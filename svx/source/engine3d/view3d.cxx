@@ -827,172 +827,172 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
 
 void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1, const basegfx::B2DPoint& rPnt2)
 {
-    if(AreObjectsMarked())
+    if(!AreObjectsMarked())
+        return;
+
+    // Create undo
+    if(bExtrude)
+        BegUndo(SvxResId(RID_SVX_3D_UNDO_EXTRUDE));
+    else
+        BegUndo(SvxResId(RID_SVX_3D_UNDO_LATHE));
+
+    // Create a new scene for the created 3D object
+    E3dScene* pScene = new E3dScene;
+
+    // Determine rectangle and possibly correct it
+    tools::Rectangle aRect = GetAllMarkedRect();
+    if(aRect.GetWidth() <= 1)
+        aRect.SetSize(Size(500, aRect.GetHeight()));
+    if(aRect.GetHeight() <= 1)
+        aRect.SetSize(Size(aRect.GetWidth(), 500));
+
+    // Determine the depth relative to the size of the selection
+    double fDepth = 0.0;
+    double fRot3D = 0.0;
+    basegfx::B2DHomMatrix aLatheMat;
+
+    if(bExtrude)
     {
-        // Create undo
-        if(bExtrude)
-            BegUndo(SvxResId(RID_SVX_3D_UNDO_EXTRUDE));
+        double fW = (double)aRect.GetWidth();
+        double fH = (double)aRect.GetHeight();
+        fDepth = sqrt(fW*fW + fH*fH) / 6.0;
+    }
+    if(!bExtrude)
+    {
+        // Create transformation for the polygons rotating body
+        if (rPnt1 != rPnt2)
+        {
+            // Rotation around control point #1 with set angle
+            // for 3D coordinates
+            basegfx::B2DPoint aDiff(rPnt1 - rPnt2);
+            fRot3D = atan2(aDiff.getY(), aDiff.getX()) - F_PI2;
+
+            if(basegfx::fTools::equalZero(fabs(fRot3D)))
+                fRot3D = 0.0;
+
+            if(fRot3D != 0.0)
+            {
+                aLatheMat = basegfx::utils::createRotateAroundPoint(rPnt2, -fRot3D)
+                    * aLatheMat;
+            }
+        }
+
+        if (rPnt2.getX() != 0.0)
+        {
+            // Translation to Y=0 - axis
+            aLatheMat.translate(-rPnt2.getX(), 0.0);
+        }
         else
-            BegUndo(SvxResId(RID_SVX_3D_UNDO_LATHE));
-
-        // Create a new scene for the created 3D object
-        E3dScene* pScene = new E3dScene;
-
-        // Determine rectangle and possibly correct it
-        tools::Rectangle aRect = GetAllMarkedRect();
-        if(aRect.GetWidth() <= 1)
-            aRect.SetSize(Size(500, aRect.GetHeight()));
-        if(aRect.GetHeight() <= 1)
-            aRect.SetSize(Size(aRect.GetWidth(), 500));
-
-        // Determine the depth relative to the size of the selection
-        double fDepth = 0.0;
-        double fRot3D = 0.0;
-        basegfx::B2DHomMatrix aLatheMat;
-
-        if(bExtrude)
         {
-            double fW = (double)aRect.GetWidth();
-            double fH = (double)aRect.GetHeight();
-            fDepth = sqrt(fW*fW + fH*fH) / 6.0;
-        }
-        if(!bExtrude)
-        {
-            // Create transformation for the polygons rotating body
-            if (rPnt1 != rPnt2)
-            {
-                // Rotation around control point #1 with set angle
-                // for 3D coordinates
-                basegfx::B2DPoint aDiff(rPnt1 - rPnt2);
-                fRot3D = atan2(aDiff.getY(), aDiff.getX()) - F_PI2;
-
-                if(basegfx::fTools::equalZero(fabs(fRot3D)))
-                    fRot3D = 0.0;
-
-                if(fRot3D != 0.0)
-                {
-                    aLatheMat = basegfx::utils::createRotateAroundPoint(rPnt2, -fRot3D)
-                        * aLatheMat;
-                }
-            }
-
-            if (rPnt2.getX() != 0.0)
-            {
-                // Translation to Y=0 - axis
-                aLatheMat.translate(-rPnt2.getX(), 0.0);
-            }
-            else
-            {
-                aLatheMat.translate((double)-aRect.Left(), 0.0);
-            }
-
-            // Form the inverse matrix to determine the target expansion
-            basegfx::B2DHomMatrix aInvLatheMat(aLatheMat);
-            aInvLatheMat.invert();
-
-            // SnapRect extension enables mirroring in the axis of rotation
-            for(size_t a=0; a<GetMarkedObjectCount(); ++a)
-            {
-                SdrMark* pMark = GetSdrMarkByIndex(a);
-                SdrObject* pObj = pMark->GetMarkedSdrObj();
-                tools::Rectangle aTurnRect = pObj->GetSnapRect();
-                basegfx::B2DPoint aRot;
-                Point aRotPnt;
-
-                aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Top());
-                aRot *= aLatheMat;
-                aRot.setX(-aRot.getX());
-                aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
-
-                aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Bottom());
-                aRot *= aLatheMat;
-                aRot.setX(-aRot.getX());
-                aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
-
-                aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Top());
-                aRot *= aLatheMat;
-                aRot.setX(-aRot.getX());
-                aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
-
-                aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Bottom());
-                aRot *= aLatheMat;
-                aRot.setX(-aRot.getX());
-                aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
-            }
+            aLatheMat.translate((double)-aRect.Left(), 0.0);
         }
 
-        // Walk through the selection and convert it into 3D, complete with
-        // Conversion to SdrPathObject, also fonts
+        // Form the inverse matrix to determine the target expansion
+        basegfx::B2DHomMatrix aInvLatheMat(aLatheMat);
+        aInvLatheMat.invert();
+
+        // SnapRect extension enables mirroring in the axis of rotation
         for(size_t a=0; a<GetMarkedObjectCount(); ++a)
         {
             SdrMark* pMark = GetSdrMarkByIndex(a);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
+            tools::Rectangle aTurnRect = pObj->GetSnapRect();
+            basegfx::B2DPoint aRot;
+            Point aRotPnt;
 
-            ImpCreate3DObject(pScene, pObj, bExtrude, fDepth, aLatheMat);
+            aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Top());
+            aRot *= aLatheMat;
+            aRot.setX(-aRot.getX());
+            aRot *= aInvLatheMat;
+            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
+
+            aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Bottom());
+            aRot *= aLatheMat;
+            aRot.setX(-aRot.getX());
+            aRot *= aInvLatheMat;
+            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
+
+            aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Top());
+            aRot *= aLatheMat;
+            aRot.setX(-aRot.getX());
+            aRot *= aInvLatheMat;
+            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
+
+            aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Bottom());
+            aRot *= aLatheMat;
+            aRot.setX(-aRot.getX());
+            aRot *= aInvLatheMat;
+            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
         }
-
-        if(pScene->GetSubList() && pScene->GetSubList()->GetObjCount() != 0)
-        {
-            // Arrange all created objects by depth
-            if(bExtrude)
-                DoDepthArrange(pScene, fDepth);
-
-            // Center 3D objects in the middle of the overall rectangle
-            basegfx::B3DPoint aCenter(pScene->GetBoundVolume().getCenter());
-            basegfx::B3DHomMatrix aMatrix;
-
-            aMatrix.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());
-            pScene->SetTransform(aMatrix * pScene->GetTransform());
-
-            // Initialize scene
-            pScene->NbcSetSnapRect(aRect);
-            basegfx::B3DRange aBoundVol = pScene->GetBoundVolume();
-            InitScene(pScene, (double)aRect.GetWidth(), (double)aRect.GetHeight(), aBoundVol.getDepth());
-
-            // Insert scene instead of the first selected object and throw away
-            // all the old objects
-            SdrObject* pRepObj = GetMarkedObjectByIndex(0);
-            SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
-            MarkObj(pRepObj, pPV, true);
-            ReplaceObjectAtView(pRepObj, *pPV, pScene, false);
-            DeleteMarked();
-            MarkObj(pScene, pPV);
-
-            // Rotate Rotation body around the axis of rotation
-            basegfx::B3DHomMatrix aRotate;
-
-            if(!bExtrude && fRot3D != 0.0)
-            {
-                aRotate.rotate(0.0, 0.0, fRot3D);
-            }
-
-            // Set default rotation
-            aRotate.rotate(DEG2RAD(20.0), 0.0, 0.0);
-
-            if(!aRotate.isIdentity())
-            {
-                pScene->SetTransform(aRotate * pScene->GetTransform());
-            }
-
-            // Invalid SnapRects of objects
-            pScene->SetSnapRect(aRect);
-        }
-        else
-        {
-            // No 3D object was created, throw away everything
-            delete pScene;
-        }
-
-        EndUndo();
     }
+
+    // Walk through the selection and convert it into 3D, complete with
+    // Conversion to SdrPathObject, also fonts
+    for(size_t a=0; a<GetMarkedObjectCount(); ++a)
+    {
+        SdrMark* pMark = GetSdrMarkByIndex(a);
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
+
+        ImpCreate3DObject(pScene, pObj, bExtrude, fDepth, aLatheMat);
+    }
+
+    if(pScene->GetSubList() && pScene->GetSubList()->GetObjCount() != 0)
+    {
+        // Arrange all created objects by depth
+        if(bExtrude)
+            DoDepthArrange(pScene, fDepth);
+
+        // Center 3D objects in the middle of the overall rectangle
+        basegfx::B3DPoint aCenter(pScene->GetBoundVolume().getCenter());
+        basegfx::B3DHomMatrix aMatrix;
+
+        aMatrix.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());
+        pScene->SetTransform(aMatrix * pScene->GetTransform());
+
+        // Initialize scene
+        pScene->NbcSetSnapRect(aRect);
+        basegfx::B3DRange aBoundVol = pScene->GetBoundVolume();
+        InitScene(pScene, (double)aRect.GetWidth(), (double)aRect.GetHeight(), aBoundVol.getDepth());
+
+        // Insert scene instead of the first selected object and throw away
+        // all the old objects
+        SdrObject* pRepObj = GetMarkedObjectByIndex(0);
+        SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
+        MarkObj(pRepObj, pPV, true);
+        ReplaceObjectAtView(pRepObj, *pPV, pScene, false);
+        DeleteMarked();
+        MarkObj(pScene, pPV);
+
+        // Rotate Rotation body around the axis of rotation
+        basegfx::B3DHomMatrix aRotate;
+
+        if(!bExtrude && fRot3D != 0.0)
+        {
+            aRotate.rotate(0.0, 0.0, fRot3D);
+        }
+
+        // Set default rotation
+        aRotate.rotate(DEG2RAD(20.0), 0.0, 0.0);
+
+        if(!aRotate.isIdentity())
+        {
+            pScene->SetTransform(aRotate * pScene->GetTransform());
+        }
+
+        // Invalid SnapRects of objects
+        pScene->SetSnapRect(aRect);
+    }
+    else
+    {
+        // No 3D object was created, throw away everything
+        delete pScene;
+    }
+
+    EndUndo();
 }
 
 //Arrange all created extrude objects by depth
@@ -1325,92 +1325,92 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 
 void E3dView::Start3DCreation()
 {
-    if (GetMarkedObjectCount())
+    if (!GetMarkedObjectCount())
+        return;
+
+    //positioned
+    long          nOutMin = 0;
+    long          nOutMax = 0;
+    long          nMinLen = 0;
+    long          nObjDst = 0;
+    long          nOutHgt = 0;
+    OutputDevice* pOut    = GetFirstOutputDevice();
+
+    // first determine representation boundaries
+    if (pOut != nullptr)
     {
-        //positioned
-        long          nOutMin = 0;
-        long          nOutMax = 0;
-        long          nMinLen = 0;
-        long          nObjDst = 0;
-        long          nOutHgt = 0;
-        OutputDevice* pOut    = GetFirstOutputDevice();
+        nMinLen = pOut->PixelToLogic(Size(0,50)).Height();
+        nObjDst = pOut->PixelToLogic(Size(0,20)).Height();
 
-        // first determine representation boundaries
-        if (pOut != nullptr)
+        long nDst = pOut->PixelToLogic(Size(0,10)).Height();
+
+        nOutMin =  -pOut->GetMapMode().GetOrigin().Y();
+        nOutMax =  pOut->GetOutputSize().Height() - 1 + nOutMin;
+        nOutMin += nDst;
+        nOutMax -= nDst;
+
+        if (nOutMax - nOutMin < nDst)
         {
-            nMinLen = pOut->PixelToLogic(Size(0,50)).Height();
-            nObjDst = pOut->PixelToLogic(Size(0,20)).Height();
-
-            long nDst = pOut->PixelToLogic(Size(0,10)).Height();
-
-            nOutMin =  -pOut->GetMapMode().GetOrigin().Y();
-            nOutMax =  pOut->GetOutputSize().Height() - 1 + nOutMin;
-            nOutMin += nDst;
-            nOutMax -= nDst;
-
-            if (nOutMax - nOutMin < nDst)
-            {
-                nOutMin += nOutMax + 1;
-                nOutMin /= 2;
-                nOutMin -= (nDst + 1) / 2;
-                nOutMax  = nOutMin + nDst;
-            }
-
-            nOutHgt = nOutMax - nOutMin;
-
-            long nTemp = nOutHgt / 4;
-            if (nTemp > nMinLen) nMinLen = nTemp;
+            nOutMin += nOutMax + 1;
+            nOutMin /= 2;
+            nOutMin -= (nDst + 1) / 2;
+            nOutMax  = nOutMin + nDst;
         }
 
-        // and then attach the marks at the top and bottom of the object
-        basegfx::B2DRange aR;
-        for(size_t nMark = 0; nMark < GetMarkedObjectCount(); ++nMark)
-        {
-            SdrObject* pMark = GetMarkedObjectByIndex(nMark);
-            basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly());
-            aR.expand(basegfx::utils::getRange(aXPP));
-        }
+        nOutHgt = nOutMax - nOutMin;
 
-        basegfx::B2DPoint aCenter(aR.getCenter());
-        long      nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
-        long      nHgt     = nMarkHgt + nObjDst * 2;
-
-        if (nHgt < nMinLen) nHgt = nMinLen;
-
-        long nY1 = basegfx::fround(aCenter.getY()) - (nHgt + 1) / 2;
-        long nY2 = nY1 + nHgt;
-
-        if (pOut && (nMinLen > nOutHgt)) nMinLen = nOutHgt;
-        if (pOut)
-        {
-            if (nY1 < nOutMin)
-            {
-                nY1 = nOutMin;
-                if (nY2 < nY1 + nMinLen) nY2 = nY1 + nMinLen;
-            }
-            if (nY2 > nOutMax)
-            {
-                nY2 = nOutMax;
-                if (nY1 > nY2 - nMinLen) nY1 = nY2 - nMinLen;
-            }
-        }
-
-        maRef1.X() = basegfx::fround(aR.getMinX());    // Initial move axis 2/100mm to the left
-        maRef1.Y() = nY1;
-        maRef2.X() = maRef1.X();
-        maRef2.Y() = nY2;
-
-        // Turn on marks
-        SetMarkHandles(nullptr);
-
-        //HMHif (bVis) ShowMarkHdl();
-        if (AreObjectsMarked()) MarkListHasChanged();
-
-        // Show mirror polygon IMMEDIATELY
-        const SdrHdlList &aHdlList = GetHdlList();
-        mpMirrorOverlay = new Impl3DMirrorConstructOverlay(*this);
-        mpMirrorOverlay->SetMirrorAxis(aHdlList.GetHdl(SdrHdlKind::Ref1)->GetPos(), aHdlList.GetHdl(SdrHdlKind::Ref2)->GetPos());
+        long nTemp = nOutHgt / 4;
+        if (nTemp > nMinLen) nMinLen = nTemp;
     }
+
+    // and then attach the marks at the top and bottom of the object
+    basegfx::B2DRange aR;
+    for(size_t nMark = 0; nMark < GetMarkedObjectCount(); ++nMark)
+    {
+        SdrObject* pMark = GetMarkedObjectByIndex(nMark);
+        basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly());
+        aR.expand(basegfx::utils::getRange(aXPP));
+    }
+
+    basegfx::B2DPoint aCenter(aR.getCenter());
+    long      nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
+    long      nHgt     = nMarkHgt + nObjDst * 2;
+
+    if (nHgt < nMinLen) nHgt = nMinLen;
+
+    long nY1 = basegfx::fround(aCenter.getY()) - (nHgt + 1) / 2;
+    long nY2 = nY1 + nHgt;
+
+    if (pOut && (nMinLen > nOutHgt)) nMinLen = nOutHgt;
+    if (pOut)
+    {
+        if (nY1 < nOutMin)
+        {
+            nY1 = nOutMin;
+            if (nY2 < nY1 + nMinLen) nY2 = nY1 + nMinLen;
+        }
+        if (nY2 > nOutMax)
+        {
+            nY2 = nOutMax;
+            if (nY1 > nY2 - nMinLen) nY1 = nY2 - nMinLen;
+        }
+    }
+
+    maRef1.X() = basegfx::fround(aR.getMinX());    // Initial move axis 2/100mm to the left
+    maRef1.Y() = nY1;
+    maRef2.X() = maRef1.X();
+    maRef2.Y() = nY2;
+
+    // Turn on marks
+    SetMarkHandles(nullptr);
+
+    //HMHif (bVis) ShowMarkHdl();
+    if (AreObjectsMarked()) MarkListHasChanged();
+
+    // Show mirror polygon IMMEDIATELY
+    const SdrHdlList &aHdlList = GetHdlList();
+    mpMirrorOverlay = new Impl3DMirrorConstructOverlay(*this);
+    mpMirrorOverlay->SetMirrorAxis(aHdlList.GetHdl(SdrHdlKind::Ref1)->GetPos(), aHdlList.GetHdl(SdrHdlKind::Ref2)->GetPos());
 }
 
 // what happens with a mouse movement when the object is created?

@@ -297,62 +297,62 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
 {
     const sal_uInt16 nId = rUDEvt.GetItemId();
 
-    if (nId && mpTheme)
+    if (!nId || !mpTheme)
+        return;
+
+    const tools::Rectangle& rRect = rUDEvt.GetRect();
+    const Size aSize(rRect.GetWidth(), rRect.GetHeight());
+    BitmapEx aBitmapEx;
+    Size aPreparedSize;
+    OUString aItemTextTitle;
+    OUString aItemTextPath;
+
+    mpTheme->GetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aPreparedSize, aItemTextTitle, aItemTextPath);
+
+    bool bNeedToCreate(aBitmapEx.IsEmpty());
+
+    if (!bNeedToCreate && aItemTextTitle.isEmpty())
     {
-        const tools::Rectangle& rRect = rUDEvt.GetRect();
-        const Size aSize(rRect.GetWidth(), rRect.GetHeight());
-        BitmapEx aBitmapEx;
-        Size aPreparedSize;
-        OUString aItemTextTitle;
-        OUString aItemTextPath;
-
-        mpTheme->GetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aPreparedSize, aItemTextTitle, aItemTextPath);
-
-        bool bNeedToCreate(aBitmapEx.IsEmpty());
-
-        if (!bNeedToCreate && aItemTextTitle.isEmpty())
-        {
-            bNeedToCreate = true;
-        }
-
-        if (!bNeedToCreate && aPreparedSize != aSize)
-        {
-            bNeedToCreate = true;
-        }
-
-        if (bNeedToCreate)
-        {
-            SgaObject* pObj = mpTheme->AcquireObject(nId - 1);
-
-            if(pObj)
-            {
-                aBitmapEx = pObj->createPreviewBitmapEx(aSize);
-                aItemTextTitle = GalleryBrowser2::GetItemText(*mpTheme, *pObj, GalleryItemFlags::Title);
-
-                mpTheme->SetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
-                GalleryTheme::ReleaseObject(pObj);
-            }
-        }
-
-        if (!aBitmapEx.IsEmpty())
-        {
-            const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
-            const Point aPos(
-                ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
-                ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
-            OutputDevice* pDev = rUDEvt.GetRenderContext();
-
-            if(aBitmapEx.IsTransparent())
-            {
-                // draw checkered background for full rectangle.
-                drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
-            }
-
-            pDev->DrawBitmapEx(aPos, aBitmapEx);
-        }
-
-        SetItemText(nId, aItemTextTitle);
+        bNeedToCreate = true;
     }
+
+    if (!bNeedToCreate && aPreparedSize != aSize)
+    {
+        bNeedToCreate = true;
+    }
+
+    if (bNeedToCreate)
+    {
+        SgaObject* pObj = mpTheme->AcquireObject(nId - 1);
+
+        if(pObj)
+        {
+            aBitmapEx = pObj->createPreviewBitmapEx(aSize);
+            aItemTextTitle = GalleryBrowser2::GetItemText(*mpTheme, *pObj, GalleryItemFlags::Title);
+
+            mpTheme->SetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
+            GalleryTheme::ReleaseObject(pObj);
+        }
+    }
+
+    if (!aBitmapEx.IsEmpty())
+    {
+        const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
+        const Point aPos(
+            ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
+            ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
+        OutputDevice* pDev = rUDEvt.GetRenderContext();
+
+        if(aBitmapEx.IsTransparent())
+        {
+            // draw checkered background for full rectangle.
+            drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
+        }
+
+        pDev->DrawBitmapEx(aPos, aBitmapEx);
+    }
+
+    SetItemText(nId, aItemTextTitle);
 }
 
 void GalleryIconView::MouseButtonDown(const MouseEvent& rMEvt)

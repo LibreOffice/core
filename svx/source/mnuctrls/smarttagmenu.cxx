@@ -63,39 +63,39 @@ void SmartTagMenuController::statusChanged( const css::frame::FeatureStateEvent&
     resetPopupMenu( m_xPopupMenu );
 
     css::uno::Sequence< css::beans::PropertyValue > aProperties;
-    if ( rEvent.IsEnabled && ( rEvent.State >>= aProperties ) )
-    {
-        css::uno::Sequence< css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > aActionComponents;
-        css::uno::Sequence< css::uno::Sequence< sal_Int32 > > aActionIndices;
-        css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > > aStringKeyMaps;
-        css::uno::Reference< css::text::XTextRange > xTextRange;
-        css::uno::Reference< css::frame::XController > xController;
-        css::lang::Locale aLocale;
-        OUString aApplicationName;
-        OUString aRangeText;
+    if ( !rEvent.IsEnabled || !( rEvent.State >>= aProperties ) )
+        return;
 
-        for ( const auto& aProperty : aProperties )
-        {
-            if ( aProperty.Name == "ActionComponents" )
-                aProperty.Value >>= aActionComponents;
-            else if ( aProperty.Name == "ActionIndices" )
-                aProperty.Value >>= aActionIndices;
-            else if ( aProperty.Name == "StringKeyMaps" )
-                aProperty.Value >>= aStringKeyMaps;
-            else if ( aProperty.Name == "TextRange" )
-                aProperty.Value >>= xTextRange;
-            else if ( aProperty.Name == "Controller" )
-                aProperty.Value >>= xController;
-            else if ( aProperty.Name == "Locale" )
-                aProperty.Value >>= aLocale;
-            else if ( aProperty.Name == "ApplicationName" )
-                aProperty.Value >>= aApplicationName;
-            else if ( aProperty.Name == "RangeText" )
-                aProperty.Value >>= aRangeText;
-        }
-        m_pSmartTagItem.reset( new SvxSmartTagItem( 0, aActionComponents, aActionIndices, aStringKeyMaps, xTextRange, xController, aLocale, aApplicationName, aRangeText ) );
-        FillMenu();
+    css::uno::Sequence< css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > aActionComponents;
+    css::uno::Sequence< css::uno::Sequence< sal_Int32 > > aActionIndices;
+    css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > > aStringKeyMaps;
+    css::uno::Reference< css::text::XTextRange > xTextRange;
+    css::uno::Reference< css::frame::XController > xController;
+    css::lang::Locale aLocale;
+    OUString aApplicationName;
+    OUString aRangeText;
+
+    for ( const auto& aProperty : aProperties )
+    {
+        if ( aProperty.Name == "ActionComponents" )
+            aProperty.Value >>= aActionComponents;
+        else if ( aProperty.Name == "ActionIndices" )
+            aProperty.Value >>= aActionIndices;
+        else if ( aProperty.Name == "StringKeyMaps" )
+            aProperty.Value >>= aStringKeyMaps;
+        else if ( aProperty.Name == "TextRange" )
+            aProperty.Value >>= xTextRange;
+        else if ( aProperty.Name == "Controller" )
+            aProperty.Value >>= xController;
+        else if ( aProperty.Name == "Locale" )
+            aProperty.Value >>= aLocale;
+        else if ( aProperty.Name == "ApplicationName" )
+            aProperty.Value >>= aApplicationName;
+        else if ( aProperty.Name == "RangeText" )
+            aProperty.Value >>= aRangeText;
     }
+    m_pSmartTagItem.reset( new SvxSmartTagItem( 0, aActionComponents, aActionIndices, aStringKeyMaps, xTextRange, xController, aLocale, aApplicationName, aRangeText ) );
+    FillMenu();
 }
 
 void SmartTagMenuController::FillMenu()

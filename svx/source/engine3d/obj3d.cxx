@@ -323,48 +323,48 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     // Movement in X, Y in the eye coordinate system
     E3dScene* pScene = GetScene();
 
-    if(pScene)
-    {
-        // transform pos from 2D world to 3D eye
-        const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
-        const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
-        basegfx::B2DPoint aScaleCenter2D((double)rRef.X(), (double)rRef.Y());
-        basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+    if(!pScene)
+        return;
 
-        aInverseSceneTransform.invert();
-        aScaleCenter2D = aInverseSceneTransform * aScaleCenter2D;
+    // transform pos from 2D world to 3D eye
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
+    const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
+    basegfx::B2DPoint aScaleCenter2D((double)rRef.X(), (double)rRef.Y());
+    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
 
-        basegfx::B3DPoint aScaleCenter3D(aScaleCenter2D.getX(), aScaleCenter2D.getY(), 0.5);
-        basegfx::B3DHomMatrix aInverseViewToEye(aViewInfo3D.getDeviceToView() * aViewInfo3D.getProjection());
+    aInverseSceneTransform.invert();
+    aScaleCenter2D = aInverseSceneTransform * aScaleCenter2D;
 
-        aInverseViewToEye.invert();
-        aScaleCenter3D = aInverseViewToEye * aScaleCenter3D;
+    basegfx::B3DPoint aScaleCenter3D(aScaleCenter2D.getX(), aScaleCenter2D.getY(), 0.5);
+    basegfx::B3DHomMatrix aInverseViewToEye(aViewInfo3D.getDeviceToView() * aViewInfo3D.getProjection());
 
-        // Get scale factors
-        double fScaleX(xFact);
-        double fScaleY(yFact);
+    aInverseViewToEye.invert();
+    aScaleCenter3D = aInverseViewToEye * aScaleCenter3D;
 
-        // build transform
-        basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());
-        aInverseOrientation.invert();
-        basegfx::B3DHomMatrix aFullTransform(GetFullTransform());
-        basegfx::B3DHomMatrix aTrans(aFullTransform);
+    // Get scale factors
+    double fScaleX(xFact);
+    double fScaleY(yFact);
 
-        aTrans *= aViewInfo3D.getOrientation();
-        aTrans.translate(-aScaleCenter3D.getX(), -aScaleCenter3D.getY(), -aScaleCenter3D.getZ());
-        aTrans.scale(fScaleX, fScaleY, 1.0);
-        aTrans.translate(aScaleCenter3D.getX(), aScaleCenter3D.getY(), aScaleCenter3D.getZ());
-        aTrans *= aInverseOrientation;
-        aFullTransform.invert();
-        aTrans *= aFullTransform;
+    // build transform
+    basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());
+    aInverseOrientation.invert();
+    basegfx::B3DHomMatrix aFullTransform(GetFullTransform());
+    basegfx::B3DHomMatrix aTrans(aFullTransform);
 
-        // Apply
-        basegfx::B3DHomMatrix aObjTrans(GetTransform());
-        aObjTrans *= aTrans;
+    aTrans *= aViewInfo3D.getOrientation();
+    aTrans.translate(-aScaleCenter3D.getX(), -aScaleCenter3D.getY(), -aScaleCenter3D.getZ());
+    aTrans.scale(fScaleX, fScaleY, 1.0);
+    aTrans.translate(aScaleCenter3D.getX(), aScaleCenter3D.getY(), aScaleCenter3D.getZ());
+    aTrans *= aInverseOrientation;
+    aFullTransform.invert();
+    aTrans *= aFullTransform;
 
-        E3DModifySceneSnapRectUpdater aUpdater(this);
-        SetTransform(aObjTrans);
-    }
+    // Apply
+    basegfx::B3DHomMatrix aObjTrans(GetTransform());
+    aObjTrans *= aTrans;
+
+    E3DModifySceneSnapRectUpdater aUpdater(this);
+    SetTransform(aObjTrans);
 }
 
 
@@ -375,49 +375,49 @@ void E3dObject::NbcMove(const Size& rSize)
     // Movement in X, Y in the eye coordinate system
     E3dScene* pScene = GetScene();
 
-    if(pScene)
+    if(!pScene)
+        return;
+
+    //Dimensions of the scene in 3D and 2D for comparison
+    tools::Rectangle aRect = pScene->GetSnapRect();
+
+    basegfx::B3DHomMatrix aInvDispTransform;
+    if(GetParentObj())
     {
-        //Dimensions of the scene in 3D and 2D for comparison
-        tools::Rectangle aRect = pScene->GetSnapRect();
-
-        basegfx::B3DHomMatrix aInvDispTransform;
-        if(GetParentObj())
-        {
-            aInvDispTransform = GetParentObj()->GetFullTransform();
-            aInvDispTransform.invert();
-        }
-
-        // BoundVolume from 3d world to 3d eye
-        const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
-        const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
-        basegfx::B3DRange aEyeVol(pScene->GetBoundVolume());
-        aEyeVol.transform(aViewInfo3D.getOrientation());
-
-        if ((aRect.GetWidth() == 0) || (aRect.GetHeight() == 0))
-            throw o3tl::divide_by_zero();
-
-        // build relative movement vector in eye coordinates
-        basegfx::B3DPoint aMove(
-            (double)rSize.Width() * aEyeVol.getWidth() / (double)aRect.GetWidth(),
-            (double)-rSize.Height() * aEyeVol.getHeight() / (double)aRect.GetHeight(),
-            0.0);
-        basegfx::B3DPoint aPos(0.0, 0.0, 0.0);
-
-        // movement vector to local coordinates of objects' parent
-        basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());
-        aInverseOrientation.invert();
-        basegfx::B3DHomMatrix aCompleteTrans(aInvDispTransform * aInverseOrientation);
-
-        aMove = aCompleteTrans * aMove;
-        aPos = aCompleteTrans * aPos;
-
-        // build transformation and apply
-        basegfx::B3DHomMatrix aTranslate;
-        aTranslate.translate(aMove.getX() - aPos.getX(), aMove.getY() - aPos.getY(), aMove.getZ() - aPos.getZ());
-
-        E3DModifySceneSnapRectUpdater aUpdater(pScene);
-        SetTransform(aTranslate * GetTransform());
+        aInvDispTransform = GetParentObj()->GetFullTransform();
+        aInvDispTransform.invert();
     }
+
+    // BoundVolume from 3d world to 3d eye
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
+    const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
+    basegfx::B3DRange aEyeVol(pScene->GetBoundVolume());
+    aEyeVol.transform(aViewInfo3D.getOrientation());
+
+    if ((aRect.GetWidth() == 0) || (aRect.GetHeight() == 0))
+        throw o3tl::divide_by_zero();
+
+    // build relative movement vector in eye coordinates
+    basegfx::B3DPoint aMove(
+        (double)rSize.Width() * aEyeVol.getWidth() / (double)aRect.GetWidth(),
+        (double)-rSize.Height() * aEyeVol.getHeight() / (double)aRect.GetHeight(),
+        0.0);
+    basegfx::B3DPoint aPos(0.0, 0.0, 0.0);
+
+    // movement vector to local coordinates of objects' parent
+    basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());
+    aInverseOrientation.invert();
+    basegfx::B3DHomMatrix aCompleteTrans(aInvDispTransform * aInverseOrientation);
+
+    aMove = aCompleteTrans * aMove;
+    aPos = aCompleteTrans * aPos;
+
+    // build transformation and apply
+    basegfx::B3DHomMatrix aTranslate;
+    aTranslate.translate(aMove.getX() - aPos.getX(), aMove.getY() - aPos.getY(), aMove.getZ() - aPos.getZ());
+
+    E3DModifySceneSnapRectUpdater aUpdater(pScene);
+    SetTransform(aTranslate * GetTransform());
 }
 
 // Return the sublist, but only if it contains objects!

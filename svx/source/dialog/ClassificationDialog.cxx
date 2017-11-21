@@ -575,55 +575,55 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
 {
     const sal_Int32 nSelected = rBox.GetSelectedEntryPos();
-    if (nSelected >= 0 && m_nCurrentSelectedCategory != nSelected)
+    if (nSelected < 0 || m_nCurrentSelectedCategory == nSelected)
+        return;
+
+    std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
+    std::vector<editeng::Section> aSections;
+    pEditText->GetAllSections(aSections);
+
+    // if we are replacing an existing field
+    bool bReplaceExisting = false;
+    // selection of the existing field, which will be replaced
+    ESelection aExistingFieldSelection;
+
+    for (editeng::Section const & rSection : aSections)
     {
-        std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
-        std::vector<editeng::Section> aSections;
-        pEditText->GetAllSections(aSections);
-
-        // if we are replacing an existing field
-        bool bReplaceExisting = false;
-        // selection of the existing field, which will be replaced
-        ESelection aExistingFieldSelection;
-
-        for (editeng::Section const & rSection : aSections)
+        const SvxFieldItem* pFieldItem = findField(rSection);
+        if (pFieldItem)
         {
-            const SvxFieldItem* pFieldItem = findField(rSection);
-            if (pFieldItem)
+            const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
+            if (pClassificationField && pClassificationField->meType == ClassificationType::CATEGORY)
             {
-                const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
-                if (pClassificationField && pClassificationField->meType == ClassificationType::CATEGORY)
-                {
-                    aExistingFieldSelection = ESelection(rSection.mnParagraph, rSection.mnStart,
-                                                         rSection.mnParagraph, rSection.mnEnd);
-                    bReplaceExisting = true;
-                }
+                aExistingFieldSelection = ESelection(rSection.mnParagraph, rSection.mnStart,
+                                                     rSection.mnParagraph, rSection.mnEnd);
+                bReplaceExisting = true;
             }
         }
-
-        if (bReplaceExisting)
-        {
-            ScopedVclPtrInstance<QueryBox> aQueryBox(this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, SvxResId(RID_CLASSIFICATION_CHANGE_CATEGORY));
-            if (aQueryBox->Execute() == RET_NO)
-            {
-                // Revert to previosuly selected
-                m_pInternationalClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
-                m_pClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
-                return;
-            }
-            m_pEditWindow->pEdView->SetSelection(aExistingFieldSelection);
-        }
-
-        const OUString aFullString = maHelper.GetBACNames()[nSelected];
-        const OUString aAbbreviatedString = maHelper.GetAbbreviatedBACNames()[nSelected];
-        const OUString aIdentifierString = maHelper.GetBACIdentifiers()[nSelected];
-        insertField(ClassificationType::CATEGORY, aAbbreviatedString, aFullString, aIdentifierString);
-
-        // Change category to the new selection
-        m_pInternationalClassificationListBox->SelectEntryPos(nSelected);
-        m_pClassificationListBox->SelectEntryPos(nSelected);
-        m_nCurrentSelectedCategory = nSelected;
     }
+
+    if (bReplaceExisting)
+    {
+        ScopedVclPtrInstance<QueryBox> aQueryBox(this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, SvxResId(RID_CLASSIFICATION_CHANGE_CATEGORY));
+        if (aQueryBox->Execute() == RET_NO)
+        {
+            // Revert to previosuly selected
+            m_pInternationalClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
+            m_pClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
+            return;
+        }
+        m_pEditWindow->pEdView->SetSelection(aExistingFieldSelection);
+    }
+
+    const OUString aFullString = maHelper.GetBACNames()[nSelected];
+    const OUString aAbbreviatedString = maHelper.GetAbbreviatedBACNames()[nSelected];
+    const OUString aIdentifierString = maHelper.GetBACIdentifiers()[nSelected];
+    insertField(ClassificationType::CATEGORY, aAbbreviatedString, aFullString, aIdentifierString);
+
+    // Change category to the new selection
+    m_pInternationalClassificationListBox->SelectEntryPos(nSelected);
+    m_pClassificationListBox->SelectEntryPos(nSelected);
+    m_nCurrentSelectedCategory = nSelected;
 }
 
 IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)

@@ -170,276 +170,276 @@ namespace
 
     void impTextBreakupHandler::impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo)
     {
-        if(!rInfo.maText.isEmpty() && rInfo.mnTextLen)
+        if(rInfo.maText.isEmpty() || !rInfo.mnTextLen)
+            return;
+
+        OUString caseMappedText = rInfo.mrFont.CalcCaseMap( rInfo.maText );
+        basegfx::B2DVector aFontScaling;
+        drawinglayer::attribute::FontAttribute aFontAttribute(
+            drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                aFontScaling,
+                rInfo.mrFont,
+                rInfo.IsRTL(),
+                false));
+        basegfx::B2DHomMatrix aNewTransform;
+
+        // add font scale to new transform
+        aNewTransform.scale(aFontScaling.getX(), aFontScaling.getY());
+
+        // look for proportional font scaling, if necessary, scale accordingly
+        if(100 != rInfo.mrFont.GetPropr())
         {
-            OUString caseMappedText = rInfo.mrFont.CalcCaseMap( rInfo.maText );
-            basegfx::B2DVector aFontScaling;
-            drawinglayer::attribute::FontAttribute aFontAttribute(
-                drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                    aFontScaling,
-                    rInfo.mrFont,
-                    rInfo.IsRTL(),
-                    false));
-            basegfx::B2DHomMatrix aNewTransform;
+            const double fFactor(rInfo.mrFont.GetPropr() / 100.0);
+            aNewTransform.scale(fFactor, fFactor);
+        }
 
-            // add font scale to new transform
-            aNewTransform.scale(aFontScaling.getX(), aFontScaling.getY());
+        // apply font rotate
+        if(rInfo.mrFont.GetOrientation())
+        {
+            aNewTransform.rotate(-rInfo.mrFont.GetOrientation() * F_PI1800);
+        }
 
-            // look for proportional font scaling, if necessary, scale accordingly
-            if(100 != rInfo.mrFont.GetPropr())
+        // look for escapement, if necessary, translate accordingly
+        if(rInfo.mrFont.GetEscapement())
+        {
+            sal_Int16 nEsc(rInfo.mrFont.GetEscapement());
+
+            if(DFLT_ESC_AUTO_SUPER == nEsc)
             {
-                const double fFactor(rInfo.mrFont.GetPropr() / 100.0);
-                aNewTransform.scale(fFactor, fFactor);
+                nEsc = 33;
+            }
+            else if(DFLT_ESC_AUTO_SUB == nEsc)
+            {
+                nEsc = -20;
             }
 
-            // apply font rotate
-            if(rInfo.mrFont.GetOrientation())
+            if(nEsc > 100)
             {
-                aNewTransform.rotate(-rInfo.mrFont.GetOrientation() * F_PI1800);
+                nEsc = 100;
+            }
+            else if(nEsc < -100)
+            {
+                nEsc = -100;
             }
 
-            // look for escapement, if necessary, translate accordingly
-            if(rInfo.mrFont.GetEscapement())
+            const double fEscapement(nEsc / -100.0);
+            aNewTransform.translate(0.0, fEscapement * aFontScaling.getY());
+        }
+
+        // apply transformA
+        aNewTransform *= maNewTransformA;
+
+        // apply local offset
+        aNewTransform.translate(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y());
+
+        // also apply embedding object's transform
+        aNewTransform *= maNewTransformB;
+
+        // prepare DXArray content. To make it independent from font size (and such from
+        // the text transformation), scale it to unit coordinates
+        ::std::vector< double > aDXArray;
+        static bool bDisableTextArray(false);
+
+        if(!bDisableTextArray && rInfo.mpDXArray && rInfo.mnTextLen)
+        {
+            aDXArray.reserve(rInfo.mnTextLen);
+
+            for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
             {
-                sal_Int16 nEsc(rInfo.mrFont.GetEscapement());
+                aDXArray.push_back((double)rInfo.mpDXArray[a]);
+            }
+        }
 
-                if(DFLT_ESC_AUTO_SUPER == nEsc)
-                {
-                    nEsc = 33;
-                }
-                else if(DFLT_ESC_AUTO_SUB == nEsc)
-                {
-                    nEsc = -20;
-                }
+        // create complex text primitive and append
+        const Color aFontColor(rInfo.mrFont.GetColor());
+        const basegfx::BColor aBFontColor(aFontColor.getBColor());
 
-                if(nEsc > 100)
-                {
-                    nEsc = 100;
-                }
-                else if(nEsc < -100)
-                {
-                    nEsc = -100;
-                }
+        const Color aTextFillColor(rInfo.mrFont.GetFillColor());
 
-                const double fEscapement(nEsc / -100.0);
-                aNewTransform.translate(0.0, fEscapement * aFontScaling.getY());
+        // prepare wordLineMode (for underline and strikeout)
+        // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
+        // to be split which would not look like the original
+        const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
+
+        // prepare new primitive
+        drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = nullptr;
+        const bool bDecoratedIsNeeded(
+               LINESTYLE_NONE != rInfo.mrFont.GetOverline()
+            || LINESTYLE_NONE != rInfo.mrFont.GetUnderline()
+            || STRIKEOUT_NONE != rInfo.mrFont.GetStrikeout()
+            || FontEmphasisMark::NONE != (rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
+            || FontRelief::NONE != rInfo.mrFont.GetRelief()
+            || rInfo.mrFont.IsShadow()
+            || bWordLineMode);
+
+        if(bDecoratedIsNeeded)
+        {
+            // TextDecoratedPortionPrimitive2D needed, prepare some more data
+            // get overline and underline color. If it's on automatic (0xffffffff) use FontColor instead
+            const Color aUnderlineColor(rInfo.maTextLineColor);
+            const basegfx::BColor aBUnderlineColor((0xffffffff == aUnderlineColor.GetColor()) ? aBFontColor : aUnderlineColor.getBColor());
+            const Color aOverlineColor(rInfo.maOverlineColor);
+            const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
+
+            // prepare overline and underline data
+            const drawinglayer::primitive2d::TextLine eFontOverline(
+                drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetOverline()));
+            const drawinglayer::primitive2d::TextLine eFontLineStyle(
+                drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetUnderline()));
+
+            // check UnderlineAbove
+            const bool bUnderlineAbove(
+                drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && impIsUnderlineAbove(rInfo.mrFont));
+
+            // prepare strikeout data
+            const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(
+                drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rInfo.mrFont.GetStrikeout()));
+
+            // prepare emphasis mark data
+            drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE);
+
+            switch(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
+            {
+                case FontEmphasisMark::Dot : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DOT; break;
+                case FontEmphasisMark::Circle : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_CIRCLE; break;
+                case FontEmphasisMark::Disc : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DISC; break;
+                case FontEmphasisMark::Accent : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_ACCENT; break;
+                default: break;
             }
 
-            // apply transformA
-            aNewTransform *= maNewTransformA;
+            const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosAbove);
+            const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosBelow);
 
-            // apply local offset
-            aNewTransform.translate(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y());
+            // prepare font relief data
+            drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
 
-            // also apply embedding object's transform
-            aNewTransform *= maNewTransformB;
-
-            // prepare DXArray content. To make it independent from font size (and such from
-            // the text transformation), scale it to unit coordinates
-            ::std::vector< double > aDXArray;
-            static bool bDisableTextArray(false);
-
-            if(!bDisableTextArray && rInfo.mpDXArray && rInfo.mnTextLen)
+            switch(rInfo.mrFont.GetRelief())
             {
-                aDXArray.reserve(rInfo.mnTextLen);
+                case FontRelief::Embossed : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
+                case FontRelief::Engraved : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
+                default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
+            }
 
-                for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
+            // prepare shadow/outline data
+            const bool bShadow(rInfo.mrFont.IsShadow());
+
+            // TextDecoratedPortionPrimitive2D is needed, create one
+            pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+
+                // attributes for TextSimplePortionPrimitive2D
+                aNewTransform,
+                caseMappedText,
+                rInfo.mnTextStart,
+                rInfo.mnTextLen,
+                aDXArray,
+                aFontAttribute,
+                rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
+                aBFontColor,
+                aTextFillColor,
+
+                // attributes for TextDecoratedPortionPrimitive2D
+                aBOverlineColor,
+                aBUnderlineColor,
+                eFontOverline,
+                eFontLineStyle,
+                bUnderlineAbove,
+                eTextStrikeout,
+                bWordLineMode,
+                eTextEmphasisMark,
+                bEmphasisMarkAbove,
+                bEmphasisMarkBelow,
+                eTextRelief,
+                bShadow);
+        }
+        else
+        {
+            // TextSimplePortionPrimitive2D is enough
+            pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aNewTransform,
+                caseMappedText,
+                rInfo.mnTextStart,
+                rInfo.mnTextLen,
+                aDXArray,
+                aFontAttribute,
+                rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
+                aBFontColor,
+                rInfo.mbFilled,
+                rInfo.mnWidthToFill,
+                aTextFillColor);
+        }
+
+        if(rInfo.mbEndOfBullet)
+        {
+            // embed in TextHierarchyBulletPrimitive2D
+            const drawinglayer::primitive2d::Primitive2DReference aNewReference(pNewPrimitive);
+            const drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference } ;
+            pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
+        }
+
+        if(rInfo.mpFieldData)
+        {
+            pNewPrimitive = impCheckFieldPrimitive(pNewPrimitive, rInfo);
+        }
+
+        maTextPortionPrimitives.push_back(pNewPrimitive);
+
+        // support for WrongSpellVector. Create WrongSpellPrimitives as needed
+        if(rInfo.mpWrongSpellVector && !aDXArray.empty())
+        {
+            const sal_Int32 nSize(rInfo.mpWrongSpellVector->size());
+            const sal_Int32 nDXCount(aDXArray.size());
+            const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red, hard coded
+
+            for(sal_Int32 a(0); a < nSize; a++)
+            {
+                const EEngineData::WrongSpellClass& rCandidate = (*rInfo.mpWrongSpellVector)[a];
+
+                if(rCandidate.nStart >= rInfo.mnTextStart && rCandidate.nEnd >= rInfo.mnTextStart && rCandidate.nEnd > rCandidate.nStart)
                 {
-                    aDXArray.push_back((double)rInfo.mpDXArray[a]);
-                }
-            }
+                    const sal_Int32 nStart(rCandidate.nStart - rInfo.mnTextStart);
+                    const sal_Int32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
+                    double fStart(0.0);
+                    double fEnd(0.0);
 
-            // create complex text primitive and append
-            const Color aFontColor(rInfo.mrFont.GetColor());
-            const basegfx::BColor aBFontColor(aFontColor.getBColor());
-
-            const Color aTextFillColor(rInfo.mrFont.GetFillColor());
-
-            // prepare wordLineMode (for underline and strikeout)
-            // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
-            // to be split which would not look like the original
-            const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
-
-            // prepare new primitive
-            drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = nullptr;
-            const bool bDecoratedIsNeeded(
-                   LINESTYLE_NONE != rInfo.mrFont.GetOverline()
-                || LINESTYLE_NONE != rInfo.mrFont.GetUnderline()
-                || STRIKEOUT_NONE != rInfo.mrFont.GetStrikeout()
-                || FontEmphasisMark::NONE != (rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
-                || FontRelief::NONE != rInfo.mrFont.GetRelief()
-                || rInfo.mrFont.IsShadow()
-                || bWordLineMode);
-
-            if(bDecoratedIsNeeded)
-            {
-                // TextDecoratedPortionPrimitive2D needed, prepare some more data
-                // get overline and underline color. If it's on automatic (0xffffffff) use FontColor instead
-                const Color aUnderlineColor(rInfo.maTextLineColor);
-                const basegfx::BColor aBUnderlineColor((0xffffffff == aUnderlineColor.GetColor()) ? aBFontColor : aUnderlineColor.getBColor());
-                const Color aOverlineColor(rInfo.maOverlineColor);
-                const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
-
-                // prepare overline and underline data
-                const drawinglayer::primitive2d::TextLine eFontOverline(
-                    drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetOverline()));
-                const drawinglayer::primitive2d::TextLine eFontLineStyle(
-                    drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetUnderline()));
-
-                // check UnderlineAbove
-                const bool bUnderlineAbove(
-                    drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && impIsUnderlineAbove(rInfo.mrFont));
-
-                // prepare strikeout data
-                const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(
-                    drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rInfo.mrFont.GetStrikeout()));
-
-                // prepare emphasis mark data
-                drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE);
-
-                switch(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
-                {
-                    case FontEmphasisMark::Dot : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DOT; break;
-                    case FontEmphasisMark::Circle : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_CIRCLE; break;
-                    case FontEmphasisMark::Disc : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DISC; break;
-                    case FontEmphasisMark::Accent : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_ACCENT; break;
-                    default: break;
-                }
-
-                const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosAbove);
-                const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosBelow);
-
-                // prepare font relief data
-                drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
-
-                switch(rInfo.mrFont.GetRelief())
-                {
-                    case FontRelief::Embossed : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
-                    case FontRelief::Engraved : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
-                    default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
-                }
-
-                // prepare shadow/outline data
-                const bool bShadow(rInfo.mrFont.IsShadow());
-
-                // TextDecoratedPortionPrimitive2D is needed, create one
-                pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-
-                    // attributes for TextSimplePortionPrimitive2D
-                    aNewTransform,
-                    caseMappedText,
-                    rInfo.mnTextStart,
-                    rInfo.mnTextLen,
-                    aDXArray,
-                    aFontAttribute,
-                    rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
-                    aBFontColor,
-                    aTextFillColor,
-
-                    // attributes for TextDecoratedPortionPrimitive2D
-                    aBOverlineColor,
-                    aBUnderlineColor,
-                    eFontOverline,
-                    eFontLineStyle,
-                    bUnderlineAbove,
-                    eTextStrikeout,
-                    bWordLineMode,
-                    eTextEmphasisMark,
-                    bEmphasisMarkAbove,
-                    bEmphasisMarkBelow,
-                    eTextRelief,
-                    bShadow);
-            }
-            else
-            {
-                // TextSimplePortionPrimitive2D is enough
-                pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                    aNewTransform,
-                    caseMappedText,
-                    rInfo.mnTextStart,
-                    rInfo.mnTextLen,
-                    aDXArray,
-                    aFontAttribute,
-                    rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
-                    aBFontColor,
-                    rInfo.mbFilled,
-                    rInfo.mnWidthToFill,
-                    aTextFillColor);
-            }
-
-            if(rInfo.mbEndOfBullet)
-            {
-                // embed in TextHierarchyBulletPrimitive2D
-                const drawinglayer::primitive2d::Primitive2DReference aNewReference(pNewPrimitive);
-                const drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference } ;
-                pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
-            }
-
-            if(rInfo.mpFieldData)
-            {
-                pNewPrimitive = impCheckFieldPrimitive(pNewPrimitive, rInfo);
-            }
-
-            maTextPortionPrimitives.push_back(pNewPrimitive);
-
-            // support for WrongSpellVector. Create WrongSpellPrimitives as needed
-            if(rInfo.mpWrongSpellVector && !aDXArray.empty())
-            {
-                const sal_Int32 nSize(rInfo.mpWrongSpellVector->size());
-                const sal_Int32 nDXCount(aDXArray.size());
-                const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red, hard coded
-
-                for(sal_Int32 a(0); a < nSize; a++)
-                {
-                    const EEngineData::WrongSpellClass& rCandidate = (*rInfo.mpWrongSpellVector)[a];
-
-                    if(rCandidate.nStart >= rInfo.mnTextStart && rCandidate.nEnd >= rInfo.mnTextStart && rCandidate.nEnd > rCandidate.nStart)
+                    if(nStart > 0 && nStart - 1 < nDXCount)
                     {
-                        const sal_Int32 nStart(rCandidate.nStart - rInfo.mnTextStart);
-                        const sal_Int32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
-                        double fStart(0.0);
-                        double fEnd(0.0);
+                        fStart = aDXArray[nStart - 1];
+                    }
 
-                        if(nStart > 0 && nStart - 1 < nDXCount)
+                    if(nEnd > 0 && nEnd - 1 < nDXCount)
+                    {
+                        fEnd = aDXArray[nEnd - 1];
+                    }
+
+                    if(!basegfx::fTools::equal(fStart, fEnd))
+                    {
+                        if(rInfo.IsRTL())
                         {
-                            fStart = aDXArray[nStart - 1];
+                            // #i98523#
+                            // When the portion is RTL, mirror the redlining using the
+                            // full portion width
+                            const double fTextWidth(aDXArray[aDXArray.size() - 1]);
+
+                            fStart = fTextWidth - fStart;
+                            fEnd = fTextWidth - fEnd;
                         }
 
-                        if(nEnd > 0 && nEnd - 1 < nDXCount)
+                        // need to take FontScaling out of values; it's already part of
+                        // aNewTransform and would be double applied
+                        const double fFontScaleX(aFontScaling.getX());
+
+                        if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                            && !basegfx::fTools::equalZero(fFontScaleX))
                         {
-                            fEnd = aDXArray[nEnd - 1];
+                            fStart /= fFontScaleX;
+                            fEnd /= fFontScaleX;
                         }
 
-                        if(!basegfx::fTools::equal(fStart, fEnd))
-                        {
-                            if(rInfo.IsRTL())
-                            {
-                                // #i98523#
-                                // When the portion is RTL, mirror the redlining using the
-                                // full portion width
-                                const double fTextWidth(aDXArray[aDXArray.size() - 1]);
-
-                                fStart = fTextWidth - fStart;
-                                fEnd = fTextWidth - fEnd;
-                            }
-
-                            // need to take FontScaling out of values; it's already part of
-                            // aNewTransform and would be double applied
-                            const double fFontScaleX(aFontScaling.getX());
-
-                            if(!basegfx::fTools::equal(fFontScaleX, 1.0)
-                                && !basegfx::fTools::equalZero(fFontScaleX))
-                            {
-                                fStart /= fFontScaleX;
-                                fEnd /= fFontScaleX;
-                            }
-
-                            maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
-                                aNewTransform,
-                                fStart,
-                                fEnd,
-                                aSpellColor));
-                        }
+                        maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
+                            aNewTransform,
+                            fStart,
+                            fEnd,
+                            aSpellColor));
                     }
                 }
             }
@@ -1205,34 +1205,34 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
 void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const
 {
-    if(SdrTextAniKind::Blink == GetTextAniKind())
+    if(SdrTextAniKind::Blink != GetTextAniKind())
+        return;
+
+    // get values
+    const SfxItemSet& rSet = GetObjectItemSet();
+    const sal_uInt32 nRepeat((sal_uInt32)rSet.Get(SDRATTR_TEXT_ANICOUNT).GetValue());
+    double fDelay((double)rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue());
+
+    if(0.0 == fDelay)
     {
-        // get values
-        const SfxItemSet& rSet = GetObjectItemSet();
-        const sal_uInt32 nRepeat((sal_uInt32)rSet.Get(SDRATTR_TEXT_ANICOUNT).GetValue());
-        double fDelay((double)rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue());
+        // use default
+        fDelay = 250.0;
+    }
 
-        if(0.0 == fDelay)
-        {
-            // use default
-            fDelay = 250.0;
-        }
+    // prepare loop and add
+    drawinglayer::animation::AnimationEntryLoop  aLoop(nRepeat ? nRepeat : ENDLESS_LOOP);
+    drawinglayer::animation::AnimationEntryFixed aStart(fDelay, 0.0);
+    aLoop.append(aStart);
+    drawinglayer::animation::AnimationEntryFixed aEnd(fDelay, 1.0);
+    aLoop.append(aEnd);
+    rAnimList.append(aLoop);
 
-        // prepare loop and add
-        drawinglayer::animation::AnimationEntryLoop  aLoop(nRepeat ? nRepeat : ENDLESS_LOOP);
-        drawinglayer::animation::AnimationEntryFixed aStart(fDelay, 0.0);
-        aLoop.append(aStart);
-        drawinglayer::animation::AnimationEntryFixed aEnd(fDelay, 1.0);
-        aLoop.append(aEnd);
-        rAnimList.append(aLoop);
-
-        // add stopped state if loop is not endless
-        if(0L != nRepeat)
-        {
-            bool bVisibleWhenStopped(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE).GetValue());
-            drawinglayer::animation::AnimationEntryFixed aStop(ENDLESS_TIME, bVisibleWhenStopped ? 0.0 : 1.0);
-            rAnimList.append(aStop);
-        }
+    // add stopped state if loop is not endless
+    if(0L != nRepeat)
+    {
+        bool bVisibleWhenStopped(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE).GetValue());
+        drawinglayer::animation::AnimationEntryFixed aStop(ENDLESS_TIME, bVisibleWhenStopped ? 0.0 : 1.0);
+        rAnimList.append(aStop);
     }
 }
 
@@ -1368,67 +1368,67 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
 {
     const SdrTextAniKind eAniKind(GetTextAniKind());
 
-    if(SdrTextAniKind::Scroll == eAniKind || SdrTextAniKind::Alternate == eAniKind || SdrTextAniKind::Slide == eAniKind)
+    if(SdrTextAniKind::Scroll != eAniKind && SdrTextAniKind::Alternate != eAniKind && SdrTextAniKind::Slide != eAniKind)
+        return;
+
+    // get data. Goal is to calculate fTimeFullPath which is the time needed to
+    // move animation from (0.0) to (1.0) state
+    const SfxItemSet& rSet = GetObjectItemSet();
+    double fAnimationDelay((double)rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue());
+    double fSingleStepWidth((double)rSet.Get(SDRATTR_TEXT_ANIAMOUNT).GetValue());
+    const SdrTextAniDirection eDirection(GetTextAniDirection());
+    const bool bForward(SdrTextAniDirection::Right == eDirection || SdrTextAniDirection::Down == eDirection);
+
+    if(basegfx::fTools::equalZero(fAnimationDelay))
     {
-        // get data. Goal is to calculate fTimeFullPath which is the time needed to
-        // move animation from (0.0) to (1.0) state
-        const SfxItemSet& rSet = GetObjectItemSet();
-        double fAnimationDelay((double)rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue());
-        double fSingleStepWidth((double)rSet.Get(SDRATTR_TEXT_ANIAMOUNT).GetValue());
-        const SdrTextAniDirection eDirection(GetTextAniDirection());
-        const bool bForward(SdrTextAniDirection::Right == eDirection || SdrTextAniDirection::Down == eDirection);
+        // default to 1/20 second
+        fAnimationDelay = 50.0;
+    }
 
-        if(basegfx::fTools::equalZero(fAnimationDelay))
+    if(basegfx::fTools::less(fSingleStepWidth, 0.0))
+    {
+        // data is in pixels, convert to logic. Imply PIXEL_DPI dpi.
+        // It makes no sense to keep the view-transformation centered
+        // definitions, so get rid of them here.
+        fSingleStepWidth = (-fSingleStepWidth * (2540.0 / PIXEL_DPI));
+    }
+
+    if(basegfx::fTools::equalZero(fSingleStepWidth))
+    {
+        // default to 1 millimeter
+        fSingleStepWidth = 100.0;
+    }
+
+    // use the length of the full animation path and the number of steps
+    // to get the full path time
+    const double fFullPathLength(fFrameLength + fTextLength);
+    const double fNumberOfSteps(fFullPathLength / fSingleStepWidth);
+    double fTimeFullPath(fNumberOfSteps * fAnimationDelay);
+
+    if(fTimeFullPath < fAnimationDelay)
+    {
+        fTimeFullPath = fAnimationDelay;
+    }
+
+    switch(eAniKind)
+    {
+        case SdrTextAniKind::Scroll :
         {
-            // default to 1/20 second
-            fAnimationDelay = 50.0;
+            impCreateScrollTiming(rSet, rAnimList, bForward, fTimeFullPath, fAnimationDelay);
+            break;
         }
-
-        if(basegfx::fTools::less(fSingleStepWidth, 0.0))
+        case SdrTextAniKind::Alternate :
         {
-            // data is in pixels, convert to logic. Imply PIXEL_DPI dpi.
-            // It makes no sense to keep the view-transformation centered
-            // definitions, so get rid of them here.
-            fSingleStepWidth = (-fSingleStepWidth * (2540.0 / PIXEL_DPI));
+            double fRelativeTextLength(fTextLength / (fFrameLength + fTextLength));
+            impCreateAlternateTiming(rSet, rAnimList, fRelativeTextLength, bForward, fTimeFullPath, fAnimationDelay);
+            break;
         }
-
-        if(basegfx::fTools::equalZero(fSingleStepWidth))
+        case SdrTextAniKind::Slide :
         {
-            // default to 1 millimeter
-            fSingleStepWidth = 100.0;
+            impCreateSlideTiming(rSet, rAnimList, bForward, fTimeFullPath, fAnimationDelay);
+            break;
         }
-
-        // use the length of the full animation path and the number of steps
-        // to get the full path time
-        const double fFullPathLength(fFrameLength + fTextLength);
-        const double fNumberOfSteps(fFullPathLength / fSingleStepWidth);
-        double fTimeFullPath(fNumberOfSteps * fAnimationDelay);
-
-        if(fTimeFullPath < fAnimationDelay)
-        {
-            fTimeFullPath = fAnimationDelay;
-        }
-
-        switch(eAniKind)
-        {
-            case SdrTextAniKind::Scroll :
-            {
-                impCreateScrollTiming(rSet, rAnimList, bForward, fTimeFullPath, fAnimationDelay);
-                break;
-            }
-            case SdrTextAniKind::Alternate :
-            {
-                double fRelativeTextLength(fTextLength / (fFrameLength + fTextLength));
-                impCreateAlternateTiming(rSet, rAnimList, fRelativeTextLength, bForward, fTimeFullPath, fAnimationDelay);
-                break;
-            }
-            case SdrTextAniKind::Slide :
-            {
-                impCreateSlideTiming(rSet, rAnimList, bForward, fTimeFullPath, fAnimationDelay);
-                break;
-            }
-            default : break; // SdrTextAniKind::NONE, SdrTextAniKind::Blink
-        }
+        default : break; // SdrTextAniKind::NONE, SdrTextAniKind::Blink
     }
 }
 

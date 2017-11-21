@@ -328,27 +328,28 @@ void SdrObjList::impChildInserted(SdrObject const & rChild)
 void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
 {
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::NbcInsertObject(NULL)");
-    if (pObj!=nullptr) {
-        DBG_ASSERT(!pObj->IsInserted(),"The object already has the status Inserted.");
-        const size_t nCount = GetObjCount();
-        if (nPos>nCount) nPos=nCount;
-        InsertObjectIntoContainer(*pObj,nPos);
+    if (pObj==nullptr)
+        return;
 
-        if (nPos<nCount) bObjOrdNumsDirty=true;
-        pObj->SetOrdNum(nPos);
-        pObj->SetObjList(this);
-        pObj->SetPage(pPage);
+    DBG_ASSERT(!pObj->IsInserted(),"The object already has the status Inserted.");
+    const size_t nCount = GetObjCount();
+    if (nPos>nCount) nPos=nCount;
+    InsertObjectIntoContainer(*pObj,nPos);
 
-        // Inform the parent about change to allow invalidations at
-        // evtl. existing parent visualisations
-        impChildInserted(*pObj);
+    if (nPos<nCount) bObjOrdNumsDirty=true;
+    pObj->SetOrdNum(nPos);
+    pObj->SetObjList(this);
+    pObj->SetPage(pPage);
 
-        if (!bRectsDirty) {
-            aOutRect.Union(pObj->GetCurrentBoundRect());
-            aSnapRect.Union(pObj->GetSnapRect());
-        }
-        pObj->SetInserted(true); // calls the UserCall (among others)
+    // Inform the parent about change to allow invalidations at
+    // evtl. existing parent visualisations
+    impChildInserted(*pObj);
+
+    if (!bRectsDirty) {
+        aOutRect.Union(pObj->GetCurrentBoundRect());
+        aSnapRect.Union(pObj->GetSnapRect());
     }
+    pObj->SetInserted(true); // calls the UserCall (among others)
 }
 
 void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)

@@ -1685,24 +1685,24 @@ static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPoly
 
 void SdrPathObj::ImpForceLineAngle()
 {
-    if(OBJ_LINE == meKind && lcl_ImpIsLine(GetPathPoly()))
-    {
-        const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
-        const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
-        const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
-        const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
-        const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
-        const Point aDelt(aPoint1 - aPoint0);
+    if(OBJ_LINE != meKind || !lcl_ImpIsLine(GetPathPoly()))
+        return;
 
-        aGeo.nRotationAngle=GetAngle(aDelt);
-        aGeo.nShearAngle=0;
-        aGeo.RecalcSinCos();
-        aGeo.RecalcTan();
+    const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
+    const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
+    const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
+    const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
+    const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
+    const Point aDelt(aPoint1 - aPoint0);
 
-        // for SdrTextObj, keep aRect up to date
-        maRect = tools::Rectangle(aPoint0, aPoint1);
-        maRect.Justify();
-    }
+    aGeo.nRotationAngle=GetAngle(aDelt);
+    aGeo.nShearAngle=0;
+    aGeo.RecalcSinCos();
+    aGeo.RecalcTan();
+
+    // for SdrTextObj, keep aRect up to date
+    maRect = tools::Rectangle(aPoint0, aPoint1);
+    maRect.Justify();
 }
 
 void SdrPathObj::ImpForceKind()

@@ -84,62 +84,62 @@ void SvxLineBox::Select()
     // Call the parent's Select() member to trigger accessibility events.
     LineLB::Select();
 
-    if ( !IsTravelSelect() )
+    if ( IsTravelSelect() )
+        return;
+
+    drawing::LineStyle eXLS;
+    sal_Int32 nPos = GetSelectedEntryPos();
+
+    switch ( nPos )
     {
-        drawing::LineStyle eXLS;
-        sal_Int32 nPos = GetSelectedEntryPos();
-
-        switch ( nPos )
-        {
-            case 0:
-                eXLS = drawing::LineStyle_NONE;
-                break;
-
-            case 1:
-                eXLS = drawing::LineStyle_SOLID;
-                break;
-
-            default:
-            {
-                eXLS = drawing::LineStyle_DASH;
-
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                     SfxObjectShell::Current()  &&
-                     SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
-                {
-                    // LineDashItem will only be sent if it also has a dash.
-                    // Notify cares!
-                    SvxDashListItem aItem( *static_cast<const SvxDashListItem*>(
-                        SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
-                    XLineDashItem aLineDashItem( GetSelectedEntry(),
-                        aItem.GetDashList()->GetDash( nPos - 2 )->GetDash() );
-
-                    Any a;
-                    Sequence< PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = "LineDash";
-                    aLineDashItem.QueryValue ( a );
-                    aArgs[0].Value = a;
-                    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                                 ".uno:LineDash",
-                                                 aArgs );
-                }
-            }
+        case 0:
+            eXLS = drawing::LineStyle_NONE;
             break;
+
+        case 1:
+            eXLS = drawing::LineStyle_SOLID;
+            break;
+
+        default:
+        {
+            eXLS = drawing::LineStyle_DASH;
+
+            if ( nPos != LISTBOX_ENTRY_NOTFOUND &&
+                 SfxObjectShell::Current()  &&
+                 SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
+            {
+                // LineDashItem will only be sent if it also has a dash.
+                // Notify cares!
+                SvxDashListItem aItem( *static_cast<const SvxDashListItem*>(
+                    SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
+                XLineDashItem aLineDashItem( GetSelectedEntry(),
+                    aItem.GetDashList()->GetDash( nPos - 2 )->GetDash() );
+
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = "LineDash";
+                aLineDashItem.QueryValue ( a );
+                aArgs[0].Value = a;
+                SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                             ".uno:LineDash",
+                                             aArgs );
+            }
         }
-
-        XLineStyleItem aLineStyleItem( eXLS );
-        Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "XLineStyle";
-        aLineStyleItem.QueryValue ( a );
-        aArgs[0].Value = a;
-        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                     ".uno:XLineStyle",
-                                     aArgs );
-
-        nCurPos = GetSelectedEntryPos();
-        ReleaseFocus_Impl();
+        break;
     }
+
+    XLineStyleItem aLineStyleItem( eXLS );
+    Any a;
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = "XLineStyle";
+    aLineStyleItem.QueryValue ( a );
+    aArgs[0].Value = a;
+    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                 ".uno:XLineStyle",
+                                 aArgs );
+
+    nCurPos = GetSelectedEntryPos();
+    ReleaseFocus_Impl();
 }
 
 
