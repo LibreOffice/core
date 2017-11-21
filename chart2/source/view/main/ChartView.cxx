@@ -2089,12 +2089,12 @@ sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabe
     return nFormat;
 }
 
-awt::Rectangle ExplicitValueProvider::addAxisTitleSizes(
+awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
             ChartModel& rModel
             , const Reference< uno::XInterface >& xChartView
-            , const awt::Rectangle& rExcludingPositionAndSize )
+            , const awt::Rectangle& rPositionAndSize, bool bSubtract )
 {
-    awt::Rectangle aRet(rExcludingPositionAndSize);
+    awt::Rectangle aRet(rPositionAndSize);
 
     //add axis title sizes to the diagram size
     uno::Reference< chart2::XTitle > xTitle_Height( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, rModel ) );
@@ -2146,78 +2146,21 @@ awt::Rectangle ExplicitValueProvider::addAxisTitleSizes(
                 if( nSecondTitleSpaceWidth )
                     nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
             }
-
-            aRet.X -= nTitleSpaceWidth;
-            aRet.Y -= nSecondTitleSpaceHeight;
-            aRet.Width += nTitleSpaceWidth + nSecondTitleSpaceWidth;
-            aRet.Height += nTitleSpaceHeight + nSecondTitleSpaceHeight;
-        }
-    }
-    return aRet;
-}
-
-awt::Rectangle ExplicitValueProvider::substractAxisTitleSizes(
-            ChartModel& rModel
-            , const Reference< uno::XInterface >& xChartView
-            , const awt::Rectangle& rPositionAndSizeIncludingTitles )
-{
-    awt::Rectangle aRet(rPositionAndSizeIncludingTitles);
-
-    //add axis title sizes to the diagram size
-    uno::Reference< chart2::XTitle > xTitle_Height( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, rModel ) );
-    uno::Reference< chart2::XTitle > xTitle_Width( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, rModel ) );
-    uno::Reference< chart2::XTitle > xSecondTitle_Height( TitleHelper::getTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, rModel ) );
-    uno::Reference< chart2::XTitle > xSecondTitle_Width( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, rModel ) );
-    if( xTitle_Height.is() || xTitle_Width.is() || xSecondTitle_Height.is() || xSecondTitle_Width.is() )
-    {
-        ExplicitValueProvider* pExplicitValueProvider = ExplicitValueProvider::getExplicitValueProvider(xChartView);
-        if( pExplicitValueProvider )
-        {
-            //detect whether x axis points into x direction or not
-            if( lcl_getPropertySwapXAndYAxis( rModel.getFirstDiagram() ) )
+            if( bSubtract )
             {
-                std::swap( xTitle_Height, xTitle_Width );
-                std::swap( xSecondTitle_Height, xSecondTitle_Width );
+                aRet.X += nTitleSpaceWidth;
+                aRet.Y += nSecondTitleSpaceHeight;
+                aRet.Width -= (nTitleSpaceWidth + nSecondTitleSpaceWidth);
+                aRet.Height -= (nTitleSpaceHeight + nSecondTitleSpaceHeight);
             }
+            else
+            {
 
-            sal_Int32 nTitleSpaceWidth = 0;
-            sal_Int32 nTitleSpaceHeight = 0;
-            sal_Int32 nSecondTitleSpaceWidth = 0;
-            sal_Int32 nSecondTitleSpaceHeight = 0;
-
-            if( xTitle_Height.is() )
-            {
-                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, rModel ) );
-                nTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
-                if( nTitleSpaceHeight )
-                    nTitleSpaceHeight+=lcl_getDiagramTitleSpace();
+                aRet.X -= nTitleSpaceWidth;
+                aRet.Y -= nSecondTitleSpaceHeight;
+                aRet.Width += nTitleSpaceWidth + nSecondTitleSpaceWidth;
+                aRet.Height += nTitleSpaceHeight + nSecondTitleSpaceHeight;
             }
-            if( xTitle_Width.is() )
-            {
-                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, rModel ) );
-                nTitleSpaceWidth = pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
-                if(nTitleSpaceWidth)
-                    nTitleSpaceWidth+=lcl_getDiagramTitleSpace();
-            }
-            if( xSecondTitle_Height.is() )
-            {
-                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, rModel ) );
-                nSecondTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
-                if( nSecondTitleSpaceHeight )
-                    nSecondTitleSpaceHeight+=lcl_getDiagramTitleSpace();
-            }
-            if( xSecondTitle_Width.is() )
-            {
-                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, rModel ) );
-                nSecondTitleSpaceWidth += pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
-                if( nSecondTitleSpaceWidth )
-                    nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
-            }
-
-            aRet.X += nTitleSpaceWidth;
-            aRet.Y += nSecondTitleSpaceHeight;
-            aRet.Width -= (nTitleSpaceWidth + nSecondTitleSpaceWidth);
-            aRet.Height -= (nTitleSpaceHeight + nSecondTitleSpaceHeight);
         }
     }
     return aRet;
