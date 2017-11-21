@@ -625,7 +625,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         {
             //save geometry
             SdrCustomShapeGeometryItem aInitialGeometry =
-                static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+                pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
 
             EnhancedCustomShape2d aShape(pObj);
 

@@ -882,7 +882,7 @@ namespace
     SvxBoxItem mergeDrawinglayerTextDistancesAndSvxBoxItem(const SfxItemSet& rAttrSet)
     {
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
-        SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( rAttrSet.Get( SDRATTR_TABLE_BORDER ) ) );
+        SvxBoxItem aBoxItem( rAttrSet.Get( SDRATTR_TABLE_BORDER ) );
         aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_LEFTDIST).GetValue()), SvxBoxItemLine::LEFT );
         aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST).GetValue()), SvxBoxItemLine::RIGHT );
         aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_UPPERDIST).GetValue()), SvxBoxItemLine::TOP );
@@ -906,7 +906,7 @@ void SvxTableController::onFormatTable( SfxRequest const & rReq )
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem(mergeDrawinglayerTextDistancesAndSvxBoxItem(aNewAttr));
 
-        SvxBoxInfoItem aBoxInfoItem( static_cast< const SvxBoxInfoItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) ) );
+        SvxBoxInfoItem aBoxInfoItem( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) );
 
         MergeAttrFromSelectedCells(aNewAttr, false);
         FillCommonBorderAttrFromSelectedCells( aBoxItem, aBoxInfoItem );
@@ -934,7 +934,7 @@ void SvxTableController::onFormatTable( SfxRequest const & rReq )
                 aNewSet.Put(aBoxInfoItem);
             }
 
-            SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
+            SvxBoxItem aNewBoxItem( aNewSet.Get( SDRATTR_TABLE_BORDER ) );
 
             if( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) != aBoxItem.GetDistance( SvxBoxItemLine::LEFT ) )
                 aNewSet.Put(makeSdrTextLeftDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) ) );
@@ -2415,11 +2415,11 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
         {
             const SvxBoxItem* pBoxItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER, false) )
-                pBoxItem = dynamic_cast< const SvxBoxItem* >( &rAttr.Get( SDRATTR_TABLE_BORDER ) );
+                pBoxItem = &rAttr.Get( SDRATTR_TABLE_BORDER );
 
             const SvxBoxInfoItem* pBoxInfoItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER_INNER, false) )
-                pBoxInfoItem = dynamic_cast< const SvxBoxInfoItem* >( &rAttr.Get( SDRATTR_TABLE_BORDER_INNER ) );
+                pBoxInfoItem = &rAttr.Get( SDRATTR_TABLE_BORDER_INNER );
 
             const SvxColorItem* pLineColorItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SID_FRAME_LINECOLOR, false) )
@@ -2461,7 +2461,7 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
                         continue;
 
                     const SfxItemSet& rSet = xCell->GetItemSet();
-                    const SvxBoxItem* pOldOuter = static_cast<const SvxBoxItem*>(&rSet.Get( SDRATTR_TABLE_BORDER ));
+                    const SvxBoxItem* pOldOuter = &rSet.Get( SDRATTR_TABLE_BORDER );
 
                     SvxBoxItem aNewFrame( *pOldOuter );
 

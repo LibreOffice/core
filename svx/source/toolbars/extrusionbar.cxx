@@ -545,7 +545,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
                             pSdrView->BegUndo( aStr );
                             pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         }
-                        SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
+                        SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         impl_execute( rReq, aGeometryItem, pObj );
                         pObj->SetMergedItem( aGeometryItem );
                         pObj->BroadcastObjectChange();
@@ -625,7 +625,7 @@ void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             // see if this is an extruded customshape
             if( !bHasCustomShape )
@@ -775,7 +775,7 @@ void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& rSet )
             // see if this is an extruded customshape
             if( !bHasCustomShape )
             {
-                const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+                const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                 const Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
                 if( pAny_ )
                     *pAny_ >>= bHasCustomShape;
@@ -784,7 +784,7 @@ void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& rSet )
                     continue;
             }
 
-            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             bool    bParallel = true;
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, "ProjectionMode" );
@@ -827,7 +827,7 @@ void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             // see if this is an extruded customshape
             if( !bHasCustomShape )
@@ -912,7 +912,7 @@ void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             // see if this is an extruded customshape
             if( !bHasCustomShape )
@@ -996,7 +996,7 @@ void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxItemSet& r
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             // see if this is an extruded customshape
             if( !bHasCustomShape )
@@ -1070,7 +1070,7 @@ void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxItemSet& r
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             // see if this is an extruded customshape
             if( !bHasCustomShape )
@@ -1139,7 +1139,7 @@ void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             // see if this is an extruded customshape
             if( !bHasCustomShape )
@@ -1207,7 +1207,7 @@ bool checkForSelectedCustomShapes( SdrView const * pSdrView, bool bOnlyExtruded 
         {
             if( bOnlyExtruded )
             {
-                const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ));
+                const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                 const Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
                 if( pAny )
                     *pAny >>= bFound;

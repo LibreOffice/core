@@ -258,8 +258,8 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     if ( pSdrObjCustomShape )
     {
         // retrieving the TextPath property to check if feature is enabled
-        const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
-            pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+        const SdrCustomShapeGeometryItem& rGeometryItem =
+            pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         bool bTextPathOn = false;
         const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "TextPath" );
         if ( pAny )

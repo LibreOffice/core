@@ -496,7 +496,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     {
                         if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
                         {
-                            const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+                            const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
                             if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))
                                 // But still disallow fontwork shapes.
                                 bDisable = pAny->get<OUString>().startsWith("fontwork-");
