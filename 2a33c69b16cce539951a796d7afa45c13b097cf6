@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_35285086",
+        "filename": "uitest/impress_tests/backgrounds.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-21T09:14:52Z",
+      "side": 0,
+      "message": "Why remove this test? The test should still work as before.",
+      "range": {
+        "startLine": 126,
+        "startChar": 12,
+        "endLine": 150,
+        "endChar": 50
+      },
+      "revId": "2a33c69b16cce539951a796d7afa45c13b097cf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
