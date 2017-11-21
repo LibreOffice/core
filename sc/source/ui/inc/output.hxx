@@ -250,6 +250,8 @@ private:
     bool Clip( DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
                long nEngineHeight, bool bWrapFields);
 
+    bool AdjustAreaParamClipRect(OutputAreaParam& aAreaParam);
+
 public:
     /**
      * @param nNewScrX: X-Offset in the output device for the table
