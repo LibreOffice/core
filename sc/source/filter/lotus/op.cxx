@@ -662,7 +662,7 @@ void OP_ApplyPatternArea123(LotusContext& rContext, SvStream& rStream)
                 break;
         }
     }
-    while( nLevel && !rStream.IsEof() && rStream.good() );
+    while( nLevel && rStream.good() );
 
     rContext.aLotusPatternPool.clear();
 }
