@@ -57,7 +57,7 @@ void SelectionObserver::Context::Abort()
 
 SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter)
-    , mbIsOvservationActive(false)
+    , mbIsObservationActive(false)
     , mbPageEventOccurred(false)
     , maInsertedPages()
 {
@@ -69,7 +69,7 @@ SelectionObserver::~SelectionObserver()
 
 void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
 {
-    if ( ! mbIsOvservationActive)
+    if (!mbIsObservationActive)
         return;
 
     mbPageEventOccurred = true;
@@ -92,22 +92,22 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
 
 void SelectionObserver::StartObservation()
 {
-    OSL_ASSERT(!mbIsOvservationActive);
+    OSL_ASSERT(!mbIsObservationActive);
     maInsertedPages.clear();
-    mbIsOvservationActive = true;
+    mbIsObservationActive = true;
 }
 
 void SelectionObserver::AbortObservation()
 {
-    OSL_ASSERT(mbIsOvservationActive);
-    mbIsOvservationActive = false;
+    OSL_ASSERT(mbIsObservationActive);
+    mbIsObservationActive = false;
     maInsertedPages.clear();
 }
 
 void SelectionObserver::EndObservation()
 {
-    OSL_ASSERT(mbIsOvservationActive);
-    mbIsOvservationActive = false;
+    OSL_ASSERT(mbIsObservationActive);
+    mbIsObservationActive = false;
 
     if (!mbPageEventOccurred)
         return;
