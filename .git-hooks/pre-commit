@@ -7,7 +7,6 @@
 
 use strict;
 use lib "solenv/clang-format";
-use ClangFormat;
 #use File::Copy;
 #use Cwd;
 
@@ -112,6 +111,15 @@ sub check_whitespaces($)
 
 sub check_style($)
 {
+    if (! -e "solenv/clang-format/ClangFormat.pm")
+    {
+        # Commit happens in a submodule.
+        return;
+    }
+
+    require ClangFormat;
+    ClangFormat->import();
+
     my ($h) = @_;
     my $src = ClangFormat::get_extension_regex();
     my @bad_names = ();
