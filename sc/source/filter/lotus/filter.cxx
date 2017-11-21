@@ -82,6 +82,9 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
         sal_uInt16 nOpcode(LOTUS_EOF), nLength(0);
 
         aStream.ReadUInt16(nOpcode).ReadUInt16(nLength);
+        if (!aStream.good())
+            break;
+
         aPrgrsBar.Progress();
         if( nOpcode == LOTUS_EOF )
             rContext.bEOF = true;
@@ -118,7 +121,9 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
 
     MemDelete(rContext);
 
-    if (nErr == ERRCODE_NONE)
+    if (!aStream.good())
+        nErr = SCERR_IMPORT_FORMAT;
+    else if (nErr == ERRCODE_NONE)
         rContext.pDoc->CalcAfterLoad();
 
     return nErr;
