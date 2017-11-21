@@ -33,10 +33,14 @@ class SvNumberFormatter;
  */
 struct SAL_WARN_UNUSED SC_DLLPUBLIC ScSetStringParam
 {
+    /** Enum settings that take effect if mbDetectNumberFormat=false or if
+        true a number was not detected.
+     */
     enum TextFormatPolicy
     {
         /**
-         * Set Text number format no matter what the input string is.
+         * Set Text number format if the input string can be parsed as a number
+         * or formula text.
          */
         Always,
 
