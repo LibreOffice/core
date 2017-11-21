@@ -460,8 +460,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     WW8PLCFxDesc aRes;
     aRes.pMemPos = nullptr;
     aRes.nEndPos = rStartCp;
-    bool bReadRes(false);
-    WW8PLCFxDesc aPrevRes;
+    std::set<std::pair<WW8_CP, WW8_CP>> aPrevRes;
 
     while (pPap->HasFkp() && rStartCp != WW8_CP_MAX)
     {
@@ -496,13 +495,12 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
         }
         pPap->GetSprms(&aRes);
         pPap->SetDirty(false);
-        if (bReadRes && aRes.nEndPos == aPrevRes.nEndPos && aRes.nStartPos == aPrevRes.nStartPos)
+        auto aBounds(std::make_pair(aRes.nStartPos, aRes.nEndPos));
+        if (!aPrevRes.insert(aBounds).second) //already seen these bounds, infinite loop
         {
             SAL_WARN("sw.ww8", "SearchRowEnd, loop in paragraph property chain");
             break;
         }
-        bReadRes = true;
-        aPrevRes = aRes;
         //Update our aRes to get the new starting point of the next properties
         rStartCp = aRes.nEndPos;
     }
@@ -519,8 +517,7 @@ bool SwWW8ImplReader::SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const
     WW8PLCFxDesc aRes;
     aRes.pMemPos = nullptr;
     aRes.nEndPos = pPap->Where();
-    bool bReadRes(false);
-    WW8PLCFxDesc aPrevRes;
+    std::set<std::pair<WW8_CP, WW8_CP>> aPrevRes;
 
     while (pPap->HasFkp() && pPap->Where() != WW8_CP_MAX)
     {
@@ -539,11 +536,12 @@ bool SwWW8ImplReader::SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const
 
         // Read the sprms and make sure we moved forward to avoid infinite loops.
         pPap->GetSprms(&aRes);
-        if (bReadRes && aRes.nEndPos == aPrevRes.nEndPos && aRes.nStartPos == aPrevRes.nStartPos)
-            return false;
-
-        bReadRes = true;
-        aPrevRes = aRes;
+        auto aBounds(std::make_pair(aRes.nStartPos, aRes.nEndPos));
+        if (!aPrevRes.insert(aBounds).second) //already seen these bounds, infinite loop
+        {
+            SAL_WARN("sw.ww8", "SearchTableEnd, loop in paragraph property chain");
+            break;
+        }
     }
 
     return false;
