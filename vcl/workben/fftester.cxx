@@ -102,6 +102,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         InitVCL();
 
+        Application::SetDialogCancelMode(Application::DialogCancelMode::Silent);
+
         if (strcmp(argv[2], "wmf") == 0 || strcmp(argv[2], "emf") == 0)
         {
             GDIMetaFile aGDIMetaFile;

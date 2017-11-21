@@ -100,6 +100,7 @@ void CommonInitialize(int *argc, char ***argv)
     comphelper::setProcessServiceFactory( xServiceManager );
     utl::ConfigManager::EnableFuzzing();
     InitVCL();
+    Application::SetDialogCancelMode( Application::DialogCancelMode::Silent );
 
     //we don't have a de-init, so inside this leak disabled region...
     //get the font info
