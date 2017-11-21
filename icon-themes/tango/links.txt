@@ -624,3 +624,6 @@ cmd/sc_formatframemenu.png cmd/sc_inserttextframe.png
 cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 
+cmd/lc_spacepara115.png cmd/lc_spacepara1.png
+cmd/lc_spacepara25.png cmd/lc_spacepara2.png
+
