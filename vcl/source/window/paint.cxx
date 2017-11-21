@@ -1537,7 +1537,7 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
     OutputDevice *pOutDev = GetOutDev();
 
     // RTL: check if this window requires special action
-    bool bReMirror = ( ImplIsAntiparallel() );
+    bool bReMirror = ImplIsAntiparallel();
 
     tools::Rectangle aRectMirror( rRect );
     if( bReMirror )
