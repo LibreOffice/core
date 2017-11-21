@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 #include <memory>
 #include <vcl/pngread.hxx>
 
@@ -1317,6 +1320,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     }
                     else
                     {
+                        assert(mnPngDepth == 16);
                         for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
                             ImplSetAlphaPixel( nY, nX, pTmp[ 0 ], pTmp[ 2 ] );
                     }
