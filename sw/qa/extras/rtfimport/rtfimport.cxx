@@ -469,6 +469,18 @@ DECLARE_RTFIMPORT_TEST(testSbkodd, "sbkodd.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), xCursor->getPage());
 }
 
+DECLARE_RTFIMPORT_TEST(testSbkeven, "sbkeven.rtf")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), xCursor->getPage());
+    xCursor->jumpToNextPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), xCursor->getPage());
+    xCursor->jumpToNextPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), xCursor->getPage());
+}
+
 DECLARE_RTFIMPORT_TEST(testPoshPosv, "posh-posv.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(1), "HoriOrient"));
