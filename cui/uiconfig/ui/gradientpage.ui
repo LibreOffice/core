@@ -296,7 +296,7 @@
                       <object class="GtkLabel" id="centerft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="gradientpage|centerft">Center ( X / Y ) :</property>
+                        <property name="label" translatable="yes" context="gradientpage|centerft">Center ( X / Y ):</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0.43999999761581421</property>
