@@ -1796,7 +1796,8 @@ bool ScColumn::ParseString(
                     }
                 }
             }
-            else if (aParam.meSetTextNumFormat != ScSetStringParam::Always)
+            else if (aParam.meSetTextNumFormat == ScSetStringParam::Never ||
+                     aParam.meSetTextNumFormat == ScSetStringParam::SpecialNumberOnly)
             {
                 // Only check if the string is a regular number.
                 const LocaleDataWrapper* pLocale = aParam.mpNumFormatter->GetLocaleData();
@@ -1824,7 +1825,14 @@ bool ScColumn::ParseString(
 
         if (rCell.meType == CELLTYPE_NONE)
         {
-            if (aParam.meSetTextNumFormat != ScSetStringParam::Never && aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
+            // If we reach here with ScSetStringParam::SpecialNumberOnly it
+            // means a simple number was not detected above, so test for
+            // special numbers. In any case ScSetStringParam::Always does not
+            // mean always, but only always for content that could be any
+            // numeric.
+            if ((aParam.meSetTextNumFormat == ScSetStringParam::Always ||
+                 aParam.meSetTextNumFormat == ScSetStringParam::SpecialNumberOnly) &&
+                    aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
             {
                 // Set the cell format type to Text.
                 applyTextNumFormat(*this, nRow, aParam.mpNumFormatter);
