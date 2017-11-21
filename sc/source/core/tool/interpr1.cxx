@@ -8914,18 +8914,30 @@ void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double fCnt    = GetStringPositionArgument();
-        double fAnfang = GetStringPositionArgument();
+        sal_Int32 nSubLen = ( sal_Int32 )GetStringPositionArgument();
+        sal_Int32 nStart  = ( sal_Int32 )GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fCnt < 0.0)
+        if ( nStart < 1 || nSubLen < 0 )
             PushIllegalArgument();
         else
         {
-            sal_Int32 nCharacters = std::min<sal_Int32>(static_cast<sal_Int32>(fCnt), aStr.getLength() - fAnfang + 1);
-            OUString sRes;
-            if (nCharacters > 0)
-                sRes = aStr.copy(static_cast<sal_Int32>(fAnfang-1), nCharacters);
-            PushString(sRes);
+            sal_Int32 nLen = aStr.getLength();
+            sal_Int32 nIdx = 0;
+            sal_Int32 nCnt = 0;
+            while ( nIdx < nLen && nStart - 1 > nCnt )
+            {
+                aStr.iterateCodePoints( &nIdx );
+                ++nCnt;
+            }
+            sal_Int32 nIdx0 = nIdx;  //start position
+
+            while ( nIdx < nLen && nStart + nSubLen - 1 > nCnt )
+            {
+                aStr.iterateCodePoints( &nIdx );
+                ++nCnt;
+            }
+            aStr = aStr.copy( nIdx0, nIdx - nIdx0 );
+            PushString( aStr );
         }
     }
 }
