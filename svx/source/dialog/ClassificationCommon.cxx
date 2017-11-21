@@ -106,18 +106,19 @@ void insertFullTextualRepresentationAsDocumentProperty(
                                 sString);
 }
 
-void insertCreationOrigin(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer,
-                          sfx::ClassificationKeyCreator const & rKeyCreator,
+void insertCreationOrigin(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer,
+                          sfx::ClassificationKeyCreator const& rKeyCreator,
                           sfx::ClassificationCreationOrigin eOrigin)
 {
     // Nothing to do if origin is "NONE"
     if (eOrigin == sfx::ClassificationCreationOrigin::NONE)
         return;
 
-    OUString sValue = (eOrigin == sfx::ClassificationCreationOrigin::BAF_POLICY) ? OUString("BAF_POLICY") : OUString("MANUAL");
+    OUString sValue = (eOrigin == sfx::ClassificationCreationOrigin::BAF_POLICY)
+                          ? OUString("BAF_POLICY")
+                          : OUString("MANUAL");
     addOrInsertDocumentProperty(rxPropertyContainer, rKeyCreator.makeCreationOriginKey(), sValue);
 }
-
 }
 } // end svx::classification namespace
 
