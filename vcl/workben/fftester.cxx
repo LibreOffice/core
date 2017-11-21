@@ -386,6 +386,20 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = (int) (*pfnImport)(aFileStream);
         }
+        else if (strcmp(argv[2], "docx") == 0)
+        {
+            static FFilterCall pfnImport(nullptr);
+            if (!pfnImport)
+            {
+                osl::Module aLibrary;
+                aLibrary.loadRelative(&thisModule, "libswlo.so", SAL_LOADMODULE_LAZY);
+                pfnImport = reinterpret_cast<FFilterCall>(
+                    aLibrary.getFunctionSymbol("TestImportDOCX"));
+                aLibrary.release();
+            }
+            SvFileStream aFileStream(out, StreamMode::READ);
+            ret = (int) (*pfnImport)(aFileStream);
+        }
         else if (strcmp(argv[2], "fods") == 0)
         {
             static FFilterCall pfnImport(nullptr);
