@@ -31,6 +31,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
@@ -1576,7 +1577,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         {
             OUString sGrfName;
             OUString sFltName;
-            GraphicObject *pGrfObj = nullptr;
+            std::unique_ptr<GraphicObject> pGrfObj;
             SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), &sGrfName, &sFltName );
             OUString sTmp;
             aValue >>= sTmp;
@@ -1585,7 +1586,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             {
                 if( sTmp.startsWith(sPackageProtocol) )
                 {
-                    pGrfObj = new GraphicObject;
+                    pGrfObj = o3tl::make_unique<GraphicObject>();
                     pGrfObj->SetUserData( sTmp );
                     sGrfName.clear();
                 }
@@ -1594,7 +1595,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     const OString sId(OUStringToOString(
                         sTmp.copy(sizeof(sGraphicObjectProtocol)-1),
                         RTL_TEXTENCODING_ASCII_US));
-                    pGrfObj = new GraphicObject( sId );
+                    pGrfObj = o3tl::make_unique<GraphicObject>( sId );
                     sGrfName.clear();
                 }
                 else
@@ -1614,14 +1615,12 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
                 if(!pGrfNode)
                 {
-                    delete pGrfObj;
                     throw uno::RuntimeException();
                 }
                 SwPaM aGrfPaM(*pGrfNode);
                 pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, sGrfName, sFltName, nullptr,
-                                        pGrfObj );
+                                        pGrfObj.get() );
             }
-            delete pGrfObj;
         }
         else if( FN_UNO_GRAPHIC == pEntry->nWID )
         {
@@ -1651,7 +1650,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             Graphic aGraphic;
             if( bURL )
             {
-                GraphicObject *pGrfObj = nullptr;
+                std::unique_ptr<GraphicObject> pGrfObj;
                 OUString aGrfUrl;
                 aValue >>= aGrfUrl;
 
@@ -1663,11 +1662,10 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     OString sId(OUStringToOString(
                         aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1),
                         RTL_TEXTENCODING_ASCII_US));
-                    pGrfObj = new GraphicObject( sId );
+                    pGrfObj = o3tl::make_unique<GraphicObject>( sId );
                     aGraphic = pGrfObj->GetGraphic();
                     bApply = true;
                 }
-                delete pGrfObj;
             }
             else
             {
@@ -2813,13 +2811,13 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         UnoActionContext aCont(pDoc);
         const ::uno::Any* pGraphicURL;
         OUString sGraphicURL;
-        GraphicObject *pGrfObj = nullptr;
+        std::unique_ptr<GraphicObject> pGrfObj;
         if(pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
         {
             (*pGraphicURL) >>= sGraphicURL;
             if( sGraphicURL.startsWith(sPackageProtocol) )
             {
-                pGrfObj = new GraphicObject;
+                pGrfObj = o3tl::make_unique<GraphicObject>();
                 pGrfObj->SetUserData( sGraphicURL );
                 sGraphicURL.clear();
             }
@@ -2828,7 +2826,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 OString sId(OUStringToOString(
                     sGraphicURL.copy( sizeof(sGraphicObjectProtocol)-1 ),
                     RTL_TEXTENCODING_ASCII_US));
-                pGrfObj = new GraphicObject( sId );
+                pGrfObj = o3tl::make_unique<GraphicObject>( sId );
                 sGraphicURL.clear();
             }
         }
@@ -2851,12 +2849,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
         pFormat = pGrfObj
             ? pDoc->getIDocumentContentOperations().InsertGraphicObject(
-                    aPam, *pGrfObj, &aFrameSet, &aGrSet, pParentFrameFormat)
+                    aPam, *pGrfObj.get(), &aFrameSet, &aGrSet, pParentFrameFormat)
             : pDoc->getIDocumentContentOperations().InsertGraphic(
                     aPam, sGraphicURL, sFltName,
                     (!bHasGraphic && !sGraphicURL.isEmpty()) ? nullptr : &aGraphic,
                     &aFrameSet, &aGrSet, pParentFrameFormat);
-        delete pGrfObj;
         if(pFormat)
         {
             SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFormat->GetContent().GetContentIdx()
