@@ -2740,6 +2740,36 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, const
     lcl_DoHyperlinkResult(pDev, aURLRect, maCell);
 }
 
+bool ScOutputData::AreaParamClipRect(OutputAreaParam& aAreaParam, bool bWrapFields)
+{
+    if( aAreaParam.maClipRect.Left() < nScrX )
+    {
+        aAreaParam.maClipRect.Left() = nScrX;
+        aAreaParam.mbLeftClip = true;
+    }
+    if( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+    {
+        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+        aAreaParam.mbRightClip = true;
+    }
+    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
+
+    //  Fields in a cell with automatic breaks: clip to cell width
+    if( bWrapFields ) bClip = true;
+
+    if( aAreaParam.maClipRect.Top() < nScrY )
+    {
+        aAreaParam.maClipRect.Top() = nScrY;
+        bClip = true;
+    }
+    if( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+    {
+        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
+        bClip = true;
+    }
+    return bClip;
+}
+
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     OSL_ASSERT(rParam.meOrient == SvxCellOrientation::Standard);
@@ -2970,36 +3000,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     if (bOutside)
         return;
 
-    if ( aAreaParam.maClipRect.Left() < nScrX )
-    {
-        aAreaParam.maClipRect.Left() = nScrX;
-        aAreaParam.mbLeftClip = true;
-    }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
-    {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-        aAreaParam.mbRightClip = true;
-    }
-
-    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
+    bool bClip = AreaParamClipRect(aAreaParam, bWrapFields);
     bool bSimClip = false;
-
-    if ( bWrapFields )
-    {
-        //  Fields in a cell with automatic breaks: clip to cell width
-        bClip = true;
-    }
-
-    if ( aAreaParam.maClipRect.Top() < nScrY )
-    {
-        aAreaParam.maClipRect.Top() = nScrY;
-        bClip = true;
-    }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
-    {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
-        bClip = true;
-    }
 
     Size aCellSize;         // output area, excluding margins, in logical units
     if (rParam.mbPixelToLogic)
@@ -3187,36 +3189,8 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
                          OutputAreaParam& aAreaParam, long nEngineHeight,
                          bool bWrapFields)
 {
-    if ( aAreaParam.maClipRect.Left() < nScrX )
-    {
-        aAreaParam.maClipRect.Left() = nScrX;
-        aAreaParam.mbLeftClip = true;
-    }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
-    {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-        aAreaParam.mbRightClip = true;
-    }
-
-    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
+    bool bClip = AreaParamClipRect(aAreaParam, bWrapFields);
     bool bSimClip = false;
-
-    if ( bWrapFields )
-    {
-        //  Fields in a cell with automatic breaks: clip to cell width
-        bClip = true;
-    }
-
-    if ( aAreaParam.maClipRect.Top() < nScrY )
-    {
-        aAreaParam.maClipRect.Top() = nScrY;
-        bClip = true;
-    }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
-    {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
-        bClip = true;
-    }
 
     const Size& aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
     if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
@@ -3945,36 +3919,8 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     if (bOutside)
         return;
 
-    if ( aAreaParam.maClipRect.Left() < nScrX )
-    {
-        aAreaParam.maClipRect.Left() = nScrX;
-        aAreaParam.mbLeftClip = true;
-    }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
-    {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-        aAreaParam.mbRightClip = true;
-    }
-
-    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
+    bool bClip = AreaParamClipRect(aAreaParam, bWrapFields);
     bool bSimClip = false;
-
-    if ( bWrapFields )
-    {
-        //  Fields in a cell with automatic breaks: clip to cell width
-        bClip = true;
-    }
-
-    if ( aAreaParam.maClipRect.Top() < nScrY )
-    {
-        aAreaParam.maClipRect.Top() = nScrY;
-        bClip = true;
-    }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
-    {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
-        bClip = true;
-    }
 
     Size aCellSize;         // output area, excluding margins, in logical units
     if (rParam.mbPixelToLogic)
@@ -4291,36 +4237,8 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     if (bOutside)
         return;
 
-    if ( aAreaParam.maClipRect.Left() < nScrX )
-    {
-        aAreaParam.maClipRect.Left() = nScrX;
-        aAreaParam.mbLeftClip = true;
-    }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
-    {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-        aAreaParam.mbRightClip = true;
-    }
-
-    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
+    bool bClip = AreaParamClipRect(aAreaParam, bWrapFields);
     bool bSimClip = false;
-
-    if ( bWrapFields )
-    {
-        //  Fields in a cell with automatic breaks: clip to cell width
-        bClip = true;
-    }
-
-    if ( aAreaParam.maClipRect.Top() < nScrY )
-    {
-        aAreaParam.maClipRect.Top() = nScrY;
-        bClip = true;
-    }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
-    {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
-        bClip = true;
-    }
 
     Size aCellSize;         // output area, excluding margins, in logical units
     if (rParam.mbPixelToLogic)
