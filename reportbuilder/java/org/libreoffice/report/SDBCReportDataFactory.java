@@ -26,6 +26,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.sdb.RowSetVetoException;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.XCompletedExecution;
 import com.sun.star.sdb.XParametersSupplier;
@@ -202,7 +203,16 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 if (rowSetCreated && execute != null && paramDef.parameterCount > 0)
                 {
                     final XInteractionHandler handler = UnoRuntime.queryInterface(XInteractionHandler.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.InteractionHandler", m_cmpCtx));
-                    execute.executeWithCompletion(handler);
+                    try
+                    {
+                        execute.executeWithCompletion(handler);
+                    }
+                    catch (RowSetVetoException ex)
+                    {
+                        // The user just cancelled his/her query
+                        // just execute
+                       rowSet.execute();
+                    }
                 }
                 else
                 {
