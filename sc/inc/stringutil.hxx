@@ -31,7 +31,7 @@ class SvNumberFormatter;
  * Store parameters used in the ScDocument::SetString() method.  Various
  * options for string-setting operation are specified herein.
  */
-struct SC_DLLPUBLIC ScSetStringParam
+struct SAL_WARN_UNUSED SC_DLLPUBLIC ScSetStringParam
 {
     enum TextFormatPolicy
     {
@@ -45,6 +45,12 @@ struct SC_DLLPUBLIC ScSetStringParam
          * special number but we only want to detect a simple number.
          */
         SpecialNumberOnly,
+
+        /**
+         * Keep an existing number format, do not set Text number format and do
+         * not set another number format.
+         */
+        Keep,
 
         /**
          * Never set Text number format.
