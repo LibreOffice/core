@@ -175,6 +175,9 @@ public:
         double fNan;
         rtl::math::setNan(&fNan);
         ScTokenArray aCode2;
+
+        ScInterpreterContext aContext(mrDoc, mpFormatter);
+
         for (SCROW i = mnIdx; i <= mnLastIdx; ++i, maBatchTopPos.IncRow())
         {
             formula::FormulaTokenArrayPlainIterator aIter(mrCode);
@@ -298,7 +301,6 @@ public:
 
             ScCompiler aComp(&mrDoc, maBatchTopPos, aCode2);
             aComp.CompileTokenArray();
-            ScInterpreterContext aContext(mrDoc, mpFormatter);
             ScInterpreter aInterpreter(pDest, &mrDoc, aContext, maBatchTopPos, aCode2);
             aInterpreter.Interpret();
             mrResults[i] = aInterpreter.GetResultToken();
