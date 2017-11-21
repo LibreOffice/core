@@ -83,6 +83,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/profilezone.hxx>
 
@@ -329,6 +330,82 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
         io_lMediaDescriptor[utl::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
 }
 
+namespace
+{
+
+class WarningDialogsParentScope
+{
+private:
+    class WarningDialogsParent :
+        public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
+    {
+    private:
+        osl::Mutex m_aLock;
+        VclPtr<WorkWindow> m_xWin;
+        css::uno::Reference<css::awt::XWindow> m_xInterface;
+    public:
+
+        using cppu::WeakComponentImplHelperBase::disposing;
+        virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+        {
+        }
+
+        // XTerminateListener
+        virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+        {
+        }
+
+        virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+        {
+            SolarMutexGuard aSolarGuard;
+            m_xWin.disposeAndClear();
+        }
+
+    public:
+        WarningDialogsParent()
+            : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aLock)
+        {
+            SolarMutexGuard aSolarGuard;
+            m_xWin = VclPtr<WorkWindow>::Create(nullptr, WB_STDWORK);
+            m_xInterface = VCLUnoHelper::GetInterface(m_xWin);
+        }
+
+        virtual ~WarningDialogsParent() override
+        {
+            SolarMutexGuard aSolarGuard;
+            m_xWin.disposeAndClear();
+        }
+
+        const css::uno::Reference<css::awt::XWindow>& GetDialogParent() const
+        {
+            return m_xInterface;
+        }
+    };
+
+    css::uno::Reference<css::frame::XDesktop> m_xDesktop;
+    rtl::Reference<WarningDialogsParent> m_xListener;
+
+public:
+    WarningDialogsParentScope(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+        : m_xDesktop(css::frame::Desktop::create(rContext), css::uno::UNO_QUERY_THROW)
+        , m_xListener(new WarningDialogsParent)
+    {
+        m_xDesktop->addTerminateListener(m_xListener.get());
+    }
+
+    const css::uno::Reference<css::awt::XWindow>& GetDialogParent() const
+    {
+        return m_xListener->GetDialogParent();
+    }
+
+    ~WarningDialogsParentScope()
+    {
+        m_xDesktop->removeTerminateListener(m_xListener.get());
+    }
+};
+
+}
+
 void LoadEnv::startLoading()
 {
     // SAFE ->
@@ -345,6 +422,35 @@ void LoadEnv::startLoading()
 
     // <- SAFE
     aReadLock.clear();
+
+    std::unique_ptr<WarningDialogsParentScope> xWarningDialogsParent;
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
+        bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
+        bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
+
+        if (!bHidden && !bMinimized && !bPreview)
+        {
+            xWarningDialogsParent.reset(new WarningDialogsParentScope(m_xContext));
+
+            // Because we don't have a window yet, set things up so that warnings dialogs are relative to a specific
+            // temporary window we create here so modal dialogs can be modal to a specific window we control
+            // the lifecycle of. The result is the dialogs don't block other windows, but don't attempt to live
+            // past the lifetime of the application.
+
+            // Once the typedetection is over and the document begins to load the new window frame for the document
+            // becomes the parent window for new modal dialogs
+            css::uno::Reference<css::task::XInteractionHandler> xInteractionHandler(
+                task::InteractionHandler::createWithParent(m_xContext, xWarningDialogsParent->GetDialogParent()),
+                css::uno::UNO_QUERY);
+            if (xInteractionHandler.is())
+            {
+                m_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+                m_lMediaDescriptor[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= xInteractionHandler;
+            }
+        }
+    }
 
     // detect its type/filter etc.
     // These information will be available by the
