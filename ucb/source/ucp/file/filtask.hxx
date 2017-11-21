@@ -211,7 +211,7 @@ namespace fileaccess
         {
             bool operator()( const MyProperty& rKey1, const MyProperty& rKey2 ) const
             {
-                return !!(  rKey1.getPropertyName() == rKey2.getPropertyName() );
+                return rKey1.getPropertyName() == rKey2.getPropertyName();
             }
         };
 

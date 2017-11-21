@@ -139,7 +139,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
     double fY = fScaledUpperYValue;
     double fZ = fScaledZ;
     bool bReverse = !pPosHelper->isMathematicalOrientationY();
-    bool bNormalOutside = (!bReverse == !!(fBaseValue < fScaledUpperYValue));
+    bool bNormalOutside = (!bReverse == (fBaseValue < fScaledUpperYValue));
     double fDepth = fScaledUpperBarDepth;
 
     switch(nLabelPlacement)

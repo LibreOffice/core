@@ -378,7 +378,7 @@ namespace svt
             else
                 o_formatter = pos->second;
 
-            return !!o_formatter;
+            return bool(o_formatter);
         }
     }
 

@@ -1048,9 +1048,9 @@ bool SfxWorkWindow::IsVisible_Impl( SfxVisibilityFlags nMode ) const
             return false;
         case SfxVisibilityFlags::Client:
         case SfxVisibilityFlags::Server:
-            return !!(nMode & nUpdateMode);
+            return bool(nMode & nUpdateMode);
         default:
-            return !!(nMode & nOrigMode ) ||
+            return (nMode & nOrigMode ) ||
                 nOrigMode == SfxVisibilityFlags::Standard;
     }
 }

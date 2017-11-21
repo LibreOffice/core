@@ -90,7 +90,14 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
     if (e == nullptr) {
         return true;
     }
-/* hits for OSL_ENSURE(!b, ...);
+    // Ignore macros, otherwise
+    //    OSL_ENSURE(!b, ...);
+    // triggers.
+    if (e->getLocStart().isMacroID())
+        return true;
+    // double logical not of an int is an idiom to convert to bool
+    if (!e->IgnoreImpCasts()->getType()->isBooleanType())
+        return true;
     report(
         DiagnosticsEngine::Warning,
         ("double logical negation expression of the form '!!A' (with A of type"
@@ -99,7 +106,6 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         << e->IgnoreImpCasts()->getType()
         << e->IgnoreImpCasts()->getType()->isBooleanType()
         << expr->getSourceRange();
-*/
     return true;
 }
 
