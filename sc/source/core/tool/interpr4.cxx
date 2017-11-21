@@ -3959,7 +3959,7 @@ StackVar ScInterpreter::Interpret()
     sal_uLong nRetIndexExpr = 0;
     sal_uInt16 nErrorFunction = 0;
     sal_uInt16 nErrorFunctionCount = 0;
-    std::stack<sal_uInt16> aErrorFunctionStack;
+    std::vector<sal_uInt16> aErrorFunctionStack;
     sal_uInt16 nStackBase;
 
     nGlobalError = FormulaError::NONE;
@@ -4522,15 +4522,15 @@ StackVar ScInterpreter::Interpret()
             if ( nLevel == 1 || (nLevel == 2 && aCode.IsEndOfPath()) )
             {
                 if (nLevel == 1)
-                    aErrorFunctionStack.push( nErrorFunction);
+                    aErrorFunctionStack.push_back( nErrorFunction);
                 bGotResult = JumpMatrix( nLevel );
                 if (aErrorFunctionStack.empty())
                     assert(!"ScInterpreter::Interpret - aErrorFunctionStack empty in JumpMatrix context");
                 else
                 {
-                    nErrorFunction = aErrorFunctionStack.top();
+                    nErrorFunction = aErrorFunctionStack.back();
                     if (bGotResult)
-                        aErrorFunctionStack.pop();
+                        aErrorFunctionStack.pop_back();
                 }
             }
             else
