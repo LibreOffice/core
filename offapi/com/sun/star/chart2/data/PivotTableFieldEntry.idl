@@ -44,7 +44,7 @@ struct PivotTableFieldEntry
     long DimensionPositionIndex;
 
     /**
-     * Does it have some members that are hidded (filtered).
+     * Does it have some members that are hidden (filtered).
      */
     boolean HasHiddenMembers;
 };

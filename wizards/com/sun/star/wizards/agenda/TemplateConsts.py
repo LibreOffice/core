@@ -42,7 +42,7 @@ class TemplateConsts:
     '''
     SECTION_MINUTES = "MINUTES"
     '''
-    taged headings and names.
+    tagged headings and names.
     These will be searched in item tables (in the template) and will be
     replaced with resource strings.
 
