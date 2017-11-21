@@ -13,6 +13,7 @@
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 
+#include <iostream>
 #include <memory>
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -139,6 +140,7 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
     pStream->ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
 
+    std::cout << "bako pBuffer is '"<< std::endl <<(char*)pBuffer.get()<< "'" << std::endl<< std::endl;
     xmlDocPtr pDoc = xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
 
     return pDoc;
