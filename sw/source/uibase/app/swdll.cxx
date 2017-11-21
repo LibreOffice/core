@@ -147,7 +147,7 @@ SwDLL::SwDLL()
     }
 }
 
-SwDLL::~SwDLL()
+SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
 {
     if (m_pAutoCorrCfg)
     {

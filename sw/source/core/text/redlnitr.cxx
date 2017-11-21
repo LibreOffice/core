@@ -177,7 +177,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     Seek (rFnt, 0, COMPLETE_STRING);
 }
 
-SwRedlineItr::~SwRedlineItr()
+SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 {
     Clear( nullptr );
     delete pExt;

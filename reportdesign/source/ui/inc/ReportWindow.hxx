@@ -22,6 +22,7 @@
 #include <com/sun/star/report/XSection.hpp>
 #include "ReportDefines.hxx"
 #include "StartMarker.hxx"
+#include <o3tl/deleter.hxx>
 #include <svtools/ruler.hxx>
 #include <svx/svdedtv.hxx>
 #include <sfx2/zoomitem.hxx>
@@ -49,9 +50,8 @@ namespace rptui
         VclPtr<ODesignView>            m_pView;
         VclPtr<OScrollWindowHelper>    m_pParent;
         VclPtr<OViewsWindow>           m_aViewsWindow;
-        ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pReportListener;
-        ::std::unique_ptr<DlgEdFactory>
-                                m_pObjFac;
+        rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pReportListener;
+        std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory>>  m_pObjFac;
 
         void ImplInitSettings();
 

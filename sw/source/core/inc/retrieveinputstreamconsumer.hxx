@@ -36,7 +36,7 @@ class SwAsyncRetrieveInputStreamThreadConsumer
     public:
 
         SwAsyncRetrieveInputStreamThreadConsumer( SwGrfNode& rGrfNode );
-        ~SwAsyncRetrieveInputStreamThreadConsumer();
+        ~SwAsyncRetrieveInputStreamThreadConsumer() COVERITY_NOEXCEPT_FALSE;
 
         /** method to create thread
         */
