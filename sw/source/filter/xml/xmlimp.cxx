@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
@@ -1625,7 +1626,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOCX(SvStream &rStream)
     //setting a property will inform the document its modified, which attempts
     //to update the properties, which throws cause the properties are uninitialized
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
-    bool ret = xFilter->filter(aArgs);
+    bool ret = false;
+    try
+    {
+        ret = xFilter->filter(aArgs);
+    }
+    catch (const css::lang::WrappedTargetRuntimeException&)
+    {
+    }
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
     xDocSh->DoClose();
