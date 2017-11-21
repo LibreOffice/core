@@ -514,6 +514,13 @@ static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
     return bPossible;
 }
 
+bool ScCellShell::HasClipboardFormat( SotClipboardFormatId nFormatId )
+{
+    vcl::Window* pWin = GetViewData()->GetActiveWin();
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ));
+    return aDataHelper.HasFormat( nFormatId );
+}
+
 IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
     bPastePossible = lcl_IsCellPastePossible( *pDataHelper );

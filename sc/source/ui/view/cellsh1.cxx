@@ -1651,21 +1651,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 // and paste the SotClipboardFormatId::STRING_TSVC if it is available.
                 // Which makes a difference if the clipboard contains cells with embedded line breaks.
 
-                SotClipboardFormatId nFormat = SotClipboardFormatId::STRING;
-                {
-                    SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
-                    GetPossibleClipboardFormats( aFormats );
-
-                    const sal_uInt16 nFormatCount = aFormats.Count();
-                    for (sal_uInt16 i=0; i<nFormatCount; i++)
-                    {
-                        if (SotClipboardFormatId::STRING_TSVC == aFormats.GetClipbrdFormatId( i ))
-                        {
-                            nFormat = SotClipboardFormatId::STRING_TSVC;
-                            break;
-                        }
-                    }
-                }
+                SotClipboardFormatId nFormat = HasClipboardFormat( SotClipboardFormatId::STRING_TSVC) ?
+                    SotClipboardFormatId::STRING_TSVC : SotClipboardFormatId::STRING;
 
                 const bool bRet = pTabViewShell->PasteFromSystem(nFormat, true); // TRUE: no error messages
                 if ( bRet )

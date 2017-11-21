@@ -31,6 +31,7 @@
 #include <address.hxx>
 #include <vcl/window.hxx>
 #include <rtl/ref.hxx>
+#include <sot/formats.hxx>
 
 class SvxClipboardFormatItem;
 class TransferableDataHelper;
@@ -55,6 +56,7 @@ private:
     bool            bPastePossible;
 
     void        GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats );
+    bool        HasClipboardFormat( SotClipboardFormatId nFormatId );
     void        ExecuteExternalSource(
                     const OUString& _rFile, const OUString& _rFilter, const OUString& _rOptions,
                     const OUString& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );
