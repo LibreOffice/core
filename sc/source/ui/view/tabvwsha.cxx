@@ -425,18 +425,18 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
             case FID_CHG_ACCEPT:
                 {
-                    rSet.Put(SfxBoolItem(FID_CHG_ACCEPT,
-                            pThisFrame->HasChildWindow(FID_CHG_ACCEPT)));
-                    if(pDoc->GetChangeTrack()==nullptr)
+                    if(
+                       ( !pDoc->GetChangeTrack() &&  !pThisFrame->HasChildWindow(FID_CHG_ACCEPT) )
+                       ||
+                       ( pDocShell && pDocShell->IsDocShared() )
+                      )
                     {
-                        if ( !pThisFrame->HasChildWindow(FID_CHG_ACCEPT) )
-                        {
-                            rSet.DisableItem( nWhich);
-                        }
+                        rSet.DisableItem( nWhich);
                     }
-                    if ( pDocShell && pDocShell->IsDocShared() )
+                    else
                     {
-                        rSet.DisableItem( nWhich );
+                        rSet.Put(SfxBoolItem(FID_CHG_ACCEPT,
+                            pThisFrame->HasChildWindow(FID_CHG_ACCEPT)));
                     }
                 }
                 break;
