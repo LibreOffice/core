@@ -93,10 +93,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
     if ( nEscherContainer == ESCHER_SpContainer )
     {
         // opening a shape container
-#if OSL_DEBUG_LEVEL > 0
-        if ( m_nShapeType != ESCHER_ShpInst_Nil )
-            fprintf( stderr, "Warning!  VMLExport::OpenContainer(): opening shape inside a shape.\n" );
-#endif
+        SAL_WARN_IF(m_nShapeType != ESCHER_ShpInst_Nil, "oox.vml", "opening shape inside of a shape!");
         m_nShapeType = ESCHER_ShpInst_Nil;
         m_pShapeAttrList = FastSerializerHelper::createAttrList();
 
@@ -589,10 +586,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         if ( !aPath.isEmpty() && pathString != "xe" )
                             m_pShapeAttrList->add( XML_path, pathString );
                     }
-#if OSL_DEBUG_LEVEL > 0
                     else
-                        fprintf( stderr, "TODO: unhandled shape path, missing either pVertices or pSegmentInfo.\n" );
-#endif
+                        SAL_WARN("oox.vml", "unhandled shape path, missing either pVertices or pSegmentInfo.");
                 }
                 bAlreadyWritten[ ESCHER_Prop_pVertices ] = true;
                 bAlreadyWritten[ ESCHER_Prop_pSegmentInfo ] = true;
@@ -653,9 +648,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                 // TODO case ESCHER_FillShadeTitle:  pFillType = ""; break;
                                 // TODO case ESCHER_FillBackground:  pFillType = ""; break;
                                 default:
-    #if OSL_DEBUG_LEVEL > 0
-                                    fprintf( stderr, "TODO: unhandled fill type\n" );
-    #endif
+                                    SAL_INFO("oox.vml", "Uunhandled fill type: " << nValue);
                                     break;
                             }
                             if ( pFillType )
