@@ -76,6 +76,7 @@ class SdrCaptionFitLineLenItem;
 class SdrCaptionLineLenItem;
 class SdrCaptionTypeItem;
 class SdrCircKindItem;
+class SdrCustomShapeGeometryItem;
 class SdrEdgeKindItem;
 class SdrEdgeLineDeltaCountItem;
 class SdrEdgeNode1GlueDistItem;
@@ -138,8 +139,25 @@ class SdrTransformRef2XItem;
 class SdrTransformRef2YItem;
 class SdrVertShearAllItem;
 class SdrVertShearOneItem;
+class SfxBoolItem;
 class SfxStringItem;
 class SfxVoidItem;
+class Svx3DCharacterModeItem;
+class Svx3DCloseBackItem;
+class Svx3DCloseFrontItem;
+class Svx3DNormalsKindItem;
+class Svx3DPerspectiveItem;
+class Svx3DReducedLineGeometryItem;
+class Svx3DShadeModeItem;
+class Svx3DSmoothLidsItem;
+class Svx3DSmoothNormalsItem;
+class Svx3DTextureProjectionXItem;
+class Svx3DTextureProjectionYItem;
+class SvxB3DVectorItem;
+class SvxBoxInfoItem;
+class SvxBoxItem;
+class SvxColorItem;
+class SvxLineItem;
 class SvxWritingModeItem;
 class XColorItem;
 
@@ -298,86 +316,86 @@ class XColorItem;
 #define SDRATTR_3D_FIRST                        (SDRATTR_GRAF_LAST + 1)     /* 1244 V4+++*/
 
 #define SDRATTR_3DOBJ_FIRST                     (SDRATTR_3D_FIRST)          /* 1244 V4+++*/
-#define SDRATTR_3DOBJ_PERCENT_DIAGONAL          (SDRATTR_3DOBJ_FIRST + 0)   /* 1244 V4+++*/
-#define SDRATTR_3DOBJ_BACKSCALE                 (SDRATTR_3DOBJ_FIRST + 1)   /* 1245 V4+++*/
-#define SDRATTR_3DOBJ_DEPTH                     (SDRATTR_3DOBJ_FIRST + 2)   /* 1246 V4+++*/
-#define SDRATTR_3DOBJ_HORZ_SEGS                 (SDRATTR_3DOBJ_FIRST + 3)   /* 1247 V4+++*/
-#define SDRATTR_3DOBJ_VERT_SEGS                 (SDRATTR_3DOBJ_FIRST + 4)   /* 1248 V4+++*/
-#define SDRATTR_3DOBJ_END_ANGLE                 (SDRATTR_3DOBJ_FIRST + 5)   /* 1249 V4+++*/
-#define SDRATTR_3DOBJ_DOUBLE_SIDED              (SDRATTR_3DOBJ_FIRST + 6)   /* 1250 V4+++*/
-#define SDRATTR_3DOBJ_NORMALS_KIND              (SDRATTR_3DOBJ_FIRST + 7)   /* 1251 V4+++*/
-#define SDRATTR_3DOBJ_NORMALS_INVERT            (SDRATTR_3DOBJ_FIRST + 8)   /* 1252 V4+++*/
-#define SDRATTR_3DOBJ_TEXTURE_PROJ_X            (SDRATTR_3DOBJ_FIRST + 9)   /* 1253 V4+++*/
-#define SDRATTR_3DOBJ_TEXTURE_PROJ_Y            (SDRATTR_3DOBJ_FIRST + 10)  /* 1254 V4+++*/
-#define SDRATTR_3DOBJ_SHADOW_3D                 (SDRATTR_3DOBJ_FIRST + 11)  /* 1255 V4+++*/
-#define SDRATTR_3DOBJ_MAT_COLOR                 (SDRATTR_3DOBJ_FIRST + 12)  /* 1256 V4+++*/
-#define SDRATTR_3DOBJ_MAT_EMISSION              (SDRATTR_3DOBJ_FIRST + 13)  /* 1257 V4+++*/
-#define SDRATTR_3DOBJ_MAT_SPECULAR              (SDRATTR_3DOBJ_FIRST + 14)  /* 1258 V4+++*/
-#define SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY    (SDRATTR_3DOBJ_FIRST + 15)  /* 1259 V4+++*/
-#define SDRATTR_3DOBJ_TEXTURE_KIND              (SDRATTR_3DOBJ_FIRST + 16)  /* 1260 V4+++*/
-#define SDRATTR_3DOBJ_TEXTURE_MODE              (SDRATTR_3DOBJ_FIRST + 17)  /* 1261 V4+++*/
-#define SDRATTR_3DOBJ_TEXTURE_FILTER            (SDRATTR_3DOBJ_FIRST + 18)  /* 1262 V4+++*/
+#define SDRATTR_3DOBJ_PERCENT_DIAGONAL          TypedWhichId<SfxUInt16Item>(SDRATTR_3DOBJ_FIRST + 0)   /* 1244 V4+++*/
+#define SDRATTR_3DOBJ_BACKSCALE                 TypedWhichId<SfxUInt16Item>(SDRATTR_3DOBJ_FIRST + 1)   /* 1245 V4+++*/
+#define SDRATTR_3DOBJ_DEPTH                     TypedWhichId<SfxUInt32Item>(SDRATTR_3DOBJ_FIRST + 2)   /* 1246 V4+++*/
+#define SDRATTR_3DOBJ_HORZ_SEGS                 TypedWhichId<SfxUInt32Item>(SDRATTR_3DOBJ_FIRST + 3)   /* 1247 V4+++*/
+#define SDRATTR_3DOBJ_VERT_SEGS                 TypedWhichId<SfxUInt32Item>(SDRATTR_3DOBJ_FIRST + 4)   /* 1248 V4+++*/
+#define SDRATTR_3DOBJ_END_ANGLE                 TypedWhichId<SfxUInt32Item>(SDRATTR_3DOBJ_FIRST + 5)   /* 1249 V4+++*/
+#define SDRATTR_3DOBJ_DOUBLE_SIDED              TypedWhichId<SfxBoolItem>(SDRATTR_3DOBJ_FIRST + 6)   /* 1250 V4+++*/
+#define SDRATTR_3DOBJ_NORMALS_KIND              TypedWhichId<Svx3DNormalsKindItem>(SDRATTR_3DOBJ_FIRST + 7)   /* 1251 V4+++*/
+#define SDRATTR_3DOBJ_NORMALS_INVERT            TypedWhichId<SfxBoolItem>(SDRATTR_3DOBJ_FIRST + 8)   /* 1252 V4+++*/
+#define SDRATTR_3DOBJ_TEXTURE_PROJ_X            TypedWhichId<Svx3DTextureProjectionXItem>(SDRATTR_3DOBJ_FIRST + 9)   /* 1253 V4+++*/
+#define SDRATTR_3DOBJ_TEXTURE_PROJ_Y            TypedWhichId<Svx3DTextureProjectionYItem>(SDRATTR_3DOBJ_FIRST + 10)  /* 1254 V4+++*/
+#define SDRATTR_3DOBJ_SHADOW_3D                 TypedWhichId<SfxBoolItem>(SDRATTR_3DOBJ_FIRST + 11)  /* 1255 V4+++*/
+#define SDRATTR_3DOBJ_MAT_COLOR                 TypedWhichId<SvxColorItem>(SDRATTR_3DOBJ_FIRST + 12)  /* 1256 V4+++*/
+#define SDRATTR_3DOBJ_MAT_EMISSION              TypedWhichId<SvxColorItem>(SDRATTR_3DOBJ_FIRST + 13)  /* 1257 V4+++*/
+#define SDRATTR_3DOBJ_MAT_SPECULAR              TypedWhichId<SvxColorItem>(SDRATTR_3DOBJ_FIRST + 14)  /* 1258 V4+++*/
+#define SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY    TypedWhichId<SfxUInt16Item>(SDRATTR_3DOBJ_FIRST + 15)  /* 1259 V4+++*/
+#define SDRATTR_3DOBJ_TEXTURE_KIND              TypedWhichId<Svx3DTextureKindItem>(SDRATTR_3DOBJ_FIRST + 16)  /* 1260 V4+++*/
+#define SDRATTR_3DOBJ_TEXTURE_MODE              TypedWhichId<Svx3DTextureModeItem>(SDRATTR_3DOBJ_FIRST + 17)  /* 1261 V4+++*/
+#define SDRATTR_3DOBJ_TEXTURE_FILTER            TypedWhichId<SfxBoolItem>(SDRATTR_3DOBJ_FIRST + 18)  /* 1262 V4+++*/
 
 // #107245# New items for 3d objects use former range SDRATTR_3DOBJ_RESERVED_01
 // up to SDRATTR_3DOBJ_RESERVED_05
-#define SDRATTR_3DOBJ_SMOOTH_NORMALS            (SDRATTR_3DOBJ_FIRST + 19)  /* 1263 V4+++*/
-#define SDRATTR_3DOBJ_SMOOTH_LIDS               (SDRATTR_3DOBJ_FIRST + 20)  /* 1264 V4+++*/
-#define SDRATTR_3DOBJ_CHARACTER_MODE            (SDRATTR_3DOBJ_FIRST + 21)  /* 1265 V4+++*/
-#define SDRATTR_3DOBJ_CLOSE_FRONT               (SDRATTR_3DOBJ_FIRST + 22)  /* 1266 V4+++*/
-#define SDRATTR_3DOBJ_CLOSE_BACK                (SDRATTR_3DOBJ_FIRST + 23)  /* 1267 V4+++*/
+#define SDRATTR_3DOBJ_SMOOTH_NORMALS            TypedWhichId<Svx3DSmoothNormalsItem>(SDRATTR_3DOBJ_FIRST + 19)  /* 1263 V4+++*/
+#define SDRATTR_3DOBJ_SMOOTH_LIDS               TypedWhichId<Svx3DSmoothLidsItem>(SDRATTR_3DOBJ_FIRST + 20)  /* 1264 V4+++*/
+#define SDRATTR_3DOBJ_CHARACTER_MODE            TypedWhichId<Svx3DCharacterModeItem>(SDRATTR_3DOBJ_FIRST + 21)  /* 1265 V4+++*/
+#define SDRATTR_3DOBJ_CLOSE_FRONT               TypedWhichId<Svx3DCloseFrontItem>(SDRATTR_3DOBJ_FIRST + 22)  /* 1266 V4+++*/
+#define SDRATTR_3DOBJ_CLOSE_BACK                TypedWhichId<Svx3DCloseBackItem>(SDRATTR_3DOBJ_FIRST + 23)  /* 1267 V4+++*/
 
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-#define SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY     (SDRATTR_3DOBJ_FIRST + 24)  /* 1268 V4+++*/
+#define SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY     TypedWhichId<Svx3DReducedLineGeometryItem>(SDRATTR_3DOBJ_FIRST + 24)  /* 1268 V4+++*/
 
 #define SDRATTR_3DOBJ_LAST                      (SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)   /* 1282 V4+++*/
 
 #define SDRATTR_3DSCENE_FIRST                   (SDRATTR_3DOBJ_LAST + 1)        /* 1283 V4+++*/
-#define SDRATTR_3DSCENE_PERSPECTIVE             (SDRATTR_3DSCENE_FIRST + 0)     /* 1283 V4+++*/
-#define SDRATTR_3DSCENE_DISTANCE                (SDRATTR_3DSCENE_FIRST + 1)     /* 1284 V4+++*/
-#define SDRATTR_3DSCENE_FOCAL_LENGTH            (SDRATTR_3DSCENE_FIRST + 2)     /* 1285 V4+++*/
-#define SDRATTR_3DSCENE_TWO_SIDED_LIGHTING      (SDRATTR_3DSCENE_FIRST + 3)     /* 1286 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_1            (SDRATTR_3DSCENE_FIRST + 4)     /* 1287 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_2            (SDRATTR_3DSCENE_FIRST + 5)     /* 1288 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_3            (SDRATTR_3DSCENE_FIRST + 6)     /* 1289 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_4            (SDRATTR_3DSCENE_FIRST + 7)     /* 1290 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_5            (SDRATTR_3DSCENE_FIRST + 8)     /* 1291 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_6            (SDRATTR_3DSCENE_FIRST + 9)     /* 1292 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_7            (SDRATTR_3DSCENE_FIRST + 10)    /* 1293 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTCOLOR_8            (SDRATTR_3DSCENE_FIRST + 11)    /* 1294 V4+++*/
-#define SDRATTR_3DSCENE_AMBIENTCOLOR            (SDRATTR_3DSCENE_FIRST + 12)    /* 1295 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_1               (SDRATTR_3DSCENE_FIRST + 13)    /* 1296 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_2               (SDRATTR_3DSCENE_FIRST + 14)    /* 1297 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_3               (SDRATTR_3DSCENE_FIRST + 15)    /* 1298 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_4               (SDRATTR_3DSCENE_FIRST + 16)    /* 1299 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_5               (SDRATTR_3DSCENE_FIRST + 17)    /* 1300 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_6               (SDRATTR_3DSCENE_FIRST + 18)    /* 1301 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_7               (SDRATTR_3DSCENE_FIRST + 19)    /* 1302 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTON_8               (SDRATTR_3DSCENE_FIRST + 20)    /* 1303 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_1        (SDRATTR_3DSCENE_FIRST + 21)    /* 1304 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_2        (SDRATTR_3DSCENE_FIRST + 22)    /* 1305 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_3        (SDRATTR_3DSCENE_FIRST + 23)    /* 1306 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_4        (SDRATTR_3DSCENE_FIRST + 24)    /* 1307 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_5        (SDRATTR_3DSCENE_FIRST + 25)    /* 1308 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_6        (SDRATTR_3DSCENE_FIRST + 26)    /* 1309 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_7        (SDRATTR_3DSCENE_FIRST + 27)    /* 1310 V4+++*/
-#define SDRATTR_3DSCENE_LIGHTDIRECTION_8        (SDRATTR_3DSCENE_FIRST + 28)    /* 1311 V4+++*/
-#define SDRATTR_3DSCENE_SHADOW_SLANT            (SDRATTR_3DSCENE_FIRST + 29)    /* 1312 V4+++*/
-#define SDRATTR_3DSCENE_SHADE_MODE              (SDRATTR_3DSCENE_FIRST + 30)    /* 1313 V4+++*/
+#define SDRATTR_3DSCENE_PERSPECTIVE             TypedWhichId<Svx3DPerspectiveItem>(SDRATTR_3DSCENE_FIRST + 0)     /* 1283 V4+++*/
+#define SDRATTR_3DSCENE_DISTANCE                TypedWhichId<SfxUInt32Item>(SDRATTR_3DSCENE_FIRST + 1)     /* 1284 V4+++*/
+#define SDRATTR_3DSCENE_FOCAL_LENGTH            TypedWhichId<SfxUInt32Item>(SDRATTR_3DSCENE_FIRST + 2)     /* 1285 V4+++*/
+#define SDRATTR_3DSCENE_TWO_SIDED_LIGHTING      TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 3)     /* 1286 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_1            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 4)     /* 1287 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_2            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 5)     /* 1288 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_3            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 6)     /* 1289 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_4            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 7)     /* 1290 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_5            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 8)     /* 1291 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_6            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 9)     /* 1292 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_7            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 10)    /* 1293 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTCOLOR_8            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 11)    /* 1294 V4+++*/
+#define SDRATTR_3DSCENE_AMBIENTCOLOR            TypedWhichId<SvxColorItem>(SDRATTR_3DSCENE_FIRST + 12)    /* 1295 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_1               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 13)    /* 1296 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_2               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 14)    /* 1297 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_3               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 15)    /* 1298 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_4               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 16)    /* 1299 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_5               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 17)    /* 1300 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_6               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 18)    /* 1301 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_7               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 19)    /* 1302 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTON_8               TypedWhichId<SfxBoolItem>(SDRATTR_3DSCENE_FIRST + 20)    /* 1303 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_1        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 21)    /* 1304 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_2        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 22)    /* 1305 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_3        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 23)    /* 1306 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_4        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 24)    /* 1307 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_5        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 25)    /* 1308 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_6        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 26)    /* 1309 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_7        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 27)    /* 1310 V4+++*/
+#define SDRATTR_3DSCENE_LIGHTDIRECTION_8        TypedWhichId<SvxB3DVectorItem>(SDRATTR_3DSCENE_FIRST + 28)    /* 1311 V4+++*/
+#define SDRATTR_3DSCENE_SHADOW_SLANT            TypedWhichId<SfxUInt16Item>(SDRATTR_3DSCENE_FIRST + 29)    /* 1312 V4+++*/
+#define SDRATTR_3DSCENE_SHADE_MODE              TypedWhichId<Svx3DShadeModeItem>(SDRATTR_3DSCENE_FIRST + 30)    /* 1313 V4+++*/
 #define SDRATTR_3DSCENE_LAST                    (SDRATTR_3DSCENE_SHADE_MODE)    /* 1333 V4+++*/
 #define SDRATTR_3D_LAST                         (SDRATTR_3DSCENE_LAST)          /* 1333 V4+++*/
 
-#define SDRATTR_CUSTOMSHAPE_FIRST                   (SDRATTR_3D_LAST + 1)           /* 1334 V4+++*/
-#define SDRATTR_CUSTOMSHAPE_ENGINE              (SDRATTR_CUSTOMSHAPE_FIRST + 0) /* 1334 V4+++*/
-#define SDRATTR_CUSTOMSHAPE_DATA                    (SDRATTR_CUSTOMSHAPE_FIRST + 1) /* 1335 V4+++*/
-#define SDRATTR_CUSTOMSHAPE_GEOMETRY                (SDRATTR_CUSTOMSHAPE_FIRST + 2) /* 1336 V4+++*/
-#define SDRATTR_CUSTOMSHAPE_LAST                    (SDRATTR_CUSTOMSHAPE_GEOMETRY)   /* 1357 V4+++*/
+#define SDRATTR_CUSTOMSHAPE_FIRST               (SDRATTR_3D_LAST + 1)           /* 1334 V4+++*/
+#define SDRATTR_CUSTOMSHAPE_ENGINE              TypedWhichId<SfxStringItem>(SDRATTR_CUSTOMSHAPE_FIRST + 0) /* 1334 V4+++*/
+#define SDRATTR_CUSTOMSHAPE_DATA                TypedWhichId<SfxStringItem>(SDRATTR_CUSTOMSHAPE_FIRST + 1) /* 1335 V4+++*/
+#define SDRATTR_CUSTOMSHAPE_GEOMETRY            TypedWhichId<SdrCustomShapeGeometryItem>(SDRATTR_CUSTOMSHAPE_FIRST + 2) /* 1336 V4+++*/
+#define SDRATTR_CUSTOMSHAPE_LAST                (SDRATTR_CUSTOMSHAPE_GEOMETRY)   /* 1357 V4+++*/
 
 #define SDRATTR_TABLE_FIRST                     (SDRATTR_CUSTOMSHAPE_LAST+1)
-#define SDRATTR_TABLE_BORDER                    (SDRATTR_TABLE_FIRST+0)
-#define SDRATTR_TABLE_BORDER_INNER              (SDRATTR_TABLE_FIRST+1)
-#define SDRATTR_TABLE_BORDER_TLBR               (SDRATTR_TABLE_FIRST+2)
-#define SDRATTR_TABLE_BORDER_BLTR               (SDRATTR_TABLE_FIRST+3)
+#define SDRATTR_TABLE_BORDER                    TypedWhichId<SvxBoxItem>(SDRATTR_TABLE_FIRST+0)
+#define SDRATTR_TABLE_BORDER_INNER              TypedWhichId<SvxBoxInfoItem>(SDRATTR_TABLE_FIRST+1)
+#define SDRATTR_TABLE_BORDER_TLBR               TypedWhichId<SvxLineItem>(SDRATTR_TABLE_FIRST+2)
+#define SDRATTR_TABLE_BORDER_BLTR               TypedWhichId<SvxLineItem>(SDRATTR_TABLE_FIRST+3)
 #define SDRATTR_TABLE_TEXT_ROTATION             (SDRATTR_TABLE_FIRST+4)
 
 #define SDRATTR_TABLE_LAST                      (SDRATTR_TABLE_TEXT_ROTATION)

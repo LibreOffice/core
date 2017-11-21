@@ -886,7 +886,7 @@ namespace drawinglayer
         {
             // get perspective
             css::drawing::ProjectionMode aProjectionMode(css::drawing::ProjectionMode_PARALLEL);
-            const sal_uInt16 nProjectionValue(static_cast<const Svx3DPerspectiveItem&>(rSet.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue());
+            const sal_uInt16 nProjectionValue(rSet.Get(SDRATTR_3DSCENE_PERSPECTIVE).GetValue());
 
             if(1 == nProjectionValue)
             {
@@ -894,14 +894,14 @@ namespace drawinglayer
             }
 
             // get distance
-            const double fDistance(static_cast<const SfxUInt32Item&>(rSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue());
+            const double fDistance(rSet.Get(SDRATTR_3DSCENE_DISTANCE).GetValue());
 
             // get shadow slant
-            const double fShadowSlant(F_PI180 * static_cast<const SfxUInt16Item&>(rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());
+            const double fShadowSlant(F_PI180 * rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT).GetValue());
 
             // get shade mode
             css::drawing::ShadeMode aShadeMode(css::drawing::ShadeMode_FLAT);
-            const sal_uInt16 nShadeValue(static_cast<const Svx3DShadeModeItem&>(rSet.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue());
+            const sal_uInt16 nShadeValue(rSet.Get(SDRATTR_3DSCENE_SHADE_MODE).GetValue());
 
             if(1 == nShadeValue)
             {
@@ -917,7 +917,7 @@ namespace drawinglayer
             }
 
             // get two sided lighting
-            const bool bTwoSidedLighting(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue());
+            const bool bTwoSidedLighting(rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING).GetValue());
 
             return attribute::SdrSceneAttribute(fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting);
         }
@@ -927,64 +927,64 @@ namespace drawinglayer
             // extract lights from given SfxItemSet (from scene)
             ::std::vector< attribute::Sdr3DLightAttribute > aLightVector;
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_1).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, true);
             }
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_2).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, false);
             }
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_3).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, false);
             }
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_4).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, false);
             }
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_5).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, false);
             }
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_6).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, false);
             }
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_7).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, false);
             }
 
-            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue())
+            if(rSet.Get(SDRATTR_3DSCENE_LIGHTON_8).GetValue())
             {
-                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
+                const basegfx::BColor aColor(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8).GetValue());
                 aLightVector.emplace_back(aColor, aDirection, false);
             }
 
             // get ambient color
-            const Color aAmbientValue(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue());
+            const Color aAmbientValue(rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR).GetValue());
             const basegfx::BColor aAmbientLight(aAmbientValue.getBColor());
 
             return attribute::SdrLightingAttribute(aAmbientLight, aLightVector);
