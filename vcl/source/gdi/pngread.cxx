@@ -1328,6 +1328,22 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp++ )
                             ImplSetAlphaPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] );
                     }
+                    else if (mnPngDepth == 1 )
+                    {
+                        for ( long nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
+                        {
+                            nShift = (nShift - 1) & 7;
+
+                            sal_uInt8 nCol;
+                            if ( nShift == 0 )
+                                nCol = *(pTmp++);
+                            else
+                                nCol = static_cast<sal_uInt8>( *pTmp >> nShift );
+                            nCol &= 1;
+
+                            ImplSetAlphaPixel( nY, nX, nCol, mpTransTab[ nCol ] );
+                        }
+                    }
                     else
                     {
                         for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
