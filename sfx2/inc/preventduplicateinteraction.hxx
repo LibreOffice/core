@@ -22,16 +22,126 @@
 
 #include <vector>
 
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/frame/XTerminateListener2.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+
+#include <sfx2/app.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
 namespace sfx2 {
+
+inline void closedialogs(SystemWindow& rTopLevel, bool bCloseRoot)
+{
+    for (vcl::Window *pChild = rTopLevel.GetWindow(GetWindowType::FirstTopWindowChild); pChild; pChild = rTopLevel.GetWindow(GetWindowType::NextTopWindowSibling))
+        closedialogs(dynamic_cast<SystemWindow&>(*pChild), true);
+    if (bCloseRoot)
+        rTopLevel.Close();
+}
+
+// This is intended to be the parent for any warning dialogs launched
+// during the load of a document so that those dialogs are modal to
+// this window and don't block any existing windows.
+//
+// If there are dialog children open on exit then veto termination,
+// close the topmost dialog and retry termination.
+class WarningDialogsParent :
+    public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
+{
+private:
+    osl::Mutex m_aLock;
+    VclPtr<WorkWindow> m_xWin;
+    css::uno::Reference<css::awt::XWindow> m_xInterface;
+
+private:
+
+    DECL_STATIC_LINK(WarningDialogsParent, TerminateDesktop, void*, void);
+
+    void closewarningdialogs()
+    {
+        if (!m_xWin)
+            return;
+        SolarMutexGuard aSolarGuard;
+        closedialogs(dynamic_cast<SystemWindow&>(*m_xWin), false);
+    }
+
+public:
+
+    using cppu::WeakComponentImplHelperBase::disposing;
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+    {
+    }
+
+    // XTerminateListener
+    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+    {
+        closewarningdialogs();
+        Application::PostUserEvent(LINK(this, WarningDialogsParent, TerminateDesktop));
+        throw css::frame::TerminationVetoException();
+    }
+
+    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+    {
+    }
+
+public:
+    WarningDialogsParent()
+        : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aLock)
+    {
+        SolarMutexGuard aSolarGuard;
+        m_xWin = VclPtr<WorkWindow>::Create(nullptr, WB_STDWORK);
+        m_xWin->SetText("dialog parent for warning dialogs during load");
+        m_xInterface = VCLUnoHelper::GetInterface(m_xWin);
+    }
+
+    virtual ~WarningDialogsParent() override
+    {
+        closewarningdialogs();
+        m_xWin.disposeAndClear();
+    }
+
+    const css::uno::Reference<css::awt::XWindow>& GetDialogParent() const
+    {
+        return m_xInterface;
+    }
+};
+
+class WarningDialogsParentScope
+{
+private:
+    css::uno::Reference<css::frame::XDesktop> m_xDesktop;
+    rtl::Reference<WarningDialogsParent> m_xListener;
+
+public:
+    WarningDialogsParentScope(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+        : m_xDesktop(css::frame::Desktop::create(rContext), css::uno::UNO_QUERY_THROW)
+        , m_xListener(new WarningDialogsParent)
+    {
+        m_xDesktop->addTerminateListener(m_xListener.get());
+    }
+
+    const css::uno::Reference<css::awt::XWindow>& GetDialogParent() const
+    {
+        return m_xListener->GetDialogParent();
+    }
+
+    ~WarningDialogsParentScope()
+    {
+        m_xDesktop->removeTerminateListener(m_xListener.get());
+    }
+};
 
 /**
     @short      Prevent us from showing the same interaction more than once during
@@ -98,6 +208,8 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
         /** The outside interaction handler, which is used to handle every incoming interaction,
             if it's not blocked. */
         css::uno::Reference< css::task::XInteractionHandler > m_xHandler;
+
+        std::unique_ptr<WarningDialogsParentScope> m_xWarningDialogsParent;
 
         /** This list describe which and how incoming interactions must be handled.
             Further it contains all collected information after this interaction
