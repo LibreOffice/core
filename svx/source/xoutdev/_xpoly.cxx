@@ -666,26 +666,26 @@ void XPolygon::CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNex
 {
     double fAbsLen = CalcDistance(nNext, nPrev);
 
-    if ( fAbsLen )
-    {
-        const Point& rCenter = pImpXPolygon->pPointAry[nCenter];
-        Point&  rNext = pImpXPolygon->pPointAry[nNext];
-        Point&  rPrev = pImpXPolygon->pPointAry[nPrev];
-        Point   aDiff = rNext - rPrev;
-        double  fNextLen = CalcDistance(nCenter, nNext) / fAbsLen;
-        double  fPrevLen = CalcDistance(nCenter, nPrev) / fAbsLen;
+    if ( !fAbsLen )
+        return;
 
-        // same length for both sides if SYMMTR
-        if ( GetFlags(nCenter) == PolyFlags::Symmetric )
-        {
-            fPrevLen = (fNextLen + fPrevLen) / 2;
-            fNextLen = fPrevLen;
-        }
-        rNext.X() = rCenter.X() + (long) (fNextLen * aDiff.X());
-        rNext.Y() = rCenter.Y() + (long) (fNextLen * aDiff.Y());
-        rPrev.X() = rCenter.X() - (long) (fPrevLen * aDiff.X());
-        rPrev.Y() = rCenter.Y() - (long) (fPrevLen * aDiff.Y());
+    const Point& rCenter = pImpXPolygon->pPointAry[nCenter];
+    Point&  rNext = pImpXPolygon->pPointAry[nNext];
+    Point&  rPrev = pImpXPolygon->pPointAry[nPrev];
+    Point   aDiff = rNext - rPrev;
+    double  fNextLen = CalcDistance(nCenter, nNext) / fAbsLen;
+    double  fPrevLen = CalcDistance(nCenter, nPrev) / fAbsLen;
+
+    // same length for both sides if SYMMTR
+    if ( GetFlags(nCenter) == PolyFlags::Symmetric )
+    {
+        fPrevLen = (fNextLen + fPrevLen) / 2;
+        fNextLen = fPrevLen;
     }
+    rNext.X() = rCenter.X() + (long) (fNextLen * aDiff.X());
+    rNext.Y() = rCenter.Y() + (long) (fNextLen * aDiff.Y());
+    rPrev.X() = rCenter.X() - (long) (fPrevLen * aDiff.X());
+    rPrev.Y() = rCenter.Y() - (long) (fPrevLen * aDiff.Y());
 }
 
 /// convert four polygon points into a Bézier curve
@@ -793,39 +793,39 @@ void XPolygon::Distort(const tools::Rectangle& rRefRect,
     Wr = rRefRect.GetWidth();
     Hr = rRefRect.GetHeight();
 
-    if ( Wr && Hr )
+    if ( !Wr || !Hr )
+        return;
+
+    long    X1, X2, X3, X4;
+    long    Y1, Y2, Y3, Y4;
+    DBG_ASSERT(rDistortedRect.pImpXPolygon->nPoints >= 4,
+               "Distort: rectangle to small");
+
+    X1 = rDistortedRect[0].X();
+    Y1 = rDistortedRect[0].Y();
+    X2 = rDistortedRect[1].X();
+    Y2 = rDistortedRect[1].Y();
+    X3 = rDistortedRect[3].X();
+    Y3 = rDistortedRect[3].Y();
+    X4 = rDistortedRect[2].X();
+    Y4 = rDistortedRect[2].Y();
+
+    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
+
+    for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
-        long    X1, X2, X3, X4;
-        long    Y1, Y2, Y3, Y4;
-        DBG_ASSERT(rDistortedRect.pImpXPolygon->nPoints >= 4,
-                   "Distort: rectangle to small");
+        double  fTx, fTy, fUx, fUy;
+        Point& rPnt = pImpXPolygon->pPointAry[i];
 
-        X1 = rDistortedRect[0].X();
-        Y1 = rDistortedRect[0].Y();
-        X2 = rDistortedRect[1].X();
-        Y2 = rDistortedRect[1].Y();
-        X3 = rDistortedRect[3].X();
-        Y3 = rDistortedRect[3].Y();
-        X4 = rDistortedRect[2].X();
-        Y4 = rDistortedRect[2].Y();
+        fTx = (double)(rPnt.X() - Xr) / Wr;
+        fTy = (double)(rPnt.Y() - Yr) / Hr;
+        fUx = 1.0 - fTx;
+        fUy = 1.0 - fTy;
 
-        sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
-
-        for (sal_uInt16 i = 0; i < nPntCnt; i++)
-        {
-            double  fTx, fTy, fUx, fUy;
-            Point& rPnt = pImpXPolygon->pPointAry[i];
-
-            fTx = (double)(rPnt.X() - Xr) / Wr;
-            fTy = (double)(rPnt.Y() - Yr) / Hr;
-            fUx = 1.0 - fTx;
-            fUy = 1.0 - fTy;
-
-            rPnt.X() = (long) ( fUy * (fUx * X1 + fTx * X2) +
-                                fTy * (fUx * X3 + fTx * X4) );
-            rPnt.Y() = (long) ( fUx * (fUy * Y1 + fTy * Y3) +
-                                fTx * (fUy * Y2 + fTy * Y4) );
-        }
+        rPnt.X() = (long) ( fUy * (fUx * X1 + fTx * X2) +
+                            fTy * (fUx * X3 + fTx * X4) );
+        rPnt.Y() = (long) ( fUx * (fUy * Y1 + fTy * Y3) +
+                            fTx * (fUy * Y2 + fTy * Y4) );
     }
 }
 

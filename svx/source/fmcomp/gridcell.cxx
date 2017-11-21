@@ -535,44 +535,44 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn )
     ,m_pWindow( nullptr )
 {
     Reference< XPropertySet > xColModelProps( _rColumn.getModel(), UNO_QUERY );
-    if ( xColModelProps.is() )
+    if ( !xColModelProps.is() )
+        return;
+
+    // if our model's format key changes we want to propagate the new value to our windows
+    m_pModelChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, Reference< css::beans::XPropertySet > (_rColumn.getModel(), UNO_QUERY));
+
+    // be listener for some common properties
+    implDoPropertyListening( FM_PROP_READONLY, false );
+    implDoPropertyListening( FM_PROP_ENABLED, false );
+
+    // add as listener for all known "value" properties
+    implDoPropertyListening( FM_PROP_VALUE, false );
+    implDoPropertyListening( FM_PROP_STATE, false );
+    implDoPropertyListening( FM_PROP_TEXT, false );
+    implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, false );
+    implDoPropertyListening( FM_PROP_SELECT_SEQ, false );
+    implDoPropertyListening( FM_PROP_DATE, false );
+    implDoPropertyListening( FM_PROP_TIME, false );
+
+    // be listener at the bound field as well
+    try
     {
-        // if our model's format key changes we want to propagate the new value to our windows
-        m_pModelChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, Reference< css::beans::XPropertySet > (_rColumn.getModel(), UNO_QUERY));
-
-        // be listener for some common properties
-        implDoPropertyListening( FM_PROP_READONLY, false );
-        implDoPropertyListening( FM_PROP_ENABLED, false );
-
-        // add as listener for all known "value" properties
-        implDoPropertyListening( FM_PROP_VALUE, false );
-        implDoPropertyListening( FM_PROP_STATE, false );
-        implDoPropertyListening( FM_PROP_TEXT, false );
-        implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, false );
-        implDoPropertyListening( FM_PROP_SELECT_SEQ, false );
-        implDoPropertyListening( FM_PROP_DATE, false );
-        implDoPropertyListening( FM_PROP_TIME, false );
-
-        // be listener at the bound field as well
-        try
+        Reference< XPropertySetInfo > xPSI( xColModelProps->getPropertySetInfo(), UNO_SET_THROW );
+        if ( xPSI->hasPropertyByName( FM_PROP_BOUNDFIELD ) )
         {
-            Reference< XPropertySetInfo > xPSI( xColModelProps->getPropertySetInfo(), UNO_SET_THROW );
-            if ( xPSI->hasPropertyByName( FM_PROP_BOUNDFIELD ) )
+            Reference< XPropertySet > xField;
+            xColModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
+            if ( xField.is() )
             {
-                Reference< XPropertySet > xField;
-                xColModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
-                if ( xField.is() )
-                {
-                    m_pFieldChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, xField);
-                    m_pFieldChangeBroadcaster->addProperty( FM_PROP_ISREADONLY );
-                }
+                m_pFieldChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, xField);
+                m_pFieldChangeBroadcaster->addProperty( FM_PROP_ISREADONLY );
             }
         }
-        catch( const Exception& )
-        {
-            OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
-        }
+    }
+    catch( const Exception& )
+    {
+        OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1718,23 +1718,23 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 {
     DBG_ASSERT( m_pWindow, "DbPatternField::implAdjustGenericFieldSetting: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbPatternField::implAdjustGenericFieldSetting: invalid model!" );
-    if ( m_pWindow && _rxModel.is() )
-    {
-        OUString aLitMask;
-        OUString aEditMask;
-        bool bStrict = false;
+    if ( !m_pWindow || !_rxModel.is() )
+        return;
 
-        _rxModel->getPropertyValue( FM_PROP_LITERALMASK ) >>= aLitMask;
-        _rxModel->getPropertyValue( FM_PROP_EDITMASK ) >>= aEditMask;
-        _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) >>= bStrict;
+    OUString aLitMask;
+    OUString aEditMask;
+    bool bStrict = false;
 
-        OString aAsciiEditMask(OUStringToOString(aEditMask, RTL_TEXTENCODING_ASCII_US));
+    _rxModel->getPropertyValue( FM_PROP_LITERALMASK ) >>= aLitMask;
+    _rxModel->getPropertyValue( FM_PROP_EDITMASK ) >>= aEditMask;
+    _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) >>= bStrict;
 
-        static_cast< PatternField* >( m_pWindow.get() )->SetMask( aAsciiEditMask, aLitMask );
-        static_cast< PatternField* >( m_pPainter.get() )->SetMask( aAsciiEditMask, aLitMask );
-        static_cast< PatternField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
-        static_cast< PatternField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
-    }
+    OString aAsciiEditMask(OUStringToOString(aEditMask, RTL_TEXTENCODING_ASCII_US));
+
+    static_cast< PatternField* >( m_pWindow.get() )->SetMask( aAsciiEditMask, aLitMask );
+    static_cast< PatternField* >( m_pPainter.get() )->SetMask( aAsciiEditMask, aLitMask );
+    static_cast< PatternField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
+    static_cast< PatternField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
 }
 
 
@@ -1865,54 +1865,54 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 {
     DBG_ASSERT( m_pWindow, "DbNumericField::implAdjustGenericFieldSetting: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbNumericField::implAdjustGenericFieldSetting: invalid model!" );
-    if ( m_pWindow && _rxModel.is() )
+    if ( !m_pWindow || !_rxModel.is() )
+        return;
+
+    sal_Int32   nMin        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
+    sal_Int32   nMax        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
+    sal_Int32   nStep       = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
+    bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+    sal_Int16   nScale      = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
+    bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
+
+    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetMinValue(nMin);
+    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetMaxValue(nMax);
+    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetSpinSize(nStep);
+    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetStrictFormat(bStrict);
+
+    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetMinValue(nMin);
+    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetMaxValue(nMax);
+    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetStrictFormat(bStrict);
+
+
+    // give a formatter to the field and the painter;
+    // test first if I can get from the service behind a connection
+    Reference< css::util::XNumberFormatsSupplier >  xSupplier;
+    Reference< XRowSet > xForm;
+    if ( m_rColumn.GetParent().getDataSource() )
+        xForm.set( Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY );
+    if ( xForm.is() )
+        xSupplier = getNumberFormats( getConnection( xForm ), true );
+    SvNumberFormatter* pFormatterUsed = nullptr;
+    if ( xSupplier.is() )
     {
-        sal_Int32   nMin        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
-        sal_Int32   nMax        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
-        sal_Int32   nStep       = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
-        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
-        sal_Int16   nScale      = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
-        bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
-
-        static_cast< DoubleNumericField* >( m_pWindow.get() )->SetMinValue(nMin);
-        static_cast< DoubleNumericField* >( m_pWindow.get() )->SetMaxValue(nMax);
-        static_cast< DoubleNumericField* >( m_pWindow.get() )->SetSpinSize(nStep);
-        static_cast< DoubleNumericField* >( m_pWindow.get() )->SetStrictFormat(bStrict);
-
-        static_cast< DoubleNumericField* >( m_pPainter.get() )->SetMinValue(nMin);
-        static_cast< DoubleNumericField* >( m_pPainter.get() )->SetMaxValue(nMax);
-        static_cast< DoubleNumericField* >( m_pPainter.get() )->SetStrictFormat(bStrict);
-
-
-        // give a formatter to the field and the painter;
-        // test first if I can get from the service behind a connection
-        Reference< css::util::XNumberFormatsSupplier >  xSupplier;
-        Reference< XRowSet > xForm;
-        if ( m_rColumn.GetParent().getDataSource() )
-            xForm.set( Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY );
-        if ( xForm.is() )
-            xSupplier = getNumberFormats( getConnection( xForm ), true );
-        SvNumberFormatter* pFormatterUsed = nullptr;
-        if ( xSupplier.is() )
-        {
-            SvNumberFormatsSupplierObj* pImplmentation = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
-            pFormatterUsed = pImplmentation ? pImplmentation->GetNumberFormatter() : nullptr;
-        }
-        if ( nullptr == pFormatterUsed )
-        {   // the cursor didn't lead to success -> standard
-            pFormatterUsed = static_cast< DoubleNumericField* >( m_pWindow.get() )->StandardFormatter();
-            DBG_ASSERT( pFormatterUsed != nullptr, "DbNumericField::implAdjustGenericFieldSetting: no standard formatter given by the numeric field !" );
-        }
-        static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormatter( pFormatterUsed );
-        static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormatter( pFormatterUsed );
-
-        // and then generate a format which has the desired length after the decimal point, etc.
-        LanguageType aAppLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
-        OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, false, nScale);
-
-        static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormat( sFormatString, aAppLanguage );
-        static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormat( sFormatString, aAppLanguage );
+        SvNumberFormatsSupplierObj* pImplmentation = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
+        pFormatterUsed = pImplmentation ? pImplmentation->GetNumberFormatter() : nullptr;
     }
+    if ( nullptr == pFormatterUsed )
+    {   // the cursor didn't lead to success -> standard
+        pFormatterUsed = static_cast< DoubleNumericField* >( m_pWindow.get() )->StandardFormatter();
+        DBG_ASSERT( pFormatterUsed != nullptr, "DbNumericField::implAdjustGenericFieldSetting: no standard formatter given by the numeric field !" );
+    }
+    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormatter( pFormatterUsed );
+    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormatter( pFormatterUsed );
+
+    // and then generate a format which has the desired length after the decimal point, etc.
+    LanguageType aAppLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
+    OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, false, nScale);
+
+    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormat( sFormatString, aAppLanguage );
+    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormat( sFormatString, aAppLanguage );
 }
 
 
@@ -2005,42 +2005,42 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
 {
     DBG_ASSERT( m_pWindow, "DbCurrencyField::implAdjustGenericFieldSetting: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbCurrencyField::implAdjustGenericFieldSetting: invalid model!" );
-    if ( m_pWindow && _rxModel.is() )
-    {
-        m_nScale                = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
-        double  nMin            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
-        double  nMax            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
-        double  nStep           = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
-        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
-        bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
-        OUString aStr( getString( _rxModel->getPropertyValue(FM_PROP_CURRENCYSYMBOL ) ) );
+    if ( !m_pWindow || !_rxModel.is() )
+        return;
 
-        //fdo#42747 the min/max/first/last of vcl NumericFormatters needs to be
-        //multiplied by the no of decimal places. See also
-        //VclBuilder::mungeAdjustment
-        int nMul = rtl_math_pow10Exp(1, m_nScale);
-        nMin *= nMul;
-        nMax *= nMul;
+    m_nScale                = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
+    double  nMin            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
+    double  nMax            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
+    double  nStep           = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
+    bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+    bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
+    OUString aStr( getString( _rxModel->getPropertyValue(FM_PROP_CURRENCYSYMBOL ) ) );
 
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetUseThousandSep( bThousand );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetDecimalDigits( m_nScale );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetCurrencySymbol( aStr );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetFirst( nMin );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetLast( nMax );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetMin( nMin );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetMax( nMax );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetSpinSize( nStep );
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
+    //fdo#42747 the min/max/first/last of vcl NumericFormatters needs to be
+    //multiplied by the no of decimal places. See also
+    //VclBuilder::mungeAdjustment
+    int nMul = rtl_math_pow10Exp(1, m_nScale);
+    nMin *= nMul;
+    nMax *= nMul;
 
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetUseThousandSep( bThousand );
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetDecimalDigits( m_nScale );
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetCurrencySymbol( aStr );
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetFirst( nMin );
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetLast( nMax );
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetMin( nMin );
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetMax( nMax );
-        static_cast< LongCurrencyField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
-    }
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetUseThousandSep( bThousand );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetDecimalDigits( m_nScale );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetCurrencySymbol( aStr );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetFirst( nMin );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetLast( nMax );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetMin( nMin );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetMax( nMax );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetSpinSize( nStep );
+    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
+
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetUseThousandSep( bThousand );
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetDecimalDigits( m_nScale );
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetCurrencySymbol( aStr );
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetFirst( nMin );
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetLast( nMax );
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetMin( nMin );
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetMax( nMax );
+    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
 }
 
 
@@ -2171,36 +2171,36 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
 {
     DBG_ASSERT( m_pWindow, "DbDateField::implAdjustGenericFieldSetting: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbDateField::implAdjustGenericFieldSetting: invalid model!" );
-    if ( m_pWindow && _rxModel.is() )
+    if ( !m_pWindow || !_rxModel.is() )
+        return;
+
+    sal_Int16   nFormat     = getINT16( _rxModel->getPropertyValue( FM_PROP_DATEFORMAT ) );
+    util::Date  aMin;
+    OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMIN ) >>= aMin );
+    util::Date  aMax;
+    OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMAX ) >>= aMax );
+    bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+
+    Any  aCentury = _rxModel->getPropertyValue( FM_PROP_DATE_SHOW_CENTURY );
+    if ( aCentury.getValueType().getTypeClass() != TypeClass_VOID )
     {
-        sal_Int16   nFormat     = getINT16( _rxModel->getPropertyValue( FM_PROP_DATEFORMAT ) );
-        util::Date  aMin;
-        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMIN ) >>= aMin );
-        util::Date  aMax;
-        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMAX ) >>= aMax );
-        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+        bool bShowDateCentury = getBOOL( aCentury );
 
-        Any  aCentury = _rxModel->getPropertyValue( FM_PROP_DATE_SHOW_CENTURY );
-        if ( aCentury.getValueType().getTypeClass() != TypeClass_VOID )
-        {
-            bool bShowDateCentury = getBOOL( aCentury );
-
-            static_cast<DateField*>( m_pWindow.get() )->SetShowDateCentury( bShowDateCentury );
-            static_cast<DateField*>( m_pPainter.get() )->SetShowDateCentury( bShowDateCentury );
-        }
-
-        static_cast< DateField* >( m_pWindow.get() )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
-        static_cast< DateField* >( m_pWindow.get() )->SetMin( aMin );
-        static_cast< DateField* >( m_pWindow.get() )->SetMax( aMax );
-        static_cast< DateField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
-
-        static_cast< DateField* >( m_pPainter.get() )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
-        static_cast< DateField* >( m_pPainter.get() )->SetMin( aMin );
-        static_cast< DateField* >( m_pPainter.get() )->SetMax( aMax );
-        static_cast< DateField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pPainter.get() )->EnableEmptyFieldValue( true );
+        static_cast<DateField*>( m_pWindow.get() )->SetShowDateCentury( bShowDateCentury );
+        static_cast<DateField*>( m_pPainter.get() )->SetShowDateCentury( bShowDateCentury );
     }
+
+    static_cast< DateField* >( m_pWindow.get() )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
+    static_cast< DateField* >( m_pWindow.get() )->SetMin( aMin );
+    static_cast< DateField* >( m_pWindow.get() )->SetMax( aMax );
+    static_cast< DateField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
+    static_cast< DateField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
+
+    static_cast< DateField* >( m_pPainter.get() )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
+    static_cast< DateField* >( m_pPainter.get() )->SetMin( aMin );
+    static_cast< DateField* >( m_pPainter.get() )->SetMax( aMax );
+    static_cast< DateField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
+    static_cast< DateField* >( m_pPainter.get() )->EnableEmptyFieldValue( true );
 }
 
 namespace
@@ -2288,27 +2288,27 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
 {
     DBG_ASSERT( m_pWindow, "DbTimeField::implAdjustGenericFieldSetting: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbTimeField::implAdjustGenericFieldSetting: invalid model!" );
-    if ( m_pWindow && _rxModel.is() )
-    {
-        sal_Int16   nFormat     = getINT16( _rxModel->getPropertyValue( FM_PROP_TIMEFORMAT ) );
-        util::Time  aMin;
-        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMIN ) >>= aMin );
-        util::Time  aMax;
-        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) >>= aMax );
-        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+    if ( !m_pWindow || !_rxModel.is() )
+        return;
 
-        static_cast< TimeField* >( m_pWindow.get() )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
-        static_cast< TimeField* >( m_pWindow.get() )->SetMin( aMin );
-        static_cast< TimeField* >( m_pWindow.get() )->SetMax( aMax );
-        static_cast< TimeField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
+    sal_Int16   nFormat     = getINT16( _rxModel->getPropertyValue( FM_PROP_TIMEFORMAT ) );
+    util::Time  aMin;
+    OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMIN ) >>= aMin );
+    util::Time  aMax;
+    OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) >>= aMax );
+    bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
-        static_cast< TimeField* >( m_pPainter.get() )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
-        static_cast< TimeField* >( m_pPainter.get() )->SetMin( aMin );
-        static_cast< TimeField* >( m_pPainter.get() )->SetMax( aMax );
-        static_cast< TimeField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pPainter.get() )->EnableEmptyFieldValue( true );
-    }
+    static_cast< TimeField* >( m_pWindow.get() )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
+    static_cast< TimeField* >( m_pWindow.get() )->SetMin( aMin );
+    static_cast< TimeField* >( m_pWindow.get() )->SetMax( aMax );
+    static_cast< TimeField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
+    static_cast< TimeField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
+
+    static_cast< TimeField* >( m_pPainter.get() )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
+    static_cast< TimeField* >( m_pPainter.get() )->SetMin( aMin );
+    static_cast< TimeField* >( m_pPainter.get() )->SetMax( aMax );
+    static_cast< TimeField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
+    static_cast< TimeField* >( m_pPainter.get() )->EnableEmptyFieldValue( true );
 }
 
 namespace
@@ -2956,118 +2956,119 @@ void DbFilterField::SetText(const OUString& rText)
 void DbFilterField::Update()
 {
     // should we fill the combobox with a filter proposal?
-    if (m_bFilterList && !m_bFilterListFilled)
+    if (!m_bFilterList || m_bFilterListFilled)
+        return;
+
+    m_bFilterListFilled = true;
+    Reference< css::beans::XPropertySet >  xField = m_rColumn.GetField();
+    if (!xField.is())
+        return;
+
+    OUString aName;
+    xField->getPropertyValue(FM_PROP_NAME) >>= aName;
+
+    // the columnmodel
+    Reference< css::container::XChild >  xModelAsChild(m_rColumn.getModel(), UNO_QUERY);
+    // the grid model
+    xModelAsChild.set(xModelAsChild->getParent(),UNO_QUERY);
+    Reference< XRowSet >  xForm(xModelAsChild->getParent(), UNO_QUERY);
+    if (!xForm.is())
+        return;
+
+    Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
+    Reference< XTablesSupplier > xSupTab;
+    xFormProp->getPropertyValue("SingleSelectQueryComposer") >>= xSupTab;
+
+    Reference< XConnection >  xConnection(getConnection(xForm));
+    if (!xSupTab.is())
+        return;
+
+    // search the field
+    Reference< XColumnsSupplier > xSupCol(xSupTab,UNO_QUERY);
+    Reference< css::container::XNameAccess >    xFieldNames = xSupCol->getColumns();
+    if (!xFieldNames->hasByName(aName))
+        return;
+
+    Reference< css::container::XNameAccess >    xTablesNames = xSupTab->getTables();
+    Reference< css::beans::XPropertySet >       xComposerFieldAsSet(xFieldNames->getByName(aName),UNO_QUERY);
+
+    if (!xComposerFieldAsSet.is() ||
+        !::comphelper::hasProperty(FM_PROP_TABLENAME, xComposerFieldAsSet) ||
+        !::comphelper::hasProperty(FM_PROP_FIELDSOURCE, xComposerFieldAsSet))
+        return;
+
+    OUString aFieldName;
+    OUString aTableName;
+    xComposerFieldAsSet->getPropertyValue(FM_PROP_FIELDSOURCE)  >>= aFieldName;
+    xComposerFieldAsSet->getPropertyValue(FM_PROP_TABLENAME)    >>= aTableName;
+
+    // no possibility to create a select statement
+    // looking for the complete table name
+    if (!xTablesNames->hasByName(aTableName))
+        return;
+
+    // build a statement and send as query;
+    // Access to the connection
+    Reference< XStatement >  xStatement;
+    Reference< XResultSet >  xListCursor;
+    Reference< css::sdb::XColumn >  xDataField;
+
+    try
     {
-        m_bFilterListFilled = true;
-        Reference< css::beans::XPropertySet >  xField = m_rColumn.GetField();
-        if (!xField.is())
-            return;
+        Reference< XDatabaseMetaData >  xMeta = xConnection->getMetaData();
 
-        OUString aName;
-        xField->getPropertyValue(FM_PROP_NAME) >>= aName;
-
-        // the columnmodel
-        Reference< css::container::XChild >  xModelAsChild(m_rColumn.getModel(), UNO_QUERY);
-        // the grid model
-        xModelAsChild.set(xModelAsChild->getParent(),UNO_QUERY);
-        Reference< XRowSet >  xForm(xModelAsChild->getParent(), UNO_QUERY);
-        if (!xForm.is())
-            return;
-
-        Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
-        Reference< XTablesSupplier > xSupTab;
-        xFormProp->getPropertyValue("SingleSelectQueryComposer") >>= xSupTab;
-
-        Reference< XConnection >  xConnection(getConnection(xForm));
-        if (!xSupTab.is())
-            return;
-
-        // search the field
-        Reference< XColumnsSupplier > xSupCol(xSupTab,UNO_QUERY);
-        Reference< css::container::XNameAccess >    xFieldNames = xSupCol->getColumns();
-        if (!xFieldNames->hasByName(aName))
-            return;
-
-        Reference< css::container::XNameAccess >    xTablesNames = xSupTab->getTables();
-        Reference< css::beans::XPropertySet >       xComposerFieldAsSet(xFieldNames->getByName(aName),UNO_QUERY);
-
-        if (xComposerFieldAsSet.is() && ::comphelper::hasProperty(FM_PROP_TABLENAME, xComposerFieldAsSet) &&
-            ::comphelper::hasProperty(FM_PROP_FIELDSOURCE, xComposerFieldAsSet))
+        OUString aQuote(xMeta->getIdentifierQuoteString());
+        OUStringBuffer aStatement("SELECT DISTINCT ");
+        aStatement.append(quoteName(aQuote, aName));
+        if (!aFieldName.isEmpty() && aName != aFieldName)
         {
-            OUString aFieldName;
-            OUString aTableName;
-            xComposerFieldAsSet->getPropertyValue(FM_PROP_FIELDSOURCE)  >>= aFieldName;
-            xComposerFieldAsSet->getPropertyValue(FM_PROP_TABLENAME)    >>= aTableName;
-
-            // no possibility to create a select statement
-            // looking for the complete table name
-            if (!xTablesNames->hasByName(aTableName))
-                return;
-
-            // build a statement and send as query;
-            // Access to the connection
-            Reference< XStatement >  xStatement;
-            Reference< XResultSet >  xListCursor;
-            Reference< css::sdb::XColumn >  xDataField;
-
-            try
-            {
-                Reference< XDatabaseMetaData >  xMeta = xConnection->getMetaData();
-
-                OUString aQuote(xMeta->getIdentifierQuoteString());
-                OUStringBuffer aStatement("SELECT DISTINCT ");
-                aStatement.append(quoteName(aQuote, aName));
-                if (!aFieldName.isEmpty() && aName != aFieldName)
-                {
-                    aStatement.append(" AS ");
-                    aStatement.append(quoteName(aQuote, aFieldName));
-                }
-
-                aStatement.append(" FROM ");
-
-                Reference< XPropertySet > xTableNameAccess(xTablesNames->getByName(aTableName), UNO_QUERY_THROW);
-                aStatement.append(composeTableNameForSelect(xConnection, xTableNameAccess));
-
-                xStatement = xConnection->createStatement();
-                Reference< css::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
-                xStatementProps->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, makeAny(true));
-
-                xListCursor = xStatement->executeQuery(aStatement.makeStringAndClear());
-
-                Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
-                Reference< css::container::XIndexAccess >  xFields(xSupplyCols->getColumns(), UNO_QUERY);
-                xDataField.set(xFields->getByIndex(0), css::uno::UNO_QUERY);
-                if (!xDataField.is())
-                    return;
-            }
-            catch(const Exception&)
-            {
-                ::comphelper::disposeComponent(xStatement);
-                return;
-            }
-
-            sal_Int16 i = 0;
-            ::std::vector< OUString >   aStringList;
-            aStringList.reserve(16);
-            OUString aStr;
-            css::util::Date aNullDate = m_rColumn.GetParent().getNullDate();
-            sal_Int32 nFormatKey = m_rColumn.GetKey();
-            Reference< XNumberFormatter >  xFormatter = m_rColumn.GetParent().getNumberFormatter();
-            sal_Int16 nKeyType = ::comphelper::getNumberFormatType(xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
-
-            while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max number of entries
-            {
-                aStr = getFormattedValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
-                aStringList.push_back(aStr);
-                (void)xListCursor->next();
-            }
-
-            // filling the entries for the combobox
-            for (::std::vector< OUString >::const_iterator iter = aStringList.begin();
-                 iter != aStringList.end(); ++iter)
-                static_cast<ComboBox*>(m_pWindow.get())->InsertEntry(*iter);
+            aStatement.append(" AS ");
+            aStatement.append(quoteName(aQuote, aFieldName));
         }
+
+        aStatement.append(" FROM ");
+
+        Reference< XPropertySet > xTableNameAccess(xTablesNames->getByName(aTableName), UNO_QUERY_THROW);
+        aStatement.append(composeTableNameForSelect(xConnection, xTableNameAccess));
+
+        xStatement = xConnection->createStatement();
+        Reference< css::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
+        xStatementProps->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, makeAny(true));
+
+        xListCursor = xStatement->executeQuery(aStatement.makeStringAndClear());
+
+        Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
+        Reference< css::container::XIndexAccess >  xFields(xSupplyCols->getColumns(), UNO_QUERY);
+        xDataField.set(xFields->getByIndex(0), css::uno::UNO_QUERY);
+        if (!xDataField.is())
+            return;
     }
+    catch(const Exception&)
+    {
+        ::comphelper::disposeComponent(xStatement);
+        return;
+    }
+
+    sal_Int16 i = 0;
+    ::std::vector< OUString >   aStringList;
+    aStringList.reserve(16);
+    OUString aStr;
+    css::util::Date aNullDate = m_rColumn.GetParent().getNullDate();
+    sal_Int32 nFormatKey = m_rColumn.GetKey();
+    Reference< XNumberFormatter >  xFormatter = m_rColumn.GetParent().getNumberFormatter();
+    sal_Int16 nKeyType = ::comphelper::getNumberFormatType(xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
+
+    while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max number of entries
+    {
+        aStr = getFormattedValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
+        aStringList.push_back(aStr);
+        (void)xListCursor->next();
+    }
+
+    // filling the entries for the combobox
+    for (::std::vector< OUString >::const_iterator iter = aStringList.begin();
+         iter != aStringList.end(); ++iter)
+        static_cast<ComboBox*>(m_pWindow.get())->InsertEntry(*iter);
 }
 
 

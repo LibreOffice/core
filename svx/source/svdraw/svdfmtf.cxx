@@ -1373,40 +1373,40 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
 {
     basegfx::B2DRange aRange(rAct.GetRect().Left(), rAct.GetRect().Top(), rAct.GetRect().Right(), rAct.GetRect().Bottom());
 
-    if(!aRange.isEmpty())
-    {
-        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
-        aRange.transform(aTransform);
-        const Gradient& rGradient = rAct.GetGradient();
-        SdrRectObj* pRect = new SdrRectObj(
-            tools::Rectangle(
-                floor(aRange.getMinX()),
-                floor(aRange.getMinY()),
-                ceil(aRange.getMaxX()),
-                ceil(aRange.getMaxY())));
-        // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
-        SfxItemSet aGradientAttr(mpModel->GetItemPool(), pRect->GetMergedItemSet().GetRanges());
-        const css::awt::GradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
-        const XFillGradientItem aXFillGradientItem(
-            XGradient(
-                rGradient.GetStartColor(),
-                rGradient.GetEndColor(),
-                aXGradientStyle,
-                rGradient.GetAngle(),
-                rGradient.GetOfsX(),
-                rGradient.GetOfsY(),
-                rGradient.GetBorder(),
-                rGradient.GetStartIntensity(),
-                rGradient.GetEndIntensity(),
-                rGradient.GetSteps()));
+    if(aRange.isEmpty())
+        return;
 
-        SetAttributes(pRect);
-        aGradientAttr.Put(XFillStyleItem(drawing::FillStyle_GRADIENT)); // #i125211#
-        aGradientAttr.Put(aXFillGradientItem);
-        pRect->SetMergedItemSet(aGradientAttr);
+    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    aRange.transform(aTransform);
+    const Gradient& rGradient = rAct.GetGradient();
+    SdrRectObj* pRect = new SdrRectObj(
+        tools::Rectangle(
+            floor(aRange.getMinX()),
+            floor(aRange.getMinY()),
+            ceil(aRange.getMaxX()),
+            ceil(aRange.getMaxY())));
+    // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
+    SfxItemSet aGradientAttr(mpModel->GetItemPool(), pRect->GetMergedItemSet().GetRanges());
+    const css::awt::GradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
+    const XFillGradientItem aXFillGradientItem(
+        XGradient(
+            rGradient.GetStartColor(),
+            rGradient.GetEndColor(),
+            aXGradientStyle,
+            rGradient.GetAngle(),
+            rGradient.GetOfsX(),
+            rGradient.GetOfsY(),
+            rGradient.GetBorder(),
+            rGradient.GetStartIntensity(),
+            rGradient.GetEndIntensity(),
+            rGradient.GetSteps()));
 
-        InsertObj(pRect, false);
-    }
+    SetAttributes(pRect);
+    aGradientAttr.Put(XFillStyleItem(drawing::FillStyle_GRADIENT)); // #i125211#
+    aGradientAttr.Put(aXFillGradientItem);
+    pRect->SetMergedItemSet(aGradientAttr);
+
+    InsertObj(pRect, false);
 }
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction const & rAct)
@@ -1469,185 +1469,185 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
 {
     const GDIMetaFile& rMtf = rAct.GetGDIMetaFile();
 
-    if(rMtf.GetActionSize())
+    if(!rMtf.GetActionSize())
+        return;
+
+    const tools::Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
+
+    // convert metafile sub-content to BitmapEx
+    BitmapEx aBitmapEx(
+        convertMetafileToBitmapEx(
+            rMtf,
+            basegfx::B2DRange(
+                aRect.Left(), aRect.Top(),
+                aRect.Right(), aRect.Bottom()),
+            125000));
+
+    // handle colors
+    const Gradient& rGradient = rAct.GetGradient();
+    basegfx::BColor aStart(rGradient.GetStartColor().getBColor());
+    basegfx::BColor aEnd(rGradient.GetEndColor().getBColor());
+
+    if(100 != rGradient.GetStartIntensity())
     {
-        const tools::Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
+        aStart *= (double)rGradient.GetStartIntensity() / 100.0;
+    }
 
-        // convert metafile sub-content to BitmapEx
-        BitmapEx aBitmapEx(
-            convertMetafileToBitmapEx(
-                rMtf,
-                basegfx::B2DRange(
-                    aRect.Left(), aRect.Top(),
-                    aRect.Right(), aRect.Bottom()),
-                125000));
+    if(100 != rGradient.GetEndIntensity())
+    {
+        aEnd *= (double)rGradient.GetEndIntensity() / 100.0;
+    }
 
-        // handle colors
-        const Gradient& rGradient = rAct.GetGradient();
-        basegfx::BColor aStart(rGradient.GetStartColor().getBColor());
-        basegfx::BColor aEnd(rGradient.GetEndColor().getBColor());
+    const bool bEqualColors(aStart == aEnd);
+    const bool bNoSteps(1 == rGradient.GetSteps());
+    bool bCreateObject(true);
+    bool bHasNewMask(false);
+    AlphaMask aNewMask;
+    double fTransparence(0.0);
+    bool bFixedTransparence(false);
 
-        if(100 != rGradient.GetStartIntensity())
+    if(bEqualColors || bNoSteps)
+    {
+        // single transparence
+        const basegfx::BColor aMedium(basegfx::average(aStart, aEnd));
+        fTransparence = aMedium.luminance();
+
+        if(basegfx::fTools::lessOrEqual(fTransparence, 0.0))
         {
-            aStart *= (double)rGradient.GetStartIntensity() / 100.0;
+            // no transparence needed, all done
         }
-
-        if(100 != rGradient.GetEndIntensity())
+        else if(basegfx::fTools::moreOrEqual(fTransparence, 1.0))
         {
-            aEnd *= (double)rGradient.GetEndIntensity() / 100.0;
-        }
-
-        const bool bEqualColors(aStart == aEnd);
-        const bool bNoSteps(1 == rGradient.GetSteps());
-        bool bCreateObject(true);
-        bool bHasNewMask(false);
-        AlphaMask aNewMask;
-        double fTransparence(0.0);
-        bool bFixedTransparence(false);
-
-        if(bEqualColors || bNoSteps)
-        {
-            // single transparence
-            const basegfx::BColor aMedium(basegfx::average(aStart, aEnd));
-            fTransparence = aMedium.luminance();
-
-            if(basegfx::fTools::lessOrEqual(fTransparence, 0.0))
-            {
-                // no transparence needed, all done
-            }
-            else if(basegfx::fTools::moreOrEqual(fTransparence, 1.0))
-            {
-                // all transparent, no object
-                bCreateObject = false;
-            }
-            else
-            {
-                // 0.0 < transparence < 1.0, apply fixed transparence
-                bFixedTransparence = true;
-            }
+            // all transparent, no object
+            bCreateObject = false;
         }
         else
         {
-            // gradient transparence
-            ScopedVclPtrInstance< VirtualDevice > pVDev;
-
-            pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
-            pVDev->DrawGradient(tools::Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
-
-            aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
-            bHasNewMask = true;
+            // 0.0 < transparence < 1.0, apply fixed transparence
+            bFixedTransparence = true;
         }
+    }
+    else
+    {
+        // gradient transparence
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
 
-        if(bCreateObject)
+        pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
+        pVDev->DrawGradient(tools::Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
+
+        aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
+        bHasNewMask = true;
+    }
+
+    if(bCreateObject)
+    {
+        if(bHasNewMask || bFixedTransparence)
         {
-            if(bHasNewMask || bFixedTransparence)
+            if(!aBitmapEx.IsAlpha() && !aBitmapEx.IsTransparent())
             {
-                if(!aBitmapEx.IsAlpha() && !aBitmapEx.IsTransparent())
+                // no transparence yet, apply new one
+                if(bFixedTransparence)
                 {
-                    // no transparence yet, apply new one
+                    sal_uInt8 aAlpha(basegfx::fround(fTransparence * 255.0));
+
+                    aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &aAlpha);
+                }
+
+                aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aNewMask);
+            }
+            else
+            {
+                // mix existing and new alpha mask
+                AlphaMask aOldMask;
+
+                if(aBitmapEx.IsAlpha())
+                {
+                    aOldMask = aBitmapEx.GetAlpha();
+                }
+                else if(TransparentType::Bitmap == aBitmapEx.GetTransparentType())
+                {
+                    aOldMask = aBitmapEx.GetMask();
+                }
+                else if(TransparentType::Color == aBitmapEx.GetTransparentType())
+                {
+                    aOldMask = aBitmapEx.GetBitmap().CreateMask(aBitmapEx.GetTransparentColor());
+                }
+
+                AlphaMask::ScopedWriteAccess pOld(aOldMask);
+
+                if(pOld)
+                {
+                    const double fFactor(1.0 / 255.0);
+
                     if(bFixedTransparence)
                     {
-                        sal_uInt8 aAlpha(basegfx::fround(fTransparence * 255.0));
+                        const double fOpNew(1.0 - fTransparence);
 
-                        aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &aAlpha);
-                    }
-
-                    aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aNewMask);
-                }
-                else
-                {
-                    // mix existing and new alpha mask
-                    AlphaMask aOldMask;
-
-                    if(aBitmapEx.IsAlpha())
-                    {
-                        aOldMask = aBitmapEx.GetAlpha();
-                    }
-                    else if(TransparentType::Bitmap == aBitmapEx.GetTransparentType())
-                    {
-                        aOldMask = aBitmapEx.GetMask();
-                    }
-                    else if(TransparentType::Color == aBitmapEx.GetTransparentType())
-                    {
-                        aOldMask = aBitmapEx.GetBitmap().CreateMask(aBitmapEx.GetTransparentColor());
-                    }
-
-                    AlphaMask::ScopedWriteAccess pOld(aOldMask);
-
-                    if(pOld)
-                    {
-                        const double fFactor(1.0 / 255.0);
-
-                        if(bFixedTransparence)
+                        for(long y(0); y < pOld->Height(); y++)
                         {
-                            const double fOpNew(1.0 - fTransparence);
-
-                            for(long y(0); y < pOld->Height(); y++)
+                            for(long x(0); x < pOld->Width(); x++)
                             {
-                                for(long x(0); x < pOld->Width(); x++)
-                                {
-                                    const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
-                                    const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+                                const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
+                                const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
 
-                                    pOld->SetPixel(y, x, BitmapColor(aCol));
-                                }
+                                pOld->SetPixel(y, x, BitmapColor(aCol));
                             }
                         }
-                        else
-                        {
-                            AlphaMask::ScopedReadAccess pNew(aNewMask);
-
-                            if(pNew)
-                            {
-                                if(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height())
-                                {
-                                    for(long y(0); y < pOld->Height(); y++)
-                                    {
-                                        for(long x(0); x < pOld->Width(); x++)
-                                        {
-                                            const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
-                                            const double fOpNew(1.0 - (pNew->GetPixel(y, x).GetIndex() * fFactor));
-                                            const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
-
-                                            pOld->SetPixel(y, x, BitmapColor(aCol));
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    OSL_ENSURE(false, "Alpha masks have different sizes (!)");
-                                }
-
-                                pNew.reset();
-                            }
-                            else
-                            {
-                                OSL_ENSURE(false, "Got no access to new alpha mask (!)");
-                            }
-                        }
-
-                        pOld.reset();
                     }
                     else
                     {
-                        OSL_ENSURE(false, "Got no access to old alpha mask (!)");
+                        AlphaMask::ScopedReadAccess pNew(aNewMask);
+
+                        if(pNew)
+                        {
+                            if(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height())
+                            {
+                                for(long y(0); y < pOld->Height(); y++)
+                                {
+                                    for(long x(0); x < pOld->Width(); x++)
+                                    {
+                                        const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
+                                        const double fOpNew(1.0 - (pNew->GetPixel(y, x).GetIndex() * fFactor));
+                                        const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+
+                                        pOld->SetPixel(y, x, BitmapColor(aCol));
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                OSL_ENSURE(false, "Alpha masks have different sizes (!)");
+                            }
+
+                            pNew.reset();
+                        }
+                        else
+                        {
+                            OSL_ENSURE(false, "Got no access to new alpha mask (!)");
+                        }
                     }
 
-                    // apply combined bitmap as mask
-                    aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aOldMask);
+                    pOld.reset();
                 }
+                else
+                {
+                    OSL_ENSURE(false, "Got no access to old alpha mask (!)");
+                }
+
+                // apply combined bitmap as mask
+                aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aOldMask);
             }
-
-            // create and add object
-            SdrGrafObj* pGraf = new SdrGrafObj(aBitmapEx, aRect);
-
-            // for MetaFloatTransparentAction, do not use SetAttributes(...)
-            // since these metafile content is not used to draw line/fill
-            // dependent of these setting at the device content
-            pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
-            pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
-            InsertObj(pGraf);
         }
+
+        // create and add object
+        SdrGrafObj* pGraf = new SdrGrafObj(aBitmapEx, aRect);
+
+        // for MetaFloatTransparentAction, do not use SetAttributes(...)
+        // since these metafile content is not used to draw line/fill
+        // dependent of these setting at the device content
+        pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+        pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+        InsertObj(pGraf);
     }
 }
 

@@ -76,67 +76,67 @@ Size SvxXConnectionPreview::GetOptimalSize() const
 void SvxXConnectionPreview::AdaptSize()
 {
     // Adapt size
-    if( pObjList )
+    if( !pObjList )
+        return;
+
+    SetMapMode(MapMode(MapUnit::Map100thMM));
+
+    OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
+    tools::Rectangle aRect = pObjList->GetAllObjBoundRect();
+
+    MapMode aMapMode = GetMapMode();
+    aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
+    SetMapMode( aMapMode );
+
+    MapMode         aDisplayMap( aMapMode );
+    Point           aNewPos;
+    Size            aNewSize;
+    const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
+    const long      nWidth = aWinSize.Width();
+    const long      nHeight = aWinSize.Height();
+    if (aRect.GetHeight() == 0)
+        return;
+    double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
+    if (nHeight == 0)
+        return;
+    double          fWinWH = (double) nWidth / nHeight;
+
+    // Adapt bitmap to Thumb size (not here!)
+    if ( fRectWH < fWinWH)
     {
-        SetMapMode(MapMode(MapUnit::Map100thMM));
-
-        OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
-        tools::Rectangle aRect = pObjList->GetAllObjBoundRect();
-
-        MapMode aMapMode = GetMapMode();
-        aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
-        SetMapMode( aMapMode );
-
-        MapMode         aDisplayMap( aMapMode );
-        Point           aNewPos;
-        Size            aNewSize;
-        const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
-        const long      nWidth = aWinSize.Width();
-        const long      nHeight = aWinSize.Height();
-        if (aRect.GetHeight() == 0)
-            return;
-        double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
-        if (nHeight == 0)
-            return;
-        double          fWinWH = (double) nWidth / nHeight;
-
-        // Adapt bitmap to Thumb size (not here!)
-        if ( fRectWH < fWinWH)
-        {
-            aNewSize.Width() = (long) ( (double) nHeight * fRectWH );
-            aNewSize.Height()= nHeight;
-        }
-        else
-        {
-            aNewSize.Width() = nWidth;
-            aNewSize.Height()= (long) ( (double) nWidth / fRectWH );
-        }
-
-        Fraction aFrac1( aWinSize.Width(), aRect.GetWidth() );
-        Fraction aFrac2( aWinSize.Height(), aRect.GetHeight() );
-        Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
-
-        // Implement MapMode
-        aDisplayMap.SetScaleX( aMinFrac );
-        aDisplayMap.SetScaleY( aMinFrac );
-
-        // Centering
-        aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
-        aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
-
-        aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMapMode, aDisplayMap ) );
-        SetMapMode( aDisplayMap );
-
-        // Origin
-        aNewPos = aDisplayMap.GetOrigin();
-        aNewPos -= Point( aRect.TopLeft().X(), aRect.TopLeft().Y() );
-        aDisplayMap.SetOrigin( aNewPos );
-        SetMapMode( aDisplayMap );
-
-        Point aPos;
-        MouseEvent aMEvt( aPos, 1, MouseEventModifiers::NONE, MOUSE_RIGHT );
-        MouseButtonDown( aMEvt );
+        aNewSize.Width() = (long) ( (double) nHeight * fRectWH );
+        aNewSize.Height()= nHeight;
     }
+    else
+    {
+        aNewSize.Width() = nWidth;
+        aNewSize.Height()= (long) ( (double) nWidth / fRectWH );
+    }
+
+    Fraction aFrac1( aWinSize.Width(), aRect.GetWidth() );
+    Fraction aFrac2( aWinSize.Height(), aRect.GetHeight() );
+    Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
+
+    // Implement MapMode
+    aDisplayMap.SetScaleX( aMinFrac );
+    aDisplayMap.SetScaleY( aMinFrac );
+
+    // Centering
+    aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
+    aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
+
+    aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMapMode, aDisplayMap ) );
+    SetMapMode( aDisplayMap );
+
+    // Origin
+    aNewPos = aDisplayMap.GetOrigin();
+    aNewPos -= Point( aRect.TopLeft().X(), aRect.TopLeft().Y() );
+    aDisplayMap.SetOrigin( aNewPos );
+    SetMapMode( aDisplayMap );
+
+    Point aPos;
+    MouseEvent aMEvt( aPos, 1, MouseEventModifiers::NONE, MOUSE_RIGHT );
+    MouseButtonDown( aMEvt );
 }
 
 void SvxXConnectionPreview::Construct()

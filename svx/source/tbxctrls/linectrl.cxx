@@ -366,50 +366,50 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 
 void SvxLineEndWindow::FillValueSet()
 {
-    if( mpLineEndList.is() )
+    if( !mpLineEndList.is() )
+        return;
+
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+
+    long nCount = mpLineEndList->Count();
+
+    // First entry: no line end.
+    // An entry is temporarily added to get the UI bitmap
+    basegfx::B2DPolyPolygon aNothing;
+    mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SvxResId(RID_SVXSTR_NONE)));
+    const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
+    Bitmap aBmp = mpLineEndList->GetUiBitmap( nCount );
+    OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
+
+    maBmpSize = aBmp.GetSizePixel();
+    pVD->SetOutputSizePixel( maBmpSize, false );
+    maBmpSize.Width() = maBmpSize.Width() / 2;
+    Point aPt0( 0, 0 );
+    Point aPt1( maBmpSize.Width(), 0 );
+
+    pVD->DrawBitmap( Point(), aBmp );
+    mpLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
+    mpLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
+
+    mpLineEndList->Remove(nCount);
+
+    for( long i = 0; i < nCount; i++ )
     {
-        ScopedVclPtrInstance< VirtualDevice > pVD;
-
-        long nCount = mpLineEndList->Count();
-
-        // First entry: no line end.
-        // An entry is temporarily added to get the UI bitmap
-        basegfx::B2DPolyPolygon aNothing;
-        mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SvxResId(RID_SVXSTR_NONE)));
-        const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
-        Bitmap aBmp = mpLineEndList->GetUiBitmap( nCount );
+        pEntry = mpLineEndList->GetLineEnd( i );
+        DBG_ASSERT( pEntry, "Could not access LineEndEntry" );
+        aBmp = mpLineEndList->GetUiBitmap( i );
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
-        maBmpSize = aBmp.GetSizePixel();
-        pVD->SetOutputSizePixel( maBmpSize, false );
-        maBmpSize.Width() = maBmpSize.Width() / 2;
-        Point aPt0( 0, 0 );
-        Point aPt1( maBmpSize.Width(), 0 );
-
-        pVD->DrawBitmap( Point(), aBmp );
-        mpLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
-        mpLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
-
-        mpLineEndList->Remove(nCount);
-
-        for( long i = 0; i < nCount; i++ )
-        {
-            pEntry = mpLineEndList->GetLineEnd( i );
-            DBG_ASSERT( pEntry, "Could not access LineEndEntry" );
-            aBmp = mpLineEndList->GetUiBitmap( i );
-            OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
-
-            pVD->DrawBitmap( aPt0, aBmp );
-            mpLineEndSet->InsertItem((sal_uInt16)((i+1)*2L+1),
-                    Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
-            mpLineEndSet->InsertItem((sal_uInt16)((i+2)*2L),
-                    Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
-        }
-        mnLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
-        mpLineEndSet->SetLineCount( mnLines );
-
-        SetSize();
+        pVD->DrawBitmap( aPt0, aBmp );
+        mpLineEndSet->InsertItem((sal_uInt16)((i+1)*2L+1),
+                Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
+        mpLineEndSet->InsertItem((sal_uInt16)((i+2)*2L),
+                Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
     }
+    mnLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
+    mpLineEndSet->SetLineCount( mnLines );
+
+    SetSize();
 }
 
 void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )

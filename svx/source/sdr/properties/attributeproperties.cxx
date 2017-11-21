@@ -469,45 +469,45 @@ namespace sdr
 
         void AttributeProperties::ForceStyleToHardAttributes()
         {
-            if(GetStyleSheet() && dynamic_cast<const SfxStyleSheet *>(mpStyleSheet) != nullptr)
+            if(!GetStyleSheet() || dynamic_cast<const SfxStyleSheet *>(mpStyleSheet) == nullptr)
+                return;
+
+            // prepare copied, new itemset, but WITHOUT parent
+            GetObjectItemSet();
+            SfxItemSet* pDestItemSet = new SfxItemSet(*mpItemSet);
+            pDestItemSet->SetParent(nullptr);
+
+            // prepare forgetting the current stylesheet like in RemoveStyleSheet()
+            EndListening(*mpStyleSheet);
+            EndListening(mpStyleSheet->GetPool());
+
+            // prepare the iter; use the mpObjectItemSet which may have less
+            // WhichIDs than the style.
+            SfxWhichIter aIter(*pDestItemSet);
+            sal_uInt16 nWhich(aIter.FirstWhich());
+            const SfxPoolItem *pItem = nullptr;
+
+            // now set all hard attributes of the current at the new itemset
+            while(nWhich)
             {
-                // prepare copied, new itemset, but WITHOUT parent
-                GetObjectItemSet();
-                SfxItemSet* pDestItemSet = new SfxItemSet(*mpItemSet);
-                pDestItemSet->SetParent(nullptr);
-
-                // prepare forgetting the current stylesheet like in RemoveStyleSheet()
-                EndListening(*mpStyleSheet);
-                EndListening(mpStyleSheet->GetPool());
-
-                // prepare the iter; use the mpObjectItemSet which may have less
-                // WhichIDs than the style.
-                SfxWhichIter aIter(*pDestItemSet);
-                sal_uInt16 nWhich(aIter.FirstWhich());
-                const SfxPoolItem *pItem = nullptr;
-
-                // now set all hard attributes of the current at the new itemset
-                while(nWhich)
+                // #i61284# use mpItemSet with parents, makes things easier and reduces to
+                // one loop
+                if(SfxItemState::SET == mpItemSet->GetItemState(nWhich, true, &pItem))
                 {
-                    // #i61284# use mpItemSet with parents, makes things easier and reduces to
-                    // one loop
-                    if(SfxItemState::SET == mpItemSet->GetItemState(nWhich, true, &pItem))
-                    {
-                        pDestItemSet->Put(*pItem);
-                    }
-
-                    nWhich = aIter.NextWhich();
+                    pDestItemSet->Put(*pItem);
                 }
 
-                // replace itemsets
-                mpItemSet.reset(pDestItemSet);
-
-                // set necessary changes like in RemoveStyleSheet()
-                GetSdrObject().SetBoundRectDirty();
-                GetSdrObject().SetRectsDirty(true);
-
-                mpStyleSheet = nullptr;
+                nWhich = aIter.NextWhich();
             }
+
+            // replace itemsets
+            mpItemSet.reset(pDestItemSet);
+
+            // set necessary changes like in RemoveStyleSheet()
+            GetSdrObject().SetBoundRectDirty();
+            GetSdrObject().SetRectsDirty(true);
+
+            mpStyleSheet = nullptr;
         }
 
         void AttributeProperties::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)

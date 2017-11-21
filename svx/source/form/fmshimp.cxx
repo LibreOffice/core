@@ -1838,91 +1838,91 @@ void FmXFormShell::setActiveController_Lock(const Reference<runtime::XFormContro
         return;
     }
 
-    if (xController != m_xActiveController)
+    if (xController == m_xActiveController)
+        return;
+
+    // switch all nav dispatchers belonging to the form of the current nav controller to 'non active'
+    Reference< XResultSet> xNavigationForm;
+    if (m_xNavigationController.is())
+        xNavigationForm.set(m_xNavigationController->getModel(), UNO_QUERY);
+
+    m_bInActivate = true;
+
+    // check if the 2 controllers serve different forms
+    Reference< XResultSet> xOldForm;
+    if (m_xActiveController.is())
+        xOldForm.set(m_xActiveController->getModel(), UNO_QUERY);
+    Reference< XResultSet> xNewForm;
+    if (xController.is())
+        xNewForm = Reference< XResultSet>(xController->getModel(), UNO_QUERY);
+    xOldForm = getInternalForm_Lock(xOldForm);
+    xNewForm = getInternalForm_Lock(xNewForm);
+
+    bool bDifferentForm = ( xOldForm.get() != xNewForm.get() );
+    bool bNeedSave = bDifferentForm && !_bNoSaveOldContent;
+        // we save the content of the old form if we move to a new form, and saving old content is allowed
+
+    if ( m_xActiveController.is() && bNeedSave )
     {
-        // switch all nav dispatchers belonging to the form of the current nav controller to 'non active'
-        Reference< XResultSet> xNavigationForm;
-        if (m_xNavigationController.is())
-            xNavigationForm.set(m_xNavigationController->getModel(), UNO_QUERY);
-
-        m_bInActivate = true;
-
-        // check if the 2 controllers serve different forms
-        Reference< XResultSet> xOldForm;
-        if (m_xActiveController.is())
-            xOldForm.set(m_xActiveController->getModel(), UNO_QUERY);
-        Reference< XResultSet> xNewForm;
-        if (xController.is())
-            xNewForm = Reference< XResultSet>(xController->getModel(), UNO_QUERY);
-        xOldForm = getInternalForm_Lock(xOldForm);
-        xNewForm = getInternalForm_Lock(xNewForm);
-
-        bool bDifferentForm = ( xOldForm.get() != xNewForm.get() );
-        bool bNeedSave = bDifferentForm && !_bNoSaveOldContent;
-            // we save the content of the old form if we move to a new form, and saving old content is allowed
-
-        if ( m_xActiveController.is() && bNeedSave )
+        // save content on change of the controller; a commit has already been executed
+        if ( m_aActiveControllerFeatures->commitCurrentControl() )
         {
-            // save content on change of the controller; a commit has already been executed
-            if ( m_aActiveControllerFeatures->commitCurrentControl() )
+            m_bSetFocus = true;
+            if ( m_aActiveControllerFeatures->isModifiedRow() )
             {
-                m_bSetFocus = true;
-                if ( m_aActiveControllerFeatures->isModifiedRow() )
+                bool bIsNew = m_aActiveControllerFeatures->isInsertionRow();
+                bool bResult = m_aActiveControllerFeatures->commitCurrentRecord();
+                if ( !bResult && m_bSetFocus )
                 {
-                    bool bIsNew = m_aActiveControllerFeatures->isInsertionRow();
-                    bool bResult = m_aActiveControllerFeatures->commitCurrentRecord();
-                    if ( !bResult && m_bSetFocus )
+                    // if we couldn't save the current record, set the focus back to the
+                    // current control
+                    Reference< XWindow > xWindow( m_xActiveController->getCurrentControl(), UNO_QUERY );
+                    if ( xWindow.is() )
+                        xWindow->setFocus();
+                    m_bInActivate = false;
+                    return;
+                }
+                else if ( bResult && bIsNew )
+                {
+                    Reference< XResultSet > xCursor( m_aActiveControllerFeatures->getCursor().get() );
+                    if ( xCursor.is() )
                     {
-                        // if we couldn't save the current record, set the focus back to the
-                        // current control
-                        Reference< XWindow > xWindow( m_xActiveController->getCurrentControl(), UNO_QUERY );
-                        if ( xWindow.is() )
-                            xWindow->setFocus();
-                        m_bInActivate = false;
-                        return;
-                    }
-                    else if ( bResult && bIsNew )
-                    {
-                        Reference< XResultSet > xCursor( m_aActiveControllerFeatures->getCursor().get() );
-                        if ( xCursor.is() )
-                        {
-                            DO_SAFE( xCursor->last(); );
-                        }
+                        DO_SAFE( xCursor->last(); );
                     }
                 }
             }
         }
-
-        stopListening_Lock();
-
-        impl_switchActiveControllerListening_Lock(false);
-
-        m_aActiveControllerFeatures.dispose();
-        m_xActiveController = xController;
-        if ( m_xActiveController.is() )
-            m_aActiveControllerFeatures.assign( m_xActiveController );
-
-        impl_switchActiveControllerListening_Lock(true);
-
-        if ( m_xActiveController.is() )
-            m_xActiveForm = getInternalForm_Lock(Reference<XForm>(m_xActiveController->getModel(), UNO_QUERY));
-        else
-            m_xActiveForm = nullptr;
-
-        startListening_Lock();
-
-        // activate all dispatchers belonging to form of the new navigation controller
-        xNavigationForm = nullptr;
-        if (m_xNavigationController.is())
-            xNavigationForm.set(m_xNavigationController->getModel(), UNO_QUERY);
-
-        m_bInActivate = false;
-
-        m_pShell->UIFeatureChanged();
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
-
-        InvalidateSlot_Lock(SID_FM_FILTER_NAVIGATOR_CONTROL, true);
     }
+
+    stopListening_Lock();
+
+    impl_switchActiveControllerListening_Lock(false);
+
+    m_aActiveControllerFeatures.dispose();
+    m_xActiveController = xController;
+    if ( m_xActiveController.is() )
+        m_aActiveControllerFeatures.assign( m_xActiveController );
+
+    impl_switchActiveControllerListening_Lock(true);
+
+    if ( m_xActiveController.is() )
+        m_xActiveForm = getInternalForm_Lock(Reference<XForm>(m_xActiveController->getModel(), UNO_QUERY));
+    else
+        m_xActiveForm = nullptr;
+
+    startListening_Lock();
+
+    // activate all dispatchers belonging to form of the new navigation controller
+    xNavigationForm = nullptr;
+    if (m_xNavigationController.is())
+        xNavigationForm.set(m_xNavigationController->getModel(), UNO_QUERY);
+
+    m_bInActivate = false;
+
+    m_pShell->UIFeatureChanged();
+    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+
+    InvalidateSlot_Lock(SID_FM_FILTER_NAVIGATOR_CONTROL, true);
 }
 
 

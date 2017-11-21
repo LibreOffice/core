@@ -2294,113 +2294,113 @@ basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation()
 
 void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 {
-    if (DragStat().CheckMinMoved(rPnt))
-    {
-        bResize=!getSdrDragView().IsOrtho();
-        long nSA=0;
+    if (!DragStat().CheckMinMoved(rPnt))
+        return;
 
-        if (getSdrDragView().IsAngleSnapEnabled())
-            nSA=getSdrDragView().GetSnapAngle();
+    bResize=!getSdrDragView().IsOrtho();
+    long nSA=0;
 
-        Point aP0(DragStat().GetStart());
-        Point aPnt(rPnt);
-        Fraction aNeuFact(1,1);
+    if (getSdrDragView().IsAngleSnapEnabled())
+        nSA=getSdrDragView().GetSnapAngle();
 
-        // if angle snapping not activated, snap to raster (except when using slant)
-        if (nSA==0 && !bSlant)
-            aPnt=GetSnapPos(aPnt);
+    Point aP0(DragStat().GetStart());
+    Point aPnt(rPnt);
+    Fraction aNeuFact(1,1);
 
-        if (!bSlant && !bResize)
-        { // shear, but no resize
-            if (bVertical)
-                aPnt.X()=aP0.X();
-            else
-                aPnt.Y()=aP0.Y();
-        }
+    // if angle snapping not activated, snap to raster (except when using slant)
+    if (nSA==0 && !bSlant)
+        aPnt=GetSnapPos(aPnt);
 
-        Point aRef(DragStat().GetRef1());
-        Point aDif(aPnt-aRef);
-
-        long nNewAngle=0;
-
-        if (bSlant)
-        {
-            nNewAngle=NormAngle180(-(GetAngle(aDif)-nAngle0));
-
-            if (bVertical)
-                nNewAngle=NormAngle180(-nNewAngle);
-        }
+    if (!bSlant && !bResize)
+    { // shear, but no resize
+        if (bVertical)
+            aPnt.X()=aP0.X();
         else
+            aPnt.Y()=aP0.Y();
+    }
+
+    Point aRef(DragStat().GetRef1());
+    Point aDif(aPnt-aRef);
+
+    long nNewAngle=0;
+
+    if (bSlant)
+    {
+        nNewAngle=NormAngle180(-(GetAngle(aDif)-nAngle0));
+
+        if (bVertical)
+            nNewAngle=NormAngle180(-nNewAngle);
+    }
+    else
+    {
+        if (bVertical)
+            nNewAngle=NormAngle180(GetAngle(aDif));
+        else
+            nNewAngle=NormAngle180(-(GetAngle(aDif)-9000));
+
+        if (nNewAngle<-9000 || nNewAngle>9000)
+            nNewAngle=NormAngle180(nNewAngle+18000);
+
+        if (bResize)
         {
+            Point aPt2(aPnt);
+
+            if (nSA!=0)
+                aPt2=GetSnapPos(aPnt); // snap this one in any case
+
             if (bVertical)
-                nNewAngle=NormAngle180(GetAngle(aDif));
-            else
-                nNewAngle=NormAngle180(-(GetAngle(aDif)-9000));
-
-            if (nNewAngle<-9000 || nNewAngle>9000)
-                nNewAngle=NormAngle180(nNewAngle+18000);
-
-            if (bResize)
             {
-                Point aPt2(aPnt);
-
-                if (nSA!=0)
-                    aPt2=GetSnapPos(aPnt); // snap this one in any case
-
-                if (bVertical)
-                {
-                    aNeuFact=Fraction(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
-                }
-                else
-                {
-                    aNeuFact=Fraction(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
-                }
+                aNeuFact=Fraction(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
+            }
+            else
+            {
+                aNeuFact=Fraction(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
             }
         }
+    }
 
-        bool bNeg=nNewAngle<0;
+    bool bNeg=nNewAngle<0;
 
-        if (bNeg)
-            nNewAngle=-nNewAngle;
+    if (bNeg)
+        nNewAngle=-nNewAngle;
 
-        if (nSA!=0)
-        { // angle snapping
-            nNewAngle+=nSA/2;
-            nNewAngle/=nSA;
-            nNewAngle*=nSA;
-        }
+    if (nSA!=0)
+    { // angle snapping
+        nNewAngle+=nSA/2;
+        nNewAngle/=nSA;
+        nNewAngle*=nSA;
+    }
 
-        nNewAngle=NormAngle360(nNewAngle);
-        bUpSideDown=nNewAngle>9000 && nNewAngle<27000;
+    nNewAngle=NormAngle360(nNewAngle);
+    bUpSideDown=nNewAngle>9000 && nNewAngle<27000;
 
-        if (bSlant)
-        { // calculate resize for slant
-            // when angle snapping is activated, disable 89 degree limit
-            long nTmpAngle=nNewAngle;
-            if (bUpSideDown) nNewAngle-=18000;
-            if (bNeg) nTmpAngle=-nTmpAngle;
-            bResize=true;
-            aNeuFact = cos(nTmpAngle*nPi180);
-            aFact.ReduceInaccurate(10); // three decimals should be enough
-        }
+    if (bSlant)
+    { // calculate resize for slant
+        // when angle snapping is activated, disable 89 degree limit
+        long nTmpAngle=nNewAngle;
+        if (bUpSideDown) nNewAngle-=18000;
+        if (bNeg) nTmpAngle=-nTmpAngle;
+        bResize=true;
+        aNeuFact = cos(nTmpAngle*nPi180);
+        aFact.ReduceInaccurate(10); // three decimals should be enough
+    }
 
-        if (nNewAngle>8900)
-            nNewAngle=8900;
+    if (nNewAngle>8900)
+        nNewAngle=8900;
 
-        if (bNeg)
-            nNewAngle=-nNewAngle;
+    if (bNeg)
+        nNewAngle=-nNewAngle;
 
-        if (nAngle!=nNewAngle || aFact!=aNeuFact)
-        {
-            nAngle=nNewAngle;
-            aFact=aNeuFact;
-            double a=nAngle*nPi180;
-            double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
-            Hide();
-            nTan=nTan1;
-            DragStat().NextMove(rPnt);
-            Show();
-        }
+    if (nAngle!=nNewAngle || aFact!=aNeuFact)
+    {
+        nAngle=nNewAngle;
+        aFact=aNeuFact;
+        double a=nAngle*nPi180;
+        double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
+        Hide();
+        nTan=nTan1;
+        DragStat().NextMove(rPnt);
+        Show();
     }
 }
 
@@ -3097,165 +3097,165 @@ void SdrDragCrook::MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
 
 void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 {
-    if (DragStat().CheckMinMoved(rPnt))
+    if (!DragStat().CheckMinMoved(rPnt))
+        return;
+
+    bool bNeuMoveOnly=getSdrDragView().IsMoveOnlyDragging();
+    bAtCenter=false;
+    SdrCrookMode eNeuMode=getSdrDragView().GetCrookMode();
+    bool bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed);
+    bResize=!getSdrDragView().IsOrtho() && bResizeAllowed && !bNeuMoveOnly;
+    bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SdrCrookMode::Rotate;
+
+    Point aPnt(GetSnapPos(rPnt));
+
+    Point aNeuCenter(aMarkCenter.X(),aStart.Y());
+
+    if (bVertical)
     {
-        bool bNeuMoveOnly=getSdrDragView().IsMoveOnlyDragging();
-        bAtCenter=false;
-        SdrCrookMode eNeuMode=getSdrDragView().GetCrookMode();
-        bool bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed);
-        bResize=!getSdrDragView().IsOrtho() && bResizeAllowed && !bNeuMoveOnly;
-        bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SdrCrookMode::Rotate;
+        aNeuCenter.X()=aStart.X();
+        aNeuCenter.Y()=aMarkCenter.Y();
+    }
 
-        Point aPnt(GetSnapPos(rPnt));
+    if (!getSdrDragView().IsCrookAtCenter())
+    {
+        switch (GetDragHdlKind())
+        {
+            case SdrHdlKind::UpperLeft: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
+            case SdrHdlKind::Upper: aNeuCenter.Y()=aMarkRect.Bottom(); bUpr=true; break;
+            case SdrHdlKind::UpperRight: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
+            case SdrHdlKind::Left : aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
+            case SdrHdlKind::Right: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
+            case SdrHdlKind::LowerLeft: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
+            case SdrHdlKind::Lower: aNeuCenter.Y()=aMarkRect.Top();    bLwr=true; break;
+            case SdrHdlKind::LowerRight: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
+            default: bAtCenter=true;
+        }
+    }
+    else
+        bAtCenter=true;
 
-        Point aNeuCenter(aMarkCenter.X(),aStart.Y());
+    Fraction aNeuFact(1,1);
+    long dx1=aPnt.X()-aNeuCenter.X();
+    long dy1=aPnt.Y()-aNeuCenter.Y();
+    bValid=bVertical ? dx1!=0 : dy1!=0;
+
+    if (bValid)
+    {
+        if (bVertical)
+            bValid = std::abs(dx1)*100>std::abs(dy1);
+        else
+            bValid = std::abs(dy1)*100>std::abs(dx1);
+    }
+
+    long nNeuRad=0;
+    nAngle=0;
+
+    if (bValid)
+    {
+        double a=0; // slope of the radius
+        long nPntWink=0;
 
         if (bVertical)
         {
-            aNeuCenter.X()=aStart.X();
-            aNeuCenter.Y()=aMarkCenter.Y();
-        }
-
-        if (!getSdrDragView().IsCrookAtCenter())
-        {
-            switch (GetDragHdlKind())
-            {
-                case SdrHdlKind::UpperLeft: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case SdrHdlKind::Upper: aNeuCenter.Y()=aMarkRect.Bottom(); bUpr=true; break;
-                case SdrHdlKind::UpperRight: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                case SdrHdlKind::Left : aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case SdrHdlKind::Right: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                case SdrHdlKind::LowerLeft: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case SdrHdlKind::Lower: aNeuCenter.Y()=aMarkRect.Top();    bLwr=true; break;
-                case SdrHdlKind::LowerRight: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                default: bAtCenter=true;
-            }
+            a=((double)dy1)/((double)dx1); // slope of the radius
+            nNeuRad=((long)(dy1*a)+dx1) /2;
+            aNeuCenter.X()+=nNeuRad;
+            nPntWink=GetAngle(aPnt-aNeuCenter);
         }
         else
-            bAtCenter=true;
-
-        Fraction aNeuFact(1,1);
-        long dx1=aPnt.X()-aNeuCenter.X();
-        long dy1=aPnt.Y()-aNeuCenter.Y();
-        bValid=bVertical ? dx1!=0 : dy1!=0;
-
-        if (bValid)
         {
-            if (bVertical)
-                bValid = std::abs(dx1)*100>std::abs(dy1);
-            else
-                bValid = std::abs(dy1)*100>std::abs(dx1);
+            a=((double)dx1)/((double)dy1); // slope of the radius
+            nNeuRad=((long)(dx1*a)+dy1) /2;
+            aNeuCenter.Y()+=nNeuRad;
+            nPntWink=GetAngle(aPnt-aNeuCenter)-9000;
         }
 
-        long nNeuRad=0;
-        nAngle=0;
-
-        if (bValid)
+        if (!bAtCenter)
         {
-            double a=0; // slope of the radius
-            long nPntWink=0;
-
-            if (bVertical)
+            if (nNeuRad<0)
             {
-                a=((double)dy1)/((double)dx1); // slope of the radius
-                nNeuRad=((long)(dy1*a)+dx1) /2;
-                aNeuCenter.X()+=nNeuRad;
-                nPntWink=GetAngle(aPnt-aNeuCenter);
+                if (bRgt) nPntWink+=18000;
+                if (bLft) nPntWink=18000-nPntWink;
+                if (bLwr) nPntWink=-nPntWink;
             }
             else
             {
-                a=((double)dx1)/((double)dy1); // slope of the radius
-                nNeuRad=((long)(dx1*a)+dy1) /2;
-                aNeuCenter.Y()+=nNeuRad;
-                nPntWink=GetAngle(aPnt-aNeuCenter)-9000;
+                if (bRgt) nPntWink=-nPntWink;
+                if (bUpr) nPntWink=18000-nPntWink;
+                if (bLwr) nPntWink+=18000;
             }
 
-            if (!bAtCenter)
-            {
-                if (nNeuRad<0)
-                {
-                    if (bRgt) nPntWink+=18000;
-                    if (bLft) nPntWink=18000-nPntWink;
-                    if (bLwr) nPntWink=-nPntWink;
-                }
-                else
-                {
-                    if (bRgt) nPntWink=-nPntWink;
-                    if (bUpr) nPntWink=18000-nPntWink;
-                    if (bLwr) nPntWink+=18000;
-                }
-
-                nPntWink=NormAngle360(nPntWink);
-            }
-            else
-            {
-                if (nNeuRad<0) nPntWink+=18000;
-                if (bVertical) nPntWink=18000-nPntWink;
-                nPntWink=NormAngle180(nPntWink);
-                nPntWink = std::abs(nPntWink);
-            }
-
-            double nUmfang = 2 * std::abs(nNeuRad)*nPi;
-
-            if (bResize)
-            {
-                long nMul=(long)(nUmfang*NormAngle360(nPntWink)/36000);
-
-                if (bAtCenter)
-                    nMul*=2;
-
-                aNeuFact=Fraction(nMul,nMarkSize);
-                nAngle=nPntWink;
-            }
-            else
-            {
-                nAngle=(long)((nMarkSize*360/nUmfang)*100)/2;
-
-                if (nAngle==0)
-                    bValid=false;
-            }
+            nPntWink=NormAngle360(nPntWink);
+        }
+        else
+        {
+            if (nNeuRad<0) nPntWink+=18000;
+            if (bVertical) nPntWink=18000-nPntWink;
+            nPntWink=NormAngle180(nPntWink);
+            nPntWink = std::abs(nPntWink);
         }
 
-        if (nAngle==0 || nNeuRad==0)
-            bValid=false;
+        double nUmfang = 2 * std::abs(nNeuRad)*nPi;
 
-        if (!bValid)
-            nNeuRad=0;
-
-        if (!bValid && bResize)
+        if (bResize)
         {
-            long nMul=bVertical ? dy1 : dx1;
-
-            if (bLft || bUpr)
-                nMul=-nMul;
-
-            long nDiv=nMarkSize;
+            long nMul=(long)(nUmfang*NormAngle360(nPntWink)/36000);
 
             if (bAtCenter)
-            {
                 nMul*=2;
-                nMul = std::abs(nMul);
-            }
 
-            aNeuFact=Fraction(nMul,nDiv);
+            aNeuFact=Fraction(nMul,nMarkSize);
+            nAngle=nPntWink;
         }
-
-        if (aNeuCenter!=aCenter || bNeuContortion!=bContortion || aNeuFact!=aFact ||
-            bNeuMoveOnly != getMoveOnly() || bNeuRotate!=bRotate || eNeuMode!=eMode)
+        else
         {
-            Hide();
-            setMoveOnly(bNeuMoveOnly);
-            bRotate=bNeuRotate;
-            eMode=eNeuMode;
-            bContortion=bNeuContortion;
-            aCenter=aNeuCenter;
-            aFact=aNeuFact;
-            aRad=Point(nNeuRad,nNeuRad);
-            bResize=aFact!=Fraction(1,1) && aFact.GetDenominator()!=0 && aFact.IsValid();
-            DragStat().NextMove(aPnt);
-            Show();
+            nAngle=(long)((nMarkSize*360/nUmfang)*100)/2;
+
+            if (nAngle==0)
+                bValid=false;
         }
     }
+
+    if (nAngle==0 || nNeuRad==0)
+        bValid=false;
+
+    if (!bValid)
+        nNeuRad=0;
+
+    if (!bValid && bResize)
+    {
+        long nMul=bVertical ? dy1 : dx1;
+
+        if (bLft || bUpr)
+            nMul=-nMul;
+
+        long nDiv=nMarkSize;
+
+        if (bAtCenter)
+        {
+            nMul*=2;
+            nMul = std::abs(nMul);
+        }
+
+        aNeuFact=Fraction(nMul,nDiv);
+    }
+
+    if (aNeuCenter==aCenter && bNeuContortion==bContortion && aNeuFact==aFact &&
+        bNeuMoveOnly == getMoveOnly() && bNeuRotate==bRotate && eNeuMode==eMode)
+        return;
+
+    Hide();
+    setMoveOnly(bNeuMoveOnly);
+    bRotate=bNeuRotate;
+    eMode=eNeuMode;
+    bContortion=bNeuContortion;
+    aCenter=aNeuCenter;
+    aFact=aNeuFact;
+    aRad=Point(nNeuRad,nNeuRad);
+    bResize=aFact!=Fraction(1,1) && aFact.GetDenominator()!=0 && aFact.IsValid();
+    DragStat().NextMove(aPnt);
+    Show();
 }
 
 void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)

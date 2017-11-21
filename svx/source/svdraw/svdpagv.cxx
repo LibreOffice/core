@@ -422,178 +422,178 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     if (ny1<0) ny1=-ny1;
     if (ny2<0) ny2=-ny2;
 
-    if (nx1!=0)
+    if (nx1==0)
+        return;
+
+    // no more global output size, use window size instead to decide grid sizes
+    long nScreenWdt = rOut.GetOutputSizePixel().Width();
+
+    long nMinDotPix=2;
+    long nMinLinPix=4;
+
+    if (nScreenWdt>=1600)
     {
-        // no more global output size, use window size instead to decide grid sizes
-        long nScreenWdt = rOut.GetOutputSizePixel().Width();
-
-        long nMinDotPix=2;
-        long nMinLinPix=4;
-
-        if (nScreenWdt>=1600)
-        {
-            nMinDotPix=4;
-            nMinLinPix=8;
-        }
-        else if (nScreenWdt>=1024)
-        {
-            nMinDotPix=3;
-            nMinLinPix=6;
-        }
-        else
-        { // e. g. 640x480
-            nMinDotPix=2;
-            nMinLinPix=4;
-        }
-        Size aMinDotDist(rOut.PixelToLogic(Size(nMinDotPix,nMinDotPix)));
-        Size aMinLinDist(rOut.PixelToLogic(Size(nMinLinPix,nMinLinPix)));
-        bool bHoriSolid=nx2<aMinDotDist.Width();
-        bool bVertSolid=ny2<aMinDotDist.Height();
-        // enlarge line offset (minimum 4 pixels)
-        // enlarge by: *2 *5 *10 *20 *50 *100 ...
-        int nTgl=0;
-        long nVal0=nx1;
-        while (nx1<aMinLinDist.Width())
-        {
-            long a=nx1;
-
-            if (nTgl==0) nx1*=2;
-            if (nTgl==1) nx1=nVal0*5; // => nx1*=2.5
-            if (nTgl==2) nx1*=2;
-
-            nVal0=a;
-            nTgl++; if (nTgl>=3) nTgl=0;
-        }
-        nTgl=0;
-        nVal0=ny1;
-        while (ny1<aMinLinDist.Height())
-        {
-            long a=ny1;
-
-            if (nTgl==0) ny1*=2;
-            if (nTgl==1) ny1=nVal0*5; // => ny1*=2.5
-            if (nTgl==2) ny1*=2;
-
-            nVal0=a;
-            nTgl++;
-
-            if (nTgl>=3) nTgl=0;
-        }
-
-        bool bHoriFine=nx2<nx1;
-        bool bVertFine=ny2<ny1;
-        bool bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
-        bool bVertLines=bVertSolid || bVertFine;
-
-        Color aColorMerk( rOut.GetLineColor() );
-        rOut.SetLineColor( aColor );
-
-        bool bMap0=rOut.IsMapModeEnabled();
-
-        long nWrX=0;
-        long nWrY=0;
-        Point aOrg(aPgOrg);
-        long x1=GetPage()->GetLeftBorder()+1+nWrX;
-        long x2=GetPage()->GetWidth()-GetPage()->GetRightBorder()-1+nWrY;
-        long y1=GetPage()->GetUpperBorder()+1+nWrX;
-        long y2=GetPage()->GetHeight()-GetPage()->GetLowerBorder()-1+nWrY;
-        const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
-
-        sal_uInt16 nGridPaintCnt=1;
-        if (pFrames!=nullptr) nGridPaintCnt=pFrames->GetCount();
-        for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintCnt; nGridPaintNum++) {
-            if (pFrames!=nullptr) {
-                const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
-                nWrX=rGF.GetPaperRect().Left();
-                nWrY=rGF.GetPaperRect().Top();
-                x1=rGF.GetUserArea().Left();
-                x2=rGF.GetUserArea().Right();
-                y1=rGF.GetUserArea().Top();
-                y2=rGF.GetUserArea().Bottom();
-                aOrg=rGF.GetUserArea().TopLeft();
-                aOrg-=rGF.GetPaperRect().TopLeft();
-            }
-            if (!rRect.IsEmpty()) {
-                Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
-                long nX1Pix=a1PixSiz.Width();  // add 1 pixel of tolerance
-                long nY1Pix=a1PixSiz.Height();
-                if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
-                if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
-                if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
-                if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
-            }
-
-            long xBigOrg=aOrg.X()+nWrX;
-            while (xBigOrg>=x1) xBigOrg-=nx1;
-            while (xBigOrg<x1) xBigOrg+=nx1;
-            long xFinOrg=xBigOrg;
-            while (xFinOrg>=x1) xFinOrg-=nx2;
-            while (xFinOrg<x1) xFinOrg+=nx2;
-
-            long yBigOrg=aOrg.Y()+nWrY;
-            while (yBigOrg>=y1) yBigOrg-=ny1;
-            while (yBigOrg<y1) yBigOrg+=ny1;
-            long yFinOrg=yBigOrg;
-            while (yFinOrg>=y1) yFinOrg-=ny2;
-            while (yFinOrg<y1) yFinOrg+=ny2;
-
-            if( x1 <= x2 && y1 <= y2 )
-            {
-                if( bHoriLines )
-                {
-                    DrawGridFlags nGridFlags = ( bHoriSolid ? DrawGridFlags::HorzLines : DrawGridFlags::Dots );
-                    sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
-                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
-                    sal_uInt32 nStepOffset = 0;
-                    sal_uInt16 nPointOffset = 0;
-
-                    for(sal_uInt16 a=0;a<nSteps;a++)
-                    {
-                        // draw
-                        rOut.DrawGrid(
-                            tools::Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
-                            Size( nx1, ny1 ), nGridFlags );
-
-                        // do a step
-                        nStepOffset += nRestPerStepMul1000;
-                        while(nStepOffset >= 1000)
-                        {
-                            nStepOffset -= 1000;
-                            nPointOffset++;
-                        }
-                    }
-                }
-
-                if( bVertLines )
-                {
-                    DrawGridFlags nGridFlags = ( bVertSolid ? DrawGridFlags::VertLines : DrawGridFlags::Dots );
-                    sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
-                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
-                    sal_uInt32 nStepOffset = 0;
-                    sal_uInt16 nPointOffset = 0;
-
-                    for(sal_uInt16 a=0;a<nSteps;a++)
-                    {
-                        // draw
-                        rOut.DrawGrid(
-                            tools::Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
-                            Size( nx1, ny1 ), nGridFlags );
-
-                        // do a step
-                        nStepOffset += nRestPerStepMul1000;
-                        while(nStepOffset >= 1000)
-                        {
-                            nStepOffset -= 1000;
-                            nPointOffset++;
-                        }
-                    }
-                }
-            }
-        }
-
-        rOut.EnableMapMode(bMap0);
-        rOut.SetLineColor(aColorMerk);
+        nMinDotPix=4;
+        nMinLinPix=8;
     }
+    else if (nScreenWdt>=1024)
+    {
+        nMinDotPix=3;
+        nMinLinPix=6;
+    }
+    else
+    { // e. g. 640x480
+        nMinDotPix=2;
+        nMinLinPix=4;
+    }
+    Size aMinDotDist(rOut.PixelToLogic(Size(nMinDotPix,nMinDotPix)));
+    Size aMinLinDist(rOut.PixelToLogic(Size(nMinLinPix,nMinLinPix)));
+    bool bHoriSolid=nx2<aMinDotDist.Width();
+    bool bVertSolid=ny2<aMinDotDist.Height();
+    // enlarge line offset (minimum 4 pixels)
+    // enlarge by: *2 *5 *10 *20 *50 *100 ...
+    int nTgl=0;
+    long nVal0=nx1;
+    while (nx1<aMinLinDist.Width())
+    {
+        long a=nx1;
+
+        if (nTgl==0) nx1*=2;
+        if (nTgl==1) nx1=nVal0*5; // => nx1*=2.5
+        if (nTgl==2) nx1*=2;
+
+        nVal0=a;
+        nTgl++; if (nTgl>=3) nTgl=0;
+    }
+    nTgl=0;
+    nVal0=ny1;
+    while (ny1<aMinLinDist.Height())
+    {
+        long a=ny1;
+
+        if (nTgl==0) ny1*=2;
+        if (nTgl==1) ny1=nVal0*5; // => ny1*=2.5
+        if (nTgl==2) ny1*=2;
+
+        nVal0=a;
+        nTgl++;
+
+        if (nTgl>=3) nTgl=0;
+    }
+
+    bool bHoriFine=nx2<nx1;
+    bool bVertFine=ny2<ny1;
+    bool bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
+    bool bVertLines=bVertSolid || bVertFine;
+
+    Color aColorMerk( rOut.GetLineColor() );
+    rOut.SetLineColor( aColor );
+
+    bool bMap0=rOut.IsMapModeEnabled();
+
+    long nWrX=0;
+    long nWrY=0;
+    Point aOrg(aPgOrg);
+    long x1=GetPage()->GetLeftBorder()+1+nWrX;
+    long x2=GetPage()->GetWidth()-GetPage()->GetRightBorder()-1+nWrY;
+    long y1=GetPage()->GetUpperBorder()+1+nWrX;
+    long y2=GetPage()->GetHeight()-GetPage()->GetLowerBorder()-1+nWrY;
+    const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
+
+    sal_uInt16 nGridPaintCnt=1;
+    if (pFrames!=nullptr) nGridPaintCnt=pFrames->GetCount();
+    for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintCnt; nGridPaintNum++) {
+        if (pFrames!=nullptr) {
+            const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
+            nWrX=rGF.GetPaperRect().Left();
+            nWrY=rGF.GetPaperRect().Top();
+            x1=rGF.GetUserArea().Left();
+            x2=rGF.GetUserArea().Right();
+            y1=rGF.GetUserArea().Top();
+            y2=rGF.GetUserArea().Bottom();
+            aOrg=rGF.GetUserArea().TopLeft();
+            aOrg-=rGF.GetPaperRect().TopLeft();
+        }
+        if (!rRect.IsEmpty()) {
+            Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
+            long nX1Pix=a1PixSiz.Width();  // add 1 pixel of tolerance
+            long nY1Pix=a1PixSiz.Height();
+            if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
+            if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
+            if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
+            if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
+        }
+
+        long xBigOrg=aOrg.X()+nWrX;
+        while (xBigOrg>=x1) xBigOrg-=nx1;
+        while (xBigOrg<x1) xBigOrg+=nx1;
+        long xFinOrg=xBigOrg;
+        while (xFinOrg>=x1) xFinOrg-=nx2;
+        while (xFinOrg<x1) xFinOrg+=nx2;
+
+        long yBigOrg=aOrg.Y()+nWrY;
+        while (yBigOrg>=y1) yBigOrg-=ny1;
+        while (yBigOrg<y1) yBigOrg+=ny1;
+        long yFinOrg=yBigOrg;
+        while (yFinOrg>=y1) yFinOrg-=ny2;
+        while (yFinOrg<y1) yFinOrg+=ny2;
+
+        if( x1 <= x2 && y1 <= y2 )
+        {
+            if( bHoriLines )
+            {
+                DrawGridFlags nGridFlags = ( bHoriSolid ? DrawGridFlags::HorzLines : DrawGridFlags::Dots );
+                sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
+                sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
+                sal_uInt32 nStepOffset = 0;
+                sal_uInt16 nPointOffset = 0;
+
+                for(sal_uInt16 a=0;a<nSteps;a++)
+                {
+                    // draw
+                    rOut.DrawGrid(
+                        tools::Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
+                        Size( nx1, ny1 ), nGridFlags );
+
+                    // do a step
+                    nStepOffset += nRestPerStepMul1000;
+                    while(nStepOffset >= 1000)
+                    {
+                        nStepOffset -= 1000;
+                        nPointOffset++;
+                    }
+                }
+            }
+
+            if( bVertLines )
+            {
+                DrawGridFlags nGridFlags = ( bVertSolid ? DrawGridFlags::VertLines : DrawGridFlags::Dots );
+                sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
+                sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
+                sal_uInt32 nStepOffset = 0;
+                sal_uInt16 nPointOffset = 0;
+
+                for(sal_uInt16 a=0;a<nSteps;a++)
+                {
+                    // draw
+                    rOut.DrawGrid(
+                        tools::Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
+                        Size( nx1, ny1 ), nGridFlags );
+
+                    // do a step
+                    nStepOffset += nRestPerStepMul1000;
+                    while(nStepOffset >= 1000)
+                    {
+                        nStepOffset -= 1000;
+                        nPointOffset++;
+                    }
+                }
+            }
+        }
+    }
+
+    rOut.EnableMapMode(bMap0);
+    rOut.SetLineColor(aColorMerk);
 }
 
 void SdrPageView::AdjHdl()
@@ -814,39 +814,39 @@ bool SdrPageView::EnterGroup(SdrObject* pObj)
 
 void SdrPageView::LeaveOneGroup()
 {
-    if(GetAktGroup())
-    {
-        bool bGlueInvalidate = GetView().ImpIsGlueVisible();
+    if(!GetAktGroup())
+        return;
 
-        if(bGlueInvalidate)
-            GetView().GlueInvalidate();
+    bool bGlueInvalidate = GetView().ImpIsGlueVisible();
 
-        SdrObject* pLastGroup = GetAktGroup();
-        SdrObject* pParentGroup = GetAktGroup()->GetUpGroup();
-        SdrObjList* pParentList = GetPage();
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
 
-        if(pParentGroup)
-            pParentList = pParentGroup->GetSubList();
+    SdrObject* pLastGroup = GetAktGroup();
+    SdrObject* pParentGroup = GetAktGroup()->GetUpGroup();
+    SdrObjList* pParentList = GetPage();
 
-        // deselect everything
-        GetView().UnmarkAll();
+    if(pParentGroup)
+        pParentList = pParentGroup->GetSubList();
 
-        // allocations, pAktGroup and pAktList need to be set
-        SetAktGroupAndList(pParentGroup, pParentList);
+    // deselect everything
+    GetView().UnmarkAll();
 
-        // select the group we just left
-        if(pLastGroup)
-            if(GetView().GetSdrPageView())
-                GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
+    // allocations, pAktGroup and pAktList need to be set
+    SetAktGroupAndList(pParentGroup, pParentList);
 
-        GetView().AdjustMarkHdl();
+    // select the group we just left
+    if(pLastGroup)
+        if(GetView().GetSdrPageView())
+            GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
 
-        // invalidate only if view wants to visualize group entering
-        InvalidateAllWin();
+    GetView().AdjustMarkHdl();
 
-        if(bGlueInvalidate)
-            GetView().GlueInvalidate();
-    }
+    // invalidate only if view wants to visualize group entering
+    InvalidateAllWin();
+
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
 }
 
 void SdrPageView::LeaveAllGroup()
