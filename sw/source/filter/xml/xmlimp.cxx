@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -1630,6 +1631,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOCX(SvStream &rStream)
     try
     {
         ret = xFilter->filter(aArgs);
+    }
+    catch (const css::io::IOException&)
+    {
     }
     catch (const css::lang::WrappedTargetRuntimeException&)
     {
