@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9023d2a6",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4329,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-21T20:31:36Z",
+      "side": 1,
+      "message": "Likely should had been temporarily (adverb to \u0027use\u0027) instead.",
+      "range": {
+        "startLine": 4329,
+        "startChar": 10,
+        "endLine": 4329,
+        "endChar": 19
+      },
+      "revId": "9288afaa6956c4fcd8f66cdd03a6fa057469db66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
