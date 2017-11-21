@@ -56,9 +56,10 @@ void SelectionObserver::Context::Abort()
 //===== SelectionObserver =====================================================
 
 SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
-    : mrSlideSorter(rSlideSorter),
-      mbIsOvservationActive(false),
-      maInsertedPages()
+    : mrSlideSorter(rSlideSorter)
+    , mbIsOvservationActive(false)
+    , mbPageEventOccurred(false)
+    , maInsertedPages()
 {
 }
 
@@ -70,6 +71,8 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
 {
     if ( ! mbIsOvservationActive)
         return;
+
+    mbPageEventOccurred = true;
 
     const SdPage* pPage = dynamic_cast<const SdPage*>(pSdrPage);
     if (pPage == nullptr)
@@ -105,6 +108,9 @@ void SelectionObserver::EndObservation()
 {
     OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;
+
+    if (!mbPageEventOccurred)
+        return;
 
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
     PageSelector::UpdateLock aUpdateLock (mrSlideSorter);

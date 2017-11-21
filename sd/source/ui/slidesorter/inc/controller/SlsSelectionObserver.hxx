@@ -66,6 +66,7 @@ public:
 private:
     SlideSorter& mrSlideSorter;
     bool mbIsOvservationActive;
+    bool mbPageEventOccurred;
 
     ::std::vector<const SdPage*> maInsertedPages;
 };
