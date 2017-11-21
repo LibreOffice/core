@@ -126,48 +126,48 @@ void SdrText::SetModel( SdrModel* pNewModel )
     SdrModel* pOldModel = mpModel;
     mpModel = pNewModel;
 
-    if( mpOutlinerParaObject && pOldModel!=nullptr && pNewModel!=nullptr)
-    {
-        bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET;
+    if( !mpOutlinerParaObject || pOldModel==nullptr || pNewModel==nullptr)
+        return;
 
-        MapUnit aOldUnit(pOldModel->GetScaleUnit());
-        MapUnit aNewUnit(pNewModel->GetScaleUnit());
-        bool bScaleUnitChanged=aNewUnit!=aOldUnit;
-        // Now move the OutlinerParaObject into a new Pool.
-        // TODO: We should compare the DefTab and RefDevice of both Models to
-        // see whether we need to use AutoGrow!
-        sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
-        sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
-        bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
-        bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
+    bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET;
+
+    MapUnit aOldUnit(pOldModel->GetScaleUnit());
+    MapUnit aNewUnit(pNewModel->GetScaleUnit());
+    bool bScaleUnitChanged=aNewUnit!=aOldUnit;
+    // Now move the OutlinerParaObject into a new Pool.
+    // TODO: We should compare the DefTab and RefDevice of both Models to
+    // see whether we need to use AutoGrow!
+    sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
+    sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
+    bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
+    bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
+    if (bSetHgtItem)
+    {
+        // fix the value of HeightItem, so
+        // 1. it remains and
+        // 2. DoStretchChars gets the right value
+        SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
+    }
+    // now use the Outliner, etc. so the above SetAttr can work at all
+    SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
+    rOutliner.SetText(*mpOutlinerParaObject);
+    delete mpOutlinerParaObject;
+    mpOutlinerParaObject=nullptr;
+    if (bScaleUnitChanged)
+    {
+        Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
+
         if (bSetHgtItem)
         {
-            // fix the value of HeightItem, so
-            // 1. it remains and
-            // 2. DoStretchChars gets the right value
+            // Now correct the frame attribute
+            nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
             SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
         }
-        // now use the Outliner, etc. so the above SetAttr can work at all
-        SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
-        rOutliner.SetText(*mpOutlinerParaObject);
-        delete mpOutlinerParaObject;
-        mpOutlinerParaObject=nullptr;
-        if (bScaleUnitChanged)
-        {
-            Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
-
-            if (bSetHgtItem)
-            {
-                // Now correct the frame attribute
-                nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
-                SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
-            }
-        }
-        SetOutlinerParaObject(rOutliner.CreateParaObject());
-        mpOutlinerParaObject->ClearPortionInfo();
-        mbPortionInfoChecked=false;
-        rOutliner.Clear();
     }
+    SetOutlinerParaObject(rOutliner.CreateParaObject());
+    mpOutlinerParaObject->ClearPortionInfo();
+    mbPortionInfoChecked=false;
+    rOutliner.Clear();
 }
 
 void SdrText::ForceOutlinerParaObject( OutlinerMode nOutlMode )

@@ -1127,47 +1127,47 @@ void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
     MapMode aMap(rWin.GetMapMode());
     Size aActualSize(rWin.GetOutputSize());
 
-    if( aActualSize.Height() > 0 && aActualSize.Width() > 0 )
+    if( aActualSize.Height() <= 0 || aActualSize.Width() <= 0 )
+        return;
+
+    Size aNewSize(rRect.GetSize());
+    bool bNewScale=false;
+    bool bNeedMoreX=aNewSize.Width()>aActualSize.Width();
+    bool bNeedMoreY=aNewSize.Height()>aActualSize.Height();
+    if (bNeedMoreX || bNeedMoreY)
     {
-        Size aNewSize(rRect.GetSize());
-        bool bNewScale=false;
-        bool bNeedMoreX=aNewSize.Width()>aActualSize.Width();
-        bool bNeedMoreY=aNewSize.Height()>aActualSize.Height();
-        if (bNeedMoreX || bNeedMoreY)
-        {
-            bNewScale=true;
-            // set new MapMode (Size+Org) and invalidate everything
-            Fraction aXFact(aNewSize.Width(),aActualSize.Width());
-            Fraction aYFact(aNewSize.Height(),aActualSize.Height());
-            if (aYFact>aXFact) aXFact=aYFact;
-            aXFact*=aMap.GetScaleX();
-            aXFact.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
-            aMap.SetScaleX(aXFact);
-            aMap.SetScaleY(aYFact);
+        bNewScale=true;
+        // set new MapMode (Size+Org) and invalidate everything
+        Fraction aXFact(aNewSize.Width(),aActualSize.Width());
+        Fraction aYFact(aNewSize.Height(),aActualSize.Height());
+        if (aYFact>aXFact) aXFact=aYFact;
+        aXFact*=aMap.GetScaleX();
+        aXFact.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
+        aMap.SetScaleX(aXFact);
+        aMap.SetScaleY(aYFact);
+        rWin.SetMapMode(aMap);
+        aActualSize=rWin.GetOutputSize();
+    }
+    Point aOrg(aMap.GetOrigin());
+    long dx=0,dy=0;
+    long l=-aOrg.X();
+    long r=-aOrg.X()+aActualSize.Width()-1;
+    long o=-aOrg.Y();
+    long u=-aOrg.Y()+aActualSize.Height()-1;
+    if (l>rRect.Left()) dx=rRect.Left()-l;
+    else if (r<rRect.Right()) dx=rRect.Right()-r;
+    if (o>rRect.Top()) dy=rRect.Top()-o;
+    else if (u<rRect.Bottom()) dy=rRect.Bottom()-u;
+    aMap.SetOrigin(Point(aOrg.X()-dx,aOrg.Y()-dy));
+    if (!bNewScale) {
+        if (dx!=0 || dy!=0) {
+            rWin.Scroll(-dx,-dy);
             rWin.SetMapMode(aMap);
-            aActualSize=rWin.GetOutputSize();
+            rWin.Update();
         }
-        Point aOrg(aMap.GetOrigin());
-        long dx=0,dy=0;
-        long l=-aOrg.X();
-        long r=-aOrg.X()+aActualSize.Width()-1;
-        long o=-aOrg.Y();
-        long u=-aOrg.Y()+aActualSize.Height()-1;
-        if (l>rRect.Left()) dx=rRect.Left()-l;
-        else if (r<rRect.Right()) dx=rRect.Right()-r;
-        if (o>rRect.Top()) dy=rRect.Top()-o;
-        else if (u<rRect.Bottom()) dy=rRect.Bottom()-u;
-        aMap.SetOrigin(Point(aOrg.X()-dx,aOrg.Y()-dy));
-        if (!bNewScale) {
-            if (dx!=0 || dy!=0) {
-                rWin.Scroll(-dx,-dy);
-                rWin.SetMapMode(aMap);
-                rWin.Update();
-            }
-        } else {
-            rWin.SetMapMode(aMap);
-            InvalidateOneWin(rWin);
-        }
+    } else {
+        rWin.SetMapMode(aMap);
+        InvalidateOneWin(rWin);
     }
 }
 
