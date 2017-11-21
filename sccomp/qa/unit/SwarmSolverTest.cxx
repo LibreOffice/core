@@ -27,7 +27,6 @@ using namespace css;
 
 namespace
 {
-
 class SwarmSolverTest : public CalcUnoApiTest
 {
     uno::Reference<lang::XComponent> mxComponent;

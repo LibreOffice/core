@@ -47,7 +47,6 @@ using namespace css;
 
 namespace
 {
-
 struct Bound
 {
     double lower;
@@ -468,16 +467,13 @@ public:
     {
     }
 
-    void setTimeout(double fTimeout)
-    {
-        mfTimeout = fTimeout;
-    }
+    void setTimeout(double fTimeout) { mfTimeout = fTimeout; }
 
     std::vector<double> const& solve()
     {
         using std::chrono::duration_cast;
-        using std::chrono::milliseconds;
         using std::chrono::high_resolution_clock;
+        using std::chrono::milliseconds;
 
         mrAlgorithm.initialize();
 
