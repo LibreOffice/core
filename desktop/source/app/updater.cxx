@@ -385,9 +385,9 @@ OUString toOUString(const std::string& rStr)
     return OUString::fromUtf8(rStr.c_str());
 }
 
-update_file parse_update_file(const orcus::json::detail::node& rNode)
+update_file parse_update_file(orcus::json::node& rNode)
 {
-    if (rNode.type() != orcus::json::detail::node_t::object)
+    if (rNode.type() != orcus::json::node_t::object)
     {
         SAL_WARN("desktop.updater", "invalid update or language file entry");
         throw invalid_update_info();
@@ -399,10 +399,10 @@ update_file parse_update_file(const orcus::json::detail::node& rNode)
         throw invalid_update_info();
     }
 
-    orcus::json::detail::node aURLNode = rNode.child("url");
-    orcus::json::detail::node aHashNode = rNode.child("hash");
-    orcus::json::detail::node aHashTypeNode = rNode.child("hash_function");
-    orcus::json::detail::node aSizeNode = rNode.child("size");
+    orcus::json::node aURLNode = rNode.child("url");
+    orcus::json::node aHashNode = rNode.child("hash");
+    orcus::json::node aHashTypeNode = rNode.child("hash_function");
+    orcus::json::node aSizeNode = rNode.child("size");
 
     if (aHashTypeNode.string_value() != "sha512")
     {
@@ -423,12 +423,12 @@ update_file parse_update_file(const orcus::json::detail::node& rNode)
 
 update_info parse_response(const std::string& rResponse)
 {
-    orcus::json_document_tree aJsonDoc;
+    orcus::json::document_tree aJsonDoc;
     orcus::json_config aConfig;
     aJsonDoc.load(rResponse, aConfig);
 
     auto aDocumentRoot = aJsonDoc.get_document_root();
-    if (aDocumentRoot.type() != orcus::json_node_t::object)
+    if (aDocumentRoot.type() != orcus::json::node_t::object)
     {
         SAL_WARN("desktop.updater", "invalid root entries: " << rResponse);
         throw invalid_update_info();
@@ -447,26 +447,26 @@ update_info parse_response(const std::string& rResponse)
         return aUpdateInfo;
     }
 
-    orcus::json::detail::node aFromNode = aDocumentRoot.child("from");
-    if (aFromNode.type() != orcus::json_node_t::string)
+    orcus::json::node aFromNode = aDocumentRoot.child("from");
+    if (aFromNode.type() != orcus::json::node_t::string)
     {
         throw invalid_update_info();
     }
 
-    orcus::json::detail::node aSeeAlsoNode = aDocumentRoot.child("see also");
-    if (aSeeAlsoNode.type() != orcus::json_node_t::string)
+    orcus::json::node aSeeAlsoNode = aDocumentRoot.child("see also");
+    if (aSeeAlsoNode.type() != orcus::json::node_t::string)
     {
         throw invalid_update_info();
     }
 
-    orcus::json::detail::node aUpdateNode = aDocumentRoot.child("update");
-    if (aUpdateNode.type() != orcus::json_node_t::object)
+    orcus::json::node aUpdateNode = aDocumentRoot.child("update");
+    if (aUpdateNode.type() != orcus::json::node_t::object)
     {
         throw invalid_update_info();
     }
 
-    orcus::json::detail::node aLanguageNode = aDocumentRoot.child("languages");
-    if (aUpdateNode.type() != orcus::json_node_t::object)
+    orcus::json::node aLanguageNode = aDocumentRoot.child("languages");
+    if (aUpdateNode.type() != orcus::json::node_t::object)
     {
         throw invalid_update_info();
     }
