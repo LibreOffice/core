@@ -133,7 +133,7 @@ SdrPageWindow::~SdrPageWindow()
 
     if (mpImpl->mxControlContainer.is())
     {
-        SdrView& rView = GetPageView().GetView();
+        auto & rView = static_cast<SdrPaintView &>(GetPageView().GetView());
 
         // notify derived views
         FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
