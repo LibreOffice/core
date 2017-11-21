@@ -1499,7 +1499,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                         css::beans::PropertyValue aTextRotateAngle;
                         aTextRotateAngle.Name = "TextRotateAngle";
                         aTextRotateAngle.Value <<= 180.0;
-                        SdrCustomShapeGeometryItem aGeometryItem(static_cast<const SdrCustomShapeGeometryItem&>(pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
+                        SdrCustomShapeGeometryItem aGeometryItem(pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
                         aGeometryItem.SetPropertyValue( aTextRotateAngle );
                         pObjCustomShape->SetMergedItem( aGeometryItem );
                     }

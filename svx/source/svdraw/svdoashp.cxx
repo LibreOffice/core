@@ -171,11 +171,11 @@ static MSO_SPT ImpGetCustomShapeType( const SdrObjCustomShape& rCustoShape )
 {
     MSO_SPT eRetValue = mso_sptNil;
 
-    OUString aEngine( static_cast<const SfxStringItem&>( rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
+    OUString aEngine( rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue() );
     if ( aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine" )
     {
         OUString sShapeType;
-        const SdrCustomShapeGeometryItem& rGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+        const SdrCustomShapeGeometryItem& rGeometryItem( rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
         const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
         if ( pAny && ( *pAny >>= sShapeType ) )
             eRetValue = EnhancedCustomShapeTypeNames::Get( sShapeType );
@@ -410,7 +410,7 @@ Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine(
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
 
-    OUString aEngine(static_cast<const SfxStringItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
+    OUString aEngine(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue());
     if ( aEngine.isEmpty() )
         aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
 
@@ -474,7 +474,7 @@ bool SdrObjCustomShape::IsTextPath() const
 {
     const OUString sTextPath( "TextPath" );
     bool bTextPathOn = false;
-    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
     if ( pAny )
         *pAny >>= bTextPathOn;
@@ -486,7 +486,7 @@ bool SdrObjCustomShape::UseNoFillStyle() const
     bool bRet = false;
     OUString sShapeType;
     const OUString sType( "Type" );
-    const SdrCustomShapeGeometryItem& rGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+    const SdrCustomShapeGeometryItem& rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
         *pAny >>= sShapeType;
@@ -498,7 +498,7 @@ bool SdrObjCustomShape::UseNoFillStyle() const
 bool SdrObjCustomShape::IsMirroredX() const
 {
     bool bMirroredX = false;
-    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+    SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredX( "MirroredX" );
     css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredX );
     if ( pAny )
@@ -508,7 +508,7 @@ bool SdrObjCustomShape::IsMirroredX() const
 bool SdrObjCustomShape::IsMirroredY() const
 {
     bool bMirroredY = false;
-    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+    SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredY( "MirroredY" );
     css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredY );
     if ( pAny )
@@ -517,7 +517,7 @@ bool SdrObjCustomShape::IsMirroredY() const
 }
 void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 {
-    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+    SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredX( "MirroredX" );
     PropertyValue aPropVal;
     aPropVal.Name = sMirroredX;
@@ -527,7 +527,7 @@ void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 }
 void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 {
-    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+    SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredY( "MirroredY" );
     PropertyValue aPropVal;
     aPropVal.Name = sMirroredY;
@@ -539,7 +539,7 @@ void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
     const css::uno::Any* pAny;
-    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const OUString sTextRotateAngle( "TextRotateAngle" );
     const OUString sTextPreRotateAngle( "TextPreRotateAngle" );
     pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? sTextPreRotateAngle : sTextRotateAngle );
@@ -842,7 +842,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     PropertyValue aPropVal;
     OUString sShapeType;
     const OUString sType( "Type" );
-    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+    SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     if ( pType && !pType->isEmpty() )
     {
         sal_Int32 nType = pType->toInt32();
@@ -1086,7 +1086,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     PropertyValue aPropVal;
     OUString sShapeType;
     const OUString sType( "Type" );
-    const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+    const SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
     const Any *pAny = aGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
@@ -2885,7 +2885,7 @@ void SdrObjCustomShape::SaveGeoData(SdrObjGeoData& rGeo) const
     rAGeo.bMirroredY = IsMirroredY();
 
     const OUString sAdjustmentValues( "AdjustmentValues" );
-    const Any* pAny = static_cast<const SdrCustomShapeGeometryItem&>( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ).GetPropertyValueByName( sAdjustmentValues );
+    const Any* pAny = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ).GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= rAGeo.aAdjustmentSeq;
 }
@@ -2898,7 +2898,7 @@ void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
     SetMirroredX( rAGeo.bMirroredX );
     SetMirroredY( rAGeo.bMirroredY );
 
-    SdrCustomShapeGeometryItem rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    SdrCustomShapeGeometryItem rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const OUString sAdjustmentValues( "AdjustmentValues" );
     PropertyValue aPropVal;
     aPropVal.Name = sAdjustmentValues;
@@ -3174,13 +3174,13 @@ void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& 
 OUString SdrObjCustomShape::GetCustomShapeName()
 {
     OUString sShapeName;
-    OUString aEngine( static_cast<const SfxStringItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue() );
+    OUString aEngine( GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue() );
     if ( aEngine.isEmpty()
          || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine" )
     {
         OUString sShapeType;
         const OUString sType("Type");
-        const SdrCustomShapeGeometryItem& rGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+        const SdrCustomShapeGeometryItem& rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
         const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
         if ( pAny && ( *pAny >>= sShapeType ) )
             sShapeName = EnhancedCustomShapeTypeNames::GetAccName( sShapeType );

@@ -35,6 +35,7 @@
 #include <svx/unoapi.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
+#include <svx/svx3ditems.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/strings.hrc>

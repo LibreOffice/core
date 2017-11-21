@@ -102,15 +102,15 @@ public:
 
     // Perspective: enum ProjectionType { ProjectionType::Parallel, ProjectionType::Perspective }
     ProjectionType GetPerspective() const
-        { return (ProjectionType) static_cast<const Svx3DPerspectiveItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue(); }
+        { return (ProjectionType) GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE).GetValue(); }
 
     // Distance:
     double GetDistance() const
-        { return (double)static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE)).GetValue(); }
+        { return (double)GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE).GetValue(); }
 
     // Focal length: before cm, now 1/10th mm (*100)
     double GetFocalLength() const
-        { return static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue(); }
 
     // set flag to draw only selected
     void SetDrawOnlySelected(bool bNew) { bDrawOnlySelected = bNew; }

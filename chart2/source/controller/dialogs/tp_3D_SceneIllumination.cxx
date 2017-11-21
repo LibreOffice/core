@@ -331,44 +331,44 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3
     const SfxItemSet a3DLightAttributes(m_pCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
     LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_1).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1).GetValue());
 
     pInfo = &m_pLightSourceInfoList[1];
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_2).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2).GetValue());
 
     pInfo = &m_pLightSourceInfoList[2];
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_3).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3).GetValue());
 
     pInfo = &m_pLightSourceInfoList[3];
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_4).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4).GetValue());
 
     pInfo = &m_pLightSourceInfoList[4];
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_5).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5).GetValue());
 
     pInfo = &m_pLightSourceInfoList[5];
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_6).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6).GetValue());
 
     pInfo = &m_pLightSourceInfoList[6];
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_7).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7).GetValue());
 
     pInfo = &m_pLightSourceInfoList[7];
-    pInfo->aLightSource.nDiffuseColor = static_cast<const SvxColorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().GetColor();
-    pInfo->aLightSource.bIsEnabled = static_cast<const SfxBoolItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_8).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8).GetValue());
 
     applyLightSourcesToModel();
 }

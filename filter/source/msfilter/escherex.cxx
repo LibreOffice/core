@@ -2428,8 +2428,8 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
     if ( pCustoShape )
     {
         uno::Sequence< OUString > sEquationSource;
-        const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
-            pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+        const SdrCustomShapeGeometryItem& rGeometryItem =
+            pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
         if ( pAny )
             *pAny >>= sEquationSource;
@@ -4568,8 +4568,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             SdrObject* pCustoShape( GetSdrObjectFromXShape( aXShape ) );
             if ( dynamic_cast<const SdrObjCustomShape* >(pCustoShape) !=  nullptr )
             {
-                const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
-                    pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+                const SdrCustomShapeGeometryItem& rGeometryItem =
+                    pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
                 const OUString sPath( "Path"  );
                 const OUString sType( "Type"  );
