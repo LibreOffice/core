@@ -1738,15 +1738,11 @@ void ScFormulaCell::Interpret()
 namespace {
 class StackCleaner
 {
-    ScInterpreter*  pInt;
+    std::unique_ptr<ScInterpreter>  pInt;
     public:
     StackCleaner( ScInterpreter* pI )
         : pInt(pI)
         {}
-    ~StackCleaner()
-    {
-        delete pInt;
-    }
 };
 }
 
@@ -4291,7 +4287,7 @@ struct ScDependantsCalculator
             }
         }
 
-        for (auto i = 0u; i < aRangeList.size(); ++i)
+        for (size_t i = 0; i < aRangeList.size(); ++i)
         {
             const ScRange* pRange = aRangeList[i];
             assert(pRange->aStart.Tab() == pRange->aEnd.Tab());

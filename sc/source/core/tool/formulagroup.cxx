@@ -377,7 +377,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
         }
         SCROW nRemaining = nLen - nBatchSize * nThreadCount;
 
-        SAL_INFO("sc.swipret.threaded", "Running " << nThreadCount << " threads");
+        SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
 
         SCROW nLeft = nLen;
         SCROW nStart = 0;
@@ -393,9 +393,9 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
             nLeft -= nCount;
             nStart = nLast + 1;
         }
-        SAL_INFO("sc.swipret.threaded", "Joining threads");
+        SAL_INFO("sc.threaded", "Joining threads");
         rThreadPool.waitUntilDone(aTag);
-        SAL_INFO("sc.swipret.threaded", "Done");
+        SAL_INFO("sc.threaded", "Done");
     }
     else
     {
