@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_8aeba377",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-11-21T06:39:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_aaa5bfa2",
+      "revId": "3f8489f211ed866679103ebac643bee432afef29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_caa20b99",
         "filename": "cui/source/customize/CommandCategoryListBox.cxx",
         "patchSetId": 9
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_0af89348",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-11-21T06:39:51Z",
+      "side": 1,
+      "message": "Yeah, but it doesn\u0027t matter since we already have pFamily. Anyway, now I realize that this new object (pFamily) might be completely unnecessary. Thanks for your attention. :)",
+      "parentUuid": "1a430d35_caa20b99",
+      "revId": "3f8489f211ed866679103ebac643bee432afef29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_0aa9737b",
         "filename": "cui/source/customize/CommandCategoryListBox.cxx",
         "patchSetId": 9
@@ -47,6 +83,24 @@
       "writtenOn": "2017-11-20T23:25:54Z",
       "side": 1,
       "message": "Another leaky bucket",
+      "revId": "3f8489f211ed866679103ebac643bee432afef29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6a9d9709",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-11-21T06:39:51Z",
+      "side": 1,
+      "message": "On line 319, it is assigned to the pObject pointer inside the new SfxGroupInfo_Impl, which is then pushed to a vector. So I understand that this isn\u0027t leaking. Or am I totally confused? :)",
+      "parentUuid": "1a430d35_0aa9737b",
       "revId": "3f8489f211ed866679103ebac643bee432afef29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
