@@ -1289,7 +1289,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     // fix it after inserting the char, so that clients don't
                     // have to worry about it.
                     const SwFormatAnchor* pAnchor = nullptr;
-                    pFormat->GetItemState( RES_ANCHOR, false,
+                    (void)pFormat->GetItemState( RES_ANCHOR, false,
                         reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
 
                     SwIndex aIdx( this, pAttr->GetStart() );
