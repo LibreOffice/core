@@ -89,7 +89,7 @@ public:
     SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt, SwAttrHandler& rAH,
         sal_Int32 nRedlPos, bool bShw, const std::vector<ExtTextInputAttr> *pArr = nullptr,
         sal_Int32 nExtStart = COMPLETE_STRING );
-    ~SwRedlineItr();
+    ~SwRedlineItr() COVERITY_NOEXCEPT_FALSE;
     bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }
     void Clear( SwFont* pFnt ) { if( bOn ) Clear_( pFnt ); }
     void ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bChg );

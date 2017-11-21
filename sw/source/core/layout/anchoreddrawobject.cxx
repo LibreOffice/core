@@ -46,7 +46,7 @@ class SwPosNotify
 
     public:
         explicit SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj );
-        ~SwPosNotify();
+        ~SwPosNotify() COVERITY_NOEXCEPT_FALSE;
         // #i32795#
         Point LastObjPos() const;
 };
@@ -59,7 +59,7 @@ SwPosNotify::SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj ) :
     mpOldPageFrame = mpAnchoredDrawObj->GetPageFrame();
 }
 
-SwPosNotify::~SwPosNotify()
+SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
 {
     if ( maOldObjRect != mpAnchoredDrawObj->GetObjRect() )
     {
