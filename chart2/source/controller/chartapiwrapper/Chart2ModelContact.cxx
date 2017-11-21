@@ -175,8 +175,8 @@ awt::Size Chart2ModelContact::GetPageSize() const
 
 awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )
 {
-    awt::Rectangle aRect = ExplicitValueProvider::substractAxisTitleSizes(
-        *mpModel, getChartView(), rPositionRect );
+    awt::Rectangle aRect = ExplicitValueProvider::AddSubtractAxisTitleSizes(
+        *mpModel, getChartView(), rPositionRect, true );
     return aRect;
 }
 
@@ -185,8 +185,8 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
     awt::Rectangle aRect( GetDiagramRectangleIncludingAxes() );
 
     //add axis title sizes to the diagram size
-    aRect = ExplicitValueProvider::addAxisTitleSizes(
-        *mpModel, getChartView(), aRect );
+    aRect = ExplicitValueProvider::AddSubtractAxisTitleSizes(
+        *mpModel, getChartView(), aRect, false );
 
     return aRect;
 }
