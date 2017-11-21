@@ -245,97 +245,97 @@ void SdrEditView::PutMarkedToTop()
 void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
 {
     const size_t nCount=GetMarkedObjectCount();
-    if (nCount!=0)
+    if (nCount==0)
+        return;
+
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+        BegUndo(ImpGetResStr(STR_EditPutToTop),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToTop);
+
+    SortMarkedObjects();
+
+    if (pRefObj!=nullptr)
     {
-        const bool bUndo = IsUndoEnabled();
-        if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditPutToTop),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToTop);
-
-        SortMarkedObjects();
-
-        if (pRefObj!=nullptr)
+        // Make "in front of the object" work, even if the
+        // selected objects are already in front of the other object
+        const size_t nRefMark=TryToFindMarkedObject(pRefObj);
+        SdrMark aRefMark;
+        if (nRefMark!=SAL_MAX_SIZE)
         {
-            // Make "in front of the object" work, even if the
-            // selected objects are already in front of the other object
-            const size_t nRefMark=TryToFindMarkedObject(pRefObj);
-            SdrMark aRefMark;
-            if (nRefMark!=SAL_MAX_SIZE)
-            {
-                aRefMark=*GetSdrMarkByIndex(nRefMark);
-                GetMarkedObjectListWriteAccess().DeleteMark(nRefMark);
-            }
-            PutMarkedToBtm();
-            if (nRefMark!=SAL_MAX_SIZE)
-            {
-                GetMarkedObjectListWriteAccess().InsertEntry(aRefMark);
-                SortMarkedObjects();
-            }
+            aRefMark=*GetSdrMarkByIndex(nRefMark);
+            GetMarkedObjectListWriteAccess().DeleteMark(nRefMark);
         }
-        for (size_t nm=0; nm<nCount; ++nm)
-        { // All Ordnums have to be correct!
-            GetMarkedObjectByIndex(nm)->GetOrdNum();
-        }
-        bool bChg=false;
-        SdrObjList* pOL0=nullptr;
-        size_t nNewPos=0;
-        for (size_t nm=nCount; nm>0;)
+        PutMarkedToBtm();
+        if (nRefMark!=SAL_MAX_SIZE)
         {
-            --nm;
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pObj=pM->GetMarkedSdrObj();
-            if (pObj!=pRefObj)
+            GetMarkedObjectListWriteAccess().InsertEntry(aRefMark);
+            SortMarkedObjects();
+        }
+    }
+    for (size_t nm=0; nm<nCount; ++nm)
+    { // All Ordnums have to be correct!
+        GetMarkedObjectByIndex(nm)->GetOrdNum();
+    }
+    bool bChg=false;
+    SdrObjList* pOL0=nullptr;
+    size_t nNewPos=0;
+    for (size_t nm=nCount; nm>0;)
+    {
+        --nm;
+        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrObject* pObj=pM->GetMarkedSdrObj();
+        if (pObj!=pRefObj)
+        {
+            SdrObjList* pOL=pObj->GetObjList();
+            if (pOL!=pOL0)
             {
-                SdrObjList* pOL=pObj->GetObjList();
-                if (pOL!=pOL0)
+                nNewPos=pOL->GetObjCount()-1;
+                pOL0=pOL;
+            }
+            const size_t nNowPos=pObj->GetOrdNumDirect();
+            SdrObject* pMaxObj=GetMaxToTopObj(pObj);
+            if (pMaxObj!=nullptr)
+            {
+                size_t nMaxOrd=pMaxObj->GetOrdNum(); // sadly doesn't work any other way
+                if (nMaxOrd>0)
+                    nMaxOrd--;
+                if (nNewPos>nMaxOrd)
+                    nNewPos=nMaxOrd; // neither go faster...
+                if (nNewPos<nNowPos)
+                    nNewPos=nNowPos; // nor go into the other direction
+            }
+            if (pRefObj!=nullptr)
+            {
+                if (pRefObj->GetObjList()==pObj->GetObjList())
                 {
-                    nNewPos=pOL->GetObjCount()-1;
-                    pOL0=pOL;
-                }
-                const size_t nNowPos=pObj->GetOrdNumDirect();
-                SdrObject* pMaxObj=GetMaxToTopObj(pObj);
-                if (pMaxObj!=nullptr)
-                {
-                    size_t nMaxOrd=pMaxObj->GetOrdNum(); // sadly doesn't work any other way
-                    if (nMaxOrd>0)
-                        nMaxOrd--;
+                    const size_t nMaxOrd=pRefObj->GetOrdNum(); // sadly doesn't work any other way
                     if (nNewPos>nMaxOrd)
                         nNewPos=nMaxOrd; // neither go faster...
                     if (nNewPos<nNowPos)
                         nNewPos=nNowPos; // nor go into the other direction
                 }
-                if (pRefObj!=nullptr)
+                else
                 {
-                    if (pRefObj->GetObjList()==pObj->GetObjList())
-                    {
-                        const size_t nMaxOrd=pRefObj->GetOrdNum(); // sadly doesn't work any other way
-                        if (nNewPos>nMaxOrd)
-                            nNewPos=nMaxOrd; // neither go faster...
-                        if (nNewPos<nNowPos)
-                            nNewPos=nNowPos; // nor go into the other direction
-                    }
-                    else
-                    {
-                        nNewPos=nNowPos; // different PageView, so don't change
-                    }
+                    nNewPos=nNowPos; // different PageView, so don't change
                 }
-                if (nNowPos!=nNewPos)
-                {
-                    bChg=true;
-                    pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                    if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
-                    ObjOrderChanged(pObj,nNowPos,nNewPos);
-                }
-                nNewPos--;
-            } // if (pObj!=pRefObj)
-        } // for loop over all selected objects
+            }
+            if (nNowPos!=nNewPos)
+            {
+                bChg=true;
+                pOL->SetObjectOrdNum(nNowPos,nNewPos);
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
+                ObjOrderChanged(pObj,nNowPos,nNewPos);
+            }
+            nNewPos--;
+        } // if (pObj!=pRefObj)
+    } // for loop over all selected objects
 
-        if( bUndo )
-            EndUndo();
+    if( bUndo )
+        EndUndo();
 
-        if(bChg)
-            MarkListHasChanged();
-    }
+    if(bChg)
+        MarkListHasChanged();
 }
 
 void SdrEditView::PutMarkedToBtm()
@@ -346,80 +346,81 @@ void SdrEditView::PutMarkedToBtm()
 void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
 {
     const size_t nCount=GetMarkedObjectCount();
-    if (nCount!=0)
+    if (nCount==0)
+        return;
+
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo(ImpGetResStr(STR_EditPutToBtm),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToBottom);
+
+    SortMarkedObjects();
+    if (pRefObj!=nullptr)
     {
-        const bool bUndo = IsUndoEnabled();
-
-        if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditPutToBtm),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToBottom);
-
-        SortMarkedObjects();
-        if (pRefObj!=nullptr)
+        // Make "behind the object" work, even if the
+        // selected objects are already behind the other object
+        const size_t nRefMark=TryToFindMarkedObject(pRefObj);
+        SdrMark aRefMark;
+        if (nRefMark!=SAL_MAX_SIZE)
         {
-            // Make "behind the object" work, even if the
-            // selected objects are already behind the other object
-            const size_t nRefMark=TryToFindMarkedObject(pRefObj);
-            SdrMark aRefMark;
-            if (nRefMark!=SAL_MAX_SIZE)
-            {
-                aRefMark=*GetSdrMarkByIndex(nRefMark);
-                GetMarkedObjectListWriteAccess().DeleteMark(nRefMark);
-            }
-            PutMarkedToTop();
-            if (nRefMark!=SAL_MAX_SIZE)
-            {
-                GetMarkedObjectListWriteAccess().InsertEntry(aRefMark);
-                SortMarkedObjects();
-            }
+            aRefMark=*GetSdrMarkByIndex(nRefMark);
+            GetMarkedObjectListWriteAccess().DeleteMark(nRefMark);
         }
-        for (size_t nm=0; nm<nCount; ++nm) { // All Ordnums have to be correct!
-            GetMarkedObjectByIndex(nm)->GetOrdNum();
+        PutMarkedToTop();
+        if (nRefMark!=SAL_MAX_SIZE)
+        {
+            GetMarkedObjectListWriteAccess().InsertEntry(aRefMark);
+            SortMarkedObjects();
         }
-        bool bChg=false;
-        SdrObjList* pOL0=nullptr;
-        size_t nNewPos=0;
-        for (size_t nm=0; nm<nCount; ++nm) {
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pObj=pM->GetMarkedSdrObj();
-            if (pObj!=pRefObj) {
-                SdrObjList* pOL=pObj->GetObjList();
-                if (pOL!=pOL0) {
-                    nNewPos=0;
-                    pOL0=pOL;
-                }
-                const size_t nNowPos=pObj->GetOrdNumDirect();
-                SdrObject* pMinObj=GetMaxToBtmObj(pObj);
-                if (pMinObj!=nullptr) {
-                    const size_t nMinOrd=pMinObj->GetOrdNum()+1; // sadly doesn't work any differently
+    }
+    for (size_t nm=0; nm<nCount; ++nm) { // All Ordnums have to be correct!
+        GetMarkedObjectByIndex(nm)->GetOrdNum();
+    }
+    bool bChg=false;
+    SdrObjList* pOL0=nullptr;
+    size_t nNewPos=0;
+    for (size_t nm=0; nm<nCount; ++nm) {
+        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrObject* pObj=pM->GetMarkedSdrObj();
+        if (pObj!=pRefObj) {
+            SdrObjList* pOL=pObj->GetObjList();
+            if (pOL!=pOL0) {
+                nNewPos=0;
+                pOL0=pOL;
+            }
+            const size_t nNowPos=pObj->GetOrdNumDirect();
+            SdrObject* pMinObj=GetMaxToBtmObj(pObj);
+            if (pMinObj!=nullptr) {
+                const size_t nMinOrd=pMinObj->GetOrdNum()+1; // sadly doesn't work any differently
+                if (nNewPos<nMinOrd) nNewPos=nMinOrd; // neither go faster...
+                if (nNewPos>nNowPos) nNewPos=nNowPos; // nor go into the other direction
+            }
+            if (pRefObj!=nullptr) {
+                if (pRefObj->GetObjList()==pObj->GetObjList()) {
+                    const size_t nMinOrd=pRefObj->GetOrdNum(); // sadly doesn't work any differently
                     if (nNewPos<nMinOrd) nNewPos=nMinOrd; // neither go faster...
                     if (nNewPos>nNowPos) nNewPos=nNowPos; // nor go into the other direction
+                } else {
+                    nNewPos=nNowPos; // different PageView, so don't change
                 }
-                if (pRefObj!=nullptr) {
-                    if (pRefObj->GetObjList()==pObj->GetObjList()) {
-                        const size_t nMinOrd=pRefObj->GetOrdNum(); // sadly doesn't work any differently
-                        if (nNewPos<nMinOrd) nNewPos=nMinOrd; // neither go faster...
-                        if (nNewPos>nNowPos) nNewPos=nNowPos; // nor go into the other direction
-                    } else {
-                        nNewPos=nNowPos; // different PageView, so don't change
-                    }
-                }
-                if (nNowPos!=nNewPos) {
-                    bChg=true;
-                    pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                    if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
-                    ObjOrderChanged(pObj,nNowPos,nNewPos);
-                }
-                nNewPos++;
-            } // if (pObj!=pRefObj)
-        } // for loop over all selected objects
+            }
+            if (nNowPos!=nNewPos) {
+                bChg=true;
+                pOL->SetObjectOrdNum(nNowPos,nNewPos);
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
+                ObjOrderChanged(pObj,nNowPos,nNewPos);
+            }
+            nNewPos++;
+        } // if (pObj!=pRefObj)
+    } // for loop over all selected objects
 
-        if(bUndo)
-            EndUndo();
+    if(bUndo)
+        EndUndo();
 
-        if(bChg)
-            MarkListHasChanged();
-    }
+    if(bChg)
+        MarkListHasChanged();
+
 }
 
 void SdrEditView::ReverseOrderOfMarked()
@@ -989,186 +990,186 @@ void SdrEditView::DistributeMarkedObjects()
 void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 {
     // #i73441# check content
-    if(AreObjectsMarked())
+    if(!AreObjectsMarked())
+        return;
+
+    SdrMarkList aRemove;
+    SortMarkedObjects();
+
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo();
+
+    size_t nInsPos = SAL_MAX_SIZE;
+    const SdrObject* pAttrObj = nullptr;
+    basegfx::B2DPolyPolygon aMergePolyPolygonA;
+    basegfx::B2DPolyPolygon aMergePolyPolygonB;
+
+    SdrObjList* pInsOL = nullptr;
+    SdrPageView* pInsPV = nullptr;
+    bool bFirstObjectComplete(false);
+
+    // make sure selected objects are contour objects
+    // since now basegfx::utils::adaptiveSubdivide() is used, it is no longer
+    // necessary to use ConvertMarkedToPolyObj which will subdivide curves using the old
+    // mechanisms. In a next step the polygon clipper will even be able to clip curves...
+    // ConvertMarkedToPolyObj(true);
+    ConvertMarkedToPathObj(true);
+    OSL_ENSURE(AreObjectsMarked(), "no more objects selected after preparations (!)");
+
+    for(size_t a=0; a<GetMarkedObjectCount(); ++a)
     {
-        SdrMarkList aRemove;
-        SortMarkedObjects();
+        SdrMark* pM = GetSdrMarkByIndex(a);
+        SdrObject* pObj = pM->GetMarkedSdrObj();
 
-        const bool bUndo = IsUndoEnabled();
-
-        if( bUndo )
-            BegUndo();
-
-        size_t nInsPos = SAL_MAX_SIZE;
-        const SdrObject* pAttrObj = nullptr;
-        basegfx::B2DPolyPolygon aMergePolyPolygonA;
-        basegfx::B2DPolyPolygon aMergePolyPolygonB;
-
-        SdrObjList* pInsOL = nullptr;
-        SdrPageView* pInsPV = nullptr;
-        bool bFirstObjectComplete(false);
-
-        // make sure selected objects are contour objects
-        // since now basegfx::utils::adaptiveSubdivide() is used, it is no longer
-        // necessary to use ConvertMarkedToPolyObj which will subdivide curves using the old
-        // mechanisms. In a next step the polygon clipper will even be able to clip curves...
-        // ConvertMarkedToPolyObj(true);
-        ConvertMarkedToPathObj(true);
-        OSL_ENSURE(AreObjectsMarked(), "no more objects selected after preparations (!)");
-
-        for(size_t a=0; a<GetMarkedObjectCount(); ++a)
+        if(ImpCanConvertForCombine(pObj))
         {
-            SdrMark* pM = GetSdrMarkByIndex(a);
-            SdrObject* pObj = pM->GetMarkedSdrObj();
+            if(!pAttrObj)
+                pAttrObj = pObj;
 
-            if(ImpCanConvertForCombine(pObj))
+            nInsPos = pObj->GetOrdNum() + 1;
+            pInsPV = pM->GetPageView();
+            pInsOL = pObj->GetObjList();
+
+            // #i76891# use single iteration from SJ here which works on SdrObjects and takes
+            // groups into account by itself
+            SdrObjListIter aIter(*pObj, SdrIterMode::DeepWithGroups);
+
+            while(aIter.IsMore())
             {
-                if(!pAttrObj)
-                    pAttrObj = pObj;
-
-                nInsPos = pObj->GetOrdNum() + 1;
-                pInsPV = pM->GetPageView();
-                pInsOL = pObj->GetObjList();
-
-                // #i76891# use single iteration from SJ here which works on SdrObjects and takes
-                // groups into account by itself
-                SdrObjListIter aIter(*pObj, SdrIterMode::DeepWithGroups);
-
-                while(aIter.IsMore())
+                SdrObject* pCandidate = aIter.Next();
+                SdrPathObj* pPathObj = dynamic_cast<SdrPathObj*>( pCandidate );
+                if(pPathObj)
                 {
-                    SdrObject* pCandidate = aIter.Next();
-                    SdrPathObj* pPathObj = dynamic_cast<SdrPathObj*>( pCandidate );
-                    if(pPathObj)
+                    basegfx::B2DPolyPolygon aTmpPoly(pPathObj->GetPathPoly());
+
+                    // #i76891# unfortunately ConvertMarkedToPathObj has converted all
+                    // involved polygon data to curve segments, even if not necessary.
+                    // It is better to try to reduce to more simple polygons.
+                    aTmpPoly = basegfx::utils::simplifyCurveSegments(aTmpPoly);
+
+                    // for each part polygon as preparation, remove self-intersections
+                    // correct orientations and get rid of possible neutral polygons.
+                    aTmpPoly = basegfx::utils::prepareForPolygonOperation(aTmpPoly);
+
+                    if(!bFirstObjectComplete)
                     {
-                        basegfx::B2DPolyPolygon aTmpPoly(pPathObj->GetPathPoly());
-
-                        // #i76891# unfortunately ConvertMarkedToPathObj has converted all
-                        // involved polygon data to curve segments, even if not necessary.
-                        // It is better to try to reduce to more simple polygons.
-                        aTmpPoly = basegfx::utils::simplifyCurveSegments(aTmpPoly);
-
-                        // for each part polygon as preparation, remove self-intersections
-                        // correct orientations and get rid of possible neutral polygons.
-                        aTmpPoly = basegfx::utils::prepareForPolygonOperation(aTmpPoly);
-
-                        if(!bFirstObjectComplete)
+                        // #i111987# Also need to collect ORed source shape when more than
+                        // a single polygon is involved
+                        if(aMergePolyPolygonA.count())
                         {
-                            // #i111987# Also need to collect ORed source shape when more than
-                            // a single polygon is involved
-                            if(aMergePolyPolygonA.count())
-                            {
-                                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aTmpPoly);
-                            }
-                            else
-                            {
-                                aMergePolyPolygonA = aTmpPoly;
-                            }
+                            aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aTmpPoly);
                         }
                         else
                         {
-                            if(aMergePolyPolygonB.count())
-                            {
-                                // to topologically correctly collect the 2nd polygon
-                                // group it is necessary to OR the parts (each is seen as
-                                // XOR-FillRule polygon and they are drawn over each-other)
-                                aMergePolyPolygonB = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonB, aTmpPoly);
-                            }
-                            else
-                            {
-                                aMergePolyPolygonB = aTmpPoly;
-                            }
+                            aMergePolyPolygonA = aTmpPoly;
+                        }
+                    }
+                    else
+                    {
+                        if(aMergePolyPolygonB.count())
+                        {
+                            // to topologically correctly collect the 2nd polygon
+                            // group it is necessary to OR the parts (each is seen as
+                            // XOR-FillRule polygon and they are drawn over each-other)
+                            aMergePolyPolygonB = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonB, aTmpPoly);
+                        }
+                        else
+                        {
+                            aMergePolyPolygonB = aTmpPoly;
                         }
                     }
                 }
-
-                // was there something added to the first polygon?
-                if(!bFirstObjectComplete && aMergePolyPolygonA.count())
-                {
-                    bFirstObjectComplete = true;
-                }
-
-                // move object to temporary delete list
-                aRemove.InsertEntry(SdrMark(pObj, pM->GetPageView()));
             }
+
+            // was there something added to the first polygon?
+            if(!bFirstObjectComplete && aMergePolyPolygonA.count())
+            {
+                bFirstObjectComplete = true;
+            }
+
+            // move object to temporary delete list
+            aRemove.InsertEntry(SdrMark(pObj, pM->GetPageView()));
         }
-
-        switch(eMode)
-        {
-            case SdrMergeMode::Merge:
-            {
-                // merge all contained parts (OR)
-                static bool bTestXOR(false);
-                if(bTestXOR)
-                {
-                    aMergePolyPolygonA = basegfx::utils::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
-                }
-                else
-                {
-                    aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
-                }
-                break;
-            }
-            case SdrMergeMode::Subtract:
-            {
-                // Subtract B from A
-                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
-                break;
-            }
-            case SdrMergeMode::Intersect:
-            {
-                // AND B and A
-                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
-                break;
-            }
-        }
-
-        // #i73441# check insert list before taking actions
-        if(pInsOL)
-        {
-            SdrPathObj* pPath = new SdrPathObj(OBJ_PATHFILL, aMergePolyPolygonA);
-            ImpCopyAttributes(pAttrObj, pPath);
-            pInsOL->InsertObject(pPath, nInsPos);
-            if( bUndo )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
-
-            // #i124760# To have a correct selection with only the new object it is necessary to
-            // unmark all objects first. If not doing so, there may remain invalid pointers to objects
-            //TTTT:Not needed for aw080 (!)
-            UnmarkAllObj(pInsPV);
-
-            MarkObj(pPath, pInsPV, false, true);
-        }
-
-        aRemove.ForceSort();
-        switch(eMode)
-        {
-            case SdrMergeMode::Merge:
-            {
-                SetUndoComment(
-                    ImpGetResStr(STR_EditMergeMergePoly),
-                    aRemove.GetMarkDescription());
-                break;
-            }
-            case SdrMergeMode::Subtract:
-            {
-                SetUndoComment(
-                    ImpGetResStr(STR_EditMergeSubstractPoly),
-                    aRemove.GetMarkDescription());
-                break;
-            }
-            case SdrMergeMode::Intersect:
-            {
-                SetUndoComment(
-                    ImpGetResStr(STR_EditMergeIntersectPoly),
-                    aRemove.GetMarkDescription());
-                break;
-            }
-        }
-        DeleteMarkedList(aRemove);
-
-        if( bUndo )
-            EndUndo();
     }
+
+    switch(eMode)
+    {
+        case SdrMergeMode::Merge:
+        {
+            // merge all contained parts (OR)
+            static bool bTestXOR(false);
+            if(bTestXOR)
+            {
+                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
+            }
+            else
+            {
+                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
+            }
+            break;
+        }
+        case SdrMergeMode::Subtract:
+        {
+            // Subtract B from A
+            aMergePolyPolygonA = basegfx::utils::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
+            break;
+        }
+        case SdrMergeMode::Intersect:
+        {
+            // AND B and A
+            aMergePolyPolygonA = basegfx::utils::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
+            break;
+        }
+    }
+
+    // #i73441# check insert list before taking actions
+    if(pInsOL)
+    {
+        SdrPathObj* pPath = new SdrPathObj(OBJ_PATHFILL, aMergePolyPolygonA);
+        ImpCopyAttributes(pAttrObj, pPath);
+        pInsOL->InsertObject(pPath, nInsPos);
+        if( bUndo )
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
+
+        // #i124760# To have a correct selection with only the new object it is necessary to
+        // unmark all objects first. If not doing so, there may remain invalid pointers to objects
+        //TTTT:Not needed for aw080 (!)
+        UnmarkAllObj(pInsPV);
+
+        MarkObj(pPath, pInsPV, false, true);
+    }
+
+    aRemove.ForceSort();
+    switch(eMode)
+    {
+        case SdrMergeMode::Merge:
+        {
+            SetUndoComment(
+                ImpGetResStr(STR_EditMergeMergePoly),
+                aRemove.GetMarkDescription());
+            break;
+        }
+        case SdrMergeMode::Subtract:
+        {
+            SetUndoComment(
+                ImpGetResStr(STR_EditMergeSubstractPoly),
+                aRemove.GetMarkDescription());
+            break;
+        }
+        case SdrMergeMode::Intersect:
+        {
+            SetUndoComment(
+                ImpGetResStr(STR_EditMergeIntersectPoly),
+                aRemove.GetMarkDescription());
+            break;
+        }
+    }
+    DeleteMarkedList(aRemove);
+
+    if( bUndo )
+        EndUndo();
 }
 
 void SdrEditView::EqualizeMarkedObjects(bool bWidth)

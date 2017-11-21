@@ -813,49 +813,49 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
 void PosSizePropertyPanel::executeSize()
 {
-    if ( mpMtrWidth->IsValueModified() || mpMtrHeight->IsValueModified())
+    if ( !mpMtrWidth->IsValueModified() && !mpMtrHeight->IsValueModified())
+        return;
+
+    Fraction aUIScale = mpView->GetModel()->GetUIScale();
+
+    // get Width
+    double nWidth = (double)mpMtrWidth->GetValue( meDlgUnit );
+    nWidth = MetricField::ConvertDoubleValue( nWidth, mpMtrWidth->GetBaseValue(), mpMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
+    long lWidth = (long)(nWidth * (double)aUIScale);
+    lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
+    lWidth = (long)mpMtrWidth->Denormalize( lWidth );
+
+    // get Height
+    double nHeight = (double)mpMtrHeight->GetValue( meDlgUnit );
+    nHeight = MetricField::ConvertDoubleValue( nHeight, mpMtrHeight->GetBaseValue(), mpMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
+    long lHeight = (long)(nHeight * (double)aUIScale);
+    lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
+    lHeight = (long)mpMtrWidth->Denormalize( lHeight );
+
+    // put Width & Height to itemset
+    SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, (sal_uInt32) lWidth);
+    SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, (sal_uInt32) lHeight);
+    SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)RectPoint::LT);
+    const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
+
+    if( nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::Graphic)
+        || nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::OLE)
+        )
     {
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
-
-        // get Width
-        double nWidth = (double)mpMtrWidth->GetValue( meDlgUnit );
-        nWidth = MetricField::ConvertDoubleValue( nWidth, mpMtrWidth->GetBaseValue(), mpMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lWidth = (long)(nWidth * (double)aUIScale);
-        lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
-        lWidth = (long)mpMtrWidth->Denormalize( lWidth );
-
-        // get Height
-        double nHeight = (double)mpMtrHeight->GetValue( meDlgUnit );
-        nHeight = MetricField::ConvertDoubleValue( nHeight, mpMtrHeight->GetBaseValue(), mpMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lHeight = (long)(nHeight * (double)aUIScale);
-        lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
-        lHeight = (long)mpMtrWidth->Denormalize( lHeight );
-
-        // put Width & Height to itemset
-        SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, (sal_uInt32) lWidth);
-        SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, (sal_uInt32) lHeight);
-        SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)RectPoint::LT);
-        const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
-
-        if( nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::Graphic)
-            || nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::OLE)
-            )
-        {
+        GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+            SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
+    }
+    else
+    {
+        if ( (mpMtrWidth->IsValueModified()) && (mpMtrHeight->IsValueModified()))
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
                 SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
-        }
-        else
-        {
-            if ( (mpMtrWidth->IsValueModified()) && (mpMtrHeight->IsValueModified()))
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                    SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
-            else if( mpMtrWidth->IsValueModified())
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                    SfxCallMode::RECORD, { &aWidthItem, &aPointItem });
-            else if ( mpMtrHeight->IsValueModified())
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                    SfxCallMode::RECORD, { &aHeightItem, &aPointItem });
-        }
+        else if( mpMtrWidth->IsValueModified())
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+                SfxCallMode::RECORD, { &aWidthItem, &aPointItem });
+        else if ( mpMtrHeight->IsValueModified())
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
+                SfxCallMode::RECORD, { &aHeightItem, &aPointItem });
     }
 }
 

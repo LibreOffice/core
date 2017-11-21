@@ -409,43 +409,43 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
         "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
 
     // Correct condition (#i52126#)
-    if ( pCreatedObj != pNewObj )
+    if ( pCreatedObj == pNewObj )
+        return;
+
+    DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
+    // Correct condition (#i52126#)
+    mpImpl->mpCreatedObj = pNewObj;
+
+    if( mpObj.is() && mpObj->GetModel() )
     {
-        DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
-        // Correct condition (#i52126#)
-        mpImpl->mpCreatedObj = pNewObj;
+        EndListening( *mpObj->GetModel() );
+    }
 
-        if( mpObj.is() && mpObj->GetModel() )
-        {
-            EndListening( *mpObj->GetModel() );
-        }
+    mpObj.reset( pNewObj );
 
-        mpObj.reset( pNewObj );
+    OSL_ENSURE( !mbIsMultiPropertyCall, "SvxShape::Create: hmm?" );
+        // this was previously set in impl_initFromSdrObject, but I think it was superfluous
+        // (it definitely was in the other context where it was called, but I strongly suppose
+        // it was also superfluous when called from here)
+    impl_initFromSdrObject();
 
-        OSL_ENSURE( !mbIsMultiPropertyCall, "SvxShape::Create: hmm?" );
-            // this was previously set in impl_initFromSdrObject, but I think it was superfluous
-            // (it definitely was in the other context where it was called, but I strongly suppose
-            // it was also superfluous when called from here)
-        impl_initFromSdrObject();
+    ObtainSettingsFromPropertySet( *mpPropSet );
 
-        ObtainSettingsFromPropertySet( *mpPropSet );
+    // save user call
+    SdrObjUserCall* pUser = mpObj->GetUserCall();
+    mpObj->SetUserCall(nullptr);
 
-        // save user call
-        SdrObjUserCall* pUser = mpObj->GetUserCall();
-        mpObj->SetUserCall(nullptr);
+    setPosition( maPosition );
+    setSize( maSize );
 
-        setPosition( maPosition );
-        setSize( maSize );
+    // restore user call after we set the initial size
+    mpObj->SetUserCall( pUser );
 
-        // restore user call after we set the initial size
-        mpObj->SetUserCall( pUser );
-
-        // if this shape was already named, use this name
-        if( !maShapeName.isEmpty() )
-        {
-            mpObj->SetName( maShapeName );
-            maShapeName.clear();
-        }
+    // if this shape was already named, use this name
+    if( !maShapeName.isEmpty() )
+    {
+        mpObj->SetName( maShapeName );
+        maShapeName.clear();
     }
 }
 

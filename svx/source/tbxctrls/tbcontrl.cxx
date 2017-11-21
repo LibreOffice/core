@@ -432,82 +432,82 @@ void SvxStyleBox_Impl::Select()
     // Tell base class about selection so that AT get informed about it.
     ComboBox::Select();
 
-    if ( !IsTravelSelect() )
+    if ( IsTravelSelect() )
+        return;
+
+    OUString aSearchEntry( GetText() );
+    bool bDoIt = true, bClear = false;
+    if( bInSpecialMode )
     {
-        OUString aSearchEntry( GetText() );
-        bool bDoIt = true, bClear = false;
-        if( bInSpecialMode )
+        if( aSearchEntry == aClearFormatKey && GetSelectedEntryPos() == 0 )
         {
-            if( aSearchEntry == aClearFormatKey && GetSelectedEntryPos() == 0 )
-            {
-                aSearchEntry = sDefaultStyle;
-                bClear = true;
-                //not only apply default style but also call 'ClearFormatting'
-                Sequence< PropertyValue > aEmptyVals;
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ResetAttributes",
-                    aEmptyVals);
-            }
-            else if( aSearchEntry == aMoreKey && GetSelectedEntryPos() == ( GetEntryCount() - 1 ) )
-            {
-                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                DBG_ASSERT( pViewFrm, "SvxStyleBox_Impl::Select(): no viewframe" );
-                pViewFrm->ShowChildWindow( SID_SIDEBAR );
-                ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
-                                                    pViewFrm->GetFrame().GetFrameInterface());
-                //tdf#113214 change text back to previous entry
-                SetText(GetSavedValue());
-                bDoIt = false;
-            }
+            aSearchEntry = sDefaultStyle;
+            bClear = true;
+            //not only apply default style but also call 'ClearFormatting'
+            Sequence< PropertyValue > aEmptyVals;
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ResetAttributes",
+                aEmptyVals);
         }
-
-        //Do we need to create a new style?
-        SfxObjectShell *pShell = SfxObjectShell::Current();
-        SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyle = nullptr;
-
-        bool bCreateNew = false;
-
-        if ( pPool )
+        else if( aSearchEntry == aMoreKey && GetSelectedEntryPos() == ( GetEntryCount() - 1 ) )
         {
-            pPool->SetSearchMask( eStyleFamily );
-
-            pStyle = pPool->First();
-            while ( pStyle && pStyle->GetName() != aSearchEntry )
-                pStyle = pPool->Next();
+            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+            DBG_ASSERT( pViewFrm, "SvxStyleBox_Impl::Select(): no viewframe" );
+            pViewFrm->ShowChildWindow( SID_SIDEBAR );
+            ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
+                                                pViewFrm->GetFrame().GetFrameInterface());
+            //tdf#113214 change text back to previous entry
+            SetText(GetSavedValue());
+            bDoIt = false;
         }
+    }
 
-        if ( !pStyle )
+    //Do we need to create a new style?
+    SfxObjectShell *pShell = SfxObjectShell::Current();
+    SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+    SfxStyleSheetBase* pStyle = nullptr;
+
+    bool bCreateNew = false;
+
+    if ( pPool )
+    {
+        pPool->SetSearchMask( eStyleFamily );
+
+        pStyle = pPool->First();
+        while ( pStyle && pStyle->GetName() != aSearchEntry )
+            pStyle = pPool->Next();
+    }
+
+    if ( !pStyle )
+    {
+        // cannot find the style for whatever reason
+        // therefore create a new style
+        bCreateNew = true;
+    }
+
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    ReleaseFocus();
+
+    if( bDoIt )
+    {
+        if ( bClear )
+            SetText( aSearchEntry );
+        SaveValue();
+
+        Sequence< PropertyValue > aArgs( 2 );
+        aArgs[0].Value  <<= aSearchEntry;
+        aArgs[1].Name   = "Family";
+        aArgs[1].Value  <<= sal_Int16( eStyleFamily );
+        if( bCreateNew )
         {
-            // cannot find the style for whatever reason
-            // therefore create a new style
-            bCreateNew = true;
+            aArgs[0].Name   = "Param";
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:StyleNewByExample", aArgs);
         }
-
-        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-            This instance may be deleted in the meantime (i.e. when a dialog is opened
-            while in Dispatch()), accessing members will crash in this case. */
-        ReleaseFocus();
-
-        if( bDoIt )
+        else
         {
-            if ( bClear )
-                SetText( aSearchEntry );
-            SaveValue();
-
-            Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Value  <<= aSearchEntry;
-            aArgs[1].Name   = "Family";
-            aArgs[1].Value  <<= sal_Int16( eStyleFamily );
-            if( bCreateNew )
-            {
-                aArgs[0].Name   = "Param";
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:StyleNewByExample", aArgs);
-            }
-            else
-            {
-                aArgs[0].Name   = "Template";
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
-            }
+            aArgs[0].Name   = "Template";
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
         }
     }
 }

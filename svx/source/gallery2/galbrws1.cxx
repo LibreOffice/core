@@ -566,27 +566,27 @@ IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl, void*, void)
     std::vector<OString> aExecVector;
     ImplGetExecuteVector(aExecVector);
 
-    if( !aExecVector.empty() )
-    {
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/gallerymenu1.ui", "");
-        VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
+    if( aExecVector.empty() )
+        return;
 
-        aMenu->EnableItem( aMenu->GetItemId("update"), std::find( aExecVector.begin(), aExecVector.end(), "update" ) != aExecVector.end() );
-        aMenu->EnableItem( aMenu->GetItemId("rename"), std::find( aExecVector.begin(), aExecVector.end(), "rename" ) != aExecVector.end() );
-        aMenu->EnableItem( aMenu->GetItemId("delete"), std::find( aExecVector.begin(), aExecVector.end(), "delete" ) != aExecVector.end() );
-        aMenu->EnableItem( aMenu->GetItemId("assign"), std::find( aExecVector.begin(), aExecVector.end(), "assign" ) != aExecVector.end() );
-        aMenu->EnableItem( aMenu->GetItemId("properties"), std::find( aExecVector.begin(), aExecVector.end(), "properties" ) != aExecVector.end() );
-        aMenu->SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
-        aMenu->RemoveDisabledEntries();
+    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/gallerymenu1.ui", "");
+    VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
 
-        const tools::Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
-        Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectedEntryPos() ).Center() );
+    aMenu->EnableItem( aMenu->GetItemId("update"), std::find( aExecVector.begin(), aExecVector.end(), "update" ) != aExecVector.end() );
+    aMenu->EnableItem( aMenu->GetItemId("rename"), std::find( aExecVector.begin(), aExecVector.end(), "rename" ) != aExecVector.end() );
+    aMenu->EnableItem( aMenu->GetItemId("delete"), std::find( aExecVector.begin(), aExecVector.end(), "delete" ) != aExecVector.end() );
+    aMenu->EnableItem( aMenu->GetItemId("assign"), std::find( aExecVector.begin(), aExecVector.end(), "assign" ) != aExecVector.end() );
+    aMenu->EnableItem( aMenu->GetItemId("properties"), std::find( aExecVector.begin(), aExecVector.end(), "properties" ) != aExecVector.end() );
+    aMenu->SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
+    aMenu->RemoveDisabledEntries();
 
-        aSelPos.X() = std::max( std::min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
-        aSelPos.Y() = std::max( std::min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );
+    const tools::Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
+    Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectedEntryPos() ).Center() );
 
-        aMenu->Execute( this, aSelPos );
-    }
+    aSelPos.X() = std::max( std::min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
+    aSelPos.Y() = std::max( std::min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );
+
+    aMenu->Execute( this, aSelPos );
 }
 
 IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu, bool )

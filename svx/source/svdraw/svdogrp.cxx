@@ -607,27 +607,28 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
 
 void SdrObjGroup::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    if (nAngle!=0) {
-        SetGlueReallyAbsolute(true);
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        RotatePoint(aRefPoint,rRef,sn,cs);
-        // move the connectors first, everything else afterwards
-        SdrObjList* pOL=pSub.get();
-        const size_t nObjCount = pOL->GetObjCount();
-        for (size_t i=0; i<nObjCount; ++i) {
-            SdrObject* pObj=pOL->GetObj(i);
-            if (pObj->IsEdgeObj()) pObj->Rotate(rRef,nAngle,sn,cs);
-        }
-        for (size_t i=0; i<nObjCount; ++i) {
-            SdrObject* pObj=pOL->GetObj(i);
-            if (!pObj->IsEdgeObj()) pObj->Rotate(rRef,nAngle,sn,cs);
-        }
-        NbcRotateGluePoints(rRef,nAngle,sn,cs);
-        SetGlueReallyAbsolute(false);
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
+    if (nAngle==0)
+        return;
+
+    SetGlueReallyAbsolute(true);
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    RotatePoint(aRefPoint,rRef,sn,cs);
+    // move the connectors first, everything else afterwards
+    SdrObjList* pOL=pSub.get();
+    const size_t nObjCount = pOL->GetObjCount();
+    for (size_t i=0; i<nObjCount; ++i) {
+        SdrObject* pObj=pOL->GetObj(i);
+        if (pObj->IsEdgeObj()) pObj->Rotate(rRef,nAngle,sn,cs);
     }
+    for (size_t i=0; i<nObjCount; ++i) {
+        SdrObject* pObj=pOL->GetObj(i);
+        if (!pObj->IsEdgeObj()) pObj->Rotate(rRef,nAngle,sn,cs);
+    }
+    NbcRotateGluePoints(rRef,nAngle,sn,cs);
+    SetGlueReallyAbsolute(false);
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 
@@ -657,27 +658,29 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 
 void SdrObjGroup::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    if (nAngle!=0) {
-        SetGlueReallyAbsolute(true);
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        ShearPoint(aRefPoint,rRef,tn);
-        // move the connectors first, everything else afterwards
-        SdrObjList* pOL=pSub.get();
-        const size_t nObjCount = pOL->GetObjCount();
-        for (size_t i=0; i<nObjCount; ++i) {
-            SdrObject* pObj=pOL->GetObj(i);
-            if (pObj->IsEdgeObj()) pObj->Shear(rRef,nAngle,tn,bVShear);
-        }
-        for (size_t i=0; i<nObjCount; ++i) {
-            SdrObject* pObj=pOL->GetObj(i);
-            if (!pObj->IsEdgeObj()) pObj->Shear(rRef,nAngle,tn,bVShear);
-        }
-        NbcShearGluePoints(rRef,tn,bVShear);
-        SetGlueReallyAbsolute(false);
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
+    if (nAngle==0)
+        return;
+
+    SetGlueReallyAbsolute(true);
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    ShearPoint(aRefPoint,rRef,tn);
+    // move the connectors first, everything else afterwards
+    SdrObjList* pOL=pSub.get();
+    const size_t nObjCount = pOL->GetObjCount();
+    for (size_t i=0; i<nObjCount; ++i) {
+        SdrObject* pObj=pOL->GetObj(i);
+        if (pObj->IsEdgeObj()) pObj->Shear(rRef,nAngle,tn,bVShear);
     }
+    for (size_t i=0; i<nObjCount; ++i) {
+        SdrObject* pObj=pOL->GetObj(i);
+        if (!pObj->IsEdgeObj()) pObj->Shear(rRef,nAngle,tn,bVShear);
+    }
+    NbcShearGluePoints(rRef,tn,bVShear);
+    SetGlueReallyAbsolute(false);
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
+
 }
 
 

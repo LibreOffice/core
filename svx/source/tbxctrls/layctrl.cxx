@@ -275,43 +275,43 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     }
 
     // the text near the mouse cursor telling the table dimensions
-    if (nCol && nLine)
+    if (!nCol || !nLine)
+        return;
+
+    OUString aText;
+    aText += OUString::number( nCol );
+    aText += " x ";
+    aText += OUString::number( nLine );
+    if(GetId() == FN_SHOW_MULTIPLE_PAGES)
     {
-        OUString aText;
-        aText += OUString::number( nCol );
-        aText += " x ";
-        aText += OUString::number( nLine );
-        if(GetId() == FN_SHOW_MULTIPLE_PAGES)
-        {
-            aText += " ";
-            aText += SvxResId(RID_SVXSTR_PAGES);
-        }
-
-        Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
-
-        long nTextX = nSelectionWidth + mnTableCellWidth;
-        long nTextY = nSelectionHeight + mnTableCellHeight;
-        const long nTipBorder = 2;
-
-        if (aTextSize.Width() + mnTablePosX + mnTableCellWidth + 2 * nTipBorder < nSelectionWidth)
-            nTextX = nSelectionWidth - mnTableCellWidth - aTextSize.Width();
-
-        if (aTextSize.Height() + mnTablePosY + mnTableCellHeight + 2 * nTipBorder < nSelectionHeight)
-            nTextY = nSelectionHeight - mnTableCellHeight - aTextSize.Height();
-
-        rRenderContext.SetLineColor(aLineColor);
-        rRenderContext.SetFillColor(aBackgroundColor);
-        rRenderContext.DrawRect(tools::Rectangle(nTextX - 2 * nTipBorder,
-                                          nTextY - 2 * nTipBorder,
-                                          nTextX + aTextSize.Width() + nTipBorder,
-                                          nTextY + aTextSize.Height() + nTipBorder));
-
-        // #i95350# force RTL output
-        if (IsRTLEnabled())
-            aText = OUStringLiteral1(0x202D) + aText;
-
-        rRenderContext.DrawText(Point(nTextX, nTextY), aText);
+        aText += " ";
+        aText += SvxResId(RID_SVXSTR_PAGES);
     }
+
+    Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
+
+    long nTextX = nSelectionWidth + mnTableCellWidth;
+    long nTextY = nSelectionHeight + mnTableCellHeight;
+    const long nTipBorder = 2;
+
+    if (aTextSize.Width() + mnTablePosX + mnTableCellWidth + 2 * nTipBorder < nSelectionWidth)
+        nTextX = nSelectionWidth - mnTableCellWidth - aTextSize.Width();
+
+    if (aTextSize.Height() + mnTablePosY + mnTableCellHeight + 2 * nTipBorder < nSelectionHeight)
+        nTextY = nSelectionHeight - mnTableCellHeight - aTextSize.Height();
+
+    rRenderContext.SetLineColor(aLineColor);
+    rRenderContext.SetFillColor(aBackgroundColor);
+    rRenderContext.DrawRect(tools::Rectangle(nTextX - 2 * nTipBorder,
+                                      nTextY - 2 * nTipBorder,
+                                      nTextX + aTextSize.Width() + nTipBorder,
+                                      nTextY + aTextSize.Height() + nTipBorder));
+
+    // #i95350# force RTL output
+    if (IsRTLEnabled())
+        aText = OUStringLiteral1(0x202D) + aText;
+
+    rRenderContext.DrawText(Point(nTextX, nTextY), aText);
 }
 
 

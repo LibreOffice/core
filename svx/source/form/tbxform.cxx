@@ -57,27 +57,27 @@ SvxFmAbsRecWin::SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pCont
 
 void SvxFmAbsRecWin::FirePosition( bool _bForce )
 {
-    if ( _bForce || IsValueChangedFromSaved() )
+    if ( !_bForce && !IsValueChangedFromSaved() )
+        return;
+
+    sal_Int64 nRecord = GetValue();
+    if (nRecord < GetMin() || nRecord > GetMax())
     {
-        sal_Int64 nRecord = GetValue();
-        if (nRecord < GetMin() || nRecord > GetMax())
-        {
-            return;
-        }
-
-        SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
-
-        Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "Position";
-        aPositionParam.QueryValue( a );
-        aArgs[0].Value = a;
-        m_pController->Dispatch( ".uno:AbsoluteRecord",
-                                 aArgs );
-        m_pController->updateStatus();
-
-        SaveValue();
+        return;
     }
+
+    SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
+
+    Any a;
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = "Position";
+    aPositionParam.QueryValue( a );
+    aArgs[0].Value = a;
+    m_pController->Dispatch( ".uno:AbsoluteRecord",
+                             aArgs );
+    m_pController->updateStatus();
+
+    SaveValue();
 }
 
 

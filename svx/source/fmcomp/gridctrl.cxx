@@ -2980,65 +2980,65 @@ void DbGridControl::Dispatch(sal_uInt16 nId)
 
 void DbGridControl::Undo()
 {
-    if (!IsFilterMode() && IsValid(m_xCurrentRow) && IsModified())
-    {
-        // check if we have somebody doin' the UNDO for us
-        int nState = -1;
-        if (m_aMasterStateProvider.IsSet())
-            nState = m_aMasterStateProvider.Call(DbGridControlNavigationBarState::Undo);
-        if (nState>0)
-        {   // yes, we have, and the slot is enabled
-            DBG_ASSERT(m_aMasterSlotExecutor.IsSet(), "DbGridControl::Undo : a state, but no execute link ?");
-            bool lResult = m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Undo);
-            if (lResult)
-                // handled
-                return;
-        }
-        else if (nState == 0)
-            // yes, we have, and the slot is disabled
+    if (IsFilterMode() || !IsValid(m_xCurrentRow) || !IsModified())
+        return;
+
+    // check if we have somebody doin' the UNDO for us
+    int nState = -1;
+    if (m_aMasterStateProvider.IsSet())
+        nState = m_aMasterStateProvider.Call(DbGridControlNavigationBarState::Undo);
+    if (nState>0)
+    {   // yes, we have, and the slot is enabled
+        DBG_ASSERT(m_aMasterSlotExecutor.IsSet(), "DbGridControl::Undo : a state, but no execute link ?");
+        bool lResult = m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Undo);
+        if (lResult)
+            // handled
             return;
-
-        BeginCursorAction();
-
-        bool bAppending = m_xCurrentRow->IsNew();
-        bool bDirty     = m_xCurrentRow->IsModified();
-
-        try
-        {
-            // cancel editing
-            Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
-            // no effects if we're not updating currently
-            if (bAppending)
-                // just refresh the row
-                xUpdateCursor->moveToInsertRow();
-            else
-                xUpdateCursor->cancelRowUpdates();
-
-        }
-        catch(Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        EndCursorAction();
-
-        m_xDataRow->SetState(m_pDataCursor, false);
-        if (m_xPaintRow == m_xCurrentRow)
-            m_xPaintRow = m_xCurrentRow = m_xDataRow;
-        else
-            m_xCurrentRow = m_xDataRow;
-
-        if (bAppending && (EditBrowseBox::IsModified() || bDirty))
-            // remove the row
-            if (m_nCurrentPos == GetRowCount() - 2)
-            {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
-                // caused our data source form to be reset - which should be the usual case ....)
-                RowRemoved(GetRowCount() - 1);
-                m_aBar->InvalidateAll(m_nCurrentPos);
-            }
-
-        RowModified(m_nCurrentPos);
     }
+    else if (nState == 0)
+        // yes, we have, and the slot is disabled
+        return;
+
+    BeginCursorAction();
+
+    bool bAppending = m_xCurrentRow->IsNew();
+    bool bDirty     = m_xCurrentRow->IsModified();
+
+    try
+    {
+        // cancel editing
+        Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
+        // no effects if we're not updating currently
+        if (bAppending)
+            // just refresh the row
+            xUpdateCursor->moveToInsertRow();
+        else
+            xUpdateCursor->cancelRowUpdates();
+
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    EndCursorAction();
+
+    m_xDataRow->SetState(m_pDataCursor, false);
+    if (m_xPaintRow == m_xCurrentRow)
+        m_xPaintRow = m_xCurrentRow = m_xDataRow;
+    else
+        m_xCurrentRow = m_xDataRow;
+
+    if (bAppending && (EditBrowseBox::IsModified() || bDirty))
+        // remove the row
+        if (m_nCurrentPos == GetRowCount() - 2)
+        {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
+            // caused our data source form to be reset - which should be the usual case ....)
+            RowRemoved(GetRowCount() - 1);
+            m_aBar->InvalidateAll(m_nCurrentPos);
+        }
+
+    RowModified(m_nCurrentPos);
 }
 
 void DbGridControl::resetCurrentRow()

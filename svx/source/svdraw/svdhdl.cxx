@@ -1958,122 +1958,122 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
     if (mnFocusIndex >= GetHdlCount())
         mnFocusIndex = SAL_MAX_SIZE;
 
-    if(!aList.empty())
+    if(aList.empty())
+        return;
+
+    // take care of old handle
+    const size_t nOldHdlNum(mnFocusIndex);
+    SdrHdl* pOld = GetHdl(nOldHdlNum);
+
+    if(pOld)
     {
-        // take care of old handle
-        const size_t nOldHdlNum(mnFocusIndex);
-        SdrHdl* pOld = GetHdl(nOldHdlNum);
+        // switch off old handle
+        mnFocusIndex = SAL_MAX_SIZE;
+        pOld->Touch();
+    }
 
-        if(pOld)
+    // allocate pointer array for sorted handle list
+    std::unique_ptr<ImplHdlAndIndex[]> pHdlAndIndex(new ImplHdlAndIndex[aList.size()]);
+
+    // build sorted handle list
+    for( size_t a = 0; a < aList.size(); ++a)
+    {
+        pHdlAndIndex[a].mpHdl = aList[a];
+        pHdlAndIndex[a].mnIndex = a;
+    }
+
+    qsort(pHdlAndIndex.get(), aList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
+
+    // look for old num in sorted array
+    size_t nOldHdl(nOldHdlNum);
+
+    if(nOldHdlNum != SAL_MAX_SIZE)
+    {
+        for(size_t a = 0; a < aList.size(); ++a)
         {
-            // switch off old handle
-            mnFocusIndex = SAL_MAX_SIZE;
-            pOld->Touch();
-        }
-
-        // allocate pointer array for sorted handle list
-        std::unique_ptr<ImplHdlAndIndex[]> pHdlAndIndex(new ImplHdlAndIndex[aList.size()]);
-
-        // build sorted handle list
-        for( size_t a = 0; a < aList.size(); ++a)
-        {
-            pHdlAndIndex[a].mpHdl = aList[a];
-            pHdlAndIndex[a].mnIndex = a;
-        }
-
-        qsort(pHdlAndIndex.get(), aList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
-
-        // look for old num in sorted array
-        size_t nOldHdl(nOldHdlNum);
-
-        if(nOldHdlNum != SAL_MAX_SIZE)
-        {
-            for(size_t a = 0; a < aList.size(); ++a)
+            if(pHdlAndIndex[a].mpHdl == pOld)
             {
-                if(pHdlAndIndex[a].mpHdl == pOld)
-                {
-                    nOldHdl = a;
-                    break;
-                }
+                nOldHdl = a;
+                break;
             }
         }
+    }
 
-        // build new HdlNum
-        size_t nNewHdl(nOldHdl);
+    // build new HdlNum
+    size_t nNewHdl(nOldHdl);
 
-        // do the focus travel
-        if(bForward)
+    // do the focus travel
+    if(bForward)
+    {
+        if(nOldHdl != SAL_MAX_SIZE)
         {
-            if(nOldHdl != SAL_MAX_SIZE)
+            if(nOldHdl == aList.size() - 1)
             {
-                if(nOldHdl == aList.size() - 1)
-                {
-                    // end forward run
-                    nNewHdl = SAL_MAX_SIZE;
-                }
-                else
-                {
-                    // simply the next handle
-                    nNewHdl++;
-                }
+                // end forward run
+                nNewHdl = SAL_MAX_SIZE;
             }
             else
             {
-                // start forward run at first entry
-                nNewHdl = 0;
+                // simply the next handle
+                nNewHdl++;
             }
         }
         else
         {
-            if(nOldHdl == SAL_MAX_SIZE)
-            {
-                // start backward run at last entry
-                nNewHdl = aList.size() - 1;
+            // start forward run at first entry
+            nNewHdl = 0;
+        }
+    }
+    else
+    {
+        if(nOldHdl == SAL_MAX_SIZE)
+        {
+            // start backward run at last entry
+            nNewHdl = aList.size() - 1;
 
+        }
+        else
+        {
+            if(nOldHdl == 0)
+            {
+                // end backward run
+                nNewHdl = SAL_MAX_SIZE;
             }
             else
             {
-                if(nOldHdl == 0)
-                {
-                    // end backward run
-                    nNewHdl = SAL_MAX_SIZE;
-                }
-                else
-                {
-                    // simply the previous handle
-                    nNewHdl--;
-                }
+                // simply the previous handle
+                nNewHdl--;
             }
         }
+    }
 
-        // build new HdlNum
-        sal_uIntPtr nNewHdlNum(nNewHdl);
+    // build new HdlNum
+    sal_uIntPtr nNewHdlNum(nNewHdl);
 
-        // look for old num in sorted array
-        if(nNewHdl != SAL_MAX_SIZE)
+    // look for old num in sorted array
+    if(nNewHdl != SAL_MAX_SIZE)
+    {
+        SdrHdl* pNew = pHdlAndIndex[nNewHdl].mpHdl;
+
+        for(size_t a = 0; a < aList.size(); ++a)
         {
-            SdrHdl* pNew = pHdlAndIndex[nNewHdl].mpHdl;
-
-            for(size_t a = 0; a < aList.size(); ++a)
+            if(aList[a] == pNew)
             {
-                if(aList[a] == pNew)
-                {
-                    nNewHdlNum = a;
-                    break;
-                }
+                nNewHdlNum = a;
+                break;
             }
         }
+    }
 
-        // take care of next handle
-        if(nOldHdlNum != nNewHdlNum)
+    // take care of next handle
+    if(nOldHdlNum != nNewHdlNum)
+    {
+        mnFocusIndex = nNewHdlNum;
+        SdrHdl* pNew = GetHdl(mnFocusIndex);
+
+        if(pNew)
         {
-            mnFocusIndex = nNewHdlNum;
-            SdrHdl* pNew = GetHdl(mnFocusIndex);
-
-            if(pNew)
-            {
-                pNew->Touch();
-            }
+            pNew->Touch();
         }
     }
 }
