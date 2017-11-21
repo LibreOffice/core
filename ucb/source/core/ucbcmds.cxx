@@ -624,11 +624,11 @@ uno::Reference< ucb::XContent > createNew(
                 // (not a and not b) or (a and b)
                 // not( a or b) or (a and b)
 
-                if ( ( !!bSourceIsFolder ==
+                if ( ( bSourceIsFolder ==
                         !!( nAttribs
                             & ucb::ContentInfoAttribute::KIND_FOLDER ) )
                      &&
-                     ( !!bSourceIsDocument ==
+                     ( bSourceIsDocument ==
                         !!( nAttribs
                             & ucb::ContentInfoAttribute::KIND_DOCUMENT ) )
                    )

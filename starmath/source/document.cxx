@@ -493,7 +493,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             }
         }
     }
-    if ( !!(pRefDev = rDocShell.GetRefDev()) && pPrinter.get() != pRefDev.get() )
+    if ( (pRefDev = rDocShell.GetRefDev()) && pPrinter.get() != pRefDev.get() )
     {
         pRefDev->Push( PushFlags::MAPMODE );
         if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )

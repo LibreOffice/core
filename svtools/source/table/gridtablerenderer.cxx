@@ -246,8 +246,8 @@ namespace svt { namespace table
 
         OUString sHeaderText;
         PColumnModel const pColumn = m_pImpl->rModel.getColumnModel( _nCol );
-        DBG_ASSERT( !!pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
-        if ( !!pColumn )
+        DBG_ASSERT( pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
+        if ( pColumn )
             sHeaderText = pColumn->getName();
 
         Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );

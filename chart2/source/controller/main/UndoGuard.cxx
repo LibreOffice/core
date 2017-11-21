@@ -45,13 +45,13 @@ UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< docume
 
 UndoGuard::~UndoGuard()
 {
-    if ( !!m_pDocumentSnapshot )
+    if ( m_pDocumentSnapshot )
         discardSnapshot();
 }
 
 void UndoGuard::commit()
 {
-    if ( !m_bActionPosted && !!m_pDocumentSnapshot )
+    if ( !m_bActionPosted && m_pDocumentSnapshot )
     {
         try
         {

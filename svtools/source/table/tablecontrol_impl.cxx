@@ -257,7 +257,7 @@ namespace svt { namespace table
     {
         SuppressCursor aHideCursor( *this );
 
-        if ( !!m_pModel )
+        if ( m_pModel )
             m_pModel->removeTableModelListener( shared_from_this() );
 
         m_pModel = _pModel;
@@ -1659,8 +1659,8 @@ namespace svt { namespace table
 
     void TableControl_Impl::impl_ni_doSwitchCursor( bool _bShow )
     {
-        PTableRenderer pRenderer = !!m_pModel ? m_pModel->getRenderer() : PTableRenderer();
-        if ( !!pRenderer )
+        PTableRenderer pRenderer = m_pModel ? m_pModel->getRenderer() : PTableRenderer();
+        if ( pRenderer )
         {
             tools::Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, m_nCurRow, aCellRect );

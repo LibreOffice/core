@@ -57,7 +57,7 @@ UndoElement::~UndoElement()
 
 void SAL_CALL UndoElement::disposing()
 {
-    if ( !!m_pModelClone )
+    if ( m_pModelClone )
         m_pModelClone->dispose();
     m_pModelClone.reset();
     m_xDocumentModel.clear();

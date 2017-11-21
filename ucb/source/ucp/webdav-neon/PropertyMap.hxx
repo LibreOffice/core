@@ -41,7 +41,7 @@ struct equalPropertyName
   bool operator()( const css::beans::Property & p1,
                    const css::beans::Property & p2 ) const
   {
-        return !!( p1.Name == p2.Name );
+        return p1.Name == p2.Name;
   }
 };
 

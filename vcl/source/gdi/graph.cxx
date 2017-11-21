@@ -91,7 +91,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     }
 
     if ( aSize.Width() > 0 && aSize.Height() > 0 && pFont && pText && pText->getLength()
-         && !(!pOutDev->IsOutputEnabled() /*&& pOutDev->GetConnectMetaFile() */) )
+         && pOutDev->IsOutputEnabled() )
     {
         MapMode aMapMode( MapUnit::MapPoint );
         Size    aSz = pOutDev->LogicToLogic( Size( 0, 12 ), &aMapMode, nullptr );

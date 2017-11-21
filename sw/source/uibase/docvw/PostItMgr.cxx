@@ -448,7 +448,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             case SfxHintId::ModeChanged:
             {
-                if ( mbReadOnly != !!(mpView->GetDocShell()->IsReadOnly()) )
+                if ( mbReadOnly != mpView->GetDocShell()->IsReadOnly() )
                 {
                     mbReadOnly = !mbReadOnly;
                     SetReadOnlyState();
