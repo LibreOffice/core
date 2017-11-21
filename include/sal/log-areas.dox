@@ -167,6 +167,7 @@ certain functionality.
 @li @c desktop.opengl
 @li @c desktop.splash
 @li @c desktop.test
+@li @c desktop.updater
 
 @section Draw
 

@@ -69,8 +69,8 @@ static const char kUserAgent[] = "LibreOffice UpdateChecker/1.0 (unknown platfor
 #endif
 
 #ifdef UNX
-const char* pUpdaterName = "updater";
-const char* pSofficeExeName = "soffice";
+const char* const pUpdaterName = "updater";
+const char* const pSofficeExeName = "soffice";
 #elif defined(WNT)
 const char* pUpdaterName = "updater.exe";
 const char* pSofficeExeName = "soffice.exe";
@@ -105,7 +105,7 @@ OUString normalizePath(const OUString& rPath)
     return aPath.replaceAll("\\", "/");
 }
 
-void CopyFileToDir(const OUString& rTempDirURL, const OUString rFileName, const OUString& rOldDir)
+void CopyFileToDir(const OUString& rTempDirURL, const OUString & rFileName, const OUString& rOldDir)
 {
     OUString aSourceURL = rOldDir + "/" + rFileName;
     OUString aDestURL = rTempDirURL + "/" + rFileName;
@@ -152,7 +152,7 @@ void createStr(const OUString& rStr, CharT** pArgs, size_t i)
 #error "Need an implementation"
 #endif
     CharT* pStr = new CharT[aStr.getLength() + 1];
-    tstrncpy(pStr, (CharT*)aStr.getStr(), aStr.getLength());
+    tstrncpy(pStr, aStr.getStr(), aStr.getLength());
     pStr[aStr.getLength()] = '\0';
     pArgs[i] = pStr;
 }
@@ -328,7 +328,7 @@ bool update()
 namespace {
 
 // Callback to get the response data from server.
-static size_t WriteCallback(void *ptr, size_t size,
+size_t WriteCallback(void *ptr, size_t size,
                             size_t nmemb, void *userp)
 {
   if (!userp)
@@ -523,7 +523,7 @@ size_t WriteCallbackFile(void *ptr, size_t size,
 
   WriteDataFile* response = static_cast<WriteDataFile *>(userp);
   size_t real_size = size * nmemb;
-  response->mpStream->WriteBytes(static_cast<char *>(ptr), real_size);
+  response->mpStream->WriteBytes(ptr, real_size);
   response->maHash.update(static_cast<const unsigned char*>(ptr), real_size);
   return real_size;
 }
@@ -802,7 +802,7 @@ OUString Updater::getExecutableDirURL()
 
 void Updater::log(const OUString& rMessage)
 {
-    SAL_INFO("updater", rMessage);
+    SAL_INFO("desktop.updater", rMessage);
     OUString aUpdateLog = getUpdateInfoLog();
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
@@ -811,7 +811,7 @@ void Updater::log(const OUString& rMessage)
 
 void Updater::log(const OString& rMessage)
 {
-    SAL_INFO("updater", rMessage);
+    SAL_INFO("desktop.updater", rMessage);
     OUString aUpdateLog = getUpdateInfoLog();
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
@@ -820,7 +820,7 @@ void Updater::log(const OString& rMessage)
 
 void Updater::log(const char* pMessage)
 {
-    SAL_INFO("updater", pMessage);
+    SAL_INFO("desktop.updater", pMessage);
     OUString aUpdateLog = getUpdateInfoLog();
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
