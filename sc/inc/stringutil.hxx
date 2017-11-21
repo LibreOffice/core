@@ -47,6 +47,12 @@ struct SAL_WARN_UNUSED SC_DLLPUBLIC ScSetStringParam
         SpecialNumberOnly,
 
         /**
+         * Keep an existing number format, do not set Text number format and do
+         * not set another number format.
+         */
+        Keep,
+
+        /**
          * Never set Text number format.
          */
         Never

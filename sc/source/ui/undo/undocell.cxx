@@ -457,6 +457,8 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
         {
             ScSetStringParam aParam;
             aParam.setTextInput();
+            // Undo only cell content, without setting any number format.
+            aParam.meSetTextNumFormat = ScSetStringParam::Keep;
             rDoc.SetString(maPos, rVal.mpString->getString(), &aParam);
         }
         break;
