@@ -1054,41 +1054,158 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=MID([.I2];12;8)">
+      <text:p/>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=MID([.J2];12;8)">
+      <text:p/>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce38" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=MID(I2;12;8)" calcext:value-type="string">
+      <text:p>=MID(I2;12;8)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce9" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:formula="of:=MID([.I2];0;3)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" table:formula="of:=ISERROR([.A7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=MID(I2;0;3)" calcext:value-type="string">
+      <text:p>=MID(I2;0;3)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:formula="of:=MID([.I8];[.J8];[.K8])" office:value-type="string" office:string-value="b😂" calcext:value-type="string">
+      <text:p>b😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
+      <text:p>b😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=MID(I8;J8;K8)" calcext:value-type="string">
+      <text:p>=MID(I8;J8;K8)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>result Excel 2016 is b😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce46" office:value-type="string" calcext:value-type="string"><text:p>ab<text:span text:style-name="T1">😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:span></text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" table:style-name="ce46" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=MID([.I9];[.J9];[.K9])" office:value-type="string" office:string-value="b" calcext:value-type="string">
+      <text:p>b</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
+      <text:p>b</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=MID(I9;J9;K9)" calcext:value-type="string">
+      <text:p>=MID(I9;J9;K9)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>result Excel 2016 is b</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce46" office:value-type="string" calcext:value-type="string">
+      <text:p>ab😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce46" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce46" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce16"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce17"/>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=MID([.I10];[.J10];[.K10])" office:value-type="string" office:string-value="𧌒𧀬" calcext:value-type="string">
+      <text:p>𧌒𧀬</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
+      <text:p>𧌒𧀬</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce42" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=MID(I10;J10;K10)" calcext:value-type="string">
+      <text:p>=MID(I10;J10;K10)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>result Excel 2016 is 𧌒</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce47" office:value-type="string" calcext:value-type="string"><text:p>&quot;<text:span text:style-name="T2">𧌒𧀬</text:span>&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" table:style-name="ce46" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
     </table:table-row>
-    <table:table-row table:style-name="ro5" table:number-rows-repeated="27">
+    <table:table-row table:style-name="ro3">
+     <table:table-cell table:formula="of:=MID([.I11];[.J11];[.K11])" office:value-type="string" office:string-value="ü" calcext:value-type="string">
+      <text:p>ü</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
+      <text:p>ü</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce43" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=MID(I11;J11;K11)" calcext:value-type="string">
+      <text:p>=MID(I11;J11;K11)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>result Excel 2016 is identical</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce48" office:value-type="string" calcext:value-type="string">
+      <text:p>&quot;üë&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" table:style-name="ce46" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=MID([.I12];[.J12];[.K12])" office:value-type="string" office:string-value="𝖍𝖙𝖚" calcext:value-type="string">
+      <text:p>𝖍𝖙𝖚</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
+      <text:p>𝖍𝖙𝖚</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce44" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=MID(I12;J12;K12)" calcext:value-type="string">
+      <text:p>=MID(I12;J12;K12)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>result Excel 2016 is 𝖈</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce49" office:value-type="string" calcext:value-type="string">
+      <text:p>𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" table:style-name="ce46" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro5" table:number-rows-repeated="25">
      <table:table-cell table:style-name="ce14"/>
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:style-name="ce27"/>
