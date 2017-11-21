@@ -66,16 +66,10 @@ public:
     static ExplicitValueProvider* getExplicitValueProvider( const css::uno::Reference< css::uno::XInterface >& xChartView );
 
     static css::awt::Rectangle
-        addAxisTitleSizes(
+        addSubstractAxisTitleSizes(
                 ChartModel& rModel
             , const css::uno::Reference< css::uno::XInterface >& xChartView
-            , const css::awt::Rectangle& rExcludingPositionAndSize );
-
-    static css::awt::Rectangle
-        substractAxisTitleSizes(
-                ChartModel& rModel
-            , const css::uno::Reference< css::uno::XInterface >& xChartView
-            , const css::awt::Rectangle& rPositionAndSizeIncludingTitles );
+            , const css::awt::Rectangle& rExcludingPositionAndSize, bool bSubtract );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
