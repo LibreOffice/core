@@ -18,9 +18,8 @@
  */
 
 #include <segmenttree.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <mdds/flat_segment_tree.hpp>
-
 #include <algorithm>
 #include <limits>
 
@@ -144,7 +143,13 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
     SCROW nEndPos = aData.mnPos2;
     while (nEndPos <= nPos2)
     {
-        nValue += aData.mnValue * (nEndPos - nCurPos + 1);
+        sal_uInt32 nRes;
+        if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+        {
+            SAL_WARN("sc.core", "row height overflow");
+            nRes = SAL_MAX_INT32;
+        }
+        nValue = o3tl::saturating_add(nValue, nRes);
         nCurPos = nEndPos + 1;
         if (!getRangeData(nCurPos, aData))
             break;
@@ -154,7 +159,13 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
     if (nCurPos <= nPos2)
     {
         nEndPos = ::std::min(nEndPos, nPos2);
-        nValue += aData.mnValue * (nEndPos - nCurPos + 1);
+        sal_uInt32 nRes;
+        if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+        {
+            SAL_WARN("sc.core", "row height overflow");
+            nRes = SAL_MAX_INT32;
+        }
+        nValue = o3tl::saturating_add(nValue, nRes);
     }
     return nValue;
 }
