@@ -49,35 +49,35 @@ public:
 
     // PercentDiagonal: 0..100, before 0.0..0.5
     sal_uInt16 GetPercentDiagonal() const
-        { return static_cast<const SfxUInt16Item&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL).GetValue(); }
 
     // BackScale: 0..100, before 0.0..1.0
     sal_uInt16 GetPercentBackScale() const
-        { return static_cast<const SfxUInt16Item&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_BACKSCALE).GetValue(); }
 
     // BackScale: 0..100, before 0.0..1.0
     sal_uInt32 GetExtrudeDepth() const
-        { return static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_DEPTH)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_DEPTH).GetValue(); }
 
     // #107245# GetSmoothNormals() for bExtrudeSmoothed
     bool GetSmoothNormals() const
-        { return static_cast<const Svx3DSmoothNormalsItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_NORMALS)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_NORMALS).GetValue(); }
 
     // #107245# GetSmoothLids() for bExtrudeSmoothFrontBack
     bool GetSmoothLids() const
-        { return static_cast<const Svx3DSmoothLidsItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_LIDS)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_LIDS).GetValue(); }
 
     // #107245# GetCharacterMode() for bExtrudeCharacterMode
     bool GetCharacterMode() const
-        { return static_cast<const Svx3DCharacterModeItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_CHARACTER_MODE)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_CHARACTER_MODE).GetValue(); }
 
     // #107245# GetCloseFront() for bExtrudeCloseFront
     bool GetCloseFront() const
-        { return static_cast<const Svx3DCloseFrontItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_FRONT)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_FRONT).GetValue(); }
 
     // #107245# GetCloseBack() for bExtrudeCloseBack
     bool GetCloseBack() const
-        { return static_cast<const Svx3DCloseBackItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
+        { return GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const override;
 

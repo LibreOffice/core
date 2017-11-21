@@ -341,9 +341,9 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
             const SfxItemSet& rSceneSet = pScene->GetMergedItemSet();
             double fCamPosZ =
-                (double)static_cast<const SfxUInt32Item&>(rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+                (double)rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE).GetValue();
             double fCamFocal =
-                (double)static_cast<const SfxUInt32Item&>(rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+                (double)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue();
 
             aCam.SetAutoAdjustProjection(false);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);

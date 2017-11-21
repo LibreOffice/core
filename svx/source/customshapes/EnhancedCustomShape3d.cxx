@@ -185,7 +185,7 @@ EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCus
     , fOriginY(0.0)
     , pMap( pM )
 {
-    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );
     if ( pAny )
         *pAny >>= eProjectionMode;
@@ -253,7 +253,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 {
     SdrObject*  pRet = nullptr;
     SdrModel*   pModel = pCustomShape->GetModel();
-    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
     double      fMap, *pMap = nullptr;
     if ( pModel )
@@ -734,7 +734,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
 tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomShape, const tools::Rectangle& rSnapRect, const tools::Rectangle& rBoundRect, const double* pMap )
 {
-    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const Point aCenter( rSnapRect.Center() );
     double fExtrusionBackward, fExtrusionForward;
     GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );

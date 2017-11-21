@@ -876,14 +876,14 @@ bool Svx3DLightControl::GetLightOnOff(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
-            case 1 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
-            case 2 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
-            case 3 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
-            case 4 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
-            case 5 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
-            case 6 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
-            case 7 : return static_cast<const SfxBoolItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
+            case 0 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_1).GetValue();
+            case 1 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_2).GetValue();
+            case 2 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_3).GetValue();
+            case 3 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_4).GetValue();
+            case 4 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_5).GetValue();
+            case 5 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_6).GetValue();
+            case 6 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_7).GetValue();
+            case 7 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_8).GetValue();
         }
     }
 
@@ -898,14 +898,14 @@ Color Svx3DLightControl::GetLightColor(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
-            case 1 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
-            case 2 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
-            case 3 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
-            case 4 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
-            case 5 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
-            case 6 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
-            case 7 : return static_cast<const SvxColorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
+            case 0 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1).GetValue();
+            case 1 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2).GetValue();
+            case 2 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3).GetValue();
+            case 3 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4).GetValue();
+            case 4 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5).GetValue();
+            case 5 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6).GetValue();
+            case 6 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7).GetValue();
+            case 7 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8).GetValue();
         }
     }
 
@@ -920,14 +920,14 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
-            case 1 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
-            case 2 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
-            case 3 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
-            case 4 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
-            case 5 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
-            case 6 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
-            case 7 : return static_cast<const SvxB3DVectorItem&>(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
+            case 0 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1).GetValue();
+            case 1 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2).GetValue();
+            case 2 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3).GetValue();
+            case 3 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4).GetValue();
+            case 4 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5).GetValue();
+            case 5 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6).GetValue();
+            case 6 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7).GetValue();
+            case 7 : return aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8).GetValue();
         }
     }
 

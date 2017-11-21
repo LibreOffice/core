@@ -175,8 +175,8 @@ bool lcl_IsFontwork( const SdrObject* pObj )
     if( pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
     {
         const OUString aTextPath = "TextPath";
-        const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
-            pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+        const SdrCustomShapeGeometryItem& rGeometryItem =
+            pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         if( const Any* pAny = rGeometryItem.GetPropertyValueByName( aTextPath, aTextPath ) )
             *pAny >>= bIsFontwork;
     }

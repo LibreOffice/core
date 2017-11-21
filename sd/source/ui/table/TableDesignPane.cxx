@@ -477,7 +477,7 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
             maTextColor.SetColor( COL_TRANSPARENT );
 
         // get border
-        const SvxBoxItem* pBoxItem = dynamic_cast<const SvxBoxItem*>(rSet.GetItem( SDRATTR_TABLE_BORDER ) );
+        const SvxBoxItem* pBoxItem = rSet.GetItem( SDRATTR_TABLE_BORDER );
         if( pBoxItem )
             maBorder = *pBoxItem;
     }
