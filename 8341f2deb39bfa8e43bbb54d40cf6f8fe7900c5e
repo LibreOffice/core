@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f51ec8b9",
+        "filename": "ucb/source/core/ucbcmds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2017-11-21T15:53:42Z",
+      "side": 1,
+      "message": "There is a !! here",
+      "revId": "8341f2deb39bfa8e43bbb54d40cf6f8fe7900c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_151c34c0",
+        "filename": "ucb/source/core/ucbcmds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2017-11-21T15:53:42Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "8341f2deb39bfa8e43bbb54d40cf6f8fe7900c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
