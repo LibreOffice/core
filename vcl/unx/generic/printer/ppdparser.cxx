@@ -269,7 +269,7 @@ public:
     ~PPDDecompressStream();
 
     bool IsOpen() const;
-    bool IsEof() const;
+    bool eof() const;
     OString ReadLine();
     void Open( const OUString& i_rFile );
     void Close();
@@ -345,9 +345,9 @@ bool PPDDecompressStream::IsOpen() const
     return (mpMemStream || (mpFileStream && mpFileStream->IsOpen()));
 }
 
-bool PPDDecompressStream::IsEof() const
+bool PPDDecompressStream::eof() const
 {
-    return ( mpMemStream ? mpMemStream->IsEof() : ( mpFileStream == nullptr || mpFileStream->IsEof() ) );
+    return ( mpMemStream ? mpMemStream->eof() : ( mpFileStream == nullptr || mpFileStream->eof() ) );
 }
 
 OString PPDDecompressStream::ReadLine()
@@ -726,7 +726,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
     if( aStream.IsOpen() )
     {
         bool bLanguageEncoding = false;
-        while( ! aStream.IsEof() )
+        while( ! aStream.eof() )
         {
             OString aCurLine = aStream.ReadLine();
             if( aCurLine.startsWith("*") )

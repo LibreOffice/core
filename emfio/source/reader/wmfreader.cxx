@@ -1367,10 +1367,10 @@ namespace emfio
                       || (mnRecSize == 3
                          && nFunction == 0
                          )
-                      || mpInputStream->IsEof()
+                      || mpInputStream->eof()
                       )
                     {
-                        if( mpInputStream->IsEof() )
+                        if( mpInputStream->eof() )
                             mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
 
                         break;
@@ -1480,7 +1480,7 @@ namespace emfio
                 {
                     break;
                 }
-                else if ( nRSize < 3 || pStm->IsEof() )
+                else if ( nRSize < 3 || pStm->eof() )
                 {
                     pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     bRet = false;

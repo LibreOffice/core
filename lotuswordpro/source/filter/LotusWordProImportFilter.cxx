@@ -62,7 +62,7 @@ bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< css::beans::
     }
 
     SvFileStream inputStream( sURL, StreamMode::READ );
-    if ( inputStream.IsEof() || ( inputStream.GetError() != ERRCODE_NONE ) )
+    if ( inputStream.eof() || ( inputStream.GetError() != ERRCODE_NONE ) )
          return false;
 
     // An XML import service: what we push sax messages to..

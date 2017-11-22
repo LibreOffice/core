@@ -3139,23 +3139,23 @@ void SbRtl_EOF(StarBASIC *, SbxArray & rPar, bool)
             StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
             return;
         }
-        bool bIsEof;
+        bool beof;
         SvStream* pSvStrm = pSbStrm->GetStrm();
         if ( pSbStrm->IsText() )
         {
             char cBla;
             (*pSvStrm).ReadChar( cBla ); // can we read another character?
-            bIsEof = pSvStrm->IsEof();
-            if ( !bIsEof )
+            beof = pSvStrm->eof();
+            if ( !beof )
             {
                 pSvStrm->SeekRel( -1 );
             }
         }
         else
         {
-            bIsEof = pSvStrm->IsEof();  // for binary data!
+            beof = pSvStrm->eof();  // for binary data!
         }
-        rPar.Get(0)->PutBool( bIsEof );
+        rPar.Get(0)->PutBool( beof );
     }
 }
 

@@ -1069,7 +1069,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
         pStream->ReadUInt32( nVal );
         sal_uInt8 cRecTyp = (sal_uInt8)nVal;
         if( !nVal || cRecTyp != cType ||
-            pStream->GetErrorCode() != ERRCODE_NONE || pStream->IsEof() )
+            pStream->GetErrorCode() != ERRCODE_NONE || pStream->eof() )
         {
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
             OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );

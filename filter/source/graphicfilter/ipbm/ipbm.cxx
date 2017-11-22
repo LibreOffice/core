@@ -281,7 +281,7 @@ bool PBMReader::ImplReadBody()
             case 0 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mrPBM.IsEof() || mrPBM.GetError() )
+                    if ( mrPBM.eof() || mrPBM.GetError() )
                         return false;
 
                     if ( --nShift < 0 )
@@ -303,7 +303,7 @@ bool PBMReader::ImplReadBody()
             case 1 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mrPBM.IsEof() || mrPBM.GetError() )
+                    if ( mrPBM.eof() || mrPBM.GetError() )
                         return false;
 
                     mrPBM.ReadUChar( nDat );
@@ -321,7 +321,7 @@ bool PBMReader::ImplReadBody()
             case 2 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mrPBM.IsEof() || mrPBM.GetError() )
+                    if ( mrPBM.eof() || mrPBM.GetError() )
                         return false;
 
                     sal_uInt8   nR, nG, nB;
@@ -346,7 +346,7 @@ bool PBMReader::ImplReadBody()
         case 0 :
             while ( !bFinished )
             {
-                if ( mrPBM.IsEof() || mrPBM.GetError() )
+                if ( mrPBM.eof() || mrPBM.GetError() )
                     return false;
 
                 mrPBM.ReadUChar( nDat );
@@ -405,7 +405,7 @@ bool PBMReader::ImplReadBody()
                     continue;
                 }
 
-                if ( mrPBM.IsEof() || mrPBM.GetError() )
+                if ( mrPBM.eof() || mrPBM.GetError() )
                     return false;
 
                 mrPBM.ReadUChar( nDat );
@@ -478,7 +478,7 @@ bool PBMReader::ImplReadBody()
                     continue;
                 }
 
-                if ( mrPBM.IsEof() || mrPBM.GetError() )
+                if ( mrPBM.eof() || mrPBM.GetError() )
                     return false;
 
                 mrPBM.ReadUChar( nDat );

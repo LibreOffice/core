@@ -1234,7 +1234,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     nMaxPos = std::max(nOrigPos + nOffset + DataTypeSize() * nDataLen, nMaxPos);
             }
             pTIFF->ReadUInt32( nOffset );
-            if ( pTIFF->IsEof() )
+            if ( pTIFF->eof() )
                 nOffset = 0;
 
             nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
@@ -1325,7 +1325,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         break;
                 }
                 pTIFF->ReadUInt32( nNextIfd );
-                if ( pTIFF->IsEof() )
+                if ( pTIFF->eof() )
                     nNextIfd = 0;
             }
             if ( !nBitsPerSample || ( nBitsPerSample > 32 ) )

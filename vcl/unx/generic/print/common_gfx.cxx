@@ -1067,7 +1067,7 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
     OString aDocTitle;
     double fLeft = 0, fRight = 0, fTop = 0, fBottom = 0;
     bool bEndComments = false;
-    while( ! aStream.IsEof()
+    while( ! aStream.eof()
            && ( ( fLeft == 0 && fRight == 0 && fTop == 0 && fBottom == 0 ) ||
                 ( aDocTitle.isEmpty() && !bEndComments ) )
            )

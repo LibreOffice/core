@@ -193,14 +193,14 @@ sal_uInt32 SvParser<T>::GetNextChar()
         bool bSeekBack = true;
 
         rInput.ReadUChar( c1 );
-        bErr = rInput.IsEof() || rInput.GetError();
+        bErr = rInput.eof() || rInput.GetError();
         if( !bErr )
         {
             if( 0xff == c1 || 0xfe == c1 )
             {
                 unsigned char c2;
                 rInput.ReadUChar( c2 );
-                bErr = rInput.IsEof() || rInput.GetError();
+                bErr = rInput.eof() || rInput.GetError();
                 if( !bErr )
                 {
                     if( 0xfe == c1 && 0xff == c2 )
@@ -221,14 +221,14 @@ sal_uInt32 SvParser<T>::GetNextChar()
             {
                 unsigned char c2;
                 rInput.ReadUChar( c2 );
-                bErr = rInput.IsEof() || rInput.GetError();
+                bErr = rInput.eof() || rInput.GetError();
                 if( !bErr )
                 {
                     if( ( 0xef == c1 && 0xbb == c2 ) || ( 0xbb == c1 && 0xef == c2 ) )
                     {
                         unsigned char c3(0);
                         rInput.ReadUChar( c3 );
-                        bErr = rInput.IsEof() || rInput.GetError();
+                        bErr = rInput.eof() || rInput.GetError();
                         if( !bErr && ( 0xbf == c3 ) )
                         {
                             SetSrcEncoding(RTL_TEXTENCODING_UTF8);
@@ -253,12 +253,12 @@ sal_uInt32 SvParser<T>::GetNextChar()
 
         rInput.ReadUChar( c1 ).ReadUChar( c2 );
         if( 2 == rInput.Tell() &&
-            !(rInput.IsEof() || rInput.GetError()) &&
+            !(rInput.eof() || rInput.GetError()) &&
             ( (bUCS2BSrcEnc && 0xfe == c1 && 0xff == c2) ||
               (!bUCS2BSrcEnc && 0xff == c1 && 0xfe == c2) ) )
             rInput.ReadUChar( c1 ).ReadUChar( c2 );
 
-        bErr = rInput.IsEof() || rInput.GetError();
+        bErr = rInput.eof() || rInput.GetError();
         if( !bErr )
         {
             if( bUCS2BSrcEnc )
@@ -279,7 +279,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
         {
             sal_Char c1;    // signed, that's the text converter expects
             rInput.ReadChar( c1 );
-            bErr = rInput.IsEof() || rInput.GetError();
+            bErr = rInput.eof() || rInput.GetError();
             if( !bErr )
             {
                 if (
@@ -315,7 +315,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                             while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0 )
                             {
                                 rInput.ReadChar( c1 );
-                                bErr = rInput.IsEof() || rInput.GetError();
+                                bErr = rInput.eof() || rInput.GetError();
                                 if( bErr )
                                     break;
 
@@ -361,7 +361,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                                     nLen < 10 )
                             {
                                 rInput.ReadChar( c1 );
-                                bErr = rInput.IsEof() || rInput.GetError();
+                                bErr = rInput.eof() || rInput.GetError();
                                 if( bErr )
                                     break;
 

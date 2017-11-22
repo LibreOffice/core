@@ -1016,7 +1016,7 @@ static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
             sal_uInt8 aByte;
             pStrm->ReadUChar( aByte );
 
-            if( bBinary && SbiRuntime::isVBAEnabled() && aByte == 1 && pStrm->IsEof() )
+            if( bBinary && SbiRuntime::isVBAEnabled() && aByte == 1 && pStrm->eof() )
             {
                 aByte = 0;
             }

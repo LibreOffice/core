@@ -546,7 +546,7 @@ ErrCode SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
         rBuf = aBuffer.makeStringAndClear();
     }
     MapError();
-    if( !nError && pStrm->IsEof() )
+    if( !nError && pStrm->eof() )
     {
         nError = ERRCODE_BASIC_READ_PAST_EOF;
     }

@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_In
     if (nMaxBytesToRead < 0)
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
-    if (m_pSvStream->IsEof())
+    if (m_pSvStream->eof())
     {
         aData.realloc(0);
         return 0;

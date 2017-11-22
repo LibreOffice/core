@@ -413,7 +413,7 @@ bool GIFReader::ReadExtension()
         if ( bOverreadDataBlocks )
         {
             bRet = true;
-            while( cSize && bStatus && !rIStm.IsEof() )
+            while( cSize && bStatus && !rIStm.eof() )
             {
                 sal_uInt16 nCount = (sal_uInt16) cSize + 1;
                 const sal_uInt64 nMaxPossible = rIStm.remainingSize();
@@ -491,7 +491,7 @@ sal_uLong GIFReader::ReadNextBlock()
 
     rIStm.ReadUChar( cBlockSize );
 
-    if ( rIStm.IsEof() )
+    if ( rIStm.eof() )
         nRet = 4;
     else if ( NO_PENDING( rIStm ) )
     {
@@ -717,7 +717,7 @@ bool GIFReader::ProcessGIF()
 
             rIStm.ReadUChar( cByte );
 
-            if( rIStm.IsEof() )
+            if( rIStm.eof() )
                 eActAction = END_READING;
             else if( NO_PENDING( rIStm ) )
             {
@@ -775,7 +775,7 @@ bool GIFReader::ProcessGIF()
 
             rIStm.ReadUChar( cDataSize );
 
-            if( rIStm.IsEof() )
+            if( rIStm.eof() )
                 eActAction = ABORT_READING;
             else if( cDataSize > 12 )
                 bStatus = false;

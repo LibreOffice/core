@@ -172,7 +172,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& a
     if (nMaxBytesToRead < 0)
         throw BufferSizeExceededException(OUString(),static_cast<XWeak*>(this));
 
-    if (m_pSvStream->IsEof())
+    if (m_pSvStream->eof())
     {
         aData.realloc(0);
         return 0;

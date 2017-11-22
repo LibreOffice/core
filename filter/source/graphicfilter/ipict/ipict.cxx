@@ -1213,7 +1213,7 @@ void PictReader::ReadHeader()
           // a small test to check if versionOp code exists after the bdbox ( with no extra NOP codes)
           pPict->Seek(nOffset+10);
           pPict->ReadBytes(sBuf, 2);
-          if (pPict->IsEof() || pPict->GetError()) break;
+          if (pPict->eof() || pPict->GetError()) break;
           if (sBuf[0] == 0x11 || (sBuf[0] == 0x00 && sBuf[1] == 0x11)) ; // maybe ok
           else continue;
         }
@@ -1231,7 +1231,7 @@ void PictReader::ReadHeader()
         if (st >= 3 && actualConfid != 20) continue;
         aBoundingRect=tools::Rectangle( x1,y1, x2, y2 );
 
-        if (pPict->IsEof() || pPict->GetError()) continue;
+        if (pPict->eof() || pPict->GetError()) continue;
         // read version
         pPict->ReadBytes(sBuf, 2);
         // version 1 file
@@ -1250,7 +1250,7 @@ void PictReader::ReadHeader()
           }
         while ( sBuf[0] == 0x00 && numZero < 10);
         actualConfid -= (numZero-1); // extra nop are dubious
-        if (pPict->IsEof() || pPict->GetError()) continue;
+        if (pPict->eof() || pPict->GetError()) continue;
         if (sBuf[0] != 0x11) continue; // not a version opcode
         // abnormal version 1 file
         if (sBuf[1] == 0x01 ) {
@@ -1265,7 +1265,7 @@ void PictReader::ReadHeader()
         // 3 Bytes ignored : end of version arg 0x02FF (ie: 0xFF), HeaderOp : 0x0C00
         pPict->SeekRel( 3 );
         pPict->ReadInt16( nExtVer ).ReadInt16( nReserved );
-        if (pPict->IsEof() || pPict->GetError()) continue;
+        if (pPict->eof() || pPict->GetError()) continue;
 
         if ( nExtVer == -2 ) // extended version 2 picture
           {
@@ -1960,7 +1960,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
         if (pPict->GetError())
             break;
 
-        if (pPict->IsEof())
+        if (pPict->eof())
         {
             pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
             break;

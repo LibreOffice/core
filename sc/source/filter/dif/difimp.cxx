@@ -546,7 +546,7 @@ DATASET DifParser::GetNextDataset()
                         while ( bContinue )
                         {
                             aData = aData + "\n";
-                            bContinue = !rIn.IsEof() && ReadNextLine( aLine );
+                            bContinue = !rIn.eof() && ReadNextLine( aLine );
                             if( bContinue )
                             {
                                 nLineLength = aLine.getLength();
@@ -576,7 +576,7 @@ DATASET DifParser::GetNextDataset()
     if( eRet == D_UNKNOWN )
         ReadNextLine( aLine );
 
-    if( rIn.IsEof() )
+    if( rIn.eof() )
         eRet = D_EOD;
 
     return eRet;

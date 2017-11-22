@@ -6774,7 +6774,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
 
         nBytesRead += 6 * sizeof( sal_uInt32 ) + nStrLen + nDataLen;
 
-        if( !rStm.IsEof() && nReadLen > nBytesRead && nDataLen )
+        if( !rStm.eof() && nReadLen > nBytesRead && nDataLen )
         {
             if( xOle10Stm.is() )
             {
@@ -6828,7 +6828,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             else
                 rStm.SeekRel( nDataLen );
         }
-    } while( !rStm.IsEof() && nReadLen >= nBytesRead );
+    } while( !rStm.eof() && nReadLen >= nBytesRead );
 
     if( !bMtfRead && pMtf )
     {

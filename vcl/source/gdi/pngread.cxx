@@ -263,7 +263,7 @@ bool PNGReaderImpl::ReadNextChunk()
         // get the next chunk from the stream
 
         // unless we are at the end of the PNG stream
-        if( mrPNGStream.IsEof() || (mrPNGStream.GetError() != ERRCODE_NONE) )
+        if( mrPNGStream.eof() || (mrPNGStream.GetError() != ERRCODE_NONE) )
             return false;
         if( !maChunkSeq.empty() && (maChunkSeq.back().nType == PNGCHUNK_IEND) )
             return false;
@@ -289,7 +289,7 @@ bool PNGReaderImpl::ReadNextChunk()
         sal_uInt32 nCRC32 = rtl_crc32( 0, &nChunkType, 4 );
 
         // read the chunk data and check the CRC
-        if( mnChunkLen && !mrPNGStream.IsEof() )
+        if( mnChunkLen && !mrPNGStream.eof() )
         {
             rChunkData.aData.resize( mnChunkLen );
 

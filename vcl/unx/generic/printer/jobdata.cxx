@@ -211,7 +211,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
     const char pslevelEquals[] = "pslevel=";
     const char pdfdeviceEquals[] = "pdfdevice=";
 
-    while( ! aStream.IsEof() )
+    while( ! aStream.eof() )
     {
         aStream.ReadLine( aLine );
         if (aLine.startsWith("JobData"))
