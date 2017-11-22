@@ -20,7 +20,6 @@
 #include <com/sun/star/util/CellProtection.hpp>
 
 #include <scitems.hxx>
-#include <android/compatibility.hxx>
 
 #include <editeng/eeitem.hxx>
 

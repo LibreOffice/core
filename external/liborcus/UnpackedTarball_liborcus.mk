@@ -26,11 +26,5 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/windows-constants-hack.patch \
 ))
 endif
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
-	external/liborcus/android-workaround.patch \
-))
-endif
-
 
 # vim: set noet sw=4 ts=4:

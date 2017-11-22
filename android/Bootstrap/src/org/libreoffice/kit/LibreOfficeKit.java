@@ -107,6 +107,7 @@ class NativeLibLoader {
         protected static synchronized void load() {
             if (done)
                 return;
+            System.loadLibrary("c++_shared");
             System.loadLibrary("nspr4");
             System.loadLibrary("plds4");
             System.loadLibrary("plc4");
