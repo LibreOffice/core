@@ -28,6 +28,7 @@
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <vector>
 
 // forward-declarations
@@ -92,7 +93,7 @@ public:
     void                DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
-class IconChoiceDialog : public ModalDialog
+class IconChoiceDialog : public SfxModalDialog
 {
 private:
     friend class IconChoicePage;

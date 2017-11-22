@@ -34,6 +34,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -430,6 +431,7 @@ const char* ImplDbgCheckWindow( const void* pObj );
 
 namespace vcl { class Window; }
 namespace vcl { class Cursor; }
+namespace vcl { class ILibreOfficeKitNotifier; }
 class Dialog;
 class WindowImpl;
 class PaintHelper;
@@ -1066,6 +1068,7 @@ public:
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
+    virtual void                        LogicInvalidate(const tools::Rectangle* pRectangle) override;
     void                                Validate();
     bool                                HasPaintEvent() const;
     void                                Update();
@@ -1202,6 +1205,32 @@ public:
                                         GetComponentInterface( bool bCreate = true );
 
     void                        SetComponentInterface( css::uno::Reference< css::awt::XWindowPeer > const & xIFace );
+
+    /// Interface to register for dialog / window tunneling.
+    void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier);
+    const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
+    vcl::LOKWindowId                    GetLOKWindowId() const;
+
+    /// Indicate that LOK is not going to use this dialog any more.
+    void                                ReleaseLOKNotifier();
+
+    /// Find an existing Window based on the LOKWindowId.
+    static VclPtr<Window>               FindLOKWindow(vcl::LOKWindowId nWindowId);
+
+    /// Dialog / window tunneling related methods.
+    virtual void paintDialog(VirtualDevice& rDevice);
+    Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
+
+    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
+    void LogicMouseMove(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonDownChild(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonUpChild(const MouseEvent& rMouseEvent);
+    void LogicMouseMoveChild(const MouseEvent& rMouseEvent);
+
+    void LOKKeyInput(const KeyEvent& rKeyEvent);
+    void LOKKeyUp(const KeyEvent& rKeyEvent);
+    void LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload);
 
     /** @name Accessibility
      */

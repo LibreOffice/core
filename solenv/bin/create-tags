@@ -7,11 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ctags=ctags
-if test "$1" = "-e"; then
-    ctags=etags
-fi
-
+ctags="ctags $@"
 saloptions="-ISAL_DELETED_FUNCTION -ISAL_OVERRIDE -ISAL_FINAL"
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 

@@ -57,8 +57,6 @@ private:
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;
 
-    vcl::IDialogRenderable*   mpDialogRenderable; // to emit LOK callbacks
-
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
     SAL_DLLPRIVATE VclPtr<vcl::Window> AddBorderWindow(vcl::Window* pParent, WinBits nBits);
@@ -73,31 +71,15 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
-    OUString               maID; // Dialog ID (UNO name) for this dialog (set
-                                 // and used by LOK for now)
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     virtual        void    doDeferredInit(WinBits nBits) override;
-    virtual        void    LogicInvalidate(const tools::Rectangle* pRectangle) override;
                    void    InvalidateFloatingWindow(const Point& rPos);
                    void    CloseFloatingWindow();
-                   Size    PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
 
-    /// Necessary to register dialog renderable instance to emit LOK callbacks
-    void registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable, const OUString& aDialogId);
     /// Paints the current dialog to the given virtual device
-    void paintDialog(VirtualDevice& rDevice);
-    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
-    void LogicMouseMove(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonDownChild(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonUpChild(const MouseEvent& rMouseEvent);
-    void LogicMouseMoveChild(const MouseEvent& rMouseEvent);
-
-    void LOKKeyInput(const KeyEvent& rKeyEvent);
-    void LOKKeyUp(const KeyEvent& rKeyEvent);
-    void LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload);
+    void paintDialog(VirtualDevice& rDevice) override;
 
 protected:
     explicit        Dialog( WindowType nType );

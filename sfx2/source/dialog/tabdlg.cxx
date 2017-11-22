@@ -21,11 +21,9 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <algorithm>
-#include <vcl/builder.hxx>
-#include <vcl/msgbox.hxx>
-#include <unotools/viewoptions.hxx>
 
 #include <appdata.hxx>
+#include <comphelper/lok.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -36,8 +34,12 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/itemconnect.hxx>
-
+#include <sfx2/viewsh.hxx>
 #include <uitest/sfx_uiobject.hxx>
+#include <unotools/viewoptions.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/IDialogRenderable.hxx>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>
@@ -401,6 +403,13 @@ void SfxTabDialog::dispose()
     m_pBaseFmtBtn.clear();
     m_pActionArea.clear();
 
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        pViewShell->notifyWindow(GetLOKWindowId(), "close");
+        ReleaseLOKNotifier();
+    }
+
     TabDialog::dispose();
 }
 
@@ -508,6 +517,17 @@ short SfxTabDialog::Execute()
     if ( !m_pTabCtrl->GetPageCount() )
         return RET_CANCEL;
     Start_Impl();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        SetLOKNotifier(pViewShell);
+        const Size aSize = GetOptimalSize();
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", aSize.toString()));
+        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+    }
+
     return TabDialog::Execute();
 }
 

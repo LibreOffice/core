@@ -34,6 +34,8 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <sfx2/shell.hxx>
 #include <tools/gen.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -140,7 +142,7 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
-class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell
+class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::ILibreOfficeKitNotifier
 {
 friend class SfxViewFrame;
 friend class SfxBaseController;
@@ -218,6 +220,10 @@ public:
 
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
+
+    // ILibreOfficeKitNotifier
+    virtual void                notifyWindow(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
+    virtual void                notifyWindowChild(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const Point& rPos) const override;
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );

@@ -53,9 +53,11 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <salframe.hxx>
 
 #include <iostream>
+#include <utility>
 
 static OString ImplGetDialogText( Dialog* pDialog )
 {
@@ -346,7 +348,6 @@ struct DialogImpl
 
 void Dialog::ImplInitDialogData()
 {
-    mpDialogRenderable = nullptr;
     mpWindowImpl->mbDialog  = true;
     mpPrevExecuteDlg        = nullptr;
     mbInExecute             = false;
@@ -594,11 +595,6 @@ void Dialog::dispose()
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogClosed");
 
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable)
-    {
-        mpDialogRenderable->notifyDialog(maID, "close");
-    }
-
     SystemWindow::dispose();
 }
 
@@ -696,6 +692,15 @@ void Dialog::StateChanged( StateChangedType nType )
 
         ImplMouseAutoPos( this );
     }
+    else if (nType == StateChangedType::Text)
+    {
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            std::vector<vcl::LOKPayloadItem> aPayload;
+            aPayload.push_back(std::make_pair(OString("title"), GetText().toUtf8()));
+            pNotifier->notifyWindow(GetLOKWindowId(), "title_changed", aPayload);
+        }
+    }
 
     SystemWindow::StateChanged( nType );
 
@@ -789,6 +794,9 @@ bool Dialog::ImplStartExecuteModal()
     case Application::DialogCancelMode::Off:
         break;
     case Application::DialogCancelMode::Silent:
+        if (GetLOKNotifier())
+            break;
+
         SAL_INFO(
             "vcl",
             "Dialog \"" << ImplGetDialogText(this)
@@ -874,15 +882,6 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
-void Dialog::registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable, const OUString& aDialogId)
-{
-    if (pDialogRenderable && !mpDialogRenderable)
-    {
-        mpDialogRenderable = pDialogRenderable;
-        maID = aDialogId;
-    }
-}
-
 void Dialog::paintDialog(VirtualDevice& rDevice)
 {
     setDeferredProperties();
@@ -894,139 +893,16 @@ void Dialog::paintDialog(VirtualDevice& rDevice)
     PaintToDevice(&rDevice, Point(0, 0), Size());
 }
 
-Size Dialog::PaintActiveFloatingWindow(VirtualDevice& rDevice) const
-{
-    Size aRet;
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat)
-    {
-        // TODO:: run a while loop here and check all the active floating
-        // windows ( chained together, cf. pFirstFloat->mpNextFloat )
-        // For now just assume that the active floating window is the one we
-        // want to render
-        if (pFirstFloat->GetParentDialog() == this)
-        {
-            pFirstFloat->PaintToDevice(&rDevice, Point(0, 0), Size());
-            aRet = ::isLayoutEnabled(pFirstFloat) ? pFirstFloat->get_preferred_size() : pFirstFloat->GetSizePixel();
-        }
-
-        pFirstFloat = nullptr;
-    }
-
-    return aRet;
-}
-
-void Dialog::LogicMouseButtonDownChild(const MouseEvent& rMouseEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
-    {
-        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
-    }
-}
-
-void Dialog::LogicMouseButtonUpChild(const MouseEvent& rMouseEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
-    {
-        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
-    }
-}
-
-void Dialog::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
-    {
-        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
-    }
-}
-
 void Dialog::InvalidateFloatingWindow(const Point& rPos)
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable && !maID.isEmpty())
-    {
-        mpDialogRenderable->notifyDialogChild(maID, "invalidate", rPos);
-    }
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        pNotifier->notifyWindowChild(GetLOKWindowId(), "invalidate", rPos);
 }
 
 void Dialog::CloseFloatingWindow()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable && !maID.isEmpty())
-    {
-        mpDialogRenderable->notifyDialogChild(maID, "close", Point(0, 0));
-    }
-}
-
-void Dialog::LogicInvalidate(const tools::Rectangle* pRectangle)
-{
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
-    {
-        std::vector<vcl::LOKPayloadItem> aPayload;
-        if (pRectangle)
-            aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
-
-        mpDialogRenderable->notifyDialog(maID, "invalidate", aPayload);
-    }
-}
-
-void Dialog::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
-}
-
-void Dialog::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
-}
-
-void Dialog::LogicMouseMove(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
-}
-
-void Dialog::LOKKeyInput(const KeyEvent& rKeyEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(this, SalEvent::ExternalKeyInput, &rKeyEvent);
-}
-
-void Dialog::LOKKeyUp(const KeyEvent& rKeyEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(this, SalEvent::ExternalKeyUp, &rKeyEvent);
-}
-
-void Dialog::LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
-    {
-        mpDialogRenderable->notifyDialog(maID, rAction, rPayload);
-    }
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        pNotifier->notifyWindowChild(GetLOKWindowId(), "close", Point(0, 0));
 }
 
 void Dialog::ensureRepaint()
@@ -1345,10 +1221,14 @@ void Dialog::Resize()
 {
     SystemWindow::Resize();
 
-    // inform LOK clients
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
-        mpDialogRenderable->notifyDialog(maID, "invalidate");
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", GetOptimalSize().toString()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
     }
 }
 

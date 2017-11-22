@@ -160,7 +160,30 @@ void SfxModalDialog::dispose()
 {
     SetDialogData_Impl();
     delete pOutputSet;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        pViewShell->notifyWindow(GetLOKWindowId(), "close");
+        ReleaseLOKNotifier();
+    }
+
     ModalDialog::dispose();
+}
+
+short SfxModalDialog::Execute()
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        SetLOKNotifier(pViewShell);
+        const Size aSize = GetOptimalSize();
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", aSize.toString()));
+        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+    }
+
+    return ModalDialog::Execute();
 }
 
 void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
@@ -219,6 +242,18 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 
                 SetPosPixel( aPos );
             }
+        }
+
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+        {
+            SetLOKNotifier(pViewShell);
+            // Below method doesn't really give the exact dimensions,
+            // Check GetSizePixel() ?
+            const Size aOptimalSize = GetOptimalSize();
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back(std::make_pair("size", aOptimalSize.toString()));
+            pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
 
         pImpl->bConstructed = true;
@@ -352,6 +387,14 @@ void SfxModelessDialog::dispose()
     if ( pImpl->pMgr->GetFrame().is() && pImpl->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( nullptr );
     pImpl.reset();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        pViewShell->notifyWindow(GetLOKWindowId(), "close");
+        ReleaseLOKNotifier();
+    }
+
     ModelessDialog::dispose();
 }
 
