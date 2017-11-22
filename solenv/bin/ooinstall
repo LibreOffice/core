@@ -88,11 +88,14 @@ if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {
 
 print "Running LibreOffice installer\n";
 
+my $PRODUCTNAME_no_spaces = $ENV{PRODUCTNAME};
+$PRODUCTNAME_no_spaces =~ s/ //g;
+
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
         "perl " .
         (scalar keys(%DB::sub) ? "-d " : "") .
         "-w $ENV{SRCDIR}/solenv/bin/make_installer.pl " .
-        "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p LibreOffice " .
+        "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p $PRODUCTNAME_no_spaces " .
         "-u $tmp_dir " .
         "-buildid $BUILD $destdir $strip $msi " .
         "-simple $path") && die "Failed to install: $!";
