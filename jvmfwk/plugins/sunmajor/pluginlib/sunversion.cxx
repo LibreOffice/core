@@ -85,7 +85,7 @@ bool SunVersion::init(const char *szVersion)
         }
         //if  correct separator then form integer
         else if (
-            ! (nPartPos == 0) // prevents: ".4.1", "..1", part must start with digit
+            (nPartPos != 0) // prevents: ".4.1", "..1", part must start with digit
             && (
                 //separators after maintenance (1.4.1_01, 1.4.1-beta, or 1.4.1)
                 (pCur == pEnd || *pCur == '_' || *pCur == '-')

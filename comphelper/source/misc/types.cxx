@@ -137,7 +137,7 @@ Type getSequenceElementType(const Type& _rSequenceType)
     OSL_ENSURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,
                 "getSequenceElementType: must be called with a  sequence type!");
 
-    if (!(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE))
+    if (_rSequenceType.getTypeClass() != TypeClass_SEQUENCE)
         return Type();
 
     TypeDescription aTD(_rSequenceType);

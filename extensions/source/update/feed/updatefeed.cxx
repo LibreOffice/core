@@ -227,7 +227,7 @@ public:
         OSL_ASSERT( m_xNodeList.is() );
         OSL_ASSERT( m_xUpdateInformationProvider.is() );
 
-        if( !(m_nCount < m_nNodes ) )
+        if( m_nCount >= m_nNodes )
             throw container::NoSuchElementException(OUString::number(m_nCount), *this);
 
         try

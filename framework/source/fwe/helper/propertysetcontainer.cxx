@@ -105,7 +105,7 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard g;
 
-    if ( !((sal_Int32)m_aPropertySetVector.size() > nIndex) )
+    if ( (sal_Int32)m_aPropertySetVector.size() <= nIndex )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     m_aPropertySetVector.erase(m_aPropertySetVector.begin() +  nIndex);
@@ -114,7 +114,7 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 // XIndexReplace
 void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
 {
-    if ( !((sal_Int32)m_aPropertySetVector.size() > Index) )
+    if ( (sal_Int32)m_aPropertySetVector.size() <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     Reference< XPropertySet > aPropertySetElement;

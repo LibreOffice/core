@@ -1120,7 +1120,7 @@ void ScViewData::ResetOldCursor()
 
 SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
 {
-    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
         return -1;
 
     return maTabData[nTabIndex]->nCurX;
@@ -1128,7 +1128,7 @@ SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
 
 SCROW ScViewData::GetCurYForTab( SCTAB nTabIndex ) const
 {
-    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
             return -1;
 
     return maTabData[nTabIndex]->nCurY;
@@ -1136,7 +1136,7 @@ SCROW ScViewData::GetCurYForTab( SCTAB nTabIndex ) const
 
 void ScViewData::SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex )
 {
-    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
             return;
 
     maTabData[nTabIndex]->nCurX = nNewCurX;
@@ -1144,7 +1144,7 @@ void ScViewData::SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex )
 
 void ScViewData::SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex )
 {
-    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
             return;
 
     maTabData[nTabIndex]->nCurY = nNewCurY;
@@ -1853,7 +1853,7 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
 
 ScPositionHelper* ScViewData::GetLOKWidthHelper(SCTAB nTabIndex)
 {
-    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
     {
         return nullptr;
     }
@@ -1862,7 +1862,7 @@ ScPositionHelper* ScViewData::GetLOKWidthHelper(SCTAB nTabIndex)
 
 ScPositionHelper* ScViewData::GetLOKHeightHelper(SCTAB nTabIndex)
 {
-    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
     {
         return nullptr;
     }

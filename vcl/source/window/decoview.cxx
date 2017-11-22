@@ -531,7 +531,7 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
 
         ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
 
-        if ( !((nStyle & BUTTON_DRAW_FLATTEST) == DrawButtonFlags::Flat) )
+        if ( (nStyle & BUTTON_DRAW_FLATTEST) != DrawButtonFlags::Flat )
         {
             if ( nStyle & (DrawButtonFlags::Pressed | DrawButtonFlags::Checked) )
             {

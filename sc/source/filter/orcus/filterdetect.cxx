@@ -75,7 +75,7 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
     while(!bEnd)
     {
         sal_Int32 nReadBytes = xInputStream->readBytes(aSeq, nBytes);
-        bEnd = !(nReadBytes == nBytes);
+        bEnd = (nReadBytes != nBytes);
         aContent.append(reinterpret_cast<const char*>(aSeq.getConstArray()), nReadBytes);
     }
 

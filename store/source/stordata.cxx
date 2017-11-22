@@ -218,7 +218,7 @@ storeError OStoreIndirectionPageObject::read (
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
-    if (!(nSingle < nLimit))
+    if (nSingle >= nLimit)
         return store_E_InvalidAccess;
 
     // Obtain data page location.
@@ -308,7 +308,7 @@ storeError OStoreIndirectionPageObject::write (
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
-    if (!(nSingle < nLimit))
+    if (nSingle >= nLimit)
         return store_E_InvalidAccess;
 
     // Obtain data page location.
@@ -416,7 +416,7 @@ storeError OStoreIndirectionPageObject::truncate (
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
-    if (!(nSingle < nLimit))
+    if (nSingle >= nLimit)
         return store_E_InvalidAccess;
 
     // Truncate.

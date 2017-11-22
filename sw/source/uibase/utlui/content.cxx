@@ -1379,7 +1379,7 @@ void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                 assert(!pChild || lcl_IsContentType(pChild) || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pChild->GetUserData())));
                                 while(pChild &&
                                         lcl_IsContent(pChild) &&
-                                        !(static_cast<SwOutlineContent*>(pChild->GetUserData())->GetOutlineLevel() < nLevel)
+                                        (static_cast<SwOutlineContent*>(pChild->GetUserData())->GetOutlineLevel() >= nLevel)
                                     )
                                 {
                                     pChild = Prev(pChild);

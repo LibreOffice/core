@@ -611,7 +611,7 @@ inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rN
             nCurrentPos = writeSequence();
 
         if (!writeString(xAttribs->getValueByIndex( i ), true, true) &&
-            !(eRet == SAX_ERROR))
+            eRet != SAX_ERROR)
             eRet = SAX_WARNING;
 
         mp_Sequence[nCurrentPos] = '"';

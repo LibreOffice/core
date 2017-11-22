@@ -1802,7 +1802,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         SwTextAttr * const pHt = m_pSwpHints->Get(n);
 
         const sal_Int32 nAttrStartIdx = pHt->GetStart();
-        if (!( nAttrStartIdx < nEnd))
+        if ( nAttrStartIdx >= nEnd )
             break;
 
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
@@ -2163,7 +2163,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     {
         SwTextAttr * const pHt = m_pSwpHints->Get(nAttrCnt);
         const sal_Int32 nAttrStartIdx = pHt->GetStart();
-        if (!( nAttrStartIdx < nEnd ))
+        if ( nAttrStartIdx >= nEnd )
             break;
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
         const sal_uInt16 nWhich = pHt->Which();

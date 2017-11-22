@@ -583,8 +583,8 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                     pChild->ImplGetFrameData()->mnFirstMouseX      = nMouseX;
                     pChild->ImplGetFrameData()->mnFirstMouseY      = nMouseY;
                     pChild->ImplGetFrameData()->mnFirstMouseCode   = nCode;
-                    pChild->ImplGetFrameData()->mbStartDragCalled  = !((nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
-                                                                (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)));
+                    pChild->ImplGetFrameData()->mbStartDragCalled  = (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
+                                                                     (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE));
                 }
                 pChild->ImplGetFrameData()->mnMouseDownTime = nMsgTime;
             }

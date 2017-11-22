@@ -1433,7 +1433,7 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
         // i#22341 - add condition to handle map <aVCharMap>
         // that is ambiguous in the alignment.
         if ( _pMap[i].nAlign == _nAlign &&
-             ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
+             ( (_pMap != aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
         {
             sSelEntry = sEntry;
         }

@@ -682,7 +682,7 @@ tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox()
     tools::Rectangle aBounds ( 0, 0, 0, 0 );
 
     vcl::Window* pWindow = mpControl;
-    if (!(pWindow != nullptr))
+    if (pWindow == nullptr)
         throw DisposedException();
 
     aBounds = pWindow->GetWindowExtentsRelative (nullptr);

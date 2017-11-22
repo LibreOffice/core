@@ -284,13 +284,13 @@ OUString ODataInputStream::readUTF()
             case 12: case 13:
                 // 110x xxxx   10xx xxxx
                 nCount += 2;
-                if( ! ( nCount <= nUTFLen ) )
+                if( nCount > nUTFLen )
                 {
                     throw WrongFormatException( );
                 }
 
                 char2 = (sal_uInt8)readByte();
-                if( ! ( (char2 & 0xC0) == 0x80 ) )
+                if( (char2 & 0xC0) != 0x80 )
                 {
                     throw WrongFormatException( );
                 }
@@ -301,7 +301,7 @@ OUString ODataInputStream::readUTF()
             case 14:
             // 1110 xxxx  10xx xxxx  10xx xxxx
                 nCount += 3;
-                if( !( nCount <= nUTFLen) )
+                if( nCount > nUTFLen )
                 {
                     throw WrongFormatException( );
                 }

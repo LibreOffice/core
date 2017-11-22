@@ -242,7 +242,7 @@ void INetURLHistory_Impl::putUrl (const OUString &rUrl)
         sal_uInt16 nLRU = m_pList[m_aHead.m_nNext].m_nPrev;
 
         sal_uInt16 nSI = find (m_pList[nLRU].m_nHash);
-        if (!(nLRU == m_pHash[nSI].m_nLru))
+        if (nLRU != m_pHash[nSI].m_nLru)
         {
             // Update LRU chain.
             nLRU = m_pHash[nSI].m_nLru;

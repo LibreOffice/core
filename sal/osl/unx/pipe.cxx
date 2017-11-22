@@ -441,7 +441,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     /* set close-on-exec flag */
     int flags;
-    if (!((flags = fcntl(s, F_GETFD, 0)) < 0))
+    if ((flags = fcntl(s, F_GETFD, 0)) >= 0)
     {
         flags |= FD_CLOEXEC;
         if (fcntl(s, F_SETFD, flags) < 0)

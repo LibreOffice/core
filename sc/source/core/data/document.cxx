@@ -4772,7 +4772,7 @@ void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
 
 void ScDocument::AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
 {
-    if(!(static_cast<size_t>(nTab) < maTabs.size()))
+    if(static_cast<size_t>(nTab) >= maTabs.size())
         return;
 
     if(!maTabs[nTab])
@@ -4783,7 +4783,7 @@ void ScDocument::AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_u
 
 void ScDocument::RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
 {
-    if(!(static_cast<size_t>(nTab) < maTabs.size()))
+    if(static_cast<size_t>(nTab) >= maTabs.size())
         return;
 
     if(!maTabs[nTab])
