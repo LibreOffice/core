@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_44f0cf67",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-22T20:16:12Z",
+      "side": 1,
+      "message": "Please follow our naming conventions, for references passed we use the r... prefix, so that should be rAreaParam instead.",
+      "range": {
+        "startLine": 2723,
+        "startChar": 60,
+        "endLine": 2723,
+        "endChar": 70
+      },
+      "revId": "2f34bec2a7b939e24c3c5e884fdfe2057b732248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
