@@ -2635,11 +2635,6 @@
       </node>
     </node>
     <node oor:name="Popups">
-      <node oor:name=".uno:PasteSpecialMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Paste ~Special</value>
-        </prop>
-      </node>
       <node oor:name=".uno:TableMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">T~able</value>
