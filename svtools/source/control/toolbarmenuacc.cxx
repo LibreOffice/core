@@ -105,26 +105,26 @@ IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclWindowEvent&, rEvent, void )
 
 void ToolbarMenuAcc::FireAccessibleEvent( short nEventId, const Any& rOldValue, const Any& rNewValue )
 {
-    if( nEventId )
+    if( !nEventId )
+        return;
+
+    EventListenerVector                  aTmpListeners( mxEventListeners );
+    AccessibleEventObject aEvtObject;
+
+    aEvtObject.EventId = nEventId;
+    aEvtObject.Source = static_cast<XWeak*>(this);
+    aEvtObject.NewValue = rNewValue;
+    aEvtObject.OldValue = rOldValue;
+
+    for (EventListenerVector::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
+        aIter != aEnd ; ++aIter)
     {
-        EventListenerVector                  aTmpListeners( mxEventListeners );
-        AccessibleEventObject aEvtObject;
-
-        aEvtObject.EventId = nEventId;
-        aEvtObject.Source = static_cast<XWeak*>(this);
-        aEvtObject.NewValue = rNewValue;
-        aEvtObject.OldValue = rOldValue;
-
-        for (EventListenerVector::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
-            aIter != aEnd ; ++aIter)
+        try
         {
-            try
-            {
-                (*aIter)->notifyEvent( aEvtObject );
-            }
-            catch( Exception& )
-            {
-            }
+            (*aIter)->notifyEvent( aEvtObject );
+        }
+        catch( Exception& )
+        {
         }
     }
 }
@@ -273,22 +273,22 @@ void SAL_CALL ToolbarMenuAcc::addAccessibleEventListener( const Reference< XAcce
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if( rxListener.is() )
+    if( !rxListener.is() )
+           return;
+
+       EventListenerVector::const_iterator aIter = mxEventListeners.begin();
+    bool bFound = false;
+
+    while( !bFound && ( aIter != mxEventListeners.end() ) )
     {
-           EventListenerVector::const_iterator aIter = mxEventListeners.begin();
-        bool bFound = false;
-
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
-        {
-            if( *aIter == rxListener )
-                bFound = true;
-            else
-                ++aIter;
-        }
-
-        if (!bFound)
-            mxEventListeners.push_back( rxListener );
+        if( *aIter == rxListener )
+            bFound = true;
+        else
+            ++aIter;
     }
+
+    if (!bFound)
+        mxEventListeners.push_back( rxListener );
 }
 
 

@@ -957,22 +957,22 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     nCurItemId = aPopupMenu->Execute( this, rPos );
     mbMenuDown = false;
 
-    if ( nCurItemId )
+    if ( !nCurItemId )
+        return;
+
+    sal_uInt16 nTempMonthOff = nMonthOff % 12;
+    sal_uInt16 nTempYearOff = nMonthOff / 12;
+    sal_uInt16 nNewMonth = nCurItemId % 1000;
+    sal_uInt16 nNewYear = nYear+((nCurItemId-1000)/1000);
+    if ( nTempMonthOff < nNewMonth )
+        nNewMonth = nNewMonth - nTempMonthOff;
+    else
     {
-        sal_uInt16 nTempMonthOff = nMonthOff % 12;
-        sal_uInt16 nTempYearOff = nMonthOff / 12;
-        sal_uInt16 nNewMonth = nCurItemId % 1000;
-        sal_uInt16 nNewYear = nYear+((nCurItemId-1000)/1000);
-        if ( nTempMonthOff < nNewMonth )
-            nNewMonth = nNewMonth - nTempMonthOff;
-        else
-        {
-            nNewYear--;
-            nNewMonth = 12-(nTempMonthOff-nNewMonth);
-        }
-        nNewYear = nNewYear - nTempYearOff;
-        SetFirstDate( Date( 1, nNewMonth, nNewYear ) );
+        nNewYear--;
+        nNewMonth = 12-(nTempMonthOff-nNewMonth);
     }
+    nNewYear = nNewYear - nTempYearOff;
+    SetFirstDate( Date( 1, nNewMonth, nNewYear ) );
 }
 
 void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
@@ -1026,32 +1026,32 @@ void Calendar::ImplEndTracking( bool bCancel )
         }
     }
 
-    if ( !bSpinDown )
+    if ( bSpinDown )
+        return;
+
+    if ( !bCancel )
     {
-        if ( !bCancel )
+        // determine if we should scroll the visible area
+        if ( !mpSelectTable->empty() )
         {
-            // determine if we should scroll the visible area
-            if ( !mpSelectTable->empty() )
-            {
-                Date aFirstSelDate( *mpSelectTable->begin() );
-                Date aLastSelDate( *mpSelectTable->rbegin() );
-                if ( aLastSelDate < GetFirstMonth() )
-                    ImplScroll( true );
-                else if ( GetLastMonth() < aFirstSelDate )
-                    ImplScroll( false );
-            }
+            Date aFirstSelDate( *mpSelectTable->begin() );
+            Date aLastSelDate( *mpSelectTable->rbegin() );
+            if ( aLastSelDate < GetFirstMonth() )
+                ImplScroll( true );
+            else if ( GetLastMonth() < aFirstSelDate )
+                ImplScroll( false );
         }
-
-        if ( mbAllSel ||
-             (!bCancel && ((maCurDate != maOldCurDate) || (*mpOldSelectTable != *mpSelectTable))) )
-            Select();
-
-        if ( !bSelection && (mnWinStyle & WB_TABSTOP) && !bCancel )
-            GrabFocus();
-
-        delete mpOldSelectTable;
-        mpOldSelectTable = nullptr;
     }
+
+    if ( mbAllSel ||
+         (!bCancel && ((maCurDate != maOldCurDate) || (*mpOldSelectTable != *mpSelectTable))) )
+        Select();
+
+    if ( !bSelection && (mnWinStyle & WB_TABSTOP) && !bCancel )
+        GrabFocus();
+
+    delete mpOldSelectTable;
+    mpOldSelectTable = nullptr;
 }
 
 IMPL_LINK_NOARG( Calendar, ScrollHdl, Timer*, void )
@@ -1353,48 +1353,48 @@ void Calendar::SetCurDate( const Date& rNewDate )
     if ( !rNewDate.IsValidAndGregorian() )
         return;
 
-    if ( maCurDate != rNewDate )
+    if ( maCurDate == rNewDate )
+        return;
+
+    bool bUpdate    = IsVisible() && IsUpdateMode();
+    Date aOldDate   = maCurDate;
+    maCurDate       = rNewDate;
+    maAnchorDate    = maCurDate;
+
+    ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
+    ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
+
+    // shift actual date in the visible area
+    if ( mbFormat || (maCurDate < GetFirstMonth()) )
+        SetFirstDate( maCurDate );
+    else if ( maCurDate > GetLastMonth() )
     {
-        bool bUpdate    = IsVisible() && IsUpdateMode();
-        Date aOldDate   = maCurDate;
-        maCurDate       = rNewDate;
-        maAnchorDate    = maCurDate;
-
-        ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
-        ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
-
-        // shift actual date in the visible area
-        if ( mbFormat || (maCurDate < GetFirstMonth()) )
-            SetFirstDate( maCurDate );
-        else if ( maCurDate > GetLastMonth() )
+        Date aTempDate = GetLastMonth();
+        long nDateOff = maCurDate-aTempDate;
+        if ( nDateOff < 365 )
         {
-            Date aTempDate = GetLastMonth();
-            long nDateOff = maCurDate-aTempDate;
-            if ( nDateOff < 365 )
+            Date aFirstDate = GetFirstMonth();
+            aFirstDate.AddDays( aFirstDate.GetDaysInMonth() );
+            ++aTempDate;
+            while ( nDateOff > aTempDate.GetDaysInMonth() )
             {
-                Date aFirstDate = GetFirstMonth();
                 aFirstDate.AddDays( aFirstDate.GetDaysInMonth() );
-                ++aTempDate;
-                while ( nDateOff > aTempDate.GetDaysInMonth() )
-                {
-                    aFirstDate.AddDays( aFirstDate.GetDaysInMonth() );
-                    sal_Int32 nDaysInMonth = aTempDate.GetDaysInMonth();
-                    aTempDate.AddDays( nDaysInMonth );
-                    nDateOff -= nDaysInMonth;
-                }
-                SetFirstDate( aFirstDate );
+                sal_Int32 nDaysInMonth = aTempDate.GetDaysInMonth();
+                aTempDate.AddDays( nDaysInMonth );
+                nDateOff -= nDaysInMonth;
             }
-            else
-                SetFirstDate( maCurDate );
+            SetFirstDate( aFirstDate );
         }
         else
+            SetFirstDate( maCurDate );
+    }
+    else
+    {
+        if ( bUpdate )
         {
-            if ( bUpdate )
-            {
-                HideFocus();
-                ImplUpdateDate( aOldDate );
-                ImplUpdateDate( maCurDate );
-            }
+            HideFocus();
+            ImplUpdateDate( aOldDate );
+            ImplUpdateDate( maCurDate );
         }
     }
 }
@@ -1802,18 +1802,18 @@ void CalendarField::dispose()
 
 IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
 {
-    if ( !pCalendar->IsTravelSelect() )
+    if ( pCalendar->IsTravelSelect() )
+        return;
+
+    mpFloatWin->EndPopupMode();
+    EndDropDown();
+    GrabFocus();
+    Date aNewDate = mpCalendar->GetFirstSelectedDate();
+    if ( IsEmptyDate() || ( aNewDate != GetDate() ) )
     {
-        mpFloatWin->EndPopupMode();
-        EndDropDown();
-        GrabFocus();
-        Date aNewDate = mpCalendar->GetFirstSelectedDate();
-        if ( IsEmptyDate() || ( aNewDate != GetDate() ) )
-        {
-            SetDate( aNewDate );
-            SetModifyFlag();
-            Modify();
-        }
+        SetDate( aNewDate );
+        SetModifyFlag();
+        Modify();
     }
 }
 

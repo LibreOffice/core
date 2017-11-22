@@ -330,54 +330,54 @@ void SvtIconChoiceCtrl::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
 {
-    if( rPaper != GetBackground() )
+    if( rPaper == GetBackground() )
+        return;
+
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    // if it is the default (empty) wallpaper
+    if( rPaper.GetStyle() == WallpaperStyle::NONE && rPaper.GetColor() == COL_TRANSPARENT &&
+        !rPaper.IsBitmap() && !rPaper.IsGradient() && !rPaper.IsRect())
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        // if it is the default (empty) wallpaper
-        if( rPaper.GetStyle() == WallpaperStyle::NONE && rPaper.GetColor() == COL_TRANSPARENT &&
-            !rPaper.IsBitmap() && !rPaper.IsGradient() && !rPaper.IsRect())
+        Control::SetBackground( rStyleSettings.GetFieldColor() );
+    }
+    else
+    {
+        Wallpaper aBackground( rPaper );
+        // HACK, as background might be transparent!
+        if( !aBackground.IsBitmap() )
+            aBackground.SetStyle( WallpaperStyle::Tile );
+
+        WallpaperStyle eStyle = aBackground.GetStyle();
+        Color aBack( aBackground.GetColor());
+        Color aTrans( COL_TRANSPARENT );
+        if( aBack == aTrans &&
+            (!aBackground.IsBitmap() ||
+             aBackground.GetBitmap().IsTransparent() ||
+             (eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale)) )
         {
-            Control::SetBackground( rStyleSettings.GetFieldColor() );
+            aBackground.SetColor( rStyleSettings.GetFieldColor() );
+        }
+        if( aBackground.IsScrollable() )
+        {
+            tools::Rectangle aRect;
+            aRect.SetSize( Size(32765, 32765) );
+            aBackground.SetRect( aRect );
         }
         else
         {
-            Wallpaper aBackground( rPaper );
-            // HACK, as background might be transparent!
-            if( !aBackground.IsBitmap() )
-                aBackground.SetStyle( WallpaperStyle::Tile );
-
-            WallpaperStyle eStyle = aBackground.GetStyle();
-            Color aBack( aBackground.GetColor());
-            Color aTrans( COL_TRANSPARENT );
-            if( aBack == aTrans &&
-                (!aBackground.IsBitmap() ||
-                 aBackground.GetBitmap().IsTransparent() ||
-                 (eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale)) )
-            {
-                aBackground.SetColor( rStyleSettings.GetFieldColor() );
-            }
-            if( aBackground.IsScrollable() )
-            {
-                tools::Rectangle aRect;
-                aRect.SetSize( Size(32765, 32765) );
-                aBackground.SetRect( aRect );
-            }
-            else
-            {
-                tools::Rectangle aRect( _pImpl->GetOutputRect() );
-                aBackground.SetRect( aRect );
-            }
-            Control::SetBackground( aBackground );
+            tools::Rectangle aRect( _pImpl->GetOutputRect() );
+            aBackground.SetRect( aRect );
         }
-
-        // If text colors are attributed "hard," don't use automatism to select
-        // a readable text color.
-        vcl::Font aFont( GetFont() );
-        aFont.SetColor( rStyleSettings.GetFieldTextColor() );
-        SetFont( aFont );
-
-        Invalidate(InvalidateFlags::NoChildren);
+        Control::SetBackground( aBackground );
     }
+
+    // If text colors are attributed "hard," don't use automatism to select
+    // a readable text color.
+    vcl::Font aFont( GetFont() );
+    aFont.SetColor( rStyleSettings.GetFieldTextColor() );
+    SetFont( aFont );
+
+    Invalidate(InvalidateFlags::NoChildren);
 }
 
 void SvtIconChoiceCtrl::RequestHelp( const HelpEvent& rHEvt )

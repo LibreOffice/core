@@ -221,20 +221,20 @@ void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry )
 
 void SvImpLBox::CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect )
 {
-    if ( pEntry && bIsCellFocusEnabled )
+    if ( !(pEntry && bIsCellFocusEnabled) )
+        return;
+
+    if ( nCurTabPos > FIRST_ENTRY_TAB )
     {
-        if ( nCurTabPos > FIRST_ENTRY_TAB )
-        {
-            SvLBoxItem& rItem = pCursor->GetItem( nCurTabPos );
-            rRect.Left() = pView->GetTab( pCursor, &rItem )->GetPos();
-        }
-        if (pCursor->ItemCount() > static_cast<size_t>(nCurTabPos+1))
-        {
-            SvLBoxItem& rNextItem = pCursor->GetItem( nCurTabPos + 1 );
-            long nRight = pView->GetTab( pCursor, &rNextItem )->GetPos() - 1;
-            if ( nRight < rRect.Right() )
-                rRect.Right() = nRight;
-        }
+        SvLBoxItem& rItem = pCursor->GetItem( nCurTabPos );
+        rRect.Left() = pView->GetTab( pCursor, &rItem )->GetPos();
+    }
+    if (pCursor->ItemCount() > static_cast<size_t>(nCurTabPos+1))
+    {
+        SvLBoxItem& rNextItem = pCursor->GetItem( nCurTabPos + 1 );
+        long nRight = pView->GetTab( pCursor, &rNextItem )->GetPos() - 1;
+        if ( nRight < rRect.Right() )
+            rRect.Right() = nRight;
     }
 }
 
@@ -374,20 +374,20 @@ void SvImpLBox::CursorUp()
         return;
 
     SvTreeListEntry* pPrevFirstToDraw = pView->PrevVisible(pStartEntry);
-    if( pPrevFirstToDraw )
-    {
-        nFlags &= (~LBoxFlags::Filling);
-        long nEntryHeight = pView->GetEntryHeight();
-        ShowCursor( false );
-        pView->Update();
-        pStartEntry = pPrevFirstToDraw;
-        tools::Rectangle aArea( GetVisibleArea() );
-        aArea.Bottom() -= nEntryHeight;
-        pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
-        pView->Update();
-        ShowCursor( true );
-        pView->NotifyScrolled();
-    }
+    if( !pPrevFirstToDraw )
+        return;
+
+    nFlags &= (~LBoxFlags::Filling);
+    long nEntryHeight = pView->GetEntryHeight();
+    ShowCursor( false );
+    pView->Update();
+    pStartEntry = pPrevFirstToDraw;
+    tools::Rectangle aArea( GetVisibleArea() );
+    aArea.Bottom() -= nEntryHeight;
+    pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
+    pView->Update();
+    ShowCursor( true );
+    pView->NotifyScrolled();
 }
 
 void SvImpLBox::PageDown( sal_uInt16 nDelta )
@@ -1323,35 +1323,35 @@ void SvImpLBox::FillView()
             nTempThumb = nVisibleViewCount - 1;
         pStartEntry = pView->GetEntryAtVisPos(nTempThumb);
     }
-    if( pStartEntry )
+    if( !pStartEntry )
+        return;
+
+    sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
+    sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
+    sal_uLong nCurDispEntries = nLast-nThumb+1;
+    if( nCurDispEntries >=  nVisibleCount )
+        return;
+
+    ShowCursor( false );
+    // fill window by moving the thumb up incrementally
+    bool bFound = false;
+    SvTreeListEntry* pTemp = pStartEntry;
+    while( nCurDispEntries < nVisibleCount && pTemp )
     {
-        sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
-        sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
-        sal_uLong nCurDispEntries = nLast-nThumb+1;
-        if( nCurDispEntries <  nVisibleCount )
+        pTemp = pView->PrevVisible(pStartEntry);
+        if( pTemp )
         {
-            ShowCursor( false );
-            // fill window by moving the thumb up incrementally
-            bool bFound = false;
-            SvTreeListEntry* pTemp = pStartEntry;
-            while( nCurDispEntries < nVisibleCount && pTemp )
-            {
-                pTemp = pView->PrevVisible(pStartEntry);
-                if( pTemp )
-                {
-                    nThumb--;
-                    pStartEntry = pTemp;
-                    nCurDispEntries++;
-                    bFound = true;
-                }
-            }
-            if( bFound )
-            {
-                aVerSBar->SetThumbPos( nThumb );
-                ShowCursor( true ); // recalculate focus rectangle
-                pView->Invalidate();
-            }
+            nThumb--;
+            pStartEntry = pTemp;
+            nCurDispEntries++;
+            bFound = true;
         }
+    }
+    if( bFound )
+    {
+        aVerSBar->SetThumbPos( nThumb );
+        ShowCursor( true ); // recalculate focus rectangle
+        pView->Invalidate();
     }
 }
 
@@ -1481,22 +1481,22 @@ void SvImpLBox::SetEntryHeight()
 void SvImpLBox::EntryExpanded( SvTreeListEntry* pEntry )
 {
     // SelAllDestrAnch( false, true ); //DeselectAll();
-    if( GetUpdateMode() )
+    if( !GetUpdateMode() )
+        return;
+
+    ShowCursor( false );
+    long nY = GetEntryLine( pEntry );
+    if( IsLineVisible(nY) )
     {
-        ShowCursor( false );
-        long nY = GetEntryLine( pEntry );
-        if( IsLineVisible(nY) )
-        {
-            InvalidateEntriesFrom( nY );
-            FindMostRight( pEntry, nullptr  );
-        }
-        aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1 ) );
-        // if we expanded before the thumb, the thumb's position has to be
-        // corrected
-        SyncVerThumb();
-        ShowVerSBar();
-        ShowCursor( true );
+        InvalidateEntriesFrom( nY );
+        FindMostRight( pEntry, nullptr  );
     }
+    aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1 ) );
+    // if we expanded before the thumb, the thumb's position has to be
+    // corrected
+    SyncVerThumb();
+    ShowVerSBar();
+    ShowCursor( true );
 }
 
 void SvImpLBox::EntryCollapsed( SvTreeListEntry* pEntry )
@@ -1743,23 +1743,23 @@ void SvImpLBox::MovingEntry( SvTreeListEntry* pEntry )
         ShowCursor( false );
     if( IsEntryInView( pEntry ) )
         pView->Invalidate();
-    if( pEntry == pStartEntry )
+    if( pEntry != pStartEntry )
+        return;
+
+    SvTreeListEntry* pNew = nullptr;
+    if( !pEntry->HasChildren() )
     {
-        SvTreeListEntry* pNew = nullptr;
-        if( !pEntry->HasChildren() )
-        {
-            pNew = pView->NextVisible(pStartEntry);
-            if( !pNew )
-                pNew = pView->PrevVisible(pStartEntry);
-        }
-        else
-        {
-            pNew = SvTreeList::NextSibling( pEntry );
-            if( !pNew )
-                pNew = SvTreeList::PrevSibling( pEntry );
-        }
-        pStartEntry = pNew;
+        pNew = pView->NextVisible(pStartEntry);
+        if( !pNew )
+            pNew = pView->PrevVisible(pStartEntry);
     }
+    else
+    {
+        pNew = SvTreeList::NextSibling( pEntry );
+        if( !pNew )
+            pNew = SvTreeList::PrevSibling( pEntry );
+    }
+    pStartEntry = pNew;
 }
 
 void SvImpLBox::EntryMoved( SvTreeListEntry* pEntry )
@@ -1799,56 +1799,56 @@ void SvImpLBox::EntryMoved( SvTreeListEntry* pEntry )
 
 void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
 {
-    if( GetUpdateMode() )
-    {
-        SvTreeListEntry* pParent = pTree->GetParent(pEntry);
-        if (pParent && pTree->GetChildList(pParent).size() == 1)
-            // draw plus sign
-            pTree->InvalidateEntry( pParent );
+    if( !GetUpdateMode() )
+        return;
 
-        if( !pView->IsEntryVisible( pEntry ) )
-            return;
-        bool bDeselAll(nFlags & LBoxFlags::DeselectAll);
-        if( bDeselAll )
-            SelAllDestrAnch( false );
-        else
-            DestroyAnchor();
-        //  nFlags &= (~LBoxFlags::DeselectAll);
+    SvTreeListEntry* pParent = pTree->GetParent(pEntry);
+    if (pParent && pTree->GetChildList(pParent).size() == 1)
+        // draw plus sign
+        pTree->InvalidateEntry( pParent );
+
+    if( !pView->IsEntryVisible( pEntry ) )
+        return;
+    bool bDeselAll(nFlags & LBoxFlags::DeselectAll);
+    if( bDeselAll )
+        SelAllDestrAnch( false );
+    else
+        DestroyAnchor();
+    //  nFlags &= (~LBoxFlags::DeselectAll);
 //      ShowCursor( false ); // if cursor is moved lower
-        long nY = GetEntryLine( pEntry );
-        bool bEntryVisible = IsLineVisible( nY );
-        if( bEntryVisible )
-        {
-            ShowCursor( false ); // if cursor is moved lower
-            nY -= pView->GetEntryHeight(); // because of lines
-            InvalidateEntriesFrom( nY );
-        }
-        else if( pStartEntry && nY < GetEntryLine(pStartEntry) )
-        {
-            // Check if the view is filled completely. If not, then adjust
-            // pStartEntry and the Cursor (automatic scrolling).
-            sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
-            sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
-            sal_uInt16 nCurDispEntries = nLast-nThumb+1;
-            if( nCurDispEntries < nVisibleCount )
-            {
-                // set at the next paint event
-                pStartEntry = nullptr;
-                SetCursor( nullptr );
-                pView->Invalidate();
-            }
-        }
-        else if( !pStartEntry )
-            pView->Invalidate();
-
-        SetMostRight( pEntry );
-        aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1));
-        SyncVerThumb(); // if something was inserted before the thumb
-        ShowVerSBar();
-        ShowCursor( true );
-        if( pStartEntry != pView->First() && (nFlags & LBoxFlags::Filling) )
-            pView->Update();
+    long nY = GetEntryLine( pEntry );
+    bool bEntryVisible = IsLineVisible( nY );
+    if( bEntryVisible )
+    {
+        ShowCursor( false ); // if cursor is moved lower
+        nY -= pView->GetEntryHeight(); // because of lines
+        InvalidateEntriesFrom( nY );
     }
+    else if( pStartEntry && nY < GetEntryLine(pStartEntry) )
+    {
+        // Check if the view is filled completely. If not, then adjust
+        // pStartEntry and the Cursor (automatic scrolling).
+        sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
+        sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
+        sal_uInt16 nCurDispEntries = nLast-nThumb+1;
+        if( nCurDispEntries < nVisibleCount )
+        {
+            // set at the next paint event
+            pStartEntry = nullptr;
+            SetCursor( nullptr );
+            pView->Invalidate();
+        }
+    }
+    else if( !pStartEntry )
+        pView->Invalidate();
+
+    SetMostRight( pEntry );
+    aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1));
+    SyncVerThumb(); // if something was inserted before the thumb
+    ShowVerSBar();
+    ShowCursor( true );
+    if( pStartEntry != pView->First() && (nFlags & LBoxFlags::Filling) )
+        pView->Update();
 }
 
 
@@ -3073,27 +3073,27 @@ void SvImpLBox::SetCurEntry( SvTreeListEntry* pEntry )
 
 IMPL_LINK_NOARG(SvImpLBox, EditTimerCall, Timer *, void)
 {
-    if( pView->IsInplaceEditingEnabled() )
-    {
-        bool bIsMouseTriggered = aEditClickPos.X() >= 0;
-        if ( bIsMouseTriggered )
-        {
-            Point aCurrentMousePos = pView->GetPointerPosPixel();
-            if  (   ( std::abs( aCurrentMousePos.X() - aEditClickPos.X() ) > 5 )
-                ||  ( std::abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
-                )
-            {
-                return;
-            }
-        }
+    if( !pView->IsInplaceEditingEnabled() )
+        return;
 
-        SvTreeListEntry* pEntry = GetCurEntry();
-        if( pEntry )
+    bool bIsMouseTriggered = aEditClickPos.X() >= 0;
+    if ( bIsMouseTriggered )
+    {
+        Point aCurrentMousePos = pView->GetPointerPosPixel();
+        if  (   ( std::abs( aCurrentMousePos.X() - aEditClickPos.X() ) > 5 )
+            ||  ( std::abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
+            )
         {
-            ShowCursor( false );
-            pView->ImplEditEntry( pEntry );
-            ShowCursor( true );
+            return;
         }
+    }
+
+    SvTreeListEntry* pEntry = GetCurEntry();
+    if( pEntry )
+    {
+        ShowCursor( false );
+        pView->ImplEditEntry( pEntry );
+        ShowCursor( true );
     }
 }
 

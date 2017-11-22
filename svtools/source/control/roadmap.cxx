@@ -404,18 +404,18 @@ void ORoadmap::EnableRoadmapItem( ItemId _nItemId, bool _bEnable )
 void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel )
 {
     RoadmapItem* pItem = GetByID( _nID );
-    if ( pItem != nullptr )
-    {
-        pItem->Update( pItem->GetIndex(), _sLabel );
+    if ( pItem == nullptr )
+        return;
 
-        const HL_Vector& rItems = m_pImpl->getHyperLabels();
-        for (   HL_Vector::const_iterator i = rItems.begin();
-                i != rItems.end();
-                ++i
-            )
-        {
-            (*i)->SetPosition( GetPreviousHyperLabel( i - rItems.begin() ) );
-        }
+    pItem->Update( pItem->GetIndex(), _sLabel );
+
+    const HL_Vector& rItems = m_pImpl->getHyperLabels();
+    for (   HL_Vector::const_iterator i = rItems.begin();
+            i != rItems.end();
+            ++i
+        )
+    {
+        (*i)->SetPosition( GetPreviousHyperLabel( i - rItems.begin() ) );
     }
 }
 
@@ -640,24 +640,24 @@ IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, CurHyperLabel, void)
 
 void ORoadmap::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
+    if (!((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
         ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-        ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
+        ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        )))
+        return;
+
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
+    Color aTextColor = rStyleSettings.GetFieldTextColor();
+    vcl::Font aFont = GetFont();
+    aFont.SetColor( aTextColor );
+    SetFont( aFont );
+    RoadmapTypes::ItemId curItemID = GetCurrentRoadmapItemID();
+    RoadmapItem* pLabelItem = GetByID( curItemID );
+    if (pLabelItem != nullptr)
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
-        Color aTextColor = rStyleSettings.GetFieldTextColor();
-        vcl::Font aFont = GetFont();
-        aFont.SetColor( aTextColor );
-        SetFont( aFont );
-        RoadmapTypes::ItemId curItemID = GetCurrentRoadmapItemID();
-        RoadmapItem* pLabelItem = GetByID( curItemID );
-        if (pLabelItem != nullptr)
-        {
-            pLabelItem->ToggleBackgroundColor(rStyleSettings.GetHighlightColor());
-        }
-        Invalidate();
+        pLabelItem->ToggleBackgroundColor(rStyleSettings.GetHighlightColor());
     }
+    Invalidate();
 }
 
 void ORoadmap::ApplySettings(vcl::RenderContext& rRenderContext)

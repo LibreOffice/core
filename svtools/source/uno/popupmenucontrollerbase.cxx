@@ -303,32 +303,32 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
     osl::MutexGuard aLock( m_aMutex );
 
     bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
+    if ( bInitalized )
+        return;
+
+    PropertyValue       aPropValue;
+    OUString       aCommandURL;
+    Reference< XFrame > xFrame;
+
+    for ( int i = 0; i < aArguments.getLength(); i++ )
     {
-        PropertyValue       aPropValue;
-        OUString       aCommandURL;
-        Reference< XFrame > xFrame;
-
-        for ( int i = 0; i < aArguments.getLength(); i++ )
+        if ( aArguments[i] >>= aPropValue )
         {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name == "Frame" )
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name == "CommandURL" )
-                    aPropValue.Value >>= aCommandURL;
-                else if ( aPropValue.Name == "ModuleIdentifier" )
-                    aPropValue.Value >>= m_aModuleName;
-            }
+            if ( aPropValue.Name == "Frame" )
+                aPropValue.Value >>= xFrame;
+            else if ( aPropValue.Name == "CommandURL" )
+                aPropValue.Value >>= aCommandURL;
+            else if ( aPropValue.Name == "ModuleIdentifier" )
+                aPropValue.Value >>= m_aModuleName;
         }
+    }
 
-        if ( xFrame.is() && !aCommandURL.isEmpty() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-            m_aBaseURL      = determineBaseURL( aCommandURL );
-            m_bInitialized  = true;
-        }
+    if ( xFrame.is() && !aCommandURL.isEmpty() )
+    {
+        m_xFrame        = xFrame;
+        m_aCommandURL   = aCommandURL;
+        m_aBaseURL      = determineBaseURL( aCommandURL );
+        m_bInitialized  = true;
     }
 }
 // XPopupMenuController
@@ -337,25 +337,25 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
     osl::MutexGuard aLock( m_aMutex );
     throwIfDisposed();
 
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        SolarMutexGuard aSolarMutexGuard;
+    if ( !(m_xFrame.is() && !m_xPopupMenu.is()) )
+        return;
 
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >( static_cast<OWeakObject*>(this), UNO_QUERY ));
+    // Create popup menu on demand
+    SolarMutexGuard aSolarMutexGuard;
 
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    m_xPopupMenu = xPopupMenu;
+    m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >( static_cast<OWeakObject*>(this), UNO_QUERY ));
 
-        URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        m_xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-        impl_setPopupMenu();
+    URL aTargetURL;
+    aTargetURL.Complete = m_aCommandURL;
+    m_xURLTransformer->parseStrict( aTargetURL );
+    m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-        updatePopupMenu();
-    }
+    impl_setPopupMenu();
+
+    updatePopupMenu();
 }
 void PopupMenuControllerBase::impl_setPopupMenu()
 {

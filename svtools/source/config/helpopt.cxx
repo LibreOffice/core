@@ -136,66 +136,66 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
     Sequence< Any > aValues = GetProperties( rPropertyNames );
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT( aValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == rPropertyNames.getLength() )
-    {
-        for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
-        {
-            assert(pValues[nProp].hasValue() && "property value missing");
-            if ( pValues[nProp].hasValue() )
-            {
-                bool bTmp;
-                OUString aTmpStr;
-                sal_Int32 nTmpInt = 0;
-                if ( pValues[nProp] >>= bTmp )
-                {
-                    switch ( static_cast< HelpProperty >(
-                        lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) ) )
-                    {
-                        case HelpProperty::ExtendedHelp:
-                            bExtendedHelp = bTmp;
-                            break;
-                        case HelpProperty::HelpTips:
-                            bHelpTips = bTmp;
-                            break;
-                        default:
-                            SAL_WARN( "svtools.config", "Wrong Member!" );
-                            break;
-                    }
-                }
-                else if ( pValues[nProp] >>= aTmpStr )
-                {
-                    switch ( static_cast< HelpProperty >(nProp) )
-                    {
-                        case HelpProperty::Locale:
-                            aLocale = aTmpStr;
-                            break;
+    if ( aValues.getLength() != rPropertyNames.getLength() )
+        return;
 
-                        case HelpProperty::System:
-                            aSystem = aTmpStr;
-                            break;
-                        case HelpProperty::StyleSheet:
-                            sHelpStyleSheet = aTmpStr;
+    for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
+    {
+        assert(pValues[nProp].hasValue() && "property value missing");
+        if ( pValues[nProp].hasValue() )
+        {
+            bool bTmp;
+            OUString aTmpStr;
+            sal_Int32 nTmpInt = 0;
+            if ( pValues[nProp] >>= bTmp )
+            {
+                switch ( static_cast< HelpProperty >(
+                    lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) ) )
+                {
+                    case HelpProperty::ExtendedHelp:
+                        bExtendedHelp = bTmp;
                         break;
-                        default:
-                            SAL_WARN( "svtools.config", "Wrong Member!" );
-                            break;
-                    }
-                }
-                else if ( pValues[nProp] >>= nTmpInt )
-                {
-                    SAL_WARN( "svtools.config", "Wrong Member!" );
-                }
-                else
-                {
-                    SAL_WARN( "svtools.config", "Wrong Type!" );
+                    case HelpProperty::HelpTips:
+                        bHelpTips = bTmp;
+                        break;
+                    default:
+                        SAL_WARN( "svtools.config", "Wrong Member!" );
+                        break;
                 }
             }
+            else if ( pValues[nProp] >>= aTmpStr )
+            {
+                switch ( static_cast< HelpProperty >(nProp) )
+                {
+                    case HelpProperty::Locale:
+                        aLocale = aTmpStr;
+                        break;
+
+                    case HelpProperty::System:
+                        aSystem = aTmpStr;
+                        break;
+                    case HelpProperty::StyleSheet:
+                        sHelpStyleSheet = aTmpStr;
+                    break;
+                    default:
+                        SAL_WARN( "svtools.config", "Wrong Member!" );
+                        break;
+                }
+            }
+            else if ( pValues[nProp] >>= nTmpInt )
+            {
+                SAL_WARN( "svtools.config", "Wrong Member!" );
+            }
+            else
+            {
+                SAL_WARN( "svtools.config", "Wrong Type!" );
+            }
         }
-        if ( IsHelpTips() != Help::IsQuickHelpEnabled() )
-            IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
-        if ( IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
-            IsExtendedHelp() ? Help::EnableBalloonHelp() : Help::DisableBalloonHelp();
     }
+    if ( IsHelpTips() != Help::IsQuickHelpEnabled() )
+        IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
+    if ( IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
+        IsExtendedHelp() ? Help::EnableBalloonHelp() : Help::DisableBalloonHelp();
 }
 
 void SvtHelpOptions_Impl::ImplCommit()

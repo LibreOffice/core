@@ -576,57 +576,57 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     // Title Bar
     // If there is a handle column and if the  header bar is available, only
     // take the HandleColumn into account
-    if (nTitleLines && (!bHeaderBar || bHandleCol))
+    if (!(nTitleLines && (!bHeaderBar || bHandleCol)))
+        return;
+
+    // iterate through columns to redraw
+    long nX = 0;
+    size_t nCol;
+    for (nCol = 0; nCol < pCols.size() && nX < rRect.Right(); ++nCol)
     {
-        // iterate through columns to redraw
-        long nX = 0;
-        size_t nCol;
-        for (nCol = 0; nCol < pCols.size() && nX < rRect.Right(); ++nCol)
+        // skip invisible columns between frozen and scrollable area
+        if (nCol < nFirstCol && !pCols[nCol]->IsFrozen())
+            nCol = nFirstCol;
+
+        // only the handle column?
+        if (bHeaderBar && bHandleCol && nCol > 0)
+            break;
+
+        BrowserColumn* pCol = pCols[nCol];
+
+        // draw the column and increment position
+        if ( pCol->Width() > 4 )
         {
-            // skip invisible columns between frozen and scrollable area
-            if (nCol < nFirstCol && !pCols[nCol]->IsFrozen())
-                nCol = nFirstCol;
-
-            // only the handle column?
-            if (bHeaderBar && bHandleCol && nCol > 0)
-                break;
-
-            BrowserColumn* pCol = pCols[nCol];
-
-            // draw the column and increment position
-            if ( pCol->Width() > 4 )
-            {
-                ButtonFrame aButtonFrame( Point( nX, 0 ),
-                    Size( pCol->Width()-1, GetTitleHeight()-1 ),
-                    pCol->Title(), !IsEnabled());
-                aButtonFrame.Draw(rRenderContext);
-                rRenderContext.DrawLine(Point(nX + pCol->Width() - 1, 0),
-                                        Point(nX + pCol->Width() - 1, GetTitleHeight() - 1));
-            }
-            else
-            {
-                rRenderContext.Push(PushFlags::FILLCOLOR);
-                rRenderContext.SetFillColor(Color(COL_BLACK));
-                rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
-                rRenderContext.Pop();
-            }
-
-            // skip column
-            nX += pCol->Width();
+            ButtonFrame aButtonFrame( Point( nX, 0 ),
+                Size( pCol->Width()-1, GetTitleHeight()-1 ),
+                pCol->Title(), !IsEnabled());
+            aButtonFrame.Draw(rRenderContext);
+            rRenderContext.DrawLine(Point(nX + pCol->Width() - 1, 0),
+                                    Point(nX + pCol->Width() - 1, GetTitleHeight() - 1));
         }
-
-        // retouching
-        if ( !bHeaderBar && nCol == pCols.size() )
+        else
         {
-            const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
-            Color aColFace(rSettings.GetFaceColor());
-            rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-            rRenderContext.SetFillColor(aColFace);
-            rRenderContext.SetLineColor(aColFace);
-            rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0),
-                                              Point(rRect.Right(), GetTitleHeight() - 2 )));
+            rRenderContext.Push(PushFlags::FILLCOLOR);
+            rRenderContext.SetFillColor(Color(COL_BLACK));
+            rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
             rRenderContext.Pop();
         }
+
+        // skip column
+        nX += pCol->Width();
+    }
+
+    // retouching
+    if ( !bHeaderBar && nCol == pCols.size() )
+    {
+        const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
+        Color aColFace(rSettings.GetFaceColor());
+        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.SetFillColor(aColFace);
+        rRenderContext.SetLineColor(aColFace);
+        rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0),
+                                          Point(rRect.Right(), GetTitleHeight() - 2 )));
+        rRenderContext.Pop();
     }
 }
 

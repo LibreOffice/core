@@ -1289,19 +1289,19 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )
 
 IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
-    if ( !pBar->IsItemMode() )
-    {
-        Size aSize;
-        sal_uInt16 nTabs = pBar->GetItemCount();
-        long nTmpSize = 0;
+    if ( pBar->IsItemMode() )
+        return;
 
-        for ( sal_uInt16 i = 1; i <= nTabs; ++i )
-        {
-            long nWidth = pBar->GetItemSize(i);
-            aSize.Width() =  nWidth + nTmpSize;
-            nTmpSize += nWidth;
-            mpImpl->mpView->SetTab( i, aSize.Width(), MapUnit::MapPixel );
-        }
+    Size aSize;
+    sal_uInt16 nTabs = pBar->GetItemCount();
+    long nTmpSize = 0;
+
+    for ( sal_uInt16 i = 1; i <= nTabs; ++i )
+    {
+        long nWidth = pBar->GetItemSize(i);
+        aSize.Width() =  nWidth + nTmpSize;
+        nTmpSize += nWidth;
+        mpImpl->mpView->SetTab( i, aSize.Width(), MapUnit::MapPixel );
     }
 }
 

@@ -69,18 +69,18 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
 
 void VCLXHatchWindow::QueryObjAreaPixel( tools::Rectangle & aRect )
 {
-    if ( m_xController.is() )
-    {
-        awt::Rectangle aUnoRequestRect = AWTRectangle( aRect );
+    if ( !m_xController.is() )
+        return;
 
-        try {
-            awt::Rectangle aUnoResultRect = m_xController->calcAdjustedRectangle( aUnoRequestRect );
-            aRect = VCLRectangle( aUnoResultRect );
-        }
-        catch( uno::Exception& )
-        {
-            OSL_FAIL( "Can't adjust rectangle size!" );
-        }
+    awt::Rectangle aUnoRequestRect = AWTRectangle( aRect );
+
+    try {
+        awt::Rectangle aUnoResultRect = m_xController->calcAdjustedRectangle( aUnoRequestRect );
+        aRect = VCLRectangle( aUnoResultRect );
+    }
+    catch( uno::Exception& )
+    {
+        OSL_FAIL( "Can't adjust rectangle size!" );
     }
 }
 

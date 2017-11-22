@@ -490,33 +490,33 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
 
 void ImplCalculateCropRect( ::Graphic const & rGraphic, const text::GraphicCrop& rGraphicCropLogic, tools::Rectangle& rGraphicCropPixel )
 {
-    if ( rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom )
+    if ( !(rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom) )
+        return;
+
+    Size aSourceSizePixel( rGraphic.GetSizePixel() );
+    if ( !(aSourceSizePixel.Width() && aSourceSizePixel.Height()) )
+        return;
+
+    if ( !(rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom) )
+        return;
+
+    Size aSize100thMM( 0, 0 );
+    if( rGraphic.GetPrefMapMode().GetMapUnit() != MapUnit::MapPixel )
     {
-        Size aSourceSizePixel( rGraphic.GetSizePixel() );
-        if ( aSourceSizePixel.Width() && aSourceSizePixel.Height() )
-        {
-            if ( rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom )
-            {
-                Size aSize100thMM( 0, 0 );
-                if( rGraphic.GetPrefMapMode().GetMapUnit() != MapUnit::MapPixel )
-                {
-                    aSize100thMM = OutputDevice::LogicToLogic(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
-                }
-                else
-                {
-                    aSize100thMM = Application::GetDefaultDevice()->PixelToLogic(rGraphic.GetPrefSize(), MapMode(MapUnit::Map100thMM));
-                }
-                if ( aSize100thMM.Width() && aSize100thMM.Height() )
-                {
-                    double fSourceSizePixelWidth = static_cast<double>(aSourceSizePixel.Width());
-                    double fSourceSizePixelHeight= static_cast<double>(aSourceSizePixel.Height());
-                    rGraphicCropPixel.Left() = static_cast< sal_Int32 >((fSourceSizePixelWidth * rGraphicCropLogic.Left ) / aSize100thMM.Width());
-                    rGraphicCropPixel.Top() = static_cast< sal_Int32 >((fSourceSizePixelHeight * rGraphicCropLogic.Top ) / aSize100thMM.Height());
-                    rGraphicCropPixel.Right() = static_cast< sal_Int32 >(( fSourceSizePixelWidth * ( aSize100thMM.Width() - rGraphicCropLogic.Right ) ) / aSize100thMM.Width() );
-                    rGraphicCropPixel.Bottom() = static_cast< sal_Int32 >(( fSourceSizePixelHeight * ( aSize100thMM.Height() - rGraphicCropLogic.Bottom ) ) / aSize100thMM.Height() );
-                }
-            }
-        }
+        aSize100thMM = OutputDevice::LogicToLogic(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
+    }
+    else
+    {
+        aSize100thMM = Application::GetDefaultDevice()->PixelToLogic(rGraphic.GetPrefSize(), MapMode(MapUnit::Map100thMM));
+    }
+    if ( aSize100thMM.Width() && aSize100thMM.Height() )
+    {
+        double fSourceSizePixelWidth = static_cast<double>(aSourceSizePixel.Width());
+        double fSourceSizePixelHeight= static_cast<double>(aSourceSizePixel.Height());
+        rGraphicCropPixel.Left() = static_cast< sal_Int32 >((fSourceSizePixelWidth * rGraphicCropLogic.Left ) / aSize100thMM.Width());
+        rGraphicCropPixel.Top() = static_cast< sal_Int32 >((fSourceSizePixelHeight * rGraphicCropLogic.Top ) / aSize100thMM.Height());
+        rGraphicCropPixel.Right() = static_cast< sal_Int32 >(( fSourceSizePixelWidth * ( aSize100thMM.Width() - rGraphicCropLogic.Right ) ) / aSize100thMM.Width() );
+        rGraphicCropPixel.Bottom() = static_cast< sal_Int32 >(( fSourceSizePixelHeight * ( aSize100thMM.Height() - rGraphicCropLogic.Bottom ) ) / aSize100thMM.Height() );
     }
 }
 
@@ -536,35 +536,35 @@ void ImplApplyBitmapScaling( ::Graphic& rGraphic, sal_Int32 nPixelWidth, sal_Int
 
 void ImplApplyBitmapResolution( ::Graphic& rGraphic, sal_Int32 nImageResolution, const Size& rVisiblePixelSize, const awt::Size& rLogicalSize )
 {
-    if ( nImageResolution && rLogicalSize.Width && rLogicalSize.Height )
+    if ( !(nImageResolution && rLogicalSize.Width && rLogicalSize.Height) )
+        return;
+
+    const double fImageResolution = static_cast<double>( nImageResolution );
+    const double fSourceDPIX = ( static_cast<double>(rVisiblePixelSize.Width()) * 2540.0 ) / static_cast<double>(rLogicalSize.Width);
+    const double fSourceDPIY = ( static_cast<double>(rVisiblePixelSize.Height()) * 2540.0 ) / static_cast<double>(rLogicalSize.Height);
+    const sal_Int32 nSourcePixelWidth( rGraphic.GetSizePixel().Width() );
+    const sal_Int32 nSourcePixelHeight( rGraphic.GetSizePixel().Height() );
+    const double fSourcePixelWidth = static_cast<double>( nSourcePixelWidth );
+    const double fSourcePixelHeight= static_cast<double>( nSourcePixelHeight );
+
+    sal_Int32 nDestPixelWidth = nSourcePixelWidth;
+    sal_Int32 nDestPixelHeight = nSourcePixelHeight;
+
+    // check, if the bitmap DPI exceeds the maximum DPI
+    if( fSourceDPIX > fImageResolution )
     {
-        const double fImageResolution = static_cast<double>( nImageResolution );
-        const double fSourceDPIX = ( static_cast<double>(rVisiblePixelSize.Width()) * 2540.0 ) / static_cast<double>(rLogicalSize.Width);
-        const double fSourceDPIY = ( static_cast<double>(rVisiblePixelSize.Height()) * 2540.0 ) / static_cast<double>(rLogicalSize.Height);
-        const sal_Int32 nSourcePixelWidth( rGraphic.GetSizePixel().Width() );
-        const sal_Int32 nSourcePixelHeight( rGraphic.GetSizePixel().Height() );
-        const double fSourcePixelWidth = static_cast<double>( nSourcePixelWidth );
-        const double fSourcePixelHeight= static_cast<double>( nSourcePixelHeight );
-
-        sal_Int32 nDestPixelWidth = nSourcePixelWidth;
-        sal_Int32 nDestPixelHeight = nSourcePixelHeight;
-
-        // check, if the bitmap DPI exceeds the maximum DPI
-        if( fSourceDPIX > fImageResolution )
-        {
-            nDestPixelWidth = static_cast<sal_Int32>(( fSourcePixelWidth * fImageResolution ) / fSourceDPIX);
-            if ( !nDestPixelWidth || ( nDestPixelWidth > nSourcePixelWidth ) )
-                nDestPixelWidth = nSourcePixelWidth;
-        }
-        if ( fSourceDPIY > fImageResolution )
-        {
-            nDestPixelHeight= static_cast<sal_Int32>(( fSourcePixelHeight* fImageResolution ) / fSourceDPIY);
-            if ( !nDestPixelHeight || ( nDestPixelHeight > nSourcePixelHeight ) )
-                nDestPixelHeight = nSourcePixelHeight;
-        }
-        if ( ( nDestPixelWidth != nSourcePixelWidth ) || ( nDestPixelHeight != nSourcePixelHeight ) )
-            ImplApplyBitmapScaling( rGraphic, nDestPixelWidth, nDestPixelHeight );
+        nDestPixelWidth = static_cast<sal_Int32>(( fSourcePixelWidth * fImageResolution ) / fSourceDPIX);
+        if ( !nDestPixelWidth || ( nDestPixelWidth > nSourcePixelWidth ) )
+            nDestPixelWidth = nSourcePixelWidth;
     }
+    if ( fSourceDPIY > fImageResolution )
+    {
+        nDestPixelHeight= static_cast<sal_Int32>(( fSourcePixelHeight* fImageResolution ) / fSourceDPIY);
+        if ( !nDestPixelHeight || ( nDestPixelHeight > nSourcePixelHeight ) )
+            nDestPixelHeight = nSourcePixelHeight;
+    }
+    if ( ( nDestPixelWidth != nSourcePixelWidth ) || ( nDestPixelHeight != nSourcePixelHeight ) )
+        ImplApplyBitmapScaling( rGraphic, nDestPixelWidth, nDestPixelHeight );
 }
 
 void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyValue >& rFilterData )
@@ -741,94 +741,94 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
         }
     }
 
-    if( pOStm )
+    if( !pOStm )
+        return;
+
+    uno::Sequence< beans::PropertyValue >   aFilterDataSeq;
+    const char*                             pFilterShortName = nullptr;
+
+    for( i = 0; i < rMediaProperties.getLength(); ++i )
     {
-        uno::Sequence< beans::PropertyValue >   aFilterDataSeq;
-        const char*                             pFilterShortName = nullptr;
+        const OUString   aName( rMediaProperties[ i ].Name );
+        const uno::Any          aValue( rMediaProperties[ i ].Value );
 
-        for( i = 0; i < rMediaProperties.getLength(); ++i )
+        if (aName == "FilterData")
         {
-            const OUString   aName( rMediaProperties[ i ].Name );
-            const uno::Any          aValue( rMediaProperties[ i ].Value );
-
-            if (aName == "FilterData")
-            {
-                aValue >>= aFilterDataSeq;
-            }
-            else if (aName == "MimeType")
-            {
-                OUString aMimeType;
-
-                aValue >>= aMimeType;
-
-                if (aMimeType == MIMETYPE_BMP)
-                    pFilterShortName = "bmp";
-                else if (aMimeType == MIMETYPE_EPS)
-                    pFilterShortName = "eps";
-                else if (aMimeType == MIMETYPE_GIF)
-                    pFilterShortName = "gif";
-                else if (aMimeType == MIMETYPE_JPG)
-                    pFilterShortName = "jpg";
-                else if (aMimeType == MIMETYPE_MET)
-                    pFilterShortName = "met";
-                else if (aMimeType == MIMETYPE_PNG)
-                    pFilterShortName = "png";
-                else if (aMimeType == MIMETYPE_PCT)
-                    pFilterShortName = "pct";
-                else if (aMimeType == MIMETYPE_PBM)
-                    pFilterShortName = "pbm";
-                else if (aMimeType == MIMETYPE_PGM)
-                    pFilterShortName = "pgm";
-                else if (aMimeType == MIMETYPE_PPM)
-                    pFilterShortName = "ppm";
-                else if (aMimeType == MIMETYPE_RAS)
-                    pFilterShortName = "ras";
-                else if (aMimeType == MIMETYPE_SVM)
-                    pFilterShortName = "svm";
-                else if (aMimeType == MIMETYPE_TIF)
-                    pFilterShortName = "tif";
-                else if (aMimeType == MIMETYPE_EMF)
-                    pFilterShortName = "emf";
-                else if (aMimeType == MIMETYPE_WMF)
-                    pFilterShortName = "wmf";
-                else if (aMimeType == MIMETYPE_XPM)
-                    pFilterShortName = "xpm";
-                else if (aMimeType == MIMETYPE_SVG)
-                    pFilterShortName = "svg";
-                else if (aMimeType == MIMETYPE_VCLGRAPHIC)
-                    pFilterShortName = MIMETYPE_VCLGRAPHIC;
-            }
+            aValue >>= aFilterDataSeq;
         }
-
-        if( pFilterShortName )
+        else if (aName == "MimeType")
         {
-            ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
+            OUString aMimeType;
 
+            aValue >>= aMimeType;
+
+            if (aMimeType == MIMETYPE_BMP)
+                pFilterShortName = "bmp";
+            else if (aMimeType == MIMETYPE_EPS)
+                pFilterShortName = "eps";
+            else if (aMimeType == MIMETYPE_GIF)
+                pFilterShortName = "gif";
+            else if (aMimeType == MIMETYPE_JPG)
+                pFilterShortName = "jpg";
+            else if (aMimeType == MIMETYPE_MET)
+                pFilterShortName = "met";
+            else if (aMimeType == MIMETYPE_PNG)
+                pFilterShortName = "png";
+            else if (aMimeType == MIMETYPE_PCT)
+                pFilterShortName = "pct";
+            else if (aMimeType == MIMETYPE_PBM)
+                pFilterShortName = "pbm";
+            else if (aMimeType == MIMETYPE_PGM)
+                pFilterShortName = "pgm";
+            else if (aMimeType == MIMETYPE_PPM)
+                pFilterShortName = "ppm";
+            else if (aMimeType == MIMETYPE_RAS)
+                pFilterShortName = "ras";
+            else if (aMimeType == MIMETYPE_SVM)
+                pFilterShortName = "svm";
+            else if (aMimeType == MIMETYPE_TIF)
+                pFilterShortName = "tif";
+            else if (aMimeType == MIMETYPE_EMF)
+                pFilterShortName = "emf";
+            else if (aMimeType == MIMETYPE_WMF)
+                pFilterShortName = "wmf";
+            else if (aMimeType == MIMETYPE_XPM)
+                pFilterShortName = "xpm";
+            else if (aMimeType == MIMETYPE_SVG)
+                pFilterShortName = "svg";
+            else if (aMimeType == MIMETYPE_VCLGRAPHIC)
+                pFilterShortName = MIMETYPE_VCLGRAPHIC;
+        }
+    }
+
+    if( !pFilterShortName )
+        return;
+
+    ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
+
+    {
+        const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
+        const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
+
+        if( pGraphic && ( pGraphic->GetType() != GraphicType::NONE ) )
+        {
+            ::Graphic aGraphic( *pGraphic );
+            ImplApplyFilterData( aGraphic, aFilterDataSeq );
+
+            /* sj: using a temporary memory stream, because some graphic filters are seeking behind
+               stream end (which leads to an invalid argument exception then). */
+            SvMemoryStream aMemStrm;
+            aMemStrm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+            if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
+                WriteGraphic( aMemStrm, aGraphic );
+            else
             {
-                const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
-                const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
-
-                if( pGraphic && ( pGraphic->GetType() != GraphicType::NONE ) )
-                {
-                    ::Graphic aGraphic( *pGraphic );
-                    ImplApplyFilterData( aGraphic, aFilterDataSeq );
-
-                    /* sj: using a temporary memory stream, because some graphic filters are seeking behind
-                       stream end (which leads to an invalid argument exception then). */
-                    SvMemoryStream aMemStrm;
-                    aMemStrm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                    if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
-                        WriteGraphic( aMemStrm, aGraphic );
-                    else
-                    {
-                        rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
-                                                rFilter.GetExportFormatNumberForShortName( OUString::createFromAscii( pFilterShortName ) ),
-                                                    ( aFilterDataSeq.getLength() ? &aFilterDataSeq : nullptr ) );
-                    }
-                    aMemStrm.Seek( STREAM_SEEK_TO_END );
-                    pOStm->WriteBytes( aMemStrm.GetData(), aMemStrm.Tell() );
-                }
+                rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
+                                        rFilter.GetExportFormatNumberForShortName( OUString::createFromAscii( pFilterShortName ) ),
+                                            ( aFilterDataSeq.getLength() ? &aFilterDataSeq : nullptr ) );
             }
+            aMemStrm.Seek( STREAM_SEEK_TO_END );
+            pOStm->WriteBytes( aMemStrm.GetData(), aMemStrm.Tell() );
         }
     }
 }

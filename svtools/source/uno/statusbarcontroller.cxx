@@ -131,39 +131,39 @@ void SAL_CALL StatusbarController::initialize( const Sequence< Any >& aArguments
         bInitialized = m_bInitialized;
     }
 
-    if ( !bInitialized )
+    if ( bInitialized )
+        return;
+
+    SolarMutexGuard aSolarMutexGuard;
+    m_bInitialized = true;
+
+    PropertyValue aPropValue;
+    for ( int i = 0; i < aArguments.getLength(); i++ )
     {
-        SolarMutexGuard aSolarMutexGuard;
-        m_bInitialized = true;
-
-        PropertyValue aPropValue;
-        for ( int i = 0; i < aArguments.getLength(); i++ )
+        if ( aArguments[i] >>= aPropValue )
         {
-            if ( aArguments[i] >>= aPropValue )
+            if ( aPropValue.Name == "Frame" )
+                aPropValue.Value >>= m_xFrame;
+            else if ( aPropValue.Name == "CommandURL" )
+                aPropValue.Value >>= m_aCommandURL;
+            else if ( aPropValue.Name == "ServiceManager" )
             {
-                if ( aPropValue.Name == "Frame" )
-                    aPropValue.Value >>= m_xFrame;
-                else if ( aPropValue.Name == "CommandURL" )
-                    aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name == "ServiceManager" )
-                {
-                    Reference<XMultiServiceFactory> xMSF;
-                    aPropValue.Value >>= xMSF;
-                    if( xMSF.is() )
-                        m_xContext = comphelper::getComponentContext(xMSF);
-                }
-                else if ( aPropValue.Name == "ParentWindow" )
-                    aPropValue.Value >>= m_xParentWindow;
-                else if ( aPropValue.Name == "Identifier" )
-                    aPropValue.Value >>= m_nID;
-                else if ( aPropValue.Name == "StatusbarItem" )
-                    aPropValue.Value >>= m_xStatusbarItem;
+                Reference<XMultiServiceFactory> xMSF;
+                aPropValue.Value >>= xMSF;
+                if( xMSF.is() )
+                    m_xContext = comphelper::getComponentContext(xMSF);
             }
+            else if ( aPropValue.Name == "ParentWindow" )
+                aPropValue.Value >>= m_xParentWindow;
+            else if ( aPropValue.Name == "Identifier" )
+                aPropValue.Value >>= m_nID;
+            else if ( aPropValue.Name == "StatusbarItem" )
+                aPropValue.Value >>= m_xStatusbarItem;
         }
-
-        if ( !m_aCommandURL.isEmpty() )
-            m_aListenerMap.emplace( m_aCommandURL, Reference< XDispatch >() );
     }
+
+    if ( !m_aCommandURL.isEmpty() )
+        m_aListenerMap.emplace( m_aCommandURL, Reference< XDispatch >() );
 }
 
 void SAL_CALL StatusbarController::update()
@@ -534,19 +534,19 @@ void StatusbarController::execute( const css::uno::Sequence< css::beans::Propert
         }
     }
 
-    if ( xDispatch.is() && xURLTransformer.is() )
-    {
-        try
-        {
-            css::util::URL aTargetURL;
+    if ( !(xDispatch.is() && xURLTransformer.is()) )
+        return;
 
-            aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
-            xDispatch->dispatch( aTargetURL, aArgs );
-        }
-        catch ( DisposedException& )
-        {
-        }
+    try
+    {
+        css::util::URL aTargetURL;
+
+        aTargetURL.Complete = aCommandURL;
+        xURLTransformer->parseStrict( aTargetURL );
+        xDispatch->dispatch( aTargetURL, aArgs );
+    }
+    catch ( DisposedException& )
+    {
     }
 }
 

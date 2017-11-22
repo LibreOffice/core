@@ -317,30 +317,30 @@ void SvLBoxButton::Clone( SvLBoxItem* pSource )
 
 void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::RenderContext const & rRenderContext)
 {
-    if (rRenderContext.IsNativeControlSupported( i_eType, ControlPart::Entire) )
+    if (!rRenderContext.IsNativeControlSupported( i_eType, ControlPart::Entire) )
+        return;
+
+    ImplControlValue    aControlValue;
+    tools::Rectangle    aCtrlRegion( Point( 0, 0 ), io_rSize );
+
+    aControlValue.setTristateVal( ButtonValue::On );
+
+    tools::Rectangle aNativeBounds, aNativeContent;
+    bool bNativeOK = rRenderContext.GetNativeControlRegion( i_eType,
+                                                        ControlPart::Entire,
+                                                        aCtrlRegion,
+                                                        ControlState::ENABLED,
+                                                        aControlValue,
+                                                        aNativeBounds,
+                                                        aNativeContent );
+    if( bNativeOK )
     {
-        ImplControlValue    aControlValue;
-        tools::Rectangle    aCtrlRegion( Point( 0, 0 ), io_rSize );
-
-        aControlValue.setTristateVal( ButtonValue::On );
-
-        tools::Rectangle aNativeBounds, aNativeContent;
-        bool bNativeOK = rRenderContext.GetNativeControlRegion( i_eType,
-                                                            ControlPart::Entire,
-                                                            aCtrlRegion,
-                                                            ControlState::ENABLED,
-                                                            aControlValue,
-                                                            aNativeBounds,
-                                                            aNativeContent );
-        if( bNativeOK )
-        {
-            Size aContentSize( aNativeContent.GetSize() );
-            // leave a little space around the box image (looks better)
-            if( aContentSize.Height() + 2 > io_rSize.Height() )
-                io_rSize.Height() = aContentSize.Height() + 2;
-            if( aContentSize.Width() + 2 > io_rSize.Width() )
-                io_rSize.Width() = aContentSize.Width() + 2;
-        }
+        Size aContentSize( aNativeContent.GetSize() );
+        // leave a little space around the box image (looks better)
+        if( aContentSize.Height() + 2 > io_rSize.Height() )
+            io_rSize.Height() = aContentSize.Height() + 2;
+        if( aContentSize.Width() + 2 > io_rSize.Width() )
+            io_rSize.Width() = aContentSize.Width() + 2;
     }
 }
 

@@ -627,21 +627,21 @@ void AssignmentPersistentData::ImplCommit()
             // so the dialog will at least show up before we do the loading of the
             // configuration data and the (maybe time consuming) analysis of the data source/table to select
 
-        if ( !m_pImpl->bWorkingPersistent )
-        {
-            StyleSettings aSystemStyle = GetSettings().GetStyleSettings();
-            const ::Color& rNewColor = aSystemStyle.GetDialogColor();
+        if ( m_pImpl->bWorkingPersistent )
+            return;
 
-            m_pDatasource->SetReadOnly();
-            m_pDatasource->SetBackground( Wallpaper( rNewColor ) );
-            m_pDatasource->SetControlBackground( rNewColor );
+        StyleSettings aSystemStyle = GetSettings().GetStyleSettings();
+        const ::Color& rNewColor = aSystemStyle.GetDialogColor();
 
-            m_pTable->SetReadOnly();
-            m_pTable->SetBackground( Wallpaper( rNewColor ) );
-            m_pTable->SetControlBackground( rNewColor );
+        m_pDatasource->SetReadOnly();
+        m_pDatasource->SetBackground( Wallpaper( rNewColor ) );
+        m_pDatasource->SetControlBackground( rNewColor );
 
-            m_pAdministrateDatasources->Hide( );
-        }
+        m_pTable->SetReadOnly();
+        m_pTable->SetBackground( Wallpaper( rNewColor ) );
+        m_pTable->SetControlBackground( rNewColor );
+
+        m_pAdministrateDatasources->Hide( );
     }
 
 

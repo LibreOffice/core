@@ -263,41 +263,41 @@ void ImageMap::ImpReadCERNLine( const OString& rLine  )
     }
     OString aToken = aBuf.makeStringAndClear();
 
-    if ( NOTEOL( cChar ) )
+    if ( !(NOTEOL( cChar )) )
+        return;
+
+    if ( ( aToken == "rectangle" ) || ( aToken == "rect" ) )
     {
-        if ( ( aToken == "rectangle" ) || ( aToken == "rect" ) )
-        {
-            const Point     aTopLeft( ImpReadCERNCoords( &pStr ) );
-            const Point     aBottomRight( ImpReadCERNCoords( &pStr ) );
-            const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
-            const tools::Rectangle aRect( aTopLeft, aBottomRight );
+        const Point     aTopLeft( ImpReadCERNCoords( &pStr ) );
+        const Point     aBottomRight( ImpReadCERNCoords( &pStr ) );
+        const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
+        const tools::Rectangle aRect( aTopLeft, aBottomRight );
 
-            IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
-            maList.push_back( pObj );
-        }
-        else if ( ( aToken == "circle" ) || ( aToken == "circ" ) )
-        {
-            const Point     aCenter( ImpReadCERNCoords( &pStr ) );
-            const long      nRadius = ImpReadCERNRadius( &pStr );
-            const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
+        IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
+        maList.push_back( pObj );
+    }
+    else if ( ( aToken == "circle" ) || ( aToken == "circ" ) )
+    {
+        const Point     aCenter( ImpReadCERNCoords( &pStr ) );
+        const long      nRadius = ImpReadCERNRadius( &pStr );
+        const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
 
-            IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
-            maList.push_back( pObj );
-        }
-        else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
-        {
-            const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr, '(') - 1;
-            tools::Polygon aPoly( nCount );
-            OUString aURL;
+        IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
+        maList.push_back( pObj );
+    }
+    else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
+    {
+        const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr, '(') - 1;
+        tools::Polygon aPoly( nCount );
+        OUString aURL;
 
-            for ( sal_uInt16 i = 0; i < nCount; i++ )
-                aPoly[ i ] = ImpReadCERNCoords( &pStr );
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
+            aPoly[ i ] = ImpReadCERNCoords( &pStr );
 
-            aURL = ImpReadCERNURL( &pStr, "" );
+        aURL = ImpReadCERNURL( &pStr, "" );
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
-            maList.push_back( pObj );
-        }
+        IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
+        maList.push_back( pObj );
     }
 }
 
@@ -404,42 +404,42 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
     }
     OString aToken = aBuf.makeStringAndClear();
 
-    if ( NOTEOL( cChar ) )
+    if ( !(NOTEOL( cChar )) )
+        return;
+
+    if ( aToken == "rect" )
     {
-        if ( aToken == "rect" )
-        {
-            const OUString  aURL( ImpReadNCSAURL( &pStr, "" ) );
-            const Point     aTopLeft( ImpReadNCSACoords( &pStr ) );
-            const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
-            const tools::Rectangle aRect( aTopLeft, aBottomRight );
+        const OUString  aURL( ImpReadNCSAURL( &pStr, "" ) );
+        const Point     aTopLeft( ImpReadNCSACoords( &pStr ) );
+        const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
+        const tools::Rectangle aRect( aTopLeft, aBottomRight );
 
-            IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
-            maList.push_back( pObj );
-        }
-        else if ( aToken == "circle" )
-        {
-            const OUString  aURL( ImpReadNCSAURL( &pStr, "" ) );
-            const Point     aCenter( ImpReadNCSACoords( &pStr ) );
-            const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
-            long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
-                                                   (double) aDX.Y() * aDX.Y() );
+        IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
+        maList.push_back( pObj );
+    }
+    else if ( aToken == "circle" )
+    {
+        const OUString  aURL( ImpReadNCSAURL( &pStr, "" ) );
+        const Point     aCenter( ImpReadNCSACoords( &pStr ) );
+        const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
+        long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
+                                               (double) aDX.Y() * aDX.Y() );
 
-            IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
-            maList.push_back( pObj );
-        }
-        else if ( aToken == "poly" )
-        {
-            const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
-                ',') - 1;
-            const OUString aURL( ImpReadNCSAURL( &pStr, "" ) );
-            tools::Polygon aPoly( nCount );
+        IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
+        maList.push_back( pObj );
+    }
+    else if ( aToken == "poly" )
+    {
+        const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
+            ',') - 1;
+        const OUString aURL( ImpReadNCSAURL( &pStr, "" ) );
+        tools::Polygon aPoly( nCount );
 
-            for ( sal_uInt16 i = 0; i < nCount; i++ )
-                aPoly[ i ] = ImpReadNCSACoords( &pStr );
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
+            aPoly[ i ] = ImpReadNCSACoords( &pStr );
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
-            maList.push_back( pObj );
-        }
+        IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
+        maList.push_back( pObj );
     }
 }
 

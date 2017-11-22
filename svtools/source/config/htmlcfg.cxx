@@ -123,71 +123,71 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    if(aValues.getLength() != aNames.getLength())
+        return;
+
+    pImpl->nFlags = HtmlCfgFlags::NONE;
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        pImpl->nFlags = HtmlCfgFlags::NONE;
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            switch(nProp)
             {
-                switch(nProp)
-                {
-                    case  0:
-                        if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HtmlCfgFlags::UnknownTags;
-                    break;//"Import/UnknownTag",
-                    case  1:
-                        if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HtmlCfgFlags::IgnoreFontFamily;
-                    break;//"Import/FontSetting",
-                    case  2: pValues[nProp] >>= pImpl->aFontSizeArr[0]; break;//"Import/FontSize/Size_1",
-                    case  3: pValues[nProp] >>= pImpl->aFontSizeArr[1]; break;//"Import/FontSize/Size_2",
-                    case  4: pValues[nProp] >>= pImpl->aFontSizeArr[2]; break;//"Import/FontSize/Size_3",
-                    case  5: pValues[nProp] >>= pImpl->aFontSizeArr[3]; break;//"Import/FontSize/Size_4",
-                    case  6: pValues[nProp] >>= pImpl->aFontSizeArr[4]; break;//"Import/FontSize/Size_5",
-                    case  7: pValues[nProp] >>= pImpl->aFontSizeArr[5]; break;//"Import/FontSize/Size_6",
-                    case  8: pValues[nProp] >>= pImpl->aFontSizeArr[6]; break;//"Import/FontSize/Size_7",
-                    case  9://"Export/Browser",
+                case  0:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        pImpl->nFlags |= HtmlCfgFlags::UnknownTags;
+                break;//"Import/UnknownTag",
+                case  1:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        pImpl->nFlags |= HtmlCfgFlags::IgnoreFontFamily;
+                break;//"Import/FontSetting",
+                case  2: pValues[nProp] >>= pImpl->aFontSizeArr[0]; break;//"Import/FontSize/Size_1",
+                case  3: pValues[nProp] >>= pImpl->aFontSizeArr[1]; break;//"Import/FontSize/Size_2",
+                case  4: pValues[nProp] >>= pImpl->aFontSizeArr[2]; break;//"Import/FontSize/Size_3",
+                case  5: pValues[nProp] >>= pImpl->aFontSizeArr[3]; break;//"Import/FontSize/Size_4",
+                case  6: pValues[nProp] >>= pImpl->aFontSizeArr[4]; break;//"Import/FontSize/Size_5",
+                case  7: pValues[nProp] >>= pImpl->aFontSizeArr[5]; break;//"Import/FontSize/Size_6",
+                case  8: pValues[nProp] >>= pImpl->aFontSizeArr[6]; break;//"Import/FontSize/Size_7",
+                case  9://"Export/Browser",
+                    {
+                        sal_Int32 nExpMode = 0;
+                        pValues[nProp] >>= nExpMode;
+                        switch( nExpMode )
                         {
-                            sal_Int32 nExpMode = 0;
-                            pValues[nProp] >>= nExpMode;
-                            switch( nExpMode )
-                            {
-                                case 1:     nExpMode = HTML_CFG_MSIE;    break;
-                                case 3:     nExpMode = HTML_CFG_WRITER;     break;
-                                case 4:     nExpMode = HTML_CFG_NS40;       break;
-                                default:    nExpMode = HTML_CFG_NS40;       break;
-                            }
-
-                            pImpl->nExportMode = nExpMode;
+                            case 1:     nExpMode = HTML_CFG_MSIE;    break;
+                            case 3:     nExpMode = HTML_CFG_WRITER;     break;
+                            case 4:     nExpMode = HTML_CFG_NS40;       break;
+                            default:    nExpMode = HTML_CFG_NS40;       break;
                         }
-                        break;
-                    case 10:
-                        if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HtmlCfgFlags::StarBasic;
-                    break;//"Export/Basic",
-                    case 11:
-                        if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HtmlCfgFlags::PrintLayoutExtension;
-                    break;//"Export/PrintLayout",
-                    case 12:
-                        if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HtmlCfgFlags::LocalGrf;
-                    break;//"Export/LocalGraphic",
-                    case 13:
-                        if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HtmlCfgFlags::IsBasicWarning;
-                    break;//"Export/Warning"
 
-                    case 14: pValues[nProp] >>= pImpl->eEncoding;
-                             pImpl->bIsEncodingDefault = false;
-                    break;//"Export/Encoding"
+                        pImpl->nExportMode = nExpMode;
+                    }
+                    break;
+                case 10:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        pImpl->nFlags |= HtmlCfgFlags::StarBasic;
+                break;//"Export/Basic",
+                case 11:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        pImpl->nFlags |= HtmlCfgFlags::PrintLayoutExtension;
+                break;//"Export/PrintLayout",
+                case 12:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        pImpl->nFlags |= HtmlCfgFlags::LocalGrf;
+                break;//"Export/LocalGraphic",
+                case 13:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        pImpl->nFlags |= HtmlCfgFlags::IsBasicWarning;
+                break;//"Export/Warning"
 
-                    case 15:
-                        if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HtmlCfgFlags::NumbersEnglishUS;
-                    break;//"Import/NumbersEnglishUS"
-                }
+                case 14: pValues[nProp] >>= pImpl->eEncoding;
+                         pImpl->bIsEncodingDefault = false;
+                break;//"Export/Encoding"
+
+                case 15:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        pImpl->nFlags |= HtmlCfgFlags::NumbersEnglishUS;
+                break;//"Import/NumbersEnglishUS"
             }
         }
     }

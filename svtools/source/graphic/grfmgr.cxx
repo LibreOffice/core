@@ -150,85 +150,85 @@ void GraphicObject::ImplAssignGraphicData()
 
 void GraphicObject::ImplEnsureGraphicManager()
 {
-    if (!mpGlobalMgr)
+    if (mpGlobalMgr)
+        return;
+
+    sal_uLong nCacheSize = 20000;
+    sal_uLong nMaxObjCacheSize = 20000;
+    sal_uLong nTimeoutSeconds = 20000;
+    if (!utl::ConfigManager::IsFuzzing())
     {
-        sal_uLong nCacheSize = 20000;
-        sal_uLong nMaxObjCacheSize = 20000;
-        sal_uLong nTimeoutSeconds = 20000;
-        if (!utl::ConfigManager::IsFuzzing())
+        try
         {
-            try
-            {
-                nCacheSize = officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get();
-                nMaxObjCacheSize = officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get();
-                nTimeoutSeconds = officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get();
-            }
-            catch (...)
-            {
-            }
+            nCacheSize = officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get();
+            nMaxObjCacheSize = officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get();
+            nTimeoutSeconds = officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get();
         }
-        mpGlobalMgr = new GraphicManager(nCacheSize, nMaxObjCacheSize);
-        mpGlobalMgr->SetCacheTimeout(nTimeoutSeconds);
+        catch (...)
+        {
+        }
     }
+    mpGlobalMgr = new GraphicManager(nCacheSize, nMaxObjCacheSize);
+    mpGlobalMgr->SetCacheTimeout(nTimeoutSeconds);
 }
 
 void GraphicObject::ImplAutoSwapIn()
 {
-    if( IsSwappedOut() )
+    if( !IsSwappedOut() )
+        return;
+
     {
+        mbIsInSwapIn = true;
+
+        if( maGraphic.SwapIn() )
+            mbAutoSwapped = false;
+        else
         {
-            mbIsInSwapIn = true;
+            SvStream* pStream = GetSwapStream();
 
-            if( maGraphic.SwapIn() )
-                mbAutoSwapped = false;
-            else
+            if( GRFMGR_AUTOSWAPSTREAM_NONE != pStream )
             {
-                SvStream* pStream = GetSwapStream();
-
-                if( GRFMGR_AUTOSWAPSTREAM_NONE != pStream )
+                if( GRFMGR_AUTOSWAPSTREAM_LINK == pStream )
                 {
-                    if( GRFMGR_AUTOSWAPSTREAM_LINK == pStream )
+                    if( HasLink() )
                     {
-                        if( HasLink() )
+                        OUString aURLStr;
+
+                        if( osl::FileBase::getFileURLFromSystemPath( GetLink(), aURLStr ) == osl::FileBase::E_None )
                         {
-                            OUString aURLStr;
+                            std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::READ ));
 
-                            if( osl::FileBase::getFileURLFromSystemPath( GetLink(), aURLStr ) == osl::FileBase::E_None )
+                            if( pIStm )
                             {
-                                std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::READ ));
-
-                                if( pIStm )
-                                {
-                                    ReadGraphic( *pIStm, maGraphic );
-                                    mbAutoSwapped = ( maGraphic.GetType() != GraphicType::NONE );
-                                }
+                                ReadGraphic( *pIStm, maGraphic );
+                                mbAutoSwapped = ( maGraphic.GetType() != GraphicType::NONE );
                             }
                         }
                     }
-                    else if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )
-                        mbAutoSwapped = !maGraphic.SwapIn();
-                    else if( GRFMGR_AUTOSWAPSTREAM_LOADED == pStream )
-                        mbAutoSwapped = maGraphic.IsSwapOut();
-                    else
-                    {
-                        mbAutoSwapped = !maGraphic.SwapIn( pStream );
-                        delete pStream;
-                    }
                 }
+                else if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )
+                    mbAutoSwapped = !maGraphic.SwapIn();
+                else if( GRFMGR_AUTOSWAPSTREAM_LOADED == pStream )
+                    mbAutoSwapped = maGraphic.IsSwapOut();
                 else
                 {
-                    DBG_ASSERT( ( GraphicType::NONE == meType ) || ( GraphicType::Default == meType ),
-                                "GraphicObject::ImplAutoSwapIn: could not get stream to swap in graphic! (=>KA)" );
+                    mbAutoSwapped = !maGraphic.SwapIn( pStream );
+                    delete pStream;
                 }
             }
-
-            mbIsInSwapIn = false;
-
-            if (!mbAutoSwapped)
-                mpGlobalMgr->ImplGraphicObjectWasSwappedIn( *this );
+            else
+            {
+                DBG_ASSERT( ( GraphicType::NONE == meType ) || ( GraphicType::Default == meType ),
+                            "GraphicObject::ImplAutoSwapIn: could not get stream to swap in graphic! (=>KA)" );
+            }
         }
-        ImplAssignGraphicData();
+
+        mbIsInSwapIn = false;
+
+        if (!mbAutoSwapped)
+            mpGlobalMgr->ImplGraphicObjectWasSwappedIn( *this );
     }
+    ImplAssignGraphicData();
 }
 
 bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,

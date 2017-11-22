@@ -54,35 +54,35 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
 
-    if(aValues.getLength() == rNames.getLength())
+    if(aValues.getLength() != rNames.getLength())
+        return;
+
+    for(int nProp = 0; nProp < rNames.getLength(); ++nProp, ++pValues)
     {
-        for(int nProp = 0; nProp < rNames.getLength(); ++nProp, ++pValues)
+        if(pValues->hasValue())
         {
-            if(pValues->hasValue())
+            switch(nProp)
             {
-                switch(nProp)
+                case  0:    //"Window/Drag"
                 {
-                    case  0:    //"Window/Drag"
-                    {
-                        short nTmp;
-                        if (*pValues >>= nTmp)
-                            nDragMode = (DragMode)nTmp;
-                        break;
-                    }
-                    case  1: bMenuMouseFollow = *o3tl::doAccess<bool>(*pValues); break; //"Menu/FollowMouse",
-                    case  2:
-                    {
-                        short nTmp;
-                        if (*pValues >>= nTmp)
-                            nSnapMode = (SnapType)nTmp; //"Dialog/MousePositioning",
-                        break;
-                    }
-                    case  3: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
-#if defined( UNX )
-                    case  4: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialising/Enabled",
-                    case  5: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
-#endif
+                    short nTmp;
+                    if (*pValues >>= nTmp)
+                        nDragMode = (DragMode)nTmp;
+                    break;
                 }
+                case  1: bMenuMouseFollow = *o3tl::doAccess<bool>(*pValues); break; //"Menu/FollowMouse",
+                case  2:
+                {
+                    short nTmp;
+                    if (*pValues >>= nTmp)
+                        nSnapMode = (SnapType)nTmp; //"Dialog/MousePositioning",
+                    break;
+                }
+                case  3: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
+#if defined( UNX )
+                case  4: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialising/Enabled",
+                case  5: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
+#endif
             }
         }
     }

@@ -463,31 +463,32 @@ void SvResizeWindow::SelectMouse( const Point & rPos )
     short nGrab = m_aResizer.SelectMove( this, rPos );
     if( nGrab >= 4 )
         nGrab -= 4;
-    if( m_nMoveGrab != nGrab )
-    { // Pointer did change
-        if( -1 == nGrab )
-            SetPointer( m_aOldPointer );
-        else
+    if( m_nMoveGrab == nGrab )
+        return;
+
+    // Pointer did change
+    if( -1 == nGrab )
+        SetPointer( m_aOldPointer );
+    else
+    {
+        PointerStyle aStyle = PointerStyle::Move;
+        if( nGrab == 3 )
+            aStyle = PointerStyle::ESize;
+        else if( nGrab == 2 )
+            aStyle = PointerStyle::NESize;
+        else if( nGrab == 1 )
+            aStyle = PointerStyle::SSize;
+        else if( nGrab == 0 )
+            aStyle = PointerStyle::SESize;
+        if( m_nMoveGrab == -1 ) // the first time
         {
-            PointerStyle aStyle = PointerStyle::Move;
-            if( nGrab == 3 )
-                aStyle = PointerStyle::ESize;
-            else if( nGrab == 2 )
-                aStyle = PointerStyle::NESize;
-            else if( nGrab == 1 )
-                aStyle = PointerStyle::SSize;
-            else if( nGrab == 0 )
-                aStyle = PointerStyle::SESize;
-            if( m_nMoveGrab == -1 ) // the first time
-            {
-                m_aOldPointer = GetPointer();
-                SetPointer( Pointer( aStyle ) );
-            }
-            else
-                SetPointer( Pointer( aStyle ) );
+            m_aOldPointer = GetPointer();
+            SetPointer( Pointer( aStyle ) );
         }
-        m_nMoveGrab = nGrab;
+        else
+            SetPointer( Pointer( aStyle ) );
     }
+    m_nMoveGrab = nGrab;
 }
 
 /*************************************************************************
@@ -532,23 +533,23 @@ void SvResizeWindow::MouseMove( const MouseEvent & rEvt )
 *************************************************************************/
 void SvResizeWindow::MouseButtonUp( const MouseEvent & rEvt )
 {
-    if( m_aResizer.GetGrab() != -1 )
+    if( m_aResizer.GetGrab() == -1 )
+        return;
+
+    tools::Rectangle aRect( m_aResizer.GetTrackRectPixel( rEvt.GetPosPixel() ) );
+    Point aDiff = GetPosPixel();
+    aRect.SetPos( aRect.TopLeft() + aDiff );
+    // aRect -= GetAllBorderPixel();
+    m_aResizer.ValidateRect( aRect );
+
+    m_pWrapper->QueryObjAreaPixel( aRect );
+
+    tools::Rectangle aOutRect;
+    if( m_aResizer.SelectRelease( this, rEvt.GetPosPixel(), aOutRect ) )
     {
-        tools::Rectangle aRect( m_aResizer.GetTrackRectPixel( rEvt.GetPosPixel() ) );
-        Point aDiff = GetPosPixel();
-        aRect.SetPos( aRect.TopLeft() + aDiff );
-        // aRect -= GetAllBorderPixel();
-        m_aResizer.ValidateRect( aRect );
-
-        m_pWrapper->QueryObjAreaPixel( aRect );
-
-        tools::Rectangle aOutRect;
-        if( m_aResizer.SelectRelease( this, rEvt.GetPosPixel(), aOutRect ) )
-        {
-            m_nMoveGrab = -1;
-            SetPointer( m_aOldPointer );
-            m_pWrapper->RequestObjAreaPixel( aRect );
-        }
+        m_nMoveGrab = -1;
+        SetPointer( m_aOldPointer );
+        m_pWrapper->RequestObjAreaPixel( aRect );
     }
 }
 

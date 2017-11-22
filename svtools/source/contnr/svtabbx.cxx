@@ -40,36 +40,36 @@ using namespace ::com::sun::star::accessibility;
 void SvTabListBox::SetTabs()
 {
     SvTreeListBox::SetTabs();
-    if( nTabCount )
+    if( !nTabCount )
+        return;
+
+    DBG_ASSERT(pTabList,"TabList ?");
+
+    // The tree listbox has now inserted its tabs into the list. Now we
+    // fluff up the list with additional tabs and adjust the rightmost tab
+    // of the tree listbox.
+
+    // Picking the rightmost tab.
+    // HACK for the explorer! If ViewParent != 0, the first tab of the tree
+    // listbox is calculated by the tre listbox itself! This behavior is
+    // necessary for ButtonsOnRoot, as the explorer does not know in this
+    // case, which additional offset it need to add to the tabs in this mode
+    // -- the tree listbox knows that, though!
+    /*
+    if( !pViewParent )
     {
-        DBG_ASSERT(pTabList,"TabList ?");
+    SvLBoxTab* pFirstTab = (SvLBoxTab*)aTabs.GetObject( aTabs.Count()-1 );
+    pFirstTab->SetPos( pTabList[0].GetPos() );
+    pFirstTab->nFlags &= ~MYTABMASK;
+    pFirstTab->nFlags |= pTabList[0].nFlags;
+    }
+    */
 
-        // The tree listbox has now inserted its tabs into the list. Now we
-        // fluff up the list with additional tabs and adjust the rightmost tab
-        // of the tree listbox.
-
-        // Picking the rightmost tab.
-        // HACK for the explorer! If ViewParent != 0, the first tab of the tree
-        // listbox is calculated by the tre listbox itself! This behavior is
-        // necessary for ButtonsOnRoot, as the explorer does not know in this
-        // case, which additional offset it need to add to the tabs in this mode
-        // -- the tree listbox knows that, though!
-        /*
-        if( !pViewParent )
-        {
-        SvLBoxTab* pFirstTab = (SvLBoxTab*)aTabs.GetObject( aTabs.Count()-1 );
-        pFirstTab->SetPos( pTabList[0].GetPos() );
-        pFirstTab->nFlags &= ~MYTABMASK;
-        pFirstTab->nFlags |= pTabList[0].nFlags;
-        }
-        */
-
-        // append all other tabs to the list
-        for( sal_uInt16 nCurTab = 1; nCurTab < nTabCount; nCurTab++ )
-        {
-            SvLBoxTab* pTab = pTabList+nCurTab;
-            AddTab( pTab->GetPos(), pTab->nFlags );
-        }
+    // append all other tabs to the list
+    for( sal_uInt16 nCurTab = 1; nCurTab < nTabCount; nCurTab++ )
+    {
+        SvLBoxTab* pTab = pTabList+nCurTab;
+        AddTab( pTab->GetPos(), pTab->nFlags );
     }
 }
 
@@ -144,19 +144,19 @@ void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
 void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
 {
     DBG_ASSERT(nTab<nTabCount,"Invalid Tab-Pos");
-    if( nTab < nTabCount )
-    {
-        DBG_ASSERT(pTabList,"TabList?");
-        MapMode aMMSource( eMapUnit );
-        MapMode aMMDest( MapUnit::MapPixel );
-        Size aSize( nValue, 0 );
-        aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
-        nValue = aSize.Width();
-        pTabList[ nTab ].SetPos( nValue );
-        SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
-        if( IsUpdateMode() )
-            Invalidate();
-    }
+    if( nTab >= nTabCount )
+        return;
+
+    DBG_ASSERT(pTabList,"TabList?");
+    MapMode aMMSource( eMapUnit );
+    MapMode aMMDest( MapUnit::MapPixel );
+    Size aSize( nValue, 0 );
+    aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
+    nValue = aSize.Width();
+    pTabList[ nTab ].SetPos( nValue );
+    SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
+    if( IsUpdateMode() )
+        Invalidate();
 }
 
 SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,

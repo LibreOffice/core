@@ -497,23 +497,23 @@ void BrowseBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumn
 {
     const MultiSelection* pColumnSel = GetColumnSelection();
     sal_Int32 nCount = GetSelectedColumnCount();
-    if( pColumnSel && nCount )
-    {
-        _rColumns.realloc( nCount );
+    if( !(pColumnSel && nCount) )
+        return;
 
-        sal_Int32 nIndex = 0;
-        const size_t nRangeCount = pColumnSel->GetRangeCount();
-        for( size_t nRange = 0; nRange < nRangeCount; ++nRange )
+    _rColumns.realloc( nCount );
+
+    sal_Int32 nIndex = 0;
+    const size_t nRangeCount = pColumnSel->GetRangeCount();
+    for( size_t nRange = 0; nRange < nRangeCount; ++nRange )
+    {
+        const Range& rRange = pColumnSel->GetRange( nRange );
+        // loop has to include aRange.Max()
+        for( sal_Int32 nCol = rRange.Min(); nCol <= (sal_Int32)rRange.Max(); ++nCol )
         {
-            const Range& rRange = pColumnSel->GetRange( nRange );
-            // loop has to include aRange.Max()
-            for( sal_Int32 nCol = rRange.Min(); nCol <= (sal_Int32)rRange.Max(); ++nCol )
-            {
-                DBG_ASSERT( nIndex < nCount,
-                    "GetAllSelectedColumns - range overflow" );
-                _rColumns[ nIndex ] = nCol;
-                ++nIndex;
-            }
+            DBG_ASSERT( nIndex < nCount,
+                "GetAllSelectedColumns - range overflow" );
+            _rColumns[ nIndex ] = nCol;
+            ++nIndex;
         }
     }
 }

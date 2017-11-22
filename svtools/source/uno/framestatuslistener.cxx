@@ -256,19 +256,19 @@ void FrameStatusListener::bindListener()
     }
 
     // Call without locked mutex as we are called back from dispatch implementation
-    if ( xStatusListener.is() )
+    if ( !xStatusListener.is() )
+        return;
+
+    try
     {
-        try
+        for (Listener & rListener : aDispatchVector)
         {
-            for (Listener & rListener : aDispatchVector)
-            {
-                if ( rListener.xDispatch.is() )
-                    rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
-            }
+            if ( rListener.xDispatch.is() )
+                rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
         }
-        catch (const Exception&)
-        {
-        }
+    }
+    catch (const Exception&)
+    {
     }
 }
 

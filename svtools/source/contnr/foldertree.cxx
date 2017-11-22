@@ -41,48 +41,48 @@ void FolderTree::RequestingChildren( SvTreeListEntry* pEntry )
 
 void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 {
-    if( pEntry )
+    if( !pEntry )
+        return;
+
+    OUString* pURL = static_cast< OUString* >( pEntry->GetUserData() );
+
+    if( pURL && m_sLastUpdatedDir != *pURL )
     {
-        OUString* pURL = static_cast< OUString* >( pEntry->GetUserData() );
-
-        if( pURL && m_sLastUpdatedDir != *pURL )
+        while (SvTreeListEntry* pChild = FirstChild(pEntry))
         {
-            while (SvTreeListEntry* pChild = FirstChild(pEntry))
+            GetModel()->Remove(pChild);
+        }
+
+        ::std::vector< SortingData_Impl* > aContent;
+
+        ::rtl::Reference< ::svt::FileViewContentEnumerator >
+            xContentEnumerator(new FileViewContentEnumerator(
+            m_xEnv, aContent, m_aMutex, nullptr));
+
+        FolderDescriptor aFolder( *pURL );
+
+        EnumerationResult eResult =
+            xContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
+
+        if ( EnumerationResult::SUCCESS == eResult )
+        {
+            for(SortingData_Impl* i : aContent)
             {
-                GetModel()->Remove(pChild);
-            }
-
-            ::std::vector< SortingData_Impl* > aContent;
-
-            ::rtl::Reference< ::svt::FileViewContentEnumerator >
-                xContentEnumerator(new FileViewContentEnumerator(
-                m_xEnv, aContent, m_aMutex, nullptr));
-
-            FolderDescriptor aFolder( *pURL );
-
-            EnumerationResult eResult =
-                xContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
-
-            if ( EnumerationResult::SUCCESS == eResult )
-            {
-                for(SortingData_Impl* i : aContent)
+                if( i->mbIsFolder )
                 {
-                    if( i->mbIsFolder )
-                    {
-                        SvTreeListEntry* pNewEntry = InsertEntry( i->GetTitle(), pEntry, true );
+                    SvTreeListEntry* pNewEntry = InsertEntry( i->GetTitle(), pEntry, true );
 
-                        OUString* sData = new OUString( i->maTargetURL );
-                        pNewEntry->SetUserData( static_cast< void* >( sData ) );
-                    }
+                    OUString* sData = new OUString( i->maTargetURL );
+                    pNewEntry->SetUserData( static_cast< void* >( sData ) );
                 }
             }
         }
-        else
-        {
-            // this dir was updated recently
-            // next time read this remote folder
-            m_sLastUpdatedDir.clear();
-        }
+    }
+    else
+    {
+        // this dir was updated recently
+        // next time read this remote folder
+        m_sLastUpdatedDir.clear();
     }
 }
 
@@ -92,24 +92,24 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
 
     SvTreeListEntry* pParent = GetCurEntry();
 
-    if( pParent && !IsExpanded( pParent ) )
+    if( !(pParent && !IsExpanded( pParent )) )
+        return;
+
+    while (SvTreeListEntry* pChild = FirstChild(pParent))
     {
-        while (SvTreeListEntry* pChild = FirstChild(pParent))
-        {
-            GetModel()->Remove(pChild);
-        }
-
-
-        for(::std::vector< std::pair< OUString, OUString > >::const_iterator it = rFolders.begin(); it != rFolders.end() ; ++it)
-        {
-            SvTreeListEntry* pNewEntry = InsertEntry( it->first, pParent, true  );
-            OUString* sData = new OUString( it->second );
-            pNewEntry->SetUserData( static_cast< void* >( sData ) );
-        }
-
-        m_sLastUpdatedDir = rUrl;
-        Expand( pParent );
+        GetModel()->Remove(pChild);
     }
+
+
+    for(::std::vector< std::pair< OUString, OUString > >::const_iterator it = rFolders.begin(); it != rFolders.end() ; ++it)
+    {
+        SvTreeListEntry* pNewEntry = InsertEntry( it->first, pParent, true  );
+        OUString* sData = new OUString( it->second );
+        pNewEntry->SetUserData( static_cast< void* >( sData ) );
+    }
+
+    m_sLastUpdatedDir = rUrl;
+    Expand( pParent );
 }
 
 void FolderTree::SetTreePath( OUString const & sUrl )

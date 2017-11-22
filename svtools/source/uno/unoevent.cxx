@@ -119,20 +119,20 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
     // else: bRetValueOK not set
 
     // if we don't have a return value, make an empty one
-    if (! bRetValueOK)
-    {
-        // create "None" macro
-        Sequence<PropertyValue> aSequence(1);
+    if ( bRetValueOK)
+        return;
 
-        PropertyValue aKindValue;
-        aKindValue.Name = sEventType;
-        Any aTmp;
-        aTmp <<= OUString(sNone);
-        aKindValue.Value = aTmp;
-        aSequence[0] = aKindValue;
+    // create "None" macro
+    Sequence<PropertyValue> aSequence(1);
 
-        rAny <<= aSequence;
-    }
+    PropertyValue aKindValue;
+    aKindValue.Name = sEventType;
+    Any aTmp;
+    aTmp <<= OUString(sNone);
+    aKindValue.Value = aTmp;
+    aSequence[0] = aKindValue;
+
+    rAny <<= aSequence;
 }
 
 /// @throws IllegalArgumentException

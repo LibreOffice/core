@@ -175,21 +175,21 @@ void SvSimpleTable::SetTabs()
     SvHeaderTabListBox::SetTabs();
 
     sal_uInt16 nPrivTabCount = TabCount();
-    if ( nPrivTabCount )
+    if ( !nPrivTabCount )
+        return;
+
+    if ( nPrivTabCount > aHeaderBar->GetItemCount() )
+        nPrivTabCount = aHeaderBar->GetItemCount();
+
+    sal_uInt16 i, nPos = 0;
+    for ( i = 1; i < nPrivTabCount; ++i )
     {
-        if ( nPrivTabCount > aHeaderBar->GetItemCount() )
-            nPrivTabCount = aHeaderBar->GetItemCount();
-
-        sal_uInt16 i, nPos = 0;
-        for ( i = 1; i < nPrivTabCount; ++i )
-        {
-            sal_uInt16 nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
-            aHeaderBar->SetItemSize( i, nNewSize );
-            nPos = (sal_uInt16)GetTab(i);
-        }
-
-        aHeaderBar->SetItemSize( i, HEADERBAR_FULLSIZE ); // because no tab for last entry
+        sal_uInt16 nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
+        aHeaderBar->SetItemSize( i, nNewSize );
+        nPos = (sal_uInt16)GetTab(i);
     }
+
+    aHeaderBar->SetItemSize( i, HEADERBAR_FULLSIZE ); // because no tab for last entry
 }
 
 void SvSimpleTable::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -324,19 +324,19 @@ void SvSimpleTable::HBarClick()
 {
     sal_uInt16 nId=aHeaderBar->GetCurItemId();
 
-    if (aHeaderBar->GetItemBits(nId) & HeaderBarItemBits::CLICKABLE)
-    {
-        if(nId==nSortCol+1)
-        {
-            SortByCol(nId-1,!bSortDirection);
-        }
-        else
-        {
-            SortByCol(nId-1,bSortDirection);
-        }
+    if (!(aHeaderBar->GetItemBits(nId) & HeaderBarItemBits::CLICKABLE))
+        return;
 
-        aHeaderBarClickLink.Call(this);
+    if(nId==nSortCol+1)
+    {
+        SortByCol(nId-1,!bSortDirection);
     }
+    else
+    {
+        SortByCol(nId-1,bSortDirection);
+    }
+
+    aHeaderBarClickLink.Call(this);
 }
 
 void SvSimpleTable::HBarDrag()

@@ -489,44 +489,45 @@ namespace svt
         else if (IsEditing() && !aController->GetWindow().HasChildPathFocus())
             AsynchGetFocus();
 
-        if (IsEditing() && aController->GetWindow().IsEnabled() && aController->WantMouseEvent())
-        {   // forwards the event to the control
+        if (!(IsEditing() && aController->GetWindow().IsEnabled() && aController->WantMouseEvent()))
+return;
 
-            // If the field has been moved previously, we have to adjust the position
+// forwards the event to the control
 
-            aController->GetWindow().GrabFocus();
+        // If the field has been moved previously, we have to adjust the position
 
-            // the position of the event relative to the controller's window
-            Point aPos = _rEvt.GetPosPixel() - _rEvt.GetRect().TopLeft();
-            // the (child) window which should really get the event
-            vcl::Window* pRealHandler = aController->GetWindow().FindWindow(aPos);
-            if (pRealHandler)
-                // the coords relative to this real handler
-                aPos -= pRealHandler->GetPosPixel();
-            else
-                pRealHandler = &aController->GetWindow();
+        aController->GetWindow().GrabFocus();
 
-            // the faked event
-            MouseEvent aEvent(aPos, _rEvt.GetClicks(), _rEvt.GetMode(),
-                              _rEvt.GetButtons(),
-                              _rEvt.GetModifier());
+        // the position of the event relative to the controller's window
+        Point aPos = _rEvt.GetPosPixel() - _rEvt.GetRect().TopLeft();
+        // the (child) window which should really get the event
+        vcl::Window* pRealHandler = aController->GetWindow().FindWindow(aPos);
+        if (pRealHandler)
+            // the coords relative to this real handler
+            aPos -= pRealHandler->GetPosPixel();
+        else
+            pRealHandler = &aController->GetWindow();
 
-            pRealHandler->MouseButtonDown(aEvent);
-            if (_bUp)
-                pRealHandler->MouseButtonUp(aEvent);
+        // the faked event
+        MouseEvent aEvent(aPos, _rEvt.GetClicks(), _rEvt.GetMode(),
+                          _rEvt.GetButtons(),
+                          _rEvt.GetModifier());
 
-            vcl::Window *pWin = &aController->GetWindow();
-            if (!pWin->IsTracking())
+        pRealHandler->MouseButtonDown(aEvent);
+        if (_bUp)
+            pRealHandler->MouseButtonUp(aEvent);
+
+        vcl::Window *pWin = &aController->GetWindow();
+        if (!pWin->IsTracking())
+        {
+            for (pWin = pWin->GetWindow(GetWindowType::FirstChild);
+                 pWin && !pWin->IsTracking();
+                 pWin = pWin->GetWindow(GetWindowType::Next))
             {
-                for (pWin = pWin->GetWindow(GetWindowType::FirstChild);
-                     pWin && !pWin->IsTracking();
-                     pWin = pWin->GetWindow(GetWindowType::Next))
-                {
-                }
             }
-            if (pWin && pWin->IsTracking())
-                pWin->EndTracking();
         }
+        if (pWin && pWin->IsTracking())
+            pWin->EndTracking();
     }
 
 
@@ -770,20 +771,20 @@ namespace svt
             GetDataWindow().ApplyControlForeground(GetDataWindow(), rStyleSettings.GetFieldTextColor());
         }
 
-        if (bBackground) // FIXME: Outside of Paint Hierarchy
+        if (!bBackground) // FIXME: Outside of Paint Hierarchy
+            return;
+
+        if (GetDataWindow().IsControlBackground())
         {
-            if (GetDataWindow().IsControlBackground())
-            {
-                GetDataWindow().SetControlBackground(GetControlBackground());
-                GetDataWindow().SetBackground(GetDataWindow().GetControlBackground());
-                GetDataWindow().SetFillColor(GetDataWindow().GetControlBackground());
-            }
-            else
-            {
-                GetDataWindow().SetControlBackground();
-                GetDataWindow().SetBackground(rStyleSettings.GetFieldColor());
-                GetDataWindow().SetFillColor(rStyleSettings.GetFieldColor());
-            }
+            GetDataWindow().SetControlBackground(GetControlBackground());
+            GetDataWindow().SetBackground(GetDataWindow().GetControlBackground());
+            GetDataWindow().SetFillColor(GetDataWindow().GetControlBackground());
+        }
+        else
+        {
+            GetDataWindow().SetControlBackground();
+            GetDataWindow().SetBackground(rStyleSettings.GetFieldColor());
+            GetDataWindow().SetFillColor(rStyleSettings.GetFieldColor());
         }
     }
 
@@ -940,38 +941,38 @@ namespace svt
             return;
         }
 
-        if (nEditRow >= 0 && nEditCol > HandleColumnId)
+        if (!(nEditRow >= 0 && nEditCol > HandleColumnId))
+            return;
+
+        aController = GetController(nRow, nCol);
+        if (aController.is())
         {
-            aController = GetController(nRow, nCol);
-            if (aController.is())
+            tools::Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
+            ResizeController(aController, aRect);
+
+            InitController(aController, nEditRow, nEditCol);
+
+            aController->ClearModified();
+            aController->SetModifyHdl(LINK(this,EditBrowseBox,ModifyHdl));
+            EnableAndShow();
+
+            if ( isAccessibleAlive() )
+                implCreateActiveAccessible();
+
+            // activate the cell only of the browser has the focus
+            if ( bHasFocus && bCellFocus )
+                AsynchGetFocus();
+        }
+        else
+        {
+            // no controller -> we have a new "active descendant"
+            if ( isAccessibleAlive() && HasFocus() )
             {
-                tools::Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
-                ResizeController(aController, aRect);
-
-                InitController(aController, nEditRow, nEditCol);
-
-                aController->ClearModified();
-                aController->SetModifyHdl(LINK(this,EditBrowseBox,ModifyHdl));
-                EnableAndShow();
-
-                if ( isAccessibleAlive() )
-                    implCreateActiveAccessible();
-
-                // activate the cell only of the browser has the focus
-                if ( bHasFocus && bCellFocus )
-                    AsynchGetFocus();
-            }
-            else
-            {
-                // no controller -> we have a new "active descendant"
-                if ( isAccessibleAlive() && HasFocus() )
-                {
-                    commitTableEvent(
-                        ACTIVE_DESCENDANT_CHANGED,
-                        makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
-                        Any()
-                    );
-                }
+                commitTableEvent(
+                    ACTIVE_DESCENDANT_CHANGED,
+                    makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
+                    Any()
+                );
             }
         }
     }
@@ -979,37 +980,37 @@ namespace svt
 
     void EditBrowseBox::DeactivateCell(bool bUpdate)
     {
-        if (IsEditing())
+        if (!IsEditing())
+            return;
+
+        if ( isAccessibleAlive() )
         {
-            if ( isAccessibleAlive() )
-            {
-                commitBrowseBoxEvent( CHILD, Any(), makeAny( m_aImpl->m_xActiveCell ) );
-                m_aImpl->clearActiveCell();
-            }
-
-            aOldController = aController;
-            aController.clear();
-
-            // reset the modify handler
-            aOldController->SetModifyHdl(Link<LinkParamNone*,void>());
-
-            if (bHasFocus)
-                GrabFocus(); // ensure that we have (and keep) the focus
-
-            aOldController->suspend();
-
-            // update if requested
-            if (bUpdate)
-                Update();
-
-            nOldEditCol = nEditCol;
-            nOldEditRow = nEditRow;
-
-            // release the controller (asynchronously)
-            if (nEndEvent)
-                Application::RemoveUserEvent(nEndEvent);
-            nEndEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,EndEditHdl), nullptr, true);
+            commitBrowseBoxEvent( CHILD, Any(), makeAny( m_aImpl->m_xActiveCell ) );
+            m_aImpl->clearActiveCell();
         }
+
+        aOldController = aController;
+        aController.clear();
+
+        // reset the modify handler
+        aOldController->SetModifyHdl(Link<LinkParamNone*,void>());
+
+        if (bHasFocus)
+            GrabFocus(); // ensure that we have (and keep) the focus
+
+        aOldController->suspend();
+
+        // update if requested
+        if (bUpdate)
+            Update();
+
+        nOldEditCol = nEditCol;
+        nOldEditRow = nEditRow;
+
+        // release the controller (asynchronously)
+        if (nEndEvent)
+            Application::RemoveUserEvent(nEndEvent);
+        nEndEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,EndEditHdl), nullptr, true);
     }
 
 

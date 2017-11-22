@@ -186,34 +186,34 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
     // to 200MB).
     const sal_uLong nMaxCacheSize(GetMaxCacheSize());
 
-    if(mnUsedSize > nMaxCacheSize)
+    if(mnUsedSize <= nMaxCacheSize)
+        return;
+
+    // Copy the object list for now, because maObjList can change in the meantime unexpectedly.
+    std::vector< GraphicObject* > aCandidates(maObjList.begin(), maObjList.end());
+    // if we use more currently, sort by last DataChangeTimeStamp
+    // sort by DataChangeTimeStamp so that the oldest get removed first
+    std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
+
+    for(decltype(aCandidates)::size_type a(0); mnUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
     {
-        // Copy the object list for now, because maObjList can change in the meantime unexpectedly.
-        std::vector< GraphicObject* > aCandidates(maObjList.begin(), maObjList.end());
-        // if we use more currently, sort by last DataChangeTimeStamp
-        // sort by DataChangeTimeStamp so that the oldest get removed first
-        std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
-
-        for(decltype(aCandidates)::size_type a(0); mnUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
+        // swap out until we have no more or the goal to use less than nMaxCacheSize
+        // is reached
+        GraphicObject* pObj = aCandidates[a];
+        if( pObj == pGraphicToIgnore )
         {
-            // swap out until we have no more or the goal to use less than nMaxCacheSize
-            // is reached
-            GraphicObject* pObj = aCandidates[a];
-            if( pObj == pGraphicToIgnore )
-            {
-                continue;
-            }
-            if (maObjList.find(pObj) == maObjList.end())
-            {
-                // object has been deleted when swapping out another one
-                continue;
-            }
+            continue;
+        }
+        if (maObjList.find(pObj) == maObjList.end())
+        {
+            // object has been deleted when swapping out another one
+            continue;
+        }
 
-            // do not swap out when we have less than 16KB data objects
-            if(pObj->GetSizeBytes() >= (16 * 1024))
-            {
-                pObj->FireSwapOutRequest();
-            }
+        // do not swap out when we have less than 16KB data objects
+        if(pObj->GetSizeBytes() >= (16 * 1024))
+        {
+            pObj->FireSwapOutRequest();
         }
     }
 }
@@ -1438,62 +1438,62 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
         rBmpEx.Rotate( aAttr.GetRotation(), Color( COL_TRANSPARENT ) );
     }
 
-    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
+    if( !(( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent()) )
+        return;
+
+    AlphaMask   aAlpha;
+    sal_uInt8       cTrans = aAttr.GetTransparency();
+
+    if( !rBmpEx.IsTransparent() )
+        aAlpha = AlphaMask( rBmpEx.GetSizePixel(), &cTrans );
+    else if( !rBmpEx.IsAlpha() )
     {
-        AlphaMask   aAlpha;
-        sal_uInt8       cTrans = aAttr.GetTransparency();
-
-        if( !rBmpEx.IsTransparent() )
-            aAlpha = AlphaMask( rBmpEx.GetSizePixel(), &cTrans );
-        else if( !rBmpEx.IsAlpha() )
-        {
-            aAlpha = rBmpEx.GetMask();
-            aAlpha.Replace( 0, cTrans );
-        }
-        else
-        {
-            aAlpha = rBmpEx.GetAlpha();
-            BitmapWriteAccess* pA = aAlpha.AcquireWriteAccess();
-
-            if( pA )
-            {
-                sal_uLong       nTrans = cTrans, nNewTrans;
-                const long  nWidth = pA->Width(), nHeight = pA->Height();
-
-                if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
-                {
-                    for( long nY = 0; nY < nHeight; nY++ )
-                    {
-                        Scanline pAScan = pA->GetScanline( nY );
-
-                        for( long nX = 0; nX < nWidth; nX++ )
-                        {
-                            nNewTrans = nTrans + *pAScan;
-                            *pAScan++ = (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
-                        }
-                    }
-                }
-                else
-                {
-                    BitmapColor aAlphaValue( 0 );
-
-                    for( long nY = 0; nY < nHeight; nY++ )
-                    {
-                        for( long nX = 0; nX < nWidth; nX++ )
-                        {
-                            nNewTrans = nTrans + pA->GetPixel( nY, nX ).GetIndex();
-                            aAlphaValue.SetIndex( (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
-                            pA->SetPixel( nY, nX, aAlphaValue );
-                        }
-                    }
-                }
-
-                aAlpha.ReleaseAccess( pA );
-            }
-        }
-
-        rBmpEx = BitmapEx( rBmpEx.GetBitmap(), aAlpha );
+        aAlpha = rBmpEx.GetMask();
+        aAlpha.Replace( 0, cTrans );
     }
+    else
+    {
+        aAlpha = rBmpEx.GetAlpha();
+        BitmapWriteAccess* pA = aAlpha.AcquireWriteAccess();
+
+        if( pA )
+        {
+            sal_uLong       nTrans = cTrans, nNewTrans;
+            const long  nWidth = pA->Width(), nHeight = pA->Height();
+
+            if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
+            {
+                for( long nY = 0; nY < nHeight; nY++ )
+                {
+                    Scanline pAScan = pA->GetScanline( nY );
+
+                    for( long nX = 0; nX < nWidth; nX++ )
+                    {
+                        nNewTrans = nTrans + *pAScan;
+                        *pAScan++ = (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
+                    }
+                }
+            }
+            else
+            {
+                BitmapColor aAlphaValue( 0 );
+
+                for( long nY = 0; nY < nHeight; nY++ )
+                {
+                    for( long nX = 0; nX < nWidth; nX++ )
+                    {
+                        nNewTrans = nTrans + pA->GetPixel( nY, nX ).GetIndex();
+                        aAlphaValue.SetIndex( (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
+                        pA->SetPixel( nY, nX, aAlphaValue );
+                    }
+                }
+            }
+
+            aAlpha.ReleaseAccess( pA );
+        }
+    }
+
+    rBmpEx = BitmapEx( rBmpEx.GetBitmap(), aAlpha );
 }
 
 void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
@@ -2083,23 +2083,23 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
 
     const Size  aSizePixel( rBmpEx.GetSizePixel() );
 
-    if( rAttr.GetRotation() != 0 && !IsAnimated() )
-    {
-        if( aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height() )
-        {
-            double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
-            double fDstWH = (double) rDstSize.Width() / rDstSize.Height();
-            double fScaleX = 1.0, fScaleY = 1.0;
+    if( !(rAttr.GetRotation() != 0 && !IsAnimated()) )
+        return;
 
-            // always choose scaling to shrink bitmap
-            if( fSrcWH < fDstWH )
-                fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
-            else
-                fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+    if( !(aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height()) )
+        return;
 
-            rBmpEx.Scale( fScaleX, fScaleY );
-        }
-    }
+    double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
+    double fDstWH = (double) rDstSize.Width() / rDstSize.Height();
+    double fScaleX = 1.0, fScaleY = 1.0;
+
+    // always choose scaling to shrink bitmap
+    if( fSrcWH < fDstWH )
+        fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
+    else
+        fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+
+    rBmpEx.Scale( fScaleX, fScaleY );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
