@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_30c93e27",
+        "filename": "solenv/gbuild/HelpHTMLTarget.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2017-11-22T09:41:31Z",
+      "side": 1,
+      "message": "why which?\n\nconfig_host.mk:export XSLTPROC\u003d/usr/bin/xsltproc\n\nso why not using $(XSLTPROC) directly? Also below.\n\nor is this supposed to be ran outside the build (env)?",
+      "revId": "443c0d389a2255a7dbd0e7d44a9ac49a7f2d27c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_50ceca2e",
+        "filename": "solenv/gbuild/HelpHTMLTarget.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2017-11-22T09:41:31Z",
+      "side": 1,
+      "message": "also here",
+      "revId": "443c0d389a2255a7dbd0e7d44a9ac49a7f2d27c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
