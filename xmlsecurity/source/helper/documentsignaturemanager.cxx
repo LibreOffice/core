@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_gpgme.h>
+
 #include <documentsignaturemanager.hxx>
 #include <gpg/SEInitializer.hxx>
 
@@ -64,14 +66,14 @@ bool DocumentSignatureManager::init()
     initXmlSec();
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
-#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
+#if GPGME_HAVE_GPGME
     mxGpgSEInitializer.set(new SEInitializerGpg());
 #endif
 
     if (mxSEInitializer.is())
         mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
-#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
+#if GPGME_HAVE_GPGME
     if (mxGpgSEInitializer.is())
         mxGpgSecurityContext = mxGpgSEInitializer->createSecurityContext(OUString());
 

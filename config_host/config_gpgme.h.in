@@ -10,6 +10,9 @@
 /* Configuration for gpgme++.
  */
 
+// Defined if gpgme support is available
+#define GPGME_HAVE_GPGME 0
+
 // Defined if gpgme supports exporting minimal key.
 #define GPGME_CAN_EXPORT_MINIMAL_KEY 0
 

@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_gpgme.h>
 
 #include <xsecctl.hxx>
 #include <documentsignaturehelper.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
-#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
+#if GPGME_HAVE_GPGME
 # include <gpg/xmlsignature_gpgimpl.hxx>
 #endif
 
@@ -160,7 +161,7 @@ void XSecController::createXSecComponent( )
 
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
-#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
+#if GPGME_HAVE_GPGME
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xSecurityContext, cssu::UNO_QUERY );
     if (xServiceInfo->getImplementationName() == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
         m_xXMLSignature.set(new XMLSignature_GpgImpl());
