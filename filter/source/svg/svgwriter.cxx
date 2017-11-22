@@ -1228,13 +1228,10 @@ void SVGTextWriter::startTextShape()
         if( rFont.GetOrientation() )
             {
                 Point   aRot( maTextPos );
-                OUString aTransform =
-                    "translate(" + OUString::number( aRot.X() ) +
-                    "," + OUString::number( aRot.Y() ) + ") rotate(" +
-                    OUString::number( rFont.GetOrientation() * -0.1 ) +
-                    ") translate(" + OUString::number( -aRot.X() ) +
-                    "," + OUString::number( -aRot.Y() ) + ")";
-
+                OUString aTransform = "rotate(" +
+                    OUString::number( rFont.GetOrientation() * -0.1 ) + " " +
+                    OUString::number( aRot.X() ) + " " +
+                    OUString::number( aRot.Y() ) + ")";
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
             }
 
@@ -2568,13 +2565,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     if( rFont.GetOrientation() )
     {
         Point   aRot( aPos );
-        OUString  aTransform =
-                "translate(" + OUString::number( aRot.X() ) +
-                "," + OUString::number( aRot.Y() ) + ") rotate(" +
-                OUString::number( rFont.GetOrientation() * -0.1 ) +
-                ") translate(" + OUString::number( -aRot.X() ) +
-                "," + OUString::number( -aRot.Y() ) + ")";
-
+        OUString  aTransform = "rotate(" +
+                    OUString::number( rFont.GetOrientation() * -0.1 ) + " " +
+                    OUString::number( aRot.X() ) + " " +
+                    OUString::number( aRot.Y() ) + ")";
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
     }
 
