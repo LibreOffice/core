@@ -1433,7 +1433,7 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 bool    bIsAttr;
                 while ( (bIsAttr = TokenInGroup(TG::Attribute))
                        ||  TokenInGroup(TG::FontAttr))
-                    aStack.push((bIsAttr) ? DoAttribut() : DoFontAttribut());
+                    aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
 
                 SmNode *pFirstNode = DoPower();
                 while (!aStack.empty())

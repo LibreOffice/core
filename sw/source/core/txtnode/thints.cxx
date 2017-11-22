@@ -251,7 +251,7 @@ lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
     const sal_Int32 nOtherStart, const sal_Int32 nOtherEnd, bool bOtherDummy)
 {
     const bool bSplitAtStart(nNewStart < nOtherStart);
-    const sal_Int32 nSplitPos( (bSplitAtStart) ? nOtherStart : nOtherEnd );
+    const sal_Int32 nSplitPos( bSplitAtStart ? nOtherStart : nOtherEnd );
     // first find the portion that is split (not necessarily the last one!)
     NestList_t::iterator const iter(
         std::find_if( rSplits.begin(), rSplits.end(),
@@ -2718,8 +2718,8 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
         // this loop needs to handle the case where one has a CHARFMT and the
         // other CHARFMT + RSID-only AUTOFMT, so...
         // want to skip over RSID-only AUTOFMT here, hence the -1
-        if ((nAttributesInPor1 - ((isRsidOnlyAutoFormat1) ? 1 : 0)) ==
-            (nAttributesInPor2 - ((isRsidOnlyAutoFormat2) ? 1 : 0))
+        if ((nAttributesInPor1 - (isRsidOnlyAutoFormat1 ? 1 : 0)) ==
+            (nAttributesInPor2 - (isRsidOnlyAutoFormat2 ? 1 : 0))
             && (nAttributesInPor1 != 0 || nAttributesInPor2 != 0))
         {
             // _if_ there is one element more either in aRange1 or aRange2

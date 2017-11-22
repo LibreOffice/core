@@ -252,7 +252,7 @@ lcl_setAutoStyle(IStyleAccess & rStyleAccess, const uno::Any & rValue,
          throw lang::IllegalArgumentException();
     }
 
-    SwFormatAutoFormat aFormat( (bPara)
+    SwFormatAutoFormat aFormat( bPara
         ? sal::static_int_cast< sal_uInt16 >(RES_AUTO_STYLE)
         : sal::static_int_cast< sal_uInt16 >(RES_TXTATR_AUTOFMT) );
     aFormat.SetStyleHandle( pStyle );
@@ -388,7 +388,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
         lcl_setCharStyle(rPam.GetDoc(), aStyle, aSet);
         // the first style should replace the current attributes,
         // all other have to be added
-        SwUnoCursorHelper::SetCursorAttr(rPam, aSet, (nStyle)
+        SwUnoCursorHelper::SetCursorAttr(rPam, aSet, nStyle
                 ? SetAttrMode::DONTREPLACE
                 : SetAttrMode::DEFAULT);
         rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::START, nullptr);
@@ -630,7 +630,7 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
             SwTextNode const*const pNd = rNds[ n ]->GetTextNode();
             if( pNd )
             {
-                SwFormatColl *const pNdFormat = (bConditional)
+                SwFormatColl *const pNdFormat = bConditional
                     ? pNd->GetFormatColl() : &pNd->GetAnyFormatColl();
                 if( !pFormat )
                 {
@@ -646,7 +646,7 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
 
         pTmpCursor = pTmpCursor->GetNext();
     } while ( pTmpCursor != &rPaM );
-    return (bError) ? nullptr : pFormat;
+    return bError ? nullptr : pFormat;
 }
 
 class SwXTextCursor::Impl
@@ -873,7 +873,7 @@ sal_Int64 SAL_CALL
 SwXTextCursor::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
     const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXTextCursor>(rId, this) );
-    return (nRet) ? nRet : OTextCursorHelper::getSomething(rId);
+    return nRet ? nRet : OTextCursorHelper::getSomething(rId);
 }
 
 void SAL_CALL SwXTextCursor::collapseToStart()
@@ -976,7 +976,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
         {
             rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
             pCNode = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
-            pTableNode = (pCNode) ? pCNode->FindTableNode() : nullptr;
+            pTableNode = pCNode ? pCNode->FindTableNode() : nullptr;
         }
         if (pCNode)
         {
@@ -2915,7 +2915,7 @@ SwXTextCursor::createEnumeration()
             ? rUnoCursor.GetPoint()->nNode.GetNode().FindTableNode()
             : nullptr);
     SwTable const*const pTable(
-            (pStartNode) ? & pStartNode->GetTable() : nullptr );
+            pStartNode ? & pStartNode->GetTable() : nullptr );
     return SwXParagraphEnumeration::Create(pParentText, pNewCursor, eSetType, pStartNode, pTable);
 }
 

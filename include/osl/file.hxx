@@ -1906,7 +1906,7 @@ public:
     {
         return static_cast< RC >(osl_createDirectoryPath(
             aDirectoryUrl.pData,
-            (aDirectoryCreationObserver) ? onDirectoryCreated : NULL,
+            aDirectoryCreationObserver ? onDirectoryCreated : NULL,
             aDirectoryCreationObserver));
     }
 };

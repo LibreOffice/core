@@ -374,7 +374,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 aCpyPam.GetPoint()->nNode.Assign( pAutoDoc->GetNodes().GetEndOfContent(), -1 );
                 pContentNd = aCpyPam.GetContentNode();
                 aCpyPam.GetPoint()->nContent.Assign(
-                       pContentNd, (pContentNd) ? pContentNd->Len() : 0);
+                       pContentNd, pContentNd ? pContentNd->Len() : 0);
 
                 SwDontExpandItem aExpItem;
                 aExpItem.SaveDontExpandItems( *aPam.GetPoint() );

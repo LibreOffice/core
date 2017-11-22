@@ -1336,7 +1336,7 @@ lcl_GetTextAttrs(
     sal_Int32 const nIndex, RES_TXTATR const nWhich,
     enum SwTextNode::GetTextAttrMode const eMode)
 {
-    size_t const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
+    size_t const nSize = pSwpHints ? pSwpHints->Count() : 0;
     sal_Int32 nPreviousIndex(0); // index of last hint with nWhich
     bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=nullptr;
     switch (eMode)
@@ -1366,7 +1366,7 @@ lcl_GetTextAttrs(
         assert(pEndIdx || pHint->HasDummyChar());
         // If EXPAND is set, simulate the text input behavior, i.e.
         // move the start, and expand the end.
-        bool const bContained( (pEndIdx)
+        bool const bContained( pEndIdx
             ? (*pMatchFunc)(nIndex, nHintStart, *pEndIdx)
             : (nHintStart == nIndex) );
         if (bContained)

@@ -164,7 +164,7 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
 
     if(!b1stSegm && !bSegmFuz)
     {
-        eMarkedSegmentsKind = (bCurve) ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line;
+        eMarkedSegmentsKind = bCurve ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line;
     }
 }
 

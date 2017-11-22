@@ -147,7 +147,7 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteForm
     }
     if (!xNote.is())
     {
-        SwXFootnote *const pNote((pFootnoteFormat)
+        SwXFootnote *const pNote(pFootnoteFormat
                 ? new SwXFootnote(rDoc, *pFootnoteFormat)
                 : new SwXFootnote(isEndnote));
         xNote.set(pNote);
@@ -175,7 +175,7 @@ sal_Int64 SAL_CALL
 SwXFootnote::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
     const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXFootnote>(rId, this) );
-    return (nRet) ? nRet : SwXText::getSomething(rId);
+    return nRet ? nRet : SwXText::getSomething(rId);
 }
 
 OUString SAL_CALL
@@ -300,7 +300,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
     OTextCursorHelper *const pCursor =
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pNewDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
+        pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pNewDoc)
     {
         throw lang::IllegalArgumentException();
@@ -322,7 +322,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
     SwXTextCursor const*const pTextCursor(
             dynamic_cast<SwXTextCursor*>(pCursor));
     const bool bForceExpandHints( pTextCursor && pTextCursor->IsAtEndOfMeta() );
-    const SetAttrMode nInsertFlags = (bForceExpandHints)
+    const SetAttrMode nInsertFlags = bForceExpandHints
         ? SetAttrMode::FORCEHINTEXPAND
         : SetAttrMode::DEFAULT;
 

@@ -1176,7 +1176,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     mbPageBorderOnlyLeftRight(false)
 {
     aPrefVisiLayers.SetAll();
-    eListKind = (bMasterPage) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
+    eListKind = bMasterPage ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 
     mpSdrPageProperties.reset(new SdrPageProperties(*this));
 }

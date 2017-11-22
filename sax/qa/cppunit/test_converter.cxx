@@ -79,7 +79,7 @@ private:
 void doTest(util::Duration const & rid, char const*const pis,
         char const*const i_pos = nullptr)
 {
-    char const*const pos((i_pos) ? i_pos : pis);
+    char const*const pos(i_pos ? i_pos : pis);
     util::Duration od;
     OUString is(::rtl::OUString::createFromAscii(pis));
     SAL_INFO("sax.cppunit","about to convert '" << is << "'");
@@ -155,7 +155,7 @@ bool eqDateTime(const util::DateTime& a, const util::DateTime& b) {
 void doTest(util::DateTime const & rdt, char const*const pis,
         char const*const i_pos = nullptr)
 {
-    char const*const pos((i_pos) ? i_pos : pis);
+    char const*const pos(i_pos ? i_pos : pis);
     OUString is(OUString::createFromAscii(pis));
     util::DateTime odt;
     SAL_INFO("sax.cppunit","about to convert '" << is << "'");
@@ -249,7 +249,7 @@ void ConverterTest::testDateTime()
 void doTestTime(util::DateTime const & rdt, char const*const pis,
         char const*const i_pos = nullptr)
 {
-    char const*const pos((i_pos) ? i_pos : pis);
+    char const*const pos(i_pos ? i_pos : pis);
     OUString is(OUString::createFromAscii(pis));
     util::DateTime odt;
     SAL_INFO("sax.cppunit","about to convert '" << is << "'");

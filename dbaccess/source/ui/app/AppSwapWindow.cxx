@@ -129,7 +129,7 @@ bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 ElementType OApplicationSwapWindow::getElementType() const
 {
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl->GetSelectedEntry();
-    return ( pEntry ) ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
+    return pEntry ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
 }
 
 bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )

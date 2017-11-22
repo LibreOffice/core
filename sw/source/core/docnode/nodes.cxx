@@ -1479,7 +1479,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         // move the content into the new node
         bool bOneNd = pStt->nNode == pEnd->nNode;
         const sal_Int32 nLen =
-                ( (bOneNd) ? std::min(pEnd->nContent.GetIndex(), pSrcNd->Len()) : pSrcNd->Len() )
+                ( bOneNd ? std::min(pEnd->nContent.GetIndex(), pSrcNd->Len()) : pSrcNd->Len() )
                 - pStt->nContent.GetIndex();
 
         if( !pEnd->nNode.GetNode().IsContentNode() )

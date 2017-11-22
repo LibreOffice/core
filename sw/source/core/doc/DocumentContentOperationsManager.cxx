@@ -3226,7 +3226,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             *aCpyPaM.GetPoint() = pCopiedPaM->second;
         }
 
-        lcl_CopyBookmarks((pCopiedPaM) ? pCopiedPaM->first : aRgTmp, aCpyPaM);
+        lcl_CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, aCpyPaM);
     }
 
     if( bDelRedlines && ( RedlineFlags::DeleteRedlines & pDest->getIDocumentRedlineAccess().GetRedlineFlags() ))
@@ -4344,7 +4344,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 if( !bCopyOk )
                 {
-                    const sal_Int32 nCpyLen = ( (bOneNode)
+                    const sal_Int32 nCpyLen = ( bOneNode
                                            ? pEnd->nContent.GetIndex()
                                            : pSttTextNd->GetText().getLength())
                                          - pStt->nContent.GetIndex();

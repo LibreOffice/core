@@ -1921,7 +1921,7 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 
 SwTable * SwTable::FindTable( SwFrameFormat const*const pFormat )
 {
-    return (pFormat)
+    return pFormat
         ? SwIterator<SwTable,SwFormat>(*pFormat).First()
         : nullptr;
 }

@@ -1780,10 +1780,10 @@ bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
         {
             SwPosition& rPos = *m_pCurrentCursor->GetPoint();
             SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
-            pTextAttr = (pTextNd)
+            pTextAttr = pTextNd
                 ? pTextNd->GetTextAttrAt(rPos.nContent.GetIndex(),
                         static_cast<RES_TXTATR>(nWhich),
-                        (bExpand) ? SwTextNode::EXPAND : SwTextNode::DEFAULT)
+                        bExpand ? SwTextNode::EXPAND : SwTextNode::DEFAULT)
                 : nullptr;
         }
 

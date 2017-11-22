@@ -202,7 +202,7 @@ private:
 
 inline void PushButton::Check( bool bCheck )
 {
-    SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    SetState( bCheck ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
 inline bool PushButton::IsChecked() const
@@ -474,7 +474,7 @@ public:
 
 inline void CheckBox::Check( bool bCheck )
 {
-    SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    SetState( bCheck ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
 inline bool CheckBox::IsChecked() const

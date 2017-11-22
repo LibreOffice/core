@@ -585,7 +585,7 @@ bool ImplSdPPTImport::Import()
                 bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bNotesMaster;
                 bool bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bStarDrawFiller;
 
-                PageKind ePgKind = ( bNotesMaster ) ? PageKind::Notes : PageKind::Standard;
+                PageKind ePgKind = bNotesMaster ? PageKind::Notes : PageKind::Standard;
                 bool bHandout = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bHandoutMaster;
                 if ( bHandout )
                     ePgKind = PageKind::Handout;

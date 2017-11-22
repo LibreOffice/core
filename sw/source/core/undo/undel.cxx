@@ -376,7 +376,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                 pHistory->CopyFormatAttr( *pSttTextNd->GetpSwAttrSet(), nNdIdx );
 
         // the length might have changed (!!Fields!!)
-        sal_Int32 nLen = ((bOneNode)
+        sal_Int32 nLen = (bOneNode
                     ? pEnd->nContent.GetIndex()
                     : pSttTextNd->GetText().getLength())
             - pStt->nContent.GetIndex();
@@ -392,7 +392,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
         bool emptied( !m_pSttStr->isEmpty() && !pSttTextNd->Len() );
         if (!bOneNode || emptied) // merging may overwrite xmlids...
         {
-            m_pMetadataUndoStart = (emptied)
+            m_pMetadataUndoStart = emptied
                 ? pSttTextNd->CreateUndoForDelete()
                 : pSttTextNd->CreateUndo();
         }
@@ -427,7 +427,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
         // METADATA: store
         bool emptied = !m_pEndStr->isEmpty() && !pEndTextNd->Len();
 
-        m_pMetadataUndoEnd = (emptied)
+        m_pMetadataUndoEnd = emptied
             ? pEndTextNd->CreateUndoForDelete()
             : pEndTextNd->CreateUndo();
     }

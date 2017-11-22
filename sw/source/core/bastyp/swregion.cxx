@@ -186,7 +186,7 @@ void SwRegionRects::Compress()
                 }
             }
         }
-        i = (bRestart) ? 0 : i+1;
+        i = bRestart ? 0 : i+1;
     }
 }
 

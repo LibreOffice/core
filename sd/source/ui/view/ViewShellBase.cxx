@@ -455,7 +455,7 @@ OUString ViewShellBase::GetSelectionText(bool bCompleteWords)
     std::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(
             dynamic_cast<DrawViewShell*>(pMainShell.get()));
-    return (pDrawViewShell)
+    return pDrawViewShell
         ?   pDrawViewShell->GetSelectionText(bCompleteWords)
         :   SfxViewShell::GetSelectionText(bCompleteWords);
 }
@@ -465,7 +465,7 @@ bool ViewShellBase::HasSelection(bool bText) const
     std::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(
             dynamic_cast<DrawViewShell*>(pMainShell.get()));
-    return (pDrawViewShell)
+    return pDrawViewShell
         ?   pDrawViewShell->HasSelection(bText)
         :   SfxViewShell::HasSelection(bText);
 }

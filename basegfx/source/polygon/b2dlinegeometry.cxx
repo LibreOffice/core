@@ -98,9 +98,9 @@ namespace basegfx
 
                 // get the polygon vector we want to plant this arrow on
                 const double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition) - fShift);
-                const B2DVector aHead(rCandidate.getB2DPoint((bStart) ? 0 : rCandidate.count() - 1));
+                const B2DVector aHead(rCandidate.getB2DPoint(bStart ? 0 : rCandidate.count() - 1));
                 const B2DVector aTail(getPositionAbsolute(rCandidate,
-                    (bStart) ? fConsumedLength : fCandidateLength - fConsumedLength, fCandidateLength));
+                    bStart ? fConsumedLength : fCandidateLength - fConsumedLength, fCandidateLength));
 
                 // from that vector, take the needed rotation and add rotate for arrow to transformation
                 const B2DVector aTargetDirection(aHead - aTail);

@@ -892,7 +892,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                     SwNode & rNode(rPaM.GetPoint()->nNode.GetNode());
                     SwContentNode *const pContentNode( rNode.GetContentNode() );
                     SwPaM const tmpPam(rNode, 0,
-                                   rNode, (pContentNode) ? pContentNode->Len() : 0);
+                                   rNode, pContentNode ? pContentNode->Len() : 0);
                     ::PaMCorrAbs(tmpPam, aPos);
                 }
 

@@ -368,25 +368,25 @@ namespace pcr
     OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sTranslation : OUString();
+        return pInfo ? pInfo->sTranslation : OUString();
     }
 
     OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sHelpId : OString();
+        return pInfo ? pInfo->sHelpId : OString();
     }
 
     sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->nPos : 0xFFFF;
+        return pInfo ? pInfo->nPos : 0xFFFF;
     }
 
     sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->nUIFlags : 0;
+        return pInfo ? pInfo->nUIFlags : 0;
     }
 
     std::vector< OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const

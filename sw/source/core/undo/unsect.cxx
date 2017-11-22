@@ -73,7 +73,7 @@ SwUndoInsSection::SwUndoInsSection(
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
     : SwUndo( SwUndoId::INSSECTION, rPam.GetDoc() ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
-    , m_pTOXBase( (pTOXBase) ? new SwTOXBase(*pTOXBase) : nullptr )
+    , m_pTOXBase( pTOXBase ? new SwTOXBase(*pTOXBase) : nullptr )
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : nullptr )
     , m_nSectionNodePos(0)
     , m_bSplitAtStart(false)

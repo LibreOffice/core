@@ -1476,7 +1476,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
                          nullptr,
                          PTR_FD_SET(WriteSet),
                          PTR_FD_SET(ExcptSet),
-                         (pTimeout) ? &tv : nullptr);
+                         pTimeout ? &tv : nullptr);
 
     if (ReadyHandles > 0)  /* connected */
     {

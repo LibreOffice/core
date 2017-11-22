@@ -1049,10 +1049,10 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         }
         else
         {
-            SwDoc* const pDoc = (pCursor) ? pCursor->GetDoc()
-                : ((pPortion) ? pPortion->GetCursor().GetDoc() : nullptr);
-            const SwPaM* const pUnoCursor = (pCursor) ? pCursor->GetPaM()
-                : ((pPortion) ? &pPortion->GetCursor() : nullptr);
+            SwDoc* const pDoc = pCursor ? pCursor->GetDoc()
+                : (pPortion ? pPortion->GetCursor().GetDoc() : nullptr);
+            const SwPaM* const pUnoCursor = pCursor ? pCursor->GetPaM()
+                : (pPortion ? &pPortion->GetCursor() : nullptr);
             if (pUnoCursor && pDoc == rToFill.GetDoc())
             {
                 OSL_ENSURE(!pUnoCursor->IsMultiSelection(),
@@ -1084,7 +1084,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode const *const pSttNode,
             true, &pItem))
     {
         SfxPoolItem *const pItemNonConst(const_cast<SfxPoolItem *>(pItem));
-        SwFrameFormat *const pHeadFootFormat = (bHeader) ?
+        SwFrameFormat *const pHeadFootFormat = bHeader ?
             static_cast<SwFormatHeader*>(pItemNonConst)->GetHeaderFormat() :
             static_cast<SwFormatFooter*>(pItemNonConst)->GetFooterFormat();
         if (pHeadFootFormat)
@@ -1092,7 +1092,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode const *const pSttNode,
             const SwFormatContent& rFlyContent = pHeadFootFormat->GetContent();
             const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
             SwStartNode const*const pCurSttNode = rNode.FindSttNodeByType(
-                (bHeader) ? SwHeaderStartNode : SwFooterStartNode);
+                bHeader ? SwHeaderStartNode : SwFooterStartNode);
             if (pCurSttNode && (pCurSttNode == pSttNode))
             {
                 rpFormat = pHeadFootFormat;
@@ -1145,7 +1145,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 static_cast<SwFrameFormat*>(pTableNode->GetTable().GetFrameFormat());
             SwTableBox *const  pBox = pSttNode->GetTableBox();
 
-            xParentText = (pBox)
+            xParentText = pBox
                 ? SwXCell::CreateXCell( pTableFormat, pBox )
                 : new SwXCell( pTableFormat, *pSttNode );
         }

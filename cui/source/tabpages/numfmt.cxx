@@ -505,7 +505,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     delete pNumFmtShell;   // delete old shell if applicable (== reset)
 
-    nInitFormat = ( pValFmtAttr )               // memorize init key
+    nInitFormat = pValFmtAttr                   // memorize init key
                     ? pValFmtAttr->GetValue()   // (for FillItemSet())
                     : ULONG_MAX;                // == DONT_KNOW
 
@@ -513,13 +513,13 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     if ( eValType == SvxNumberValueType::String )
         pNumFmtShell =SvxNumberFormatShell::Create(
                                 pNumItem->GetNumberFormatter(),
-                                (pValFmtAttr) ? nInitFormat : 0,
+                                pValFmtAttr ? nInitFormat : 0,
                                 eValType,
                                 aValString );
     else
         pNumFmtShell =SvxNumberFormatShell::Create(
                                 pNumItem->GetNumberFormatter(),
-                                (pValFmtAttr) ? nInitFormat : 0,
+                                pValFmtAttr ? nInitFormat : 0,
                                 eValType,
                                 nValDouble,
                                 &aValString );

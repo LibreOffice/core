@@ -1417,7 +1417,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    bPrevLineSpacingPorportional );
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
-                nUpper = (bContextualSpacing) ? 0 : nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
+                nUpper = bContextualSpacing ? 0 : nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
                 SwTwips nAdd = nPrevLineSpacing;
                 // OD 07.01.2004 #i11859# - consideration of the line spacing
                 //      for the upper spacing of a text frame

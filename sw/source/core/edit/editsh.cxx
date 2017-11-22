@@ -87,7 +87,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
     StartAllAction();
     {
         const SwInsertFlags nInsertFlags =
-            (bForceExpandHints)
+            bForceExpandHints
             ? (SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
             : SwInsertFlags::EMPTYEXPAND;
 

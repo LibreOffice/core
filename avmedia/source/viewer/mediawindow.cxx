@@ -220,7 +220,7 @@ bool MediaWindow::executeMediaURLDialog(const vcl::Window* pParent, OUString& rU
     static const char               aSeparator[] = ";";
     OUString                        aAllTypes;
 
-    aDlg.SetTitle( AvmResId( (o_pbLink)
+    aDlg.SetTitle( AvmResId( o_pbLink
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
     getMediaFilters( aFilters );

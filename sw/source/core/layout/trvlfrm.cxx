@@ -278,7 +278,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 
                 // try this again but prefer the "previous" position
                 SwCursorMoveState aMoveState;
-                SwCursorMoveState *const pState((pCMS) ? pCMS : &aMoveState);
+                SwCursorMoveState *const pState(pCMS ? pCMS : &aMoveState);
                 comphelper::FlagRestorationGuard g(
                         pState->m_bPosMatchesBounds, true);
                 SwPosition prevTextPos(*pPos);

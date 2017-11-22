@@ -2157,7 +2157,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const SwFormatCol* pCols = pFormat ? &pFormat->GetCol():
                                                    &rDesc.GetMaster().GetCol();
                     const SwColumns& rCols = pCols->GetColumns();
-                    const sal_uInt16 nBorder = (pFormat)
+                    const sal_uInt16 nBorder = pFormat
                         ? pFormat->GetBox().GetSmallestDistance()
                         : rDesc.GetMaster().GetBox().GetSmallestDistance();
 

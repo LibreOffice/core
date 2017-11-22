@@ -1657,7 +1657,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 --pTmp->GetPoint()->nNode;
                 SwContentNode *const pContentNode( pTmp->GetContentNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
-                        (pContentNode) ? pContentNode->Len() : 0 );
+                        pContentNode ? pContentNode->Len() : 0 );
                 // tdf#106218 try to avoid losing a paragraph break here:
                 if (pTmp->GetMark()->nContent == 0)
                 {
@@ -1700,7 +1700,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 --pTmp->GetPoint()->nNode;
                 SwContentNode *const pContentNode( pTmp->GetContentNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
-                        (pContentNode) ? pContentNode->Len() : 0 );
+                        pContentNode ? pContentNode->Len() : 0 );
                 // tdf#106218 try to avoid losing a paragraph break here:
                 if (pTmp->GetMark()->nContent == 0)
                 {

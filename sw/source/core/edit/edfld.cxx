@@ -153,7 +153,7 @@ void SwEditShell::Insert2(SwField const & rField, const bool bForceExpandHints)
     StartAllAction();
     SwFormatField aField( rField );
 
-    const SetAttrMode nInsertFlags = (bForceExpandHints)
+    const SetAttrMode nInsertFlags = bForceExpandHints
         ? SetAttrMode::FORCEHINTEXPAND
         : SetAttrMode::DEFAULT;
 

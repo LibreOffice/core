@@ -502,7 +502,7 @@ void WW8AttributeOutput::StartStyleProperties( bool bParProp, sal_uInt16 nStyle 
 {
     impl_SkipOdd( m_rWW8Export.pO, m_rWW8Export.pTableStrm->Tell() );
 
-    sal_uInt16 nLen = ( bParProp ) ? 2 : 0;     // default length
+    sal_uInt16 nLen = bParProp ? 2 : 0;         // default length
     m_nStyleLenPos = m_rWW8Export.pO->size();   // adding length
                                                 // Don't save pointer, because it
                                                 // changes by _grow!

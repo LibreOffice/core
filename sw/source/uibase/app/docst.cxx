@@ -824,7 +824,7 @@ sal_uInt16 SwDocShell::Edit(
         // In HTML mode, we do not always have a printer. In order to show
         // the correct page size in the Format - Page dialog, we have to
         // get one here.
-        SwWrtShell* pCurrShell = (pActShell) ? pActShell : m_pWrtShell;
+        SwWrtShell* pCurrShell = pActShell ? pActShell : m_pWrtShell;
         if( ( HTMLMODE_ON & nHtmlMode ) &&
             !pCurrShell->getIDocumentDeviceAccess().getPrinter( false ) )
             pCurrShell->InitPrt( pCurrShell->getIDocumentDeviceAccess().getPrinter( true ) );

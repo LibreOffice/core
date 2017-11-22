@@ -1573,7 +1573,7 @@ SwField * DocumentFieldsManager::GetFieldAtPos(const SwPosition & rPos)
 {
     SwTextField * const pAttr = GetTextFieldAtPos(rPos);
 
-    return (pAttr) ? const_cast<SwField *>( pAttr->GetFormatField().GetField() ) : nullptr;
+    return pAttr ? const_cast<SwField *>( pAttr->GetFormatField().GetField() ) : nullptr;
 }
 
 SwTextField * DocumentFieldsManager::GetTextFieldAtPos(const SwPosition & rPos)

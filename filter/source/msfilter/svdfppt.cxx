@@ -2276,7 +2276,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     }
                 }
                 sal_Int32  nParaIndex = pTextObj->GetCurrentIndex();
-                SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->mxParaSet->mnDepth ] : pSheet;
+                SfxStyleSheet* pS = ppStyleSheetAry ? ppStyleSheetAry[ pPara->mxParaSet->mnDepth ] : pSheet;
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
                 rOutliner.Insert( OUString(), nParaIndex, pPara->mxParaSet->mnDepth );

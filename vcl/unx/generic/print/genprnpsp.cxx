@@ -1243,9 +1243,9 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     }
 
     // job has been spooled
-    i_rController.setJobState( (bAborted)
+    i_rController.setJobState( bAborted
             ? view::PrintableState_JOB_ABORTED
-            : ((bSuccess) ? view::PrintableState_JOB_SPOOLED
+            : (bSuccess ? view::PrintableState_JOB_SPOOLED
                           : view::PrintableState_JOB_SPOOLING_FAILED));
 
     // clean up the temporary PDF files

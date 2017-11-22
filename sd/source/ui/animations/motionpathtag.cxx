@@ -681,7 +681,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
     if(rKEvt.GetKeyCode().IsMod2())
     {
         OutputDevice* pOut = mrView.GetViewShell()->GetActiveWindow();
-        Size aLogicSizeOnePixel = (pOut) ? pOut->PixelToLogic(Size(1,1)) : Size(100, 100);
+        Size aLogicSizeOnePixel = pOut ? pOut->PixelToLogic(Size(1,1)) : Size(100, 100);
         nX *= aLogicSizeOnePixel.Width();
         nY *= aLogicSizeOnePixel.Height();
     }

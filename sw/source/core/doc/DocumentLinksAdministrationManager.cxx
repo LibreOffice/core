@@ -115,10 +115,10 @@ namespace
         SwSection* pSect = pSectFormat->GetSection();
         if( pSect )
         {
-            OUString sNm( (bCaseSensitive)
+            OUString sNm( bCaseSensitive
                     ? pSect->GetSectionName()
                     : GetAppCharClass().lowercase( pSect->GetSectionName() ));
-            OUString sCompare( (bCaseSensitive)
+            OUString sCompare( bCaseSensitive
                     ? pItem->m_Item
                     : GetAppCharClass().lowercase( pItem->m_Item ) );
             if( sNm == sCompare )

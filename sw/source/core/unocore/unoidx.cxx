@@ -328,7 +328,7 @@ public:
     Impl(   SwDoc & rDoc,
             const TOXTypes eType,
             SwTOXBaseSection *const pBaseSection)
-        : SwClient((pBaseSection) ? pBaseSection->GetFormat() : nullptr)
+        : SwClient(pBaseSection ? pBaseSection->GetFormat() : nullptr)
         , m_Listeners(m_Mutex)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
@@ -351,7 +351,7 @@ public:
         SwSectionFormat *const pSectionFormat(GetSectionFormat());
         SwTOXBase *const pTOXSection( (m_bIsDescriptor)
             ?  &m_pProps->GetTOXBase()
-            : ((pSectionFormat)
+            : (pSectionFormat
                 ? static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection())
                 : nullptr));
         if (!pTOXSection)
@@ -422,7 +422,7 @@ SwXDocumentIndex::CreateXDocumentIndex(
     }
     if (!xIndex.is())
     {
-        SwXDocumentIndex *const pIndex((pSection)
+        SwXDocumentIndex *const pIndex(pSection
                 ? new SwXDocumentIndex(*pSection, rDoc)
                 : new SwXDocumentIndex(eTypes, rDoc));
         xIndex.set(pIndex);
@@ -1257,7 +1257,7 @@ void SAL_CALL SwXDocumentIndex::refresh()
         SolarMutexGuard g;
 
         SwSectionFormat *const pFormat = m_pImpl->GetSectionFormat();
-        SwTOXBaseSection *const pTOXBase = (pFormat) ?
+        SwTOXBaseSection *const pTOXBase = pFormat ?
             static_cast<SwTOXBaseSection*>(pFormat->GetSection()) : nullptr;
         if (!pTOXBase)
         {
@@ -1316,7 +1316,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
 
     SwDoc *const pDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
+        pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();
@@ -1482,7 +1482,7 @@ uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
     if (pSectionFormat)
     {
         SwDocShell const*const pShell( pSectionFormat->GetDoc()->GetDocShell() );
-        return (pShell) ? pShell->GetModel() : nullptr;
+        return pShell ? pShell->GetModel() : nullptr;
     }
     return nullptr;
 }
@@ -1654,7 +1654,7 @@ SwXDocumentIndexMark::CreateXDocumentIndexMark(
     }
     if (!xTOXMark.is())
     {
-        SwXDocumentIndexMark *const pNew((pMark)
+        SwXDocumentIndexMark *const pNew(pMark
             ? new SwXDocumentIndexMark(rDoc,
                     *const_cast<SwTOXType*>(pMark->GetTOXType()), *pMark)
             : new SwXDocumentIndexMark(eType));
@@ -1797,7 +1797,7 @@ SwXDocumentIndexMark::attach(
     OTextCursorHelper *const pCursor =
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
+        pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();
@@ -1939,7 +1939,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
 
     const bool bForceExpandHints( !bMark && pTextCursor && pTextCursor->IsAtEndOfMeta() );
-    const SetAttrMode nInsertFlags = (bForceExpandHints)
+    const SetAttrMode nInsertFlags = bForceExpandHints
         ?   ( SetAttrMode::FORCEHINTEXPAND
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND;

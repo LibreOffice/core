@@ -325,7 +325,7 @@ bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 SwFrameFormat *SwPageDesc::GetLeftFormat(bool const bFirst)
 {
     return (UseOnPage::Left & m_eUse)
-            ? ((bFirst) ? &m_FirstLeft : &m_Left)
+            ? (bFirst ? &m_FirstLeft : &m_Left)
             : nullptr;
 }
 

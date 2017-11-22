@@ -2813,7 +2813,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         if(pPageObj)
         {
             SdrPage* pPage = pPageObj->GetReferencedPage();
-            sal_Int32 nPageNumber = (pPage) ? pPage->GetPageNum() : 0L;
+            sal_Int32 nPageNumber = pPage ? pPage->GetPageNum() : 0L;
             nPageNumber++;
             nPageNumber >>= 1;
             rValue <<= nPageNumber;

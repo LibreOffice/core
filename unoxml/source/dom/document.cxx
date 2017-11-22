@@ -942,7 +942,7 @@ namespace DOM
         if (nullptr == m_aNodePtr) {
             return nullptr;
         }
-        xmlDocPtr const pClone(xmlCopyDoc(m_aDocPtr, (bDeep) ? 1 : 0));
+        xmlDocPtr const pClone(xmlCopyDoc(m_aDocPtr, bDeep ? 1 : 0));
         if (nullptr == pClone) { return nullptr; }
         Reference< XNode > const xRet(
             static_cast<CNode*>(CDocument::CreateCDocument(pClone).get()));

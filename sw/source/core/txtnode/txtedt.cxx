@@ -1425,7 +1425,7 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
         pNode->GetWrong()->SetInvalid( nInvStart, nInvEnd );
         pNode->SetWrongDirty(
             (COMPLETE_STRING != pNode->GetWrong()->GetBeginInv())
-                ? ((bPending)
+                ? (bPending
                     ? SwTextNode::WrongState::PENDING
                     : SwTextNode::WrongState::TODO)
                 : SwTextNode::WrongState::DONE);

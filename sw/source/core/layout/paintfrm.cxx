@@ -2795,13 +2795,13 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
     aB.SetRefMode( !bVert ? svx::frame::RefMode::Begin : svx::frame::RefMode::End );
 
     SwLineEntry aLeft  (nLeft,   nTop,  nBottom,
-            (bVert) ? aB                         : ((bR2L) ? aR : aL));
+            bVert ? aB                         : (bR2L ? aR : aL));
     SwLineEntry aRight (nRight,  nTop,  nBottom,
-            (bVert) ? ((bBottomAsTop) ? aB : aT) : ((bR2L) ? aL : aR));
+            bVert ? (bBottomAsTop ? aB : aT) : (bR2L ? aL : aR));
     SwLineEntry aTop   (nTop,    nLeft, nRight,
-            (bVert) ? aL                         : ((bBottomAsTop) ? aB : aT));
+            bVert ? aL                         : (bBottomAsTop ? aB : aT));
     SwLineEntry aBottom(nBottom, nLeft, nRight,
-            (bVert) ? aR                         : aB);
+            bVert ? aR                         : aB);
 
     Insert( aLeft, false );
     Insert( aRight, false );
@@ -4652,7 +4652,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
     basegfx::B2DPoint aEnd;
     if (isVertical)
     {   // fdo#38635: always from outer edge
-        double const fStartX( (isLeftOrTopBorder)
+        double const fStartX( isLeftOrTopBorder
                 ? rRect.Left()  + (rRect.Width() / 2.0)
                 : rRect.Right() - (rRect.Width() / 2.0));
         aStart.setX(fStartX);
@@ -4664,7 +4664,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
     }
     else
     {   // fdo#38635: always from outer edge
-        double const fStartY( (isLeftOrTopBorder)
+        double const fStartY( isLeftOrTopBorder
                 ? rRect.Top()    + (rRect.Height() / 2.0)
                 : rRect.Bottom() - (rRect.Height() / 2.0));
         aStart.setX(rRect.Left() +
@@ -7454,7 +7454,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
     SwIterator<SwFrame,SwFormat> aIter( *this );
     SwFrame *pFirst = aIter.First();
     SwViewShell *const pSh =
-        (pFirst) ? pFirst->getRootFrame()->GetCurrShell() : nullptr;
+        pFirst ? pFirst->getRootFrame()->GetCurrShell() : nullptr;
     if (nullptr != pSh)
     {
         SwViewShell *pOldGlobal = gProp.pSGlobalShell;

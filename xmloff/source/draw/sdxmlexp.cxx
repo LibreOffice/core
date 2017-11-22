@@ -388,7 +388,7 @@ SdXMLExport::SdXMLExport(
     OUString const & implementationName,
     bool bIsDraw, SvXMLExportFlags nExportFlags )
 :   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
-        (bIsDraw) ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
+        bIsDraw ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
     mnDocMasterPageCount(0),
     mnDocDrawPageCount(0),
     mnObjectCount(0),

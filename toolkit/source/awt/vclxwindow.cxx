@@ -687,7 +687,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 bool const isEnter(pMouseEvt->IsEnterWindow());
                 Callback aCallback = [ this, isEnter, aEvent ]()
                      { MouseListenerMultiplexer& rMouseListeners = this->mpImpl->getMouseListeners();
-                       (isEnter)
+                       isEnter
                            ? rMouseListeners.mouseEntered(aEvent)
                            : rMouseListeners.mouseExited(aEvent); };
 

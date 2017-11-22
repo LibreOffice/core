@@ -564,7 +564,7 @@ static bool lcl_GetHeaderFooterItem(
         SvxSetItem const*& o_rpItem)
 {
     SfxItemState eState = rSet.GetItemState(
-        (bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+        bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
         false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
     if (SfxItemState::SET != eState &&
         rPropName == UNO_NAME_FIRST_IS_SHARED)
@@ -3049,7 +3049,7 @@ static uno::Reference<text::XText> lcl_makeHeaderFooter(const sal_uInt16 nRes, c
     const SfxPoolItem* pItem;
     if(SfxItemState::SET != rSet.GetItemState(nRes, true, &pItem))
         return nullptr;
-    SwFrameFormat* const pHeadFootFormat = (bHeader)
+    SwFrameFormat* const pHeadFootFormat = bHeader
         ? static_cast<SwFormatHeader*>(const_cast<SfxPoolItem*>(pItem))->GetHeaderFormat()
         : static_cast<SwFormatFooter*>(const_cast<SfxPoolItem*>(pItem))->GetFooterFormat();
     if(!pHeadFootFormat)

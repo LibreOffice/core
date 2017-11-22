@@ -280,7 +280,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                         --pEndPos->nNode;
                         pTNd = pEndPos->nNode.GetNode().GetTextNode();
                     }
-                    nContent = (pTNd) ? pTNd->GetText().getLength() : 0;
+                    nContent = pTNd ? pTNd->GetText().getLength() : 0;
                     pEndPos->nContent.Assign( pTNd, nContent );
                 }
             }
@@ -985,7 +985,7 @@ lcl_initParent(SwSectionNode & rThis, SwSectionFormat & rFormat)
 SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
         SwSectionFormat & rFormat, SwTOXBase const*const pTOXBase)
     : SwStartNode( rIdx, SwNodeType::Section )
-    , m_pSection( (pTOXBase)
+    , m_pSection( pTOXBase
         ? new SwTOXBaseSection(*pTOXBase, lcl_initParent(*this, rFormat))
         : new SwSection( CONTENT_SECTION, rFormat.GetName(),
                 lcl_initParent(*this, rFormat) ) )

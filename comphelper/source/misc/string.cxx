@@ -453,7 +453,7 @@ OUString removeAny(OUString const& rIn,
             buf.append(c);
         }
     }
-    return (isFound) ? buf.makeStringAndClear() : rIn;
+    return isFound ? buf.makeStringAndClear() : rIn;
 }
 
 OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,

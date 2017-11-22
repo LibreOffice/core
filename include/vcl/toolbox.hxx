@@ -518,7 +518,7 @@ public:
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
 {
-    SetItemState( nItemId, (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    SetItemState( nItemId, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
 inline bool ToolBox::IsItemChecked( sal_uInt16 nItemId ) const

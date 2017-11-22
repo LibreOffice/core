@@ -147,7 +147,7 @@ InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
     if (bUsedShortCut)
         return nShortCutInsContentsCmdBits;
 
-    return ( (ScInsertContentsDlg::bPreviousAllCheck)
+    return ( ScInsertContentsDlg::bPreviousAllCheck
                 ? InsertDeleteFlags::ALL
                 : ScInsertContentsDlg::nPreviousChecks );
 }

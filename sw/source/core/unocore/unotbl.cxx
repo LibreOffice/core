@@ -1947,9 +1947,9 @@ public:
         , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE))
         , m_bFirstRowAsLabel(false)
         , m_bFirstColumnAsLabel(false)
-        , m_pTableProps((pFrameFormat) ? nullptr : new SwTableProperties_Impl)
-        , m_nRows((pFrameFormat) ? 0 : 2)
-        , m_nColumns((pFrameFormat) ? 0 : 2)
+        , m_pTableProps(pFrameFormat ? nullptr : new SwTableProperties_Impl)
+        , m_nRows(pFrameFormat ? 0 : 2)
+        , m_nColumns(pFrameFormat ? 0 : 2)
     {
     }
 
@@ -2024,7 +2024,7 @@ uno::Reference<text::XTextTable> SwXTextTable::CreateXTextTable(SwFrameFormat* c
         xTable.set(pFrameFormat->GetXObject(), uno::UNO_QUERY); // cached?
     if(xTable.is())
         return xTable;
-    SwXTextTable* const pNew( (pFrameFormat) ? new SwXTextTable(*pFrameFormat) : new SwXTextTable());
+    SwXTextTable* const pNew( pFrameFormat ? new SwXTextTable(*pFrameFormat) : new SwXTextTable());
     xTable.set(pNew);
     if(pFrameFormat)
         pFrameFormat->SetXObject(xTable);

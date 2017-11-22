@@ -1256,7 +1256,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     switch ( rUnderline.GetLineStyle() )
     {
         case LINESTYLE_SINGLE:
-            b = ( bWord ) ? 2 : 1;
+            b = bWord ? 2 : 1;
             break;
         case LINESTYLE_BOLD:
             b = 6;

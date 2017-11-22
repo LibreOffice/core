@@ -181,7 +181,7 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
             bInvalid = ( nWidth != *pIt );
             ++pIt;
         }
-        nWidth = (bInvalid) ?  0.0 : nLine1 + nLine2 + nGap;
+        nWidth = bInvalid ?  0.0 : nLine1 + nLine2 + nGap;
     }
 
     return nWidth;
@@ -583,7 +583,7 @@ sal_Int32 LineListBox::GetEntryPos( SvxBorderLineStyle nStyle ) const
 SvxBorderLineStyle LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
     ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < pLineList->size()) ? (*pLineList)[ nPos ] : nullptr;
-    return ( pData ) ? pData->GetStyle() : SvxBorderLineStyle::NONE;
+    return pData ? pData->GetStyle() : SvxBorderLineStyle::NONE;
 }
 
 void LineListBox::UpdatePaintLineColor()

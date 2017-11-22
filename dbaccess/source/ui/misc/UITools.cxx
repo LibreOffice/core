@@ -1383,7 +1383,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
             {"Parent", uno::Any(xNameAccess)},
             {PROPERTY_EMBEDDEDOBJECT, uno::Any(_xContent)},
         }));
-        OUString sServiceName(_bCollection ? ((_bForm) ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION)) : OUString(SERVICE_SDB_DOCUMENTDEFINITION));
+        OUString sServiceName(_bCollection ? (_bForm ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION)) : OUString(SERVICE_SDB_DOCUMENTDEFINITION));
 
         Reference<XContent > xNew( xORB->createInstanceWithArguments( sServiceName, aArguments ), UNO_QUERY_THROW );
         Reference< XNameContainer > xNameContainer( xNameAccess, UNO_QUERY_THROW );

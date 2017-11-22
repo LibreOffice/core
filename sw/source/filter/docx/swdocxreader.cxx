@@ -222,7 +222,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                     SwDoc* pGlDoc = rBlocks.GetDoc();
                     SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(), -1 );
                     pCNd = aIdx.GetNode().GetContentNode();
-                    SwPosition aPos( aIdx, SwIndex( pCNd, ( pCNd ) ? pCNd->Len() : 0 ) );
+                    SwPosition aPos( aIdx, SwIndex( pCNd, pCNd ? pCNd->Len() : 0 ) );
                     pD->getIDocumentContentOperations().CopyRange( aPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
                     rBlocks.PutDoc();
                 }

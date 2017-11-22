@@ -1218,7 +1218,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
             return false;
     }
 
-    OUString const aTableStyleName((pStyleName)
+    OUString const aTableStyleName(pStyleName
             ? *pStyleName
             : pTableNode->GetTable().GetTableStyleName());
     SwTableAutoFormat* pTableStyle = GetDoc()->GetTableStyles().FindAutoFormat(aTableStyleName);

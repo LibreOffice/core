@@ -585,8 +585,8 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
     ImplTabItem*    pOldItem = ImplGetItem( nOldId );
     ImplTabItem*    pItem = ImplGetItem( nId );
-    TabPage*        pOldPage = (pOldItem) ? pOldItem->mpTabPage.get() : nullptr;
-    TabPage*        pPage = (pItem) ? pItem->mpTabPage.get() : nullptr;
+    TabPage*        pOldPage = pOldItem ? pOldItem->mpTabPage.get() : nullptr;
+    TabPage*        pPage = pItem ? pItem->mpTabPage.get() : nullptr;
     vcl::Window*    pCtrlParent = GetParent();
 
     if ( IsReallyVisible() && IsUpdateMode() )

@@ -732,7 +732,7 @@ void MetaField::GetPrefixAndSuffix(
             SwTextNode * const pTextNode( GetTextNode() );
             SwDocShell const * const pShell(pTextNode->GetDoc()->GetDocShell());
             const uno::Reference<frame::XModel> xModel(
-                (pShell) ? pShell->GetModel() : nullptr,  uno::UNO_SET_THROW);
+                pShell ? pShell->GetModel() : nullptr,  uno::UNO_SET_THROW);
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
         }
     }

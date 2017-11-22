@@ -123,16 +123,16 @@ static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
 {
     SdrObject* pObj1 = lhs->GetMarkedSdrObj();
     SdrObject* pObj2 = rhs->GetMarkedSdrObj();
-    SdrObjList* pOL1 = (pObj1) ? pObj1->GetObjList() : nullptr;
-    SdrObjList* pOL2 = (pObj2) ? pObj2->GetObjList() : nullptr;
+    SdrObjList* pOL1 = pObj1 ? pObj1->GetObjList() : nullptr;
+    SdrObjList* pOL2 = pObj2 ? pObj2->GetObjList() : nullptr;
 
     if (pOL1 == pOL2)
     {
         // AF: Note that I reverted a change from sal_uInt32 to sal_uLong (made
         // for 64bit compliance, #i78198#) because internally in SdrObject
         // both nOrdNum and mnNavigationPosition are stored as sal_uInt32.
-        sal_uInt32 nObjOrd1((pObj1) ? pObj1->GetNavigationPosition() : 0);
-        sal_uInt32 nObjOrd2((pObj2) ? pObj2->GetNavigationPosition() : 0);
+        sal_uInt32 nObjOrd1(pObj1 ? pObj1->GetNavigationPosition() : 0);
+        sal_uInt32 nObjOrd2(pObj2 ? pObj2->GetNavigationPosition() : 0);
 
         return nObjOrd1 < nObjOrd2;
     }

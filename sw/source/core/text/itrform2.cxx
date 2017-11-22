@@ -368,7 +368,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
 
     const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
-    const sal_uInt16 nGridWidth = (bHasGrid) ? GetGridWidth(*pGrid, *pDoc) : 0;
+    const sal_uInt16 nGridWidth = bHasGrid ? GetGridWidth(*pGrid, *pDoc) : 0;
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,

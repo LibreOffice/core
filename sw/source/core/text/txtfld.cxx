@@ -91,7 +91,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
     }
 
     SwViewShell *pSh = rInf.GetVsh();
-    SwDoc *const pDoc( (pSh) ? pSh->GetDoc() : nullptr );
+    SwDoc *const pDoc( pSh ? pSh->GetDoc() : nullptr );
     bool const bInClipboard( pDoc == nullptr || pDoc->IsClipBoard() );
     bool bPlaceHolder = false;
 
@@ -113,7 +113,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
 
         case SwFieldIds::HiddenText:
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwHiddenPortion(aStr);
@@ -127,7 +127,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     &static_txtattr_cast<SwTextField const*>(pHint)->GetTextNode());
             }
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion( aStr );
@@ -140,7 +140,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                 static_cast<SwDocStatField*>(pField)->ChangeExpansion( pFrame );
             }
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion( aStr );
@@ -168,7 +168,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                                             bVirt, nNumFormat != (SvxNumType)-1 ? &nNumFormat : nullptr);
             }
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion( aStr );
@@ -196,7 +196,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                 }
             }
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion( aStr );
@@ -211,7 +211,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                 pDBField->ChgBodyTextFlag( ::lcl_IsInBody( pFrame ) );
             }
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion(aStr);
@@ -225,7 +225,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                         static_txtattr_cast<SwTextField const*>(pHint));
             }
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion(aStr);
@@ -241,7 +241,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         case SwFieldIds::GetRef:
             subType = static_cast<SwGetRefField*>(pField)->GetSubType();
             {
-                OUString const str( (bName)
+                OUString const str( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion(str);
@@ -254,7 +254,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         case SwFieldIds::DateTime:
             subType = static_cast<SwDateTimeField*>(pField)->GetSubType();
             {
-                OUString const str( (bName)
+                OUString const str( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion(str);
@@ -266,7 +266,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             break;
         default:
             {
-                OUString const aStr( (bName)
+                OUString const aStr( bName
                         ? pField->GetFieldName()
                         : pField->ExpandField(bInClipboard) );
                 pRet = new SwFieldPortion(aStr);
@@ -282,7 +282,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), m_pFrame->GetTextNode()->getIDocumentSettingAccess() );
         }
         {
-            OUString const aStr( (bName)
+            OUString const aStr( bName
                     ? pField->GetFieldName()
                     : pField->ExpandField(bInClipboard) );
             pRet = new SwFieldPortion(aStr, pTmpFnt, bPlaceHolder);
@@ -301,7 +301,7 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
     OSL_ENSURE(pField, "lcl_NewMetaPortion: no meta field?");
     if (pField)
     {
-        pField->GetPrefixAndSuffix((bPrefix) ? &fix : nullptr, (bPrefix) ? nullptr : &fix);
+        pField->GetPrefixAndSuffix(bPrefix ? &fix : nullptr, bPrefix ? nullptr : &fix);
     }
     return new SwFieldPortion( fix );
 }

@@ -170,7 +170,7 @@ void
 SwCondCollItem::SetStyle(OUString const*const pStyle, sal_uInt16 const nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
-        m_sStyles[nPos] = (pStyle) ? *pStyle : OUString();
+        m_sStyles[nPos] = pStyle ? *pStyle : OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

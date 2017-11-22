@@ -1278,7 +1278,7 @@ SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
     }
     if (!xFrame.is())
     {
-        NameLookupIsHard *const pNew((pFrameFormat)
+        NameLookupIsHard *const pNew(pFrameFormat
                 ? new NameLookupIsHard(*pFrameFormat)
                 : new NameLookupIsHard(&rDoc));
         xFrame.set(pNew);
@@ -2849,7 +2849,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             (*pFilter) >>= sFltName;
         }
 
-        pFormat = (pGrfObj)
+        pFormat = pGrfObj
             ? pDoc->getIDocumentContentOperations().InsertGraphicObject(
                     aPam, *pGrfObj, &aFrameSet, &aGrSet, pParentFrameFormat)
             : pDoc->getIDocumentContentOperations().InsertGraphic(
