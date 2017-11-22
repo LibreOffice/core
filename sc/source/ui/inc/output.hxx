@@ -57,6 +57,7 @@ class SdrPaintWindow;
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
 class ScFieldEditEngine;
+class ClearableClipRegion;
 
 class ScOutputData
 {
@@ -247,8 +248,8 @@ private:
     void ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, const Size& aCellSize,
                         bool bMerged, OutputAreaParam& aAreaParam );
 
-    bool Clip( DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
-               long nEngineHeight, bool bWrapFields);
+    std::unique_ptr<ClearableClipRegion> Clip( DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
+                                               long nEngineHeight, bool bWrapFields );
 
     bool AdjustAreaParamClipRect(OutputAreaParam& rAreaParam);
 

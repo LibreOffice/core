@@ -2755,6 +2755,52 @@ bool ScOutputData::AdjustAreaParamClipRect(OutputAreaParam& rAreaParam)
     return bVClip;
 }
 
+// Doesn't handle clip marks - should be handled in advance using GetOutputArea
+class ClearableClipRegion
+{
+public:
+    ClearableClipRegion( const tools::Rectangle& rRect, bool bClip, bool bSimClip,
+                        const VclPtr<OutputDevice>& pDev, bool bMetaFile )
+        :mbMetaFile(bMetaFile)
+    {
+        if (bClip || bSimClip)
+        {
+            maRect = rRect;
+            if (bClip)  // for bSimClip only initialize aClipRect
+            {
+                mpDev.reset(pDev);
+                if (mbMetaFile)
+                {
+                    mpDev->Push();
+                    mpDev->IntersectClipRegion(maRect);
+                }
+                else
+                    mpDev->SetClipRegion(vcl::Region(maRect));
+            }
+        }
+    }
+
+    ~ClearableClipRegion()
+    {
+        //The Pop() or SetClipRegion() calls must only be in case mpDev is set
+        //mpDev is only set if in the constructor bClip was true
+        if (mpDev)
+        {
+            if (mbMetaFile)
+                mpDev->Pop();
+            else
+                mpDev->SetClipRegion();
+        }
+    }
+
+    const tools::Rectangle& getRect() const{return maRect;}
+
+private:
+    tools::Rectangle        maRect;
+    VclPtr<OutputDevice>    mpDev;
+    bool                    mbMetaFile;
+};
+
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     OSL_ASSERT(rParam.meOrient == SvxCellOrientation::Standard);
@@ -3040,99 +3086,76 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         }
     }
 
-    tools::Rectangle aLogicClip;
-    if (bClip || bSimClip)
-    {
-        // Clip marks are already handled in GetOutputArea
+    Point aURLStart;
 
+    {   // Clip marks are already handled in GetOutputArea
+        ClearableClipRegion aClip(rParam.mbPixelToLogic ? mpRefDevice->PixelToLogic(aAreaParam.maClipRect)
+                                : aAreaParam.maClipRect, bClip, bSimClip, mpDev, bMetaFile);
+
+        Point aLogicStart;
         if (rParam.mbPixelToLogic)
-            aLogicClip = mpRefDevice->PixelToLogic( aAreaParam.maClipRect );
+            aLogicStart = mpRefDevice->PixelToLogic( Point(nStartX,nStartY) );
         else
-            aLogicClip = aAreaParam.maClipRect;
+            aLogicStart = Point(nStartX, nStartY);
 
-        if (bClip)  // for bSimClip only initialize aClipRect
+        if (!rParam.mbBreak)
         {
-            if (bMetaFile)
-            {
-                mpDev->Push();
-                mpDev->IntersectClipRegion( aLogicClip );
-            }
-            else
-                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
+            //  horizontal alignment
+            if (rParam.adjustHorAlignment(rParam.mpEngine))
+                // reset adjustment for the next cell
+                rParam.mpOldPattern = nullptr;
         }
-    }
 
-    Point aLogicStart;
-    if (rParam.mbPixelToLogic)
-        aLogicStart = mpRefDevice->PixelToLogic( Point(nStartX,nStartY) );
-    else
-        aLogicStart = Point(nStartX, nStartY);
+        if (rParam.meVerJust==SvxCellVerJustify::Bottom ||
+            rParam.meVerJust==SvxCellVerJustify::Standard)
+        {
+            //! if pRefDevice != pFmtDevice, keep heights in logic units,
+            //! only converting margin?
 
-    if (!rParam.mbBreak)
-    {
-        //  horizontal alignment
-        if (rParam.adjustHorAlignment(rParam.mpEngine))
-            // reset adjustment for the next cell
-            rParam.mpOldPattern = nullptr;
-    }
+            if (rParam.mbPixelToLogic)
+                aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM +
+                                mpRefDevice->LogicToPixel(aCellSize).Height() -
+                                mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
+                                )).Height();
+            else
+                aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
+        }
+        else if (rParam.meVerJust==SvxCellVerJustify::Center)
+        {
+            if (rParam.mbPixelToLogic)
+                aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM + (
+                                mpRefDevice->LogicToPixel(aCellSize).Height() -
+                                mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
+                                / 2)).Height();
+            else
+                aLogicStart.Y() += nTopM + (aCellSize.Height() - nEngineHeight) / 2;
+        }
+        else        // top
+        {
+            if (rParam.mbPixelToLogic)
+                aLogicStart.Y() += mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+            else
+                aLogicStart.Y() += nTopM;
+        }
 
-    if (rParam.meVerJust==SvxCellVerJustify::Bottom ||
-        rParam.meVerJust==SvxCellVerJustify::Standard)
-    {
-        //! if pRefDevice != pFmtDevice, keep heights in logic units,
-        //! only converting margin?
+        aURLStart = aLogicStart;      // copy before modifying for orientation
 
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM +
-                            mpRefDevice->LogicToPixel(aCellSize).Height() -
-                            mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
-                            )).Height();
+        rParam.adjustForRTL();
+
+        // bMoveClipped handling has been replaced by complete alignment
+        // handling (also extending to the left).
+
+        if (bSimClip)
+        {
+            // no hard clip, only draw the affected rows
+            Point aDocStart = aClip.getRect().TopLeft();
+            aDocStart -= aLogicStart;
+            rParam.mpEngine->Draw( mpDev, aClip.getRect(), aDocStart, false );
+        }
         else
-            aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
-    }
-    else if (rParam.meVerJust==SvxCellVerJustify::Center)
-    {
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM + (
-                            mpRefDevice->LogicToPixel(aCellSize).Height() -
-                            mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
-                            / 2)).Height();
-        else
-            aLogicStart.Y() += nTopM + (aCellSize.Height() - nEngineHeight) / 2;
-    }
-    else        // top
-    {
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-        else
-            aLogicStart.Y() += nTopM;
-    }
-
-    Point aURLStart = aLogicStart;      // copy before modifying for orientation
-
-    rParam.adjustForRTL();
-
-    // bMoveClipped handling has been replaced by complete alignment
-    // handling (also extending to the left).
-
-    if (bSimClip)
-    {
-        // no hard clip, only draw the affected rows
-        Point aDocStart = aLogicClip.TopLeft();
-        aDocStart -= aLogicStart;
-        rParam.mpEngine->Draw( mpDev, aLogicClip, aDocStart, false );
-    }
-    else
-    {
-        rParam.mpEngine->Draw(mpDev, aLogicStart);
-    }
-
-    if (bClip)
-    {
-        if (bMetaFile)
-            mpDev->Pop();
-        else
-            mpDev->SetClipRegion();
+        {
+            rParam.mpEngine->Draw(mpDev, aLogicStart);
+        }
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -3170,9 +3193,9 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, con
     }
 }
 
-bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
-                         OutputAreaParam& aAreaParam, long nEngineHeight,
-                         bool bWrapFields)
+std::unique_ptr<ClearableClipRegion> ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
+                                                        OutputAreaParam& aAreaParam, long nEngineHeight,
+                                                        bool bWrapFields)
 {
     // Also take fields in a cell with automatic breaks into account: clip to cell width
     bool bClip = AdjustAreaParamClipRect(aAreaParam) || aAreaParam.mbLeftClip || aAreaParam.mbRightClip || bWrapFields;
@@ -3198,29 +3221,10 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         ShowClipMarks( rParam, nEngineHeight, aCellSize, bMerged, aAreaParam);
     }
 
-    tools::Rectangle aLogicClip;
-    if (bClip || bSimClip)
-    {
         // Clip marks are already handled in GetOutputArea
-
-        if (rParam.mbPixelToLogic)
-            aLogicClip = mpRefDevice->PixelToLogic( aAreaParam.maClipRect );
-        else
-            aLogicClip = aAreaParam.maClipRect;
-
-        if (bClip)  // for bSimClip only initialize aClipRect
-        {
-            if (bMetaFile)
-            {
-                mpDev->Push();
-                mpDev->IntersectClipRegion( aLogicClip );
-            }
-            else
-                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
-        }
-    }
-
-    return bClip;
+    return  std::unique_ptr<ClearableClipRegion>( new ClearableClipRegion( rParam.mbPixelToLogic ?
+                                                mpRefDevice->PixelToLogic( aAreaParam.maClipRect )
+                                              : aAreaParam.maClipRect, bClip, bSimClip, mpDev, bMetaFile ));
 }
 
 void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
@@ -3406,79 +3410,75 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         ? mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) )
         : Size( nOutWidth, nOutHeight );
 
-    const bool bClip = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
+    Point aURLStart;
 
-    Point aLogicStart(nStartX, nStartY);
-    rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
-
-    Point aURLStart = aLogicStart;      // copy before modifying for orientation
-
-    if (rParam.meHorJustResult == SvxCellHorJustify::Block || rParam.mbBreak)
     {
-        Size aPSize = rParam.mpEngine->GetPaperSize();
-        aPSize.Width() = aCellSize.Height();
-        rParam.mpEngine->SetPaperSize(aPSize);
-        aLogicStart.Y() +=
-            rParam.mbBreak ? aPSize.Width() : nEngineHeight;
-    }
-    else
-    {
-        // Note that the "paper" is rotated 90 degrees to the left, so
-        // paper's width is in vertical direction.  Also, the whole text
-        // is on a single line, as text wrap is not in effect.
+        auto ClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
 
-        // Set the paper width to be the width of the text.
-        Size aPSize = rParam.mpEngine->GetPaperSize();
-        aPSize.Width() = rParam.mpEngine->CalcTextWidth();
-        rParam.mpEngine->SetPaperSize(aPSize);
+        Point aLogicStart(nStartX, nStartY);
+        rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
 
-        long nGap = 0;
-        long nTopOffset = 0;
-        if (rParam.mbPixelToLogic)
+        aURLStart = aLogicStart;      // copy before modifying for orientation
+
+        if (rParam.meHorJustResult == SvxCellHorJustify::Block || rParam.mbBreak)
         {
-            nGap = mpRefDevice->LogicToPixel(aCellSize).Height() - mpRefDevice->LogicToPixel(aPSize).Width();
-            nGap = mpRefDevice->PixelToLogic(Size(0, nGap)).Height();
-            nTopOffset = mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+            Size aPSize = rParam.mpEngine->GetPaperSize();
+            aPSize.Width() = aCellSize.Height();
+            rParam.mpEngine->SetPaperSize(aPSize);
+            aLogicStart.Y() +=
+                rParam.mbBreak ? aPSize.Width() : nEngineHeight;
         }
         else
         {
-            nGap = aCellSize.Height() - aPSize.Width();
-            nTopOffset = nTopM;
+            // Note that the "paper" is rotated 90 degrees to the left, so
+            // paper's width is in vertical direction.  Also, the whole text
+            // is on a single line, as text wrap is not in effect.
+
+            // Set the paper width to be the width of the text.
+            Size aPSize = rParam.mpEngine->GetPaperSize();
+            aPSize.Width() = rParam.mpEngine->CalcTextWidth();
+            rParam.mpEngine->SetPaperSize(aPSize);
+
+            long nGap = 0;
+            long nTopOffset = 0;
+            if (rParam.mbPixelToLogic)
+            {
+                nGap = mpRefDevice->LogicToPixel(aCellSize).Height() - mpRefDevice->LogicToPixel(aPSize).Width();
+                nGap = mpRefDevice->PixelToLogic(Size(0, nGap)).Height();
+                nTopOffset = mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+            }
+            else
+            {
+                nGap = aCellSize.Height() - aPSize.Width();
+                nTopOffset = nTopM;
+            }
+
+            // First, align text to bottom.
+            aLogicStart.Y() += aCellSize.Height();
+            aLogicStart.Y() += nTopOffset;
+
+            switch (rParam.meVerJust)
+            {
+                case SvxCellVerJustify::Standard:
+                case SvxCellVerJustify::Bottom:
+                    // align to bottom (do nothing).
+                break;
+                case SvxCellVerJustify::Center:
+                    // center it.
+                    aLogicStart.Y() -= nGap / 2;
+                break;
+                case SvxCellVerJustify::Block:
+                case SvxCellVerJustify::Top:
+                    // align to top
+                    aLogicStart.Y() -= nGap;
+                break;
+                default:
+                    ;
+            }
         }
 
-        // First, align text to bottom.
-        aLogicStart.Y() += aCellSize.Height();
-        aLogicStart.Y() += nTopOffset;
-
-        switch (rParam.meVerJust)
-        {
-            case SvxCellVerJustify::Standard:
-            case SvxCellVerJustify::Bottom:
-                // align to bottom (do nothing).
-            break;
-            case SvxCellVerJustify::Center:
-                // center it.
-                aLogicStart.Y() -= nGap / 2;
-            break;
-            case SvxCellVerJustify::Block:
-            case SvxCellVerJustify::Top:
-                // align to top
-                aLogicStart.Y() -= nGap;
-            break;
-            default:
-                ;
-        }
-    }
-
-    rParam.adjustForRTL();
-    rParam.mpEngine->Draw(mpDev, aLogicStart, 900);
-
-    if (bClip)
-    {
-        if (bMetaFile)
-            mpDev->Pop();
-        else
-            mpDev->SetClipRegion();
+        rParam.adjustForRTL();
+        rParam.mpEngine->Draw(mpDev, aLogicStart, 900);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -3669,71 +3669,67 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         ? mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) )
         : Size( nOutWidth, nOutHeight );
 
-    const bool bClip = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
+    Point aURLStart;
 
-    Point aLogicStart(nStartX, nStartY);
-    rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
-
-    Point aURLStart = aLogicStart;      // copy before modifying for orientation
-
-    if (rParam.meHorJustResult != SvxCellHorJustify::Block)
     {
-        aLogicStart.X() += nEngineWidth;
-        if (!rParam.mbBreak)
+        const auto ClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
+
+        Point aLogicStart(nStartX, nStartY);
+        rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
+
+        aURLStart = aLogicStart;      // copy before modifying for orientation
+
+        if (rParam.meHorJustResult != SvxCellHorJustify::Block)
         {
-            // Set the paper width to text size.
-            Size aPSize = rParam.mpEngine->GetPaperSize();
-            aPSize.Width() = rParam.mpEngine->CalcTextWidth();
-            rParam.mpEngine->SetPaperSize(aPSize);
+            aLogicStart.X() += nEngineWidth;
+            if (!rParam.mbBreak)
+            {
+                // Set the paper width to text size.
+                Size aPSize = rParam.mpEngine->GetPaperSize();
+                aPSize.Width() = rParam.mpEngine->CalcTextWidth();
+                rParam.mpEngine->SetPaperSize(aPSize);
 
-            long nGap = 0;
-            long nTopOffset = 0; // offset by top margin
-            if (rParam.mbPixelToLogic)
-            {
-                nGap = mpRefDevice->LogicToPixel(aPSize).Width() - mpRefDevice->LogicToPixel(aCellSize).Height();
-                nGap = mpRefDevice->PixelToLogic(Size(0, nGap)).Height();
-                nTopOffset = mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-            }
-            else
-            {
-                nGap = aPSize.Width() - aCellSize.Height();
-                nTopOffset = nTopM;
-            }
-            aLogicStart.Y() += nTopOffset;
+                long nGap = 0;
+                long nTopOffset = 0; // offset by top margin
+                if (rParam.mbPixelToLogic)
+                {
+                    nGap = mpRefDevice->LogicToPixel(aPSize).Width() - mpRefDevice->LogicToPixel(aCellSize).Height();
+                    nGap = mpRefDevice->PixelToLogic(Size(0, nGap)).Height();
+                    nTopOffset = mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+                }
+                else
+                {
+                    nGap = aPSize.Width() - aCellSize.Height();
+                    nTopOffset = nTopM;
+                }
+                aLogicStart.Y() += nTopOffset;
 
-            switch (rParam.meVerJust)
-            {
-                case SvxCellVerJustify::Standard:
-                case SvxCellVerJustify::Bottom:
-                    // align to bottom
-                    aLogicStart.Y() -= nGap;
-                break;
-                case SvxCellVerJustify::Center:
-                    // center it.
-                    aLogicStart.Y() -= nGap / 2;
-                break;
-                case SvxCellVerJustify::Block:
-                case SvxCellVerJustify::Top:
-                    // align to top (do nothing)
-                default:
-                    ;
+                switch (rParam.meVerJust)
+                {
+                    case SvxCellVerJustify::Standard:
+                    case SvxCellVerJustify::Bottom:
+                        // align to bottom
+                        aLogicStart.Y() -= nGap;
+                    break;
+                    case SvxCellVerJustify::Center:
+                        // center it.
+                        aLogicStart.Y() -= nGap / 2;
+                    break;
+                    case SvxCellVerJustify::Block:
+                    case SvxCellVerJustify::Top:
+                        // align to top (do nothing)
+                    default:
+                        ;
+                }
             }
         }
-    }
 
-    rParam.adjustForRTL();
+        rParam.adjustForRTL();
 
-    // bMoveClipped handling has been replaced by complete alignment
-    // handling (also extending to the left).
+        // bMoveClipped handling has been replaced by complete alignment
+        // handling (also extending to the left).
 
-    rParam.mpEngine->Draw(mpDev, aLogicStart, 2700);
-
-    if (bClip)
-    {
-        if (bMetaFile)
-            mpDev->Pop();
-        else
-            mpDev->SetClipRegion();
+        rParam.mpEngine->Draw(mpDev, aLogicStart, 2700);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -3959,95 +3955,72 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         }
     }
 
-    tools::Rectangle aLogicClip;
-    if (bClip || bSimClip)
-    {
-        // Clip marks are already handled in GetOutputArea
+    Point aURLStart;
 
+    {   // Clip marks are already handled in GetOutputArea
+        ClearableClipRegion aClip(rParam.mbPixelToLogic ? mpRefDevice->PixelToLogic(aAreaParam.maClipRect)
+                                : aAreaParam.maClipRect, bClip, bSimClip, mpDev, bMetaFile);
+
+        Point aLogicStart;
         if (rParam.mbPixelToLogic)
-            aLogicClip = mpRefDevice->PixelToLogic( aAreaParam.maClipRect );
+            aLogicStart = mpRefDevice->PixelToLogic( Point(nStartX,nStartY) );
         else
-            aLogicClip = aAreaParam.maClipRect;
+            aLogicStart = Point(nStartX, nStartY);
 
-        if (bClip)  // for bSimClip only initialize aClipRect
+        if (rParam.meVerJust==SvxCellVerJustify::Bottom ||
+            rParam.meVerJust==SvxCellVerJustify::Standard)
         {
-            if (bMetaFile)
-            {
-                mpDev->Push();
-                mpDev->IntersectClipRegion( aLogicClip );
-            }
+            //! if pRefDevice != pFmtDevice, keep heights in logic units,
+            //! only converting margin?
+
+            if (rParam.mbPixelToLogic)
+                aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM +
+                                mpRefDevice->LogicToPixel(aCellSize).Height() -
+                                mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
+                                )).Height();
             else
-                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
+                aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
         }
-    }
+        else if (rParam.meVerJust==SvxCellVerJustify::Center)
+        {
+            if (rParam.mbPixelToLogic)
+                aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM + (
+                                mpRefDevice->LogicToPixel(aCellSize).Height() -
+                                mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
+                                / 2)).Height();
+            else
+                aLogicStart.Y() += nTopM + (aCellSize.Height() - nEngineHeight) / 2;
+        }
+        else        // top
+        {
+            if (rParam.mbPixelToLogic)
+                aLogicStart.Y() += mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+            else
+                aLogicStart.Y() += nTopM;
+        }
 
-    Point aLogicStart;
-    if (rParam.mbPixelToLogic)
-        aLogicStart = mpRefDevice->PixelToLogic( Point(nStartX,nStartY) );
-    else
-        aLogicStart = Point(nStartX, nStartY);
+        aURLStart = aLogicStart;      // copy before modifying for orientation
 
-    if (rParam.meVerJust==SvxCellVerJustify::Bottom ||
-        rParam.meVerJust==SvxCellVerJustify::Standard)
-    {
-        //! if pRefDevice != pFmtDevice, keep heights in logic units,
-        //! only converting margin?
+        Size aPaperLogic = rParam.mpEngine->GetPaperSize();
+        aPaperLogic.Width() = nEngineWidth;
+        rParam.mpEngine->SetPaperSize(aPaperLogic);
 
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM +
-                            mpRefDevice->LogicToPixel(aCellSize).Height() -
-                            mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
-                            )).Height();
+        rParam.adjustForRTL();
+
+        // bMoveClipped handling has been replaced by complete alignment
+        // handling (also extending to the left).
+
+        if (bSimClip)
+        {
+            // no hard clip, only draw the affected rows
+            Point aDocStart = aClip.getRect().TopLeft();
+            aDocStart -= aLogicStart;
+            rParam.mpEngine->Draw( mpDev, aClip.getRect(), aDocStart, false );
+        }
         else
-            aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
-    }
-    else if (rParam.meVerJust==SvxCellVerJustify::Center)
-    {
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM + (
-                            mpRefDevice->LogicToPixel(aCellSize).Height() -
-                            mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
-                            / 2)).Height();
-        else
-            aLogicStart.Y() += nTopM + (aCellSize.Height() - nEngineHeight) / 2;
-    }
-    else        // top
-    {
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-        else
-            aLogicStart.Y() += nTopM;
-    }
-
-    Point aURLStart = aLogicStart;      // copy before modifying for orientation
-
-    Size aPaperLogic = rParam.mpEngine->GetPaperSize();
-    aPaperLogic.Width() = nEngineWidth;
-    rParam.mpEngine->SetPaperSize(aPaperLogic);
-
-    rParam.adjustForRTL();
-
-    // bMoveClipped handling has been replaced by complete alignment
-    // handling (also extending to the left).
-
-    if (bSimClip)
-    {
-        // no hard clip, only draw the affected rows
-        Point aDocStart = aLogicClip.TopLeft();
-        aDocStart -= aLogicStart;
-        rParam.mpEngine->Draw( mpDev, aLogicClip, aDocStart, false );
-    }
-    else
-    {
-        rParam.mpEngine->Draw( mpDev, aLogicStart );
-    }
-
-    if (bClip)
-    {
-        if (bMetaFile)
-            mpDev->Pop();
-        else
-            mpDev->SetClipRegion();
+        {
+            rParam.mpEngine->Draw( mpDev, aLogicStart );
+        }
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -4278,72 +4251,49 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         }
     }
 
-    tools::Rectangle aLogicClip;
-    if (bClip || bSimClip)
-    {
-        // Clip marks are already handled in GetOutputArea
+    Point aURLStart;
 
+    {   // Clip marks are already handled in GetOutputArea
+        ClearableClipRegion aClip(rParam.mbPixelToLogic ? mpRefDevice->PixelToLogic(aAreaParam.maClipRect)
+                                : aAreaParam.maClipRect, bClip, bSimClip, mpDev, bMetaFile);
+
+        Point aLogicStart;
         if (rParam.mbPixelToLogic)
-            aLogicClip = mpRefDevice->PixelToLogic( aAreaParam.maClipRect );
+            aLogicStart = mpRefDevice->PixelToLogic( Point(nStartX,nStartY) );
         else
-            aLogicClip = aAreaParam.maClipRect;
+            aLogicStart = Point(nStartX, nStartY);
 
-        if (bClip)  // if bSimClip only initialize aClipRect
-        {
-            if (bMetaFile)
-            {
-                mpDev->Push();
-                mpDev->IntersectClipRegion( aLogicClip );
-            }
-            else
-                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
-        }
-    }
+        long nAvailWidth = aCellSize.Width();
+        // space for AutoFilter is already handled in GetOutputArea
 
-    Point aLogicStart;
-    if (rParam.mbPixelToLogic)
-        aLogicStart = mpRefDevice->PixelToLogic( Point(nStartX,nStartY) );
-    else
-        aLogicStart = Point(nStartX, nStartY);
+        //  horizontal alignment
 
-    long nAvailWidth = aCellSize.Width();
-    // space for AutoFilter is already handled in GetOutputArea
+        if (rParam.meHorJustResult==SvxCellHorJustify::Right)
+            aLogicStart.X() += nAvailWidth - nEngineWidth;
+        else if (rParam.meHorJustResult==SvxCellHorJustify::Center)
+            aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
 
-    //  horizontal alignment
+        // paper size is subtracted below
+        aLogicStart.X() += nEngineWidth;
 
-    if (rParam.meHorJustResult==SvxCellHorJustify::Right)
-        aLogicStart.X() += nAvailWidth - nEngineWidth;
-    else if (rParam.meHorJustResult==SvxCellHorJustify::Center)
-        aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
-
-    // paper size is subtracted below
-    aLogicStart.X() += nEngineWidth;
-
-    // vertical adjustment is within the EditEngine
-    if (rParam.mbPixelToLogic)
-        aLogicStart.Y() += mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-    else
-        aLogicStart.Y() += nTopM;
-
-    Point aURLStart = aLogicStart;      // copy before modifying for orientation
-
-    rParam.adjustForRTL();
-
-    // bMoveClipped handling has been replaced by complete alignment
-    // handling (also extending to the left).
-
-    // with SetVertical, the start position is top left of
-    // the whole output area, not the text itself
-    aLogicStart.X() -= rParam.mpEngine->GetPaperSize().Width();
-
-    rParam.mpEngine->Draw(mpDev, aLogicStart);
-
-    if (bClip)
-    {
-        if (bMetaFile)
-            mpDev->Pop();
+        // vertical adjustment is within the EditEngine
+        if (rParam.mbPixelToLogic)
+            aLogicStart.Y() += mpRefDevice->PixelToLogic(Size(0,nTopM)).Height();
         else
-            mpDev->SetClipRegion();
+            aLogicStart.Y() += nTopM;
+
+        aURLStart = aLogicStart;      // copy before modifying for orientation
+
+        rParam.adjustForRTL();
+
+        // bMoveClipped handling has been replaced by complete alignment
+        // handling (also extending to the left).
+
+        // with SetVertical, the start position is top left of
+        // the whole output area, not the text itself
+        aLogicStart.X() -= rParam.mpEngine->GetPaperSize().Width();
+
+        rParam.mpEngine->Draw(mpDev, aLogicStart);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
