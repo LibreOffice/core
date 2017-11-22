@@ -876,7 +876,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
         if (pStartPos)
             *pStartPos = (sal_Int32)m_pFileStream->Tell();
         m_pFileStream->ReadByteStringLine(m_aCurrentLine, nEncoding);
-        if (m_pFileStream->IsEof())
+        if (m_pFileStream->eof())
             return false;
 
         QuotedTokenizedString sLine = m_aCurrentLine; // check if the string continues on next line
@@ -927,7 +927,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
             {
                 nLastOffset = sLine.Len();
                 m_pFileStream->ReadByteStringLine(sLine,nEncoding);
-                if ( !m_pFileStream->IsEof() )
+                if ( !m_pFileStream->eof() )
                 {
                     OUString aStr = m_aCurrentLine.GetString() + "\n" + sLine.GetString();
                     m_aCurrentLine.SetString(aStr);

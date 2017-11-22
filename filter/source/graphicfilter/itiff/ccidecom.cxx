@@ -769,7 +769,7 @@ bool CCIDecompressor::ReadEOL()
         while ( nInputBitsBufSize < 12 )
         {
             pIStream->ReadUChar( nByte );
-            if ( pIStream->IsEof() )
+            if ( pIStream->eof() )
                 return false;
             if ( pIStream->Tell() > nMaxPos )
                 return false;

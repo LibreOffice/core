@@ -1444,7 +1444,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
     // reading which will create VDevs and other stuff, just to
     // read nothing. CAUTION: Eof is only true AFTER reading another
     // byte, a speciality of SvMemoryStream (!)
-    if (rIStm.GetError() || rIStm.IsEof())
+    if (rIStm.GetError() || rIStm.eof())
         return;
 
     if (NATIVE_FORMAT_50 == nTmp)

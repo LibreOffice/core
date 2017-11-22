@@ -126,7 +126,7 @@ class SvTokenStream
     void            FillTokenList();
     sal_uLong       GetNumber();
     bool            MakeToken( SvToken & );
-    bool            IsEof() const { return pInStream->IsEof(); }
+    bool            IsEof() const { return pInStream->eof(); }
     void            SetMax()
                     {
                         sal_uLong n = Tell();

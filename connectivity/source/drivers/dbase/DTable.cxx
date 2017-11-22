@@ -2655,7 +2655,7 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
                 aBuf[i] = 0;
                 aBStr.append(aBuf);
 
-            } while (!bReady && !m_pMemoStream->IsEof());
+            } while (!bReady && !m_pMemoStream->eof());
 
             aVariable = OStringToOUString(aBStr.makeStringAndClear(),
                 m_eEncoding);

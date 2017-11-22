@@ -4095,7 +4095,7 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = nullptr;
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
-    while( !rInStr.GetError() && !rInStr.IsEof() )
+    while( !rInStr.GetError() && !rInStr.eof() )
     {
         OUString sLine;
         rInStr.ReadByteStringLine( sLine, eTEnc );
