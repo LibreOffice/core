@@ -504,8 +504,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             DrawRect(tools::Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
 
             const ScPatternAttr& rDefPattern =
-                static_cast<const ScPatternAttr&>(
-                    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN));
+                    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
 
             std::unique_ptr<ScEditEngineDefaulter> pEditEng(
                 new ScEditEngineDefaulter(EditEngine::CreatePool(), true));
@@ -797,7 +796,7 @@ static Size lcl_GetDocPageSize( const ScDocument* pDoc, SCTAB nTab )
     if ( pStyleSheet )
     {
         SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-        return static_cast<const SvxSizeItem&>( rStyleSet.Get(ATTR_PAGE_SIZE)).GetSize();
+        return rStyleSet.Get(ATTR_PAGE_SIZE).GetSize();
     }
     else
     {
@@ -1077,7 +1076,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                 SfxItemSet&  rStyleSet = pStyleSheet->GetItemSet();
 
-                SvxLRSpaceItem aLRItem = static_cast<const SvxLRSpaceItem&>( rStyleSet.Get( ATTR_LRSPACE ) );
+                SvxLRSpaceItem aLRItem = rStyleSet.Get( ATTR_LRSPACE );
 
                 if(( bLeftRulerChange || bRightRulerChange ) && ( aButtonUpPt.X() <= ( 0 - aOffset.X() ) || aButtonUpPt.X() > nWidth * HMM_PER_TWIPS - aOffset.X() ) )
                 {
@@ -1172,7 +1171,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
 
-                    SvxULSpaceItem aULItem = static_cast<const SvxULSpaceItem&>( rStyleSet.Get( ATTR_ULSPACE ) );
+                    SvxULSpaceItem aULItem = rStyleSet.Get( ATTR_ULSPACE );
 
                     if( bTopRulerMove && bTopRulerChange )
                     {
@@ -1192,10 +1191,10 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         if ( rStyleSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SfxItemState::SET )
                         {
                             const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-                            Size  aHeaderSize = static_cast<const SvxSizeItem&>(rHeaderSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                            Size  aHeaderSize = rHeaderSet.Get(ATTR_PAGE_SIZE).GetSize();
                             aHeaderSize.Height() = (long)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - aULItem.GetUpper());
                             aHeaderSize.Height() = aHeaderSize.Height() * 100 / mnScale;
-                            SvxSetItem  aNewHeader( static_cast<const SvxSetItem&>(rStyleSet.Get(ATTR_PAGE_HEADERSET)) );
+                            SvxSetItem  aNewHeader( rStyleSet.Get(ATTR_PAGE_HEADERSET) );
                             aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
                             rStyleSet.Put( aNewHeader );
                             pDocShell->SetModified();
@@ -1207,10 +1206,10 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         if( rStyleSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SfxItemState::SET )
                         {
                             const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-                            Size aFooterSize = static_cast<const SvxSizeItem&>(rFooterSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                            Size aFooterSize = rFooterSet.Get(ATTR_PAGE_SIZE).GetSize();
                             aFooterSize.Height() = (long)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - aULItem.GetLower() );
                             aFooterSize.Height() = aFooterSize.Height() * 100 / mnScale;
-                            SvxSetItem  aNewFooter( static_cast<const SvxSetItem&>(rStyleSet.Get(ATTR_PAGE_FOOTERSET)) );
+                            SvxSetItem  aNewFooter( rStyleSet.Get(ATTR_PAGE_FOOTERSET) );
                             aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
                             rStyleSet.Put( aNewFooter );
                             pDocShell->SetModified();

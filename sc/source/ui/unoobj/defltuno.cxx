@@ -18,6 +18,7 @@
  */
 
 #include <editeng/memberids.h>
+#include <editeng/langitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/unomid.hxx>

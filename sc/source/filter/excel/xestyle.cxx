@@ -1450,7 +1450,7 @@ OUString XclExpNumFmtBuffer::GetFormatCode( sal_uInt32 nScNumFmt )
 
 bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, bool bStyle )
 {
-    const ScProtectionAttr& rProtItem = GETITEM( rItemSet, ScProtectionAttr, ATTR_PROTECTION );
+    const ScProtectionAttr& rProtItem = rItemSet.Get( ATTR_PROTECTION );
     mbLocked = rProtItem.GetProtection();
     mbHidden = rProtItem.GetHideFormula() || rProtItem.GetHideCell();
     return ScfTools::CheckItem( rItemSet, ATTR_PROTECTION, bStyle );
@@ -1474,25 +1474,25 @@ bool XclExpCellAlign::FillFromItemSet(
         const SfxItemSet& rItemSet, bool bForceLineBreak, XclBiff eBiff, bool bStyle )
 {
     bool bUsed = false;
-    SvxCellHorJustify eHorAlign = GETITEM( rItemSet, SvxHorJustifyItem, ATTR_HOR_JUSTIFY ).GetValue();
-    SvxCellVerJustify eVerAlign = GETITEM( rItemSet, SvxVerJustifyItem, ATTR_VER_JUSTIFY ).GetValue();
+    SvxCellHorJustify eHorAlign = rItemSet.Get( ATTR_HOR_JUSTIFY ).GetValue();
+    SvxCellVerJustify eVerAlign = rItemSet.Get( ATTR_VER_JUSTIFY ).GetValue();
 
     switch( eBiff )
     {
         case EXC_BIFF8: // attributes new in BIFF8
         {
             // text indent
-            long nTmpIndent = GETITEM( rItemSet, SfxUInt16Item, ATTR_INDENT ).GetValue();
+            long nTmpIndent = rItemSet.Get( ATTR_INDENT ).GetValue();
             (nTmpIndent += 100) /= 200; // 1 Excel unit == 10 pt == 200 twips
             mnIndent = limit_cast< sal_uInt8 >( nTmpIndent, 0, 15 );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
             // shrink to fit
-            mbShrink = GETITEM( rItemSet, SfxBoolItem, ATTR_SHRINKTOFIT ).GetValue();
+            mbShrink = rItemSet.Get( ATTR_SHRINKTOFIT ).GetValue();
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_SHRINKTOFIT, bStyle );
 
             // CTL text direction
-            SetScFrameDir( GETITEM( rItemSet, SvxFrameDirectionItem, ATTR_WRITINGDIR ).GetValue() );
+            SetScFrameDir( rItemSet.Get( ATTR_WRITINGDIR ).GetValue() );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_WRITINGDIR, bStyle );
 
             SAL_FALLTHROUGH;
@@ -1506,7 +1506,7 @@ bool XclExpCellAlign::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
             // stacked/rotation
-            bool bStacked = GETITEM( rItemSet, SfxBoolItem, ATTR_STACKED ).GetValue();
+            bool bStacked = rItemSet.Get( ATTR_STACKED ).GetValue();
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_STACKED, bStyle );
             if( bStacked )
             {
@@ -1515,7 +1515,7 @@ bool XclExpCellAlign::FillFromItemSet(
             else
             {
                 // rotation
-                sal_Int32 nScRot = GETITEM( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE ).GetValue();
+                sal_Int32 nScRot = rItemSet.Get( ATTR_ROTATE_VALUE ).GetValue();
                 mnRotation = XclTools::GetXclRotation( nScRot );
                 bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
             }
@@ -1527,7 +1527,7 @@ bool XclExpCellAlign::FillFromItemSet(
         case EXC_BIFF3: // attributes new in BIFF3
         {
             // text wrap
-            mbLineBreak = bForceLineBreak || GETITEMBOOL( rItemSet, ATTR_LINEBREAK );
+            mbLineBreak = bForceLineBreak || rItemSet.Get( ATTR_LINEBREAK ).GetValue();
             bUsed |= bForceLineBreak || ScfTools::CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
 
             SAL_FALLTHROUGH;
@@ -1736,13 +1736,13 @@ bool XclExpCellBorder::FillFromItemSet(
     {
         case EXC_BIFF8: // attributes new in BIFF8
         {
-            const SvxLineItem& rTLBRItem = GETITEM( rItemSet, SvxLineItem, ATTR_BORDER_TLBR );
+            const SvxLineItem& rTLBRItem = rItemSet.Get( ATTR_BORDER_TLBR );
             sal_uInt8 nTLBRLine;
             sal_uInt32 nTLBRColorId;
             lclGetBorderLine( nTLBRLine, nTLBRColorId, rTLBRItem.GetLine(), rPalette, eBiff );
             mbDiagTLtoBR = (nTLBRLine != EXC_LINE_NONE);
 
-            const SvxLineItem& rBLTRItem = GETITEM( rItemSet, SvxLineItem, ATTR_BORDER_BLTR );
+            const SvxLineItem& rBLTRItem = rItemSet.Get( ATTR_BORDER_BLTR );
             sal_uInt8 nBLTRLine;
             sal_uInt32 nBLTRColorId;
             lclGetBorderLine( nBLTRLine, nBLTRColorId, rBLTRItem.GetLine(), rPalette, eBiff );
@@ -1770,7 +1770,7 @@ bool XclExpCellBorder::FillFromItemSet(
         case EXC_BIFF3:
         case EXC_BIFF2:
         {
-            const SvxBoxItem& rBoxItem = GETITEM( rItemSet, SvxBoxItem, ATTR_BORDER );
+            const SvxBoxItem& rBoxItem = rItemSet.Get( ATTR_BORDER );
             lclGetBorderLine( mnLeftLine,   mnLeftColorId,   rBoxItem.GetLeft(),   rPalette, eBiff );
             lclGetBorderLine( mnRightLine,  mnRightColorId,  rBoxItem.GetRight(),  rPalette, eBiff );
             lclGetBorderLine( mnTopLine,    mnTopColorId,    rBoxItem.GetTop(),    rPalette, eBiff );
@@ -1905,7 +1905,7 @@ XclExpCellArea::XclExpCellArea() :
 
 bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, bool bStyle )
 {
-    const SvxBrushItem& rBrushItem = GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND );
+    const SvxBrushItem& rBrushItem = rItemSet.Get( ATTR_BACKGROUND );
     if( rBrushItem.GetColor().GetTransparency() )
     {
         mnPattern = EXC_PATT_NONE;
@@ -2003,7 +2003,7 @@ bool XclExpColor::FillFromItemSet( const SfxItemSet& rItemSet )
     if( !ScfTools::CheckItem( rItemSet, ATTR_BACKGROUND, true ) )
         return false;
 
-    const SvxBrushItem& rBrushItem = GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND );
+    const SvxBrushItem& rBrushItem = rItemSet.Get( ATTR_BACKGROUND );
     maColor = rBrushItem.GetColor();
 
     return true;
@@ -2131,7 +2131,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
 
     // number format
     mnScNumFmt = (nForceScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) ?
-        GETITEM( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT ).GetValue() : nForceScNumFmt;
+        rItemSet.Get( ATTR_VALUE_FORMAT ).GetValue() : nForceScNumFmt;
     mnXclNumFmt = GetNumFmtBuffer().Insert( mnScNumFmt );
     mbFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
     // alignment

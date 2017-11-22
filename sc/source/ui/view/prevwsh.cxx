@@ -245,7 +245,7 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
     if (!pStyleSheet) return false;
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
-    aPageSize = static_cast<const SvxSizeItem&>( pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
+    aPageSize = pParamSet->Get(ATTR_PAGE_SIZE).GetSize();
     aPageSize.Width()  = (long) (aPageSize.Width()  * HMM_PER_TWIPS );
     aPageSize.Height() = (long) (aPageSize.Height() * HMM_PER_TWIPS );
     return true;
@@ -841,7 +841,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                         if ( pStyleSheet )
                         {
                             SfxItemSet& rStyleSet   = pStyleSheet->GetItemSet();
-                            sal_uInt16 nCurrentZoom = static_cast<const SfxUInt16Item&>(rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
+                            sal_uInt16 nCurrentZoom = rStyleSet.Get(ATTR_PAGE_SCALE).GetValue();
                             if( nCurrentZoom )
                             {
                                 SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM_SLIDER, MAXZOOM_SLIDER, SID_PREVIEW_SCALINGFACTOR );

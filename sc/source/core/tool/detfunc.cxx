@@ -229,8 +229,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
 
     //  do use the default cell style, so the user has a chance to
     //  modify the font for the annotations
-    static_cast<const ScPatternAttr&>(rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN)).
-        FillEditItemSet( &aCaptionSet );
+    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).FillEditItemSet( &aCaptionSet );
 
     // support the best position for the tail connector now that
     // that notes can be resized and repositioned.

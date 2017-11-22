@@ -24,7 +24,9 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/escapementitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/scripttypeitem.hxx>

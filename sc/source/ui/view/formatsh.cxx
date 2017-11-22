@@ -805,8 +805,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 sal_uLong nFormat =
                                     static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                                 LanguageType eLang =
-                                    static_cast<const SvxLanguageItem*>(&rSet.Get(
-                                    ATTR_LANGUAGE_FORMAT ))->GetLanguage();
+                                    rSet.Get(ATTR_LANGUAGE_FORMAT ).GetLanguage();
                                 sal_uLong nLangFormat = rDoc.GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nFormat, eLang );
                                 if ( nLangFormat != nFormat )
@@ -889,10 +888,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                                 rDoc.SetStreamValid(nTab, false);
 
-                            sal_uLong nOldFormat = static_cast<const SfxUInt32Item&>(aOldSet.
-                                                    Get( ATTR_VALUE_FORMAT )).GetValue();
-                            sal_uLong nNewFormat = static_cast<const SfxUInt32Item&>(rNewSet.
-                                                    Get( ATTR_VALUE_FORMAT )).GetValue();
+                            sal_uLong nOldFormat = aOldSet.Get( ATTR_VALUE_FORMAT ).GetValue();
+                            sal_uLong nNewFormat = rNewSet.Get( ATTR_VALUE_FORMAT ).GetValue();
                             if ( nNewFormat != nOldFormat )
                             {
                                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
@@ -1039,7 +1036,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
         case SID_NUMBER_TWODEC:
         {
             const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
-            sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+            sal_uInt32 nNumberFormat = rAttrSet.Get(ATTR_VALUE_FORMAT).GetValue();
 
             if ((nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 4)
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
@@ -1087,10 +1084,8 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                     const SfxItemSet& rOldSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
 
-                    LanguageType eOldLang = static_cast<const SvxLanguageItem&>(
-                                            rOldSet.Get( ATTR_LANGUAGE_FORMAT ) ).GetLanguage();
-                    sal_uInt32 nOldFormat = static_cast<const SfxUInt32Item&>(
-                                            rOldSet.Get( ATTR_VALUE_FORMAT ) ).GetValue();
+                    LanguageType eOldLang = rOldSet.Get( ATTR_LANGUAGE_FORMAT ).GetLanguage();
+                    sal_uInt32 nOldFormat = rOldSet.Get( ATTR_VALUE_FORMAT ).GetValue();
 
                     if ( nOldFormat != nNewFormat )
                     {
@@ -1949,7 +1944,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         if(SfxItemState::SET == pNewAttrs->GetItemState(ATTR_BORDER_TLBR, true, &pItem))
                         {
                             SvxLineItem aItem(ATTR_BORDER_TLBR);
-                            aItem.SetLine(static_cast<const SvxLineItem&>(pNewAttrs->Get(ATTR_BORDER_TLBR)).GetLine());
+                            aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_TLBR).GetLine());
                             pNewSet->Put(aItem);
                             rReq.AppendItem(aItem);
                             pTabViewShell->ApplyAttributes(pNewSet.get(), pOldSet.get());
@@ -1960,7 +1955,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         if(SfxItemState::SET == pNewAttrs->GetItemState(ATTR_BORDER_BLTR, true, &pItem ))
                         {
                             SvxLineItem aItem(ATTR_BORDER_BLTR);
-                            aItem.SetLine(static_cast<const SvxLineItem&>(pNewAttrs->Get(ATTR_BORDER_BLTR)).GetLine());
+                            aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_BLTR).GetLine());
                             pNewSet->Put(aItem);
                             rReq.AppendItem(aItem);
                             pTabViewShell->ApplyAttributes(pNewSet.get(), pOldSet.get());
@@ -2001,8 +1996,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
             case SID_ATTR_BORDER_SHADOW:
                 {
-                    const SvxShadowItem& rNewShadowItem = static_cast<const SvxShadowItem&>(
-                                            pNewAttrs->Get( ATTR_SHADOW ) );
+                    const SvxShadowItem& rNewShadowItem =
+                                            pNewAttrs->Get( ATTR_SHADOW );
                     pTabViewShell->ApplyAttr( rNewShadowItem );
                 }
                 break;
@@ -2021,7 +2016,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
-    const SvxBrushItem&  rBrushItem = static_cast<const SvxBrushItem&>(rAttrSet.Get( ATTR_BACKGROUND ));
+    const SvxBrushItem&  rBrushItem = rAttrSet.Get( ATTR_BACKGROUND );
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
 
@@ -2224,7 +2219,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             break;
             case SID_SCATTR_CELLPROTECTION:
             {
-                bool bProtect = static_cast<const ScProtectionAttr&>(rAttrSet.Get( ATTR_PROTECTION )).GetProtection();
+                bool bProtect = rAttrSet.Get( ATTR_PROTECTION ).GetProtection();
                 rSet.Put( SfxBoolItem(SID_SCATTR_CELLPROTECTION, bProtect) );
             }
             break;
@@ -2273,8 +2268,8 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     }
     else
     {
-        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
-                    rAttrSet.Get(ATTR_FONT_UNDERLINE)).GetLineStyle();
+        FontLineStyle eUnderline =
+                    rAttrSet.Get(ATTR_FONT_UNDERLINE).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {
@@ -2443,12 +2438,12 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
     SvxCellHorJustify eHAlign = SvxCellHorJustify::Standard;
     bool bHasHAlign = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY ) != SfxItemState::DONTCARE;
     if( bHasHAlign )
-        eHAlign = static_cast<const SvxHorJustifyItem&>(rAttrSet.Get( ATTR_HOR_JUSTIFY )).GetValue();
+        eHAlign = rAttrSet.Get( ATTR_HOR_JUSTIFY ).GetValue();
 
     SvxCellVerJustify eVAlign = SvxCellVerJustify::Standard;
     bool bHasVAlign = rAttrSet.GetItemState( ATTR_VER_JUSTIFY ) != SfxItemState::DONTCARE;
     if( bHasVAlign )
-        eVAlign = static_cast<const SvxVerJustifyItem&>(rAttrSet.Get( ATTR_VER_JUSTIFY )).GetValue();
+        eVAlign = rAttrSet.Get( ATTR_VER_JUSTIFY ).GetValue();
 
     while ( nWhich )
     {
@@ -2488,7 +2483,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
     ScDocument* pDoc                = pViewData->GetDocument();
     short nType                     = GetCurrentNumberFormatType();
     const SfxItemSet& rAttrSet      = pTabViewShell->GetSelectionPattern()->GetItemSet();
-    sal_uInt32 nNumberFormat        = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+    sal_uInt32 nNumberFormat        = rAttrSet.Get(ATTR_VALUE_FORMAT).GetValue();
     SvNumberFormatter* pFormatter   = pDoc->GetFormatTable();
     NfIndexTableOffset nOffset      = pFormatter->GetIndexTableOffset(nNumberFormat);
 
@@ -2692,16 +2687,15 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
         (rAttrSet.GetItemState( ATTR_VERTICAL_ASIAN ) == SfxItemState::DONTCARE) ||
         (rAttrSet.GetItemState( ATTR_STACKED ) == SfxItemState::DONTCARE);
     bool bLeftRight = !bVertDontCare &&
-        !static_cast<const SfxBoolItem&>(rAttrSet.Get( ATTR_STACKED )).GetValue();
+        !rAttrSet.Get( ATTR_STACKED ).GetValue();
     bool bTopBottom = !bVertDontCare && !bLeftRight &&
-        static_cast<const SfxBoolItem&>(rAttrSet.Get( ATTR_VERTICAL_ASIAN )).GetValue();
+        rAttrSet.Get( ATTR_VERTICAL_ASIAN ).GetValue();
 
     bool bBidiDontCare = (rAttrSet.GetItemState( ATTR_WRITINGDIR ) == SfxItemState::DONTCARE);
     EEHorizontalTextDirection eBidiDir = EE_HTEXTDIR_DEFAULT;
     if ( !bBidiDontCare )
     {
-        SvxFrameDirection eCellDir = static_cast<const SvxFrameDirectionItem&>(
-                                        rAttrSet.Get( ATTR_WRITINGDIR )).GetValue();
+        SvxFrameDirection eCellDir = rAttrSet.Get( ATTR_WRITINGDIR ).GetValue();
         if ( eCellDir == SvxFrameDirection::Environment )
             eBidiDir = (EEHorizontalTextDirection)GetViewData()->GetDocument()->
                                 GetEditTextDirection( GetViewData()->GetTabNo() );

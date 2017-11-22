@@ -1051,7 +1051,7 @@ static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner
     if ( rMerge.GetRowMerge() == nDistBottom + 1 )
         nDistBottom = 0;
 
-    const SvxBoxItem* pCellFrame = static_cast<const SvxBoxItem*>( &pPattern->GetItemSet().Get( ATTR_BORDER ) );
+    const SvxBoxItem* pCellFrame = &pPattern->GetItemSet().Get( ATTR_BORDER );
     const SvxBorderLine* pLeftAttr   = pCellFrame->GetLeft();
     const SvxBorderLine* pRightAttr  = pCellFrame->GetRight();
     const SvxBorderLine* pTopAttr    = pCellFrame->GetTop();
@@ -1153,8 +1153,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
     OSL_ENSURE( pBoxItem && pBoxInfoItem, "Missing line attributes!" );
 
     const ScPatternAttr* pPattern = GetPattern( nStartRow );
-    const SvxBoxItem* pOldFrame = static_cast<const SvxBoxItem*>(
-                                  &pPattern->GetItemSet().Get( ATTR_BORDER ));
+    const SvxBoxItem* pOldFrame = &pPattern->GetItemSet().Get( ATTR_BORDER );
 
     // right/bottom border set when connected together
     const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE));
@@ -1513,10 +1512,8 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
         SCROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
         {
-            const ScMergeAttr* pAttr = static_cast<const ScMergeAttr*>(
-                                            &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE ) );
-            const ScMergeFlagAttr* pFlagAttr = static_cast<const ScMergeFlagAttr*>(
-                                            &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE_FLAG ));
+            const ScMergeAttr* pAttr = &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE );
+            const ScMergeFlagAttr* pFlagAttr = &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE_FLAG );
 
             OSL_ENSURE( nCountY==1 || nThisStart==nThisEnd, "What's up?" );
 
@@ -1723,7 +1720,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         bool bNeedJust = ( rOldSet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem ) != SfxItemState::SET
                            || (static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SvxCellHorJustify::Left &&
                                static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SvxCellHorJustify::Right ));
-        sal_uInt16 nOldValue = static_cast<const SfxUInt16Item&>(rOldSet.Get( ATTR_INDENT )).GetValue();
+        sal_uInt16 nOldValue = rOldSet.Get( ATTR_INDENT ).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659
         long nColWidth = (long)pDocument->GetColWidth(nCol,nTab);
@@ -2404,8 +2401,7 @@ void ScAttrArray::CopyArea(
 
     if ( mvData.empty() )
     {
-        const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>(
-                                             &pDestDocPool->GetDefaultItem( ATTR_PATTERN ));
+        const ScPatternAttr* pNewPattern = &pDestDocPool->GetDefaultItem( ATTR_PATTERN );
         rAttrArray.SetPatternArea(nDestStart, nDestEnd, pNewPattern);
         return;
     }
@@ -2421,8 +2417,7 @@ void ScAttrArray::CopyArea(
             {
                 // default: nothing changed
 
-                pNewPattern = static_cast<const ScPatternAttr*>(
-                                &pDestDocPool->GetDefaultItem( ATTR_PATTERN ));
+                pNewPattern = &pDestDocPool->GetDefaultItem( ATTR_PATTERN );
             }
             else if ( nStripFlags != ScMF::NONE )
             {

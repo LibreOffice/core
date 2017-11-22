@@ -828,7 +828,7 @@ XclExpFormulaCell::XclExpFormulaCell(
 
         // current cell number format
         sal_uInt32 nScNumFmt = pPattern ?
-            GETITEM( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT ).GetValue() :
+            pPattern->GetItemSet().Get( ATTR_VALUE_FORMAT ).GetValue() :
             rNumFmtBfr.GetStandardFormat();
 
         // alternative number format passed to XF buffer
@@ -2517,11 +2517,11 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         {
             const SfxItemSet& rItemSet = pPattern->GetItemSet();
             // base cell in a merged range
-            const ScMergeAttr& rMergeItem = GETITEM( rItemSet, ScMergeAttr, ATTR_MERGE );
+            const ScMergeAttr& rMergeItem = rItemSet.Get( ATTR_MERGE );
             bIsMergedBase = rMergeItem.IsMerged();
             /*  overlapped cell in a merged range; in Excel all merged cells
                 must contain same XF index, for correct border */
-            const ScMergeFlagAttr& rMergeFlagItem = GETITEM( rItemSet, ScMergeFlagAttr, ATTR_MERGE_FLAG );
+            const ScMergeFlagAttr& rMergeFlagItem = rItemSet.Get( ATTR_MERGE_FLAG );
             if( rMergeFlagItem.IsOverlapped() )
                 nMergeBaseXFId = mxMergedcells->GetBaseXFId( aScPos );
         }
@@ -2537,7 +2537,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 // try to create a Boolean cell
                 if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
                 {
-                    sal_uInt32 nScNumFmt = GETITEM( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT ).GetValue();
+                    sal_uInt32 nScNumFmt = pPattern->GetItemSet().Get( ATTR_VALUE_FORMAT ).GetValue();
                     if( rFormatter.GetType( nScNumFmt ) == css::util::NumberFormat::LOGICAL )
                         xCell.reset( new XclExpBooleanCell(
                             GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 ) );
@@ -2612,7 +2612,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             // base cell in a merged range
             if( bIsMergedBase )
             {
-                const ScMergeAttr& rMergeItem = GETITEM( rItemSet, ScMergeAttr, ATTR_MERGE );
+                const ScMergeAttr& rMergeItem = rItemSet.Get( ATTR_MERGE );
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
@@ -2631,7 +2631,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             // data validation
             if( ScfTools::CheckItem( rItemSet, ATTR_VALIDDATA, false ) )
             {
-                sal_uLong nScHandle = GETITEM( rItemSet, SfxUInt32Item, ATTR_VALIDDATA ).GetValue();
+                sal_uLong nScHandle = rItemSet.Get( ATTR_VALIDDATA ).GetValue();
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.SetCol( nLastScCol );
                 mxDval->InsertCellRange( aScRange, nScHandle );

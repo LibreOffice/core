@@ -283,10 +283,8 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     if ( pStyleSheet )
                     {
                         SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-                        sal_uInt16 nScale = static_cast<const SfxUInt16Item&>(
-                                            rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
-                        sal_uInt16 nPages = static_cast<const SfxUInt16Item&>(
-                                            rStyleSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
+                        sal_uInt16 nScale = rStyleSet.Get(ATTR_PAGE_SCALE).GetValue();
+                        sal_uInt16 nPages = rStyleSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
                         if ( nScale == 100 && nPages == 0 )
                             rSet.DisableItem( nWhich );
                     }

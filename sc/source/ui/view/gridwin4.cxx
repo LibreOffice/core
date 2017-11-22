@@ -106,7 +106,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
 
     //  use ScPatternAttr::GetFont only for font size
     vcl::Font aAttrFont;
-    static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+    pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN).
                                     GetFont(aAttrFont,SC_AUTOCOL_BLACK,pDev,&rZoomY);
 
     //  everything else from application font
@@ -1342,7 +1342,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
 
         vcl::Font aFont;
         std::unique_ptr<ScEditEngineDefaulter> pEditEng;
-        const ScPatternAttr& rDefPattern = static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
+        const ScPatternAttr& rDefPattern = pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN);
         if ( nPageScript == SvtScriptType::LATIN )
         {
             //  use single font and call DrawText directly

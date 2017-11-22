@@ -137,7 +137,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
     aItemSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
     // use the default cell style to be able to modify the caption font
-    const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
+    const ScPatternAttr& rDefPattern = rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN );
     rDefPattern.FillEditItemSet( &aItemSet );
 
     rCaption.SetMergedItemSet( aItemSet );

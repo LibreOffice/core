@@ -6004,7 +6004,7 @@ void ScDocument::DeleteSelectionTab(
 
 ScPatternAttr* ScDocument::GetDefPattern() const
 {
-    return const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(&mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN)));
+    return const_cast<ScPatternAttr*>(&mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN));
 }
 
 ScDocumentPool* ScDocument::GetPool()
@@ -6062,11 +6062,11 @@ void ScDocument::UpdStlShtPtrsFrmNms()
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
+        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i));
         if (pPattern)
             pPattern->UpdateStyleSheet(this);
     }
-    const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN))).UpdateStyleSheet(this);
+    const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet(this);
 }
 
 void ScDocument::StylesToNames()
@@ -6076,11 +6076,11 @@ void ScDocument::StylesToNames()
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
+        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i));
         if (pPattern)
             pPattern->StyleToName();
     }
-    const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN))).StyleToName();
+    const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
 }
 
 sal_uLong ScDocument::GetCellCount() const
@@ -6307,7 +6307,7 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();
-                sal_uInt16 nFirst = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_FIRSTPAGENO)).GetValue();
+                sal_uInt16 nFirst = rSet.Get(ATTR_PAGE_FIRSTPAGENO).GetValue();
                 if ( nFirst != 0 )
                     return true;        // Specify page number in new template
             }

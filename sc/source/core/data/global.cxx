@@ -510,7 +510,7 @@ void ScGlobal::InitTextHeight(const SfxItemPool* pPool)
         return;
     }
 
-    const ScPatternAttr* pPattern = static_cast<const ScPatternAttr*>(&pPool->GetDefaultItem(ATTR_PATTERN));
+    const ScPatternAttr* pPattern = &pPool->GetDefaultItem(ATTR_PATTERN);
     if (!pPattern)
     {
         OSL_FAIL("ScGlobal::InitTextHeight: No default pattern");
@@ -967,7 +967,7 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatte
         sal_uInt32 nParentFmt = 0; // Pool default
         const SfxItemSet* pParent = rSet.GetParent();
         if ( pParent )
-            nParentFmt = static_cast<const SfxUInt32Item&>(pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
+            nParentFmt = pParent->Get( ATTR_VALUE_FORMAT ).GetValue();
         const SvNumberformat* pParFormat = rFormatter.GetEntry( nParentFmt );
 
         if ( pHardFormat && pParFormat &&

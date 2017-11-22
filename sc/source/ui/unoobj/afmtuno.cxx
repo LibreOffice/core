@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/memberids.h>
 #include <svl/poolitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/unomid.hxx>
 #include <unowids.hxx>

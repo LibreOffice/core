@@ -70,13 +70,13 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
     if ( pStyleSheet )
     {
         const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        const SvxLRSpaceItem* pLRItem = static_cast<const SvxLRSpaceItem*>( &rSet.Get( ATTR_LRSPACE ) );
+        const SvxLRSpaceItem* pLRItem = &rSet.Get( ATTR_LRSPACE );
         long nLeftMargin   = pLRItem->GetLeft();
         long nRightMargin  = pLRItem->GetRight();
-        const SvxULSpaceItem* pULItem = static_cast<const SvxULSpaceItem*>( &rSet.Get( ATTR_ULSPACE ) );
+        const SvxULSpaceItem* pULItem = &rSet.Get( ATTR_ULSPACE );
         long nTopMargin    = pULItem->GetUpper();
         long nBottomMargin = pULItem->GetLower();
-        aPageSize = static_cast<const SvxSizeItem&>(rSet.Get(ATTR_PAGE_SIZE)).GetSize();
+        aPageSize = rSet.Get(ATTR_PAGE_SIZE).GetSize();
         if ( !aPageSize.Width() || !aPageSize.Height() )
         {
             OSL_FAIL("PageSize Null ?!?!?");

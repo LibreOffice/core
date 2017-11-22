@@ -695,7 +695,7 @@ ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
         : ScEditEngineDefaulter( pDoc->GetEnginePool() )
 {
     SetEditTextObjectPool( pDoc->GetEditPool() );
-    Init(static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)));
+    Init(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
 }
 
 ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,

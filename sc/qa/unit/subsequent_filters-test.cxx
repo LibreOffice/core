@@ -3526,7 +3526,7 @@ void ScFiltersTest::testPageScalingXLSX()
     CPPUNIT_ASSERT(pStyleSheet);
 
     SfxItemSet& rSet = pStyleSheet->GetItemSet();
-    sal_uInt16 nVal = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
+    sal_uInt16 nVal = rSet.Get(ATTR_PAGE_SCALE).GetValue();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(90), nVal);
 
     xDocSh->DoClose();

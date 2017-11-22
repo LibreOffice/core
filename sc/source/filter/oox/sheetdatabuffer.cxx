@@ -457,7 +457,7 @@ void SheetDataBuffer::finalizeImport()
             pDefPattern = rDoc.getDoc().GetPattern( nScCol, nScRow, getSheetIndex() );
             if ( pDefPattern )
             {
-                const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>( pDefPattern->GetItemSet().GetItem( ATTR_MERGE_FLAG ) );
+                const ScMergeFlagAttr* pAttr = pDefPattern->GetItemSet().GetItem( ATTR_MERGE_FLAG );
                 bAutoFilter = pAttr->HasAutoFilter();
             }
             else
