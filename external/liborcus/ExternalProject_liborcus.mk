@@ -44,7 +44,7 @@ else
 liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_iostreams -lboost_filesystem
 endif
 ifeq ($(OS),ANDROID)
-liborcus_LIBS+=-lgnustl_shared -lm
+liborcus_LIBS+=$(gb_STDLIBS)
 endif
 
 liborcus_CPPCLAGS=$(CPPFLAGS)

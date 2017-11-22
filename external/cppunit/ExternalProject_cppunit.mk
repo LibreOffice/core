@@ -52,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________NONE) \
 			$(if $(filter WNT,$(OS)),LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
 			$(if $(filter SOLARIS,$(OS)),LIBS="-lm") \
-			$(if $(filter ANDROID,$(OS)),LIBS="-lgnustl_shared -lm") \
+			$(if $(filter ANDROID,$(OS)),LIBS="$(gb_STDLIBS)") \
 			CXXFLAGS="$(cppunit_CXXFLAGS)" \
 		&& cd src \
 		&& $(MAKE) \

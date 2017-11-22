@@ -290,7 +290,8 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         }
 #endif
 
-#if defined(LC_PAPER) && defined(_GNU_SOURCE)
+// _NL_PAPER_WIDTH / HEIGHT not available with android unified headers
+#if defined(LC_PAPER) && defined(_GNU_SOURCE) && !defined(ANDROID)
         // try LC_PAPER
         locale_t loc = newlocale(LC_PAPER_MASK, "", static_cast<locale_t>(0));
         if (loc != static_cast<locale_t>(0))

@@ -309,7 +309,7 @@ namespace CPPU_CURRENT_NAMESPACE
             return;
         }
 
-        typelib_TypeDescription * pExcTypeDescr = 0;
+        typelib_TypeDescription * pExcTypeDescr = nullptr;
         OUString unoName( toUNOname( header->exceptionType->name() ) );
 #if OSL_DEBUG_LEVEL > 1
         OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
@@ -318,7 +318,7 @@ namespace CPPU_CURRENT_NAMESPACE
         typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
         if (0 == pExcTypeDescr)
         {
-            RuntimeException aRE( OUString("exception type not found: ") + unoName );
+            RuntimeException aRE( "exception type not found: " + unoName );
             Type const & rType = cppu::UnoType<decltype(aRE)>::get();
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
             SAL_WARN("bridges", aRE.Message);
