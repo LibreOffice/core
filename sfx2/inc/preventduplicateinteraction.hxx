@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
 #define INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
 
-#include <framework/fwedllapi.h>
-
 #include <vector>
 
 #include <com/sun/star/task/XInteractionHandler2.hpp>
@@ -33,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-namespace framework{
+namespace sfx2 {
 
 /**
     @short      Prevent us from showing the same interaction more than once during
@@ -51,7 +49,7 @@ struct ThreadHelpBase2
         mutable ::osl::Mutex m_aLock;
 };
 
-class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
+class PreventDuplicateInteraction : private ThreadHelpBase2
                                     ,public ::cppu::WeakImplHelper< css::task::XInteractionHandler2 >
 {
 
@@ -230,7 +228,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                                                   PreventDuplicateInteraction::InteractionInfo* pReturn     ) const;
 };
 
-} // namespace framework
+} // namespace sfx2
 
 #endif // INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
 
