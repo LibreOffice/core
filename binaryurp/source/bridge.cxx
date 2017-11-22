@@ -927,7 +927,11 @@ void Bridge::removeEventListener(
     css::uno::Reference< css::lang::XEventListener > const & aListener)
 {
     osl::MutexGuard g(mutex_);
-    listeners_.erase(std::remove(listeners_.begin(), listeners_.end(), aListener), listeners_.end());
+    Listeners::iterator i(
+        std::find(listeners_.begin(), listeners_.end(), aListener));
+    if (i != listeners_.end()) {
+        listeners_.erase(i);
+    }
 }
 
 void Bridge::sendCommitChangeRequest() {
