@@ -1055,7 +1055,7 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
     return false;
 }
 
-bool Printer::Setup( vcl::Window* pWindow, bool bPapersizeFromSetup )
+bool Printer::Setup( vcl::Window* pWindow )
 {
     if ( IsDisplayPrinter() )
         return false;
@@ -1065,7 +1065,6 @@ bool Printer::Setup( vcl::Window* pWindow, bool bPapersizeFromSetup )
 
     JobSetup aJobSetup = maJobSetup;
     ImplJobSetup& rData = aJobSetup.ImplGetData();
-    rData.SetPapersizeFromSetup( bPapersizeFromSetup );
     SalFrame* pFrame;
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
@@ -1278,6 +1277,26 @@ bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
 sal_uInt16 Printer::GetPaperBin() const
 {
     return maJobSetup.ImplGetConstData().GetPaperBin();
+}
+
+bool Printer::GetPrinterSettingsPreferred() const
+{
+    return maJobSetup.ImplGetConstData().GetPapersizeFromSetup();
+}
+
+// dear loplugins, DO NOT REMOVE this code
+// it will be used in follow-up commits
+void Printer::SetPrinterSettingsPreferred( bool bPaperSizeFromSetup)
+{
+    if ( maJobSetup.ImplGetConstData().GetPapersizeFromSetup() != bPaperSizeFromSetup )
+    {
+        JobSetup      aJobSetup = maJobSetup;
+        ImplJobSetup& rData = aJobSetup.ImplGetData();
+        rData.SetPapersizeFromSetup(bPaperSizeFromSetup);
+
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+    }
 }
 
 // Map user paper format to a available printer paper formats

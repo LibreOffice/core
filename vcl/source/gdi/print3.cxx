@@ -813,7 +813,7 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         }
 
         // call driver setup
-        bRet = xPrinter->Setup( i_pParent, getPapersizeFromSetup() );
+        bRet = xPrinter->Setup( i_pParent );
         SAL_WARN_IF(xPrinter != mpImplData->mxPrinter, "vcl.gdi",
                     "Printer changed underneath us during setup");
         xPrinter = mpImplData->mxPrinter;
