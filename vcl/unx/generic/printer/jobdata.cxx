@@ -38,6 +38,7 @@ JobData& JobData::operator=(const JobData& rRight)
     m_nColorDepth           = rRight.m_nColorDepth;
     m_eOrientation          = rRight.m_eOrientation;
     m_aPrinterName          = rRight.m_aPrinterName;
+    m_bPapersizeFromSetup   = rRight.m_bPapersizeFromSetup;
     m_pParser               = rRight.m_pParser;
     m_aContext              = rRight.m_aContext;
     m_nPSLevel              = rRight.m_nPSLevel;

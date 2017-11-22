@@ -293,10 +293,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
 {
     if ( !mpTempPrinter )
         mpTempPrinter = VclPtr<Printer>::Create( mpPrinter->GetJobSetup() );
-    // 2nd argument: whether paper size and orientation from printer settings
-    // override document settings, iow whether matching listboxes are editable
-    // (this is a printer setup dialog, so they definitely should be editable)
-    mpTempPrinter->Setup( this, true );
+    mpTempPrinter->Setup( this );
 }
 
 

@@ -247,6 +247,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         pJobSetup->SetDriverDataLen( 0 );
         pJobSetup->SetDriverData( nullptr );
     }
+    pJobSetup->SetPapersizeFromSetup( rData.m_bPapersizeFromSetup );
 }
 
 // Needs a cleaner abstraction ...
