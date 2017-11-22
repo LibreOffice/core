@@ -1938,6 +1938,11 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
             aImageSize.Width()  = CalcZoom(aImageSize.Width());
             aImageSize.Height() = CalcZoom(aImageSize.Height());
 
+            aImageRect.Left()++;
+            aImageRect.Top()++;
+            aImageRect.Right()--;
+            aImageRect.Bottom()--;
+
             // display border and selection status
             aImageRect = aDecoView.DrawFrame(aImageRect, DrawFrameStyle::DoubleIn);
             if ((ImplGetButtonState() & DrawButtonFlags::Pressed) || !bEnabled)
