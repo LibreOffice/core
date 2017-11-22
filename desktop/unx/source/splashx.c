@@ -55,6 +55,8 @@ struct splash
     Colormap color_map;
     Window win;
     GC gc;
+    //true when intro-highres loaded successfully
+    sal_Bool bHasHiDpiImage;
 
 // Progress bar values
 // taken from desktop/source/splash/splash.cxx
@@ -611,12 +613,15 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
         goto cleanup; /* success */
 
     /* load high resolution splash image */
+    splash->bHasHiDpiImage = sal_False;
     if (isHiDPI(splash))
     {
-        /* TODO- change progress bar parameters after getting size of intro-highres.png */
         strcpy (pSuffix, "intro-highres" IMG_SUFFIX);
         if ( splash_load_bmp( splash, pBuffer ) )
+        {
+            splash->bHasHiDpiImage = sal_True;
             goto cleanup; /* success */
+        }
     }
     /* load standard resolution splash image */
     strcpy (pSuffix, "intro" IMG_SUFFIX);
@@ -655,8 +660,16 @@ static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, 
     get_bootstrap_value( logo,  1, handle, "Logo" );
     get_bootstrap_value( bar,   3, handle, "ProgressBarColor" );
     get_bootstrap_value( frame, 3, handle, "ProgressFrameColor" );
-    get_bootstrap_value( pos,   2, handle, "ProgressPosition" );
-    get_bootstrap_value( size,  2, handle, "ProgressSize" );
+    if (isHiDPI(splash) && splash->bHasHiDpiImage)
+    {
+       get_bootstrap_value( pos,   2, handle, "ProgressPositionHigh" );
+       get_bootstrap_value( size,  2, handle, "ProgressSizeHigh" );
+    }
+    else
+    {
+       get_bootstrap_value( pos,   2, handle, "ProgressPosition" );
+       get_bootstrap_value( size,  2, handle, "ProgressSize" );
+    }
 
     if ( logo[0] == 0 )
     {
