@@ -263,7 +263,7 @@ bool PNGReaderImpl::ReadNextChunk()
         // get the next chunk from the stream
 
         // unless we are at the end of the PNG stream
-        if( mrPNGStream.eof() || (mrPNGStream.GetError() != ERRCODE_NONE) )
+        if (!mrPNGStream.good())
             return false;
         if( !maChunkSeq.empty() && (maChunkSeq.back().nType == PNGCHUNK_IEND) )
             return false;

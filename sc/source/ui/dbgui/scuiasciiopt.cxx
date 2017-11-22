@@ -530,9 +530,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
         // need to work out some more line information
         do
         {
-            if (!Seek( mpRowPosArray[mnRowPosCount]) ||
-                    mpDatStream->GetError() != ERRCODE_NONE ||
-                    mpDatStream->eof())
+            if (!Seek(mpRowPosArray[mnRowPosCount]) || !mpDatStream->good())
             {
                 bRet = false;
                 break;
@@ -541,9 +539,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
                     mcTextSep);
             mnStreamPos = mpDatStream->Tell();
             mpRowPosArray[++mnRowPosCount] = mnStreamPos;
-        } while (nLine >= mnRowPosCount &&
-                mpDatStream->GetError() == ERRCODE_NONE &&
-                !mpDatStream->eof());
+        } while (nLine >= mnRowPosCount && mpDatStream->good());
         if (mpDatStream->eof() &&
                 mnStreamPos == mpRowPosArray[mnRowPosCount-1])
         {

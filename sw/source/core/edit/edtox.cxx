@@ -320,7 +320,7 @@ void SwEditShell::ApplyAutoMark()
                             SearchAlgorithms2::ABSOLUTE,
                             '\\' );
 
-        while( !rStrm.GetError() && !rStrm.eof() )
+        while (rStrm.good())
         {
             OString aRdLine;
             rStrm.ReadLine( aRdLine );

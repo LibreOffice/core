@@ -105,7 +105,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
                         if ( nRead < 32000 )
                             aSeq.realloc( nRead );
                         xTargetStream->writeBytes( aSeq );
-                    } while( !pTempStream->eof() && !pTempStream->GetError() && nRead );
+                    } while (pTempStream->good() && nRead);
 
                     if ( pTempStream->GetError() )
                         throw io::IOException();
