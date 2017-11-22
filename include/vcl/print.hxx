@@ -293,7 +293,7 @@ public:
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
 
-    bool                        Setup( vcl::Window* pWindow = nullptr, bool bPapersizeFromSetup = false );
+    bool                        Setup( vcl::Window* pWindow = nullptr );
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     /** SetPrinterOptions is used internally only now
@@ -333,6 +333,9 @@ public:
     const PaperInfo&            GetPaperInfo( int nPaper ) const;
     sal_uInt16                  GetPaperBinCount() const;
     OUString                    GetPaperBinName( sal_uInt16 nPaperBin ) const;
+
+    bool                        GetPrinterSettingsPreferred() const;
+    void                        SetPrinterSettingsPreferred( bool bPaperSizeFromSetup );
 
     const Size&                 GetPaperSizePixel() const { return maPaperSize; }
     Size                        GetPaperSize() const { return PixelToLogic( maPaperSize ); }

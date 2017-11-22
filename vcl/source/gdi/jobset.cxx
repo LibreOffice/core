@@ -206,6 +206,7 @@ bool JobSetup::operator==( const JobSetup& rJobSetup ) const
          (pData1->mePaperFormat     == pData2->mePaperFormat)           &&
          (pData1->mnPaperWidth      == pData2->mnPaperWidth)            &&
          (pData1->mnPaperHeight     == pData2->mnPaperHeight)           &&
+         (pData1->mbPapersizeFromSetup == pData2->mbPapersizeFromSetup) &&
          (pData1->mnDriverDataLen   == pData2->mnDriverDataLen)         &&
          (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0)                                                           &&
          (pData1->maValueMap        == pData2->maValueMap)
