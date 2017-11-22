@@ -41,6 +41,16 @@ SvStream& WritePair( SvStream& rOStream, const Pair& rPair )
     return rOStream;
 }
 
+rtl::OString Pair::toString() const
+{
+    std::stringstream ss;
+    // Note that this is not just used for debugging output but the
+    // format is parsed by external code (passed in callbacks to
+    // LibreOfficeKit clients). So don't change.
+    ss << A() << ", " << B();
+    return ss.str().c_str();
+}
+
 void tools::Rectangle::SetSize( const Size& rSize )
 {
     if ( rSize.Width() < 0 )
