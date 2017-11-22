@@ -225,7 +225,7 @@ ErrCode ScQProReader::import( ScDocument *pDoc )
 
 bool ScQProReader::recordsLeft()
 {
-    return mpStream && !mpStream->IsEof();
+    return mpStream && !mpStream->eof();
 }
 
 bool ScQProReader::nextRecord()

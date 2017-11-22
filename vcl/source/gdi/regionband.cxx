@@ -255,7 +255,7 @@ void RegionBand::load(SvStream& rIStrm)
             }
         }
 
-        if( rIStrm.IsEof() )
+        if( rIStrm.eof() )
         {
             OSL_ENSURE(false, "premature end of region stream" );
             implReset();

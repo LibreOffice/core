@@ -371,7 +371,7 @@ ErrCode SwASCIIParser::ReadChars()
                 cLastCR = 0;
                 nLineLen = 0;
                 // We skip the last one at the end
-                if( !rInput.IsEof() || !(pEnd == pStt ||
+                if( !rInput.eof() || !(pEnd == pStt ||
                     ( !*pEnd && pEnd == pStt+1 ) ) )
                     pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
             }
@@ -388,7 +388,7 @@ ErrCode SwASCIIParser::ReadChars()
                         ++pStt;
 
                         // We skip the last one at the end
-                        if( !rInput.IsEof() || pEnd != pStt )
+                        if( !rInput.eof() || pEnd != pStt )
                             bSplitNode = true;
                     }
                     break;
@@ -414,7 +414,7 @@ ErrCode SwASCIIParser::ReadChars()
                             bChkSplit = true;
 
                         // We skip the last one at the end
-                        if( bChkSplit && ( !rInput.IsEof() || pEnd != pStt ))
+                        if( bChkSplit && ( !rInput.eof() || pEnd != pStt ))
                             bSplitNode = true;
                     }
                     break;

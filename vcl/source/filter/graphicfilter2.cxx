@@ -221,14 +221,14 @@ sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
         do
         {
             rStm.ReadUChar( nByte );
-            if ( rStm.IsEof() || rStm.GetError() )  // as 0 is not allowed as marker,
+            if ( rStm.eof() || rStm.GetError() )  // as 0 is not allowed as marker,
                 return 0;                           // we can use it as errorcode
         }
         while ( nByte != 0xff );
         do
         {
             rStm.ReadUChar( nByte );
-            if ( rStm.IsEof() || rStm.GetError() )
+            if ( rStm.eof() || rStm.GetError() )
                 return 0;
         }
         while( nByte == 0xff );
@@ -263,7 +263,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
             bool bScanFailure = false;
             bool bScanFinished = false;
 
-            while( !bScanFailure && !bScanFinished && !rStm.IsEof() && !rStm.GetError() )
+            while( !bScanFailure && !bScanFinished && !rStm.eof() && !rStm.GetError() )
             {
                 sal_uInt8 nMarker = ImpDetectJPG_GetNextMarker( rStm );
                 switch( nMarker )
@@ -555,7 +555,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                 rStm.ReadUInt32( nLen32 );
                 rStm.ReadUInt32( nTemp32 );
                 while( ( nTemp32 != 0x70485973 ) && ( nTemp32 != 0x49444154 )
-                       && !rStm.IsEof() && !rStm.GetError() )
+                       && !rStm.eof() && !rStm.GetError() )
                 {
                     rStm.SeekRel( 4 + nLen32 );
                     rStm.ReadUInt32( nLen32 );
@@ -563,7 +563,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                 }
 
                 if ( nTemp32 == 0x70485973
-                     && !rStm.IsEof() && !rStm.GetError() )
+                     && !rStm.eof() && !rStm.GetError() )
                 {
                     sal_uLong   nXRes;
                     sal_uLong   nYRes;

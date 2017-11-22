@@ -79,7 +79,7 @@ RTFError RTFTokenizer::resolveParse()
         m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
     }
 
-    while ((Strm().ReadChar(ch), !Strm().IsEof()))
+    while ((Strm().ReadChar(ch), !Strm().eof()))
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
 
@@ -198,7 +198,7 @@ RTFError RTFTokenizer::resolveKeyword()
     int nParam = 0;
 
     Strm().ReadChar(ch);
-    if (Strm().IsEof())
+    if (Strm().eof())
         return RTFError::UNEXPECTED_EOF;
 
     if (!rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
@@ -213,7 +213,7 @@ RTFError RTFTokenizer::resolveKeyword()
     {
         aBuf.append(ch);
         Strm().ReadChar(ch);
-        if (Strm().IsEof())
+        if (Strm().eof())
         {
             ch = ' ';
             break;
@@ -229,7 +229,7 @@ RTFError RTFTokenizer::resolveKeyword()
         // in case we'll have a parameter, that will be negative
         bNeg = true;
         Strm().ReadChar(ch);
-        if (Strm().IsEof())
+        if (Strm().eof())
             return RTFError::UNEXPECTED_EOF;
     }
     if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
@@ -242,7 +242,7 @@ RTFError RTFTokenizer::resolveKeyword()
         {
             aParameter.append(ch);
             Strm().ReadChar(ch);
-            if (Strm().IsEof())
+            if (Strm().eof())
             {
                 ch = ' ';
                 break;

@@ -42,7 +42,7 @@ SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
     OUStringBuffer sBuf(512);
     sal_uInt16 c;
 
-    while (!rIStm.IsEof())
+    while (!rIStm.eof())
     {
         // read first character of filepath; c==0 > reach end of stream
         rIStm.ReadUInt16( c );
@@ -50,7 +50,7 @@ SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
             break;
 
         // read string till c==0
-        while (c && !rIStm.IsEof())
+        while (c && !rIStm.eof())
         {
             sBuf.append((sal_Unicode)c);
             rIStm.ReadUInt16( c );

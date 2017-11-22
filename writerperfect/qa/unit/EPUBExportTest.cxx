@@ -168,7 +168,7 @@ void EPUBExportTest::parseCssExport(const OUString &rName, std::map< OString, st
     // Minimal CSS handler till orcus is up to our needs.
     OString aLine;
     OString aRuleName;
-    while (!pStream->IsEof())
+    while (!pStream->eof())
     {
         pStream->ReadLine(aLine);
         if (aLine.endsWith("{"))

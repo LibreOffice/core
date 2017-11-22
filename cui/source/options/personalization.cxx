@@ -419,7 +419,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     Graphic aGraphic;
     sal_Int32 nIndex = 0;
 
-    while( aStream.IsOpen() && !aStream.IsEof() )
+    while( aStream.IsOpen() && !aStream.eof() )
     {
         OString aLine;
         aStream.ReadLine( aLine );

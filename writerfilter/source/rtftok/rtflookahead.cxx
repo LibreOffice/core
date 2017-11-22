@@ -53,9 +53,9 @@ RTFError RTFLookahead::dispatchValue(RTFKeyword /*nKeyword*/, int /*nParam*/)
 
 RTFError RTFLookahead::resolveChars(char ch)
 {
-    while (!m_rStream.IsEof() && (ch != '{' && ch != '}' && ch != '\\'))
+    while (!m_rStream.eof() && (ch != '{' && ch != '}' && ch != '\\'))
         m_rStream.ReadChar(ch);
-    if (!m_rStream.IsEof())
+    if (!m_rStream.eof())
         m_rStream.SeekRel(-1);
     return RTFError::OK;
 }

@@ -442,9 +442,9 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                         nNextCh = GetNextChar();
                     }
                     while( nPos < MAX_ENTITY_LEN && rtl::isAsciiAlphanumeric( nNextCh ) &&
-                           !rInput.IsEof() );
+                           !rInput.eof() );
 
-                    if( IsParserWorking() && !rInput.IsEof() )
+                    if( IsParserWorking() && !rInput.eof() )
                     {
                         OUString sEntity(sEntityBuffer.getStr(), nPos);
                         cChar = GetHTMLCharName( sEntity );
@@ -619,7 +619,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             break;
 
         case sal_Unicode(EOF):
-            if( rInput.IsEof() )
+            if( rInput.eof() )
             {
                 bContinue = false;
             }
@@ -690,7 +690,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 // Reduce sequences of Blanks/Tabs/CR/LF to a single blank
                 do {
                     if( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
-                        rInput.IsEof() )
+                        rInput.eof() )
                     {
                         if( !aToken.isEmpty() || sTmpBuffer.getLength() > 1 )
                         {
@@ -724,7 +724,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                         aToken += sTmpBuffer.makeStringAndClear();
                     }
                     if( ( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
-                          rInput.IsEof() ) ||
+                          rInput.eof() ) ||
                         !IsParserWorking() )
                     {
                         if( !sTmpBuffer.isEmpty() )
@@ -927,7 +927,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
         case sal_Unicode(EOF):
             // eof closes the current text token and behaves like having read
             // an end token
-            if( rInput.IsEof() )
+            if( rInput.eof() )
             {
                 bContinue = false;
                 if( !aToken.isEmpty() || !sTmpBuffer.isEmpty() )
@@ -1031,7 +1031,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             aToken += sTmpBuffer.makeStringAndClear();
                         nNextCh = GetNextChar();
                     } while( '>' != nNextCh && '/' != nNextCh && !rtl::isAsciiWhiteSpace( nNextCh ) &&
-                             IsParserWorking() && !rInput.IsEof() );
+                             IsParserWorking() && !rInput.eof() );
 
                     if( !sTmpBuffer.isEmpty() )
                         aToken += sTmpBuffer.makeStringAndClear();
@@ -1084,7 +1084,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
 
                         bool bDone = false;
                         // Read until closing -->. If not found restart at first >
-                        while( !bDone && !rInput.IsEof() && IsParserWorking() )
+                        while( !bDone && !rInput.eof() && IsParserWorking() )
                         {
                             if( '>'==nNextCh )
                             {
@@ -1134,7 +1134,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             mnPendingOffToken = (HtmlTokenId)((int)nRet + 1);       // HtmlTokenId::<TOKEN>_ON -> HtmlTokenId::<TOKEN>_OFF
                             aToken = aToken.replaceAt( aToken.getLength()-1, 1, "");   // remove trailing '/'
                         }
-                        if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
+                        if( sal_Unicode(EOF) == nNextCh && rInput.eof() )
                         {
                             // Move back in front of < and restart there.
                             // Return < as text.
@@ -1159,7 +1159,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     {
                         // simply throw away everything
                         ScanText( '>' );
-                        if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
+                        if( sal_Unicode(EOF) == nNextCh && rInput.eof() )
                         {
                             // Move back in front of < and restart there.
                             // Return < as text.
@@ -1187,7 +1187,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
 
                         bool bDone = false;
                         // Read until closing %>. If not found restart at first >.
-                        while( !bDone && !rInput.IsEof() && IsParserWorking() )
+                        while( !bDone && !rInput.eof() && IsParserWorking() )
                         {
                             bDone = '>'==nNextCh && aToken.endsWith("%");
                             if( !bDone )
@@ -1260,7 +1260,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
             break;
 
         case sal_Unicode(EOF):
-            if( rInput.IsEof() )
+            if( rInput.eof() )
             {
                 eState = SvParserState::Accepted;
                 nRet = HtmlTokenId(nNextCh);

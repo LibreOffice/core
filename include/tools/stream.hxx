@@ -274,7 +274,6 @@ public:
     // length between current (Tell()) pos and end of stream
     virtual sal_uInt64 remainingSize();
     void            Flush();
-    bool            IsEof() const { return m_isEof; }
     // next Tell() <= nSize
     bool            SetStreamSize( sal_uInt64 nSize );
 

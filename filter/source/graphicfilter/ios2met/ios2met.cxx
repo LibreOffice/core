@@ -2712,7 +2712,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
         if (nFieldType==EndDocumnMagic)
             break;
 
-        if (pOS2MET->IsEof() || nFieldSize < 8)
+        if (pOS2MET->eof() || nFieldSize < 8)
         {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             ErrorCode=8;

@@ -2703,7 +2703,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             ImplMetaReadData aReadData;
             aReadData.meActualCharSet = rIStm.GetStreamCharSet();
 
-            for( sal_uInt32 nAction = 0; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
+            for( sal_uInt32 nAction = 0; ( nAction < nCount ) && !rIStm.eof(); nAction++ )
             {
                 MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
                 if( pAction )

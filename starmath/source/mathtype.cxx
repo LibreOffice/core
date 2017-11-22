@@ -1763,7 +1763,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                 break;
         }
     }
-    while (nRecord != END && !pS->IsEof());
+    while (nRecord != END && !pS->eof());
     while (nSetSize)
     {
         rRet += "}";
