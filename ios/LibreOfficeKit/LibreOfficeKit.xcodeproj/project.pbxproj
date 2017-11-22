@@ -205,7 +205,7 @@
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRELINK_FLAGS = "-Wl -ios_version_min 11.0 -lz -liconv -ggdb2";
+				PRELINK_FLAGS = "-Wl -ios_version_min 11.0 -lz -liconv -g";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "x86_64 arm64";
 			};
@@ -272,7 +272,7 @@
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
-				PRELINK_FLAGS = "-Wl -ios_version_min 11.0 -lz -liconv -ggdb2";
+				PRELINK_FLAGS = "-Wl -ios_version_min 11.0 -lz -liconv -g";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "x86_64 arm64";

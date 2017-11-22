@@ -15,13 +15,13 @@ OTHER_CPLUSPLUSFLAGS = @CPLUSPLUSFLAGS@
 SYMROOT = @SYMROOT@
 
 //:configuration = Debug
-LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_ARM64_debug.a -ggdb2
+LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_ARM64_debug.a -g
 
 //:configuration = Release
 LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_ARM64.a
 
 //:configuration = Simulator
-LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_X86_64_debug.a -ggdb2
+LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_X86_64_debug.a -g
 
 //:completeSettings = some
 

@@ -28,6 +28,9 @@ gb_COMPILEROPTFLAGS := -Oz
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
+# Use standard lldb debugger
+gb_DEBUGINFO_FLAGS=-g
+
 # Darwin mktemp -t expects a prefix, not a pattern
 gb_MKTEMP := /usr/bin/mktemp -t gbuild.
 
