@@ -29,6 +29,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
@@ -899,9 +900,9 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
     {   // don't reset to default SYSTEM GENERAL if not intended
         sal_uInt32 nOldFormat =
-            static_cast<const SfxUInt32Item&>(pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
+            pOldSet->Get( ATTR_VALUE_FORMAT ).GetValue();
         sal_uInt32 nNewFormat =
-            static_cast<const SfxUInt32Item&>(pDialogSet->Get( ATTR_VALUE_FORMAT )).GetValue();
+            pDialogSet->Get( ATTR_VALUE_FORMAT ).GetValue();
         if ( nNewFormat != nOldFormat )
         {
             SvNumberFormatter* pFormatter =
@@ -930,10 +931,10 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         // font language has changed.  Redo the online spelling.
         ResetAutoSpell();
 
-    const SvxBoxItem&     rOldOuter = static_cast<const SvxBoxItem&>     (pOldSet->Get(ATTR_BORDER));
-    const SvxBoxItem&     rNewOuter = static_cast<const SvxBoxItem&>     (pDialogSet->Get(ATTR_BORDER));
-    const SvxBoxInfoItem& rOldInner = static_cast<const SvxBoxInfoItem&> (pOldSet->Get(ATTR_BORDER_INNER));
-    const SvxBoxInfoItem& rNewInner = static_cast<const SvxBoxInfoItem&> (pDialogSet->Get(ATTR_BORDER_INNER));
+    const SvxBoxItem&     rOldOuter = pOldSet->Get(ATTR_BORDER);
+    const SvxBoxItem&     rNewOuter = pDialogSet->Get(ATTR_BORDER);
+    const SvxBoxInfoItem& rOldInner = pOldSet->Get(ATTR_BORDER_INNER);
+    const SvxBoxInfoItem& rNewInner = pDialogSet->Get(ATTR_BORDER_INNER);
     SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
     SfxItemPool*          pNewPool  = rNewSet.GetPool();
 

@@ -1483,8 +1483,8 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
         const bool bUndo(aDocument.IsUndoEnabled());
         if (bUndo)
         {
-            sal_uInt16 nOldScale = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
-            sal_uInt16 nOldPages = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
+            sal_uInt16 nOldScale = rSet.Get(ATTR_PAGE_SCALE).GetValue();
+            sal_uInt16 nOldPages = rSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
             GetUndoManager()->AddUndoAction( new ScUndoPrintZoom(
                             this, nTab, nOldScale, nOldPages, nScale, nPages ) );
         }
@@ -1514,9 +1514,9 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     if ( pStyleSheet )
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        bool bHeaders = static_cast<const SfxBoolItem&>(rSet.Get(ATTR_PAGE_HEADERS)).GetValue();
-        sal_uInt16 nOldScale = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
-        sal_uInt16 nOldPages = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
+        bool bHeaders = rSet.Get(ATTR_PAGE_HEADERS).GetValue();
+        sal_uInt16 nOldScale = rSet.Get(ATTR_PAGE_SCALE).GetValue();
+        sal_uInt16 nOldPages = rSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
         const ScRange* pRepeatCol = aDocument.GetRepeatColRange( nTab );
         const ScRange* pRepeatRow = aDocument.GetRepeatRowRange( nTab );
 
@@ -1719,21 +1719,17 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                     {
                         SfxItemSet&  rStyleSet = pStyleSheet->GetItemSet();
 
-                        SvxPageUsage eUsage = static_cast<const SvxPageItem&>(
-                                                  rStyleSet.Get( ATTR_PAGE )).
-                                                      GetPageUsage();
-                        bool bShareHeader = static_cast<const SfxBoolItem&>(
-                                                static_cast<const SvxSetItem&>(rStyleSet
-                                                        .Get(ATTR_PAGE_HEADERSET))
+                        SvxPageUsage eUsage = rStyleSet.Get( ATTR_PAGE ).GetPageUsage();
+                        bool bShareHeader = rStyleSet
+                                                    .Get(ATTR_PAGE_HEADERSET)
                                                     .GetItemSet()
-                                                    .Get(ATTR_PAGE_SHARED))
-                                                .GetValue();
-                        bool bShareFooter = static_cast<const SfxBoolItem&>(
-                                                static_cast<const SvxSetItem&>(rStyleSet
-                                                        .Get(ATTR_PAGE_FOOTERSET))
+                                                    .Get(ATTR_PAGE_SHARED)
+                                                    .GetValue();
+                        bool bShareFooter = rStyleSet
+                                                    .Get(ATTR_PAGE_FOOTERSET)
                                                     .GetItemSet()
-                                                    .Get(ATTR_PAGE_SHARED))
-                                                .GetValue();
+                                                    .Get(ATTR_PAGE_SHARED)
+                                                    .GetValue();
                         sal_uInt16 nResId = 0;
 
                         switch ( eUsage )
@@ -2185,13 +2181,13 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     const SvxSetItem*   pSetItem = nullptr;
     const SfxItemSet*   pSet     = nullptr;
 
-    pSetItem = static_cast<const SvxSetItem*>( &pStyleSet->Get( ATTR_PAGE_HEADERSET ) );
+    pSetItem = &pStyleSet->Get( ATTR_PAGE_HEADERSET );
     pSet     = &pSetItem->GetItemSet();
-    rbHeader = static_cast<const SfxBoolItem&>(pSet->Get(ATTR_PAGE_ON)).GetValue();
+    rbHeader = pSet->Get(ATTR_PAGE_ON).GetValue();
 
-    pSetItem = static_cast<const SvxSetItem*>( &pStyleSet->Get( ATTR_PAGE_FOOTERSET ) );
+    pSetItem = &pStyleSet->Get( ATTR_PAGE_FOOTERSET );
     pSet     = &pSetItem->GetItemSet();
-    rbFooter = static_cast<const SfxBoolItem&>(pSet->Get(ATTR_PAGE_ON)).GetValue();
+    rbFooter = pSet->Get(ATTR_PAGE_ON).GetValue();
 }
 
 #if defined(_WIN32)

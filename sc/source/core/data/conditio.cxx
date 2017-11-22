@@ -27,6 +27,7 @@
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 
+#include <attrib.hxx>
 #include <conditio.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -2264,7 +2265,7 @@ void ScConditionalFormatList::RemoveFromDocument(ScDocument* pDoc) const
     ScRangeList aRange = GetCombinedRange();
     ScMarkData aMark;
     aMark.MarkFromRangeList(aRange, true);
-    sal_uInt16 const pItems[2] = { ATTR_CONDITIONAL,0};
+    sal_uInt16 const pItems[2] = { sal_uInt16(ATTR_CONDITIONAL),0};
     pDoc->ClearSelectionItems(pItems, aMark);
 }
 

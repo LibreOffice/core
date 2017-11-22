@@ -23,6 +23,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/svxrtf.hxx>
+#include <editeng/shaditem.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/rtftoken.h>
 

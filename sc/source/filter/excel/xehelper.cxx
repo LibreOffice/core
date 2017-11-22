@@ -497,7 +497,7 @@ XclExpStringRef lclCreateFormattedString(
                 // add escapement
                 aFont.SetEscapement( nEsc );
                 // modify automatic font color for hyperlinks
-                if( bIsHyperlink && (GETITEM( aItemSet, SvxColorItem, ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO) )
+                if( bIsHyperlink && aItemSet.Get( ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO)
                     aFont.SetColor( Color( COL_LIGHTBLUE ) );
 
                 // insert font into buffer

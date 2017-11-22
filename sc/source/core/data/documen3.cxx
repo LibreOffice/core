@@ -2051,8 +2051,7 @@ void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
 
-    const ScMergeAttr* pDefAttr = static_cast<const ScMergeAttr*>(
-                                        &mxPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE ));
+    const ScMergeAttr* pDefAttr = &mxPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE );
     ApplyAttr( nCol, nRow, nTab, *pDefAttr );
 }
 

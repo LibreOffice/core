@@ -359,7 +359,7 @@ void ScDocumentPool::StyleDeleted( const ScStyleSheet* pStyle )
     sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(GetItem2(ATTR_PATTERN, i)));
+        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(GetItem2(ATTR_PATTERN, i));
         if ( pPattern && pPattern->GetStyleSheet() == pStyle )
             pPattern->StyleToName();
     }
@@ -376,8 +376,7 @@ void ScDocumentPool::CellStyleCreated( const OUString& rName, const ScDocument* 
     for (sal_uInt32 i=0; i<nCount; i++)
     {
         ScPatternAttr *const pPattern =
-            const_cast<ScPatternAttr*>(
-                static_cast<ScPatternAttr const*>(GetItem2(ATTR_PATTERN, i)));
+            const_cast<ScPatternAttr*>(GetItem2(ATTR_PATTERN, i));
         if ( pPattern && pPattern->GetStyleSheet() == nullptr )
         {
             const OUString* pStyleName = pPattern->GetStyleName();

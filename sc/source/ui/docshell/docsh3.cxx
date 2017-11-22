@@ -369,8 +369,7 @@ void ScDocShell::CalcOutputFactor()
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
     long nPrinterWidth = 0;
     long nWindowWidth = 0;
-    const ScPatternAttr* pPattern = static_cast<const ScPatternAttr*>(&aDocument.GetPool()->
-                                            GetDefaultItem(ATTR_PATTERN));
+    const ScPatternAttr* pPattern = &aDocument.GetPool()->GetDefaultItem(ATTR_PATTERN);
 
     vcl::Font aDefFont;
     OutputDevice* pRefDev = GetRefDevice();
@@ -537,7 +536,7 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
 
             if (nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION)
             {
-                const SvxPageItem& rOldItem = static_cast<const SvxPageItem&>(rSet.Get(ATTR_PAGE));
+                const SvxPageItem& rOldItem = rSet.Get(ATTR_PAGE);
                 bool bWasLand = rOldItem.IsLandscape();
                 bool bNewLand = ( pNewPrinter->GetOrientation() == Orientation::Landscape );
                 if (bNewLand != bWasLand)
@@ -547,7 +546,7 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
                     rSet.Put( aNewItem );
 
                     // flip size
-                    Size aOldSize = static_cast<const SvxSizeItem&>(rSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                    Size aOldSize = rSet.Get(ATTR_PAGE_SIZE).GetSize();
                     Size aNewSize(aOldSize.Height(),aOldSize.Width());
                     SvxSizeItem aNewSItem(ATTR_PAGE_SIZE,aNewSize);
                     rSet.Put( aNewSItem );
