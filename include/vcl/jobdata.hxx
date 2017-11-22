@@ -44,6 +44,7 @@ struct VCL_DLLPUBLIC JobData
     int                     m_nPDFDevice;   // 0: no override, -1 PostScript, +1: Automatically PDF, +2: Explicitly PDF
     orientation             m_eOrientation;
     OUString                m_aPrinterName;
+    bool                    m_bPapersizeFromSetup;
     const PPDParser*        m_pParser;
     PPDContext              m_aContext;
 
@@ -59,6 +60,7 @@ struct VCL_DLLPUBLIC JobData
             m_nColorDevice( 0 ),
             m_nPDFDevice( 0 ),
             m_eOrientation( orientation::Portrait ),
+            m_bPapersizeFromSetup( false ),
             m_pParser( nullptr ) {}
 
     JobData& operator=(const psp::JobData& rRight);
