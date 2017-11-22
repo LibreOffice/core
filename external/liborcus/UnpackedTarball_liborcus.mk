@@ -26,7 +26,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/windows-constants-hack.patch \
 ))
 endif
-ifeq ($(OS),ANDROID)
+
+# TODO: remove once switching arm to llvm-c++
+ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/android-workaround.patch \
 ))

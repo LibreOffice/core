@@ -5830,7 +5830,6 @@ include/LibreOfficeKit/LibreOfficeKitEnums.h
 include/LibreOfficeKit/LibreOfficeKitGtk.h
 include/LibreOfficeKit/LibreOfficeKitInit.h
 include/LibreOfficeKit/LibreOfficeKitTypes.h
-include/android/compatibility.hxx
 include/animations/animationnodehelper.hxx
 include/apple_remote/RemoteControl.h
 include/apple_remote/RemoteMainController.h
