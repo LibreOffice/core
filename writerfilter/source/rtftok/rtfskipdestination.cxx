@@ -15,11 +15,10 @@ namespace writerfilter
 {
 namespace rtftok
 {
-
 RTFSkipDestination::RTFSkipDestination(RTFListener& rImport)
-    : m_rImport(rImport),
-      m_bParsed(true),
-      m_bReset(true)
+    : m_rImport(rImport)
+    , m_bParsed(true)
+    , m_bReset(true)
 {
 }
 
@@ -36,15 +35,9 @@ RTFSkipDestination::~RTFSkipDestination()
     }
 }
 
-void RTFSkipDestination::setParsed(bool bParsed)
-{
-    m_bParsed = bParsed;
-}
+void RTFSkipDestination::setParsed(bool bParsed) { m_bParsed = bParsed; }
 
-void RTFSkipDestination::setReset(bool bReset)
-{
-    m_bReset = bReset;
-}
+void RTFSkipDestination::setReset(bool bReset) { m_bReset = bReset; }
 
 } // namespace rtftok
 } // namespace writerfilter

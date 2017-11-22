@@ -21,8 +21,7 @@ namespace writerfilter
 {
 namespace rtftok
 {
-
-using RTFSprmsImplBase = std::vector< std::pair<Id, RTFValue::Pointer_t> >;
+using RTFSprmsImplBase = std::vector<std::pair<Id, RTFValue::Pointer_t>>;
 
 /// The payload of RTFSprms which is only copied on write.
 class RTFSprmsImpl : public RTFSprmsImplBase
@@ -31,10 +30,7 @@ public:
     sal_Int32 m_nRefCount = 0;
 };
 
-inline void intrusive_ptr_add_ref(RTFSprmsImpl* p)
-{
-    ++(p->m_nRefCount);
-}
+inline void intrusive_ptr_add_ref(RTFSprmsImpl* p) { ++(p->m_nRefCount); }
 inline void intrusive_ptr_release(RTFSprmsImpl* p)
 {
     if (!--(p->m_nRefCount))
@@ -68,36 +64,21 @@ public:
     /// Also insert default values to override attributes of style
     /// (yes, really; that's what Word does).
     RTFSprms cloneAndDeduplicate(RTFSprms& rReference) const;
-    std::size_t size() const
-    {
-        return m_pSprms->size();
-    }
-    bool empty() const
-    {
-        return m_pSprms->empty();
-    }
-    Entry_t& back()
-    {
-        return m_pSprms->back();
-    }
-    Iterator_t begin()
-    {
-        return m_pSprms->begin();
-    }
-    Iterator_t end()
-    {
-        return m_pSprms->end();
-    }
+    std::size_t size() const { return m_pSprms->size(); }
+    bool empty() const { return m_pSprms->empty(); }
+    Entry_t& back() { return m_pSprms->back(); }
+    Iterator_t begin() { return m_pSprms->begin(); }
+    Iterator_t end() { return m_pSprms->end(); }
     void clear();
     bool equals(RTFValue& rOther);
+
 private:
     void ensureCopyBeforeWrite();
     boost::intrusive_ptr<RTFSprmsImpl> m_pSprms;
 };
 
 /// RTF keyword with a parameter
-class RTFSprm
-    : public Sprm
+class RTFSprm : public Sprm
 {
 public:
     RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);

@@ -27,30 +27,24 @@ public:
     {
     }
 
-    sal_uInt16 GetOrient() const
-    {
-        return OSL_LONIBBLE(OSL_LOBYTE(m_nVal));
-    }
+    sal_uInt16 GetOrient() const { return OSL_LONIBBLE(OSL_LOBYTE(m_nVal)); }
 
-    sal_uInt16 GetRelation() const
-    {
-        return OSL_HINIBBLE(OSL_LOBYTE(m_nVal));
-    }
+    sal_uInt16 GetRelation() const { return OSL_HINIBBLE(OSL_LOBYTE(m_nVal)); }
 
     sal_Int32 GetAlign() const
     {
         sal_Int32 nAlign = 0;
         switch (GetOrient())
         {
-        case css::text::VertOrientation::CENTER:
-            nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_center;
-            break;
-        case css::text::VertOrientation::TOP:
-            nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_top;
-            break;
-        case css::text::VertOrientation::BOTTOM:
-            nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_bottom;
-            break;
+            case css::text::VertOrientation::CENTER:
+                nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_center;
+                break;
+            case css::text::VertOrientation::TOP:
+                nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_top;
+                break;
+            case css::text::VertOrientation::BOTTOM:
+                nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_bottom;
+                break;
         }
 
         return nAlign;
@@ -61,15 +55,15 @@ public:
         sal_Int32 nAnchor = 0;
         switch (GetRelation())
         {
-        case css::text::RelOrientation::FRAME:
-            nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_text;
-            break;
-        case css::text::RelOrientation::PAGE_FRAME:
-            nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_page;
-            break;
-        case css::text::RelOrientation::PAGE_PRINT_AREA:
-            nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_margin;
-            break;
+            case css::text::RelOrientation::FRAME:
+                nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_text;
+                break;
+            case css::text::RelOrientation::PAGE_FRAME:
+                nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_page;
+                break;
+            case css::text::RelOrientation::PAGE_PRINT_AREA:
+                nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_margin;
+                break;
         }
 
         return nAnchor;
@@ -88,36 +82,30 @@ public:
     {
     }
 
-    sal_uInt16 GetOrient() const
-    {
-        return OSL_LONIBBLE(OSL_LOBYTE(m_nVal));
-    }
+    sal_uInt16 GetOrient() const { return OSL_LONIBBLE(OSL_LOBYTE(m_nVal)); }
 
-    sal_uInt16 GetRelation() const
-    {
-        return OSL_LONIBBLE(OSL_HIBYTE(m_nVal));
-    }
+    sal_uInt16 GetRelation() const { return OSL_LONIBBLE(OSL_HIBYTE(m_nVal)); }
 
     sal_Int32 GetAlign() const
     {
         sal_Int32 nAlign = 0;
         switch (GetOrient())
         {
-        case css::text::HoriOrientation::CENTER:
-            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_center;
-            break;
-        case css::text::HoriOrientation::RIGHT:
-            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_right;
-            break;
-        case css::text::HoriOrientation::LEFT:
-            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_left;
-            break;
-        case css::text::HoriOrientation::INSIDE:
-            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_inside;
-            break;
-        case css::text::HoriOrientation::OUTSIDE:
-            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_outside;
-            break;
+            case css::text::HoriOrientation::CENTER:
+                nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_center;
+                break;
+            case css::text::HoriOrientation::RIGHT:
+                nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_right;
+                break;
+            case css::text::HoriOrientation::LEFT:
+                nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_left;
+                break;
+            case css::text::HoriOrientation::INSIDE:
+                nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_inside;
+                break;
+            case css::text::HoriOrientation::OUTSIDE:
+                nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_outside;
+                break;
         }
 
         return nAlign;
@@ -128,15 +116,15 @@ public:
         sal_Int32 nAnchor = 0;
         switch (GetRelation())
         {
-        case css::text::RelOrientation::FRAME:
-            nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_text;
-            break;
-        case css::text::RelOrientation::PAGE_FRAME:
-            nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_page;
-            break;
-        case css::text::RelOrientation::PAGE_PRINT_AREA:
-            nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_margin;
-            break;
+            case css::text::RelOrientation::FRAME:
+                nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_text;
+                break;
+            case css::text::RelOrientation::PAGE_FRAME:
+                nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_page;
+                break;
+            case css::text::RelOrientation::PAGE_PRINT_AREA:
+                nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_margin;
+                break;
         }
 
         return nAnchor;

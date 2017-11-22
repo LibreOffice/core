@@ -18,8 +18,7 @@ namespace writerfilter
 namespace rtftok
 {
 /// Sends tables (e.g. font table) to the domain mapper.
-class RTFReferenceTable
-    : public writerfilter::Reference<Table>
+class RTFReferenceTable : public writerfilter::Reference<Table>
 {
 public:
     using Entries_t = std::map<int, writerfilter::Reference<Properties>::Pointer_t>;
@@ -27,6 +26,7 @@ public:
     explicit RTFReferenceTable(Entries_t aEntries);
     virtual ~RTFReferenceTable();
     void resolve(Table& rHandler) override;
+
 private:
     Entries_t m_aEntries;
 };

@@ -13,7 +13,6 @@ namespace writerfilter
 {
 namespace rtftok
 {
-
 RTFReferenceTable::RTFReferenceTable(Entries_t aEntries)
     : m_aEntries(std::move(aEntries))
 {

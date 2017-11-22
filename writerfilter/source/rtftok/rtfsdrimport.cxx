@@ -46,12 +46,10 @@
 
 using namespace com::sun::star;
 
-
 namespace writerfilter
 {
 namespace rtftok
 {
-
 RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
                            uno::Reference<lang::XComponent> const& xDstDoc)
     : m_rImport(rDocument)
@@ -73,7 +71,8 @@ RTFSdrImport::~RTFSdrImport()
         m_aParents.pop();
 }
 
-void RTFSdrImport::createShape(const OUString& rService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
+void RTFSdrImport::createShape(const OUString& rService, uno::Reference<drawing::XShape>& xShape,
+                               uno::Reference<beans::XPropertySet>& xPropertySet)
 {
     if (m_rImport.getModelFactory().is())
         xShape.set(m_rImport.getModelFactory()->createInstance(rService), uno::UNO_QUERY);
@@ -141,12 +140,15 @@ void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> const& xPrope
     if (!m_aGraphicZOrderHelpers.empty())
     {
         writerfilter::dmapper::GraphicZOrderHelper& rHelper = m_aGraphicZOrderHelpers.top();
-        xPropertySet->setPropertyValue("ZOrder", uno::makeAny(rHelper.findZOrder(nZOrder, bOldStyle)));
+        xPropertySet->setPropertyValue("ZOrder",
+                                       uno::makeAny(rHelper.findZOrder(nZOrder, bOldStyle)));
         rHelper.addItem(xPropertySet, nZOrder);
     }
 }
 
-void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame, const uno::Reference<beans::XPropertySet>& xPropertySet, uno::Any const& rLineColor, uno::Any const& rLineWidth)
+void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame,
+                                            const uno::Reference<beans::XPropertySet>& xPropertySet,
+                                            uno::Any const& rLineColor, uno::Any const& rLineWidth)
 {
     if (!bTextFrame)
     {
@@ -155,18 +157,19 @@ void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame, const uno::Referenc
     }
     else
     {
-        static const char* aBorders[] =
-        {
-            "TopBorder", "LeftBorder", "BottomBorder", "RightBorder"
-        };
+        static const char* aBorders[]
+            = { "TopBorder", "LeftBorder", "BottomBorder", "RightBorder" };
         for (const char* pBorder : aBorders)
         {
-            table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(OUString::createFromAscii(pBorder)).get<table::BorderLine2>();
+            table::BorderLine2 aBorderLine
+                = xPropertySet->getPropertyValue(OUString::createFromAscii(pBorder))
+                      .get<table::BorderLine2>();
             if (rLineColor.hasValue())
                 aBorderLine.Color = rLineColor.get<sal_Int32>();
             if (rLineWidth.hasValue())
                 aBorderLine.LineWidth = rLineWidth.get<sal_Int32>();
-            xPropertySet->setPropertyValue(OUString::createFromAscii(pBorder), uno::makeAny(aBorderLine));
+            xPropertySet->setPropertyValue(OUString::createFromAscii(pBorder),
+                                           uno::makeAny(aBorderLine));
         }
     }
 }
@@ -180,7 +183,8 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> const& xProp
         xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_SOLID));
 }
 
-void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, const OUString& aKey, const OUString& aValue)
+void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
+                                 const OUString& aKey, const OUString& aValue)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;
@@ -192,40 +196,40 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
     {
         switch (aValue.toInt32())
         {
-        case 1:
-            nHoriOrient = text::HoriOrientation::LEFT;
-            break;
-        case 2:
-            nHoriOrient = text::HoriOrientation::CENTER;
-            break;
-        case 3:
-            nHoriOrient = text::HoriOrientation::RIGHT;
-            break;
-        case 4:
-            nHoriOrient = text::HoriOrientation::INSIDE;
-            break;
-        case 5:
-            nHoriOrient = text::HoriOrientation::OUTSIDE;
-            break;
-        default:
-            break;
+            case 1:
+                nHoriOrient = text::HoriOrientation::LEFT;
+                break;
+            case 2:
+                nHoriOrient = text::HoriOrientation::CENTER;
+                break;
+            case 3:
+                nHoriOrient = text::HoriOrientation::RIGHT;
+                break;
+            case 4:
+                nHoriOrient = text::HoriOrientation::INSIDE;
+                break;
+            case 5:
+                nHoriOrient = text::HoriOrientation::OUTSIDE;
+                break;
+            default:
+                break;
         }
     }
     else if (aKey == "posv")
     {
         switch (aValue.toInt32())
         {
-        case 1:
-            nVertOrient = text::VertOrientation::TOP;
-            break;
-        case 2:
-            nVertOrient = text::VertOrientation::CENTER;
-            break;
-        case 3:
-            nVertOrient = text::VertOrientation::BOTTOM;
-            break;
-        default:
-            break;
+            case 1:
+                nVertOrient = text::VertOrientation::TOP;
+                break;
+            case 2:
+                nVertOrient = text::VertOrientation::CENTER;
+                break;
+            case 3:
+                nVertOrient = text::VertOrientation::BOTTOM;
+                break;
+            default:
+                break;
         }
     }
     else if (aKey == "fFitShapeToText")
@@ -236,10 +240,12 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
     {
         // See DffPropertyReader::Fix16ToAngle(): in RTF, positive rotation angles are clockwise, we have them as counter-clockwise.
         // Additionally, RTF type is 0..360*2^16, our is 0..360*100.
-        sal_Int32 nRotation = aValue.toInt32()*100/RTF_MULTIPLIER;
+        sal_Int32 nRotation = aValue.toInt32() * 100 / RTF_MULTIPLIER;
         uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
         if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-            xPropertySet->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(NormAngle360(static_cast<long>(nRotation) * -1))));
+            xPropertySet->setPropertyValue(
+                "RotateAngle",
+                uno::makeAny(sal_Int32(NormAngle360(static_cast<long>(nRotation) * -1))));
     }
 
     if (nHoriOrient != 0 && xPropertySet.is())
@@ -248,8 +254,10 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
         xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
     if (!boost::logic::indeterminate(obFitShapeToText) && xPropertySet.is())
     {
-        xPropertySet->setPropertyValue("SizeType", uno::makeAny(obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
-        xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(static_cast<bool>(obFitShapeToText)));
+        xPropertySet->setPropertyValue(
+            "SizeType", uno::makeAny(obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
+        xPropertySet->setPropertyValue("FrameIsAutomaticHeight",
+                                       uno::makeAny(static_cast<bool>(obFitShapeToText)));
     }
     if (!bFilled && xPropertySet.is())
     {
@@ -261,9 +269,9 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
 }
 
 int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
-                            uno::Reference<beans::XPropertySet>& o_xPropSet,
-                            bool& o_rIsCustomShape,
-                            RTFShape const& rShape, bool const bClose, ShapeOrPict const shapeOrPict)
+                            uno::Reference<beans::XPropertySet>& o_xPropSet, bool& o_rIsCustomShape,
+                            RTFShape const& rShape, bool const bClose,
+                            ShapeOrPict const shapeOrPict)
 {
     assert(!o_xShape.is());
     assert(!o_xPropSet.is());
@@ -272,10 +280,9 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
 
     // first, find the shape type
     int nType = -1;
-    auto iter = std::find_if(rShape.aProperties.begin(), rShape.aProperties.end(), [](std::pair<OUString, OUString> aProperty)
-    {
-        return aProperty.first == "shapeType";
-    });
+    auto iter = std::find_if(
+        rShape.aProperties.begin(), rShape.aProperties.end(),
+        [](std::pair<OUString, OUString> aProperty) { return aProperty.first == "shapeType"; });
 
     if (iter == rShape.aProperties.end())
     {
@@ -302,36 +309,38 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
 
     switch (nType)
     {
-    case ESCHER_ShpInst_PictureFrame:
-        createShape("com.sun.star.drawing.GraphicObjectShape", o_xShape, o_xPropSet);
-        m_bTextGraphicObject = true;
-        break;
-    case ESCHER_ShpInst_Line:
-        createShape("com.sun.star.drawing.LineShape", o_xShape, o_xPropSet);
-        break;
-    case ESCHER_ShpInst_Rectangle:
-    case ESCHER_ShpInst_TextBox:
-        // If we're inside a groupshape, can't use text frames.
-        if (!bClose && m_aParents.size() == 1)
-        {
-            createShape("com.sun.star.text.TextFrame", o_xShape, o_xPropSet);
-            m_bTextFrame = true;
-            std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
-            for (beans::PropertyValue& i : aDefaults)
-                o_xPropSet->setPropertyValue(i.Name, i.Value);
+        case ESCHER_ShpInst_PictureFrame:
+            createShape("com.sun.star.drawing.GraphicObjectShape", o_xShape, o_xPropSet);
+            m_bTextGraphicObject = true;
             break;
-        }
-        SAL_FALLTHROUGH;
-    default:
-        createShape("com.sun.star.drawing.CustomShape", o_xShape, o_xPropSet);
-        o_rIsCustomShape = true;
-        break;
+        case ESCHER_ShpInst_Line:
+            createShape("com.sun.star.drawing.LineShape", o_xShape, o_xPropSet);
+            break;
+        case ESCHER_ShpInst_Rectangle:
+        case ESCHER_ShpInst_TextBox:
+            // If we're inside a groupshape, can't use text frames.
+            if (!bClose && m_aParents.size() == 1)
+            {
+                createShape("com.sun.star.text.TextFrame", o_xShape, o_xPropSet);
+                m_bTextFrame = true;
+                std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
+                for (beans::PropertyValue& i : aDefaults)
+                    o_xPropSet->setPropertyValue(i.Name, i.Value);
+                break;
+            }
+            SAL_FALLTHROUGH;
+        default:
+            createShape("com.sun.star.drawing.CustomShape", o_xShape, o_xPropSet);
+            o_rIsCustomShape = true;
+            break;
     }
 
     // Defaults
     if (o_xPropSet.is() && !m_bTextFrame)
     {
-        o_xPropSet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32(0xffffff))); // White in Word, kind of blue in Writer.
+        o_xPropSet->setPropertyValue(
+            "FillColor",
+            uno::makeAny(sal_uInt32(0xffffff))); // White in Word, kind of blue in Writer.
     }
 
     return nType;
@@ -403,7 +412,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "gtextSize")
         {
             // RTF size is multiplied by 2^16
-            nFontSize = (float) rProperty.second.toUInt32() / RTF_MULTIPLIER;
+            nFontSize = (float)rProperty.second.toUInt32() / RTF_MULTIPLIER;
         }
         else if (rProperty.first == "pib")
         {
@@ -419,11 +428,14 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 xPropertySet->setPropertyValue("FillColor", aAny);
 
             // fillType will decide, possible it'll be the start color of a gradient.
-            aFillModel.moColor.set("#" + OUString::fromUtf8(msfilter::util::ConvertColor(aAny.get<sal_Int32>())));
+            aFillModel.moColor.set(
+                "#" + OUString::fromUtf8(msfilter::util::ConvertColor(aAny.get<sal_Int32>())));
         }
         else if (rProperty.first == "fillBackColor")
             // fillType will decide, possible it'll be the end color of a gradient.
-            aFillModel.moColor2.set("#" + OUString::fromUtf8(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(rProperty.second.toInt32()))));
+            aFillModel.moColor2.set("#"
+                                    + OUString::fromUtf8(msfilter::util::ConvertColor(
+                                          msfilter::util::BGRToRGB(rProperty.second.toInt32()))));
         else if (rProperty.first == "lineColor")
             aLineColor <<= msfilter::util::BGRToRGB(rProperty.second.toInt32());
         else if (rProperty.first == "lineBackColor")
@@ -437,11 +449,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             resolveFLine(xPropertySet, rProperty.second.toInt32());
         else if (rProperty.first == "fillOpacity" && xPropertySet.is())
         {
-            int opacity = 100 - (rProperty.second.toInt32())*100/RTF_MULTIPLIER;
+            int opacity = 100 - (rProperty.second.toInt32()) * 100 / RTF_MULTIPLIER;
             xPropertySet->setPropertyValue("FillTransparence", uno::Any(sal_uInt32(opacity)));
         }
         else if (rProperty.first == "lineWidth")
-            aLineWidth <<= rProperty.second.toInt32()/360;
+            aLineWidth <<= rProperty.second.toInt32() / 360;
         else if (rProperty.first == "pVerticies")
         {
             std::vector<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
@@ -469,15 +481,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                             oX.reset(aPoint.toInt32());
                         else
                             oY.reset(aPoint.toInt32());
-                    }
-                    while (nI >= 0);
+                    } while (nI >= 0);
                     drawing::EnhancedCustomShapeParameterPair aPair;
                     aPair.First.Value <<= *oX;
                     aPair.Second.Value <<= *oY;
                     aCoordinates.push_back(aPair);
                 }
-            }
-            while (nCharIndex >= 0);
+            } while (nCharIndex >= 0);
             aPropertyValue.Name = "Coordinates";
             aPropertyValue.Value <<= comphelper::containerToSequence(aCoordinates);
             aPath.push_back(aPropertyValue);
@@ -507,45 +517,45 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     drawing::EnhancedCustomShapeSegment aSegment;
                     switch (nSeg)
                     {
-                    case 0x0001: // lineto
-                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                        aSegment.Count = sal_Int32(1);
-                        aSegments.push_back(aSegment);
-                        break;
-                    case 0x4000: // moveto
-                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
-                        aSegment.Count = sal_Int32(1);
-                        aSegments.push_back(aSegment);
-                        break;
-                    case 0x2000: // curveto
-                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
-                        aSegment.Count = nPoints;
-                        aSegments.push_back(aSegment);
-                        break;
-                    case 0xb300: // arcto
-                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
-                        aSegment.Count = sal_Int32(0);
-                        aSegments.push_back(aSegment);
-                        break;
-                    case 0xac00:
-                    case 0xaa00: // nofill
-                    case 0xab00: // nostroke
-                    case 0x6001: // close
-                        break;
-                    case 0x8000: // end
-                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
-                        aSegment.Count = sal_Int32(0);
-                        aSegments.push_back(aSegment);
-                        break;
-                    default: // given number of lineto elements
-                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                        aSegment.Count = nSeg;
-                        aSegments.push_back(aSegment);
-                        break;
+                        case 0x0001: // lineto
+                            aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                            aSegment.Count = sal_Int32(1);
+                            aSegments.push_back(aSegment);
+                            break;
+                        case 0x4000: // moveto
+                            aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                            aSegment.Count = sal_Int32(1);
+                            aSegments.push_back(aSegment);
+                            break;
+                        case 0x2000: // curveto
+                            aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
+                            aSegment.Count = nPoints;
+                            aSegments.push_back(aSegment);
+                            break;
+                        case 0xb300: // arcto
+                            aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
+                            aSegment.Count = sal_Int32(0);
+                            aSegments.push_back(aSegment);
+                            break;
+                        case 0xac00:
+                        case 0xaa00: // nofill
+                        case 0xab00: // nostroke
+                        case 0x6001: // close
+                            break;
+                        case 0x8000: // end
+                            aSegment.Command
+                                = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                            aSegment.Count = sal_Int32(0);
+                            aSegments.push_back(aSegment);
+                            break;
+                        default: // given number of lineto elements
+                            aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                            aSegment.Count = nSeg;
+                            aSegments.push_back(aSegment);
+                            break;
                     }
                 }
-            }
-            while (nCharIndex >= 0);
+            } while (nCharIndex >= 0);
             aPropertyValue.Name = "Segments";
             aPropertyValue.Value <<= comphelper::containerToSequence(aSegments);
             aPath.push_back(aPropertyValue);
@@ -568,61 +578,78 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dxTextLeft")
         {
             if (xPropertySet.is())
-                xPropertySet->setPropertyValue("LeftBorderDistance", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("LeftBorderDistance",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "dyTextTop")
         {
             if (xPropertySet.is())
-                xPropertySet->setPropertyValue("TopBorderDistance", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("TopBorderDistance",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "dxTextRight")
         {
             if (xPropertySet.is())
-                xPropertySet->setPropertyValue("RightBorderDistance", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("RightBorderDistance",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "dyTextBottom")
         {
             if (xPropertySet.is())
-                xPropertySet->setPropertyValue("BottomBorderDistance", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("BottomBorderDistance",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "dxWrapDistLeft")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distL, std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(
+                    NS_ooxml::LN_CT_Anchor_distL,
+                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
             else if (xPropertySet.is())
-                xPropertySet->setPropertyValue("LeftMargin", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("LeftMargin",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "dyWrapDistTop")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distT, std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(
+                    NS_ooxml::LN_CT_Anchor_distT,
+                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
             else if (xPropertySet.is())
-                xPropertySet->setPropertyValue("TopMargin", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("TopMargin",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "dxWrapDistRight")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distR, std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(
+                    NS_ooxml::LN_CT_Anchor_distR,
+                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
             else if (xPropertySet.is())
-                xPropertySet->setPropertyValue("RightMargin", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("RightMargin",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "dyWrapDistBottom")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distB, std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(
+                    NS_ooxml::LN_CT_Anchor_distB,
+                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
             else if (xPropertySet.is())
-                xPropertySet->setPropertyValue("BottomMargin", uno::makeAny(rProperty.second.toInt32() / 360));
+                xPropertySet->setPropertyValue("BottomMargin",
+                                               uno::makeAny(rProperty.second.toInt32() / 360));
         }
         else if (rProperty.first == "fillType")
         {
             switch (rProperty.second.toInt32())
             {
-            case 7: // Shade using the fillAngle
-                aFillModel.moType.set(oox::XML_gradient);
-                break;
-            default:
-                SAL_INFO("writerfilter", "TODO handle fillType value '" << rProperty.second << "'");
-                break;
+                case 7: // Shade using the fillAngle
+                    aFillModel.moType.set(oox::XML_gradient);
+                    break;
+                default:
+                    SAL_INFO("writerfilter",
+                             "TODO handle fillType value '" << rProperty.second << "'");
+                    break;
             }
         }
         else if (rProperty.first == "fillFocus")
@@ -633,32 +660,36 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 aShadowModel.mbHasShadow = true;
         }
         else if (rProperty.first == "shadowColor")
-            aShadowModel.moColor.set("#" + OUString::fromUtf8(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(rProperty.second.toInt32()))));
+            aShadowModel.moColor.set("#"
+                                     + OUString::fromUtf8(msfilter::util::ConvertColor(
+                                           msfilter::util::BGRToRGB(rProperty.second.toInt32()))));
         else if (rProperty.first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(rProperty.second.toDouble() / 12700) + "pt");
-        else if (rProperty.first == "posh" || rProperty.first == "posv" || rProperty.first == "fFitShapeToText" || rProperty.first == "fFilled" || rProperty.first == "rotation")
+        else if (rProperty.first == "posh" || rProperty.first == "posv"
+                 || rProperty.first == "fFitShapeToText" || rProperty.first == "fFilled"
+                 || rProperty.first == "rotation")
             applyProperty(xShape, rProperty.first, rProperty.second);
         else if (rProperty.first == "posrelh")
         {
             switch (rProperty.second.toInt32())
             {
-            case 1:
-                rShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
-                break;
-            default:
-                break;
+                case 1:
+                    rShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
+                    break;
+                default:
+                    break;
             }
         }
         else if (rProperty.first == "posrelv")
         {
             switch (rProperty.second.toInt32())
             {
-            case 1:
-                rShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
-                break;
-            default:
-                break;
+                case 1:
+                    rShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
+                    break;
+                default:
+                    break;
             }
         }
         else if (rProperty.first == "groupLeft")
@@ -682,7 +713,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "pctHoriz" || rProperty.first == "pctVert")
         {
             sal_Int16 nPercentage = rtl::math::round(rProperty.second.toDouble() / 10);
-            boost::optional<sal_Int16>& rPercentage = rProperty.first == "pctHoriz" ? oRelativeWidth : oRelativeHeight;
+            boost::optional<sal_Int16>& rPercentage
+                = rProperty.first == "pctHoriz" ? oRelativeWidth : oRelativeHeight;
             if (nPercentage)
                 rPercentage = nPercentage;
         }
@@ -692,15 +724,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             {
                 switch (rProperty.second.toInt32())
                 {
-                case 0: // margin
-                    nRelativeWidthRelation = text::RelOrientation::FRAME;
-                    break;
-                case 1: // page
-                    nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
-                    break;
-                default:
-                    SAL_WARN("writerfilter", "RTFSdrImport::resolve: unhandled sizerelh value: " << rProperty.second);
-                    break;
+                    case 0: // margin
+                        nRelativeWidthRelation = text::RelOrientation::FRAME;
+                        break;
+                    case 1: // page
+                        nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
+                        break;
+                    default:
+                        SAL_WARN("writerfilter", "RTFSdrImport::resolve: unhandled sizerelh value: "
+                                                     << rProperty.second);
+                        break;
                 }
             }
         }
@@ -710,15 +743,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             {
                 switch (rProperty.second.toInt32())
                 {
-                case 0: // margin
-                    nRelativeHeightRelation = text::RelOrientation::FRAME;
-                    break;
-                case 1: // page
-                    nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
-                    break;
-                default:
-                    SAL_WARN("writerfilter", "RTFSdrImport::resolve: unhandled sizerelv value: " << rProperty.second);
-                    break;
+                    case 0: // margin
+                        nRelativeHeightRelation = text::RelOrientation::FRAME;
+                        break;
+                    case 1: // page
+                        nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
+                        break;
+                    default:
+                        SAL_WARN("writerfilter", "RTFSdrImport::resolve: unhandled sizerelv value: "
+                                                     << rProperty.second);
+                        break;
                 }
             }
         }
@@ -760,15 +794,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
             switch (rProperty.second.toInt32())
             {
-            case 0:
-                nHoriOrient = text::HoriOrientation::LEFT;
-                break;
-            case 1:
-                nHoriOrient = text::HoriOrientation::CENTER;
-                break;
-            case 2:
-                nHoriOrient = text::HoriOrientation::RIGHT;
-                break;
+                case 0:
+                    nHoriOrient = text::HoriOrientation::LEFT;
+                    break;
+                case 1:
+                    nHoriOrient = text::HoriOrientation::CENTER;
+                    break;
+                case 2:
+                    nHoriOrient = text::HoriOrientation::RIGHT;
+                    break;
             }
             if (xPropertySet.is() && text::HoriOrientation::NONE != nHoriOrient)
             {
@@ -802,15 +836,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                             oX.reset(aPoint.toInt32());
                         else
                             oY.reset(aPoint.toInt32());
-                    }
-                    while (nI >= 0);
+                    } while (nI >= 0);
                     RTFSprms aPathAttributes;
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, std::make_shared<RTFValue>(*oX));
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, std::make_shared<RTFValue>(*oY));
-                    aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo, std::make_shared<RTFValue>(aPathAttributes), RTFOverwrite::NO_APPEND);
+                    aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo,
+                                      std::make_shared<RTFValue>(aPathAttributes),
+                                      RTFOverwrite::NO_APPEND);
                 }
-            }
-            while (nCharIndex >= 0);
+            } while (nCharIndex >= 0);
             rShape.aWrapPolygonSprms = aPolygonSprms;
         }
         else if (rProperty.first == "fRelFlipV")
@@ -820,7 +854,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "fFlipV")
             obFlipV = rProperty.second.toInt32() == 1;
         else
-            SAL_INFO("writerfilter", "TODO handle shape property '" << rProperty.first << "':'" << rProperty.second << "'");
+            SAL_INFO("writerfilter", "TODO handle shape property '" << rProperty.first << "':'"
+                                                                    << rProperty.second << "'");
     }
 
     if (xPropertySet.is())
@@ -890,26 +925,28 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         aGeometry.push_back(aPropertyValue);
     }
     if (!aGeometry.empty() && xPropertySet.is() && !m_bTextFrame)
-        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(comphelper::containerToSequence(aGeometry)));
+        xPropertySet->setPropertyValue("CustomShapeGeometry",
+                                       uno::Any(comphelper::containerToSequence(aGeometry)));
 
     if (!aShapeText.isEmpty())
     {
-        auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
-        auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
-        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-        {
-            {"TextPath", uno::makeAny(true)},
+        auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry")
+                                .get<uno::Sequence<beans::PropertyValue>>();
+        auto aGeomPropVec
+            = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+            { "TextPath", uno::makeAny(true) },
         }));
-        auto it = std::find_if(aGeomPropVec.begin(), aGeomPropVec.end(), [](const beans::PropertyValue& rValue)
-        {
-            return rValue.Name == "TextPath";
-        });
+        auto it = std::find_if(
+            aGeomPropVec.begin(), aGeomPropVec.end(),
+            [](const beans::PropertyValue& rValue) { return rValue.Name == "TextPath"; });
         if (it == aGeomPropVec.end())
             aGeomPropVec.push_back(comphelper::makePropertyValue("TextPath", aPropertyValues));
         else
             it->Value <<= aPropertyValues;
 
-        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
+        xPropertySet->setPropertyValue("CustomShapeGeometry",
+                                       uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
         xPropertySet->setPropertyValue("TextAutoGrowHeight", uno::makeAny(false));
         xPropertySet->setPropertyValue("TextAutoGrowWidth", uno::makeAny(false));
     }
@@ -919,8 +956,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         if (nType == ESCHER_ShpInst_Line)
         {
             // Line shape inside group shape: get the polygon sequence and transform it.
-            uno::Sequence< uno::Sequence<awt::Point> > aPolyPolySequence;
-            if ((xPropertySet->getPropertyValue("PolyPolygon") >>= aPolyPolySequence) && aPolyPolySequence.hasElements())
+            uno::Sequence<uno::Sequence<awt::Point>> aPolyPolySequence;
+            if ((xPropertySet->getPropertyValue("PolyPolygon") >>= aPolyPolySequence)
+                && aPolyPolySequence.hasElements())
             {
                 uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
                 basegfx::B2DPolygon aPoly;
@@ -935,7 +973,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 for (sal_Int32 i = 0; i < rPolygon.getLength(); ++i)
                 {
                     basegfx::B2DPoint aPoint(aPoly.getB2DPoint(i));
-                    rPolygon[i] = awt::Point(static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getX())), static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getY())));
+                    rPolygon[i]
+                        = awt::Point(static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getX())),
+                                     static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getY())));
                 }
                 xPropertySet->setPropertyValue("PolyPolygon", uno::makeAny(aPolyPolySequence));
             }
@@ -948,8 +988,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         sal_Int32 nLeft = rShape.nLeft;
         sal_Int32 nTop = rShape.nTop;
 
-        bool bInShapeGroup = oGroupLeft && oGroupTop && oGroupRight && oGroupBottom
-                             && oRelLeft && oRelTop && oRelRight && oRelBottom;
+        bool bInShapeGroup = oGroupLeft && oGroupTop && oGroupRight && oGroupBottom && oRelLeft
+                             && oRelTop && oRelRight && oRelBottom;
         awt::Size aSize;
         if (bInShapeGroup)
         {
@@ -958,10 +998,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             sal_Int32 nShapeHeight = rShape.nBottom - rShape.nTop;
             sal_Int32 nCoordSysWidth = *oGroupRight - *oGroupLeft;
             sal_Int32 nCoordSysHeight = *oGroupBottom - *oGroupTop;
-            double fWidthRatio = static_cast< double >(nShapeWidth) / nCoordSysWidth;
-            double fHeightRatio = static_cast< double >(nShapeHeight) / nCoordSysHeight;
-            nLeft = static_cast< sal_Int32 >(rShape.nLeft + fWidthRatio * (*oRelLeft - *oGroupLeft));
-            nTop = static_cast< sal_Int32 >(rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop));
+            double fWidthRatio = static_cast<double>(nShapeWidth) / nCoordSysWidth;
+            double fHeightRatio = static_cast<double>(nShapeHeight) / nCoordSysHeight;
+            nLeft = static_cast<sal_Int32>(rShape.nLeft + fWidthRatio * (*oRelLeft - *oGroupLeft));
+            nTop = static_cast<sal_Int32>(rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop));
 
             // See lclGetAbsRect() in the VML import.
             aSize.Width = std::lround(fWidthRatio * (*oRelRight - *oRelLeft));
@@ -987,21 +1027,27 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             if (nType != ESCHER_ShpInst_Line)
             {
                 // This has to be set after position and size is set, otherwise flip will affect the position.
-                comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+                comphelper::SequenceAsHashMap aCustomShapeGeometry(
+                    xPropertySet->getPropertyValue("CustomShapeGeometry"));
                 if (obFlipH == true)
                     aCustomShapeGeometry["MirroredX"] <<= true;
                 if (obFlipV == true)
                     aCustomShapeGeometry["MirroredY"] <<= true;
-                xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+                xPropertySet->setPropertyValue(
+                    "CustomShapeGeometry",
+                    uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
             }
         }
 
         if (rShape.nHoriOrientRelation != 0)
-            xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));
+            xPropertySet->setPropertyValue("HoriOrientRelation",
+                                           uno::makeAny(rShape.nHoriOrientRelation));
         if (rShape.nVertOrientRelation != 0)
-            xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
+            xPropertySet->setPropertyValue("VertOrientRelation",
+                                           uno::makeAny(rShape.nVertOrientRelation));
         if (rShape.nWrap != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
-            xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode(rShape.nWrap)));
+            xPropertySet->setPropertyValue("Surround",
+                                           uno::makeAny(text::WrapTextMode(rShape.nWrap)));
         oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
         if (aFillModel.moType.has())
         {
@@ -1018,24 +1064,29 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             // Sets the ShadowFormat UNO property.
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
-        xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+        xPropertySet->setPropertyValue("AnchorType",
+                                       uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
         xPropertySet->setPropertyValue("Opaque", uno::makeAny(bOpaque));
         if (oRelativeWidth)
         {
             xPropertySet->setPropertyValue("RelativeWidth", uno::makeAny(*oRelativeWidth));
-            xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(nRelativeWidthRelation));
+            xPropertySet->setPropertyValue("RelativeWidthRelation",
+                                           uno::makeAny(nRelativeWidthRelation));
         }
         if (oRelativeHeight)
         {
             xPropertySet->setPropertyValue("RelativeHeight", uno::makeAny(*oRelativeHeight));
-            xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(nRelativeHeightRelation));
+            xPropertySet->setPropertyValue("RelativeHeightRelation",
+                                           uno::makeAny(nRelativeHeightRelation));
         }
     }
 
     if (m_rImport.isInBackground())
     {
         RTFSprms aAttributes;
-        aAttributes.set(NS_ooxml::LN_CT_Background_color, std::make_shared<RTFValue>(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>()));
+        aAttributes.set(NS_ooxml::LN_CT_Background_color,
+                        std::make_shared<RTFValue>(
+                            xPropertySet->getPropertyValue("FillColor").get<sal_Int32>()));
         m_rImport.Mapper().props(std::make_shared<RTFReferenceProperties>(aAttributes));
 
         uno::Reference<lang::XComponent> xComponent(xShape, uno::UNO_QUERY);
@@ -1052,10 +1103,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     m_xShape = xShape;
 }
 
-void RTFSdrImport::close()
-{
-    m_rImport.Mapper().endShape();
-}
+void RTFSdrImport::close() { m_rImport.Mapper().endShape(); }
 
 void RTFSdrImport::append(const OUString& aKey, const OUString& aValue)
 {

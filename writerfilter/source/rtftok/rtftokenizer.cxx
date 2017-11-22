@@ -24,31 +24,33 @@ namespace writerfilter
 {
 namespace rtftok
 {
-
 std::vector<RTFSymbol> RTFTokenizer::s_aRTFControlWords;
 bool RTFTokenizer::s_bControlWordsSorted;
 std::vector<RTFMathSymbol> RTFTokenizer::s_aRTFMathControlWords;
 bool RTFTokenizer::s_bMathControlWordsSorted;
 
-RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
-    : m_rImport(rImport),
-      m_pInStream(pInStream),
-      m_xStatusIndicator(xStatusIndicator),
-      m_nGroup(0),
-      m_nLineNumber(0),
-      m_nLineStartPos(0),
-      m_nGroupStart(0)
+RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream,
+                           uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
+    : m_rImport(rImport)
+    , m_pInStream(pInStream)
+    , m_xStatusIndicator(xStatusIndicator)
+    , m_nGroup(0)
+    , m_nLineNumber(0)
+    , m_nLineStartPos(0)
+    , m_nGroupStart(0)
 {
     if (!RTFTokenizer::s_bControlWordsSorted)
     {
         RTFTokenizer::s_bControlWordsSorted = true;
-        s_aRTFControlWords = std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords);
+        s_aRTFControlWords
+            = std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords);
         std::sort(s_aRTFControlWords.begin(), s_aRTFControlWords.end());
     }
     if (!RTFTokenizer::s_bMathControlWordsSorted)
     {
         RTFTokenizer::s_bMathControlWordsSorted = true;
-        s_aRTFMathControlWords = std::vector<RTFMathSymbol>(aRTFMathControlWords, aRTFMathControlWords + nRTFMathControlWords);
+        s_aRTFMathControlWords = std::vector<RTFMathSymbol>(
+            aRTFMathControlWords, aRTFMathControlWords + nRTFMathControlWords);
         std::sort(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end());
     }
 }
@@ -97,63 +99,63 @@ RTFError RTFTokenizer::resolveParse()
         {
             switch (ch)
             {
-            case '{':
-                m_nGroupStart = Strm().Tell() - 1;
-                ret = m_rImport.pushState();
-                if (ret != RTFError::OK)
-                    return ret;
-                break;
-            case '}':
-                ret = m_rImport.popState();
-                if (ret != RTFError::OK)
-                    return ret;
-                if (m_nGroup == 0)
-                {
-                    if (m_rImport.isSubstream())
-                        m_rImport.finishSubstream();
-                    return RTFError::OK;
-                }
-                break;
-            case '\\':
-                ret = resolveKeyword();
-                if (ret != RTFError::OK)
-                    return ret;
-                break;
-            case 0x0d:
-                break; // ignore this
-            case 0x0a:
-                m_nLineNumber++;
-                m_nLineStartPos = nCurrentPos;
-                break;
-            default:
-                if (m_nGroup == 0)
-                    return RTFError::CHAR_OVER;
-                if (m_rImport.getInternalState() == RTFInternalState::NORMAL)
-                {
-                    ret = m_rImport.resolveChars(ch);
+                case '{':
+                    m_nGroupStart = Strm().Tell() - 1;
+                    ret = m_rImport.pushState();
                     if (ret != RTFError::OK)
                         return ret;
-                }
-                else
-                {
-                    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": hex internal state");
-                    b = b << 4;
-                    sal_Int8 parsed = asHex(ch);
-                    if (parsed == -1)
-                        return RTFError::HEX_INVALID;
-                    b += parsed;
-                    count--;
-                    if (!count)
+                    break;
+                case '}':
+                    ret = m_rImport.popState();
+                    if (ret != RTFError::OK)
+                        return ret;
+                    if (m_nGroup == 0)
                     {
-                        ret = m_rImport.resolveChars(b);
+                        if (m_rImport.isSubstream())
+                            m_rImport.finishSubstream();
+                        return RTFError::OK;
+                    }
+                    break;
+                case '\\':
+                    ret = resolveKeyword();
+                    if (ret != RTFError::OK)
+                        return ret;
+                    break;
+                case 0x0d:
+                    break; // ignore this
+                case 0x0a:
+                    m_nLineNumber++;
+                    m_nLineStartPos = nCurrentPos;
+                    break;
+                default:
+                    if (m_nGroup == 0)
+                        return RTFError::CHAR_OVER;
+                    if (m_rImport.getInternalState() == RTFInternalState::NORMAL)
+                    {
+                        ret = m_rImport.resolveChars(ch);
                         if (ret != RTFError::OK)
                             return ret;
-                        count = 2;
-                        b = 0;
-                        m_rImport.setInternalState(RTFInternalState::NORMAL);
                     }
-                }
-                break;
+                    else
+                    {
+                        SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": hex internal state");
+                        b = b << 4;
+                        sal_Int8 parsed = asHex(ch);
+                        if (parsed == -1)
+                            return RTFError::HEX_INVALID;
+                        b += parsed;
+                        count--;
+                        if (!count)
+                        {
+                            ret = m_rImport.resolveChars(b);
+                            if (ret != RTFError::OK)
+                                return ret;
+                            count = 2;
+                            b = 0;
+                            m_rImport.setInternalState(RTFInternalState::NORMAL);
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -183,15 +185,9 @@ int RTFTokenizer::asHex(char ch)
     return ret;
 }
 
-void RTFTokenizer::pushGroup()
-{
-    m_nGroup++;
-}
+void RTFTokenizer::pushGroup() { m_nGroup++; }
 
-void RTFTokenizer::popGroup()
-{
-    m_nGroup--;
-}
+void RTFTokenizer::popGroup() { m_nGroup--; }
 
 RTFError RTFTokenizer::resolveKeyword()
 {
@@ -264,7 +260,8 @@ RTFError RTFTokenizer::resolveKeyword()
 
 bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
 {
-    auto low = std::lower_bound(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end(), rSymbol);
+    auto low
+        = std::lower_bound(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end(), rSymbol);
     int i = low - s_aRTFMathControlWords.begin();
     if (low == s_aRTFMathControlWords.end() || rSymbol < *low)
         return false;
@@ -282,8 +279,9 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
             Strm().SeekRel(nParam);
         return RTFError::OK;
     }
-    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword <<
-             "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
+    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword << "' with param? "
+                                               << (bParam ? 1 : 0) << " param val: '"
+                                               << (bParam ? nParam : 0) << "'");
     RTFSymbol aSymbol;
     aSymbol.sKeyword = rKeyword.getStr();
     auto low = std::lower_bound(s_aRTFControlWords.begin(), s_aRTFControlWords.end(), aSymbol);
@@ -299,38 +297,38 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
     RTFError ret;
     switch (s_aRTFControlWords[i].nControlType)
     {
-    case CONTROL_FLAG:
-        // flags ignore any parameter by definition
-        ret = m_rImport.dispatchFlag(s_aRTFControlWords[i].nIndex);
-        if (ret != RTFError::OK)
-            return ret;
-        break;
-    case CONTROL_DESTINATION:
-        // same for destinations
-        ret = m_rImport.dispatchDestination(s_aRTFControlWords[i].nIndex);
-        if (ret != RTFError::OK)
-            return ret;
-        break;
-    case CONTROL_SYMBOL:
-        // and symbols
-        ret = m_rImport.dispatchSymbol(s_aRTFControlWords[i].nIndex);
-        if (ret != RTFError::OK)
-            return ret;
-        break;
-    case CONTROL_TOGGLE:
-        ret = m_rImport.dispatchToggle(s_aRTFControlWords[i].nIndex, bParam, nParam);
-        if (ret != RTFError::OK)
-            return ret;
-        break;
-    case CONTROL_VALUE:
-        // Values require a parameter by definition, but Word doesn't respect this for \dibitmap.
-        if (bParam || s_aRTFControlWords[i].nIndex == RTF_DIBITMAP)
-        {
-            ret = m_rImport.dispatchValue(s_aRTFControlWords[i].nIndex, nParam);
+        case CONTROL_FLAG:
+            // flags ignore any parameter by definition
+            ret = m_rImport.dispatchFlag(s_aRTFControlWords[i].nIndex);
             if (ret != RTFError::OK)
                 return ret;
-        }
-        break;
+            break;
+        case CONTROL_DESTINATION:
+            // same for destinations
+            ret = m_rImport.dispatchDestination(s_aRTFControlWords[i].nIndex);
+            if (ret != RTFError::OK)
+                return ret;
+            break;
+        case CONTROL_SYMBOL:
+            // and symbols
+            ret = m_rImport.dispatchSymbol(s_aRTFControlWords[i].nIndex);
+            if (ret != RTFError::OK)
+                return ret;
+            break;
+        case CONTROL_TOGGLE:
+            ret = m_rImport.dispatchToggle(s_aRTFControlWords[i].nIndex, bParam, nParam);
+            if (ret != RTFError::OK)
+                return ret;
+            break;
+        case CONTROL_VALUE:
+            // Values require a parameter by definition, but Word doesn't respect this for \dibitmap.
+            if (bParam || s_aRTFControlWords[i].nIndex == RTF_DIBITMAP)
+            {
+                ret = m_rImport.dispatchValue(s_aRTFControlWords[i].nIndex, nParam);
+                if (ret != RTFError::OK)
+                    return ret;
+            }
+            break;
     }
 
     return RTFError::OK;
@@ -344,7 +342,6 @@ OUString RTFTokenizer::getPosition()
     aRet.append(sal_Int32(Strm().Tell() - m_nLineStartPos + 1));
     return aRet.makeStringAndClear();
 }
-
 
 } // namespace rtftok
 } // namespace writerfilter

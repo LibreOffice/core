@@ -16,22 +16,15 @@ namespace writerfilter
 {
 namespace rtftok
 {
-
 RTFSprm::RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue)
-    : m_nKeyword(nKeyword),
-      m_pValue(pValue)
+    : m_nKeyword(nKeyword)
+    , m_pValue(pValue)
 {
 }
 
-sal_uInt32 RTFSprm::getId() const
-{
-    return m_nKeyword;
-}
+sal_uInt32 RTFSprm::getId() const { return m_nKeyword; }
 
-Value::Pointer_t RTFSprm::getValue()
-{
-    return Value::Pointer_t(m_pValue->Clone());
-}
+Value::Pointer_t RTFSprm::getValue() { return Value::Pointer_t(m_pValue->Clone()); }
 
 writerfilter::Reference<Properties>::Pointer_t RTFSprm::getProps()
 {
@@ -39,10 +32,7 @@ writerfilter::Reference<Properties>::Pointer_t RTFSprm::getProps()
 }
 
 #ifdef DEBUG_WRITERFILTER
-std::string RTFSprm::getName() const
-{
-    return "RTFSprm";
-}
+std::string RTFSprm::getName() const { return "RTFSprm"; }
 #endif
 
 #ifdef DEBUG_WRITERFILTER
@@ -139,15 +129,15 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
 {
     switch (id)
     {
-    case NS_ooxml::LN_CT_Spacing_before:
-    case NS_ooxml::LN_CT_Spacing_after:
-    case NS_ooxml::LN_EG_RPrBase_b:
-    case NS_ooxml::LN_CT_Ind_left:
-    case NS_ooxml::LN_CT_Ind_right:
-        return std::make_shared<RTFValue>(0);
+        case NS_ooxml::LN_CT_Spacing_before:
+        case NS_ooxml::LN_CT_Spacing_after:
+        case NS_ooxml::LN_EG_RPrBase_b:
+        case NS_ooxml::LN_CT_Ind_left:
+        case NS_ooxml::LN_CT_Ind_right:
+            return std::make_shared<RTFValue>(0);
 
-    default:
-        return RTFValue::Pointer_t();
+        default:
+            return RTFValue::Pointer_t();
     }
 }
 
@@ -156,19 +146,19 @@ static bool isSPRMDeduplicateBlacklist(Id nId)
 {
     switch (nId)
     {
-    // See the NS_ooxml::LN_CT_PPrBase_tabs handler in DomainMapper,
-    // deduplication is explicitly not wanted for these tokens.
-    case NS_ooxml::LN_CT_TabStop_val:
-    case NS_ooxml::LN_CT_TabStop_leader:
-    case NS_ooxml::LN_CT_TabStop_pos:
-    // \htmautsp arrives after the style table, so only the non-style value is
-    // correct, keep these.
-    case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
-    case NS_ooxml::LN_CT_Spacing_afterAutospacing:
-        return true;
+        // See the NS_ooxml::LN_CT_PPrBase_tabs handler in DomainMapper,
+        // deduplication is explicitly not wanted for these tokens.
+        case NS_ooxml::LN_CT_TabStop_val:
+        case NS_ooxml::LN_CT_TabStop_leader:
+        case NS_ooxml::LN_CT_TabStop_pos:
+        // \htmautsp arrives after the style table, so only the non-style value is
+        // correct, keep these.
+        case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
+        case NS_ooxml::LN_CT_Spacing_afterAutospacing:
+            return true;
 
-    default:
-        return false;
+        default:
+            return false;
     }
 }
 
@@ -177,21 +167,21 @@ static bool isSPRMChildrenExpected(Id nId)
 {
     switch (nId)
     {
-    case NS_ooxml::LN_CT_PBdr_top:
-    case NS_ooxml::LN_CT_PBdr_left:
-    case NS_ooxml::LN_CT_PBdr_bottom:
-    case NS_ooxml::LN_CT_PBdr_right:
-        // Expected children are NS_ooxml::LN_CT_Border_*.
-        SAL_FALLTHROUGH;
-    case NS_ooxml::LN_CT_PrBase_shd:
-        // Expected children are NS_ooxml::LN_CT_Shd_*.
-        SAL_FALLTHROUGH;
-    case NS_ooxml::LN_CT_PPrBase_ind:
-        // Expected children are NS_ooxml::LN_CT_Ind_*.
-        return true;
+        case NS_ooxml::LN_CT_PBdr_top:
+        case NS_ooxml::LN_CT_PBdr_left:
+        case NS_ooxml::LN_CT_PBdr_bottom:
+        case NS_ooxml::LN_CT_PBdr_right:
+            // Expected children are NS_ooxml::LN_CT_Border_*.
+            SAL_FALLTHROUGH;
+        case NS_ooxml::LN_CT_PrBase_shd:
+            // Expected children are NS_ooxml::LN_CT_Shd_*.
+            SAL_FALLTHROUGH;
+        case NS_ooxml::LN_CT_PPrBase_ind:
+            // Expected children are NS_ooxml::LN_CT_Ind_*.
+            return true;
 
-    default:
-        return false;
+        default:
+            return false;
     }
 }
 
@@ -209,10 +199,12 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
         else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
         {
             RTFSprms const sprms(pValue->getSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
-            RTFSprms const attributes(pValue->getAttributes().cloneAndDeduplicate(rSprm.second->getAttributes()));
+            RTFSprms const attributes(
+                pValue->getAttributes().cloneAndDeduplicate(rSprm.second->getAttributes()));
             // Don't copy the sprm in case we expect it to have children but it doesn't have some.
             if (!isSPRMChildrenExpected(rSprm.first) || !sprms.empty() || !attributes.empty())
-                ret.set(rSprm.first, RTFValue::Pointer_t(pValue->CloneWithSprms(attributes, sprms)));
+                ret.set(rSprm.first,
+                        RTFValue::Pointer_t(pValue->CloneWithSprms(attributes, sprms)));
         }
     }
     else
@@ -226,7 +218,8 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
         else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
         {
             RTFSprms const sprms(RTFSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
-            RTFSprms const attributes(RTFSprms().cloneAndDeduplicate(rSprm.second->getAttributes()));
+            RTFSprms const attributes(
+                RTFSprms().cloneAndDeduplicate(rSprm.second->getAttributes()));
             if (!sprms.empty() || !attributes.empty())
             {
                 ret.set(rSprm.first, std::make_shared<RTFValue>(attributes, sprms));
@@ -273,7 +266,8 @@ void RTFSprms::ensureCopyBeforeWrite()
     {
         boost::intrusive_ptr<RTFSprmsImpl> pClone(new RTFSprmsImpl);
         for (auto& rSprm : *m_pSprms)
-            pClone->push_back(std::make_pair(rSprm.first, RTFValue::Pointer_t(rSprm.second->Clone())));
+            pClone->push_back(
+                std::make_pair(rSprm.first, RTFValue::Pointer_t(rSprm.second->Clone())));
         m_pSprms = pClone;
     }
 }
@@ -285,10 +279,7 @@ RTFSprms::RTFSprms()
 
 RTFSprms::~RTFSprms() = default;
 
-RTFSprms::RTFSprms(const RTFSprms& rSprms)
-{
-    *this = rSprms;
-}
+RTFSprms::RTFSprms(const RTFSprms& rSprms) { *this = rSprms; }
 
 void RTFSprms::clear()
 {

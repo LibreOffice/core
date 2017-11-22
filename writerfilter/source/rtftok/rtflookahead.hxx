@@ -45,10 +45,8 @@ public:
     void setSkipUnknown(bool bSkipUnknown) override;
     void finishSubstream() override;
     bool isSubstream() const override;
-    bool hasTable()
-    {
-        return m_bHasTable;
-    }
+    bool hasTable() { return m_bHasTable; }
+
 private:
     std::shared_ptr<RTFTokenizer> m_pTokenizer;
     SvStream& m_rStream;

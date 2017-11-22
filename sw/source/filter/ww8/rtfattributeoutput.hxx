@@ -40,6 +40,7 @@ class SwFlyFrameFormat;
 class RtfAttributeOutput : public AttributeOutputBase
 {
     friend class RtfStringBufferValue;
+
 public:
     /// Export the state of RTL/CJK.
     void RTLAndCJKState(bool bIsRTL, sal_uInt16 nScript) override;
@@ -60,10 +61,14 @@ public:
     void StartParagraphProperties() override;
 
     /// Called after we end outputting the attributes.
-    void EndParagraphProperties(const SfxItemSet& rParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted) override;
+    void EndParagraphProperties(const SfxItemSet& rParagraphMarkerProperties,
+                                const SwRedlineData* pRedlineData,
+                                const SwRedlineData* pRedlineParagraphMarkerDeleted,
+                                const SwRedlineData* pRedlineParagraphMarkerInserted) override;
 
     /// Start of the text run.
-    void StartRun(const SwRedlineData* pRedlineData, sal_Int32 nPos, bool bSingleEmptyRun = false) override;
+    void StartRun(const SwRedlineData* pRedlineData, sal_Int32 nPos,
+                  bool bSingleEmptyRun = false) override;
 
     /// End of the text run.
     void EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false) override;
@@ -79,10 +84,7 @@ public:
 
     // Access to (anyway) private buffers, used by the sdr exporter
     OStringBuffer& RunText();
-    OStringBuffer& Styles()
-    {
-        return m_aStyles;
-    }
+    OStringBuffer& Styles() { return m_aStyles; }
     OStringBuffer& StylesEnd();
 
     /// Output text (without markup).
@@ -107,7 +109,9 @@ public:
     /// The common attribute that can be among the run properties.
     void Redline(const SwRedlineData* pRedline) override;
 
-    void FormatDrop(const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner) override;
+    void FormatDrop(const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 nStyle,
+                    ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+                    ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner) override;
 
     /// Output style.
     void ParagraphStyle(sal_uInt16 nStyle) override;
@@ -115,7 +119,8 @@ public:
     void TableInfoCell(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
     void TableInfoRow(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
     void TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
+    void
+    TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
     void TableBackgrounds(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
     void TableRowRedline(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
     void TableCellRedline(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
@@ -138,9 +143,8 @@ public:
     void DefaultStyle() override;
 
     /// Start of a style in the styles table.
-    void StartStyle(const OUString& rName, StyleType eType,
-                    sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
-                    bool bAutoUpdate) override;
+    void StartStyle(const OUString& rName, StyleType eType, sal_uInt16 nBase, sal_uInt16 nNext,
+                    sal_uInt16 nWwId, sal_uInt16 nId, bool bAutoUpdate) override;
 
     /// End of a style in the styles table.
     void EndStyle() override;
@@ -178,14 +182,16 @@ public:
     void SectionTitlePage() override;
 
     /// Description of the page borders.
-    void SectionPageBorders(const SwFrameFormat* pFormat, const SwFrameFormat* pFirstPageFormat) override;
+    void SectionPageBorders(const SwFrameFormat* pFormat,
+                            const SwFrameFormat* pFirstPageFormat) override;
 
     /// Columns populated from right/numbers on the right side?
     void SectionBiDi(bool bBiDi) override;
 
     /// The style of the page numbers.
     ///
-    void SectionPageNumbering(sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber) override;
+    void SectionPageNumbering(sal_uInt16 nNumType,
+                              const ::boost::optional<sal_uInt16>& oPageRestartNumber) override;
 
     /// The type of breaking.
     void SectionType(sal_uInt8 nBreakCode) override;
@@ -200,25 +206,22 @@ public:
     void EndAbstractNumbering() override;
 
     /// All the numbering level information.
-    void NumberingLevel(sal_uInt8 nLevel,
-                        sal_uInt16 nStart,
-                        sal_uInt16 nNumberingType,
-                        SvxAdjust eAdjust,
-                        const sal_uInt8* pNumLvlPos,
-                        sal_uInt8 nFollow,
-                        const wwFont* pFont,
-                        const SfxItemSet* pOutSet,
-                        sal_Int16 nIndentAt,
-                        sal_Int16 nFirstLineIndex,
-                        sal_Int16 nListTabPos,
-                        const OUString& rNumberingString,
-                        const SvxBrushItem* pBrush) override;//For i120928,to export graphic of bullet
+    void
+    NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart, sal_uInt16 nNumberingType,
+                   SvxAdjust eAdjust, const sal_uInt8* pNumLvlPos, sal_uInt8 nFollow,
+                   const wwFont* pFont, const SfxItemSet* pOutSet, sal_Int16 nIndentAt,
+                   sal_Int16 nFirstLineIndex, sal_Int16 nListTabPos,
+                   const OUString& rNumberingString,
+                   const SvxBrushItem* pBrush) override; //For i120928,to export graphic of bullet
 
-    void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd, FieldFlags nMode);
-    void WriteBookmarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
-    void WriteAnnotationMarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
-    void WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr, bool bTitlepg);
-    void WriteBookmarkInActParagraph(const OUString& /*rName*/, sal_Int32 /*nFirstRunPos*/, sal_Int32 /*nLastRunPos*/) override {};
+    void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd,
+                         FieldFlags nMode);
+    void WriteBookmarks_Impl(std::vector<OUString>& rStarts, std::vector<OUString>& rEnds);
+    void WriteAnnotationMarks_Impl(std::vector<OUString>& rStarts, std::vector<OUString>& rEnds);
+    void WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr,
+                                bool bTitlepg);
+    void WriteBookmarkInActParagraph(const OUString& /*rName*/, sal_Int32 /*nFirstRunPos*/,
+                                     sal_Int32 /*nLastRunPos*/) override{};
 
 protected:
     /// Output frames - the implementation.
@@ -327,7 +330,8 @@ protected:
     void CharHidden(const SvxCharHiddenItem& rHidden) override;
 
     /// Sfx item RES_CHRATR_BOX
-    void CharBorder(const ::editeng::SvxBorderLine* pAllBorder, sal_uInt16 nDist, bool bShadow) override;
+    void CharBorder(const ::editeng::SvxBorderLine* pAllBorder, sal_uInt16 nDist,
+                    bool bShadow) override;
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
     void CharHighlight(const SvxBrushItem& rBrush) override;
@@ -414,7 +418,8 @@ protected:
     void FormatBox(const SvxBoxItem& rBox) override;
 
     /// Sfx item RES_COL
-    void FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol& rCol, bool bEven, SwTwips nPageSize) override;
+    void FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol& rCol, bool bEven,
+                            SwTwips nPageSize) override;
 
     /// Sfx item RES_KEEP
     void FormatKeep(const SvxFormatKeepItem& rItem) override;
@@ -451,13 +456,15 @@ protected:
     RtfExport& m_rExport;
 
 private:
-
     /// Output graphic fly frames.
     void FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode);
-    void FlyFrameOLE(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode, const Size& rSize);
-    void FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode, const Size& rSize);
+    void FlyFrameOLE(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode,
+                     const Size& rSize);
+    void FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode,
+                                const Size& rSize);
     /// Math export.
-    bool FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode, const Size& rSize);
+    bool FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode,
+                         const Size& rSize);
 
     /*
      * Table methods.
@@ -566,7 +573,7 @@ private:
      * List of already started but not yet defined tables (need to be defined
      * after the nested tables).
      */
-    std::vector< OString > m_aTables;
+    std::vector<OString> m_aTables;
     /*
      * If cell info is already output.
      */
@@ -576,7 +583,7 @@ private:
     bool m_bTableRowEnded;
 
     /// Number of cells from the table definition, by depth.
-    std::map<sal_uInt32,sal_uInt32> m_aCells;
+    std::map<sal_uInt32, sal_uInt32> m_aCells;
 
     /// If we're in a paragraph that has a single empty run only.
     bool m_bSingleEmptyRun;
@@ -589,7 +596,7 @@ private:
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* m_pFlyFrameSize;
 
-    std::vector< std::pair<OString, OString> > m_aFlyProperties;
+    std::vector<std::pair<OString, OString>> m_aFlyProperties;
 
     boost::optional<css::drawing::FillStyle> m_oFillStyle;
 
@@ -638,7 +645,8 @@ public:
     void FontPitchType(FontPitch ePitch) const;
 
     /// Writes binary data as a hex dump.
-    static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = nullptr, sal_uInt32 nLimit = 64);
+    static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = nullptr,
+                            sal_uInt32 nLimit = 64);
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) override;
 

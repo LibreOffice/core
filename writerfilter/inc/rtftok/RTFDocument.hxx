@@ -22,8 +22,7 @@ namespace writerfilter
 namespace rtftok
 {
 /// The RTFDocument opens and resolves the RTF document.
-class RTFDocument
-    : public writerfilter::Reference<Stream>
+class RTFDocument : public writerfilter::Reference<Stream>
 {
 public:
     /// Pointer to this stream.

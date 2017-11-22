@@ -14,7 +14,6 @@ namespace writerfilter
 {
 namespace rtftok
 {
-
 /**
  * An RTF destination state is the last open destination control word.
  *
