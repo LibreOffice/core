@@ -67,7 +67,7 @@ int main( int argc, char* argv[] )
     long nTileTwipWidth = 3840;
     long nTileTwipHeight = 3840;
 
-    aTimes.push_back(TimeRecord("initialization"));
+    aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init(argv[1]);
     aTimes.push_back(TimeRecord());
@@ -77,19 +77,19 @@ int main( int argc, char* argv[] )
 
     if (argv[2] != nullptr)
     {
-        aTimes.push_back(TimeRecord("load document"));
+        aTimes.emplace_back("load document");
         Document *pDocument(pOffice->documentLoad(argv[2]));
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
 
-        aTimes.push_back(TimeRecord("getparts"));
+        aTimes.emplace_back("getparts");
         const int nOriginalPart = pDocument->getPart();
         // Writer really has 1 part (the full doc).
         const int nTotalParts = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getParts());
         const int nParts = (max_parts < 0 ? nTotalParts : std::min(max_parts, nTotalParts));
         fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
 
-        aTimes.push_back(TimeRecord("get size of parts"));
+        aTimes.emplace_back("get size of parts");
         for (int n = 0; n < nParts; ++n)
         {
             const int nPart = (nOriginalPart + n) % nTotalParts;
@@ -100,7 +100,7 @@ int main( int argc, char* argv[] )
             fprintf (stderr, "  '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
             free (pName);
         }
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
 
         std::vector<unsigned char> vBuffer(nTilePixelWidth * nTilePixelHeight * 4);
         unsigned char* pPixels = &vBuffer[0];
@@ -117,17 +117,17 @@ int main( int argc, char* argv[] )
 
             if (pDocument->getDocumentType() != LOK_DOCTYPE_TEXT)
             { // whole part; meaningful only for non-writer documents.
-                aTimes.push_back(TimeRecord("render whole part"));
+                aTimes.emplace_back(TimeRecord("render whole part"));
                 pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
                                      0, 0, nWidth, nHeight); // not square
-                aTimes.push_back(TimeRecord());
+                aTimes.emplace_back();
             }
 
             { // 1:1
-                aTimes.push_back(TimeRecord("render sub-region at 1:1"));
+                aTimes.emplace_back("render sub-region at 1:1");
                 // Estimate the maximum tiles based on the number of parts requested, if Writer.
                 int nMaxTiles = max_tiles;
-                if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT && nMaxTiles < 0)
+                if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
                     nMaxTiles = (int)ceil(max_parts * 16128. / nTilePixelHeight) * ceil((double)nWidth / nTilePixelWidth);
                 int nTiles = 0;
                 for (int nY = 0; nY < nHeight - 1; nY += nTilePixelHeight)
@@ -147,14 +147,14 @@ int main( int argc, char* argv[] )
                                  nTiles, nX, nY);
                     }
                 }
-                aTimes.push_back(TimeRecord());
+                aTimes.emplace_back();
             }
 
             { // scaled
-                aTimes.push_back(TimeRecord("render sub-regions at scale"));
+                aTimes.emplace_back("render sub-regions at scale");
                 // Estimate the maximum tiles based on the number of parts requested, if Writer.
                 int nMaxTiles = max_tiles;
-                if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT && nMaxTiles < 0)
+                if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
                     nMaxTiles = (int)ceil(max_parts * 16128. / nTileTwipHeight) * ceil((double)nWidth / nTileTwipWidth);
                 int nTiles = 0;
                 for (int nY = 0; nY < nHeight - 1; nY += nTileTwipHeight)
@@ -174,13 +174,13 @@ int main( int argc, char* argv[] )
                                  nTiles, nX, nY);
                     }
                 }
-                aTimes.push_back(TimeRecord());
+                aTimes.emplace_back();
             }
         }
 
-        aTimes.push_back(TimeRecord("destroy document"));
+        aTimes.emplace_back("destroy document");
         delete pDocument;
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
     }
 
     delete pOffice;
