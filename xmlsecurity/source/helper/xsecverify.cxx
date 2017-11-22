@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_gpgme.h>
 
 #include <xsecctl.hxx>
 #include "xsecparser.hxx"
@@ -119,7 +120,7 @@ void XSecController::addSignature()
 
 void XSecController::switchGpgSignature()
 {
-#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
+#if GPGME_HAVE_GPGME
     // swap signature verifier for the Gpg one
     m_xXMLSignature.set(new XMLSignature_GpgImpl());
     if (!m_vInternalSignatureInformations.empty())

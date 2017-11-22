@@ -10169,6 +10169,7 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin" \
             LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
         fi
     fi
+    AC_DEFINE([GPGME_HAVE_GPGME])
 fi
 AC_SUBST(SYSTEM_GPGMEPP)
 AC_SUBST(GPG_ERROR_CFLAGS)
