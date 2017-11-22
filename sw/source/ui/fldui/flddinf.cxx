@@ -81,7 +81,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet *con
     //enable 'active' language selection
     m_pFormatLB->SetShowLanguageControl(true);
 
-    const SfxUnoAnyItem* pItem = (pCoreSet)
+    const SfxUnoAnyItem* pItem = pCoreSet
         ? pCoreSet->GetItem<SfxUnoAnyItem>(SID_DOCINFO, false)
         : nullptr;
     if ( pItem )

@@ -82,7 +82,7 @@ namespace DOM
         : m_pElement(pElement)
         , m_rMutex(rMutex)
         , m_pName(lcl_initXmlString(rName))
-        , m_pURI((pURI) ? lcl_initXmlString(*pURI) : nullptr)
+        , m_pURI(pURI ? lcl_initXmlString(*pURI) : nullptr)
         , m_bRebuild(true)
     {
     }

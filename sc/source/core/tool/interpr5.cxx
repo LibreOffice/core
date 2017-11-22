@@ -2490,7 +2490,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
             double fSSreg = fSlope * fSlope * fSumX2;
             pResMat->PutDouble(fSSreg, 0, 4);
 
-            double fDegreesFreedom =static_cast<double>( (bConstant) ? N-2 : N-1 );
+            double fDegreesFreedom =static_cast<double>( bConstant ? N-2 : N-1 );
             pResMat->PutDouble(fDegreesFreedom, 1, 3);
 
             double fSSresid = lcl_GetSSresid(pMatX,pMatY,fSlope,N);
@@ -2621,7 +2621,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                 pResMat->PutDouble(fSSreg, 0, 4);
                 pResMat->PutDouble(fSSresid, 1, 4);
 
-                double fDegreesFreedom =static_cast<double>( (bConstant) ? N-K-1 : N-K );
+                double fDegreesFreedom =static_cast<double>( bConstant ? N-K-1 : N-K );
                 pResMat->PutDouble(fDegreesFreedom, 1, 3);
 
                 if (fDegreesFreedom == 0.0 || fSSresid == 0.0 || fSSreg == 0.0)
@@ -2778,7 +2778,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                 pResMat->PutDouble(fSSreg, 0, 4);
                 pResMat->PutDouble(fSSresid, 1, 4);
 
-                double fDegreesFreedom =static_cast<double>( (bConstant) ? N-K-1 : N-K );
+                double fDegreesFreedom =static_cast<double>( bConstant ? N-K-1 : N-K );
                 pResMat->PutDouble(fDegreesFreedom, 1, 3);
 
                 if (fDegreesFreedom == 0.0 || fSSresid == 0.0 || fSSreg == 0.0)

@@ -351,7 +351,7 @@ bool SwSection::IsProtect() const
 {
     SwSectionFormat const *const pFormat( GetFormat() );
     OSL_ENSURE(pFormat, "SwSection::IsProtect: no format?");
-    return (pFormat)
+    return pFormat
         ?   pFormat->GetProtect().IsContentProtected()
         :   IsProtectFlag();
 }
@@ -361,7 +361,7 @@ bool SwSection::IsEditInReadonly() const
 {
     SwSectionFormat const *const pFormat( GetFormat() );
     OSL_ENSURE(pFormat, "SwSection::IsEditInReadonly: no format?");
-    return (pFormat)
+    return pFormat
         ?   pFormat->GetEditInReadonly().GetValue()
         :   IsEditInReadonlyFlag();
 }

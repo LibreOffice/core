@@ -3966,7 +3966,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType e
         {
              bRet = pTableNd->GetTable().SetColWidth( rAktBox,
                                 eType, nAbsDiff, nRelDiff,
-                                (bUndo) ? &pUndo : nullptr );
+                                bUndo ? &pUndo : nullptr );
         }
         break;
     case TableChgWidthHeightType::RowTop:
@@ -3975,7 +3975,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType e
     case TableChgWidthHeightType::CellBottom:
         bRet = pTableNd->GetTable().SetRowHeight( rAktBox,
                             eType, nAbsDiff, nRelDiff,
-                            (bUndo) ? &pUndo : nullptr );
+                            bUndo ? &pUndo : nullptr );
         break;
     default: break;
     }

@@ -277,10 +277,10 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
                 // The ContentIdx is _always_ different when called from
                 // SwDocStyleSheet::SetItemSet, because it deep-copies the
                 // PageDesc.  So check if it was previously shared.
-                 ((bFirst) ? rDesc.IsFirstShared() : rDesc.IsHeaderShared()))
+                 (bFirst ? rDesc.IsFirstShared() : rDesc.IsHeaderShared()))
             {
                 SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                        (bFirst) ? "First header" : "Left header",
+                        bFirst ? "First header" : "Left header",
                                                 GetDfltFrameFormat() );
                 ::lcl_DescSetAttr( *pRight, *pFormat, false );
                 // The section which the right header attribute is pointing
@@ -349,10 +349,10 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
                 // The ContentIdx is _always_ different when called from
                 // SwDocStyleSheet::SetItemSet, because it deep-copies the
                 // PageDesc.  So check if it was previously shared.
-                 ((bFirst) ? rDesc.IsFirstShared() : rDesc.IsFooterShared()))
+                 (bFirst ? rDesc.IsFirstShared() : rDesc.IsFooterShared()))
             {
                 SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                        (bFirst) ? "First footer" : "Left footer",
+                        bFirst ? "First footer" : "Left footer",
                                                 GetDfltFrameFormat() );
                 ::lcl_DescSetAttr( *pRight, *pFormat, false );
                 // The section to which the right footer attribute is pointing

@@ -275,15 +275,15 @@ GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
         bool const bParent)
 {
     // these should be unambiguous because of the dummy character
-    SwTextNode::GetTextAttrMode const eMode( (bParent)
+    SwTextNode::GetTextAttrMode const eMode( bParent
         ? SwTextNode::PARENT : SwTextNode::EXPAND );
     SwTextAttr *const pMetaTextAttr =
         rTextNode.GetTextAttrAt(nIndex, RES_TXTATR_META, eMode);
     SwTextAttr *const pMetaFieldTextAttr =
         rTextNode.GetTextAttrAt(nIndex, RES_TXTATR_METAFIELD, eMode);
     // which is innermost?
-    SwTextAttr *const pTextAttr = (pMetaTextAttr)
-        ? ((pMetaFieldTextAttr)
+    SwTextAttr *const pTextAttr = pMetaTextAttr
+        ? (pMetaFieldTextAttr
             ? ((pMetaFieldTextAttr->GetStart() >
                     pMetaTextAttr->GetStart())
                 ? pMetaFieldTextAttr : pMetaTextAttr)
@@ -514,7 +514,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             const SwPosition *pPos = rPam.Start();
             const SwTextNode *pTextNd =
                 rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTextNode();
-            const SwTextAttr* pTextAttr = (pTextNd)
+            const SwTextAttr* pTextAttr = pTextNd
                 ? pTextNd->GetFieldTextAttrAt( pPos->nContent.GetIndex(), true )
                 : nullptr;
             if ( pTextAttr != nullptr )

@@ -359,7 +359,7 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, bool bOneCell )
     for (size_t i = m_Cells.size(); i < nCells; ++i)
     {
         m_Cells.push_back(o3tl::make_unique<SwXMLTableCell_Impl>(
-                1UL, (bOneCell) ? nColSpan : 1UL));
+                1UL, bOneCell ? nColSpan : 1UL));
         nColSpan--;
     }
 

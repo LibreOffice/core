@@ -548,7 +548,7 @@ SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
     }
     if (!xFM.is())
     {
-        SwXFieldMaster *const pFM( (pType)
+        SwXFieldMaster *const pFM( pType
                 ? new SwXFieldMaster(*pType, pDoc)
                 : new SwXFieldMaster(pDoc, nResId));
         xFM.set(pFM);
@@ -1137,10 +1137,10 @@ public:
         , m_pDoc(pDoc)
         , m_bIsDescriptor(pFormat == nullptr)
         , m_bCallUpdate(false)
-        , m_nServiceId((pFormat)
+        , m_nServiceId(pFormat
                 ? lcl_GetServiceForField(*pFormat->GetField())
                 : nServiceId)
-        , m_pProps((pFormat) ? nullptr : new SwFieldProperties_Impl)
+        , m_pProps(pFormat ? nullptr : new SwFieldProperties_Impl)
     { }
 
     virtual ~Impl() override
@@ -1222,7 +1222,7 @@ SwXTextField::CreateXTextField(SwDoc *const pDoc, SwFormatField const* pFormat,
     }
     if (!xField.is())
     {
-        SwXTextField *const pField( (pFormat)
+        SwXTextField *const pField( pFormat
                 ? new SwXTextField(const_cast<SwFormatField&>(*pFormat), *pDoc)
                 : new SwXTextField(nServiceId, pDoc));
         xField.set(pField);
@@ -1907,7 +1907,7 @@ void SAL_CALL SwXTextField::attach(
             pTextCursor
             && pTextCursor->IsAtEndOfMeta() );
         const SetAttrMode nInsertFlags =
-            (bForceExpandHints)
+            bForceExpandHints
             ? SetAttrMode::FORCEHINTEXPAND
             : SetAttrMode::DEFAULT;
 
@@ -2323,7 +2323,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 // get text node for the text field
                 const SwFormatField *pFieldFormat =
                     (m_pImpl->GetField()) ? m_pImpl->m_pFormatField : nullptr;
-                const SwTextField* pTextField = (pFieldFormat)
+                const SwTextField* pTextField = pFieldFormat
                     ? m_pImpl->m_pFormatField->GetTextField() : nullptr;
                 if(!pTextField)
                     throw uno::RuntimeException();

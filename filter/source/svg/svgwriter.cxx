@@ -695,7 +695,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
     if( bEmpty )
     {
         nCurAction = nActionIndex;
-        return ( (bEOL) ? -2 : ( (bEOP) ? -1 : 0 ) );
+        return ( bEOL ? -2 : ( bEOP ? -1 : 0 ) );
     }
     else
     {

@@ -212,7 +212,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
             for(sal_uInt16 nPgNum(0); nPgNum < nPgCount; nPgNum++)
             {
                 // over all pages
-                SdrPage* pPage = (bMaPg) ? mpModel->GetMasterPage(nPgNum) : mpModel->GetPage(nPgNum);
+                SdrPage* pPage = bMaPg ? mpModel->GetMasterPage(nPgNum) : mpModel->GetPage(nPgNum);
                 const size_t nObjCount(pPage->GetObjCount());
 
                 // make sure OrdNums are correct

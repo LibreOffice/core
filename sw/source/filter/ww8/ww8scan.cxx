@@ -1012,7 +1012,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         {
             aShortSprm[0] = (sal_uInt8)( ( nPrm & 0xfe) >> 1 );
             aShortSprm[1] = (sal_uInt8)(   nPrm         >> 8 );
-            p->nSprmsLen = ( nPrm ) ? 2 : 0;        // length
+            p->nSprmsLen = nPrm ? 2 : 0;        // length
 
             // store Position of internal mini storage in Data Pointer
             p->pMemPos = aShortSprm;
@@ -1112,7 +1112,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     aShortSprm[2] = (sal_uInt8)( nPrm >> 8 );
 
                     // store Sprm Length in member:
-                    p->nSprmsLen = ( nPrm ) ? 3 : 0;
+                    p->nSprmsLen = nPrm ? 3 : 0;
 
                     // store Position of internal mini storage in Data Pointer
                     p->pMemPos = aShortSprm;

@@ -361,7 +361,7 @@ auto SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
     // length of word must be greater than 0
     // only report a spelling error if the cursor position is outside the word,
     // so that the user is not annoyed while typing
-    FreshState eRet = (nLen)
+    FreshState eRet = nLen
         ? (nCursorPos > nPos + nLen || nCursorPos < nPos)
             ? FreshState::FRESH
             : FreshState::CURSOR

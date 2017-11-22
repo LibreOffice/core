@@ -36,7 +36,7 @@ namespace DOM { namespace events {
 
     void CEventDispatcher::addListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, bool bCapture)
     {
-        TypeListenerMap *const pTMap = (bCapture)
+        TypeListenerMap *const pTMap = bCapture
             ? (& m_CaptureListeners) : (& m_TargetListeners);
 
         // get the multimap for the specified type
@@ -55,7 +55,7 @@ namespace DOM { namespace events {
 
     void CEventDispatcher::removeListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, bool bCapture)
     {
-        TypeListenerMap *const pTMap = (bCapture)
+        TypeListenerMap *const pTMap = bCapture
             ? (& m_CaptureListeners) : (& m_TargetListeners);
 
         // get the multimap for the specified type

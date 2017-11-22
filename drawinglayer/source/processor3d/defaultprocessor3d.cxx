@@ -55,7 +55,7 @@ namespace drawinglayer
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
                 const bool bOldSimpleTextureActive(getSimpleTextureActive());
-                std::shared_ptr< texture::GeoTexSvx > pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
+                std::shared_ptr< texture::GeoTexSvx > pOldTex = bTransparence ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
 
                 // create texture
                 const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();

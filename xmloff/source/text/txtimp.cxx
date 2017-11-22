@@ -1527,7 +1527,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     {
         sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
         const OUString rPropName = bPara ? OUString("ParaStyleName") : OUString("CharStyleName");
-        const Reference < XNameContainer > & rStyles = (bPara)
+        const Reference < XNameContainer > & rStyles = bPara
             ? m_xImpl->m_xParaStyles
             : m_xImpl->m_xTextStyles;
         if( rStyles.is() &&

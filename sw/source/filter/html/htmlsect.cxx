@@ -337,7 +337,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         }
 
         SwTextNode* pOldTextNd =
-            (bAppended) ? nullptr : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+            bAppended ? nullptr : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
 
         m_pPam->Move( fnMoveBackward );
 
@@ -724,7 +724,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
 
         SwTextNode* pOldTextNd =
-            (bAppended) ? nullptr : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+            bAppended ? nullptr : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
 
         m_pPam->Move( fnMoveBackward );
 

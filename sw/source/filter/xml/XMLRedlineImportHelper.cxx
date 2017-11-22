@@ -58,7 +58,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> const & rCursor )
     OTextCursorHelper *const pXCursor =
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel);
     OSL_ENSURE( pXCursor, "OTextCursorHelper missing" );
-    return (pXCursor) ? pXCursor->GetDoc() : nullptr;
+    return pXCursor ? pXCursor->GetDoc() : nullptr;
 }
 
 static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> const & rRange )
@@ -69,7 +69,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> const & rRange )
         ::sw::UnoTunnelGetImplementation<SwXTextRange>(xTunnel);
     // #i115174#: this may be a SvxUnoTextRange
     // OSL_ENSURE( pXRange, "SwXTextRange missing" );
-    return (pXRange) ? &pXRange->GetDoc() : nullptr;
+    return pXRange ? &pXRange->GetDoc() : nullptr;
 }
 
 // XTextRangeOrNodeIndexPosition: store a position into the text

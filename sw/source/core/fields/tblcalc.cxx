@@ -97,7 +97,7 @@ OUString SwTableField::GetCommand()
     if (EXTRNL_NAME != GetNameType())
     {
         SwNode const*const pNd = GetNodeOfFormula();
-        SwTableNode const*const pTableNd = (pNd) ? pNd->FindTableNode() : nullptr;
+        SwTableNode const*const pTableNd = pNd ? pNd->FindTableNode() : nullptr;
         if (pTableNd)
         {
             PtrToBoxNm( &pTableNd->GetTable() );

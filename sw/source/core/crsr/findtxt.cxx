@@ -80,7 +80,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
 
         if ( bNewSoftHyphen )
         {
-            nSoftHyphen = (bRemoveSoftHyphen)
+            nSoftHyphen = bRemoveSoftHyphen
                     ?  rNd.GetText().indexOf(CHAR_SOFTHYPHEN, nSoftHyphen)
                     : -1;
         }
@@ -679,7 +679,7 @@ int SwFindParaText::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove,
             const_cast<SwPaM*>(pRegion)->GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
-        std::unique_ptr<OUString> pRepl( (bRegExp)
+        std::unique_ptr<OUString> pRepl( bRegExp
                 ? ReplaceBackReferences( m_rSearchOpt, pCursor ) : nullptr );
         bool const bReplaced =
             m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(

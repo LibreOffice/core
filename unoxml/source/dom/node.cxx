@@ -393,7 +393,7 @@ namespace DOM
             return nullptr;
         }
         ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
-            xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
+            xmlCopyNode(m_aNodePtr, bDeep ? 1 : 0));
         if (!pNode.is()) { return nullptr; }
         pNode->m_bUnlinked = true; // not linked yet
         return pNode.get();

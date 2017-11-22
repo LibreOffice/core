@@ -249,7 +249,7 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
         SwPosition Pos(*pTextNode);
         xParentText.set(::sw::CreateParentXText( rDoc, Pos ));
     }
-    SwXParagraph *const pXPara( (pTextNode)
+    SwXParagraph *const pXPara( pTextNode
             ? new SwXParagraph(xParentText, *pTextNode, nSelStart, nSelEnd)
             : new SwXParagraph);
     // this is why the constructor is private: need to acquire pXPara here
@@ -1417,7 +1417,7 @@ uno::Reference<frame::XModel> SwXParagraph::GetModel()
     if (pTextNode)
     {
         SwDocShell const*const pShell( pTextNode->GetDoc()->GetDocShell() );
-        return (pShell) ? pShell->GetModel() : nullptr;
+        return pShell ? pShell->GetModel() : nullptr;
     }
     return nullptr;
 }

@@ -111,7 +111,7 @@ InsertDeleteFlags ScDeleteContentsDlg::GetDelContentsCmdBits() const
 
     ScDeleteContentsDlg::bPreviousAllCheck = aBtnDelAll->IsChecked();
 
-    return ( (ScDeleteContentsDlg::bPreviousAllCheck)
+    return ( ScDeleteContentsDlg::bPreviousAllCheck
                 ? InsertDeleteFlags::ALL
                 : ScDeleteContentsDlg::nPreviousChecks );
 }

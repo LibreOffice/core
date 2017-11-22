@@ -83,12 +83,10 @@ public:
     bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
     bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *);
     bool TraverseCaseStmt(CaseStmt *);
-    bool TraverseConditionalOperator(ConditionalOperator *);
 private:
     void VisitSomeStmt(Stmt const * stmt, const Expr* cond, StringRef stmtName);
     Expr const * insideSizeof = nullptr;
     Expr const * insideCaseStmt = nullptr;
-    Expr const * insideConditionalOperator = nullptr;
 };
 
 bool UnnecessaryParen::TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr * expr)
@@ -111,15 +109,6 @@ bool UnnecessaryParen::TraverseCaseStmt(CaseStmt * caseStmt)
     return ret;
 }
 
-bool UnnecessaryParen::TraverseConditionalOperator(ConditionalOperator * conditionalOperator)
-{
-    auto old = insideConditionalOperator;
-    insideConditionalOperator = ignoreAllImplicit(conditionalOperator->getCond());
-    bool ret = RecursiveASTVisitor::TraverseConditionalOperator(conditionalOperator);
-    insideConditionalOperator = old;
-    return ret;
-}
-
 bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
 {
     if (ignoreLocation(parenExpr))
@@ -129,8 +118,6 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
     if (insideSizeof && parenExpr == insideSizeof)
         return true;
     if (insideCaseStmt && parenExpr == insideCaseStmt)
-        return true;
-    if (insideConditionalOperator && parenExpr == insideConditionalOperator)
         return true;
 
     auto subExpr = ignoreAllImplicit(parenExpr->getSubExpr());

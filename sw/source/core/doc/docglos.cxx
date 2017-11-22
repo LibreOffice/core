@@ -165,7 +165,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pContentNd = aCpyPam.GetContentNode();
             aCpyPam.GetPoint()->nContent.Assign(
-                    pContentNd, (pContentNd) ? pContentNd->Len() : 0 );
+                    pContentNd, pContentNd ? pContentNd->Len() : 0 );
 
             GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );
             SwPaM *_pStartCursor = &rPaM, *_pStartCursor2 = _pStartCursor;

@@ -737,7 +737,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         sal_uInt32  nIndex  = 0;
         bool bIsNum  = !bLen || GetFormatter().IsNumberFormat( sText, nIndex, fVal );
         OUString* pText;
-        (bIsNum) ? pText = nullptr : pText = &sText;
+        bIsNum ? pText = nullptr : pText = &sText;
 
         // top10 flags
         sal_uInt16 nNewFlags = 0x0000;

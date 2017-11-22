@@ -168,7 +168,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
             {
                 nBulletChar = 0x2022;
                 nBulletOfs = 0;
-                nTextOfs = ( bHasBullet ) ? 0xd8 : 0;
+                nTextOfs = bHasBullet ? 0xd8 : 0;
             }
             break;
             case 1 :

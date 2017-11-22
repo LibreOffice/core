@@ -949,7 +949,7 @@ Reference< XIndexAccess >
     if(!pResultCursor)
         throw RuntimeException("No result cursor");
     Reference< XIndexAccess >  xRet;
-    xRet = SwXTextRanges::Create( (nResult) ? &(*pResultCursor) : nullptr );
+    xRet = SwXTextRanges::Create( nResult ? &(*pResultCursor) : nullptr );
     return xRet;
 }
 
@@ -2525,7 +2525,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if (pSwView)
             {
                 // PDF export should not make use of the SwPrtOptions
-                const SwPrintData *pPrtOptions = (bIsPDFExport)
+                const SwPrintData *pPrtOptions = bIsPDFExport
                     ? nullptr : m_pRenderData->GetSwPrtOptions();
                 bool setShowPlaceHoldersInPDF = false;
                 if(bIsPDFExport)

@@ -1706,7 +1706,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
     return (nullptr != pNewRedl)
         ? AppendResult::APPENDED
-        : ((bMerged) ? AppendResult::MERGED : AppendResult::IGNORED);
+        : (bMerged ? AppendResult::MERGED : AppendResult::IGNORED);
 }
 
 bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool )

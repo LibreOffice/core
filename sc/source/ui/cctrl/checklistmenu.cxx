@@ -1372,7 +1372,7 @@ void ScCheckListMenuWindow::updateMemberParents( const SvTreeListEntry* pLeaf, s
     if ( pLeaf )
     {
         SvTreeListEntry* pMonthEntry = pLeaf->GetParent();
-        SvTreeListEntry* pYearEntry = ( pMonthEntry ) ? pMonthEntry->GetParent() : nullptr;
+        SvTreeListEntry* pYearEntry = pMonthEntry ? pMonthEntry->GetParent() : nullptr;
 
         maMembers[nIdx].mpParent = pMonthEntry;
         if ( aItr != maYearMonthMap.end() )

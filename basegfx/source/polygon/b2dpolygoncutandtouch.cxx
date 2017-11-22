@@ -633,7 +633,7 @@ namespace basegfx
 
                             if(areParallel(aEdgeVector, aTestVector))
                             {
-                                const double fCut((bTestUsingX)
+                                const double fCut(bTestUsingX
                                     ? aTestVector.getX() / aEdgeVector.getX()
                                     : aTestVector.getY() / aEdgeVector.getY());
                                 const double fZero(0.0);

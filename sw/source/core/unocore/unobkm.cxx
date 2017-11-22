@@ -213,7 +213,7 @@ void SwXBookmark::attachToRangeEx(
     }
 
     SwDoc *const pDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
+        pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();
@@ -377,7 +377,7 @@ uno::Reference<frame::XModel> SwXBookmark::GetModel()
     if (m_pImpl->m_pDoc)
     {
         SwDocShell const * const pShell( m_pImpl->m_pDoc->GetDocShell() );
-        return (pShell) ? pShell->GetModel() : nullptr;
+        return pShell ? pShell->GetModel() : nullptr;
     }
     return nullptr;
 }

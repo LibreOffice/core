@@ -156,7 +156,7 @@ hchar_string DateCode::GetString()
 
     for (; *fmt && ((int) ret.size() < DATE_SIZE); fmt++)
     {
-        form = (add_zero) ? "%02d" : "%d";
+        form = add_zero ? "%02d" : "%d";
 
         add_zero = false;
         is_pm = (date[HOUR] >= 12);
@@ -230,13 +230,13 @@ hchar_string DateCode::GetString()
             break;
         case '7':
             ret.push_back(0xB5A1);
-            ret.push_back((is_pm) ? 0xD281 : 0xB8E5);
+            ret.push_back(is_pm ? 0xD281 : 0xB8E5);
             break;
         case '&':
-            strncat(cbuf, (is_pm) ? "p.m." : "a.m.", sizeof(cbuf) - strlen(cbuf) - 1);
+            strncat(cbuf, is_pm ? "p.m." : "a.m.", sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         case '+':
-            strncat(cbuf, (is_pm) ? "P.M." : "A.M.", sizeof(cbuf) - strlen(cbuf) - 1);
+            strncat(cbuf, is_pm ? "P.M." : "A.M.", sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         case '8':                             // 2.5 feature
         case '9':

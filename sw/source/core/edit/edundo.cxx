@@ -139,7 +139,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         {   // fdo#39003 Pop does not touch the rest of the cursor ring
             KillPams(); // so call this first to get rid of unwanted cursors
         }
-        Pop((bRestoreCursor) ? PopMode::DeleteCurrent : PopMode::DeleteStack);
+        Pop(bRestoreCursor ? PopMode::DeleteCurrent : PopMode::DeleteStack);
 
         GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
@@ -190,7 +190,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
             SAL_WARN("sw.core", "SwEditShell::Redo(): exception caught: " << e);
         }
 
-        Pop((bRestoreCursor) ? PopMode::DeleteCurrent : PopMode::DeleteStack);
+        Pop(bRestoreCursor ? PopMode::DeleteCurrent : PopMode::DeleteStack);
 
         GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         GetDoc()->getIDocumentRedlineAccess().CompressRedlines();

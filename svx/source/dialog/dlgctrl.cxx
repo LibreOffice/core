@@ -1234,7 +1234,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
             pVD->DrawBitmap( Point(), aBitmap );
             InsertEntry( pEntry->GetName(),
                 Image(pVD->GetBitmap(
-                    (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
+                    bStart ? Point() : Point(aBmpSize.Width() / 2, 0),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
         }
         else

@@ -123,7 +123,7 @@ public:
         , m_EventListeners(m_Mutex)
         , m_bIndexHeader(bIndexHeader)
         , m_bIsDescriptor(nullptr == pFormat)
-        , m_pProps((pFormat) ? nullptr : new SwTextSectionProperties_Impl())
+        , m_pProps(pFormat ? nullptr : new SwTextSectionProperties_Impl())
     {
     }
 
@@ -243,7 +243,7 @@ SwXTextSection::getParentSection()
 
     SwSectionFormat *const pParentFormat = rSectionFormat.GetParent();
     const uno::Reference< text::XTextSection > xRet =
-        (pParentFormat) ? CreateXTextSection(pParentFormat) : nullptr;
+        pParentFormat ? CreateXTextSection(pParentFormat) : nullptr;
     return xRet;
 }
 
@@ -287,7 +287,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 
     SwDoc *const pDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
+        pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();
@@ -562,7 +562,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
     }
 
     std::unique_ptr<SwSectionData> const pSectionData(
-        (pFormat) ? new SwSectionData(*pFormat->GetSection()) : nullptr);
+        pFormat ? new SwSectionData(*pFormat->GetSection()) : nullptr);
 
     OUString const*const pPropertyNames = rPropertyNames.getConstArray();
     uno::Any const*const pValues = rValues.getConstArray();
@@ -950,7 +950,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
 
     uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
     uno::Any* pRet = aRet.getArray();
-    SwSection *const pSect = (pFormat) ? pFormat->GetSection() : nullptr;
+    SwSection *const pSect = pFormat ? pFormat->GetSection() : nullptr;
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
 
     for (sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength();
@@ -1448,7 +1448,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
     }
 
     std::unique_ptr<SwSectionData> const pSectionData(
-        (pFormat) ? new SwSectionData(*pFormat->GetSection()) : nullptr);
+        pFormat ? new SwSectionData(*pFormat->GetSection()) : nullptr);
 
     std::unique_ptr<SfxItemSet> pNewAttrSet;
     bool bLinkModeChanged = false;
@@ -1724,7 +1724,7 @@ uno::Reference<frame::XModel> SwXTextSection::GetModel()
     if (pSectionFormat)
     {
         SwDocShell const*const pShell( pSectionFormat->GetDoc()->GetDocShell() );
-        return (pShell) ? pShell->GetModel() : nullptr;
+        return pShell ? pShell->GetModel() : nullptr;
     }
     return nullptr;
 }

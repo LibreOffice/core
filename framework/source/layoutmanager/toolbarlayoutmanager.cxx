@@ -434,7 +434,7 @@ bool ToolbarLayoutManager::requestToolbar( const OUString& rResourceURL )
         bCreateOrShowToolbar &= bool( xContainerWindow->isActive());
 
     if ( bCreateOrShowToolbar )
-        bNotify = ( bMustCallCreate ) ? createToolbar( rResourceURL ) : showToolbar( rResourceURL );
+        bNotify = bMustCallCreate ? createToolbar( rResourceURL ) : showToolbar( rResourceURL );
 
     return bNotify;
 }
@@ -3116,7 +3116,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
             if ( isDefaultPos( pIter->m_aDockedData.m_aPos ))
                 continue;
 
-            sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ? pIter->m_aDockedData.m_aPos.Y : pIter->m_aDockedData.m_aPos.X;
+            sal_Int32 nWindowRowCol = bHorzDockingArea ? pIter->m_aDockedData.m_aPos.Y : pIter->m_aDockedData.m_aPos.X;
             if ( nWindowRowCol >= nRowCol )
             {
                 if ( bHorzDockingArea )
@@ -3158,7 +3158,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                         if ( isDefaultPos( aDockedPos ))
                             continue;
 
-                        sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ? aDockedPos.Y : aDockedPos.X;
+                        sal_Int32 nWindowRowCol = bHorzDockingArea ? aDockedPos.Y : aDockedPos.X;
                         if (( nDockedArea == eDockingArea ) && ( nWindowRowCol >= nRowCol ))
                         {
                             if ( bHorzDockingArea )

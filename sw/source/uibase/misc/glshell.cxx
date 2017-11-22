@@ -131,7 +131,7 @@ static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
 }
 
 SwGlosDocShell::SwGlosDocShell(bool bNewShow)
-    : SwDocShell( (bNewShow)
+    : SwDocShell( bNewShow
             ? SfxObjectCreateMode::STANDARD : SfxObjectCreateMode::INTERNAL )
 {
 }

@@ -640,7 +640,7 @@ SwXText::insertTextContentBefore(
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
+    SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     SwTextNode * pTextNode = nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
@@ -697,7 +697,7 @@ SwXText::insertTextContentAfter(
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
+    SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     bool bRet = false;
     SwTextNode * pTextNode = nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
@@ -747,7 +747,7 @@ SwXText::removeTextContentBefore(
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
+    SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
@@ -799,7 +799,7 @@ SwXText::removeTextContentAfter(
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
+    SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
@@ -2510,7 +2510,7 @@ SwXHeadFootText::CreateXHeadFootText(
 
 SwXHeadFootText::SwXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
     : SwXText(rHeadFootFormat.GetDoc(),
-            (bIsHeader) ? CursorType::Header : CursorType::Footer)
+            bIsHeader ? CursorType::Header : CursorType::Footer)
     , m_pImpl( new SwXHeadFootText::Impl(rHeadFootFormat, bIsHeader) )
 {
 }

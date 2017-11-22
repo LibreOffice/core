@@ -1118,7 +1118,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             // Subtitle template
             SvxNumBulletItem const*const pItem(
                     rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET));
-            SvxNumRule *const pDefaultRule = (pItem) ? pItem->GetNumRule() : nullptr;
+            SvxNumRule *const pDefaultRule = pItem ? pItem->GetNumRule() : nullptr;
             DBG_ASSERT( pDefaultRule, "Where is my default template? [CL]" );
 
             if(pDefaultRule)

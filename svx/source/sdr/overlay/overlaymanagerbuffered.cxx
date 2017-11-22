@@ -153,7 +153,7 @@ namespace sdr
         void OverlayManagerBuffered::ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice)
         {
             // prepare source
-            OutputDevice& rSource = (pPreRenderDevice) ? *pPreRenderDevice : getOutputDevice();
+            OutputDevice& rSource = pPreRenderDevice ? *pPreRenderDevice : getOutputDevice();
 
             // Ensure buffer is valid
             ImpPrepareBufferDevice();

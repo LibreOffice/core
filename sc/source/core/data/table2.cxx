@@ -1638,7 +1638,7 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
             }
         }
     }
-    return (bIsFirstNoteShownState) ? CommentCaptionState::ALLSHOWN : CommentCaptionState::ALLHIDDEN;
+    return bIsFirstNoteShownState ? CommentCaptionState::ALLSHOWN : CommentCaptionState::ALLHIDDEN;
 }
 
 void ScTable::GetUnprotectedCells( ScRangeList& rRangeList ) const

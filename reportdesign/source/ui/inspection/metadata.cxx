@@ -162,21 +162,21 @@ namespace rptui
     OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sTranslation : OUString();
+        return pInfo ? pInfo->sTranslation : OUString();
     }
 
 
     OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sHelpId : OString();
+        return pInfo ? pInfo->sHelpId : OString();
     }
 
 
     PropUIFlags OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->nUIFlags : PropUIFlags::NONE;
+        return pInfo ? pInfo->nUIFlags : PropUIFlags::NONE;
     }
 
 

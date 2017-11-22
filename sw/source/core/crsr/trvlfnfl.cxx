@@ -52,7 +52,7 @@ bool SwCursor::GotoFootnoteText()
     bool bRet = false;
     SwTextNode* pTextNd = GetPoint()->nNode.GetNode().GetTextNode();
 
-    SwTextAttr *const pFootnote( (pTextNd)
+    SwTextAttr *const pFootnote( pTextNd
         ? pTextNd->GetTextAttrForCharAt(
             GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN)
         : nullptr);

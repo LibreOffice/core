@@ -1355,7 +1355,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
         sal_uInt16 nPgNum = static_cast< sal_uInt16 >(m_pPageNoNF->GetValue());
         bool const usePageNo(bState && m_pPageNoCB->IsChecked());
         boost::optional<sal_uInt16> const oPageNum(
-                (usePageNo) ? nPgNum : boost::optional<sal_Int16>());
+                usePageNo ? nPgNum : boost::optional<sal_Int16>());
         if (!pDesc || !pDesc->GetPageDesc()
             || (pDesc->GetPageDesc()->GetName() != sPage)
             || (pDesc->GetNumOffset() != oPageNum))

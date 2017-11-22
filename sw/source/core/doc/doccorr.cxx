@@ -172,7 +172,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
 {
     SwContentNode *const pContentNode( rOldNode.GetNode().GetContentNode() );
     SwPaM const aPam(rOldNode, 0,
-                     rOldNode, (pContentNode) ? pContentNode->Len() : 0);
+                     rOldNode, pContentNode ? pContentNode->Len() : 0);
     SwPosition aNewPos(rNewPos);
     aNewPos.nContent += nOffset;
 
@@ -233,7 +233,7 @@ void SwDoc::CorrAbs(
     {
         SwContentNode *const pContentNode( rEndNode.GetNode().GetContentNode() );
         SwPaM const aPam(rStartNode, 0,
-                         rEndNode, (pContentNode) ? pContentNode->Len() : 0);
+                         rEndNode, pContentNode ? pContentNode->Len() : 0);
         ::PaMCorrAbs(aPam, rNewPos);
     }
 }

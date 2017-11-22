@@ -1874,7 +1874,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool 
     // positioned on the first sentence
     long nDelta = nNewTopRow - GetTopRow();
     // limit for relative positioning
-    long nLimit = (nCacheSize) ? nCacheSize / 2 : 0;
+    long nLimit = nCacheSize ? nCacheSize / 2 : 0;
 
     // more lines on screen than in cache
     if (nLimit < nLinesOnScreen)

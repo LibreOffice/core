@@ -251,7 +251,7 @@ namespace sdr
                     aRegionBoundRect.Left(), aRegionBoundRect.Top(),
                     aRegionBoundRect.Right(), aRegionBoundRect.Bottom());
 
-                OutputDevice& rTarget = (pPreRenderDevice) ? *pPreRenderDevice : getOutputDevice();
+                OutputDevice& rTarget = pPreRenderDevice ? *pPreRenderDevice : getOutputDevice();
                 ImpDrawMembers(aRegionRange, rTarget);
             }
         }

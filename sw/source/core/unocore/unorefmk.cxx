@@ -223,7 +223,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     bool bMark = *rPam.GetPoint() != *rPam.GetMark();
 
     const bool bForceExpandHints( !bMark && pCursor && pCursor->IsAtEndOfMeta() );
-    const SetAttrMode nInsertFlags = (bForceExpandHints)
+    const SetAttrMode nInsertFlags = bForceExpandHints
         ?   ( SetAttrMode::FORCEHINTEXPAND
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND;
@@ -298,7 +298,7 @@ SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     }
     SwDoc *const pDocument =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
+        pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDocument)
     {
         throw lang::IllegalArgumentException();
@@ -552,7 +552,7 @@ const SwStartNode *SwXMetaText::GetStartNode() const
 {
     SwXText const * const pParent(
             dynamic_cast<SwXText*>(m_rMeta.GetParentText().get()));
-    return (pParent) ? pParent->GetStartNode() : nullptr;
+    return pParent ? pParent->GetStartNode() : nullptr;
 }
 
 void SwXMetaText::PrepareForAttach( uno::Reference<text::XTextRange> & xRange,
@@ -705,7 +705,7 @@ SwXMeta::~SwXMeta()
 uno::Reference<rdf::XMetadatable>
 SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
 {
-    SwXMeta *const pXMeta((isField)
+    SwXMeta *const pXMeta(isField
             ? new SwXMetaField(& rDoc) : new SwXMeta(& rDoc));
     // this is why the constructor is private: need to acquire pXMeta here
     uno::Reference<rdf::XMetadatable> const xMeta(pXMeta);
@@ -975,7 +975,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     }
     SwXTextRange *const pRange(
             ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel));
-    OTextCursorHelper *const pCursor( (pRange) ? nullptr :
+    OTextCursorHelper *const pCursor( pRange ? nullptr :
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel));
     if (!pRange && !pCursor)
     {
@@ -1001,7 +1001,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     SwXTextCursor const*const pTextCursor(
             dynamic_cast<SwXTextCursor*>(pCursor));
     const bool bForceExpandHints(pTextCursor && pTextCursor->IsAtEndOfMeta());
-    const SetAttrMode nInsertFlags( (bForceExpandHints)
+    const SetAttrMode nInsertFlags( bForceExpandHints
         ?   ( SetAttrMode::FORCEHINTEXPAND
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND );
@@ -1254,7 +1254,7 @@ uno::Reference<frame::XModel> SwXMeta::GetModel()
         if (pTextNode)
         {
             SwDocShell const * const pShell(pTextNode->GetDoc()->GetDocShell());
-            return (pShell) ? pShell->GetModel() : nullptr;
+            return pShell ? pShell->GetModel() : nullptr;
         }
     }
     return nullptr;
@@ -1462,7 +1462,7 @@ lcl_getURI(const bool bPrefix)
     static uno::Reference< rdf::XURI > xOdfSuffix(
         rdf::URI::createKnown(xContext, rdf::URIs::ODF_SUFFIX),
         uno::UNO_SET_THROW);
-    return (bPrefix) ? xOdfPrefix : xOdfSuffix;
+    return bPrefix ? xOdfPrefix : xOdfSuffix;
 }
 
 static OUString

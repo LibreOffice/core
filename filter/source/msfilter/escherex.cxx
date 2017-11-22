@@ -1891,7 +1891,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     {
         css::uno::Any aAny;
         bRetValue = EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        ( bBezier ) ? OUString("PolyPolygonBezier") : OUString("PolyPolygon"), true );
+                        bBezier ? OUString("PolyPolygonBezier") : OUString("PolyPolygon"), true );
         if ( bRetValue )
         {
             aPolyPolygon = GetPolyPolygon( aAny );
@@ -4003,7 +4003,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
 
 void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, sal_uInt32 nResize )
 {
-    sal_uInt32  nPictureOffset = ( bWritePictureOffset ) ? mnPictureOffset : 0;
+    sal_uInt32  nPictureOffset = bWritePictureOffset ? mnPictureOffset : 0;
 
     rSt.WriteUInt32( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) )
        .WriteUInt32( 36 + nResize )
@@ -4452,9 +4452,9 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
     sal_uInt32 nRule = 0;
 
     css::uno::Any aAny;
-    css::awt::Point aRefPoint( ( bFirst ) ? maPointA : maPointB );
+    css::awt::Point aRefPoint( bFirst ? maPointA : maPointB );
     css::uno::Reference< css::drawing::XShape >
-        aXShape( ( bFirst ) ? mXConnectToA : mXConnectToB );
+        aXShape( bFirst ? mXConnectToA : mXConnectToB );
 
     OUString aString(aXShape->getShapeType());
     OStringBuffer aBuf(OUStringToOString(aString, RTL_TEXTENCODING_UTF8));

@@ -1195,7 +1195,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
         return true;    // ignore (do not create a new Fkp)
     }
 
-    sal_uInt8 nOldP = ( nVarLen ) ? SearchSameSprm( nVarLen, pSprms ) : 0;
+    sal_uInt8 nOldP = nVarLen ? SearchSameSprm( nVarLen, pSprms ) : 0;
                                             // Combine equal entries
     short nOffset=0, nPos = nStartGrp;
     if (nVarLen && !nOldP)

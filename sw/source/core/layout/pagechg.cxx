@@ -1017,7 +1017,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
         bool bIsOdd = pPage->OnRightPage();
         bool bWantOdd = pPage->WannaRightPage();
         bool bFirst = pPage->OnFirstPage();
-        SwFrameFormat *pFormatWish = (bWantOdd)
+        SwFrameFormat *pFormatWish = bWantOdd
             ? pDesc->GetRightFormat(bFirst) : pDesc->GetLeftFormat(bFirst);
 
         if ( bIsOdd != bWantOdd ||
@@ -1058,7 +1058,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                      pNextPage->GetPageDesc() == (pNextDesc = pNextPage->FindPageDesc()) )   //4.
                 {
                     bool bNextFirst = pNextPage->OnFirstPage();
-                    SwFrameFormat *pNextFormatWish = (bNextWantOdd) ?   //5.
+                    SwFrameFormat *pNextFormatWish = bNextWantOdd ?   //5.
                         pNextDesc->GetRightFormat(bNextFirst) : pNextDesc->GetLeftFormat(bNextFirst);
                     if ( !pNextFormatWish )    // 6.
                         pNextFormatWish = bNextWantOdd ? pNextDesc->GetLeftFormat() : pNextDesc->GetRightFormat();
@@ -1292,7 +1292,7 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
                           pPrevPage->GetPageDesc(), bFootnote, nullptr ) )
             bCheckPages = true;
     }
-    SwFrameFormat *const pFormat( (bWishedOdd)
+    SwFrameFormat *const pFormat( bWishedOdd
             ? pDesc->GetRightFormat(bWishedFirst)
             : pDesc->GetLeftFormat(bWishedFirst) );
     assert(pFormat);

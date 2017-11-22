@@ -1585,7 +1585,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, void)
     if( !bIndex)
         bIndex = pIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.
-    sal_uInt16 nPageId = ( bIndex ) ? m_pTabCtrl->GetPageId("index") : m_pTabCtrl->GetPageId("find");
+    sal_uInt16 nPageId = bIndex ? m_pTabCtrl->GetPageId("index") : m_pTabCtrl->GetPageId("find");
     if ( nPageId != m_pTabCtrl->GetCurPageId() )
     {
         m_pTabCtrl->SetCurPageId( nPageId );

@@ -301,7 +301,7 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
         return xErrorBar;
 
     const OUString aPropName(
-            (bYError) ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X));
+            bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X));
     if( !( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar ) ||
         !xErrorBar.is())
     {
@@ -326,7 +326,7 @@ Reference< beans::XPropertySet > StatisticsHelper::getErrorBars(
     Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
     Reference< beans::XPropertySet > xErrorBar;
     const OUString aPropName(
-            (bYError) ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X));
+            bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X));
 
     if ( xSeriesProp.is())
         xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar;

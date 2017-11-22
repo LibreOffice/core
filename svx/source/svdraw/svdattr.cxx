@@ -964,7 +964,7 @@ bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue() != drawi
 
 void SdrTextFitToSizeTypeItem::SetBoolValue(bool bVal)
 {
-    SetValue((bVal) ? drawing::TextFitToSizeType_PROPORTIONAL : drawing::TextFitToSizeType_NONE);
+    SetValue(bVal ? drawing::TextFitToSizeType_PROPORTIONAL : drawing::TextFitToSizeType_NONE);
 }
 
 bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const

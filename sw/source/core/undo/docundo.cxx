@@ -671,7 +671,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     {
         return false;
     }
-    SwUndoId const nId((pSwAction)
+    SwUndoId const nId(pSwAction
             ? pSwAction->GetId()
             : static_cast<SwUndoId>(pListAction->GetId()));
     if (DoesUndo())

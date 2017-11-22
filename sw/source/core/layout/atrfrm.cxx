@@ -1523,7 +1523,7 @@ void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
                     dynamic_cast<SwStartNode*>(&pPos->nNode.GetNode()))
             || (RndStdIds::FLY_AT_PARA == m_eAnchorId && dynamic_cast<SwTableNode*>(&pPos->nNode.GetNode()))
             || dynamic_cast<SwTextNode*>(&pPos->nNode.GetNode()));
-    m_pContentAnchor .reset( (pPos) ? new SwPosition( *pPos ) : nullptr );
+    m_pContentAnchor .reset( pPos ? new SwPosition( *pPos ) : nullptr );
     // Flys anchored AT paragraph should not point into the paragraph content
     if (m_pContentAnchor &&
         ((RndStdIds::FLY_AT_PARA == m_eAnchorId) || (RndStdIds::FLY_AT_FLY == m_eAnchorId)))

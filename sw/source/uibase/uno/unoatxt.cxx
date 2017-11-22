@@ -300,12 +300,12 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
     SwContentNode * pNd = aIdx.GetNode().GetContentNode();
-    SwPosition aPos(aIdx, SwIndex(pNd, (pNd) ? pNd->Len() : 0));
+    SwPosition aPos(aIdx, SwIndex(pNd, pNd ? pNd->Len() : 0));
 
     bool bRet = false;
     pInsDoc->getIDocumentFieldsAccess().LockExpFields();
     {
-        SwDoc *const pDoc((pxCursor) ? pxCursor->GetDoc() : &pxRange->GetDoc());
+        SwDoc *const pDoc(pxCursor ? pxCursor->GetDoc() : &pxRange->GetDoc());
         SwPaM aPam(pDoc->GetNodes());
         SwPaM * pPam(nullptr);
         if(pxCursor)
