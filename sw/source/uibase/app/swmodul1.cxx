@@ -421,7 +421,7 @@ void SwModule::SetRedlineAuthor(const OUString &rAuthor)
 OUString SwModule::GetRedlineAuthor(std::size_t nPos)
 {
     OSL_ENSURE(nPos < m_pAuthorNames.size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
-    while(!(nPos < m_pAuthorNames.size()))
+    while(nPos >= m_pAuthorNames.size())
     {
         InsertRedlineAuthor("nn");
     }

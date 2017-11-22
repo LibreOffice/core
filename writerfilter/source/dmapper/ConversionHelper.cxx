@@ -321,7 +321,7 @@ OUString ConvertMSFormatStringToSO(
         {
             ++nI;
             //While not at the end and not at an unescaped end quote
-            while ((nI < nLen) && (!(aNewFormat[nI] == '\"') && (aNewFormat[nI-1] != '\\')))
+            while ((nI < nLen) && ((aNewFormat[nI] != '\"') && (aNewFormat[nI-1] != '\\')))
                 ++nI;
         }
         else //normal unquoted section

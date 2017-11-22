@@ -602,7 +602,7 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
 
             const bool bFlyCmp = pTmpPortion->IsFlyCntPortion() ?
                                      static_cast<const SwFlyCntPortion*>(pTmpPortion)->IsMax() :
-                                     !( pTmpPortion == _pDontConsiderPortion );
+                                     ( pTmpPortion != _pDontConsiderPortion );
 
             if ( bFlyCmp )
             {

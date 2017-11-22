@@ -1689,8 +1689,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
 
         if ( !bEnglishFormat )
         {
-            if ( !(nCheckPos == 0) || xTransliteration->isEqual( sFormatString,
-                                                                 pEntry->GetFormatstring() ) )
+            if ( nCheckPos != 0 || xTransliteration->isEqual( sFormatString,
+                                                              pEntry->GetFormatstring() ) )
             {
                 // other Format
                 sTmpString = sFormatString;

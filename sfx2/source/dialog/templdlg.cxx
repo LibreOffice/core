@@ -327,7 +327,7 @@ void SfxActionListBox::Recalc()
 VclPtr<PopupMenu> SfxActionListBox::CreateContextMenu()
 {
 
-    if( !( GetSelectionCount() > 0 ) )
+    if(  GetSelectionCount() <= 0 )
     {
         pDialog->EnableEdit( false );
         pDialog->EnableDel( false );

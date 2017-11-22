@@ -222,7 +222,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton, void )
         {
             delete m_aModifiedBreakPointList.remove( pBrk );
             m_pComboBox->RemoveEntryAt(nEntry);
-            if ( nEntry && !( nEntry < m_pComboBox->GetEntryCount() ) )
+            if ( nEntry && nEntry >= m_pComboBox->GetEntryCount() )
                 nEntry--;
             m_pComboBox->SetText( m_pComboBox->GetEntry( nEntry ) );
             if (SfxDispatcher* pDispatcher = GetDispatcher())

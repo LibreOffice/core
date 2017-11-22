@@ -1533,8 +1533,8 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
     GenTmpVariables(ss,vSubArguments);
     int dataCol = 0;
     int dataRow = 0;
-    if(!(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef))
+    if(vSubArguments[0]->GetFormulaToken()->GetType() !=
+        formula::svDoubleVectorRef)
         throw Unhandled(__FILE__, __LINE__);
 
     formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();

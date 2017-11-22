@@ -685,7 +685,7 @@ retry:
         readStream(i_rImpl, i_xStorage, s_manifest, i_xBaseURI->getStringValue());
     } catch (const ucb::InteractiveAugmentedIOException & e) {
         // no manifest.rdf: this is not an error in ODF < 1.2
-        if (!(ucb::IOErrorCode_NOT_EXISTING_PATH == e.Code)) {
+        if (ucb::IOErrorCode_NOT_EXISTING_PATH != e.Code) {
             iaioe = e;
             err = true;
         }

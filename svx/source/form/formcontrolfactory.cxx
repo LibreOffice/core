@@ -425,7 +425,7 @@ namespace svxform
                     lcl_initializeCharacterAttributes( _rxControlModel );
 
                     if  (   !_rControlBoundRect.IsEmpty()
-                        &&  !( _rControlBoundRect.GetWidth() > 4 * _rControlBoundRect.GetHeight() )
+                        &&  ( _rControlBoundRect.GetWidth() <= 4 * _rControlBoundRect.GetHeight() )
                         )
                     {
                         if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )

@@ -903,7 +903,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
                 break;
 
             case SwFieldIds::SetExp:
-                if ( !(eGetMode == GETFLD_EXPAND) ||
+                if ( (eGetMode != GETFLD_EXPAND) ||
                      (nsSwGetSetExpType::GSE_STRING & pField->GetSubType()) )
                 {
                     sFormula = sTrue;

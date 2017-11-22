@@ -1831,7 +1831,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap const *_pMap,
         // #i22341# - add condition to handle map <aVCharMap>
         // that is ambiguous in the alignment.
         if ( _pMap[i].nAlign == _nAlign &&
-             ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
+             ( _pMap != aVCharMap || _pMap[i].nLBRelations & nLBRelations ) )
         {
             sSelEntry = sEntry;
         }

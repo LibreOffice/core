@@ -2300,7 +2300,7 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
             }
             else
                 pTbxObj = nullptr;
-        } while ( pTbxObj && !( pTbxObj->mnFirstInGroup == 1 ) );
+        } while ( pTbxObj && ( pTbxObj->mnFirstInGroup != 1 ) );
     }
     else
     {

@@ -123,7 +123,7 @@ bool Bookmark::Read(HWPFile & hwpf)
     if (!hwpf.Read2b(dummy))
         return false;
 
-    if (!(len == 34))// 2 * (BMK_COMMENT_LEN + 1) + 2
+    if (len != 34)// 2 * (BMK_COMMENT_LEN + 1) + 2
      {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -282,7 +282,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     UpdateBBox(this);
 
     ncell = nCell;
-    if (!(ncell > 0)){
+    if (ncell <= 0){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
@@ -656,7 +656,7 @@ bool AutoNum::Read(HWPFile & hwpf)
     hwpf.Read2b(&number, 1);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -679,7 +679,7 @@ bool NewNum::Read(HWPFile & hwpf)
     hwpf.Read2b(&number, 1);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -701,7 +701,7 @@ bool ShowPageNum::Read(HWPFile & hwpf)
     hwpf.Read2b(&shape, 1);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
      m_nPageNumber = hwpf.getCurrentPage();
@@ -725,7 +725,7 @@ bool PageNumCtrl::Read(HWPFile & hwpf)
     hwpf.Read2b(&what, 1);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -744,7 +744,7 @@ bool MailMerge::Read(HWPFile & hwpf)
     hwpf.Read1b(field_name, 20);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -762,7 +762,7 @@ bool Compose::Read(HWPFile & hwpf)
     hwpf.Read2b(compose, 3);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -781,7 +781,7 @@ bool Hyphen::Read(HWPFile & hwpf)
     hwpf.Read2b(&width, 1);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -802,7 +802,7 @@ bool TocMark::Read(HWPFile & hwpf)
     hwpf.Read2b(&kind, 1);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -825,7 +825,7 @@ bool IndexMark::Read(HWPFile & hwpf)
     hwpf.Read2b(&pgno, 1);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -851,7 +851,7 @@ bool Outline::Read(HWPFile & hwpf)
     hwpf.Read2b(deco, 14);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -870,7 +870,7 @@ bool KeepSpace::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();
@@ -889,7 +889,7 @@ bool FixedSpace::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy)){
+    if (hh != dummy){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return !hwpf.State();

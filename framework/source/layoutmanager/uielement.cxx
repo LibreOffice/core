@@ -61,7 +61,7 @@ namespace framework
                 if ( m_aDockedData.m_nDockedArea == ui::DockingArea_DOCKINGAREA_TOP ||
                      m_aDockedData.m_nDockedArea == ui::DockingArea_DOCKINGAREA_BOTTOM )
                 {
-                    if ( !( m_aDockedData.m_aPos.Y == aUIElement.m_aDockedData.m_aPos.Y ) )
+                    if (  m_aDockedData.m_aPos.Y != aUIElement.m_aDockedData.m_aPos.Y )
                         return  ( m_aDockedData.m_aPos.Y < aUIElement.m_aDockedData.m_aPos.Y );
                     else
                     {
@@ -76,7 +76,7 @@ namespace framework
                 }
                 else
                 {
-                    if ( !( m_aDockedData.m_aPos.X == aUIElement.m_aDockedData.m_aPos.X ) )
+                    if ( m_aDockedData.m_aPos.X != aUIElement.m_aDockedData.m_aPos.X )
                         return ( m_aDockedData.m_aPos.X < aUIElement.m_aDockedData.m_aPos.X );
                     else
                     {

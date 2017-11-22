@@ -1641,7 +1641,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util
 
 void SvXMLNumFormatContext::CreateAndInsert(bool /*bOverwrite*/)
 {
-    if (!(nKey > -1))
+    if (nKey <= -1)
         CreateAndInsert(pData->GetNumberFormatter());
 }
 

@@ -789,7 +789,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         else if( PyObject_IsInstance( o, getAnyClass( runtime ).get() ) )
         {
-            if( !(ACCEPT_UNO_ANY == mode) )
+            if( ACCEPT_UNO_ANY != mode )
             {
                 throw RuntimeException(
                     "uno.Any instance not accepted during method call, "

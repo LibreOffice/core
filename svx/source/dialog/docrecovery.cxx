@@ -98,8 +98,8 @@ bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
     // Note: If the original files was recovery ... but a temp file
     // exists ... an error inside the temp file exists!
     if (
-        !(rInfo.RecoveryState == E_RECOVERY_FAILED            ) &&
-        !(rInfo.RecoveryState == E_ORIGINAL_DOCUMENT_RECOVERED)
+        (rInfo.RecoveryState != E_RECOVERY_FAILED            ) &&
+        (rInfo.RecoveryState != E_ORIGINAL_DOCUMENT_RECOVERED)
        )
        return false;
 
