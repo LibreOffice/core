@@ -23,11 +23,7 @@
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
-#ifndef ANDROID
 #include <unwind.h>
-#else
-#include <unwind-arm.h>
-#endif
 
 #include <cxxabi.h>
 #ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
@@ -37,13 +33,35 @@
 #include "config_cxxabi.h"
 #include "uno/mapping.h"
 
-namespace CPPU_CURRENT_NAMESPACE
-{
+#if !HAVE_CXXABI_H_CLASS_TYPE_INFO
+// <https://mentorembedded.github.io/cxx-abi/abi.html>,
+// libstdc++-v3/libsupc++/cxxabi.h:
+namespace __cxxabiv1 {
+class __class_type_info: public std::type_info {
+public:
+    explicit __class_type_info(char const * n): type_info(n) {}
+    ~__class_type_info() override;
+};
+}
+#endif
 
-    void dummy_can_throw_anything( char const * );
+#if !HAVE_CXXABI_H_SI_CLASS_TYPE_INFO
+// <https://mentorembedded.github.io/cxx-abi/abi.html>,
+// libstdc++-v3/libsupc++/cxxabi.h:
+namespace __cxxabiv1 {
+class __si_class_type_info: public __class_type_info {
+public:
+    __class_type_info const * __base_type;
+    explicit __si_class_type_info(
+        char const * n, __class_type_info const *base):
+        __class_type_info(n), __base_type(base) {}
+    ~__si_class_type_info() override;
+};
+}
+#endif
 
-    // -- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
-
+#if !HAVE_CXXABI_H_CXA_EH_GLOBALS
+namespace __cxxabiv1 {
     struct __cxa_exception
     {
         std::type_info *exceptionType;
@@ -68,12 +86,26 @@ namespace CPPU_CURRENT_NAMESPACE
         _Unwind_Exception unwindHeader;
     };
 
+}
+#endif
+
+namespace CPPU_CURRENT_NAMESPACE
+{
+
+    void dummy_can_throw_anything( char const * );
+
+    // -- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
+
     extern "C" void *__cxa_allocate_exception(
         std::size_t thrown_size ) throw();
     extern "C" void __cxa_throw (
         void *thrown_exception, std::type_info *tinfo,
         void (*dest) (void *) ) __attribute__((noreturn));
 
+}
+
+#if !HAVE_CXXABI_H_CXA_EH_GLOBALS
+namespace __cxxabiv1 {
     struct __cxa_eh_globals
     {
         __cxa_exception *caughtExceptions;
@@ -83,6 +115,7 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
     };
 }
+#endif
 
 #if !HAVE_CXXABI_H_CXA_GET_GLOBALS
 namespace __cxxabiv1 {
@@ -95,7 +128,7 @@ namespace CPPU_CURRENT_NAMESPACE
     void raiseException(
         uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
     void fillUnoException(
-        __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+        __cxxabiv1::__cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
 
 extern "C" void privateSnippetExecutor();
