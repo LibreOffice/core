@@ -146,15 +146,16 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
     }
 
     if (auto declRefExpr = dyn_cast<DeclRefExpr>(subExpr)) {
-        if (declRefExpr->getLocStart().isMacroID())
-            return true;
-
-        // hack for BAD_CAST macro
-        SourceManager& SM = compiler.getSourceManager();
-        const char *p1 = SM.getCharacterData( declRefExpr->getLocStart().getLocWithOffset(-10) );
-        const char *p2 = SM.getCharacterData( declRefExpr->getLocStart() );
-        if ( std::string(p1, p2 - p1).find("BAD_CAST") != std::string::npos )
-            return true;
+        // hack for libxml2's BAD_CAST object-like macro (expanding to "(xmlChar *)"), which is
+        // typically used as if it were a function-like macro, e.g., as "BAD_CAST(pName)" in
+        // SwNode::dumpAsXml (sw/source/core/docnode/node.cxx)
+        if (!declRefExpr->getLocStart().isMacroID()) {
+            SourceManager& SM = compiler.getSourceManager();
+            const char *p1 = SM.getCharacterData( declRefExpr->getLocStart().getLocWithOffset(-10) );
+            const char *p2 = SM.getCharacterData( declRefExpr->getLocStart() );
+            if ( std::string(p1, p2 - p1).find("BAD_CAST") != std::string::npos )
+                return true;
+        }
 
         report(
             DiagnosticsEngine::Warning, "unnecessary parentheses around identifier",
@@ -163,9 +164,7 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
     }
 
 
-    if (auto cxxNamedCastExpr = dyn_cast<CXXNamedCastExpr>(subExpr)) {
-        if (cxxNamedCastExpr->getLocStart().isMacroID())
-            return true;
+    if (isa<CXXNamedCastExpr>(subExpr)) {
         report(
             DiagnosticsEngine::Warning, "unnecessary parentheses around cast",
             parenExpr->getLocStart())
@@ -209,8 +208,6 @@ bool UnnecessaryParen::VisitReturnStmt(const ReturnStmt* returnStmt)
 {
     if (ignoreLocation(returnStmt))
         return true;
-    if (returnStmt->getLocStart().isMacroID())
-        return true;
 
     if (!returnStmt->getRetValue())
         return true;
@@ -240,8 +237,6 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt * stmt, const Expr* cond, String
 {
     if (ignoreLocation(stmt))
         return;
-    if (stmt->getLocStart().isMacroID())
-        return;
 
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(cond));
     if (parenExpr) {
@@ -269,8 +264,6 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
 {
     if (ignoreLocation(callExpr))
         return true;
-    if (callExpr->getLocStart().isMacroID())
-        return true;
     if (callExpr->getNumArgs() != 1 || isa<CXXOperatorCallExpr>(callExpr))
         return true;
 
@@ -293,8 +286,6 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
 bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callExpr)
 {
     if (ignoreLocation(callExpr))
-        return true;
-    if (callExpr->getLocStart().isMacroID())
         return true;
     if (callExpr->getNumArgs() != 2)
         return true;
@@ -333,8 +324,6 @@ bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callE
 bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)
 {
     if (ignoreLocation(varDecl))
-        return true;
-    if (varDecl->getLocStart().isMacroID())
         return true;
     if (!varDecl->getInit())
         return true;

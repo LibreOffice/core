@@ -3599,7 +3599,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 
             // clear DND_ACTION_LINK when other actions are set. The usage below cannot handle
             // multiple set values
-            if((nMyAction & DND_ACTION_LINK) && (nMyAction & (DND_ACTION_COPYMOVE)))
+            if((nMyAction & DND_ACTION_LINK) && (nMyAction & DND_ACTION_COPYMOVE))
             {
                 nMyAction &= ~DND_ACTION_LINK;
             }
