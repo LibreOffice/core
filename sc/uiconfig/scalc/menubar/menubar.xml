@@ -84,7 +84,7 @@
             <menu:menuitem menu:id=".uno:Cut"/>
             <menu:menuitem menu:id=".uno:Copy"/>
             <menu:menuitem menu:id=".uno:Paste"/>
-            <menu:menuitem menu:id=".uno:PasteSpecial"/>
+            <menu:menuitem menu:id=".uno:PasteUnformatted"/>
             <menu:menu menu:id=".uno:PasteOnly">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:PasteOnlyText"/>
@@ -92,6 +92,7 @@
                     <menu:menuitem menu:id=".uno:PasteOnlyFormula"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:PasteSpecial"/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menu menu:id=".uno:EditSelectMenu">
                 <menu:menupopup>
