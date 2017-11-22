@@ -599,7 +599,7 @@ namespace xmloff
         // some integer properties
         {
             // now the common handling
-            static CCAFlags nIntegerPropertyAttributeIds[] =
+            static const CCAFlags nIntegerPropertyAttributeIds[] =
             {   // attribute flags
                 CCAFlags::Size, CCAFlags::TabIndex
             };
@@ -998,7 +998,7 @@ namespace xmloff
 
         // the integer properties
         {
-            static SCAFlags nIntegerPropertyAttributeIds[] =
+            static const SCAFlags nIntegerPropertyAttributeIds[] =
             {   // attribute flags
                 SCAFlags::PageStepSize
             };
@@ -1862,11 +1862,11 @@ namespace xmloff
             }
             else
             {
-                XMLTokenEnum eXmlImagePositions[] =
+                const XMLTokenEnum eXmlImagePositions[] =
                 {
                     XML_START, XML_END, XML_TOP, XML_BOTTOM
                 };
-                XMLTokenEnum eXmlImageAligns[] =
+                const XMLTokenEnum eXmlImageAligns[] =
                 {
                     XML_START, XML_CENTER, XML_END
                 };

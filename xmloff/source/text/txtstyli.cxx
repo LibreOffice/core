@@ -417,7 +417,7 @@ void XMLTextStyleContext::FillPropertySet(
     };
 
     // the style families associated with the same index modulo 4
-    static sal_uInt16 aFamilies[] =
+    static const sal_uInt16 aFamilies[] =
     {
         XML_STYLE_FAMILY_SD_GRADIENT_ID,
         XML_STYLE_FAMILY_SD_GRADIENT_ID,

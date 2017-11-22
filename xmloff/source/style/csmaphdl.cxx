@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-static SvXMLEnumMapEntry<sal_uInt16> pXML_Casemap_Enum[] =
+static const SvXMLEnumMapEntry<sal_uInt16> pXML_Casemap_Enum[] =
 {
     { XML_NONE,                 style::CaseMap::NONE },
     { XML_CASEMAP_LOWERCASE,    style::CaseMap::LOWERCASE },
