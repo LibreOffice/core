@@ -10,26 +10,32 @@
 $(eval $(call gb_Module_Module,more_fonts))
 
 $(eval $(call gb_Module_add_targets,more_fonts,\
+	ExternalPackage_alef \
 	ExternalPackage_caladea \
 	ExternalPackage_carlito \
+	ExternalPackage_culmus \
 	ExternalPackage_dejavu \
 	ExternalPackage_gentium \
 	ExternalPackage_liberation \
 	ExternalPackage_liberation_narrow \
 	ExternalPackage_libertineg \
+	ExternalPackage_libre_hebrew \
 	ExternalPackage_opensans \
 	ExternalPackage_ptserif \
 	ExternalPackage_sourcecode \
 	ExternalPackage_sourcesans \
 	ExternalPackage_noto \
 	ExternalPackage_EmojiOne_Color \
+	UnpackedTarball_alef \
 	UnpackedTarball_caladea \
 	UnpackedTarball_carlito \
+	UnpackedTarball_culmus \
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
 	UnpackedTarball_liberation \
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \
+	UnpackedTarball_libre_hebrew \
 	UnpackedTarball_opensans \
 	UnpackedTarball_ptserif \
 	UnpackedTarball_sourcecode \
