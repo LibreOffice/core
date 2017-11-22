@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
 
+#include <sal/macros.h>
+
 typedef struct {
     char const *oid;
     char const *desc;
@@ -147,7 +149,7 @@ OIDItem OIDs[] = {
     {"1.2.643.2.2.36.0", "GOST_R_34.10-2001_Sign_DH_PRO"}
 };
 
-int nOID = 119;
+const int nOID = SAL_N_ELEMENTS(OIDs);
 
 #endif
 
