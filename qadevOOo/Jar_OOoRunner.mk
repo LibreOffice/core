@@ -571,7 +571,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XEnhancedMouseClickBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_XFormulaQuery \
     qadevOOo/tests/java/ifc/sheet/_XRangeSelection \
-    qadevOOo/tests/java/ifc/sheet/_XSheetCellCursor \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesAsian \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesComplex \
