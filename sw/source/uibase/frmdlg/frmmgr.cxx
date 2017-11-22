@@ -335,8 +335,8 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // aligned at character or top of line in a special case
     else if ((eAnchorType == RndStdIds::FLY_AT_PARA) ||
                 ((eAnchorType == RndStdIds::FLY_AT_CHAR) &&
-                !(rVal.nVRelOrient == text::RelOrientation::CHAR) &&
-                !(rVal.nVRelOrient == text::RelOrientation::TEXT_LINE) ) )
+                (rVal.nVRelOrient != text::RelOrientation::CHAR) &&
+                (rVal.nVRelOrient != text::RelOrientation::TEXT_LINE) ) )
     {
         if (rVal.nHPos + rVal.nWidth > aBoundRect.Right())
         {

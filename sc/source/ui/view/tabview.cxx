@@ -2436,7 +2436,7 @@ void BoundsProvider<IndexType>::Compute(
     SAL_INFO("sc.lok.header", "BoundsProvider: rBottomNearest: index: " << aSecondNearest.first
             << ", pos: " << aSecondNearest.second << ", diff: " << nSecondDiff);
 
-    bool bReverse = !(std::abs(nFirstDiff) < std::abs(nSecondDiff));
+    bool bReverse = (std::abs(nFirstDiff) >= std::abs(nSecondDiff));
 
     if(bReverse)
     {

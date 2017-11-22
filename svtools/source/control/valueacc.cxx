@@ -501,7 +501,7 @@ sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int32 nChildIndex 
     const SolarMutexGuard aSolarGuard;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
 
-    if (!(pItem != nullptr))
+    if (pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
 
     bool  bRet = mpParent->IsItemSelected( pItem->mnId );

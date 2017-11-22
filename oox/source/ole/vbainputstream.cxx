@@ -122,7 +122,7 @@ bool VbaInputStream::updateChunk()
     if( mbEof ) return false;
 
     // check header signature
-    bool bIgnoreBrokenSig = !( (nHeader & VBACHUNK_SIGMASK) == VBACHUNK_SIG );
+    bool bIgnoreBrokenSig = ( (nHeader & VBACHUNK_SIGMASK) != VBACHUNK_SIG );
 
     // decode length of chunk data and compression flag
     bool bCompressed = getFlag( nHeader, VBACHUNK_COMPRESSED );

@@ -395,7 +395,7 @@ void CGM::ImplDoClass4()
                         fStartAngle = fEndAngle;
                         fEndAngle = fG;
                     }
-                    if ( ! ( fInterAngle > fStartAngle )  && ( fInterAngle < fEndAngle ) )
+                    if ( ( fInterAngle <= fStartAngle )  && ( fInterAngle < fEndAngle ) )
                     {
                         nSwitch ^=1;
                         aIntermediatePoint = aEndingPoint;
@@ -465,7 +465,7 @@ void CGM::ImplDoClass4()
                         fStartAngle = fEndAngle;
                         fEndAngle = fG;
                     }
-                    if ( ! ( fInterAngle > fStartAngle )  && ( fInterAngle < fEndAngle ) )
+                    if ( ( fInterAngle <= fStartAngle )  && ( fInterAngle < fEndAngle ) )
                     {
                         aIntermediatePoint = aEndingPoint;
                         aEndingPoint = aStartingPoint;

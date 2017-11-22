@@ -225,7 +225,7 @@ namespace toolkitform
                     }
                 }
 
-                if ( !( i < nCount ) )
+                if (  i >= nCount )
                 {
                     // the loop terminated because there were no more elements
                     // -> step up, if possible

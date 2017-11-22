@@ -235,7 +235,7 @@ bool lcl_HasPreviousParaSameNumRule( const SwTextNode& rNode )
     const SwNode* pNode = &rNode;
     const SwNumRule* pNumRule = rNode.GetNumRule();
 
-    while (! (pNode == rNodes.DocumentSectionStartNode(const_cast<SwNode*>(static_cast<SwNode const *>(&rNode))) ) )
+    while (pNode != rNodes.DocumentSectionStartNode(const_cast<SwNode*>(static_cast<SwNode const *>(&rNode))) )
     {
         --aIdx;
 

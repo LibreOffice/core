@@ -347,7 +347,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD2(
     if (!pImpl || !pData)
         return rtl_Digest_E_Argument;
 
-    if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD2))
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD2)
         return rtl_Digest_E_Algorithm;
 
     if (nDatLen == 0)
@@ -406,7 +406,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD2(
     if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD2)
         return rtl_Digest_E_Algorithm;
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (pImpl->m_digest.m_length > nBufLen)
         return rtl_Digest_E_BufferSize;
 
     ctx = &(pImpl->m_context);
@@ -686,7 +686,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5(
     if (!pImpl || !pData)
         return rtl_Digest_E_Argument;
 
-    if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD5))
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD5)
         return rtl_Digest_E_Algorithm;
 
     if (nDatLen == 0)
@@ -760,7 +760,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD5(
     if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD5)
         return rtl_Digest_E_Algorithm;
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (pImpl->m_digest.m_length > nBufLen)
         return rtl_Digest_E_BufferSize;
 
     ctx = &(pImpl->m_context);
@@ -790,7 +790,7 @@ rtlDigestError SAL_CALL rtl_digest_rawMD5(
     if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD5)
         return rtl_Digest_E_Algorithm;
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (pImpl->m_digest.m_length > nBufLen)
         return rtl_Digest_E_BufferSize;
 
     ctx = &(pImpl->m_context);
@@ -1201,7 +1201,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA(
     if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmSHA)
         return rtl_Digest_E_Algorithm;
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (pImpl->m_digest.m_length > nBufLen)
         return rtl_Digest_E_BufferSize;
 
     ctx = &(pImpl->m_context);
@@ -1361,7 +1361,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA1 (
     if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmSHA1)
         return rtl_Digest_E_Algorithm;
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (pImpl->m_digest.m_length > nBufLen)
         return rtl_Digest_E_BufferSize;
 
     ctx = &(pImpl->m_context);
@@ -1555,7 +1555,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5(
     if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_MD5)
         return rtl_Digest_E_Algorithm;
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (pImpl->m_digest.m_length > nBufLen)
         return rtl_Digest_E_BufferSize;
 
     nBufLen = pImpl->m_digest.m_length;
@@ -1751,7 +1751,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1(
     if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1)
         return rtl_Digest_E_Algorithm;
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (pImpl->m_digest.m_length > nBufLen)
         return rtl_Digest_E_BufferSize;
 
     nBufLen = pImpl->m_digest.m_length;

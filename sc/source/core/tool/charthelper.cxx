@@ -258,7 +258,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
                 xLabeledSequence->setLabel( xNewSeq );
             }
 
-            if( !(nRange<rRanges.getLength()) )
+            if( nRange >= rRanges.getLength() )
                 break;
 
             if( xValues.is())

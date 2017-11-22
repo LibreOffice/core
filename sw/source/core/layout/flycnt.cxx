@@ -133,8 +133,8 @@ void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
                 else
                     pContent = pContent->GetPrevContentFrame();
             } while ( pContent &&
-                      !( bBodyFootnote == ( pContent->IsInDocBody() ||
-                                       pContent->IsInFootnote() ) ) );
+                      ( bBodyFootnote != ( pContent->IsInDocBody() ||
+                                           pContent->IsInFootnote() ) ) );
             if ( pContent )
                 aOldIdx = *pContent->GetNode();
 

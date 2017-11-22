@@ -2709,7 +2709,7 @@ void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
     SwEditShell* pEditShell = m_rDoc.GetEditShell();
     vcl::Window* pParent = pEditShell ? pEditShell->GetWin() : nullptr;
     if ( pParent && !mbReadlineChecked && rRedlineTable.size() > MAX_REDLINE_COUNT
-        && !((_rReadlineMode & RedlineFlags::ShowDelete) == RedlineFlags::ShowDelete) )
+        && ((_rReadlineMode & RedlineFlags::ShowDelete) != RedlineFlags::ShowDelete) )
     {
         ScopedVclPtrInstance< MessageDialog > aQuery(pParent, "QueryShowChangesDialog", "modules/swriter/ui/queryshowchangesdialog.ui");
         sal_uInt16 nResult = aQuery->Execute();

@@ -176,7 +176,7 @@ struct OStoreBTreeNodeData : public store::PageData
     */
     bool querySplit() const
     {
-        return (!(usageCount() < capacityCount()));
+        return usageCount() >= capacityCount();
     }
 
     /** Operation.

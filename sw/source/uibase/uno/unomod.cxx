@@ -354,7 +354,7 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
             sal_Int16 nTmp = 0;
             rValue >>= nTmp;
             SwPostItMode nVal = static_cast<SwPostItMode>(nTmp);
-            if(!(nVal <= SwPostItMode::EndPage))
+            if(nVal > SwPostItMode::EndPage)
                 throw lang::IllegalArgumentException();
 
             mpPrtOpt->SetPrintPostIts(nVal);

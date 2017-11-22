@@ -7929,7 +7929,7 @@ void PDFWriterImpl::endTransparencyGroup( const tools::Rectangle& rBoundingBox, 
     SAL_WARN_IF( nTransparentPercent > 100, "vcl.pdfwriter", "invalid alpha value" );
     nTransparentPercent = nTransparentPercent % 100;
 
-    if( !(m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4) )
+    if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 )
         return;
 
     // create XObject

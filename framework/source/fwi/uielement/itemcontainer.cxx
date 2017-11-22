@@ -210,7 +210,7 @@ void SAL_CALL ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
                                         static_cast<OWeakObject *>(this), 2 );
 
     ShareGuard aLock( m_aShareMutex );
-    if ( !(sal_Int32( m_aItemVector.size()) > Index) )
+    if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     m_aItemVector[Index] = aSeq;

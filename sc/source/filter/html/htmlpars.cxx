@@ -1069,7 +1069,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             }
         }
         bInCell = false;
-        if ( bTabInTabCell && !(nTableWidth < nLastWidth) )
+        if ( bTabInTabCell && (nTableWidth >= nLastWidth) )
         {   // Multiple tables in one cell, underneath each other
             bTabInTabCell = false;
             NextRow( pInfo );
