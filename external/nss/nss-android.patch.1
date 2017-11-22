@@ -39,10 +39,10 @@ diff -ur nss.org/nspr/configure nss/nspr/configure
 diff -ur nss.org/nss/Makefile nss/nss/Makefile
 --- nss.org/nss/Makefile	2017-09-07 15:29:44.933245745 +0200
 +++ nss/nss/Makefile	2017-09-07 15:32:04.347181076 +0200
-@@ -62,6 +62,7 @@
+@@ -62,6 +62,6 @@
  ifeq ($(OS_TARGET),Android)
  NSPR_CONFIGURE_OPTS += --with-android-ndk=$(ANDROID_NDK) \
-                        --target=$(ANDROID_PREFIX) \
+-                       --target=$(ANDROID_PREFIX) \
 +                       --with-arch=toolchain-default \
                         --with-android-version=$(OS_TARGET_RELEASE) \
                         --with-android-toolchain=$(ANDROID_TOOLCHAIN) \

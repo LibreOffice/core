@@ -19,47 +19,25 @@
 
 #include <math.h>
 
-#if defined(ANDROID)
+#if defined(ANDROID) && defined(ARM)
 #include <string>
 #include <sstream>
 
 namespace std
 {
+inline double fmax(double x, double y) { return ::fmax(x, y); }
 
-inline double fmax(double x, double y)
-{
-    return ::fmax(x, y);
-}
-
-inline long stol( const std::string& str, std::size_t* /*pos*/ = 0, int base = 10 )
+inline long stol(const std::string& str, std::size_t* /*pos*/ = 0, int base = 10)
 {
     char* end;
     return strtol(str.c_str(), &end, base);
 }
 
-template<typename T>
-T round(T x)
-{
-    return ::round(x);
-}
+template <typename T> T round(T x) { return ::round(x); }
 
-template<typename T>
-T trunc(T x)
-{
-    return ::trunc(x);
-}
+template <typename T> T trunc(T x) { return ::trunc(x); }
 
-template<typename T>
-T lround(T x)
-{
-    return ::lround(x);
-}
-
-template<typename T>
-T copysign(T x, T y)
-{
-    return ::copysign(x, y);
-}
+template <typename T> T lround(T x) { return ::lround(x); }
 
 template <typename T> std::string to_string(const T& rNumber)
 {

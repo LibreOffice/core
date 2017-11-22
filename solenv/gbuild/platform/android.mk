@@ -8,15 +8,26 @@
 #
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
-# Link with -lgnustl_static
+
+ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
+# TODO: gnustl is deprecated/will be removed in future versions of the ndk
+gb_STDLIBS := -lgnustl_static
+else
 gb_STDLIBS := \
-	-lgnustl_static \
-	-lm
+	-lc++_static \
+	-lc++abi \
+	-landroid_support \
+
+endif
 
 else
-# Link almost everything with -lgnustl_shared
-gb_STDLIBS := \
-	-lgnustl_shared \
+
+ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
+# TODO: gnustl is deprecated/will be removed in future versions of the ndk
+gb_STDLIBS := -lgnustl_shared
+else
+gb_STDLIBS := -lc++_shared
+endif
 
 endif
 

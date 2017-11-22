@@ -56,7 +56,7 @@ icu_LDFLAGS:=" \
     $(if $(SYSBASE),-L../lib -L../../lib -L../stubdata -L../../stubdata -L$(SYSBASE)/usr/lib) \
     $(if $(filter TRUE,$(HAVE_LD_BSYMBOLIC_FUNCTIONS)),\
 	    -Wl$(COMMA)-Bsymbolic-functions -Wl$(COMMA)--dynamic-list-cpp-new -Wl$(COMMA)--dynamic-list-cpp-typeinfo) \
-    $(if $(filter ANDROID,$(OS)),-lgnustl_shared -lm)"
+    $(if $(filter ANDROID,$(OS)),$(gb_STDLIBS))"
 
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
