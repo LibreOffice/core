@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_b07e0e17",
+        "filename": "binaryurp/source/bridge.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-22T07:41:09Z",
+      "side": 1,
+      "message": "udkapi/com/sun/star/lang/XComponent.idl: \"It is suggested to allow multiple registration of the same listener, thus for each time a listener is added, it has to be removed.\"\n\nI did not track your various \"replace list with vector\" changes carefully, so have no idea whether there are other places where you made a similar mistake.",
+      "parentUuid": "1a430d35_157d14b1",
+      "revId": "9d1f61a61893435b26f7239136ad92b7354545a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_048faccc",
         "filename": "binaryurp/source/bridgefactory.cxx",
         "patchSetId": 3
