@@ -139,4 +139,53 @@ void top8() {
     }
 }
 
+void top9() {
+    if (foo() == 1) { // expected-error {{large if statement at end of function, rather invert the condition and exit early, and flatten the function [loplugin:flatten]}}
+        Class aClass1;
+        (void)aClass1;
+        Class aClass2;
+        (void)aClass2;
+        Class aClass3;
+        (void)aClass3;
+        Class aClass4;
+        (void)aClass4;
+        Class aClass5;
+        (void)aClass5;
+        Class aClass6;
+        (void)aClass6;
+    }
+}
+
+void top10() {
+    // no warning expected
+    if (foo() == 2) {
+        if (foo() == 1) {
+            Class aClass1;
+            (void)aClass1;
+            Class aClass2;
+            (void)aClass2;
+            Class aClass3;
+            (void)aClass3;
+        }
+    }
+}
+
+int top11() {
+    // no warning expected
+    if (foo() == 1) {
+        Class aClass1;
+        (void)aClass1;
+        Class aClass2;
+        (void)aClass2;
+        Class aClass3;
+        (void)aClass3;
+        Class aClass4;
+        (void)aClass4;
+        Class aClass5;
+        (void)aClass5;
+        Class aClass6;
+        (void)aClass6;
+    }
+    return 1;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
