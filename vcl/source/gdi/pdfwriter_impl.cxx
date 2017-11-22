@@ -2293,13 +2293,13 @@ void PDFWriterImpl::endPage()
             it->m_aBitmap = BitmapEx();
         }
     }
-    for( std::list<JPGEmit>::iterator jpeg = m_aJPGs.begin(); jpeg != m_aJPGs.end(); ++jpeg )
+    for (auto & jpeg : m_aJPGs)
     {
-        if( jpeg->m_pStream )
+        if( jpeg.m_pStream )
         {
-            writeJPG( *jpeg );
-            jpeg->m_pStream.reset();
-            jpeg->m_aMask = Bitmap();
+            writeJPG( jpeg );
+            jpeg.m_pStream.reset();
+            jpeg.m_aMask = Bitmap();
         }
     }
     for( std::list<TransparencyEmit>::iterator t = m_aTransparentObjects.begin();
@@ -9796,7 +9796,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     if( ! rMask.IsEmpty() )
         aID.m_nMaskChecksum = rMask.GetChecksum();
 
-    std::list< JPGEmit >::const_iterator it;
+    std::vector< JPGEmit >::const_iterator it;
     for( it = m_aJPGs.begin(); it != m_aJPGs.end() && ! (aID == it->m_aID); ++it )
         ;
     if( it == m_aJPGs.end() )

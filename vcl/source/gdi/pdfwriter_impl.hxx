@@ -634,7 +634,7 @@ private:
      *  file stream as XObjects*/
     std::list< BitmapEmit >             m_aBitmaps;
     /* contains JPG streams until written to file     */
-    std::list<JPGEmit>                  m_aJPGs;
+    std::vector<JPGEmit>                m_aJPGs;
     /*--->i56629 contains all named destinations ever set during the PDF creation,
        destination id is always the destination's position in this vector
      */
