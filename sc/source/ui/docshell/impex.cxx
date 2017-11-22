@@ -861,7 +861,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
         for( ;; )
         {
             rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamCharSet(), nArbitraryLineLengthLimit );
-            if( rStrm.IsEof() )
+            if( rStrm.eof() )
                 break;
             SCCOL nCol = nStartCol;
             const sal_Unicode* p = aLine.getStr();
@@ -1319,7 +1319,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     while(--nSkipLines>0)
     {
         aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr); // content is ignored
-        if ( rStrm.IsEof() )
+        if ( rStrm.eof() )
             break;
     }
 
@@ -1342,7 +1342,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         for( ;; )
         {
             aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr);
-            if ( rStrm.IsEof() && aLine.isEmpty() )
+            if ( rStrm.eof() && aLine.isEmpty() )
                 break;
 
             if ( nRow > MAXROW )
@@ -1740,7 +1740,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
             //! allow unicode
             rStrm.ReadLine( aByteLine );
             aLine = OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
-            if( rStrm.IsEof() )
+            if( rStrm.eof() )
                 break;
             bool bInvalidCol = false;
             bool bInvalidRow = false;
@@ -2354,7 +2354,7 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
 
         sal_Int32 nLastOffset = 0;
         sal_Int32 nQuotes = 0;
-        while (!rStream.IsEof() && aStr.getLength() < nArbitraryLineLengthLimit)
+        while (!rStream.eof() && aStr.getLength() < nArbitraryLineLengthLimit)
         {
             const sal_Unicode *p, *pStart;
             p = pStart = aStr.getStr();

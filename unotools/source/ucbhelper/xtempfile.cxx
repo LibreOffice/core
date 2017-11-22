@@ -179,7 +179,7 @@ sal_Int32 SAL_CALL OTempFileService::readSomeBytes( css::uno::Sequence< sal_Int8
     if (nMaxBytesToRead < 0)
         throw css::io::BufferSizeExceededException( OUString(), static_cast < css::uno::XWeak * >( this ) );
 
-    if (mpStream->IsEof())
+    if (mpStream->eof())
     {
         aData.realloc(0);
         return 0;

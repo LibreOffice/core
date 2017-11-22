@@ -874,7 +874,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
     {
         char ch;
         rStream.ReadChar(ch);
-        if (rStream.IsEof())
+        if (rStream.eof())
             break;
 
         switch (ch)
@@ -1286,13 +1286,13 @@ OString PDFDocument::ReadKeyword(SvStream& rStream)
     OStringBuffer aBuf;
     char ch;
     rStream.ReadChar(ch);
-    if (rStream.IsEof())
+    if (rStream.eof())
         return OString();
     while (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
         aBuf.append(ch);
         rStream.ReadChar(ch);
-        if (rStream.IsEof())
+        if (rStream.eof())
             return aBuf.toString();
     }
     rStream.SeekRel(-1);
@@ -1334,7 +1334,7 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
     }
 
     rStream.SeekRel(itLastValid - aBuf.begin() + aPrefix.getLength());
-    if (rStream.IsEof())
+    if (rStream.eof())
     {
         SAL_WARN("vcl.filter", "PDFDocument::FindStartXRef: unexpected end of stream after startxref");
         return 0;
@@ -1702,7 +1702,7 @@ void PDFDocument::SkipWhitespace(SvStream& rStream)
     while (true)
     {
         rStream.ReadChar(ch);
-        if (rStream.IsEof())
+        if (rStream.eof())
             break;
 
         if (!rtl::isAsciiWhiteSpace(static_cast<unsigned char>(ch)))
@@ -1720,7 +1720,7 @@ void PDFDocument::SkipLineBreaks(SvStream& rStream)
     while (true)
     {
         rStream.ReadChar(ch);
-        if (rStream.IsEof())
+        if (rStream.eof())
             break;
 
         if (ch != '\n' && ch != '\r')
@@ -1899,7 +1899,7 @@ bool PDFCommentElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
     while (true)
     {
-        if (ch == '\n' || ch == '\r' || rStream.IsEof())
+        if (ch == '\n' || ch == '\r' || rStream.eof())
         {
             m_aComment = aBuf.makeStringAndClear();
 
@@ -1924,7 +1924,7 @@ bool PDFNumberElement::Read(SvStream& rStream)
     m_nOffset = rStream.Tell();
     char ch;
     rStream.ReadChar(ch);
-    if (rStream.IsEof())
+    if (rStream.eof())
     {
         return false;
     }
@@ -1934,7 +1934,7 @@ bool PDFNumberElement::Read(SvStream& rStream)
         rStream.SeekRel(-1);
         return false;
     }
-    while (!rStream.IsEof())
+    while (!rStream.eof())
     {
         if (!rtl::isAsciiDigit(static_cast<unsigned char>(ch)) && ch != '-'
                 && ch != '.')
@@ -1988,7 +1988,7 @@ bool PDFHexStringElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
 
     OStringBuffer aBuf;
-    while (!rStream.IsEof())
+    while (!rStream.eof())
     {
         if (ch == '>')
         {
@@ -2022,7 +2022,7 @@ bool PDFLiteralStringElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
 
     OStringBuffer aBuf;
-    while (!rStream.IsEof())
+    while (!rStream.eof())
     {
         if (ch == ')' && nPrevCh != '\\')
         {
@@ -2797,7 +2797,7 @@ bool PDFDictionaryElement::Read(SvStream& rStream)
         return false;
     }
 
-    if (rStream.IsEof())
+    if (rStream.eof())
     {
         SAL_WARN("vcl.filter", "PDFDictionaryElement::Read: unexpected end of file");
         return false;
@@ -2835,7 +2835,7 @@ bool PDFEndDictionaryElement::Read(SvStream& rStream)
         return false;
     }
 
-    if (rStream.IsEof())
+    if (rStream.eof())
     {
         SAL_WARN("vcl.filter", "PDFEndDictionaryElement::Read: unexpected end of file");
         return false;
@@ -2866,7 +2866,7 @@ bool PDFNameElement::Read(SvStream& rStream)
     }
     m_nLocation = rStream.Tell();
 
-    if (rStream.IsEof())
+    if (rStream.eof())
     {
         SAL_WARN("vcl.filter", "PDFNameElement::Read: unexpected end of file");
         return false;
@@ -2875,7 +2875,7 @@ bool PDFNameElement::Read(SvStream& rStream)
     // Read till the first white-space.
     OStringBuffer aBuf;
     rStream.ReadChar(ch);
-    while (!rStream.IsEof())
+    while (!rStream.eof())
     {
         if (rtl::isAsciiWhiteSpace(static_cast<unsigned char>(ch)) || ch == '/'
                 || ch == '[' || ch == ']' || ch == '<' || ch == '>' || ch == '(')

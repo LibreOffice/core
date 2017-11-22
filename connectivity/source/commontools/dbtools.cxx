@@ -2093,7 +2093,7 @@ namespace dbase
         dbf_Stream->ReadUChar( nType );
 
         dbf_Stream->Seek(STREAM_SEEK_TO_BEGIN + 29);
-        if (dbf_Stream->IsEof())
+        if (dbf_Stream->eof())
         {
             return false;
         }

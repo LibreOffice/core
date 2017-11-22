@@ -1126,7 +1126,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     bool bUnicodeChecked = false;
     bool bSkipped = false;
 
-    while (!Strm().IsEof()
+    while (!Strm().eof()
            && (m_aStates.top().nInternalState == RTFInternalState::HEX
                || (ch != '{' && ch != '}' && ch != '\\')))
     {
@@ -1179,7 +1179,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
 
         Strm().ReadChar(ch);
     }
-    if (m_aStates.top().nInternalState != RTFInternalState::HEX && !Strm().IsEof())
+    if (m_aStates.top().nInternalState != RTFInternalState::HEX && !Strm().eof())
         Strm().SeekRel(-1);
 
     if (m_aStates.top().nInternalState == RTFInternalState::HEX

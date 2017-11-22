@@ -413,7 +413,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC const & rPic, SvStream* pSt,
     sal_uLong nFilePos )
 {
     SwFrameFormat* pRet = nullptr;
-    if( pSt->IsEof() || rPic.fError || rPic.MFP.mm == 99 )
+    if( pSt->eof() || rPic.fError || rPic.MFP.mm == 99 )
         return nullptr;
 
     OUString aFileName;

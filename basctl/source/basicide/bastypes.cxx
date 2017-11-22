@@ -623,7 +623,7 @@ sal_uLong CalcLineCount( SvStream& rStream )
 
     rStream.Seek( 0 );
     rStream.ReadChar( c );
-    while ( !rStream.IsEof() )
+    while ( !rStream.eof() )
     {
         if ( c == '\n' )
             nLFs++;

@@ -101,7 +101,7 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
     rStr.Seek( 0 ); // in the beginning everything was bad...
     rStr.ReadUChar( nByte );
     bool bSync = true;
-    while( !rStr.IsEof() && bSync )
+    while( !rStr.eof() && bSync )
     {
         sal_uInt16 nMuster = *pSearch;
 

@@ -296,7 +296,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
         sal_Char aWordBuf[ BUFSIZE ];
 
         // Read the first word
-        if (!pStream->IsEof())
+        if (!pStream->eof())
         {
             pStream->ReadUInt16( nLen );
             if (ERRCODE_NONE != (nErr = pStream->GetError()))
@@ -312,7 +312,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
                 return SVSTREAM_READ_ERROR;
         }
 
-        while(!pStream->IsEof())
+        while(!pStream->eof())
         {
             // Read from file
             // Paste in dictionary without converting
@@ -325,7 +325,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
             }
 
             pStream->ReadUInt16( nLen );
-            if (pStream->IsEof())
+            if (pStream->eof())
                 break;
             if (ERRCODE_NONE != (nErr = pStream->GetError()))
                 return nErr;

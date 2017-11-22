@@ -366,7 +366,7 @@ void ZCodec::InitDecompress(SvStream & inStream)
             {
                 inStream.ReadUChar( j );
             }
-            while ( j && !inStream.IsEof() );
+            while ( j && !inStream.eof() );
         }
         /* skip the .gz file comment */
         if ( nFlags & GZ_COMMENT )
@@ -375,7 +375,7 @@ void ZCodec::InitDecompress(SvStream & inStream)
             {
                 inStream.ReadUChar( j );
             }
-            while ( j && !inStream.IsEof() );
+            while ( j && !inStream.eof() );
         }
         /* skip the header crc */
         if ( nFlags & GZ_HEAD_CRC )

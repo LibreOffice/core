@@ -941,7 +941,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
                 xBasicStream->RefreshBuffer();
                 sal_uInt32 nPasswordMarker = 0;
                 xBasicStream->ReadUInt32( nPasswordMarker );
-                if ( ( nPasswordMarker == PASSWORD_MARKER ) && !xBasicStream->IsEof() )
+                if ( ( nPasswordMarker == PASSWORD_MARKER ) && !xBasicStream->eof() )
                 {
                     OUString aPassword = xBasicStream->ReadUniOrByteString(
                         xBasicStream->GetStreamCharSet());

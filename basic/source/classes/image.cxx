@@ -73,7 +73,7 @@ void SbiImage::Clear()
 
 bool SbiGood( SvStream const & r )
 {
-    return !r.IsEof() && r.GetError() == ERRCODE_NONE;
+    return !r.eof() && r.GetError() == ERRCODE_NONE;
 }
 
 // Open Record

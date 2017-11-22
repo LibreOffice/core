@@ -3446,7 +3446,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
                 pImpl->m_pInStream->Seek(0);
                 pImpl->m_pOutStream->Seek(0);
 
-                while( !pImpl->m_pInStream->IsEof() && nErr == ERRCODE_NONE )
+                while( !pImpl->m_pInStream->eof() && nErr == ERRCODE_NONE )
                 {
                     sal_uInt32 nRead = pImpl->m_pInStream->ReadBytes(pBuf, 8192);
                     nErr = pImpl->m_pInStream->GetError();

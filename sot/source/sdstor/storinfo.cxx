@@ -30,7 +30,7 @@ SotClipboardFormatId ReadClipboardFormat( SvStream & rStm )
     SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     sal_Int32 nLen = 0;
     rStm.ReadInt32( nLen );
-    if( rStm.IsEof() )
+    if( rStm.eof() )
         rStm.SetError( SVSTREAM_GENERALERROR );
     if( nLen > 0 )
     {
