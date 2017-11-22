@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_sdk_api,xsec_xmlsec))
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_NO_XSLT \
 	-DXSECXMLSEC_DLLIMPLEMENTATION \
+	-DXSECGPG_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,xsec_xmlsec,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xsec_xmlsec))
