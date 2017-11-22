@@ -61,7 +61,7 @@ ErrCode ImportLotus::Read()
     {
         pIn->ReadUInt16( nOp ).ReadUInt16( nRecLen );
 
-        if( pIn->eof() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4 )
+        if (!pIn->good() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4)
             eAkt = S_END;
 
         nNextRec += nRecLen + 4;
@@ -245,7 +245,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
     {
         pIn->ReadUInt16( nOp ).ReadUInt16( nRecLen );
 
-        if( pIn->eof() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4 )
+        if (!pIn->good() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4)
             bRead = false;
         else
         {
