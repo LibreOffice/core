@@ -48,6 +48,7 @@ public:
     long&               A() { return nA; }
     long&               B() { return nB; }
 
+    TOOLS_DLLPUBLIC rtl::OString        toString() const;
     TOOLS_DLLPUBLIC friend SvStream&    ReadPair( SvStream& rIStream, Pair& rPair );
     TOOLS_DLLPUBLIC friend SvStream&    WritePair( SvStream& rOStream, const Pair& rPair );
 

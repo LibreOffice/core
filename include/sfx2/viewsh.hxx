@@ -34,6 +34,8 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <sfx2/shell.hxx>
 #include <tools/gen.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -140,7 +142,7 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
-class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell
+class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::IDialogNotifier
 {
 friend class SfxViewFrame;
 friend class SfxBaseController;
@@ -151,6 +153,7 @@ friend class SfxPrinterController;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
+    std::vector<std::pair<vcl::DialogID, VclPtr<Dialog> > > maOpenedDialogs;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -218,6 +221,14 @@ public:
 
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
+
+    void                        RegisterDlg(const vcl::DialogID& rDialogId, VclPtr<Dialog> pDlg);
+    VclPtr<Dialog>              GetOpenedDlg(const vcl::DialogID& rDialogId);
+    void                        UnregisterDlg(const vcl::DialogID& rDialogId);
+
+    // IDialogNotifier
+    virtual void                notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
+    virtual void                notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos) override;
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );

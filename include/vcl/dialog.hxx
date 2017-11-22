@@ -57,7 +57,7 @@ private:
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;
 
-    vcl::IDialogRenderable*   mpDialogRenderable; // to emit LOK callbacks
+    vcl::IDialogNotifier*  mpDialogNotifier; // to emit LOK callbacks
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -73,8 +73,10 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
-    OUString               maID; // Dialog ID (UNO name) for this dialog (set
-                                 // and used by LOK for now)
+    /// Dialog ID (UNO name) for this dialog
+    OUString               maID;
+    /// Necessary to register dialog notifier instance to emit LOK callbacks
+    void                   registerDialogNotifier(vcl::IDialogNotifier* pDialogNotifier);
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
@@ -84,8 +86,6 @@ public:
                    void    CloseFloatingWindow();
                    Size    PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
 
-    /// Necessary to register dialog renderable instance to emit LOK callbacks
-    void registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable, const OUString& aDialogId);
     /// Paints the current dialog to the given virtual device
     void paintDialog(VirtualDevice& rDevice);
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
