@@ -383,6 +383,11 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // update only for documents loaded from the local file system
         return;
 
+    // tdf#113935 - do not remove this line - somehow, it makes the process
+    // of switching from viewing a read-only document to opening it in writable
+    // mode much faster.
+    uno::Reference< embed::XStorage > xDocStor = pFile->GetStorage();
+
     // only for own storage formats
     if ( !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
