@@ -2720,29 +2720,29 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, const
 }
 
 // Returns true if the rect is clipped vertically
-bool ScOutputData::AdjustAreaParamClipRect(OutputAreaParam& aAreaParam)
+bool ScOutputData::AdjustAreaParamClipRect(OutputAreaParam& rAreaParam)
 {
-    if( aAreaParam.maClipRect.Left() < nScrX )
+    if( rAreaParam.maClipRect.Left() < nScrX )
     {
-        aAreaParam.maClipRect.Left() = nScrX;
-        aAreaParam.mbLeftClip = true;
+        rAreaParam.maClipRect.Left() = nScrX;
+        rAreaParam.mbLeftClip = true;
     }
-    if( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+    if( rAreaParam.maClipRect.Right() > nScrX + nScrW )
     {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-        aAreaParam.mbRightClip = true;
+        rAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+        rAreaParam.mbRightClip = true;
     }
 
     bool bVClip = false;
 
-    if( aAreaParam.maClipRect.Top() < nScrY )
+    if( rAreaParam.maClipRect.Top() < nScrY )
     {
-        aAreaParam.maClipRect.Top() = nScrY;
+        rAreaParam.maClipRect.Top() = nScrY;
         bVClip = true;
     }
-    if( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+    if( rAreaParam.maClipRect.Bottom() > nScrY + nScrH )
     {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
+        rAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
         bVClip = true;
     }
     return bVClip;
