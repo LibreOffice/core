@@ -58,7 +58,7 @@ $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	libxml2 \
 	xmlsec \
 ))
-ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
+ifneq ($(filter-out ANDROID IOS,$(OS)),)
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	gpgmepp \
 ))
@@ -81,7 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/xsec_nss \
 ))
 
-ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
+ifneq ($(filter-out ANDROID IOS,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/gpg/CertificateImpl \
 	xmlsecurity/source/gpg/CipherContext \
