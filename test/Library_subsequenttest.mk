@@ -76,8 +76,9 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xsheetannotations \
 	test/source/sheet/xsheetannotationssupplier \
 	test/source/sheet/xsheetannotationshapesupplier \
-	test/source/sheet/xsheetcellrangecontainer \
+	test/source/sheet/xsheetcellcursor \
 	test/source/sheet/xsheetcellrange \
+	test/source/sheet/xsheetcellrangecontainer \
 	test/source/sheet/xsheetcellranges \
 	test/source/sheet/xsheetconditionalentries \
 	test/source/sheet/xsheetconditionalentry \
