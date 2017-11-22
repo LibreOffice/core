@@ -37,6 +37,11 @@
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
+// TODO: workaround for unified headers migration - only made available when
+// __USE_BSD or __BIONIC__ are defined, so just add those here...
+#define letoh16(x) (x)
+#define letoh32(x) (x)
+
 struct engine {
     int dummy;
 };

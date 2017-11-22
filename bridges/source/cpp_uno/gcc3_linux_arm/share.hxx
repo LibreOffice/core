@@ -86,7 +86,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
 #if !HAVE_CXXABI_H_CXA_GET_GLOBALS
 namespace __cxxabiv1 {
-    extern "C" __cxa_eh_globals * __cxa_get_globals() throw();
+    extern "C" gcc3::__cxa_eh_globals * __cxa_get_globals() throw();
 }
 #endif
 

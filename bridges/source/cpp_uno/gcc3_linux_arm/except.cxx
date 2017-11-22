@@ -184,6 +184,9 @@ namespace CPPU_CURRENT_NAMESPACE
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr,"generated rtti for %s\n", rttiName );
 #endif
+// TODO: incompatible with llvm-c++ in ndk6 - no __si_class_type_info or __class_type_info
+// either do as iOS one and inline thing or find another way
+#if !defined(ANDROID)
                     if (pTypeDescr->pBaseTypeDescription)
                     {
                         // ensure availability of base
@@ -202,6 +205,7 @@ namespace CPPU_CURRENT_NAMESPACE
                         m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                     (void) insertion;
                     assert(insertion.second && "### inserting new generated rtti failed?!");
+#endif
                 }
                 else // taking already generated rtti
                 {

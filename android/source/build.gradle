@@ -17,31 +17,34 @@ allprojects {
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
 // compile-time dependencies
 dependencies {
-    compile fileTree(dir: "${liboInstdir}/${liboUREJavaFolder}", include: [
+    implementation fileTree(dir: "${liboInstdir}/${liboUREJavaFolder}", include: [
             "java_uno.jar",
             "juh.jar",
             "jurt.jar",
             "ridl.jar",
             "unoloader.jar"
     ])
-    compile files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
-    debugCompile(name:'owncloud_android_lib-debug', ext:'aar')
-    releaseCompile(name:'owncloud_android_lib-release', ext:'aar')
-    compile 'com.android.support:design:26.1.0' // also pulls-in corresponding support libraries
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
+    debugImplementation(name:'owncloud_android_lib-debug', ext:'aar')
+    releaseImplementation(name:'owncloud_android_lib-release', ext:'aar')
+    implementation 'com.android.support:design:27.0.1' // also pulls-in corresponding support libraries
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "27.0.1"
     compileOptions {
         // silence some java-language features hints
         sourceCompatibility 6
@@ -77,9 +80,11 @@ android {
             manifestPlaceholders = [installLocation: "preferExternal", extractNativeLibs: "true"]
         }
     }
+
+    flavorDimensions "default"
     productFlavors {
-        strippedUI
-        fullUI
+        strippedUI.dimension "default"
+        fullUI.dimension "default"
     }
 }
 

@@ -381,16 +381,16 @@ if test -n "$with_android_ndk"; then
     fi
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
-        AC_MSG_ERROR([Building for Android is only supported with NDK versions above 15.x*])
+        AC_MSG_ERROR([Building for Android is only supported with NDK versions above 16.x*])
         ;;
     11.1.*|12.1.*|13.1.*|14.1.*)
-        AC_MSG_ERROR([Building for Android is only supported with NDK versions above 15.x.*])
+        AC_MSG_ERROR([Building for Android is only supported with NDK versions above 16.x.*])
         ;;
-    15.0.*|15.1.*)
+    16.0.*)
         ;;
     *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only version 15.0.* and 15.1.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only version 15.0.* and 15.1.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.0.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.0.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
@@ -424,6 +424,7 @@ if test -n "$with_android_ndk"; then
         android_gnu_prefix=i686-linux-android
         LLVM_TRIPLE=i686-none-linux-android
         ANDROID_APP_ABI=x86
+        ANDROID_ARCH=$android_cpu
         ANDROIDCFLAGS="-march=atom"
     fi
 
@@ -462,6 +463,7 @@ if test -n "$with_android_ndk"; then
     esac
     ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86_64/bin
     ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/$ndk_build_os-x86_64
+    AC_SUBST(ANDROID_BINUTILS_PREBUILT_ROOT)
 
     test -z "$SYSBASE" && SYSBASE=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}
     test -z "$AR" && AR=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-ar
@@ -471,15 +473,21 @@ if test -n "$with_android_ndk"; then
     test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-strip
 
     ANDROIDCFLAGS="$ANDROIDCFLAGS -gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT -target $LLVM_TRIPLE -no-canonical-prefixes"
+    # android is using different sysroots for compilation and linking, but as
+    # there is no full separation in configure and elsewehere, use isystem for
+    # compilation stuff and sysroot for linking
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -D__ANDROID_API__=$ANDROID_API_LEVEL -isystem $ANDROID_NDK_HOME/sysroot/usr/include"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -isystem $ANDROID_NDK_HOME/sysroot/usr/include/$android_gnu_prefix"
     ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot=$SYSBASE -ffunction-sections -fdata-sections -Qunused-arguments"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/$ANDROID_GCC_TOOLCHAIN_VERSION/libs/$ANDROID_APP_ABI"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/libs/$ANDROID_APP_ABI"
     if test "$ENABLE_LTO" = TRUE; then
         # -flto comes from com_GCC_defs.mk, too, but we need to make sure it gets passed as part of
         # $CC and $CXX when building external libraries
         ANDROIDCFLAGS="$ANDROIDCFLAGS -flto -fuse-linker-plugin -O2"
     fi
 
-    ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/$ANDROID_GCC_TOOLCHAIN_VERSION/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/$ANDROID_GCC_TOOLCHAIN_VERSION/libs/$ANDROID_APP_ABI/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gabi++/include"
+    # TODO: get rid of the gabi++ include - that's for arm in bridges only (_Unwind_Exception)
+    ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++abi/include -I$ANDROID_NDK_HOME/sources/android/support/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gabi++/include -std=c++11"
 
     if test -z "$CC"; then
         CC="$ANDROID_COMPILER_BIN/clang $ANDROIDCFLAGS"
