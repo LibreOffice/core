@@ -96,7 +96,7 @@ enum class RTFFieldStatus
 };
 
 /// A buffer storing dmapper calls.
-using Buf_t = std::tuple< RTFBufferTypes, RTFValue::Pointer_t, std::shared_ptr<TableRowBuffer> >;
+using Buf_t = std::tuple<RTFBufferTypes, RTFValue::Pointer_t, std::shared_ptr<TableRowBuffer>>;
 using RTFBuffer_t = std::deque<Buf_t>;
 
 /// holds one nested table row
@@ -110,14 +110,14 @@ struct TableRowBuffer
     writerfilter::Reference<Properties>::Pointer_t pFrameProperties;
     writerfilter::Reference<Properties>::Pointer_t pRowProperties;
 
-    TableRowBuffer(RTFBuffer_t aBuffer,
-                   std::deque<RTFSprms> aSprms,
-                   std::deque<RTFSprms> aAttributes,
-                   int const i_nCells)
+    TableRowBuffer(RTFBuffer_t aBuffer, std::deque<RTFSprms> aSprms,
+                   std::deque<RTFSprms> aAttributes, int const i_nCells)
         : buffer(std::move(aBuffer))
-        , cellsSprms(std::move(aSprms)), cellsAttributes(std::move(aAttributes))
+        , cellsSprms(std::move(aSprms))
+        , cellsAttributes(std::move(aAttributes))
         , nCells(i_nCells)
-    {}
+    {
+    }
 };
 
 /// An entry in the color table.
@@ -135,8 +135,9 @@ class RTFShape
 {
 public:
     RTFShape();
-    std::vector< std::pair<OUString, OUString> > aProperties; ///< Properties of a single shape.
-    std::vector< std::pair<OUString, OUString> > aGroupProperties; ///< Properties applied on the groupshape.
+    std::vector<std::pair<OUString, OUString>> aProperties; ///< Properties of a single shape.
+    std::vector<std::pair<OUString, OUString>>
+        aGroupProperties; ///< Properties applied on the groupshape.
     sal_Int32 nLeft = 0;
     sal_Int32 nTop = 0;
     sal_Int32 nRight = 0;
@@ -207,6 +208,7 @@ private:
     sal_Int32 m_nHoriAlign, m_nHoriAnchor, m_nVertAlign, m_nVertAnchor;
     Id m_nHRule;
     boost::optional<Id> m_oWrap;
+
 public:
     explicit RTFFrame(RTFParserState* pParserState);
     sal_Int16 m_nAnchorType;
@@ -279,7 +281,12 @@ public:
     RTFFrame aFrame;
 
     /// Maps to OOXML's ascii, cs or eastAsia.
-    enum class RunType { LOCH, HICH, DBCH };
+    enum class RunType
+    {
+        LOCH,
+        HICH,
+        DBCH
+    };
     RunType eRunType;
     /// ltrch or rtlch
     bool isRightToLeft;
@@ -336,6 +343,7 @@ struct RTFStack
 {
 private:
     std::deque<RTFParserState> m_Impl;
+
 public:
     RTFParserState& top()
     {
@@ -349,41 +357,27 @@ public:
             throw std::out_of_range("empty rtf state stack");
         return m_Impl.pop_back();
     }
-    void push(RTFParserState const& rState)
-    {
-        return m_Impl.push_back(rState);
-    }
-    bool empty() const
-    {
-        return m_Impl.empty();
-    }
-    size_t size() const
-    {
-        return m_Impl.size();
-    }
-    const RTFParserState& operator[](size_t nIndex) const
-    {
-        return m_Impl[nIndex];
-    }
-    RTFParserState& operator[](size_t nIndex)
-    {
-        return m_Impl[nIndex];
-    }
+    void push(RTFParserState const& rState) { return m_Impl.push_back(rState); }
+    bool empty() const { return m_Impl.empty(); }
+    size_t size() const { return m_Impl.size(); }
+    const RTFParserState& operator[](size_t nIndex) const { return m_Impl[nIndex]; }
+    RTFParserState& operator[](size_t nIndex) { return m_Impl[nIndex]; }
 };
 
 void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pValue);
 void putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue);
 Id getParagraphBorder(sal_uInt32 nIndex);
-void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue, RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true);
+void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue,
+                        RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true);
 bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId);
 /// Checks if rName is contained at least once in rProperties as a key.
-bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties, const OUString& rName);
+bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties,
+                      const OUString& rName);
 RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId);
 OString DTTM22OString(long nDTTM);
 
 /// Implementation of the RTFDocument interface.
-class RTFDocumentImpl
-    : public RTFDocument, public RTFListener
+class RTFDocumentImpl : public RTFDocument, public RTFListener
 {
 public:
     using Pointer_t = std::shared_ptr<RTFDocumentImpl>;
@@ -416,10 +410,7 @@ public:
     void finishSubstream() override;
     bool isSubstream() const override;
 
-    Stream& Mapper()
-    {
-        return *m_pMapperStream;
-    }
+    Stream& Mapper() { return *m_pMapperStream; }
     void setSuperstream(RTFDocumentImpl* pSuperstream);
     const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory()
     {
@@ -435,10 +426,7 @@ public:
     /// Send NS_ooxml::LN_settings_settings to dmapper.
     void outputSettingsTable();
     /// If the initial paragraph is started.
-    bool getFirstRun()
-    {
-        return m_bFirstRun;
-    }
+    bool getFirstRun() { return m_bFirstRun; }
     /// If we need to add a dummy paragraph before a section break.
     void setNeedPar(bool bNeedPar);
     /// Return the dmapper index of an RTF index for fonts.
@@ -476,27 +464,22 @@ private:
     void runBreak();
     void parBreak();
     void tableBreak();
-    writerfilter::Reference<Properties>::Pointer_t getProperties(RTFSprms& rAttributes, RTFSprms& rSprms, Id nStyleType);
+    writerfilter::Reference<Properties>::Pointer_t getProperties(RTFSprms& rAttributes,
+                                                                 RTFSprms& rSprms, Id nStyleType);
     void checkNeedPap();
     void sectBreak(bool bFinal = false);
-    void prepareProperties(
-        RTFParserState& rState,
-        writerfilter::Reference<Properties>::Pointer_t& o_rpParagraphProperties,
-        writerfilter::Reference<Properties>::Pointer_t& o_rpFrameProperties,
-        writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties,
-        int nCells, int nCurrentCellX);
+    void prepareProperties(RTFParserState& rState,
+                           writerfilter::Reference<Properties>::Pointer_t& o_rpParagraphProperties,
+                           writerfilter::Reference<Properties>::Pointer_t& o_rpFrameProperties,
+                           writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties,
+                           int nCells, int nCurrentCellX);
     /// Send the passed properties to dmapper.
-    void sendProperties(
-        writerfilter::Reference<Properties>::Pointer_t const& pParagraphProperties,
-        writerfilter::Reference<Properties>::Pointer_t const& pFrameProperties,
-        writerfilter::Reference<Properties>::Pointer_t const& pTableRowProperties);
-    void replayRowBuffer(RTFBuffer_t& rBuffer,
-                         ::std::deque<RTFSprms>& rCellsSrpms,
-                         ::std::deque<RTFSprms>& rCellsAttributes,
-                         int nCells);
-    void replayBuffer(RTFBuffer_t& rBuffer,
-                      RTFSprms* pSprms,
-                      RTFSprms const* pAttributes);
+    void sendProperties(writerfilter::Reference<Properties>::Pointer_t const& pParagraphProperties,
+                        writerfilter::Reference<Properties>::Pointer_t const& pFrameProperties,
+                        writerfilter::Reference<Properties>::Pointer_t const& pTableRowProperties);
+    void replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprms>& rCellsSrpms,
+                         ::std::deque<RTFSprms>& rCellsAttributes, int nCells);
+    void replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* pSprms, RTFSprms const* pAttributes);
     /// If we have some unicode or hex characters to send.
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.
@@ -581,7 +564,7 @@ private:
 
     /// Buffered table cells, till cell definitions are not reached.
     /// for nested table, one buffer per table level
-    std::deque< RTFBuffer_t > m_aTableBufferStack;
+    std::deque<RTFBuffer_t> m_aTableBufferStack;
     /// Buffered superscript, till footnote is reached (or not).
     RTFBuffer_t m_aSuperBuffer;
 
@@ -589,7 +572,7 @@ private:
     RTFDocumentImpl* m_pSuperstream;
     /// Type of the stream: header, footer, footnote, etc.
     Id m_nStreamType;
-    std::queue< std::pair<Id, std::size_t> > m_nHeaderFooterPositions;
+    std::queue<std::pair<Id, std::size_t>> m_nHeaderFooterPositions;
     std::size_t m_nGroupStartPos;
     /// Ignore the first occurrence of this text.
     OUString m_aIgnoreFirst;

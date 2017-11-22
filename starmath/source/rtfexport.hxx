@@ -22,6 +22,7 @@ class SmRtfExport : public SmWordExportBase
 public:
     explicit SmRtfExport(const SmNode* pIn);
     void ConvertFromStarMath(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
+
 private:
     void HandleVerticalStack(const SmNode* pNode, int nLevel) override;
     void HandleText(const SmNode* pNode, int nLevel) override;
@@ -38,7 +39,6 @@ private:
     OStringBuffer* m_pBuffer;
     rtl_TextEncoding m_nEncoding;
 };
-
 
 #endif
 

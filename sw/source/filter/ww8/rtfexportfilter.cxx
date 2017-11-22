@@ -38,15 +38,16 @@ RtfExportFilter::RtfExportFilter(uno::Reference<uno::XComponentContext> xCtx)
 
 RtfExportFilter::~RtfExportFilter() = default;
 
-sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor)
+sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
 {
     utl::MediaDescriptor aMediaDesc = aDescriptor;
-    uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference< io::XStream >());
+    uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference<io::XStream>());
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(xStream, true);
     m_aWriter.SetStream(pStream);
 
     // get SwDoc*
-    uno::Reference< uno::XInterface > xIfc(m_xSrcDoc, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xIfc(m_xSrcDoc, uno::UNO_QUERY);
     auto pTextDoc = dynamic_cast<SwXTextDocument*>(xIfc.get());
     if (!pTextDoc)
     {
@@ -87,28 +88,24 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
     return true;
 }
 
-void RtfExportFilter::cancel()
-{
-}
+void RtfExportFilter::cancel() {}
 
-void RtfExportFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc)
+void RtfExportFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
     m_xSrcDoc = xDoc;
 }
 
 // UNO helpers
 
-OUString RtfExport_getImplementationName()
+OUString RtfExport_getImplementationName() { return OUString(IMPL_NAME_RTFEXPORT); }
+
+uno::Sequence<OUString> SAL_CALL RtfExport_getSupportedServiceNames() noexcept
 {
-    return OUString(IMPL_NAME_RTFEXPORT);
+    return uno::Sequence<OUString>{ "com.sun.star.document.ExportFilter" };
 }
 
-uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() noexcept
-{
-    return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
-}
-
-uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< uno::XComponentContext >& xCtx)
+uno::Reference<uno::XInterface>
+    SAL_CALL RtfExport_createInstance(const uno::Reference<uno::XComponentContext>& xCtx)
 {
     return static_cast<cppu::OWeakObject*>(new RtfExportFilter(xCtx));
 }

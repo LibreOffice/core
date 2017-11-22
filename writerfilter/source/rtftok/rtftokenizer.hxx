@@ -27,32 +27,25 @@ namespace rtftok
 class RTFTokenizer final
 {
 public:
-    RTFTokenizer(RTFListener& rImport, SvStream* pInStream, css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
+    RTFTokenizer(RTFListener& rImport, SvStream* pInStream,
+                 css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
     ~RTFTokenizer();
 
     RTFError resolveParse();
     static int asHex(char ch);
     /// Number of states on the stack.
-    int getGroup() const
-    {
-        return m_nGroup;
-    }
+    int getGroup() const { return m_nGroup; }
     /// To be invoked by the pushState() callback to signal when the importer enters a group.
     void pushGroup();
     /// To be invoked by the popState() callback to signal when the importer leaves a group.
     void popGroup();
     OUString getPosition();
-    std::size_t getGroupStart()
-    {
-        return m_nGroupStart;
-    }
+    std::size_t getGroupStart() { return m_nGroupStart; }
     /// To look up additional properties of a math symbol.
     static bool lookupMathKeyword(RTFMathSymbol& rSymbol);
+
 private:
-    SvStream& Strm()
-    {
-        return *m_pInStream;
-    }
+    SvStream& Strm() { return *m_pInStream; }
     RTFError resolveKeyword();
     RTFError dispatchKeyword(OString const& rKeyword, bool bParam, int nParam);
 

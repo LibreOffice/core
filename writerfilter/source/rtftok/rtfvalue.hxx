@@ -22,16 +22,15 @@ class RTFSprms;
 class RTFShape;
 class RTFPicture;
 /// Value of an RTF keyword
-class RTFValue
-    : public Value
+class RTFValue : public Value
 {
 public:
     using Pointer_t = std::shared_ptr<RTFValue>;
     RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms,
              css::uno::Reference<css::drawing::XShape> xShape,
              css::uno::Reference<css::io::XInputStream> xStream,
-             css::uno::Reference<css::embed::XEmbeddedObject> xObject,
-             bool bForceString, const RTFShape& aShape, const RTFPicture& rPicture);
+             css::uno::Reference<css::embed::XEmbeddedObject> xObject, bool bForceString,
+             const RTFShape& aShape, const RTFPicture& rPicture);
     RTFValue();
     explicit RTFValue(int nValue);
     RTFValue(OUString sValue, bool bForce = false);
@@ -60,6 +59,7 @@ public:
     RTFPicture& getPicture() const;
     bool equals(RTFValue& rOther);
     RTFValue& operator=(RTFValue const& rOther) = delete;
+
 private:
     int m_nValue = 0;
     OUString m_sValue;

@@ -52,7 +52,7 @@ class RtfSdrExport final : public EscherEx
     /// Remember style, the most important shape attribute ;-)
     OStringBuffer m_aShapeStyle;
 
-    std::map<OString,OString> m_aShapeProps;
+    std::map<OString, OString> m_aShapeProps;
 
     /// Remember which shape types we had already written.
     std::unique_ptr<bool[]> m_pShapeTypeWritten;
@@ -76,13 +76,13 @@ private:
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.
     using EscherEx::StartShape;
-    sal_Int32   StartShape();
+    sal_Int32 StartShape();
 
     /// End the shape.
     ///
     /// The parameter is just what we got from StartShape().
     using EscherEx::EndShape;
-    void        EndShape(sal_Int32 nShapeElement);
+    void EndShape(sal_Int32 nShapeElement);
 
     void Commit(EscherPropertyContainer& rProps, const tools::Rectangle& rRect) override;
 

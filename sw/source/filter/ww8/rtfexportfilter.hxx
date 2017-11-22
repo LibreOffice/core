@@ -30,31 +30,28 @@
 class RtfWriter : public Writer
 {
 protected:
-    ErrCode WriteStream() override
-    {
-        return ERRCODE_NONE;
-    }
+    ErrCode WriteStream() override { return ERRCODE_NONE; }
 };
 
 /// The physical access to the RTF document (for writing).
-class RtfExportFilter final : public cppu::WeakImplHelper
-    <
-    css::document::XFilter,
-    css::document::XExporter
-    >
+class RtfExportFilter final
+    : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter>
 {
     css::uno::Reference<css::uno::XComponentContext> m_xCtx;
     css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
+
 public:
     explicit RtfExportFilter(css::uno::Reference<css::uno::XComponentContext> xCtx);
     ~RtfExportFilter() override;
 
     // XFilter
-    sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
+    sal_Bool SAL_CALL
+    filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XExporter
-    void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
+    void SAL_CALL
+    setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
 
     RtfWriter m_aWriter;
 };
@@ -62,7 +59,8 @@ public:
 OUString RtfExport_getImplementationName();
 css::uno::Sequence<OUString> SAL_CALL RtfExport_getSupportedServiceNames() noexcept;
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL RtfExport_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
+css::uno::Reference<css::uno::XInterface>
+    SAL_CALL RtfExport_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
 
 #define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"
 

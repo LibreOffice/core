@@ -24,6 +24,7 @@ public:
     ~RTFSkipDestination();
     void setParsed(bool bParsed);
     void setReset(bool bReset);
+
 private:
     RTFListener& m_rImport;
     bool m_bParsed;

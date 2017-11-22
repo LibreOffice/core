@@ -55,6 +55,7 @@ public:
     void append(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode);
     /// Append all contained buffers and clear the argument.
     void appendAndClear(RtfStringBuffer& rBuf);
+
 private:
     using Values_t = std::vector<RtfStringBufferValue>;
     Values_t m_aValues;

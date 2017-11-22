@@ -16,10 +16,9 @@ namespace writerfilter
 {
 namespace rtftok
 {
-
 RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
-    : m_rStream(rStream),
-      m_bHasTable(false)
+    : m_rStream(rStream)
+    , m_bHasTable(false)
 {
     sal_uInt64 const nPos = m_rStream.Tell();
     m_rStream.Seek(nGroupStart);
@@ -31,10 +30,7 @@ RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
 
 RTFLookahead::~RTFLookahead() = default;
 
-RTFError RTFLookahead::dispatchDestination(RTFKeyword /*nKeyword*/)
-{
-    return RTFError::OK;
-}
+RTFError RTFLookahead::dispatchDestination(RTFKeyword /*nKeyword*/) { return RTFError::OK; }
 
 RTFError RTFLookahead::dispatchFlag(RTFKeyword nKeyword)
 {
@@ -43,10 +39,7 @@ RTFError RTFLookahead::dispatchFlag(RTFKeyword nKeyword)
     return RTFError::OK;
 }
 
-RTFError RTFLookahead::dispatchSymbol(RTFKeyword /*nKeyword*/)
-{
-    return RTFError::OK;
-}
+RTFError RTFLookahead::dispatchSymbol(RTFKeyword /*nKeyword*/) { return RTFError::OK; }
 
 RTFError RTFLookahead::dispatchToggle(RTFKeyword /*nKeyword*/, bool /*bParam*/, int /*nParam*/)
 {
@@ -79,42 +72,21 @@ RTFError RTFLookahead::popState()
     return RTFError::OK;
 }
 
-Destination RTFLookahead::getDestination()
-{
-    return Destination::NORMAL;
-}
+Destination RTFLookahead::getDestination() { return Destination::NORMAL; }
 
-void RTFLookahead::setDestination(Destination /*eDestination*/)
-{
-}
+void RTFLookahead::setDestination(Destination /*eDestination*/) {}
 
-RTFInternalState RTFLookahead::getInternalState()
-{
-    return RTFInternalState::NORMAL;
-}
+RTFInternalState RTFLookahead::getInternalState() { return RTFInternalState::NORMAL; }
 
-void RTFLookahead::setInternalState(RTFInternalState /*nInternalState*/)
-{
-}
+void RTFLookahead::setInternalState(RTFInternalState /*nInternalState*/) {}
 
-bool RTFLookahead::getSkipUnknown()
-{
-    return false;
-}
+bool RTFLookahead::getSkipUnknown() { return false; }
 
-void RTFLookahead::setSkipUnknown(bool /*bSkipUnknown*/)
-{
-}
+void RTFLookahead::setSkipUnknown(bool /*bSkipUnknown*/) {}
 
-void RTFLookahead::finishSubstream()
-{
-}
+void RTFLookahead::finishSubstream() {}
 
-bool RTFLookahead::isSubstream() const
-{
-    return false;
-}
-
+bool RTFLookahead::isSubstream() const { return false; }
 
 } // namespace rtftok
 } // namespace writerfilter
