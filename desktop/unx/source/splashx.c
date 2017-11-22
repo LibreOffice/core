@@ -655,8 +655,16 @@ static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, 
     get_bootstrap_value( logo,  1, handle, "Logo" );
     get_bootstrap_value( bar,   3, handle, "ProgressBarColor" );
     get_bootstrap_value( frame, 3, handle, "ProgressFrameColor" );
-    get_bootstrap_value( pos,   2, handle, "ProgressPosition" );
-    get_bootstrap_value( size,  2, handle, "ProgressSize" );
+    if (isHiDPI(splash) && (splash->width > 700)) //in case the highres image was not found
+    {
+       get_bootstrap_value( pos,   2, handle, "ProgressPositionHigh" );
+       get_bootstrap_value( size,  2, handle, "ProgressSizeHigh" );
+    }
+    else
+    {
+       get_bootstrap_value( pos,   2, handle, "ProgressPosition" );
+       get_bootstrap_value( size,  2, handle, "ProgressSize" );
+    }
 
     if ( logo[0] == 0 )
     {
