@@ -28,26 +28,13 @@
 #include <scresid.hxx>
 #include <scuitphfedit.hxx>
 
-//  macros from docsh4.cxx
-//! use SIDs?
-
-#define IS_SHARE_HEADER(set) \
-    static_cast<const SfxBoolItem&>( \
-        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_HEADERSET)).GetItemSet(). \
-            Get(ATTR_PAGE_SHARED)).GetValue()
-
-#define IS_SHARE_FOOTER(set) \
-    static_cast<const SfxBoolItem&>( \
-        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
-            Get(ATTR_PAGE_SHARED)).GetValue()
-
 ScHFEditDlg::ScHFEditDlg( vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle,
                           const OUString& rID, const OUString& rUIXMLDescription )
     :   SfxTabDialog( pParent, rID, rUIXMLDescription, &rCoreSet )
 {
-    eNumType = static_cast<const SvxPageItem&>(rCoreSet.Get(ATTR_PAGE)).GetNumType();
+    eNumType = rCoreSet.Get(ATTR_PAGE).GetNumType();
 
     OUString aTmp = GetText();
 
@@ -177,13 +164,15 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
     {
         //  #69193a# respect "shared" setting
 
-        bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
+        bool bShareHeader = rCoreSet.Get(ATTR_PAGE_HEADERSET).GetItemSet().
+                                Get(ATTR_PAGE_SHARED).GetValue();
         if ( bShareHeader )
             AddTabPage( "header", ScRightHeaderEditPage::Create, nullptr );
         else
             AddTabPage( "header", ScLeftHeaderEditPage::Create, nullptr );
 
-        bool bShareFooter = IS_SHARE_FOOTER(rCoreSet);
+        bool bShareFooter = rCoreSet.Get(ATTR_PAGE_FOOTERSET).GetItemSet().
+                                Get(ATTR_PAGE_SHARED).GetValue();
         if ( bShareFooter )
             AddTabPage( "footer", ScRightFooterEditPage::Create, nullptr );
         else

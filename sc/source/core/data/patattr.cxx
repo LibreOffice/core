@@ -296,24 +296,15 @@ void ScPatternAttr::GetFont(
                         rItemSet.Get( nWeightId )).GetValue();
         eItalic = static_cast<const SvxPostureItem&>(
                         rItemSet.Get( nPostureId )).GetValue();
-        eUnder = static_cast<const SvxUnderlineItem&>(
-                        rItemSet.Get( ATTR_FONT_UNDERLINE )).GetValue();
-        eOver = static_cast<const SvxOverlineItem&>(
-                        rItemSet.Get( ATTR_FONT_OVERLINE )).GetValue();
-        bWordLine = static_cast<const SvxWordLineModeItem&>(
-                        rItemSet.Get( ATTR_FONT_WORDLINE )).GetValue();
-        eStrike = static_cast<const SvxCrossedOutItem&>(
-                        rItemSet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
-        bOutline = static_cast<const SvxContourItem&>(
-                        rItemSet.Get( ATTR_FONT_CONTOUR )).GetValue();
-        bShadow = static_cast<const SvxShadowedItem&>(
-                        rItemSet.Get( ATTR_FONT_SHADOWED )).GetValue();
-        eEmphasis = static_cast<const SvxEmphasisMarkItem&>(
-                        rItemSet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
-        eRelief = static_cast<const SvxCharReliefItem&>(
-                        rItemSet.Get( ATTR_FONT_RELIEF )).GetValue();
-        aColor = static_cast<const SvxColorItem&>(
-                        rItemSet.Get( ATTR_FONT_COLOR )).GetValue();
+        eUnder = rItemSet.Get( ATTR_FONT_UNDERLINE ).GetValue();
+        eOver = rItemSet.Get( ATTR_FONT_OVERLINE ).GetValue();
+        bWordLine = rItemSet.Get( ATTR_FONT_WORDLINE ).GetValue();
+        eStrike = rItemSet.Get( ATTR_FONT_CROSSEDOUT ).GetValue();
+        bOutline = rItemSet.Get( ATTR_FONT_CONTOUR ).GetValue();
+        bShadow = rItemSet.Get( ATTR_FONT_SHADOWED ).GetValue();
+        eEmphasis = rItemSet.Get( ATTR_FONT_EMPHASISMARK ).GetEmphasisMark();
+        eRelief = rItemSet.Get( ATTR_FONT_RELIEF ).GetValue();
+        aColor = rItemSet.Get( ATTR_FONT_COLOR ).GetValue();
         // for graphite language features
         eLang = static_cast<const SvxLanguageItem&>(rItemSet.Get( nLangId )).GetLanguage();
     }
@@ -380,7 +371,7 @@ void ScPatternAttr::GetFont(
                 aBackColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
             }
             else
-                aBackColor = static_cast<const SvxBrushItem&>(rItemSet.Get( ATTR_BACKGROUND )).GetColor();
+                aBackColor = rItemSet.Get( ATTR_BACKGROUND ).GetColor();
 
             //  if background color attribute is transparent, use window color for brightness comparisons
             if ( aBackColor == COL_TRANSPARENT ||
@@ -676,54 +667,33 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     }
     else        // Everything directly from Pattern
     {
-        aColorItem = static_cast<const SvxColorItem&>( rSrcSet.Get( ATTR_FONT_COLOR ) );
-        aFontItem = static_cast<const SvxFontItem&>( rSrcSet.Get( ATTR_FONT ) );
-        aCjkFontItem = static_cast<const SvxFontItem&>( rSrcSet.Get( ATTR_CJK_FONT ) );
-        aCtlFontItem = static_cast<const SvxFontItem&>( rSrcSet.Get( ATTR_CTL_FONT ) );
-        nTHeight = static_cast<const SvxFontHeightItem&>(
-                        rSrcSet.Get( ATTR_FONT_HEIGHT )).GetHeight();
-        nCjkTHeight = static_cast<const SvxFontHeightItem&>(
-                        rSrcSet.Get( ATTR_CJK_FONT_HEIGHT )).GetHeight();
-        nCtlTHeight = static_cast<const SvxFontHeightItem&>(
-                        rSrcSet.Get( ATTR_CTL_FONT_HEIGHT )).GetHeight();
-        eWeight = static_cast<const SvxWeightItem&>(
-                        rSrcSet.Get( ATTR_FONT_WEIGHT )).GetValue();
-        eCjkWeight = static_cast<const SvxWeightItem&>(
-                        rSrcSet.Get( ATTR_CJK_FONT_WEIGHT )).GetValue();
-        eCtlWeight = static_cast<const SvxWeightItem&>(
-                        rSrcSet.Get( ATTR_CTL_FONT_WEIGHT )).GetValue();
-        eItalic = static_cast<const SvxPostureItem&>(
-                        rSrcSet.Get( ATTR_FONT_POSTURE )).GetValue();
-        eCjkItalic = static_cast<const SvxPostureItem&>(
-                        rSrcSet.Get( ATTR_CJK_FONT_POSTURE )).GetValue();
-        eCtlItalic = static_cast<const SvxPostureItem&>(
-                        rSrcSet.Get( ATTR_CTL_FONT_POSTURE )).GetValue();
-        aUnderlineItem = static_cast<const SvxUnderlineItem&>( rSrcSet.Get( ATTR_FONT_UNDERLINE ) );
-        aOverlineItem  = static_cast<const SvxOverlineItem&>( rSrcSet.Get( ATTR_FONT_OVERLINE ) );
-        bWordLine = static_cast<const SvxWordLineModeItem&>(
-                        rSrcSet.Get( ATTR_FONT_WORDLINE )).GetValue();
-        eStrike = static_cast<const SvxCrossedOutItem&>(
-                        rSrcSet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
-        bOutline = static_cast<const SvxContourItem&>(
-                        rSrcSet.Get( ATTR_FONT_CONTOUR )).GetValue();
-        bShadow = static_cast<const SvxShadowedItem&>(
-                        rSrcSet.Get( ATTR_FONT_SHADOWED )).GetValue();
-        bForbidden = static_cast<const SvxForbiddenRuleItem&>(
-                        rSrcSet.Get( ATTR_FORBIDDEN_RULES )).GetValue();
-        eEmphasis = static_cast<const SvxEmphasisMarkItem&>(
-                        rSrcSet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
-        eRelief = static_cast<const SvxCharReliefItem&>(
-                        rSrcSet.Get( ATTR_FONT_RELIEF )).GetValue();
-        eLang = static_cast<const SvxLanguageItem&>(
-                        rSrcSet.Get( ATTR_FONT_LANGUAGE )).GetLanguage();
-        eCjkLang = static_cast<const SvxLanguageItem&>(
-                        rSrcSet.Get( ATTR_CJK_FONT_LANGUAGE )).GetLanguage();
-        eCtlLang = static_cast<const SvxLanguageItem&>(
-                        rSrcSet.Get( ATTR_CTL_FONT_LANGUAGE )).GetLanguage();
-        bHyphenate = static_cast<const SfxBoolItem&>(
-                        rSrcSet.Get( ATTR_HYPHENATE )).GetValue();
-        eDirection = static_cast<const SvxFrameDirectionItem&>(
-                        rSrcSet.Get( ATTR_WRITINGDIR )).GetValue();
+        aColorItem = rSrcSet.Get( ATTR_FONT_COLOR );
+        aFontItem = rSrcSet.Get( ATTR_FONT );
+        aCjkFontItem = rSrcSet.Get( ATTR_CJK_FONT );
+        aCtlFontItem = rSrcSet.Get( ATTR_CTL_FONT );
+        nTHeight = rSrcSet.Get( ATTR_FONT_HEIGHT ).GetHeight();
+        nCjkTHeight = rSrcSet.Get( ATTR_CJK_FONT_HEIGHT ).GetHeight();
+        nCtlTHeight = rSrcSet.Get( ATTR_CTL_FONT_HEIGHT ).GetHeight();
+        eWeight = rSrcSet.Get( ATTR_FONT_WEIGHT ).GetValue();
+        eCjkWeight = rSrcSet.Get( ATTR_CJK_FONT_WEIGHT ).GetValue();
+        eCtlWeight = rSrcSet.Get( ATTR_CTL_FONT_WEIGHT ).GetValue();
+        eItalic = rSrcSet.Get( ATTR_FONT_POSTURE ).GetValue();
+        eCjkItalic = rSrcSet.Get( ATTR_CJK_FONT_POSTURE ).GetValue();
+        eCtlItalic = rSrcSet.Get( ATTR_CTL_FONT_POSTURE ).GetValue();
+        aUnderlineItem = rSrcSet.Get( ATTR_FONT_UNDERLINE );
+        aOverlineItem  = rSrcSet.Get( ATTR_FONT_OVERLINE );
+        bWordLine = rSrcSet.Get( ATTR_FONT_WORDLINE ).GetValue();
+        eStrike = rSrcSet.Get( ATTR_FONT_CROSSEDOUT ).GetValue();
+        bOutline = rSrcSet.Get( ATTR_FONT_CONTOUR ).GetValue();
+        bShadow = rSrcSet.Get( ATTR_FONT_SHADOWED ).GetValue();
+        bForbidden = rSrcSet.Get( ATTR_FORBIDDEN_RULES ).GetValue();
+        eEmphasis = rSrcSet.Get( ATTR_FONT_EMPHASISMARK ).GetEmphasisMark();
+        eRelief = rSrcSet.Get( ATTR_FONT_RELIEF ).GetValue();
+        eLang = rSrcSet.Get( ATTR_FONT_LANGUAGE ).GetLanguage();
+        eCjkLang = rSrcSet.Get( ATTR_CJK_FONT_LANGUAGE ).GetLanguage();
+        eCtlLang = rSrcSet.Get( ATTR_CTL_FONT_LANGUAGE ).GetLanguage();
+        bHyphenate = rSrcSet.Get( ATTR_HYPHENATE ).GetValue();
+        eDirection = rSrcSet.Get( ATTR_WRITINGDIR ).GetValue();
     }
 
     // Expect to be compatible to LogicToLogic, ie. 2540/1440 = 127/72, and round
@@ -909,8 +879,7 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 
     const SfxItemSet& rMySet = GetItemSet();
 
-    SvxCellHorJustify eHorJust =
-        static_cast<const SvxHorJustifyItem&>(rMySet.Get(ATTR_HOR_JUSTIFY)).GetValue();
+    SvxCellHorJustify eHorJust = rMySet.Get(ATTR_HOR_JUSTIFY).GetValue();
 
     SvxAdjust eSvxAdjust;
     switch (eHorJust)
@@ -1249,12 +1218,12 @@ namespace {
 
 sal_uInt32 getNumberFormatKey(const SfxItemSet& rSet)
 {
-    return static_cast<const SfxUInt32Item&>(rSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+    return rSet.Get(ATTR_VALUE_FORMAT).GetValue();
 }
 
 LanguageType getLanguageType(const SfxItemSet& rSet)
 {
-    return static_cast<const SvxLanguageItem&>(rSet.Get(ATTR_LANGUAGE_FORMAT)).GetLanguage();
+    return rSet.Get(ATTR_LANGUAGE_FORMAT).GetLanguage();
 }
 
 }

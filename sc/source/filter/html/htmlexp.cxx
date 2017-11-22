@@ -482,7 +482,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     const SfxItemSet& rSet = pStyleSheet->GetItemSet();
     if ( !aHTMLStyle.bInitialized )
     {
-        const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(&rSet.Get( ATTR_BACKGROUND ));
+        const SvxBrushItem* pBrushItem = &rSet.Get( ATTR_BACKGROUND );
         aHTMLStyle.aBackgroundColor = pBrushItem->GetColor();
         aHTMLStyle.bInitialized = true;
     }
@@ -564,7 +564,7 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
 void ScHTMLExport::WriteBody()
 {
     const SfxItemSet& rSet = PageDefaults( bAll ? 0 : aRange.aStart.Tab() );
-    const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(&rSet.Get( ATTR_BACKGROUND ));
+    const SvxBrushItem* pBrushItem = &rSet.Get( ATTR_BACKGROUND );
 
     // default text color black
     if (!mbSkipHeaderFooter)

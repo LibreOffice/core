@@ -121,7 +121,7 @@ void ScDPFieldButton::draw()
         {
             //  use ScPatternAttr::GetFont only for font size
             vcl::Font aAttrFont;
-            static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+            mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN).
                 GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
             aTextFont.SetFontSize( aAttrFont.GetFontSize() );
         }

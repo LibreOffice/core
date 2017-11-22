@@ -724,7 +724,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         if (pStyleSheet)
         {
             const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
-            aPaperSize = static_cast<const SvxSizeItem&>( rSourceSet.Get(ATTR_PAGE_SIZE)).GetSize();
+            aPaperSize = rSourceSet.Get(ATTR_PAGE_SIZE).GetSize();
 
             // CopyStyleFrom copies SetItems with correct pool
             ScStyleSheetPool* pDestPool = rDestDoc.GetStyleSheetPool();

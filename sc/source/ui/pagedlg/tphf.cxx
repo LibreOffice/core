@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <attrib.hxx>
 #include <tphf.hxx>
 #include <sc.hrc>
 #include <scabstdlg.hxx>
@@ -222,7 +223,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
                 pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), nSettingsId );
         }
 
-        SvxNumType eNumType = static_cast<const SvxPageItem&>(aDataSet.Get(ATTR_PAGE)).GetNumType();
+        SvxNumType eNumType = aDataSet.Get(ATTR_PAGE).GetNumType();
         static_cast<ScHFEditPage*>(pDlg->GetTabPage())->SetNumType(eNumType);
 
         aText += " (" + ScGlobal::GetRscString( STR_PAGESTYLE );

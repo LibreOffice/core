@@ -21,14 +21,20 @@
 #include <editeng/memberids.h>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/unonrule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
+#include <svx/rotmodit.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
@@ -1137,13 +1143,13 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
             if ( pEntry )     // only item-WIDs in header/footer map
             {
                 rpResultEntry = pEntry;
-                return &static_cast<const SvxSetItem&>(pStyle->GetItemSet().Get(ATTR_PAGE_HEADERSET)).GetItemSet();
+                return &pStyle->GetItemSet().Get(ATTR_PAGE_HEADERSET).GetItemSet();
             }
             pEntry = lcl_GetFooterStyleMap()->getByName( rPropName );
             if ( pEntry )      // only item-WIDs in header/footer map
             {
                 rpResultEntry = pEntry;
-                return &static_cast<const SvxSetItem&>(pStyle->GetItemSet().Get(ATTR_PAGE_FOOTERSET)).GetItemSet();
+                return &pStyle->GetItemSet().Get(ATTR_PAGE_FOOTERSET).GetItemSet();
             }
         }
         pEntry = pPropSet->getPropertyMap().getByName( rPropName );
@@ -1490,7 +1496,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                 const SfxItemPropertySimpleEntry* pHeaderEntry = lcl_GetHeaderStyleMap()->getByName( rPropertyName );
                 if ( pHeaderEntry ) // only item-WIDs in header/footer map
                 {
-                    SvxSetItem aNewHeader( static_cast<const SvxSetItem&>(rSet.Get(ATTR_PAGE_HEADERSET)) );
+                    SvxSetItem aNewHeader( rSet.Get(ATTR_PAGE_HEADERSET) );
                     if (pValue)
                         pPropSet->setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSet() );
                     else
@@ -1504,7 +1510,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                 const SfxItemPropertySimpleEntry* pFooterEntry = lcl_GetFooterStyleMap()->getByName( rPropertyName );
                 if ( pFooterEntry ) // only item-WIDs in header/footer map
                 {
-                    SvxSetItem aNewFooter( static_cast<const SvxSetItem&>(rSet.Get(ATTR_PAGE_FOOTERSET)) );
+                    SvxSetItem aNewFooter( rSet.Get(ATTR_PAGE_FOOTERSET) );
                     if (pValue)
                         pPropSet->setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSet() );
                     else
@@ -1529,10 +1535,10 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                     // language for number formats
                                     SvNumberFormatter* pFormatter =
                                             pDocShell->GetDocument().GetFormatTable();
-                                    sal_uInt32 nOldFormat = static_cast<const SfxUInt32Item&>(
-                                            rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
-                                    LanguageType eOldLang = static_cast<const SvxLanguageItem&>(
-                                            rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
+                                    sal_uInt32 nOldFormat =
+                                            rSet.Get( ATTR_VALUE_FORMAT ).GetValue();
+                                    LanguageType eOldLang =
+                                            rSet.Get( ATTR_LANGUAGE_FORMAT ).GetLanguage();
                                     pFormatter->GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
                                     sal_uInt32 nNewFormat = 0;
@@ -1664,7 +1670,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                     sal_Int16 nPages = 0;
                                     if (*pValue >>= nPages)
                                     {
-                                        ScPageScaleToItem aItem = static_cast<const ScPageScaleToItem&>(rSet.Get(ATTR_PAGE_SCALETO));
+                                        ScPageScaleToItem aItem = rSet.Get(ATTR_PAGE_SCALETO);
                                         if ( rPropertyName == SC_UNO_PAGE_SCALETOX )
                                             aItem.SetWidth(static_cast<sal_uInt16>(nPages));
                                         else
@@ -1806,10 +1812,10 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                     case ATTR_VALUE_FORMAT:
                         if ( pDocShell )
                         {
-                            sal_uInt32 nOldFormat = static_cast<const SfxUInt32Item&>(
-                                    pItemSet->Get( ATTR_VALUE_FORMAT )).GetValue();
-                            LanguageType eOldLang = static_cast<const SvxLanguageItem&>(
-                                    pItemSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
+                            sal_uInt32 nOldFormat =
+                                    pItemSet->Get( ATTR_VALUE_FORMAT ).GetValue();
+                            LanguageType eOldLang =
+                                    pItemSet->Get( ATTR_LANGUAGE_FORMAT ).GetLanguage();
                             nOldFormat = pDocShell->GetDocument().GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
                             aAny <<= nOldFormat;
@@ -1821,7 +1827,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                         break;
                     case ATTR_STACKED:
                         {
-                            sal_Int32 nRot = static_cast<const SfxInt32Item&>(pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
+                            sal_Int32 nRot = pItemSet->Get(ATTR_ROTATE_VALUE).GetValue();
                             bool bStacked = static_cast<const SfxBoolItem&>(pItemSet->Get(nWhich)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
                         }
@@ -1856,7 +1862,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                         break;
                     case ATTR_PAGE_SCALETO:
                         {
-                            ScPageScaleToItem aItem(static_cast<const ScPageScaleToItem&>(pItemSet->Get(ATTR_PAGE_SCALETO)));
+                            ScPageScaleToItem aItem(pItemSet->Get(ATTR_PAGE_SCALETO));
                             if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
                                 aAny <<= static_cast<sal_Int16>(aItem.GetWidth());
                             else

@@ -187,7 +187,7 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
         case EXC_ID_TOPMARGIN:
         case EXC_ID_BOTTOMMARGIN:
         {
-            SvxULSpaceItem aItem( GETITEM( rItemSet, SvxULSpaceItem, ATTR_ULSPACE ) );
+            SvxULSpaceItem aItem( rItemSet.Get( ATTR_ULSPACE ) );
             if( nRecId == EXC_ID_TOPMARGIN )
                 aItem.SetUpperValue( nMarginTwips );
             else
@@ -198,7 +198,7 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
         case EXC_ID_LEFTMARGIN:
         case EXC_ID_RIGHTMARGIN:
         {
-            SvxLRSpaceItem aItem( GETITEM( rItemSet, SvxLRSpaceItem, ATTR_LRSPACE ) );
+            SvxLRSpaceItem aItem( rItemSet.Get( ATTR_LRSPACE ) );
             if( nRecId == EXC_ID_LEFTMARGIN )
                 aItem.SetLeftValue( nMarginTwips );
             else
@@ -251,7 +251,7 @@ void XclImpPageSettings::Finalize()
 
     if( mbValidPaper )
     {
-        SvxPageItem aPageItem( GETITEM( rItemSet, SvxPageItem, ATTR_PAGE ) );
+        SvxPageItem aPageItem( rItemSet.Get( ATTR_PAGE ) );
         aPageItem.SetLandscape( !maData.mbPortrait );
         rItemSet.Put( aPageItem );
         ScfTools::PutItem( rItemSet, SvxSizeItem( ATTR_PAGE_SIZE, maData.GetScPaperSize() ), true );
@@ -285,7 +285,7 @@ void XclImpPageSettings::Finalize()
 
     // header
     bool bHasHeader = !maData.maHeader.isEmpty();
-    SvxSetItem aHdrSetItem( GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_HEADERSET ) );
+    SvxSetItem aHdrSetItem( rItemSet.Get( ATTR_PAGE_HEADERSET ) );
     SfxItemSet& rHdrItemSet = aHdrSetItem.GetItemSet();
     rHdrItemSet.Put( SfxBoolItem( ATTR_PAGE_ON, bHasHeader ) );
     if( bHasHeader )
@@ -321,7 +321,7 @@ void XclImpPageSettings::Finalize()
 
     // footer
     bool bHasFooter = !maData.maFooter.isEmpty();
-    SvxSetItem aFtrSetItem( GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_FOOTERSET ) );
+    SvxSetItem aFtrSetItem( rItemSet.Get( ATTR_PAGE_FOOTERSET ) );
     SfxItemSet& rFtrItemSet = aFtrSetItem.GetItemSet();
     rFtrItemSet.Put( SfxBoolItem( ATTR_PAGE_ON, bHasFooter ) );
     if( bHasFooter )

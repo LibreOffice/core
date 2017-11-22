@@ -565,7 +565,7 @@ ScVbaFormat< Ifc... >::getLocked(  )
             SfxItemSet* pDataSet = getCurrentDataSet();
             if ( pDataSet )
             {
-                const ScProtectionAttr& rProtAttr = static_cast<const ScProtectionAttr &>( pDataSet->Get(ATTR_PROTECTION) );
+                const ScProtectionAttr& rProtAttr = pDataSet->Get(ATTR_PROTECTION);
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION);
                 if(eState != SfxItemState::DONTCARE)
                     aCellProtection <<= rProtAttr.GetProtection();
@@ -598,7 +598,7 @@ ScVbaFormat< Ifc... >::getFormulaHidden(  )
             SfxItemSet* pDataSet = getCurrentDataSet();
             if ( pDataSet )
             {
-                const ScProtectionAttr& rProtAttr = static_cast<const ScProtectionAttr &>( pDataSet->Get(ATTR_PROTECTION) );
+                const ScProtectionAttr& rProtAttr = pDataSet->Get(ATTR_PROTECTION);
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION);
                 if(eState != SfxItemState::DONTCARE)
                     aBoolRet <<= rProtAttr.GetHideFormula();

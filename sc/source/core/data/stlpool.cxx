@@ -280,7 +280,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_STD );
 
     // distance to header/footer for the sheet
-    pHFSetItem = new SvxSetItem( static_cast<const SvxSetItem&>(pSet->Get( ATTR_PAGE_HEADERSET ) ) );
+    pHFSetItem = new SvxSetItem( pSet->Get( ATTR_PAGE_HEADERSET ) );
     pHFSetItem->SetWhich(ATTR_PAGE_HEADERSET);
     pSet->Put( *pHFSetItem );
     pHFSetItem->SetWhich(ATTR_PAGE_FOOTERSET);
@@ -335,7 +335,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxInfoItem.SetTable( false );
     aBoxInfoItem.SetDist ( true );
 
-    pHFSetItem = new SvxSetItem( static_cast<const SvxSetItem&>(pSet->Get( ATTR_PAGE_HEADERSET ) ) );
+    pHFSetItem = new SvxSetItem( pSet->Get( ATTR_PAGE_HEADERSET ) );
     pHFSet = &(pHFSetItem->GetItemSet());
 
     pHFSet->Put( SvxBrushItem( aColGrey, ATTR_BACKGROUND ) );

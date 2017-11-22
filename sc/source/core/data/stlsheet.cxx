@@ -28,8 +28,10 @@
 #include <svx/pageitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/pbinitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -160,8 +162,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
                         SvxSetItem      aHFSetItem(
-                                            static_cast<const SvxSetItem&>(
-                                            rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) ));
+                                            rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) );
 
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
                         SvxSizeItem     aHFSizeItem( // 0,5 cm + distance

@@ -367,11 +367,11 @@ void ScDocument::FillInfo(
     RowInfo* pRowInfo = rTabInfo.mpRowInfo.get();
 
     const SvxBrushItem* pDefBackground =
-            static_cast<const SvxBrushItem*>( &pPool->GetDefaultItem( ATTR_BACKGROUND ) );
+            &pPool->GetDefaultItem( ATTR_BACKGROUND );
     const ScMergeAttr* pDefMerge =
-            static_cast<const ScMergeAttr*>( &pPool->GetDefaultItem( ATTR_MERGE ) );
+            &pPool->GetDefaultItem( ATTR_MERGE );
     const SvxShadowItem* pDefShadow =
-            static_cast<const SvxShadowItem*>( &pPool->GetDefaultItem( ATTR_SHADOW ) );
+            &pPool->GetDefaultItem( ATTR_SHADOW );
 
     SCSIZE nArrRow;
     SCSIZE nArrCount;
@@ -518,8 +518,8 @@ void ScDocument::FillInfo(
                         const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
                                                 &pPattern->GetItem(ATTR_MERGE));
                         bool bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
-                        ScMF nOverlap = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItemSet().
-                                                        Get(ATTR_MERGE_FLAG))->GetValue();
+                        ScMF nOverlap = pPattern->GetItemSet().
+                                                        Get(ATTR_MERGE_FLAG).GetValue();
                         bool bHOverlapped(nOverlap & ScMF::Hor);
                         bool bVOverlapped(nOverlap & ScMF::Ver);
                         bool bAutoFilter(nOverlap & ScMF::Auto);

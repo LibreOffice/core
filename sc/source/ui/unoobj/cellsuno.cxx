@@ -2146,8 +2146,8 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
             {
                 // language for number formats
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                sal_uLong nOldFormat = static_cast<const SfxUInt32Item&>(rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
-                LanguageType eOldLang = static_cast<const SvxLanguageItem&>(rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
+                sal_uLong nOldFormat = rSet.Get( ATTR_VALUE_FORMAT ).GetValue();
+                LanguageType eOldLang = rSet.Get( ATTR_LANGUAGE_FORMAT ).GetLanguage();
                 nOldFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
                 sal_Int32 nIntVal = 0;
@@ -2486,10 +2486,10 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         {
                             ScDocument& rDoc = pDocShell->GetDocument();
 
-                            sal_uLong nOldFormat = static_cast<const SfxUInt32Item&>(
-                                    pDataSet->Get( ATTR_VALUE_FORMAT )).GetValue();
-                            LanguageType eOldLang = static_cast<const SvxLanguageItem&>(
-                                    pDataSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
+                            sal_uLong nOldFormat =
+                                    pDataSet->Get( ATTR_VALUE_FORMAT ).GetValue();
+                            LanguageType eOldLang =
+                                    pDataSet->Get( ATTR_LANGUAGE_FORMAT ).GetLanguage();
                             nOldFormat = rDoc.GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
                             rAny <<= (sal_Int32)nOldFormat;
@@ -2501,7 +2501,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         break;
                     case ATTR_STACKED:
                         {
-                            sal_Int32 nRot = static_cast<const SfxInt32Item&>(pDataSet->Get(ATTR_ROTATE_VALUE)).GetValue();
+                            sal_Int32 nRot = pDataSet->Get(ATTR_ROTATE_VALUE).GetValue();
                             bool bStacked = static_cast<const SfxBoolItem&>(pDataSet->Get(pEntry->nWID)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( rAny );
                         }

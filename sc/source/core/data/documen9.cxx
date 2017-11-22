@@ -570,14 +570,11 @@ void ScDocument::UpdateFontCharSet()
     rtl_TextEncoding eSysSet = osl_getThreadTextEncoding();
     if ( eSrcSet != eSysSet || bUpdateOld )
     {
-        sal_uInt32 nCount,i;
-        SvxFontItem* pItem;
-
         ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
-        nCount = pPool->GetItemCount2(ATTR_FONT);
-        for (i=0; i<nCount; i++)
+        sal_uInt32 nCount = pPool->GetItemCount2(ATTR_FONT);
+        for (sal_uInt32 i=0; i<nCount; i++)
         {
-            pItem = const_cast<SvxFontItem*>(static_cast<const SvxFontItem*>(pPool->GetItem2(ATTR_FONT, i)));
+            SvxFontItem* pItem = const_cast<SvxFontItem*>(pPool->GetItem2(ATTR_FONT, i));
             if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                             ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 pItem->SetCharSet(eSysSet);
@@ -587,9 +584,9 @@ void ScDocument::UpdateFontCharSet()
         {
             SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
             nCount = rDrawPool.GetItemCount2(EE_CHAR_FONTINFO);
-            for (i=0; i<nCount; i++)
+            for (sal_uInt32 i=0; i<nCount; i++)
             {
-                pItem = const_cast<SvxFontItem*>(rDrawPool.GetItem2(EE_CHAR_FONTINFO, i));
+                SvxFontItem* pItem = const_cast<SvxFontItem*>(rDrawPool.GetItem2(EE_CHAR_FONTINFO, i));
                 if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                                 ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                     pItem->SetCharSet( eSysSet );

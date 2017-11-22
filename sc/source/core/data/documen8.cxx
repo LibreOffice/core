@@ -252,11 +252,9 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                         maTabs[nTab]->SetStreamValid( false );
 
                 sal_uLong nOldFormat =
-                    static_cast<const SfxUInt32Item*>(&rSet.Get(
-                    ATTR_VALUE_FORMAT ))->GetValue();
+                    rSet.Get( ATTR_VALUE_FORMAT ).GetValue();
                 sal_uLong nNewFormat =
-                    static_cast<const SfxUInt32Item*>(&rChanges.Get(
-                    ATTR_VALUE_FORMAT ))->GetValue();
+                    rChanges.Get( ATTR_VALUE_FORMAT ).GetValue();
                 LanguageType eNewLang, eOldLang;
                 eNewLang = eOldLang = LANGUAGE_DONTKNOW;
                 if ( nNewFormat != nOldFormat )
@@ -371,7 +369,7 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
     {
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
         SvxFrameDirection eDirection =
-            static_cast<const SvxFrameDirectionItem&>(rStyleSet.Get( ATTR_WRITINGDIR )).GetValue();
+            rStyleSet.Get( ATTR_WRITINGDIR ).GetValue();
 
         if ( eDirection == SvxFrameDirection::Horizontal_LR_TB )
             eRet = EE_HTEXTDIR_L2R;

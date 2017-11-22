@@ -873,7 +873,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     ScPatternAttr aNewPattern( *pPattern );
                     SfxItemSet& rNewSet = aNewPattern.GetItemSet();
 
-                    const SvxBoxItem& rOldBox = static_cast<const SvxBoxItem&>(rSet.Get(ATTR_BORDER));
+                    const SvxBoxItem& rOldBox = rSet.Get(ATTR_BORDER);
                     if ( rOldBox.GetTop() || rOldBox.GetBottom() || rOldBox.GetLeft() || rOldBox.GetRight() )
                     {
                         SvxBoxItem aNew( ATTR_BORDER );
@@ -888,7 +888,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         rNewSet.Put( aNew );
                     }
 
-                    const ScMergeAttr& rOldMerge = static_cast<const ScMergeAttr&>(rSet.Get(ATTR_MERGE));
+                    const ScMergeAttr& rOldMerge = rSet.Get(ATTR_MERGE);
                     if (rOldMerge.IsMerged())
                         rNewSet.Put( ScMergeAttr( std::min(
                                         static_cast<SCCOL>(rOldMerge.GetRowMerge()),
@@ -896,7 +896,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     std::min(
                                         static_cast<SCROW>(rOldMerge.GetColMerge()),
                                         static_cast<SCROW>(MAXROW+1 - (nCol-nCol1)))));
-                    const ScMergeFlagAttr& rOldFlag = static_cast<const ScMergeFlagAttr&>(rSet.Get(ATTR_MERGE_FLAG));
+                    const ScMergeFlagAttr& rOldFlag = rSet.Get(ATTR_MERGE_FLAG);
                     if (rOldFlag.IsOverlapped())
                     {
                         ScMF nNewFlags = rOldFlag.GetValue() & ~ScMF( ScMF::Hor | ScMF::Ver );
