@@ -10,13 +10,14 @@
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 # Link with -lgnustl_static
 gb_STDLIBS := \
-	-lgnustl_static \
-	-lm
+	-lc++_static \
+	-lc++abi \
+	-landroid_support \
 
 else
 # Link almost everything with -lgnustl_shared
 gb_STDLIBS := \
-	-lgnustl_shared \
+	-lc++_shared \
 
 endif
 

@@ -156,6 +156,9 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr,"generated rtti for %s\n", rttiName );
 #endif
+// TODO: incompatible with llvm-c++ in ndk6 - no __si_class_type_info or __class_type_info
+// either do as iOS one and inline thing or find another way
+#if !defined(ANDROID)
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
@@ -173,6 +176,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                 SAL_WARN_IF( !insertion.second, "bridges", "### inserting new generated rtti failed?!" );
+#endif
             }
             else // taking already generated rtti
             {
