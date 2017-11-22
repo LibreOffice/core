@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <cassert>
 #include <float.h>
+#include <limits>
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
@@ -365,8 +366,15 @@ inline void doubleToString(typename T::String ** pResult,
     int nExp = 0;
     if ( fValue > 0.0 )
     {
-        nExp = static_cast< int >(floor(log10(fValue)));
-        fValue /= getN10Exp(nExp);
+        // Cap nExp at a small value beyond which "fValue /= N10Exp" would lose precision (or N10Exp
+        // might even be zero); that will produce output with the decimal point in a non-normalized
+        // position, but the current quality of output for such small values is probably abysmal,
+        // anyway:
+        nExp = std::max(
+            static_cast< int >(floor(log10(fValue))), std::numeric_limits<double>::min_exponent10);
+        double const N10Exp = getN10Exp(nExp);
+        assert(N10Exp != 0);
+        fValue /= N10Exp;
     }
 
     switch (eFormat)
