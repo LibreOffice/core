@@ -7,9 +7,34 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cassert>
+
 #include "plugin.hxx"
 
 namespace {
+
+// Like clang::Stmt::IgnoreImplicit (lib/AST/Stmt.cpp), but also looking through implicit
+// UserDefinedConversion's member function call:
+Expr const * ignoreAllImplicit(Expr const * expr) {
+    if (auto const e = dyn_cast<ExprWithCleanups>(expr)) {
+        expr = e->getSubExpr();
+    }
+    if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
+        expr = e->GetTemporaryExpr();
+    }
+    if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
+        expr = e->getSubExpr();
+    }
+    while (auto const e = dyn_cast<ImplicitCastExpr>(expr)) {
+        expr = e->getSubExpr();
+        if (e->getCastKind() == CK_UserDefinedConversion) {
+            auto const ce = cast<CXXMemberCallExpr>(expr);
+            assert(ce->getNumArgs() == 0);
+            expr = ce->getImplicitObjectArgument();
+        }
+    }
+    return expr;
+}
 
 Expr const * ignoreParenImpCastAndComma(Expr const * expr) {
     for (;;) {
@@ -94,15 +119,16 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         if (e->getLocStart().isMacroID())
             return true;
         // double logical not of an int is an idiom to convert to bool
-        if (!e->IgnoreImpCasts()->getType()->isBooleanType())
+        auto const sub = ignoreAllImplicit(e);
+        if (!sub->getType()->isBooleanType())
             return true;
         report(
             DiagnosticsEngine::Warning,
             ("double logical negation expression of the form '!!A' (with A of type"
              " %0) can %select{logically|literally}1 be simplified as 'A'"),
             expr->getLocStart())
-            << e->IgnoreImpCasts()->getType()
-            << e->IgnoreImpCasts()->getType()->isBooleanType()
+            << sub->getType()
+            << sub->getType()->isBooleanType()
             << expr->getSourceRange();
         return true;
     }
