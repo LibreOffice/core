@@ -159,23 +159,23 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
 void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& )
 {
     SolarMutexGuard aGuard;
-    if ( pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
+    if ( !(pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON) )
+        return;
+
+    if ( nState == embed::EmbedStates::RUNNING )
     {
-        if ( nState == embed::EmbedStates::RUNNING )
-        {
-            // updates only necessary in non-active states
-            if( pObject->IsChart() )
-                pObject->UpdateReplacementOnDemand();
-            else
-                pObject->UpdateReplacement();
-        }
-        else if ( nState == embed::EmbedStates::ACTIVE ||
-                  nState == embed::EmbedStates::UI_ACTIVE ||
-                  nState == embed::EmbedStates::INPLACE_ACTIVE )
-        {
-            // in case the object is inplace or UI active the replacement image should be updated on demand
+        // updates only necessary in non-active states
+        if( pObject->IsChart() )
             pObject->UpdateReplacementOnDemand();
-        }
+        else
+            pObject->UpdateReplacement();
+    }
+    else if ( nState == embed::EmbedStates::ACTIVE ||
+              nState == embed::EmbedStates::UI_ACTIVE ||
+              nState == embed::EmbedStates::INPLACE_ACTIVE )
+    {
+        // in case the object is inplace or UI active the replacement image should be updated on demand
+        pObject->UpdateReplacementOnDemand();
     }
 }
 

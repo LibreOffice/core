@@ -414,53 +414,53 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const css::un
     SolarMutexGuard aGuard;
 
     VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
-    if ( pMultiLineEdit )
-    {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_LINE_END_FORMAT:
-            {
-                sal_Int16 nLineEndType = css::awt::LineEndFormat::LINE_FEED;
-                OSL_VERIFY( Value >>= nLineEndType );
-                switch ( nLineEndType )
-                {
-                case css::awt::LineEndFormat::CARRIAGE_RETURN:           meLineEndType = LINEEND_CR; break;
-                case css::awt::LineEndFormat::LINE_FEED:                 meLineEndType = LINEEND_LF; break;
-                case css::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED: meLineEndType = LINEEND_CRLF; break;
-                default: OSL_FAIL( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
-                }
-            }
-            break;
+    if ( !pMultiLineEdit )
+        return;
 
-            case BASEPROPERTY_READONLY:
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_LINE_END_FORMAT:
+        {
+            sal_Int16 nLineEndType = css::awt::LineEndFormat::LINE_FEED;
+            OSL_VERIFY( Value >>= nLineEndType );
+            switch ( nLineEndType )
             {
-                bool b;
-                if ( Value >>= b )
-                    pMultiLineEdit->SetReadOnly( b );
+            case css::awt::LineEndFormat::CARRIAGE_RETURN:           meLineEndType = LINEEND_CR; break;
+            case css::awt::LineEndFormat::LINE_FEED:                 meLineEndType = LINEEND_LF; break;
+            case css::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED: meLineEndType = LINEEND_CRLF; break;
+            default: OSL_FAIL( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
             }
-            break;
-            case BASEPROPERTY_MAXTEXTLEN:
+        }
+        break;
+
+        case BASEPROPERTY_READONLY:
+        {
+            bool b;
+            if ( Value >>= b )
+                pMultiLineEdit->SetReadOnly( b );
+        }
+        break;
+        case BASEPROPERTY_MAXTEXTLEN:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                pMultiLineEdit->SetMaxTextLen( n );
+        }
+        break;
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+        {
+            bool b;
+            if ( Value >>= b )
             {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                    pMultiLineEdit->SetMaxTextLen( n );
+                pMultiLineEdit->EnableFocusSelectionHide( b );
+                lcl_setWinBits( pMultiLineEdit, WB_NOHIDESELECTION, !b );
             }
-            break;
-            case BASEPROPERTY_HIDEINACTIVESELECTION:
-            {
-                bool b;
-                if ( Value >>= b )
-                {
-                    pMultiLineEdit->EnableFocusSelectionHide( b );
-                    lcl_setWinBits( pMultiLineEdit, WB_NOHIDESELECTION, !b );
-                }
-            }
-            break;
-            default:
-            {
-                VCLXWindow::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        default:
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 }
@@ -568,25 +568,25 @@ void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const 
     SolarMutexGuard aGuard;
 
     VclPtr< FileControl > pControl = GetAs< FileControl >();
-    if ( pControl )
+    if ( !pControl )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-        case BASEPROPERTY_HIDEINACTIVESELECTION:
-        {
-            bool bValue(false);
-            OSL_VERIFY( Value >>= bValue );
+    case BASEPROPERTY_HIDEINACTIVESELECTION:
+    {
+        bool bValue(false);
+        OSL_VERIFY( Value >>= bValue );
 
-            lcl_setWinBits( pControl, WB_NOHIDESELECTION, !bValue );
-            lcl_setWinBits( &pControl->GetEdit(), WB_NOHIDESELECTION, !bValue );
-        }
+        lcl_setWinBits( pControl, WB_NOHIDESELECTION, !bValue );
+        lcl_setWinBits( &pControl->GetEdit(), WB_NOHIDESELECTION, !bValue );
+    }
+    break;
+
+    default:
+        VCLXWindow::setProperty( PropertyName, Value );
         break;
-
-        default:
-            VCLXWindow::setProperty( PropertyName, Value );
-            break;
-        }
     }
 }
 
@@ -1306,19 +1306,19 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
         return;     // TODO : how to process ?
 
     m_xCurrentSupplier = pNew;
-    if (pField)
+    if (!pField)
+        return;
+
+    // save the actual value
+    css::uno::Any aCurrent = GetValue();
+    pField->SetFormatter(m_xCurrentSupplier->GetNumberFormatter(), false);
+    if (nKeyToSetDelayed != -1)
     {
-        // save the actual value
-        css::uno::Any aCurrent = GetValue();
-        pField->SetFormatter(m_xCurrentSupplier->GetNumberFormatter(), false);
-        if (nKeyToSetDelayed != -1)
-        {
-            pField->SetFormatKey(nKeyToSetDelayed);
-            nKeyToSetDelayed = -1;
-        }
-        SetValue(aCurrent);
-        NotifyTextListeners();
+        pField->SetFormatKey(nKeyToSetDelayed);
+        nKeyToSetDelayed = -1;
     }
+    SetValue(aCurrent);
+    NotifyTextListeners();
 }
 
 
@@ -1332,19 +1332,19 @@ sal_Int32 SVTXFormattedField::getFormatKey() const
 void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    if (pField)
+    if (!pField)
+        return;
+
+    if (pField->GetFormatter())
+        pField->SetFormatKey(nKey);
+    else
     {
-        if (pField->GetFormatter())
-            pField->SetFormatKey(nKey);
-        else
-        {
-            // probably I am in a block, in which first the key and next the formatter will be set,
-            // initially this happens quite certain, as the properties are set in alphabetic sequence,
-            // and the FormatsSupplier is processed before the FormatKey
-            nKeyToSetDelayed = nKey;
-        }
-        NotifyTextListeners();
+        // probably I am in a block, in which first the key and next the formatter will be set,
+        // initially this happens quite certain, as the properties are set in alphabetic sequence,
+        // and the FormatsSupplier is processed before the FormatKey
+        nKeyToSetDelayed = nKey;
     }
+    NotifyTextListeners();
 }
 
 
@@ -1425,38 +1425,38 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
 {
     SolarMutexGuard aGuard;
     VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
-    if ( pField )
-    {
-        css::uno::Reference< css::uno::XInterface > xRoadmapItem;
-        xRoadmapItem = evt.Source;
-        sal_Int32 nID = 0;
-        css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
-        css::uno::Any aValue = xPropertySet->getPropertyValue("ID");
-        aValue >>= nID;
+    if ( !pField )
+        return;
 
-        OUString sPropertyName = evt.PropertyName;
-        if ( sPropertyName == "Enabled" )
-        {
-            bool bEnable = false;
-            evt.NewValue >>= bEnable;
-            pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
-        }
-        else if ( sPropertyName == "Label" )
-        {
-            OUString sLabel;
-            evt.NewValue >>= sLabel;
-            pField->ChangeRoadmapItemLabel( (RoadmapTypes::ItemId)nID , sLabel );
-        }
-        else if  ( sPropertyName == "ID" )
-        {
-            sal_Int32 nNewID = 0;
-            evt.NewValue >>= nNewID;
-            evt.OldValue >>= nID;
-            pField->ChangeRoadmapItemID( (RoadmapTypes::ItemId)nID, (RoadmapTypes::ItemId)nNewID );
-        }
-    //    else
-            // TODO handle Interactive appropriately
+    css::uno::Reference< css::uno::XInterface > xRoadmapItem;
+    xRoadmapItem = evt.Source;
+    sal_Int32 nID = 0;
+    css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
+    css::uno::Any aValue = xPropertySet->getPropertyValue("ID");
+    aValue >>= nID;
+
+    OUString sPropertyName = evt.PropertyName;
+    if ( sPropertyName == "Enabled" )
+    {
+        bool bEnable = false;
+        evt.NewValue >>= bEnable;
+        pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
     }
+    else if ( sPropertyName == "Label" )
+    {
+        OUString sLabel;
+        evt.NewValue >>= sLabel;
+        pField->ChangeRoadmapItemLabel( (RoadmapTypes::ItemId)nID , sLabel );
+    }
+    else if  ( sPropertyName == "ID" )
+    {
+        sal_Int32 nNewID = 0;
+        evt.NewValue >>= nNewID;
+        evt.OldValue >>= nID;
+        pField->ChangeRoadmapItemID( (RoadmapTypes::ItemId)nID, (RoadmapTypes::ItemId)nNewID );
+    }
+//    else
+        // TODO handle Interactive appropriately
 }
 
 
@@ -2051,52 +2051,52 @@ VCLXProgressBar::~VCLXProgressBar()
 void VCLXProgressBar::ImplUpdateValue()
 {
     VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
-    if ( pProgressBar )
+    if ( !pProgressBar )
+        return;
+
+    sal_Int32 nVal;
+    sal_Int32 nValMin;
+    sal_Int32 nValMax;
+
+    // check min and max
+    if (m_nValueMin < m_nValueMax)
     {
-        sal_Int32 nVal;
-        sal_Int32 nValMin;
-        sal_Int32 nValMax;
-
-        // check min and max
-        if (m_nValueMin < m_nValueMax)
-        {
-            nValMin = m_nValueMin;
-            nValMax = m_nValueMax;
-        }
-        else
-        {
-            nValMin = m_nValueMax;
-            nValMax = m_nValueMin;
-        }
-
-        // check value
-        if (m_nValue < nValMin)
-        {
-            nVal = nValMin;
-        }
-        else if (m_nValue > nValMax)
-        {
-            nVal = nValMax;
-        }
-        else
-        {
-            nVal = m_nValue;
-        }
-
-        // calculate percent
-        sal_Int32 nPercent;
-        if (nValMin != nValMax)
-        {
-            nPercent = 100 * (nVal - nValMin) / (nValMax - nValMin);
-        }
-        else
-        {
-            nPercent = 0;
-        }
-
-        // set progressbar value
-        pProgressBar->SetValue( (sal_uInt16) nPercent );
+        nValMin = m_nValueMin;
+        nValMax = m_nValueMax;
     }
+    else
+    {
+        nValMin = m_nValueMax;
+        nValMax = m_nValueMin;
+    }
+
+    // check value
+    if (m_nValue < nValMin)
+    {
+        nVal = nValMin;
+    }
+    else if (m_nValue > nValMax)
+    {
+        nVal = nValMax;
+    }
+    else
+    {
+        nVal = m_nValue;
+    }
+
+    // calculate percent
+    sal_Int32 nPercent;
+    if (nValMin != nValMax)
+    {
+        nPercent = 100 * (nVal - nValMin) / (nValMax - nValMin);
+    }
+    else
+    {
+        nPercent = 0;
+    }
+
+    // set progressbar value
+    pProgressBar->SetValue( (sal_uInt16) nPercent );
 }
 
 // css::uno::XInterface
@@ -2182,56 +2182,56 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno:
     SolarMutexGuard aGuard;
 
     VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
-    if ( pProgressBar )
-    {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_PROGRESSVALUE:
-            {
-                if ( Value >>= m_nValue )
-                    ImplUpdateValue();
-            }
-            break;
-            case BASEPROPERTY_PROGRESSVALUE_MIN:
-            {
-                if ( Value >>= m_nValueMin )
-                    ImplUpdateValue();
-            }
-            break;
-            case BASEPROPERTY_PROGRESSVALUE_MAX:
-            {
-                if ( Value >>= m_nValueMax )
-                    ImplUpdateValue();
-            }
-            break;
-            case BASEPROPERTY_FILLCOLOR:
-            {
-                VclPtr<vcl::Window> pWindow = GetWindow();
-                if ( pWindow )
-                {
-                    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    if ( !pProgressBar )
+        return;
 
-                    if ( bVoid )
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_PROGRESSVALUE:
+        {
+            if ( Value >>= m_nValue )
+                ImplUpdateValue();
+        }
+        break;
+        case BASEPROPERTY_PROGRESSVALUE_MIN:
+        {
+            if ( Value >>= m_nValueMin )
+                ImplUpdateValue();
+        }
+        break;
+        case BASEPROPERTY_PROGRESSVALUE_MAX:
+        {
+            if ( Value >>= m_nValueMax )
+                ImplUpdateValue();
+        }
+        break;
+        case BASEPROPERTY_FILLCOLOR:
+        {
+            VclPtr<vcl::Window> pWindow = GetWindow();
+            if ( pWindow )
+            {
+                bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+                if ( bVoid )
+                {
+                    pWindow->SetControlForeground();
+                }
+                else
+                {
+                    sal_Int32 nColor = 0;
+                    if ( Value >>= nColor )
                     {
-                        pWindow->SetControlForeground();
-                    }
-                    else
-                    {
-                        sal_Int32 nColor = 0;
-                        if ( Value >>= nColor )
-                        {
-                            Color aColor( nColor );
-                            pWindow->SetControlForeground( aColor );
-                        }
+                        Color aColor( nColor );
+                        pWindow->SetControlForeground( aColor );
                     }
                 }
             }
-            break;
-            default:
-                VCLXWindow::setProperty( PropertyName, Value );
-                break;
         }
+        break;
+        default:
+            VCLXWindow::setProperty( PropertyName, Value );
+            break;
     }
 }
 

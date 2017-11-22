@@ -249,31 +249,31 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
     OUString aConfigPath;
     uno::Reference< lang::XServiceInfo > xServiceInfo
             ( xDoc, uno::UNO_QUERY );
-    if ( xServiceInfo.is() )
+    if ( !xServiceInfo.is() )
+        return;
+
+    if ( xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
+        aConfigPath = "Office.Impress/Layout/Other/MeasureUnit";
+    else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
+        aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
+    else
     {
-        if ( xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
-            aConfigPath = "Office.Impress/Layout/Other/MeasureUnit";
-        else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
-            aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
+        mbGraphicsSource = false;
+        if ( xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
+            aConfigPath = "Office.Calc/Layout/Other/MeasureUnit";
+        else if ( xServiceInfo->supportsService("com.sun.star.text.TextDocument") )
+            aConfigPath = "Office.Writer/Layout/Other/MeasureUnit";
+    }
+    if ( !aConfigPath.isEmpty() )
+    {
+        FilterConfigItem aConfigItem( aConfigPath );
+        OUString aPropertyName;
+        SvtSysLocale aSysLocale;
+        if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MeasurementSystem::Metric )
+            aPropertyName = "Metric";
         else
-        {
-            mbGraphicsSource = false;
-            if ( xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
-                aConfigPath = "Office.Calc/Layout/Other/MeasureUnit";
-            else if ( xServiceInfo->supportsService("com.sun.star.text.TextDocument") )
-                aConfigPath = "Office.Writer/Layout/Other/MeasureUnit";
-        }
-        if ( !aConfigPath.isEmpty() )
-        {
-            FilterConfigItem aConfigItem( aConfigPath );
-            OUString aPropertyName;
-            SvtSysLocale aSysLocale;
-            if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MeasurementSystem::Metric )
-                aPropertyName = "Metric";
-            else
-                aPropertyName = "NonMetric";
-            meFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
-        }
+            aPropertyName = "NonMetric";
+        meFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
     }
 }
 

@@ -351,37 +351,37 @@ void ToolbarMenu_Impl::clearAccessibleSelection()
 
 void ToolbarMenu_Impl::notifyHighlightedEntry()
 {
-    if( mxAccessible.is() && mxAccessible->HasAccessibleListeners() )
+    if( !(mxAccessible.is() && mxAccessible->HasAccessibleListeners()) )
+        return;
+
+    ToolbarMenuEntry* pEntry = implGetEntry( mnHighlightedEntry );
+    if( !(pEntry && pEntry->mbEnabled && (pEntry->mnEntryId != TITLE_ID)) )
+        return;
+
+    Any aNew;
+    Any aOld( mxOldSelection );
+    if( pEntry->mpControl )
     {
-        ToolbarMenuEntry* pEntry = implGetEntry( mnHighlightedEntry );
-        if( pEntry && pEntry->mbEnabled && (pEntry->mnEntryId != TITLE_ID) )
-        {
-            Any aNew;
-            Any aOld( mxOldSelection );
-            if( pEntry->mpControl )
-            {
-                sal_Int32 nChildIndex = 0;
-                // todo: if other controls than ValueSet are allowed, adapt this code
-                ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
-                if( pValueSet )
-                    nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );
+        sal_Int32 nChildIndex = 0;
+        // todo: if other controls than ValueSet are allowed, adapt this code
+        ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
+        if( pValueSet )
+            nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );
 
-                if( (nChildIndex >= pEntry->getAccessibleChildCount()) || (nChildIndex < 0) )
-                    return;
+        if( (nChildIndex >= pEntry->getAccessibleChildCount()) || (nChildIndex < 0) )
+            return;
 
-                aNew <<= getAccessibleChild( pEntry->mpControl, nChildIndex );
-            }
-            else
-            {
-                aNew <<= pEntry->GetAccessible();
-            }
-
-            fireAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOld, aNew );
-            fireAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOld, aNew );
-            fireAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any(), Any( AccessibleStateType::FOCUSED ) );
-            aNew >>= mxOldSelection;
-        }
+        aNew <<= getAccessibleChild( pEntry->mpControl, nChildIndex );
     }
+    else
+    {
+        aNew <<= pEntry->GetAccessible();
+    }
+
+    fireAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOld, aNew );
+    fireAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOld, aNew );
+    fireAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any(), Any( AccessibleStateType::FOCUSED ) );
+    aNew >>= mxOldSelection;
 }
 
 
@@ -1029,32 +1029,32 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
 void ToolbarMenu_Impl::implHighlightControl( sal_uInt16 nCode, Control* pControl )
 {
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
-    if( pValueSet )
+    if( !pValueSet )
+        return;
+
+    const size_t nItemCount = pValueSet->GetItemCount();
+    size_t nItemPos = VALUESET_ITEM_NOTFOUND;
+    switch( nCode )
     {
-        const size_t nItemCount = pValueSet->GetItemCount();
-        size_t nItemPos = VALUESET_ITEM_NOTFOUND;
-        switch( nCode )
-        {
-        case KEY_UP:
-        {
-            const sal_uInt16 nColCount = pValueSet->GetColCount();
-            const sal_uInt16 nLastLine = nItemCount / nColCount;
-            nItemPos = std::min( static_cast<size_t>(((nLastLine-1) * nColCount) + mnLastColumn), nItemCount-1 );
-            break;
-        }
-        case KEY_DOWN:
-            nItemPos = std::min( static_cast<size_t>(mnLastColumn), nItemCount-1 );
-            break;
-        case KEY_END:
-            nItemPos = nItemCount -1;
-            break;
-        case KEY_HOME:
-            nItemPos = 0;
-            break;
-        }
-        pValueSet->SelectItem( pValueSet->GetItemId( nItemPos ) );
-        notifyHighlightedEntry();
+    case KEY_UP:
+    {
+        const sal_uInt16 nColCount = pValueSet->GetColCount();
+        const sal_uInt16 nLastLine = nItemCount / nColCount;
+        nItemPos = std::min( static_cast<size_t>(((nLastLine-1) * nColCount) + mnLastColumn), nItemCount-1 );
+        break;
     }
+    case KEY_DOWN:
+        nItemPos = std::min( static_cast<size_t>(mnLastColumn), nItemCount-1 );
+        break;
+    case KEY_END:
+        nItemPos = nItemCount -1;
+        break;
+    case KEY_HOME:
+        nItemPos = 0;
+        break;
+    }
+    pValueSet->SelectItem( pValueSet->GetItemId( nItemPos ) );
+    notifyHighlightedEntry();
 }
 
 

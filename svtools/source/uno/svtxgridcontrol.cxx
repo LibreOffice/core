@@ -434,25 +434,25 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
 
 void SVTXGridControl::impl_checkTableModelInit()
 {
-    if ( !m_bTableModelInitCompleted && m_xTableModel->hasColumnModel() && m_xTableModel->hasDataModel() )
-    {
-        VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
-        if ( pTable )
-        {
-            pTable->SetModel( PTableModel( m_xTableModel ) );
+    if ( !(!m_bTableModelInitCompleted && m_xTableModel->hasColumnModel() && m_xTableModel->hasDataModel()) )
+        return;
 
-            m_bTableModelInitCompleted = true;
+    VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
+    if ( !pTable )
+        return;
 
-            // ensure default columns exist, if they have not previously been added
-            Reference< XGridDataModel > const xDataModel( m_xTableModel->getDataModel(), UNO_QUERY_THROW );
-            Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel(), UNO_QUERY_THROW );
+    pTable->SetModel( PTableModel( m_xTableModel ) );
 
-            sal_Int32 const nDataColumnCount = xDataModel->getColumnCount();
-            if ( ( nDataColumnCount > 0 ) && ( xColumnModel->getColumnCount() == 0 ) )
-                xColumnModel->setDefaultColumns( nDataColumnCount );
-                // this will trigger notifications, which in turn will let us update our m_xTableModel
-        }
-    }
+    m_bTableModelInitCompleted = true;
+
+    // ensure default columns exist, if they have not previously been added
+    Reference< XGridDataModel > const xDataModel( m_xTableModel->getDataModel(), UNO_QUERY_THROW );
+    Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel(), UNO_QUERY_THROW );
+
+    sal_Int32 const nDataColumnCount = xDataModel->getColumnCount();
+    if ( ( nDataColumnCount > 0 ) && ( xColumnModel->getColumnCount() == 0 ) )
+        xColumnModel->setDefaultColumns( nDataColumnCount );
+        // this will trigger notifications, which in turn will let us update our m_xTableModel
 }
 
 namespace

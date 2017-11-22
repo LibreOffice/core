@@ -77,26 +77,26 @@ ValueSetAcc::~ValueSetAcc()
 
 void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
-    if( nEventId )
+    if( !nEventId )
+        return;
+
+    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
+    accessibility::AccessibleEventObject                                                        aEvtObject;
+
+    aEvtObject.EventId = nEventId;
+    aEvtObject.Source = static_cast<uno::XWeak*>(this);
+    aEvtObject.NewValue = rNewValue;
+    aEvtObject.OldValue = rOldValue;
+
+    for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
+        aIter != aTmpListeners.end() ; ++aIter)
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-        accessibility::AccessibleEventObject                                                        aEvtObject;
-
-        aEvtObject.EventId = nEventId;
-        aEvtObject.Source = static_cast<uno::XWeak*>(this);
-        aEvtObject.NewValue = rNewValue;
-        aEvtObject.OldValue = rOldValue;
-
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
-            aIter != aTmpListeners.end() ; ++aIter)
+        try
         {
-            try
-            {
-                (*aIter)->notifyEvent( aEvtObject );
-            }
-            catch(const uno::Exception&)
-            {
-            }
+            (*aIter)->notifyEvent( aEvtObject );
+        }
+        catch(const uno::Exception&)
+        {
         }
     }
 }
@@ -336,22 +336,22 @@ void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< acc
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (m_aMutex);
 
-    if( rxListener.is() )
+    if( !rxListener.is() )
+           return;
+
+       ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
+    bool bFound = false;
+
+    while( !bFound && ( aIter != mxEventListeners.end() ) )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
-        bool bFound = false;
-
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
-        {
-            if( *aIter == rxListener )
-                bFound = true;
-            else
-                ++aIter;
-        }
-
-        if (!bFound)
-            mxEventListeners.push_back( rxListener );
+        if( *aIter == rxListener )
+            bFound = true;
+        else
+            ++aIter;
     }
+
+    if (!bFound)
+        mxEventListeners.push_back( rxListener );
 }
 
 
@@ -684,21 +684,21 @@ ValueItemAcc::~ValueItemAcc()
 
 void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
-    if( nEventId )
+    if( !nEventId )
+        return;
+
+    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
+    accessibility::AccessibleEventObject                                                        aEvtObject;
+
+    aEvtObject.EventId = nEventId;
+    aEvtObject.Source = static_cast<uno::XWeak*>(this);
+    aEvtObject.NewValue = rNewValue;
+    aEvtObject.OldValue = rOldValue;
+
+    for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
+         aIter != aTmpListeners.end() ; ++aIter)
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-        accessibility::AccessibleEventObject                                                        aEvtObject;
-
-        aEvtObject.EventId = nEventId;
-        aEvtObject.Source = static_cast<uno::XWeak*>(this);
-        aEvtObject.NewValue = rNewValue;
-        aEvtObject.OldValue = rOldValue;
-
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
-             aIter != aTmpListeners.end() ; ++aIter)
-        {
-            (*aIter)->notifyEvent( aEvtObject );
-        }
+        (*aIter)->notifyEvent( aEvtObject );
     }
 }
 
@@ -905,22 +905,22 @@ void SAL_CALL ValueItemAcc::addAccessibleEventListener( const uno::Reference< ac
 {
     const ::osl::MutexGuard aGuard( maMutex );
 
-    if( rxListener.is() )
+    if( !rxListener.is() )
+           return;
+
+       ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
+    bool bFound = false;
+
+    while( !bFound && ( aIter != mxEventListeners.end() ) )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
-        bool bFound = false;
-
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
-        {
-            if( *aIter == rxListener )
-                bFound = true;
-            else
-                ++aIter;
-        }
-
-        if (!bFound)
-            mxEventListeners.push_back( rxListener );
+        if( *aIter == rxListener )
+            bFound = true;
+        else
+            ++aIter;
     }
+
+    if (!bFound)
+        mxEventListeners.push_back( rxListener );
 }
 
 

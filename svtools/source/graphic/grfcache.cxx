@@ -372,19 +372,19 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut()
         if( !maGraphicObjectList[ i ]->IsSwappedOut() )
             mbSwappedAll = false;
 
-    if( mbSwappedAll )
-    {
-        delete mpBmpEx;
-        mpBmpEx = nullptr;
-        delete mpMtf;
-        mpMtf = nullptr;
-        delete mpAnimation;
-        mpAnimation = nullptr;
+    if( !mbSwappedAll )
+        return;
 
-        // #119176# also reset VectorGraphicData
-        maVectorGraphicData.reset();
-        maPdfData = uno::Sequence<sal_Int8>();
-    }
+    delete mpBmpEx;
+    mpBmpEx = nullptr;
+    delete mpMtf;
+    mpMtf = nullptr;
+    delete mpAnimation;
+    mpAnimation = nullptr;
+
+    // #119176# also reset VectorGraphicData
+    maVectorGraphicData.reset();
+    maPdfData = uno::Sequence<sal_Int8>();
 }
 
 void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
@@ -1019,21 +1019,21 @@ void GraphicCache::SetMaxDisplayCacheSize( sal_uLong nNewCacheSize )
 
 void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
-    if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
+    if( mnReleaseTimeoutSeconds == nTimeoutSeconds )
+        return;
+
+    ::salhelper::TTimeValue           aReleaseTime;
+
+    if( ( mnReleaseTimeoutSeconds = nTimeoutSeconds ) != 0 )
     {
-        ::salhelper::TTimeValue           aReleaseTime;
+        osl_getSystemTime( &aReleaseTime );
+        aReleaseTime.addTime( ::salhelper::TTimeValue( nTimeoutSeconds, 0 ) );
+    }
 
-        if( ( mnReleaseTimeoutSeconds = nTimeoutSeconds ) != 0 )
-        {
-            osl_getSystemTime( &aReleaseTime );
-            aReleaseTime.addTime( ::salhelper::TTimeValue( nTimeoutSeconds, 0 ) );
-        }
-
-        for( GraphicDisplayCacheEntryVector::const_iterator it = maDisplayCache.begin();
-             it != maDisplayCache.end(); ++it )
-        {
-            (*it)->SetReleaseTime( aReleaseTime );
-        }
+    for( GraphicDisplayCacheEntryVector::const_iterator it = maDisplayCache.begin();
+         it != maDisplayCache.end(); ++it )
+    {
+        (*it)->SetReleaseTime( aReleaseTime );
     }
 }
 

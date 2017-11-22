@@ -108,34 +108,34 @@ void HTMLParser::RemoveSGMLComment( OUString &rString )
         rString = rString.copy( nPos );
     }
 
-    if( rString.endsWith("-->") )
+    if( !rString.endsWith("-->") )
+        return;
+
+    rString = rString.copy( 0, rString.getLength()-3 );
+    // "//" or "'", maybe preceding CR/LF
+    rString = comphelper::string::stripEnd(rString, ' ');
+    sal_Int32 nDel = 0, nLen = rString.getLength();
+    if( nLen >= 2 &&
+        rString.endsWith("//") )
     {
-        rString = rString.copy( 0, rString.getLength()-3 );
-        // "//" or "'", maybe preceding CR/LF
-        rString = comphelper::string::stripEnd(rString, ' ');
-        sal_Int32 nDel = 0, nLen = rString.getLength();
-        if( nLen >= 2 &&
-            rString.endsWith("//") )
-        {
-            nDel = 2;
-        }
-        else if( nLen && '\'' == rString[nLen-1] )
-        {
-            nDel = 1;
-        }
-        if( nDel && nLen >= nDel+1 )
-        {
-            c = rString[nLen-(nDel+1)];
-            if( '\r'==c || '\n'==c )
-            {
-                nDel++;
-                if( '\n'==c && nLen >= nDel+1 &&
-                    '\r'==rString[nLen-(nDel+1)] )
-                    nDel++;
-            }
-        }
-        rString = rString.copy( 0, nLen-nDel );
+        nDel = 2;
     }
+    else if( nLen && '\'' == rString[nLen-1] )
+    {
+        nDel = 1;
+    }
+    if( nDel && nLen >= nDel+1 )
+    {
+        c = rString[nLen-(nDel+1)];
+        if( '\r'==c || '\n'==c )
+        {
+            nDel++;
+            if( '\n'==c && nLen >= nDel+1 &&
+                '\r'==rString[nLen-(nDel+1)] )
+                nDel++;
+        }
+    }
+    rString = rString.copy( 0, nLen-nDel );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

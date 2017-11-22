@@ -41,19 +41,19 @@ IMPL_LINK_NOARG(AutocompleteEdit, AutoCompleteHdl_Impl, Edit&, void)
 
     sal_uInt16 nLen = ( sal_uInt16 )aSelection.Min();
     aCurText = aCurText.copy( 0, nLen );
-    if( !aCurText.isEmpty() )
-    {
-        if( m_aEntries.size() )
-        {
-            if( Match( aCurText ) )
-            {
-                m_nCurrent = 0;
-                SetText( m_aMatching[0] );
-                sal_uInt16 nNewLen = m_aMatching[0].getLength();
+    if( aCurText.isEmpty() )
+        return;
 
-                Selection aSel( nLen, nNewLen );
-                SetSelection( aSel );
-            }
+    if( m_aEntries.size() )
+    {
+        if( Match( aCurText ) )
+        {
+            m_nCurrent = 0;
+            SetText( m_aMatching[0] );
+            sal_uInt16 nNewLen = m_aMatching[0].getLength();
+
+            Selection aSel( nLen, nNewLen );
+            SetSelection( aSel );
         }
     }
 }

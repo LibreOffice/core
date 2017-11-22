@@ -511,20 +511,20 @@ sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >&
 
 void TransferableHelper::ImplFlush()
 {
-    if( mxClipboard.is() )
-    {
-        Reference< XFlushableClipboard >    xFlushableClipboard( mxClipboard, UNO_QUERY );
-        SolarMutexReleaser aReleaser;
+    if( !mxClipboard.is() )
+        return;
 
-        try
-        {
-            if( xFlushableClipboard.is() )
-                 xFlushableClipboard->flushClipboard();
-        }
-        catch( const css::uno::Exception& )
-        {
-            OSL_FAIL( "Could not flush clipboard" );
-        }
+    Reference< XFlushableClipboard >    xFlushableClipboard( mxClipboard, UNO_QUERY );
+    SolarMutexReleaser aReleaser;
+
+    try
+    {
+        if( xFlushableClipboard.is() )
+             xFlushableClipboard->flushClipboard();
+    }
+    catch( const css::uno::Exception& )
+    {
+        OSL_FAIL( "Could not flush clipboard" );
     }
 }
 
@@ -561,30 +561,30 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
         }
     }
 
-    if( bAdd )
+    if( !bAdd )
+        return;
+
+    DataFlavorEx   aFlavorEx;
+
+    aFlavorEx.MimeType = rFlavor.MimeType;
+    aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
+    aFlavorEx.DataType = rFlavor.DataType;
+    aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
+
+    if ((SotClipboardFormatId::OBJECTDESCRIPTOR == aFlavorEx.mnSotId) && mxObjDesc)
+        aFlavorEx.MimeType += ::ImplGetParameterString(*mxObjDesc);
+
+    maFormats.push_back(aFlavorEx);
+
+    if( SotClipboardFormatId::BITMAP == aFlavorEx.mnSotId )
     {
-        DataFlavorEx   aFlavorEx;
-
-        aFlavorEx.MimeType = rFlavor.MimeType;
-        aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
-        aFlavorEx.DataType = rFlavor.DataType;
-        aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
-
-        if ((SotClipboardFormatId::OBJECTDESCRIPTOR == aFlavorEx.mnSotId) && mxObjDesc)
-            aFlavorEx.MimeType += ::ImplGetParameterString(*mxObjDesc);
-
-        maFormats.push_back(aFlavorEx);
-
-        if( SotClipboardFormatId::BITMAP == aFlavorEx.mnSotId )
-        {
-            AddFormat( SotClipboardFormatId::PNG );
-            AddFormat( SotClipboardFormatId::BMP );
-        }
-        else if( SotClipboardFormatId::GDIMETAFILE == aFlavorEx.mnSotId )
-        {
-            AddFormat( SotClipboardFormatId::EMF );
-            AddFormat( SotClipboardFormatId::WMF );
-        }
+        AddFormat( SotClipboardFormatId::PNG );
+        AddFormat( SotClipboardFormatId::BMP );
+    }
+    else if( SotClipboardFormatId::GDIMETAFILE == aFlavorEx.mnSotId )
+    {
+        AddFormat( SotClipboardFormatId::EMF );
+        AddFormat( SotClipboardFormatId::WMF );
     }
 }
 
@@ -918,19 +918,19 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
     if( xClipboard.is() )
         mxClipboard = xClipboard;
 
-    if( mxClipboard.is() && !mxTerminateListener.is() )
-    {
-        try
-        {
-            TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
-            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-            xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+    if( !(mxClipboard.is() && !mxTerminateListener.is()) )
+        return;
 
-            mxClipboard->setContents( pThis, pThis );
-        }
-        catch( const css::uno::Exception& )
-        {
-        }
+    try
+    {
+        TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
+        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+
+        mxClipboard->setContents( pThis, pThis );
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 }
 
@@ -943,19 +943,19 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
     if( pWindow )
         xSelection = pWindow->GetPrimarySelection();
 
-    if( xSelection.is() && !mxTerminateListener.is() )
-    {
-        try
-        {
-            TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
-            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-            xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+    if( !(xSelection.is() && !mxTerminateListener.is()) )
+        return;
 
-            xSelection->setContents( pThis, pThis );
-        }
-        catch( const css::uno::Exception& )
-        {
-        }
+    try
+    {
+        TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
+        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+
+        xSelection->setContents( pThis, pThis );
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 }
 
@@ -967,38 +967,38 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XDragSource > xDragSource( pWindow->GetDragSource() );
 
-    if( xDragSource.is() )
-    {
-        /*
-         *    #96792# release mouse before actually starting DnD.
-         *    This is necessary for the X11 DnD implementation to work.
-         */
-        if( pWindow->IsMouseCaptured() )
-            pWindow->ReleaseMouse();
+    if( !xDragSource.is() )
+        return;
 
-        const Point aPt( pWindow->GetPointerPosPixel() );
+    /*
+     *    #96792# release mouse before actually starting DnD.
+     *    This is necessary for the X11 DnD implementation to work.
+     */
+    if( pWindow->IsMouseCaptured() )
+        pWindow->ReleaseMouse();
 
-        // On Mac OS X we are forced to execute 'startDrag' synchronously
-        // contrary to the XDragSource interface specification because
-        // we can receive drag events from the system only in the main
-        // thread
+    const Point aPt( pWindow->GetPointerPosPixel() );
+
+    // On Mac OS X we are forced to execute 'startDrag' synchronously
+    // contrary to the XDragSource interface specification because
+    // we can receive drag events from the system only in the main
+    // thread
 #if !defined(MACOSX)
-        SolarMutexReleaser aReleaser;
+    SolarMutexReleaser aReleaser;
 #endif
 
-        try
-        {
-            DragGestureEvent    aEvt;
-            aEvt.DragAction = DNDConstants::ACTION_COPY;
-            aEvt.DragOriginX = aPt.X();
-            aEvt.DragOriginY = aPt.Y();
-            aEvt.DragSource = xDragSource;
+    try
+    {
+        DragGestureEvent    aEvt;
+        aEvt.DragAction = DNDConstants::ACTION_COPY;
+        aEvt.DragOriginX = aPt.X();
+        aEvt.DragOriginY = aPt.Y();
+        aEvt.DragSource = xDragSource;
 
-            xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, DND_IMAGE_NONE, this, this );
-        }
-        catch( const css::uno::Exception& )
-        {
-        }
+        xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, DND_IMAGE_NONE, this, this );
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 }
 
@@ -1308,17 +1308,17 @@ void TransferableDataHelper::InitFormats()
     maFormats.clear();
     mxObjDesc.reset(new TransferableObjectDescriptor);
 
-    if( mxTransfer.is() )
-    {
-        TransferableDataHelper::FillDataFlavorExVector(mxTransfer->getTransferDataFlavors(), maFormats);
+    if( !mxTransfer.is() )
+        return;
 
-        for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
+    TransferableDataHelper::FillDataFlavorExVector(mxTransfer->getTransferDataFlavors(), maFormats);
+
+    for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
+    {
+        if( SotClipboardFormatId::OBJECTDESCRIPTOR == aIter->mnSotId )
         {
-            if( SotClipboardFormatId::OBJECTDESCRIPTOR == aIter->mnSotId )
-            {
-                ImplSetParameterString(*mxObjDesc, *aIter);
-                break;
-            }
+            ImplSetParameterString(*mxObjDesc, *aIter);
+            break;
         }
     }
 }

@@ -63,29 +63,29 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
     {
     }
 
-    if (mbSelectionOnly && mxController.is())
+    if (!(mbSelectionOnly && mxController.is()))
+        return;
+
+    try
     {
-        try
+        uno::Reference< view::XSelectionSupplier > xSelSup( mxController, uno::UNO_QUERY);
+        if (xSelSup.is())
         {
-            uno::Reference< view::XSelectionSupplier > xSelSup( mxController, uno::UNO_QUERY);
-            if (xSelSup.is())
+            uno::Any aViewSelection( xSelSup->getSelection());
+            if (aViewSelection.hasValue())
             {
-                uno::Any aViewSelection( xSelSup->getSelection());
-                if (aViewSelection.hasValue())
-                {
-                    /* FIXME: Writer always has a selection even if nothing is
-                     * selected, but passing a selection to
-                     * XRenderable::render() it always renders an empty page.
-                     * So disable the selection already here. The current page
-                     * the cursor is on is rendered. */
-                    if (!mbIsWriter)
-                        maSelection = aViewSelection;
-                }
+                /* FIXME: Writer always has a selection even if nothing is
+                 * selected, but passing a selection to
+                 * XRenderable::render() it always renders an empty page.
+                 * So disable the selection already here. The current page
+                 * the cursor is on is rendered. */
+                if (!mbIsWriter)
+                    maSelection = aViewSelection;
             }
         }
-        catch (const uno::Exception&)
-        {
-        }
+    }
+    catch (const uno::Exception&)
+    {
     }
 }
 

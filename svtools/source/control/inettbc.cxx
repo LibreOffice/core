@@ -910,59 +910,59 @@ void SvtURLBox::SetSmartProtocol( INetProtocol eProt )
 void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     Clear();
-    if ( !bHistoryDisabled )
+    if ( bHistoryDisabled )
+        return;
+
+    // read history pick list
+    Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
+    sal_uInt32 nCount = seqPicklist.getLength();
+    INetURLObject aCurObj;
+
+    for( sal_uInt32 nItem=0; nItem < nCount; nItem++ )
     {
-        // read history pick list
-        Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
-        sal_uInt32 nCount = seqPicklist.getLength();
-        INetURLObject aCurObj;
+        Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
 
-        for( sal_uInt32 nItem=0; nItem < nCount; nItem++ )
+        OUString sURL;
+
+        sal_uInt32 nPropertyCount = seqPropertySet.getLength();
+
+        for( sal_uInt32 nProperty=0; nProperty < nPropertyCount; nProperty++ )
         {
-            Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
-
-            OUString sURL;
-
-            sal_uInt32 nPropertyCount = seqPropertySet.getLength();
-
-            for( sal_uInt32 nProperty=0; nProperty < nPropertyCount; nProperty++ )
+            if( seqPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_URL )
             {
-                if( seqPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_URL )
+                seqPropertySet[nProperty].Value >>= sURL;
+                aCurObj.SetURL( sURL );
+
+                if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
                 {
-                    seqPropertySet[nProperty].Value >>= sURL;
-                    aCurObj.SetURL( sURL );
-
-                    if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
-                    {
-                        if( aCurObj.GetProtocol() != eSmartProtocol )
-                            break;
-                    }
-
-                    OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
-
-                    if ( !aURL.isEmpty() )
-                    {
-                        bool bFound = aURL.endsWith("/");
-                        if ( !bFound )
-                        {
-                            OUString aUpperURL( aURL );
-                            aUpperURL = aUpperURL.toAsciiUpperCase();
-
-                            bFound = ::std::any_of(pImpl->m_aFilters.begin(),
-                                                   pImpl->m_aFilters.end(),
-                                                   FilterMatch( aUpperURL ) );
-                        }
-                        if ( bFound )
-                        {
-                            OUString aFile;
-                            if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
-                                InsertEntry(aFile);
-                            else
-                                InsertEntry(aURL);
-                        }
-                    }
-                    break;
+                    if( aCurObj.GetProtocol() != eSmartProtocol )
+                        break;
                 }
+
+                OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
+
+                if ( !aURL.isEmpty() )
+                {
+                    bool bFound = aURL.endsWith("/");
+                    if ( !bFound )
+                    {
+                        OUString aUpperURL( aURL );
+                        aUpperURL = aUpperURL.toAsciiUpperCase();
+
+                        bFound = ::std::any_of(pImpl->m_aFilters.begin(),
+                                               pImpl->m_aFilters.end(),
+                                               FilterMatch( aUpperURL ) );
+                    }
+                    if ( bFound )
+                    {
+                        OUString aFile;
+                        if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
+                            InsertEntry(aFile);
+                        else
+                            InsertEntry(aURL);
+                    }
+                }
+                break;
             }
         }
     }

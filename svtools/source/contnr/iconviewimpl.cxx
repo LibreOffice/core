@@ -36,20 +36,20 @@ void IconViewImpl::CursorUp()
     for(short i = 0; i < pView->GetColumnsCount() && pPrevFirstToDraw; i++)
         pPrevFirstToDraw = pView->PrevVisible(pPrevFirstToDraw);
 
-    if( pPrevFirstToDraw )
-    {
-        nFlags &= (~LBoxFlags::Filling);
-        long nEntryHeight = pView->GetEntryHeight();
-        ShowCursor( false );
-        pView->Update();
-        pStartEntry = pPrevFirstToDraw;
-        tools::Rectangle aArea( GetVisibleArea() );
-        aArea.Bottom() -= nEntryHeight;
-        pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
-        pView->Update();
-        ShowCursor( true );
-        pView->NotifyScrolled();
-    }
+    if( !pPrevFirstToDraw )
+        return;
+
+    nFlags &= (~LBoxFlags::Filling);
+    long nEntryHeight = pView->GetEntryHeight();
+    ShowCursor( false );
+    pView->Update();
+    pStartEntry = pPrevFirstToDraw;
+    tools::Rectangle aArea( GetVisibleArea() );
+    aArea.Bottom() -= nEntryHeight;
+    pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
+    pView->Update();
+    ShowCursor( true );
+    pView->NotifyScrolled();
 }
 
 void IconViewImpl::CursorDown()
@@ -440,19 +440,19 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 void IconViewImpl::InvalidateEntry( long nId ) const
 {
-    if( !(nFlags & LBoxFlags::InPaint ))
-    {
-        tools::Rectangle aRect( GetVisibleArea() );
-        long nMaxBottom = aRect.Bottom();
-        aRect.Top() = nId / pView->GetColumnsCount() * pView->GetEntryHeight();
-        aRect.Bottom() = aRect.Top(); aRect.Bottom() += pView->GetEntryHeight();
+    if( (nFlags & LBoxFlags::InPaint ))
+        return;
 
-        if( aRect.Top() > nMaxBottom )
-            return;
-        if( aRect.Bottom() > nMaxBottom )
-            aRect.Bottom() = nMaxBottom;
-        pView->Invalidate( aRect );
-    }
+    tools::Rectangle aRect( GetVisibleArea() );
+    long nMaxBottom = aRect.Bottom();
+    aRect.Top() = nId / pView->GetColumnsCount() * pView->GetEntryHeight();
+    aRect.Bottom() = aRect.Top(); aRect.Bottom() += pView->GetEntryHeight();
+
+    if( aRect.Top() > nMaxBottom )
+        return;
+    if( aRect.Bottom() > nMaxBottom )
+        aRect.Bottom() = nMaxBottom;
+    pView->Invalidate( aRect );
 }
 
 bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )

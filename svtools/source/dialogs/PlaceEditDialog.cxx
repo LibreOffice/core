@@ -223,33 +223,33 @@ void PlaceEditDialog::InitDetails( )
 
 IMPL_LINK( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
 {
-    if ( m_xCurrentDetails.get() )
+    if ( !m_xCurrentDetails.get() )
+        return;
+
+    OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
+
+    if ( sUrl.startsWith( GDRIVE_BASE_URL )
+       || sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL )
+       || sUrl.startsWith( ONEDRIVE_BASE_URL ) )
     {
-        OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
+        m_pBTRepoRefresh->Click();
 
-        if ( sUrl.startsWith( GDRIVE_BASE_URL )
-           || sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL )
-           || sUrl.startsWith( ONEDRIVE_BASE_URL ) )
-        {
-            m_pBTRepoRefresh->Click();
+        sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
+        INetURLObject aHostUrl( sUrl );
+        OUString sRepoId = aHostUrl.GetMark();
 
-            sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
-            INetURLObject aHostUrl( sUrl );
-            OUString sRepoId = aHostUrl.GetMark();
-
-            if ( !sRepoId.isEmpty() )
-            {
-                EndDialog( RET_OK );
-            }
-            else
-            {
-                // TODO: repository id missing. Auth error?
-            }
-        }
-        else
+        if ( !sRepoId.isEmpty() )
         {
             EndDialog( RET_OK );
         }
+        else
+        {
+            // TODO: repository id missing. Auth error?
+        }
+    }
+    else
+    {
+        EndDialog( RET_OK );
     }
 }
 

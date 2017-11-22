@@ -472,24 +472,24 @@ void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
 void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
 {
     GraphicType nType = rGrf.GetType();
-    if( GraphicType::NONE != nType )
+    if( GraphicType::NONE == nType )
+        return;
+
+    if( !pImpl->pGrf )
+        pImpl->pGrf = new Graphic( rGrf );
+    else
+        *pImpl->pGrf = rGrf;
+
+    AddFormat( SotClipboardFormatId::SVXB );
+
+    if( GraphicType::Bitmap == nType )
     {
-        if( !pImpl->pGrf )
-            pImpl->pGrf = new Graphic( rGrf );
-        else
-            *pImpl->pGrf = rGrf;
-
-        AddFormat( SotClipboardFormatId::SVXB );
-
-        if( GraphicType::Bitmap == nType )
-        {
-            AddFormat( SotClipboardFormatId::PNG );
-            AddFormat( SotClipboardFormatId::BITMAP );
-        }
-        else if( GraphicType::GdiMetafile == nType )
-        {
-            AddFormat( SotClipboardFormatId::GDIMETAFILE );
-        }
+        AddFormat( SotClipboardFormatId::PNG );
+        AddFormat( SotClipboardFormatId::BITMAP );
+    }
+    else if( GraphicType::GdiMetafile == nType )
+    {
+        AddFormat( SotClipboardFormatId::GDIMETAFILE );
     }
 }
 

@@ -101,51 +101,51 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
     mnBitsPerPixel = 0;
     mbTransparent = false;
 
-    if( aDescriptor.Detect( true ) && aDescriptor.GetFileFormat() != GraphicFileFormat::NOT )
+    if( !(aDescriptor.Detect( true ) && aDescriptor.GetFileFormat() != GraphicFileFormat::NOT) )
+        return;
+
+    const char*             pMimeType = nullptr;
+    sal_uInt8               cType = graphic::GraphicType::EMPTY;
+
+    switch( aDescriptor.GetFileFormat() )
     {
-        const char*             pMimeType = nullptr;
-        sal_uInt8               cType = graphic::GraphicType::EMPTY;
+        case GraphicFileFormat::BMP: pMimeType = MIMETYPE_BMP; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::GIF: pMimeType = MIMETYPE_GIF; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::JPG: pMimeType = MIMETYPE_JPG; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::PCD: pMimeType = MIMETYPE_PCD; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::PCX: pMimeType = MIMETYPE_PCX; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::PNG: pMimeType = MIMETYPE_PNG; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::TIF: pMimeType = MIMETYPE_TIF; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::XBM: pMimeType = MIMETYPE_XBM; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::XPM: pMimeType = MIMETYPE_XPM; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::PBM: pMimeType = MIMETYPE_PBM; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::PGM: pMimeType = MIMETYPE_PGM; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::PPM: pMimeType = MIMETYPE_PPM; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::RAS: pMimeType = MIMETYPE_RAS; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::TGA: pMimeType = MIMETYPE_TGA; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::PSD: pMimeType = MIMETYPE_PSD; cType = graphic::GraphicType::PIXEL; break;
 
-        switch( aDescriptor.GetFileFormat() )
-        {
-            case GraphicFileFormat::BMP: pMimeType = MIMETYPE_BMP; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::GIF: pMimeType = MIMETYPE_GIF; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::JPG: pMimeType = MIMETYPE_JPG; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::PCD: pMimeType = MIMETYPE_PCD; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::PCX: pMimeType = MIMETYPE_PCX; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::PNG: pMimeType = MIMETYPE_PNG; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::TIF: pMimeType = MIMETYPE_TIF; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::XBM: pMimeType = MIMETYPE_XBM; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::XPM: pMimeType = MIMETYPE_XPM; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::PBM: pMimeType = MIMETYPE_PBM; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::PGM: pMimeType = MIMETYPE_PGM; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::PPM: pMimeType = MIMETYPE_PPM; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::RAS: pMimeType = MIMETYPE_RAS; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::TGA: pMimeType = MIMETYPE_TGA; cType = graphic::GraphicType::PIXEL; break;
-            case GraphicFileFormat::PSD: pMimeType = MIMETYPE_PSD; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::EPS: pMimeType = MIMETYPE_EPS; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::DXF: pMimeType = MIMETYPE_DXF; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::MET: pMimeType = MIMETYPE_MET; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::PCT: pMimeType = MIMETYPE_PCT; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::SVM: pMimeType = MIMETYPE_SVM; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::WMF: pMimeType = MIMETYPE_WMF; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::EMF: pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::SVG: pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
 
-            case GraphicFileFormat::EPS: pMimeType = MIMETYPE_EPS; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::DXF: pMimeType = MIMETYPE_DXF; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::MET: pMimeType = MIMETYPE_MET; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::PCT: pMimeType = MIMETYPE_PCT; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::SVM: pMimeType = MIMETYPE_SVM; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::WMF: pMimeType = MIMETYPE_WMF; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::EMF: pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::SVG: pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
+        default:
+        break;
+    }
 
-            default:
-            break;
-        }
-
-        if( graphic::GraphicType::EMPTY != cType )
-        {
-            meType = ( ( graphic::GraphicType::PIXEL == cType ) ? GraphicType::Bitmap : GraphicType::GdiMetafile );
-            maMimeType = OUString( pMimeType, strlen(pMimeType), RTL_TEXTENCODING_ASCII_US );
-            maSizePixel = aDescriptor.GetSizePixel();
-            maSize100thMM = aDescriptor.GetSize_100TH_MM();
-            mnBitsPerPixel = aDescriptor.GetBitsPerPixel();
-            mbTransparent = ( graphic::GraphicType::VECTOR == cType );
-        }
+    if( graphic::GraphicType::EMPTY != cType )
+    {
+        meType = ( ( graphic::GraphicType::PIXEL == cType ) ? GraphicType::Bitmap : GraphicType::GdiMetafile );
+        maMimeType = OUString( pMimeType, strlen(pMimeType), RTL_TEXTENCODING_ASCII_US );
+        maSizePixel = aDescriptor.GetSizePixel();
+        maSize100thMM = aDescriptor.GetSize_100TH_MM();
+        mnBitsPerPixel = aDescriptor.GetBitsPerPixel();
+        mbTransparent = ( graphic::GraphicType::VECTOR == cType );
     }
 }
 

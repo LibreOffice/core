@@ -363,37 +363,37 @@ void ExportDialog::GetGraphicSource()
     if (mxGraphic.is())
         return;
 
-    if ( mxSourceDocument.is() )
+    if ( !mxSourceDocument.is() )
+        return;
+
+    uno::Reference< frame::XModel > xModel( mxSourceDocument, uno::UNO_QUERY );
+    if ( !xModel.is() )
+        return;
+
+    uno::Reference< frame::XController > xController( xModel->getCurrentController() );
+    if ( !xController.is() )
+        return;
+
+    if ( mbExportSelection )                // check if there is a selection
     {
-        uno::Reference< frame::XModel > xModel( mxSourceDocument, uno::UNO_QUERY );
-        if ( xModel.is() )
+        if (DocumentToGraphicRenderer::isShapeSelected( mxShapes, mxShape, xController))
+            mbGraphicsSource = true;
+    }
+    if ( !mxShape.is() && !mxShapes.is() && mbGraphicsSource )
+    {
+        uno::Reference< drawing::XDrawView > xDrawView( xController, uno::UNO_QUERY );
+        if ( xDrawView.is() )
         {
-            uno::Reference< frame::XController > xController( xModel->getCurrentController() );
-            if ( xController.is() )
+            uno::Reference< drawing::XDrawPage > xCurrentPage( xDrawView->getCurrentPage() );
+            if ( xCurrentPage.is() )
             {
-                if ( mbExportSelection )                // check if there is a selection
-                {
-                    if (DocumentToGraphicRenderer::isShapeSelected( mxShapes, mxShape, xController))
-                        mbGraphicsSource = true;
-                }
-                if ( !mxShape.is() && !mxShapes.is() && mbGraphicsSource )
-                {
-                    uno::Reference< drawing::XDrawView > xDrawView( xController, uno::UNO_QUERY );
-                    if ( xDrawView.is() )
-                    {
-                        uno::Reference< drawing::XDrawPage > xCurrentPage( xDrawView->getCurrentPage() );
-                        if ( xCurrentPage.is() )
-                        {
-                            mxPage = xCurrentPage;      // exporting whole page
-                        }
-                    }
-                }
-                // For !mbGraphicsSource the mxSourceDocument is used, from
-                // which XRenderable can query XController and
-                // XSelectionSupplier the same.
+                mxPage = xCurrentPage;      // exporting whole page
             }
         }
     }
+    // For !mbGraphicsSource the mxSourceDocument is used, from
+    // which XRenderable can query XController and
+    // XSelectionSupplier the same.
 }
 
 void ExportDialog::GetGraphicStream()
@@ -756,19 +756,20 @@ void ExportDialog::setupSizeControls()
         nUnit = UNIT_CM;
     mpLbSizeX->SelectEntryPos( static_cast< sal_uInt16 >( nUnit ) );
 
-    if ( mbIsPixelFormat )      // TODO: (metafileresolutionsupport) should be supported for vector formats also... this makes
-    {                           // sense eg for bitmap fillings in metafiles, to preserve high dpi output
-                                // (atm without special vector support the bitmaps are rendered with 96dpi)
-        sal_Int32 nResolution = mpOptionsItem->ReadInt32("PixelExportResolution", 96);
-        if ( nResolution < 1 )
-            nResolution = 96;
-        mpNfResolution->SetValue( nResolution );
+    if ( !mbIsPixelFormat )      // TODO: (metafileresolutionsupport) should be supported for vector formats also... this makes
+return;
 
-        sal_Int32 nResolutionUnit = mpOptionsItem->ReadInt32("PixelExportResolutionUnit", 1);
-        if ( ( nResolutionUnit < 0 ) || ( nResolutionUnit > 2 ) )
-            nResolutionUnit = 1;
-        mpLbResolution->SelectEntryPos( static_cast< sal_uInt16 >( nResolutionUnit ) );
-    }
+// sense eg for bitmap fillings in metafiles, to preserve high dpi output
+                            // (atm without special vector support the bitmaps are rendered with 96dpi)
+    sal_Int32 nResolution = mpOptionsItem->ReadInt32("PixelExportResolution", 96);
+    if ( nResolution < 1 )
+        nResolution = 96;
+    mpNfResolution->SetValue( nResolution );
+
+    sal_Int32 nResolutionUnit = mpOptionsItem->ReadInt32("PixelExportResolutionUnit", 1);
+    if ( ( nResolutionUnit < 0 ) || ( nResolutionUnit > 2 ) )
+        nResolutionUnit = 1;
+    mpLbResolution->SelectEntryPos( static_cast< sal_uInt16 >( nResolutionUnit ) );
 }
 
 void ExportDialog::createFilterOptions()

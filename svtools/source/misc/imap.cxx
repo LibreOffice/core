@@ -494,19 +494,19 @@ void IMapPolygonObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
         aPoly[ i ] = aScaledPt;
     }
 
-    if ( bEllipse )
+    if ( !bEllipse )
+        return;
+
+    Point   aTL( aEllipse.TopLeft() );
+    Point   aBR( aEllipse.BottomRight() );
+
+    if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
     {
-        Point   aTL( aEllipse.TopLeft() );
-        Point   aBR( aEllipse.BottomRight() );
-
-        if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
-        {
-            SCALEPOINT( aTL, rFracX, rFracY );
-            SCALEPOINT( aBR, rFracX, rFracY );
-        }
-
-        aEllipse = tools::Rectangle( aTL, aBR );
+        SCALEPOINT( aTL, rFracX, rFracY );
+        SCALEPOINT( aBR, rFracX, rFracY );
     }
+
+    aEllipse = tools::Rectangle( aTL, aBR );
 }
 
 bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )

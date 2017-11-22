@@ -674,24 +674,24 @@ sal_uLong IcnGridMap_Impl::GetGridCount( const Size& rSizePixel, sal_uInt16 nDX,
 
 void IcnGridMap_Impl::OutputSizeChanged()
 {
-    if( _pGridMap )
+    if( !_pGridMap )
+        return;
+
+    sal_uInt16 nCols, nRows;
+    GetMinMapSize( nCols, nRows );
+    if( _pView->nWinBits & WB_ALIGN_TOP )
     {
-        sal_uInt16 nCols, nRows;
-        GetMinMapSize( nCols, nRows );
-        if( _pView->nWinBits & WB_ALIGN_TOP )
-        {
-            if( nCols != _nGridCols )
-                Clear();
-            else if( nRows >= _nGridRows )
-                Expand();
-        }
-        else
-        {
-            if( nRows != _nGridRows )
-                Clear();
-            else if( nCols >= _nGridCols )
-                Expand();
-        }
+        if( nCols != _nGridCols )
+            Clear();
+        else if( nRows >= _nGridRows )
+            Expand();
+    }
+    else
+    {
+        if( nRows != _nGridRows )
+            Clear();
+        else if( nCols >= _nGridCols )
+            Expand();
     }
 }
 

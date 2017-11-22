@@ -136,38 +136,38 @@ void SvParser<T>::ClearTxtConvContext()
 template<typename T>
 void SvParser<T>::SetSrcEncoding( rtl_TextEncoding eEnc )
 {
-    if( eEnc != eSrcEnc )
-    {
-        if( pImplData && pImplData->hConv )
-        {
-            rtl_destroyTextToUnicodeContext( pImplData->hConv,
-                                             pImplData->hContext );
-            rtl_destroyTextToUnicodeConverter( pImplData->hConv );
-            pImplData->hConv = nullptr;
-            pImplData->hContext = reinterpret_cast<rtl_TextToUnicodeContext>(1);
-        }
+    if( eEnc == eSrcEnc )
+        return;
 
-        if( rtl_isOctetTextEncoding(eEnc) ||
-            RTL_TEXTENCODING_UCS2 == eEnc  )
-        {
-            eSrcEnc = eEnc;
-            if( !pImplData )
-                pImplData.reset(new SvParser_Impl<T>);
-            pImplData->hConv = rtl_createTextToUnicodeConverter( eSrcEnc );
-            DBG_ASSERT( pImplData->hConv,
-                        "SvParser::SetSrcEncoding: no converter for source encoding" );
-            if( !pImplData->hConv )
-                eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
-            else
-                pImplData->hContext =
-                    rtl_createTextToUnicodeContext( pImplData->hConv );
-        }
-        else
-        {
-            SAL_WARN( "svtools",
-                        "SvParser::SetSrcEncoding: invalid source encoding" );
+    if( pImplData && pImplData->hConv )
+    {
+        rtl_destroyTextToUnicodeContext( pImplData->hConv,
+                                         pImplData->hContext );
+        rtl_destroyTextToUnicodeConverter( pImplData->hConv );
+        pImplData->hConv = nullptr;
+        pImplData->hContext = reinterpret_cast<rtl_TextToUnicodeContext>(1);
+    }
+
+    if( rtl_isOctetTextEncoding(eEnc) ||
+        RTL_TEXTENCODING_UCS2 == eEnc  )
+    {
+        eSrcEnc = eEnc;
+        if( !pImplData )
+            pImplData.reset(new SvParser_Impl<T>);
+        pImplData->hConv = rtl_createTextToUnicodeConverter( eSrcEnc );
+        DBG_ASSERT( pImplData->hConv,
+                    "SvParser::SetSrcEncoding: no converter for source encoding" );
+        if( !pImplData->hConv )
             eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
-        }
+        else
+            pImplData->hContext =
+                rtl_createTextToUnicodeContext( pImplData->hConv );
+    }
+    else
+    {
+        SAL_WARN( "svtools",
+                    "SvParser::SetSrcEncoding: invalid source encoding" );
+        eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
     }
 }
 
@@ -582,21 +582,21 @@ template<typename T>
 void SvParser<T>::RestoreState()
 {
     // restore old status
-    if( pImplData )
-    {
-        if( ERRCODE_IO_PENDING == rInput.GetError() )
-            rInput.ResetError();
-        aToken = pImplData->aToken;
-        nlLineNr = pImplData->nlLineNr;
-        nlLinePos = pImplData->nlLinePos;
-        nTokenValue= pImplData->nTokenValue;
-        bTokenHasValue=pImplData->bTokenHasValue;
-        nNextCh = pImplData->nNextCh;
+    if( !pImplData )
+        return;
 
-        pImplData->nSaveToken = pImplData->nToken;
+    if( ERRCODE_IO_PENDING == rInput.GetError() )
+        rInput.ResetError();
+    aToken = pImplData->aToken;
+    nlLineNr = pImplData->nlLineNr;
+    nlLinePos = pImplData->nlLinePos;
+    nTokenValue= pImplData->nTokenValue;
+    bTokenHasValue=pImplData->bTokenHasValue;
+    nNextCh = pImplData->nNextCh;
 
-        rInput.Seek( pImplData->nFilePos );
-    }
+    pImplData->nSaveToken = pImplData->nToken;
+
+    rInput.Seek( pImplData->nFilePos );
 }
 
 template<typename T>

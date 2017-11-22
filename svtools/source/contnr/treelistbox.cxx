@@ -744,31 +744,31 @@ SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 
 void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const
 {
 
-    if ( pEntry )
-    {
-        SvTreeListEntry* pParentEntry = GetParent( pEntry );
-        while ( true )
-        {
-            sal_uLong i, nCount = GetLevelChildCount( pParentEntry );
-            for ( i = 0; i < nCount; ++i )
-            {
-                SvTreeListEntry* pTemp = GetEntry( pParentEntry, i );
-                DBG_ASSERT( pEntry, "invalid entry" );
-                if ( pEntry == pTemp )
-                {
-                    _rPath.push_front( (sal_Int32)i );
-                    break;
-                }
-            }
+    if ( !pEntry )
+        return;
 
-            if ( pParentEntry )
+    SvTreeListEntry* pParentEntry = GetParent( pEntry );
+    while ( true )
+    {
+        sal_uLong i, nCount = GetLevelChildCount( pParentEntry );
+        for ( i = 0; i < nCount; ++i )
+        {
+            SvTreeListEntry* pTemp = GetEntry( pParentEntry, i );
+            DBG_ASSERT( pEntry, "invalid entry" );
+            if ( pEntry == pTemp )
             {
-                pEntry = pParentEntry;
-                pParentEntry = GetParent( pParentEntry );
-            }
-            else
+                _rPath.push_front( (sal_Int32)i );
                 break;
+            }
         }
+
+        if ( pParentEntry )
+        {
+            pEntry = pParentEntry;
+            pParentEntry = GetParent( pParentEntry );
+        }
+        else
+            break;
     }
 }
 
@@ -1764,17 +1764,17 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
     }
     SetEntryHeight( pEntry );
 
-    if( nTreeFlags & SvTreeFlags::CHKBTN )
+    if( !(nTreeFlags & SvTreeFlags::CHKBTN) )
+        return;
+
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
+    if( pItem )
     {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-        if( pItem )
+        long nWidth = pItem->GetSize(this, pEntry).Width();
+        if( mnCheckboxItemWidth < nWidth )
         {
-            long nWidth = pItem->GetSize(this, pEntry).Width();
-            if( mnCheckboxItemWidth < nWidth )
-            {
-                mnCheckboxItemWidth = nWidth;
-                nTreeFlags |= SvTreeFlags::RECALCTABS;
-            }
+            mnCheckboxItemWidth = nWidth;
+            nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
     }
 }
@@ -1782,27 +1782,27 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 
 void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState eState)
 {
-    if( nTreeFlags & SvTreeFlags::CHKBTN )
+    if( !(nTreeFlags & SvTreeFlags::CHKBTN) )
+        return;
+
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
+    if(!(pItem && pItem->CheckModification()))
+        return ;
+    switch( eState )
     {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-        if(!(pItem && pItem->CheckModification()))
-            return ;
-        switch( eState )
-        {
-            case SvButtonState::Checked:
-                pItem->SetStateChecked();
-                break;
+        case SvButtonState::Checked:
+            pItem->SetStateChecked();
+            break;
 
-            case SvButtonState::Unchecked:
-                pItem->SetStateUnchecked();
-                break;
+        case SvButtonState::Unchecked:
+            pItem->SetStateUnchecked();
+            break;
 
-            case SvButtonState::Tristate:
-                pItem->SetStateTristate();
-                break;
-        }
-        InvalidateEntry( pEntry );
+        case SvButtonState::Tristate:
+            pItem->SetStateTristate();
+            break;
     }
+    InvalidateEntry( pEntry );
 }
 
 void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
@@ -2360,18 +2360,18 @@ void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     pImpl->Paint(rRenderContext, rRect);
 
     //Add visual focus draw
-    if (!First())
+    if (First())
+        return;
+
+    if (HasFocus())
     {
-        if (HasFocus())
-        {
-            long nHeight = rRenderContext.GetTextHeight();
-            tools::Rectangle aRect(Point(0, 0), Size(GetSizePixel().Width(), nHeight));
-            ShowFocus(aRect);
-        }
-        else
-        {
-            HideFocus();
-        }
+        long nHeight = rRenderContext.GetTextHeight();
+        tools::Rectangle aRect(Point(0, 0), Size(GetSizePixel().Width(), nHeight));
+        ShowFocus(aRect);
+    }
+    else
+    {
+        HideFocus();
     }
 }
 
@@ -2509,47 +2509,47 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
         EndEditing();
     if( !pEntry )
         pEntry = GetCurEntry();
-    if( pEntry )
+    if( !pEntry )
+        return;
+
+    long nClickX = pImpl->aEditClickPos.X();
+    bool bIsMouseTriggered = nClickX >= 0;
+
+    SvLBoxString* pItem = nullptr;
+    sal_uInt16 nCount = pEntry->ItemCount();
+    long nTabPos, nNextTabPos = 0;
+    for( sal_uInt16 i = 0 ; i < nCount ; i++ )
     {
-        long nClickX = pImpl->aEditClickPos.X();
-        bool bIsMouseTriggered = nClickX >= 0;
+        SvLBoxItem& rTmpItem = pEntry->GetItem( i );
+        if (rTmpItem.GetType() != SvLBoxItemType::String)
+            continue;
 
-        SvLBoxString* pItem = nullptr;
-        sal_uInt16 nCount = pEntry->ItemCount();
-        long nTabPos, nNextTabPos = 0;
-        for( sal_uInt16 i = 0 ; i < nCount ; i++ )
+        SvLBoxTab* pTab = GetTab( pEntry, &rTmpItem );
+        nNextTabPos = -1;
+        if( i < nCount - 1 )
         {
-            SvLBoxItem& rTmpItem = pEntry->GetItem( i );
-            if (rTmpItem.GetType() != SvLBoxItemType::String)
-                continue;
-
-            SvLBoxTab* pTab = GetTab( pEntry, &rTmpItem );
-            nNextTabPos = -1;
-            if( i < nCount - 1 )
-            {
-                SvLBoxItem& rNextItem = pEntry->GetItem( i + 1 );
-                SvLBoxTab* pNextTab = GetTab( pEntry, &rNextItem );
-                nNextTabPos = pNextTab->GetPos();
-            }
-
-            if( pTab && pTab->IsEditable() )
-            {
-                nTabPos = pTab->GetPos();
-                if( !bIsMouseTriggered || (nClickX > nTabPos && (nNextTabPos == -1 || nClickX < nNextTabPos ) ) )
-                {
-                    pItem = static_cast<SvLBoxString*>( &rTmpItem );
-                    break;
-                }
-            }
+            SvLBoxItem& rNextItem = pEntry->GetItem( i + 1 );
+            SvLBoxTab* pNextTab = GetTab( pEntry, &rNextItem );
+            nNextTabPos = pNextTab->GetPos();
         }
 
-        Selection aSel( SELECTION_MIN, SELECTION_MAX );
-        if( pItem && EditingEntry( pEntry, aSel ) )
+        if( pTab && pTab->IsEditable() )
         {
-            SelectAll( false );
-            MakeVisible( pEntry );
-            EditItemText( pEntry, pItem, aSel );
+            nTabPos = pTab->GetPos();
+            if( !bIsMouseTriggered || (nClickX > nTabPos && (nNextTabPos == -1 || nClickX < nNextTabPos ) ) )
+            {
+                pItem = static_cast<SvLBoxString*>( &rTmpItem );
+                break;
+            }
         }
+    }
+
+    Selection aSel( SELECTION_MIN, SELECTION_MAX );
+    if( pItem && EditingEntry( pEntry, aSel ) )
+    {
+        SelectAll( false );
+        MakeVisible( pEntry );
+        EditItemText( pEntry, pItem, aSel );
     }
 }
 
@@ -2865,85 +2865,85 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
                      // to the next tab
 
-    if( (!(rEntry.GetFlags() & SvTLEntryFlags::NO_NODEBMP)) &&
+    if( !((!(rEntry.GetFlags() & SvTLEntryFlags::NO_NODEBMP)) &&
         (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
-        (rEntry.HasChildren() || rEntry.HasChildrenOnDemand()))
+        (rEntry.HasChildren() || rEntry.HasChildrenOnDemand())))
+        return;
+
+    // find first tab and check if the node bitmap extends into it
+    sal_uInt16 nNextTab = nFirstDynTabPos;
+    SvLBoxTab* pNextTab;
+    do
     {
-        // find first tab and check if the node bitmap extends into it
-        sal_uInt16 nNextTab = nFirstDynTabPos;
-        SvLBoxTab* pNextTab;
-        do
-        {
-            nNextTab++;
-            pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : nullptr;
-        } while (pNextTab && pNextTab->IsDynamic());
+        nNextTab++;
+        pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : nullptr;
+    } while (pNextTab && pNextTab->IsDynamic());
 
-        if (!pNextTab || (GetTabPos( &rEntry, pNextTab ) > nDynTabPos))
+    if (!(!pNextTab || (GetTabPos( &rEntry, pNextTab ) > nDynTabPos)))
+        return;
+
+    if (!((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(&rEntry) > 0))
+        return;
+
+    Point aPos(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
+    aPos.X() += pImpl->nNodeBmpTabDistance;
+
+    const Image* pImg = nullptr;
+
+    if (IsExpanded(&rEntry))
+        pImg = &pImpl->GetExpandedNodeBmp();
+    else
+    {
+        if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
+            (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
+            pImpl->GetDontKnowNodeBmp().GetSizePixel().Width())
         {
-            if ((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(&rEntry) > 0)
+            pImg = &pImpl->GetDontKnowNodeBmp( );
+        }
+        else
+        {
+            pImg = &pImpl->GetCollapsedNodeBmp( );
+        }
+    }
+    aPos.Y() += (nTempEntryHeight - pImg->GetSizePixel().Height()) / 2;
+
+    DrawImageFlags nStyle = DrawImageFlags::NONE;
+    if (!IsEnabled())
+        nStyle |= DrawImageFlags::Disable;
+
+    //native
+    bool bNativeOK = false;
+    if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
+    {
+        ImplControlValue aControlValue;
+        tools::Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
+        ControlState nState = ControlState::NONE;
+
+        if (IsEnabled())
+            nState |= ControlState::ENABLED;
+
+        if (IsExpanded(&rEntry))
+            aControlValue.setTristateVal(ButtonValue::On); //expanded node
+        else
+        {
+            if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
+                (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
+                pImpl->GetDontKnowNodeBmp().GetSizePixel().Width())
             {
-                Point aPos(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
-                aPos.X() += pImpl->nNodeBmpTabDistance;
-
-                const Image* pImg = nullptr;
-
-                if (IsExpanded(&rEntry))
-                    pImg = &pImpl->GetExpandedNodeBmp();
-                else
-                {
-                    if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
-                        (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
-                        pImpl->GetDontKnowNodeBmp().GetSizePixel().Width())
-                    {
-                        pImg = &pImpl->GetDontKnowNodeBmp( );
-                    }
-                    else
-                    {
-                        pImg = &pImpl->GetCollapsedNodeBmp( );
-                    }
-                }
-                aPos.Y() += (nTempEntryHeight - pImg->GetSizePixel().Height()) / 2;
-
-                DrawImageFlags nStyle = DrawImageFlags::NONE;
-                if (!IsEnabled())
-                    nStyle |= DrawImageFlags::Disable;
-
-                //native
-                bool bNativeOK = false;
-                if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
-                {
-                    ImplControlValue aControlValue;
-                    tools::Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
-                    ControlState nState = ControlState::NONE;
-
-                    if (IsEnabled())
-                        nState |= ControlState::ENABLED;
-
-                    if (IsExpanded(&rEntry))
-                        aControlValue.setTristateVal(ButtonValue::On); //expanded node
-                    else
-                    {
-                        if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
-                            (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
-                            pImpl->GetDontKnowNodeBmp().GetSizePixel().Width())
-                        {
-                            aControlValue.setTristateVal( ButtonValue::DontKnow ); //don't know
-                        }
-                        else
-                        {
-                            aControlValue.setTristateVal( ButtonValue::Off ); //collapsed node
-                        }
-                    }
-
-                    bNativeOK = rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion, nState, aControlValue, OUString());
-                }
-
-                if (!bNativeOK)
-                {
-                    rRenderContext.DrawImage(aPos, *pImg ,nStyle);
-                }
+                aControlValue.setTristateVal( ButtonValue::DontKnow ); //don't know
+            }
+            else
+            {
+                aControlValue.setTristateVal( ButtonValue::Off ); //collapsed node
             }
         }
+
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion, nState, aControlValue, OUString());
+    }
+
+    if (!bNativeOK)
+    {
+        rRenderContext.DrawImage(aPos, *pImg ,nStyle);
     }
 }
 

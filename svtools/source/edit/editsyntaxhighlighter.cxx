@@ -72,39 +72,39 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 nKey)
         }
     }
 
-    if (nChar != -1)
+    if (nChar == -1)
+        return;
+
+    sal_uInt32 nPara = nStartPara;
+    do
     {
-        sal_uInt32 nPara = nStartPara;
-        do
+        if (nPara == nStartPara && nStartPos == 0)
+            continue;
+
+        OUString aLine( GetTextEngine()->GetText( nPara ) );
+
+        if (aLine.isEmpty())
+            continue;
+
+        for (sal_Int32 i = (nPara==nStartPara) ? nStartPos-1 : aLine.getLength()-1; i>0; --i)
         {
-            if (nPara == nStartPara && nStartPos == 0)
-                continue;
-
-            OUString aLine( GetTextEngine()->GetText( nPara ) );
-
-            if (aLine.isEmpty())
-                continue;
-
-            for (sal_Int32 i = (nPara==nStartPara) ? nStartPos-1 : aLine.getLength()-1; i>0; --i)
+            if (aLine[i] == nChar)
             {
-                if (aLine[i] == nChar)
+                if (!nCount)
                 {
-                    if (!nCount)
-                    {
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nPara, i, i+1 );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nPara, i, i+1 );
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, nStartPos, nStartPos );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, nStartPos, nStartPos );
-                        return;
-                    }
-                    else
-                        --nCount;
+                    GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nPara, i, i+1 );
+                    GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nPara, i, i+1 );
+                    GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, nStartPos, nStartPos );
+                    GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, nStartPos, nStartPos );
+                    return;
                 }
-                if (aLine[i] == nKey)
-                    ++nCount;
+                else
+                    --nCount;
             }
-        } while (nPara--);
-    }
+            if (aLine[i] == nKey)
+                ++nCount;
+        }
+    } while (nPara--);
 }
 
 bool MultiLineEditSyntaxHighlight::PreNotify( NotifyEvent& rNEvt )

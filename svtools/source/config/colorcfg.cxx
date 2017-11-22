@@ -346,24 +346,24 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
 void ColorConfig_Impl::ImplUpdateApplicationSettings()
 {
     Application* pApp = GetpApp();
-    if( pApp )
+    if( !pApp )
+        return;
+
+    AllSettings aSettings = Application::GetSettings();
+    StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
+
+    ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
+    if(COL_AUTO == sal::static_int_cast<ColorData>(aRet.nColor))
+        aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR).GetColor();
+
+    Color aFontColor(aRet.nColor);
+
+    if( aStyleSettings.GetFontColor() != aFontColor )
     {
-        AllSettings aSettings = Application::GetSettings();
-        StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
+        aStyleSettings.SetFontColor( aFontColor );
 
-        ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
-        if(COL_AUTO == sal::static_int_cast<ColorData>(aRet.nColor))
-            aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR).GetColor();
-
-        Color aFontColor(aRet.nColor);
-
-        if( aStyleSettings.GetFontColor() != aFontColor )
-        {
-            aStyleSettings.SetFontColor( aFontColor );
-
-            aSettings.SetStyleSettings( aStyleSettings );
-            Application::SetSettings( aSettings );
-        }
+        aSettings.SetStyleSettings( aStyleSettings );
+        Application::SetSettings( aSettings );
     }
 }
 

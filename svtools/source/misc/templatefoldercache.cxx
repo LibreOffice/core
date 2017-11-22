@@ -477,27 +477,27 @@ namespace svt
         if ( !m_bValidCurrentState )
             readCurrentState( );
 
-        if ( m_bValidCurrentState && openCacheStream( false ) )
-        {
-            m_pCacheStream->WriteInt32( getMagicNumber() );
+        if ( !(m_bValidCurrentState && openCacheStream( false )) )
+            return;
 
-            // store the template root folders
-            // the size
-            m_pCacheStream->WriteInt32( m_aCurrentState.size() );
-            // the complete URLs
-            ::std::for_each(
-                m_aCurrentState.begin(),
-                m_aCurrentState.end(),
-                StoreContentURL( *m_pCacheStream, getOfficeInstDirs() )
-            );
+        m_pCacheStream->WriteInt32( getMagicNumber() );
 
-            // the contents
-            ::std::for_each(
-                m_aCurrentState.begin(),
-                m_aCurrentState.end(),
-                StoreFolderContent( *m_pCacheStream, getOfficeInstDirs() )
-            );
-        }
+        // store the template root folders
+        // the size
+        m_pCacheStream->WriteInt32( m_aCurrentState.size() );
+        // the complete URLs
+        ::std::for_each(
+            m_aCurrentState.begin(),
+            m_aCurrentState.end(),
+            StoreContentURL( *m_pCacheStream, getOfficeInstDirs() )
+        );
+
+        // the contents
+        ::std::for_each(
+            m_aCurrentState.begin(),
+            m_aCurrentState.end(),
+            StoreFolderContent( *m_pCacheStream, getOfficeInstDirs() )
+        );
     }
 
 

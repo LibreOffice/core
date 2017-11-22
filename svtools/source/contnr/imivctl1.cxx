@@ -371,26 +371,26 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
             nFlags &= ~IconChoiceFlags::ClearingSelection;
         }
     }
-    if( pEntry->IsSelected() != bSelect )
+    if( pEntry->IsSelected() == bSelect )
+        return;
+
+    pHdlEntry = pEntry;
+    SvxIconViewFlags nEntryFlags = pEntry->GetFlags();
+    if( bSelect )
     {
-        pHdlEntry = pEntry;
-        SvxIconViewFlags nEntryFlags = pEntry->GetFlags();
-        if( bSelect )
-        {
-            nEntryFlags |= SvxIconViewFlags::SELECTED;
-            pEntry->AssignFlags( nEntryFlags );
-            nSelectionCount++;
-            CallSelectHandler();
-        }
-        else
-        {
-            nEntryFlags &= ~SvxIconViewFlags::SELECTED;
-            pEntry->AssignFlags( nEntryFlags );
-            nSelectionCount--;
-            CallSelectHandler();
-        }
-        EntrySelected( pEntry, bSelect );
+        nEntryFlags |= SvxIconViewFlags::SELECTED;
+        pEntry->AssignFlags( nEntryFlags );
+        nSelectionCount++;
+        CallSelectHandler();
     }
+    else
+    {
+        nEntryFlags &= ~SvxIconViewFlags::SELECTED;
+        pEntry->AssignFlags( nEntryFlags );
+        nSelectionCount--;
+        CallSelectHandler();
+    }
+    EntrySelected( pEntry, bSelect );
 }
 
 void SvxIconChoiceCtrl_Impl::EntrySelected(SvxIconChoiceCtrlEntry* pEntry, bool bSelect)
@@ -480,22 +480,22 @@ void SvxIconChoiceCtrl_Impl::AdjustVirtSize( const tools::Rectangle& rRect )
     if( aVirtOutputSize.Height() < (rRect.Bottom()+TBOFFS_WINBORDER) )
         nHeightOffs = (rRect.Bottom()+TBOFFS_WINBORDER) - aVirtOutputSize.Height();
 
-    if( nWidthOffs || nHeightOffs )
-    {
-        Range aRange;
-        aVirtOutputSize.Width() += nWidthOffs;
-        aRange.Max() = aVirtOutputSize.Width();
-        aHorSBar->SetRange( aRange );
+    if( !(nWidthOffs || nHeightOffs) )
+        return;
 
-        aVirtOutputSize.Height() += nHeightOffs;
-        aRange.Max() = aVirtOutputSize.Height();
-        aVerSBar->SetRange( aRange );
+    Range aRange;
+    aVirtOutputSize.Width() += nWidthOffs;
+    aRange.Max() = aVirtOutputSize.Width();
+    aHorSBar->SetRange( aRange );
 
-        pImpCursor->Clear();
-        pGridMap->OutputSizeChanged();
-        AdjustScrollBars();
-        DocRectChanged();
-    }
+    aVirtOutputSize.Height() += nHeightOffs;
+    aRange.Max() = aVirtOutputSize.Height();
+    aVerSBar->SetRange( aRange );
+
+    pImpCursor->Clear();
+    pGridMap->OutputSizeChanged();
+    AdjustScrollBars();
+    DocRectChanged();
 }
 
 void SvxIconChoiceCtrl_Impl::InitPredecessors()
@@ -940,48 +940,48 @@ bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
 void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
     SvxIconChoiceCtrlEntry* pNewCursor, bool bMod1, bool bShift )
 {
-    if( pNewCursor )
+    if( !pNewCursor )
+        return;
+
+    SvxIconChoiceCtrlEntry* pFilterEntry = nullptr;
+    bool bDeselectAll = false;
+    if( eSelectionMode != SelectionMode::Single )
     {
-        SvxIconChoiceCtrlEntry* pFilterEntry = nullptr;
-        bool bDeselectAll = false;
-        if( eSelectionMode != SelectionMode::Single )
+        if( !bMod1 && !bShift )
+            bDeselectAll = true;
+        else if( bShift && !bMod1 && !pAnchor )
         {
-            if( !bMod1 && !bShift )
-                bDeselectAll = true;
-            else if( bShift && !bMod1 && !pAnchor )
-            {
-                bDeselectAll = true;
-                pFilterEntry = pOldCursor;
-            }
+            bDeselectAll = true;
+            pFilterEntry = pOldCursor;
         }
-        if( bDeselectAll )
-            DeselectAllBut( pFilterEntry );
-        ShowCursor( false );
-        MakeEntryVisible( pNewCursor );
-        SetCursor( pNewCursor );
-        if( bMod1 && !bShift )
+    }
+    if( bDeselectAll )
+        DeselectAllBut( pFilterEntry );
+    ShowCursor( false );
+    MakeEntryVisible( pNewCursor );
+    SetCursor( pNewCursor );
+    if( bMod1 && !bShift )
+    {
+        if( pAnchor )
         {
-            if( pAnchor )
-            {
-                AddSelectedRect( pAnchor, pOldCursor );
-                pAnchor = nullptr;
-            }
+            AddSelectedRect( pAnchor, pOldCursor );
+            pAnchor = nullptr;
         }
-        else if( bShift )
-        {
-            if( !pAnchor )
-                pAnchor = pOldCursor;
-            if ( nWinBits & WB_ALIGN_LEFT )
-                SelectRange( pAnchor, pNewCursor, bool(nFlags & IconChoiceFlags::AddMode) );
-            else
-                SelectRect(pAnchor,pNewCursor, bool(nFlags & IconChoiceFlags::AddMode), &aSelectedRectList);
-        }
+    }
+    else if( bShift )
+    {
+        if( !pAnchor )
+            pAnchor = pOldCursor;
+        if ( nWinBits & WB_ALIGN_LEFT )
+            SelectRange( pAnchor, pNewCursor, bool(nFlags & IconChoiceFlags::AddMode) );
         else
-        {
-            SelectEntry( pCursor, true, false );
-            aCurSelectionRect = GetEntryBoundRect( pCursor );
-            CallEventListeners( VclEventId::ListboxSelect, pCursor );
-        }
+            SelectRect(pAnchor,pNewCursor, bool(nFlags & IconChoiceFlags::AddMode), &aSelectedRectList);
+    }
+    else
+    {
+        SelectEntry( pCursor, true, false );
+        aCurSelectionRect = GetEntryBoundRect( pCursor );
+        CallEventListeners( VclEventId::ListboxSelect, pCursor );
     }
 }
 
@@ -2123,20 +2123,20 @@ void SvxIconChoiceCtrl_Impl::Command( const CommandEvent& rCEvt )
 
 void SvxIconChoiceCtrl_Impl::ToTop( SvxIconChoiceCtrlEntry* pEntry )
 {
-    if( !pZOrderList->empty()
-    &&  pEntry != pZOrderList->back()
+    if( !(!pZOrderList->empty()
+    &&  pEntry != pZOrderList->back())
+    )        return;
+
+    for(
+        SvxIconChoiceCtrlEntryList_impl::iterator it = pZOrderList->begin();
+        it != pZOrderList->end();
+        ++it
     ) {
-        for(
-            SvxIconChoiceCtrlEntryList_impl::iterator it = pZOrderList->begin();
-            it != pZOrderList->end();
-            ++it
-        ) {
-            if ( *it == pEntry )
-            {
-                pZOrderList->erase( it );
-                pZOrderList->push_back( pEntry );
-                break;
-            }
+        if ( *it == pEntry )
+        {
+            pZOrderList->erase( it );
+            pZOrderList->push_back( pEntry );
+            break;
         }
     }
 }
@@ -3070,24 +3070,24 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     pView->SetBackground( rStyleSettings.GetFieldColor());
 
     long nScrBarSize = rStyleSettings.GetScrollBarSize();
-    if( nScrBarSize != nHorSBarHeight || nScrBarSize != nVerSBarWidth )
-    {
-        nHorSBarHeight = nScrBarSize;
-        Size aSize( aHorSBar->GetSizePixel() );
-        aSize.Height() = nScrBarSize;
-        aHorSBar->Hide();
-        aHorSBar->SetSizePixel( aSize );
+    if( !(nScrBarSize != nHorSBarHeight || nScrBarSize != nVerSBarWidth) )
+        return;
 
-        nVerSBarWidth = nScrBarSize;
-        aSize = aVerSBar->GetSizePixel();
-        aSize.Width() = nScrBarSize;
-        aVerSBar->Hide();
-        aVerSBar->SetSizePixel( aSize );
+    nHorSBarHeight = nScrBarSize;
+    Size aSize( aHorSBar->GetSizePixel() );
+    aSize.Height() = nScrBarSize;
+    aHorSBar->Hide();
+    aHorSBar->SetSizePixel( aSize );
 
-        Size aOSize( pView->Control::GetOutputSizePixel() );
-        PositionScrollBars( aOSize.Width(), aOSize.Height() );
-        AdjustScrollBars();
-    }
+    nVerSBarWidth = nScrBarSize;
+    aSize = aVerSBar->GetSizePixel();
+    aSize.Width() = nScrBarSize;
+    aVerSBar->Hide();
+    aVerSBar->SetSizePixel( aSize );
+
+    Size aOSize( pView->Control::GetOutputSizePixel() );
+    PositionScrollBars( aOSize.Width(), aOSize.Height() );
+    AdjustScrollBars();
 }
 
 EntryList_Impl::EntryList_Impl( SvxIconChoiceCtrl_Impl* pOwner ) :

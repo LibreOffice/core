@@ -1592,41 +1592,41 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
     rPos = TREELIST_ENTRY_NOTFOUND;
     const SvTreeListEntries& rChildList = GetChildList(pParent);
 
-    if (!rChildList.empty())
+    if (rChildList.empty())
+        return;
+
+    long i = 0;
+    long j = rChildList.size()-1;
+    long k;
+    sal_Int32 nCompare = 1;
+
+    do
     {
-        long i = 0;
-        long j = rChildList.size()-1;
-        long k;
-        sal_Int32 nCompare = 1;
-
-        do
+        k = (i+j)/2;
+        const SvTreeListEntry* pTempEntry = rChildList[k].get();
+        nCompare = Compare( pEntry, pTempEntry );
+        if( eSortMode == SortDescending && nCompare != 0 )
         {
-            k = (i+j)/2;
-            const SvTreeListEntry* pTempEntry = rChildList[k].get();
-            nCompare = Compare( pEntry, pTempEntry );
-            if( eSortMode == SortDescending && nCompare != 0 )
-            {
-                if( nCompare < 0 )
-                    nCompare = 1;
-                else
-                    nCompare = -1;
-            }
-            if( nCompare > 0 )
-                i = k + 1;
+            if( nCompare < 0 )
+                nCompare = 1;
             else
-                j = k - 1;
-        } while( (nCompare != 0) && (i <= j) );
-
-        if( nCompare != 0 )
-        {
-            if (i > static_cast<long>(rChildList.size()-1)) // not found, end of list
-                rPos = TREELIST_ENTRY_NOTFOUND;
-            else
-                rPos = i;              // not found, middle of list
+                nCompare = -1;
         }
+        if( nCompare > 0 )
+            i = k + 1;
         else
-            rPos = k;
+            j = k - 1;
+    } while( (nCompare != 0) && (i <= j) );
+
+    if( nCompare != 0 )
+    {
+        if (i > static_cast<long>(rChildList.size()-1)) // not found, end of list
+            rPos = TREELIST_ENTRY_NOTFOUND;
+        else
+            rPos = i;              // not found, middle of list
     }
+    else
+        rPos = k;
 }
 
 bool SvTreeList::HasChildren( const SvTreeListEntry* pEntry ) const

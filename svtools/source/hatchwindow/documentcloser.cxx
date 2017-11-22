@@ -101,45 +101,45 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
 IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
 {
     MainThreadFrameCloserRequest* pMTRequest = static_cast<MainThreadFrameCloserRequest*>(p);
-    if ( pMTRequest )
+    if ( !pMTRequest )
+        return;
+
+    if ( pMTRequest->m_xFrame.is() )
     {
-        if ( pMTRequest->m_xFrame.is() )
+        // this is the main thread, the solar mutex must be locked
+        SolarMutexGuard aGuard;
+
+        try
         {
-            // this is the main thread, the solar mutex must be locked
-            SolarMutexGuard aGuard;
+            uno::Reference< awt::XWindow > xWindow = pMTRequest->m_xFrame->getContainerWindow();
+            uno::Reference< awt::XVclWindowPeer > xWinPeer( xWindow, uno::UNO_QUERY_THROW );
 
-            try
-            {
-                uno::Reference< awt::XWindow > xWindow = pMTRequest->m_xFrame->getContainerWindow();
-                uno::Reference< awt::XVclWindowPeer > xWinPeer( xWindow, uno::UNO_QUERY_THROW );
+            xWindow->setVisible( false );
 
-                xWindow->setVisible( false );
+            // reparent the window
+            xWinPeer->setProperty( "PluginParent", uno::makeAny( (sal_Int64) 0 ) );
 
-                // reparent the window
-                xWinPeer->setProperty( "PluginParent", uno::makeAny( (sal_Int64) 0 ) );
-
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if ( pWindow )
-                    Dialog::EndAllDialogs( pWindow );
-            }
-            catch( uno::Exception& )
-            {
-                // ignore all the errors
-            }
-
-            try
-            {
-                uno::Reference< util::XCloseable > xCloseable( pMTRequest->m_xFrame, uno::UNO_QUERY_THROW );
-                xCloseable->close( true );
-            }
-            catch( uno::Exception& )
-            {
-                // ignore all the errors
-            }
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+            if ( pWindow )
+                Dialog::EndAllDialogs( pWindow );
+        }
+        catch( uno::Exception& )
+        {
+            // ignore all the errors
         }
 
-        delete pMTRequest;
+        try
+        {
+            uno::Reference< util::XCloseable > xCloseable( pMTRequest->m_xFrame, uno::UNO_QUERY_THROW );
+            xCloseable->close( true );
+        }
+        catch( uno::Exception& )
+        {
+            // ignore all the errors
+        }
     }
+
+    delete pMTRequest;
 }
 
 ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments)

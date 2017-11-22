@@ -256,20 +256,20 @@ void SAL_CALL SvtRulerAccessible::addAccessibleEventListener( const uno::Referen
 
 void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-    if (xListener.is() && mnClientId)
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
+    if (!(xListener.is() && mnClientId))
+        return;
 
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-            mnClientId = 0;
-        }
+    ::osl::MutexGuard   aGuard( m_aMutex );
+
+    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
+    if ( !nListenerCount )
+    {
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+        mnClientId = 0;
     }
 }
 
@@ -324,19 +324,19 @@ Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId()
 
 void SAL_CALL SvtRulerAccessible::disposing()
 {
-    if( !rBHelper.bDisposed )
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-        mpRepr = nullptr;      // object dies with representation
+    if( rBHelper.bDisposed )
+        return;
 
-        // Send a disposing to all listeners.
-        if ( mnClientId )
-        {
-            comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-            mnClientId =  0;
-        }
-        mxParent.clear();
+    ::osl::MutexGuard   aGuard( m_aMutex );
+    mpRepr = nullptr;      // object dies with representation
+
+    // Send a disposing to all listeners.
+    if ( mnClientId )
+    {
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+        mnClientId =  0;
     }
+    mxParent.clear();
 }
 
 tools::Rectangle SvtRulerAccessible::GetBoundingBoxOnScreen()

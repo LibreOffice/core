@@ -36,21 +36,21 @@ IMapCompat::IMapCompat( SvStream& rStm, const StreamMode nStreamMode )
 {
     DBG_ASSERT( nStreamMode == StreamMode::READ || nStreamMode == StreamMode::WRITE, "Wrong Mode!" );
 
-    if ( !pRWStm->GetError() )
+    if ( pRWStm->GetError() )
+        return;
+
+    if ( nStmMode == StreamMode::WRITE )
     {
-        if ( nStmMode == StreamMode::WRITE )
-        {
-            nCompatPos = pRWStm->Tell();
-            pRWStm->SeekRel( 4 );
-            nTotalSize = nCompatPos + 4;
-        }
-        else
-        {
-            sal_uInt32 nTotalSizeTmp;
-            pRWStm->ReadUInt32( nTotalSizeTmp );
-            nTotalSize = nTotalSizeTmp;
-            nCompatPos = pRWStm->Tell();
-        }
+        nCompatPos = pRWStm->Tell();
+        pRWStm->SeekRel( 4 );
+        nTotalSize = nCompatPos + 4;
+    }
+    else
+    {
+        sal_uInt32 nTotalSizeTmp;
+        pRWStm->ReadUInt32( nTotalSizeTmp );
+        nTotalSize = nTotalSizeTmp;
+        nCompatPos = pRWStm->Tell();
     }
 }
 
@@ -63,23 +63,23 @@ IMapCompat::IMapCompat( SvStream& rStm, const StreamMode nStreamMode )
 
 IMapCompat::~IMapCompat()
 {
-    if ( !pRWStm->GetError() )
+    if ( pRWStm->GetError() )
+        return;
+
+    if ( nStmMode == StreamMode::WRITE )
     {
-        if ( nStmMode == StreamMode::WRITE )
-        {
-            const sal_uInt64 nEndPos = pRWStm->Tell();
+        const sal_uInt64 nEndPos = pRWStm->Tell();
 
-            pRWStm->Seek( nCompatPos );
-            pRWStm->WriteUInt32( nEndPos - nTotalSize );
-            pRWStm->Seek( nEndPos );
-        }
-        else
-        {
-            const sal_uInt64 nReadSize = pRWStm->Tell() - nCompatPos;
+        pRWStm->Seek( nCompatPos );
+        pRWStm->WriteUInt32( nEndPos - nTotalSize );
+        pRWStm->Seek( nEndPos );
+    }
+    else
+    {
+        const sal_uInt64 nReadSize = pRWStm->Tell() - nCompatPos;
 
-            if ( nTotalSize > nReadSize )
-                pRWStm->SeekRel( nTotalSize - nReadSize );
-        }
+        if ( nTotalSize > nReadSize )
+            pRWStm->SeekRel( nTotalSize - nReadSize );
     }
 }
 

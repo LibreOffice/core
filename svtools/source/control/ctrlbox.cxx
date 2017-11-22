@@ -447,27 +447,27 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     if ( nVirHeight > aSize.Height() )
         aSize.Height() = nVirHeight;
     // negative width should not be drawn
-    if ( aSize.Width() > 0 )
+    if ( aSize.Width() <= 0 )
+        return;
+
+    Size aVirSize = aVirDev->LogicToPixel( aSize );
+    if ( aVirDev->GetOutputSizePixel() != aVirSize )
+        aVirDev->SetOutputSizePixel( aVirSize );
+    aVirDev->SetFillColor( aColorDist );
+    aVirDev->DrawRect( tools::Rectangle( Point(), aSize ) );
+
+    aVirDev->SetFillColor( aColor1 );
+
+    double y1 = double( n1 ) / 2;
+    svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
+
+    if ( n2 )
     {
-        Size aVirSize = aVirDev->LogicToPixel( aSize );
-        if ( aVirDev->GetOutputSizePixel() != aVirSize )
-            aVirDev->SetOutputSizePixel( aVirSize );
-        aVirDev->SetFillColor( aColorDist );
-        aVirDev->DrawRect( tools::Rectangle( Point(), aSize ) );
-
-        aVirDev->SetFillColor( aColor1 );
-
-        double y1 = double( n1 ) / 2;
-        svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
-
-        if ( n2 )
-        {
-            double y2 =  n1 + nDist + double( n2 ) / 2;
-            aVirDev->SetFillColor( aColor2 );
-            svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
-        }
-        rBmp = aVirDev->GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
+        double y2 =  n1 + nDist + double( n2 ) / 2;
+        aVirDev->SetFillColor( aColor2 );
+        svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
     }
+    rBmp = aVirDev->GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
 }
 
 void LineListBox::ImplInit()
@@ -1329,52 +1329,52 @@ void FontSizeBox::Modify()
 {
     MetricBox::Modify();
 
-    if ( bRelativeMode )
+    if ( !bRelativeMode )
+        return;
+
+    OUString aStr = comphelper::string::stripStart(GetText(), ' ');
+
+    bool bNewMode = bRelative;
+    bool bOldPtRelMode = bPtRelative;
+
+    if ( bRelative )
     {
-        OUString aStr = comphelper::string::stripStart(GetText(), ' ');
-
-        bool bNewMode = bRelative;
-        bool bOldPtRelMode = bPtRelative;
-
-        if ( bRelative )
+        bPtRelative = false;
+        const sal_Unicode* pStr = aStr.getStr();
+        while ( *pStr )
         {
-            bPtRelative = false;
-            const sal_Unicode* pStr = aStr.getStr();
-            while ( *pStr )
+            if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') && !unicode::isSpace(*pStr) )
             {
-                if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') && !unicode::isSpace(*pStr) )
+                if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
+                    bPtRelative = true;
+                else if ( bPtRelative && 'p' == *pStr && 't' == *++pStr )
+                    ;
+                else
                 {
-                    if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
-                        bPtRelative = true;
-                    else if ( bPtRelative && 'p' == *pStr && 't' == *++pStr )
-                        ;
-                    else
-                    {
-                        bNewMode = false;
-                        break;
-                    }
+                    bNewMode = false;
+                    break;
                 }
-                pStr++;
             }
+            pStr++;
         }
-        else if (!aStr.isEmpty())
-        {
-            if ( -1 != aStr.indexOf('%') )
-            {
-                bNewMode = true;
-                bPtRelative = false;
-            }
-
-            if ( '-' == aStr[0] || '+' == aStr[0] )
-            {
-                bNewMode = true;
-                bPtRelative = true;
-            }
-        }
-
-        if ( bNewMode != bRelative || bPtRelative != bOldPtRelMode )
-            SetRelative( bNewMode );
     }
+    else if (!aStr.isEmpty())
+    {
+        if ( -1 != aStr.indexOf('%') )
+        {
+            bNewMode = true;
+            bPtRelative = false;
+        }
+
+        if ( '-' == aStr[0] || '+' == aStr[0] )
+        {
+            bNewMode = true;
+            bPtRelative = true;
+        }
+    }
+
+    if ( bNewMode != bRelative || bPtRelative != bOldPtRelMode )
+        SetRelative( bNewMode );
 }
 
 void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
@@ -1485,66 +1485,66 @@ void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
 
 void FontSizeBox::SetRelative( bool bNewRelative )
 {
-    if ( bRelativeMode )
+    if ( !bRelativeMode )
+        return;
+
+    Selection aSelection = GetSelection();
+    OUString aStr = comphelper::string::stripStart(GetText(), ' ');
+
+    if ( bNewRelative )
     {
-        Selection aSelection = GetSelection();
-        OUString aStr = comphelper::string::stripStart(GetText(), ' ');
+        bRelative = true;
+        bStdSize = false;
 
-        if ( bNewRelative )
+        if ( bPtRelative )
         {
-            bRelative = true;
-            bStdSize = false;
+            Clear(); //clear early because SetDecimalDigits is a slow recalc
 
-            if ( bPtRelative )
+            SetDecimalDigits( 1 );
+            SetMin( nPtRelMin );
+            SetMax( nPtRelMax );
+            SetUnit( FUNIT_POINT );
+
+            short i = nPtRelMin, n = 0;
+            // JP 30.06.98: more than 100 values are not useful
+            while ( i <= nPtRelMax && n++ < 100 )
             {
-                Clear(); //clear early because SetDecimalDigits is a slow recalc
-
-                SetDecimalDigits( 1 );
-                SetMin( nPtRelMin );
-                SetMax( nPtRelMax );
-                SetUnit( FUNIT_POINT );
-
-                short i = nPtRelMin, n = 0;
-                // JP 30.06.98: more than 100 values are not useful
-                while ( i <= nPtRelMax && n++ < 100 )
-                {
-                    InsertValue( i );
-                    i = i + nPtRelStep;
-                }
-            }
-            else
-            {
-                Clear(); //clear early because SetDecimalDigits is a slow recalc
-
-                SetDecimalDigits( 0 );
-                SetMin( nRelMin );
-                SetMax( nRelMax );
-                SetUnit( FUNIT_PERCENT );
-
-                sal_uInt16 i = nRelMin;
-                while ( i <= nRelMax )
-                {
-                    InsertValue( i );
-                    i = i + nRelStep;
-                }
+                InsertValue( i );
+                i = i + nPtRelStep;
             }
         }
         else
         {
-            if (pFontList)
-                Clear(); //clear early because SetDecimalDigits is a slow recalc
-            bRelative = bPtRelative = false;
-            SetDecimalDigits( 1 );
-            SetMin( 20 );
-            SetMax( 9999 );
-            SetUnit( FUNIT_POINT );
-            if ( pFontList )
-                Fill( &aFontMetric, pFontList );
-        }
+            Clear(); //clear early because SetDecimalDigits is a slow recalc
 
-        SetText( aStr );
-        SetSelection( aSelection );
+            SetDecimalDigits( 0 );
+            SetMin( nRelMin );
+            SetMax( nRelMax );
+            SetUnit( FUNIT_PERCENT );
+
+            sal_uInt16 i = nRelMin;
+            while ( i <= nRelMax )
+            {
+                InsertValue( i );
+                i = i + nRelStep;
+            }
+        }
     }
+    else
+    {
+        if (pFontList)
+            Clear(); //clear early because SetDecimalDigits is a slow recalc
+        bRelative = bPtRelative = false;
+        SetDecimalDigits( 1 );
+        SetMin( 20 );
+        SetMax( 9999 );
+        SetUnit( FUNIT_POINT );
+        if ( pFontList )
+            Fill( &aFontMetric, pFontList );
+    }
+
+    SetText( aStr );
+    SetSelection( aSelection );
 }
 
 OUString FontSizeBox::CreateFieldText( sal_Int64 nValue ) const
