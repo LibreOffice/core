@@ -351,7 +351,7 @@ struct DialogImpl
 
 void Dialog::ImplInitDialogData()
 {
-    mpDialogRenderable = nullptr;
+    mpDialogNotifier        = nullptr;
     mpWindowImpl->mbDialog  = true;
     mpPrevExecuteDlg        = nullptr;
     mbInExecute             = false;
@@ -594,9 +594,9 @@ void Dialog::dispose()
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
 
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable)
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier)
     {
-        mpDialogRenderable->notifyDialog(maID, "close");
+        mpDialogNotifier->notifyDialog(maID, "close");
     }
 
     SystemWindow::dispose();
@@ -790,6 +790,9 @@ bool Dialog::ImplStartExecuteModal()
     case Application::DialogCancelMode::Off:
         break;
     case Application::DialogCancelMode::Silent:
+        if (ImplGetDialogText(this) == "Character")
+            break;
+
         SAL_INFO(
             "vcl",
             "Dialog \"" << ImplGetDialogText(this).getStr()
@@ -875,12 +878,11 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
-void Dialog::registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable, const OUString& aDialogId)
+void Dialog::registerDialogNotifier(vcl::IDialogNotifier* pDialogNotifier)
 {
-    if (pDialogRenderable && !mpDialogRenderable)
+    if (pDialogNotifier && !mpDialogNotifier)
     {
-        mpDialogRenderable = pDialogRenderable;
-        maID = aDialogId;
+        mpDialogNotifier = pDialogNotifier;
     }
 }
 
@@ -956,29 +958,29 @@ void Dialog::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
 
 void Dialog::InvalidateFloatingWindow(const Point& rPos)
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable && !maID.isEmpty())
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialogChild(maID, "invalidate", rPos);
+        mpDialogNotifier->notifyDialogChild(maID, "invalidate", rPos);
     }
 }
 
 void Dialog::CloseFloatingWindow()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable && !maID.isEmpty())
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialogChild(maID, "close", Point(0, 0));
+        mpDialogNotifier->notifyDialogChild(maID, "close", Point(0, 0));
     }
 }
 
 void Dialog::LogicInvalidate(const Rectangle* pRectangle)
 {
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && !maID.isEmpty())
     {
         std::vector<vcl::LOKPayloadItem> aPayload;
         if (pRectangle)
             aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
 
-        mpDialogRenderable->notifyDialog(maID, "invalidate", aPayload);
+        mpDialogNotifier->notifyDialog(maID, "invalidate", aPayload);
     }
 }
 
@@ -1024,9 +1026,9 @@ void Dialog::LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloa
 {
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialog(maID, rAction, rPayload);
+        mpDialogNotifier->notifyDialog(maID, rAction, rPayload);
     }
 }
 
@@ -1357,9 +1359,9 @@ void Dialog::Resize()
     SystemWindow::Resize();
 
     // inform LOK clients
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialog(maID, "invalidate");
+        mpDialogNotifier->notifyDialog(maID, "invalidate");
     }
 }
 

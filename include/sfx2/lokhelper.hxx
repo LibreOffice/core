@@ -44,7 +44,7 @@ public:
     /// Emits a LOK_CALLBACK_DIALOG
     static void notifyDialog(const OUString& rDialogId,
                              const OUString& rAction,
-                             const std::vector<vcl::LOKPayloadItem>& rPayload);
+                             const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
     /// Emits a LOK_CALLBACK_DIALOG_CHILD
     static void notifyDialogChild(const OUString& rDialogID, const OUString& rAction, const Point& rPos);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
