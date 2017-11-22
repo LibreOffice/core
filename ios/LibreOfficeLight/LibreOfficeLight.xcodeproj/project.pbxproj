@@ -15,6 +15,7 @@
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
 		393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975771F8BECB0002DC80B /* libiconv.tbd */; };
 		3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975791F8BECC1002DC80B /* libz.tbd */; };
+		39491DFF1FC564190039A265 /* loApp.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 39491DFE1FC564190039A265 /* loApp.xcconfig */; };
 		39503A751F94D44900F19C78 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 39503A741F94D44900F19C78 /* libc++.tbd */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
@@ -44,6 +45,7 @@
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
 		393975771F8BECB0002DC80B /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		393975791F8BECC1002DC80B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		39491DFE1FC564190039A265 /* loApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loApp.xcconfig; path = ../../../../sim/workdir/ios/loApp.xcconfig; sourceTree = "<group>"; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		39503A741F94D44900F19C78 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -56,7 +58,6 @@
 		397E09071E597BD8001374E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = LibreOfficeLight/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
-		39ACF4181F8A317600DA7334 /* loApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loApp.xcconfig; path = ../../../../../../../Users/jani/lo_ios/workdir/ios/loApp.xcconfig; sourceTree = "<group>"; };
 		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../generated/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
 		39B084E61E5F0BB400682A59 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../generated/resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
 		39B084E71E5F0BB400682A59 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = ../generated/resources/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
@@ -87,7 +88,7 @@
 		3911D89F1E5993600050D6BC /* Support files */ = {
 			isa = PBXGroup;
 			children = (
-				39ACF4181F8A317600DA7334 /* loApp.xcconfig */,
+				39491DFE1FC564190039A265 /* loApp.xcconfig */,
 				39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */,
 				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
 				397E09071E597BD8001374E0 /* Assets.xcassets */,
@@ -253,6 +254,7 @@
 				397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */,
 				396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */,
 				39B08B9F1E5F0BB600682A59 /* oovbaapi.rdb in Resources */,
+				39491DFF1FC564190039A265 /* loApp.xcconfig in Resources */,
 				39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */,
 				39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */,
 				39B08BD91E5F0BB600682A59 /* services.rdb in Resources */,
@@ -304,7 +306,6 @@
 /* Begin XCBuildConfiguration section */
 		397E09231E597BD8001374E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39ACF4181F8A317600DA7334 /* loApp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -392,7 +393,6 @@
 		};
 		397E09241E597BD8001374E0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39ACF4181F8A317600DA7334 /* loApp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -474,7 +474,6 @@
 		};
 		39ACF41A1F8A358000DA7334 /* Simulator */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39ACF4181F8A317600DA7334 /* loApp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
