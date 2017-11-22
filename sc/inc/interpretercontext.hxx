@@ -25,25 +25,22 @@ struct ScInterpreterContext
     size_t mnTokenCachePos;
     std::vector<formula::FormulaToken*> maTokens;
 
-    ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter) :
-        mrDoc(rDoc),
-        mpFormatter(pFormatter),
-        mnTokenCachePos(0),
-        maTokens(TOKEN_CACHE_SIZE, nullptr)
+    ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
+        : mrDoc(rDoc)
+        , mpFormatter(pFormatter)
+        , mnTokenCachePos(0)
+        , maTokens(TOKEN_CACHE_SIZE, nullptr)
     {
     }
 
     ~ScInterpreterContext()
     {
-        for ( auto p : maTokens )
-            if ( p )
+        for (auto p : maTokens)
+            if (p)
                 p->DecRef();
     }
 
-    SvNumberFormatter* GetFormatTable() const
-    {
-        return mpFormatter;
-    }
+    SvNumberFormatter* GetFormatTable() const { return mpFormatter; }
 };
 
 #endif // INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
