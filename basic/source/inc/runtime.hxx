@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <unotools/localedatawrapper.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SbiInstance;                  // active StarBASIC process
@@ -127,7 +128,7 @@ class SbiInstance
     SbiRTLData      aRTLData;
 
     // file system
-    std::unique_ptr<SbiIoSystem>     pIosys;
+    std::unique_ptr<SbiIoSystem, o3tl::default_delete<SbiIoSystem>> pIosys;
     // DDE
     std::unique_ptr<SbiDdeControl>    pDdeCtrl;
     // DLL-Calls (DECLARE)

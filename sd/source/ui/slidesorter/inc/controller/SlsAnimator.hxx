@@ -23,13 +23,13 @@
 #include <SlideSorter.hxx>
 #include <view/SlideSorterView.hxx>
 #include <canvas/elapsedtime.hxx>
+#include <o3tl/deleter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <sal/types.h>
 
-#include <memory>
-
 #include <functional>
+#include <memory>
 #include <vector>
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -96,7 +96,7 @@ private:
     AnimationList maAnimations;
     ::canvas::tools::ElapsedTime maElapsedTime;
 
-    std::unique_ptr<view::SlideSorterView::DrawLock> mpDrawLock;
+    std::unique_ptr<view::SlideSorterView::DrawLock, o3tl::default_delete<view::SlideSorterView::DrawLock>> mpDrawLock;
 
     AnimationId mnNextAnimationId;
 
