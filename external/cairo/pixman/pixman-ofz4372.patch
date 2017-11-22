@@ -1,0 +1,16 @@
+--- misc/pixman/pixman/pixman-solid-fill.c
++++ misc/build/pixman/pixman/pixman-solid-fill.c
+@@ -30,10 +30,10 @@ static uint32_t
+ color_to_uint32 (const pixman_color_t *color)
+ {
+     return
+-        (color->alpha >> 8 << 24) |
+-        (color->red >> 8 << 16) |
++        ((uint32_t)color->alpha >> 8 << 24) |
++        ((uint32_t)color->red >> 8 << 16) |
+         (color->green & 0xff00) |
+-        (color->blue >> 8);
++        ((uint32_t)color->blue >> 8);
+ }
+ 
+ static argb_t
