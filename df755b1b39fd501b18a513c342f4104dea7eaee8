@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e4761bd6",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3962,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-22T21:51:12Z",
+      "side": 1,
+      "message": "btw, merely changing this to std::stack\u003csal_uInt16, std::vector\u003csal_uInt16\u003e\u003e would have worked, too",
+      "revId": "df755b1b39fd501b18a513c342f4104dea7eaee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
