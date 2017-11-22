@@ -156,7 +156,7 @@ SalGraphics* SvpSalFrame::AcquireGraphics()
 void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
     SvpSalGraphics* pSvpGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
-    m_aGraphics.remove( pSvpGraphics );
+    m_aGraphics.erase(std::remove(m_aGraphics.begin(), m_aGraphics.end(), pSvpGraphics), m_aGraphics.end());
     delete pSvpGraphics;
 }
 
@@ -275,10 +275,9 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
                                                 aFrameSize.getY());
 
         // update device in existing graphics
-        for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
-             it != m_aGraphics.end(); ++it )
+        for (auto const& graphic : m_aGraphics)
         {
-             (*it)->setSurface(m_pSurface, aFrameSize);
+             graphic->setSurface(m_pSurface, aFrameSize);
         }
     }
     if( m_bVisible )

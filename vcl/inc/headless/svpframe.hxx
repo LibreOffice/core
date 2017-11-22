@@ -26,6 +26,7 @@
 #include <salframe.hxx>
 
 #include <list>
+#include <vector>
 
 #ifdef IOS
 #define SvpSalInstance AquaSalInstance
@@ -52,7 +53,7 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
 
     SystemEnvData                       m_aSystemChildData;
 
-    std::list< SvpSalGraphics* >        m_aGraphics;
+    std::vector< SvpSalGraphics* >      m_aGraphics;
 
     static SvpSalFrame*       s_pFocusFrame;
 public:
