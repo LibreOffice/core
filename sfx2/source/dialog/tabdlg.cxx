@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <unotools/viewoptions.hxx>
 
 #include <appdata.hxx>
@@ -36,6 +37,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/itemconnect.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <uitest/sfx_uiobject.hxx>
 
@@ -508,6 +510,18 @@ short SfxTabDialog::Execute()
     if ( !m_pTabCtrl->GetPageCount() )
         return RET_CANCEL;
     Start_Impl();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell)
+    {
+        pViewShell->RegisterDlg(maID, this);
+        registerDialogNotifier(static_cast<vcl::IDialogNotifier*>(pViewShell));
+        const Size aSize = GetOptimalSize();
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", aSize.toString()));
+        pViewShell->notifyDialog(maID, "created", aItems);
+    }
+
     return TabDialog::Execute();
 }
 

@@ -3641,70 +3641,33 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
 
 void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice)
 {
-    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
-    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
-    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
-    if (!pSlot)
-    {
-        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
-        return;
-    }
-    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
-    if (!pChild)
-    {
-        pViewFrame->ToggleChildWindow(pSlot->GetSlotId());
-        pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
-        if (!pChild)
-        {
-            SAL_WARN("lok.dialog", "Dialog " << rDialogID << " is not supported");
-            return;
-        }
-    }
-
-    Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
-    // register the instance so that vcl::Dialog can emit LOK callbacks
-    pDlg->registerDialogRenderable(this, rDialogID);
-    pDlg->paintDialog(rDevice);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    VclPtr<Dialog> pDlg = pViewShell->GetOpenedDlg(rDialogID);
+    if (pDlg)
+        pDlg->paintDialog(rDevice);
 }
 
 void SwXTextDocument::getDialogInfo(const vcl::DialogID& rDialogID, OUString& rDialogTitle, int& rWidth, int& rHeight)
 {
-    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
-    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
-    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
-    if (!pSlot)
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    VclPtr<Dialog> pDlg = pViewShell->GetOpenedDlg(rDialogID);
+    if (pDlg)
     {
-        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
-        return;
+        rDialogTitle = pDlg->GetText();
+        const Size aSize = pDlg->GetOptimalSize();
+        rWidth = aSize.getWidth();
+        rHeight = aSize.getHeight();
     }
-    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
-    if (!pChild)
-        return;
-
-    Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
-    rDialogTitle = pDlg->GetText();
-    const Size aSize = pDlg->GetOptimalSize();
-    rWidth = aSize.getWidth();
-    rHeight = aSize.getHeight();
 }
 
 void SwXTextDocument::postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
-    // check if dialog is already open
-    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
-    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
-    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
-    if (!pSlot)
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    if (pDialog)
     {
-        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
-        return;
-    }
-    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
-    if (pChild)
-    {
-        Dialog* pDialog = static_cast<Dialog*>(pChild->GetWindow());
         KeyEvent aEvent(nCharCode, nKeyCode, 0);
 
         switch (nType)
@@ -3727,19 +3690,10 @@ void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& rDialogID, int n
 {
     SolarMutexGuard aGuard;
 
-    // check if dialog is already open
-    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
-    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
-    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
-    if (!pSlot)
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    if (pDialog)
     {
-        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
-        return;
-    }
-    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
-    if (pChild)
-    {
-        Dialog* pDialog = static_cast<Dialog*>(pChild->GetWindow());
         Point aPos(nX , nY);
         MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
@@ -3767,19 +3721,10 @@ void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, 
 {
     SolarMutexGuard aGuard;
 
-    // check if dialog is already open
-    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
-    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
-    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
-    if (!pSlot)
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    if (pDialog)
     {
-        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
-        return;
-    }
-    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
-    if (pChild)
-    {
-        Dialog* pDialog = static_cast<Dialog*>(pChild->GetWindow());
         Point aPos(nX , nY);
         MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
@@ -3801,36 +3746,16 @@ void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, 
     }
 }
 
-void SwXTextDocument::notifyDialog(const vcl::DialogID& rDialogID,
-                                   const OUString& rAction,
-                                   const std::vector<vcl::LOKPayloadItem>& rPayload)
-{
-    SfxLokHelper::notifyDialog(rDialogID, rAction, rPayload);
-}
-
-void SwXTextDocument::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)
-{
-    SfxLokHelper::notifyDialogChild(rDialogID, rAction, rPos);
-}
-
 void SwXTextDocument::paintActiveFloatingWindow(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight)
 {
-    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
-    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
-    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
-    if (!pSlot)
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    if (pDialog)
     {
-        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
-        return;
+        const Size aSize = pDialog->PaintActiveFloatingWindow(rDevice);
+        nWidth = aSize.getWidth();
+        nHeight = aSize.getHeight();
     }
-    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
-    if (!pChild)
-        return;
-
-    Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
-    const Size aSize = pDlg->PaintActiveFloatingWindow(rDevice);
-    nWidth = aSize.getWidth();
-    nHeight = aSize.getHeight();
 }
 
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
