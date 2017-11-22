@@ -22,7 +22,7 @@
 
 #include <salvd.hxx>
 
-#include <list>
+#include <vector>
 
 class SvpSalGraphics;
 typedef struct _cairo_surface cairo_surface_t;
@@ -33,7 +33,7 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
     cairo_surface_t*                    m_pSurface;
     basegfx::B2IVector                  m_aFrameSize;
     double                              m_fScale;
-    std::list< SvpSalGraphics* >        m_aGraphics;
+    std::vector< SvpSalGraphics* >      m_aGraphics;
 
 public:
     SvpSalVirtualDevice(DeviceFormat eFormat, double fScale)
