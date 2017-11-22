@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_700ae67a",
+        "filename": "external/gpgmepp/Library_gpgmepp.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-11-22T09:09:28Z",
+      "side": 1,
+      "message": "So the idea here was do get me a dependency on ExternalProject_gpgmepp, since I need configure to run \u0026 the lib to build.\n\nThat apparently does not work, any other idea how to achieve that?",
+      "revId": "b2e75ff652655367de6d57e5dce15ba5c785d38a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
