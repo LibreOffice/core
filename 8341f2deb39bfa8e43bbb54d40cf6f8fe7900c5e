@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_2419037a",
+        "filename": "ucb/source/core/ucbcmds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-22T12:20:37Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/#/c/45083/\u003e \"Make not warning about !! in loplugin:simplifybool consistent\"",
+      "parentUuid": "1a430d35_f51ec8b9",
+      "revId": "8341f2deb39bfa8e43bbb54d40cf6f8fe7900c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_151c34c0",
         "filename": "ucb/source/core/ucbcmds.cxx",
         "patchSetId": 1
