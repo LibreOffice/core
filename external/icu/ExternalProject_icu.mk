@@ -58,6 +58,9 @@ icu_LDFLAGS:=" \
 	    -Wl$(COMMA)-Bsymbolic-functions -Wl$(COMMA)--dynamic-list-cpp-new -Wl$(COMMA)--dynamic-list-cpp-typeinfo) \
     $(if $(filter ANDROID,$(OS)),-lgnustl_shared -lm)"
 
+# DATASUBDIR=data in cross-compiling case, because --disable-tools completely skips the
+# data directory/doesn't build the requested library in that case (icu/source/Makefile.in)
+# so we need to add it back to the list of subdirectories to build
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
@@ -73,7 +76,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
 				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
-		&& $(MAKE) \
+		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
 				URELIB \
