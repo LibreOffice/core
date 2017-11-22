@@ -530,7 +530,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Center X</property>
+                        <property name="label" translatable="yes" context="gradientpage|a11y_center_x">Center X</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">centerxmtr:%</property>
                       </object>
@@ -544,7 +544,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Center Y</property>
+                        <property name="label" translatable="yes" context="gradientpage|a11y_center_y">Center Y</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">centerymtr:%</property>
                       </object>
@@ -558,7 +558,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">From color percentage</property>
+                        <property name="label" translatable="yes" context="gradientpage|a11y_percentage_from">From color percentage</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">colorfrommtr:%</property>
                       </object>
@@ -572,7 +572,7 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">To color percentage</property>
+                        <property name="label" translatable="yes" context="gradientpage|a11y_percentage_to">To color percentage</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">colortomtr:%</property>
                       </object>
