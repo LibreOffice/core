@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e4f7fb88",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-22T18:25:38Z",
+      "side": 1,
+      "message": "Out of curiosity: do you have an example of such value and its non-normalized output?",
+      "range": {
+        "startLine": 370,
+        "startChar": 66,
+        "endLine": 370,
+        "endChar": 99
+      },
+      "revId": "1d3ea42d0347c60c3dd5617f3fff957e62f4678f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
