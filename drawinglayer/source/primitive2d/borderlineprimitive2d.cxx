@@ -26,7 +26,6 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <svtools/borderhelper.hxx>
 #include <editeng/borderline.hxx>
-#include <android/compatibility.hxx>
 
 #include <algorithm>
 #include <cmath>
