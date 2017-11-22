@@ -956,7 +956,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
     if( pRange->aStart >= pRange->aEnd ||
         pRange->aEnd >= Count() ||
         !CheckNodesRange( pRange->aStart, pRange->aEnd ) ||
-        !( HighestLevel( *this, *pRange ) > 1 ))
+        ( HighestLevel( *this, *pRange ) <= 1 ))
         return;
 
     // If the beginning of a range is before or at a start node position, so

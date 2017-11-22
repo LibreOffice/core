@@ -439,7 +439,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages,
     {
         const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( nPage ) );
         if(  (mbShowAllPages || pPage->GetPageKind() == PageKind::Standard)
-             && !(pPage->GetPageKind()==PageKind::Handout)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
+             && (pPage->GetPageKind() != PageKind::Handout)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
             bool bPageExluded = pPage->IsExcluded();
 

@@ -2368,7 +2368,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
             {
                 if (::rtl::math::isSignBitSet(fNumber))
                 {
-                    if (!(fNumber < 0.0))
+                    if (fNumber >= 0.0)
                         fNumber = -fNumber;     // do not display -0.0
                 }
                 if (fNumber == 0.0)

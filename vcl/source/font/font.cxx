@@ -210,7 +210,7 @@ void Font::SetKerning( FontKerning eKerning )
 
 bool Font::IsKerning() const
 {
-    return !(mpImplFont->meKerning == FontKerning::NONE);
+    return mpImplFont->meKerning != FontKerning::NONE;
 }
 
 void Font::SetWeight( FontWeight eWeight )

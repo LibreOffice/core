@@ -2998,7 +2998,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case REF_SEQUENCEFLD:
                 {
                     // Not implemented for RTF
-                    if(!(GetExport().GetExportFormat() != MSWordExportBase::ExportFormat::RTF))
+                    if(GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF)
                         break;
 
                     switch (pField->GetFormat())

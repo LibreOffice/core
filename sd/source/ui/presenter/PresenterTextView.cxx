@@ -117,7 +117,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
 {
     ThrowIfDisposed();
 
-    if (!(rArguments.getLength() == 1))
+    if (rArguments.getLength() != 1)
     {
         throw RuntimeException("PresenterTextView: invalid number of arguments",
                 static_cast<XWeak*>(this));

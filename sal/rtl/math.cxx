@@ -170,7 +170,7 @@ bool isRepresentableInteger(double fAbsValue)
         // this here.
         double fInt;
         return (nInt <= kMaxInt &&
-                (!((fInt = static_cast< double >(nInt)) < fAbsValue) && !(fInt > fAbsValue)));
+                (((fInt = static_cast< double >(nInt)) >= fAbsValue) && (fInt <= fAbsValue)));
     }
     return false;
 }

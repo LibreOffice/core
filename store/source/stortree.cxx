@@ -232,7 +232,7 @@ storeError OStoreBTreeNodeObject::remove (
     {
         // Check link entry.
         T const aEntryL (rPage.m_pData[nIndexL]);
-        if (!(rEntryL.compare (aEntryL) == T::COMPARE_EQUAL))
+        if (rEntryL.compare (aEntryL) != T::COMPARE_EQUAL)
             return store_E_InvalidAccess;
 
         // Load link node.
@@ -270,7 +270,7 @@ storeError OStoreBTreeNodeObject::remove (
     else
     {
         // Check leaf entry.
-        if (!(rEntryL.compare (rPage.m_pData[nIndexL]) == T::COMPARE_EQUAL))
+        if (rEntryL.compare (rPage.m_pData[nIndexL]) != T::COMPARE_EQUAL)
             return store_E_NotExists;
 
         // Save leaf entry.
@@ -400,7 +400,7 @@ storeError OStoreBTreeRootObject::find_lookup (
         page const & rPage = (*xPage);
         sal_uInt16 const i = rPage.find(entry);
         sal_uInt16 const n = rPage.usageCount();
-        if (!(i < n))
+        if (i >= n)
         {
             // Path to entry not exists (Must not happen(?)).
             return store_E_NotExists;
@@ -423,7 +423,7 @@ storeError OStoreBTreeRootObject::find_lookup (
     // Find index.
     page const & rPage = (*xPage);
     rIndex = rPage.find(entry);
-    if (!(rIndex < rPage.usageCount()))
+    if (rIndex >= rPage.usageCount())
         return store_E_NotExists;
 
     // Compare entry.
@@ -485,7 +485,7 @@ storeError OStoreBTreeRootObject::find_insert (
         page const & rPage = (*xPage);
         sal_uInt16 const i = rPage.find (entry);
         sal_uInt16 const n = rPage.usageCount();
-        if (!(i < n))
+        if (i >= n)
         {
             // Path to entry not exists (Must not happen(?)).
             return store_E_NotExists;

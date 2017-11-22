@@ -673,7 +673,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
         {   // Here we can insert ourselves at the beginning
             pUp = FirstLeaf( pNxtSct );
             pPrv = nullptr;
-            if( pPrvSct && !( pPrvSct->GetFormat() == pParent ) )
+            if( pPrvSct && ( pPrvSct->GetFormat() != pParent ) )
                 pPrvSct = nullptr; // In order that nothing is merged
         }
         else if( pPrvSct && pPrvSct->GetFormat() == pParent )

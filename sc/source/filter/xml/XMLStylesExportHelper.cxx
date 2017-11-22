@@ -815,7 +815,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
     const sal_Int32 nColumn, const sal_Int32 nRow, bool& bIsAutoStyle) const
 {
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    if (!(static_cast<size_t>(nTable) < aTables.size()))
+    if (static_cast<size_t>(nTable) >= aTables.size())
         return -1;
     ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
     ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
@@ -840,7 +840,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
     bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow)
 {
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    if (!(static_cast<size_t>(nTable) < aTables.size()))
+    if (static_cast<size_t>(nTable) >= aTables.size())
         return -1;
     ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
     ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
@@ -1107,7 +1107,7 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField)
 {
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    if (!(static_cast<size_t>(nTable) < aTables.size()))
+    if (static_cast<size_t>(nTable) >= aTables.size())
         return -1;
 
     if (maCache.hasCache(nTable, nField))

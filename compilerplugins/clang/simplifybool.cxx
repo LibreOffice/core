@@ -87,25 +87,43 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         return true;
     }
     auto e = getSubExprOfLogicalNegation(expr->getSubExpr());
-    if (e == nullptr) {
+    if (e) {
+        // Ignore macros, otherwise
+        //    OSL_ENSURE(!b, ...);
+        // triggers.
+        if (e->getLocStart().isMacroID())
+            return true;
+        // double logical not of an int is an idiom to convert to bool
+        if (!e->IgnoreImpCasts()->getType()->isBooleanType())
+            return true;
+        report(
+            DiagnosticsEngine::Warning,
+            ("double logical negation expression of the form '!!A' (with A of type"
+             " %0) can %select{logically|literally}1 be simplified as 'A'"),
+            expr->getLocStart())
+            << e->IgnoreImpCasts()->getType()
+            << e->IgnoreImpCasts()->getType()->isBooleanType()
+            << expr->getSourceRange();
         return true;
     }
-    // Ignore macros, otherwise
-    //    OSL_ENSURE(!b, ...);
-    // triggers.
-    if (e->getLocStart().isMacroID())
-        return true;
-    // double logical not of an int is an idiom to convert to bool
-    if (!e->IgnoreImpCasts()->getType()->isBooleanType())
-        return true;
-    report(
-        DiagnosticsEngine::Warning,
-        ("double logical negation expression of the form '!!A' (with A of type"
-         " %0) can %select{logically|literally}1 be simplified as 'A'"),
-        expr->getLocStart())
-        << e->IgnoreImpCasts()->getType()
-        << e->IgnoreImpCasts()->getType()->isBooleanType()
-        << expr->getSourceRange();
+    if (auto binaryOp = dyn_cast<BinaryOperator>(expr->getSubExpr()->IgnoreParenImpCasts())) {
+        // Ignore macros, otherwise
+        //    OSL_ENSURE(!b, ...);
+        // triggers.
+        if (binaryOp->getLocStart().isMacroID())
+            return true;
+        auto t = binaryOp->getLHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
+        // RecordType would require more smarts - we'd need to verify that an inverted operator actually existed
+        if (t->isTemplateTypeParmType() || t->isRecordType() || t->isDependentType())
+            return true;
+        if (!binaryOp->isComparisonOp())
+            return true;
+        report(
+            DiagnosticsEngine::Warning,
+            ("logical negation of comparison operator, can be simplified by inverting operator"),
+            expr->getLocStart())
+            << expr->getSourceRange();
+    }
     return true;
 }
 

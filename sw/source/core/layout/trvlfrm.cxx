@@ -2242,7 +2242,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             Sub( aRegion, aTmp );
 
             // The next statement means neither ruby nor rotate(90):
-            if( !( MultiPortionType::RUBY == pEnd2Pos->nMultiType ) )
+            if( MultiPortionType::RUBY != pEnd2Pos->nMultiType )
             {
                 SwTwips nTmp = fnRectX.GetTop(pEnd2Pos->aLine);
                 if( fnRectX.GetTop(aEndRect) != nTmp )

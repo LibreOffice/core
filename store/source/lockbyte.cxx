@@ -80,11 +80,11 @@ storeError ILockBytes::readAt (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nB
 {
     // [SECURITY:ValInput]
     sal_uInt8 * dst_lo = static_cast<sal_uInt8*>(pBuffer);
-    if (!(dst_lo != nullptr))
+    if (dst_lo == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt8 * dst_hi = dst_lo + nBytes;
-    if (!(dst_lo < dst_hi))
+    if (dst_lo >= dst_hi)
         return (dst_lo > dst_hi) ? store_E_InvalidParameter : store_E_None;
 
     OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::readAt(): invalid Offset");
@@ -102,11 +102,11 @@ storeError ILockBytes::writeAt (sal_uInt32 nOffset, void const * pBuffer, sal_uI
 {
     // [SECURITY:ValInput]
     sal_uInt8 const * src_lo = static_cast<sal_uInt8 const*>(pBuffer);
-    if (!(src_lo != nullptr))
+    if (src_lo == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt8 const * src_hi = src_lo + nBytes;
-    if (!(src_lo < src_hi))
+    if (src_lo >= src_hi)
         return (src_lo > src_hi) ? store_E_InvalidParameter : store_E_None;
 
     OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::writeAt(): invalid Offset");

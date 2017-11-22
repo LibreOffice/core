@@ -415,7 +415,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
-    if (!(nIndex < aTxt.getLength()))
+    if (nIndex >= aTxt.getLength())
         throw IndexOutOfBoundsException();
     return false;
 }
@@ -424,7 +424,7 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
-    if (!(nIndex < aTxt.getLength()))
+    if (nIndex >= aTxt.getLength())
         throw IndexOutOfBoundsException();
     return aTxt[nIndex];
 }
@@ -621,8 +621,8 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     OUString aTxt( GetAccessibleText_Impl() );
     sal_Int32 nStart = std::min(nStartIndex, nEndIndex);
     sal_Int32 nEnd   = std::max(nStartIndex, nEndIndex);
-    if (!(nStart <= aTxt.getLength()) ||
-        !(nEnd   <= aTxt.getLength()))
+    if ((nStart > aTxt.getLength()) ||
+        (nEnd   > aTxt.getLength()))
         throw IndexOutOfBoundsException();
     return aTxt.copy( nStart, nEnd - nStart );
 }
@@ -632,7 +632,7 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sa
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
     //!! nIndex is allowed to be the string length
-    if (!(nIndex <= aTxt.getLength()))
+    if (nIndex > aTxt.getLength())
         throw IndexOutOfBoundsException();
 
     css::accessibility::TextSegment aResult;
@@ -652,7 +652,7 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
     //!! nIndex is allowed to be the string length
-    if (!(nIndex <= aTxt.getLength()))
+    if (nIndex > aTxt.getLength())
         throw IndexOutOfBoundsException();
 
     css::accessibility::TextSegment aResult;
@@ -673,7 +673,7 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
     //!! nIndex is allowed to be the string length
-    if (!(nIndex <= aTxt.getLength()))
+    if (nIndex > aTxt.getLength())
         throw IndexOutOfBoundsException();
 
     css::accessibility::TextSegment aResult;

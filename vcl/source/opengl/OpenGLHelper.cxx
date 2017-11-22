@@ -348,7 +348,7 @@ namespace
         GLenum nBinaryFormat = GL_NONE;
 
         glGetProgramiv( nProgramID, GL_PROGRAM_BINARY_LENGTH, &nBinaryLength );
-        if( !( nBinaryLength > 0 ) )
+        if( nBinaryLength <= 0 )
         {
             SAL_WARN( "vcl.opengl", "Binary size is zero" );
             return;

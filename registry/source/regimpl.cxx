@@ -713,7 +713,7 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
     REG_GUARD(m_mutex);
 
     OUString const aKeyName (pKey->getName());
-    if (!(m_openKeyTable.count(aKeyName) > 0))
+    if (m_openKeyTable.count(aKeyName) <= 0)
         return RegError::KEY_NOT_OPEN;
 
     if (pKey->isModified())

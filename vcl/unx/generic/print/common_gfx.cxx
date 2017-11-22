@@ -378,7 +378,7 @@ void
 PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
 {
     // premature end of operation
-    if (!(nPoints > 1) || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
+    if (nPoints <= 0 || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
     // setup closed path
@@ -529,7 +529,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const Pol
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
     // premature end of operation
-    if (!(nPoints > 1) || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
+    if (nPoints <= 0 || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
     snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());

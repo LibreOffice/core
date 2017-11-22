@@ -2146,7 +2146,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 
     // we should verify that bits.iType & nWhich concur
     OSL_ENSURE( iType == nWhich, "something wrong, expect control type read from stream doesn't match nWhich passed in");
-    if ( !( iType == nWhich ) )
+    if ( iType != nWhich )
         return; // bail out
 
     sal_uInt8 iRes = (bits1 & 0x7C) >> 2;

@@ -136,7 +136,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         // In other words, isolate them from ODBC restrictions.
         // TODO: we assume SQL_GD_BLOCK, unless fetchSize is 1
         OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,nullptr);
-        m_bFetchDataInOrder = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER);
+        m_bFetchDataInOrder = ((SQL_GD_ANY_ORDER & nValueLen) != SQL_GD_ANY_ORDER);
     }
     catch(const Exception&)
     {
