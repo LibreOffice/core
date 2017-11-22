@@ -147,7 +147,7 @@ VCL_BUILDER_FACTORY_ARGS(SvtIconChoiceCtrl,
 
 IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
                                      const OUString& rUIXMLDescription )
-:   ModalDialog         ( pParent, rID, rUIXMLDescription ),
+:   SfxModalDialog         ( pParent, rID, rUIXMLDescription ),
     mnCurrentPageId ( USHRT_MAX ),
 
     pSet            ( nullptr ),
