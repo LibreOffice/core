@@ -10,7 +10,7 @@
 		39022C1B1EDC2A0E00100066 /* program in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1A1EDC2A0E00100066 /* program */; };
 		39022C1D1EDC2A2C00100066 /* services in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1C1EDC2A2C00100066 /* services */; };
 		39022C1F1EDC2AB000100066 /* share in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1E1EDC2AB000100066 /* share */; };
-		39022C211EDC2D0800100066 /* icudt59l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt59l.dat */; };
+		39022C211EDC2D0800100066 /* icudt60l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt60l.dat */; };
 		39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39284DB21FA5F207006F43E4 /* DocumentActions.swift */; };
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
 		393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975771F8BECB0002DC80B /* libiconv.tbd */; };
@@ -37,7 +37,7 @@
 		39022C1A1EDC2A0E00100066 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../generated/resources/program; sourceTree = "<group>"; };
 		39022C1C1EDC2A2C00100066 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../generated/resources/services; sourceTree = "<group>"; };
 		39022C1E1EDC2AB000100066 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../generated/resources/share; sourceTree = "<group>"; };
-		39022C201EDC2D0800100066 /* icudt59l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt59l.dat; path = ../generated/resources/icudt59l.dat; sourceTree = "<group>"; };
+		39022C201EDC2D0800100066 /* icudt60l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt60l.dat; path = ../generated/resources/icudt60l.dat; sourceTree = "<group>"; };
 		391FE7591FBC89BE00C592BA /* LibreOfficeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LibreOfficeKit.h; path = ../LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.h; sourceTree = "<group>"; };
 		39284DB01FA5E150006F43E4 /* dummyLOkit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = dummyLOkit.c; sourceTree = "<group>"; };
 		39284DB21FA5F207006F43E4 /* DocumentActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActions.swift; sourceTree = "<group>"; };
@@ -158,7 +158,7 @@
 		39B084E41E5F0B5200682A59 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				39022C201EDC2D0800100066 /* icudt59l.dat */,
+				39022C201EDC2D0800100066 /* icudt60l.dat */,
 				39022C1E1EDC2AB000100066 /* share */,
 				39022C1C1EDC2A2C00100066 /* services */,
 				39022C1A1EDC2A0E00100066 /* program */,
@@ -247,7 +247,7 @@
 				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
 				39B08BD71E5F0BB600682A59 /* rc in Resources */,
 				39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */,
-				39022C211EDC2D0800100066 /* icudt59l.dat in Resources */,
+				39022C211EDC2D0800100066 /* icudt60l.dat in Resources */,
 				39022C1B1EDC2A0E00100066 /* program in Resources */,
 				39022C1D1EDC2A2C00100066 /* services in Resources */,
 				397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */,
