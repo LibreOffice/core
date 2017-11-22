@@ -17,6 +17,7 @@
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
+#include <test/sheet/xsheetcellcursor.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
 #include <test/sheet/xsheetfilterable.hxx>
 #include <test/sheet/xsheetfilterableex.hxx>
@@ -43,6 +44,7 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XCellSeries,
                                                public apitest::XFormulaQuery,
                                                public apitest::XMultipleOperation,
+                                               public apitest::XSheetCellCursor,
                                                public apitest::XSheetCellRange,
                                                public apitest::XSheetFilterable,
                                                public apitest::XSheetFilterableEx,
@@ -92,6 +94,14 @@ public:
     // XMultipleOperation
     CPPUNIT_TEST(testSetTableOperation);
 
+    // XSheetCellCursor
+    CPPUNIT_TEST(testCollapseToCurrentArray);
+    CPPUNIT_TEST(testCollapseToCurrentRegion);
+    CPPUNIT_TEST(testCollapseToMergedArea);
+    CPPUNIT_TEST(testCollapseToSize);
+    CPPUNIT_TEST(testExpandToEntireColumns);
+    CPPUNIT_TEST(testExpandToEntireRows);
+
     // XSheetCellRange
     CPPUNIT_TEST(testGetSpreadsheet);
 
@@ -140,6 +150,11 @@ uno::Reference< uno::XInterface > ScCellCursorObj::init()
     uno::Reference<table::XCellRange> xCellRange = xSheet->getCellRangeByName("$A$1:$D$4");
     uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, UNO_QUERY_THROW);
     uno::Reference<table::XCellCursor> xCellCursor(xSheet->createCursorByRange(xSheetCellRange), UNO_QUERY_THROW);
+
+    xSheet->getCellByPosition(1, 1)->setValue(1);
+    xSheet->getCellByPosition(4, 5)->setValue(1);
+    xSheet->getCellByPosition(3, 2)->setFormula("xTextDoc");
+    xSheet->getCellByPosition(3, 3)->setFormula("xTextDoc");
 
     return xCellCursor;
 }
