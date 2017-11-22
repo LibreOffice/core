@@ -53,7 +53,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/doctempl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <framework/preventduplicateinteraction.hxx>
+#include <preventduplicateinteraction.hxx>
 #include <svtools/ehdl.hxx>
 #include <basic/sbxobj.hxx>
 #include <svl/urihelper.hxx>
@@ -666,7 +666,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             // intercept all incoming interactions and provide useful information
             // later if the following transaction was finished.
 
-            ::framework::PreventDuplicateInteraction*                 pHandler       = new ::framework::PreventDuplicateInteraction(::comphelper::getProcessComponentContext());
+            ::sfx2::PreventDuplicateInteraction*                 pHandler       = new ::sfx2::PreventDuplicateInteraction(::comphelper::getProcessComponentContext());
             css::uno::Reference< css::task::XInteractionHandler >     xHandler       (static_cast< css::task::XInteractionHandler* >(pHandler), css::uno::UNO_QUERY);
             css::uno::Reference< css::task::XInteractionHandler >     xWrappedHandler;
 
@@ -685,7 +685,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             // define rules for this handler
             css::uno::Type                                            aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
-            ::framework::PreventDuplicateInteraction::InteractionInfo aRule        (aInteraction, 1);
+            ::sfx2::PreventDuplicateInteraction::InteractionInfo aRule        (aInteraction, 1);
             pHandler->addInteractionRule(aRule);
 
             if (!aDocService.isEmpty())

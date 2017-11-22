@@ -5369,7 +5369,6 @@ framework/source/fwe/helper/documentundoguard.cxx
 framework/source/fwe/helper/propertysetcontainer.cxx
 framework/source/fwe/helper/titlehelper.cxx
 framework/source/fwe/helper/undomanagerhelper.cxx
-framework/source/fwe/interaction/preventduplicateinteraction.cxx
 framework/source/fwe/xml/menuconfiguration.cxx
 framework/source/fwe/xml/menudocumenthandler.cxx
 framework/source/fwe/xml/saxnamespacefilter.cxx
@@ -6522,7 +6521,6 @@ include/framework/fwedllapi.h
 include/framework/imutex.hxx
 include/framework/interaction.hxx
 include/framework/menuconfiguration.hxx
-include/framework/preventduplicateinteraction.hxx
 include/framework/sfxhelperfunctions.hxx
 include/framework/statusbarconfiguration.hxx
 include/framework/titlehelper.hxx
@@ -12878,6 +12876,7 @@ sfx2/inc/guisaveas.hxx
 sfx2/inc/inettbc.hxx
 sfx2/inc/pch/precompiled_sfx.cxx
 sfx2/inc/pch/precompiled_sfx.hxx
+sfx2/inc/preventduplicateinteraction.hxx
 sfx2/inc/sfxbasecontroller_internal.hxx
 sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
 sfx2/inc/sorgitm.hxx
@@ -12928,6 +12927,7 @@ sfx2/source/appl/newhelp.hxx
 sfx2/source/appl/opengrf.cxx
 sfx2/source/appl/openuriexternally.cxx
 sfx2/source/appl/panelist.hxx
+sfx2/source/appl/preventduplicateinteraction.cxx
 sfx2/source/appl/sfxhelp.cxx
 sfx2/source/appl/sfxpicklist.cxx
 sfx2/source/appl/shellimpl.cxx
