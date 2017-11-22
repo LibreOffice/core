@@ -281,7 +281,7 @@ bool PBMReader::ImplReadBody()
             case 0 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mrPBM.eof() || mrPBM.GetError() )
+                    if (!mrPBM.good())
                         return false;
 
                     if ( --nShift < 0 )
@@ -303,7 +303,7 @@ bool PBMReader::ImplReadBody()
             case 1 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mrPBM.eof() || mrPBM.GetError() )
+                    if (!mrPBM.good())
                         return false;
 
                     mrPBM.ReadUChar( nDat );
@@ -321,7 +321,7 @@ bool PBMReader::ImplReadBody()
             case 2 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mrPBM.eof() || mrPBM.GetError() )
+                    if (!mrPBM.good())
                         return false;
 
                     sal_uInt8   nR, nG, nB;
@@ -346,7 +346,7 @@ bool PBMReader::ImplReadBody()
         case 0 :
             while ( !bFinished )
             {
-                if ( mrPBM.eof() || mrPBM.GetError() )
+                if (!mrPBM.good())
                     return false;
 
                 mrPBM.ReadUChar( nDat );
@@ -405,7 +405,7 @@ bool PBMReader::ImplReadBody()
                     continue;
                 }
 
-                if ( mrPBM.eof() || mrPBM.GetError() )
+                if (!mrPBM.good())
                     return false;
 
                 mrPBM.ReadUChar( nDat );
@@ -478,7 +478,7 @@ bool PBMReader::ImplReadBody()
                     continue;
                 }
 
-                if ( mrPBM.eof() || mrPBM.GetError() )
+                if (!mrPBM.good())
                     return false;
 
                 mrPBM.ReadUChar( nDat );

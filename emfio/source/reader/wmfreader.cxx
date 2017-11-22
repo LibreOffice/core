@@ -1362,13 +1362,11 @@ namespace emfio
                     mnCurrentAction++;
                     mpInputStream->ReadUInt32(mnRecSize).ReadUInt16( nFunction );
 
-                    if(  mpInputStream->GetError()
-                      || (mnRecSize < 3 )
-                      || (mnRecSize == 3
-                         && nFunction == 0
-                         )
-                      || mpInputStream->eof()
-                      )
+                    if (
+                         !mpInputStream->good() ||
+                         (mnRecSize < 3) ||
+                         (mnRecSize == 3 && nFunction == 0)
+                       )
                     {
                         if( mpInputStream->eof() )
                             mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
