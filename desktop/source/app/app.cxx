@@ -337,31 +337,19 @@ namespace {
 
 OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
 {
-    OUStringBuffer    aDiagnosticMessage( 100 );
-
-    aDiagnosticMessage.append(DpResId(STR_BOOTSTRAP_ERR_CANNOT_START));
-
-    aDiagnosticMessage.append( "\n" );
-
-    aDiagnosticMessage.append( aErrorMessage );
-
-    return aDiagnosticMessage.makeStringAndClear();
+    return DpResId(STR_BOOTSTRAP_ERR_CANNOT_START) + "\n" + aErrorMessage;
 }
 
 OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 {
-    OUStringBuffer aDiagnosticMessage( 200 );
-
-    aDiagnosticMessage.append(DpResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS));
-
+    OUString aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS);
     if ( !aInternalErrMsg.isEmpty() )
     {
-        aDiagnosticMessage.append("\n\n");
-        aDiagnosticMessage.append(DpResId(STR_INTERNAL_ERRMSG));
-        aDiagnosticMessage.append(aInternalErrMsg);
+        aDiagnosticMessage += "\n\n"
+                           + DpResId(STR_INTERNAL_ERRMSG)
+                           + aInternalErrMsg;
     }
-
-    return aDiagnosticMessage.makeStringAndClear();
+    return aDiagnosticMessage;
 }
 
 
@@ -386,11 +374,8 @@ void FatalError(const OUString& sMessage)
             sProductKey = sProductKey.copy( nLastIndex+1 );
     }
 
-    OUStringBuffer sTitle (128);
-    sTitle.append      (sProductKey     );
-    sTitle.append (" - Fatal Error");
-
-    Application::ShowNativeErrorBox (sTitle.makeStringAndClear (), sMessage);
+    OUString sTitle = sProductKey + " - Fatal Error";
+    Application::ShowNativeErrorBox (sTitle, sMessage);
     _exit(EXITHELPER_FATAL_ERROR);
 }
 
@@ -849,29 +834,18 @@ void Desktop::HandleBootstrapErrors(
         }
 
         // First sentence. We cannot bootstrap office further!
-        OUString            aMessage;
-        OUStringBuffer        aDiagnosticMessage( 100 );
-
-        OUString aErrorMsg = DpResId(STR_BOOTSTRAP_ERR_NO_CFG_SERVICE);
-
-        aDiagnosticMessage.append( aErrorMsg );
-        aDiagnosticMessage.append( "\n" );
+        OUString aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_NO_CFG_SERVICE) + "\n";
         if ( !aErrorMessage.isEmpty() )
         {
-            aDiagnosticMessage.append( "(\"" );
-            aDiagnosticMessage.append( aErrorMessage );
-            aDiagnosticMessage.append( "\")\n" );
+            aDiagnosticMessage += "(\"" + aErrorMessage + "\")\n";
         }
 
         // Due to the fact the we haven't a backup applicat.rdb file anymore it is not possible to
         // repair the installation with the setup executable besides the office executable. Now
         // we have to ask the user to start the setup on CD/installation directory manually!!
-        OUString aStartSetupManually(DpResId(STR_ASK_START_SETUP_MANUALLY));
+        aDiagnosticMessage += DpResId(STR_ASK_START_SETUP_MANUALLY);
 
-        aDiagnosticMessage.append(aStartSetupManually);
-        aMessage = MakeStartupErrorMessage(aDiagnosticMessage.makeStringAndClear());
-
-        FatalError( aMessage);
+        FatalError(MakeStartupErrorMessage(aDiagnosticMessage));
     }
     else if ( aBootstrapError == BE_OFFICECONFIG_BROKEN )
     {
@@ -891,50 +865,30 @@ void Desktop::HandleBootstrapErrors(
     }
     else if ( aBootstrapError == BE_USERINSTALL_FAILED )
     {
-        OUString aMessage;
-        OUStringBuffer aDiagnosticMessage( 100 );
-        OUString aErrorMsg;
-        aErrorMsg = DpResId(STR_BOOTSTRAP_ERR_USERINSTALL_FAILED);
-        aDiagnosticMessage.append( aErrorMsg );
-        aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
-        FatalError(aMessage);
+        OUString aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_USERINSTALL_FAILED);
+        FatalError(MakeStartupErrorMessage(aDiagnosticMessage));
     }
     else if ( aBootstrapError == BE_LANGUAGE_MISSING )
     {
-        OUString aMessage;
-        OUStringBuffer aDiagnosticMessage( 100 );
-        OUString aErrorMsg;
-        aErrorMsg = DpResId(
-            //@@@ FIXME: should use an own resource string => #i36213#
-            STR_BOOTSTRAP_ERR_LANGUAGE_MISSING);
-        aDiagnosticMessage.append( aErrorMsg );
-        aMessage = MakeStartupErrorMessage(
-            aDiagnosticMessage.makeStringAndClear() );
-        FatalError(aMessage);
+        OUString aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_LANGUAGE_MISSING);
+        FatalError(MakeStartupErrorMessage(aDiagnosticMessage));
     }
     else if (( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE ) ||
              ( aBootstrapError == BE_USERINSTALL_NOWRITEACCESS      ))
     {
-        OUString       aUserInstallationURL;
-        OUString       aUserInstallationPath;
-        OUString       aMessage;
-        OUString       aErrorMsg;
-        OUStringBuffer aDiagnosticMessage( 100 );
-
+        OUString aUserInstallationURL;
+        OUString aUserInstallationPath;
         utl::Bootstrap::locateUserInstallation( aUserInstallationURL );
-
-        if ( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE )
-            aErrorMsg = DpResId(STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE);
-        else
-            aErrorMsg = DpResId(STR_BOOSTRAP_ERR_NOACCESSRIGHTS);
-
         osl::File::getSystemPathFromFileURL( aUserInstallationURL, aUserInstallationPath );
 
-        aDiagnosticMessage.append( aErrorMsg );
-        aDiagnosticMessage.append( aUserInstallationPath );
-        aMessage = MakeStartupErrorMessage(
-            aDiagnosticMessage.makeStringAndClear() );
-        FatalError(aMessage);
+        OUString aDiagnosticMessage;
+        if ( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE )
+            aDiagnosticMessage = DpResId(STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE);
+        else
+            aDiagnosticMessage = DpResId(STR_BOOSTRAP_ERR_NOACCESSRIGHTS);
+        aDiagnosticMessage += aUserInstallationPath;
+
+        FatalError(MakeStartupErrorMessage(aDiagnosticMessage));
     }
 }
 
@@ -1996,40 +1950,33 @@ void Desktop::OpenClients()
 
     if (!rArgs.IsQuickstart())
     {
-        bool bShowHelp = false;
-        OUStringBuffer aHelpURLBuffer;
+        OUString aHelpModule;
         if (rArgs.IsHelpWriter()) {
-            bShowHelp = true;
-            aHelpURLBuffer.append("vnd.sun.star.help://swriter/start");
+            aHelpModule = "swriter";
         } else if (rArgs.IsHelpCalc()) {
-            bShowHelp = true;
-            aHelpURLBuffer.append("vnd.sun.star.help://scalc/start");
+            aHelpModule = "scalc";
         } else if (rArgs.IsHelpDraw()) {
-            bShowHelp = true;
-            aHelpURLBuffer.append("vnd.sun.star.help://sdraw/start");
+            aHelpModule = "sdraw";
         } else if (rArgs.IsHelpImpress()) {
-            bShowHelp = true;
-            aHelpURLBuffer.append("vnd.sun.star.help://simpress/start");
+            aHelpModule = "simpress";
         } else if (rArgs.IsHelpBase()) {
-            bShowHelp = true;
-            aHelpURLBuffer.append("vnd.sun.star.help://sdatabase/start");
+            aHelpModule = "sdatabase";
         } else if (rArgs.IsHelpBasic()) {
-            bShowHelp = true;
-            aHelpURLBuffer.append("vnd.sun.star.help://sbasic/start");
+            aHelpModule = "sbasic";
         } else if (rArgs.IsHelpMath()) {
-            bShowHelp = true;
-            aHelpURLBuffer.append("vnd.sun.star.help://smath/start");
+            aHelpModule = "smath";
         }
-        if (bShowHelp) {
-            aHelpURLBuffer.append("?Language=");
-            aHelpURLBuffer.append(utl::ConfigManager::getLocale());
+        if (!aHelpModule.isEmpty()) {
+            OUString aHelpURL = "vnd.sun.star.help://"
+                              + aHelpModule
+                              + "/start?Language="
+                              + utl::ConfigManager::getLocale();
 #if defined UNX
-            aHelpURLBuffer.append("&System=UNX");
+            aHelpURL += "&System=UNX";
 #elif defined WNT
-            aHelpURLBuffer.append("&System=WIN");
+            aHelpURL += "&System=WIN";
 #endif
-            Application::GetHelp()->Start(
-                aHelpURLBuffer.makeStringAndClear(), nullptr);
+            Application::GetHelp()->Start(aHelpURL, nullptr);
             return;
         }
     }
