@@ -207,14 +207,13 @@ void SvxCharacterMap::dispose()
 void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
     m_pShowSet->SelectCharacter( c );
-
     setFavButtonState(OUString(&c, 1), aFont.GetFamilyName());
 }
 
 
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
-    return m_pShowSet->GetSelectCharacter();
+    return (m_pShowChar->GetText()).toChar();
 }
 
 
@@ -434,7 +433,7 @@ void SvxCharacterMap::init()
     aFont.SetFamily( FAMILY_DONTKNOW );
     aFont.SetPitch( PITCH_DONTKNOW );
     aFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
-
+    
     OUString aDefStr( aFont.GetFamilyName() );
     OUString aLastName;
     int nCount = GetDevFontCount();
