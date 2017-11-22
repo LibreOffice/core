@@ -178,6 +178,7 @@ bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
          mePaperFormat     == rImplJobSetup.mePaperFormat   &&
          mnPaperWidth      == rImplJobSetup.mnPaperWidth    &&
          mnPaperHeight     == rImplJobSetup.mnPaperHeight   &&
+         mbPapersizeFromSetup == rImplJobSetup.mbPapersizeFromSetup &&
          mnDriverDataLen   == rImplJobSetup.mnDriverDataLen &&
          maValueMap        == rImplJobSetup.maValueMap      &&
          memcmp( mpDriverData, rImplJobSetup.mpDriverData, mnDriverDataLen ) == 0;

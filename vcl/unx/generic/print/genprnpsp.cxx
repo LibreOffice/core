@@ -247,6 +247,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         pJobSetup->SetDriverDataLen( 0 );
         pJobSetup->SetDriverData( nullptr );
     }
+    pJobSetup->SetPapersizeFromSetup( rData.m_bPapersizeFromSetup );
 }
 
 // Needs a cleaner abstraction ...
@@ -689,6 +690,7 @@ bool PspSalInfoPrinter::SetData(
                 aData.m_aContext.setValue( pKey, pValue );
             }
         }
+        aData.m_bPapersizeFromSetup = pJobSetup->GetPapersizeFromSetup();
 
         m_aJobData = aData;
         copyJobDataToJobSetup( pJobSetup, aData );
