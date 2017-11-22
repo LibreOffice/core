@@ -56,6 +56,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <unotools/configmgr.hxx>
 #include "persistence.hxx"
 
 using namespace ::com::sun::star;
@@ -440,9 +441,15 @@ OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
     OUString aFilterName = GetPresetFilterName();
     if ( aFilterName.isEmpty() )
     {
+        OUString sDocumentServiceName = GetDocumentServiceName();
+        if (utl::ConfigManager::IsFuzzing() && nVersion == SOFFICE_FILEFORMAT_CURRENT &&
+            sDocumentServiceName == "com.sun.star.chart2.ChartDocument")
+        {
+            return "chart8";
+        }
         try {
             ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
-            aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(), nVersion );
+            aFilterName = aHelper.GetDefaultFilterFromServiceName(sDocumentServiceName, nVersion);
 
             // If no filter is found, fall back to the FileFormatVersion=6200 filter, Base only has that.
             if (aFilterName.isEmpty() && nVersion == SOFFICE_FILEFORMAT_CURRENT)
