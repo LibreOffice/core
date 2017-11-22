@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d0e63a14",
+        "filename": "test/source/sheet/xsheetcellcursor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2017-11-22T04:55:38Z",
+      "side": 1,
+      "message": "equality assertion failed\n- Expected: 2\n- Actual  : 4\n- Unable to collapseToMergedArea (cols)",
+      "revId": "3dbaa3a798f00b06dea68f5461e057a7737df0ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b0e9aee8",
+        "filename": "test/source/sheet/xsheetcellcursor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2017-11-22T04:55:38Z",
+      "side": 1,
+      "message": "equality assertion failed\n- Expected: 1\n- Actual  : 4\n- Unable to expandToEntireColumns (cols)",
+      "revId": "3dbaa3a798f00b06dea68f5461e057a7737df0ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_90e032fc",
+        "filename": "test/source/sheet/xsheetcellcursor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2017-11-22T04:55:38Z",
+      "side": 1,
+      "message": "equality assertion failed\n- Expected: 1\n- Actual  : 4\n- Unable to expandToEntireColumns (rows)",
+      "revId": "3dbaa3a798f00b06dea68f5461e057a7737df0ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
