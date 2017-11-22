@@ -35,17 +35,26 @@ public:
     bool TraverseIfStmt(IfStmt *);
     bool TraverseCXXCatchStmt(CXXCatchStmt * );
     bool TraverseCompoundStmt(CompoundStmt *);
+    bool TraverseFunctionDecl(FunctionDecl *);
+    bool TraverseCXXMethodDecl(CXXMethodDecl *);
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl *);
+    bool TraverseCXXConversionDecl(CXXConversionDecl *);
+    bool TraverseCXXDestructorDecl(CXXDestructorDecl *);
     bool VisitIfStmt(IfStmt const * );
 private:
     bool rewrite1(IfStmt const * );
     bool rewrite2(IfStmt const * );
+    bool rewriteLargeIf(IfStmt const * );
     SourceRange ignoreMacroExpansions(SourceRange range);
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
     std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
     bool checkOverlap(SourceRange);
+    bool isLargeCompoundStmt(Stmt const *);
 
     Stmt const * lastStmtInCompoundStmt = nullptr;
+    FunctionDecl const * functionDecl = nullptr;
+    CompoundStmt const * functionDeclBody = nullptr;
     std::vector<std::pair<char const *, char const *>> mvModifiedRanges;
     Stmt const * mElseBranch = nullptr;
 };
@@ -103,10 +112,6 @@ bool Flatten::TraverseIfStmt(IfStmt * ifStmt)
 
 bool Flatten::TraverseCompoundStmt(CompoundStmt * compoundStmt)
 {
-    // if the "if" statement is not the last statement in its block, and it contains
-    // var decls in its then block, we cannot de-indent the then block without
-    // extending the lifetime of some variables, which may be problematic
-    // ignore if we are part of an if/then/else/if chain
     auto copy = lastStmtInCompoundStmt;
     if (compoundStmt->size() > 0)
         lastStmtInCompoundStmt = compoundStmt->body_back();
@@ -117,19 +122,97 @@ bool Flatten::TraverseCompoundStmt(CompoundStmt * compoundStmt)
 
     lastStmtInCompoundStmt = copy;
     return rv;
+}
+
+bool Flatten::TraverseFunctionDecl(FunctionDecl * fd)
+{
+    auto copy1 = functionDeclBody;
+    auto copy2 = fd;
+    functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
+    functionDecl = fd;
+    bool rv = RecursiveASTVisitor<Flatten>::TraverseFunctionDecl(fd);
+    functionDeclBody = copy1;
+    functionDecl = copy2;
     return rv;
 }
+
+bool Flatten::TraverseCXXMethodDecl(CXXMethodDecl * fd)
+{
+    auto copy1 = functionDeclBody;
+    auto copy2 = fd;
+    functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
+    functionDecl = fd;
+    bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXMethodDecl(fd);
+    functionDeclBody = copy1;
+    functionDecl = copy2;
+    return rv;
+}
+
+bool Flatten::TraverseCXXConstructorDecl(CXXConstructorDecl * fd)
+{
+    auto copy1 = functionDeclBody;
+    auto copy2 = fd;
+    functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
+    functionDecl = fd;
+    bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXConstructorDecl(fd);
+    functionDeclBody = copy1;
+    functionDecl = copy2;
+    return rv;
+}
+
+bool Flatten::TraverseCXXConversionDecl(CXXConversionDecl * fd)
+{
+    auto copy1 = functionDeclBody;
+    auto copy2 = fd;
+    functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
+    functionDecl = fd;
+    bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXConversionDecl(fd);
+    functionDeclBody = copy1;
+    functionDecl = copy2;
+    return rv;
+}
+
+bool Flatten::TraverseCXXDestructorDecl(CXXDestructorDecl * fd)
+{
+    auto copy1 = functionDeclBody;
+    auto copy2 = fd;
+    functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
+    functionDecl = fd;
+    bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXDestructorDecl(fd);
+    functionDeclBody = copy1;
+    functionDecl = copy2;
+    return rv;
+}
+
 
 bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
 {
     if (ignoreLocation(ifStmt))
         return true;
 
-    if (!ifStmt->getElse())
+    // ignore if we are part of an if/then/else/if chain
+    if (ifStmt == mElseBranch || (ifStmt->getElse() && isa<IfStmt>(ifStmt->getElse())))
         return true;
 
-    // ignore if we are part of an if/then/else/if chain
-    if (ifStmt == mElseBranch || isa<IfStmt>(ifStmt->getElse()))
+    // look for a large if(){} block at the end of a function
+    if (!ifStmt->getElse()
+        && (functionDecl->getReturnType().isNull() || functionDecl->getReturnType()->isVoidType())
+        && functionDeclBody && functionDeclBody->size()
+        && functionDeclBody->body_back() == ifStmt
+        && isLargeCompoundStmt(ifStmt->getThen()))
+    {
+        if (!rewriteLargeIf(ifStmt))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "large if statement at end of function, rather invert the condition and exit early, and flatten the function",
+                ifStmt->getLocStart())
+              << ifStmt->getSourceRange();
+        }
+        return true;
+    }
+
+    if (!ifStmt->getElse())
         return true;
 
     auto const thenThrowExpr = containsSingleThrowExpr(ifStmt->getThen());
@@ -187,13 +270,22 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
 }
 
 static std::string stripOpenAndCloseBrace(std::string s);
+static std::string stripTrailingEmptyLines(std::string s);
 static std::string deindent(std::string const & s);
 static std::vector<std::string> split(std::string s);
 static bool startswith(std::string const & rStr, char const * pSubStr);
+static int countLeadingSpaces(std::string const &);
+static std::string padSpace(int iNoSpaces);
+static void replace(std::string & s, std::string const & from, std::string const & to);
 
 bool Flatten::rewrite1(IfStmt const * ifStmt)
 {
     if (!rewriter)
+        return false;
+
+    // If we overlap with a previous area we modified, we cannot perform this change
+    // without corrupting the source
+    if (!checkOverlap(ifStmt->getSourceRange()))
         return false;
 
     auto conditionRange = ignoreMacroExpansions(ifStmt->getCond()->getSourceRange());
@@ -209,11 +301,6 @@ bool Flatten::rewrite1(IfStmt const * ifStmt)
         return false;
     }
     SourceRange elseKeywordRange = ifStmt->getElseLoc();
-
-    // If we overlap with a previous area we modified, we cannot perform this change
-    // without corrupting the source
-    if (!checkOverlap(ifStmt->getSourceRange()))
-        return false;
 
     thenRange = extendOverComments(thenRange);
     elseRange = extendOverComments(elseRange);
@@ -236,7 +323,6 @@ bool Flatten::rewrite1(IfStmt const * ifStmt)
     if (!replaceText(elseRange, thenString)) {
         return false;
     }
-    std::cout << "rewrite 3" << std::endl;
     if (!removeText(elseKeywordRange)) {
         return false;
     }
@@ -255,6 +341,11 @@ bool Flatten::rewrite2(IfStmt const * ifStmt)
     if (!rewriter)
         return false;
 
+    // If we overlap with a previous area we modified, we cannot perform this change
+    // without corrupting the source
+    if (!checkOverlap(ifStmt->getSourceRange()))
+        return false;
+
     auto conditionRange = ignoreMacroExpansions(ifStmt->getCond()->getSourceRange());
     if (!conditionRange.isValid()) {
         return false;
@@ -268,11 +359,6 @@ bool Flatten::rewrite2(IfStmt const * ifStmt)
         return false;
     }
     SourceRange elseKeywordRange = ifStmt->getElseLoc();
-
-    // If we overlap with a previous area we modified, we cannot perform this change
-    // without corrupting the source
-    if (!checkOverlap(ifStmt->getSourceRange()))
-        return false;
 
     elseRange = extendOverComments(elseRange);
     elseKeywordRange = extendOverComments(elseKeywordRange);
@@ -291,6 +377,51 @@ bool Flatten::rewrite2(IfStmt const * ifStmt)
         return false;
     }
     if (!removeText(elseKeywordRange)) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
+{
+    if (!rewriter)
+        return false;
+
+    // If we overlap with a previous area we modified, we cannot perform this change
+    // without corrupting the source
+    if (!checkOverlap(ifStmt->getSourceRange()))
+        return false;
+
+    auto conditionRange = ignoreMacroExpansions(ifStmt->getCond()->getSourceRange());
+    if (!conditionRange.isValid()) {
+        return false;
+    }
+    auto thenRange = ignoreMacroExpansions(ifStmt->getThen()->getSourceRange());
+    if (!thenRange.isValid()) {
+        return false;
+    }
+
+    thenRange = extendOverComments(thenRange);
+
+    // in adjusting the formatting I assume that "{" starts on a new line
+
+    std::string conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+
+    std::string thenString = getSourceAsString(thenRange);
+    if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen())) {
+        if (compoundStmt->getLBracLoc().isValid()) {
+            thenString = stripOpenAndCloseBrace(thenString);
+        }
+    }
+    int iNoSpaces = countLeadingSpaces(thenString);
+    thenString = padSpace(iNoSpaces) + "return;\n\n" + deindent(thenString);
+    thenString = stripTrailingEmptyLines(thenString);
+
+    if (!replaceText(thenRange, thenString)) {
+        return false;
+    }
+    if (!replaceText(conditionRange, conditionString)) {
         return false;
     }
 
@@ -324,6 +455,13 @@ std::string Flatten::invertCondition(Expr const * condExpr, SourceRange conditio
     if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(condExpr))
         condExpr = exprWithCleanups->getSubExpr()->IgnoreImpCasts();
 
+    // an if statement will automatically invoke a bool-conversion method
+    if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(condExpr))
+    {
+        if (isa<CXXConversionDecl>(memberCallExpr->getMethodDecl()))
+            condExpr = memberCallExpr->getImplicitObjectArgument()->IgnoreImpCasts();
+    }
+
     if (auto unaryOp = dyn_cast<UnaryOperator>(condExpr))
     {
         if (unaryOp->getOpcode() != UO_LNot)
@@ -332,8 +470,34 @@ std::string Flatten::invertCondition(Expr const * condExpr, SourceRange conditio
         assert (i != std::string::npos);
         s = s.substr(i+1);
     }
-    else if (isa<CXXOperatorCallExpr>(condExpr))
-        s = "!(" + s + ")";
+    else if (auto binaryOp = dyn_cast<BinaryOperator>(condExpr))
+    {
+        switch (binaryOp->getOpcode())
+        {
+            case BO_LT: replace(s, "<", ">="); break;
+            case BO_GT: replace(s, ">", "<="); break;
+            case BO_LE: replace(s, "<=", ">"); break;
+            case BO_GE: replace(s, ">=", "<"); break;
+            case BO_EQ: replace(s, "==", "!="); break;
+            case BO_NE: replace(s, "!=", "=="); break;
+            default:
+                s = "!(" + s + ")";
+        }
+    }
+    else if (auto opCallExpr = dyn_cast<CXXOperatorCallExpr>(condExpr))
+    {
+        switch (opCallExpr->getOperator())
+        {
+            case OO_Less: replace(s, "<", ">="); break;
+            case OO_Greater: replace(s, ">", "<="); break;
+            case OO_LessEqual: replace(s, "<=", ">"); break;
+            case OO_GreaterEqual: replace(s, ">=", "<"); break;
+            case OO_EqualEqual: replace(s, "==", "!="); break;
+            case OO_ExclaimEqual: replace(s, "!=", "=="); break;
+            default:
+                s = "!(" + s + ")";
+        }
+    }
     else if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
         s = "!" + s;
     else
@@ -395,9 +559,41 @@ std::vector<std::string> split(std::string s)
     return rv;
 }
 
-static bool startswith(std::string const & rStr, char const * pSubStr)
+bool startswith(std::string const & rStr, char const * pSubStr)
 {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
+
+int countLeadingSpaces(std::string const & s)
+{
+    int i = 0;
+    while (i < (int)s.length() && s[i] == ' ')
+        i++;
+    return i;
+}
+
+std::string padSpace(int iNoSpaces)
+{
+    std::string s;
+    for (int i = 0; i < iNoSpaces; ++i)
+        s += " ";
+    return s;
+}
+
+std::string stripTrailingEmptyLines(std::string s)
+{
+    while (s.back() == '\n')
+        s.resize(s.length() - 1);
+    return s;
+}
+
+void replace(std::string & s, std::string const & from, std::string const & to)
+{
+    auto i = s.find(from);
+    assert (i != std::string::npos);
+    s.replace(i, from.length(), to);
+    // just in case we have something really weird, like the operator token is also present in the rest of the condition somehow
+    assert (s.find(from) == std::string::npos);
 }
 
 SourceRange Flatten::ignoreMacroExpansions(SourceRange range) {
@@ -486,7 +682,14 @@ std::string Flatten::getSourceAsString(SourceRange range)
     return std::string( p1, p2 - p1);
 }
 
-loplugin::Plugin::Registration< Flatten > X("flatten", true);
+bool Flatten::isLargeCompoundStmt(Stmt const * stmt)
+{
+    auto stmtRange = stmt->getSourceRange();
+    std::string s = getSourceAsString(stmtRange);
+    return std::count(s.begin(), s.end(), '\n') > 10;
+}
+
+loplugin::Plugin::Registration< Flatten > X("flatten", false);
 
 }
 
