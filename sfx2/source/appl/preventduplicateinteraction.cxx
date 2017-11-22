@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <framework/preventduplicateinteraction.hxx>
+#include <preventduplicateinteraction.hxx>
 
 #include <osl/diagnose.h>
 
@@ -25,7 +25,7 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
-namespace framework{
+namespace sfx2 {
 
 PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : ThreadHelpBase2()
@@ -236,6 +236,11 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
     return false;
 }
 
-} // namespace framework
+IMPL_STATIC_LINK_NOARG_TYPED(WarningDialogsParent, TerminateDesktop, void*, void)
+{
+    css::frame::Desktop::create(comphelper::getProcessComponentContext())->terminate();
+}
+
+} // namespace sfx2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
