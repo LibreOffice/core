@@ -264,7 +264,7 @@ static int lcl_gethex( int nChar )
         return 0;
 }
 
-static sal_Char aHexTab[] = "0123456789abcdef";
+static const sal_Char aHexTab[] = "0123456789abcdef";
 
 
 /** convert double number to string (using ::rtl::math) */
