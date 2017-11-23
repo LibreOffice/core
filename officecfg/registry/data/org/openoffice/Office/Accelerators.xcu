@@ -1285,7 +1285,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1" oor:op="replace">
@@ -1835,7 +1835,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_MOD1" oor:op="replace">
@@ -2058,12 +2058,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:EndOfParaSel</value>
-          </prop>
-        </node>
-        <node oor:name="D_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="D_SHIFT_MOD1" oor:op="replace">
@@ -2647,7 +2641,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1" oor:op="replace">
@@ -3189,7 +3183,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_MOD1" oor:op="replace">
@@ -3486,12 +3480,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:EndOfParaSel</value>
-          </prop>
-        </node>
-        <node oor:name="D_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="D_SHIFT_MOD1" oor:op="replace">
@@ -4069,7 +4057,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1_MOD2" oor:op="replace">
@@ -4260,12 +4248,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:EndOfParaSel</value>
-          </prop>
-        </node>
-        <node oor:name="D_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="D_SHIFT_MOD1" oor:op="replace">
@@ -4873,7 +4855,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1" oor:op="replace">
@@ -5046,12 +5028,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:EndOfParaSel</value>
-          </prop>
-        </node>
-        <node oor:name="D_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="D_SHIFT_MOD1" oor:op="replace">
@@ -5629,7 +5605,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1" oor:op="replace">
@@ -5840,12 +5816,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:EndOfParaSel</value>
-          </prop>
-        </node>
-        <node oor:name="D_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="D_SHIFT_MOD1" oor:op="replace">
@@ -6430,7 +6400,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1_MOD2" oor:op="replace">
@@ -6647,12 +6617,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:EndOfParaSel</value>
-          </prop>
-        </node>
-        <node oor:name="D_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="D_SHIFT_MOD1" oor:op="replace">
@@ -7230,7 +7194,7 @@
         <node oor:name="U_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:Underline</value>
+            <value xml:lang="en-US">.uno:UnderlineDouble</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1" oor:op="replace">
