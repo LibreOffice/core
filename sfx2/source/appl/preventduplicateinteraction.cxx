@@ -42,6 +42,7 @@ void PreventDuplicateInteraction::setHandler(const css::uno::Reference< css::tas
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
+    m_xWarningDialogsParent.reset();
     m_xHandler = xHandler;
     aLock.clear();
     // <- SAFE
@@ -54,6 +55,8 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
     aLock.clear();
     // <- SAFE
 
+    //if we use the default handler, set the parent to a window belonging to this object so that the dialogs
+    //don't block unrelated windows.
     m_xWarningDialogsParent.reset(new WarningDialogsParentScope(m_xContext));
     css::uno::Reference<css::task::XInteractionHandler> xHandler(css::task::InteractionHandler::createWithParent(
         m_xContext, m_xWarningDialogsParent->GetDialogParent()), css::uno::UNO_QUERY_THROW);
@@ -74,7 +77,7 @@ css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::u
         if ( !xHandler.is() )
             return css::uno::Any();
     }
-    return ::cppu::WeakImplHelper< css::task::XInteractionHandler2 >::queryInterface( aType );
+    return ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>::queryInterface(aType);
 }
 
 void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
@@ -228,6 +231,18 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
     // <- SAFE
 
     return false;
+}
+
+void SAL_CALL PreventDuplicateInteraction::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+{
+    // If we're re-initialized to set a specific new window as a parent then drop our temporary
+    // dialog parent
+    css::uno::Reference<css::lang::XInitialization> xHandler(m_xHandler, css::uno::UNO_QUERY);
+    if (xHandler.is())
+    {
+        m_xWarningDialogsParent.reset();
+        xHandler->initialize(rArguments);
+    }
 }
 
 IMPL_STATIC_LINK_NOARG(WarningDialogsParent, TerminateDesktop, void*, void)

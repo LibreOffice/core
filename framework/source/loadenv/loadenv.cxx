@@ -28,6 +28,7 @@
 #include <services.h>
 #include <comphelper/interaction.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <framework/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
@@ -55,6 +56,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -1044,15 +1046,35 @@ bool LoadEnv::impl_loadContent()
     bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
     css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
-    if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
+    if (!bHidden && !bMinimized && !bPreview)
     {
-        // Note: it's an optional interface!
-        css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
-        if (xProgressFactory.is())
+        if (!xProgress.is())
         {
-            xProgress = xProgressFactory->createStatusIndicator();
-            if (xProgress.is())
-                m_lMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+            // Note: it's an optional interface!
+            css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
+            if (xProgressFactory.is())
+            {
+                xProgress = xProgressFactory->createStatusIndicator();
+                if (xProgress.is())
+                    m_lMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+            }
+        }
+
+        // Now that we have a target window into which we can load, reinit the interaction handler to have this
+        // window as its parent for modal dialogs and ensure the window is visible
+        css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
+                                                                                utl::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+                                                                                css::uno::Reference< css::task::XInteractionHandler >());
+        css::uno::Reference<css::lang::XInitialization> xHandler(xInteraction, css::uno::UNO_QUERY);
+        if (xHandler.is())
+        {
+            css::uno::Reference<css::awt::XWindow> xWindow = xTargetFrame->getContainerWindow();
+            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            {
+                {"Parent", uno::Any(xWindow)}
+            }));
+            xHandler->initialize(aArguments);
+            impl_makeFrameWindowVisible(xWindow, false);
         }
     }
 
