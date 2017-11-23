@@ -57,6 +57,9 @@ int BridgeLOkit_Sizing(const int countXtiles, const int countYtiles,
 {
     long docWidth, docHeight;
 
+    (void)countXtiles;
+    (void)countYtiles;
+
     // Remember for later
     tileSizeX = pixelsXtile;
     tileSizeY = pixelsYtile;
@@ -87,6 +90,7 @@ int BridgeLOkit_open(const char *path)
 
 int BridgeLOkit_ClientCommand(const char *input)
 {
+    (void)input;
     return 0;
 }
 

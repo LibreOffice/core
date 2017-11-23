@@ -8,30 +8,20 @@
 #- Env ------------------------------------------------------------------------
 IOSGEN := $(SRCDIR)/ios/generated
 IOSRES := $(IOSGEN)/resources
-IOSKITXC := $(WORKDIR)/ios/loKit.xcconfig
 IOSAPPXC := $(WORKDIR)/ios/loApp.xcconfig
-IOSKITSRC := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit
-IOSAPPSRC := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight
-IOSKITPRJ := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj
-IOSAPPPRJ := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj
-IOSAPP := $(INSTDIR)/LibreOfficeLight.app
-ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT := libLibreOfficeKit_$(CPUNAME)_debug.a
-else
-IOSKIT := libLibreOfficeKit_$(CPUNAME).a
-endif
 
 
 #- Top level  -----------------------------------------------------------------
-$(eval $(call gb_CustomTarget_CustomTarget,ios/ios))
-
-$(call gb_CustomTarget_get_target,ios/ios): $(IOSGEN)/$(IOSKIT)
+$(eval $(call gb_CustomTarget_CustomTarget,ios/ios_setup))
 
 
 
+$(call gb_CustomTarget_get_target,ios/ios_setup): $(IOSAPPXC) $(IOSGEN)/native-code.h
 
-#- Generate xcconfig files  ---------------------------------------------------
-$(IOSKITXC): $(SRCDIR)/ios/loKit.xcconfig.in $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
+
+
+#- Generate dynamic files  ---------------------------------------------------
+$(IOSAPPXC): $(SRCDIR)/ios/loApp.xcconfig.in $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	@mkdir -p $(WORKDIR)/ios
 	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
@@ -41,22 +31,11 @@ $(IOSKITXC): $(SRCDIR)/ios/loKit.xcconfig.in $(BUILDDIR)/config_host.mk $(SRCDIR
 	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
-	    -e "s'@PRELINK@'`$(SRCDIR)/bin/lo-all-static-libs`'g" \
-	    $(SRCDIR)/ios/loKit.xcconfig.in > $(WORKDIR)/ios/loKit.xcconfig
+	    $(SRCDIR)/ios/loApp.xcconfig.in > $(IOSAPPXC)
 
-$(IOSAPPXC): $(SRCDIR)/ios/loKit.xcconfig.in $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-	@mkdir -p $(WORKDIR)/ios
-	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
-	    -e "s'@INSTDIR@'$(INSTDIR)'g" \
-	    -e "s'@SRCDIR@'$(SRC_ROOT)'g" \
-	    -e "s'@WORKDIR@'$(WORKDIR)'g" \
-	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
-	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
-	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
-	    $(SRCDIR)/ios/loApp.xcconfig.in > $(WORKDIR)/ios/loApp.xcconfig
 
-$(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
+
+$(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
 	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
@@ -113,59 +92,12 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	echo "buildid=$(BUILDID)"   >> $(IOSRES)/program/versionrc
 
 
-#- build  ---------------------------------------------------------------------
-$(IOSGEN)/$(IOSKIT): $(IOSKITXC) $(IOSAPPXC) $(IOSGEN)/native-code.h STAT_LIB_DEPEND
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
-	CC=; \
-	$(call gb_Helper_print_on_error, \
-	    xcodebuild \
-	        -xcconfig $(IOSKITXC) \
-	        -project $(IOSKITPRJ) \
-	        -target LibreOfficeKit \
-	        -sdk $(IOS_SDK) \
-	        -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'`\
-	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
-	        build \
-	        , $(WORKDIR)/ios/build.log \
-	)
-	cp $(WORKDIR)/ios/build/*/libLibreOfficeKit.a $(IOSGEN)/$(IOSKIT)
-
-STAT_LIB_DEPEND:
-
-
-
-$(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
-	CC=; \
-	$(call gb_Helper_print_on_error, \
-	    xcodebuild \
-	        -xcconfig $(IOSAPPXC) \
-	        -project $(IOSAPPPRJ) \
-	        -target LibreOfficeLight \
-	        -sdk $(IOS_SDK) \
-	        -arch $(CPU_NAME) \
-	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
-	        build \
-	        , $(WORKDIR)/ios/build.log \
-	)
 
 
 #- clean ios  -----------------------------------------------------------------
-$(call gb_CustomTarget_get_clean_target,ios/ios):
+$(call gb_CustomTarget_get_clean_target,ios/ios_setup):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
-	$(call gb_Helper_print_on_error, \
-	    xcodebuild -xcconfig $(IOSAPPXC) -project $(IOSAPPPRJ) clean \
-	        , $(WORKDIR)/ios/build.log \
-	)
-	$(call gb_Helper_print_on_error, \
-	    xcodebuild -xcconfig $(IOSKITXC) -configuration Debug -project $(IOSKITPRJ) clean \
-	        , $(WORKDIR)/ios/build.log \
-	)
-	rm -f $(IOSGEN)/$(IOSKIT)
-	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/project.xcworkspace
-	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/xcuserdata
-	rm -rf $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/project.xcworkspace
-	rm -rf $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/xcuserdata
+	rm -rf $(IOSRES) $(IOSGEN)/native-code.h $(IOSAPPXC)
 	rm -rf $(WORKDIR)/ios
 
 
