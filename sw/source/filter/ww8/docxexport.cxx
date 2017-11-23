@@ -167,7 +167,15 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sa
         }
     }
 
-    m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
+    SwWW8AttrIter aAttrIter( *this, rNode );
+    const sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
+    const OUString& aStr( rNode.GetText() );
+    const sal_Int32 nEnd = aStr.getLength();
+
+    if ( nNextAttr == nEnd && nAktPos == nEnd )
+        m_pAttrOutput->WriteFinalBookmarks_Impl( aStarts, aEnds );
+    else
+        m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
 void DocxExport::AppendBookmark( const OUString& rName )

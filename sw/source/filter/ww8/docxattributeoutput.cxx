@@ -1242,8 +1242,8 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     // XML_r node should be surrounded with bookmark-begin and bookmark-end nodes if it has bookmarks.
     // The same is applied for permission ranges.
     // But due to unit test "testFdo85542" let's output bookmark-begin with bookmark-end.
-    DoWriteBookmarksStart();
-    DoWriteBookmarksEnd();
+    DoWriteBookmarksStart(m_rBookmarksStart);
+    DoWriteBookmarksEnd(m_rBookmarksEnd);
     DoWritePermissionsStart();
     DoWriteAnnotationMarks();
 
@@ -1384,6 +1384,8 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         m_nFieldsInHyperlink = 0;
     }
 
+    DoWriteBookmarksStart(m_rFinalBookmarksStart);
+    DoWriteBookmarksEnd(m_rFinalBookmarksEnd);
     DoWriteBookmarkEndIfExist(nPos);
 }
 
@@ -1441,9 +1443,9 @@ void DocxAttributeOutput::DoWriteBookmarkEndIfExist(sal_Int32 nRunPos)
 }
 
 /// Write the start bookmarks
-void DocxAttributeOutput::DoWriteBookmarksStart()
+void DocxAttributeOutput::DoWriteBookmarksStart(std::vector<OUString>& rStarts)
 {
-    for (const OUString & bookmarkName : m_rBookmarksStart)
+    for (const OUString & bookmarkName : rStarts)
     {
         // Output the bookmark
         DoWriteBookmarkTagStart(bookmarkName);
@@ -1452,13 +1454,13 @@ void DocxAttributeOutput::DoWriteBookmarksStart()
         m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(bookmarkName), RTL_TEXTENCODING_UTF8).getStr();
         m_nNextBookmarkId++;
     }
-    m_rBookmarksStart.clear();
+    rStarts.clear();
 }
 
 /// export the end bookmarks
-void DocxAttributeOutput::DoWriteBookmarksEnd()
+void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds)
 {
-    for (const OUString & bookmarkName : m_rBookmarksEnd)
+    for (const OUString & bookmarkName : rEnds)
     {
         // Get the id of the bookmark
         auto pPos = m_rOpenedBookmarksIds.find(bookmarkName);
@@ -1470,7 +1472,7 @@ void DocxAttributeOutput::DoWriteBookmarksEnd()
             m_rOpenedBookmarksIds.erase(bookmarkName);
         }
     }
-    m_rBookmarksEnd.clear();
+    rEnds.clear();
 }
 
 // For construction of the special bookmark name template for permissions:
@@ -7318,6 +7320,37 @@ void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
         else
         {
             m_rBookmarksEnd.push_back(name);
+        }
+    }
+    rEnds.clear();
+}
+
+void DocxAttributeOutput::WriteFinalBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds )
+{
+    for ( const OUString & name : rStarts )
+    {
+        if (name.startsWith("permission-for-group:") ||
+            name.startsWith("permission-for-user:"))
+        {
+            m_rPermissionsStart.push_back(name);
+        }
+        else
+        {
+            m_rFinalBookmarksStart.push_back(name);
+        }
+    }
+    rStarts.clear();
+
+    for ( const OUString & name : rEnds )
+    {
+        if (name.startsWith("permission-for-group:") ||
+            name.startsWith("permission-for-user:"))
+        {
+            m_rPermissionsEnd.push_back(name);
+        }
+        else
+        {
+            m_rFinalBookmarksEnd.push_back(name);
         }
     }
     rEnds.clear();
