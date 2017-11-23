@@ -2545,7 +2545,7 @@ ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL n
 {
     if (!TableExists(nTab))
     {
-        std::vector<ScColumn*> aEmptyVector;
+        std::vector<ScColumn> aEmptyVector;
         return ScColumnsRange(ScColumnsRange::Iterator(aEmptyVector.begin()),
                               ScColumnsRange::Iterator(aEmptyVector.end()));
     }

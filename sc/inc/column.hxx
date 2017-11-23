@@ -186,6 +186,7 @@ public:
     };
 
     ScColumn();
+    ScColumn(ScColumn&&) = default; // Required by ScColContainer::resize
     ~ScColumn() COVERITY_NOEXCEPT_FALSE;
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray = false);

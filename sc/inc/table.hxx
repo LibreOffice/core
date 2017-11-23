@@ -128,16 +128,16 @@ class ScColumnsRange final
                             const SCCOL*,             // pointer
                             SCCOL>                    // reference
     {
-        std::vector<ScColumn*>::const_iterator maColIter;
+        std::vector<ScColumn>::const_iterator maColIter;
     public:
-        explicit Iterator(const std::vector<ScColumn*>::const_iterator& colIter) : maColIter(colIter) {}
+        explicit Iterator(const std::vector<ScColumn>::const_iterator& colIter) : maColIter(colIter) {}
 
         Iterator& operator++() { ++maColIter; return *this;}
         Iterator& operator--() { --maColIter; return *this;}
 
         bool operator==(const Iterator & rOther) const {return maColIter == rOther.maColIter;}
         bool operator!=(const Iterator & rOther) const {return !(*this == rOther);}
-        reference operator*() const {return (*maColIter)->GetCol();}
+        reference operator*() const {return (*maColIter).GetCol();}
     };
 
     ScColumnsRange(const Iterator & rBegin, const Iterator & rEnd) : maBegin(rBegin), maEnd(rEnd) {}
