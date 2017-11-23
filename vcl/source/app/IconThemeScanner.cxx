@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <deque>
+
 #include <vcl/IconThemeScanner.hxx>
 
 #include <config_folders.h>

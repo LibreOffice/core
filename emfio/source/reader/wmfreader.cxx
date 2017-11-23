@@ -25,8 +25,10 @@
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <osl/endian.h>
+#include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <tools/fract.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/bitmapaccess.hxx>

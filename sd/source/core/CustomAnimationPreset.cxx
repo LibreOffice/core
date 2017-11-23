@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <osl/diagnose.h>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>

@@ -21,11 +21,12 @@
 #define INCLUDED_VCL_OUTDEV_HXX
 
 #include <tools/gen.hxx>
+#include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
 #include <o3tl/typed_flags_set.hxx>
-
+#include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
@@ -33,7 +34,6 @@
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>

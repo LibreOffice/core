@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <deque>
+
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>

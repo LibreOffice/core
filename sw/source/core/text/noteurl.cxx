@@ -20,6 +20,7 @@
 #include <noteurl.hxx>
 
 #include <swtypes.hxx>
+#include <osl/diagnose.h>
 #include <vcl/outdev.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imap.hxx>

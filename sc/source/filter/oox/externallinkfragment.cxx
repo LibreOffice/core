@@ -23,6 +23,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <osl/diagnose.h>
 #include <defnamesbuffer.hxx>
 #include <sheetdatacontext.hxx>
 #include <unitconverter.hxx>

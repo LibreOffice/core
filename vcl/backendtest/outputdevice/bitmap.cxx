@@ -9,7 +9,7 @@
  */
 
 #include <test/outputdevice.hxx>
-
+#include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace vcl {

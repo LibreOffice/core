@@ -18,7 +18,9 @@
  */
 
 #include <tools/bigint.hxx>
-
+#include <vcl/gdimtf.hxx>
+#include <vcl/lineinfo.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
 

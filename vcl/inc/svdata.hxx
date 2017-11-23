@@ -66,6 +66,7 @@ class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
+class SvFileStream;
 class SystemWindow;
 class WorkWindow;
 class Dialog;

@@ -9,6 +9,7 @@
  */
 
 #include <test/outputdevice.hxx>
+#include <vcl/gradient.hxx>
 
 namespace vcl {
 namespace test {

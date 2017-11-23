@@ -105,7 +105,7 @@ public:
     {
         pSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", getClassName() );
     }
-    void insertMasterPage( const Reference< XDrawPage>& xMasterPage )
+    void insertMasterPage( const Reference< css::drawing::XDrawPage>& xMasterPage )
     {
         mMasterPageSet.insert( xMasterPage );
     }
@@ -631,7 +631,7 @@ bool SVGFilter::implLookForFirstVisiblePage()
 
     while( ( nCurPage <= nLastPage ) && ( -1 == mnVisiblePage ) )
     {
-        const Reference< XDrawPage > & xDrawPage = mSelectedPages[nCurPage];
+        const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[nCurPage];
 
         if( xDrawPage.is() )
         {
@@ -691,7 +691,7 @@ bool SVGFilter::implExportDocument()
         // resolution for which to prepare the geometry.
         if(xPrimitiveFactory.is())
         {
-            Reference< XShape > xShapeCandidate;
+            Reference< css::drawing::XShape > xShapeCandidate;
             const Sequence< PropertyValue > aViewInformation;
             const Sequence< PropertyValue > aParams;
 
@@ -873,7 +873,7 @@ template< typename TextFieldType >
 OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
                               const TextFieldType & aField,
                               const OUString & sOOOElemField,
-                              const Reference< XDrawPage >& xMasterPage )
+                              const Reference< css::drawing::XDrawPage >& xMasterPage )
 {
     bool bFound = false;
     sal_Int32 i;
@@ -976,9 +976,9 @@ void SVGFilter::implGenerateMetaData()
 
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
-                const Reference< XDrawPage > &    xDrawPage = mSelectedPages[i];
-                Reference< XMasterPageTarget >    xMasterPageTarget( xDrawPage, UNO_QUERY );
-                Reference< XDrawPage >            xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
+                const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
+                Reference< css::drawing::XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
+                Reference< css::drawing::XDrawPage > xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
                 OUString aSlideId(aId + "_" + OUString::number( i ));
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
@@ -1186,7 +1186,7 @@ void SVGFilter::implExportTextShapeIndex()
     sal_Int32 nCount = mSelectedPages.size();
     for( sal_Int32 i = 0; i < nCount; ++i )
     {
-        const Reference< XDrawPage > & xDrawPage = mSelectedPages[i];
+        const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
         if( mTextShapeIdListMap.find( xDrawPage ) != mTextShapeIdListMap.end() )
         {
             OUString sTextShapeIdList = mTextShapeIdListMap[xDrawPage].trim();
@@ -1350,7 +1350,7 @@ Any SVGFilter::implSafeGetPagePropSet( const OUString & sPropertyName,
 /** We collect info on master page elements visibility, and placeholder text shape content.
     This method is used when exporting a single page as implGenerateMetaData is not invoked.
  */
-void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
+void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > & rxPage )
 {
     mVisiblePagePropSet.bIsBackgroundVisible                = true;
     mVisiblePagePropSet.bAreBackgroundObjectsVisible        = true;
@@ -1396,7 +1396,7 @@ void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 }
 
 
-bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage > > & rxPages,
+bool SVGFilter::implExportMasterPages( const std::vector< Reference< css::drawing::XDrawPage > > & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
@@ -1433,7 +1433,7 @@ bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage >
     {
         if( rxPages[i].is() )
         {
-            Reference< XShapes > xShapes( rxPages[i], UNO_QUERY );
+            Reference< css::drawing::XShapes > xShapes( rxPages[i], UNO_QUERY );
 
             if( xShapes.is() )
             {
@@ -1449,7 +1449,7 @@ bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage >
 }
 
 
-void SVGFilter::implExportDrawPages( const std::vector< Reference< XDrawPage > > & rxPages,
+void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing::XDrawPage > > & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
@@ -1483,7 +1483,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< XDrawPage > >
 
     for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
-        Reference< XShapes > xShapes;
+        Reference< css::drawing::XShapes > xShapes;
 
         if (mbExportShapeSelection)
         {
@@ -1541,8 +1541,8 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< XDrawPage > >
 
 
 bool SVGFilter::implExportPage( const OUString & sPageId,
-                                    const Reference< XDrawPage > & rxPage,
-                                    const Reference< XShapes > & xShapes,
+                                    const Reference< css::drawing::XDrawPage > & rxPage,
+                                    const Reference< css::drawing::XShapes > & xShapes,
                                     bool bMaster )
 {
     bool bRet = false;
@@ -1642,9 +1642,9 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
 }
 
 
-bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes, bool bMaster )
+bool SVGFilter::implExportShapes( const Reference< css::drawing::XShapes >& rxShapes, bool bMaster )
 {
-    Reference< XShape > xShape;
+    Reference< css::drawing::XShape > xShape;
     bool bRet = false;
 
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
@@ -1659,7 +1659,7 @@ bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes, bool bMa
 }
 
 
-bool SVGFilter::implExportShape( const Reference< XShape >& rxShape, bool bMaster )
+bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShape, bool bMaster )
 {
     Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
     bool bRet = false;
@@ -1685,7 +1685,7 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape, bool bMaste
         {
             if( aShapeType.lastIndexOf( "drawing.GroupShape" ) != -1 )
             {
-                Reference< XShapes > xShapes( rxShape, UNO_QUERY );
+                Reference< css::drawing::XShapes > xShapes( rxShape, UNO_QUERY );
 
                 if( xShapes.is() )
                 {
@@ -1852,7 +1852,7 @@ bool SVGFilter::implCreateObjects()
 
     for( i = 0, nCount = mMasterPageTargets.size(); i < nCount; ++i )
     {
-        const Reference< XDrawPage > & xMasterPage = mMasterPageTargets[i];
+        const Reference< css::drawing::XDrawPage > & xMasterPage = mMasterPageTargets[i];
 
         if( xMasterPage.is() )
         {
@@ -1866,7 +1866,7 @@ bool SVGFilter::implCreateObjects()
 
     for( i = 0, nCount = mSelectedPages.size(); i < nCount; ++i )
     {
-        const Reference< XDrawPage > & xDrawPage = mSelectedPages[i];
+        const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
 
         if( xDrawPage.is() )
         {
@@ -1901,9 +1901,9 @@ bool SVGFilter::implCreateObjects()
 }
 
 
-bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes )
+bool SVGFilter::implCreateObjectsFromShapes( const Reference< css::drawing::XDrawPage > & rxPage, const Reference< css::drawing::XShapes >& rxShapes )
 {
-    Reference< XShape > xShape;
+    Reference< css::drawing::XShape > xShape;
     bool            bRet = false;
 
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
@@ -1918,12 +1918,12 @@ bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPa
 }
 
 
-bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape )
+bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDrawPage > & rxPage, const Reference< css::drawing::XShape >& rxShape )
 {
     bool bRet = false;
     if( rxShape->getShapeType().lastIndexOf( "drawing.GroupShape" ) != -1 )
     {
-        Reference< XShapes > xShapes( rxShape, UNO_QUERY );
+        Reference< css::drawing::XShapes > xShapes( rxShape, UNO_QUERY );
 
         if( xShapes.is() )
             bRet = implCreateObjectsFromShapes( rxPage, xShapes );
@@ -2035,9 +2035,9 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
 }
 
 
-void SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
+void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::XDrawPage >& rxDrawPage )
 {
-    Reference< XGraphicExportFilter >  xExporter = drawing::GraphicExportFilter::create( mxContext );
+    Reference< css::drawing::XGraphicExportFilter >  xExporter = drawing::GraphicExportFilter::create( mxContext );
 
     GDIMetaFile             aMtf;
 
@@ -2060,7 +2060,7 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& r
 }
 
 
-OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
+OUString SVGFilter::implGetClassFromShape( const Reference< css::drawing::XShape >& rxShape )
 {
     OUString            aRet;
     const OUString      aShapeType( rxShape->getShapeType() );

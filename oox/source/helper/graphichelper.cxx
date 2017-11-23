@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/seqstream.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/propertysequence.hxx>

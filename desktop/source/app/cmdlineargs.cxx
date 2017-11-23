@@ -26,6 +26,7 @@
 #endif
 
 #include "cmdlineargs.hxx"
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>

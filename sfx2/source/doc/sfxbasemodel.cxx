@@ -71,6 +71,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/salctype.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/storinfo.hxx>

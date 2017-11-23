@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <vcl/gdimtf.hxx>
 #include <vcl/window.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/virdev.hxx>

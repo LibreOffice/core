@@ -20,7 +20,7 @@
 #include <dispatch/interceptionhelper.hxx>
 
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
-
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
 namespace framework{

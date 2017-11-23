@@ -19,6 +19,7 @@
 
 #include <worksheetfragment.hxx>
 
+#include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/helper/attributelist.hxx>

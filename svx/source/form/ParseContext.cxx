@@ -26,6 +26,7 @@
 
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <fmstring.hrc>
 

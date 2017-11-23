@@ -87,6 +87,7 @@
 
 #include <memory>
 
+class ErrCode;
 class SfxMedium;
 class   SfxPrinter;
 class   SfxViewShell;

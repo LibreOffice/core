@@ -66,7 +66,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::svg;
 using namespace ::com::sun::star::xml::sax;
@@ -365,7 +364,7 @@ private:
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,
                                               const OUString* pElementId,
-                                              const Reference< XShape >* pXShape = nullptr,
+                                              const Reference< css::drawing::XShape >* pXShape = nullptr,
                                               const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 
     vcl::Font               ImplSetCorrectFontHeight() const;
@@ -384,7 +383,7 @@ public:
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
                                            const OUString* pElementId = nullptr,
-                                           const Reference< XShape >* pXShape = nullptr,
+                                           const Reference< css::drawing::XShape >* pXShape = nullptr,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 };
 

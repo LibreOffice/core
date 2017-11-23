@@ -34,6 +34,7 @@
 
 #include <osl/endian.h>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
 #include "sortedarray.hxx"
 

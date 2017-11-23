@@ -22,6 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
+#include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/textdata.hxx>

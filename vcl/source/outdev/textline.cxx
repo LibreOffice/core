@@ -20,7 +20,8 @@
 #include <cassert>
 
 #include <sal/types.h>
-
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>

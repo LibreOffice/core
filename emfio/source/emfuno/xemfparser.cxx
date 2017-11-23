@@ -32,6 +32,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>

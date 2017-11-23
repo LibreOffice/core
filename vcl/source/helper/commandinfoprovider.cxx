@@ -18,6 +18,7 @@
  */
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/mnemonic.hxx>
 #include <comphelper/string.hxx>
