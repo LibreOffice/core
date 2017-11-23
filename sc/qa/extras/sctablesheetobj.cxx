@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xprintareas.hxx>
+#include <test/sheet/xscenarioenhanced.hxx>
 #include <test/sheet/xscenariossupplier.hxx>
 #include <test/sheet/xsheetannotationssupplier.hxx>
 #include <test/sheet/xsheetauditing.hxx>
@@ -25,8 +26,10 @@
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 
+#include <com/sun/star/sheet/XScenariosSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -34,11 +37,12 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 30
+#define NUMBER_OF_TESTS 31
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
+                                               public apitest::XScenarioEnhanced,
                                                public apitest::XScenariosSupplier,
                                                public apitest::XSearchable,
                                                public apitest::XSheetAnnotationsSupplier,
@@ -63,6 +67,7 @@ public:
 
     virtual uno::Reference< uno::XInterface > init() override;
     virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
+    virtual uno::Reference< uno::XInterface > getScenarioSpreadsheet() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
 
@@ -77,6 +82,9 @@ public:
     // XReplaceable
     CPPUNIT_TEST(testReplaceAll);
     CPPUNIT_TEST(testCreateReplaceDescriptor);
+
+    // XScenarioEnhanced
+    CPPUNIT_TEST(testGetRanges);
 
     // XScenariosSupplier
     CPPUNIT_TEST(testGetScenarios);
@@ -158,6 +166,7 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
@@ -166,7 +175,36 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
     xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
 
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
+    aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
+    uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
+    xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
+    xSheets->getByName("Scenario");
+
     return xSheet;
+}
+
+uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
+{
+    createFileURL("ScTableSheetObj.ods", maFileURL);
+    if (!mxComponent.is())
+        mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Reference<container::XIndexAccess> xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
+
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
+    aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
+
+    uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
+    xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
+    uno::Reference<sheet::XSpreadsheet> sSheet(xSheets->getByName("Scenario"), UNO_QUERY_THROW);
+
+    return sSheet;
 }
 
 uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
