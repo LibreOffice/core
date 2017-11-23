@@ -22,6 +22,30 @@
       "revId": "1d3ea42d0347c60c3dd5617f3fff957e62f4678f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a75b35f5",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-23T07:44:31Z",
+      "side": 1,
+      "message": "The reproducer for ofz#4366 causes this to be called with fValue something like 4.94066e-324 (but don\u0027t have the values for the other function parameters handy right now), so nExp of -324 is capped to -307, but the resulting string will be \"0E-307\" anyway.",
+      "parentUuid": "1a430d35_e4f7fb88",
+      "range": {
+        "startLine": 370,
+        "startChar": 66,
+        "endLine": 370,
+        "endChar": 99
+      },
+      "revId": "1d3ea42d0347c60c3dd5617f3fff957e62f4678f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
