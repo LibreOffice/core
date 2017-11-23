@@ -290,42 +290,6 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
-static gboolean deleteLokDialog(GtkWidget* pWidget, GdkEvent* /*event*/, gpointer userdata)
-{
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
-    g_info("deleteLokDialog");
-    gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
-
-    return FALSE;
-}
-
-static gboolean destroyLokDialog(GtkWidget* pWidget, gpointer userdata)
-{
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
-    g_info("destroyLokDialog");
-    gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
-
-    return FALSE;
-}
-
-void openLokDialog( GtkWidget* pSelector, gpointer /*pItem*/ )
-{
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
-    gchar* pDialogId = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(pSelector));
-    // Set the width, height of the dialog to something large enough to be able
-    // to render any dialog
-    GtkWidget* pDialog = gtv_lok_dialog_new(LOK_DOC_VIEW(window->lokdocview), pDialogId, 1024, 768);
-    gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
-    g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
-    g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
-    g_free(pDialogId);
-
-    g_info("openLokDialog");
-    gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
-    gtk_widget_show_all(GTK_WIDGET(pDialog));
-    gtk_window_present(GTK_WINDOW(pDialog));
-}
-
 void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
     static const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };

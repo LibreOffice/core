@@ -119,7 +119,6 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder.get(), "documentRepair", G_CALLBACK(documentRepair));
     gtk_builder_add_callback_symbol(builder.get(), "signalAddressbar", G_CALLBACK(signalAddressbar));
     gtk_builder_add_callback_symbol(builder.get(), "signalFormulabar", G_CALLBACK(signalFormulabar));
-    gtk_builder_add_callback_symbol(builder.get(), "openLokDialog", G_CALLBACK(openLokDialog));
 
     // find toolbar
     // Note: These buttons are not the part of GtvMainToolbar
