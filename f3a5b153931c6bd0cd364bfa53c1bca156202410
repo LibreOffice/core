@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_47d5311a",
+        "filename": "xmlsecurity/source/xmlsec/xsec_xmlsec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-23T08:37:45Z",
+      "side": 1,
+      "message": "Nitpick: for other externals we use the \u0027HAVE_FEATURE_FOO\u0027 naming scheme, would it make sense to follow that here? (HAVE_FEATURE_PDFIUM, etc.) Would nicely avoid having \"gpgme\" twice in the name.",
+      "revId": "f3a5b153931c6bd0cd364bfa53c1bca156202410",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
