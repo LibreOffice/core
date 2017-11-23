@@ -1479,11 +1479,6 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     SwFrameSwapper aSwapper( this, false );
 
-#if OSL_DEBUG_LEVEL > 1
-    const SwTwips nDbgY = getFrameArea().Top();
-    (void)nDbgY;
-#endif
-
     if ( IsEmpty() )
     {
         switch ( ePrep )
