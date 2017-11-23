@@ -158,7 +158,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
                     pNewGrafObj->SetGraphicLink(
                         bAsLink ? aDlg.GetPath() : OUString(),
                         aReferer,
-                        bAsLink ? aDlg.GetCurrentFilter() : OUString());
+                        bAsLink ? aDlg.GetDetectedFilter() : OUString());
 
                     pResult = pNewGrafObj;
                 }

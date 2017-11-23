@@ -1178,7 +1178,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
             {
                 // new file chosen
                 aBgdGraphicPath   = pImportDlg->GetPath();
-                aBgdGraphicFilter = pImportDlg->GetCurrentFilter();
+                aBgdGraphicFilter = pImportDlg->GetDetectedFilter();
                 bool bLink = ( nHtmlMode & HTMLMODE_ON ) || pImportDlg->IsAsLink();
                 m_pBtnLink->Check( bLink );
                 m_pBtnLink->Enable();

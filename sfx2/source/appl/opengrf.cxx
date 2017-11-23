@@ -111,7 +111,7 @@ ErrCode SvxOpenGraphicDialog::Execute()
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
-            OUString  aCurFilter( GetCurrentFilter() );
+            OUString  aCurFilter( getCurrentFilter() );
             sal_uInt16  nFormatNum = rFilter.GetImportFormatNumber( aCurFilter );
             sal_uInt16  nRetFormat = 0;
             sal_uInt16  nFound = USHRT_MAX;
@@ -159,6 +159,10 @@ ErrCode SvxOpenGraphicDialog::Execute()
                     // store detected appropriate filter
                     OUString aFormatName(rFilter.GetImportFormatName(nFound));
                     SetDetectedFilter(aFormatName);
+                }
+                else
+                {
+                    SetDetectedFilter(mpImpl->aFileDlg.GetCurrentFilter());
                 }
 
                 return nImpRet;
@@ -245,7 +249,7 @@ OUString SvxOpenGraphicDialog::GetPath() const
     return mpImpl->aFileDlg.GetPath();
 }
 
-OUString SvxOpenGraphicDialog::GetCurrentFilter() const
+OUString SvxOpenGraphicDialog::getCurrentFilter() const
 {
     return mpImpl->aFileDlg.GetCurrentFilter();
 }
@@ -255,7 +259,7 @@ OUString SvxOpenGraphicDialog::GetDetectedFilter() const
     return mpImpl->sDetectedFilter;
 }
 
-void SvxOpenGraphicDialog::SetCurrentFilter(const OUString& rStr)
+void SvxOpenGraphicDialog::setCurrentFilter(const OUString& rStr)
 {
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }

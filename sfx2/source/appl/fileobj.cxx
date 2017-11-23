@@ -406,14 +406,14 @@ void SvFileObject::Edit(vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Lin
                 SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK), pParent);
                 aDlg.EnableLink(false);
                 aDlg.SetPath( sFile, true );
-                aDlg.SetCurrentFilter( sTmpFilter );
+                aDlg.setCurrentFilter( sTmpFilter );
 
                 if( !aDlg.Execute() )
                 {
                     sFile = aDlg.GetPath()
                         + OUStringLiteral1(sfx2::cTokenSeparator)
                         + OUStringLiteral1(sfx2::cTokenSeparator)
-                        + aDlg.GetCurrentFilter();
+                        + aDlg.GetDetectedFilter();
 
                     aEndEditLink.Call( sFile );
                 }

@@ -43,8 +43,8 @@ public:
     bool                    IsAsLink() const;
 
     //what the dialog thought the format was
-    OUString                GetCurrentFilter() const;
-    void                    SetCurrentFilter(const OUString&);
+    OUString                getCurrentFilter() const;
+    void                    setCurrentFilter(const OUString&);
 
     //what was subsequently found to be the format
     OUString                GetDetectedFilter() const;

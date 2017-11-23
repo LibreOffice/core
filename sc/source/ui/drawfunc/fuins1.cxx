@@ -264,7 +264,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             if( nError == ERRCODE_NONE )
             {
                 OUString aFileName = aDlg.GetPath();
-                OUString aFilterName = aDlg.GetCurrentFilter();
+                OUString aFilterName = aDlg.GetDetectedFilter();
                 bool bAsLink = aDlg.IsAsLink();
 
                 // really store as link only?
