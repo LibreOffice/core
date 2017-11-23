@@ -1078,14 +1078,14 @@ static void appendResourceMap( OStringBuffer& rBuf, const char* pPrefix, const P
     rBuf.append( pPrefix );
     rBuf.append( "<<" );
     int ni = 0;
-    for( PDFWriterImpl::ResourceMap::const_iterator it = rList.begin(); it != rList.end(); ++it )
+    for (auto const& item : rList)
     {
-        if( !it->first.isEmpty() && it->second > 0 )
+        if( !item.first.isEmpty() && item.second > 0 )
         {
             rBuf.append( '/' );
-            rBuf.append( it->first );
+            rBuf.append( item.first );
             rBuf.append( ' ' );
-            rBuf.append( it->second );
+            rBuf.append( item.second );
             rBuf.append( " 0 R" );
             if( ((++ni) & 7) == 0 )
                 rBuf.append( '\n' );
@@ -2284,13 +2284,12 @@ void PDFWriterImpl::endPage()
     m_aCurrentPDFState = m_aGraphicsStack.front();
     m_aGraphicsStack.front().m_aFont =  aFont;
 
-    for( std::list<BitmapEmit>::iterator it = m_aBitmaps.begin();
-         it != m_aBitmaps.end(); ++it )
+    for (auto & bitmap : m_aBitmaps)
     {
-        if( ! it->m_aBitmap.IsEmpty() )
+        if( ! bitmap.m_aBitmap.IsEmpty() )
         {
-            writeBitmapObject( *it );
-            it->m_aBitmap = BitmapEx();
+            writeBitmapObject(bitmap);
+            bitmap.m_aBitmap = BitmapEx();
         }
     }
     for (auto & jpeg : m_aJPGs)
@@ -2302,14 +2301,13 @@ void PDFWriterImpl::endPage()
             jpeg.m_aMask = Bitmap();
         }
     }
-    for( std::list<TransparencyEmit>::iterator t = m_aTransparentObjects.begin();
-         t != m_aTransparentObjects.end(); ++t )
+    for (auto & item : m_aTransparentObjects)
     {
-        if( t->m_pContentStream )
+        if( item.m_pContentStream )
         {
-            writeTransparentObject( *t );
-            delete t->m_pContentStream;
-            t->m_pContentStream = nullptr;
+            writeTransparentObject(item);
+            delete item.m_pContentStream;
+            item.m_pContentStream = nullptr;
         }
     }
 
@@ -2470,17 +2468,16 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
 {
     // create layout, list and table attribute sets
     OStringBuffer aLayout(256), aList(64), aTable(64);
-    for( PDFStructAttributes::const_iterator it = i_rEle.m_aAttributes.begin();
-         it != i_rEle.m_aAttributes.end(); ++it )
+    for (auto const& attribute : i_rEle.m_aAttributes)
     {
-        if( it->first == PDFWriter::ListNumbering )
-            appendStructureAttributeLine( it->first, it->second, aList, true );
-        else if( it->first == PDFWriter::RowSpan ||
-                 it->first == PDFWriter::ColSpan )
-            appendStructureAttributeLine( it->first, it->second, aTable, false );
-        else if( it->first == PDFWriter::LinkAnnotation )
+        if( attribute.first == PDFWriter::ListNumbering )
+            appendStructureAttributeLine( attribute.first, attribute.second, aList, true );
+        else if( attribute.first == PDFWriter::RowSpan ||
+                 attribute.first == PDFWriter::ColSpan )
+            appendStructureAttributeLine( attribute.first, attribute.second, aTable, false );
+        else if( attribute.first == PDFWriter::LinkAnnotation )
         {
-            sal_Int32 nLink = it->second.nValue;
+            sal_Int32 nLink = attribute.second.nValue;
             std::map< sal_Int32, sal_Int32 >::const_iterator link_it =
                 m_aLinkPropertyMap.find( nLink );
             if( link_it != m_aLinkPropertyMap.end() )
@@ -2524,7 +2521,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             }
         }
         else
-            appendStructureAttributeLine( it->first, it->second, aLayout, true );
+            appendStructureAttributeLine( attribute.first, attribute.second, aLayout, true );
     }
     if( ! i_rEle.m_aBBox.IsEmpty() )
     {
@@ -2586,11 +2583,10 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
     OStringBuffer aRet( 64 );
     if( aAttribObjects.size() > 1 )
         aRet.append( " [" );
-    for( std::vector< sal_Int32 >::const_iterator at_it = aAttribObjects.begin();
-         at_it != aAttribObjects.end(); ++at_it )
+    for (auto const& attrib : aAttribObjects)
     {
         aRet.append( " " );
-        aRet.append( *at_it );
+        aRet.append( attrib );
         aRet.append( " 0 R" );
     }
     if( aAttribObjects.size() > 1 )
@@ -2607,11 +2603,11 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
        )
         return 0;
 
-    for( std::list< sal_Int32 >::const_iterator it = rEle.m_aChildren.begin(); it != rEle.m_aChildren.end(); ++it )
+    for (auto const& child : rEle.m_aChildren)
     {
-        if( *it > 0 && *it < sal_Int32(m_aStructure.size()) )
+        if( child > 0 && child < sal_Int32(m_aStructure.size()) )
         {
-            PDFStructureElement& rChild = m_aStructure[ *it ];
+            PDFStructureElement& rChild = m_aStructure[ child ];
             if( rChild.m_eType != PDFWriter::NonStructElement )
             {
                 if( rChild.m_nParentElement == rEle.m_nOwnElement )
@@ -2619,14 +2615,14 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 else
                 {
                     OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure element" );
-                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure element with id " << *it);
+                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure element with id " << child);
                 }
             }
         }
         else
         {
             OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
-            SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure id " << *it);
+            SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure id " << child);
         }
     }
 
@@ -2646,13 +2642,12 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if( ! m_aRoleMap.empty() )
         {
             aLine.append( "/RoleMap<<" );
-            for( std::unordered_map<OString,OString>::const_iterator
-                 it = m_aRoleMap.begin(); it != m_aRoleMap.end(); ++it )
+            for (auto const& role : m_aRoleMap)
             {
                 aLine.append( '/' );
-                aLine.append(it->first);
+                aLine.append(role.first);
                 aLine.append( '/' );
-                aLine.append( it->second );
+                aLine.append( role.second );
                 aLine.append( '\n' );
             }
             aLine.append( ">>\n" );
@@ -2725,31 +2720,31 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     {
         unsigned int i = 0;
         aLine.append( "/K[" );
-        for( std::list< PDFStructureElementKid >::const_iterator it =
-                 rEle.m_aKids.begin(); it != rEle.m_aKids.end(); ++it, i++ )
+        for (auto const& kid : rEle.m_aKids)
         {
-            if( it->nMCID == -1 )
+            if( kid.nMCID == -1 )
             {
-                aLine.append( it->nObject );
+                aLine.append( kid.nObject );
                 aLine.append( " 0 R" );
                 aLine.append( ( (i & 15) == 15 ) ? "\n" : " " );
             }
             else
             {
-                if( it->nObject == rEle.m_nFirstPageObject )
+                if( kid.nObject == rEle.m_nFirstPageObject )
                 {
-                    aLine.append( it->nMCID );
+                    aLine.append( kid.nMCID );
                     aLine.append( " " );
                 }
                 else
                 {
                     aLine.append( "<</Type/MCR/Pg " );
-                    aLine.append( it->nObject );
+                    aLine.append( kid.nObject );
                     aLine.append( " 0 R /MCID " );
-                    aLine.append( it->nMCID );
+                    aLine.append( kid.nMCID );
                     aLine.append( ">>\n" );
                 }
             }
+            ++i;
         }
         aLine.append( "]\n" );
     }
@@ -2765,10 +2760,9 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
 
 bool PDFWriterImpl::emitGradients()
 {
-    for( std::list<GradientEmit>::iterator it = m_aGradients.begin();
-         it != m_aGradients.end(); ++it )
+    for (auto const& gradient : m_aGradients)
     {
-        if ( !writeGradientFunction( *it ) ) return false;
+        if ( !writeGradientFunction( gradient ) ) return false;
     }
     return true;
 }
@@ -2777,10 +2771,10 @@ bool PDFWriterImpl::emitTilings()
 {
     OStringBuffer aTilingObj( 1024 );
 
-    for( std::vector<TilingEmit>::iterator it = m_aTilings.begin(); it != m_aTilings.end(); ++it )
+    for (auto & tiling : m_aTilings)
     {
-        SAL_WARN_IF( !it->m_pTilingStream, "vcl.pdfwriter", "tiling without stream" );
-        if( ! it->m_pTilingStream )
+        SAL_WARN_IF( !tiling.m_pTilingStream, "vcl.pdfwriter", "tiling without stream" );
+        if( ! tiling.m_pTilingStream )
             continue;
 
         aTilingObj.setLength( 0 );
@@ -2790,22 +2784,22 @@ bool PDFWriterImpl::emitTilings()
             emitComment( "PDFWriterImpl::emitTilings" );
         }
 
-        sal_Int32 nX = (sal_Int32)it->m_aRectangle.Left();
-        sal_Int32 nY = (sal_Int32)it->m_aRectangle.Top();
-        sal_Int32 nW = (sal_Int32)it->m_aRectangle.GetWidth();
-        sal_Int32 nH = (sal_Int32)it->m_aRectangle.GetHeight();
-        if( it->m_aCellSize.Width() == 0 )
-            it->m_aCellSize.Width() = nW;
-        if( it->m_aCellSize.Height() == 0 )
-            it->m_aCellSize.Height() = nH;
+        sal_Int32 nX = (sal_Int32)tiling.m_aRectangle.Left();
+        sal_Int32 nY = (sal_Int32)tiling.m_aRectangle.Top();
+        sal_Int32 nW = (sal_Int32)tiling.m_aRectangle.GetWidth();
+        sal_Int32 nH = (sal_Int32)tiling.m_aRectangle.GetHeight();
+        if( tiling.m_aCellSize.Width() == 0 )
+            tiling.m_aCellSize.Width() = nW;
+        if( tiling.m_aCellSize.Height() == 0 )
+            tiling.m_aCellSize.Height() = nH;
 
-        bool bDeflate = compressStream( it->m_pTilingStream );
-        it->m_pTilingStream->Seek( STREAM_SEEK_TO_END );
-        sal_uInt64 const nTilingStreamSize = it->m_pTilingStream->Tell();
-        it->m_pTilingStream->Seek( STREAM_SEEK_TO_BEGIN );
+        bool bDeflate = compressStream( tiling.m_pTilingStream );
+        tiling.m_pTilingStream->Seek( STREAM_SEEK_TO_END );
+        sal_uInt64 const nTilingStreamSize = tiling.m_pTilingStream->Tell();
+        tiling.m_pTilingStream->Seek( STREAM_SEEK_TO_BEGIN );
 
         // write pattern object
-        aTilingObj.append( it->m_nObject );
+        aTilingObj.append( tiling.m_nObject );
         aTilingObj.append( " 0 obj\n" );
         aTilingObj.append( "<</Type/Pattern/PatternType 1\n"
                            "/PaintType 1\n"
@@ -2820,46 +2814,46 @@ bool PDFWriterImpl::emitTilings()
         appendFixedInt( nY+nH, aTilingObj );
         aTilingObj.append( "]\n"
                            "/XStep " );
-        appendFixedInt( it->m_aCellSize.Width(), aTilingObj );
+        appendFixedInt( tiling.m_aCellSize.Width(), aTilingObj );
         aTilingObj.append( "\n"
                            "/YStep " );
-        appendFixedInt( it->m_aCellSize.Height(), aTilingObj );
+        appendFixedInt( tiling.m_aCellSize.Height(), aTilingObj );
         aTilingObj.append( "\n" );
-        if( it->m_aTransform.matrix[0] != 1.0 ||
-            it->m_aTransform.matrix[1] != 0.0 ||
-            it->m_aTransform.matrix[3] != 0.0 ||
-            it->m_aTransform.matrix[4] != 1.0 ||
-            it->m_aTransform.matrix[2] != 0.0 ||
-            it->m_aTransform.matrix[5] != 0.0 )
+        if( tiling.m_aTransform.matrix[0] != 1.0 ||
+            tiling.m_aTransform.matrix[1] != 0.0 ||
+            tiling.m_aTransform.matrix[3] != 0.0 ||
+            tiling.m_aTransform.matrix[4] != 1.0 ||
+            tiling.m_aTransform.matrix[2] != 0.0 ||
+            tiling.m_aTransform.matrix[5] != 0.0 )
         {
             aTilingObj.append( "/Matrix [" );
             // TODO: scaling, mirroring on y, etc
-            appendDouble( it->m_aTransform.matrix[0], aTilingObj );
+            appendDouble( tiling.m_aTransform.matrix[0], aTilingObj );
             aTilingObj.append( ' ' );
-            appendDouble( it->m_aTransform.matrix[1], aTilingObj );
+            appendDouble( tiling.m_aTransform.matrix[1], aTilingObj );
             aTilingObj.append( ' ' );
-            appendDouble( it->m_aTransform.matrix[3], aTilingObj );
+            appendDouble( tiling.m_aTransform.matrix[3], aTilingObj );
             aTilingObj.append( ' ' );
-            appendDouble( it->m_aTransform.matrix[4], aTilingObj );
+            appendDouble( tiling.m_aTransform.matrix[4], aTilingObj );
             aTilingObj.append( ' ' );
-            appendDouble( it->m_aTransform.matrix[2], aTilingObj );
+            appendDouble( tiling.m_aTransform.matrix[2], aTilingObj );
             aTilingObj.append( ' ' );
-            appendDouble( it->m_aTransform.matrix[5], aTilingObj );
+            appendDouble( tiling.m_aTransform.matrix[5], aTilingObj );
             aTilingObj.append( "]\n" );
         }
         aTilingObj.append( "/Resources" );
-        it->m_aResources.append( aTilingObj, getFontDictObject() );
+        tiling.m_aResources.append( aTilingObj, getFontDictObject() );
         if( bDeflate )
             aTilingObj.append( "/Filter/FlateDecode" );
         aTilingObj.append( "/Length " );
         aTilingObj.append( (sal_Int32)nTilingStreamSize );
         aTilingObj.append( ">>\nstream\n" );
-        if ( !updateObject( it->m_nObject ) ) return false;
+        if ( !updateObject( tiling.m_nObject ) ) return false;
         if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) ) return false;
-        checkAndEnableStreamEncryption( it->m_nObject );
-        bool written = writeBuffer( it->m_pTilingStream->GetData(), nTilingStreamSize );
-        delete it->m_pTilingStream;
-        it->m_pTilingStream = nullptr;
+        checkAndEnableStreamEncryption( tiling.m_nObject );
+        bool written = writeBuffer( tiling.m_pTilingStream->GetData(), nTilingStreamSize );
+        delete tiling.m_pTilingStream;
+        tiling.m_pTilingStream = nullptr;
         if( !written )
             return false;
         disableStreamEncryption();
@@ -3220,12 +3214,11 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
 
 void PDFWriterImpl::appendBuiltinFontsToDict( OStringBuffer& rDict ) const
 {
-    for( std::map< sal_Int32, sal_Int32 >::const_iterator it =
-         m_aBuiltinFontToObjectMap.begin(); it != m_aBuiltinFontToObjectMap.end(); ++it )
+    for (auto const& item : m_aBuiltinFontToObjectMap)
     {
-        rDict.append( m_aBuiltinFonts[it->first].getNameObject() );
+        rDict.append( m_aBuiltinFonts[item.first].getNameObject() );
         rDict.append( ' ' );
-        rDict.append( it->second );
+        rDict.append( item.second );
         rDict.append( " 0 R" );
     }
 }
@@ -3262,20 +3255,20 @@ bool PDFWriterImpl::emitFonts()
             memset( pEncoding, 0, sizeof( pEncoding ) );
             memset( pCodeUnitsPerGlyph, 0, sizeof( pCodeUnitsPerGlyph ) );
             memset( pEncToUnicodeIndex, 0, sizeof( pEncToUnicodeIndex ) );
-            for( FontEmitMapping::iterator fit = s_subset.m_aMapping.begin(); fit != s_subset.m_aMapping.end();++fit )
+            for (auto const& item : s_subset.m_aMapping)
             {
-                sal_uInt8 nEnc = fit->second.getGlyphId();
+                sal_uInt8 nEnc = item.second.getGlyphId();
 
                 SAL_WARN_IF( aGlyphIds[nEnc] != 0 || pEncoding[nEnc] != 0, "vcl.pdfwriter", "duplicate glyph" );
                 SAL_WARN_IF( nEnc > s_subset.m_aMapping.size(), "vcl.pdfwriter", "invalid glyph encoding" );
 
-                aGlyphIds[ nEnc ] = fit->first;
+                aGlyphIds[ nEnc ] = item.first;
                 pEncoding[ nEnc ] = nEnc;
                 pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aCodeUnits.size());
-                pCodeUnitsPerGlyph[ nEnc ] = fit->second.countCodes();
+                pCodeUnitsPerGlyph[ nEnc ] = item.second.countCodes();
                 for( sal_Int32 n = 0; n < pCodeUnitsPerGlyph[ nEnc ]; n++ )
-                    aCodeUnits.push_back( fit->second.getCode( n ) );
-                if( fit->second.getCode(0) )
+                    aCodeUnits.push_back( item.second.getCode( n ) );
+                if( item.second.getCode(0) )
                     nToUnicodeStream = 1;
                 if( nGlyphs < 256 )
                     nGlyphs++;
@@ -3465,13 +3458,13 @@ bool PDFWriterImpl::emitFonts()
     osl_removeFile( aTmpName.pData );
 
     // emit system fonts
-    for( FontEmbedData::iterator sit = m_aSystemFonts.begin(); sit != m_aSystemFonts.end(); ++sit )
+    for (auto const& systemFont : m_aSystemFonts)
     {
-        std::map< sal_Int32, sal_Int32 > aObjects = emitSystemFont( sit->first, sit->second );
-        for( std::map< sal_Int32, sal_Int32 >::iterator fit = aObjects.begin(); fit != aObjects.end(); ++fit )
+        std::map< sal_Int32, sal_Int32 > aObjects = emitSystemFont( systemFont.first, systemFont.second );
+        for (auto const& item : aObjects)
         {
-            if ( !fit->second ) return false;
-            aFontIDToObject[ fit->first ] = fit->second;
+            if ( !item.second ) return false;
+            aFontIDToObject[ item.first ] = item.second;
         }
     }
 
@@ -3480,22 +3473,21 @@ bool PDFWriterImpl::emitFonts()
     aFontDict.append( " 0 obj\n"
                      "<<" );
     int ni = 0;
-    for( std::map< sal_Int32, sal_Int32 >::iterator mit = aFontIDToObject.begin(); mit != aFontIDToObject.end(); ++mit )
+    for (auto const& itemMap : aFontIDToObject)
     {
         aFontDict.append( "/F" );
-        aFontDict.append( mit->first );
+        aFontDict.append( itemMap.first );
         aFontDict.append( ' ' );
-        aFontDict.append( mit->second );
+        aFontDict.append( itemMap.second );
         aFontDict.append( " 0 R" );
         if( ((++ni) & 7) == 0 )
             aFontDict.append( '\n' );
     }
     // emit builtin font for widget appearances / variable text
-    for( std::map< sal_Int32, sal_Int32 >::iterator it = m_aBuiltinFontToObjectMap.begin();
-        it != m_aBuiltinFontToObjectMap.end(); ++it )
+    for (auto & item : m_aBuiltinFontToObjectMap)
     {
-        PdfBuiltinFontFace aData(m_aBuiltinFonts[it->first]);
-        it->second = emitBuiltinFont( &aData, it->second );
+        PdfBuiltinFontFace aData(m_aBuiltinFonts[item.first]);
+        item.second = emitBuiltinFont( &aData, item.second );
     }
     appendBuiltinFontsToDict( aFontDict );
     aFontDict.append( "\n>>\nendobj\n\n" );
@@ -4566,18 +4558,17 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
     if( !rWidget.m_aAppearances.empty() )
     {
         rAnnotDict.append( "/AP<<\n" );
-        for( PDFAppearanceMap::iterator dict_it = rWidget.m_aAppearances.begin(); dict_it != rWidget.m_aAppearances.end(); ++dict_it )
+        for (auto & dict_item : rWidget.m_aAppearances)
         {
             rAnnotDict.append( "/" );
-            rAnnotDict.append( dict_it->first );
-            bool bUseSubDict = (dict_it->second.size() > 1);
+            rAnnotDict.append( dict_item.first );
+            bool bUseSubDict = (dict_item.second.size() > 1);
             rAnnotDict.append( bUseSubDict ? "<<" : " " );
 
-            for( PDFAppearanceStreams::const_iterator stream_it = dict_it->second.begin();
-                 stream_it != dict_it->second.end(); ++stream_it )
+            for (auto const& stream_item : dict_item.second)
             {
-                SvMemoryStream* pApppearanceStream = stream_it->second;
-                dict_it->second[ stream_it->first ] = nullptr;
+                SvMemoryStream* pApppearanceStream = stream_item.second;
+                dict_item.second[ stream_item.first ] = nullptr;
 
                 bool bDeflate = compressStream( pApppearanceStream );
 
@@ -4619,7 +4610,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 if( bUseSubDict )
                 {
                     rAnnotDict.append( " /" );
-                    rAnnotDict.append( stream_it->first );
+                    rAnnotDict.append( stream_item.first );
                     rAnnotDict.append( " " );
                 }
                 rAnnotDict.append( nObject );
@@ -4804,12 +4795,13 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             sal_Int32 nTI = -1;
             aLine.append( "/Opt[\n" );
             sal_Int32 i = 0;
-            for( std::vector< OUString >::const_iterator it = rWidget.m_aListEntries.begin(); it != rWidget.m_aListEntries.end(); ++it, ++i )
+            for (auto const& entry : rWidget.m_aListEntries)
             {
-                appendUnicodeTextStringEncrypt( *it, rWidget.m_nObject, aLine );
+                appendUnicodeTextStringEncrypt( entry, rWidget.m_nObject, aLine );
                 aLine.append( "\n" );
-                if( *it == rWidget.m_aValue )
+                if( entry == rWidget.m_aValue )
                     nTI = i;
+                ++i;
             }
             aLine.append( "]\n" );
             if( nTI > 0 )
@@ -4984,8 +4976,8 @@ bool PDFWriterImpl::emitCatalog()
     CHECK_RETURN( emitResources() );
 
     // emit all pages
-    for( std::vector<PDFPage>::iterator it = m_aPages.begin(); it != m_aPages.end(); ++it )
-        if( ! it->emit( nTreeNode ) )
+    for (auto & page : m_aPages)
+        if( ! page.emit( nTreeNode ) )
             return false;
 
     sal_Int32 nNamedDestinationsDictionary = emitNamedDestinations();
@@ -5029,12 +5021,12 @@ bool PDFWriterImpl::emitCatalog()
     }
     else
     {
-        for( std::vector<PDFPage>::const_iterator iter = m_aPages.begin(); iter != m_aPages.end(); ++iter )
+        for (auto const& page : m_aPages)
         {
-            if( iter->m_nPageWidth > nMediaBoxWidth )
-                nMediaBoxWidth = iter->m_nPageWidth;
-            if( iter->m_nPageHeight > nMediaBoxHeight )
-                nMediaBoxHeight = iter->m_nPageHeight;
+            if( page.m_nPageWidth > nMediaBoxWidth )
+                nMediaBoxWidth = page.m_nPageWidth;
+            if( page.m_nPageHeight > nMediaBoxHeight )
+                nMediaBoxHeight = page.m_nPageHeight;
         }
     }
     aLine.append( "/MediaBox[ 0 0 " );
@@ -5044,11 +5036,12 @@ bool PDFWriterImpl::emitCatalog()
     aLine.append( " ]\n"
                   "/Kids[ " );
     unsigned int i = 0;
-    for( std::vector<PDFPage>::const_iterator iter = m_aPages.begin(); iter != m_aPages.end(); ++iter, i++ )
+    for (auto & page : m_aPages)
     {
-        aLine.append( iter->m_nPageObject );
+        aLine.append( page.m_nPageObject );
         aLine.append( " 0 R" );
         aLine.append( ( (i&15) == 15 ) ? "\n" : " " );
+        ++i;
     }
     aLine.append( "]\n"
                   "/Count " );
@@ -5938,17 +5931,15 @@ bool PDFWriterImpl::emitTrailer()
     if( ! m_aContext.Encryption.DocumentIdentifier.empty() )
     {
         aLine.append( "/ID [ <" );
-        for( std::vector< sal_uInt8 >::const_iterator it = m_aContext.Encryption.DocumentIdentifier.begin();
-             it != m_aContext.Encryption.DocumentIdentifier.end(); ++it )
+        for (auto const& item : m_aContext.Encryption.DocumentIdentifier)
         {
-            appendHex( sal_Int8(*it), aLine );
+            appendHex( sal_Int8(item), aLine );
         }
         aLine.append( ">\n"
                       "<" );
-        for( std::vector< sal_uInt8 >::const_iterator it = m_aContext.Encryption.DocumentIdentifier.begin();
-             it != m_aContext.Encryption.DocumentIdentifier.end(); ++it )
+        for (auto const& item : m_aContext.Encryption.DocumentIdentifier)
         {
-            appendHex( sal_Int8(*it), aLine );
+            appendHex( sal_Int8(item), aLine );
         }
         aLine.append( "> ]\n" );
     }
@@ -6056,29 +6047,29 @@ void PDFWriterImpl::sortWidgets()
             }
         }
     }
-    for( std::unordered_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
+    for (auto & item : sorted)
     {
         // append entries for non widget annotations
-        PDFPage& rPage = m_aPages[ it->first ];
+        PDFPage& rPage = m_aPages[ item.first ];
         unsigned int nAnnots = rPage.m_aAnnotations.size();
         for( unsigned int nA = 0; nA < nAnnots; nA++ )
-            if( it->second.aObjects.find( rPage.m_aAnnotations[nA] ) == it->second.aObjects.end())
-                it->second.aSortedAnnots.emplace_back( 10000, rPage.m_aAnnotations[nA], -1 );
+            if( item.second.aObjects.find( rPage.m_aAnnotations[nA] ) == item.second.aObjects.end())
+                item.second.aSortedAnnots.emplace_back( 10000, rPage.m_aAnnotations[nA], -1 );
 
         AnnotSorterLess aLess( m_aWidgets );
-        std::stable_sort( it->second.aSortedAnnots.begin(), it->second.aSortedAnnots.end(), aLess );
+        std::stable_sort( item.second.aSortedAnnots.begin(), item.second.aSortedAnnots.end(), aLess );
         // sanity check
-        if( it->second.aSortedAnnots.size() == nAnnots)
+        if( item.second.aSortedAnnots.size() == nAnnots)
         {
             for( unsigned int nA = 0; nA < nAnnots; nA++ )
-                rPage.m_aAnnotations[nA] = it->second.aSortedAnnots[nA].nObject;
+                rPage.m_aAnnotations[nA] = item.second.aSortedAnnots[nA].nObject;
         }
         else
         {
             SAL_WARN( "vcl.pdfwriter", "wrong number of sorted annotations" );
             SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions "
-                     "on page nr " << (long int)it->first << ", " <<
-                     (long int)it->second.aSortedAnnots.size() << " sorted and " <<
+                     "on page nr " << (long int)item.first << ", " <<
+                     (long int)item.second.aSortedAnnots.size() << " sorted and " <<
                      (long int)nAnnots << " unsorted");
         }
     }
@@ -8411,10 +8402,9 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
         if( rInfo.m_aDashArray.size() > 0 )
         {
             aLine.append( " [ " );
-            for( std::vector<double>::const_iterator it = rInfo.m_aDashArray.begin();
-                 it != rInfo.m_aDashArray.end(); ++it )
+            for (auto const& dash : rInfo.m_aDashArray)
             {
-                m_aPages.back().appendMappedLength( *it, aLine );
+                m_aPages.back().appendMappedLength( dash, aLine );
                 aLine.append( ' ' );
             }
             aLine.append( "] 0 d" );
@@ -10939,11 +10929,11 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         rEle.m_nOwnElement != rEle.m_nParentElement )
         return;
 
-    for( std::list< sal_Int32 >::const_iterator it = rEle.m_aChildren.begin(); it != rEle.m_aChildren.end(); ++it )
+    for (auto const& child : rEle.m_aChildren)
     {
-        if( *it > 0 && *it < sal_Int32(m_aStructure.size()) )
+        if( child > 0 && child < sal_Int32(m_aStructure.size()) )
         {
-            PDFStructureElement& rChild = m_aStructure[ *it ];
+            PDFStructureElement& rChild = m_aStructure[ child ];
             if( rChild.m_eType != PDFWriter::NonStructElement )
             {
                 //triggered when a child of the rEle element is found
@@ -10952,14 +10942,14 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                 else
                 {
                     OSL_FAIL( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
-                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure element with id " << *it );
+                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure element with id " << child );
                 }
             }
         }
         else
         {
             OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
-            SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure id " << *it );
+            SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure id " << child );
         }
     }
 
@@ -11008,10 +10998,9 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                                                 rEle.m_aChildren.begin(),
                                                 aChildEndIt );
                     // set the kid's new parent
-                    for( std::list< sal_Int32 >::const_iterator it = rEleNew.m_aChildren.begin();
-                         it != rEleNew.m_aChildren.end(); ++it )
+                    for (auto const& child : rEleNew.m_aChildren)
                     {
-                        m_aStructure[ *it ].m_nParentElement = nNewId;
+                        m_aStructure[ child ].m_nParentElement = nNewId;
                     }
                 }
                 //finally add the new kids resulting from the container added
@@ -11444,10 +11433,9 @@ void PDFWriterImpl::setPageTransition( PDFWriter::PageTransition eType, sal_uInt
 void PDFWriterImpl::ensureUniqueRadioOnValues()
 {
     // loop over radio groups
-    for( std::map<sal_Int32,sal_Int32>::const_iterator group = m_aRadioGroupWidgets.begin();
-         group != m_aRadioGroupWidgets.end(); ++group )
+    for (auto const& group : m_aRadioGroupWidgets)
     {
-        PDFWidget& rGroupWidget = m_aWidgets[ group->second ];
+        PDFWidget& rGroupWidget = m_aWidgets[ group.second ];
         // check whether all kids have a unique OnValue
         std::unordered_map< OUString, sal_Int32 > aOnValues;
         int nChildren = rGroupWidget.m_aKidsIndex.size();
