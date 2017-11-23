@@ -1218,11 +1218,11 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
         for( size_t nIndex = 0, nCount = rCondFormat.size(); nIndex < nCount; ++nIndex )
             if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
             {
-                if(pFormatEntry->GetType() == condformat::CONDITION)
+                if(pFormatEntry->GetType() == ScFormatEntry::Type::Condition)
                     maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex ) );
-                else if(pFormatEntry->GetType() == condformat::COLORSCALE)
+                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Colorscale)
                     maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), ++rIndex ) );
-                else if(pFormatEntry->GetType() == condformat::DATABAR)
+                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Databar)
                 {
                     const ScDataBarFormat& rFormat = static_cast<const ScDataBarFormat&>(*pFormatEntry);
                     XclExpExtCondFormatData aExtEntry;
@@ -1233,7 +1233,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
 
                     maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), rFormat, ++rIndex, aExtEntry.aGUID));
                 }
-                else if(pFormatEntry->GetType() == condformat::ICONSET)
+                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
                 {
                     // don't export iconSet entries that are not in OOXML
                     const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
@@ -1266,7 +1266,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                     else
                         maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), rIconSet, ++rIndex ) );
                 }
-                else if(pFormatEntry->GetType() == condformat::DATE)
+                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Date)
                     maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
             }
         aScRanges.Format( msSeqRef, ScRefFlags::VALID, nullptr, formula::FormulaGrammar::CONV_XL_OOX, ' ' );

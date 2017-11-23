@@ -142,7 +142,7 @@ private:
 
     std::unique_ptr<ScConditionalFormat> mpCurrentFormat;
 
-    condformat::ScFormatEntryType meEntryType;
+    ScFormatEntry::Type meEntryType;
 };
 
 class ScOrcusAutoFilter : public orcus::spreadsheet::iface::import_auto_filter

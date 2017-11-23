@@ -305,7 +305,7 @@ ScOrcusConditionalFormat::ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc)
     mnTab(nTab),
     mrDoc(rDoc),
     mpCurrentFormat(new ScConditionalFormat(0, &mrDoc)),
-    meEntryType(condformat::CONDITION)
+    meEntryType(ScFormatEntry::Type::Condition)
 {
 }
 
@@ -321,7 +321,7 @@ void ScOrcusConditionalFormat::set_color(os::color_elem_t /*alpha*/, os::color_e
 
 void ScOrcusConditionalFormat::set_condition_type(os::condition_type_t /*type*/)
 {
-    assert(meEntryType == condformat::CONDITION);
+    assert(meEntryType == ScFormatEntry::Type::Condition);
     SAL_INFO("sc.orcus.condformat", "set_condition_type");
 }
 
@@ -332,7 +332,7 @@ void ScOrcusConditionalFormat::set_formula(const char* /*p*/, size_t /*n*/)
 
 void ScOrcusConditionalFormat::set_date(os::condition_date_t /*date*/)
 {
-    assert(meEntryType == condformat::DATE);
+    assert(meEntryType == ScFormatEntry::Type::Date);
     SAL_INFO("sc.orcus.condformat", "set_date");
 }
 
@@ -343,45 +343,45 @@ void ScOrcusConditionalFormat::commit_condition()
 
 void ScOrcusConditionalFormat::set_icon_name(const char* /*p*/, size_t /*n*/)
 {
-    assert(meEntryType == condformat::ICONSET);
+    assert(meEntryType == ScFormatEntry::Type::Iconset);
     SAL_INFO("sc.orcus.condformat", "set_icon_name");
 }
 
 void ScOrcusConditionalFormat::set_databar_gradient(bool /*gradient*/)
 {
-    assert(meEntryType == condformat::DATABAR);
+    assert(meEntryType == ScFormatEntry::Type::Databar);
     SAL_INFO("sc.orcus.condformat", "set_databar_gradient");
 }
 
 void ScOrcusConditionalFormat::set_databar_axis(os::databar_axis_t /*axis*/)
 {
-    assert(meEntryType == condformat::DATABAR);
+    assert(meEntryType == ScFormatEntry::Type::Databar);
     SAL_INFO("sc.orcus.condformat", "set_databar_axis");
 }
 
 void ScOrcusConditionalFormat::set_databar_color_positive(os::color_elem_t /*alpha*/, os::color_elem_t /*red*/,
         os::color_elem_t /*green*/, os::color_elem_t /*blue*/)
 {
-    assert(meEntryType == condformat::DATABAR);
+    assert(meEntryType == ScFormatEntry::Type::Databar);
     SAL_INFO("sc.orcus.condformat", "set_databar_color_positive");
 }
 
 void ScOrcusConditionalFormat::set_databar_color_negative(os::color_elem_t /*alpha*/, os::color_elem_t /*red*/,
         os::color_elem_t /*green*/, os::color_elem_t /*blue*/)
 {
-    assert(meEntryType == condformat::DATABAR);
+    assert(meEntryType == ScFormatEntry::Type::Databar);
     SAL_INFO("sc.orcus.condformat", "set_databar_color_negative");
 }
 
 void ScOrcusConditionalFormat::set_min_databar_length(double /*length*/)
 {
-    assert(meEntryType == condformat::DATABAR);
+    assert(meEntryType == ScFormatEntry::Type::Databar);
     SAL_INFO("sc.orcus.condformat", "set_min_databar_length");
 }
 
 void ScOrcusConditionalFormat::set_max_databar_length(double /*length*/)
 {
-    assert(meEntryType == condformat::DATABAR);
+    assert(meEntryType == ScFormatEntry::Type::Databar);
     SAL_INFO("sc.orcus.condformat", "set_max_databar_length");
 }
 
@@ -392,7 +392,7 @@ void ScOrcusConditionalFormat::set_show_value(bool /*show*/)
 
 void ScOrcusConditionalFormat::set_iconset_reverse(bool /*reverse*/)
 {
-    assert(meEntryType == condformat::ICONSET);
+    assert(meEntryType == ScFormatEntry::Type::Iconset);
     SAL_INFO("sc.orcus.condformat", "set_iconset_reverse");
 }
 
@@ -412,7 +412,7 @@ void ScOrcusConditionalFormat::set_type(os::conditional_format_t type)
     {
         case os::conditional_format_t::condition:
         case os::conditional_format_t::formula:
-            meEntryType = condformat::CONDITION;
+            meEntryType = ScFormatEntry::Type::Condition;
             // mpCurrentEntry.reset(new ScCondFormatEntry());
         break;
         case os::conditional_format_t::date:

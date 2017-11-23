@@ -4255,7 +4255,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                 for(size_t i = 0; i < nEntries; ++i)
                 {
                     const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(i);
-                    if(pFormatEntry->GetType()==condformat::CONDITION)
+                    if(pFormatEntry->GetType()==ScFormatEntry::Type::Condition)
                     {
                         const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
                         OUStringBuffer aCond;
@@ -4383,7 +4383,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_BASE_CELL_ADDRESS, sBaseAddress);
                         SvXMLElementExport aElementCondEntry(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITION, true, true);
                     }
-                    else if(pFormatEntry->GetType() == condformat::COLORSCALE)
+                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Colorscale)
                     {
                         SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, true, true);
                         const ScColorScaleFormat& rColorScale = static_cast<const ScColorScaleFormat&>(*pFormatEntry);
@@ -4405,7 +4405,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, true, true);
                         }
                     }
-                    else if(pFormatEntry->GetType() == condformat::DATABAR)
+                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Databar)
                     {
                         const ScDataBarFormatData* pFormatData = static_cast<const ScDataBarFormat&>(*pFormatEntry).GetDataBarData();
                         if(!pFormatData->mbGradient)
@@ -4480,7 +4480,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
                     }
-                    else if(pFormatEntry->GetType() == condformat::ICONSET)
+                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
                     {
                         const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
                         OUString aIconSetName = getIconSetName(rIconSet.GetIconSetData()->eIconSetType);
@@ -4519,7 +4519,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
                     }
-                    else if(pFormatEntry->GetType() == condformat::DATE)
+                    else if(pFormatEntry->GetType() == ScFormatEntry::Type::Date)
                     {
                         const ScCondDateFormatEntry& rDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
                         OUString aDateType = getDateStringForType(rDateFormat.GetDateType());

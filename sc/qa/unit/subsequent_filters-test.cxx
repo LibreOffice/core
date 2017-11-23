@@ -2157,7 +2157,7 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::DATABAR);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), ScFormatEntry::Type::Databar);
     const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
     const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
 
@@ -2171,7 +2171,7 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::COLORSCALE);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), ScFormatEntry::Type::Colorscale);
     const ScColorScaleFormat* pColorScale = static_cast<const ScColorScaleFormat*>(pEntry);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pColorScale->size());
     const ScColorScaleEntry* pColorScaleEntry = pColorScale->GetEntry(0);
@@ -2196,7 +2196,7 @@ void ScFiltersTest::testCondFormatThemeColor2XLSX()
     CPPUNIT_ASSERT(pFormat);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::DATABAR);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), ScFormatEntry::Type::Databar);
     const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
     const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
 
@@ -2215,7 +2215,7 @@ void checkDatabarPositiveColor(const ScConditionalFormat* pFormat, const Color& 
     CPPUNIT_ASSERT(pFormat);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::DATABAR);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), ScFormatEntry::Type::Databar);
     const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
     const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
 
@@ -2235,7 +2235,7 @@ void ScFiltersTest::testCondFormatThemeColor3XLSX()
     CPPUNIT_ASSERT(pFormat);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::COLORSCALE);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), ScFormatEntry::Type::Colorscale);
     const ScColorScaleFormat* pColorScale = static_cast<const ScColorScaleFormat*>(pEntry);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), pColorScale->size());
@@ -2271,7 +2271,7 @@ void testComplexIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, ScIconSetT
     CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(condformat::ICONSET, pEntry->GetType());
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
     const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
     CPPUNIT_ASSERT_EQUAL(eType, pIconSet->GetIconSetData()->eIconSetType);
 }
@@ -2283,7 +2283,7 @@ void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow,
     CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(condformat::ICONSET, pEntry->GetType());
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
     const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
     std::unique_ptr<ScIconSetInfo> pInfo(pIconSet->GetIconSetInfo(ScAddress(nCol, nRow, 1)));
     if (nIndex == -1)
@@ -2359,7 +2359,7 @@ void ScFiltersTest::testColorScaleNumWithRefXLSX()
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
 
-    CPPUNIT_ASSERT_EQUAL(condformat::COLORSCALE, pEntry->GetType());
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Colorscale, pEntry->GetType());
 
     const ScColorScaleFormat* pColorScale= dynamic_cast<const ScColorScaleFormat*>(pEntry);
     CPPUNIT_ASSERT(pColorScale);

@@ -2991,12 +2991,12 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 for (size_t nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
                 {
                     const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(nFormatEntry);
-                    if (!pFormatEntry || (pFormatEntry->GetType() != condformat::CONDITION &&
-                                pFormatEntry->GetType() != condformat::DATE))
+                    if (!pFormatEntry || (pFormatEntry->GetType() != ScFormatEntry::Type::Condition &&
+                                pFormatEntry->GetType() != ScFormatEntry::Type::Date))
                         continue;
 
                     OUString aStyleName;
-                    if(pFormatEntry->GetType() == condformat::CONDITION)
+                    if(pFormatEntry->GetType() == ScFormatEntry::Type::Condition)
                     {
                         const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
                         aStyleName= pEntry->GetStyle();

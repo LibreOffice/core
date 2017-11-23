@@ -266,14 +266,14 @@ XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& 
 {
     switch (rFormat.GetType())
     {
-        case condformat::DATABAR:
+        case ScFormatEntry::Type::Databar:
         {
             const ScDataBarFormat& rDataBar = static_cast<const ScDataBarFormat&>(rFormat);
             mxEntry.reset( new XclExpExtDataBar( *this, rDataBar, rPos ) );
             pType = "dataBar";
         }
         break;
-        case condformat::ICONSET:
+        case ScFormatEntry::Type::Iconset:
         {
             const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(rFormat);
             mxEntry.reset(new XclExpExtIconSet(*this, rIconSet, rPos));
@@ -314,7 +314,7 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
         const ScFormatEntry* pEntry = itr->pEntry;
         switch (pEntry->GetType())
         {
-            case condformat::ICONSET:
+            case ScFormatEntry::Type::Iconset:
             {
                 const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pEntry);
                 bool bNeedsExt = false;
@@ -340,7 +340,7 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
                 }
             }
             break;
-            case condformat::DATABAR:
+            case ScFormatEntry::Type::Databar:
                 maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, itr->aGUID, itr->nPriority));
             break;
             default:
