@@ -30,6 +30,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build):
 		GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		--host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+		MAKE=$(MAKE) \
 	  && $(MAKE) \
 	)
 
