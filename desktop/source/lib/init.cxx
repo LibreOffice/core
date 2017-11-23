@@ -564,7 +564,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nCharCode,
                              int nKeyCode);
 static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis,
-                                   const char* pDialogId,
+                                   unsigned nDialogId,
                                    int nType,
                                    int nCharCode,
                                    int nKeyCode);
@@ -576,7 +576,7 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nButtons,
                                 int nModifier);
 static void doc_postDialogMouseEvent (LibreOfficeKitDocument* pThis,
-                                      const char* pDialogId,
+                                      unsigned nDialogId,
                                       int nType,
                                       int nX,
                                       int nY,
@@ -584,7 +584,7 @@ static void doc_postDialogMouseEvent (LibreOfficeKitDocument* pThis,
                                       int nButtons,
                                       int nModifier);
 static void doc_postDialogChildMouseEvent (LibreOfficeKitDocument* pThis,
-                                           const char* pDialogId,
+                                           unsigned nDialogId,
                                            int nType,
                                            int nX,
                                            int nY,
@@ -631,14 +631,14 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer,
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nDialogId, unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
-static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, const char* pDialogId,
+static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, unsigned nDialogId,
                               char** pDialogTitle, int* nWidth, int* nHeight);
 
-static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
+static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, unsigned nDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -1049,7 +1049,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 boost::property_tree::ptree aTree;
                 std::stringstream aStream(payload);
                 boost::property_tree::read_json(aStream, aTree);
-                const std::string aDialogId = aTree.get<std::string>("dialogId", "");
+                const unsigned nDialogId = aTree.get<unsigned>("dialogId", 0);
                 if (aTree.get<std::string>("action", "") == "invalidate")
                 {
                     std::string aRectStr = aTree.get<std::string>("rectangle", "");
@@ -1057,15 +1057,15 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     // remove all previous dialog part invalidations
                     if (aRectStr.empty())
                     {
-                        removeAll([&aDialogId] (const queue_type::value_type& elem) {
+                        removeAll([&nDialogId] (const queue_type::value_type& elem) {
                                 if (elem.first == LOK_CALLBACK_DIALOG)
                                 {
                                     boost::property_tree::ptree aOldTree;
                                     std::stringstream aOldStream(elem.second);
                                     boost::property_tree::read_json(aOldStream, aOldTree);
-                                    const std::string aOldDialogId = aOldTree.get<std::string>("dialogId", "");
+                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("dialogId", 0);
                                     if (aOldTree.get<std::string>("action", "") == "invalidate" &&
-                                        aDialogId == aOldDialogId)
+                                        nDialogId == nOldDialogId)
                                     {
                                         return true;
                                     }
@@ -1078,7 +1078,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         // if we have to invalidate all of the dialog, ignore
                         // any part invalidation message
                         const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
-                                                       [&aDialogId] (const queue_type::value_type& elem)
+                                                       [&nDialogId] (const queue_type::value_type& elem)
                                                        {
                                                            if (elem.first != LOK_CALLBACK_DIALOG)
                                                                return false;
@@ -1086,9 +1086,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                                            boost::property_tree::ptree aOldTree;
                                                            std::stringstream aOldStream(elem.second);
                                                            boost::property_tree::read_json(aOldStream, aOldTree);
-                                                           const std::string aOldDialogId = aOldTree.get<std::string>("dialogId", "");
+                                                           const unsigned nOldDialogId = aOldTree.get<unsigned>("dialogId", 0);
                                                            if (aOldTree.get<std::string>("action", "") == "invalidate" &&
-                                                               aDialogId == aOldDialogId &&
+                                                               nDialogId == nOldDialogId &&
                                                                aOldTree.get<std::string>("rectangle", "").empty())
                                                            {
                                                                return true;
@@ -1109,7 +1109,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
                         Rectangle aNewRect = Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
                         bool currentIsRedundant = false;
-                        removeAll([&aNewRect, &aDialogId, &currentIsRedundant] (const queue_type::value_type& elem) {
+                        removeAll([&aNewRect, &nDialogId, &currentIsRedundant] (const queue_type::value_type& elem) {
                                 if (elem.first != LOK_CALLBACK_DIALOG)
                                     return false;
 
@@ -1118,7 +1118,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 boost::property_tree::read_json(aOldStream, aOldTree);
                                 if (aOldTree.get<std::string>("action", "") == "invalidate")
                                 {
-                                    const std::string aOldDialogId = aOldTree.get<std::string>("dialogId", "");
+                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("dialogId", 0);
                                     std::string aOldRectStr = aOldTree.get<std::string>("rectangle", "");
                                     // not possible that we encounter an empty
                                     // rectangle here; we already handled this
@@ -1129,7 +1129,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                     aOldRectStream >> nOldLeft >> nOldComma >> nOldTop >> nOldComma >> nOldWidth >> nOldComma >> nOldHeight;
                                     Rectangle aOldRect = Rectangle(nOldLeft, nOldTop, nOldLeft + nOldWidth, nOldTop + nOldHeight);
 
-                                    if (aDialogId == aOldDialogId)
+                                    if (nDialogId == nOldDialogId)
                                     {
                                         // new one engulfs the old one?
                                         if (aNewRect.IsInside(aOldRect))
@@ -2277,7 +2277,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
 }
 
-static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis, const char* pDialogId, int nType, int nCharCode, int nKeyCode)
+static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis, unsigned nDialogId, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
@@ -2288,8 +2288,7 @@ static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis, const char* pD
         return;
     }
 
-    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
-    pDoc->postDialogKeyEvent(aDialogID, nType, nCharCode, nKeyCode);
+    pDoc->postDialogKeyEvent(nDialogId, nType, nCharCode, nKeyCode);
 }
 
 /** Class to react on finishing of a dispatched command.
@@ -2443,7 +2442,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 }
 
-static void doc_postDialogMouseEvent(LibreOfficeKitDocument* pThis, const char* pDialogId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postDialogMouseEvent(LibreOfficeKitDocument* pThis, unsigned nDialogId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -2454,11 +2453,10 @@ static void doc_postDialogMouseEvent(LibreOfficeKitDocument* pThis, const char* 
         return;
     }
 
-    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
-    pDoc->postDialogMouseEvent(aDialogID, nType, nX, nY, nCount, nButtons, nModifier);
+    pDoc->postDialogMouseEvent(nDialogId, nType, nX, nY, nCount, nButtons, nModifier);
 }
 
-static void doc_postDialogChildMouseEvent(LibreOfficeKitDocument* pThis, const char* pDialogId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postDialogChildMouseEvent(LibreOfficeKitDocument* pThis, unsigned nDialogId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -2469,8 +2467,7 @@ static void doc_postDialogChildMouseEvent(LibreOfficeKitDocument* pThis, const c
         return;
     }
 
-    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
-    pDoc->postDialogChildMouseEvent(aDialogID, nType, nX, nY, nCount, nButtons, nModifier);
+    pDoc->postDialogChildMouseEvent(nDialogId, nType, nX, nY, nCount, nButtons, nModifier);
 }
 
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
@@ -3249,15 +3246,14 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
     return nullptr;
 }
 
-static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, const char* pDialogId,
+static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, unsigned nDialogId,
                               char** pDialogTitle, int* nWidth, int* nHeight)
 {
     SolarMutexGuard aGuard;
 
     IDialogRenderable* pDialogRenderable = getDialogRenderable(pThis);
-    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
     OUString aDialogTitle;
-    pDialogRenderable->getDialogInfo(aDialogID, aDialogTitle, *nWidth, *nHeight);
+    pDialogRenderable->getDialogInfo(nDialogId, aDialogTitle, *nWidth, *nHeight);
 
     // copy dialog title
     if (!aDialogTitle.isEmpty())
@@ -3268,7 +3264,7 @@ static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, const char* pDialog
     }
 }
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId,
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nDialogId,
                             unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight)
@@ -3282,18 +3278,16 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
 
-    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
-
     MapMode aMapMode(pDevice->GetMapMode());
     aMapMode.SetOrigin(Point(-nX, -nY));
     pDevice->SetMapMode(aMapMode);
 
     comphelper::LibreOfficeKit::setDialogPainting(true);
-    pDialogRenderable->paintDialog(aDialogID, *pDevice.get());
+    pDialogRenderable->paintDialog(nDialogId, *pDevice.get());
     comphelper::LibreOfficeKit::setDialogPainting(false);
 }
 
-static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight)
+static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, unsigned nDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight)
 {
     SolarMutexGuard aGuard;
 
@@ -3304,10 +3298,8 @@ static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, const c
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(*nWidth, *nHeight), Fraction(1.0), Point(), pBuffer);
 
-    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
-
     comphelper::LibreOfficeKit::setDialogPainting(true);
-    pDialogRenderable->paintActiveFloatingWindow(aDialogID, *pDevice.get(), *nWidth, *nHeight);
+    pDialogRenderable->paintActiveFloatingWindow(nDialogId, *pDevice.get(), *nWidth, *nHeight);
     comphelper::LibreOfficeKit::setDialogPainting(false);
 }
 

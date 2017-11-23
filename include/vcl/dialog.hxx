@@ -50,6 +50,8 @@ private:
 
     vcl::IDialogNotifier*  mpDialogNotifier; // to emit LOK callbacks
 
+    static vcl::DialogID   mnLastDialogId;
+
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
 
@@ -63,8 +65,8 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
-    /// Dialog ID (UNO name) for this dialog
-    OUString               maID;
+    /// Dialog ID (used for LOK)
+    vcl::DialogID          maID;
     /// Necessary to register dialog notifier instance to emit LOK callbacks
     void                   registerDialogNotifier(vcl::IDialogNotifier* pDialogNotifier);
 
