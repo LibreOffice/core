@@ -35,7 +35,7 @@ struct GtvLokDialogClass
 
 GType gtv_lok_dialog_get_type               (void) G_GNUC_CONST;
 
-GtkWidget* gtv_lok_dialog_new(LOKDocView* pDocView, const gchar* dialogId);
+GtkWidget* gtv_lok_dialog_new(LOKDocView* pDocView, const gchar* dialogId, guint width, guint height);
 
 void gtv_lok_dialog_invalidate(GtvLokDialog* dialog, const GdkRectangle& aRectangle);
 

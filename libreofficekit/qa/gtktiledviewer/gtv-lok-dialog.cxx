@@ -39,6 +39,8 @@ struct GtvLokDialogPrivate
     guint32 m_nLastButtonReleaseTime;
     guint32 m_nKeyModifier;
     guint32 m_nLastButtonPressed;
+    guint32 m_nWidth;
+    guint32 m_nHeight;
 
     // state for child floating windows
     guint32 m_nChildLastButtonPressTime;
@@ -56,6 +58,8 @@ enum
     PROP_0,
     PROP_LOKDOCVIEW_CONTEXT,
     PROP_DIALOG_ID,
+    PROP_DIALOG_WIDTH,
+    PROP_DIALOG_HEIGHT,
     PROP_LAST
 };
 
@@ -90,8 +94,9 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     GdkRectangle aRect;
     gdk_cairo_get_clip_rectangle(pCairo, &aRect);
     g_info("Painting dialog region: %d, %d, %d, %d", aRect.x, aRect.y, aRect.width, aRect.height);
-    int nWidth = 1024;
-    int nHeight = 768;
+    int nWidth = priv->m_nWidth;
+    int nHeight = priv->m_nHeight;
+    g_info("canvas width: %d and height %d", nWidth, nHeight);
     if (aRect.width != 0 && aRect.height != 0)
     {
         nWidth = aRect.width;
@@ -105,6 +110,7 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     pDocument->pClass->paintDialog(pDocument, priv->dialogid, pBuffer, aRect.x, aRect.y, nWidth, nHeight);
     int outWidth = 0, outHeight = 0;
     pDocument->pClass->getDialogInfo(pDocument, priv->dialogid, &pDialogTitle, &outWidth, &outHeight);
+    g_debug("getDialogInfo: width: %d, height: %d", outWidth, outHeight);
     if (pDialogTitle)
     {
         gtk_window_set_title(GTK_WINDOW(pDialog), pDialogTitle);
@@ -396,6 +402,12 @@ gtv_lok_dialog_set_property(GObject* object, guint propId, const GValue* value, 
     case PROP_DIALOG_ID:
         priv->dialogid = g_value_dup_string(value);
         break;
+    case PROP_DIALOG_WIDTH:
+        priv->m_nWidth = g_value_get_uint(value);
+        break;
+    case PROP_DIALOG_HEIGHT:
+        priv->m_nHeight = g_value_get_uint(value);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
     }
@@ -414,6 +426,12 @@ gtv_lok_dialog_get_property(GObject* object, guint propId, GValue* value, GParam
         break;
     case PROP_DIALOG_ID:
         g_value_set_string(value, priv->dialogid);
+        break;
+    case PROP_DIALOG_WIDTH:
+        g_value_set_uint(value, priv->m_nWidth);
+        break;
+    case PROP_DIALOG_HEIGHT:
+        g_value_set_uint(value, priv->m_nHeight);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
@@ -450,6 +468,22 @@ gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
                                                      "Dialog identifier",
                                                      "Unique dialog identifier; UNO command for now",
                                                      nullptr,
+                                                     static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                                              G_PARAM_CONSTRUCT_ONLY |
+                                                                              G_PARAM_STATIC_STRINGS));
+
+    properties[PROP_DIALOG_WIDTH] = g_param_spec_uint("width",
+                                                     "Dialog width",
+                                                     "Dialog width",
+                                                     0, 1024, 0,
+                                                     static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                                              G_PARAM_CONSTRUCT_ONLY |
+                                                                              G_PARAM_STATIC_STRINGS));
+
+    properties[PROP_DIALOG_HEIGHT] = g_param_spec_uint("height",
+                                                       "Dialog height",
+                                                      "Dialog height",
+                                                      0, 1024, 0,
                                                      static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                                               G_PARAM_CONSTRUCT_ONLY |
                                                                               G_PARAM_STATIC_STRINGS));
@@ -668,12 +702,14 @@ void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
 
 
 GtkWidget*
-gtv_lok_dialog_new(LOKDocView* pDocView, const gchar* dialogId)
+gtv_lok_dialog_new(LOKDocView* pDocView, const gchar* dialogId, guint width, guint height)
 {
     GtkWindow* pWindow = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     return GTK_WIDGET(g_object_new(GTV_TYPE_LOK_DIALOG,
                                    "lokdocview", pDocView,
                                    "dialogid", dialogId,
+                                   "width", width,
+                                   "height", height,
                                    "title", "LOK Dialog",
                                    "modal", false,
                                    "transient-for", pWindow,
