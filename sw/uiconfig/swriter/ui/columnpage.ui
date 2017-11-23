@@ -699,6 +699,7 @@
                                 <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes" context="columnpage|applytoft">_Apply to:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">applytolb</property>
                                 <property name="xalign">1</property>
                               </object>
                               <packing>
@@ -723,6 +724,7 @@
                                 <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes" context="columnpage|textdirectionft">Text _direction:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">textdirectionlb</property>
                                 <property name="xalign">1</property>
                               </object>
                               <packing>
