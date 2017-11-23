@@ -17,10 +17,10 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_liberation \
 	ExternalPackage_liberation_narrow \
 	ExternalPackage_libertineg \
-	ExternalPackage_opensans \
-	ExternalPackage_ptserif \
-	ExternalPackage_sourcecode \
-	ExternalPackage_sourcesans \
+# 	ExternalPackage_opensans \
+# 	ExternalPackage_ptserif \
+# 	ExternalPackage_sourcecode \
+# 	ExternalPackage_sourcesans \
 	ExternalPackage_noto \
 	ExternalPackage_EmojiOne_Color \
 	UnpackedTarball_caladea \
@@ -30,10 +30,10 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_liberation \
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \
-	UnpackedTarball_opensans \
-	UnpackedTarball_ptserif \
-	UnpackedTarball_sourcecode \
-	UnpackedTarball_sourcesans \
+# 	UnpackedTarball_opensans \
+# 	UnpackedTarball_ptserif \
+# 	UnpackedTarball_sourcecode \
+# 	UnpackedTarball_sourcesans \
 	UnpackedTarball_noto \
 	UnpackedTarball_EmojiOne_Color \
 ))
