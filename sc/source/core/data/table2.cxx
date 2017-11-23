@@ -2569,12 +2569,12 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
                 nEndCol = aCol.size() - 1;
                 for (SCCOL i = nStartCol; i <= nEndCol; i++)
                     aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
-                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>( &rStyle ) );
+                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
             }
             else
             {
                 CreateColumnIfNotExists( nStartCol - 1 );
-                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>( &rStyle ) );
+                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
             }
         }
         else

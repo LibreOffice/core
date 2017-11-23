@@ -139,7 +139,7 @@ public:
     void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false );
     void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
                             bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr );
-    void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
+    void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
     void    SetAttrEntries(std::vector<ScAttrEntry> && vNewData);
