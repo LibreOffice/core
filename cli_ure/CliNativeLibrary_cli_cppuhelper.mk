@@ -13,7 +13,7 @@ $(eval $(call gb_CliNativeLibrary_CliNativeLibrary,cli_cppuhelper))
 
 $(eval $(call gb_CliNativeLibrary_wrap_library,cli_cppuhelper,cli_cppuhelper))
 
-$(eval $(call gb_CliNativeLibrary_set_configfile,cli_cppuhelper,cli_ure/source/native/cli_cppuhelper_config))
+$(eval $(call gb_CliNativeLibrary_set_configfile,cli_cppuhelper,cli_ure/source/native/cli_cppuhelper_config,cli_ure/version/version.txt))
 
 $(eval $(call gb_CliNativeLibrary_set_keyfile,cli_cppuhelper,$(SRCDIR)/cli_ure/source/cliuno.snk))
 

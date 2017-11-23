@@ -13,7 +13,7 @@ $(eval $(call gb_CliUnoApi_CliUnoApi,cli_uretypes))
 
 $(eval $(call gb_CliUnoApi_set_assembly_version,cli_uretypes,$(CLI_URETYPES_NEW_VERSION)))
 
-$(eval $(call gb_CliUnoApi_set_configfile,cli_uretypes,cli_ure/unotypes/cli_uretypes_config))
+$(eval $(call gb_CliUnoApi_set_configfile,cli_uretypes,cli_ure/unotypes/cli_uretypes_config,cli_ure/version/version.txt))
 
 $(eval $(call gb_CliUnoApi_set_keyfile,cli_uretypes,$(SRCDIR)/cli_ure/source/cliuno.snk))
 

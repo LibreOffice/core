@@ -14,7 +14,7 @@ $(eval $(call gb_CliUnoApi_CliUnoApi,cli_oootypes))
 
 $(eval $(call gb_CliUnoApi_set_assembly_version,cli_oootypes,$(CLI_OOOTYPES_NEW_VERSION)))
 
-$(eval $(call gb_CliUnoApi_set_configfile,cli_oootypes,unoil/climaker/cli_oootypes_config))
+$(eval $(call gb_CliUnoApi_set_configfile,cli_oootypes,unoil/climaker/cli_oootypes_config,unoil/climaker/version.txt))
 
 $(eval $(call gb_CliUnoApi_set_keyfile,cli_oootypes,$(SRCDIR)/cli_ure/source/cliuno.snk))
 

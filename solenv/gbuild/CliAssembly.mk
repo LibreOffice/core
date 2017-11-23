@@ -12,8 +12,6 @@
 gb_CliConfigTarget_TARGET := $(SRCDIR)/solenv/bin/clipatchconfig.pl
 gb_CliConfigTarget_COMMAND := $(PERL) -w $(gb_CliConfigTarget_TARGET)
 
-gb_CliConfigTarget_VERSIONFILE_DEFAULT := $(SRCDIR)/cli_ure/version/version.txt
-
 define gb_CliConfigTarget__command
 $(call gb_Output_announce,$(2),$(true),CPA,1)
 $(call gb_Helper_abbreviate_dirs,\
@@ -35,11 +33,11 @@ $(call gb_CliConfigTarget_get_clean_target,%) :
 #
 # gb_CliConfigTarget_CliConfigTarget target source
 define gb_CliConfigTarget_CliConfigTarget
-$(call gb_CliConfigTarget_get_target,$(1)) : CLI_CONFIG_VERSIONFILE := $(gb_CliConfigTarget_VERSIONFILE_DEFAULT)
+$(call gb_CliConfigTarget_get_target,$(1)) : CLI_CONFIG_VERSIONFILE := $(3)
 
 $(call gb_CliConfigTarget_get_target,$(1)) : $(2)
 $(call gb_CliConfigTarget_get_target,$(1)) : $(gb_CliConfigTarget_TARGET)
-$(call gb_CliConfigTarget_get_target,$(1)) : $(gb_CliConfigTarget_VERSIONFILE_DEFAULT)
+$(call gb_CliConfigTarget_get_target,$(1)) : $(3)
 $(call gb_CliConfigTarget_get_target,$(1)) :| $(dir $(call gb_CliConfigTarget_get_target,$(1))).dir
 
 endef
@@ -170,19 +168,19 @@ $(call gb_Package_add_file,$(1)_assembly,$(notdir $(2)),$(subst $(WORKDIR)/,,$(2
 endef
 
 define gb_CliAssembly__set_configfile_impl
-$(call gb_CliAssemblyTarget_set_configfile,$(1),$(2))
+$(call gb_CliAssemblyTarget_set_configfile,$(1),$(2),$(3))
 $(call gb_CliAssembly__add_file,$(1),$(2))
 
 endef
 
 define gb_CliAssembly__set_configfile
-$(call gb_CliConfigTarget_CliConfigTarget,$(2),$(3))
+$(call gb_CliConfigTarget_CliConfigTarget,$(2),$(3),$(4))
 $(call gb_CliAssembly__set_configfile_impl,$(1),$(call gb_CliConfigTarget_get_target,$(2)),$(call gb_CliConfigTarget_get_clean_target,$(2)))
 
 endef
 
 define gb_CliAssembly_set_configfile
-$(call gb_CliAssembly__set_configfile,$(1),$(patsubst %_config,%,$(2)),$(SRCDIR)/$(2))
+$(call gb_CliAssembly__set_configfile,$(1),$(patsubst %_config,%,$(2)),$(SRCDIR)/$(2),$(SRCDIR)/$(3))
 
 endef
 

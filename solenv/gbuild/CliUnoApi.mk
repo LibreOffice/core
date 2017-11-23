@@ -67,7 +67,7 @@ $(call gb_CliUnoApi_get_target,$(1)) : $(gb_CliUnoApi_DEPS)
 endef
 
 define gb_CliUnoApi_set_configfile
-$(call gb_CliAssembly_set_configfile,$(1),$(2))
+$(call gb_CliAssembly_set_configfile,$(1),$(2),$(3))
 
 endef
 
