@@ -15,7 +15,7 @@ void f1(int a, int b)
     }
 };
 
-// Consitently either warn about all or none of the below occurrences of "!!":
+// Consistently either warn about all or none of the below occurrences of "!!":
 
 enum E1
 {
