@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <documentsignaturemanager.hxx>
 #include <config_gpgme.h>
 
-#include <documentsignaturemanager.hxx>
 #include <gpg/SEInitializer.hxx>
 
 #include <com/sun/star/embed/StorageFormats.hpp>

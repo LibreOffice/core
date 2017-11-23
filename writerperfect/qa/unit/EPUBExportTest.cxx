@@ -17,6 +17,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
@@ -53,6 +54,8 @@ public:
     xmlDocPtr parseExport(const OUString &rName);
     /// Loads a CSS representation of the stream named rName in the exported package into rTree.
     void parseCssExport(const OUString &rName, std::map< OString, std::vector<OString> > &rTree);
+    /// Loads a CSS style string into a map.
+    void parseCssStyle(const OUString &rStyle, std::map<OUString, OUString> &rCss);
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
@@ -73,6 +76,7 @@ public:
     void testTable();
     void testLink();
     void testLinkCharFormat();
+    void testLinkNamedCharFormat();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -95,6 +99,7 @@ public:
     CPPUNIT_TEST(testTable);
     CPPUNIT_TEST(testLink);
     CPPUNIT_TEST(testLinkCharFormat);
+    CPPUNIT_TEST(testLinkNamedCharFormat);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -176,6 +181,17 @@ void EPUBExportTest::parseCssExport(const OUString &rName, std::map< OString, st
             aRuleName = aLine.copy(1, aLine.getLength() - 3);
         else if (aLine.endsWith(";"))
             rTree[aRuleName].push_back(aLine);
+    }
+}
+
+void EPUBExportTest::parseCssStyle(const OUString &rStyle, std::map<OUString, OUString> &rCss)
+{
+    for (const auto &rKeyValue : comphelper::string::split(rStyle, ';'))
+    {
+        OUString aKeyValue = rKeyValue.trim();
+        std::vector<OUString> aTokens = comphelper::string::split(aKeyValue, ':');
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTokens.size());
+        rCss[aTokens[0].trim()] = aTokens[1].trim();
     }
 }
 
@@ -464,7 +480,7 @@ void EPUBExportTest::testLink()
     createDoc("link.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a", "https://libreoffice.org/");
+    assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "https://libreoffice.org/");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
 }
 
@@ -476,6 +492,22 @@ void EPUBExportTest::testLinkCharFormat()
     // <span> was lost, link text having a char format was missing.
     assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "https://libreoffice.org/");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
+}
+
+void EPUBExportTest::testLinkNamedCharFormat()
+{
+    // Character properties from named character style on hyperlink was lost.
+    createDoc("link-namedcharformat.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This failed, there was no span inside the hyperlink.
+    assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "http://libreoffice.org");
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "http://libreoffice.org/");
+
+    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "style");
+    std::map<OUString, OUString> aCss;
+    parseCssStyle(aStyle, aCss);
+    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), aCss["color"]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
