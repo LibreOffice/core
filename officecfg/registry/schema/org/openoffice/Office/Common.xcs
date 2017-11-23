@@ -4475,7 +4475,7 @@
             <prop oor:name="UseNativeTextDecoration" oor:type="xs:boolean" oor:nillable="false">
               <info>
                 <desc>Specifies if text decoration like underlining and
-                strike-through be drawm by using SVG attributes (true) or by
+                strike-through be drawn by using SVG attributes (true) or by
                 drawing SVG primitives (false).</desc>
               </info>
               <value>true</value>

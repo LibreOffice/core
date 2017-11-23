@@ -648,7 +648,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                 // TODO case ESCHER_FillShadeTitle:  pFillType = ""; break;
                                 // TODO case ESCHER_FillBackground:  pFillType = ""; break;
                                 default:
-                                    SAL_INFO("oox.vml", "Uunhandled fill type: " << nValue);
+                                    SAL_INFO("oox.vml", "Unhandled fill type: " << nValue);
                                     break;
                             }
                             if ( pFillType )
