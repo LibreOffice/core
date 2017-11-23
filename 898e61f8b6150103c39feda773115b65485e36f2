@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_074de9c3",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6291,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-23T11:35:07Z",
+      "side": 1,
+      "message": "Should be std::min() instead.",
+      "range": {
+        "startLine": 6291,
+        "startChar": 27,
+        "endLine": 6291,
+        "endChar": 35
+      },
+      "revId": "898e61f8b6150103c39feda773115b65485e36f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_67cead2f",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-23T11:35:07Z",
+      "side": 1,
+      "message": "Nitpick: for a reference the name should be rPropName then.",
+      "range": {
+        "startLine": 1345,
+        "startChar": 25,
+        "endLine": 1345,
+        "endChar": 34
+      },
+      "revId": "898e61f8b6150103c39feda773115b65485e36f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_87cf1928",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-23T11:35:07Z",
+      "side": 1,
+      "message": "Nitpick: please no space after negation operator.",
+      "range": {
+        "startLine": 1950,
+        "startChar": 22,
+        "endLine": 1950,
+        "endChar": 23
+      },
+      "revId": "898e61f8b6150103c39feda773115b65485e36f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a7d415bd",
+        "filename": "sc/source/ui/view/pfuncache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-23T11:35:07Z",
+      "side": 1,
+      "message": "Should be std::min() instead.",
+      "range": {
+        "startLine": 166,
+        "startChar": 27,
+        "endLine": 166,
+        "endChar": 35
+      },
+      "revId": "898e61f8b6150103c39feda773115b65485e36f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_27e1059b",
+        "filename": "sc/source/ui/view/pfuncache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-23T11:35:07Z",
+      "side": 1,
+      "message": "Apart from that also this should be std::min() instead, it is not the same logic as the original, which treats rDoc.NeedPageResetAfterTab(i) special without the nPages.size() restriction.",
+      "revId": "898e61f8b6150103c39feda773115b65485e36f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
