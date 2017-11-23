@@ -1256,6 +1256,53 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
     }
 }
 
+void XMLShapeExport::ImpExportSignatureLine(const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
+    bool bIsSignatureLine = false;
+    xPropSet->getPropertyValue("IsSignatureLine") >>= bIsSignatureLine;
+    if (!bIsSignatureLine)
+        return;
+
+    OUString aSignatureLineId;
+    xPropSet->getPropertyValue("SignatureLineId") >>= aSignatureLineId;
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "id", aSignatureLineId);
+
+    OUString aSuggestedSignerName;
+    xPropSet->getPropertyValue("SignatureLineSuggestedSignerName") >>= aSuggestedSignerName;
+    if (!aSuggestedSignerName.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "suggested-signer-name", aSuggestedSignerName);
+
+    OUString aSuggestedSignerTitle;
+    xPropSet->getPropertyValue("SignatureLineSuggestedSignerTitle") >>= aSuggestedSignerTitle;
+    if (!aSuggestedSignerTitle.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "suggested-signer-title", aSuggestedSignerTitle);
+
+    OUString aSuggestedSignerEmail;
+    xPropSet->getPropertyValue("SignatureLineSuggestedSignerEmail") >>= aSuggestedSignerEmail;
+    if (!aSuggestedSignerEmail.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "suggested-signer-email", aSuggestedSignerEmail);
+
+    OUString aSigningInstructions;
+    xPropSet->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
+    if (!aSigningInstructions.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "signing-instructions", aSigningInstructions);
+
+    bool bShowSignDate = false;
+    xPropSet->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "show-sign-date",
+                          bShowSignDate ? OUString("true") : OUString("false"));
+
+    bool bCanAddComment = false;
+    xPropSet->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "can-add-comment",
+                          bCanAddComment ? OUString("true") : OUString("false"));
+
+    SvXMLElementExport aSignatureLineElement(mrExport, XML_NAMESPACE_LO_EXT, "signatureline", true,
+                                             true);
+}
+
 void XMLShapeExport::ExportGraphicDefaults()
 {
     rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
@@ -2364,6 +2411,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
 
             SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+            ImpExportSignatureLine( xShape );
 
             if( !sImageURL.isEmpty() )
             {
