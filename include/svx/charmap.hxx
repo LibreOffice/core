@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SVX_CHARMAP_HXX
 #define INCLUDED_SVX_CHARMAP_HXX
 
+#include <sal/config.h>
+
+#include <deque>
 #include <map>
 #include <memory>
 

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <tools/stream.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 

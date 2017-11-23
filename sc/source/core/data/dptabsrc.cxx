@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <o3tl/any.hxx>
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/intitem.hxx>

@@ -40,6 +40,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/button.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>

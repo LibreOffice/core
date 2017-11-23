@@ -36,7 +36,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-
+#include <osl/diagnose.h>
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

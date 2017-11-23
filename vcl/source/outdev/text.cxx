@@ -26,6 +26,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>

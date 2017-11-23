@@ -21,7 +21,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
-
+#include <vcl/timer.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/xtextedt.hxx>
 #include <svl/undo.hxx>

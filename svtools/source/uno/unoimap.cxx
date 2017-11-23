@@ -35,6 +35,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 #include <list>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
