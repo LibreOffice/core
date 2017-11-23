@@ -12,6 +12,7 @@
 #include <test/sheet/xprintareas.hxx>
 #include <test/sheet/xscenariossupplier.hxx>
 #include <test/sheet/xsheetannotationssupplier.hxx>
+#include <test/sheet/xsheetauditing.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
 #include <test/sheet/xsheetfilterable.hxx>
 #include <test/sheet/xsheetfilterableex.hxx>
@@ -33,7 +34,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 25
+#define NUMBER_OF_TESTS 30
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XPrintAreas,
@@ -41,6 +42,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XScenariosSupplier,
                                                public apitest::XSearchable,
                                                public apitest::XSheetAnnotationsSupplier,
+                                               public apitest::XSheetAuditing,
                                                public apitest::XSheetCellRange,
                                                public apitest::XSheetFilterable,
                                                public apitest::XSheetFilterableEx,
@@ -86,6 +88,13 @@ public:
 
     // XSheetAnnotationsSupplier
     CPPUNIT_TEST(testGetAnnotations);
+
+    // XSheetAuditing
+    CPPUNIT_TEST(testShowHideDependents);
+    CPPUNIT_TEST(testShowHidePrecedents);
+    CPPUNIT_TEST(testClearArrows);
+    CPPUNIT_TEST(testShowErrors);
+    CPPUNIT_TEST(testShowInvalid);
 
     // XSheetCellRange
     CPPUNIT_TEST(testGetSpreadsheet);
@@ -146,11 +155,16 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     createFileURL("ScTableSheetObj.ods", maFileURL);
     if (!mxComponent.is())
         mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+
+    xSheet->getCellByPosition(6, 6)->setValue(3);
+    xSheet->getCellByPosition(7, 6)->setValue(3);
+    xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
+    xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
 
     return xSheet;
 }
@@ -160,7 +174,7 @@ uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
     createFileURL("ScTableSheetObj.ods", maFileURL);
     if (!mxComponent.is())
         mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
