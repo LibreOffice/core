@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_da1f3406",
+        "filename": "cui/source/dialogs/cuicharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-23T17:51:41Z",
+      "side": 0,
+      "message": "This additional line also seems to be added by accident.",
+      "revId": "53532de71ec6da7f4a9de33eb71855e847905bb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
