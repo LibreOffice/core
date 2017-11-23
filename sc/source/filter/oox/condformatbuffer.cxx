@@ -714,7 +714,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
 
 void CondFormatRule::finalizeImport()
 {
-    ScConditionMode eOperator = SC_COND_NONE;
+    ScConditionMode eOperator = ScConditionMode::NONE;
 
     /*  Replacement formula for unsupported rule types (text comparison rules,
         time period rules, cell type rules). The replacement formulas below may
@@ -738,33 +738,33 @@ void CondFormatRule::finalizeImport()
     switch( maModel.mnType )
     {
         case XML_cellIs:
-            eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( maModel.mnOperator ));
+            eOperator = CondFormatBuffer::convertToInternalOperator( maModel.mnOperator );
         break;
         case XML_duplicateValues:
-            eOperator = SC_COND_DUPLICATE;
+            eOperator = ScConditionMode::Duplicate;
         break;
         case XML_uniqueValues:
-            eOperator = SC_COND_NOTDUPLICATE;
+            eOperator = ScConditionMode::NotDuplicate;
         break;
         case XML_expression:
-            eOperator = SC_COND_DIRECT;
+            eOperator = ScConditionMode::Direct;
         break;
         case XML_containsText:
             OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
-            eOperator = SC_COND_CONTAINS_TEXT;
+            eOperator = ScConditionMode::ContainsText;
         break;
         case XML_notContainsText:
             // note: type XML_notContainsText vs. operator XML_notContains
             OSL_ENSURE( maModel.mnOperator == XML_notContains, "CondFormatRule::finalizeImport - unexpected operator" );
-            eOperator = SC_COND_NOT_CONTAINS_TEXT;
+            eOperator = ScConditionMode::NotContainsText;
         break;
         case XML_beginsWith:
             OSL_ENSURE( maModel.mnOperator == XML_beginsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            eOperator = SC_COND_BEGINS_WITH;
+            eOperator = ScConditionMode::BeginsWith;
         break;
         case XML_endsWith:
             OSL_ENSURE( maModel.mnOperator == XML_endsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            eOperator = SC_COND_ENDS_WITH;
+            eOperator = ScConditionMode::EndsWith;
         break;
         case XML_timePeriod:
         break;
@@ -775,41 +775,41 @@ void CondFormatRule::finalizeImport()
             aReplaceFormula = "LEN(TRIM(#B))>0";
         break;
         case XML_containsErrors:
-            eOperator = SC_COND_ERROR;
+            eOperator = ScConditionMode::Error;
         break;
         case XML_notContainsErrors:
-            eOperator = SC_COND_NOERROR;
+            eOperator = ScConditionMode::NoError;
         break;
         case XML_top10:
             if(maModel.mbPercent)
             {
                 if(maModel.mbBottom)
-                    eOperator = SC_COND_BOTTOM_PERCENT;
+                    eOperator = ScConditionMode::BottomPercent;
                 else
-                    eOperator = SC_COND_TOP_PERCENT;
+                    eOperator = ScConditionMode::TopPercent;
             }
             else
             {
                 if(maModel.mbBottom)
-                    eOperator = SC_COND_BOTTOM10;
+                    eOperator = ScConditionMode::Bottom10;
                 else
-                    eOperator = SC_COND_TOP10;
+                    eOperator = ScConditionMode::Top10;
             }
         break;
         case XML_aboveAverage:
             if(maModel.mbAboveAverage)
             {
                 if(maModel.mbEqualAverage)
-                    eOperator = SC_COND_ABOVE_EQUAL_AVERAGE;
+                    eOperator = ScConditionMode::AboveEqualAverage;
                 else
-                    eOperator = SC_COND_ABOVE_AVERAGE;
+                    eOperator = ScConditionMode::AboveAverage;
             }
             else
             {
                 if(maModel.mbEqualAverage)
-                    eOperator = SC_COND_BELOW_EQUAL_AVERAGE;
+                    eOperator = ScConditionMode::BelowEqualAverage;
                 else
-                    eOperator = SC_COND_BELOW_AVERAGE;
+                    eOperator = ScConditionMode::BelowAverage;
             }
         break;
         case XML_colorScale:
@@ -837,20 +837,20 @@ void CondFormatRule::finalizeImport()
         // set the replacement formula
         maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
-        eOperator = SC_COND_DIRECT;
+        eOperator = ScConditionMode::Direct;
     }
 
     ScAddress aPos = mrCondFormat.getRanges().GetTopLeftCorner();
 
-    if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
+    if( eOperator == ScConditionMode::Error || eOperator == ScConditionMode::NoError )
     {
         ScDocument& rDoc = getScDocument();
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, nullptr, nullptr, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
-    else if( eOperator == SC_COND_BEGINS_WITH || eOperator == SC_COND_ENDS_WITH ||
-            eOperator == SC_COND_CONTAINS_TEXT || eOperator == SC_COND_NOT_CONTAINS_TEXT )
+    else if( eOperator == ScConditionMode::BeginsWith || eOperator == ScConditionMode::EndsWith ||
+            eOperator == ScConditionMode::ContainsText || eOperator == ScConditionMode::NotContainsText )
     {
         ScDocument& rDoc = getScDocument();
         ScTokenArray aTokenArray;
@@ -860,7 +860,7 @@ void CondFormatRule::finalizeImport()
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, nullptr, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
-    else if( (eOperator != SC_COND_NONE) && !maModel.maFormulas.empty() )
+    else if( (eOperator != ScConditionMode::NONE) && !maModel.maFormulas.empty() )
     {
         ScDocument& rDoc = getScDocument();
         std::unique_ptr<ScTokenArray> pTokenArray2;
@@ -877,8 +877,8 @@ void CondFormatRule::finalizeImport()
                                             &aTokenArray, pTokenArray2.get(), &rDoc, aPos, aStyleName);
         mpFormat->AddEntry(pNewEntry);
     }
-    else if ( eOperator == SC_COND_TOP10 || eOperator == SC_COND_BOTTOM10 ||
-            eOperator == SC_COND_TOP_PERCENT || eOperator == SC_COND_BOTTOM_PERCENT )
+    else if ( eOperator == ScConditionMode::Top10 || eOperator == ScConditionMode::Bottom10 ||
+            eOperator == ScConditionMode::TopPercent || eOperator == ScConditionMode::BottomPercent )
     {
         ScDocument& rDoc = getScDocument();
         ScTokenArray aTokenArray;
@@ -887,8 +887,8 @@ void CondFormatRule::finalizeImport()
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, nullptr, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
-    else if( eOperator == SC_COND_ABOVE_AVERAGE || eOperator == SC_COND_BELOW_AVERAGE ||
-            eOperator == SC_COND_ABOVE_EQUAL_AVERAGE || eOperator == SC_COND_BELOW_EQUAL_AVERAGE )
+    else if( eOperator == ScConditionMode::AboveAverage || eOperator == ScConditionMode::BelowAverage ||
+            eOperator == ScConditionMode::AboveEqualAverage || eOperator == ScConditionMode::BelowEqualAverage )
     {
         ScDocument& rDoc = getScDocument();
         // actually that is still unsupported
@@ -898,7 +898,7 @@ void CondFormatRule::finalizeImport()
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayDev, nullptr, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
-    else if( eOperator == SC_COND_DUPLICATE || eOperator == SC_COND_NOTDUPLICATE )
+    else if( eOperator == ScConditionMode::Duplicate || eOperator == ScConditionMode::NotDuplicate )
     {
         ScDocument& rDoc = getScDocument();
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
@@ -1182,22 +1182,22 @@ sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
     return ConditionOperator2::NONE;
 }
 
-sal_Int32 CondFormatBuffer::convertToInternalOperator( sal_Int32 nToken )
+ScConditionMode CondFormatBuffer::convertToInternalOperator( sal_Int32 nToken )
 {
     switch( nToken )
     {
-        case XML_between:               return SC_COND_BETWEEN;
-        case XML_equal:                 return SC_COND_EQUAL;
-        case XML_greaterThan:           return SC_COND_GREATER;
-        case XML_greaterThanOrEqual:    return SC_COND_EQGREATER;
-        case XML_lessThan:              return SC_COND_LESS;
-        case XML_lessThanOrEqual:       return SC_COND_EQLESS;
-        case XML_notBetween:            return SC_COND_NOTBETWEEN;
-        case XML_notEqual:              return SC_COND_NOTEQUAL;
-        case XML_duplicateValues:       return SC_COND_DUPLICATE;
-        case XML_uniqueValues:          return SC_COND_NOTDUPLICATE;
+        case XML_between:               return ScConditionMode::Between;
+        case XML_equal:                 return ScConditionMode::Equal;
+        case XML_greaterThan:           return ScConditionMode::Greater;
+        case XML_greaterThanOrEqual:    return ScConditionMode::EqGreater;
+        case XML_lessThan:              return ScConditionMode::Less;
+        case XML_lessThanOrEqual:       return ScConditionMode::EqLess;
+        case XML_notBetween:            return ScConditionMode::NotBetween;
+        case XML_notEqual:              return ScConditionMode::NotEqual;
+        case XML_duplicateValues:       return ScConditionMode::Duplicate;
+        case XML_uniqueValues:          return ScConditionMode::NotDuplicate;
     }
-    return ConditionOperator2::NONE;
+    return ScConditionMode::NONE;
 }
 
 // private --------------------------------------------------------------------

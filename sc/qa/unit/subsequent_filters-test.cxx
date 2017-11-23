@@ -1314,14 +1314,14 @@ void ScFiltersTest::testDataValidityODS()
 
     //sheet1's expected Data Validation Entry values
     ValDataTestParams aVDTParams1(
-        SC_VALID_DECIMAL, SC_COND_GREATER, "3.14", EMPTY_OUSTRING, rDoc,
+        SC_VALID_DECIMAL, ScConditionMode::Greater, "3.14", EMPTY_OUSTRING, rDoc,
         aValBaseAddr1, "Too small",
         "The number you are trying to enter is not greater than 3.14! Are you sure you want to enter it anyway?",
         SC_VALERR_WARNING, 1
     );
     //sheet2's expected Data Validation Entry values
     ValDataTestParams aVDTParams2(
-        SC_VALID_WHOLE, SC_COND_BETWEEN, "1", "10", rDoc,
+        SC_VALID_WHOLE, ScConditionMode::Between, "1", "10", rDoc,
         aValBaseAddr2, "Error sheet 2",
         "Must be a whole number between 1 and 10.",
         SC_VALERR_STOP, 2

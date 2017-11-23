@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_CONDFORMATBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_CONDFORMATBUFFER_HXX
 
+#include "conditio.hxx"
 #include "formulaparser.hxx"
 #include "worksheethelper.hxx"
 #include <tools/color.hxx>
@@ -296,7 +297,7 @@ public:
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
-    static sal_Int32    convertToInternalOperator( sal_Int32 nToken );
+    static ScConditionMode convertToInternalOperator( sal_Int32 nToken );
     void                finalizeImport();
 private:
     CondFormatRef       createCondFormat();
