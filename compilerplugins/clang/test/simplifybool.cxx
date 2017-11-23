@@ -15,4 +15,12 @@ void f1(int a, int b)
     }
 };
 
+void f2(float a, float b)
+{
+    // no warning expected
+    if (!(a < b))
+    {
+        a = b;
+    }
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

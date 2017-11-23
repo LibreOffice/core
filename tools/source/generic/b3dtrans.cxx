@@ -59,11 +59,11 @@ void B3dTransformationSet::Orientation(basegfx::B3DHomMatrix& rTarget, const bas
 
 void B3dTransformationSet::Frustum(basegfx::B3DHomMatrix& rTarget, double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
 {
-    if(fNear <= 0.0)
+    if(!(fNear > 0.0))
     {
         fNear = 0.001;
     }
-    if(fFar <= 0.0)
+    if(!(fFar > 0.0))
     {
         fFar = 1.0;
     }
