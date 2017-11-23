@@ -301,7 +301,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
             for ( const auto & rCell : *rCol.second )
             {
                 // Skip header rows
-                if (rCell.first < nHeaderRowCount )
+                if (rCell.first < nHeaderRowCount || !rCell.second)
                     continue;
 
                 ScRange aRange;
