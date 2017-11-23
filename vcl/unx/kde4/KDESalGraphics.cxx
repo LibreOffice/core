@@ -513,17 +513,17 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if( value.getType() == ControlType::SpinButtons )
         {
             const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
-            if( (pSpinVal->mnUpperState & ControlState::PRESSED) )
+            if( pSpinVal->mnUpperState & ControlState::PRESSED )
                 option.activeSubControls |= QStyle::SC_SpinBoxUp;
-            if( (pSpinVal->mnLowerState & ControlState::PRESSED) )
+            if( pSpinVal->mnLowerState & ControlState::PRESSED )
                 option.activeSubControls |= QStyle::SC_SpinBoxDown;
-            if( (pSpinVal->mnUpperState & ControlState::ENABLED) )
+            if( pSpinVal->mnUpperState & ControlState::ENABLED )
                 option.stepEnabled |= QAbstractSpinBox::StepUpEnabled;
-            if( (pSpinVal->mnLowerState & ControlState::ENABLED) )
+            if( pSpinVal->mnLowerState & ControlState::ENABLED )
                 option.stepEnabled |= QAbstractSpinBox::StepDownEnabled;
-            if( (pSpinVal->mnUpperState & ControlState::ROLLOVER) )
+            if( pSpinVal->mnUpperState & ControlState::ROLLOVER )
                 option.state = QStyle::State_MouseOver;
-            if( (pSpinVal->mnLowerState & ControlState::ROLLOVER) )
+            if( pSpinVal->mnLowerState & ControlState::ROLLOVER )
                 option.state = QStyle::State_MouseOver;
         }
 

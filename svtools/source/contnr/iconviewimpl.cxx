@@ -440,7 +440,7 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 void IconViewImpl::InvalidateEntry( long nId ) const
 {
-    if( (nFlags & LBoxFlags::InPaint ))
+    if( nFlags & LBoxFlags::InPaint )
         return;
 
     tools::Rectangle aRect( GetVisibleArea() );

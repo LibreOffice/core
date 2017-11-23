@@ -1093,7 +1093,7 @@ DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxSwPosSizeTabPage::EnableAnchorTypes(SvxAnchorIds nAnchorEnable)
 {
-    if((nAnchorEnable & SvxAnchorIds::Fly))
+    if(nAnchorEnable & SvxAnchorIds::Fly)
         m_pToFrameRB->Show();
     if(!(nAnchorEnable & SvxAnchorIds::Page))
         m_pToPageRB->Enable(false);

@@ -14,6 +14,8 @@ bool foo(int);
 
 enum class EFoo { Bar };
 
+struct S { operator bool(); };
+
 int main()
 {
     int x = 1;
@@ -49,6 +51,16 @@ int main()
     std::string v3;
     v3 = (std::string("xx") + "xx"); // expected-error {{parentheses immediately inside assignment [loplugin:unnecessaryparen]}}
     (void)v3;
+
+    S s1;
+    if ((s1)) { // expected-error {{parentheses immediately inside if statement [loplugin:unnecessaryparen]}}
+        // expected-error@-1 {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
+        return 0;
+    }
+    S s2;
+    if ((s2 = s1)) {
+        return 0;
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

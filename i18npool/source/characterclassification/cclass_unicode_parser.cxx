@@ -934,7 +934,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             break;
             case ssGetBool :
             {
-                if ( (nMask & ParserFlags::BOOL) )
+                if ( nMask & ParserFlags::BOOL )
                     eState = ssStop;    // maximum 2: <, >, <>, <=, >=
                 else
                     eState = ssStopBack;

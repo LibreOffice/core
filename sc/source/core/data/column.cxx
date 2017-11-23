@@ -255,7 +255,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                 else if (nEdges & MatrixEdge::Inside)
                     bFound = true;  // inside, all selected?
 
-                if ((((nEdges & MatrixEdge::Left) | MatrixEdge::Right) ^ ((nEdges & MatrixEdge::Right) | MatrixEdge::Left)))
+                if (((nEdges & MatrixEdge::Left) | MatrixEdge::Right) ^ ((nEdges & MatrixEdge::Right) | MatrixEdge::Left))
                     // either left or right, but not both.
                     bFound = true;  // only left/right edge, all selected?
 

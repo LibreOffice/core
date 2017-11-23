@@ -1680,14 +1680,14 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
         bNoSearch = false;
 
 
-    if ( ( SearchOptionFlags::SEARCHALL & nOptions ) )
+    if ( SearchOptionFlags::SEARCHALL & nOptions )
     {
         m_pSearchAllBtn->Enable();
         bNoSearch = false;
     }
     else
         m_pSearchAllBtn->Disable();
-    if ( ( SearchOptionFlags::REPLACE & nOptions ) )
+    if ( SearchOptionFlags::REPLACE & nOptions )
     {
         m_pReplaceBtn->Enable();
         m_pReplaceFrame->get_label_widget()->Enable();
@@ -1702,7 +1702,7 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
         m_pReplaceLB->Disable();
         m_pReplaceTmplLB->Disable();
     }
-    if ( ( SearchOptionFlags::REPLACE_ALL & nOptions ) )
+    if ( SearchOptionFlags::REPLACE_ALL & nOptions )
     {
         m_pReplaceAllBtn->Enable();
         bNoSearch = false;
@@ -1716,11 +1716,11 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
     m_pSearchLB->Enable( !bNoSearch );
     m_pNotesBtn->Enable();
 
-    if ( ( SearchOptionFlags::WHOLE_WORDS & nOptions ) )
+    if ( SearchOptionFlags::WHOLE_WORDS & nOptions )
         m_pWordBtn->Enable();
     else
         m_pWordBtn->Disable();
-    if ( ( SearchOptionFlags::BACKWARDS & nOptions ) )
+    if ( SearchOptionFlags::BACKWARDS & nOptions )
     {
         m_pBackSearchBtn->Enable();
         m_pReplaceBackwardsCB->Enable();
@@ -1730,27 +1730,27 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
         m_pBackSearchBtn->Disable();
         m_pReplaceBackwardsCB->Disable();
     }
-    if ( ( SearchOptionFlags::REG_EXP & nOptions ) )
+    if ( SearchOptionFlags::REG_EXP & nOptions )
         m_pRegExpBtn->Enable();
     else
         m_pRegExpBtn->Disable();
-    if ( ( SearchOptionFlags::WILDCARD & nOptions ) )
+    if ( SearchOptionFlags::WILDCARD & nOptions )
         m_pWildcardBtn->Enable();
     else
         m_pWildcardBtn->Disable();
-    if ( ( SearchOptionFlags::EXACT & nOptions ) )
+    if ( SearchOptionFlags::EXACT & nOptions )
         m_pMatchCaseCB->Enable();
     else
         m_pMatchCaseCB->Disable();
-    if ( ( SearchOptionFlags::SELECTION & nOptions ) )
+    if ( SearchOptionFlags::SELECTION & nOptions )
         m_pSelectionBtn->Enable();
     else
         m_pSelectionBtn->Disable();
-    if ( ( SearchOptionFlags::FAMILIES & nOptions ) )
+    if ( SearchOptionFlags::FAMILIES & nOptions )
         m_pLayoutBtn->Enable();
     else
         m_pLayoutBtn->Disable();
-    if ( ( SearchOptionFlags::FORMAT & nOptions ) )
+    if ( SearchOptionFlags::FORMAT & nOptions )
     {
         m_pAttributeBtn->Enable();
         m_pFormatBtn->Enable();
@@ -1763,7 +1763,7 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
         m_pNoFormatBtn->Disable();
     }
 
-    if ( ( SearchOptionFlags::SIMILARITY & nOptions ) )
+    if ( SearchOptionFlags::SIMILARITY & nOptions )
     {
         m_pSimilarityBox->Enable();
         m_pSimilarityBtn->Enable();

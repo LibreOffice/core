@@ -834,7 +834,7 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
         {
             if( (*aIter)->CheckHit(rEvt.GetPosPixel()) )
             {
-                SelectConn((*aIter));
+                SelectConn(*aIter);
 
                 // Double-click
                 if( rEvt.GetClicks() == 2 )

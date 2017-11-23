@@ -946,7 +946,7 @@ namespace basegfx
 
             if(!bFinished && (aCutFlags & CutFlagValue::LINE))
             {
-                if((aCutFlags & CutFlagValue::START1))
+                if(aCutFlags & CutFlagValue::START1)
                 {
                     // start1 on line 2 ?
                     if(isPointOnEdge(rEdge1Start, rEdge2Start, rEdge2Delta, &fCut2))

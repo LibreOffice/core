@@ -286,19 +286,19 @@ namespace cppcanvas
 
                 const OutDevState& rNewState( getState() );
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::LINECOLOR) )
+                if( aCalculatedNewState.pushFlags & PushFlags::LINECOLOR )
                 {
                     aCalculatedNewState.lineColor      = rNewState.lineColor;
                     aCalculatedNewState.isLineColorSet = rNewState.isLineColorSet;
                 }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::FILLCOLOR) )
+                if( aCalculatedNewState.pushFlags & PushFlags::FILLCOLOR )
                 {
                     aCalculatedNewState.fillColor      = rNewState.fillColor;
                     aCalculatedNewState.isFillColorSet = rNewState.isFillColorSet;
                 }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::FONT) )
+                if( aCalculatedNewState.pushFlags & PushFlags::FONT )
                 {
                     aCalculatedNewState.xFont                   = rNewState.xFont;
                     aCalculatedNewState.fontRotation            = rNewState.fontRotation;
@@ -312,17 +312,17 @@ namespace cppcanvas
                     aCalculatedNewState.isTextOutlineModeSet    = rNewState.isTextOutlineModeSet;
                 }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::TEXTCOLOR) )
+                if( aCalculatedNewState.pushFlags & PushFlags::TEXTCOLOR )
                 {
                     aCalculatedNewState.textColor = rNewState.textColor;
                 }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::MAPMODE) )
+                if( aCalculatedNewState.pushFlags & PushFlags::MAPMODE )
                 {
                     aCalculatedNewState.mapModeTransform = rNewState.mapModeTransform;
                 }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::CLIPREGION) )
+                if( aCalculatedNewState.pushFlags & PushFlags::CLIPREGION )
                 {
                     aCalculatedNewState.clip        = rNewState.clip;
                     aCalculatedNewState.clipRect    = rNewState.clipRect;
@@ -334,13 +334,13 @@ namespace cppcanvas
                 // {
                 // }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::TEXTFILLCOLOR) )
+                if( aCalculatedNewState.pushFlags & PushFlags::TEXTFILLCOLOR )
                 {
                     aCalculatedNewState.textFillColor      = rNewState.textFillColor;
                     aCalculatedNewState.isTextFillColorSet = rNewState.isTextFillColorSet;
                 }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::TEXTALIGN) )
+                if( aCalculatedNewState.pushFlags & PushFlags::TEXTALIGN )
                 {
                     aCalculatedNewState.textReferencePoint = rNewState.textReferencePoint;
                 }
@@ -350,13 +350,13 @@ namespace cppcanvas
                 // {
                 // }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::TEXTLINECOLOR) )
+                if( aCalculatedNewState.pushFlags & PushFlags::TEXTLINECOLOR )
                 {
                     aCalculatedNewState.textLineColor      = rNewState.textLineColor;
                     aCalculatedNewState.isTextLineColorSet = rNewState.isTextLineColorSet;
                 }
 
-                if( (aCalculatedNewState.pushFlags & PushFlags::TEXTLAYOUTMODE) )
+                if( aCalculatedNewState.pushFlags & PushFlags::TEXTLAYOUTMODE )
                 {
                     aCalculatedNewState.textAlignment = rNewState.textAlignment;
                     aCalculatedNewState.textDirection = rNewState.textDirection;

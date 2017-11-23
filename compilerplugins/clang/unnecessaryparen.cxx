@@ -23,8 +23,8 @@ look for unnecessary parentheses
 
 namespace {
 
-// Like clang::Stmt::IgnoreImplicit (lib/AST/Stmt.cpp), but also ignoring
-// CXXConstructExpr:
+// Like clang::Stmt::IgnoreImplicit (lib/AST/Stmt.cpp), but also ignoring CXXConstructExpr and
+// looking through implicit UserDefinedConversion's member function call:
 Expr const * ignoreAllImplicit(Expr const * expr) {
     if (auto const e = dyn_cast<ExprWithCleanups>(expr)) {
         expr = e->getSubExpr();
@@ -40,7 +40,15 @@ Expr const * ignoreAllImplicit(Expr const * expr) {
     if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
         expr = e->getSubExpr();
     }
-    return expr->IgnoreImpCasts();
+    while (auto const e = dyn_cast<ImplicitCastExpr>(expr)) {
+        expr = e->getSubExpr();
+        if (e->getCastKind() == CK_UserDefinedConversion) {
+            auto const ce = cast<CXXMemberCallExpr>(expr);
+            assert(ce->getNumArgs() == 0);
+            expr = ce->getImplicitObjectArgument();
+        }
+    }
+    return expr;
 }
 
 class UnnecessaryParen:
@@ -239,6 +247,11 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt * stmt, const Expr* cond, String
         auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
         if (binaryOp && binaryOp->getOpcode() == BO_Assign)
             return;
+        if (auto const opCall = dyn_cast<CXXOperatorCallExpr>(parenExpr->getSubExpr())) {
+            if (opCall->getOperator() == OO_Equal) {
+                return;
+            }
+        }
         report(
             DiagnosticsEngine::Warning, "parentheses immediately inside %0 statement",
             parenExpr->getLocStart())
