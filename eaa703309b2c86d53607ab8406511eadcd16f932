@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1a30dce7",
+        "filename": "cui/source/dialogs/cuicharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-23T14:28:04Z",
+      "side": 1,
+      "message": "Please remove this trailing whitespace (a commit hook should be warning about this).",
+      "revId": "eaa703309b2c86d53607ab8406511eadcd16f932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
