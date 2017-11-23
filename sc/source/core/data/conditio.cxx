@@ -1047,26 +1047,26 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
     {
         switch( eOp )
         {
-            case SC_COND_BEGINS_WITH:
-            case SC_COND_ENDS_WITH:
-            case SC_COND_CONTAINS_TEXT:
-            case SC_COND_NOT_CONTAINS_TEXT:
+            case ScConditionMode::BeginsWith:
+            case ScConditionMode::EndsWith:
+            case ScConditionMode::ContainsText:
+            case ScConditionMode::NotContainsText:
                 break;
-            case SC_COND_NOTEQUAL:
+            case ScConditionMode::NotEqual:
                 return true;
             default:
                 return false;
         }
     }
 
-    if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
+    if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
         if ( bIsStr2 )
             return false;
 
     double nComp1 = nVal1; // Copy, so that it can be changed
     double nComp2 = nVal2;
 
-    if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
+    if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
         if ( nComp1 > nComp2 )
         {
             // Right order for value range
@@ -1077,73 +1077,73 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
     bool bValid = false;
     switch (eOp)
     {
-        case SC_COND_NONE:
+        case ScConditionMode::NONE:
             break;                  // Always sal_False
-        case SC_COND_EQUAL:
+        case ScConditionMode::Equal:
             bValid = ::rtl::math::approxEqual( nArg, nComp1 );
             break;
-        case SC_COND_NOTEQUAL:
+        case ScConditionMode::NotEqual:
             bValid = !::rtl::math::approxEqual( nArg, nComp1 );
             break;
-        case SC_COND_GREATER:
+        case ScConditionMode::Greater:
             bValid = ( nArg > nComp1 ) && !::rtl::math::approxEqual( nArg, nComp1 );
             break;
-        case SC_COND_EQGREATER:
+        case ScConditionMode::EqGreater:
             bValid = ( nArg >= nComp1 ) || ::rtl::math::approxEqual( nArg, nComp1 );
             break;
-        case SC_COND_LESS:
+        case ScConditionMode::Less:
             bValid = ( nArg < nComp1 ) && !::rtl::math::approxEqual( nArg, nComp1 );
             break;
-        case SC_COND_EQLESS:
+        case ScConditionMode::EqLess:
             bValid = ( nArg <= nComp1 ) || ::rtl::math::approxEqual( nArg, nComp1 );
             break;
-        case SC_COND_BETWEEN:
+        case ScConditionMode::Between:
             bValid = ( nArg >= nComp1 && nArg <= nComp2 ) ||
                      ::rtl::math::approxEqual( nArg, nComp1 ) || ::rtl::math::approxEqual( nArg, nComp2 );
             break;
-        case SC_COND_NOTBETWEEN:
+        case ScConditionMode::NotBetween:
             bValid = ( nArg < nComp1 || nArg > nComp2 ) &&
                      !::rtl::math::approxEqual( nArg, nComp1 ) && !::rtl::math::approxEqual( nArg, nComp2 );
             break;
-        case SC_COND_DUPLICATE:
-        case SC_COND_NOTDUPLICATE:
+        case ScConditionMode::Duplicate:
+        case ScConditionMode::NotDuplicate:
             if( pCondFormat )
             {
                 bValid = IsDuplicate( nArg, OUString() );
-                if( eOp == SC_COND_NOTDUPLICATE )
+                if( eOp == ScConditionMode::NotDuplicate )
                     bValid = !bValid;
             }
             break;
-        case SC_COND_DIRECT:
+        case ScConditionMode::Direct:
             bValid = nComp1 != 0.0;
             break;
-        case SC_COND_TOP10:
+        case ScConditionMode::Top10:
             bValid = IsTopNElement( nArg );
             break;
-        case SC_COND_BOTTOM10:
+        case ScConditionMode::Bottom10:
             bValid = IsBottomNElement( nArg );
             break;
-        case SC_COND_TOP_PERCENT:
+        case ScConditionMode::TopPercent:
             bValid = IsTopNPercent( nArg );
             break;
-        case SC_COND_BOTTOM_PERCENT:
+        case ScConditionMode::BottomPercent:
             bValid = IsBottomNPercent( nArg );
             break;
-        case SC_COND_ABOVE_AVERAGE:
-        case SC_COND_ABOVE_EQUAL_AVERAGE:
-            bValid = IsAboveAverage( nArg, eOp == SC_COND_ABOVE_EQUAL_AVERAGE );
+        case ScConditionMode::AboveAverage:
+        case ScConditionMode::AboveEqualAverage:
+            bValid = IsAboveAverage( nArg, eOp == ScConditionMode::AboveEqualAverage );
             break;
-        case SC_COND_BELOW_AVERAGE:
-        case SC_COND_BELOW_EQUAL_AVERAGE:
-            bValid = IsBelowAverage( nArg, eOp == SC_COND_BELOW_EQUAL_AVERAGE );
+        case ScConditionMode::BelowAverage:
+        case ScConditionMode::BelowEqualAverage:
+            bValid = IsBelowAverage( nArg, eOp == ScConditionMode::BelowEqualAverage );
             break;
-        case SC_COND_ERROR:
-        case SC_COND_NOERROR:
+        case ScConditionMode::Error:
+        case ScConditionMode::NoError:
             bValid = IsError( rPos );
-            if( eOp == SC_COND_NOERROR )
+            if( eOp == ScConditionMode::NoError )
                 bValid = !bValid;
             break;
-        case SC_COND_BEGINS_WITH:
+        case ScConditionMode::BeginsWith:
             if(aStrVal1.isEmpty())
             {
                 OUString aStr = OUString::number(nVal1);
@@ -1156,7 +1156,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 bValid = aStr2.startsWith(aStrVal1);
             }
             break;
-        case SC_COND_ENDS_WITH:
+        case ScConditionMode::EndsWith:
             if(aStrVal1.isEmpty())
             {
                 OUString aStr = OUString::number(nVal1);
@@ -1169,8 +1169,8 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 bValid = aStr2.endsWith(aStrVal1);
             }
             break;
-        case SC_COND_CONTAINS_TEXT:
-        case SC_COND_NOT_CONTAINS_TEXT:
+        case ScConditionMode::ContainsText:
+        case ScConditionMode::NotContainsText:
             if(aStrVal1.isEmpty())
             {
                 OUString aStr = OUString::number(nVal1);
@@ -1183,7 +1183,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 bValid = aStr2.indexOf(aStrVal1) != -1;
             }
 
-            if( eOp == SC_COND_NOT_CONTAINS_TEXT )
+            if( eOp == ScConditionMode::NotContainsText )
                 bValid = !bValid;
             break;
         default:
@@ -1197,31 +1197,31 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
 {
     bool bValid = false;
     // Interpret must already have been called
-    if ( eOp == SC_COND_DIRECT ) // Formula is independent from the content
+    if ( eOp == ScConditionMode::Direct ) // Formula is independent from the content
         return nVal1 != 0.0;
 
-    if ( eOp == SC_COND_DUPLICATE || eOp == SC_COND_NOTDUPLICATE )
+    if ( eOp == ScConditionMode::Duplicate || eOp == ScConditionMode::NotDuplicate )
     {
         if( pCondFormat && !rArg.isEmpty() )
         {
             bValid = IsDuplicate( 0.0, rArg );
-            if( eOp == SC_COND_NOTDUPLICATE )
+            if( eOp == ScConditionMode::NotDuplicate )
                 bValid = !bValid;
             return bValid;
         }
     }
 
     // If number contains condition, always false, except for "not equal".
-    if ( !bIsStr1 && (eOp != SC_COND_ERROR && eOp != SC_COND_NOERROR) )
-        return ( eOp == SC_COND_NOTEQUAL );
-    if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
+    if ( !bIsStr1 && (eOp != ScConditionMode::Error && eOp != ScConditionMode::NoError) )
+        return ( eOp == ScConditionMode::NotEqual );
+    if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
         if ( !bIsStr2 )
             return false;
 
     OUString aUpVal1( aStrVal1 ); //TODO: As a member? (Also set in Interpret)
     OUString aUpVal2( aStrVal2 );
 
-    if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
+    if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
         if (ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 ) > 0)
         {
             // Right order for value range
@@ -1230,37 +1230,37 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
 
     switch ( eOp )
     {
-        case SC_COND_EQUAL:
+        case ScConditionMode::Equal:
             bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) == 0);
         break;
-        case SC_COND_NOTEQUAL:
+        case ScConditionMode::NotEqual:
             bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) != 0);
         break;
-        case SC_COND_TOP_PERCENT:
-        case SC_COND_BOTTOM_PERCENT:
-        case SC_COND_TOP10:
-        case SC_COND_BOTTOM10:
-        case SC_COND_ABOVE_AVERAGE:
-        case SC_COND_BELOW_AVERAGE:
+        case ScConditionMode::TopPercent:
+        case ScConditionMode::BottomPercent:
+        case ScConditionMode::Top10:
+        case ScConditionMode::Bottom10:
+        case ScConditionMode::AboveAverage:
+        case ScConditionMode::BelowAverage:
             return false;
-        case SC_COND_ERROR:
-        case SC_COND_NOERROR:
+        case ScConditionMode::Error:
+        case ScConditionMode::NoError:
             bValid = IsError( rPos );
-            if(eOp == SC_COND_NOERROR)
+            if(eOp == ScConditionMode::NoError)
                 bValid = !bValid;
         break;
-        case SC_COND_BEGINS_WITH:
+        case ScConditionMode::BeginsWith:
             bValid = rArg.startsWith(aUpVal1);
         break;
-        case SC_COND_ENDS_WITH:
+        case ScConditionMode::EndsWith:
             bValid = rArg.endsWith(aUpVal1);
         break;
-        case SC_COND_CONTAINS_TEXT:
-        case SC_COND_NOT_CONTAINS_TEXT:
+        case ScConditionMode::ContainsText:
+        case ScConditionMode::NotContainsText:
             bValid = rArg.indexOf(aUpVal1) != -1;
-            if(eOp == SC_COND_NOT_CONTAINS_TEXT)
+            if(eOp == ScConditionMode::NotContainsText)
                 bValid = !bValid;
         break;
         default:
@@ -1269,28 +1269,28 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                 rArg, aUpVal1 );
             switch ( eOp )
             {
-                case SC_COND_GREATER:
+                case ScConditionMode::Greater:
                     bValid = ( nCompare > 0 );
                     break;
-                case SC_COND_EQGREATER:
+                case ScConditionMode::EqGreater:
                     bValid = ( nCompare >= 0 );
                     break;
-                case SC_COND_LESS:
+                case ScConditionMode::Less:
                     bValid = ( nCompare < 0 );
                     break;
-                case SC_COND_EQLESS:
+                case ScConditionMode::EqLess:
                     bValid = ( nCompare <= 0 );
                     break;
-                case SC_COND_BETWEEN:
-                case SC_COND_NOTBETWEEN:
+                case ScConditionMode::Between:
+                case ScConditionMode::NotBetween:
                     //  Test for NOTBETWEEN:
                     bValid = ( nCompare < 0 ||
                         ScGlobal::GetCollator()->compareString( rArg,
                         aUpVal2 ) > 0 );
-                    if ( eOp == SC_COND_BETWEEN )
+                    if ( eOp == ScConditionMode::Between )
                         bValid = !bValid;
                     break;
-                //  SC_COND_DIRECT already handled above
+                //  ScConditionMode::Direct already handled above
                 default:
                     SAL_WARN("sc", "unknown operation in ScConditionEntry");
                     bValid = false;
@@ -1481,41 +1481,41 @@ ScFormatEntry* ScConditionEntry::Clone(ScDocument* pDoc) const
 
 ScConditionMode ScConditionEntry::GetModeFromApi(css::sheet::ConditionOperator nOperation)
 {
-    ScConditionMode eMode = SC_COND_NONE;
+    ScConditionMode eMode = ScConditionMode::NONE;
     switch ((sal_Int32)nOperation)
     {
         case css::sheet::ConditionOperator2::EQUAL:
-            eMode = SC_COND_EQUAL;
+            eMode = ScConditionMode::Equal;
             break;
         case css::sheet::ConditionOperator2::LESS:
-            eMode = SC_COND_LESS;
+            eMode = ScConditionMode::Less;
             break;
         case css::sheet::ConditionOperator2::GREATER:
-            eMode = SC_COND_GREATER;
+            eMode = ScConditionMode::Greater;
             break;
         case css::sheet::ConditionOperator2::LESS_EQUAL:
-            eMode = SC_COND_EQLESS;
+            eMode = ScConditionMode::EqLess;
             break;
         case css::sheet::ConditionOperator2::GREATER_EQUAL:
-            eMode = SC_COND_EQGREATER;
+            eMode = ScConditionMode::EqGreater;
             break;
         case css::sheet::ConditionOperator2::NOT_EQUAL:
-            eMode = SC_COND_NOTEQUAL;
+            eMode = ScConditionMode::NotEqual;
             break;
         case css::sheet::ConditionOperator2::BETWEEN:
-            eMode = SC_COND_BETWEEN;
+            eMode = ScConditionMode::Between;
             break;
         case css::sheet::ConditionOperator2::NOT_BETWEEN:
-            eMode = SC_COND_NOTBETWEEN;
+            eMode = ScConditionMode::NotBetween;
             break;
         case css::sheet::ConditionOperator2::FORMULA:
-            eMode = SC_COND_DIRECT;
+            eMode = ScConditionMode::Direct;
             break;
         case css::sheet::ConditionOperator2::DUPLICATE:
-            eMode = SC_COND_DUPLICATE;
+            eMode = ScConditionMode::Duplicate;
             break;
         case css::sheet::ConditionOperator2::NOT_DUPLICATE:
-            eMode = SC_COND_NOTDUPLICATE;
+            eMode = ScConditionMode::NotDuplicate;
             break;
         default:
             break;
