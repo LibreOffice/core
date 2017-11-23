@@ -109,6 +109,44 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.docx")
+{
+    uno::Reference<drawing::XShape> xSignatureLineShape = getShape(1);
+    uno::Reference<beans::XPropertySet> xPropSet(xSignatureLineShape, uno::UNO_QUERY);
+
+    bool bIsSignatureLine;
+    xPropSet->getPropertyValue("IsSignatureLine") >>= bIsSignatureLine;
+    CPPUNIT_ASSERT_EQUAL(true, bIsSignatureLine);
+
+    bool bShowSignDate;
+    xPropSet->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
+    CPPUNIT_ASSERT_EQUAL(true, bShowSignDate);
+
+    bool bCanAddComment;
+    xPropSet->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
+    CPPUNIT_ASSERT_EQUAL(true, bCanAddComment);
+
+    OUString aSignatureLineId;
+    xPropSet->getPropertyValue("SignatureLineId") >>= aSignatureLineId;
+    CPPUNIT_ASSERT_EQUAL(OUString("{0EBE47D5-A1BD-4C9E-A52E-6256E5C345E9}"), aSignatureLineId);
+
+    OUString aSuggestedSignerName;
+    xPropSet->getPropertyValue("SignatureLineSuggestedSignerName") >>= aSuggestedSignerName;
+    CPPUNIT_ASSERT_EQUAL(OUString("John Doe"), aSuggestedSignerName);
+
+    OUString aSuggestedSignerTitle;
+    xPropSet->getPropertyValue("SignatureLineSuggestedSignerTitle") >>= aSuggestedSignerTitle;
+    CPPUNIT_ASSERT_EQUAL(OUString("Farmer"), aSuggestedSignerTitle);
+
+    OUString aSuggestedSignerEmail;
+    xPropSet->getPropertyValue("SignatureLineSuggestedSignerEmail") >>= aSuggestedSignerEmail;
+    CPPUNIT_ASSERT_EQUAL(OUString("john@thefarmers.com"), aSuggestedSignerEmail);
+
+    OUString aSigningInstructions;
+    xPropSet->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
+    CPPUNIT_ASSERT_EQUAL(OUString("Check the machines!"), aSigningInstructions);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

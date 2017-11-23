@@ -1311,39 +1311,54 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
     if( getShapeModel().mbIsSignatureLine )
     {
-        // Get the document signatures
-        Reference< security::XDocumentDigitalSignatures > xSignatures(
-            security::DocumentDigitalSignatures::createWithVersion(
-                comphelper::getProcessComponentContext(), "1.2" ) );
-
-        uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-            ZIP_STORAGE_FORMAT_STRING, mrDrawing.getFilter().getFileUrl(), embed::ElementModes::READ);
-        SAL_WARN_IF(!xStorage.is(), "oox.vml", "No xStorage!");
-
-        uno::Sequence< security::DocumentSignatureInformation > xSignatureInfo =
-            xSignatures->verifyScriptingContentSignatures(xStorage, uno::Reference< io::XInputStream >());
-
         OUString aGraphicUrl;
-        for (int i=0; i<xSignatureInfo.getLength(); i++)
+        try
         {
-            // Try to find matching signature line image - if none exists that is fine,
-            // then the signature line is not digitally signed.
-            if (xSignatureInfo[i].SignatureLineId == getShapeModel().maSignatureId)
+            // Get the document signatures
+            Reference<security::XDocumentDigitalSignatures> xSignatures(
+                security::DocumentDigitalSignatures::createWithVersion(
+                    comphelper::getProcessComponentContext(), "1.2"));
+
+            uno::Reference<embed::XStorage> xStorage
+                = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+                    ZIP_STORAGE_FORMAT_STRING, mrDrawing.getFilter().getFileUrl(),
+                    embed::ElementModes::READ);
+            SAL_WARN_IF(!xStorage.is(), "oox.vml", "No xStorage!");
+
+            uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
+                = xSignatures->verifyScriptingContentSignatures(xStorage,
+                                                                uno::Reference<io::XInputStream>());
+
+            for (int i = 0; i < xSignatureInfo.getLength(); i++)
             {
-                if (xSignatureInfo[i].SignatureIsValid)
+                // Try to find matching signature line image - if none exists that is fine,
+                // then the signature line is not digitally signed.
+                if (xSignatureInfo[i].SignatureLineId == getShapeModel().maSignatureId)
                 {
-                    // Signature is valid, use the 'valid' image
-                    SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "oox.vml", "No ValidSignatureLineImage!");
-                    aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(xSignatureInfo[i].ValidSignatureLineImage);
+                    if (xSignatureInfo[i].SignatureIsValid)
+                    {
+                        // Signature is valid, use the 'valid' image
+                        SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "oox.vml",
+                                    "No ValidSignatureLineImage!");
+                        aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(
+                            xSignatureInfo[i].ValidSignatureLineImage);
+                    }
+                    else
+                    {
+                        // Signature is invalid, use the 'invalid' image
+                        SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml",
+                                    "No InvalidSignatureLineImage!");
+                        aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(
+                            xSignatureInfo[i].InvalidSignatureLineImage);
+                    }
+                    break;
                 }
-                else
-                {
-                    // Signature is invalid, use the 'invalid' image
-                    SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml", "No InvalidSignatureLineImage!");
-                    aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(xSignatureInfo[i].InvalidSignatureLineImage);
-                }
-                break;
             }
+        }
+        catch (css::uno::Exception&)
+        {
+            // DocumentDigitalSignatures service not available.
+            // We continue by rendering the "unsigned" shape instead.
         }
 
         Reference< XShape > xShape;
