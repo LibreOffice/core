@@ -63,7 +63,6 @@ public:
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
     void                UseResourceText();
-    bool                CleanAndCheckEmpty(OUString& rText);
     void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
     bool                IsTwoLines() const;

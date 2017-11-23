@@ -616,7 +616,7 @@ void SvxFontPrevWindow::UseResourceText()
  * removes line feeds and carriage returns from string
  * returns if param is empty
  */
-bool SvxFontPrevWindow::CleanAndCheckEmpty(OUString& rText)
+bool CleanAndCheckEmpty(OUString& rText)
 {
     bool bEmpty = true;
     for (sal_Int32 i = 0; i < rText.getLength(); ++i)
