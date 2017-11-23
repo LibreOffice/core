@@ -283,7 +283,7 @@ void FilterHelper::setCurrentFilter( const ::rtl::OUString& aTitle )
 
 ::rtl::OUString SAL_CALL FilterHelper::getCurrentFilter(  )
 {
-    ::rtl::OUString sReturn = (m_aCurrentFilter);
+    ::rtl::OUString sReturn = m_aCurrentFilter;
 
     return sReturn;
 }
