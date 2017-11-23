@@ -409,23 +409,23 @@ uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pE
 {
     switch (pEntry->GetType())
     {
-        case condformat::CONDITION:
+        case ScFormatEntry::Type::Condition:
             return new ScConditionEntryObj(xParent,
                     static_cast<const ScCondFormatEntry*>(pEntry));
         break;
-        case condformat::COLORSCALE:
+        case ScFormatEntry::Type::Colorscale:
             return new ScColorScaleFormatObj(xParent,
                     static_cast<const ScColorScaleFormat*>(pEntry));
         break;
-        case condformat::DATABAR:
+        case ScFormatEntry::Type::Databar:
             return new ScDataBarFormatObj(xParent,
                     static_cast<const ScDataBarFormat*>(pEntry));
         break;
-        case condformat::ICONSET:
+        case ScFormatEntry::Type::Iconset:
             return new ScIconSetFormatObj(xParent,
                     static_cast<const ScIconSetFormat*>(pEntry));
         break;
-        case condformat::DATE:
+        case ScFormatEntry::Type::Date:
             return new ScCondDateFormatObj(xParent,
                     static_cast<const ScCondDateFormatEntry*>(pEntry));
         break;

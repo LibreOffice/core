@@ -113,20 +113,6 @@ class ScConditionalFormat;
 struct ScDataBarInfo;
 struct ScIconSetInfo;
 
-namespace condformat
-{
-
-enum ScFormatEntryType
-{
-    CONDITION,
-    COLORSCALE,
-    DATABAR,
-    ICONSET,
-    DATE
-};
-
-}
-
 struct ScCondFormatData
 {
     ScCondFormatData():
@@ -146,7 +132,16 @@ public:
     ScFormatEntry(ScDocument* pDoc);
     virtual ~ScFormatEntry() {}
 
-    virtual condformat::ScFormatEntryType GetType() const = 0;
+    enum class Type
+    {
+        Condition,
+        Colorscale,
+        Databar,
+        Iconset,
+        Date
+    };
+
+    virtual Type GetType() const = 0;
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) = 0;
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) = 0;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) = 0;
@@ -266,7 +261,7 @@ public:
 
     bool            MarkUsedExternalReferences() const;
 
-    virtual condformat::ScFormatEntryType GetType() const override { return condformat::CONDITION; }
+    virtual Type GetType() const override { return Type::Condition; }
 
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
 
@@ -382,7 +377,7 @@ public:
     const OUString& GetStyleName() const { return maStyleName;}
     void SetStyleName( const OUString& rStyleName );
 
-    virtual condformat::ScFormatEntryType GetType() const override { return condformat::DATE; }
+    virtual Type GetType() const override { return Type::Date; }
     virtual void UpdateReference( sc::RefUpdateContext& ) override {}
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& ) override {}
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& ) override {}

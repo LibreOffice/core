@@ -64,7 +64,7 @@ void testDataBar_Impl(const ScDocument& rDoc)
         CPPUNIT_ASSERT_EQUAL(size_t(1), (*itr)->size());
 
         const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(0);
-        CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), condformat::DATABAR);
+        CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), ScFormatEntry::Type::Databar);
         const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pFormatEntry);
         CPPUNIT_ASSERT(pDataBar);
         const ScDataBarFormatData* pDataBarData = pDataBar->GetDataBarData();
@@ -101,7 +101,7 @@ void testColorScale2Entry_Impl(const ScDocument& rDoc)
         CPPUNIT_ASSERT_EQUAL(size_t(1), (*itr)->size());
 
         const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(0);
-        CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), condformat::COLORSCALE);
+        CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), ScFormatEntry::Type::Colorscale);
         const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(pFormatEntry);
         CPPUNIT_ASSERT_EQUAL(size_t(2), pColFormat->size());
 
@@ -140,7 +140,7 @@ void testColorScale3Entry_Impl(const ScDocument& rDoc)
         CPPUNIT_ASSERT_EQUAL(size_t(1), (*itr)->size());
 
         const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(0);
-        CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), condformat::COLORSCALE);
+        CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), ScFormatEntry::Type::Colorscale);
         const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(pFormatEntry);
         CPPUNIT_ASSERT_EQUAL(size_t(3), pColFormat->size());
 

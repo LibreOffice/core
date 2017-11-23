@@ -130,7 +130,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
     {
         switch(rFormat.GetEntry(0)->GetType())
         {
-            case condformat::CONDITION:
+            case ScFormatEntry::Type::Condition:
                 {
                     const ScConditionEntry* pEntry = static_cast<const ScConditionEntry*>(rFormat.GetEntry(0));
                     ScConditionMode eMode = pEntry->GetOperation();
@@ -162,16 +162,16 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                 }
 
                 break;
-            case condformat::DATABAR:
+            case ScFormatEntry::Type::Databar:
                 aBuffer.append(getTextForType(DATABAR));
                 break;
-            case condformat::COLORSCALE:
+            case ScFormatEntry::Type::Colorscale:
                 aBuffer.append(getTextForType(COLORSCALE));
                 break;
-            case condformat::ICONSET:
+            case ScFormatEntry::Type::Iconset:
                 aBuffer.append(getTextForType(ICONSET));
                 break;
-            case condformat::DATE:
+            case ScFormatEntry::Type::Date:
                 {
                     aBuffer.append(getTextForType(DATE));
                     aBuffer.append(" ");

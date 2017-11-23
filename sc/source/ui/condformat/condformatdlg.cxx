@@ -85,7 +85,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
             const ScFormatEntry* pEntry = pFormat->GetEntry(nIndex);
             switch(pEntry->GetType())
             {
-                case condformat::CONDITION:
+                case ScFormatEntry::Type::Condition:
                     {
                         const ScCondFormatEntry* pConditionEntry = static_cast<const ScCondFormatEntry*>( pEntry );
                         if(pConditionEntry->GetOperation() != ScConditionMode::Direct)
@@ -95,7 +95,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
 
                     }
                     break;
-                case condformat::COLORSCALE:
+                case ScFormatEntry::Type::Colorscale:
                     {
                         const ScColorScaleFormat* pColorScale = static_cast<const ScColorScaleFormat*>( pEntry );
                         if( pColorScale->size() == 2 )
@@ -104,13 +104,13 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
                             maEntries.push_back(VclPtr<ScColorScale3FrmtEntry>::Create( this, mpDoc, maPos, pColorScale ) );
                     }
                     break;
-                case condformat::DATABAR:
+                case ScFormatEntry::Type::Databar:
                     maEntries.push_back(VclPtr<ScDataBarFrmtEntry>::Create( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
                     break;
-                case condformat::ICONSET:
+                case ScFormatEntry::Type::Iconset:
                     maEntries.push_back(VclPtr<ScIconSetFrmtEntry>::Create( this, mpDoc, maPos, static_cast<const ScIconSetFormat*>( pEntry ) ) );
                     break;
-                case condformat::DATE:
+                case ScFormatEntry::Type::Date:
                     maEntries.push_back(VclPtr<ScDateFrmtEntry>::Create( this, mpDoc, static_cast<const ScCondDateFormatEntry*>( pEntry ) ) );
                     break;
             }

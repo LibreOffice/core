@@ -275,7 +275,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
 
-    virtual condformat::ScFormatEntryType GetType() const override;
+    virtual Type GetType() const override;
     ScColorScaleEntries::iterator begin();
     ScColorScaleEntries::const_iterator begin() const;
     ScColorScaleEntries::iterator end();
@@ -313,7 +313,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
 
-    virtual condformat::ScFormatEntryType GetType() const override;
+    virtual Type GetType() const override;
 
     /**
      * Makes sure that the mpFormatData does not contain valid entries.
@@ -375,7 +375,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
 
-    virtual condformat::ScFormatEntryType GetType() const override;
+    virtual Type GetType() const override;
 
     static const ScIconSetMap g_IconSetMap[];
     static BitmapEx& getBitmap(sc::IconSetBitmapMap& rBitmapMap, ScIconSetType eType, sal_Int32 nIndex);

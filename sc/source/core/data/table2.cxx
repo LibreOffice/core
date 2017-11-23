@@ -608,9 +608,9 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             {
                 OUString aStyleName;
                 const ScFormatEntry* pEntry = pNewFormat->GetEntry(i);
-                if(pEntry->GetType() == condformat::CONDITION)
+                if(pEntry->GetType() == ScFormatEntry::Type::Condition)
                     aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
-                else if(pEntry->GetType() == condformat::DATE)
+                else if(pEntry->GetType() == ScFormatEntry::Type::Date)
                     aStyleName = static_cast<const ScCondDateFormatEntry*>(pEntry)->GetStyleName();
 
                 if(!aStyleName.isEmpty())
@@ -2132,7 +2132,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                                 for (size_t nEntry=0; nEntry<nEntryCount; nEntry++)
                                 {
                                     const ScFormatEntry* pEntry = pFormat->GetEntry(nEntry);
-                                    if(pEntry->GetType() != condformat::CONDITION)
+                                    if(pEntry->GetType() != ScFormatEntry::Type::Condition)
                                         continue;
 
                                     OUString  aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
