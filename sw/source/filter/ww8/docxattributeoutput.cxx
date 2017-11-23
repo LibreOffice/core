@@ -1687,12 +1687,6 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
                                rField2.GetSelectedItem(), aItems);
                 }
                 m_pSerializer->endElementNS( XML_w, XML_fldChar );
-
-                if ( bWriteRun )
-                    m_pSerializer->endElementNS( XML_w, XML_r );
-
-                if ( !rInfos.pField )
-                    CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
         }
         else
         {
@@ -1715,15 +1709,15 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
                 WriteFFData(  rInfos );
 
             m_pSerializer->endElementNS( XML_w, XML_fldChar );
-
-            if ( bWriteRun )
-                m_pSerializer->endElementNS( XML_w, XML_r );
-
-            // The hyperlinks fields can't be expanded: the value is
-            // normally in the text run
-            if ( !rInfos.pField )
-                CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
         }
+
+        if ( bWriteRun )
+            m_pSerializer->endElementNS( XML_w, XML_r );
+
+        // The hyperlinks fields can't be expanded: the value is
+        // normally in the text run
+        if ( !rInfos.pField )
+            CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
     }
 }
 
@@ -1892,10 +1886,25 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
     m_bPreventDoubleFieldsHandling = false;
 }
 
+namespace {
+bool Is_fldSimple(ww::eField eType)
+{
+    return eType == ww::eMERGEFIELD;
+}
+}
+
 void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos )
 {
+    bool bIsFldSimple = Is_fldSimple(rInfos.eType);
+
     // The command has to be written before for the hyperlinks
-    if ( rInfos.pField )
+    if (bIsFldSimple)
+    {
+        m_pSerializer->startElementNS(XML_w, XML_fldSimple,
+            FSNS(XML_w, XML_instr), rInfos.sCmd.toUtf8(),
+            FSEND);
+    }
+    else if ( rInfos.pField )
     {
         CmdField_Impl( pNode, nPos, rInfos, true );
     }
@@ -1939,12 +1948,19 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     // Write the Field end
     if ( rInfos.bClose  )
     {
-        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-        DoWriteFieldRunProperties( pNode, nPos );
-        m_pSerializer->singleElementNS( XML_w, XML_fldChar,
-              FSNS( XML_w, XML_fldCharType ), "end",
-              FSEND );
-        m_pSerializer->endElementNS( XML_w, XML_r );
+        if (bIsFldSimple)
+        {
+            m_pSerializer->endElementNS(XML_w, XML_fldSimple);
+        }
+        else
+        {
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            DoWriteFieldRunProperties( pNode, nPos );
+            m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+                FSNS( XML_w, XML_fldCharType ), "end",
+                FSEND );
+            m_pSerializer->endElementNS( XML_w, XML_r );
+        }
     }
     // Write the ref field if a bookmark had to be set and the field
     // should be visible
