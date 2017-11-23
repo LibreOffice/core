@@ -221,6 +221,19 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             }
         }
 
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+        {
+            pViewShell->RegisterDlg(maID, this);
+            registerDialogNotifier(static_cast<vcl::IDialogNotifier*>(pViewShell));
+            // Below method doesn't really give the exact dimensions,
+            // Check GetSizePixel() ?
+            const Size aOptimalSize = GetOptimalSize();
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back(std::make_pair("size", aOptimalSize.toString()));
+            pViewShell->notifyDialog(maID, "created", aItems);
+        }
+
         pImpl->bConstructed = true;
     }
 
@@ -352,6 +365,14 @@ void SfxModelessDialog::dispose()
     if ( pImpl->pMgr->GetFrame().is() && pImpl->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( nullptr );
     pImpl.reset();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        pViewShell->notifyDialog(maID, "close");
+        pViewShell->UnregisterDlg(maID);
+    }
+
     ModelessDialog::dispose();
 }
 
