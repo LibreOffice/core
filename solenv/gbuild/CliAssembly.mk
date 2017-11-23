@@ -63,7 +63,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-keyfile:$(1).tmp.snk \
 		-link:$(CLI_ASSEMBLY_CONFIGFILE) \
 		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
-	rm -f $(1).tmp/snk && \
+	rm -f $(1).tmp.snk && \
 	touch $(1) \
 )
 endef
@@ -107,6 +107,7 @@ endef
 define gb_CliAssemblyTarget_set_configfile
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_CONFIGFILE := $(2)
 $(call gb_CliAssemblyTarget_get_target,$(1)) : $(2)
+$(call gb_CliAssemblyTarget_get_clean_target,$(1)) : $(3)
 
 endef
 
@@ -176,7 +177,7 @@ endef
 
 define gb_CliAssembly__set_configfile
 $(call gb_CliConfigTarget_CliConfigTarget,$(2),$(3))
-$(call gb_CliAssembly__set_configfile_impl,$(1),$(call gb_CliConfigTarget_get_target,$(2)))
+$(call gb_CliAssembly__set_configfile_impl,$(1),$(call gb_CliConfigTarget_get_target,$(2)),$(call gb_CliConfigTarget_get_clean_target,$(2)))
 
 endef
 
