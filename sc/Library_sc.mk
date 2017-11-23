@@ -107,7 +107,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/cellvalues \
     sc/source/core/data/clipcontext \
     sc/source/core/data/clipparam \
-    sc/source/core/data/colcontainer \
     sc/source/core/data/column \
     sc/source/core/data/column2 \
     sc/source/core/data/column3 \
