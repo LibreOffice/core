@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e7761dd6",
+        "filename": "officecfg/registry/schema/org/openoffice/UserProfile.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-23T13:11:34Z",
+      "side": 1,
+      "message": "that is not a valid value for xs:boolean",
+      "revId": "050caaa22f0f27f0471f8448faf1e8ed11b5653f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
