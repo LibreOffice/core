@@ -773,7 +773,7 @@ void ScColumn::GetUnprotectedCells( SCROW nStartRow, SCROW nEndRow, ScRangeList&
 {
     SCROW nTmpStartRow = nStartRow, nTmpEndRow = nEndRow;
     const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
-    bool bProtection = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION)).GetProtection();
+    bool bProtection = pPattern->GetItem(ATTR_PROTECTION).GetProtection();
     if (!bProtection)
     {
         // Limit the span to the range in question.
@@ -787,7 +787,7 @@ void ScColumn::GetUnprotectedCells( SCROW nStartRow, SCROW nEndRow, ScRangeList&
     {
         nStartRow = nTmpEndRow + 1;
         pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
-        bool bTmpProtection = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION)).GetProtection();
+        bool bTmpProtection = pPattern->GetItem(ATTR_PROTECTION).GetProtection();
         if (!bTmpProtection)
         {
             // Limit the span to the range in question.
@@ -1011,8 +1011,7 @@ private:
         if (mpCFList)
         {
             maPos.SetRow(nRow);
-            const ScCondFormatItem& rItem =
-                static_cast<const ScCondFormatItem&>(pPat->GetItem(ATTR_CONDITIONAL));
+            const ScCondFormatItem& rItem = pPat->GetItem(ATTR_CONDITIONAL);
             const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
             pCondSet = mrCol.GetDoc().GetCondResult(rCell, maPos, *mpCFList, rData);
         }

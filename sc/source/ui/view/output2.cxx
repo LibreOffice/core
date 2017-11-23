@@ -25,9 +25,14 @@
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
@@ -37,6 +42,10 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
@@ -323,9 +332,9 @@ void ScDrawStringsVars::SetPattern(
 
     //  alignment
 
-    eAttrHorJust = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
+    eAttrHorJust = pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet ).GetValue();
 
-    eAttrVerJust = static_cast<const SvxVerJustifyItem&>(pPattern->GetItem( ATTR_VER_JUSTIFY, pCondSet )).GetValue();
+    eAttrVerJust = pPattern->GetItem( ATTR_VER_JUSTIFY, pCondSet ).GetValue();
     if ( eAttrVerJust == SvxCellVerJustify::Standard )
         eAttrVerJust = SvxCellVerJustify::Bottom;
 
@@ -335,7 +344,7 @@ void ScDrawStringsVars::SetPattern(
 
     //  line break
 
-    bLineBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK, pCondSet )).GetValue();
+    bLineBreak = pPattern->GetItem( ATTR_LINEBREAK, pCondSet ).GetValue();
 
     //  handle "repeat" alignment
 
@@ -355,7 +364,7 @@ void ScDrawStringsVars::SetPattern(
     {
         case SvxCellOrientation::Standard:
             nRot = 0;
-            bRotated = static_cast<const SfxInt32Item&>(pPattern->GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue() != 0 &&
+            bRotated = pPattern->GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue() != 0 &&
                        !bRepeat;
             break;
         case SvxCellOrientation::Stacked:
@@ -404,10 +413,10 @@ void ScDrawStringsVars::SetPattern(
     if ( bPixelToLogic )
         nAscentPixel = pRefDevice->LogicToPixel( Size( 0, nAscentPixel ) ).Height();
 
-    Color aULineColor( static_cast<const SvxUnderlineItem&>(pPattern->GetItem( ATTR_FONT_UNDERLINE, pCondSet )).GetColor() );
+    Color aULineColor( pPattern->GetItem( ATTR_FONT_UNDERLINE, pCondSet ).GetColor() );
     pDev->SetTextLineColor( aULineColor );
 
-    Color aOLineColor( static_cast<const SvxOverlineItem&>(pPattern->GetItem( ATTR_FONT_OVERLINE, pCondSet )).GetColor() );
+    Color aOLineColor( pPattern->GetItem( ATTR_FONT_OVERLINE, pCondSet ).GetColor() );
     pDev->SetOverlineColor( aOLineColor );
 
     // number format
@@ -415,15 +424,15 @@ void ScDrawStringsVars::SetPattern(
     nValueFormat = pPattern->GetNumberFormat( pOutput->mpDoc->GetFormatTable(), pCondSet );
 
     // margins
-    pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem( ATTR_MARGIN, pCondSet ));
+    pMargin = &pPattern->GetItem( ATTR_MARGIN, pCondSet );
     if ( eAttrHorJust == SvxCellHorJustify::Left || eAttrHorJust == SvxCellHorJustify::Right )
-        nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
+        nIndent = pPattern->GetItem( ATTR_INDENT, pCondSet ).GetValue();
     else
         nIndent = 0;
 
     // "Shrink to fit"
 
-    bShrink = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
+    bShrink = pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet ).GetValue();
 
     // at least the text size needs to be retrieved again
     //! differentiate and do not get the text again from the number format?
@@ -460,16 +469,16 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
 
     // margins
 
-    pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem( ATTR_MARGIN, pCondSet ));
+    pMargin = &pPattern->GetItem( ATTR_MARGIN, pCondSet );
 
     if ( eAttrHorJust == SvxCellHorJustify::Left )
-        nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
+        nIndent = pPattern->GetItem( ATTR_INDENT, pCondSet ).GetValue();
     else
         nIndent = 0;
 
     // "Shrink to fit"
 
-    bShrink = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
+    bShrink = pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet ).GetValue();
 }
 
 inline bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
@@ -1125,8 +1134,8 @@ bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
         return false;
 
     const ScPatternAttr* pPattern = mpDoc->GetPattern( nX, nY, nTab );
-    return !(static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE)).IsMerged() ||
-         static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).IsOverlapped());
+    return !(pPattern->GetItem(ATTR_MERGE).IsMerged() ||
+         pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped());
 }
 
 // nX, nArrY:       loop variables from DrawStrings / DrawEdit
@@ -1193,7 +1202,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     }
     nCellPosY -= (long) mpDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, mnPPTY );
 
-    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(&rPattern.GetItem( ATTR_MERGE ));
+    const ScMergeAttr* pMerge = &rPattern.GetItem( ATTR_MERGE );
     bool bMerged = pMerge->IsMerged();
     long nMergeCols = pMerge->GetColMerge();
     if ( nMergeCols == 0 )
@@ -1327,7 +1336,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         // (for automatic line break: only if not formatting for printer, as in ScColumn::GetNeededSize)
 
         if ( eType==OUTTYPE_WINDOW &&
-             ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & (ScMF::Auto|ScMF::Button|ScMF::ButtonPopup) ) &&
+             ( rPattern.GetItem(ATTR_MERGE_FLAG).GetValue() & (ScMF::Auto|ScMF::Button|ScMF::ButtonPopup) ) &&
              ( !bBreak || mpRefDevice == pFmtDevice ) )
         {
             // filter drop-down width is now independent from row height
@@ -1635,8 +1644,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                     }
 
                     if (aCell.hasNumeric() &&
-                        static_cast<const SfxBoolItem&>(
-                            pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue())
+                            pPattern->GetItem(ATTR_LINEBREAK, pCondSet).GetValue())
                     {
                         // Disable line break when the cell content is numeric.
                         aAltPatterns.push_back(o3tl::make_unique<ScPatternAttr>(*pPattern));
@@ -2429,7 +2437,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         mbHyphenatorSet = true;
     }
 
-    Color aBackCol = static_cast<const SvxBrushItem&>(mpPattern->GetItem( ATTR_BACKGROUND, mpCondSet )).GetColor();
+    Color aBackCol = mpPattern->GetItem( ATTR_BACKGROUND, mpCondSet ).GetColor();
     if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
         aBackCol.SetColor( nConfBackColor );
     mpEngine->SetBackgroundColor( aBackCol );
@@ -2437,8 +2445,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
 
 void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, long& rRightM, double nPPTX, double nPPTY) const
 {
-    const SvxMarginItem& rMargin =
-        static_cast<const SvxMarginItem&>(mpPattern->GetItem(ATTR_MARGIN, mpCondSet));
+    const SvxMarginItem& rMargin = mpPattern->GetItem(ATTR_MARGIN, mpCondSet);
 
     sal_uInt16 nIndent = 0;
     if (meHorJustAttr == SvxCellHorJustify::Left || meHorJustAttr == SvxCellHorJustify::Right)
@@ -2990,8 +2997,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
     {
-        const ScMergeAttr* pMerge =
-                static_cast<const ScMergeAttr*>(&rParam.mpPattern->GetItem(ATTR_MERGE));
+        const ScMergeAttr* pMerge = &rParam.mpPattern->GetItem(ATTR_MERGE);
         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
         //  Don't clip for text height when printing rows with optimal height,
@@ -3175,8 +3181,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
     const Size& aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
     if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
     {
-        const ScMergeAttr* pMerge =
-                static_cast<const ScMergeAttr*>(&rParam.mpPattern->GetItem(ATTR_MERGE));
+        const ScMergeAttr* pMerge = &rParam.mpPattern->GetItem(ATTR_MERGE);
         const bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
         //  Don't clip for text height when printing rows with optimal height,
@@ -3911,8 +3916,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
     if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
     {
-        const ScMergeAttr* pMerge =
-                static_cast<const ScMergeAttr*>(&rParam.mpPattern->GetItem(ATTR_MERGE));
+        const ScMergeAttr* pMerge = &rParam.mpPattern->GetItem(ATTR_MERGE);
         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
         //  Don't clip for text height when printing rows with optimal height,
@@ -4230,8 +4234,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
     {
-        const ScMergeAttr* pMerge =
-                static_cast<const ScMergeAttr*>(&rParam.mpPattern->GetItem(ATTR_MERGE));
+        const ScMergeAttr* pMerge = &rParam.mpPattern->GetItem(ATTR_MERGE);
         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
         //  Don't clip for text height when printing rows with optimal height,
@@ -4621,17 +4624,16 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                         long nCellWidth = (long) pRowInfo[0].pCellInfo[nX+1].nWidth;
 
-                        SvxCellHorJustify eHorJust = static_cast<const SvxHorJustifyItem&>(
-                                            pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet)).GetValue();
+                        SvxCellHorJustify eHorJust =
+                                            pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet).GetValue();
                         bool bBreak = ( eHorJust == SvxCellHorJustify::Block ) ||
-                                    static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue();
+                                    pPattern->GetItem(ATTR_LINEBREAK, pCondSet).GetValue();
                         bool bRepeat = ( eHorJust == SvxCellHorJustify::Repeat && !bBreak );
-                        bool bShrink = !bBreak && !bRepeat && static_cast<const SfxBoolItem&>
-                                        (pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
+                        bool bShrink = !bBreak && !bRepeat &&
+                                        pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet ).GetValue();
                         SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
 
-                        const ScMergeAttr* pMerge =
-                                static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
+                        const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
                         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
                         long nStartX = nPosX;
@@ -4669,8 +4671,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 nOutHeight += (long) mpDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, mnPPTY);
                             }
 
-                            SvxCellVerJustify eVerJust = static_cast<const SvxVerJustifyItem&>(
-                                                pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet)).GetValue();
+                            SvxCellVerJustify eVerJust =
+                                                pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet).GetValue();
 
                             // syntax mode is ignored here...
 
@@ -4706,8 +4708,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     bHyphenatorSet = true;
                                 }
 
-                                Color aBackCol = static_cast<const SvxBrushItem&>(
-                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor();
+                                Color aBackCol =
+                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet ).GetColor();
                                 if ( mbUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
                                     aBackCol.SetColor( nConfBackColor );
                                 pEngine->SetBackgroundColor( aBackCol );
@@ -4717,12 +4719,11 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                             //! change position and paper size to EditUtil !!!
 
-                            const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(
-                                                    &pPattern->GetItem(ATTR_MARGIN, pCondSet));
+                            const SvxMarginItem* pMargin =
+                                                    &pPattern->GetItem(ATTR_MARGIN, pCondSet);
                             sal_uInt16 nIndent = 0;
                             if ( eHorJust == SvxCellHorJustify::Left )
-                                nIndent = static_cast<const SfxUInt16Item&>(pPattern->
-                                                    GetItem(ATTR_INDENT, pCondSet)).GetValue();
+                                nIndent = pPattern->GetItem(ATTR_INDENT, pCondSet).GetValue();
 
                             long nTotalHeight = nOutHeight; // without subtracting the margin
                             if ( bPixelToLogic )
@@ -4744,12 +4745,11 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             SvxRotateMode eRotMode = SVX_ROTATE_MODE_STANDARD;
                             if ( eOrient == SvxCellOrientation::Standard )
                             {
-                                nAttrRotate = static_cast<const SfxInt32Item&>(pPattern->
-                                                    GetItem(ATTR_ROTATE_VALUE, pCondSet)).GetValue();
+                                nAttrRotate = pPattern->
+                                                    GetItem(ATTR_ROTATE_VALUE, pCondSet).GetValue();
                                 if ( nAttrRotate )
                                 {
-                                    eRotMode = static_cast<const SvxRotateModeItem&>(
-                                                pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
+                                    eRotMode = pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
                                     if ( nAttrRotate == 18000 )
                                         eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow

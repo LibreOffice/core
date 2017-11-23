@@ -110,8 +110,8 @@ long ScColumn::GetNeededSize(
     //      merged?
     //      Do not merge in conditional formatting
 
-    const ScMergeAttr*      pMerge = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
-    const ScMergeFlagAttr*  pFlag = static_cast<const ScMergeFlagAttr*>(&pPattern->GetItem(ATTR_MERGE_FLAG));
+    const ScMergeAttr*      pMerge = &pPattern->GetItem(ATTR_MERGE);
+    const ScMergeFlagAttr*  pFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
 
     if ( bWidth )
     {
@@ -146,8 +146,7 @@ long ScColumn::GetNeededSize(
             pCondSet->GetItemState(ATTR_HOR_JUSTIFY, true, &pCondItem) == SfxItemState::SET)
         eHorJust = static_cast<const SvxHorJustifyItem*>(pCondItem)->GetValue();
     else
-        eHorJust = static_cast<const SvxHorJustifyItem&>(
-                                        pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+        eHorJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
     bool bBreak;
     if ( eHorJust == SvxCellHorJustify::Block )
         bBreak = true;
@@ -155,7 +154,7 @@ long ScColumn::GetNeededSize(
                 pCondSet->GetItemState(ATTR_LINEBREAK, true, &pCondItem) == SfxItemState::SET)
         bBreak = static_cast<const SfxBoolItem*>(pCondItem)->GetValue();
     else
-        bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
+        bBreak = pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
@@ -192,7 +191,7 @@ long ScColumn::GetNeededSize(
 
     SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
     bool bAsianVertical = ( eOrient == SvxCellOrientation::Stacked &&
-            static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
+            pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet ).GetValue() );
     if ( bAsianVertical )
         bBreak = false;
 
@@ -207,15 +206,14 @@ long ScColumn::GetNeededSize(
                 pCondSet->GetItemState(ATTR_ROTATE_VALUE, true, &pCondItem) == SfxItemState::SET)
             nRotate = static_cast<const SfxInt32Item*>(pCondItem)->GetValue();
         else
-            nRotate =static_cast<const SfxInt32Item&>(pPattern->GetItem(ATTR_ROTATE_VALUE)).GetValue();
+            nRotate = pPattern->GetItem(ATTR_ROTATE_VALUE).GetValue();
         if ( nRotate )
         {
             if (pCondSet &&
                     pCondSet->GetItemState(ATTR_ROTATE_MODE, true, &pCondItem) == SfxItemState::SET)
                 eRotMode = static_cast<const SvxRotateModeItem*>(pCondItem)->GetValue();
             else
-                eRotMode = static_cast<const SvxRotateModeItem&>(
-                                            pPattern->GetItem(ATTR_ROTATE_MODE)).GetValue();
+                eRotMode = pPattern->GetItem(ATTR_ROTATE_MODE).GetValue();
 
             if ( nRotate == 18000 )
                 eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
@@ -235,7 +233,7 @@ long ScColumn::GetNeededSize(
             pCondSet->GetItemState(ATTR_MARGIN, true, &pCondItem) == SfxItemState::SET)
         pMargin = static_cast<const SvxMarginItem*>(pCondItem);
     else
-        pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
+        pMargin = &pPattern->GetItem(ATTR_MARGIN);
     sal_uInt16 nIndent = 0;
     if ( eHorJust == SvxCellHorJustify::Left )
     {
@@ -243,7 +241,7 @@ long ScColumn::GetNeededSize(
                 pCondSet->GetItemState(ATTR_INDENT, true, &pCondItem) == SfxItemState::SET)
             nIndent = static_cast<const SfxUInt16Item*>(pCondItem)->GetValue();
         else
-            nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue();
+            nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
     }
 
     SvtScriptType nScript = pDocument->GetScriptType(nCol, nRow, nTab);
@@ -562,7 +560,7 @@ long ScColumn::GetNeededSize(
         //      20 * nZoom/100
         //      Conditional formatting is not interesting here
 
-        ScMF nFlags = static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
+        ScMF nFlags = pPattern->GetItem(ATTR_MERGE_FLAG).GetValue();
         if (nFlags & ScMF::Auto)
             nValue += long(rZoomX*20);
     }
@@ -657,7 +655,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         // font color doesn't matter here
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX );
         pDev->SetFont( aFont );
-        const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
+        const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
         long nMargin = (long) ( pMargin->GetLeftMargin() * nPPTX ) +
                         (long) ( pMargin->GetRightMargin() * nPPTX );
 
@@ -757,16 +755,14 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
     sal_uInt16 nHeight = rFontHeight.GetHeight();
     nHeight *= 1.18;
 
-    if ( static_cast<const SvxEmphasisMarkItem&>(rPattern.
-            GetItem(ATTR_FONT_EMPHASISMARK)).GetEmphasisMark() != FontEmphasisMark::NONE )
+    if ( rPattern.GetItem(ATTR_FONT_EMPHASISMARK).GetEmphasisMark() != FontEmphasisMark::NONE )
     {
         //  add height for emphasis marks
         //TODO: font metrics should be used instead
         nHeight += nHeight / 4;
     }
 
-    const SvxMarginItem& rMargin =
-        static_cast<const SvxMarginItem&>(rPattern.GetItem(ATTR_MARGIN));
+    const SvxMarginItem& rMargin = rPattern.GetItem(ATTR_MARGIN);
 
     nHeight += rMargin.GetTopMargin() + rMargin.GetBottomMargin();
 
@@ -799,8 +795,8 @@ void ScColumn::GetOptimalHeight(
     const ScPatternAttr* pPattern = aIter.Next(nStart,nEnd);
     while ( pPattern )
     {
-        const ScMergeAttr*      pMerge = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
-        const ScMergeFlagAttr*  pFlag = static_cast<const ScMergeFlagAttr*>(&pPattern->GetItem(ATTR_MERGE_FLAG));
+        const ScMergeAttr*      pMerge = &pPattern->GetItem(ATTR_MERGE);
+        const ScMergeFlagAttr*  pFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
         if ( pMerge->GetRowMerge() > 1 || pFlag->IsOverlapped() )
         {
             //  do nothing - vertically with merged and overlapping,
@@ -813,23 +809,20 @@ void ScColumn::GetOptimalHeight(
             bool bStdOnly = false;
             if (bStdAllowed)
             {
-                bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
-                                (static_cast<const SvxHorJustifyItem&>(pPattern->
-                                    GetItem( ATTR_HOR_JUSTIFY )).GetValue() ==
+                bool bBreak = pPattern->GetItem(ATTR_LINEBREAK).GetValue() ||
+                              (pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue() ==
                                     SvxCellHorJustify::Block);
                 bStdOnly = !bBreak;
 
                 // conditional formatting: loop all cells
                 if (bStdOnly &&
-                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem(
-                            ATTR_CONDITIONAL)).GetCondFormatData().empty())
+                    !pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
                 {
                     bStdOnly = false;
                 }
 
                 // rotated text: loop all cells
-                if ( bStdOnly && static_cast<const SfxInt32Item&>(pPattern->
-                                    GetItem(ATTR_ROTATE_VALUE)).GetValue() )
+                if ( bStdOnly && pPattern->GetItem(ATTR_ROTATE_VALUE).GetValue() )
                     bStdOnly = false;
             }
 

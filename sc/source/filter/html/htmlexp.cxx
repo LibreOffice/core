@@ -842,7 +842,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab );
 
-    const ScMergeFlagAttr& rMergeFlagAttr = static_cast<const ScMergeFlagAttr&>( pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet ) );
+    const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet );
     if ( rMergeFlagAttr.IsOverlapped() )
         return ;
 
@@ -903,7 +903,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const sal_Char* pChar;
     sal_uInt16 nHeightPixel;
 
-    const ScMergeAttr& rMergeAttr = static_cast<const ScMergeAttr&>( pAttr->GetItem( ATTR_MERGE, pCondItemSet ) );
+    const ScMergeAttr& rMergeAttr = pAttr->GetItem( ATTR_MERGE, pCondItemSet );
     if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
         SCCOL nC, jC;
@@ -965,23 +965,23 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         pAttr->GetItem( ScGlobal::GetScriptedWhichID( nScriptType,
                     ATTR_FONT_POSTURE), pCondItemSet) );
 
-    const SvxUnderlineItem& rUnderlineItem = static_cast<const SvxUnderlineItem&>(
-        pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet ) );
+    const SvxUnderlineItem& rUnderlineItem =
+        pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet );
 
-    const SvxCrossedOutItem& rCrossedOutItem = static_cast<const SvxCrossedOutItem&>(
-        pAttr->GetItem( ATTR_FONT_CROSSEDOUT, pCondItemSet ) );
+    const SvxCrossedOutItem& rCrossedOutItem =
+        pAttr->GetItem( ATTR_FONT_CROSSEDOUT, pCondItemSet );
 
-    const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>( pAttr->GetItem(
-            ATTR_FONT_COLOR, pCondItemSet ) );
+    const SvxColorItem& rColorItem = pAttr->GetItem(
+            ATTR_FONT_COLOR, pCondItemSet );
 
-    const SvxHorJustifyItem& rHorJustifyItem = static_cast<const SvxHorJustifyItem&>(
-        pAttr->GetItem( ATTR_HOR_JUSTIFY, pCondItemSet ) );
+    const SvxHorJustifyItem& rHorJustifyItem =
+        pAttr->GetItem( ATTR_HOR_JUSTIFY, pCondItemSet );
 
-    const SvxVerJustifyItem& rVerJustifyItem = static_cast<const SvxVerJustifyItem&>(
-        pAttr->GetItem( ATTR_VER_JUSTIFY, pCondItemSet ) );
+    const SvxVerJustifyItem& rVerJustifyItem =
+        pAttr->GetItem( ATTR_VER_JUSTIFY, pCondItemSet );
 
-    const SvxBrushItem& rBrushItem = static_cast<const SvxBrushItem&>( pAttr->GetItem(
-            ATTR_BACKGROUND, pCondItemSet ) );
+    const SvxBrushItem& rBrushItem = pAttr->GetItem(
+            ATTR_BACKGROUND, pCondItemSet );
 
     Color aBgColor;
     if ( rBrushItem.GetColor().GetTransparency() == 255 )

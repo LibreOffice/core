@@ -226,17 +226,17 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
     }
     pPattern = pDoc->GetPattern(1,4,1);
-    Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+    Color aColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("background color should be green", Color(COL_LIGHTGREEN), aColor);
     pPattern = pDoc->GetPattern(2,0,1);
-    SvxCellHorJustify eHorJustify = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+    SvxCellHorJustify eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
     //test alignment
     pPattern = pDoc->GetPattern(2,1,1);
-    eHorJustify = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+    eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned right horizontally", SvxCellHorJustify::Right, eHorJustify);
     pPattern = pDoc->GetPattern(2,2,1);
-    eHorJustify = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+    eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SvxCellHorJustify::Block, eHorJustify);
 
     //test Sheet3 only for ods and xlsx
@@ -264,7 +264,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
 
             // check actual align applied to cell, should be the same as
             // the style
-            eHorJustify = static_cast< const SvxHorJustifyItem& >(pPattern->GetItem( ATTR_HOR_JUSTIFY ) ).GetValue();
+            eHorJustify = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
             CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
         }
     }

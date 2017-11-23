@@ -289,7 +289,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
+    const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
     long nCellX = (long) ( pDoc->GetColWidth(nCol,nTab) * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
     {
@@ -304,11 +304,11 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         nCellY += (long) pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
     }
 
-    const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
+    const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
     sal_uInt16 nIndent = 0;
-    if ( static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue() ==
+    if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
                 SvxCellHorJustify::Left )
-        nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue();
+        nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
     long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
     aStartPos.X()   += nPixDifX * nLayoutSign;
     nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // due to line feed, etc.
@@ -317,12 +317,11 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
 
     long nPixDifY;
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
-    SvxCellVerJustify eJust = static_cast<const SvxVerJustifyItem&>(pPattern->
-                                                GetItem(ATTR_VER_JUSTIFY)).GetValue();
+    SvxCellVerJustify eJust = pPattern->GetItem(ATTR_VER_JUSTIFY).GetValue();
 
     //  asian vertical is always edited top-aligned
-    bool bAsianVertical = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_STACKED )).GetValue() &&
-        static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
+    bool bAsianVertical = pPattern->GetItem( ATTR_STACKED ).GetValue() &&
+        pPattern->GetItem( ATTR_VERTICAL_ASIAN ).GetValue();
 
     if ( eJust == SvxCellVerJustify::Top ||
             ( bForceToTop && ( SC_MOD()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )

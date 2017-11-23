@@ -1885,8 +1885,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
 
                     SCROW nThisY = nY;
                     const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
-                    const ScMergeFlagAttr* pMergeFlag = static_cast<const ScMergeFlagAttr*>( &pPattern->
-                                                                    GetItem(ATTR_MERGE_FLAG) );
+                    const ScMergeFlagAttr* pMergeFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
                     if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                     {
                         while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
@@ -1894,7 +1893,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
                         {
                             --nThisY;
                             pPattern = pDoc->GetPattern( nX, nThisY, nTab );
-                            pMergeFlag = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
+                            pMergeFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
                         }
                     }
 
@@ -1906,7 +1905,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
                         {
                             --nThisX;
                             pPattern = pDoc->GetPattern( nThisX, nThisY, nTab );
-                            pMergeFlag = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
+                            pMergeFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
                         }
                     }
 
@@ -1914,7 +1913,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
                     {
                         if ( !pMergeFlag->IsOverlapped() )
                         {
-                            const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
+                            const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
                             if (pMerge->GetColMerge() > 0 || pMerge->GetRowMerge() > 0)
                             {
                                 Point aEndPos = pViewData->GetScrPos(

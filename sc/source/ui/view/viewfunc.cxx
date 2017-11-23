@@ -200,7 +200,7 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     const ScPatternAttr* pSource = rDoc.GetPattern(
                             aFormatSource.Col(), aFormatSource.Row(), nTab );
-    if ( !static_cast<const ScMergeAttr&>(pSource->GetItem(ATTR_MERGE)).IsMerged() )
+    if ( !pSource->GetItem(ATTR_MERGE).IsMerged() )
     {
         ScRange aRange( nCol, nRow, nTab, nCol, nRow, nTab );
         ScMarkData aMark;
@@ -869,8 +869,8 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
                                       GetViewData().GetCurY(),
                                       GetViewData().GetTabNo() );
 
-        rLineOuter = static_cast<const SvxBoxItem&>    (pAttrs->GetItem( ATTR_BORDER ));
-        rLineInner = static_cast<const SvxBoxInfoItem&>(pAttrs->GetItem( ATTR_BORDER_INNER ));
+        rLineOuter = pAttrs->GetItem( ATTR_BORDER );
+        rLineInner = pAttrs->GetItem( ATTR_BORDER_INNER );
         rLineInner.SetTable(false);
         rLineInner.SetDist(true);
         rLineInner.SetMinDist(false);
@@ -2372,13 +2372,11 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                     long nEdit = pHdl->GetTextSize().Width();       // in 0.01 mm
 
                     const ScPatternAttr* pPattern = rDoc.GetPattern( nCol, nRow, nTab );
-                    const SvxMarginItem& rMItem =
-                            static_cast<const SvxMarginItem&>(pPattern->GetItem(ATTR_MARGIN));
+                    const SvxMarginItem& rMItem = pPattern->GetItem(ATTR_MARGIN);
                     sal_uInt16 nMargin = rMItem.GetLeftMargin() + rMItem.GetRightMargin();
-                    if ( static_cast<const SvxHorJustifyItem&>( pPattern->
-                            GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Left )
+                    if ( pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue() == SvxCellHorJustify::Left )
                         nMargin = sal::static_int_cast<sal_uInt16>(
-                            nMargin + static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue() );
+                            nMargin + pPattern->GetItem(ATTR_INDENT).GetValue() );
 
                     nWidth = (sal_uInt16)(nEdit * pDocSh->GetOutputFactor() / HMM_PER_TWIPS)
                                 + nMargin + STD_EXTRA_WIDTH;
@@ -2427,9 +2425,8 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
         {
             const ScPatternAttr* pPattern = rDoc.GetPattern( nCol, nRow, nTab );
             bool bNeedHeight =
-                    static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue() ||
-                    static_cast<const SvxHorJustifyItem&>(pPattern->
-                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block;
+                    pPattern->GetItem( ATTR_LINEBREAK ).GetValue() ||
+                    pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue() == SvxCellHorJustify::Block;
             if (bNeedHeight)
                 AdjustRowHeight( nRow, nRow );
         }

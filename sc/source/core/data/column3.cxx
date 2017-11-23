@@ -522,7 +522,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::
     if (pCFList)
     {
         const ScCondFormatItem& rItem =
-            static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL));
+            pPattern->GetItem(ATTR_CONDITIONAL);
         const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
         pCondSet = pDocument->GetCondResult(aCell, aPos, *pCFList, rData);
     }
@@ -2437,7 +2437,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
     const ScPatternAttr* pPattern = aAttrIter.Next( nTop, nBottom );
     while (pPattern)
     {
-        const ScProtectionAttr* pAttr = static_cast<const ScProtectionAttr*>(&pPattern->GetItem(ATTR_PROTECTION));
+        const ScProtectionAttr* pAttr = &pPattern->GetItem(ATTR_PROTECTION);
         if ( pAttr->GetHideCell() )
             DeleteArea( nTop, nBottom, InsertDeleteFlags::CONTENTS );
         else if ( pAttr->GetHideFormula() )

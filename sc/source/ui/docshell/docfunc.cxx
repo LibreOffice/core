@@ -1868,8 +1868,8 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             const ScMergeFlagAttr* pMergeFlagAttr = nullptr;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != nullptr )
             {
-                const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
-                pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
+                const ScMergeAttr* pMergeFlag = &pPattern->GetItem(ATTR_MERGE);
+                pMergeFlagAttr = &pPattern->GetItem(ATTR_MERGE_FLAG);
                 ScMF nNewFlags = pMergeFlagAttr->GetValue() & ( ScMF::Hor | ScMF::Ver );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == ScMF::Hor || nNewFlags == ScMF::Ver )
                 {
@@ -2346,8 +2346,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             const ScMergeFlagAttr* pMergeFlagAttr = nullptr;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != nullptr )
             {
-                const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
-                pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
+                const ScMergeAttr* pMergeFlag = &pPattern->GetItem( ATTR_MERGE );
+                pMergeFlagAttr = &pPattern->GetItem( ATTR_MERGE_FLAG );
                 ScMF nNewFlags = pMergeFlagAttr->GetValue() & ( ScMF::Hor | ScMF::Ver );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == ScMF::Hor || nNewFlags == ScMF::Ver )
                 {

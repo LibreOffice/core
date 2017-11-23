@@ -107,8 +107,8 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
     {
         const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
-        const ScMergeAttr&      rMergeAttr      = static_cast<const ScMergeAttr&>(      pAttr->GetItem( ATTR_MERGE ));
-        const SvxVerJustifyItem& rVerJustifyItem= static_cast<const SvxVerJustifyItem&>(pAttr->GetItem( ATTR_VER_JUSTIFY ));
+        const ScMergeAttr&      rMergeAttr      = pAttr->GetItem( ATTR_MERGE );
+        const SvxVerJustifyItem& rVerJustifyItem= pAttr->GetItem( ATTR_VER_JUSTIFY );
 
         const sal_Char* pChar;
 
@@ -116,7 +116,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
             rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CLMGF );
         else
         {
-            const ScMergeFlagAttr& rMergeFlagAttr = static_cast<const ScMergeFlagAttr&>( pAttr->GetItem( ATTR_MERGE_FLAG ) );
+            const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG );
             if ( rMergeFlagAttr.IsHorOverlapped() )
                 rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CLMRG );
         }
@@ -155,7 +155,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 {
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
 
-    const ScMergeFlagAttr& rMergeFlagAttr = static_cast<const ScMergeFlagAttr&>( pAttr->GetItem( ATTR_MERGE_FLAG ) );
+    const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG );
     if ( rMergeFlagAttr.IsHorOverlapped() )
     {
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
@@ -191,10 +191,10 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 
     bool bResetAttr(false);
 
-    const SvxHorJustifyItem&    rHorJustifyItem = static_cast<const SvxHorJustifyItem&>(pAttr->GetItem( ATTR_HOR_JUSTIFY ));
-    const SvxWeightItem&        rWeightItem     = static_cast<const SvxWeightItem&>(    pAttr->GetItem( ATTR_FONT_WEIGHT ));
-    const SvxPostureItem&       rPostureItem    = static_cast<const SvxPostureItem&>(   pAttr->GetItem( ATTR_FONT_POSTURE ));
-    const SvxUnderlineItem&     rUnderlineItem  = static_cast<const SvxUnderlineItem&>( pAttr->GetItem( ATTR_FONT_UNDERLINE ));
+    const SvxHorJustifyItem&    rHorJustifyItem = pAttr->GetItem( ATTR_HOR_JUSTIFY );
+    const SvxWeightItem&        rWeightItem     = pAttr->GetItem( ATTR_FONT_WEIGHT );
+    const SvxPostureItem&       rPostureItem    = pAttr->GetItem( ATTR_FONT_POSTURE );
+    const SvxUnderlineItem&     rUnderlineItem  = pAttr->GetItem( ATTR_FONT_UNDERLINE );
 
     const sal_Char* pChar;
 

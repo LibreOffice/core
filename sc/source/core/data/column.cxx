@@ -1765,7 +1765,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
-        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( pPattern->GetItem( ATTR_MERGE_FLAG ).IsScenario() )
         {
             DeleteArea( nStart, nEnd, InsertDeleteFlags::CONTENTS );
             sc::CopyToDocContext aCxt(*pDocument);
@@ -1793,7 +1793,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
-        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( pPattern->GetItem( ATTR_MERGE_FLAG ).IsScenario() )
         {
             rDestCol.DeleteArea( nStart, nEnd, InsertDeleteFlags::CONTENTS );
             sc::CopyToDocContext aCxt(*rDestCol.pDocument);
@@ -1818,7 +1818,7 @@ bool ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern && bOk)
     {
-        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( pPattern->GetItem( ATTR_MERGE_FLAG ).IsScenario() )
             if ( rDestCol.pAttrArray->HasAttrib( nStart, nEnd, HasAttrFlags::Protected ) )
                 bOk = false;
 
@@ -1836,7 +1836,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
-        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( pPattern->GetItem( ATTR_MERGE_FLAG ).IsScenario() )
         {
             aRange.aStart.SetRow( nStart );
             aRange.aEnd.SetRow( nEnd );

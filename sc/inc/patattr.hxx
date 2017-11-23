@@ -69,9 +69,16 @@ public:
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }
+    template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const
+    { return static_cast<const T&>(GetItem(sal_uInt16(nWhich))); }
 
     static const SfxPoolItem& GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
+    template<class T> static const T& GetItem( TypedWhichId<T> nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
+    { return static_cast<const T&>(GetItem(sal_uInt16(nWhich), rItemSet, pCondSet)); }
+
     const SfxPoolItem&      GetItem( sal_uInt16 nWhich, const SfxItemSet* pCondSet ) const;
+    template<class T> const T& GetItem( TypedWhichId<T> nWhich, const SfxItemSet* pCondSet  ) const
+    { return static_cast<const T&>(GetItem(sal_uInt16(nWhich), pCondSet)); }
 
                             /// @param pWhich are no ranges, but single IDs, 0-terminated
     bool                    HasItemsSet( const sal_uInt16* pWhich ) const;

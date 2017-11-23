@@ -1223,8 +1223,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             SCROW nRow2 = -1;
             while ( ( pPattern = aIter.GetNext( nCol, nRow1, nRow2 ) ) != nullptr )
             {
-                const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
-                const ScMergeFlagAttr* pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
+                const ScMergeAttr* pMergeFlag = &pPattern->GetItem(ATTR_MERGE);
+                const ScMergeFlagAttr* pMergeFlagAttr = &pPattern->GetItem(ATTR_MERGE_FLAG);
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || ( pMergeFlagAttr && pMergeFlagAttr->IsOverlapped() ) )
                 {
                     ScRange aRange(nCol, nRow1, nStartTab);
