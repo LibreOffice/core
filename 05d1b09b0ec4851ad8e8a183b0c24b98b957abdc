@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a7e095fb",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-11-23T09:18:53Z",
+      "side": 1,
+      "message": "This FIXME is a remnant from ooo times, which is no longer valid. (Message already has its own string.)\n\nBetter get rid of the comment and write this part on a single line.",
+      "range": {
+        "startLine": 873,
+        "startChar": 8,
+        "endLine": 875,
+        "endChar": 48
+      },
+      "revId": "05d1b09b0ec4851ad8e8a183b0c24b98b957abdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
