@@ -1254,7 +1254,151 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="61">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce32" table:formula="of:=FIND([.I16];[.J16])" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#VALUE!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:#VALUE!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#VALUE!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35" table:formula="of:=ISERROR([.A16])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=FIND(I16;J16)" calcext:value-type="string">
+      <text:p>=FIND(I16;J16)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 has same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+      <text:p>B😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+      <text:p>ab😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce32" table:formula="of:=FIND([.I17];[.J16])" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce36" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=FIND(I17;J16)" calcext:value-type="string">
+      <text:p>=FIND(I17;J16)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 has same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+      <text:p>😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce32" table:formula="of:=FIND([.I18];[.J18])" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=FIND(I18;J18)" calcext:value-type="string">
+      <text:p>=FIND(I18;J18)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns 4</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+      <text:p>𧀬</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce44" office:value-type="string" calcext:value-type="string"><text:p>&quot;<text:span text:style-name="T1">𧌒𧀬</text:span>&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce32" table:formula="of:=FIND([.I19];[.J16])" office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce38" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=FIND(I19;J16)" calcext:value-type="string">
+      <text:p>=FIND(I19;J16)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns 10</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro3">
+     <table:table-cell table:style-name="ce32" table:formula="of:=FIND([.I20];[.J20])" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" table:formula="of:=[.A20]=[.B20]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=FIND(I20;J20)" calcext:value-type="string">
+      <text:p>=FIND(I20;J20)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 has same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+      <text:p>e</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce45" office:value-type="string" calcext:value-type="string">
+      <text:p>&quot;üë&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce32" table:formula="of:=FIND([.I21];[.J21])" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=FIND(I21;J21)" calcext:value-type="string">
+      <text:p>=FIND(I21;J21)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns 5</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+      <text:p>𝖍𝖙</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce46" office:value-type="string" calcext:value-type="string">
+      <text:p>𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="55">
      <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce27"/>
