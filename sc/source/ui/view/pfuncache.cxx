@@ -163,7 +163,8 @@ SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
 long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 {
     long nRet = 0;
-    for ( SCTAB i=0; i<nTab&& i < static_cast<SCTAB>(nPages.size()); i++ )
+    const SCTAB maxIndex = std::max(nTab, static_cast<SCTAB>(nPages.size()));
+    for ( SCTAB i=0; i<maxIndex; i++ )
         nRet += nPages[i];
     return nRet;
 }
@@ -174,17 +175,13 @@ long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
 
     long nDisplayStart = 0;
     ScDocument& rDoc = pDocSh->GetDocument();
-    for (SCTAB i=0; i<nTab; i++)
+    const SCTAB maxIndex = std::max(nTab, static_cast<SCTAB>(nPages.size()));
+    for (SCTAB i=0; i<maxIndex; i++)
     {
         if ( rDoc.NeedPageResetAfterTab(i) )
             nDisplayStart = 0;
         else
-        {
-            if ( i < static_cast<SCTAB>(nPages.size()) )
-                nDisplayStart += nPages[i];
-            else
-                OSL_FAIL("nPages out of bounds, FIX IT!");
-        }
+            nDisplayStart += nPages[i];
     }
     return nDisplayStart;
 }
