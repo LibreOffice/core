@@ -22,30 +22,34 @@
 
 #include "types.hxx"
 #include "address.hxx"
+#include "column.hxx"
 
 #include <vector>
 
-class ScColumn;
-class ScDocument;
-
-class ScColContainer
+class ScColContainer final
 {
-    typedef std::vector<ScColumn*> ScColumnVector;
-    ScColumnVector    aCols;
-    ScDocument*       pDocument;
+    std::vector<ScColumn> aCols;
 
 public:
-    ScColContainer( ScDocument* pDoc, const size_t nSize );
-    ~ScColContainer();
+
+    ScColContainer(const size_t nSize)
+      : aCols(nSize)
+    {
+    }
+
+    ~ScColContainer()
+    {
+        Clear();
+    }
 
     const ScColumn& operator[] ( const size_t nIndex ) const
     {
-        return *aCols[nIndex];
+        return aCols[nIndex];
     }
 
     ScColumn& operator[] ( const size_t nIndex )
     {
-        return *aCols[nIndex];
+        return aCols[nIndex];
     }
 
     SCCOL size() const
@@ -58,9 +62,14 @@ public:
         return aCols.empty();
     }
 
-    void Clear();
-};
+    void Clear()
+    {
+        for (ScColumn& rCol: aCols)
+            rCol.PrepareBroadcastersForDestruction();
 
+        aCols.clear();
+    }
+};
 
 #endif
 

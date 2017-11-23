@@ -18,32 +18,4 @@
  */
 
 
-#include "colcontainer.hxx"
-#include "column.hxx"
-#include "document.hxx"
-
-ScColContainer::ScColContainer( ScDocument* pDoc, const size_t nSize )
-{
-    pDocument = pDoc;
-    aCols.resize( nSize );
-    for ( size_t nCol = 0; nCol < nSize; ++nCol )
-        aCols[nCol] = new ScColumn;
-}
-
-ScColContainer::~ScColContainer()
-{
-    Clear();
-}
-
-
-void ScColContainer::Clear()
-{
-    SCCOL nSize = size();
-    for ( SCCOL nIdx = 0; nIdx < nSize; ++nIdx )
-    {
-        aCols[nIdx]->PrepareBroadcastersForDestruction();
-        delete aCols[nIdx];
-    }
-    aCols.clear();
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
