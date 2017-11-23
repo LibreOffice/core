@@ -15,7 +15,16 @@ void f1(int a, int b)
     }
 };
 
-// Consitently either warn about all or none of the below occurrences of "!!":
+void f2(float a, float b)
+{
+    // no warning expected
+    if (!(a < b))
+    {
+        a = b;
+    }
+};
+
+// Consistently either warn about all or none of the below occurrences of "!!":
 
 enum E1
 {
