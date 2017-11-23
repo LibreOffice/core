@@ -567,7 +567,7 @@ void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle )
 
 void ScColumn::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
 {
-    pAttrArray->ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>(&rStyle));
+    pAttrArray->ApplyStyleArea(nStartRow, nEndRow, rStyle);
 }
 
 void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
@@ -579,7 +579,7 @@ void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData&
     {
         ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
         while (aMultiIter.Next( nTop, nBottom ))
-            pAttrArray->ApplyStyleArea(nTop, nBottom, const_cast<ScStyleSheet*>(&rStyle));
+            pAttrArray->ApplyStyleArea(nTop, nBottom, rStyle);
     }
 }
 

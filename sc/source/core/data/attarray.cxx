@@ -605,7 +605,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
 #endif
 }
 
-void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle )
+void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
@@ -625,7 +625,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
         {
             const ScPatternAttr* pOldPattern = mvData[nPos].pPattern;
             std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
-            pNewPattern->SetStyleSheet(pStyle);
+            pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(&rStyle));
             SCROW nY1 = nStart;
             SCROW nY2 = mvData[nPos].nEndRow;
             nStart = mvData[nPos].nEndRow + 1;
