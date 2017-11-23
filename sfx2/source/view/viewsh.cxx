@@ -1955,7 +1955,7 @@ void SfxViewShell::notifyDialog(const vcl::DialogID& rDialogId, const OUString& 
 
 void SfxViewShell::notifyDialogChild(const vcl::DialogID& rDialogId, const OUString& rAction, const Point& rPos)
 {
-    SfxLokHelper::notifyDialog(rDialogId, rAction);
+    SfxLokHelper::notifyDialogChild(rDialogId, rAction, rPos);
 }
 
 void SfxViewShell::RegisterDlg(vcl::DialogID nDialogId, VclPtr<Dialog> pDlg)
