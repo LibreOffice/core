@@ -24,6 +24,7 @@
 #include "MacabHeader.hxx"
 #include "MacabRecord.hxx"
 
+#include <memory>
 #include <vector>
 
 namespace connectivity
@@ -51,7 +52,7 @@ namespace connectivity
 
         class MacabComplexOrder : public MacabOrder
         {
-            std::vector<MacabOrder *> m_aOrders;
+            std::vector<std::unique_ptr<MacabOrder>> m_aOrders;
 
         public:
             MacabComplexOrder();

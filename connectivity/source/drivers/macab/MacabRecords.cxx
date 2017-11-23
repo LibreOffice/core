@@ -188,8 +188,6 @@ void MacabRecords::initialize()
 
 MacabRecords::~MacabRecords()
 {
-    delete [] lcl_CFTypes;
-    delete [] requiredProperties;
 }
 
 
@@ -315,26 +313,13 @@ sal_Int32 MacabRecords::getFieldNumber(const OUString& _columnName) const
  */
 void MacabRecords::bootstrap_CF_types()
 {
-    lcl_CFTypesLength = 6;
-    lcl_CFTypes = new lcl_CFType[lcl_CFTypesLength];
-
-    lcl_CFTypes[0].cf = CFNumberGetTypeID();
-    lcl_CFTypes[0].ab = kABIntegerProperty;
-
-    lcl_CFTypes[1].cf = CFStringGetTypeID();
-    lcl_CFTypes[1].ab = kABStringProperty;
-
-    lcl_CFTypes[2].cf = CFDateGetTypeID();
-    lcl_CFTypes[2].ab = kABDateProperty;
-
-    lcl_CFTypes[3].cf = CFArrayGetTypeID();
-    lcl_CFTypes[3].ab = kABArrayProperty;
-
-    lcl_CFTypes[4].cf = CFDictionaryGetTypeID();
-    lcl_CFTypes[4].ab = kABDictionaryProperty;
-
-    lcl_CFTypes[5].cf = CFDataGetTypeID();
-    lcl_CFTypes[5].ab = kABDataProperty;
+    lcl_CFTypes = {
+        {CFNumberGetTypeID(), kABIntegerProperty},
+        {CFStringGetTypeID(), kABStringProperty},
+        {CFDateGetTypeID(), kABDateProperty},
+        {CFArrayGetTypeID(), kABArrayProperty},
+        {CFDictionaryGetTypeID(), kABDictionaryProperty},
+        {CFDataGetTypeID(), kABDataProperty}};
 }
 
 
@@ -344,15 +329,9 @@ void MacabRecords::bootstrap_CF_types()
  */
 void MacabRecords::bootstrap_requiredProperties()
 {
-    numRequiredProperties = 7;
-    requiredProperties = new CFStringRef[numRequiredProperties];
-    requiredProperties[0] = kABTitleProperty;
-    requiredProperties[1] = kABFirstNameProperty;
-    requiredProperties[2] = kABLastNameProperty;
-    requiredProperties[3] = kABOrganizationProperty;
-    requiredProperties[4] = kABAddressProperty;
-    requiredProperties[5] = kABPhoneProperty;
-    requiredProperties[6] = kABEmailProperty;
+    requiredProperties = {
+        kABTitleProperty, kABFirstNameProperty, kABLastNameProperty, kABOrganizationProperty,
+        kABAddressProperty, kABPhoneProperty, kABEmailProperty};
 }
 
 
@@ -384,12 +363,12 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     CFStringRef *nonRequiredProperties;
     sal_Int32 numRecords = (sal_Int32) CFArrayGetCount(_records);
     sal_Int32 numProperties = (sal_Int32) CFArrayGetCount(allProperties);
-    sal_Int32 numNonRequiredProperties = numProperties - numRequiredProperties;
+    sal_Int32 numNonRequiredProperties = numProperties - requiredProperties.size();
 
     /* While searching through the properties for required properties, these
      * sal_Bools will keep track of what we have found.
      */
-    bool bFoundRequiredProperties[numRequiredProperties];
+    bool bFoundRequiredProperties[requiredProperties.size()];
 
 
     /* We have three MacabHeaders: headerDataForProperty is where we
@@ -404,7 +383,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     MacabHeader *nonRequiredHeader = new MacabHeader();
 
     /* Other variables... */
-    sal_Int32 i, j, k;
+    sal_Int32 k;
     ABRecordRef record;
     CFStringRef property;
 
@@ -412,15 +391,15 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     /* Allocate and initialize... */
     nonRequiredProperties = new CFStringRef[numNonRequiredProperties];
     k = 0;
-    for(i = 0; i < numRequiredProperties; i++)
+    for(std::vector<CFStringRef>::size_type i = 0; i < requiredProperties.size(); i++)
         bFoundRequiredProperties[i] = false;
 
     /* Determine the non-required properties... */
-    for(i = 0; i < numProperties; i++)
+    for(sal_Int32 i = 0; i < numProperties; i++)
     {
         bool bFoundProperty = false;
         property = static_cast<CFStringRef>(CFArrayGetValueAtIndex(allProperties, i));
-        for(j = 0; j < numRequiredProperties; j++)
+        for(std::vector<CFStringRef>::size_type j = 0; j < requiredProperties.size(); j++)
         {
             if(CFEqual(property, requiredProperties[j]))
             {
@@ -449,7 +428,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     OSL_ENSURE(k == numNonRequiredProperties, "MacabRecords::createHeaderForRecordType: Found an unexpected number of non-required properties");
 
     /* Fill the header with required properties first... */
-    for(i = 0; i < numRequiredProperties; i++)
+    for(std::vector<CFStringRef>::size_type i = 0; i < requiredProperties.size(); i++)
     {
         if(bFoundRequiredProperties[i])
         {
@@ -464,7 +443,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
              * e-mail addresses for one of her or his contacts, and we need to
              * get all of them.
              */
-            for(j = 0; j < numRecords; j++)
+            for(sal_Int32 j = 0; j < numRecords; j++)
             {
                 record = const_cast<ABRecordRef>(CFArrayGetValueAtIndex(_records, j));
                 headerDataForProperty = createHeaderForProperty(record,requiredProperties[i],_recordType,true);
@@ -484,11 +463,11 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     }
 
     /* And now, non-required properties... */
-    for(i = 0; i < numRecords; i++)
+    for(sal_Int32 i = 0; i < numRecords; i++)
     {
         record = const_cast<ABRecordRef>(CFArrayGetValueAtIndex(_records, i));
 
-        for(j = 0; j < numNonRequiredProperties; j++)
+        for(sal_Int32 j = 0; j < numNonRequiredProperties; j++)
         {
             property = nonRequiredProperties[j];
             headerDataForProperty = createHeaderForProperty(record,property,_recordType,false);
@@ -1115,13 +1094,12 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
 
 ABPropertyType MacabRecords::getABTypeFromCFType(const CFTypeID cf_type ) const
 {
-    sal_Int32 i;
-    for(i = 0; i < lcl_CFTypesLength; i++)
+    for(auto const & i: lcl_CFTypes)
     {
         /* A match! */
-        if(lcl_CFTypes[i].cf == (sal_Int32) cf_type)
+        if(i.cf == cf_type)
         {
-            return (ABPropertyType) lcl_CFTypes[i].ab;
+            return (ABPropertyType) i.ab;
         }
     }
     return kABErrorInProperty;
