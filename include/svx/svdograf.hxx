@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SVDOGRAF_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
 #include <svtools/grfmgr.hxx>
@@ -104,6 +105,16 @@ private:
     // #i25616#
     bool mbInsidePaint:1;
     bool mbIsPreview:1;
+
+    bool mbIsSignatureLine;
+    OUString maSignatureLineId;
+    OUString maSignatureLineSuggestedSignerName;
+    OUString maSignatureLineSuggestedSignerTitle;
+    OUString maSignatureLineSuggestedSignerEmail;
+    OUString maSignatureLineSigningInstructions;
+    bool mbIsSignatureLineShowSignDate;
+    bool mbIsSignatureLineCanAddComment;
+    css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
 private:
 
@@ -210,6 +221,65 @@ public:
 
     // add handles for crop mode when selected
     virtual void addCropHandles(SdrHdlList& rTarget) const override;
+
+    // Signature Line
+    void setIsSignatureLine(bool bIsSignatureLine) { mbIsSignatureLine = bIsSignatureLine; };
+    bool isSignatureLine() const { return mbIsSignatureLine; };
+    void setSignatureLineId(const OUString& rSignatureLineId)
+    {
+        maSignatureLineId = rSignatureLineId;
+    };
+    const OUString& getSignatureLineId() const { return maSignatureLineId; };
+    void setSignatureLineSuggestedSignerName(const OUString& rSuggestedSignerName)
+    {
+        maSignatureLineSuggestedSignerName = rSuggestedSignerName;
+    };
+    const OUString& getSignatureLineSuggestedSignerName() const
+    {
+        return maSignatureLineSuggestedSignerName;
+    };
+    void setSignatureLineSuggestedSignerTitle(const OUString& rSuggestedSignerTitle)
+    {
+        maSignatureLineSuggestedSignerTitle = rSuggestedSignerTitle;
+    };
+    const OUString& getSignatureLineSuggestedSignerTitle() const
+    {
+        return maSignatureLineSuggestedSignerTitle;
+    };
+    void setSignatureLineSuggestedSignerEmail(const OUString& rSuggestedSignerEmail)
+    {
+        maSignatureLineSuggestedSignerEmail = rSuggestedSignerEmail;
+    };
+    const OUString& getSignatureLineSuggestedSignerEmail() const
+    {
+        return maSignatureLineSuggestedSignerEmail;
+    };
+    void setSignatureLineSigningInstructions(const OUString& rSigningInstructions)
+    {
+        maSignatureLineSigningInstructions = rSigningInstructions;
+    };
+    const OUString& getSignatureLineSigningInstructions() const
+    {
+        return maSignatureLineSigningInstructions;
+    };
+    void setSignatureLineShowSignDate(bool bIsSignatureLineShowSignDate)
+    {
+        mbIsSignatureLineShowSignDate = bIsSignatureLineShowSignDate;
+    };
+    bool isSignatureLineShowSignDate() const { return mbIsSignatureLineShowSignDate; };
+    void setSignatureLineCanAddComment(bool bIsSignatureCanAddComment)
+    {
+        mbIsSignatureLineCanAddComment = bIsSignatureCanAddComment;
+    };
+    bool isSignatureLineCanAddComment() const { return mbIsSignatureLineCanAddComment; };
+    const css::uno::Reference<css::graphic::XGraphic> getSignatureLineUnsignedGraphic() const
+    {
+        return mpSignatureLineUnsignedGraphic;
+    };
+    void setSignatureLineUnsignedGraphic(css::uno::Reference<css::graphic::XGraphic> rGraphic)
+    {
+        mpSignatureLineUnsignedGraphic = rGraphic;
+    };
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX
