@@ -34,6 +34,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <sfx2/shell.hxx>
 #include <tools/gen.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -140,7 +141,7 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
-class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell
+class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::IDialogNotifier
 {
 #ifdef INCLUDED_SFX2_VIEWSH_HXX
 friend class SfxViewFrame;
@@ -220,6 +221,10 @@ public:
 
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
+
+    // IDialogNotifier
+    virtual void                notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
+    virtual void                notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos) override;
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );

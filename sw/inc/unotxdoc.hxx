@@ -443,12 +443,6 @@ public:
     void postDialogChildMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
                                    int nCount, int nButtons, int nModifier) override;
 
-    void notifyDialog(const vcl::DialogID& rDialogID,
-                      const OUString& rAction,
-                      const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
-
-    void notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos) override;
-
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
 

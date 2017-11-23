@@ -3801,18 +3801,6 @@ void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, 
     }
 }
 
-void SwXTextDocument::notifyDialog(const vcl::DialogID& rDialogID,
-                                   const OUString& rAction,
-                                   const std::vector<vcl::LOKPayloadItem>& rPayload)
-{
-    SfxLokHelper::notifyDialog(rDialogID, rAction, rPayload);
-}
-
-void SwXTextDocument::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)
-{
-    SfxLokHelper::notifyDialogChild(rDialogID, rAction, rPos);
-}
-
 void SwXTextDocument::paintActiveFloatingWindow(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight)
 {
     SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();

@@ -1948,6 +1948,16 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
     return xRender;
 }
 
+void SfxViewShell::notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
+{
+    SfxLokHelper::notifyDialog(rDialogID, rAction, rPayload);
+}
+
+void SfxViewShell::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)
+{
+    SfxLokHelper::notifyDialog(rDialogID, rAction);
+}
+
 uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetClipboardNotifier()
 {
     uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClipboardNotifier;
