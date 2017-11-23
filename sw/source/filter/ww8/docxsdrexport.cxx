@@ -919,20 +919,19 @@ void DocxSdrExport::Impl::textFrameShadow(const SwFrameFormat& rFrameFormat)
 
 bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape)
 {
-    bool supported = true;
-
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
-    if (xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonShape") || xServiceInfo->supportsService("com.sun.star.drawing.PolyLineShape"))
-        supported = false;
+    if (xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonShape")
+        || xServiceInfo->supportsService("com.sun.star.drawing.PolyLineShape"))
+        return false;
 
     // For signature line shapes, we don't want DML, just the VML shape.
     bool bIsSignatureLineShape = false;
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     xShapeProperties->getPropertyValue("IsSignatureLine") >>= bIsSignatureLineShape;
     if (bIsSignatureLineShape)
-        supported = false;
+        return false;
 
-    return supported;
+    return true;
 }
 
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat, int nAnchorId)
