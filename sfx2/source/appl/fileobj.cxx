@@ -413,7 +413,7 @@ void SvFileObject::Edit(vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Lin
                     sFile = aDlg.GetPath()
                         + OUStringLiteral1(sfx2::cTokenSeparator)
                         + OUStringLiteral1(sfx2::cTokenSeparator)
-                        + aDlg.GetCurrentFilter();
+                        + aDlg.GetDetectedFilter();
 
                     aEndEditLink.Call( sFile );
                 }

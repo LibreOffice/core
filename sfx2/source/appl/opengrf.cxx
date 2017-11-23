@@ -73,6 +73,7 @@ struct SvxOpenGrf_Impl
     SvxOpenGrf_Impl(const vcl::Window* pPreferredParent);
 
     sfx2::FileDialogHelper                  aFileDlg;
+    OUString sDetectedFilter;
     uno::Reference < XFilePickerControlAccess > xCtrlAcc;
 };
 
@@ -153,11 +154,15 @@ ErrCode SvxOpenGraphicDialog::Execute()
             }
             else
             {
-                // setup appropriate filter (so next time, it will work)
                 if( rFilter.GetImportFormatCount() )
                 {
-                    OUString  aFormatName(rFilter.GetImportFormatName(nFound));
-                    SetCurrentFilter(aFormatName);
+                    // store detected appropriate filter
+                    OUString aFormatName(rFilter.GetImportFormatName(nFound));
+                    SetDetectedFilter(aFormatName);
+                }
+                else
+                {
+                    SetDetectedFilter(mpImpl->aFileDlg.GetCurrentFilter());
                 }
 
                 return nImpRet;
@@ -234,28 +239,34 @@ bool SvxOpenGraphicDialog::IsAsLink() const
     return false;
 }
 
-
 ErrCode SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 {
     return mpImpl->aFileDlg.GetGraphic(rGraphic);
 }
-
 
 OUString SvxOpenGraphicDialog::GetPath() const
 {
     return mpImpl->aFileDlg.GetPath();
 }
 
-
 OUString SvxOpenGraphicDialog::GetCurrentFilter() const
 {
     return mpImpl->aFileDlg.GetCurrentFilter();
 }
 
+OUString SvxOpenGraphicDialog::GetDetectedFilter() const
+{
+    return mpImpl->sDetectedFilter;
+}
 
 void SvxOpenGraphicDialog::SetCurrentFilter(const OUString& rStr)
 {
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
+}
+
+void SvxOpenGraphicDialog::SetDetectedFilter(const OUString& rStr)
+{
+    mpImpl->sDetectedFilter = rStr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
