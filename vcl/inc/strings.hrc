@@ -92,6 +92,8 @@
 
 #define STR_FPICKER_AUTO_EXTENSION                   NC_("STR_FPICKER_AUTO_EXTENSION", "~Automatic file name extension")
 #define STR_FPICKER_PASSWORD                         NC_("STR_FPICKER_PASSWORD", "Save with pass~word")
+// dear loplugins, please don't remove this constant, it will be used in follow-up commits
+#define STR_FPICKER_GPGENCRYPT                       NC_("STR_FPICKER_GPGENCRYPT", "Encrypt with ~GPG key")
 #define STR_FPICKER_FILTER_OPTIONS                   NC_("STR_FPICKER_FILTER_OPTIONS", "~Edit filter settings")
 #define STR_FPICKER_READONLY                         NC_("STR_FPICKER_READONLY", "~Read-only")
 #define STR_FPICKER_INSERT_AS_LINK                   NC_("STR_FPICKER_INSERT_AS_LINK", "Insert as ~Link")

@@ -13,6 +13,8 @@
 
 #define STR_SVT_FILEPICKER_AUTO_EXTENSION           NC_("STR_SVT_FILEPICKER_AUTO_EXTENSION", "~Automatic file name extension")
 #define STR_SVT_FILEPICKER_PASSWORD                 NC_("STR_SVT_FILEPICKER_PASSWORD", "Save with pass~word")
+//dear loplugins, please don't remove this constant, it will be used in follow-up commits
+#define STR_SVT_FILEPICKER_GPGENCRYPT               NC_("STR_SVT_FILEPICKER_GPGENCRYPT", "Encrypt with ~GPG key")
 #define STR_SVT_FILEPICKER_FILTER_OPTIONS           NC_("STR_SVT_FILEPICKER_FILTER_OPTIONS", "~Edit filter settings")
 #define STR_SVT_FILEPICKER_READONLY                 NC_("STR_SVT_FILEPICKER_READONLY", "~Read-only")
 #define STR_SVT_FILEPICKER_INSERT_AS_LINK           NC_("STR_SVT_FILEPICKER_INSERT_AS_LINK", "~Link")
