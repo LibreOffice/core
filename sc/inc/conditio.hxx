@@ -409,8 +409,7 @@ class SC_DLLPUBLIC ScConditionalFormat
     ScDocument*         pDoc;
     sal_uInt32          nKey;               // Index in attributes
 
-    typedef std::vector<std::unique_ptr<ScFormatEntry>> CondFormatContainer;
-    CondFormatContainer maEntries;
+    std::vector<std::unique_ptr<ScFormatEntry>> maEntries;
     ScRangeList maRanges;            // Ranges for conditional format
 
 public:
