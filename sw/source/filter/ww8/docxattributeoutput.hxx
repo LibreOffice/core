@@ -370,6 +370,7 @@ public:
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
+    void WriteFinalBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void PushRelIdCache();
     void PopRelIdCache();
@@ -699,8 +700,8 @@ private:
 
     void DoWriteBookmarkTagStart(const OUString & bookmarkName);
     void DoWriteBookmarkTagEnd(const OUString & bookmarkName);
-    void DoWriteBookmarksStart();
-    void DoWriteBookmarksEnd();
+    void DoWriteBookmarksStart(std::vector<OUString>& rStarts);
+    void DoWriteBookmarksEnd(std::vector<OUString>& rEnds);
     void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
     void DoWriteBookmarkEndIfExist(sal_Int32 nRunPos);
 
@@ -790,6 +791,10 @@ private:
     /// Bookmarks to output
     std::vector<OUString> m_rBookmarksStart;
     std::vector<OUString> m_rBookmarksEnd;
+
+    /// Bookmarks to output at the end
+    std::vector<OUString> m_rFinalBookmarksStart;
+    std::vector<OUString> m_rFinalBookmarksEnd;
 
     /// Bookmarks of the current paragraph
     std::multimap<sal_Int32, OUString> m_aBookmarksOfParagraphStart;
