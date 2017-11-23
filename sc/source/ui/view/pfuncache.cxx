@@ -163,7 +163,8 @@ SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
 long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 {
     long nRet = 0;
-    for ( SCTAB i=0; i<nTab&& i < static_cast<SCTAB>(nPages.size()); i++ )
+    const SCTAB maxIndex = std::min(nTab, static_cast<SCTAB>(nPages.size()));
+    for ( SCTAB i=0; i<maxIndex; i++ )
         nRet += nPages[i];
     return nRet;
 }

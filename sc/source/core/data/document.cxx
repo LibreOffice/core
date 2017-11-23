@@ -6275,7 +6275,7 @@ void ScDocument::SetRepeatRowRange( SCTAB nTab, const ScRange* pNew )
 
 ScPrintRangeSaver* ScDocument::CreatePrintRangeSaver() const
 {
-    SCTAB nCount = static_cast<SCTAB>(maTabs.size());
+    const SCTAB nCount = static_cast<SCTAB>(maTabs.size());
     ScPrintRangeSaver* pNew = new ScPrintRangeSaver( nCount );
     for (SCTAB i=0; i<nCount; i++)
         if (maTabs[i])
@@ -6285,8 +6285,9 @@ ScPrintRangeSaver* ScDocument::CreatePrintRangeSaver() const
 
 void ScDocument::RestorePrintRanges( const ScPrintRangeSaver& rSaver )
 {
-    SCTAB nCount = rSaver.GetTabCount();
-    for (SCTAB i=0; i<nCount && i < static_cast<SCTAB>(maTabs.size()); i++)
+    const SCTAB nCount = rSaver.GetTabCount();
+    const SCTAB maxIndex = std::min(nCount, static_cast<SCTAB>(maTabs.size()));
+    for (SCTAB i=0; i<maxIndex; i++)
         if (maTabs[i])
             maTabs[i]->RestorePrintRanges( rSaver.GetTabData(i) );
 }
@@ -6298,10 +6299,10 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 
     if ( nTab + 1 < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab+1] )
     {
-        OUString aNew = maTabs[nTab+1]->GetPageStyle();
-        if ( aNew != maTabs[nTab]->GetPageStyle() )
+        const OUString & rNew = maTabs[nTab+1]->GetPageStyle();
+        if ( rNew != maTabs[nTab]->GetPageStyle() )
         {
-            SfxStyleSheetBase* pStyle = mxPoolHelper->GetStylePool()->Find( aNew, SfxStyleFamily::Page );
+            SfxStyleSheetBase* pStyle = mxPoolHelper->GetStylePool()->Find( rNew, SfxStyleFamily::Page );
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();
