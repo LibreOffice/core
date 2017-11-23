@@ -1574,7 +1574,7 @@ Dim i As Integer, l As Long
 					lNextQuote = InStr(lUrl, psString, &quot;&quot;&quot;&quot;, 1)
 					If lNextQuote = 0 Then lNextQuote = Len(psString)			&apos;	Should not happen but, if quoted string not closed ...
 					sUrl = Mid(psString, lUrl, lNextQuote - lUrl)
-					sOutput = sOutput &amp; sPattern &amp; Iif(sPattern = &quot;&lt;a id=&quot;&quot;&quot;, sUrl, ConvertToUrl(sUrl)) &amp; &quot;&quot;&quot;&quot;
+					sOutput = sOutput &amp; sPattern &amp; sUrl &amp; &quot;&quot;&quot;&quot;
 					lCurrentChar = lNextQuote + 1
 					bQuote = False
 					bTagEnd = False
