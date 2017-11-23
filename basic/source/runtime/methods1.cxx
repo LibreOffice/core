@@ -1834,17 +1834,26 @@ inline void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int1
     rnYear  = implGetDateYear( dDate );
 }
 
-inline sal_Int16 limitToINT16( sal_Int32 n32 )
+/** Limits a date to valid dates within tools' class Date capabilities.
+
+    @return the year number, truncated if necessary and in that case also
+            rMonth and rDay adjusted.
+ */
+inline sal_Int16 limitDate( sal_Int32 n32Year, sal_Int16& rMonth, sal_Int16& rDay )
 {
-    if( n32 > 32767 )
+    if( n32Year > SAL_MAX_INT16 )
     {
-        n32 = 32767;
+        n32Year = SAL_MAX_INT16;
+        rMonth = 12;
+        rDay = 31;
     }
-    else if( n32 < -32768 )
+    else if( n32Year < SAL_MIN_INT16 )
     {
-        n32 = -32768;
+        n32Year = SAL_MIN_INT16;
+        rMonth = 1;
+        rDay = 1;
     }
-    return (sal_Int16)n32;
+    return (sal_Int16)n32Year;
 }
 
 void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
@@ -1886,7 +1895,8 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
             case INTERVAL_YYYY:
             {
                 sal_Int32 nTargetYear = lNumber + nYear;
-                nTargetYear16 = limitToINT16( nTargetYear );
+                nTargetYear16 = limitDate( nTargetYear, nMonth, nDay );
+                /* TODO: should the result be error if the date was limited? It never was. */
                 nTargetMonth = nMonth;
                 bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, true, dNewDate );
                 break;
@@ -1931,7 +1941,8 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
                     }
                     nTargetYear = (sal_Int32)nYear + nYearsAdd;
                 }
-                nTargetYear16 = limitToINT16( nTargetYear );
+                nTargetYear16 = limitDate( nTargetYear, nTargetMonth, nDay );
+                /* TODO: should the result be error if the date was limited? It never was. */
                 bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, true, dNewDate );
                 break;
             }
