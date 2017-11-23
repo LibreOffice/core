@@ -231,15 +231,15 @@ sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
     sal_uInt16 nLbPos = SC_VALIDDLG_DATA_EQUAL;
     switch( eCondMode )
     {
-        case SC_COND_NONE:          // may occur in old XML files after Excel import
-        case SC_COND_EQUAL:         nLbPos = SC_VALIDDLG_DATA_EQUAL;        break;
-        case SC_COND_LESS:          nLbPos = SC_VALIDDLG_DATA_LESS;         break;
-        case SC_COND_GREATER:       nLbPos = SC_VALIDDLG_DATA_GREATER;      break;
-        case SC_COND_EQLESS:        nLbPos = SC_VALIDDLG_DATA_EQLESS;       break;
-        case SC_COND_EQGREATER:     nLbPos = SC_VALIDDLG_DATA_EQGREATER;    break;
-        case SC_COND_NOTEQUAL:      nLbPos = SC_VALIDDLG_DATA_NOTEQUAL;     break;
-        case SC_COND_BETWEEN:       nLbPos = SC_VALIDDLG_DATA_VALIDRANGE;      break;
-        case SC_COND_NOTBETWEEN:    nLbPos = SC_VALIDDLG_DATA_INVALIDRANGE;   break;
+        case ScConditionMode::NONE:          // may occur in old XML files after Excel import
+        case ScConditionMode::Equal:         nLbPos = SC_VALIDDLG_DATA_EQUAL;        break;
+        case ScConditionMode::Less:          nLbPos = SC_VALIDDLG_DATA_LESS;         break;
+        case ScConditionMode::Greater:       nLbPos = SC_VALIDDLG_DATA_GREATER;      break;
+        case ScConditionMode::EqLess:        nLbPos = SC_VALIDDLG_DATA_EQLESS;       break;
+        case ScConditionMode::EqGreater:     nLbPos = SC_VALIDDLG_DATA_EQGREATER;    break;
+        case ScConditionMode::NotEqual:      nLbPos = SC_VALIDDLG_DATA_NOTEQUAL;     break;
+        case ScConditionMode::Between:       nLbPos = SC_VALIDDLG_DATA_VALIDRANGE;      break;
+        case ScConditionMode::NotBetween:    nLbPos = SC_VALIDDLG_DATA_INVALIDRANGE;   break;
         default:    OSL_FAIL( "lclGetPosFromCondMode - unknown condition mode" );
     }
     return nLbPos;
@@ -248,17 +248,17 @@ sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
 /** Converts the passed list box position to an ScConditionMode. */
 ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
 {
-    ScConditionMode eCondMode = SC_COND_EQUAL;
+    ScConditionMode eCondMode = ScConditionMode::Equal;
     switch( nLbPos )
     {
-        case SC_VALIDDLG_DATA_EQUAL:        eCondMode = SC_COND_EQUAL;      break;
-        case SC_VALIDDLG_DATA_LESS:         eCondMode = SC_COND_LESS;       break;
-        case SC_VALIDDLG_DATA_GREATER:      eCondMode = SC_COND_GREATER;    break;
-        case SC_VALIDDLG_DATA_EQLESS:       eCondMode = SC_COND_EQLESS;     break;
-        case SC_VALIDDLG_DATA_EQGREATER:    eCondMode = SC_COND_EQGREATER;  break;
-        case SC_VALIDDLG_DATA_NOTEQUAL:     eCondMode = SC_COND_NOTEQUAL;   break;
-        case SC_VALIDDLG_DATA_VALIDRANGE:      eCondMode = SC_COND_BETWEEN;    break;
-        case SC_VALIDDLG_DATA_INVALIDRANGE:   eCondMode = SC_COND_NOTBETWEEN; break;
+        case SC_VALIDDLG_DATA_EQUAL:        eCondMode = ScConditionMode::Equal;      break;
+        case SC_VALIDDLG_DATA_LESS:         eCondMode = ScConditionMode::Less;       break;
+        case SC_VALIDDLG_DATA_GREATER:      eCondMode = ScConditionMode::Greater;    break;
+        case SC_VALIDDLG_DATA_EQLESS:       eCondMode = ScConditionMode::EqLess;     break;
+        case SC_VALIDDLG_DATA_EQGREATER:    eCondMode = ScConditionMode::EqGreater;  break;
+        case SC_VALIDDLG_DATA_NOTEQUAL:     eCondMode = ScConditionMode::NotEqual;   break;
+        case SC_VALIDDLG_DATA_VALIDRANGE:      eCondMode = ScConditionMode::Between;    break;
+        case SC_VALIDDLG_DATA_INVALIDRANGE:   eCondMode = ScConditionMode::NotBetween; break;
         default:    OSL_FAIL( "lclGetCondModeFromPos - invalid list box position" );
     }
     return eCondMode;

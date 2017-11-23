@@ -400,11 +400,11 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
 {
     if(rValue.startsWith("unique"))
     {
-        eMode = SC_COND_NOTDUPLICATE;
+        eMode = ScConditionMode::NotDuplicate;
     }
     else if(rValue.startsWith("duplicate"))
     {
-        eMode = SC_COND_DUPLICATE;
+        eMode = ScConditionMode::Duplicate;
     }
     else if(rValue.startsWith("between"))
     {
@@ -413,7 +413,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ',');
         rExpr2 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
-        eMode = SC_COND_BETWEEN;
+        eMode = ScConditionMode::Between;
     }
     else if(rValue.startsWith("not-between"))
     {
@@ -422,37 +422,37 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ',');
         rExpr2 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
-        eMode = SC_COND_NOTBETWEEN;
+        eMode = ScConditionMode::NotBetween;
     }
     else if(rValue.startsWith("<="))
     {
         rExpr1 = rValue.copy(2);
-        eMode = SC_COND_EQLESS;
+        eMode = ScConditionMode::EqLess;
     }
     else if(rValue.startsWith(">="))
     {
         rExpr1 = rValue.copy(2);
-        eMode = SC_COND_EQGREATER;
+        eMode = ScConditionMode::EqGreater;
     }
     else if(rValue.startsWith("!="))
     {
         rExpr1 = rValue.copy(2);
-        eMode = SC_COND_NOTEQUAL;
+        eMode = ScConditionMode::NotEqual;
     }
     else if(rValue.startsWith("<"))
     {
         rExpr1 = rValue.copy(1);
-        eMode = SC_COND_LESS;
+        eMode = ScConditionMode::Less;
     }
     else if(rValue.startsWith("="))
     {
         rExpr1 = rValue.copy(1);
-        eMode = SC_COND_EQUAL;
+        eMode = ScConditionMode::Equal;
     }
     else if(rValue.startsWith(">"))
     {
         rExpr1 = rValue.copy(1);
-        eMode = SC_COND_GREATER;
+        eMode = ScConditionMode::Greater;
     }
     else if(rValue.startsWith("formula-is"))
     {
@@ -460,7 +460,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
         const sal_Unicode* pStart = pStr + 11;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
-        eMode = SC_COND_DIRECT;
+        eMode = ScConditionMode::Direct;
     }
     else if(rValue.startsWith("top-elements"))
     {
@@ -468,7 +468,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
         const sal_Unicode* pStart = pStr + 13;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
-        eMode = SC_COND_TOP10;
+        eMode = ScConditionMode::Top10;
     }
     else if(rValue.startsWith("bottom-elements"))
     {
@@ -476,7 +476,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
         const sal_Unicode* pStart = pStr + 16;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
-        eMode = SC_COND_BOTTOM10;
+        eMode = ScConditionMode::Bottom10;
     }
     else if(rValue.startsWith("top-percent"))
     {
@@ -484,7 +484,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
         const sal_Unicode* pStart = pStr + 12;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
-        eMode = SC_COND_TOP_PERCENT;
+        eMode = ScConditionMode::TopPercent;
     }
     else if(rValue.startsWith("bottom-percent"))
     {
@@ -492,35 +492,35 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
         const sal_Unicode* pStart = pStr + 15;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
-        eMode = SC_COND_BOTTOM_PERCENT;
+        eMode = ScConditionMode::BottomPercent;
     }
     else if(rValue.startsWith("above-average"))
     {
-        eMode = SC_COND_ABOVE_AVERAGE;
+        eMode = ScConditionMode::AboveAverage;
     }
     else if(rValue.startsWith("below-average"))
     {
-        eMode = SC_COND_BELOW_AVERAGE;
+        eMode = ScConditionMode::BelowAverage;
     }
     else if(rValue.startsWith("above-equal-average"))
     {
-        eMode = SC_COND_ABOVE_EQUAL_AVERAGE;
+        eMode = ScConditionMode::AboveEqualAverage;
     }
     else if(rValue.startsWith("below-equal-average"))
     {
-        eMode = SC_COND_BELOW_EQUAL_AVERAGE;
+        eMode = ScConditionMode::BelowEqualAverage;
     }
     else if(rValue.startsWith("is-error"))
     {
-        eMode = SC_COND_ERROR;
+        eMode = ScConditionMode::Error;
     }
     else if(rValue.startsWith("is-no-error"))
     {
-        eMode = SC_COND_NOERROR;
+        eMode = ScConditionMode::NoError;
     }
     else if(rValue.startsWith("begins-with"))
     {
-        eMode = SC_COND_BEGINS_WITH;
+        eMode = ScConditionMode::BeginsWith;
         const sal_Unicode* pStr = rValue.getStr();
         const sal_Unicode* pStart = pStr + 12;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
@@ -528,7 +528,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
     }
     else if(rValue.startsWith("ends-with"))
     {
-        eMode = SC_COND_ENDS_WITH;
+        eMode = ScConditionMode::EndsWith;
         const sal_Unicode* pStr = rValue.getStr();
         const sal_Unicode* pStart = pStr + 10;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
@@ -536,7 +536,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
     }
     else if(rValue.startsWith("contains-text"))
     {
-        eMode = SC_COND_CONTAINS_TEXT;
+        eMode = ScConditionMode::ContainsText;
         const sal_Unicode* pStr = rValue.getStr();
         const sal_Unicode* pStart = pStr + 14;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
@@ -544,14 +544,14 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
     }
     else if(rValue.startsWith("not-contains-text"))
     {
-        eMode = SC_COND_NOT_CONTAINS_TEXT;
+        eMode = ScConditionMode::NotContainsText;
         const sal_Unicode* pStr = rValue.getStr();
         const sal_Unicode* pStart = pStr + 18;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
     }
     else
-        eMode = SC_COND_NONE;
+        eMode = ScConditionMode::NONE;
 }
 
 }
