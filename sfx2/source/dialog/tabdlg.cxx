@@ -21,12 +21,9 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <algorithm>
-#include <vcl/builder.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/IDialogRenderable.hxx>
-#include <unotools/viewoptions.hxx>
 
 #include "appdata.hxx"
+#include <comphelper/lok.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -40,6 +37,10 @@
 #include <sfx2/viewsh.hxx>
 
 #include "uitest/sfx_uiobject.hxx"
+#include <unotools/viewoptions.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/IDialogRenderable.hxx>
 
 #include "dialog.hrc"
 #include "helpid.hrc"
@@ -404,6 +405,13 @@ void SfxTabDialog::dispose()
     m_pBaseFmtBtn.clear();
     m_pActionArea.clear();
 
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        pViewShell->notifyDialog(maID, "close");
+        pViewShell->UnregisterDlg(maID);
+    }
+
     TabDialog::dispose();
 }
 
@@ -513,7 +521,7 @@ short SfxTabDialog::Execute()
     Start_Impl();
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (pViewShell)
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
         pViewShell->RegisterDlg(maID, this);
         registerDialogNotifier(static_cast<vcl::IDialogNotifier*>(pViewShell));

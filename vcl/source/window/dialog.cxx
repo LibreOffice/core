@@ -597,11 +597,6 @@ void Dialog::dispose()
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
 
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier)
-    {
-        mpDialogNotifier->notifyDialog(maID, "close");
-    }
-
     SystemWindow::dispose();
 }
 
