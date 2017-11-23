@@ -91,8 +91,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             {
             case STATE_TOGGLE:
             {
-                short nTmpEsc = static_cast<const SvxEscapementItem&>(
-                            aSet.Get( RES_CHRATR_ESCAPEMENT )).GetEsc();
+                short nTmpEsc = aSet.Get( RES_CHRATR_ESCAPEMENT ).GetEsc();
                 eEscape = nWhich == FN_SET_SUPER_SCRIPT ?
                                 SvxEscapement::Superscript:
                                 SvxEscapement::Subscript;
@@ -137,7 +136,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             {
             case STATE_TOGGLE:
             {
-                SvxCaseMap eTmpCaseMap = static_cast<const SvxCaseMapItem&>(aSet.Get(RES_CHRATR_CASEMAP)).GetCaseMap();
+                SvxCaseMap eTmpCaseMap = aSet.Get(RES_CHRATR_CASEMAP).GetCaseMap();
                 if (eTmpCaseMap == SvxCaseMap::SmallCaps)
                     eCaseMap = SvxCaseMap::NotMapped;
             }
@@ -162,8 +161,8 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             break;
         case FN_UNDERLINE_DOUBLE:
         {
-            FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
-                            aSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
+            FontLineStyle eUnderline =
+                            aSet.Get(RES_CHRATR_UNDERLINE).GetLineStyle();
             switch( eState )
             {
                 case STATE_TOGGLE:
@@ -697,8 +696,8 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 eState = aCoreSet.GetItemState(RES_CHRATR_UNDERLINE);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
-                            aCoreSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
+                    FontLineStyle eUnderline =
+                            aCoreSet.Get(RES_CHRATR_UNDERLINE).GetLineStyle();
                     rSet.Put(SfxBoolItem(nSlot, eUnderline == LINESTYLE_DOUBLE));
                 }
                 else

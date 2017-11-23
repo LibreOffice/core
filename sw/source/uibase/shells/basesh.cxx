@@ -2045,13 +2045,13 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
 
                     sal_Int32 nWesternSize =
                             pStdFont->GetFontHeight(FONT_STANDARD, FONT_GROUP_DEFAULT,
-                            static_cast<const SvxLanguageItem&>(aLangSet.Get( RES_CHRATR_LANGUAGE)).GetLanguage());
+                            aLangSet.Get( RES_CHRATR_LANGUAGE).GetLanguage());
                     sal_Int32 nCJKSize =
                             pStdFont->GetFontHeight(FONT_STANDARD, FONT_GROUP_CJK,
-                            static_cast<const SvxLanguageItem&>(aLangSet.Get( RES_CHRATR_CJK_LANGUAGE)).GetLanguage());
+                            aLangSet.Get( RES_CHRATR_CJK_LANGUAGE).GetLanguage());
                     sal_Int32 nCTLSize =
                             pStdFont->GetFontHeight(FONT_STANDARD, FONT_GROUP_CTL,
-                            static_cast<const SvxLanguageItem&>(aLangSet.Get( RES_CHRATR_CTL_LANGUAGE)).GetLanguage());
+                            aLangSet.Get( RES_CHRATR_CTL_LANGUAGE).GetLanguage());
 
                     switch(nScripts)
                     {

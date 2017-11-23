@@ -741,24 +741,24 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
 
     if( UPDATE_CHAR & eFlags )
     {
-        pFormat->SetFont( static_cast<const SvxFontItem&>(rSet.Get( RES_CHRATR_FONT )) );
-        pFormat->SetHeight( static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_FONTSIZE )) );
-        pFormat->SetWeight( static_cast<const SvxWeightItem&>(rSet.Get( RES_CHRATR_WEIGHT )) );
-        pFormat->SetPosture( static_cast<const SvxPostureItem&>(rSet.Get( RES_CHRATR_POSTURE )) );
-        pFormat->SetCJKFont( static_cast<const SvxFontItem&>(rSet.Get( RES_CHRATR_CJK_FONT )) );
-        pFormat->SetCJKHeight( static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_CJK_FONTSIZE )) );
-        pFormat->SetCJKWeight( static_cast<const SvxWeightItem&>(rSet.Get( RES_CHRATR_CJK_WEIGHT )) );
-        pFormat->SetCJKPosture( static_cast<const SvxPostureItem&>(rSet.Get( RES_CHRATR_CJK_POSTURE )) );
-        pFormat->SetCTLFont( static_cast<const SvxFontItem&>(rSet.Get( RES_CHRATR_CTL_FONT )) );
-        pFormat->SetCTLHeight( static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_CTL_FONTSIZE )) );
-        pFormat->SetCTLWeight( static_cast<const SvxWeightItem&>(rSet.Get( RES_CHRATR_CTL_WEIGHT )) );
-        pFormat->SetCTLPosture( static_cast<const SvxPostureItem&>(rSet.Get( RES_CHRATR_CTL_POSTURE )) );
-        pFormat->SetUnderline( static_cast<const SvxUnderlineItem&>(rSet.Get( RES_CHRATR_UNDERLINE )) );
-        pFormat->SetOverline( static_cast<const SvxOverlineItem&>(rSet.Get( RES_CHRATR_OVERLINE )) );
-        pFormat->SetCrossedOut( static_cast<const SvxCrossedOutItem&>(rSet.Get( RES_CHRATR_CROSSEDOUT )) );
-        pFormat->SetContour( static_cast<const SvxContourItem&>(rSet.Get( RES_CHRATR_CONTOUR )) );
-        pFormat->SetShadowed( static_cast<const SvxShadowedItem&>(rSet.Get( RES_CHRATR_SHADOWED )) );
-        pFormat->SetColor( static_cast<const SvxColorItem&>(rSet.Get( RES_CHRATR_COLOR )) );
+        pFormat->SetFont( rSet.Get( RES_CHRATR_FONT ) );
+        pFormat->SetHeight( rSet.Get( RES_CHRATR_FONTSIZE ) );
+        pFormat->SetWeight( rSet.Get( RES_CHRATR_WEIGHT ) );
+        pFormat->SetPosture( rSet.Get( RES_CHRATR_POSTURE ) );
+        pFormat->SetCJKFont( rSet.Get( RES_CHRATR_CJK_FONT ) );
+        pFormat->SetCJKHeight( rSet.Get( RES_CHRATR_CJK_FONTSIZE ) );
+        pFormat->SetCJKWeight( rSet.Get( RES_CHRATR_CJK_WEIGHT ) );
+        pFormat->SetCJKPosture( rSet.Get( RES_CHRATR_CJK_POSTURE ) );
+        pFormat->SetCTLFont( rSet.Get( RES_CHRATR_CTL_FONT ) );
+        pFormat->SetCTLHeight( rSet.Get( RES_CHRATR_CTL_FONTSIZE ) );
+        pFormat->SetCTLWeight( rSet.Get( RES_CHRATR_CTL_WEIGHT ) );
+        pFormat->SetCTLPosture( rSet.Get( RES_CHRATR_CTL_POSTURE ) );
+        pFormat->SetUnderline( rSet.Get( RES_CHRATR_UNDERLINE ) );
+        pFormat->SetOverline( rSet.Get( RES_CHRATR_OVERLINE ) );
+        pFormat->SetCrossedOut( rSet.Get( RES_CHRATR_CROSSEDOUT ) );
+        pFormat->SetContour( rSet.Get( RES_CHRATR_CONTOUR ) );
+        pFormat->SetShadowed( rSet.Get( RES_CHRATR_SHADOWED ) );
+        pFormat->SetColor( rSet.Get( RES_CHRATR_COLOR ) );
         pFormat->SetAdjust( static_cast<const SvxAdjustItem&>(rSet.Get( RES_PARATR_ADJUST )) );
     }
     if( UPDATE_BOX & eFlags )

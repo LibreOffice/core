@@ -84,9 +84,20 @@
 #include <unomid.h>
 #include <cmdid.h>
 #include <unofldmid.h>
+#include <editeng/colritem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
 #include <editeng/memberids.h>
+#include <editeng/postitem.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/unoprnms.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/xdef.hxx>
 #include "unomapproperties.hxx"
 

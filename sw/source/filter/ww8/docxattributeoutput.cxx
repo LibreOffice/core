@@ -6139,7 +6139,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::NUMBER_LOWER_ZH:
             aType="taiwaneseCountingThousand";
             if (pOutSet) {
-                const SvxLanguageItem rLang = static_cast<const SvxLanguageItem&>( pOutSet->Get( RES_CHRATR_CJK_LANGUAGE) );
+                const SvxLanguageItem rLang = pOutSet->Get( RES_CHRATR_CJK_LANGUAGE);
                 const LanguageType eLang = rLang.GetLanguage();
 
                 if (LANGUAGE_CHINESE_SIMPLIFIED == eLang) {

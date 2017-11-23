@@ -864,8 +864,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
     else if( bRefItemSet )
     {
         // The item was still set in the HTML template so we output the default
-        pColorItem = static_cast<const SvxColorItem*>(&rItemSet.GetPool()
-                                        ->GetDefaultItem( RES_CHRATR_COLOR ));
+        pColorItem = &rItemSet.GetPool()->GetDefaultItem( RES_CHRATR_COLOR );
     }
 
     if( pColorItem )

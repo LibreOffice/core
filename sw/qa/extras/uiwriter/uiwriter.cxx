@@ -3220,14 +3220,14 @@ void SwUiWriterTest::testTdf99689TableOfContents()
     // next node should contain superscript
     SwTextNode* pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
     CPPUNIT_ASSERT( pNext->HasHints() );
-    sal_Int32 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
-    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+    sal_uInt16 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType );
 
     // next node should contain subscript
     pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
     CPPUNIT_ASSERT( pNext->HasHints() );
     nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
-    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType );
 }
 
 void SwUiWriterTest::testTdf99689TableOfFigures()
@@ -3245,14 +3245,14 @@ void SwUiWriterTest::testTdf99689TableOfFigures()
     // next node should contain subscript
     SwTextNode* pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
     CPPUNIT_ASSERT( pNext->HasHints() );
-    sal_Int32 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
-    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+    sal_uInt16 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType );
 
     // next node should contain superscript
     pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
     CPPUNIT_ASSERT( pNext->HasHints() );
     nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
-    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType );
 }
 
 void SwUiWriterTest::testTdf99689TableOfTables()
@@ -3270,14 +3270,14 @@ void SwUiWriterTest::testTdf99689TableOfTables()
     // next node should contain superscript
     SwTextNode* pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
     CPPUNIT_ASSERT( pNext->HasHints() );
-    sal_Int32 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
-    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+    sal_uInt16 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType );
 
     // next node should contain subscript
     pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
     CPPUNIT_ASSERT( pNext->HasHints() );
     nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
-    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType );
 }
 
 void SwUiWriterTest::testTdf83798()

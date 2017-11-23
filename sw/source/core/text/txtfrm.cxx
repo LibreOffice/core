@@ -28,6 +28,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/pgrditem.hxx>
+#include <editeng/rsiditem.hxx>
 #include <unotools/configmgr.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
