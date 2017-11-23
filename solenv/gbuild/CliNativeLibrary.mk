@@ -63,7 +63,7 @@ $(call gb_CliNativeLibrary_get_target,$(1)) :
 endef
 
 define gb_CliNativeLibrary_set_configfile
-$(call gb_CliAssembly_set_configfile,$(1),$(2))
+$(call gb_CliAssembly_set_configfile,$(1),$(2),$(3))
 
 endef
 

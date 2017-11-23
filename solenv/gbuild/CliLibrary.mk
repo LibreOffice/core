@@ -82,7 +82,7 @@ $(call gb_CliLibrary_get_target,$(1)) :
 endef
 
 define gb_CliLibrary_set_configfile
-$(call gb_CliAssembly_set_configfile,$(1),$(2))
+$(call gb_CliAssembly_set_configfile,$(1),$(2),$(3))
 
 endef
 

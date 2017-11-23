@@ -11,7 +11,7 @@ include $(SRCDIR)/cli_ure/version/version.txt
 
 $(eval $(call gb_CliLibrary_CliLibrary,cli_basetypes))
 
-$(eval $(call gb_CliLibrary_set_configfile,cli_basetypes,cli_ure/source/basetypes/cli_basetypes_config))
+$(eval $(call gb_CliLibrary_set_configfile,cli_basetypes,cli_ure/source/basetypes/cli_basetypes_config,cli_ure/version/version.txt))
 
 $(eval $(call gb_CliLibrary_set_keyfile,cli_basetypes,$(SRCDIR)/cli_ure/source/cliuno.snk))
 
