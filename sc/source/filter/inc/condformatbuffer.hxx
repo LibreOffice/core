@@ -23,6 +23,7 @@
 #include "formulaparser.hxx"
 #include "worksheethelper.hxx"
 #include <tools/color.hxx>
+#include <conditio.hxx>
 #include <rangelst.hxx>
 
 #include <memory>
@@ -296,7 +297,7 @@ public:
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
-    static sal_Int32    convertToInternalOperator( sal_Int32 nToken );
+    static ScConditionMode convertToInternalOperator( sal_Int32 nToken );
     void                finalizeImport();
 private:
     CondFormatRef       createCondFormat();

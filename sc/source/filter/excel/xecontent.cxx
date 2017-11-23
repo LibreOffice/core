@@ -665,36 +665,36 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
 
     switch( rFormatEntry.GetOperation() )
     {
-        case SC_COND_NONE:
+        case ScConditionMode::NONE:
             mnType = EXC_CF_TYPE_NONE;
         break;
-        case SC_COND_BETWEEN:
+        case ScConditionMode::Between:
             mnOperator = EXC_CF_CMP_BETWEEN;
             mbFormula2 = true;
         break;
-        case SC_COND_NOTBETWEEN:
+        case ScConditionMode::NotBetween:
             mnOperator = EXC_CF_CMP_NOT_BETWEEN;
             mbFormula2 = true;
         break;
-        case SC_COND_EQUAL:
+        case ScConditionMode::Equal:
             mnOperator = EXC_CF_CMP_EQUAL;
         break;
-        case SC_COND_NOTEQUAL:
+        case ScConditionMode::NotEqual:
             mnOperator = EXC_CF_CMP_NOT_EQUAL;
         break;
-        case SC_COND_GREATER:
+        case ScConditionMode::Greater:
             mnOperator = EXC_CF_CMP_GREATER;
         break;
-        case SC_COND_LESS:
+        case ScConditionMode::Less:
             mnOperator = EXC_CF_CMP_LESS;
         break;
-        case SC_COND_EQGREATER:
+        case ScConditionMode::EqGreater:
             mnOperator = EXC_CF_CMP_GREATER_EQUAL;
         break;
-        case SC_COND_EQLESS:
+        case ScConditionMode::EqLess:
             mnOperator = EXC_CF_CMP_LESS_EQUAL;
         break;
-        case SC_COND_DIRECT:
+        case ScConditionMode::Direct:
             mnType = EXC_CF_TYPE_FMLA;
         break;
         default:
@@ -816,53 +816,53 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
     const char *pRet = nullptr;
     switch(eMode)
     {
-        case SC_COND_EQUAL:
+        case ScConditionMode::Equal:
             pRet = "equal";
             break;
-        case SC_COND_LESS:
+        case ScConditionMode::Less:
             pRet = "lessThan";
             break;
-        case SC_COND_GREATER:
+        case ScConditionMode::Greater:
             pRet = "greaterThan";
             break;
-        case SC_COND_EQLESS:
+        case ScConditionMode::EqLess:
             pRet = "lessThanOrEqual";
             break;
-        case SC_COND_EQGREATER:
+        case ScConditionMode::EqGreater:
             pRet = "greaterThanOrEqual";
             break;
-        case SC_COND_NOTEQUAL:
+        case ScConditionMode::NotEqual:
             pRet = "notEqual";
             break;
-        case SC_COND_BETWEEN:
+        case ScConditionMode::Between:
             bFrmla2 = true;
             pRet = "between";
             break;
-        case SC_COND_NOTBETWEEN:
+        case ScConditionMode::NotBetween:
             bFrmla2 = true;
             pRet = "notBetween";
             break;
-        case SC_COND_DUPLICATE:
+        case ScConditionMode::Duplicate:
             pRet = nullptr;
             break;
-        case SC_COND_NOTDUPLICATE:
+        case ScConditionMode::NotDuplicate:
             pRet = nullptr;
             break;
-        case SC_COND_BEGINS_WITH:
+        case ScConditionMode::BeginsWith:
             pRet = "beginsWith";
         break;
-        case SC_COND_ENDS_WITH:
+        case ScConditionMode::EndsWith:
             pRet = "endsWith";
         break;
-        case SC_COND_CONTAINS_TEXT:
+        case ScConditionMode::ContainsText:
             pRet = "containsText";
         break;
-        case SC_COND_NOT_CONTAINS_TEXT:
+        case ScConditionMode::NotContainsText:
             pRet = "notContains";
         break;
-        case SC_COND_DIRECT:
+        case ScConditionMode::Direct:
             break;
-        case SC_COND_NONE:
+        case ScConditionMode::NONE:
         default:
             break;
     }
@@ -873,33 +873,33 @@ const char* GetTypeString(ScConditionMode eMode)
 {
     switch(eMode)
     {
-        case SC_COND_DIRECT:
+        case ScConditionMode::Direct:
             return "expression";
-        case SC_COND_TOP10:
-        case SC_COND_TOP_PERCENT:
-        case SC_COND_BOTTOM10:
-        case SC_COND_BOTTOM_PERCENT:
+        case ScConditionMode::Top10:
+        case ScConditionMode::TopPercent:
+        case ScConditionMode::Bottom10:
+        case ScConditionMode::BottomPercent:
             return "top10";
-        case SC_COND_ABOVE_AVERAGE:
-        case SC_COND_BELOW_AVERAGE:
-        case SC_COND_ABOVE_EQUAL_AVERAGE:
-        case SC_COND_BELOW_EQUAL_AVERAGE:
+        case ScConditionMode::AboveAverage:
+        case ScConditionMode::BelowAverage:
+        case ScConditionMode::AboveEqualAverage:
+        case ScConditionMode::BelowEqualAverage:
             return "aboveAverage";
-        case SC_COND_NOTDUPLICATE:
+        case ScConditionMode::NotDuplicate:
             return "uniqueValues";
-        case SC_COND_DUPLICATE:
+        case ScConditionMode::Duplicate:
             return "duplicateValues";
-        case SC_COND_ERROR:
+        case ScConditionMode::Error:
             return "containsErrors";
-        case SC_COND_NOERROR:
+        case ScConditionMode::NoError:
             return "notContainsErrors";
-        case SC_COND_BEGINS_WITH:
+        case ScConditionMode::BeginsWith:
             return "beginsWith";
-        case SC_COND_ENDS_WITH:
+        case ScConditionMode::EndsWith:
             return "endsWith";
-        case SC_COND_CONTAINS_TEXT:
+        case ScConditionMode::ContainsText:
             return "containsText";
-        case SC_COND_NOT_CONTAINS_TEXT:
+        case ScConditionMode::NotContainsText:
             return "notContainsText";
         default:
             return "cellIs";
@@ -910,10 +910,10 @@ bool IsTopBottomRule(ScConditionMode eMode)
 {
     switch(eMode)
     {
-        case SC_COND_TOP10:
-        case SC_COND_BOTTOM10:
-        case SC_COND_TOP_PERCENT:
-        case SC_COND_BOTTOM_PERCENT:
+        case ScConditionMode::Top10:
+        case ScConditionMode::Bottom10:
+        case ScConditionMode::TopPercent:
+        case ScConditionMode::BottomPercent:
             return true;
         default:
             break;
@@ -926,10 +926,10 @@ bool IsTextRule(ScConditionMode eMode)
 {
     switch(eMode)
     {
-        case SC_COND_BEGINS_WITH:
-        case SC_COND_ENDS_WITH:
-        case SC_COND_CONTAINS_TEXT:
-        case SC_COND_NOT_CONTAINS_TEXT:
+        case ScConditionMode::BeginsWith:
+        case ScConditionMode::EndsWith:
+        case ScConditionMode::ContainsText:
+        case ScConditionMode::NotContainsText:
             return true;
         default:
             break;
@@ -944,14 +944,14 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
 {
     bool bFmla2 = false;
     ScConditionMode eOperation = mrFormatEntry.GetOperation();
-    bool bAboveAverage = eOperation == SC_COND_ABOVE_AVERAGE ||
-                                eOperation == SC_COND_ABOVE_EQUAL_AVERAGE;
-    bool bEqualAverage = eOperation == SC_COND_ABOVE_EQUAL_AVERAGE ||
-                                eOperation == SC_COND_BELOW_EQUAL_AVERAGE;
-    bool bBottom = eOperation == SC_COND_BOTTOM10
-        || eOperation == SC_COND_BOTTOM_PERCENT;
-    bool bPercent = eOperation == SC_COND_TOP_PERCENT ||
-        eOperation == SC_COND_BOTTOM_PERCENT;
+    bool bAboveAverage = eOperation == ScConditionMode::AboveAverage ||
+                                eOperation == ScConditionMode::AboveEqualAverage;
+    bool bEqualAverage = eOperation == ScConditionMode::AboveEqualAverage ||
+                                eOperation == ScConditionMode::BelowEqualAverage;
+    bool bBottom = eOperation == ScConditionMode::Bottom10
+        || eOperation == ScConditionMode::BottomPercent;
+    bool bPercent = eOperation == ScConditionMode::TopPercent ||
+        eOperation == ScConditionMode::BottomPercent;
     OString aRank("0");
     if(IsTopBottomRule(eOperation))
     {
@@ -1618,15 +1618,15 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
         switch( pValData->GetOperation() )
         {
-            case SC_COND_NONE:
-            case SC_COND_EQUAL:         mnFlags |= EXC_DV_COND_EQUAL;       break;
-            case SC_COND_LESS:          mnFlags |= EXC_DV_COND_LESS;        break;
-            case SC_COND_GREATER:       mnFlags |= EXC_DV_COND_GREATER;     break;
-            case SC_COND_EQLESS:        mnFlags |= EXC_DV_COND_EQLESS;      break;
-            case SC_COND_EQGREATER:     mnFlags |= EXC_DV_COND_EQGREATER;   break;
-            case SC_COND_NOTEQUAL:      mnFlags |= EXC_DV_COND_NOTEQUAL;    break;
-            case SC_COND_BETWEEN:       mnFlags |= EXC_DV_COND_BETWEEN;     break;
-            case SC_COND_NOTBETWEEN:    mnFlags |= EXC_DV_COND_NOTBETWEEN;  break;
+            case ScConditionMode::NONE:
+            case ScConditionMode::Equal:         mnFlags |= EXC_DV_COND_EQUAL;       break;
+            case ScConditionMode::Less:          mnFlags |= EXC_DV_COND_LESS;        break;
+            case ScConditionMode::Greater:       mnFlags |= EXC_DV_COND_GREATER;     break;
+            case ScConditionMode::EqLess:        mnFlags |= EXC_DV_COND_EQLESS;      break;
+            case ScConditionMode::EqGreater:     mnFlags |= EXC_DV_COND_EQGREATER;   break;
+            case ScConditionMode::NotEqual:      mnFlags |= EXC_DV_COND_NOTEQUAL;    break;
+            case ScConditionMode::Between:       mnFlags |= EXC_DV_COND_BETWEEN;     break;
+            case ScConditionMode::NotBetween:    mnFlags |= EXC_DV_COND_NOTBETWEEN;  break;
             default:                    OSL_FAIL( "XclExpDV::XclExpDV - unknown condition" );
         }
         switch( eScErrorStyle )

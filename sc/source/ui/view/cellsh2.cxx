@@ -817,7 +817,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     SfxItemSet aArgSet( GetPool(), ScTPValidationValue::GetRanges() );
                     ScValidationMode eMode = SC_VALID_ANY;
-                    ScConditionMode eOper = SC_COND_EQUAL;
+                    ScConditionMode eOper = ScConditionMode::Equal;
                     OUString aExpr1, aExpr2;
                     bool bBlank = true;
                     sal_Int16 nListType = css::sheet::TableValidationVisibility::UNSORTED;
@@ -918,14 +918,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if ( eMode == SC_VALID_TIME ) {
                                     sal_Int32 wraparound = aExpr1.compareTo(aExpr2);
                                     if (wraparound > 0) {
-                                        if (eOper == SC_COND_BETWEEN) {
-                                            eOper = SC_COND_NOTBETWEEN;
+                                        if (eOper == ScConditionMode::Between) {
+                                            eOper = ScConditionMode::NotBetween;
                                             OUString tmp = aExpr1;
                                             aExpr1 = aExpr2;
                                             aExpr2 = tmp;
                                         }
-                                        else if (eOper == SC_COND_NOTBETWEEN) {
-                                            eOper = SC_COND_BETWEEN;
+                                        else if (eOper == ScConditionMode::NotBetween) {
+                                            eOper = ScConditionMode::Between;
                                             OUString tmp = aExpr1;
                                             aExpr1 = aExpr2;
                                             aExpr2 = tmp;
