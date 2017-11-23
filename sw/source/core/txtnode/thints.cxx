@@ -21,6 +21,7 @@
 
 #include <hintids.hxx>
 #include <editeng/xmlcnitm.hxx>
+#include <editeng/rsiditem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stylepool.hxx>

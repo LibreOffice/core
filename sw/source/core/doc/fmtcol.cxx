@@ -160,9 +160,9 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
             const SfxItemSet* pParent = GetAttrSet().GetParent();
             pNewLRSpace = static_cast<const SvxLRSpaceItem*>(&pParent->Get( RES_LR_SPACE ));
             pNewULSpace = static_cast<const SvxULSpaceItem*>(&pParent->Get( RES_UL_SPACE ));
-            aFontSizeArr[0] = static_cast<const SvxFontHeightItem*>(&pParent->Get( RES_CHRATR_FONTSIZE ));
-            aFontSizeArr[1] = static_cast<const SvxFontHeightItem*>(&pParent->Get( RES_CHRATR_CJK_FONTSIZE ));
-            aFontSizeArr[2] = static_cast<const SvxFontHeightItem*>(&pParent->Get( RES_CHRATR_CTL_FONTSIZE ));
+            aFontSizeArr[0] = &pParent->Get( RES_CHRATR_FONTSIZE );
+            aFontSizeArr[1] = &pParent->Get( RES_CHRATR_CJK_FONTSIZE );
+            aFontSizeArr[2] = &pParent->Get( RES_CHRATR_CTL_FONTSIZE );
             // #i66431# - modify has to be propagated, because of new parent format.
             bNewParent = true;
         }

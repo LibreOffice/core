@@ -669,8 +669,7 @@ void RtfExport::ExportDocument_Impl()
         .WriteChar('1')
         .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSI);
     Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_DEFF);
-    OutULong(m_aFontHelper.GetId(
-        static_cast<const SvxFontItem&>(m_pDoc->GetAttrPool().GetDefaultItem(RES_CHRATR_FONT))));
+    OutULong(m_aFontHelper.GetId(m_pDoc->GetAttrPool().GetDefaultItem(RES_CHRATR_FONT)));
     // If this not exist, MS don't understand our ansi characters (0x80-0xff).
     Strm().WriteCharPtr("\\adeflang1025");
 
@@ -1174,15 +1173,12 @@ void RtfExport::OutColorTable()
     {
         auto pCol = static_cast<const SvxColorItem*>(GetDfltAttr(RES_CHRATR_COLOR));
         InsColor(pCol->GetValue());
-        if (nullptr
-            != (pCol
-                = static_cast<const SvxColorItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_COLOR))))
+        if ((pCol = rPool.GetPoolDefaultItem(RES_CHRATR_COLOR)))
             InsColor(pCol->GetValue());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_COLOR);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (nullptr
-                != (pCol = static_cast<const SvxColorItem*>(rPool.GetItem2(RES_CHRATR_COLOR, n))))
+            if ((pCol = rPool.GetItem2(RES_CHRATR_COLOR, n)))
                 InsColor(pCol->GetValue());
         }
 
@@ -1191,9 +1187,7 @@ void RtfExport::OutColorTable()
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_UNDERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (nullptr
-                != (pUnder = static_cast<const SvxUnderlineItem*>(
-                        rPool.GetItem2(RES_CHRATR_UNDERLINE, n))))
+            if ((pUnder = rPool.GetItem2(RES_CHRATR_UNDERLINE, n)))
                 InsColor(pUnder->GetColor());
         }
 
@@ -1202,9 +1196,7 @@ void RtfExport::OutColorTable()
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_OVERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (nullptr
-                != (pOver
-                    = static_cast<const SvxOverlineItem*>(rPool.GetItem2(RES_CHRATR_OVERLINE, n))))
+            if ((pOver = rPool.GetItem2(RES_CHRATR_OVERLINE, n)))
                 InsColor(pOver->GetColor());
         }
     }
@@ -1265,15 +1257,12 @@ void RtfExport::OutColorTable()
 
     {
         const SvxBoxItem* pCharBox;
-        if (nullptr
-            != (pCharBox
-                = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_BOX))))
+        if ((pCharBox = rPool.GetPoolDefaultItem(RES_CHRATR_BOX)))
             InsColorLine(*pCharBox);
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_BOX);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (nullptr
-                != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_CHRATR_BOX, n))))
+            if ((pCharBox = rPool.GetItem2(RES_CHRATR_BOX, n)))
                 InsColorLine(*pCharBox);
         }
     }

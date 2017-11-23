@@ -1554,7 +1554,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SfxItemSet aSet( GetPool() );
                 rSh.GetCurAttr( aSet );
-                const SvxColorItem& aColorItem = static_cast< const SvxColorItem& >( aSet.Get(RES_CHRATR_COLOR) );
+                const SvxColorItem& aColorItem = aSet.Get(RES_CHRATR_COLOR);
                 std::unique_ptr<SfxPoolItem> pNewItem(aColorItem.CloneSetWhich(SID_ATTR_CHAR_COLOR2));
                 rSet.Put( *pNewItem );
             }
@@ -1564,14 +1564,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 // Always use the visible background
                 SfxItemSet aSet( GetPool() );
                 rSh.GetCurAttr( aSet );
-                const SvxBrushItem& aBrushItem = static_cast< const SvxBrushItem& >( aSet.Get(RES_CHRATR_HIGHLIGHT) );
+                const SvxBrushItem& aBrushItem = aSet.Get(RES_CHRATR_HIGHLIGHT);
                 if( aBrushItem.GetColor() != COL_TRANSPARENT )
                 {
                     rSet.Put( SvxColorItem(aBrushItem.GetColor(), nWhich) );
                 }
                 else
                 {
-                    const SvxBrushItem& aBrushItem2 = static_cast< const SvxBrushItem& >( aSet.Get(RES_CHRATR_BACKGROUND) );
+                    const SvxBrushItem& aBrushItem2 = aSet.Get(RES_CHRATR_BACKGROUND);
                     rSet.Put( SvxColorItem(aBrushItem2.GetColor(), nWhich) );
                 }
             }

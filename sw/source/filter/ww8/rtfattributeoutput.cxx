@@ -1440,8 +1440,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
             nVal = 35;
             if (pOutSet)
             {
-                const SvxLanguageItem rlang
-                    = static_cast<const SvxLanguageItem&>(pOutSet->Get(RES_CHRATR_CJK_LANGUAGE));
+                const SvxLanguageItem rlang = pOutSet->Get(RES_CHRATR_CJK_LANGUAGE);
                 if (LANGUAGE_CHINESE_SIMPLIFIED == rlang.GetLanguage())
                 {
                     nVal = 39;

@@ -216,7 +216,7 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
                             rFontHeight = pFont->GetSize(pFont->GetActual()).Height();
                         else
                         {
-                            const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get(RES_CHRATR_FONTSIZE));
+                            const SvxFontHeightItem& rItem = rSet.Get(RES_CHRATR_FONTSIZE);
                             rFontHeight = rItem.GetHeight();
                         }
                     }
@@ -230,7 +230,7 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
     {
         const sal_uInt16 nLines = rDrop.GetLines();
 
-        const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_FONTSIZE ));
+        const SvxFontHeightItem& rItem = rSet.Get( RES_CHRATR_FONTSIZE );
         rFontHeight = rItem.GetHeight();
         rDropHeight = nLines * rFontHeight;
         rDropDescent = rFontHeight / 5;

@@ -204,7 +204,7 @@ static sal_uInt8 GetLevelNFC(  sal_uInt16 eNumType, const SfxItemSet *pOutSet)
     case SVX_NUM_NUMBER_LOWER_ZH:
         nRet = 35;
         if ( pOutSet ) {
-            const SvxLanguageItem rLang = static_cast<const SvxLanguageItem&>( pOutSet->Get( RES_CHRATR_CJK_LANGUAGE) );
+            const SvxLanguageItem rLang = pOutSet->Get( RES_CHRATR_CJK_LANGUAGE);
             const LanguageType eLang = rLang.GetLanguage();
             if (LANGUAGE_CHINESE_SIMPLIFIED ==eLang) {
                 nRet = 39;

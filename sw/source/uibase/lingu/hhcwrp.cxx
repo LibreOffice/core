@@ -490,7 +490,7 @@ void SwHHCWrapper::ReplaceUnit(
             OSL_ENSURE( pTargetFont, "target font missing?" );
             if (pTargetFont && pNewUnitLanguage)
             {
-                SvxFontItem aFontItem(static_cast<const SvxFontItem&>( aSet.Get( RES_CHRATR_CJK_FONT ) ));
+                SvxFontItem aFontItem( aSet.Get( RES_CHRATR_CJK_FONT ) );
                 aFontItem.SetFamilyName(    pTargetFont->GetFamilyName());
                 aFontItem.SetFamily(        pTargetFont->GetFamilyType());
                 aFontItem.SetStyleName(     pTargetFont->GetStyleName());

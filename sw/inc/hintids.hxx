@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <svx/xdef.hxx>
 #include "swdllapi.h"
+#include <svl/typedwhich.hxx>
 #include <vector>
 
 // For SwTextHints without end index the following char is added:
@@ -52,56 +53,53 @@
 
 // Ranges for the IDs of the format-attributes.
 // Which-values for character-format attributes.
-enum RES_CHRATR
-{
-RES_CHRATR_BEGIN = HINT_BEGIN,
-    RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN,  //  1
-    RES_CHRATR_CHARSETCOLOR,                //  2
-    RES_CHRATR_COLOR,                       //  3
-    RES_CHRATR_CONTOUR,                     //  4
-    RES_CHRATR_CROSSEDOUT,                  //  5
-    RES_CHRATR_ESCAPEMENT,                  //  6
-    RES_CHRATR_FONT,                        //  7
-    RES_CHRATR_FONTSIZE,                    //  8
-    RES_CHRATR_KERNING,                     //  9
-    RES_CHRATR_LANGUAGE,                    // 10
-    RES_CHRATR_POSTURE,                     // 11
-    RES_CHRATR_PROPORTIONALFONTSIZE,        // 12
-    RES_CHRATR_SHADOWED,                    // 13
-    RES_CHRATR_UNDERLINE,                   // 14
-    RES_CHRATR_WEIGHT,                      // 15
-    RES_CHRATR_WORDLINEMODE,                // 16
-    RES_CHRATR_AUTOKERN,                    // 17
-    RES_CHRATR_BLINK,                       // 18
-    RES_CHRATR_NOHYPHEN,                    // 19
-    RES_CHRATR_NOLINEBREAK,                 // 20
-    RES_CHRATR_BACKGROUND,                  // 21
-    RES_CHRATR_CJK_FONT,                    // 22
-    RES_CHRATR_CJK_FONTSIZE,                // 23
-    RES_CHRATR_CJK_LANGUAGE,                // 24
-    RES_CHRATR_CJK_POSTURE,                 // 25
-    RES_CHRATR_CJK_WEIGHT,                  // 26
-    RES_CHRATR_CTL_FONT,                    // 27
-    RES_CHRATR_CTL_FONTSIZE,                // 28
-    RES_CHRATR_CTL_LANGUAGE,                // 29
-    RES_CHRATR_CTL_POSTURE,                 // 30
-    RES_CHRATR_CTL_WEIGHT,                  // 31
-    RES_CHRATR_ROTATE,                      // 32
-    RES_CHRATR_EMPHASIS_MARK,               // 33
-    RES_CHRATR_TWO_LINES,                   // 34
-    RES_CHRATR_SCALEW,                      // 35
-    RES_CHRATR_RELIEF,                      // 36
-    RES_CHRATR_HIDDEN,                      // 37
-    RES_CHRATR_OVERLINE,                    // 38
-    RES_CHRATR_RSID,                        // 39
-    RES_CHRATR_BOX,                         // 40
-    RES_CHRATR_SHADOW,                      // 41
-    RES_CHRATR_HIGHLIGHT,                   // 42
-    RES_CHRATR_GRABBAG,                     // 43
-    RES_CHRATR_BIDIRTL,                     // 44
-    RES_CHRATR_IDCTHINT,                    // 45
-RES_CHRATR_END
-};
+#define RES_CHRATR_BEGIN  HINT_BEGIN
+#define     RES_CHRATR_CASEMAP                     TypedWhichId<SvxCaseMapItem>(RES_CHRATR_BEGIN)  //  1
+#define     RES_CHRATR_CHARSETCOLOR                TypedWhichId<SvxCharSetColorItem>(2)
+#define     RES_CHRATR_COLOR                       TypedWhichId<SvxColorItem>(3)
+#define     RES_CHRATR_CONTOUR                     TypedWhichId<SvxContourItem>(4)
+#define     RES_CHRATR_CROSSEDOUT                  TypedWhichId<SvxCrossedOutItem>(5)
+#define     RES_CHRATR_ESCAPEMENT                  TypedWhichId<SvxEscapementItem>(6)
+#define     RES_CHRATR_FONT                        TypedWhichId<SvxFontItem>(7)
+#define     RES_CHRATR_FONTSIZE                    TypedWhichId<SvxFontHeightItem>(8)
+#define     RES_CHRATR_KERNING                     TypedWhichId<SvxKerningItem>(9)
+#define     RES_CHRATR_LANGUAGE                    TypedWhichId<SvxLanguageItem>(10)
+#define     RES_CHRATR_POSTURE                     TypedWhichId<SvxPostureItem>(11)
+#define     RES_CHRATR_PROPORTIONALFONTSIZE        TypedWhichId<SvxPropSizeItem>(12)
+#define     RES_CHRATR_SHADOWED                    TypedWhichId<SvxShadowedItem>(13)
+#define     RES_CHRATR_UNDERLINE                   TypedWhichId<SvxUnderlineItem>(14)
+#define     RES_CHRATR_WEIGHT                      TypedWhichId<SvxWeightItem>(15)
+#define     RES_CHRATR_WORDLINEMODE                TypedWhichId<SvxWordLineModeItem>(16)
+#define     RES_CHRATR_AUTOKERN                    TypedWhichId<SvxAutoKernItem>(17)
+#define     RES_CHRATR_BLINK                       TypedWhichId<SvxBlinkItem>(18)
+#define     RES_CHRATR_NOHYPHEN                    TypedWhichId<SvxNoHyphenItem>(19)
+#define     RES_CHRATR_NOLINEBREAK                 TypedWhichId<SvxNoLinebreakItem>(20)
+#define     RES_CHRATR_BACKGROUND                  TypedWhichId<SvxBrushItem>(21)
+#define     RES_CHRATR_CJK_FONT                    TypedWhichId<SvxFontItem>(22)
+#define     RES_CHRATR_CJK_FONTSIZE                TypedWhichId<SvxFontHeightItem>(23)
+#define     RES_CHRATR_CJK_LANGUAGE                TypedWhichId<SvxLanguageItem>(24)
+#define     RES_CHRATR_CJK_POSTURE                 TypedWhichId<SvxPostureItem>(25)
+#define     RES_CHRATR_CJK_WEIGHT                  TypedWhichId<SvxWeightItem>(26)
+#define     RES_CHRATR_CTL_FONT                    TypedWhichId<SvxFontItem>(27)
+#define     RES_CHRATR_CTL_FONTSIZE                TypedWhichId<SvxFontHeightItem>(28)
+#define     RES_CHRATR_CTL_LANGUAGE                TypedWhichId<SvxLanguageItem>(29)
+#define     RES_CHRATR_CTL_POSTURE                 TypedWhichId<SvxPostureItem>(30)
+#define     RES_CHRATR_CTL_WEIGHT                  TypedWhichId<SvxWeightItem>(31)
+#define     RES_CHRATR_ROTATE                      TypedWhichId<SvxCharRotateItem>(32)
+#define     RES_CHRATR_EMPHASIS_MARK               TypedWhichId<SvxEmphasisMarkItem>(33)
+#define     RES_CHRATR_TWO_LINES                   TypedWhichId<SvxTwoLinesItem>(34)
+#define     RES_CHRATR_SCALEW                      TypedWhichId<SvxCharScaleWidthItem>(35)
+#define     RES_CHRATR_RELIEF                      TypedWhichId<SvxCharReliefItem>(36)
+#define     RES_CHRATR_HIDDEN                      TypedWhichId<SvxCharHiddenItem>(37)
+#define     RES_CHRATR_OVERLINE                    TypedWhichId<SvxOverlineItem>(38)
+#define     RES_CHRATR_RSID                        TypedWhichId<SvxRsidItem>(39)
+#define     RES_CHRATR_BOX                         TypedWhichId<SvxBoxItem>(40)
+#define     RES_CHRATR_SHADOW                      TypedWhichId<SvxShadowedItem>(41)
+#define     RES_CHRATR_HIGHLIGHT                   TypedWhichId<SvxBrushItem>(42)
+#define     RES_CHRATR_GRABBAG                     TypedWhichId<SfxGrabBagItem>(43)
+#define     RES_CHRATR_BIDIRTL                     TypedWhichId<SfxInt16Item>(44)
+#define     RES_CHRATR_IDCTHINT                    TypedWhichId<SfxInt16Item>(45)
+#define RES_CHRATR_END  (46)
 
 // this Attribute used only in a TextNodes SwpAttr-Array
 enum RES_TXTATR

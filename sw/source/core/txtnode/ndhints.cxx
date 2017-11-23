@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <editeng/rsiditem.hxx>
 #include <txatbase.hxx>
 #include <ndhints.hxx>
 #include <txtatr.hxx>
