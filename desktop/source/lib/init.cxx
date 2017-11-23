@@ -3573,11 +3573,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             // Force headless -- this is only for bitmap rendering.
             rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
 
-            // We specifically need to make sure we have the "headless"
-            // command arg set (various code specifically checks via
-            // CommandLineArgs):
-            desktop::Desktop::GetCommandLineArgs().setHeadless();
-
 #ifdef IOS
             // mpDefInst need to be initialized, which only happens in InitVCL(),
             // there might be more elegant ways to get InitVCL() called, but
