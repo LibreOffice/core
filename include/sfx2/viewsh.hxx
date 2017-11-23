@@ -155,7 +155,7 @@ friend class SfxPrinterController;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
-    std::vector<std::pair<OUString, Dialog*>> maOpenedDialogs;
+    std::vector<std::pair<vcl::DialogID, Dialog*>> maOpenedDialogs;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -224,13 +224,13 @@ public:
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
 
-    void                        RegisterDlg(const vcl::DialogID& rName, Dialog* pDlg);
-    Dialog*                     GetOpenedDlg(OUString rName);
-    void                        UnregisterDlg(const OUString& rName);
+    void                        RegisterDlg(const vcl::DialogID& rDialogId, Dialog* pDlg);
+    Dialog*                     GetOpenedDlg(const vcl::DialogID& rDialogId);
+    void                        UnregisterDlg(const vcl::DialogID& rDialogId);
 
     // IDialogNotifier
-    virtual void                notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
-    virtual void                notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos) override;
+    virtual void                notifyDialog(const vcl::DialogID& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
+    virtual void                notifyDialogChild(const vcl::DialogID& rDialogId, const OUString& rAction, const Point& rPos) override;
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );

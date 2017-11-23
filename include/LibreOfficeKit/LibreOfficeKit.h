@@ -268,29 +268,29 @@ struct _LibreOfficeKitDocumentClass
 
     /// Paints dialog with given dialog id to the buffer
     /// @see lok::Document::paintDialog().
-    void (*paintDialog) (LibreOfficeKitDocument* pThis, const char* pDialogId,
+    void (*paintDialog) (LibreOfficeKitDocument* pThis, unsigned nDialogId,
                          unsigned char* pBuffer,
                          const int x, const int y,
                          const int width, const int height);
 
     /// Get info about dialog with given dialog id
     /// @see lok::Document::getDialogInfo().
-    void (*getDialogInfo) (LibreOfficeKitDocument* pThis, const char* pDialogId,
+    void (*getDialogInfo) (LibreOfficeKitDocument* pThis, unsigned nDialogId,
                            char** pDialogTitle, int* pWidth, int* pHeight);
 
     /// @see lok::Document::paintActiveFloatingWindow().
-    void (*paintActiveFloatingWindow) (LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
+    void (*paintActiveFloatingWindow) (LibreOfficeKitDocument* pThis, unsigned nDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
     /// @see lok::Document::postDialogKeyEvent().
     void (*postDialogKeyEvent) (LibreOfficeKitDocument* pThis,
-                                const char* pDialogId,
+                                unsigned nDialogId,
                                 int nType,
                                 int nCharCode,
                                 int nKeyCode);
 
     /// @see lok::Document::postDialogMouseEvent().
     void (*postDialogMouseEvent) (LibreOfficeKitDocument* pThis,
-                                  const char* pDialogId,
+                                  unsigned nDialogId,
                                   int nType,
                                   int nX,
                                   int nY,
@@ -300,7 +300,7 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::postDialogChildMouseEvent().
     void (*postDialogChildMouseEvent) (LibreOfficeKitDocument* pThis,
-                                       const char* pDialogId,
+                                       unsigned nDialogId,
                                        int nType,
                                        int nX,
                                        int nY,

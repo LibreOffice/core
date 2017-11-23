@@ -1948,31 +1948,28 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
     return xRender;
 }
 
-void SfxViewShell::notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
+void SfxViewShell::notifyDialog(const vcl::DialogID& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
-    SfxLokHelper::notifyDialog(rDialogID, rAction, rPayload);
+    SfxLokHelper::notifyDialog(rDialogId, rAction, rPayload);
 }
 
-void SfxViewShell::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)
+void SfxViewShell::notifyDialogChild(const vcl::DialogID& rDialogId, const OUString& rAction, const Point& rPos)
 {
-    SfxLokHelper::notifyDialog(rDialogID, rAction);
+    SfxLokHelper::notifyDialog(rDialogId, rAction);
 }
 
-void SfxViewShell::RegisterDlg(const OUString& rName, Dialog* pDlg)
+void SfxViewShell::RegisterDlg(const vcl::DialogID& rDialogId, Dialog* pDlg)
 {
     if (pDlg)
-        maOpenedDialogs.push_back(std::make_pair(rName, pDlg));
+        maOpenedDialogs.push_back(std::make_pair(rDialogId, pDlg));
 }
 
-Dialog* SfxViewShell::GetOpenedDlg(OUString rName)
+Dialog* SfxViewShell::GetOpenedDlg(const vcl::DialogID& rDialogId)
 {
-    if (rName.startsWith(".uno:"))
-        rName = rName.replaceFirst(".uno:", "");
-
     const auto it = std::find_if(maOpenedDialogs.begin(),
                                  maOpenedDialogs.end(),
-                                 [&rName](const std::pair<OUString, Dialog*> aItem) {
-                                     return rName == aItem.first;
+                                 [&rDialogId](const std::pair<vcl::DialogID, Dialog*> aItem) {
+                                     return rDialogId == aItem.first;
                                  });
 
     Dialog* ret = nullptr;
@@ -1983,12 +1980,12 @@ Dialog* SfxViewShell::GetOpenedDlg(OUString rName)
     return ret;
 }
 
-void SfxViewShell::UnregisterDlg(const OUString& rName)
+void SfxViewShell::UnregisterDlg(const vcl::DialogID& rDialogId)
 {
     maOpenedDialogs.erase(std::remove_if(maOpenedDialogs.begin(),
                                          maOpenedDialogs.end(),
-                                         [&rName](const std::pair<OUString, Dialog*> aItem) {
-                                             return aItem.first == rName;
+                                         [&rDialogId](const std::pair<vcl::DialogID, Dialog*> aItem) {
+                                             return aItem.first == rDialogId;
                                          }));
 }
 
