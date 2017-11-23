@@ -1315,7 +1315,7 @@ bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos
 }
 
 OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIndex,
-                                        sal_uLong nNumFmt,
+                                        sal_uInt32 nNumFmt,
                                         const FormulaGrammar::Grammar eGrammar ) const
 {
     assert( nIndex <= 1);

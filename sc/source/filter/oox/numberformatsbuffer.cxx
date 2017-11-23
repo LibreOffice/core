@@ -1950,11 +1950,11 @@ void NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts,
         maApiData.mnIndex = lclCreatePredefinedFormat( rxNumFmts, maModel.mnPredefId, maModel.maLocale );
 }
 
-sal_uLong NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+sal_uInt32 NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
     const ScDocument& rDoc = getScDocument();
-    static sal_uLong  nDflt = rDoc.GetFormatTable()->GetStandardIndex( ScGlobal::eLnge );
-    sal_uLong nScNumFmt = nDflt;
+    static sal_uInt32  nDflt = rDoc.GetFormatTable()->GetStandardIndex( ScGlobal::eLnge );
+    sal_uInt32 nScNumFmt = nDflt;
     if ( maApiData.mnIndex )
         nScNumFmt = maApiData.mnIndex;
 
@@ -1982,17 +1982,14 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper )
     insertBuiltinFormats();
 }
 
-NumberFormatRef NumberFormatsBuffer::createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode )
+NumberFormatRef NumberFormatsBuffer::createNumFmt( sal_uInt32 nNumFmtId, const OUString& rFmtCode )
 {
     NumberFormatRef xNumFmt;
-    if( nNumFmtId >= 0 )
-    {
-        xNumFmt.reset( new NumberFormat( *this ) );
-        maNumFmts[ nNumFmtId ] = xNumFmt;
-        if ( nNumFmtId > mnHighestId )
-            mnHighestId = nNumFmtId;
-        xNumFmt->setFormatCode( rFmtCode );
-    }
+    xNumFmt.reset( new NumberFormat( *this ) );
+    maNumFmts[ nNumFmtId ] = xNumFmt;
+    if ( nNumFmtId > mnHighestId )
+        mnHighestId = nNumFmtId;
+    xNumFmt->setFormatCode( rFmtCode );
     return xNumFmt;
 }
 
@@ -2015,7 +2012,7 @@ void NumberFormatsBuffer::finalizeImport()
     maNumFmts.forEach( NumberFormatFinalizer( *this ) );
 }
 
-sal_uLong NumberFormatsBuffer::fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
+sal_uInt32 NumberFormatsBuffer::fillToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const
 {
     const NumberFormat* pNumFmt = maNumFmts.get(nNumFmtId).get();
     if (!pNumFmt)
@@ -2052,7 +2049,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
         aBuiltinVec.push_back( aMIt->second );
 
     // insert the default formats in the format map (in reverse order from default table to system locale)
-    typedef ::std::map< sal_Int32, sal_Int32 > ReuseMap;
+    typedef ::std::map< sal_uInt32, sal_uInt32 > ReuseMap;
     ReuseMap aReuseMap;
     for( BuiltinVec::reverse_iterator aVIt = aBuiltinVec.rbegin(), aVEnd = aBuiltinVec.rend(); aVIt != aVEnd; ++aVIt )
     {

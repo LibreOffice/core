@@ -709,7 +709,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
     }
 }
 
-sal_uLong XclImpNumFmtBuffer::GetScFormat( sal_uInt16 nXclNumFmt ) const
+sal_uInt32 XclImpNumFmtBuffer::GetScFormat( sal_uInt16 nXclNumFmt ) const
 {
     XclImpIndexMap::const_iterator aIt = maIndexMap.find( nXclNumFmt );
     return (aIt != maIndexMap.end()) ? aIt->second : NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -717,13 +717,13 @@ sal_uLong XclImpNumFmtBuffer::GetScFormat( sal_uInt16 nXclNumFmt ) const
 
 void XclImpNumFmtBuffer::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nXclNumFmt, bool bSkipPoolDefs ) const
 {
-    sal_uLong nScNumFmt = GetScFormat( nXclNumFmt );
+    sal_uInt32 nScNumFmt = GetScFormat( nXclNumFmt );
     if( nScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND )
         nScNumFmt = GetStdScNumFmt();
     FillScFmtToItemSet( rItemSet, nScNumFmt, bSkipPoolDefs );
 }
 
-void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uLong nScNumFmt, bool bSkipPoolDefs ) const
+void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uInt32 nScNumFmt, bool bSkipPoolDefs ) const
 {
     OSL_ENSURE( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND, "XclImpNumFmtBuffer::FillScFmtToItemSet - invalid number format" );
     ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );

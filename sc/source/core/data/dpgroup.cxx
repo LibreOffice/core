@@ -593,7 +593,7 @@ bool ScDPGroupTableData::IsDateDimension(long nDim)
     return pSourceData->IsDateDimension( nDim );
 }
 
-sal_uLong ScDPGroupTableData::GetNumberFormat(long nDim)
+sal_uInt32 ScDPGroupTableData::GetNumberFormat(long nDim)
 {
     if ( nDim >= nSourceCount )
     {

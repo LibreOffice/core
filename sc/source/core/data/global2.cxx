@@ -375,7 +375,7 @@ bool isEmptyString( const OUString& rStr )
 
 double ScGlobal::ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
         FormulaError & rError, FormulaError nStringNoValueError,
-        SvNumberFormatter* pFormatter, short & rCurFmtType )
+        SvNumberFormatter* pFormatter, sal_uInt32 & rCurFmtType )
 {
     // We keep ScCalcConfig::StringConversion::LOCALE default until
     // we provide a friendly way to convert string numbers into numbers in the UI.

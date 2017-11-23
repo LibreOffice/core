@@ -966,7 +966,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         }
         else
         {
-            sal_uLong nFormat = rDoc.GetNumberFormat(aCellPos);
+            sal_uInt32 nFormat = rDoc.GetNumberFormat(aCellPos);
             ScCellFormat::GetInputString(aCell, nFormat, aText, *rDoc.GetFormatTable(), &rDoc);
             if (!aText.isEmpty())
                 pEditEngine->SetTextNewDefaults(aText, aDefaults);

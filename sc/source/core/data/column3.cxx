@@ -531,7 +531,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::
 
     OUString aStr;
     Color* pColor;
-    sal_uLong nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
+    sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
     ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter, pDocument);
 
     // Store the real script type to the array.
@@ -2063,7 +2063,7 @@ class FilterEntriesHandler
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         OUString aStr;
-        sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
+        sal_uInt32 nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
         ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrColumn.GetDoc());
 
         if (rCell.hasString())
@@ -2551,7 +2551,7 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
     if (aCell.meType == CELLTYPE_FORMULA)
         aCell.mpFormula->MaybeInterpret();
 
-    sal_uLong nFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
+    sal_uInt32 nFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     Color* pColor = nullptr;
     ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()), pDocument);
 }
@@ -2572,7 +2572,7 @@ double* ScColumn::GetValueCell( SCROW nRow )
 void ScColumn::GetInputString( SCROW nRow, OUString& rString ) const
 {
     ScRefCellValue aCell = GetCellValue(nRow);
-    sal_uLong nFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
+    sal_uInt32 nFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()), pDocument);
 }
 

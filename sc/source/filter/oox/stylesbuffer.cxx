@@ -2904,7 +2904,7 @@ void StylesBuffer::writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, 
         pFont->fillToItemSet( rItemSet, false, bSkipPoolDefs );
 }
 
-sal_uLong StylesBuffer::writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
+sal_uInt32 StylesBuffer::writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const
 {
     return maNumFmts.fillToItemSet( rItemSet, nNumFmtId, bSkipPoolDefs );
 }

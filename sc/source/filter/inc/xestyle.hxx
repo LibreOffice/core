@@ -434,7 +434,7 @@ public:
                             const XclExpRoot& rRoot,
                             const ScPatternAttr& rPattern,
                             sal_Int16 nScript,
-                            sal_uLong nScForceNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
+                            sal_uInt32 nScForceNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
                             sal_uInt16 nForceXclFont = EXC_FONT_NOTFOUND,
                             bool bForceLineBreak = false );
     /** Constructs a style XF record from the passed cell style sheet. */
@@ -455,7 +455,7 @@ public:
         @descr  Searches for cell XFs only. */
     bool                Equals(
                             const ScPatternAttr& rPattern,
-                            sal_uLong nScForceNumFmt,
+                            sal_uInt32 nScForceNumFmt,
                             sal_uInt16 nForceXclFont,
                             bool bForceLineBreak ) const;
 
@@ -484,7 +484,7 @@ protected:  // access for XclExpDefaultXF
     XclExpCellBorder    maBorder;           /// Border line style.
     XclExpCellArea      maArea;             /// Background area style.
     sal_uInt32          mnParentXFId;       /// XF ID of parent XF record.
-    sal_uLong               mnScNumFmt;         /// Calc number format index.
+    sal_uInt32          mnScNumFmt;         /// Calc number format index.
     sal_uInt16          mnXclFont;          /// Excel font index.
     sal_uInt16          mnXclNumFmt;        /// Excel number format index.
     sal_Int32           mnBorderId;         /// OOXML Border Index
@@ -500,7 +500,7 @@ private:
     void                Init(
                             const SfxItemSet& rItemSet,
                             sal_Int16 nScript,
-                            sal_uLong nForceScNumFmt,
+                            sal_uInt32 nForceScNumFmt,
                             sal_uInt16 nForceXclFont,
                             bool bForceLineBreak,
                             bool bDefStyle );
@@ -599,7 +599,7 @@ public:
         @return  A unique XF record ID. */
     sal_uInt32          InsertWithNumFmt(
                             const ScPatternAttr* pPattern, sal_Int16 nScript,
-                            sal_uLong nForceScNumFmt,
+                            sal_uInt32 nForceScNumFmt,
                             bool bForceLineBreak );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  A unique XF record ID. */
@@ -632,7 +632,7 @@ private:
 
 private:
     /** Returns the XF ID of the cell XF containing the passed format. */
-    sal_uInt32          FindXF( const ScPatternAttr& rPattern, sal_uLong nForceScNumFmt,
+    sal_uInt32          FindXF( const ScPatternAttr& rPattern, sal_uInt32 nForceScNumFmt,
                             sal_uInt16 nForceXclFont, bool bForceLineBreak ) const;
     /** Returns the XF ID of the style XF containing the passed style. */
     sal_uInt32          FindXF( const SfxStyleSheetBase& rStyleSheet ) const;
@@ -643,7 +643,7 @@ private:
     /** Tries to find the XF record containing the passed format or inserts a new record.
         @return  The XF record ID. */
     sal_uInt32          InsertCellXF( const ScPatternAttr* pPattern, sal_Int16 nScript,
-                            sal_uLong nForceScNumFmt,
+                            sal_uInt32 nForceScNumFmt,
                             sal_uInt16 nForceXclFont, bool bForceLineBreak );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  The XF record ID. */

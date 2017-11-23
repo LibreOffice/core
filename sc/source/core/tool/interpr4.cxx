@@ -124,9 +124,9 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
     return false;
 }
 
-sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell )
+sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell )
 {
-    sal_uLong nFormat;
+    sal_uInt32 nFormat;
     FormulaError nErr;
     if (rCell.isEmpty())
     {
@@ -151,7 +151,7 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
 {
     if ( bCalcAsShown && fOrig != 0.0 )
     {
-        sal_uLong nFormat = pDok->GetNumberFormat( rPos );
+        sal_uInt32 nFormat = pDok->GetNumberFormat( rPos );
         fOrig = pDok->RoundValueAsShown( fOrig, nFormat );
     }
     return fOrig;
@@ -172,7 +172,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
     return fValue;
 }
 
-double ScInterpreter::ConvertStringToValue( const OUString& rStr, FormulaError& rError, short& rCurFmtType )
+double ScInterpreter::ConvertStringToValue( const OUString& rStr, FormulaError& rError, sal_uInt32& rCurFmtType )
 {
     return ScGlobal::ConvertStringToValue( rStr, maCalcConfig, rError, mnStringNoValueError, pFormatter, rCurFmtType);
 }
@@ -690,7 +690,7 @@ void ScInterpreter::PushTokenRef( const formula::FormulaConstTokenRef& x )
 }
 
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
-        const ScAddress & rAddress, short * pRetTypeExpr, sal_uLong * pRetIndexExpr, bool bFinalResult )
+        const ScAddress & rAddress, sal_uInt32 * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult )
 {
     ScRefCellValue aCell(*pDok, rAddress);
     if (aCell.hasEmptyValue())
@@ -1675,7 +1675,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
     return aRet;
 }
 
-void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr)
+void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTypeExpr, sal_uInt32& rRetIndexExpr)
 {
     if (xMat)
     {
@@ -3955,8 +3955,8 @@ bool IsErrFunc(OpCode oc)
 
 StackVar ScInterpreter::Interpret()
 {
-    short nRetTypeExpr = css::util::NumberFormat::UNDEFINED;
-    sal_uLong nRetIndexExpr = 0;
+    sal_uInt32 nRetTypeExpr = css::util::NumberFormat::UNDEFINED;
+    sal_uInt32 nRetIndexExpr = 0;
     sal_uInt16 nErrorFunction = 0;
     sal_uInt16 nErrorFunctionCount = 0;
     std::vector<sal_uInt16> aErrorFunctionStack;

@@ -401,7 +401,7 @@ public:
 
 void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero,
-    sal_uLong& rCount, short& rFuncFmtType, double& fRes, double& fMem )
+    sal_uLong& rCount, sal_uInt32& rFuncFmtType, double& fRes, double& fMem )
 {
     if (!pMat)
         return;

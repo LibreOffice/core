@@ -157,7 +157,7 @@ long ScColumn::GetNeededSize(
         bBreak = pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-    sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+    sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
     // #i111387# disable automatic line breaks only for "General" number format
     if (bBreak && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
     {

@@ -135,9 +135,9 @@ public:
                                 with text encoding RTL_TEXTENC_SYMBOL */
     bool                    IsSymbolFont() const;
 
-    sal_uLong                   GetNumberFormat( SvNumberFormatter* ) const;
-    sal_uLong                   GetNumberFormat( SvNumberFormatter* pFormatter,
-                                                const SfxItemSet* pCondSet ) const;
+    sal_uInt32              GetNumberFormat( SvNumberFormatter* ) const;
+    sal_uInt32              GetNumberFormat( SvNumberFormatter* pFormatter,
+                                             const SfxItemSet* pCondSet ) const;
 
     long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
     ScRotateDir             GetRotateDir( const SfxItemSet* pCondSet ) const;

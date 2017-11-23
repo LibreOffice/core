@@ -2063,7 +2063,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
           && nFormatType != css::util::NumberFormat::TIME
           && nFormatType != css::util::NumberFormat::DATETIME )
         {
-            sal_uLong nFormat = pDocument->GetNumberFormat( aPos );
+            sal_uInt32 nFormat = pDocument->GetNumberFormat( aPos );
             aResult.SetDouble( pDocument->RoundValueAsShown(
                         aResult.GetDouble(), nFormat));
         }

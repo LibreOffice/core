@@ -280,7 +280,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             else
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                sal_uLong nNumFmt = pPattern->GetNumberFormat(pFormatter);
+                sal_uInt32 nNumFmt = pPattern->GetNumberFormat(pFormatter);
                 OUString aText;
                 Color* pColor;
                 ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, pDoc);

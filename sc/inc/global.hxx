@@ -812,7 +812,7 @@ public:
      */
     static double ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
             FormulaError & rError, FormulaError nStringNoValueError,
-            SvNumberFormatter* pFormatter, short & rCurFmtType );
+            SvNumberFormatter* pFormatter, sal_uInt32 & rCurFmtType );
 
 };
 
