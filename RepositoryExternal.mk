@@ -3469,7 +3469,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-else # NON-SYSTEM_GPGME
+else ifneq ($(filter GPGMEPP,$(BUILD_TYPE)),) # NON-SYSTEM_GPGME
 
 define gb_ExternalProject__use_gpgmepp
 $(call gb_ExternalProject_use_external_project,$(1),gpgmepp)
