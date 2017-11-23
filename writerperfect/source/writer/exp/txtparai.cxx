@@ -245,10 +245,15 @@ void XMLHyperlinkContext::startElement(const OUString &/*rName*/, const css::uno
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
         const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        if (rAttributeName == "xlink:href")
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        if (rAttributeName == "text:style-name")
+            // This affects the nested span's properties.
+            FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aPropertyList);
+        else
         {
+            // This affects the link's properties.
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
@@ -263,8 +268,12 @@ void XMLHyperlinkContext::endElement(const OUString &/*rName*/)
 
 void XMLHyperlinkContext::characters(const OUString &rChars)
 {
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
+
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+
+    mrImport.GetGenerator().closeSpan();
 }
 
 XMLParaContext::XMLParaContext(XMLImport &rImport)
