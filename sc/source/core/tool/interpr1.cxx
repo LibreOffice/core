@@ -8942,7 +8942,16 @@ void ScInterpreter::ScSearch()
             if (!bBool)
                 PushNoValue();
             else
-                PushDouble((double)nPos + 1);
+            {
+                sal_Int32 nIdx = 0;
+                sal_Int32 nCnt = 0;
+                while ( nIdx <= nPos )
+                {
+                    sStr.iterateCodePoints( &nIdx );
+                    ++nCnt;
+                }
+                PushDouble( ( double )nCnt );
+            }
         }
     }
 }
