@@ -2073,12 +2073,12 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                             {
                                 if (pEntry->nWID == SC_WID_UNO_TBLBORD2)
                                     ScHelperFunctions::AssignTableBorder2ToAny( aAny,
-                                            static_cast<const SvxBoxItem&>(pPattern->GetItem(ATTR_BORDER)),
-                                            static_cast<const SvxBoxInfoItem&>(pPattern->GetItem(ATTR_BORDER_INNER)) );
+                                            pPattern->GetItem(ATTR_BORDER),
+                                            pPattern->GetItem(ATTR_BORDER_INNER) );
                                 else
                                     ScHelperFunctions::AssignTableBorderToAny( aAny,
-                                            static_cast<const SvxBoxItem&>(pPattern->GetItem(ATTR_BORDER)),
-                                            static_cast<const SvxBoxInfoItem&>(pPattern->GetItem(ATTR_BORDER_INNER)) );
+                                            pPattern->GetItem(ATTR_BORDER),
+                                            pPattern->GetItem(ATTR_BORDER_INNER) );
                             }
                         }
                         break;
@@ -2566,8 +2566,8 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     rDoc.GetStorageGrammar() :
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
-                            const std::vector<sal_uInt32>& rIndex = static_cast<const ScCondFormatItem&>(
-                                    pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+                            const std::vector<sal_uInt32>& rIndex =
+                                    pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                             sal_uLong nIndex = 0;
                             if(!rIndex.empty())
                                 nIndex = rIndex[0];
@@ -2589,8 +2589,8 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     rDoc.GetStorageGrammar() :
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
-                            sal_uLong nIndex = static_cast<const SfxUInt32Item&>(
-                                    pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
+                            sal_uLong nIndex =
+                                    pPattern->GetItem(ATTR_VALIDDATA).GetValue();
                             rAny <<= uno::Reference<beans::XPropertySet>(
                                     new ScTableValidationObj( &rDoc, nIndex, eGrammar ));
                         }

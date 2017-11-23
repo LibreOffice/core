@@ -2009,7 +2009,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 const ScConditionalFormat* pCondFormat = nullptr;
                 const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
-                const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+                const std::vector<sal_uInt32>& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                 bool bContainsCondFormat = !rCondFormats.empty();
                 bool bCondFormatDlg = false;
                 if(bContainsCondFormat)

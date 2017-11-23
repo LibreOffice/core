@@ -140,7 +140,7 @@ SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     if (!pPattern) return SvtScriptType::NONE;
     const SfxItemSet* pCondSet = nullptr;
-    if ( !static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty() )
+    if ( !pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
 
     sal_uLong nFormat = pPattern->GetNumberFormat( mxPoolHelper->GetFormTable(), pCondSet );

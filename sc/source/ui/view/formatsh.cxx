@@ -1489,9 +1489,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     }
                     else
                     {
-                        SvxUnderlineItem aUnderline( static_cast<const SvxUnderlineItem&>(
-                                                        pAttrs->GetItem(
-                                                            ATTR_FONT_UNDERLINE ) ) );
+                        SvxUnderlineItem aUnderline( pAttrs->GetItem( ATTR_FONT_UNDERLINE ) );
                         eUnderline = (LINESTYLE_NONE != aUnderline.GetLineStyle())
                                     ? LINESTYLE_NONE
                                     : LINESTYLE_SINGLE;
@@ -1509,8 +1507,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
             case SID_ULINE_VAL_DOUBLE:
             case SID_ULINE_VAL_DOTTED:
                 {
-                    FontLineStyle eOld = static_cast<const SvxUnderlineItem&>(
-                                            pAttrs->GetItem(ATTR_FONT_UNDERLINE)).GetLineStyle();
+                    FontLineStyle eOld = pAttrs->GetItem(ATTR_FONT_UNDERLINE).GetLineStyle();
                     FontLineStyle eNew = eOld;
                     switch (nSlot)
                     {
@@ -1694,8 +1691,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
             case SID_BACKGROUND_COLOR:
                 {
-                    SvxBrushItem aBrushItem( static_cast<const SvxBrushItem&>(
-                                     pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) ) );
+                    SvxBrushItem aBrushItem(
+                                     pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) );
                     aBrushItem.SetColor( COL_TRANSPARENT );
                     pTabViewShell->ApplyAttr( aBrushItem, false );
                 }
@@ -1704,7 +1701,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_ALIGN_LINEBREAK:                  // without parameter as toggle
                 {
                     const ScPatternAttr* pAttrs = pTabViewShell->GetSelectionPattern();
-                    bool bOld = static_cast<const SfxBoolItem&>(pAttrs->GetItem(ATTR_LINEBREAK)).GetValue();
+                    bool bOld = pAttrs->GetItem(ATTR_LINEBREAK).GetValue();
                     SfxBoolItem aBreakItem( ATTR_LINEBREAK, !bOld );
                     pTabViewShell->ApplyAttr( aBreakItem );
 
@@ -1719,10 +1716,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_SCATTR_CELLPROTECTION:                  // without parameter as toggle
                 {
                     const ScPatternAttr* pAttrs = pTabViewShell->GetSelectionPattern();
-                    bool bProtect = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetProtection();
-                    bool bHideFormula = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetHideFormula();
-                    bool bHideCell = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetHideCell();
-                    bool bHidePrint = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetHidePrint();
+                    bool bProtect = pAttrs->GetItem(ATTR_PROTECTION).GetProtection();
+                    bool bHideFormula = pAttrs->GetItem(ATTR_PROTECTION).GetHideFormula();
+                    bool bHideCell = pAttrs->GetItem(ATTR_PROTECTION).GetHideCell();
+                    bool bHidePrint = pAttrs->GetItem(ATTR_PROTECTION).GetHidePrint();
 
                     ScProtectionAttr aProtectionItem( !bProtect, bHideFormula, bHideCell, bHidePrint );
                     pTabViewShell->ApplyAttr( aProtectionItem );
@@ -1972,9 +1969,9 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     const SvxColorItem  rNewColorItem = static_cast<const SvxColorItem&>(
                                             pNewAttrs->Get( SID_BACKGROUND_COLOR ) );
 
-                    SvxBrushItem        aBrushItem( static_cast<const SvxBrushItem&>(
+                    SvxBrushItem        aBrushItem(
                                             pTabViewShell->GetSelectionPattern()->
-                                                GetItem( ATTR_BACKGROUND ) ) );
+                                                GetItem( ATTR_BACKGROUND ) );
 
                     aBrushItem.SetColor( rNewColorItem.GetValue() );
 
@@ -1984,9 +1981,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                 case SID_ATTR_BRUSH:
                 {
-                    SvxBrushItem        aBrushItem( static_cast<const SvxBrushItem&>(
-                                            pTabViewShell->GetSelectionPattern()->
-                                                GetItem( ATTR_BACKGROUND ) ) );
+                    SvxBrushItem        aBrushItem( pTabViewShell->GetSelectionPattern()->
+                                                GetItem( ATTR_BACKGROUND ) );
                     const SvxBrushItem& rNewBrushItem = static_cast<const SvxBrushItem&>(
                                             pNewAttrs->Get( GetPool().GetWhich(nSlot) ) );
                     aBrushItem.SetColor(rNewBrushItem.GetColor());

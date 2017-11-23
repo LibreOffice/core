@@ -387,9 +387,9 @@ static bool lcl_GetHyperlinkCell(
         else
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(aPos);
-            if ( !static_cast<const SfxStringItem&>(pPattern->GetItem(ATTR_HYPERLINK)).GetValue().isEmpty() )
+            if ( !pPattern->GetItem(ATTR_HYPERLINK).GetValue().isEmpty() )
             {
-                rURL =  static_cast<const SfxStringItem&>(pPattern->GetItem(ATTR_HYPERLINK)).GetValue();
+                rURL = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
                 bFound = true;
             }
             else if (rCell.meType == CELLTYPE_EDIT)
@@ -4982,7 +4982,7 @@ namespace {
 SvxAdjust toSvxAdjust( const ScPatternAttr& rPat )
 {
     SvxCellHorJustify eHorJust =
-            static_cast<const SvxHorJustifyItem&>(rPat.GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+            rPat.GetItem(ATTR_HOR_JUSTIFY).GetValue();
 
     SvxAdjust eSvxAdjust = SvxAdjust::Left;
     switch (eHorJust)
@@ -5081,11 +5081,9 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     if (pPattern->GetCellOrientation() != SvxCellOrientation::Standard)
         return false;
 
-    bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
-                    (static_cast<const SvxHorJustifyItem&>(pPattern->
-                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block);
-    SvxCellHorJustify eHorJust = static_cast<const SvxHorJustifyItem&>(pPattern->
-                        GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+    bool bBreak = pPattern->GetItem(ATTR_LINEBREAK).GetValue() ||
+                    (pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue() == SvxCellHorJustify::Block);
+    SvxCellHorJustify eHorJust = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
 
         //  EditEngine
 
@@ -5394,8 +5392,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
             // NB: For spell-checking, we currently only use the primary
             // language; not CJK nor CTL.
             const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
-            LanguageType nCellLang =
-                static_cast<const SvxLanguageItem&>(pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
+            LanguageType nCellLang = pPattern->GetItem(ATTR_FONT_LANGUAGE).GetValue();
 
             if (nCellLang == LANGUAGE_SYSTEM)
                 nCellLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
@@ -5788,7 +5785,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
         // fdo#87382 Also display the cell cursor for the visible part of
         // merged cells if the view position is part of merged cells.
-        const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE));
+        const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
         if (rMerge.GetColMerge() <= 1 && rMerge.GetRowMerge() <= 1)
             return;     // not merged and invisible
 
@@ -5800,7 +5797,7 @@ void ScGridWindow::UpdateCursorOverlay()
     }
 
     //  don't show the cursor in overlapped cells
-    const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>( pPattern->GetItem(ATTR_MERGE_FLAG) );
+    const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
     bool bOverlapped = rMergeFlag.IsOverlapped();
 
     //  left or above of the screen?
@@ -5809,7 +5806,7 @@ void ScGridWindow::UpdateCursorOverlay()
     {
         SCCOL nEndX = nX;
         SCROW nEndY = nY;
-        const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>( pPattern->GetItem(ATTR_MERGE) );
+        const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
         if (rMerge.GetColMerge() > 1)
             nEndX += rMerge.GetColMerge()-1;
         if (rMerge.GetRowMerge() > 1)

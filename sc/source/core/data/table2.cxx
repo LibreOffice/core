@@ -2038,8 +2038,8 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
             double nFactor = 0.0;
             if ( nCol > nX2+1 )
             {
-                long nRotVal = static_cast<const SfxInt32Item&>( pPattern->
-                        GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue();
+                long nRotVal = pPattern->
+                        GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue();
                 double nRealOrient = nRotVal * F_PI18000;   // 1/100 degree
                 double nCos = cos( nRealOrient );
                 double nSin = sin( nRealOrient );

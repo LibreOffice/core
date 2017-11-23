@@ -529,7 +529,7 @@ void ScGlobal::InitTextHeight(const SfxItemPool* pPool)
     if (nTest > nDefFontHeight)
         nDefFontHeight = nTest;
 
-    const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
+    const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
 
     nTest = static_cast<sal_uInt16>(
         nDefFontHeight + pMargin->GetTopMargin() + pMargin->GetBottomMargin() - STD_ROWHEIGHT_DIFF);

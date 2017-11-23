@@ -147,13 +147,13 @@ SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet
 {
     SvxCellOrientation eOrient = SvxCellOrientation::Standard;
 
-    if( static_cast<const SfxBoolItem&>(GetItem( ATTR_STACKED, rItemSet, pCondSet )).GetValue() )
+    if( GetItem( ATTR_STACKED, rItemSet, pCondSet ).GetValue() )
     {
         eOrient = SvxCellOrientation::Stacked;
     }
     else
     {
-        sal_Int32 nAngle = static_cast<const SfxInt32Item&>(GetItem( ATTR_ROTATE_VALUE, rItemSet, pCondSet )).GetValue();
+        sal_Int32 nAngle = GetItem( ATTR_ROTATE_VALUE, rItemSet, pCondSet ).GetValue();
         if( nAngle == 9000 )
             eOrient = SvxCellOrientation::BottomUp;
         else if( nAngle == 27000 )
@@ -1297,11 +1297,11 @@ long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
     long nAttrRotate = 0;
     if ( GetCellOrientation() == SvxCellOrientation::Standard )
     {
-        bool bRepeat = ( static_cast<const SvxHorJustifyItem&>(GetItem(ATTR_HOR_JUSTIFY, pCondSet)).
+        bool bRepeat = ( GetItem(ATTR_HOR_JUSTIFY, pCondSet).
                             GetValue() == SvxCellHorJustify::Repeat );
         // ignore orientation/rotation if "repeat" is active
         if ( !bRepeat )
-            nAttrRotate = static_cast<const SfxInt32Item&>(GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue();
+            nAttrRotate = GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue();
     }
     return nAttrRotate;
 }
@@ -1313,8 +1313,7 @@ ScRotateDir ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
     long nAttrRotate = GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
-        SvxRotateMode eRotMode = static_cast<const SvxRotateModeItem&>(
-                                    GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
+        SvxRotateMode eRotMode = GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
         if ( eRotMode == SVX_ROTATE_MODE_STANDARD || nAttrRotate == 18000 )
             nRet = ScRotateDir::Standard;

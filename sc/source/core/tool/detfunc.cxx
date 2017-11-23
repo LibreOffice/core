@@ -1293,7 +1293,7 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
     const ScPatternAttr* pPattern = aAttrIter.GetNext( nCol, nRow1, nRow2 );
     while ( pPattern && nInsCount < SC_DET_MAXCIRCLE )
     {
-        sal_uLong nIndex = static_cast<const SfxUInt32Item&>(pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
+        sal_uLong nIndex = pPattern->GetItem(ATTR_VALIDDATA).GetValue();
         if (nIndex)
         {
             const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
