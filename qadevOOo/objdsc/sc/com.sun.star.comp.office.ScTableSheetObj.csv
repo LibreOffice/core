@@ -226,7 +226,6 @@
 "ScTableSheetObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
 "ScTableSheetObj";"com::sun::star::sheet::XCellRangeData";"getDataArray()"
 "ScTableSheetObj";"com::sun::star::sheet::XCellRangeData";"setDataArray()"
-"ScTableSheetObj";"com::sun::star::sheet::XScenarioEnhanced#optional";"getRanges()"
 "ScTableSheetObj";"com::sun::star::chart::XChartDataArray";"getData()"
 "ScTableSheetObj";"com::sun::star::chart::XChartDataArray";"setData()"
 "ScTableSheetObj";"com::sun::star::chart::XChartDataArray";"getRowDescriptions()"
