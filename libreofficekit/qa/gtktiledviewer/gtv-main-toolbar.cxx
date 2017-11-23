@@ -35,7 +35,6 @@ struct GtvMainToolbarPrivateImpl
     GtkWidget* m_pDeleteComment;
     GtkWidget* m_pPartSelector;
     GtkWidget* m_pPartModeSelector;
-    GtkWidget* m_pDialogSelector;
 
     /// Sensitivity (enabled or disabled) for each tool item, ignoring edit state
     std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
@@ -50,8 +49,7 @@ struct GtvMainToolbarPrivateImpl
         m_pJustifypara(nullptr),
         m_pDeleteComment(nullptr),
         m_pPartSelector(nullptr),
-        m_pPartModeSelector(nullptr),
-        m_pDialogSelector(nullptr)
+        m_pPartModeSelector(nullptr)
         { }
 };
 
@@ -98,7 +96,6 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     priv->m_pDeleteComment = GTK_WIDGET(gtk_builder_get_object(builder.get(), "btn_removeannotation"));
     priv->m_pPartSelector = GTK_WIDGET(gtk_builder_get_object(builder.get(), "combo_partselector"));
     priv->m_pPartModeSelector = GTK_WIDGET(gtk_builder_get_object(builder.get(), "combo_partsmodeselector"));
-    priv->m_pDialogSelector = GTK_WIDGET(gtk_builder_get_object(builder.get(), "combo_dialogselector"));
 
     toolbar->m_pAddressbar = GTK_WIDGET(gtk_builder_get_object(builder.get(), "addressbar_entry"));
     toolbar->m_pFormulabar = GTK_WIDGET(gtk_builder_get_object(builder.get(), "formulabar_entry"));
@@ -181,22 +178,6 @@ static void populatePartSelector(GtvMainToolbar* toolbar)
     gtv_application_window_set_part_broadcast(window, true);
 }
 
-static void populateDialogSelector(GtvMainToolbar* toolbar)
-{
-    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
-
-    GtkComboBoxText* pSelector = GTK_COMBO_BOX_TEXT(priv->m_pDialogSelector);
-    gtk_combo_box_text_append_text( pSelector, ".uno:SearchDialog" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:AcceptTrackedChanges" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:SpellingAndGrammarDialog" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:InsertField" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:ImageMapDialog" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:WordCountDialog" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:HyperlinkDialog" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:InsertIndexesEntry" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:InsertAuthoritiesEntry");
-}
-
 void
 gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode)
 {
@@ -223,8 +204,6 @@ gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType 
 
     // populate combo boxes
     populatePartSelector(toolbar);
-    // populate dialogs
-    populateDialogSelector(toolbar);
 }
 
 GtkContainer*
