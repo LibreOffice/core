@@ -396,6 +396,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
             bFileOpenDialog  = false;
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_PASSWORD;
+            nFeatures        |= FEATURE_GPGPASSWORD;
         }
         break;
 
@@ -405,6 +406,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_PASSWORD;
             nFeatures        |= FEATURE_FILTEROPTIONS;
+            nFeatures        |= FEATURE_GPGPASSWORD;
         }
         break;
 
