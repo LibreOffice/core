@@ -69,7 +69,7 @@ public:
     void                finalizeImport(
                             const css::uno::Reference< css::util::XNumberFormats >& rxNumFmts,
                             const css::lang::Locale& rFromLocale );
-    sal_uLong fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
+    sal_uInt32          fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 
 private:
     NumFmtModel         maModel;
@@ -84,7 +84,7 @@ public:
     explicit            NumberFormatsBuffer( const WorkbookHelper& rHelper );
 
     /** Inserts a new number format. */
-    NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode );
+    NumberFormatRef     createNumFmt( sal_uInt32 nNumFmtId, const OUString& rFmtCode );
 
     /** Inserts a new number format code. */
     NumberFormatRef     importNumFmt( const AttributeList& rAttribs );
@@ -94,19 +94,19 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    sal_uLong           fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const;
+    sal_uInt32          fillToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const;
 
-    sal_Int32           nextFreeId(){ return ++mnHighestId; }
+    sal_uInt32          nextFreeId(){ return ++mnHighestId; }
 private:
     /** Inserts built-in number formats for the current system language. */
     void                insertBuiltinFormats();
 
 private:
-    typedef RefMap< sal_Int32, NumberFormat > NumberFormatMap;
+    typedef RefMap< sal_uInt32, NumberFormat > NumberFormatMap;
 
     NumberFormatMap     maNumFmts;          /// List of number formats.
     OUString     maLocaleStr;        /// Current office locale.
-    sal_Int32           mnHighestId;
+    sal_uInt32          mnHighestId;
 };
 
 } // namespace xls

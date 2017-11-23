@@ -948,7 +948,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     break;
                     case CELLTYPE_VALUE:
                     {
-                        sal_uLong nNumFmt = GetNumberFormat( nSrcX, nSrcY );
+                        sal_uInt32 nNumFmt = GetNumberFormat( nSrcX, nSrcY );
                         //  overflow is possible...
                         double nVal = aCell.mfValue;
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
@@ -1050,7 +1050,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                 {
                     //TODO: get number format according to Index?
                     Color* pColor;
-                    sal_uLong nNumFmt = GetNumberFormat( nCol1, nRow1 );
+                    sal_uInt32 nNumFmt = GetNumberFormat( nCol1, nRow1 );
                     pDocument->GetFormatTable()->GetOutputString( nStart, nNumFmt, aValue, &pColor );
                 }
             }

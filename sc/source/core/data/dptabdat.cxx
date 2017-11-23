@@ -110,7 +110,7 @@ bool ScDPTableData::IsRepeatIfEmpty()
     return false;
 }
 
-sal_uLong ScDPTableData::GetNumberFormat(long)
+sal_uInt32 ScDPTableData::GetNumberFormat(long)
 {
     return 0;           // default format
 }

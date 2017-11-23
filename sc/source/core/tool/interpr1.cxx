@@ -1988,7 +1988,7 @@ void ScInterpreter::ScIsLogical()
             {
                 if (aCell.hasNumeric())
                 {
-                    sal_uLong nFormat = GetCellNumberFormat(aAdr, aCell);
+                    sal_uInt32 nFormat = GetCellNumberFormat(aAdr, aCell);
                     bRes = (pFormatter->GetType(nFormat) == css::util::NumberFormat::LOGICAL);
                 }
             }
@@ -2036,7 +2036,7 @@ void ScInterpreter::ScType()
                         break;
                     case CELLTYPE_VALUE :
                     {
-                        sal_uLong nFormat = GetCellNumberFormat(aAdr, aCell);
+                        sal_uInt32 nFormat = GetCellNumberFormat(aAdr, aCell);
                         if (pFormatter->GetType(nFormat) == css::util::NumberFormat::LOGICAL)
                             nType = 4;
                         else
@@ -2321,7 +2321,7 @@ void ScInterpreter::ScCell()
             else if( aInfoType == "FORMAT" )
             {   // specific format code for standard formats
                 OUString aFuncResult;
-                sal_uLong   nFormat = pDok->GetNumberFormat( aCellPos );
+                sal_uInt32 nFormat = pDok->GetNumberFormat( aCellPos );
                 getFormatString(pFormatter, nFormat, aFuncResult);
                 PushString( aFuncResult );
             }

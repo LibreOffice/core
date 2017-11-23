@@ -41,7 +41,7 @@ OUString getTwoDigitString(sal_Int32 nValue)
 
 void appendDateStr(OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter)
 {
-    sal_uLong nFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::DATE, ScGlobal::eLnge );
+    sal_uInt32 nFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::DATE, ScGlobal::eLnge );
     OUString aString;
     pFormatter->GetInputLineString(fValue, nFormat, aString);
     rBuffer.append(aString);
@@ -196,7 +196,7 @@ namespace {
 
 void lcl_AppendDateStr( OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
 {
-    sal_uLong nFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::DATE, ScGlobal::eLnge );
+    sal_uInt32 nFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::DATE, ScGlobal::eLnge );
     OUString aString;
     pFormatter->GetInputLineString( fValue, nFormat, aString );
     rBuffer.append( aString );

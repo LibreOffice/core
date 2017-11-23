@@ -1702,7 +1702,7 @@ void ScChangeActionContent::SetValue(
     OUString& rStr, ScCellValue& rCell, const ScAddress& rPos, const ScCellValue& rOrgCell,
     const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
-    sal_uLong nFormat = NeedsNumberFormat(rOrgCell) ? pFromDoc->GetNumberFormat(rPos) : 0;
+    sal_uInt32 nFormat = NeedsNumberFormat(rOrgCell) ? pFromDoc->GetNumberFormat(rPos) : 0;
     SetValue(rStr, rCell, nFormat, rOrgCell, pFromDoc, pToDoc);
 }
 

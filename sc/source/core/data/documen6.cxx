@@ -110,7 +110,7 @@ SvtScriptType ScDocument::GetStringScriptType( const OUString& rString )
     return nRet;
 }
 
-SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat )
+SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 nNumberFormat )
 {
     SvtScriptType nStored = GetScriptType(rPos);
     if ( nStored != SvtScriptType::UNKNOWN )         // stored value valid?
@@ -143,7 +143,7 @@ SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( !pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
 
-    sal_uLong nFormat = pPattern->GetNumberFormat( mxPoolHelper->GetFormTable(), pCondSet );
+    sal_uInt32 nFormat = pPattern->GetNumberFormat( mxPoolHelper->GetFormTable(), pCondSet );
 
     return GetCellScriptType(aPos, nFormat);
 }

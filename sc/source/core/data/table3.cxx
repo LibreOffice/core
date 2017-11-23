@@ -2468,7 +2468,7 @@ public:
                 aCellStr = *rCell.mpString;
             else
             {
-                sal_uLong nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
+                sal_uInt32 nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 OUString aStr;
                 ScCellFormat::GetInputString(rCell, nFormat, aStr, *mrDoc.GetFormatTable(), &mrDoc);
                 aCellStr = mrStrPool.intern(aStr);

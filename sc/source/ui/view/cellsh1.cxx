@@ -789,7 +789,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_2, aPara ) );
 
-                        sal_uLong nFormatKey = pFormatter->GetStandardFormat(css::util::NumberFormat::NUMBER,
+                        sal_uInt32 nFormatKey = pFormatter->GetStandardFormat(css::util::NumberFormat::NUMBER,
                                     ScGlobal::eLnge );
 
                         pFormatter->GetOutputString( fIncVal, nFormatKey, aPara, &pColor );

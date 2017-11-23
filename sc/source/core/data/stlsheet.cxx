@@ -242,7 +242,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                 ScDocument* pDoc = pool->GetDocument();
                 if ( pDoc )
                 {
-                    sal_uLong nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::CURRENCY,ScGlobal::eLnge );
+                    sal_uInt32 nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::CURRENCY,ScGlobal::eLnge );
                     pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
                 }
             }

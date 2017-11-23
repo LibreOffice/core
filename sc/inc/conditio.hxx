@@ -250,7 +250,7 @@ public:
     void            SetFormula1( const ScTokenArray& rArray );
     void            SetFormula2( const ScTokenArray& rArray );
 
-    OUString          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
+    OUString          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uInt32 nNumFmt = 0,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
                     /** Create a flat copy using ScTokenArray copy-ctor with

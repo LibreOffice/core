@@ -1310,7 +1310,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
         {
             //  like in GetString for document (column)
             Color* pColor;
-            sal_uLong nNumFmt = pDoc->GetNumberFormat(aCellPos);
+            sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aCellPos);
             OUString aStr;
             ScCellFormat::GetString(aCell, nNumFmt, aStr, &pColor, *pDoc->GetFormatTable(), pDoc);
             return aStr;

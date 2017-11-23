@@ -841,7 +841,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         {
                             eMode = pOldData->GetDataMode();
                             eOper = pOldData->GetOperation();
-                            sal_uLong nNumFmt = 0;
+                            sal_uInt32 nNumFmt = 0;
                             if ( eMode == SC_VALID_DATE || eMode == SC_VALID_TIME )
                             {
                                 short nType = ( eMode == SC_VALID_DATE ) ? css::util::NumberFormat::DATE

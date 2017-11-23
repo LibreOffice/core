@@ -1018,7 +1018,7 @@ private:
 
         OUString aStr;
         Color* pColor;
-        sal_uLong nFormat = pPat->GetNumberFormat(mpFormatter, pCondSet);
+        sal_uInt32 nFormat = pPat->GetNumberFormat(mpFormatter, pCondSet);
         ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *mpFormatter, &mrCol.GetDoc());
 
         rAttr.mnScriptType = mrCol.GetDoc().GetStringScriptType(aStr);

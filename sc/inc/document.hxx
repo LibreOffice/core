@@ -1122,7 +1122,7 @@ public:
     SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& ) const;
     void                                      SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
-    void                                      GetNumberFormatInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex, const ScAddress& rPos ) const;
+    void                                      GetNumberFormatInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex, const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScFormulaCell*         GetFormulaCell( const ScAddress& rPos ) const;
     SC_DLLPUBLIC ScFormulaCell*               GetFormulaCell( const ScAddress& rPos );
     SC_DLLPUBLIC void                         GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const;
@@ -1628,7 +1628,7 @@ public:
     SC_DLLPUBLIC const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
     bool                        HasStringWeakCharacters( const OUString& rString );
     SC_DLLPUBLIC SvtScriptType  GetStringScriptType( const OUString& rString );
-    SC_DLLPUBLIC SvtScriptType  GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat );
+    SC_DLLPUBLIC SvtScriptType  GetCellScriptType( const ScAddress& rPos, sal_uInt32 nNumberFormat );
     SC_DLLPUBLIC SvtScriptType  GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab );
     SvtScriptType               GetRangeScriptType( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength );
     SvtScriptType               GetRangeScriptType( const ScRangeList& rRanges );

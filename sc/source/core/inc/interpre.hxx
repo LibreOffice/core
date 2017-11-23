@@ -216,12 +216,12 @@ private:
     FormulaError nGlobalError;          // global (local to this formula expression) error
     sal_uInt16  sp;                     // stack pointer
     sal_uInt16  maxsp;                  // the maximal used stack pointer
-    sal_uLong   nFuncFmtIndex;          // NumberFormatIndex of a function
-    sal_uLong   nCurFmtIndex;           // current NumberFormatIndex
-    sal_uLong   nRetFmtIndex;           // NumberFormatIndex of an expression, if any
-    short       nFuncFmtType;           // NumberFormatType of a function
-    short       nCurFmtType;            // current NumberFormatType
-    short       nRetFmtType;            // NumberFormatType of an expression
+    sal_uInt32  nFuncFmtIndex;          // NumberFormatIndex of a function
+    sal_uInt32  nCurFmtIndex;           // current NumberFormatIndex
+    sal_uInt32  nRetFmtIndex;           // NumberFormatIndex of an expression, if any
+    sal_uInt32  nFuncFmtType;           // NumberFormatType of a function
+    sal_uInt32  nCurFmtType;            // current NumberFormatType
+    sal_uInt32  nRetFmtType;            // NumberFormatType of an expression
     FormulaError  mnStringNoValueError; // the error set in ConvertStringToValue() if no value
     SubtotalFlags mnSubTotalFlags;      // flags for subtotal and aggregate functions
     sal_uInt8   cPar;                   // current count of parameters
@@ -247,13 +247,13 @@ private:
 
     void ReplaceCell( ScAddress& );     // for TableOp
     bool IsTableOpInRange( const ScRange& );
-    sal_uLong GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
+    sal_uInt32 GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
     double ConvertStringToValue( const OUString& );
     public:
     static double ScGetGCD(double fx, double fy);
     /** For matrix back calls into the current interpreter.
         Uses rError instead of nGlobalError and rCurFmtType instead of nCurFmtType. */
-    double ConvertStringToValue( const OUString&, FormulaError& rError, short& rCurFmtType );
+    double ConvertStringToValue( const OUString&, FormulaError& rError, sal_uInt32& rCurFmtType );
     private:
     double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
     double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
@@ -331,7 +331,7 @@ private:
                 FormulaDoubleToken or a FormulaTypedDoubleToken.
      */
     void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
-            short * pRetTypeExpr, sal_uLong * pRetIndexExpr, bool bFinalResult = false );
+            sal_uInt32 * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult = false );
 
     formula::FormulaConstTokenRef PopToken();
     void Pop();
@@ -393,7 +393,7 @@ private:
     inline bool MatrixParameterConversion();
     ScMatrixRef PopMatrix();
     sc::RangeMatrix PopRangeMatrix();
-    void QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
+    void QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTypeExpr, sal_uInt32& rRetIndexExpr);
 
     formula::FormulaToken* CreateFormulaDoubleToken( double fVal, short nFmt = css::util::NumberFormat::NUMBER );
     formula::FormulaToken* CreateDoubleOrTypedToken( double fVal );

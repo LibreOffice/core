@@ -74,7 +74,7 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 
 }
 
-void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rpArr,
+void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrArray*& rpArr,
         SCROW& nAttrEndRow, const ScAttrArray* pNewArr, SCROW nRow,
         const ScDocument* pDoc )
 {
@@ -262,7 +262,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
     }
 }
 
-void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex )
+void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex )
 {
     if (!bNumValid && mnTab < pDoc->GetTableCount())
     {
@@ -1683,7 +1683,7 @@ bool ScQueryCellIterator::BinarySearch()
         if (aPos.first->type == sc::element_type_string || aPos.first->type == sc::element_type_edittext)
         {
             aCell = sc::toRefCell(aPos.first, aPos.second);
-            sal_uLong nFormat = pCol->GetNumberFormat(mrContext, nRow);
+            sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, nRow);
             OUString aCellStr;
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
             sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
@@ -1717,7 +1717,7 @@ bool ScQueryCellIterator::BinarySearch()
     aCell = aCellData.first;
     if (aCell.hasString())
     {
-        sal_uLong nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
+        sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
         OUString aStr;
         ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter, pDoc);
         aLastInRangeString = aStr;
@@ -1816,7 +1816,7 @@ bool ScQueryCellIterator::BinarySearch()
         else if (bStr && bByString)
         {
             OUString aCellStr;
-            sal_uLong nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
+            sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());

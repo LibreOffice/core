@@ -157,7 +157,7 @@ public:
     virtual OUString                getDimensionName(long nColumn) override;
     virtual bool                    getIsDataLayoutDimension(long nColumn) override;
     virtual bool                    IsDateDimension(long nDim) override;
-    virtual sal_uLong               GetNumberFormat(long nDim) override;
+    virtual sal_uInt32              GetNumberFormat(long nDim) override;
     virtual void                    DisposeData() override;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
 

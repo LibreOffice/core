@@ -632,7 +632,7 @@ private:
     typedef ::std::unique_ptr< ::ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
-    sal_uLong           mnScNumFmt;         /// Calc number format.
+    sal_uInt32          mnScNumFmt;         /// Calc number format.
 
     XfModel             maModel;            /// Cell XF or style XF model data.
     Alignment           maAlignment;        /// Cell alignment data.
@@ -852,7 +852,7 @@ public:
     OUString     createDxfStyle( sal_Int32 nDxfId ) const;
 
     void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs ) const;
-    sal_uLong           writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const;
+    sal_uInt32          writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const;
     /** Writes the specified number format to the passed property map. */
     void                writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs ) const;
     /** Writes the fill attributes of the specified fill data to the passed property map. */

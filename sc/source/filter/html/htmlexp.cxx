@@ -869,7 +869,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     ScRefCellValue aCell(*pDoc, aPos);
 
-    sal_uLong nFormat = pAttr->GetNumberFormat( pFormatter );
+    sal_uInt32 nFormat = pAttr->GetNumberFormat( pFormatter );
     bool bValueData = aCell.hasNumeric();
     SvtScriptType nScriptType = SvtScriptType::NONE;
     if (!aCell.isEmpty())

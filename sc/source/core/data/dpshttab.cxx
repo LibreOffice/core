@@ -118,7 +118,7 @@ bool ScSheetDPData::IsDateDimension(long nDim)
     }
 }
 
-sal_uLong ScSheetDPData::GetNumberFormat(long nDim)
+sal_uInt32 ScSheetDPData::GetNumberFormat(long nDim)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nDim))

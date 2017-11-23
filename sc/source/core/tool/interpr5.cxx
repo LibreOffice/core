@@ -1137,12 +1137,12 @@ static ScMatrixRef lcl_MatrixCalculation(
                 else if ((!bVal1 && rMat1.IsString(i,j)) || (!bVal2 && rMat2.IsString(i,j)))
                 {
                     FormulaError nError1 = FormulaError::NONE;
-                    short nFmt1 = 0;
+                    sal_uInt32 nFmt1 = 0;
                     double fVal1 = (bVal1 ? rMat1.GetDouble(i,j) :
                             pInterpreter->ConvertStringToValue( rMat1.GetString(i,j).getString(), nError1, nFmt1));
 
                     FormulaError nError2 = FormulaError::NONE;
-                    short nFmt2 = 0;
+                    sal_uInt32 nFmt2 = 0;
                     double fVal2 = (bVal2 ? rMat2.GetDouble(i,j) :
                             pInterpreter->ConvertStringToValue( rMat2.GetString(i,j).getString(), nError2, nFmt2));
 
@@ -1181,7 +1181,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
 }
 
 // for DATE, TIME, DATETIME
-static void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
+static void lcl_GetDiffDateTimeFmtType( sal_uInt32& nFuncFmt, short nFmt1, short nFmt2 )
 {
     if ( nFmt1 != css::util::NumberFormat::UNDEFINED || nFmt2 != css::util::NumberFormat::UNDEFINED )
     {

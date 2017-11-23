@@ -53,8 +53,8 @@ class ScValueIterator            // walk through all values in an area
 
     ScDocument*     pDoc;
     const ScAttrArray*  pAttrArray;
-    sal_uLong           nNumFormat;     // for CalcAsShown
-    sal_uLong           nNumFmtIndex;
+    sal_uInt32      nNumFormat;     // for CalcAsShown
+    sal_uInt32      nNumFmtIndex;
     ScAddress       maStartPos;
     ScAddress       maEndPos;
     SCCOL           mnCol;
@@ -85,7 +85,7 @@ public:
         ScDocument* pDocument, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
         bool bTextAsZero = false );
 
-    void GetCurNumFmtInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex );
+    void GetCurNumFmtInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex );
 
     /// Does NOT reset rValue if no value found!
     bool GetFirst( double& rValue, FormulaError& rErr );
@@ -142,13 +142,13 @@ private:
         ScDocument*         mpDoc;
         const ScInterpreterContext& mrContext;
         const ScAttrArray*  pAttrArray;
-        sal_uLong               nNumFormat;     // for CalcAsShown
-        sal_uLong               nNumFmtIndex;
+        sal_uInt32          nNumFormat;     // for CalcAsShown
+        sal_uInt32          nNumFmtIndex;
         SCCOL               nCol;
         SCROW               nRow;
         SCROW               nAttrEndRow;
         SCTAB               nTab;
-        short               nNumFmtType;
+        sal_uInt32          nNumFmtType;
         bool                bCalcAsShown;
     };
 
@@ -454,7 +454,7 @@ private:
     const ScAttrArray        *pAttrArray;
     std::unique_ptr<ScHorizontalCellIterator>
                               pCellIter;
-    sal_uLong                 nNumFormat;     // for CalcAsShown
+    sal_uInt32                nNumFormat;     // for CalcAsShown
     SCTAB                     nEndTab;
     SCCOL                     nCurCol;
     SCROW                     nCurRow;

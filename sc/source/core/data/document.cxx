@@ -3720,7 +3720,7 @@ void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberForma
     maTabs[nTab]->SetNumberFormat(rPos.Col(), rPos.Row(), nNumberFormat);
 }
 
-void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex,
+void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex,
             const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();

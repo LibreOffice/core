@@ -1228,9 +1228,9 @@ LanguageType getLanguageType(const SfxItemSet& rSet)
 
 }
 
-sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
+sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 {
-    sal_uLong nFormat = getNumberFormatKey(GetItemSet());
+    sal_uInt32 nFormat = getNumberFormatKey(GetItemSet());
     LanguageType eLang = getLanguageType(GetItemSet());
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
         ;       // it remains as it is
@@ -1241,8 +1241,8 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 
 // the same if conditional formatting is in play:
 
-sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
-                                        const SfxItemSet* pCondSet ) const
+sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
+                                           const SfxItemSet* pCondSet ) const
 {
     assert(pFormatter);
     if (!pCondSet)

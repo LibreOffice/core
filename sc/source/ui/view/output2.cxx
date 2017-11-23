@@ -2359,7 +2359,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
     }
     else
     {
-        sal_uLong nFormat = mpPattern->GetNumberFormat(
+        sal_uInt32 nFormat = mpPattern->GetNumberFormat(
                                     pDoc->GetFormatTable(), mpCondSet );
         OUString aString;
         Color* pColor;
@@ -4799,7 +4799,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             }
                             else
                             {
-                                sal_uLong nFormat = pPattern->GetNumberFormat(
+                                sal_uInt32 nFormat = pPattern->GetNumberFormat(
                                                             mpDoc->GetFormatTable(), pCondSet );
                                 OUString aString;
                                 Color* pColor;

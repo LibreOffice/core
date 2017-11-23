@@ -224,7 +224,7 @@ public:
     void                CreateScFormats();
 
     /** Returns the format key with the passed Excel index or NUMBERFORMAT_ENTRY_NOT_FOUND on error. */
-    sal_uLong               GetScFormat( sal_uInt16 nXclNumFmt ) const;
+    sal_uInt32          GetScFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Fills an Excel number format to the passed item set.
         @param rItemSet  The destination item set.
@@ -238,7 +238,7 @@ public:
         @param nScNumFmt  The Calc number formatter index of the format.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                FillScFmtToItemSet(
-                            SfxItemSet& rItemSet, sal_uLong nScNumFmt,
+                            SfxItemSet& rItemSet, sal_uInt32 nScNumFmt,
                             bool bSkipPoolDefs = false ) const;
 
 private:
