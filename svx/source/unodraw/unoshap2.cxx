@@ -1429,6 +1429,106 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         }
         break;
     }
+
+    case OWN_ATTR_IS_SIGNATURELINE:
+    {
+        bool bIsSignatureLine;
+        if (rValue >>= bIsSignatureLine)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setIsSignatureLine(bIsSignatureLine);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_ID:
+    {
+        OUString aSignatureLineId;
+        if (rValue >>= aSignatureLineId)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineId(aSignatureLineId);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SUGGESTED_SIGNER_NAME:
+    {
+        OUString aSuggestedSignerName;
+        if (rValue >>= aSuggestedSignerName)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineSuggestedSignerName(aSuggestedSignerName);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SUGGESTED_SIGNER_TITLE:
+    {
+        OUString aSuggestedSignerTitle;
+        if (rValue >>= aSuggestedSignerTitle)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineSuggestedSignerTitle(aSuggestedSignerTitle);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SUGGESTED_SIGNER_EMAIL:
+    {
+        OUString aSuggestedSignerEmail;
+        if (rValue >>= aSuggestedSignerEmail)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineSuggestedSignerEmail(aSuggestedSignerEmail);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SIGNING_INSTRUCTIONS:
+    {
+        OUString aSigningInstructions;
+        if (rValue >>= aSigningInstructions)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineSigningInstructions(aSigningInstructions);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SHOW_SIGN_DATE:
+    {
+        bool bShowSignDate;
+        if (rValue >>= bShowSignDate)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineShowSignDate(bShowSignDate);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT:
+    {
+        bool bCanAddComment;
+        if (rValue >>= bCanAddComment)
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineCanAddComment(bCanAddComment);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE:
+    {
+        Reference<graphic::XGraphic> xGraphic(rValue, uno::UNO_QUERY);
+        if (xGraphic.is())
+        {
+            static_cast<SdrGrafObj*>(mpObj.get())->setSignatureLineUnsignedGraphic(xGraphic);
+            bOk = true;
+        }
+        break;
+    }
+
     default:
         return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
     }
@@ -1519,6 +1619,63 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         rValue <<= static_cast< SdrGrafObj* >( mpObj.get() )->getInputStream();
         break;
     }
+
+    case OWN_ATTR_IS_SIGNATURELINE:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->isSignatureLine();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_ID:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->getSignatureLineId();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SUGGESTED_SIGNER_NAME:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->getSignatureLineSuggestedSignerName();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SUGGESTED_SIGNER_TITLE:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->getSignatureLineSuggestedSignerTitle();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SUGGESTED_SIGNER_EMAIL:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->getSignatureLineSuggestedSignerEmail();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SIGNING_INSTRUCTIONS:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->getSignatureLineSigningInstructions();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_SHOW_SIGN_DATE:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->isSignatureLineShowSignDate();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(mpObj.get())->isSignatureLineCanAddComment();
+        break;
+    }
+
+    case OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE:
+    {
+        Reference<graphic::XGraphic> xGraphic(
+            static_cast<SdrGrafObj*>(mpObj.get())->getSignatureLineUnsignedGraphic());
+        rValue <<= xGraphic;
+        break;
+    }
+
     default:
         return SvxShapeText::getPropertyValueImpl(rName, pProperty,rValue);
     }
