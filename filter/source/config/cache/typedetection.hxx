@@ -21,14 +21,16 @@
 
 #include "basecontainer.hxx"
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unotools/mediadescriptor.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
-
 
 namespace filter{ namespace config {
 
+class TerminateDetection;
 
 /** @short      implements the service <type scope="com.sun.star.document">TypeDetection</type>.
  */
@@ -39,6 +41,8 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper< BaseContainer       
 // native interface
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    rtl::Reference<TerminateDetection> m_xTerminateListener;
+    bool m_bCancel;
 
 public:
 
@@ -52,6 +56,11 @@ public:
                 reference to the uno service manager, which created this service instance.
      */
     explicit TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+
+    void cancel()
+    {
+        m_bCancel = true;
+    }
 
 
     /** @short  standard dtor.
@@ -360,6 +369,36 @@ public:
         @return The new instance of this service as an uno reference.
      */
     static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+};
+
+class TerminateDetection : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
+{
+private:
+    osl::Mutex m_aLock;
+    TypeDetection* m_pTypeDetection;
+
+public:
+
+    using cppu::WeakComponentImplHelperBase::disposing;
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+    {
+    }
+
+    // XTerminateListener
+    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+    {
+        m_pTypeDetection->cancel();
+    }
+
+    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+    {
+    }
+
+    TerminateDetection(TypeDetection* pTypeDetection)
+        : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aLock)
+        , m_pTypeDetection(pTypeDetection)
+    {
+    }
 };
 
 }}

@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
@@ -160,7 +161,7 @@ struct ThreadHelpBase2
 };
 
 class PreventDuplicateInteraction : private ThreadHelpBase2
-                                    ,public ::cppu::WeakImplHelper< css::task::XInteractionHandler2 >
+                                  , public ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>
 {
 
     // structs, types etc.
@@ -220,6 +221,7 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
     // uno interface
     public:
 
+        virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
         /**
             @interface  XInteractionHandler
