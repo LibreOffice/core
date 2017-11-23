@@ -656,7 +656,7 @@ void ScOutputData::SetCellRotations()
 
                         // add rotation info to Array information
                         const long nAttrRotate(pPattern->GetRotateVal(pCondSet));
-                        const SvxRotateMode eRotMode(static_cast<const SvxRotateModeItem&>(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue());
+                        const SvxRotateMode eRotMode(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue());
                         const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate * F_PI18000); // 1/100th degrees -> [0..2PI]
                         svx::frame::Array& rArray = mrTabInfo.maArray;
 
@@ -678,8 +678,8 @@ static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW n
     long nAttrRotate = pPattern->GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
-        SvxRotateMode eRotMode = static_cast<const SvxRotateModeItem&>(
-                    pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
+        SvxRotateMode eRotMode =
+                    pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
         if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
             nRet = ScRotateDir::Standard;
@@ -705,8 +705,8 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
 {
     const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
-    const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(
-                            &pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
+    const SvxBrushItem* pBackground =
+                            &pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
 
     ScRotateDir nDir = lcl_GetRotateDir( pDoc, nCol, nRow, nTab );
 
@@ -720,7 +720,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
             --nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
             pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
-            pBackground = static_cast<const SvxBrushItem*>(&pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
+            pBackground = &pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
         }
     }
     else if ( nDir == ScRotateDir::Left )
@@ -732,7 +732,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
             ++nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
             pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
-            pBackground = static_cast<const SvxBrushItem*>(&pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
+            pBackground = &pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
         }
     }
 
@@ -1080,8 +1080,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                         const ScPatternAttr* pP = pInfo->pPatternAttr;
                         if (pP)
                         {
-                            const ScProtectionAttr& rProt = static_cast<const ScProtectionAttr&>(
-                                                                pP->GetItem(ATTR_PROTECTION));
+                            const ScProtectionAttr& rProt = pP->GetItem(ATTR_PROTECTION);
                             if (rProt.GetProtection() || rProt.GetHideCell())
                                 pBackground = ScGlobal::GetProtectedBrushItem();
                             else
@@ -1119,7 +1118,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     if (pInfo->bMerged && pInfo->pPatternAttr)
                     {
                             const ScMergeAttr* pMerge =
-                                    static_cast<const ScMergeAttr*>(&pInfo->pPatternAttr->GetItem(ATTR_MERGE));
+                                    &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
                             nMergedCols = std::max<SCCOL>(1, pMerge->GetColMerge());
                     }
 
@@ -1551,8 +1550,8 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                     //! LastPattern etc.
 
                     long nAttrRotate = pPattern->GetRotateVal( pCondSet );
-                    SvxRotateMode eRotMode = static_cast<const SvxRotateModeItem&>(
-                                    pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
+                    SvxRotateMode eRotMode =
+                                    pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
                     if (nAttrRotate)
                     {
@@ -1616,8 +1615,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                         const SvxBrushItem* pBackground = pInfo->pBackground;
                         if (!pBackground)
-                            pBackground = static_cast<const SvxBrushItem*>(&pPattern->GetItem(
-                                ATTR_BACKGROUND, pCondSet));
+                            pBackground = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
                         if (bCellContrast)
                         {
                             //  high contrast for cell borders and backgrounds -> empty background
@@ -2389,7 +2387,7 @@ void ScOutputData::DrawClipMarks()
                             SCCOL nOverX = nX;
                             SCROW nOverY = nY;
                             const ScMergeAttr* pMerge =
-                                    static_cast<const ScMergeAttr*>(&pInfo->pPatternAttr->GetItem(ATTR_MERGE));
+                                    &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
                             SCCOL nCountX = pMerge->GetColMerge();
                             for (SCCOL i=1; i<nCountX; i++)
                                 nOutWidth += (long) ( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );

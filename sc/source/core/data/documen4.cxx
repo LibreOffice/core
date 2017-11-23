@@ -775,7 +775,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
         const SfxPoolItem* pItem;
         if ( rSet.GetItemState( ATTR_CONDITIONAL, true, &pItem ) == SfxItemState::SET )
         {
-            const std::vector<sal_uInt32>& rIndex = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+            const std::vector<sal_uInt32>& rIndex = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
             ScConditionalFormatList* pCondFormList = GetCondFormList( nTab );
             if (!rIndex.empty() && pCondFormList)
             {
@@ -816,7 +816,7 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab 
     ScRefCellValue aCell(const_cast<ScDocument&>(*this), aPos);
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     const std::vector<sal_uInt32>& rIndex =
-        static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+        pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
 
     return GetCondResult(aCell, aPos, *pFormatList, rIndex);
 }

@@ -793,7 +793,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
             mpEditEngine->SetSpeller( xXSpellChecker1 );
         }
 
-        bool bHyphen = pLastPattern && static_cast<const SfxBoolItem&>(pLastPattern->GetItem(ATTR_HYPHENATE)).GetValue();
+        bool bHyphen = pLastPattern && pLastPattern->GetItem(ATTR_HYPHENATE).GetValue();
         if ( bHyphen ) {
             css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
             mpEditEngine->SetHyphenator( xXHyphenator );
@@ -1962,8 +1962,8 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     }
 
     bool bAsianVertical = pLastPattern &&
-        static_cast<const SfxBoolItem&>(pLastPattern->GetItem( ATTR_STACKED )).GetValue() &&
-        static_cast<const SfxBoolItem&>(pLastPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
+        pLastPattern->GetItem( ATTR_STACKED ).GetValue() &&
+        pLastPattern->GetItem( ATTR_VERTICAL_ASIAN ).GetValue();
     if ( bAsianVertical )
     {
         // Always edit at top of cell -> LEFT when editing vertically
@@ -2114,8 +2114,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 //  Background color must be known for automatic font color.
                 //  For transparent cell background, the document background color must be used.
 
-                Color aBackCol = static_cast<const SvxBrushItem&>(
-                                pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
+                Color aBackCol = pPattern->GetItem( ATTR_BACKGROUND ).GetColor();
                 ScModule* pScMod = SC_MOD();
                 if ( aBackCol.GetTransparency() > 0 ||
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
@@ -2123,10 +2122,9 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 mpEditEngine->SetBackgroundColor( aBackCol );
 
                 // Adjustment
-                eAttrAdjust = static_cast<const SvxHorJustifyItem&>(pPattern->
-                                GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+                eAttrAdjust = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
                 if ( eAttrAdjust == SvxCellHorJustify::Repeat &&
-                     static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
+                     pPattern->GetItem(ATTR_LINEBREAK).GetValue() )
                 {
                     // #i31843# "repeat" with "line breaks" is treated as default alignment
                     eAttrAdjust = SvxCellHorJustify::Standard;

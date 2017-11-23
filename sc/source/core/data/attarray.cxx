@@ -1045,7 +1045,7 @@ static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner
                                 bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
 {
     // right/bottom border set when connected together
-    const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE));
+    const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
     if ( rMerge.GetColMerge() == nDistRight + 1 )
         nDistRight = 0;
     if ( rMerge.GetRowMerge() == nDistBottom + 1 )
@@ -1156,7 +1156,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
     const SvxBoxItem* pOldFrame = &pPattern->GetItemSet().Get( ATTR_BORDER );
 
     // right/bottom border set when connected together
-    const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE));
+    const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
     if ( rMerge.GetColMerge() == nDistRight + 1 )
         nDistRight = 0;
     if ( rMerge.GetRowMerge() == nDistBottom + 1 )
@@ -1261,15 +1261,13 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     bool bFound = false;
     if ( nMask & HasAttrFlags::Merged )
     {
-        const ScMergeAttr* pMerge =
-            static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
+        const ScMergeAttr* pMerge = &pPattern->GetItem( ATTR_MERGE );
         if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
             bFound = true;
     }
     if ( nMask & ( HasAttrFlags::Overlapped | HasAttrFlags::NotOverlapped | HasAttrFlags::AutoFilter ) )
     {
-        const ScMergeFlagAttr* pMergeFlag =
-            static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
+        const ScMergeFlagAttr* pMergeFlag = &pPattern->GetItem( ATTR_MERGE_FLAG );
         if ( (nMask & HasAttrFlags::Overlapped) && pMergeFlag->IsOverlapped() )
             bFound = true;
         if ( (nMask & HasAttrFlags::NotOverlapped) && !pMergeFlag->IsOverlapped() )
@@ -1279,35 +1277,31 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     }
     if ( nMask & HasAttrFlags::Lines )
     {
-        const SvxBoxItem* pBox =
-            static_cast<const SvxBoxItem*>( &pPattern->GetItem( ATTR_BORDER ) );
+        const SvxBoxItem* pBox = &pPattern->GetItem( ATTR_BORDER );
         if ( pBox->GetLeft() || pBox->GetRight() || pBox->GetTop() || pBox->GetBottom() )
             bFound = true;
     }
     if ( nMask & HasAttrFlags::Shadow )
     {
-        const SvxShadowItem* pShadow =
-            static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ) );
+        const SvxShadowItem* pShadow = &pPattern->GetItem( ATTR_SHADOW );
         if ( pShadow->GetLocation() != SvxShadowLocation::NONE )
             bFound = true;
     }
     if ( nMask & HasAttrFlags::Conditional )
     {
-        bool bContainsCondFormat =
-            !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+        bool bContainsCondFormat = pPattern->GetItem( ATTR_CONDITIONAL ).GetCondFormatData().empty();
         if ( bContainsCondFormat )
             bFound = true;
     }
     if ( nMask & HasAttrFlags::Protected )
     {
-        const ScProtectionAttr* pProtect =
-            static_cast<const ScProtectionAttr*>( &pPattern->GetItem( ATTR_PROTECTION ) );
+        const ScProtectionAttr* pProtect = &pPattern->GetItem( ATTR_PROTECTION );
         bool bFoundTemp = false;
         if ( pProtect->GetProtection() || pProtect->GetHideCell() )
             bFoundTemp = true;
 
         bool bContainsCondFormat = !mvData.empty() &&
-            !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+            !pPattern->GetItem( ATTR_CONDITIONAL ).GetCondFormatData().empty();
         if ( bContainsCondFormat && nCol != -1 ) // pDocument->GetCondResult() is valid only for real columns.
         {
             SCROW nRowStartCond = std::max<SCROW>( nRow1, i ? mvData[i-1].nEndRow + 1: 0 );
@@ -1343,8 +1337,7 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     }
     if ( nMask & HasAttrFlags::Rotate )
     {
-        const SfxInt32Item* pRotate =
-            static_cast<const SfxInt32Item*>( &pPattern->GetItem( ATTR_ROTATE_VALUE ) );
+        const SfxInt32Item* pRotate = &pPattern->GetItem( ATTR_ROTATE_VALUE );
         // 90 or 270 degrees is former SvxOrientationItem - only look for other values
         // (see ScPatternAttr::GetCellOrientation)
         sal_Int32 nAngle = pRotate->GetValue();
@@ -1355,21 +1348,19 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     {
         if (pPattern->GetCellOrientation() != SvxCellOrientation::Standard)
             bFound = true;
-        else if (static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
+        else if (pPattern->GetItem( ATTR_LINEBREAK ).GetValue())
             bFound = true;
-        else if (static_cast<const SvxHorJustifyItem&>(pPattern->
-                    GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block)
+        else if (pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue() == SvxCellHorJustify::Block)
             bFound = true;
 
-        else if (!static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty())
+        else if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
             bFound = true;
-        else if (static_cast<const SfxInt32Item&>(pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
+        else if (pPattern->GetItem( ATTR_ROTATE_VALUE ).GetValue())
             bFound = true;
     }
     if ( nMask & ( HasAttrFlags::ShadowRight | HasAttrFlags::ShadowDown ) )
     {
-        const SvxShadowItem* pShadow =
-            static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ));
+        const SvxShadowItem* pShadow = &pPattern->GetItem( ATTR_SHADOW );
         SvxShadowLocation eLoc = pShadow->GetLocation();
         if ( nMask & HasAttrFlags::ShadowRight )
             if ( eLoc == SvxShadowLocation::TopRight || eLoc == SvxShadowLocation::BottomRight )
@@ -1381,8 +1372,7 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     if ( nMask & HasAttrFlags::RightOrCenter )
     {
         //  called only if the sheet is LTR, so physical=logical alignment can be assumed
-        SvxCellHorJustify eHorJust =
-            static_cast<const SvxHorJustifyItem&>( pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+        SvxCellHorJustify eHorJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
         if ( eHorJust == SvxCellHorJustify::Right || eHorJust == SvxCellHorJustify::Center )
             bFound = true;
     }
@@ -1422,13 +1412,12 @@ bool ScAttrArray::IsMerged( SCROW nRow ) const
     {
         SCSIZE nIndex;
         Search(nRow, nIndex);
-        const ScMergeAttr& rItem =
-            static_cast<const ScMergeAttr&>(mvData[nIndex].pPattern->GetItem(ATTR_MERGE));
+        const ScMergeAttr& rItem = mvData[nIndex].pPattern->GetItem(ATTR_MERGE);
 
         return rItem.IsMerged();
     }
 
-    return static_cast<const ScMergeAttr&>(pDocument->GetDefPattern()->GetItem(ATTR_MERGE)).IsMerged();
+    return pDocument->GetDefPattern()->GetItem(ATTR_MERGE).IsMerged();
 }
 
 /**
@@ -1451,7 +1440,7 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
     for (SCSIZE i=nStartIndex; i<=nEndIndex; i++)
     {
         pPattern = mvData[i].pPattern;
-        pItem = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
+        pItem = &pPattern->GetItem( ATTR_MERGE );
         SCCOL  nCountX = pItem->GetColMerge();
         SCROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
@@ -1507,7 +1496,7 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             nThisEnd = nEndRow;
 
         pPattern = mvData[nIndex].pPattern;
-        pItem = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
+        pItem = &pPattern->GetItem( ATTR_MERGE );
         SCCOL  nCountX = pItem->GetColMerge();
         SCROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
@@ -1565,7 +1554,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
             if (nThisRow < nStartRow) nThisRow = nStartRow;
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
-            pItem = static_cast<const ScMergeFlagAttr*>( &pOldPattern->GetItem( ATTR_MERGE_FLAG ) );
+            pItem = &pOldPattern->GetItem( ATTR_MERGE_FLAG );
 
             if (pItem->IsOverlapped() || pItem->HasAutoFilter())
             {
@@ -1617,7 +1606,7 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
     while ( nThisRow <= nEndRow )
     {
         pOldPattern = mvData[nIndex].pPattern;
-        nOldValue = static_cast<const ScMergeFlagAttr*>( &pOldPattern->GetItem( ATTR_MERGE_FLAG ))->GetValue();
+        nOldValue = pOldPattern->GetItem( ATTR_MERGE_FLAG ).GetValue();
         if ( (nOldValue | nFlags) != nOldValue )
         {
             nRow = mvData[nIndex].nEndRow;
@@ -1654,7 +1643,7 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
     while ( nThisRow <= nEndRow )
     {
         pOldPattern = mvData[nIndex].pPattern;
-        nOldValue = static_cast<const ScMergeFlagAttr*>(&pOldPattern->GetItem( ATTR_MERGE_FLAG ))->GetValue();
+        nOldValue = pOldPattern->GetItem( ATTR_MERGE_FLAG ).GetValue();
         if ( (nOldValue & ~nFlags) != nOldValue )
         {
             nRow = mvData[nIndex].nEndRow;
@@ -1780,8 +1769,8 @@ SCROW ScAttrArray::GetNextUnprotected( SCROW nRow, bool bUp ) const
 
         SCSIZE nIndex;
         Search(nRow, nIndex);
-        while (static_cast<const ScProtectionAttr&>(mvData[nIndex].pPattern->
-                GetItem(ATTR_PROTECTION)).GetProtection())
+        while (mvData[nIndex].pPattern->
+                GetItem(ATTR_PROTECTION).GetProtection())
         {
             if (bUp)
             {
@@ -2172,8 +2161,8 @@ bool ScAttrArray::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 
         for ( ; nIndex < mvData.size(); nIndex++ )
         {
-            if ( static_cast<const ScMergeFlagAttr&>(mvData[nIndex].pPattern->
-                        GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped() )
+            if ( mvData[nIndex].pPattern->
+                        GetItem(ATTR_MERGE_FLAG).IsHorOverlapped() )
             {
                 bTest = false;  // may not be pushed out
                 break;
@@ -2192,15 +2181,15 @@ bool ScAttrArray::TestInsertRow( SCSIZE nSize ) const
     // MAXROW + 1 - nSize   = 1st row pushed out
 
     if ( mvData.empty() )
-        return !static_cast<const ScMergeFlagAttr&>(pDocument->GetDefPattern()->
-                       GetItem(ATTR_MERGE_FLAG)).IsVerOverlapped();
+        return !pDocument->GetDefPattern()->
+                       GetItem(ATTR_MERGE_FLAG).IsVerOverlapped();
 
     SCSIZE nFirstLost = mvData.size()-1;
     while ( nFirstLost && mvData[nFirstLost-1].nEndRow >= sal::static_int_cast<SCROW>(MAXROW + 1 - nSize) )
         --nFirstLost;
 
-    return !static_cast<const ScMergeFlagAttr&>(mvData[nFirstLost].pPattern->
-                GetItem(ATTR_MERGE_FLAG)).IsVerOverlapped();
+    return !mvData[nFirstLost].pPattern->
+                GetItem(ATTR_MERGE_FLAG).IsVerOverlapped();
 }
 
 void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
@@ -2213,7 +2202,7 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
     // set ScMergeAttr may not be extended (so behind delete again)
 
-    bool bDoMerge = static_cast<const ScMergeAttr&>( mvData[nIndex].pPattern->GetItem(ATTR_MERGE)).IsMerged();
+    bool bDoMerge = mvData[nIndex].pPattern->GetItem(ATTR_MERGE).IsMerged();
 
     assert( !bDoMerge || nCol != -1 );
 
@@ -2424,8 +2413,7 @@ void ScAttrArray::CopyArea(
                 std::unique_ptr<ScPatternAttr> pTmpPattern(new ScPatternAttr( *pOldPattern ));
                 ScMF nNewFlags = ScMF::NONE;
                 if ( nStripFlags != ScMF::All )
-                    nNewFlags = static_cast<const ScMergeFlagAttr&>(pTmpPattern->GetItem(ATTR_MERGE_FLAG)).
-                                GetValue() & ~nStripFlags;
+                    nNewFlags = pTmpPattern->GetItem(ATTR_MERGE_FLAG).GetValue() & ~nStripFlags;
 
                 if ( nNewFlags != ScMF::NONE )
                     pTmpPattern->GetItemSet().Put( ScMergeFlagAttr( nNewFlags ) );

@@ -1312,11 +1312,10 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bEditActive[eWhich] = true;
 
     const ScPatternAttr* pPattern = pDoc->GetPattern( nNewX, nNewY, nTabNo );
-    SvxCellHorJustify eJust = static_cast<const SvxHorJustifyItem&>(
-                                    pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+    SvxCellHorJustify eJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
 
     bool bBreak = ( eJust == SvxCellHorJustify::Block ) ||
-                    static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
+                    pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
     bool bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
 
@@ -1341,7 +1340,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         //  modify members nEditCol etc. only if also extending for needed area
         nEditCol = nNewX;
         nEditRow = nNewY;
-        const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
+        const ScMergeAttr* pMergeAttr = &pPattern->GetItem(ATTR_MERGE);
         nEditEndCol = nEditCol;
         if (pMergeAttr->GetColMerge() > 1)
             nEditEndCol += pMergeAttr->GetColMerge() - 1;
@@ -1445,7 +1444,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         pNewEngine->InsertView(pEditView[eWhich]);
 
     //      background color of the cell
-    Color aBackCol = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+    Color aBackCol = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
 
     ScModule* pScMod = SC_MOD();
     if ( aBackCol.GetTransparency() > 0 )
@@ -1518,8 +1517,7 @@ void ScViewData::EditGrowX()
 
     //  get bGrow... variables the same way as in SetEditEngine
     const ScPatternAttr* pPattern = pLocalDoc->GetPattern( nEditCol, nEditRow, nTabNo );
-    SvxCellHorJustify eJust = static_cast<const SvxHorJustifyItem&>(
-                                    pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+    SvxCellHorJustify eJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
     bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
     bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
     bool bGrowBackwards = bGrowToLeft;                          // logical left

@@ -8979,8 +8979,7 @@ void ScInterpreter::ScText()
             const ScPatternAttr* pPattern = pDok->GetPattern(
                     aPos.Col(), aPos.Row(), aPos.Tab() );
             if ( pPattern )
-                eCellLang = static_cast<const SvxLanguageItem&>(
-                        pPattern->GetItem( ATTR_LANGUAGE_FORMAT )).GetValue();
+                eCellLang = pPattern->GetItem( ATTR_LANGUAGE_FORMAT ).GetValue();
             else
                 eCellLang = ScGlobal::eLnge;
             if (bString)

@@ -1836,8 +1836,7 @@ void ScFiltersTest::testRichTextContentODS()
         CPPUNIT_ASSERT_EQUAL(OUString("All bold"), rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
         const ScPatternAttr* pAttr = rDoc.GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
         CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
-        const SvxWeightItem& rWeightItem =
-            static_cast<const SvxWeightItem&>(pAttr->GetItem(ATTR_FONT_WEIGHT));
+        const SvxWeightItem& rWeightItem = pAttr->GetItem(ATTR_FONT_WEIGHT);
         CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeightItem.GetWeight());
     }
 
@@ -2802,13 +2801,13 @@ void ScFiltersTest::testColumnStyleXLSX()
     const ScPatternAttr* pPattern = rDoc.GetPattern(0,0,0);
     CPPUNIT_ASSERT(pPattern);
 
-    const ScProtectionAttr& rAttr = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION));
+    const ScProtectionAttr& rAttr = pPattern->GetItem(ATTR_PROTECTION);
     CPPUNIT_ASSERT(rAttr.GetProtection());
 
     pPattern = rDoc.GetPattern(0,1,0);
     CPPUNIT_ASSERT(pPattern);
 
-    const ScProtectionAttr& rAttrNew = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION));
+    const ScProtectionAttr& rAttrNew = pPattern->GetItem(ATTR_PROTECTION);
     CPPUNIT_ASSERT(!rAttrNew.GetProtection());
 
     xDocSh->DoClose();
@@ -2823,7 +2822,7 @@ void ScFiltersTest::testColumnStyleAutoFilterXLSX()
     const ScPatternAttr* pPattern = rDoc.GetPattern(0, 10, 18);
     CPPUNIT_ASSERT(pPattern);
 
-    const ScMergeFlagAttr& rAttr = static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG));
+    const ScMergeFlagAttr& rAttr = pPattern->GetItem(ATTR_MERGE_FLAG);
     CPPUNIT_ASSERT(!rAttr.HasAutoFilter());
 
     xDocSh->DoClose();

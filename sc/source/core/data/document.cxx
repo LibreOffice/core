@@ -5461,11 +5461,9 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
                 bool bHorOverlapped;
                 if ( pAttrArray->Count() )
-                    bHorOverlapped = static_cast<const ScMergeFlagAttr&>(pAttrArray->mvData[nIndex].pPattern->
-                                                                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped();
+                    bHorOverlapped = pAttrArray->mvData[nIndex].pPattern->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
                 else
-                    bHorOverlapped = static_cast<const ScMergeFlagAttr&>(GetDefPattern()->
-                                                                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped();
+                    bHorOverlapped = GetDefPattern()->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
                 if ( bHorOverlapped )
                 {
                     SCROW nEndRowSeg = (pAttrArray->Count()) ? pAttrArray->mvData[nIndex].nEndRow : MAXROW;

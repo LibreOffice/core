@@ -107,8 +107,8 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
         !pDoc->RowHidden(rStartY, nTab, nullptr, &nLastRow) &&
         pRowInfo[nArrY].nRowNo == rStartY)
     {
-        pMerge = static_cast<const ScMergeAttr*>( &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
-                                        GetItem(ATTR_MERGE));
+        pMerge = &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
+                                        GetItem(ATTR_MERGE);
     }
     else
         pMerge = static_cast<const ScMergeAttr*>( pDoc->GetAttr(rStartX,rStartY,nTab,ATTR_MERGE) );
@@ -500,23 +500,17 @@ void ScDocument::FillInfo(
                             pPattern = GetDefPattern();
                         }
 
-                        const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(
-                                                        &pPattern->GetItem(ATTR_BACKGROUND));
-                        const SvxBoxItem* pLinesAttr = static_cast<const SvxBoxItem*>(
-                                                        &pPattern->GetItem(ATTR_BORDER));
+                        const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
+                        const SvxBoxItem* pLinesAttr = &pPattern->GetItem(ATTR_BORDER);
 
-                        const SvxLineItem* pTLBRLine = static_cast< const SvxLineItem* >(
-                            &pPattern->GetItem( ATTR_BORDER_TLBR ) );
-                        const SvxLineItem* pBLTRLine = static_cast< const SvxLineItem* >(
-                            &pPattern->GetItem( ATTR_BORDER_BLTR ) );
+                        const SvxLineItem* pTLBRLine = &pPattern->GetItem( ATTR_BORDER_TLBR );
+                        const SvxLineItem* pBLTRLine = &pPattern->GetItem( ATTR_BORDER_BLTR );
 
-                        const SvxShadowItem* pShadowAttr = static_cast<const SvxShadowItem*>(
-                                                        &pPattern->GetItem(ATTR_SHADOW));
+                        const SvxShadowItem* pShadowAttr = &pPattern->GetItem(ATTR_SHADOW);
                         if (pShadowAttr != pDefShadow)
                             bAnyShadow = true;
 
-                        const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
-                                                &pPattern->GetItem(ATTR_MERGE));
+                        const ScMergeAttr* pMergeAttr = &pPattern->GetItem(ATTR_MERGE);
                         bool bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
                         ScMF nOverlap = pPattern->GetItemSet().
                                                         Get(ATTR_MERGE_FLAG).GetValue();
@@ -533,15 +527,14 @@ void ScDocument::FillInfo(
                         bool bHidden, bHideFormula;
                         if (bTabProtect)
                         {
-                            const ScProtectionAttr& rProtAttr = static_cast<const ScProtectionAttr&>(
-                                                        pPattern->GetItem(ATTR_PROTECTION));
+                            const ScProtectionAttr& rProtAttr = pPattern->GetItem(ATTR_PROTECTION);
                             bHidden = rProtAttr.GetHideCell();
                             bHideFormula = rProtAttr.GetHideFormula();
                         }
                         else
                             bHidden = bHideFormula = false;
 
-                        const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+                        const std::vector<sal_uInt32>& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                         bool bContainsCondFormat = !rCondFormats.empty();
 
                         do
@@ -1056,9 +1049,9 @@ void ScDocument::FillInfo(
                     if( const ScPatternAttr* pPattern = GetPattern( nFirstRealDocCol, nFirstRealDocRow, nTab ) )
                     {
                         const SfxItemSet* pCond = GetCondResult( nFirstRealDocCol, nFirstRealDocRow, nTab );
-                        pBox = static_cast< const SvxBoxItem* >( &pPattern->GetItem( ATTR_BORDER, pCond ) );
-                        pTLBR = static_cast< const SvxLineItem* >( &pPattern->GetItem( ATTR_BORDER_TLBR, pCond ) );
-                        pBLTR = static_cast< const SvxLineItem* >( &pPattern->GetItem( ATTR_BORDER_BLTR, pCond ) );
+                        pBox = &pPattern->GetItem( ATTR_BORDER, pCond );
+                        pTLBR = &pPattern->GetItem( ATTR_BORDER_TLBR, pCond );
+                        pBLTR = &pPattern->GetItem( ATTR_BORDER_BLTR, pCond );
                     }
                     else
                     {

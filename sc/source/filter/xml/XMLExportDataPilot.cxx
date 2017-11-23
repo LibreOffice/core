@@ -767,7 +767,7 @@ void ScXMLExportDataPilot::WriteDataPilots()
         const ScPatternAttr* pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
         while (pAttr)
         {
-            const ScMergeFlagAttr& rItem = static_cast<const ScMergeFlagAttr&>(pAttr->GetItem(ATTR_MERGE_FLAG));
+            const ScMergeFlagAttr& rItem = pAttr->GetItem(ATTR_MERGE_FLAG);
             if (rItem.HasPivotButton())
             {
                 for (SCROW nButtonRow = nRow1; nButtonRow <= nRow2; ++nButtonRow)
