@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <limits.h>
+#include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>

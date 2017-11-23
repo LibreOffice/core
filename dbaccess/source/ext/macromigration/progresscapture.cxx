@@ -20,6 +20,7 @@
 #include "progresscapture.hxx"
 #include "migrationprogress.hxx"
 
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
 namespace dbmm

@@ -28,6 +28,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/printer.hxx>
 
 #include <attrib.hxx>

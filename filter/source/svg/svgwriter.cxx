@@ -2757,7 +2757,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                         sal_uInt32 nWriteFlags,
                                         const OUString* pElementId,
-                                        const Reference< XShape >* pxShape,
+                                        const Reference< css::drawing::XShape >* pxShape,
                                         const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
     // need a counter for the actions written per shape to avoid double ID
@@ -3725,7 +3725,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
                                      const GDIMetaFile& rMtf,
                                      sal_uInt32 nWriteFlags,
                                      const OUString* pElementId,
-                                     const Reference< XShape >* pXShape,
+                                     const Reference< css::drawing::XShape >* pXShape,
                                      const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
     MapMode     aMapMode( rMtf.GetPrefMapMode() );
