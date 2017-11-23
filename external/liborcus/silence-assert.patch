@@ -1,0 +1,11 @@
+--- liborcus/src/parser/sax_parser_base.cpp	2017-11-23 15:26:54.307416084 +0000
++++ liborcus/src/parser/sax_parser_base.cpp	2017-11-16 00:38:32.000000000 +0000
+@@ -296,7 +296,7 @@
+         str = pstring(buf.get(), buf.size());
+ 
+     // Skip the closing quote.
+-    assert(cur_char() == '"');
++    assert(!has_char() || cur_char() == '"');
+     next();
+ }
+ 
