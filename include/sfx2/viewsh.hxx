@@ -222,13 +222,13 @@ public:
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
 
-    void                        RegisterDlg(const vcl::DialogID& rDialogId, VclPtr<Dialog> pDlg);
-    VclPtr<Dialog>              GetOpenedDlg(const vcl::DialogID& rDialogId);
-    void                        UnregisterDlg(const vcl::DialogID& rDialogId);
+    void                        RegisterDlg(vcl::DialogID nDialogId, VclPtr<Dialog> pDlg);
+    VclPtr<Dialog>              GetOpenedDlg(vcl::DialogID nDialogId);
+    void                        UnregisterDlg(vcl::DialogID nDialogId);
 
     // IDialogNotifier
-    virtual void                notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
-    virtual void                notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos) override;
+    virtual void                notifyDialog(const vcl::DialogID& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
+    virtual void                notifyDialogChild(const vcl::DialogID& rDialogId, const OUString& rAction, const Point& rPos) override;
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );
