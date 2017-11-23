@@ -88,7 +88,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
                 case condformat::CONDITION:
                     {
                         const ScCondFormatEntry* pConditionEntry = static_cast<const ScCondFormatEntry*>( pEntry );
-                        if(pConditionEntry->GetOperation() != SC_COND_DIRECT)
+                        if(pConditionEntry->GetOperation() != ScConditionMode::Direct)
                             maEntries.push_back(VclPtr<ScConditionFrmtEntry>::Create( this, mpDoc, pDialogParent, maPos, pConditionEntry ) );
                         else
                             maEntries.push_back(VclPtr<ScFormulaFrmtEntry>::Create( this, mpDoc, pDialogParent, maPos, pConditionEntry ) );

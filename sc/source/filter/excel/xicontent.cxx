@@ -542,21 +542,21 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** mode and comparison operator ***
 
-    ScConditionMode eMode = SC_COND_NONE;
+    ScConditionMode eMode = ScConditionMode::NONE;
     switch( nType )
     {
         case EXC_CF_TYPE_CELL:
         {
             switch( nOperator )
             {
-                case EXC_CF_CMP_BETWEEN:        eMode = SC_COND_BETWEEN;    break;
-                case EXC_CF_CMP_NOT_BETWEEN:    eMode = SC_COND_NOTBETWEEN; break;
-                case EXC_CF_CMP_EQUAL:          eMode = SC_COND_EQUAL;      break;
-                case EXC_CF_CMP_NOT_EQUAL:      eMode = SC_COND_NOTEQUAL;   break;
-                case EXC_CF_CMP_GREATER:        eMode = SC_COND_GREATER;    break;
-                case EXC_CF_CMP_LESS:           eMode = SC_COND_LESS;       break;
-                case EXC_CF_CMP_GREATER_EQUAL:  eMode = SC_COND_EQGREATER;  break;
-                case EXC_CF_CMP_LESS_EQUAL:     eMode = SC_COND_EQLESS;     break;
+                case EXC_CF_CMP_BETWEEN:        eMode = ScConditionMode::Between;    break;
+                case EXC_CF_CMP_NOT_BETWEEN:    eMode = ScConditionMode::NotBetween; break;
+                case EXC_CF_CMP_EQUAL:          eMode = ScConditionMode::Equal;      break;
+                case EXC_CF_CMP_NOT_EQUAL:      eMode = ScConditionMode::NotEqual;   break;
+                case EXC_CF_CMP_GREATER:        eMode = ScConditionMode::Greater;    break;
+                case EXC_CF_CMP_LESS:           eMode = ScConditionMode::Less;       break;
+                case EXC_CF_CMP_GREATER_EQUAL:  eMode = ScConditionMode::EqGreater;  break;
+                case EXC_CF_CMP_LESS_EQUAL:     eMode = ScConditionMode::EqLess;     break;
                 default:
                     SAL_INFO(
                         "sc.filter", "unknown CF comparison " << nOperator);
@@ -565,7 +565,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         break;
 
         case EXC_CF_TYPE_FMLA:
-            eMode = SC_COND_DIRECT;
+            eMode = ScConditionMode::Direct;
         break;
 
         default:
@@ -861,17 +861,17 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     }
     rRoot.GetTracer().TraceDVType(eValMode == SC_VALID_CUSTOM);
 
-    ScConditionMode eCondMode = SC_COND_BETWEEN;
+    ScConditionMode eCondMode = ScConditionMode::Between;
     switch( nFlags & EXC_DV_COND_MASK )
     {
-        case EXC_DV_COND_BETWEEN:   eCondMode = SC_COND_BETWEEN;    break;
-        case EXC_DV_COND_NOTBETWEEN:eCondMode = SC_COND_NOTBETWEEN; break;
-        case EXC_DV_COND_EQUAL:     eCondMode = SC_COND_EQUAL;      break;
-        case EXC_DV_COND_NOTEQUAL:  eCondMode = SC_COND_NOTEQUAL;   break;
-        case EXC_DV_COND_GREATER:   eCondMode = SC_COND_GREATER;    break;
-        case EXC_DV_COND_LESS:      eCondMode = SC_COND_LESS;       break;
-        case EXC_DV_COND_EQGREATER: eCondMode = SC_COND_EQGREATER;  break;
-        case EXC_DV_COND_EQLESS:    eCondMode = SC_COND_EQLESS;     break;
+        case EXC_DV_COND_BETWEEN:   eCondMode = ScConditionMode::Between;    break;
+        case EXC_DV_COND_NOTBETWEEN:eCondMode = ScConditionMode::NotBetween; break;
+        case EXC_DV_COND_EQUAL:     eCondMode = ScConditionMode::Equal;      break;
+        case EXC_DV_COND_NOTEQUAL:  eCondMode = ScConditionMode::NotEqual;   break;
+        case EXC_DV_COND_GREATER:   eCondMode = ScConditionMode::Greater;    break;
+        case EXC_DV_COND_LESS:      eCondMode = ScConditionMode::Less;       break;
+        case EXC_DV_COND_EQGREATER: eCondMode = ScConditionMode::EqGreater;  break;
+        case EXC_DV_COND_EQLESS:    eCondMode = ScConditionMode::EqLess;     break;
         default:                    bIsValid = false;
     }
 

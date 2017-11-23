@@ -56,34 +56,34 @@ struct RefUpdateMoveTabContext;
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
 
-enum ScConditionMode
+enum class ScConditionMode
 {
-    SC_COND_EQUAL,
-    SC_COND_LESS,
-    SC_COND_GREATER,
-    SC_COND_EQLESS,
-    SC_COND_EQGREATER,
-    SC_COND_NOTEQUAL,
-    SC_COND_BETWEEN,
-    SC_COND_NOTBETWEEN,
-    SC_COND_DUPLICATE,
-    SC_COND_NOTDUPLICATE,
-    SC_COND_DIRECT,
-    SC_COND_TOP10,
-    SC_COND_BOTTOM10,
-    SC_COND_TOP_PERCENT,
-    SC_COND_BOTTOM_PERCENT,
-    SC_COND_ABOVE_AVERAGE,
-    SC_COND_BELOW_AVERAGE,
-    SC_COND_ABOVE_EQUAL_AVERAGE,
-    SC_COND_BELOW_EQUAL_AVERAGE,
-    SC_COND_ERROR,
-    SC_COND_NOERROR,
-    SC_COND_BEGINS_WITH,
-    SC_COND_ENDS_WITH,
-    SC_COND_CONTAINS_TEXT,
-    SC_COND_NOT_CONTAINS_TEXT,
-    SC_COND_NONE
+    Equal,
+    Less,
+    Greater,
+    EqLess,
+    EqGreater,
+    NotEqual,
+    Between,
+    NotBetween,
+    Duplicate,
+    NotDuplicate,
+    Direct,
+    Top10,
+    Bottom10,
+    TopPercent,
+    BottomPercent,
+    AboveAverage,
+    BelowAverage,
+    AboveEqualAverage,
+    BelowEqualAverage,
+    Error,
+    NoError,
+    BeginsWith,
+    EndsWith,
+    ContainsText,
+    NotContainsText,
+    NONE
 };
 
 class ScFormulaListener : public SvtListener

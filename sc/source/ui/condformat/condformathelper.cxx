@@ -134,7 +134,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                 {
                     const ScConditionEntry* pEntry = static_cast<const ScConditionEntry*>(rFormat.GetEntry(0));
                     ScConditionMode eMode = pEntry->GetOperation();
-                    if(eMode == SC_COND_DIRECT)
+                    if(eMode == ScConditionMode::Direct)
                     {
                         aBuffer.append(getTextForType(FORMULA));
                         aBuffer.append(" ");
@@ -146,7 +146,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                         aBuffer.append(" ");
                         aBuffer.append(getExpression(static_cast<sal_Int32>(eMode)));
                         aBuffer.append(" ");
-                        if(eMode == SC_COND_BETWEEN || eMode == SC_COND_NOTBETWEEN)
+                        if(eMode == ScConditionMode::Between || eMode == ScConditionMode::NotBetween)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
                             aBuffer.append(" ");
@@ -154,7 +154,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                             aBuffer.append(" ");
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
-                        else if(eMode <= SC_COND_NOTEQUAL || eMode >= SC_COND_BEGINS_WITH)
+                        else if(eMode <= ScConditionMode::NotEqual || eMode >= ScConditionMode::BeginsWith)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
                         }

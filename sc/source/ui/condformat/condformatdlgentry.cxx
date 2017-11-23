@@ -163,30 +163,30 @@ void FillStyleListBox( const ScDocument* pDoc, ListBox& rLbStyle )
 }
 
 const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::NUM_COND_ENTRIES] = {
-    SC_COND_EQUAL,
-    SC_COND_LESS,
-    SC_COND_GREATER,
-    SC_COND_EQLESS,
-    SC_COND_EQGREATER,
-    SC_COND_NOTEQUAL,
-    SC_COND_BETWEEN,
-    SC_COND_NOTBETWEEN,
-    SC_COND_DUPLICATE,
-    SC_COND_NOTDUPLICATE,
-    SC_COND_TOP10,
-    SC_COND_BOTTOM10,
-    SC_COND_TOP_PERCENT,
-    SC_COND_BOTTOM_PERCENT,
-    SC_COND_ABOVE_AVERAGE,
-    SC_COND_BELOW_AVERAGE,
-    SC_COND_ABOVE_EQUAL_AVERAGE,
-    SC_COND_BELOW_EQUAL_AVERAGE,
-    SC_COND_ERROR,
-    SC_COND_NOERROR,
-    SC_COND_BEGINS_WITH,
-    SC_COND_ENDS_WITH,
-    SC_COND_CONTAINS_TEXT,
-    SC_COND_NOT_CONTAINS_TEXT
+    ScConditionMode::Equal,
+    ScConditionMode::Less,
+    ScConditionMode::Greater,
+    ScConditionMode::EqLess,
+    ScConditionMode::EqGreater,
+    ScConditionMode::NotEqual,
+    ScConditionMode::Between,
+    ScConditionMode::NotBetween,
+    ScConditionMode::Duplicate,
+    ScConditionMode::NotDuplicate,
+    ScConditionMode::Top10,
+    ScConditionMode::Bottom10,
+    ScConditionMode::TopPercent,
+    ScConditionMode::BottomPercent,
+    ScConditionMode::AboveAverage,
+    ScConditionMode::BelowAverage,
+    ScConditionMode::AboveEqualAverage,
+    ScConditionMode::BelowEqualAverage,
+    ScConditionMode::Error,
+    ScConditionMode::NoError,
+    ScConditionMode::BeginsWith,
+    ScConditionMode::EndsWith,
+    ScConditionMode::ContainsText,
+    ScConditionMode::NotContainsText
 };
 
 ScConditionFrmtEntry::ScConditionFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
@@ -373,32 +373,32 @@ sal_Int32 ScConditionFrmtEntry::GetNumberEditFields( ScConditionMode eMode )
 {
     switch(eMode)
     {
-        case SC_COND_EQUAL:
-        case SC_COND_LESS:
-        case SC_COND_GREATER:
-        case SC_COND_EQLESS:
-        case SC_COND_EQGREATER:
-        case SC_COND_NOTEQUAL:
-        case SC_COND_TOP10:
-        case SC_COND_BOTTOM10:
-        case SC_COND_TOP_PERCENT:
-        case SC_COND_BOTTOM_PERCENT:
-        case SC_COND_BEGINS_WITH:
-        case SC_COND_ENDS_WITH:
-        case SC_COND_CONTAINS_TEXT:
-        case SC_COND_NOT_CONTAINS_TEXT:
-        case SC_COND_ERROR:
-        case SC_COND_NOERROR:
+        case ScConditionMode::Equal:
+        case ScConditionMode::Less:
+        case ScConditionMode::Greater:
+        case ScConditionMode::EqLess:
+        case ScConditionMode::EqGreater:
+        case ScConditionMode::NotEqual:
+        case ScConditionMode::Top10:
+        case ScConditionMode::Bottom10:
+        case ScConditionMode::TopPercent:
+        case ScConditionMode::BottomPercent:
+        case ScConditionMode::BeginsWith:
+        case ScConditionMode::EndsWith:
+        case ScConditionMode::ContainsText:
+        case ScConditionMode::NotContainsText:
+        case ScConditionMode::Error:
+        case ScConditionMode::NoError:
             return 1;
-        case SC_COND_ABOVE_AVERAGE:
-        case SC_COND_BELOW_AVERAGE:
-        case SC_COND_ABOVE_EQUAL_AVERAGE:
-        case SC_COND_BELOW_EQUAL_AVERAGE:
-        case SC_COND_DUPLICATE:
-        case SC_COND_NOTDUPLICATE:
+        case ScConditionMode::AboveAverage:
+        case ScConditionMode::BelowAverage:
+        case ScConditionMode::AboveEqualAverage:
+        case ScConditionMode::BelowEqualAverage:
+        case ScConditionMode::Duplicate:
+        case ScConditionMode::NotDuplicate:
             return 0;
-        case SC_COND_BETWEEN:
-        case SC_COND_NOTBETWEEN:
+        case ScConditionMode::Between:
+        case ScConditionMode::NotBetween:
             return 2;
         default:
             assert(false); // should never get here
@@ -607,7 +607,7 @@ ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
     if(aFormula.isEmpty())
         return nullptr;
 
-    ScFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT, aFormula, OUString(), mpDoc, maPos, maLbStyle->GetSelectedEntry());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, aFormula, OUString(), mpDoc, maPos, maLbStyle->GetSelectedEntry());
     return pEntry;
 }
 

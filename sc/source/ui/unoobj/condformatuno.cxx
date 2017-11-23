@@ -81,32 +81,32 @@ struct ConditionEntryApiMap
 
 ConditionEntryApiMap aConditionEntryMap[] =
 {
-    {SC_COND_EQUAL, sheet::ConditionFormatOperator::EQUAL},
-    {SC_COND_LESS, sheet::ConditionFormatOperator::LESS},
-    {SC_COND_GREATER, sheet::ConditionFormatOperator::GREATER},
-    {SC_COND_EQLESS, sheet::ConditionFormatOperator::LESS_EQUAL},
-    {SC_COND_EQGREATER, sheet::ConditionFormatOperator::GREATER_EQUAL},
-    {SC_COND_NOTEQUAL, sheet::ConditionFormatOperator::NOT_EQUAL},
-    {SC_COND_BETWEEN, sheet::ConditionFormatOperator::BETWEEN},
-    {SC_COND_NOTBETWEEN, sheet::ConditionFormatOperator::NOT_BETWEEN},
-    {SC_COND_DUPLICATE, sheet::ConditionFormatOperator::DUPLICATE},
-    {SC_COND_NOTDUPLICATE, sheet::ConditionFormatOperator::UNIQUE},
-    {SC_COND_DIRECT, sheet::ConditionFormatOperator::EXPRESSION},
-    {SC_COND_TOP10, sheet::ConditionFormatOperator::TOP_N_ELEMENTS},
-    {SC_COND_BOTTOM10, sheet::ConditionFormatOperator::BOTTOM_N_ELEMENTS},
-    {SC_COND_TOP_PERCENT, sheet::ConditionFormatOperator::TOP_N_PERCENT},
-    {SC_COND_BOTTOM_PERCENT, sheet::ConditionFormatOperator::BOTTOM_N_PERCENT},
-    {SC_COND_ABOVE_AVERAGE, sheet::ConditionFormatOperator::ABOVE_AVERAGE},
-    {SC_COND_BELOW_AVERAGE, sheet::ConditionFormatOperator::BELOW_AVERAGE},
-    {SC_COND_ABOVE_EQUAL_AVERAGE, sheet::ConditionFormatOperator::ABOVE_EQUAL_AVERAGE},
-    {SC_COND_BELOW_EQUAL_AVERAGE, sheet::ConditionFormatOperator::BELOW_EQUAL_AVERAGE},
-    {SC_COND_ERROR, sheet::ConditionFormatOperator::ERROR},
-    {SC_COND_NOERROR, sheet::ConditionFormatOperator::NO_ERROR},
-    {SC_COND_BEGINS_WITH, sheet::ConditionFormatOperator::BEGINS_WITH},
-    {SC_COND_ENDS_WITH, sheet::ConditionFormatOperator::ENDS_WITH},
-    {SC_COND_CONTAINS_TEXT, sheet::ConditionFormatOperator::CONTAINS},
-    {SC_COND_NOT_CONTAINS_TEXT, sheet::ConditionFormatOperator::NOT_CONTAINS},
-    {SC_COND_NONE, sheet::ConditionFormatOperator::EQUAL},
+    {ScConditionMode::Equal, sheet::ConditionFormatOperator::EQUAL},
+    {ScConditionMode::Less, sheet::ConditionFormatOperator::LESS},
+    {ScConditionMode::Greater, sheet::ConditionFormatOperator::GREATER},
+    {ScConditionMode::EqLess, sheet::ConditionFormatOperator::LESS_EQUAL},
+    {ScConditionMode::EqGreater, sheet::ConditionFormatOperator::GREATER_EQUAL},
+    {ScConditionMode::NotEqual, sheet::ConditionFormatOperator::NOT_EQUAL},
+    {ScConditionMode::Between, sheet::ConditionFormatOperator::BETWEEN},
+    {ScConditionMode::NotBetween, sheet::ConditionFormatOperator::NOT_BETWEEN},
+    {ScConditionMode::Duplicate, sheet::ConditionFormatOperator::DUPLICATE},
+    {ScConditionMode::NotDuplicate, sheet::ConditionFormatOperator::UNIQUE},
+    {ScConditionMode::Direct, sheet::ConditionFormatOperator::EXPRESSION},
+    {ScConditionMode::Top10, sheet::ConditionFormatOperator::TOP_N_ELEMENTS},
+    {ScConditionMode::Bottom10, sheet::ConditionFormatOperator::BOTTOM_N_ELEMENTS},
+    {ScConditionMode::TopPercent, sheet::ConditionFormatOperator::TOP_N_PERCENT},
+    {ScConditionMode::BottomPercent, sheet::ConditionFormatOperator::BOTTOM_N_PERCENT},
+    {ScConditionMode::AboveAverage, sheet::ConditionFormatOperator::ABOVE_AVERAGE},
+    {ScConditionMode::BelowAverage, sheet::ConditionFormatOperator::BELOW_AVERAGE},
+    {ScConditionMode::AboveEqualAverage, sheet::ConditionFormatOperator::ABOVE_EQUAL_AVERAGE},
+    {ScConditionMode::BelowEqualAverage, sheet::ConditionFormatOperator::BELOW_EQUAL_AVERAGE},
+    {ScConditionMode::Error, sheet::ConditionFormatOperator::ERROR},
+    {ScConditionMode::NoError, sheet::ConditionFormatOperator::NO_ERROR},
+    {ScConditionMode::BeginsWith, sheet::ConditionFormatOperator::BEGINS_WITH},
+    {ScConditionMode::EndsWith, sheet::ConditionFormatOperator::ENDS_WITH},
+    {ScConditionMode::ContainsText, sheet::ConditionFormatOperator::CONTAINS},
+    {ScConditionMode::NotContainsText, sheet::ConditionFormatOperator::NOT_CONTAINS},
+    {ScConditionMode::NONE, sheet::ConditionFormatOperator::EQUAL},
 };
 
 enum ColorScaleProperties
@@ -477,7 +477,7 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
     switch (nType)
     {
         case sheet::ConditionEntryType::CONDITION:
-            pNewEntry = new ScCondFormatEntry(SC_COND_EQUAL, "", "",
+            pNewEntry = new ScCondFormatEntry(ScConditionMode::Equal, "", "",
                     pDoc, pFormat->GetRange().GetTopLeftCorner(), "");
         break;
         case sheet::ConditionEntryType::COLORSCALE:

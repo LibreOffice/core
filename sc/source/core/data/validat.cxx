@@ -125,7 +125,7 @@ ScValidationData::~ScValidationData()
 
 bool ScValidationData::IsEmpty() const
 {
-    ScValidationData aDefault( SC_VALID_ANY, SC_COND_EQUAL, "", "", GetDocument(), ScAddress() );
+    ScValidationData aDefault( SC_VALID_ANY, ScConditionMode::Equal, "", "", GetDocument(), ScAddress() );
     return EqualEntries( aDefault );
 }
 
@@ -524,7 +524,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             break;
 
         case SC_VALID_CUSTOM:
-            //  for Custom, it must be eOp == SC_COND_DIRECT
+            //  for Custom, it must be eOp == ScConditionMode::Direct
             //TODO: the value must be in the document !!!
             bOk = IsCellValid(rCell, rPos);
             break;
@@ -844,7 +844,7 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
 bool ScValidationData::IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
 {
     // create a condition entry that tests on equality and set the passed token array
-    ScConditionEntry aCondEntry( SC_COND_EQUAL, &rTokArr, nullptr, GetDocument(), rPos );
+    ScConditionEntry aCondEntry( ScConditionMode::Equal, &rTokArr, nullptr, GetDocument(), rPos );
     return aCondEntry.IsCellValid(rCell, rPos);
 }
 

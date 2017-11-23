@@ -68,16 +68,16 @@ static sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
     sal_Int32 eOper = sheet::ConditionOperator2::NONE;
     switch (eMode)
     {
-        case SC_COND_EQUAL:         eOper = sheet::ConditionOperator2::EQUAL;           break;
-        case SC_COND_LESS:          eOper = sheet::ConditionOperator2::LESS;            break;
-        case SC_COND_GREATER:       eOper = sheet::ConditionOperator2::GREATER;         break;
-        case SC_COND_EQLESS:        eOper = sheet::ConditionOperator2::LESS_EQUAL;      break;
-        case SC_COND_EQGREATER:     eOper = sheet::ConditionOperator2::GREATER_EQUAL;   break;
-        case SC_COND_NOTEQUAL:      eOper = sheet::ConditionOperator2::NOT_EQUAL;       break;
-        case SC_COND_BETWEEN:       eOper = sheet::ConditionOperator2::BETWEEN;         break;
-        case SC_COND_NOTBETWEEN:    eOper = sheet::ConditionOperator2::NOT_BETWEEN;     break;
-        case SC_COND_DIRECT:        eOper = sheet::ConditionOperator2::FORMULA;         break;
-        case SC_COND_DUPLICATE:     eOper = sheet::ConditionOperator2::DUPLICATE;       break;
+        case ScConditionMode::Equal:         eOper = sheet::ConditionOperator2::EQUAL;           break;
+        case ScConditionMode::Less:          eOper = sheet::ConditionOperator2::LESS;            break;
+        case ScConditionMode::Greater:       eOper = sheet::ConditionOperator2::GREATER;         break;
+        case ScConditionMode::EqLess:        eOper = sheet::ConditionOperator2::LESS_EQUAL;      break;
+        case ScConditionMode::EqGreater:     eOper = sheet::ConditionOperator2::GREATER_EQUAL;   break;
+        case ScConditionMode::NotEqual:      eOper = sheet::ConditionOperator2::NOT_EQUAL;       break;
+        case ScConditionMode::Between:       eOper = sheet::ConditionOperator2::BETWEEN;         break;
+        case ScConditionMode::NotBetween:    eOper = sheet::ConditionOperator2::NOT_BETWEEN;     break;
+        case ScConditionMode::Direct:        eOper = sheet::ConditionOperator2::FORMULA;         break;
+        case ScConditionMode::Duplicate:     eOper = sheet::ConditionOperator2::DUPLICATE;       break;
         default:
         {
             // added to avoid warnings
@@ -91,15 +91,15 @@ static sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMo
     sheet::ConditionOperator eOper = sheet::ConditionOperator_NONE;
     switch (eMode)
     {
-        case SC_COND_EQUAL:         eOper = sheet::ConditionOperator_EQUAL;         break;
-        case SC_COND_LESS:          eOper = sheet::ConditionOperator_LESS;          break;
-        case SC_COND_GREATER:       eOper = sheet::ConditionOperator_GREATER;       break;
-        case SC_COND_EQLESS:        eOper = sheet::ConditionOperator_LESS_EQUAL;    break;
-        case SC_COND_EQGREATER:     eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
-        case SC_COND_NOTEQUAL:      eOper = sheet::ConditionOperator_NOT_EQUAL;     break;
-        case SC_COND_BETWEEN:       eOper = sheet::ConditionOperator_BETWEEN;       break;
-        case SC_COND_NOTBETWEEN:    eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
-        case SC_COND_DIRECT:        eOper = sheet::ConditionOperator_FORMULA;       break;
+        case ScConditionMode::Equal:         eOper = sheet::ConditionOperator_EQUAL;         break;
+        case ScConditionMode::Less:          eOper = sheet::ConditionOperator_LESS;          break;
+        case ScConditionMode::Greater:       eOper = sheet::ConditionOperator_GREATER;       break;
+        case ScConditionMode::EqLess:        eOper = sheet::ConditionOperator_LESS_EQUAL;    break;
+        case ScConditionMode::EqGreater:     eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
+        case ScConditionMode::NotEqual:      eOper = sheet::ConditionOperator_NOT_EQUAL;     break;
+        case ScConditionMode::Between:       eOper = sheet::ConditionOperator_BETWEEN;       break;
+        case ScConditionMode::NotBetween:    eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
+        case ScConditionMode::Direct:        eOper = sheet::ConditionOperator_FORMULA;       break;
         default:
         {
             // added to avoid warnings
@@ -110,18 +110,18 @@ static sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMo
 
 static ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
 {
-    ScConditionMode eMode = SC_COND_NONE;
+    ScConditionMode eMode = ScConditionMode::NONE;
     switch (eOper)
     {
-        case sheet::ConditionOperator_EQUAL:            eMode = SC_COND_EQUAL;      break;
-        case sheet::ConditionOperator_LESS:             eMode = SC_COND_LESS;       break;
-        case sheet::ConditionOperator_GREATER:          eMode = SC_COND_GREATER;    break;
-        case sheet::ConditionOperator_LESS_EQUAL:       eMode = SC_COND_EQLESS;     break;
-        case sheet::ConditionOperator_GREATER_EQUAL:    eMode = SC_COND_EQGREATER;  break;
-        case sheet::ConditionOperator_NOT_EQUAL:        eMode = SC_COND_NOTEQUAL;   break;
-        case sheet::ConditionOperator_BETWEEN:          eMode = SC_COND_BETWEEN;    break;
-        case sheet::ConditionOperator_NOT_BETWEEN:      eMode = SC_COND_NOTBETWEEN; break;
-        case sheet::ConditionOperator_FORMULA:          eMode = SC_COND_DIRECT;     break;
+        case sheet::ConditionOperator_EQUAL:            eMode = ScConditionMode::Equal;      break;
+        case sheet::ConditionOperator_LESS:             eMode = ScConditionMode::Less;       break;
+        case sheet::ConditionOperator_GREATER:          eMode = ScConditionMode::Greater;    break;
+        case sheet::ConditionOperator_LESS_EQUAL:       eMode = ScConditionMode::EqLess;     break;
+        case sheet::ConditionOperator_GREATER_EQUAL:    eMode = ScConditionMode::EqGreater;  break;
+        case sheet::ConditionOperator_NOT_EQUAL:        eMode = ScConditionMode::NotEqual;   break;
+        case sheet::ConditionOperator_BETWEEN:          eMode = ScConditionMode::Between;    break;
+        case sheet::ConditionOperator_NOT_BETWEEN:      eMode = ScConditionMode::NotBetween; break;
+        case sheet::ConditionOperator_FORMULA:          eMode = ScConditionMode::Direct;     break;
         default:
         {
             // added to avoid warnings
@@ -133,7 +133,7 @@ static ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOp
 ScCondFormatEntryItem::ScCondFormatEntryItem() :
     meGrammar1( FormulaGrammar::GRAM_UNSPECIFIED ),
     meGrammar2( FormulaGrammar::GRAM_UNSPECIFIED ),
-    meMode( SC_COND_NONE )
+    meMode( ScConditionMode::NONE )
 {
 }
 
@@ -249,7 +249,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
 {
     SolarMutexGuard aGuard;
     ScCondFormatEntryItem aEntry;
-    aEntry.meMode = SC_COND_NONE;
+    aEntry.meMode = ScConditionMode::NONE;
 
     const beans::PropertyValue* pPropArray = aConditionalEntry.getConstArray();
     long nPropCount = aConditionalEntry.getLength();
@@ -660,7 +660,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
 
 void ScTableValidationObj::ClearData_Impl()
 {
-    nMode        = SC_COND_NONE;
+    nMode        = ScConditionMode::NONE;
     nValMode     = SC_VALID_ANY;
     bIgnoreBlank = true;
     nShowList    = sheet::TableValidationVisibility::UNSORTED;
