@@ -312,7 +312,9 @@ void openLokDialog( GtkWidget* pSelector, gpointer /*pItem*/ )
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
     gchar* pDialogId = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(pSelector));
-    GtkWidget* pDialog = gtv_lok_dialog_new(LOK_DOC_VIEW(window->lokdocview), pDialogId);
+    // Set the width, height of the dialog to something large enough to be able
+    // to render any dialog
+    GtkWidget* pDialog = gtv_lok_dialog_new(LOK_DOC_VIEW(window->lokdocview), pDialogId, 1024, 768);
     gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
     g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
     g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
