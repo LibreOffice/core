@@ -22,29 +22,35 @@
 
 #include "types.hxx"
 #include "address.hxx"
+#include "column.hxx"
 
 #include <vector>
 
-class ScColumn;
-class ScDocument;
-
-class ScColContainer
+class ScColContainer final
 {
-    typedef std::vector<ScColumn*> ScColumnVector;
+    typedef std::vector<ScColumn> ScColumnVector;
     ScColumnVector    aCols;
 
 public:
-    ScColContainer( const size_t nSize );
-    ~ScColContainer() COVERITY_NOEXCEPT_FALSE;
+
+    ScColContainer(const size_t nSize)
+      : aCols(nSize)
+    {
+    }
+
+    ~ScColContainer() COVERITY_NOEXCEPT_FALSE
+    {
+        Clear();
+    }
 
     const ScColumn& operator[] ( const size_t nIndex ) const
     {
-        return *aCols[nIndex];
+        return aCols[nIndex];
     }
 
     ScColumn& operator[] ( const size_t nIndex )
     {
-        return *aCols[nIndex];
+        return aCols[nIndex];
     }
 
     SCCOL size() const
@@ -57,26 +63,36 @@ public:
         return aCols.empty();
     }
 
-    void resize( const size_t aNewSize );
+    void resize(const size_t aNewSize)
+    {
+        aCols.resize(aNewSize);
+    }
 
-    void Clear();
+    void Clear()
+    {
+        for (ScColumn& rCol: aCols)
+            rCol.PrepareBroadcastersForDestruction();
+
+        aCols.clear();
+    }
 
     const ScColumn& back() const
     {
         assert(aCols.size() > 0);
-        return *aCols.back();
+        return aCols.back();
     }
 
     ScColumn& back()
     {
         assert(aCols.size() > 0);
-        return *aCols.back();
+        return aCols.back();
     }
 
+    ScColumnVector::iterator begin() { return aCols.begin(); }
+    ScColumnVector::iterator end() { return aCols.end(); }
     ScColumnVector::const_iterator begin() const { return aCols.begin(); }
     ScColumnVector::const_iterator end() const { return aCols.end(); }
 };
-
 
 #endif
 

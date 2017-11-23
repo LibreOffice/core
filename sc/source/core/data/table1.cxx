@@ -1673,14 +1673,14 @@ void ScTable::UpdateReference(
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc )
 {
-    for (auto const & rpCol : aCol)
-        rpCol->UpdateTranspose( rSource, rDest, pUndoDoc );
+    for (auto& rpCol : aCol)
+        rpCol.UpdateTranspose( rSource, rDest, pUndoDoc );
 }
 
 void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    for (auto const & rpCol : aCol)
-        rpCol->UpdateGrow( rArea, nGrowX, nGrowY );
+    for (auto& rpCol : aCol)
+        rpCol.UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
 void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )

@@ -1670,8 +1670,8 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
 
 void ScTable::GetUnprotectedCells( ScRangeList& rRangeList ) const
 {
-    for (auto pCol : aCol)
-        pCol->GetUnprotectedCells(0, MAXROW, rRangeList);
+    for (auto& pCol : aCol)
+        pCol.GetUnprotectedCells(0, MAXROW, rRangeList);
 }
 
 bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
