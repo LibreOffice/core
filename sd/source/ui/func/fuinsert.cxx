@@ -148,7 +148,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         nError = aDlg.GetGraphic(aGraphic);
         bAsLink = aDlg.IsAsLink();
         aFileName = aDlg.GetPath();
-        aFilterName = aDlg.GetCurrentFilter();
+        aFilterName = aDlg.GetDetectedFilter();
     }
 
     if( nError == ERRCODE_NONE )

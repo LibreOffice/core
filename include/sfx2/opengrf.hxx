@@ -42,8 +42,14 @@ public:
     void                    AsLink(bool);
     bool                    IsAsLink() const;
 
+    //what the dialog thought the format was
     OUString                GetCurrentFilter() const;
     void                    SetCurrentFilter(const OUString&);
+
+    //what was subsequently found to be the format
+    OUString                GetDetectedFilter() const;
+    void                    SetDetectedFilter(const OUString&);
+
 private:
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) = delete;
     SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & ) = delete;
