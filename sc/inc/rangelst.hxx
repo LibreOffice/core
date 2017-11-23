@@ -22,6 +22,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include <ostream>
 #include <vector>
 #include <sal/types.h>
 
@@ -99,6 +100,22 @@ private:
     typedef std::vector<ScRange*>::const_iterator const_iterator;
 };
 typedef tools::SvRef<ScRangeList> ScRangeListRef;
+
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScRangeList& rRangeList)
+{
+    stream << "(";
+    for (size_t i = 0; i < rRangeList.size(); ++i)
+    {
+        if (i > 0)
+            stream << ",";
+        stream << *(rRangeList[i]);
+    }
+    stream << ")";
+
+    return stream;
+}
 
 // RangePairList:
 //    aRange[0]: actual range,
