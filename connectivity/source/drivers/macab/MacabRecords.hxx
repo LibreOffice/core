@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRECORDS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRECORDS_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include "MacabRecord.hxx"
 #include "MacabHeader.hxx"
 
@@ -37,7 +41,7 @@ namespace connectivity
          * types to Address Book types).
          */
         struct lcl_CFType {
-            sal_Int32 cf;
+            CFTypeID cf;
             sal_Int32 ab;
         };
 
@@ -56,12 +60,10 @@ namespace connectivity
                 OUString m_sName;
 
                 /* For converting CF types to AB types */
-                sal_Int32 lcl_CFTypesLength;
-                lcl_CFType *lcl_CFTypes;
+                std::vector<lcl_CFType> lcl_CFTypes;
 
                 /* For required properties */
-                CFStringRef *requiredProperties;
-                sal_Int32 numRequiredProperties;
+                std::vector<CFStringRef> requiredProperties;
 
             private:
                 /* All of the private methods are for creating a MacabHeader or a
