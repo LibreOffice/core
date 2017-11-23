@@ -3586,8 +3586,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             // CommandLineArgs):
             desktop::Desktop::GetCommandLineArgs().setHeadless();
 
-            Application::EnableHeadlessMode(true);
-
 #ifdef IOS
             // mpDefInst need to be initialized, which only happens in InitVCL(),
             // there might be more elegant ways to get InitVCL() called, but
