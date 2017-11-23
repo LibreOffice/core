@@ -178,15 +178,15 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
     else
     {
-        if( (mnStyle & SalFrameStyleFlags::MOVEABLE) )
+        if( mnStyle & SalFrameStyleFlags::MOVEABLE )
         {
             mnStyleMask |= NSTitledWindowMask;
             if( mpParent == nullptr )
                 mnStyleMask |= NSMiniaturizableWindowMask;
         }
-        if( (mnStyle & SalFrameStyleFlags::SIZEABLE) )
+        if( mnStyle & SalFrameStyleFlags::SIZEABLE )
             mnStyleMask |= NSResizableWindowMask;
-        if( (mnStyle & SalFrameStyleFlags::CLOSEABLE) )
+        if( mnStyle & SalFrameStyleFlags::CLOSEABLE )
             mnStyleMask |= NSClosableWindowMask;
         // documentation says anything other than NSBorderlessWindowMask (=0)
         // should also include NSTitledWindowMask;
@@ -206,7 +206,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         return;
     }
 
-    if( (mnStyle & SalFrameStyleFlags::TOOLTIP) )
+    if( mnStyle & SalFrameStyleFlags::TOOLTIP )
         [mpNSWindow setIgnoresMouseEvents: YES];
     else
         [mpNSWindow setAcceptsMouseMovedEvents: YES];
