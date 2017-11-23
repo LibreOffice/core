@@ -1001,9 +1001,8 @@ executeMessageBox(
     WinBits nButtonMask)
 {
     SolarMutexGuard aGuard;
-    WinBits nStyle(0);
 
-    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, nStyle, rTitle, rMessage);
+    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, rTitle, rMessage);
 
     sal_uInt16 aResult = xBox->Execute();
     switch( aResult )
