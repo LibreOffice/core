@@ -21,5 +21,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-disable-docs.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-win32-macro.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-libtool.patch.1) \
+    $(if $(filter MSC,$(COM)),external/gpgmepp/w32-add-initializer.patch.1) \
 ))
 # vim: set noet sw=4 ts=4:

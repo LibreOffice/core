@@ -1,0 +1,16 @@
+Make sure the gpgrt_lock_init gets called in libgpg-error, otherwise
+several critical section statics are uninitialized
+
+diff -ur gpgmepp.org/src/version.c gpgmepp/src/version.c
+--- gpgmepp.org/src/version.c	2016-11-16 13:22:41.000000000 +0100
++++ gpgmepp/src/version.c	2017-11-23 17:16:35.218735200 +0100
+@@ -66,6 +66,9 @@
+     return;
+ 
+ #ifdef HAVE_W32_SYSTEM
++  // initialize libgpg-error stuff
++  gpg_err_init();
++
+   /* We need to make sure that the sockets are initialized.  */
+   {
+     WSADATA wsadat;
