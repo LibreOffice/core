@@ -365,10 +365,6 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
                 command += '='
                 command += value
 
-        # The directory of the file is missing from lib's include list, as that
-        # one is not the same for all source files in the lib.
-        command += ' -I' + os.path.dirname(file)
-
         for include in lib.include:
             command += ' -I'
             command += include
