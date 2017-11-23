@@ -347,6 +347,7 @@ struct DialogImpl
 
 void Dialog::ImplInitDialogData()
 {
+    maID                    = mnLastDialogId++;
     mpDialogNotifier        = nullptr;
     mpWindowImpl->mbDialog  = true;
     mpPrevExecuteDlg        = nullptr;
@@ -490,6 +491,8 @@ void Dialog::ImplInitSettings()
     else
         SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
 }
+
+vcl::DialogID Dialog::mnLastDialogId = 1;
 
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
@@ -962,7 +965,7 @@ void Dialog::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
 
 void Dialog::InvalidateFloatingWindow(const Point& rPos)
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && !maID.isEmpty())
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && maID != 0)
     {
         mpDialogNotifier->notifyDialogChild(maID, "invalidate", rPos);
     }
@@ -970,7 +973,7 @@ void Dialog::InvalidateFloatingWindow(const Point& rPos)
 
 void Dialog::CloseFloatingWindow()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && !maID.isEmpty())
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && maID != 0)
     {
         mpDialogNotifier->notifyDialogChild(maID, "close", Point(0, 0));
     }
@@ -978,7 +981,7 @@ void Dialog::CloseFloatingWindow()
 
 void Dialog::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && !maID.isEmpty())
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && maID != 0)
     {
         std::vector<vcl::LOKPayloadItem> aPayload;
         if (pRectangle)
@@ -1030,7 +1033,7 @@ void Dialog::LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloa
 {
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && !maID.isEmpty())
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && maID != 0)
     {
         mpDialogNotifier->notifyDialog(maID, rAction, rPayload);
     }
@@ -1351,7 +1354,7 @@ void Dialog::Resize()
     SystemWindow::Resize();
 
     // inform LOK clients
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && !maID.isEmpty())
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && maID != 0)
     {
         mpDialogNotifier->notifyDialog(maID, "invalidate");
     }

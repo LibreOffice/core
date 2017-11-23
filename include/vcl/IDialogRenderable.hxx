@@ -23,7 +23,7 @@ namespace vcl
 
 typedef std::pair<const OString, const OString> LOKPayloadItem;
 
-typedef OUString DialogID;
+typedef sal_uInt32 DialogID;
 
 class VCL_DLLPUBLIC IDialogRenderable
 {

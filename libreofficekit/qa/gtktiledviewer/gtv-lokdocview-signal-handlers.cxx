@@ -308,15 +308,15 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     std::stringstream aStream(pPayload);
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
-    const std::string aDialogId = aRoot.get<std::string>("dialogId");
+    const unsigned nDialogId = aRoot.get<unsigned>("dialogId");
     const std::string aAction = aRoot.get<std::string>("action");
 
     if (aAction == "created")
     {
         const std::string aSize = aRoot.get<std::string>("size");
         std::vector<int> aPoints = GtvHelpers::splitIntoIntegers(aSize, ", ", 2);
-        GtkWidget* pDialog = gtv_lok_dialog_new(pDocView, aDialogId.c_str(), aPoints[0], aPoints[1]);
-        g_info("created  dialog, for dialogid: %s with size: %s", aDialogId.c_str(), aSize.c_str());
+        GtkWidget* pDialog = gtv_lok_dialog_new(pDocView, nDialogId, aPoints[0], aPoints[1]);
+        g_info("created  dialog, for dialogid: %d with size: %s", nDialogId, aSize.c_str());
 
         gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
         g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
@@ -333,9 +333,9 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     GList* pIt = nullptr;
     for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
     {
-        gchar* pChildDialogId = nullptr;
-        g_object_get(pIt->data, "dialogid", &pChildDialogId, nullptr);
-        if (g_strcmp0(pChildDialogId, aDialogId.c_str()) == 0)
+        guint nChildDialogId = 0;
+        g_object_get(pIt->data, "dialogid", &nChildDialogId, nullptr);
+        if (nDialogId == nChildDialogId)
         {
             if (aAction == "close")
                 gtk_widget_destroy(GTK_WIDGET(pIt->data));
@@ -355,7 +355,6 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
                 gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data), aGdkRectangle);
             }
         }
-        g_free(pChildDialogId);
     }
 }
 
@@ -366,9 +365,9 @@ void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, g
     std::stringstream aStream(pPayload);
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
-    std::string aDialogId = aRoot.get<std::string>("dialogId");
-    std::string aAction = aRoot.get<std::string>("action");
-    std::string aPos = aRoot.get<std::string>("position");
+    const unsigned nDialogId = aRoot.get<unsigned>("dialogId");
+    const std::string aAction = aRoot.get<std::string>("action");
+    const std::string aPos = aRoot.get<std::string>("position");
     gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
     gchar** ppCoordinate = ppCoordinates;
     int nX = 0;
@@ -386,16 +385,15 @@ void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, g
     GList* pIt = nullptr;
     for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
     {
-        gchar* pChildDialogId = nullptr;
-        g_object_get(pIt->data, "dialogid", &pChildDialogId, nullptr);
-        if (g_strcmp0(pChildDialogId, aDialogId.c_str()) == 0)
+        guint nChildDialogId = 0;
+        g_object_get(pIt->data, "dialogid", &nChildDialogId, nullptr);
+        if (nDialogId == nChildDialogId)
         {
             if (aAction == "invalidate")
                 gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
             else if (aAction == "close")
                 gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
         }
-        g_free(pChildDialogId);
     }
 }
 

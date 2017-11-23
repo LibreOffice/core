@@ -48,7 +48,7 @@ struct GtvLokDialogPrivate
     guint32 m_nChildKeyModifier;
     guint32 m_nChildLastButtonPressed;
 
-    gchar* dialogid;
+    guint dialogid;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GtvLokDialog, gtv_lok_dialog, GTK_TYPE_DIALOG);
@@ -400,7 +400,7 @@ gtv_lok_dialog_set_property(GObject* object, guint propId, const GValue* value, 
         priv->lokdocview = LOK_DOC_VIEW(g_value_get_object(value));
         break;
     case PROP_DIALOG_ID:
-        priv->dialogid = g_value_dup_string(value);
+        priv->dialogid = g_value_get_uint(value);
         break;
     case PROP_DIALOG_WIDTH:
         priv->m_nWidth = g_value_get_uint(value);
@@ -425,7 +425,7 @@ gtv_lok_dialog_get_property(GObject* object, guint propId, GValue* value, GParam
         g_value_set_object(value, priv->lokdocview);
         break;
     case PROP_DIALOG_ID:
-        g_value_set_string(value, priv->dialogid);
+        g_value_set_uint(value, priv->dialogid);
         break;
     case PROP_DIALOG_WIDTH:
         g_value_set_uint(value, priv->m_nWidth);
@@ -439,22 +439,10 @@ gtv_lok_dialog_get_property(GObject* object, guint propId, GValue* value, GParam
 }
 
 static void
-gtv_lok_dialog_finalize(GObject* object)
-{
-    GtvLokDialog* self = GTV_LOK_DIALOG(object);
-    GtvLokDialogPrivate* priv = getPrivate(self);
-
-    g_free(priv->dialogid);
-
-    G_OBJECT_CLASS(gtv_lok_dialog_parent_class)->finalize(object);
-}
-
-static void
 gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
 {
     G_OBJECT_CLASS(klass)->get_property = gtv_lok_dialog_get_property;
     G_OBJECT_CLASS(klass)->set_property = gtv_lok_dialog_set_property;
-    G_OBJECT_CLASS(klass)->finalize = gtv_lok_dialog_finalize;
 
     properties[PROP_LOKDOCVIEW_CONTEXT] = g_param_spec_object("lokdocview",
                                                               "LOKDocView Context",
@@ -464,29 +452,29 @@ gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
                                                                                        G_PARAM_CONSTRUCT_ONLY |
                                                                                        G_PARAM_STATIC_STRINGS));
 
-    properties[PROP_DIALOG_ID] = g_param_spec_string("dialogid",
-                                                     "Dialog identifier",
-                                                     "Unique dialog identifier; UNO command for now",
-                                                     nullptr,
-                                                     static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                                              G_PARAM_CONSTRUCT_ONLY |
-                                                                              G_PARAM_STATIC_STRINGS));
+    properties[PROP_DIALOG_ID] = g_param_spec_uint("dialogid",
+                                                   "Dialog identifier",
+                                                   "Unique dialog identifier",
+                                                   0, G_MAXUINT, 0,
+                                                   static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                                            G_PARAM_CONSTRUCT_ONLY |
+                                                                            G_PARAM_STATIC_STRINGS));
 
     properties[PROP_DIALOG_WIDTH] = g_param_spec_uint("width",
-                                                     "Dialog width",
-                                                     "Dialog width",
-                                                     0, 1024, 0,
-                                                     static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                                              G_PARAM_CONSTRUCT_ONLY |
-                                                                              G_PARAM_STATIC_STRINGS));
+                                                      "Dialog width",
+                                                      "Dialog width",
+                                                      0, 1024, 0,
+                                                      static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                                               G_PARAM_CONSTRUCT_ONLY |
+                                                                               G_PARAM_STATIC_STRINGS));
 
     properties[PROP_DIALOG_HEIGHT] = g_param_spec_uint("height",
                                                        "Dialog height",
-                                                      "Dialog height",
-                                                      0, 1024, 0,
-                                                     static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                                              G_PARAM_CONSTRUCT_ONLY |
-                                                                              G_PARAM_STATIC_STRINGS));
+                                                       "Dialog height",
+                                                       0, 1024, 0,
+                                                       static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                                                G_PARAM_CONSTRUCT_ONLY |
+                                                                                G_PARAM_STATIC_STRINGS));
 
     g_object_class_install_properties (G_OBJECT_CLASS(klass), PROP_LAST, properties);
 }
@@ -702,7 +690,7 @@ void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
 
 
 GtkWidget*
-gtv_lok_dialog_new(LOKDocView* pDocView, const gchar* dialogId, guint width, guint height)
+gtv_lok_dialog_new(LOKDocView* pDocView, guint dialogId, guint width, guint height)
 {
     GtkWindow* pWindow = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     return GTK_WIDGET(g_object_new(GTV_TYPE_LOK_DIALOG,
