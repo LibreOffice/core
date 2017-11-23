@@ -86,6 +86,98 @@ enum class ScConditionMode
     NONE
 };
 
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScConditionMode& rMode)
+{
+    switch (rMode)
+    {
+    case ScConditionMode::Equal:
+        stream << "EQUAL";
+        break;
+    case ScConditionMode::Less:
+        stream << "LESS";
+        break;
+    case ScConditionMode::Greater:
+        stream << "GREATER";
+        break;
+    case ScConditionMode::EqLess:
+        stream << "EQLESS";
+        break;
+    case ScConditionMode::EqGreater:
+        stream << "EQGREATER";
+        break;
+    case ScConditionMode::NotEqual:
+        stream << "NOTEQUAL";
+        break;
+    case ScConditionMode::Between:
+        stream << "BETWEEN";
+        break;
+    case ScConditionMode::NotBetween:
+        stream << "NOTBETWEEN";
+        break;
+    case ScConditionMode::Duplicate:
+        stream << "DUPLICATE";
+        break;
+    case ScConditionMode::NotDuplicate:
+        stream << "NOTDUPLICATE";
+        break;
+    case ScConditionMode::Direct:
+        stream << "DIRECT";
+        break;
+    case ScConditionMode::Top10:
+        stream << "TOP10";
+        break;
+    case ScConditionMode::Bottom10:
+        stream << "BOTTOM10";
+        break;
+    case ScConditionMode::TopPercent:
+        stream << "TOPPERCENT";
+        break;
+    case ScConditionMode::BottomPercent:
+        stream << "BOTTOMPERCENT";
+        break;
+    case ScConditionMode::AboveAverage:
+        stream << "ABOVEAVERAGE";
+        break;
+    case ScConditionMode::BelowAverage:
+        stream << "BELOWAVERAGE";
+        break;
+    case ScConditionMode::AboveEqualAverage:
+        stream << "ABOVEEQUALAVERAGE";
+        break;
+    case ScConditionMode::BelowEqualAverage:
+        stream << "BELOWEQUALAVERAGE";
+        break;
+    case ScConditionMode::Error:
+        stream << "ERROR";
+        break;
+    case ScConditionMode::NoError:
+        stream << "NOERROR";
+        break;
+    case ScConditionMode::BeginsWith:
+        stream << "BEGINSWITH";
+        break;
+    case ScConditionMode::EndsWith:
+        stream << "ENDSWITH";
+        break;
+    case ScConditionMode::ContainsText:
+        stream << "CONTAINSTEXT";
+        break;
+    case ScConditionMode::NotContainsText:
+        stream << "NOTCONTAINSTEXT";
+        break;
+    case ScConditionMode::NONE:
+        stream << "NONE";
+        break;
+    default:
+        stream << "?(" << (int)rMode << ")";
+        break;
+    }
+
+    return stream;
+}
+
 class ScFormulaListener : public SvtListener
 {
 private:
