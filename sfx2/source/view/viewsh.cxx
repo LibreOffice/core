@@ -1958,6 +1958,40 @@ void SfxViewShell::notifyDialogChild(const vcl::DialogID& rDialogID, const OUStr
     SfxLokHelper::notifyDialog(rDialogID, rAction);
 }
 
+void SfxViewShell::RegisterDlg(const OUString& rName, Dialog* pDlg)
+{
+    if (pDlg)
+        maOpenedDialogs.push_back(std::make_pair(rName, pDlg));
+}
+
+Dialog* SfxViewShell::GetOpenedDlg(OUString rName)
+{
+    if (rName.startsWith(".uno:"))
+        rName = rName.replaceFirst(".uno:", "");
+
+    const auto it = std::find_if(maOpenedDialogs.begin(),
+                                 maOpenedDialogs.end(),
+                                 [&rName](const std::pair<OUString, Dialog*> aItem) {
+                                     return rName == aItem.first;
+                                 });
+
+    Dialog* ret = nullptr;
+    if (it != maOpenedDialogs.end())
+    {
+        ret = it->second;
+    }
+    return ret;
+}
+
+void SfxViewShell::UnregisterDlg(const OUString& rName)
+{
+    maOpenedDialogs.erase(std::remove_if(maOpenedDialogs.begin(),
+                                         maOpenedDialogs.end(),
+                                         [&rName](const std::pair<OUString, Dialog*> aItem) {
+                                             return aItem.first == rName;
+                                         }));
+}
+
 uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetClipboardNotifier()
 {
     uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClipboardNotifier;

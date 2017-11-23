@@ -34,6 +34,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <sfx2/shell.hxx>
 #include <tools/gen.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/jobset.hxx>
@@ -154,6 +155,7 @@ friend class SfxPrinterController;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
+    std::vector<std::pair<OUString, Dialog*>> maOpenedDialogs;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -221,6 +223,10 @@ public:
 
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
+
+    void                        RegisterDlg(const vcl::DialogID& rName, Dialog* pDlg);
+    Dialog*                     GetOpenedDlg(OUString rName);
+    void                        UnregisterDlg(const OUString& rName);
 
     // IDialogNotifier
     virtual void                notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
