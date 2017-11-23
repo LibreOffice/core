@@ -170,6 +170,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     , m_bPerParagraph(bPerParagraph)
     , m_aParagraphSignHandler(rParagraphSignHandler)
     , m_nCurrentSelectedCategory(-1)
+    , m_nInsertMarkings(-1)
 {
     get(m_pOkButton, "ok");
     get(m_pEditWindow, "classificationEditWindow");
@@ -180,11 +181,10 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     get(m_pInternationalClassificationListBox, "internationalClassificationCB");
     get(m_pMarkingLabel, "markingLabel");
     get(m_pMarkingListBox, "markingCB");
-    get(m_pIntellectualPropertyPartNumberListBox, "intellectualPropertyPartNumberCB");
+    get(m_pIntellectualPropertyPartNumberListBox, "intellectualPropertyPartNumberLB");
     get(m_pIntellectualPropertyPartListBox, "intellectualPropertyPartLB");
     get(m_pIntellectualPropertyPartAddButton, "intellectualPropertyPartAddButton");
     get(m_pIntellectualPropertyPartEdit, "intellectualPropertyPartEntry");
-
     get(m_pIntellectualPropertyExpander, "intellectualPropertyExpander");
 
     m_pSignButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
@@ -197,19 +197,18 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     m_pClassificationListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectClassificationHdl));
     for (const OUString& rName : maHelper.GetBACNames())
         m_pClassificationListBox->InsertEntry(rName);
-    m_pClassificationListBox->EnableAutoSize(true);
 
     m_pInternationalClassificationListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectClassificationHdl));
     for (const OUString& rName : maInternationalHelper.GetBACNames())
         m_pInternationalClassificationListBox->InsertEntry(rName);
-    m_pInternationalClassificationListBox->EnableAutoSize(true);
 
     if (!maHelper.GetMarkings().empty())
     {
         m_pMarkingListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectMarkingHdl));
+        m_pMarkingListBox->SetLoseFocusHdl(LINK(this, ClassificationDialog, LoseFocusMarkingHdl));
+
         for (const OUString& rName : maHelper.GetMarkings())
             m_pMarkingListBox->InsertEntry(rName);
-        m_pMarkingListBox->EnableAutoSize(true);
     }
     else
     {
@@ -217,15 +216,13 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
         m_pMarkingLabel->Show(false);
     }
 
-    m_pIntellectualPropertyPartNumberListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
+    m_pIntellectualPropertyPartNumberListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyPartNumbers())
         m_pIntellectualPropertyPartNumberListBox->InsertEntry(rName);
-    m_pIntellectualPropertyPartNumberListBox->EnableAutoSize(true);
 
-    m_pIntellectualPropertyPartListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectIPPartHdl));
+    m_pIntellectualPropertyPartListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectIPPartHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyParts())
         m_pIntellectualPropertyPartListBox->InsertEntry(rName);
-    m_pIntellectualPropertyPartListBox->EnableAutoSize(true);
 
     m_pRecentlyUsedListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
 
@@ -289,6 +286,14 @@ short ClassificationDialog::Execute()
         writeRecentlyUsed();
     }
     return nResult;
+}
+
+void ClassificationDialog::insertCategoryField(sal_Int32 nID)
+{
+    const OUString aFullString = maHelper.GetBACNames()[nID];
+    const OUString aAbbreviatedString = maHelper.GetAbbreviatedBACNames()[nID];
+    const OUString aIdentifierString = maHelper.GetBACIdentifiers()[nID];
+    insertField(ClassificationType::CATEGORY, aAbbreviatedString, aFullString, aIdentifierString);
 }
 
 void ClassificationDialog::insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier)
@@ -598,22 +603,9 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
     }
 
     if (bReplaceExisting)
-    {
-        ScopedVclPtrInstance<QueryBox> aQueryBox(this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, SvxResId(RID_CLASSIFICATION_CHANGE_CATEGORY));
-        if (aQueryBox->Execute() == RET_NO)
-        {
-            // Revert to previosuly selected
-            m_pInternationalClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
-            m_pClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
-            return;
-        }
         m_pEditWindow->pEdView->SetSelection(aExistingFieldSelection);
-    }
 
-    const OUString aFullString = maHelper.GetBACNames()[nSelected];
-    const OUString aAbbreviatedString = maHelper.GetAbbreviatedBACNames()[nSelected];
-    const OUString aIdentifierString = maHelper.GetBACIdentifiers()[nSelected];
-    insertField(ClassificationType::CATEGORY, aAbbreviatedString, aFullString, aIdentifierString);
+    insertCategoryField(nSelected);
 
     // Change category to the new selection
     m_pInternationalClassificationListBox->SelectEntryPos(nSelected);
@@ -621,13 +613,22 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
     m_nCurrentSelectedCategory = nSelected;
 }
 
+IMPL_LINK_NOARG(ClassificationDialog, LoseFocusMarkingHdl, Control&, void)
+{
+    if (m_nInsertMarkings >= 0)
+    {
+        const OUString aString = maHelper.GetMarkings()[m_nInsertMarkings];
+        insertField(ClassificationType::MARKING, aString, aString);
+        m_nInsertMarkings = -1;
+    }
+}
+
 IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
 {
     sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
-        const OUString aString = maHelper.GetMarkings()[nSelected];
-        insertField(ClassificationType::MARKING, aString, aString);
+        m_nInsertMarkings = nSelected;
     }
 }
 
