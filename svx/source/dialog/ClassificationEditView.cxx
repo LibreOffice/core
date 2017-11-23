@@ -48,11 +48,16 @@ ClassificationEditView::ClassificationEditView(vcl::Window* pParent, WinBits nBi
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
+    float fScaleFactor = GetDPIScaleFactor();
+    set_width_request(600 * fScaleFactor);
+    set_height_request(100 * fScaleFactor);
+
     SetMapMode(MapMode(MapUnit::MapTwip));
     SetPointer(PointerStyle::Text);
     SetBackground(aBgColor);
 
-    Size aSize(GetOutputSize());
+    Size aOutputSize(GetOutputSize());
+    Size aSize(aOutputSize);
     aSize.Height() *= 4;
 
     pEdEngine.reset(new ClassificationEditEngine(EditEngine::CreatePool()));
@@ -62,7 +67,7 @@ ClassificationEditView::ClassificationEditView(vcl::Window* pParent, WinBits nBi
     pEdEngine->SetControlWord(pEdEngine->GetControlWord() | EEControlBits::MARKFIELDS);
 
     pEdView.reset(new EditView(pEdEngine.get(), this));
-    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), GetOutputSize()));
+    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
 
     pEdView->SetBackgroundColor(aBgColor);
     pEdEngine->InsertView(pEdView.get());

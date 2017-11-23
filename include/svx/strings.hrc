@@ -1653,9 +1653,6 @@
 #define RID_SUBSETSTR_SYRIAC_SUPPLEMENT                     NC_("RID_SUBSETMAP", "Syriac Supplement")
 #define RID_SUBSETSTR_ZANABAZAR_SQUARE                      NC_("RID_SUBSETMAP", "Zanabazar Square")
 
-// TSCP Classification
-#define RID_CLASSIFICATION_CHANGE_CATEGORY                  NC_("RID_CLASSIFICATION_CHANGE_CATEGORY", "Do you really want to change the classification category?")
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
