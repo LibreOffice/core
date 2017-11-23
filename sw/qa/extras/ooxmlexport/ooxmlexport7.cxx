@@ -1815,6 +1815,23 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(2));
+    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("a"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("b"));
+    // a
+    uno::Reference<text::XTextContent> xContent3(xBookmarksByName->getByName("a"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange3(xContent3->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xRange3->getString(), OUString());
+    // b
+    uno::Reference<text::XTextContent> xContent2(xBookmarksByName->getByName("b"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange2(xContent2->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("r"), xRange2->getString());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
