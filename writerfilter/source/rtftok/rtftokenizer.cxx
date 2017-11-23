@@ -8,6 +8,7 @@
  */
 
 #include "rtftokenizer.hxx"
+#include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -37,7 +37,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/enumrange.hxx>

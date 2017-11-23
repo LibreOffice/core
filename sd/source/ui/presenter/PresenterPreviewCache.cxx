@@ -22,6 +22,7 @@
 
 #include <cache/SlsCacheContext.hxx>
 #include <tools/IdleDetection.hxx>
+#include <vcl/bitmapex.hxx>
 #include <sdpage.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>

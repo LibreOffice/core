@@ -56,7 +56,6 @@
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -216,13 +215,13 @@ private:
     ObjectMap*                          mpObjects;
     Reference< XComponent >             mxSrcDoc;
     Reference< XComponent >             mxDstDoc;
-    Reference< XDrawPage >              mxDefaultPage;
+    Reference< css::drawing::XDrawPage > mxDefaultPage;
     Sequence< PropertyValue >           maFilterData;
     // #i124608# explicit ShapeSelection for export when export of the selection is wanted
-    Reference< XShapes >                maShapeSelection;
+    Reference< css::drawing::XShapes >  maShapeSelection;
     bool                                mbExportShapeSelection;
-    std::vector< Reference< XDrawPage > > mSelectedPages;
-    std::vector< Reference< XDrawPage > > mMasterPageTargets;
+    std::vector< Reference< css::drawing::XDrawPage > > mSelectedPages;
+    std::vector< Reference< css::drawing::XDrawPage > > mMasterPageTargets;
 
     Link<EditFieldInfo*,void>           maOldFieldHdl;
     Link<EditFieldInfo*,void>           maNewFieldHdl;
@@ -234,7 +233,7 @@ private:
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
-    void                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
+    void                            implGetPagePropSet( const Reference< css::drawing::XDrawPage > & rxPage );
     void                            implGenerateMetaData();
     void                            implExportTextShapeIndex();
     void                            implEmbedBulletGlyphs();
@@ -245,26 +244,26 @@ private:
     bool                            implExportDocument();
     void                            implExportAnimations();
 
-    bool                            implExportMasterPages( const std::vector< Reference< XDrawPage > >& rxPages,
+    bool                            implExportMasterPages( const std::vector< Reference< css::drawing::XDrawPage > >& rxPages,
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    void                            implExportDrawPages( const std::vector< Reference< XDrawPage > >& rxPages,
+    void                            implExportDrawPages( const std::vector< Reference< css::drawing::XDrawPage > >& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );
     bool                            implExportPage( const OUString & sPageId,
-                                                        const Reference< XDrawPage > & rxPage,
-                                                        const Reference< XShapes > & xShapes,
+                                                        const Reference< css::drawing::XDrawPage > & rxPage,
+                                                        const Reference< css::drawing::XShapes > & xShapes,
                                                         bool bMaster );
 
-    bool                            implExportShapes( const Reference< XShapes >& rxShapes,
+    bool                            implExportShapes( const Reference< css::drawing::XShapes >& rxShapes,
                                                           bool bMaster );
-    bool                            implExportShape( const Reference< XShape >& rxShape,
+    bool                            implExportShape( const Reference< css::drawing::XShape >& rxShape,
                                                          bool bMaster );
 
     bool                            implCreateObjects();
-    bool                            implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes );
-    bool                            implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape );
-    void                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
+    bool                            implCreateObjectsFromShapes( const Reference< css::drawing::XDrawPage > & rxPage, const Reference< css::drawing::XShapes >& rxShapes );
+    bool                            implCreateObjectsFromShape( const Reference< css::drawing::XDrawPage > & rxPage, const Reference< css::drawing::XShape >& rxShape );
+    void                            implCreateObjectsFromBackground( const Reference< css::drawing::XDrawPage >& rxMasterPage );
 
-    static OUString                 implGetClassFromShape( const Reference< XShape >& rxShape );
+    static OUString                 implGetClassFromShape( const Reference< css::drawing::XShape >& rxShape );
     void                            implRegisterInterface( const Reference< XInterface >& rxIf );
     const OUString &                implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
     static OUString                 implGetInterfaceName( const Reference< XInterface >& rxIf );

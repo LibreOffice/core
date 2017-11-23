@@ -22,6 +22,7 @@
 #include <tools/line.hxx>
 
 #include <vcl/hatch.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
