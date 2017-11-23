@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testDateAdd()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 Or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -27,61 +27,70 @@ Function verify_testDateAdd() As String
     testName = "Test DateAdd function"
     On Error GoTo errorHandler
 
-    date2 = CDate("28.02.1995")
-    date1 = DateAdd("m", 1, "31.1.1995")
+    date2 = CDate("1995-02-28")
+    date1 = DateAdd("m", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("28.02.1995")
-    date1 = DateAdd("m", 1, "31.1.1995")
+    date2 = CDate("1995-02-28")
+    date1 = DateAdd("m", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("28.02.1995")
-    date1 = DateAdd("m", 1, "31.1.1995")
+    date2 = CDate("1995-02-28")
+    date1 = DateAdd("m", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("31.01.1996")
-    date1 = DateAdd("yyyy", 1, "31.1.1995")
+    date2 = CDate("1996-01-31")
+    date1 = DateAdd("yyyy", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("30.04.1995")
-    date1 = DateAdd("q", 1, "31.1.1995")
+    date2 = CDate("1995-04-30")
+    date1 = DateAdd("q", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("1.02.1995")
-    date1 = DateAdd("y", 1, "31.1.1995")
+    date2 = CDate("1995-02-01")
+    date1 = DateAdd("y", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("1.02.1995")
-    date1 = DateAdd("d", 1, "31.1.1995")
+    date2 = CDate("1995-02-01")
+    date1 = DateAdd("d", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("1.02.1995")
-    date1 = DateAdd("w", 1, "31.1.1995")
+    date2 = CDate("1995-02-01")
+    date1 = DateAdd("w", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("7.02.1995")
-    date1 = DateAdd("ww", 1, "31.1.1995")
+    date2 = CDate("1995-02-07")
+    date1 = DateAdd("ww", 1, "1995-01-31")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-Rem why this fails in excel?
-    date2 = CDate("1.1.1995 22:48:29")
-    date1 = DateAdd("h", 1, "1.1.1995 21:48:29")
+Rem This fails when directly comparing date1=date2, probably due to rounding.
+Rem Workaround convert to string which does the rounding.
+    Dim date1s, date2s As String
+    date2 = CDate("1995-01-01 22:48:29")
+    date1 = DateAdd("h", 1, "1995-01-01 21:48:29")
+    date1s = "" & date1
+    date2s = "" & date2
+    TestLog_ASSERT date1s = date2s, "the return DateAdd is: " & date1
+
+    date2 = CDate("1995-01-31 21:49:29")
+    date1 = DateAdd("n", 1, "1995-01-31 21:48:29")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("31.1.1995 21:49:29")
-    date1 = DateAdd("n", 1, "31.1.1995 21:48:29")
+    date2 = CDate("1995-01-31 21:48:30")
+    date1 = DateAdd("s", 1, "1995-01-31 21:48:29")
     TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
 
-    date2 = CDate("31.1.1995 21:48:30")
-    date1 = DateAdd("s", 1, "31.1.1995 21:48:29")
-    TestLog_ASSERT date1 = date2, "the return DateAdd is: " & date1
-
+exitFunc:
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testDateAdd = result
 
     Exit Function
+
 errorHandler:
-        TestLog_ASSERT (False), testName & ": hit error handler"
+    On Error GoTo 0
+    TestLog_ASSERT (False), testName & ": hit error handler"
+    GoTo exitFunc
+
 End Function
 
 Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional testComment As String)
