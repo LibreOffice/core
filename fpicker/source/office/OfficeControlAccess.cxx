@@ -77,6 +77,7 @@ namespace svt
             { "FilterList",             LISTBOX_FILTER,                 PROPERTY_FLAGS_COMMON                               },
             { "FilterListLabel",        LISTBOX_FILTER_LABEL,           PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "FilterOptionsBox",       CHECKBOX_FILTEROPTIONS,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "GpgPassword",            CHECKBOX_GPGENCRYPTION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "HelpButton",             PUSHBUTTON_HELP,                PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "ImageTemplateList",      LISTBOX_IMAGE_TEMPLATE,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
             { "ImageTemplateListLabel", LISTBOX_IMAGE_TEMPLATE_LABEL,   PROPERTY_FLAGS_COMMON | PropFlags::Text          },
