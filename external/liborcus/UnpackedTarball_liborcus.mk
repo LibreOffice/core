@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
+	external/liborcus/silence-assert.patch \
 ))
 
 ifeq ($(OS),WNT)
