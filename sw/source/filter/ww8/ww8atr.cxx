@@ -2754,6 +2754,12 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             GetExport().OutputField(pField, ww::eFILENAME, sStr);
         }
         break;
+    case SwFieldIds::Database:
+        {
+            OUString sStr = FieldString(ww::eMERGEFIELD) + pField->GetPar1() + " ";
+            GetExport().OutputField(pField, ww::eMERGEFIELD, sStr);
+        }
+        break;
     case SwFieldIds::DatabaseName:
         {
             SwDBData aData = GetExport().m_pDoc->GetDBData();
