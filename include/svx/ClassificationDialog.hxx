@@ -60,11 +60,13 @@ private:
     const std::function<void()> m_aParagraphSignHandler;
 
     sal_Int32 m_nCurrentSelectedCategory;
+    sal_Int16 m_nInsertMarkings;
 
     DECL_LINK(ButtonClicked, Button*, void);
     DECL_LINK(SelectToolboxHdl, ToolBox*, void);
     DECL_LINK(SelectClassificationHdl, ListBox&, void);
     DECL_LINK(SelectMarkingHdl, ListBox&, void);
+    DECL_LINK(LoseFocusMarkingHdl, Control&, void);
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
     DECL_LINK(SelectRecentlyUsedHdl, ListBox&, void);
     DECL_LINK(SelectIPPartHdl, ListBox&, void);
@@ -72,6 +74,7 @@ private:
     DECL_LINK(ExpandedHdl, VclExpander&, void);
 
     void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier = OUString());
+    void insertCategoryField(sal_Int32 nID);
 
     std::vector<std::vector<ClassificationResult>> m_aRecentlyUsedValuesCollection;
     std::vector<ClassificationResult> m_aInitialValues;
