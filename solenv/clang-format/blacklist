@@ -8296,6 +8296,8 @@ ios/LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.c
 ios/LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.h
 ios/LibreOfficeLight/LibreOfficeLight/dummyLOkit.c
 ios/LibreOfficeLight/LibreOfficeLight/lokit-Bridging-Header.h
+ios/source/LibreOfficeKit.c
+ios/source/LibreOfficeKit.h
 javaunohelper/source/bootstrap.cxx
 javaunohelper/source/javaunohelper.cxx
 javaunohelper/source/juhx-export-functions.hxx
