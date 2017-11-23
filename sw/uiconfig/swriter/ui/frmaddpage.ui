@@ -205,6 +205,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="frmaddpage|description_label">_Description:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">description:border</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
