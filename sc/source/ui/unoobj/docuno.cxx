@@ -1338,13 +1338,13 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
 {
     OutputDevice* pRet = nullptr;
     const beans::PropertyValue* pPropArray = rOptions.getConstArray();
-    long nPropCount = rOptions.getLength();
+    const long nPropCount = rOptions.getLength();
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        OUString aPropName(rProp.Name);
+        const OUString & rPropName = rProp.Name;
 
-        if (aPropName == SC_UNONAME_RENDERDEV)
+        if (rPropName == SC_UNONAME_RENDERDEV)
         {
             uno::Reference<awt::XDevice> xRenderDevice(rProp.Value, uno::UNO_QUERY);
             if ( xRenderDevice.is() )
@@ -1947,7 +1947,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     //  resolve the hyperlinks for PDF export
 
-    if ( pPDFData )
+    if ( pPDFData && !pPDFData->GetBookmarks().empty() )
     {
         //  iterate over the hyperlinks that were output for this page
 
