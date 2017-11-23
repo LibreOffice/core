@@ -1255,6 +1255,46 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
     }
 }
 
+void XMLShapeExport::ImpExportSignatureLine(const uno::Reference<drawing::XShape>& xShape)
+{
+    /* uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
+    bool bIsSignatureLine;
+    xPropSet->getPropertyValue("IsSignatureLine") >>= bIsSignatureLine;
+    if (!bIsSignatureLine)
+        return;
+
+    OUString aSignatureLineId;
+    xPropSet->getPropertyValue("SignatureLineId") >>= aSignatureLineId;
+    mrExport.AddAttribute(XML_NAMESPACE_LOEXT, "id", aSignatureLineId);
+
+    OUString aSuggestedSignerName;
+    xPropSet->getPropertyValue("SignatureSuggestedSignerName") >>= aSuggestedSignerName;
+    mrExport.AddAttribute(XML_NAMESPACE_LOEXT, "suggested-signer-name", aSuggestedSignerName);
+
+    OUString aSuggestedSignerTitle;
+    xPropSet->getPropertyValue("SignatureSuggestedSignerTitle") >>= aSuggestedSignerTitle;
+    mrExport.AddAttribute(XML_NAMESPACE_LOEXT, "suggested-signer-title", aSuggestedSignerTitle);
+
+    OUString aSuggestedSignerEmail;
+    xPropSet->getPropertyValue("SignatureSuggestedSignerEmail") >>= aSuggestedSignerEmail;
+    mrExport.AddAttribute(XML_NAMESPACE_LOEXT, "suggested-signer-email", aSuggestedSignerEmail);
+
+    OUString aSigningInstructions;
+    xPropSet->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
+    mrExport.AddAttribute(XML_NAMESPACE_LOEXT, "signing-instructions", aSigningInstructions);
+
+    bool bShowSignDate;
+    xPropSet->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
+    mrExport.AddAttribute(XML_NAMESPACE_LOEXT, "show-sign-date", bShowSignDate ? "true" : "false");
+
+    bool bCanAddComment;
+    xPropSet->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
+    mrExport.AddAttribute(XML_NAMESPACE_LOEXT, "can-add-comment", bCanAddComment ? "true" : "false");
+
+    SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_LOEXT, "signatureline", true, true); */
+}
+
 void XMLShapeExport::ExportGraphicDefaults()
 {
     rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
@@ -2394,6 +2434,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
     ImpExportEvents( xShape );
     ImpExportGluePoints( xShape );
+    ImpExportSignatureLine( xShape );
 
     // image map
     GetExport().GetImageMapExport().Export( xPropSet );
