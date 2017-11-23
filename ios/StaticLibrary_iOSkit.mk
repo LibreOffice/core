@@ -17,14 +17,14 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,iOSkit))
+$(eval $(call gb_StaticLibrary_StaticLibrary,iOS_kitBridge))
 
-$(eval $(call gb_StaticLibrary_set_include,iOSkit,\
+$(eval $(call gb_StaticLibrary_set_include,iOS_kitBridge,\
     $$(INCLUDE) \
     -I$(SRCDIR)/ios/generated \
 ))
 
-$(eval $(call gb_StaticLibrary_add_cobjects,iOSkit,\
+$(eval $(call gb_StaticLibrary_add_cobjects,iOS_kitBridge,\
     ios/source/LibreOfficeKit \
 ))
 

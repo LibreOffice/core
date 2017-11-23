@@ -12,11 +12,11 @@ IOSAPPXC := $(WORKDIR)/ios/loApp.xcconfig
 
 
 #- Top level  -----------------------------------------------------------------
-$(eval $(call gb_CustomTarget_CustomTarget,ios/ios_setup))
+$(eval $(call gb_CustomTarget_CustomTarget,ios/iOS_setup))
 
 
 
-$(call gb_CustomTarget_get_target,ios/ios_setup): $(IOSAPPXC) $(IOSGEN)/native-code.h
+$(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSAPPXC) $(IOSGEN)/native-code.h
 
 
 
@@ -93,12 +93,12 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 
 
 
-
 #- clean ios  -----------------------------------------------------------------
-$(call gb_CustomTarget_get_clean_target,ios/ios_setup):
+$(call gb_CustomTarget_get_clean_target,ios/iOS_setup):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
 	rm -rf $(IOSRES) $(IOSGEN)/native-code.h $(IOSAPPXC)
 	rm -rf $(WORKDIR)/ios
+
 
 
 # vim: set noet sw=4 ts=4:
