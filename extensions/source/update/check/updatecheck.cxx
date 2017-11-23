@@ -480,7 +480,7 @@ UpdateCheckThread::run()
             rModel.clear();
 
             // last == 0 means check immediately
-            bool checkNow = ! (last > 0);
+            bool checkNow = last <= 0;
 
             // Reset the condition to avoid busy loops
             if( osl::Condition::result_ok == aResult )
