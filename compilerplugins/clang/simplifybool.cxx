@@ -142,6 +142,10 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         // RecordType would require more smarts - we'd need to verify that an inverted operator actually existed
         if (t->isTemplateTypeParmType() || t->isRecordType() || t->isDependentType())
             return true;
+        // for floating point (with NaN) !(x<y) need not be equivalent to x>=y
+        if (t->isFloatingType() ||
+            binaryOp->getRHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType()->isFloatingType())
+            return true;
         if (!binaryOp->isComparisonOp())
             return true;
         report(
