@@ -3534,6 +3534,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 	gpgmepp \
 ))
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
+	gpgmepp-w32spawn \
+))
+
 endif
 
 ifneq ($(filter MACOSX LINUX,$(OS)),)
