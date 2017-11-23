@@ -34,6 +34,7 @@
 #include <memory>
 
 namespace vcl { class Window; }
+class ErrCode;
 class SfxFilter;
 class SfxObjectFactory;
 class SfxMedium;

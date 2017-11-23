@@ -19,6 +19,7 @@
 
 #include "rtattributehandler.hxx"
 
+#include <osl/diagnose.h>
 #include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>

@@ -20,7 +20,11 @@
 #ifndef INCLUDED_CPPCANVAS_SOURCE_INC_IMPLRENDERER_HXX
 #define INCLUDED_CPPCANVAS_SOURCE_INC_IMPLRENDERER_HXX
 
+#include <sal/config.h>
+
+#include <basegfx/vector/b2dsize.hxx>
 #include <sal/types.h>
+#include <tools/stream.hxx>
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/canvas.hxx>
 
@@ -30,7 +34,7 @@
 
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
-
+#include <osl/diagnose.h>
 #include <osl/endian.h>
 
 #include <map>

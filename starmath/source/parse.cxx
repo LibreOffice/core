@@ -20,6 +20,7 @@
 #include <memory>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18nlangtag/lang.h>
+#include <tools/lineend.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <o3tl/make_unique.hxx>

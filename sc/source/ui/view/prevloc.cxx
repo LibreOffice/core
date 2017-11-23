@@ -20,6 +20,7 @@
 #include <prevloc.hxx>
 #include <document.hxx>
 
+#include <osl/diagnose.h>
 #include <vcl/outdev.hxx>
 
 #include <o3tl/make_unique.hxx>

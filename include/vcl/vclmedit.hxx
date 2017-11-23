@@ -24,6 +24,7 @@
 #include <tools/wintypes.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/timer.hxx>
 
 class ImpVclMEdit;
 class Timer;

@@ -22,6 +22,7 @@
 #include <unx/gtk/gtkinst.hxx>
 
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 #include <window.h>
 #include <strings.hrc>
 

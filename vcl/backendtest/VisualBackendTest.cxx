@@ -19,6 +19,7 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include <osl/time.h>
+#include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>
 #include <salhelper/thread.hxx>
