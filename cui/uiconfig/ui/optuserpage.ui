@@ -1,460 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
-  <object class="GtkFrame" id="OptUserPage">
+  <object class="GtkBox" id="OptUserPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="label_xalign">0</property>
-    <property name="shadow_type">none</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkAlignment" id="alignment1">
+      <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="top_padding">6</property>
-        <property name="left_padding">12</property>
+        <property name="border_width">6</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
         <child>
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
             <child>
-              <object class="GtkLabel" id="companyft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|companyft">_Company:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">company</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="nameft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|nameft">First/last _name/initials:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">firstname</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="streetft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|streetft">_Street:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">street</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="cityft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|cityft">City/state/_zip:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">city</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">7</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="countryft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|countryft">Country/re_gion:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">country</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="titleft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|titleft">_Title/position:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">title</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="phoneft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|phoneft">Telephone (home/_work):</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">home</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="phoneft-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="optuserpage|phoneft-atkobject">Home telephone number</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="faxft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|faxft">Fa_x/e-mail:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">fax</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">11</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid2">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="firstname">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="firstname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|firstname-atkobject">First name</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="lastname">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="lastname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|lastname-atkobject">Last name</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="shortname">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
-                    <property name="width_chars">7</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="shortname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|shortname-atkobject">Initials</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid3">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="city">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="city-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|city-atkobject">City</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="state">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="state-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|state-atkobject">State</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="zip">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
-                    <property name="width_chars">15</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="zip-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|zip-atkobject">Zip code</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">7</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid5">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="hexpand">True</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="title">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="title-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|title-atkobject">Title</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="position">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="position-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|position-atkobject">Position</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">9</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid6">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="home">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="home-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|home-atkobject">Home telephone number</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="work">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="work-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|work-atkobject">Work telephone number</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">10</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid7">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="hexpand">True</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="fax">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="fax-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|fax-atkobject">FAX number</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="email">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="email-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|email-atkobject">email address</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">11</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="usefordocprop">
-                <property name="label" translatable="yes" context="optuserpage|usefordocprop">Use data for document properties</property>
+              <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">12</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="rusnameft">
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|rusnameft">Last name/first _name/father’s name/initials:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">ruslastname</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid8">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkEntry" id="ruslastname">
-                    <property name="can_focus">True</property>
+                  <object class="GtkLabel" id="companyft">
+                    <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="ruslastname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|ruslastname-atkobject">Last name</property>
-                      </object>
-                    </child>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|companyft">_Company:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">company</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -462,52 +41,758 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="rusfathersname">
-                    <property name="can_focus">True</property>
+                  <object class="GtkLabel" id="nameft">
+                    <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|nameft">First/last _name/initials:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">firstname</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="streetft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|streetft">_Street:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">street</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="cityft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|cityft">City/state/_zip:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">city</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="countryft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|countryft">Country/re_gion:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">country</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="titleft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|titleft">_Title/position:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">title</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="phoneft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|phoneft">Telephone (home/_work):</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">home</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="rusfathersname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|rusfathersname-atkobject">Father's name</property>
+                      <object class="AtkObject" id="phoneft-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="phoneft-atkobject">Home telephone number</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">10</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="russhortname">
-                    <property name="can_focus">True</property>
+                  <object class="GtkLabel" id="faxft">
+                    <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
-                    <property name="width_chars">7</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="russhortname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|russhortname-atkobject">Initials</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|faxft">Fa_x/e-mail:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">fax</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">11</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid2">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="firstname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="firstname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|firstname-atkobject">First name</property>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="lastname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lastname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="lastname-atkobject">Last name</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="shortname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="invisible_char">•</property>
+                        <property name="width_chars">7</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="shortname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="shortname-atkobject">Initials</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="rusfirstname">
-                    <property name="can_focus">True</property>
+                  <object class="GtkGrid" id="grid3">
+                    <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="rusfirstname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|rusfirstname-atkobject">First name</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="city">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="city-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="city-atkobject">City</property>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="state">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="state-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="state-atkobject">State</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="zip">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="invisible_char">•</property>
+                        <property name="width_chars">15</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zip-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="zip-atkobject">Zip code</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid5">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="title">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="title-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="title-atkobject">Title</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="position">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="position-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="position-atkobject">Position</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid6">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="home">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="home-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="home-atkobject">Home telephone number</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="work">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="work-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="work-atkobject">Work telephone number</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid7">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="fax">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fax-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="fax-atkobject">FAX number</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="email">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="email-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="email-atkobject">email address</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">11</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="usefordocprop">
+                    <property name="label" translatable="yes" context="optuserpage|usefordocprop">Use data for document properties</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="rusnameft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|rusnameft">Last name/first _name/father’s name/initials:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">ruslastname</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid8">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="ruslastname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ruslastname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="ruslastname-atkobject">Last name</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="rusfathersname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rusfathersname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="rusfathersname-atkobject">Father's name</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="russhortname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="invisible_char">•</property>
+                        <property name="width_chars">7</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="russhortname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="russhortname-atkobject">Initials</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="rusfirstname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rusfirstname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="rusfirstname-atkobject">First name</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="eastnameft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|eastnameft">Last/first _name/initials:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">eastlastname</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid9">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="eastlastname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="eastlastname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="eastlastname-atkobject">Last name</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="eastfirstname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="eastfirstname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="eastfirstname-atkobject">First name</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="eastshortname">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="invisible_char">•</property>
+                        <property name="width_chars">7</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="eastshortname-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="eastshortname-atkobject">Initials</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="russtreetft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|russtreetft">_Street/apartment number:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">russtreet</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid10">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="russtreet">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="russtreet-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="russtreet-atkobject">Street</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="apartnum">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="invisible_char">•</property>
+                        <property name="width_chars">15</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="apartnum-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="ruslastname-atkobject">Apartment number</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="icityft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|icityft">_Zip/city:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">izip</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid11">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="icity">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="icity-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="icity-atkobject">City</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="izip">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="invisible_char">•</property>
+                        <property name="width_chars">15</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="izip-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="izip-atkobject">Zip code</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid4">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkEntry" id="street">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid12">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkEntry" id="country">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid13">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkEntry" id="company">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">•</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -515,301 +800,125 @@
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="eastnameft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|eastnameft">Last/first _name/initials:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">eastlastname</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid9">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="column_spacing">6</property>
                 <child>
-                  <object class="GtkEntry" id="eastlastname">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="eastlastname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|eastlastname-atkobject">Last name</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="eastfirstname">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="eastfirstname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|eastfirstname-atkobject">First name</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="eastshortname">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
-                    <property name="width_chars">7</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="eastshortname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|eastshortname-atkobject">Initials</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="russtreetft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|russtreetft">_Street/apartment number:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">russtreet</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid10">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="russtreet">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="russtreet-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|russtreet-atkobject">Street</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="apartnum">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
-                    <property name="width_chars">15</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="apartnum-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|apartnum-atkobject">Apartment number</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="icityft">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="optuserpage|icityft">_Zip/city:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">izip</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid11">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="icity">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="icity-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|icity-atkobject">City</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="izip">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
-                    <property name="width_chars">15</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="izip-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|izip-atkobject">Zip code</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid4">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="hexpand">True</property>
-                <child>
-                  <object class="GtkEntry" id="street">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid12">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="hexpand">True</property>
-                <child>
-                  <object class="GtkEntry" id="country">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">8</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid13">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="hexpand">True</property>
-                <child>
-                  <object class="GtkEntry" id="company">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
         </child>
+        <child type="label">
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="optuserpage|label1">Address</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
     </child>
-    <child type="label">
-      <object class="GtkLabel" id="label1">
-        <property name="visible">True</property>
+    <child>
+      <object class="GtkFrame" id="frame2">
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="optuserpage|label1">Address</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-        </attributes>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkGrid" id="grid14">
+                <property name="can_focus">False</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="signingkeylabel">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|signingkeylabel">OpenPGP signing key:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">encryptionkey</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="encryptionkeylabel">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="optuserpage|encryptionkeylabel">OpenPGP encryption key:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">encryptionkey</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="encryptionkey">
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="signingkey">
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="encrypttoself">
+                    <property name="label" translatable="yes" context="optuserpage|encrypttoself">When encrypting documents, always encrypt to self</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label2">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="optuserpage|label2">Cryptography</property>
+            <property name="use_underline">True</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
     </child>
   </object>
 </interface>

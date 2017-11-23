@@ -199,6 +199,27 @@
         </info>
         <value/>
       </prop>
+      <prop oor:name="signingkey" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General - User Data -->
+        <info>
+          <desc>Specifies user's preferred OpenPGP key used for document signing</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="encryptionkey" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General - User Data -->
+        <info>
+          <desc>Specifies user's preferred OpenPGP key used for document encryption</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="encrypttoself" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General - User Data -->
+        <info>
+          <desc>Whether to encrypt documents for recipient(s) and also for the user with their preferred encryption key</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
