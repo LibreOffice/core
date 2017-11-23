@@ -16,6 +16,24 @@
       "revId": "53532de71ec6da7f4a9de33eb71855e847905bb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9ae04cfc",
+        "filename": "cui/source/dialogs/cuicharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-23T18:23:29Z",
+      "side": 0,
+      "message": "Ah, sorry this line was removed not added. But the main point is to not generating too much noise in git history with whitespace changes.",
+      "parentUuid": "1a430d35_da1f3406",
+      "revId": "53532de71ec6da7f4a9de33eb71855e847905bb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
