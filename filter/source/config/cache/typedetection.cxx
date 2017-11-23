@@ -21,6 +21,7 @@
 #include "constant.hxx"
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
@@ -50,7 +51,10 @@ namespace filter{
 
 TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
    : m_xContext(rxContext)
+   , m_xTerminateListener(new TerminateDetection(this))
+   , m_bCancel(false)
 {
+    css::frame::Desktop::create(m_xContext)->addTerminateListener(m_xTerminateListener.get());
     BaseContainer::init(rxContext                                     ,
                         TypeDetection::impl_getImplementationName()   ,
                         TypeDetection::impl_getSupportedServiceNames(),
@@ -60,6 +64,7 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentCont
 
 TypeDetection::~TypeDetection()
 {
+    css::frame::Desktop::create(m_xContext)->removeTerminateListener(m_xTerminateListener.get());
 }
 
 
@@ -425,18 +430,17 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         if (lFlatTypes.size()>0)
             sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
 
-
         // flat detection failed
         // pure deep detection failed
         // => ask might existing InteractionHandler
         // means: ask user for its decision
-        if (sType.isEmpty())
+        if (sType.isEmpty() && !m_bCancel)
             sType = impl_askUserForTypeAndFilterIfAllowed(stlDescriptor);
 
 
         // no real detected type - but a might valid one.
         // update descriptor and set last chance for return.
-        if (sType.isEmpty() && !sLastChance.isEmpty())
+        if (sType.isEmpty() && !sLastChance.isEmpty() && !m_bCancel)
         {
             OSL_FAIL("set first flat detected type without a registered deep detection service as \"last chance\" ... nevertheless some other deep detections said \"NO\". I TRY IT!");
             sType = sLastChance;
@@ -896,7 +900,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     //    obtained from the cache                 => ignore it, and continue with search
 
     for (FlatDetection::const_iterator pFlatIt  = lFlatTypes.begin();
-                                       pFlatIt != lFlatTypes.end()  ;
+                                       pFlatIt != lFlatTypes.end() && !m_bCancel;
                                      ++pFlatIt                      )
     {
         const FlatDetectionInfo& aFlatTypeInfo = *pFlatIt;
