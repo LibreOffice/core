@@ -452,7 +452,6 @@
           <object class="GtkComboBoxText" id="combo_dialogselector">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <signal name="changed" handler="openLokDialog" swapped="no"/>
           </object>
         </child>
       </object>
