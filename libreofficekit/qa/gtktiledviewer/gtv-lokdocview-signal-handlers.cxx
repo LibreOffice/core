@@ -22,6 +22,24 @@
 
 #include <iostream>
 
+static gboolean deleteLokDialog(GtkWidget* pWidget, GdkEvent* /*event*/, gpointer userdata)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
+    g_info("deleteLokDialog");
+    gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
+
+    return FALSE;
+}
+
+static gboolean destroyLokDialog(GtkWidget* pWidget, gpointer userdata)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
+    g_info("destroyLokDialog");
+    gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
+
+    return FALSE;
+}
+
 void LOKDocViewSigHandlers::editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
@@ -293,9 +311,23 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     const std::string aDialogId = aRoot.get<std::string>("dialogId");
     const std::string aAction = aRoot.get<std::string>("action");
 
-    // we only understand 'invalidate' and 'close' as of now
-    if (aAction != "invalidate" && aAction != "close")
+    if (aAction == "created")
+    {
+        const std::string aSize = aRoot.get<std::string>("size");
+        std::vector<int> aPoints = GtvHelpers::splitIntoIntegers(aSize, ", ", 2);
+        GtkWidget* pDialog = gtv_lok_dialog_new(pDocView, aDialogId.c_str(), aPoints[0], aPoints[1]);
+        g_info("created  dialog, for dialogid: %s with size: %s", aDialogId.c_str(), aSize.c_str());
+
+        gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
+        g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
+        g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
+
+        gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
+        gtk_widget_show_all(GTK_WIDGET(pDialog));
+        gtk_window_present(GTK_WINDOW(pDialog));
+
         return;
+    }
 
     GList* pChildWins = gtv_application_window_get_all_child_windows(window);
     GList* pIt = nullptr;
