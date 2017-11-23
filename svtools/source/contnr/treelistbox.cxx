@@ -3358,7 +3358,7 @@ SvLBoxTab* SvTreeListBox::GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rPo
     for( sal_uInt16 nPos = 0; nPos < nTabCount; nPos++ )
     {
         SvLBoxTab* pTab = aTabs[ nPos ];
-        if( (pTab->nFlags & nFlagMask) )
+        if( pTab->nFlags & nFlagMask )
         {
             rPos = nPos;
             return pTab;
@@ -3375,7 +3375,7 @@ void SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
     {
         --nPos;
         SvLBoxTab* pTab = aTabs[ nPos ];
-        if( (pTab->nFlags & nFlagMask) )
+        if( pTab->nFlags & nFlagMask )
         {
             rTabPos = nPos;
             return;

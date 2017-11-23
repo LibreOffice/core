@@ -2197,7 +2197,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         const SelectionType nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & SelectionType::Frame)
                             eKeyState = SwKeyState::GoIntoFly;
-                        else if((nSelectionType & SelectionType::DrawObject))
+                        else if(nSelectionType & SelectionType::DrawObject)
                         {
                             eKeyState = SwKeyState::GoIntoDrawing;
                             if (lcl_goIntoTextBox(*this, rSh))

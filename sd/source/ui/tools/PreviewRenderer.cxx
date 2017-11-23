@@ -284,7 +284,7 @@ void PreviewRenderer::PaintPage (
     {
         pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
         nSavedControlWord = pOutliner->GetControlWord();
-        pOutliner->SetControlWord((nSavedControlWord & ~EEControlBits::ONLINESPELLING));
+        pOutliner->SetControlWord(nSavedControlWord & ~EEControlBits::ONLINESPELLING);
     }
 
     // Use a special redirector to prevent PresObj shapes from being painted.

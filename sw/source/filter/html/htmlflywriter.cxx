@@ -647,7 +647,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
     // The spacing must be considered for the size, if the corresponding flag
     // is set.
-    if( (nFrameOpts & HtmlFrmOpts::MarginSize) )
+    if( nFrameOpts & HtmlFrmOpts::MarginSize )
     {
         aTwipSpc.Width() *= -2;
         aTwipSpc.Height() *= -2;
@@ -912,7 +912,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
     // The spacing must be considered for the size, if the corresponding flag
     // is set.
-    if( (nFrameOptions & HtmlFrmOpts::MarginSize) )
+    if( nFrameOptions & HtmlFrmOpts::MarginSize )
     {
         aTwipSpc.Width() *= -2;
         aTwipSpc.Height() *= -2;

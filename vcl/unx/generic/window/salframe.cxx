@@ -436,7 +436,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         }
         Attributes.override_redirect = True;
     }
-    else if( (nSalFrameStyle & SalFrameStyleFlags::SYSTEMCHILD ) )
+    else if( nSalFrameStyle & SalFrameStyleFlags::SYSTEMCHILD )
     {
         SAL_WARN_IF( !mpParent, "vcl", "SalFrameStyleFlags::SYSTEMCHILD window without parent" );
         if( mpParent )
@@ -618,7 +618,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         X11SalFrame* pFrame = this;
         while( pFrame->mpParent )
             pFrame = pFrame->mpParent;
-        if( (pFrame->nStyle_ & SalFrameStyleFlags::PLUG ) )
+        if( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
         {
             // if the top level window is a plugin window,
             // then we should place us in the same window group as
@@ -703,7 +703,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
 #endif
 
-        if( (nSalFrameStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
+        if( nSalFrameStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_TAKE_FOCUS );
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
@@ -1919,7 +1919,7 @@ void X11SalFrame::SetSize( const Size &rSize )
         XResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), rSize.Width(), rSize.Height() );
         if( GetWindow() != GetShellWindow() )
         {
-            if( (nStyle_ & SalFrameStyleFlags::PLUG ) )
+            if( nStyle_ & SalFrameStyleFlags::PLUG )
                 XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
             else
                 XResizeWindow( GetXDisplay(), GetWindow(), rSize.Width(), rSize.Height() );
@@ -2017,7 +2017,7 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
     XMoveResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), values.x, values.y, values.width, values.height );
     if( GetShellWindow() != GetWindow() )
     {
-        if( (nStyle_ & SalFrameStyleFlags::PLUG ) )
+        if( nStyle_ & SalFrameStyleFlags::PLUG )
             XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
         else
             XMoveResizeWindow( GetXDisplay(), GetWindow(), values.x, values.y, values.width, values.height );

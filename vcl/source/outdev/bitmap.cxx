@@ -65,7 +65,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if ( ( mnDrawMode & DrawModeFlags::NoBitmap ) )
+    if ( mnDrawMode & DrawModeFlags::NoBitmap )
     {
         return;
     }

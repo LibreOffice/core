@@ -2564,7 +2564,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
     if ( !pElement )
     {
         // element does not exist, check if creation is allowed
-        if( ( nMode & StreamMode::NOCREATE ) )
+        if( nMode & StreamMode::NOCREATE )
         {
             SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
             OUString aName( pImp->m_aURL );
@@ -2659,7 +2659,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
     if ( !pElement )
     {
         // element does not exist, check if creation is allowed
-        if( ( nMode & StreamMode::NOCREATE ) )
+        if( nMode & StreamMode::NOCREATE )
         {
             SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
             OUString aName( pImp->m_aURL );

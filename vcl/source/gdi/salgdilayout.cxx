@@ -120,7 +120,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
         {
             OutputDevice *pOutDevRef = const_cast<OutputDevice*>(pOutDev);
             // mirror this window back
-            if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
+            if( m_nLayout & SalLayoutFlags::BiDiRtl )
             {
                 long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 x = devX + (x - pOutDevRef->GetOutOffXPixel());
@@ -131,7 +131,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
                 x = pOutDevRef->GetOutputWidthPixel() - (x - devX) + pOutDevRef->GetOutOffXPixel() - 1;
             }
         }
-        else if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
+        else if( m_nLayout & SalLayoutFlags::BiDiRtl )
             x = w-1-x;
     }
 }
@@ -150,7 +150,7 @@ void SalGraphics::mirror( long& x, long nWidth, const OutputDevice *pOutDev, boo
         {
             OutputDevice *pOutDevRef = const_cast<OutputDevice*>(pOutDev);
             // mirror this window back
-            if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
+            if( m_nLayout & SalLayoutFlags::BiDiRtl )
             {
                 long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 if( bBack )
@@ -167,7 +167,7 @@ void SalGraphics::mirror( long& x, long nWidth, const OutputDevice *pOutDev, boo
                     x = pOutDevRef->GetOutputWidthPixel() - (x - devX) + pOutDevRef->GetOutOffXPixel() - nWidth;
             }
         }
-        else if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
+        else if( m_nLayout & SalLayoutFlags::BiDiRtl )
             x = w-nWidth-x;
 
     }
@@ -189,7 +189,7 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
         {
             OutputDevice *pOutDevRef = const_cast<OutputDevice*>(pOutDev);
             // mirror this window back
-            if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
+            if( m_nLayout & SalLayoutFlags::BiDiRtl )
             {
                 long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
@@ -208,7 +208,7 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
                 }
             }
         }
-        else if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
+        else if( m_nLayout & SalLayoutFlags::BiDiRtl )
         {
             for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
             {

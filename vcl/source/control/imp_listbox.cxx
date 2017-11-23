@@ -619,7 +619,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 
     if ( aMetrics.bText )
     {
-        if( (rEntry.mnFlags & ListBoxEntryFlags::MultiLine) )
+        if( rEntry.mnFlags & ListBoxEntryFlags::MultiLine )
         {
             // multiline case
             Size aCurSize( PixelToLogic( GetSizePixel() ) );
@@ -1796,7 +1796,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         {
             long nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * mnBorder);
             // a multiline entry should only be as wide a the window
-            if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
+            if (pEntry->mnFlags & ListBoxEntryFlags::MultiLine)
                 nMaxWidth = GetOutputSizePixel().Width() - 2 * mnBorder;
 
             tools::Rectangle aTextRect(Point(mnBorder - mnLeft, nY),
@@ -1818,9 +1818,9 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             }
 
             DrawTextFlags nDrawStyle = ImplGetTextStyle();
-            if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
+            if (pEntry->mnFlags & ListBoxEntryFlags::MultiLine)
                 nDrawStyle |= MULTILINE_ENTRY_DRAW_FLAGS;
-            if ((pEntry->mnFlags & ListBoxEntryFlags::DrawDisabled))
+            if (pEntry->mnFlags & ListBoxEntryFlags::DrawDisabled)
                 nDrawStyle |= DrawTextFlags::Disable;
 
             rRenderContext.DrawText(aTextRect, aStr, nDrawStyle);

@@ -978,7 +978,7 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName)
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if ( (getImportFlags() & SvXMLImportFlags::META) )
+    if ( getImportFlags() & SvXMLImportFlags::META )
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
         pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties());

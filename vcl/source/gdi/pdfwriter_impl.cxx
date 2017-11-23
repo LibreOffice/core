@@ -10232,7 +10232,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
     GraphicsState& rNewState = m_aGraphicsStack.front();
     // first set clip region since it might invalidate everything else
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::ClipRegion) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::ClipRegion )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::ClipRegion;
 
@@ -10268,32 +10268,32 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         }
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::MapMode) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::MapMode )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::MapMode;
         getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::Font) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::Font )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::Font;
         getReferenceDevice()->SetFont( rNewState.m_aFont );
         getReferenceDevice()->ImplNewFont();
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::LayoutMode) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::LayoutMode )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::LayoutMode;
         getReferenceDevice()->SetLayoutMode( rNewState.m_nLayoutMode );
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::DigitLanguage) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::DigitLanguage )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::DigitLanguage;
         getReferenceDevice()->SetDigitLanguage( rNewState.m_aDigitLanguage );
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::LineColor) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::LineColor )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::LineColor;
         if( m_aCurrentPDFState.m_aLineColor != rNewState.m_aLineColor &&
@@ -10304,7 +10304,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         }
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::FillColor) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::FillColor )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::FillColor;
         if( m_aCurrentPDFState.m_aFillColor != rNewState.m_aFillColor &&
@@ -10315,7 +10315,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         }
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::TransparentPercent) )
+    if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::TransparentPercent )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::TransparentPercent;
         if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )

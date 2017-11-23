@@ -1201,17 +1201,17 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         GdkWindowTypeHint eType = GDK_WINDOW_TYPE_HINT_NORMAL;
         if( (nStyle & SalFrameStyleFlags::DIALOG) && m_pParent != nullptr )
             eType = GDK_WINDOW_TYPE_HINT_DIALOG;
-        if( (nStyle & SalFrameStyleFlags::INTRO) )
+        if( nStyle & SalFrameStyleFlags::INTRO )
         {
             gtk_window_set_role( GTK_WINDOW(m_pWindow), "splashscreen" );
             eType = GDK_WINDOW_TYPE_HINT_SPLASHSCREEN;
         }
-        else if( (nStyle & SalFrameStyleFlags::TOOLWINDOW ) )
+        else if( nStyle & SalFrameStyleFlags::TOOLWINDOW )
         {
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
             gtk_window_set_skip_taskbar_hint( GTK_WINDOW(m_pWindow), true );
         }
-        else if( (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
+        else if( nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, true );
@@ -1226,7 +1226,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
     }
-    else if( (nStyle & SalFrameStyleFlags::FLOAT) )
+    else if( nStyle & SalFrameStyleFlags::FLOAT )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_POPUP_MENU );
 
     if( eWinType == GTK_WINDOW_TOPLEVEL )

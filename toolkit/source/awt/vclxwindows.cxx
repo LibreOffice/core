@@ -193,7 +193,7 @@ namespace toolkit
         Any aEffect;
 
         StyleSettings aStyleSettings = _pWindow->GetSettings().GetStyleSettings();
-        if ( (aStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
+        if ( aStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
             aEffect <<= (sal_Int16)FLAT;
         else
             aEffect <<= (sal_Int16)LOOK3D;

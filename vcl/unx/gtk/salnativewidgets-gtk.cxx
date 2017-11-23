@@ -1645,7 +1645,7 @@ bool GtkSalGraphics::NWPaintGTKButtonReal(
 
         if ( GTK_IS_BUTTON(button) )
         {
-            if ( (nState & ControlState::DEFAULT) )
+            if ( nState & ControlState::DEFAULT )
                 gtk_paint_box( button->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
                                &clipRect, button, "buttondefault", x, y, w, h );
 

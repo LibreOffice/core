@@ -299,7 +299,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
 
     if( rExport.GetAttrList().getLength() > 0 || !aIndexArray.empty() )
     {
-        if( (nFlags & SvXmlExportFlags::IGN_WS) )
+        if( nFlags & SvXmlExportFlags::IGN_WS )
         {
             rExport.IgnorableWhitespace();
         }

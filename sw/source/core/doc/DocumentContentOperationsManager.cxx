@@ -664,7 +664,7 @@ namespace
 
         // redline mode RedlineFlags::Ignore|RedlineFlags::On; save old mode
         RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( (( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On ));
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
 
         // iterate over relevant redlines and decide for each whether it should
         // be saved, or split + saved

@@ -219,7 +219,7 @@ namespace dbaui
                 ++setting
              )
         {
-            if ( (*setting->ppControl) )
+            if ( *setting->ppControl )
             {
                 _rControlList.push_back( new OSaveValueWrapper< CheckBox >( *setting->ppControl ) );
             }

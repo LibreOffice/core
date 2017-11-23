@@ -3517,7 +3517,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 }
 
                 // was dropdown arrow pressed
-                if( (it->mnBits & ToolBoxItemBits::DROPDOWN) )
+                if( it->mnBits & ToolBoxItemBits::DROPDOWN )
                 {
                     if( ( (it->mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY)
                         || it->GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) ).IsInside( aMousePos ))
