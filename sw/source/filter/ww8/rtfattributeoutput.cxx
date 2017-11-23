@@ -3570,12 +3570,9 @@ void RtfAttributeOutput::WriteExpand(const SwField* pField)
     OUString sCmd; // for optional Parameters
     switch (pField->GetTyp()->Which())
     {
-        //#i119803# Export user field and DB field for RTF filter
-        case SwFieldIds::Database:
-            sCmd = FieldString(ww::eMERGEFIELD);
-            SAL_FALLTHROUGH;
+        //#i119803# Export user field for RTF filter
         case SwFieldIds::User:
-            sCmd += pField->GetTyp()->GetName();
+            sCmd = pField->GetTyp()->GetName();
             m_rExport.OutputField(pField, ww::eNONE, sCmd);
             break;
         default:

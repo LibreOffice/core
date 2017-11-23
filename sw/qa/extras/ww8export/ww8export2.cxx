@@ -14,6 +14,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -321,6 +322,32 @@ DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
     // Check anchor type
     xPropertySet2.set(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.doc")
+{
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
+    CPPUNIT_ASSERT(xTextField.is());
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XDependentTextField> xDependent(xTextField, uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.Database"));
+    OUString sValue;
+    xTextField->getPropertyValue("Content") >>= sValue;
+    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(u8"«Name»"), sValue);
+
+    uno::Reference<beans::XPropertySet> xFiledMaster = xDependent->getTextFieldMaster();
+    uno::Reference<lang::XServiceInfo> xFiledMasterServiceInfo(xFiledMaster, uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xFiledMasterServiceInfo->supportsService("com.sun.star.text.fieldmaster.Database"));
+
+    // Defined properties: DataBaseName, Name, DataTableName, DataColumnName, DependentTextFields, DataCommandType, InstanceName, DataBaseURL
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("Name") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Name"), sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataColumnName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Name"), sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("InstanceName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.Name"), sValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
