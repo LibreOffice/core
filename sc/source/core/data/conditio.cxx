@@ -62,7 +62,7 @@ bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
 
     switch(GetType())
     {
-        case condformat::CONDITION:
+        case Type::Condition:
             return static_cast<const ScCondFormatEntry&>(*this) == static_cast<const ScCondFormatEntry&>(r);
         default:
             // TODO: implement also this case
@@ -1851,13 +1851,13 @@ const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const 
 {
     for (auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
     {
-        if((*itr)->GetType() == condformat::CONDITION)
+        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
         {
             const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(**itr);
             if (rEntry.IsCellValid(rCell, rPos))
                 return rEntry.GetStyle();
         }
-        else if((*itr)->GetType() == condformat::DATE)
+        else if((*itr)->GetType() == ScFormatEntry::Type::Date)
         {
             const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(**itr);
             if (rEntry.IsValid( rPos ))
@@ -1873,28 +1873,28 @@ ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAd
     ScCondFormatData aData;
     for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
     {
-        if((*itr)->GetType() == condformat::CONDITION && aData.aStyleName.isEmpty())
+        if((*itr)->GetType() == ScFormatEntry::Type::Condition && aData.aStyleName.isEmpty())
         {
             const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(**itr);
             if (rEntry.IsCellValid(rCell, rPos))
                 aData.aStyleName = rEntry.GetStyle();
         }
-        else if((*itr)->GetType() == condformat::COLORSCALE && !aData.pColorScale)
+        else if((*itr)->GetType() == ScFormatEntry::Type::Colorscale && !aData.pColorScale)
         {
             const ScColorScaleFormat& rEntry = static_cast<const ScColorScaleFormat&>(**itr);
             aData.pColorScale = rEntry.GetColor(rPos);
         }
-        else if((*itr)->GetType() == condformat::DATABAR && !aData.pDataBar)
+        else if((*itr)->GetType() == ScFormatEntry::Type::Databar && !aData.pDataBar)
         {
             const ScDataBarFormat& rEntry = static_cast<const ScDataBarFormat&>(**itr);
             aData.pDataBar = rEntry.GetDataBarInfo(rPos);
         }
-        else if((*itr)->GetType() == condformat::ICONSET && !aData.pIconSet)
+        else if((*itr)->GetType() == ScFormatEntry::Type::Iconset && !aData.pIconSet)
         {
             const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(**itr);
             aData.pIconSet = rEntry.GetIconSetInfo(rPos);
         }
-        else if((*itr)->GetType() == condformat::DATE && aData.aStyleName.isEmpty())
+        else if((*itr)->GetType() == ScFormatEntry::Type::Date && aData.aStyleName.isEmpty())
         {
             const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(**itr);
             if ( rEntry.IsValid( rPos ) )
@@ -1913,14 +1913,14 @@ void ScConditionalFormat::DoRepaint()
 void ScConditionalFormat::CompileAll()
 {
     for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
-        if((*itr)->GetType() == condformat::CONDITION)
+        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
             static_cast<ScCondFormatEntry&>(**itr).CompileAll();
 }
 
 void ScConditionalFormat::CompileXML()
 {
     for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
-        if((*itr)->GetType() == condformat::CONDITION)
+        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
             static_cast<ScCondFormatEntry&>(**itr).CompileXML();
 }
 
@@ -2043,7 +2043,7 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 void ScConditionalFormat::RenameCellStyle(const OUString& rOld, const OUString& rNew)
 {
     for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
-        if((*itr)->GetType() == condformat::CONDITION)
+        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
         {
             ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(**itr);
             if(rFormat.GetStyle() == rOld)
@@ -2055,7 +2055,7 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
     for(auto itr = maEntries.cbegin(); itr != maEntries.cend() && !bAllMarked; ++itr)
-        if((*itr)->GetType() == condformat::CONDITION)
+        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
         {
             const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(**itr);
             bAllMarked = rFormat.MarkUsedExternalReferences();

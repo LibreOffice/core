@@ -594,9 +594,9 @@ void ScColorScaleFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
         (*it)->UpdateMoveTab(rCxt);
 }
 
-condformat::ScFormatEntryType ScColorScaleFormat::GetType() const
+ScFormatEntry::Type ScColorScaleFormat::GetType() const
 {
-    return condformat::COLORSCALE;
+    return Type::Colorscale;
 }
 
 ScColorScaleEntries::iterator ScColorScaleFormat::begin()
@@ -695,9 +695,9 @@ void ScDataBarFormat::SetParent(ScConditionalFormat* pFormat)
     ScColorFormat::SetParent(pFormat);
 }
 
-condformat::ScFormatEntryType ScDataBarFormat::GetType() const
+ScFormatEntry::Type ScDataBarFormat::GetType() const
 {
-    return condformat::DATABAR;
+    return Type::Databar;
 }
 
 void ScDataBarFormat::UpdateReference( sc::RefUpdateContext& rCxt )
@@ -1028,9 +1028,9 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     return pInfo;
 }
 
-condformat::ScFormatEntryType ScIconSetFormat::GetType() const
+ScFormatEntry::Type ScIconSetFormat::GetType() const
 {
-    return condformat::ICONSET;
+    return Type::Iconset;
 }
 
 void ScIconSetFormat::UpdateReference( sc::RefUpdateContext& rCxt )
