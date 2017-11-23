@@ -6500,8 +6500,16 @@ if test $_os = "WINNT"; then
             cd -
         else
             UCRT_REDISTDIR=""
-            AC_MSG_WARN([--without-ucrt-dir not specified or dlls not found - installer will have runtime dependency])
-            add_warning "--without-ucrt-dir not specified or dlls not found - installer will have runtime dependency"
+            if test -n "$PKGFORMAT"; then
+               for i in "$PKGFORMAT"; do
+                   case "$i" in
+                   msi)
+                       AC_MSG_WARN([--without-ucrt-dir not specified or dlls not found - installer will have runtime dependency])
+                       add_warning "--without-ucrt-dir not specified or dlls not found - installer will have runtime dependency"
+                       ;;
+                   esac
+               done
+            fi
         fi
     fi
 fi
