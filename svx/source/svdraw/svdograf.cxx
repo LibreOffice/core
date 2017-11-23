@@ -329,7 +329,10 @@ void SdrGrafObj::onGraphicChanged()
 SdrGrafObj::SdrGrafObj()
 :   SdrRectObj(),
     pGraphicLink    ( nullptr ),
-    bMirrored       ( false )
+    bMirrored       ( false ),
+    mbIsSignatureLine(false),
+    mbIsSignatureLineShowSignDate(true),
+    mbIsSignatureLineCanAddComment(false)
 {
     pGraphic = new GraphicObject;
     mpReplacementGraphic = nullptr;

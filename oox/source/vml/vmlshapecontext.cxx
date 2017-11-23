@@ -494,6 +494,18 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
         case O_TOKEN( signatureline ):
             mrShapeModel.mbIsSignatureLine = true;
             mrShapeModel.maSignatureId = rAttribs.getString(XML_id, OUString());
+            mrShapeModel.maSignatureLineSuggestedSignerName
+                = rAttribs.getString(O_TOKEN(suggestedsigner), OUString());
+            mrShapeModel.maSignatureLineSuggestedSignerTitle
+                = rAttribs.getString(O_TOKEN(suggestedsigner2), OUString());
+            mrShapeModel.maSignatureLineSuggestedSignerEmail
+                = rAttribs.getString(O_TOKEN(suggestedsigneremail), OUString());
+            mrShapeModel.maSignatureLineSigningInstructions
+                = rAttribs.getString(O_TOKEN(signinginstructions), OUString());
+            mrShapeModel.mbSignatureLineShowSignDate = ConversionHelper::decodeBool(
+                rAttribs.getString(XML_showsigndate, "t")); // default is true
+            mrShapeModel.mbSignatureLineCanAddComment = ConversionHelper::decodeBool(
+                rAttribs.getString(XML_allowcomments, "f")); // default is false
             break;
         case O_TOKEN( lock ):
             // TODO

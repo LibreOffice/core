@@ -210,6 +210,12 @@ struct ShapeModel
     OUString     maVmlPath;          ///< VML path for this shape
     bool         mbIsSignatureLine;  ///< Shape is a signature line
     OUString     maSignatureId;      ///< ID of the signature
+    OUString     maSignatureLineSuggestedSignerName;
+    OUString     maSignatureLineSuggestedSignerTitle;
+    OUString     maSignatureLineSuggestedSignerEmail;
+    OUString     maSignatureLineSigningInstructions;
+    bool         mbSignatureLineShowSignDate;
+    bool         mbSignatureLineCanAddComment;
 
     explicit            ShapeModel();
                         ~ShapeModel();
