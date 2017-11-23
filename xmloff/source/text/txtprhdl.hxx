@@ -21,9 +21,6 @@
 
 
 #include <xmloff/prhdlfac.hxx>
-#include <memory>
-
-class XMLTextPropertyHandlerFactory_Impl;
 
 class XMLTextPropertyHandlerFactory : public XMLPropertyHandlerFactory
 {
