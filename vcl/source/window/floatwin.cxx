@@ -32,6 +32,7 @@
 
 #include <tools/rc.h>
 #include <tools/debug.hxx>
+#include <vcl/IDialogRenderable.hxx>
 
 class FloatingWindow::ImplData
 {
