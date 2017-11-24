@@ -19,10 +19,13 @@ namespace writerperfect
 namespace exp
 {
 
-XMLStylesContext::XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles, std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles)
+XMLStylesContext::XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles,
+                                   std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles,
+                                   std::map<OUString, librevenge::RVNGPropertyList> &rCellStyles)
     : XMLImportContext(rImport),
       m_rParagraphStyles(rParagraphStyles),
-      m_rTextStyles(rTextStyles)
+      m_rTextStyles(rTextStyles),
+      m_rCellStyles(rCellStyles)
 {
 }
 
@@ -41,6 +44,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentPa
 std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentTextStyles()
 {
     return m_rTextStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentCellStyles()
+{
+    return m_rCellStyles;
 }
 
 } // namespace exp

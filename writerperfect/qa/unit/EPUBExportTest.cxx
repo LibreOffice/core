@@ -75,6 +75,7 @@ public:
     void testImage();
     void testTable();
     void testTableRowSpan();
+    void testTableCellBorder();
     void testLink();
     void testLinkCharFormat();
     void testLinkNamedCharFormat();
@@ -99,6 +100,7 @@ public:
     CPPUNIT_TEST(testImage);
     CPPUNIT_TEST(testTable);
     CPPUNIT_TEST(testTableRowSpan);
+    CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testLink);
     CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST(testLinkNamedCharFormat);
@@ -484,6 +486,18 @@ void EPUBExportTest::testTableRowSpan()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This failed, row span wasn't exported.
     assertXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "rowspan", "2");
+}
+
+void EPUBExportTest::testTableCellBorder()
+{
+    createDoc("table-cell-border.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "style");
+    std::map<OUString, OUString> aCss;
+    parseCssStyle(aStyle, aCss);
+    // This failed, cell border wasn't exported.
+    CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"), aCss["border-left"]);
 }
 
 void EPUBExportTest::testLink()

@@ -33,12 +33,14 @@ public:
 
     librevenge::RVNGPropertyList &GetTextPropertyList();
     librevenge::RVNGPropertyList &GetParagraphPropertyList();
+    librevenge::RVNGPropertyList &GetCellPropertyList();
 
 private:
     OUString m_aName;
     OUString m_aFamily;
     librevenge::RVNGPropertyList m_aTextPropertyList;
     librevenge::RVNGPropertyList m_aParagraphPropertyList;
+    librevenge::RVNGPropertyList m_aCellPropertyList;
     XMLStylesContext &m_rStyles;
 };
 

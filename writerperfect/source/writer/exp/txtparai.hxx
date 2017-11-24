@@ -10,6 +10,8 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_TXTPARAI_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_TXTPARAI_HXX
 
+#include <map>
+
 #include "xmlictxt.hxx"
 
 namespace writerperfect
@@ -37,6 +39,13 @@ private:
 
 /// Shared child context factory for paragraph and span contexts.
 rtl::Reference<XMLImportContext> CreateParagraphOrSpanChildContext(XMLImport &rImport, const OUString &rName, const librevenge::RVNGPropertyList &rTextPropertyList);
+
+/// Looks for rName in rAutomaticStyles (and failing that, in rNamedStyles) and
+/// fills rPropertyList based on that.
+void FillStyles(const OUString &rName,
+                std::map<OUString, librevenge::RVNGPropertyList> &rAutomaticStyles,
+                std::map<OUString, librevenge::RVNGPropertyList> &rNamedStyles,
+                librevenge::RVNGPropertyList &rPropertyList);
 
 } // namespace exp
 } // namespace writerperfect
