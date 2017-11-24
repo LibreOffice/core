@@ -1048,7 +1048,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                     pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, (sal_uInt16)eActLang,
                                             Sequence< PropertyValue >() );
                 }
-                if( (pArgs->xSpellAlt).is() )
+                if( pArgs->xSpellAlt.is() )
                 {
                     if( IsSymbol( aScanner.GetBegin() ) )
                     {

@@ -1999,7 +1999,7 @@ bool TransferableDataHelper::GetFileList( FileList& rFileList )
                     bRet = true;
                  }
                  else
-                    bRet = ( ( ReadFileList( *xStm, rFileList ) ).GetError() == ERRCODE_NONE );
+                    bRet = ( ReadFileList( *xStm, rFileList ).GetError() == ERRCODE_NONE );
             }
         }
     }

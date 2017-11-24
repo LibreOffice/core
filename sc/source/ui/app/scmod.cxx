@@ -630,11 +630,11 @@ void ScModule::ResetDragObject()
     mpDragData->pCellTransfer = nullptr;
     mpDragData->pDrawTransfer = nullptr;
     mpDragData->pJumpLocalDoc = nullptr;
-    (mpDragData->aLinkDoc).clear();
-    (mpDragData->aLinkTable).clear();
-    (mpDragData->aLinkArea).clear();
-    (mpDragData->aJumpTarget).clear();
-    (mpDragData->aJumpText).clear();
+    mpDragData->aLinkDoc.clear();
+    mpDragData->aLinkTable.clear();
+    mpDragData->aLinkArea.clear();
+    mpDragData->aJumpTarget.clear();
+    mpDragData->aJumpText.clear();
 }
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )

@@ -205,7 +205,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
     if (maFontColor != COL_AUTO)
         mrOutputDev.SetTextColor(maFontColor);
 
-    Size aPixelSize((m_pFont) ? maPixelSize : mrOutputDev.GetFont().GetFontSize());
+    Size aPixelSize(m_pFont ? maPixelSize : mrOutputDev.GetFont().GetFontSize());
 
     Point aFontDrawPosition = aRectangle.TopLeft();
     if (eRenderAlign == RenderAlign::CENTER)

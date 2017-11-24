@@ -67,7 +67,7 @@ namespace DOM { namespace events {
             while (iter != rMap.end() && iter->first == pNode)
             {
                 // erase all references to specified listener
-                if ((iter->second).is() && iter->second == aListener)
+                if (iter->second.is() && iter->second == aListener)
                 {
                     ListenerMap::iterator tmp_iter = iter;
                     ++iter;
@@ -96,7 +96,7 @@ namespace DOM { namespace events {
             auto const ibound = rMap.upper_bound(pNode);
             for( ; iter != ibound; ++iter )
             {
-                if((iter->second).is())
+                if(iter->second.is())
                     (iter->second)->handleEvent(xEvent);
             }
         }

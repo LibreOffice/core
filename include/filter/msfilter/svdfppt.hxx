@@ -1139,7 +1139,7 @@ public:
                         TSS_Type nInstanceInSheet,
                         const PPTTextObj* pTextObj
                     );
-    sal_uInt32      Count() const { return ( mpFieldItem ) ? 1 : maString.getLength(); };
+    sal_uInt32      Count() const { return mpFieldItem ? 1 : maString.getLength(); };
     bool            HasTabulator();
 };
 

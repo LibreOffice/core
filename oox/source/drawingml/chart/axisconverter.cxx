@@ -390,7 +390,7 @@ AxisDispUnitsConverter::~AxisDispUnitsConverter()
 void AxisDispUnitsConverter::convertFromModel( const Reference< XAxis >& rxAxis )
 {
     PropertySet aPropSet( rxAxis );
-    if (!(mrModel.mnBuiltInUnit).isEmpty() )
+    if (!mrModel.mnBuiltInUnit.isEmpty() )
     {
         aPropSet.setProperty(PROP_DisplayUnits, true);
         aPropSet.setProperty( PROP_BuiltInUnit, mrModel.mnBuiltInUnit );

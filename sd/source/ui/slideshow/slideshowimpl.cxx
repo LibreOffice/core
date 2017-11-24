@@ -2263,7 +2263,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 
             for( sal_Int32 i = 0; i < nSlideCount; i++ )
             {
-                bool bVisible = !( mpDoc->GetSdPage( (sal_uInt16)i, PageKind::Standard ) )->IsExcluded();
+                bool bVisible = ! mpDoc->GetSdPage( (sal_uInt16)i, PageKind::Standard )->IsExcluded();
                 if( bVisible || (eMode == AnimationSlideController::ALL) )
                     mpSlideController->insertSlideNumber( i, bVisible );
             }
@@ -2289,7 +2289,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
             {
                 const sal_uInt16 nSdSlide = ( (*it)->GetPageNum() - 1 ) / 2;
 
-                if( !( mpDoc->GetSdPage( nSdSlide, PageKind::Standard ) )->IsExcluded())
+                if( ! mpDoc->GetSdPage( nSdSlide, PageKind::Standard )->IsExcluded())
                     mpSlideController->insertSlideNumber( nSdSlide );
             }
         }

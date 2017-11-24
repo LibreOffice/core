@@ -422,7 +422,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         {
             if( pOldInfo->maType == pOldInfo->maFilterName )
             {
-                (pNewInfo->maType).clear();
+                pNewInfo->maType.clear();
             }
         }
 
@@ -1130,7 +1130,7 @@ void XMLFilterSettingsDialog::initFilterList()
                                     Sequence< OUString > aExtensions;
                                     if( pValues2->Value >>= aExtensions )
                                     {
-                                        (pTempFilter->maExtension).clear();
+                                        pTempFilter->maExtension.clear();
 
                                         sal_Int32 nCount3( aExtensions.getLength() );
                                         OUString* pExtensions = aExtensions.getArray();

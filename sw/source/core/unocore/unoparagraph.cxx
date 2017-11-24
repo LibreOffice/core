@@ -343,7 +343,7 @@ SwXParagraph::attachToText(SwXText & rParent, SwTextNode & rTextNode)
         {
             try { setString(m_pImpl->m_sText); }
             catch(...){}
-            (m_pImpl->m_sText).clear();
+            m_pImpl->m_sText.clear();
         }
     }
 }

@@ -311,7 +311,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
         if( -1 == nColonPos )
         {
             // case: no ':' found -> default namespace
-            (xEntry->sPrefix).clear();
+            xEntry->sPrefix.clear();
             xEntry->sName = rAttrName;
         }
         else

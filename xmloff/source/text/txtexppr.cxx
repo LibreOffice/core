@@ -56,7 +56,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         pThis->maDropCapExport.exportXML( rProperty.maValue, bDropWholeWord,
                                           sDropCharStyle );
         pThis->bDropWholeWord = false;
-        (pThis->sDropCharStyle).clear();
+        pThis->sDropCharStyle.clear();
         break;
 
     case CTF_TABSTOP:

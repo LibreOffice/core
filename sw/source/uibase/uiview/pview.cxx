@@ -1175,7 +1175,7 @@ void SwPagePreview::Init()
 
 SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
-    m_pViewWin( VclPtr<SwPagePreviewWin>::Create(&(GetViewFrame())->GetWindow(), *this ) ),
+    m_pViewWin( VclPtr<SwPagePreviewWin>::Create(&GetViewFrame()->GetWindow(), *this ) ),
     m_nNewPage(USHRT_MAX),
     m_sPageStr(SwResId(STR_PAGE)),
     m_pHScrollbar(nullptr),

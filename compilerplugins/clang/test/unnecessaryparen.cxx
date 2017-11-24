@@ -55,6 +55,7 @@ int main()
     S s1;
     if ((s1)) { // expected-error {{parentheses immediately inside if statement [loplugin:unnecessaryparen]}}
         // expected-error@-1 {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
+        // expected-error@-2 {{unnecessary parentheses around member expr [loplugin:unnecessaryparen]}}
         return 0;
     }
     S s2;
@@ -64,6 +65,15 @@ int main()
 
     (void) sizeof (int);
     (void) sizeof (x); // expect no warning (for whatever reason; for symmetry with above case?)
+};
+
+struct S2 {
+    S2& GetText();
+    void toChar();
+};
+void func2(S2 *p)
+{
+    (p->GetText()).toChar(); // expected-error {{unnecessary parentheses around member expr [loplugin:unnecessaryparen]}}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
