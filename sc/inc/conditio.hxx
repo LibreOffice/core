@@ -542,7 +542,13 @@ public:
     void            DoRepaint();
 
     sal_uInt32      GetKey() const          { return nKey; }
-    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
+
+    // call only if a key has not already been set
+    void            SetKey(sal_uInt32 nNew)
+    {
+        assert(nKey == 0 || nNew == nKey);
+        nKey = nNew;
+    }
 
     bool            MarkUsedExternalReferences() const;
 
