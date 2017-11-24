@@ -61,6 +61,9 @@ int main()
     if ((s2 = s1)) {
         return 0;
     }
+
+    (void) sizeof (int);
+    (void) sizeof (x); // expect no warning (for whatever reason; for symmetry with above case?)
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
