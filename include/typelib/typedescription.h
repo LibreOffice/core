@@ -1017,7 +1017,7 @@ inline void TYPELIB_DANGER_GET( typelib_TypeDescription** ppMacroTypeDescr,
     }
 }
 
-/** Releases the description previouse fetched by TYPELIB_DANGER_GET.
+/** Releases the description previous fetched by TYPELIB_DANGER_GET.
     @internal
 */
 inline void TYPELIB_DANGER_RELEASE( typelib_TypeDescription* pDescription )

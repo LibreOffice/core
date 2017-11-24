@@ -85,7 +85,7 @@ public class _XFormLayerAccess extends MultiMethodTest {
         if (xFormCont == null)
             log.println("ERROR: Could not get FromContoller");
 
-        log.println("set back DesignMode to previouse state");
+        log.println("set back DesignMode to previous state");
         oObj.setFormDesignMode(currentMode);
 
         tRes.tested("getFromController()", xFormCont != null );
