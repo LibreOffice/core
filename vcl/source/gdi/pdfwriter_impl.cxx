@@ -9786,9 +9786,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     if( ! rMask.IsEmpty() )
         aID.m_nMaskChecksum = rMask.GetChecksum();
 
-    std::vector< JPGEmit >::const_iterator it;
-    for( it = m_aJPGs.begin(); it != m_aJPGs.end() && ! (aID == it->m_aID); ++it )
-        ;
+    std::vector< JPGEmit >::const_iterator it = std::find_if(m_aJPGs.begin(), m_aJPGs.end(),
+                                             [&](const JPGEmit& arg) { return aID == arg.m_aID; });
     if( it == m_aJPGs.end() )
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
@@ -9894,12 +9893,8 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         if( ! aMask.IsEmpty() )
             aID.m_nMaskChecksum = aMask.GetChecksum();
     }
-    std::list< BitmapEmit >::const_iterator it;
-    for( it = m_aBitmaps.begin(); it != m_aBitmaps.end(); ++it )
-    {
-        if( aID == it->m_aID )
-            break;
-    }
+    std::list< BitmapEmit >::const_iterator it = std::find_if(m_aBitmaps.begin(), m_aBitmaps.end(),
+                                             [&](const BitmapEmit& arg) { return aID == arg.m_aID; });
     if( it == m_aBitmaps.end() )
     {
         m_aBitmaps.push_front( BitmapEmit() );
@@ -9951,19 +9946,13 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
                                getReferenceDevice(),
                                rSize ) );
     // check if we already have this gradient
-    std::list<GradientEmit>::iterator it;
     // rounding to point will generally lose some pixels
     // round up to point boundary
     aPtSize.Width()++;
     aPtSize.Height()++;
-    for( it = m_aGradients.begin(); it != m_aGradients.end(); ++it )
-    {
-        if( it->m_aGradient == rGradient )
-        {
-            if( it->m_aSize == aPtSize )
-                break;
-        }
-    }
+    std::list< GradientEmit >::const_iterator it = std::find_if(m_aGradients.begin(), m_aGradients.end(),
+                                             [&](const GradientEmit& arg) { return ((rGradient == arg.m_aGradient) && (aPtSize == arg.m_aSize) ); });
+
     if( it == m_aGradients.end() )
     {
         m_aGradients.push_front( GradientEmit() );
@@ -11438,11 +11427,9 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
         PDFWidget& rGroupWidget = m_aWidgets[ group.second ];
         // check whether all kids have a unique OnValue
         std::unordered_map< OUString, sal_Int32 > aOnValues;
-        int nChildren = rGroupWidget.m_aKidsIndex.size();
         bool bIsUnique = true;
-        for( int nKid = 0; nKid < nChildren && bIsUnique; nKid++ )
+        for (auto const& nKidIndex : rGroupWidget.m_aKidsIndex)
         {
-            int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
             const OUString& rVal = m_aWidgets[nKidIndex].m_aOnValue;
             SAL_INFO("vcl.pdfwriter", "OnValue: " << rVal);
             if( aOnValues.find( rVal ) == aOnValues.end() )
@@ -11452,25 +11439,26 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
             else
             {
                 bIsUnique = false;
+                break;
             }
         }
         if( ! bIsUnique )
         {
             SAL_INFO("vcl.pdfwriter", "enforcing unique OnValues" );
             // make unique by using ascending OnValues
-            for( int nKid = 0; nKid < nChildren; nKid++ )
+            int nKid = 0;
+            for (auto const& nKidIndex : rGroupWidget.m_aKidsIndex)
             {
-                int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
                 PDFWidget& rKid = m_aWidgets[nKidIndex];
                 rKid.m_aOnValue = OUString::number( nKid+1 );
                 if( rKid.m_aValue != "Off" )
                     rKid.m_aValue = rKid.m_aOnValue;
+                ++nKid;
             }
         }
         // finally move the "Yes" appearance to the OnValue appearance
-        for( int nKid = 0; nKid < nChildren; nKid++ )
+        for (auto const& nKidIndex : rGroupWidget.m_aKidsIndex)
         {
-            int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
             PDFWidget& rKid = m_aWidgets[nKidIndex];
             PDFAppearanceMap::iterator app_it = rKid.m_aAppearances.find( "N" );
             if( app_it != rKid.m_aAppearances.end() )
