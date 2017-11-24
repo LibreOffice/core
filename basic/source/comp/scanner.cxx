@@ -20,6 +20,7 @@
 #include <basiccharclass.hxx>
 #include <scanner.hxx>
 #include <sbintern.hxx>
+#include <runtime.hxx>
 
 #include <i18nlangtag/lang.h>
 #include <comphelper/processfactory.hxx>
@@ -560,12 +561,21 @@ bool SbiScanner::NextSym()
             aSym = aLine.copy( n, nCol - n - 1 );
 
             // parse date literal
-            SvNumberFormatter aFormatter(comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
-            sal_uInt32 nIndex = 0;
-            bool bSuccess = aFormatter.IsNumberFormat(aSym, nIndex, nVal);
+            std::shared_ptr<SvNumberFormatter> pFormatter;
+            if (GetSbData()->pInst)
+            {
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
+            }
+            else
+            {
+                sal_uInt32 nDummy;
+                pFormatter = SbiInstance::PrepareNumberFormatter( nDummy, nDummy, nDummy );
+            }
+            sal_uInt32 nIndex = pFormatter->GetStandardIndex( LANGUAGE_ENGLISH_US);
+            bool bSuccess = pFormatter->IsNumberFormat(aSym, nIndex, nVal);
             if( bSuccess )
             {
-                short nType_ = aFormatter.GetType(nIndex);
+                short nType_ = pFormatter->GetType(nIndex);
                 if( !(nType_ & css::util::NumberFormat::DATE) )
                     bSuccess = false;
             }
