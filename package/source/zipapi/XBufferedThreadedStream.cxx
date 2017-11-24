@@ -9,6 +9,7 @@
 
 #include "XBufferedThreadedStream.hxx"
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 using namespace css::uno;
 using com::sun::star::packages::zip::ZipIOException;
@@ -27,20 +28,10 @@ private:
         {
             mxStream.produce();
         }
-        catch( const RuntimeException &e )
-        {
-            SAL_WARN("package", "RuntimeException from unbuffered Stream " << e );
-            mxStream.saveException( new RuntimeException( e ) );
-        }
-        catch( const ZipIOException &e )
-        {
-            SAL_WARN("package", "ZipIOException from unbuffered Stream " << e );
-            mxStream.saveException( new ZipIOException( e ) );
-        }
-        catch( const Exception &e )
+        catch (const css::uno::Exception &e)
         {
             SAL_WARN("package", "Unexpected " << e );
-            mxStream.saveException( new Exception( e ) );
+            mxStream.saveException(cppu::getCaughtException());
         }
 
         mxStream.setTerminateThread();
@@ -58,7 +49,6 @@ XBufferedThreadedStream::XBufferedThreadedStream(
 , mnOffset( 0 )
 , mxUnzippingThread( new UnzippingThread(*this) )
 , mbTerminateThread( false )
-, maSavedException( nullptr )
 {
     mxUnzippingThread->launch();
 }
@@ -116,8 +106,8 @@ const Buffer& XBufferedThreadedStream::getNextBlock()
         if( maPendingBuffers.empty() )
         {
             maInUseBuffer = Buffer();
-            if( maSavedException )
-                throw *maSavedException;
+            if (maSavedException.hasValue())
+                cppu::throwException(maSavedException);
         }
         else
         {
