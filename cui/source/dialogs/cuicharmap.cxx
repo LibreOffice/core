@@ -214,7 +214,7 @@ void SvxCharacterMap::SetChar( sal_UCS4 c )
 
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
-    return m_pShowSet->GetSelectCharacter();
+   return (m_pShowChar->GetText()).toChar();
 }
 
 
