@@ -22,12 +22,14 @@ namespace exp
 XMLStylesContext::XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles,
                                    std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles,
                                    std::map<OUString, librevenge::RVNGPropertyList> &rCellStyles,
-                                   std::map<OUString, librevenge::RVNGPropertyList> &rColumnStyles)
+                                   std::map<OUString, librevenge::RVNGPropertyList> &rColumnStyles,
+                                   std::map<OUString, librevenge::RVNGPropertyList> &rRowStyles)
     : XMLImportContext(rImport),
       m_rParagraphStyles(rParagraphStyles),
       m_rTextStyles(rTextStyles),
       m_rCellStyles(rCellStyles),
-      m_rColumnStyles(rColumnStyles)
+      m_rColumnStyles(rColumnStyles),
+      m_rRowStyles(rRowStyles)
 {
 }
 
@@ -56,6 +58,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentCe
 std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentColumnStyles()
 {
     return m_rColumnStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentRowStyles()
+{
+    return m_rRowStyles;
 }
 
 } // namespace exp

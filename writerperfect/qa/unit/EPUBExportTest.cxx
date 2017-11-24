@@ -77,6 +77,7 @@ public:
     void testTableRowSpan();
     void testTableCellBorder();
     void testTableCellWidth();
+    void testTableRowHeight();
     void testLink();
     void testLinkCharFormat();
     void testLinkNamedCharFormat();
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testTableRowSpan);
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testTableCellWidth);
+    CPPUNIT_TEST(testTableRowHeight);
     CPPUNIT_TEST(testLink);
     CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST(testLinkNamedCharFormat);
@@ -510,6 +512,13 @@ double getCellWidth(const OUString &rStyle)
     EPUBExportTest::parseCssStyle(rStyle, aCss);
     return aCss["width"].toDouble();
 }
+
+double getRowHeight(const OUString &rStyle)
+{
+    std::map<OUString, OUString> aCss;
+    EPUBExportTest::parseCssStyle(rStyle, aCss);
+    return aCss["height"].toDouble();
+}
 }
 
 void EPUBExportTest::testTableCellWidth()
@@ -523,6 +532,17 @@ void EPUBExportTest::testTableCellWidth()
     // These failed, all widths were 0.
     CPPUNIT_ASSERT_GREATER(getCellWidth(aStyle2), getCellWidth(aStyle1));
     CPPUNIT_ASSERT_GREATER(getCellWidth(aStyle3), getCellWidth(aStyle1));
+}
+
+void EPUBExportTest::testTableRowHeight()
+{
+    createDoc("table-row-height.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    OUString aStyle1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]", "style");
+    OUString aStyle2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[2]", "style");
+    // These failed, both heights were 0.
+    CPPUNIT_ASSERT_GREATER(getRowHeight(aStyle2), getRowHeight(aStyle1));
 }
 
 void EPUBExportTest::testLink()

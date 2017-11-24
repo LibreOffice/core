@@ -66,12 +66,14 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
         return new XMLStylesContext(mrImport, mrImport.GetAutomaticParagraphStyles(),
                                     mrImport.GetAutomaticTextStyles(),
                                     mrImport.GetAutomaticCellStyles(),
-                                    mrImport.GetAutomaticColumnStyles());
+                                    mrImport.GetAutomaticColumnStyles(),
+                                    mrImport.GetAutomaticRowStyles());
     else if (rName == "office:styles")
         return new XMLStylesContext(mrImport, mrImport.GetParagraphStyles(),
                                     mrImport.GetTextStyles(),
                                     mrImport.GetCellStyles(),
-                                    mrImport.GetColumnStyles());
+                                    mrImport.GetColumnStyles(),
+                                    mrImport.GetRowStyles());
     return nullptr;
 }
 
@@ -112,6 +114,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticColumnS
     return maAutomaticColumnStyles;
 }
 
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticRowStyles()
+{
+    return maAutomaticRowStyles;
+}
+
 std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetTextStyles()
 {
     return maTextStyles;
@@ -130,6 +137,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetCellStyles()
 std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetColumnStyles()
 {
     return maColumnStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetRowStyles()
+{
+    return maRowStyles;
 }
 
 void XMLImport::startDocument()

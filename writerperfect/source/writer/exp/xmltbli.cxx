@@ -141,9 +141,18 @@ rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(const OU
     return nullptr;
 }
 
-void XMLTableRowContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLTableRowContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
 {
-    mrImport.GetGenerator().openTableRow(librevenge::RVNGPropertyList());
+    librevenge::RVNGPropertyList aPropertyList;
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+
+        if (rAttributeName == "table:style-name")
+            FillStyles(rAttributeValue, mrImport.GetAutomaticRowStyles(), mrImport.GetRowStyles(), aPropertyList);
+    }
+    mrImport.GetGenerator().openTableRow(aPropertyList);
 }
 
 void XMLTableRowContext::endElement(const OUString &/*rName*/)
@@ -187,11 +196,6 @@ rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(const OUStr
     SAL_WARN("writerperfect", "XMLTableContext::CreateChildContext: unhandled " << rName);
 
     return nullptr;
-}
-
-void XMLTableContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
-{
-    m_bTableOpened = false;
 }
 
 void XMLTableContext::endElement(const OUString &/*rName*/)
