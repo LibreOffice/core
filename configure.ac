@@ -2845,17 +2845,17 @@ dnl ===================================================================
 
 if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
+    current_sdk_ver=11.1
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
-        versionmin=-mios-simulator-version-min=11.1
+        versionmin=-mios-simulator-version-min=$current_sdk_ver
     else
         platform=iPhoneOS
-        versionmin=-miphoneos-version-min=11.1
+        versionmin=-miphoneos-version-min=$current_sdk_ver
     fi
     xcode_developer=`xcode-select -print-path`
 
-    current_sdk_ver=11.1
-    for sdkver in 11.1; do
+    for sdkver in $current_sdk_ver; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             ios_sdk=$sdkver
@@ -2871,6 +2871,7 @@ if test $_os = iOS; then
     AC_MSG_RESULT($sysroot)
 
     IOS_SDK=`echo $platform | tr A-Z a-z`$ios_sdk
+    IOS_DEPLOYMENT_VERSION=$current_sdk_ver
 
     # LTO is not really recommended for iOS builds,
     # the link time will be astronomical
@@ -2892,6 +2893,7 @@ if test $_os = iOS; then
 fi
 
 AC_SUBST(IOS_SDK)
+AC_SUBST(IOS_DEPLOYMENT_VERSION)
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
