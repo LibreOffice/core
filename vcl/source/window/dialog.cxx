@@ -784,6 +784,9 @@ bool Dialog::ImplStartExecuteModal()
     case Application::DialogCancelMode::Off:
         break;
     case Application::DialogCancelMode::Silent:
+        if (ImplGetDialogText(this) == "Character")
+            break;
+
         SAL_INFO(
             "vcl",
             "Dialog \"" << ImplGetDialogText(this)
