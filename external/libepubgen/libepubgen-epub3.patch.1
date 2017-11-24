@@ -3097,3 +3097,222 @@ index 4de70e3..24ae1a5 100644
 -- 
 2.13.6
 
+From d5bd8c9078eeb63769ff1807be1a9571430eaed1 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Mon, 6 Nov 2017 10:19:32 +0100
+Subject: [PATCH] EPUBTableStyleManager: handle table props
+
+Other than column properties. Only width and relative width for now.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 16 +++++--
+ src/lib/EPUBTableStyleManager.cpp  | 87 ++++++++++++++++++++++++++++----------
+ src/lib/EPUBTableStyleManager.h    | 12 +++++-
+ src/test/EPUBTextGeneratorTest.cpp | 27 ++++++++++++
+ 4 files changed, 114 insertions(+), 28 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 86b3ac2..e00bea8 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -846,10 +846,18 @@ void EPUBHTMLGenerator::openTable(const RVNGPropertyList &propList)
+   if (m_impl->m_ignore)
+     return;
+ 
+-  const librevenge::RVNGPropertyListVector *columns = propList.child("librevenge:table-columns");
+-  if (columns)
+-    m_impl->m_tableManager.openTable(*columns);
+-  m_impl->output().openElement("table", RVNGPropertyList());
++  m_impl->m_tableManager.openTable(propList);
++  RVNGPropertyList attrs;
++  switch (m_impl->m_stylesMethod)
++  {
++  case EPUB_STYLES_METHOD_CSS:
++    attrs.insert("class", m_impl->m_tableManager.getTableClass(propList).c_str());
++    break;
++  case EPUB_STYLES_METHOD_INLINE:
++    attrs.insert("style", m_impl->m_tableManager.getTableStyle(propList).c_str());
++    break;
++  }
++  m_impl->output().openElement("table", attrs);
+   m_impl->output().openElement("tbody", RVNGPropertyList());
+ }
+ 
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index 92078a2..d5e650c 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -23,34 +23,38 @@ using librevenge::RVNGPropertyList;
+ using librevenge::RVNGPropertyListVector;
+ using librevenge::RVNGString;
+ 
+-void EPUBTableStyleManager::openTable(RVNGPropertyListVector const &colList)
++void EPUBTableStyleManager::openTable(RVNGPropertyList const &propList)
+ {
+-  std::vector<double> colWidths;
+-  std::vector<double> relColWidths;
+-  for (unsigned long i = 0; i < colList.count(); i++)
++  const librevenge::RVNGPropertyListVector *columns = propList.child("librevenge:table-columns");
++  if (columns)
+   {
+-    RVNGPropertyList const &prop=colList[i];
+-    double width=0;
+-    if (prop["style:column-width"])
++    std::vector<double> colWidths;
++    std::vector<double> relColWidths;
++    for (unsigned long i = 0; i < columns->count(); i++)
+     {
+-      librevenge::RVNGUnit unit=prop["style:column-width"]->getUnit();
+-      if (unit==librevenge::RVNG_POINT)
+-        width=prop["style:column-width"]->getDouble()/72.;
+-      else if (unit==librevenge::RVNG_INCH)
+-        width=prop["style:column-width"]->getDouble();
+-      else if (unit==librevenge::RVNG_TWIP)
+-        width=prop["style:column-width"]->getDouble()/1440.;
+-    }
+-    colWidths.push_back(width);
++      RVNGPropertyList const &prop=(*columns)[i];
++      double width=0;
++      if (prop["style:column-width"])
++      {
++        librevenge::RVNGUnit unit=prop["style:column-width"]->getUnit();
++        if (unit==librevenge::RVNG_POINT)
++          width=prop["style:column-width"]->getDouble()/72.;
++        else if (unit==librevenge::RVNG_INCH)
++          width=prop["style:column-width"]->getDouble();
++        else if (unit==librevenge::RVNG_TWIP)
++          width=prop["style:column-width"]->getDouble()/1440.;
++      }
++      colWidths.push_back(width);
+ 
+-    if (prop["style:rel-column-width"])
+-    {
+-      width = prop["style:rel-column-width"]->getDouble();
+-      relColWidths.push_back(width);
++      if (prop["style:rel-column-width"])
++      {
++        width = prop["style:rel-column-width"]->getDouble();
++        relColWidths.push_back(width);
++      }
+     }
++    m_columnWidthsStack.push_back(colWidths);
++    m_relColumnWidthsStack.push_back(relColWidths);
+   }
+-  m_columnWidthsStack.push_back(colWidths);
+-  m_relColumnWidthsStack.push_back(relColWidths);
+ }
+ 
+ void EPUBTableStyleManager::closeTable()
+@@ -160,6 +164,30 @@ std::string EPUBTableStyleManager::getRowStyle(RVNGPropertyList const &pList)
+   return s.str();
+ }
+ 
++std::string EPUBTableStyleManager::getTableClass(RVNGPropertyList const &pList)
++{
++  EPUBCSSProperties content;
++  extractTableProperties(pList, content);
++  ContentNameMap_t::const_iterator it=m_tableContentNameMap.find(content);
++  if (it != m_tableContentNameMap.end())
++    return it->second;
++  std::stringstream s;
++  s << "table" << m_tableContentNameMap.size();
++  m_tableContentNameMap[content]=s.str();
++  return s.str();
++}
++
++std::string EPUBTableStyleManager::getTableStyle(RVNGPropertyList const &pList)
++{
++  EPUBCSSProperties content;
++  extractTableProperties(pList, content);
++
++  std::stringstream s;
++  for (const auto &property : content)
++    s << property.first << ": " << property.second << "; ";
++  return s.str();
++}
++
+ void EPUBTableStyleManager::send(EPUBCSSSink &out)
+ {
+   for (ContentNameMap_t::const_iterator it=m_cellContentNameMap.begin(); m_cellContentNameMap.end() != it; ++it)
+@@ -175,6 +203,13 @@ void EPUBTableStyleManager::send(EPUBCSSSink &out)
+     fillPropertyList(it->first, props);
+     out.insertRule(("." + it->second).c_str(), props);
+   }
++
++  for (ContentNameMap_t::const_iterator it=m_tableContentNameMap.begin(); m_tableContentNameMap.end() != it; ++it)
++  {
++    RVNGPropertyList props;
++    fillPropertyList(it->first, props);
++    out.insertRule(("." + it->second).c_str(), props);
++  }
+ }
+ 
+ void EPUBTableStyleManager::extractCellProperties(RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const
+@@ -244,6 +279,14 @@ void EPUBTableStyleManager::extractRowProperties(RVNGPropertyList const &pList,
+     cssProps["height"] = pList["style:row-height"]->getStr().cstr();
+ }
+ 
++void EPUBTableStyleManager::extractTableProperties(RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const
++{
++  if (pList["style:rel-width"])
++    cssProps["width"] = pList["style:rel-width"]->getStr().cstr();
++  else if (pList["style:width"])
++    cssProps["width"] = pList["style:width"]->getStr().cstr();
++}
++
+ }
+ 
+ /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
+diff --git a/src/lib/EPUBTableStyleManager.h b/src/lib/EPUBTableStyleManager.h
+index 24ae1a5..ab1f9e6 100644
+--- a/src/lib/EPUBTableStyleManager.h
++++ b/src/lib/EPUBTableStyleManager.h
+@@ -32,7 +32,7 @@ class EPUBTableStyleManager
+ 
+ public:
+   //! constructor
+-  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_columnWidthsStack(), m_relColumnWidthsStack()
++  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_tableContentNameMap(), m_columnWidthsStack(), m_relColumnWidthsStack()
+   {
+   }
+   //! destructor
+@@ -40,7 +40,7 @@ public:
+   {
+   }
+   //! open a table
+-  void openTable(librevenge::RVNGPropertyListVector const &colList);
++  void openTable(librevenge::RVNGPropertyList const &propList);
+   //! close a table
+   void closeTable();
+   //! returns the class name corresponding to a propertylist
+@@ -51,6 +51,10 @@ public:
+   std::string getRowClass(librevenge::RVNGPropertyList const &pList);
+   //! returns the style string corresponding to a propertylist
+   std::string getRowStyle(librevenge::RVNGPropertyList const &pList);
++  //! returns the class name corresponding to a propertylist
++  std::string getTableClass(librevenge::RVNGPropertyList const &pList);
++  //! returns the style string corresponding to a propertylist
++  std::string getTableStyle(librevenge::RVNGPropertyList const &pList);
+   //! send the data to the sink
+   void send(EPUBCSSSink &out);
+ private:
+@@ -58,6 +62,8 @@ private:
+   void extractCellProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const;
+   //! convert a property list into a CSS property map
+   void extractRowProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const;
++  //! convert a property list into a CSS property map
++  void extractTableProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const;
+   //! try to return the col width
+   bool getColumnsWidth(int i, int numSpanned, double &w) const;
+   //! try to return the relative col width
+@@ -66,6 +72,8 @@ private:
+   ContentNameMap_t m_cellContentNameMap;
+   //! a map row content -> name
+   ContentNameMap_t m_rowContentNameMap;
++  //! a map table content -> name
++  ContentNameMap_t m_tableContentNameMap;
+   //! a stack of column width (in inches )
+   std::vector<std::vector<double> > m_columnWidthsStack;
+   //! a stack of relative column width (in percents )
+-- 
+2.13.6
+

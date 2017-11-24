@@ -55,7 +55,7 @@ public:
     /// Loads a CSS representation of the stream named rName in the exported package into rTree.
     void parseCssExport(const OUString &rName, std::map< OString, std::vector<OString> > &rTree);
     /// Loads a CSS style string into a map.
-    static void parseCssStyle(const OUString &rStyle, std::map<OUString, OUString> &rCss);
+    static std::map<OUString, OUString> parseCssStyle(const OUString &rStyle);
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
@@ -81,6 +81,7 @@ public:
     void testLink();
     void testLinkCharFormat();
     void testLinkNamedCharFormat();
+    void testTableWidth();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -108,6 +109,7 @@ public:
     CPPUNIT_TEST(testLink);
     CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST(testLinkNamedCharFormat);
+    CPPUNIT_TEST(testTableWidth);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -192,15 +194,19 @@ void EPUBExportTest::parseCssExport(const OUString &rName, std::map< OString, st
     }
 }
 
-void EPUBExportTest::parseCssStyle(const OUString &rStyle, std::map<OUString, OUString> &rCss)
+std::map<OUString, OUString> EPUBExportTest::parseCssStyle(const OUString &rStyle)
 {
+    std::map<OUString, OUString> aCss;
+
     for (const auto &rKeyValue : comphelper::string::split(rStyle, ';'))
     {
         OUString aKeyValue = rKeyValue.trim();
         std::vector<OUString> aTokens = comphelper::string::split(aKeyValue, ':');
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTokens.size());
-        rCss[aTokens[0].trim()] = aTokens[1].trim();
+        aCss[aTokens[0].trim()] = aTokens[1].trim();
     }
+
+    return aCss;
 }
 
 void EPUBExportTest::testOutlineLevel()
@@ -498,26 +504,20 @@ void EPUBExportTest::testTableCellBorder()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     OUString aStyle = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "style");
-    std::map<OUString, OUString> aCss;
-    parseCssStyle(aStyle, aCss);
     // This failed, cell border wasn't exported.
-    CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"), aCss["border-left"]);
+    CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"), EPUBExportTest::parseCssStyle(aStyle)["border-left"]);
 }
 
 namespace
 {
 double getCellWidth(const OUString &rStyle)
 {
-    std::map<OUString, OUString> aCss;
-    EPUBExportTest::parseCssStyle(rStyle, aCss);
-    return aCss["width"].toDouble();
+    return EPUBExportTest::parseCssStyle(rStyle)["width"].toDouble();
 }
 
 double getRowHeight(const OUString &rStyle)
 {
-    std::map<OUString, OUString> aCss;
-    EPUBExportTest::parseCssStyle(rStyle, aCss);
-    return aCss["height"].toDouble();
+    return EPUBExportTest::parseCssStyle(rStyle)["height"].toDouble();
 }
 }
 
@@ -575,9 +575,18 @@ void EPUBExportTest::testLinkNamedCharFormat()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "http://libreoffice.org/");
 
     OUString aStyle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "style");
-    std::map<OUString, OUString> aCss;
-    parseCssStyle(aStyle, aCss);
-    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), aCss["color"]);
+    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::parseCssStyle(aStyle)["color"]);
+}
+
+void EPUBExportTest::testTableWidth()
+{
+    createDoc("table-width.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+
+    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:table", "style");
+    // This failed, relative total width of table was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("50%"), EPUBExportTest::parseCssStyle(aStyle)["width"]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);

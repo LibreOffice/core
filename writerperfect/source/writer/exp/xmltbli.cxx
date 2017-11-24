@@ -183,10 +183,9 @@ rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(const OUStr
 
     if (!m_bTableOpened)
     {
-        librevenge::RVNGPropertyList aPropertyList;
         if (!m_aColumns.empty())
-            aPropertyList.insert("librevenge:table-columns", m_aColumns);
-        mrImport.GetGenerator().openTable(aPropertyList);
+            m_aPropertyList.insert("librevenge:table-columns", m_aColumns);
+        mrImport.GetGenerator().openTable(m_aPropertyList);
         m_bTableOpened = true;
     }
 
@@ -196,6 +195,24 @@ rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(const OUStr
     SAL_WARN("writerperfect", "XMLTableContext::CreateChildContext: unhandled " << rName);
 
     return nullptr;
+}
+
+void XMLTableContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+
+        if (rAttributeName == "table:style-name")
+            FillStyles(rAttributeValue, mrImport.GetAutomaticTableStyles(), mrImport.GetTableStyles(), m_aPropertyList);
+        else
+        {
+            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            m_aPropertyList.insert(sName.getStr(), sValue.getStr());
+        }
+    }
 }
 
 void XMLTableContext::endElement(const OUString &/*rName*/)
