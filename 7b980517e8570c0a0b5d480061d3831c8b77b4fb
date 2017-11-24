@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f8e6b813",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 8892,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-24T20:06:08Z",
+      "side": 1,
+      "message": "These two iterations can be optimized by using only one iteration from the end of string with iterateCodePoints(\u0026nIdx,-1) until the desired amount of characters is reached.",
+      "revId": "7b980517e8570c0a0b5d480061d3831c8b77b4fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
