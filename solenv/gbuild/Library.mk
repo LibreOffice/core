@@ -177,6 +177,7 @@ $(eval $(foreach method,\
 	add_objcxxobjects \
 	add_cxxclrobject \
 	add_cxxclrobjects \
+	add_generated_cxxclrobjects \
 	add_asmobject \
 	add_asmobjects \
 	add_exception_objects \
