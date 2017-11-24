@@ -385,7 +385,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                         aGrabBag.push_back(comphelper::makePropertyValue("LinkChainName", sLinkChainName));
                     }
 
-                    if(!(maTypeModel.maRotation).isEmpty())
+                    if(!maTypeModel.maRotation.isEmpty())
                         aGrabBag.push_back(comphelper::makePropertyValue("mso-rotation-angle", ConversionHelper::decodeRotation(maTypeModel.maRotation)));
                     propertySet->setPropertyValue("FrameInteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
                     sal_Int32 backColorTransparency = 0;

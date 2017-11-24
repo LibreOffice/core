@@ -345,8 +345,8 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
         m_aParameterRow->get().push_back(sal_Int32(0));
     }
 
-    if ((sal_Int32)(m_aParameterRow->get()).size() <= parameterIndex)
-        (m_aParameterRow->get()).resize(parameterIndex+1);
+    if ((sal_Int32)m_aParameterRow->get().size() <= parameterIndex)
+        m_aParameterRow->get().resize(parameterIndex+1);
 }
 
 void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const

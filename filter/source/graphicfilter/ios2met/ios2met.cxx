@@ -2275,14 +2275,14 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     return;
                 }
                 // write (Windows-)BITMAPINFOHEADER:
-                (p->pBMP)->WriteUInt32( 40 ).WriteUInt32( p->nWidth ).WriteUInt32( p->nHeight );
-                (p->pBMP)->WriteUInt16( 1 ).WriteUInt16( p->nBitsPerPixel );
-                (p->pBMP)->WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 );
-                (p->pBMP)->WriteUInt32( 0 ).WriteUInt32( 0 );
+                p->pBMP->WriteUInt32( 40 ).WriteUInt32( p->nWidth ).WriteUInt32( p->nHeight );
+                p->pBMP->WriteUInt16( 1 ).WriteUInt16( p->nBitsPerPixel );
+                p->pBMP->WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 );
+                p->pBMP->WriteUInt32( 0 ).WriteUInt32( 0 );
                 // write color table:
                 if (p->nBitsPerPixel<=8) {
                     sal_uInt16 i, nColTabSize=1<<(p->nBitsPerPixel);
-                    for (i=0; i<nColTabSize; i++) (p->pBMP)->WriteUInt32( GetPalette0RGB(i) );
+                    for (i=0; i<nColTabSize; i++) p->pBMP->WriteUInt32( GetPalette0RGB(i) );
                 }
             }
             // OK, now the map data is being pushed. Unfortunately OS2 and BMP

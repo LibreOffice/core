@@ -524,7 +524,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
 
         case SwFieldIds::Macro:
             if( bUpdateFields && pDstTextField->GetpTextNode() )
-                (pDstTextField->GetpTextNode())->
+                pDstTextField->GetpTextNode()->
                     ModifyNotification( nullptr, pDstFormatField );
             break;
 

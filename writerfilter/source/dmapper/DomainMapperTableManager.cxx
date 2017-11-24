@@ -407,7 +407,7 @@ const uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTa
 TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
 {
     if ( !m_aTablePositions.empty( ) && m_aTablePositions.back() )
-        return (m_aTablePositions.back( )).get();
+        return m_aTablePositions.back().get();
     else
         return nullptr;
 }

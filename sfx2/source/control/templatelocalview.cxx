@@ -706,8 +706,8 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
 
     if (!pItem->maTemplates.empty())
     {
-        nId = (pItem->maTemplates.back()).nId+1;
-        nDocId = (pItem->maTemplates.back()).nDocId+1;
+        nId = pItem->maTemplates.back().nId+1;
+        nDocId = pItem->maTemplates.back().nDocId+1;
     }
 
     if (mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))

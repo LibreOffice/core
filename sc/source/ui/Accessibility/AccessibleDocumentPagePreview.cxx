@@ -941,7 +941,7 @@ struct ScShapePointFound
     bool operator() (const ScShapeChild& rShape)
     {
         bool bResult(false);
-        if ((VCLRectangle(rShape.mpAccShape->getBounds())).IsInside(maPoint))
+        if (VCLRectangle(rShape.mpAccShape->getBounds()).IsInside(maPoint))
             bResult = true;
         return bResult;
     }

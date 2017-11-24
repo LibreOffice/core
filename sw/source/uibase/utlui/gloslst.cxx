@@ -370,8 +370,8 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 {
     SwTextBlocks*   pBlock = pGlossaries->GetGroupDoc(pGroup->sName);
     pGroup->nCount = pBlock ? pBlock->GetCount() : 0;
-    (pGroup->sLongNames).clear();
-    (pGroup->sShortNames).clear();
+    pGroup->sLongNames.clear();
+    pGroup->sShortNames.clear();
     if(pBlock)
         pGroup->sTitle = pBlock->GetName();
 

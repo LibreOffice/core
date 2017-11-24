@@ -1262,7 +1262,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
         if( ((1 == iter2->Pos) || (2 == iter2->Pos)) && autoDownloadEnabled && !iter2->URL2.isEmpty())
         {
             iter2->URL = iter2->URL2;
-            (iter2->URL2).clear();
+            iter2->URL2.clear();
             iter2->Pos = iter2->Pos2;
             iter2->Pos2 = 0;
         }

@@ -2390,7 +2390,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
             SdPage* pNotesPage = GetModel()->GetDoc()->GetSdPage( (SvxFmDrawPage::mpPage->GetPageNum()-1)>>1, PageKind::Notes );
 
             pNotesPage->TRG_ClearMasterPage();
-            sal_uInt16 nNum = (SvxFmDrawPage::mpPage->TRG_GetMasterPage()).GetPageNum() + 1;
+            sal_uInt16 nNum = SvxFmDrawPage::mpPage->TRG_GetMasterPage().GetPageNum() + 1;
             pNotesPage->TRG_SetMasterPage(*SvxFmDrawPage::mpPage->GetModel()->GetMasterPage(nNum));
             pNotesPage->SetLayoutName( pSdPage->GetLayoutName() );
 

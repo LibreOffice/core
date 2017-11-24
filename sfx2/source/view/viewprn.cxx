@@ -617,7 +617,7 @@ const std::shared_ptr< vcl::PrinterController >& SfxViewShell::GetPrinterControl
 
 Printer* SfxViewShell::GetActivePrinter() const
 {
-    return (pImpl->m_xPrinterController)
+    return pImpl->m_xPrinterController
         ?  pImpl->m_xPrinterController->getPrinter().get() : nullptr;
 }
 

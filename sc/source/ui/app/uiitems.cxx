@@ -332,8 +332,8 @@ bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
     const ScUserListItem& r = static_cast<const ScUserListItem&>(rItem);
     bool bEqual = false;
 
-    if ( !pUserList || !(r.pUserList) )
-        bEqual = ( !pUserList && !(r.pUserList) );
+    if ( !pUserList || !r.pUserList )
+        bEqual = ( !pUserList && !r.pUserList );
     else
         bEqual = ( *pUserList == *(r.pUserList) );
 

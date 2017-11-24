@@ -693,7 +693,7 @@ void SwHHCWrapper::ConvEnd_impl( SwConversionArgs const *pConversionArgs )
 bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
     bool bProgress = !m_bIsDrawObj && !m_bIsSelection;
-    (pConversionArgs->aConvText).clear();
+    pConversionArgs->aConvText.clear();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
     m_pView->GetWrtShell().SpellContinue( &m_nPageCount, bProgress ? &m_nPageStart : nullptr, pConversionArgs );
     return !pConversionArgs->aConvText.isEmpty();

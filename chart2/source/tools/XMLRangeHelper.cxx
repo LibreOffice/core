@@ -349,7 +349,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
 
     OUStringBuffer aBuffer;
 
-    if( !(rRange.aTableName).isEmpty())
+    if( !rRange.aTableName.isEmpty())
     {
         bool bNeedsEscaping = ( rRange.aTableName.indexOf( aQuote ) > -1 );
         bool bNeedsQuoting = bNeedsEscaping || ( rRange.aTableName.indexOf( aSpace ) > -1 );

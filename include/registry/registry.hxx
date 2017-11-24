@@ -695,7 +695,7 @@ inline bool RegistryKey::isValid() const
 inline bool RegistryKey::isReadOnly() const
     {
         if  (m_registry.isValid())
-            return (m_registry.m_pApi)->isKeyReadOnly(m_hImpl);
+            return m_registry.m_pApi->isKeyReadOnly(m_hImpl);
         else
             return false;
     }

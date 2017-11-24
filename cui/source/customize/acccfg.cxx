@@ -1101,7 +1101,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
     // remove function name from selected entry
     sal_uInt16 nCol = m_pEntriesBox->TabCount() - 1;
     m_pEntriesBox->SetEntryText( OUString(), nPos, nCol );
-    (pEntry->m_sCommand).clear();
+    pEntry->m_sCommand.clear();
 
     m_pFunctionBox->GetSelectHdl().Call( m_pFunctionBox );
 }

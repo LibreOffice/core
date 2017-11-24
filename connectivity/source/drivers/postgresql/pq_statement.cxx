@@ -434,7 +434,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
 
     ExecStatusType state = PQresultStatus( result );
     *(data->pLastOidInserted) = 0;
-    (data->pLastTableInserted)->clear();
+    data->pLastTableInserted->clear();
     *(data->pLastQuery) = cmd;
 
     bool ret = false;

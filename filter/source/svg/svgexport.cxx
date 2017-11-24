@@ -2093,13 +2093,13 @@ OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
 {
     if( rxIf.is() )
-        (mpSVGExport->getInterfaceToIdentifierMapper()).registerReference( rxIf );
+        mpSVGExport->getInterfaceToIdentifierMapper().registerReference( rxIf );
 }
 
 
 const OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
 {
-   return (mpSVGExport->getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
+   return mpSVGExport->getInterfaceToIdentifierMapper().getIdentifier( rxIf );
 }
 
 

@@ -70,7 +70,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column )
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
 {
-    return (m_xColumns->get()).size();
+    return m_xColumns->get().size();
 }
 
 
