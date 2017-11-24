@@ -23,6 +23,7 @@
 
 #include <svdata.hxx>
 #include <tools/time.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>
 #include <saltimer.hxx>
@@ -575,7 +576,7 @@ Task::~Task() COVERITY_NOEXCEPT_FALSE
             mpSchedulerData->mpTask = nullptr;
     }
     else
-        assert( nullptr == mpSchedulerData );
+        assert(nullptr == mpSchedulerData || utl::ConfigManager::IsFuzzing());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
