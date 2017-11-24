@@ -194,16 +194,19 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
 
     m_pIntellectualPropertyPartAddButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
 
+    m_pClassificationListBox->setMaxWidthChars(20);
     m_pClassificationListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectClassificationHdl));
     for (const OUString& rName : maHelper.GetBACNames())
         m_pClassificationListBox->InsertEntry(rName);
 
+    m_pInternationalClassificationListBox->setMaxWidthChars(20);
     m_pInternationalClassificationListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectClassificationHdl));
     for (const OUString& rName : maInternationalHelper.GetBACNames())
         m_pInternationalClassificationListBox->InsertEntry(rName);
 
     if (!maHelper.GetMarkings().empty())
     {
+        m_pMarkingListBox->setMaxWidthChars(20);
         m_pMarkingListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectMarkingHdl));
         m_pMarkingListBox->SetLoseFocusHdl(LINK(this, ClassificationDialog, LoseFocusMarkingHdl));
 
@@ -216,14 +219,19 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
         m_pMarkingLabel->Show(false);
     }
 
+    m_pIntellectualPropertyPartNumberListBox->SetDropDownLineCount(5);
+    m_pIntellectualPropertyPartNumberListBox->setMaxWidthChars(20);
     m_pIntellectualPropertyPartNumberListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyPartNumbers())
         m_pIntellectualPropertyPartNumberListBox->InsertEntry(rName);
 
+    m_pIntellectualPropertyPartListBox->SetDropDownLineCount(5);
+    m_pIntellectualPropertyPartNumberListBox->setMaxWidthChars(20);
     m_pIntellectualPropertyPartListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectIPPartHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyParts())
         m_pIntellectualPropertyPartListBox->InsertEntry(rName);
 
+    m_pRecentlyUsedListBox->setMaxWidthChars(5);
     m_pRecentlyUsedListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
 
     bool bExpand = officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::get();
