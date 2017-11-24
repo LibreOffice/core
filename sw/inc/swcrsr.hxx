@@ -116,24 +116,24 @@ public:
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
-                FindRanges = FindRanges::InBody,
+                FindRanges,
                 bool bReplace = false );
     sal_uLong Find( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
-                FindRanges = FindRanges::InBody,
+                FindRanges,
                 const SwTextFormatColl* pReplFormat = nullptr );
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
-                FindRanges = FindRanges::InBody,
+                FindRanges,
                 const i18nutil::SearchOptions2* pSearchOpt = nullptr,
                 const SfxItemSet* rReplSet = nullptr );
 
     // UI versions
-    bool IsStartWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    bool IsEndWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    bool IsInWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    bool IsStartWord( sal_Int16 nWordType ) const;
+    bool IsEndWord( sal_Int16 nWordType  ) const;
+    bool IsInWord( sal_Int16 nWordType ) const;
     bool IsStartEndSentence( bool bEnd ) const;
     bool GoStartWord();
     bool GoEndWord();

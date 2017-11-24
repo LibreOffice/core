@@ -116,9 +116,9 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
 // Check if Split or InsertCol lead to a box becoming smaller than MINLAY.
 bool CheckSplitCells( const SwCursorShell& rShell, sal_uInt16 nDiv,
-                        const SwTableSearchType = SwTableSearchType::NONE );
+                        const SwTableSearchType );
 bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
-                        const SwTableSearchType = SwTableSearchType::NONE );
+                        const SwTableSearchType );
 
 // For working on tab selection also for split tables.
 class SwSelUnion

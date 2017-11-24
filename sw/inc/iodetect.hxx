@@ -98,7 +98,7 @@ public:
     static bool IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
     static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
-            rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd=nullptr );
+            rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd );
 
     static const OUString GetSubStorageName( const SfxFilter& rFltr );
 };

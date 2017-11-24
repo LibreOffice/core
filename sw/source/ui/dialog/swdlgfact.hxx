@@ -444,7 +444,7 @@ public:
                                                 SfxStyleFamily      nRegion,
                                                 const OString&      sPage,
                                                 SwWrtShell*         pActShell,
-                                                bool                bNew = false) override;
+                                                bool                bNew) override;
     virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) override;
