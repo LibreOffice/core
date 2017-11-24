@@ -78,20 +78,9 @@ public:
     virtual        void    LogicInvalidate(const tools::Rectangle* pRectangle) override;
                    void    InvalidateFloatingWindow(const Point& rPos);
                    void    CloseFloatingWindow();
-                   Size    PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
 
     /// Paints the current dialog to the given virtual device
-    void paintDialog(VirtualDevice& rDevice);
-    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
-    void LogicMouseMove(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonDownChild(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonUpChild(const MouseEvent& rMouseEvent);
-    void LogicMouseMoveChild(const MouseEvent& rMouseEvent);
-
-    void LOKKeyInput(const KeyEvent& rKeyEvent);
-    void LOKKeyUp(const KeyEvent& rKeyEvent);
-    void LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload);
+    void paintDialog(VirtualDevice& rDevice) override;
 
 protected:
     explicit        Dialog( WindowType nType );

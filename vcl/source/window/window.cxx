@@ -64,6 +64,7 @@
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -3175,6 +3176,123 @@ vcl::LOKWindowId Window::GetLOKWindowId() const
     assert(mpWindowImpl->mnLOKWindowId > 0);
 
     return mpWindowImpl->mnLOKWindowId;
+}
+
+void Window::paintDialog(VirtualDevice& rDevice)
+{
+    // FIXME are these two necessary?
+    Show();
+    ToTop();
+
+    PaintToDevice(&rDevice, Point(0, 0), Size());
+}
+
+Size Window::PaintActiveFloatingWindow(VirtualDevice& rDevice) const
+{
+    Size aRet;
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat)
+    {
+        // TODO:: run a while loop here and check all the active floating
+        // windows ( chained together, cf. pFirstFloat->mpNextFloat )
+        // For now just assume that the active floating window is the one we
+        // want to render
+        if (pFirstFloat->GetParentDialog() == this)
+        {
+            pFirstFloat->PaintToDevice(&rDevice, Point(0, 0), Size());
+            aRet = pFirstFloat->GetSizePixel();
+        }
+
+        pFirstFloat = nullptr;
+    }
+
+    return aRet;
+}
+
+void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
+}
+
+void Window::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
+}
+
+void Window::LogicMouseMove(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
+}
+
+void Window::LogicMouseButtonDownChild(const MouseEvent& rMouseEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
+    {
+        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
+    }
+}
+
+void Window::LogicMouseButtonUpChild(const MouseEvent& rMouseEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
+    {
+        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
+    }
+}
+
+void Window::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
+    {
+        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
+    }
+}
+
+void Window::LOKKeyInput(const KeyEvent& rKeyEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplWindowFrameProc(this, SalEvent::ExternalKeyInput, &rKeyEvent);
+}
+
+void Window::LOKKeyUp(const KeyEvent& rKeyEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplWindowFrameProc(this, SalEvent::ExternalKeyUp, &rKeyEvent);
+}
+
+void Window::LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        pNotifier->notifyWindow(GetLOKWindowId(), rAction, rPayload);
 }
 
 void Window::ImplCallDeactivateListeners( vcl::Window *pNew )

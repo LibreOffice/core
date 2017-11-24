@@ -34,6 +34,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -488,8 +489,6 @@ public:
                                         Color* pSelectionTextColor = nullptr, long nCornerRadius = 0,
                                         Color const * pPaintColor = nullptr);
 };
-
-typedef sal_uInt32 LOKWindowId;
 
 class VCL_DLLPUBLIC Window : public ::OutputDevice
 {
@@ -1203,10 +1202,25 @@ public:
 
     void                        SetComponentInterface( css::uno::Reference< css::awt::XWindowPeer > const & xIFace );
 
-    /// Interface to register for dialog tunneling.
+    /// Interface to register for dialog / window tunneling.
     void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier);
     const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
+
+    /// Dialog / window tunneling related methods.
+    virtual void paintDialog(VirtualDevice& rDevice);
+    Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
+
+    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
+    void LogicMouseMove(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonDownChild(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonUpChild(const MouseEvent& rMouseEvent);
+    void LogicMouseMoveChild(const MouseEvent& rMouseEvent);
+
+    void LOKKeyInput(const KeyEvent& rKeyEvent);
+    void LOKKeyUp(const KeyEvent& rKeyEvent);
+    void LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload);
 
     /** @name Accessibility
      */

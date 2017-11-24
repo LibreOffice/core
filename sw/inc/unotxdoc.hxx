@@ -70,7 +70,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include <vcl/IDialogRenderable.hxx>
 #include <com/sun/star/tiledrendering/XTiledRenderable.hpp>
 
 #include "unobaseclass.hxx"
@@ -132,7 +131,6 @@ class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel,
     public vcl::ITiledRenderable,
-    public vcl::IDialogRenderable,
     public css::tiledrendering::XTiledRenderable
 {
 private:
@@ -431,17 +429,8 @@ public:
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
 
-    void paintDialog(const vcl::LOKWindowId& rLOKWindowId, VirtualDevice& rDevice) override;
-    void getDialogInfo(const vcl::LOKWindowId& rLOKWindowId, OUString& rDialogTitle, int& rWidth, int& rHeight) override;
-    void paintActiveFloatingWindow(const vcl::LOKWindowId& rLOKWindowId, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
-    void postDialogKeyEvent(const vcl::LOKWindowId& rLOKWindowId, int nType,
-                            int nCharCode, int nKeyCode) override;
-
-    void postDialogMouseEvent(const vcl::LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
-                              int nCount, int nButtons, int nModifier) override;
-
-    void postDialogChildMouseEvent(const vcl::LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
-                                   int nCount, int nButtons, int nModifier) override;
+    /// @see vcl::ITiledRenderable::findWindow().
+    VclPtr<vcl::Window> findWindow(vcl::LOKWindowId nLOKWindowId) const override;
 
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
