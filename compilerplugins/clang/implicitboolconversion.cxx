@@ -159,6 +159,7 @@ bool isBoolExpr(Expr const * expr) {
                 if (td == nullptr) {
                     break;
                 }
+                td = cast<TemplateDecl>(td->getCanonicalDecl());
                 TemplateParameterList const * ps = td->getTemplateParameters();
                 SubstTemplateTypeParmType const * t2
                     = getAsSubstTemplateTypeParmType(
