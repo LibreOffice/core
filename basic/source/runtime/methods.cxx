@@ -2043,24 +2043,22 @@ void SbRtl_DateValue(StarBASIC *, SbxArray & rPar, bool)
             pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
         }
 
-        sal_uInt32 nIndex = 0;
+        LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
+        sal_uInt32 nIndex = pFormatter->GetStandardIndex( eLangType);
         double fResult;
         OUString aStr( rPar.Get(1)->GetOUString() );
         bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
         short nType = pFormatter->GetType( nIndex );
 
         // DateValue("February 12, 1969") raises error if the system locale is not en_US
-        // by using SbiInstance::GetNumberFormatter.
-        // It seems that both locale number formatter and English number formatter
-        // are supported in Visual Basic.
-        LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
+        // It seems that both locale number formatter and English number
+        // formatter are supported in Visual Basic.
         if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
         {
-            // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;
-            SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US );
-            nIndex = 0;
-            bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, fResult );
-            nType = aFormatter.GetType( nIndex );
+            // Try using LANGUAGE_ENGLISH_US to get the date value.
+            nIndex = pFormatter->GetStandardIndex( LANGUAGE_ENGLISH_US);
+            bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
+            nType = pFormatter->GetType( nIndex );
         }
 
         if(bSuccess && (nType==css::util::NumberFormat::DATE || nType==css::util::NumberFormat::DATETIME))
