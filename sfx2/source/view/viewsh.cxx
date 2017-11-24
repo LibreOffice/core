@@ -1948,14 +1948,14 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
     return xRender;
 }
 
-void SfxViewShell::notifyDialog(const vcl::LOKWindowId& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
+void SfxViewShell::notifyWindow(vcl::LOKWindowId nDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
 {
-    SfxLokHelper::notifyDialog(rDialogId, rAction, rPayload);
+    SfxLokHelper::notifyWindow(nDialogId, rAction, rPayload);
 }
 
-void SfxViewShell::notifyDialogChild(const vcl::LOKWindowId& rDialogId, const OUString& rAction, const Point& rPos) const
+void SfxViewShell::notifyWindowChild(vcl::LOKWindowId nDialogId, const OUString& rAction, const Point& rPos) const
 {
-    SfxLokHelper::notifyDialogChild(rDialogId, rAction, rPos);
+    SfxLokHelper::notifyWindowChild(nDialogId, rAction, rPos);
 }
 
 void SfxViewShell::RegisterDlg(vcl::LOKWindowId nDialogId, VclPtr<Dialog> pDlg)

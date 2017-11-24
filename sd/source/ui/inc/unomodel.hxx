@@ -265,6 +265,9 @@ public:
     /// @see vcl::ITiledRenderable::getPostIts().
     virtual OUString getPostIts() override;
 
+    /// @see vcl::ITiledRenderable::findWindow().
+    VclPtr<vcl::Window> findWindow(vcl::LOKWindowId nLOKWindowId) const override;
+
     // XComponent
 
     /** This dispose implementation releases the resources held by the
