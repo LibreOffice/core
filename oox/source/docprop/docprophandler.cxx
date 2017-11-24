@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <osl/time.h>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -501,17 +502,22 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     break;
 
                 case EXTPR_TOKEN( TotalTime ):
-                    try
+                {
+                    sal_Int32 nDuration;
+                    if (!o3tl::checked_multiply<sal_Int32>(aChars.toInt32(), 60, nDuration))
                     {
-                        // The TotalTime is in mins as per ECMA specification.
-                        m_xDocProp->setEditingDuration( aChars.toInt32() * 60 );
-                    }
-                    catch (lang::IllegalArgumentException &)
-                    {
-                        // ignore
+                        try
+                        {
+                            // The TotalTime is in mins as per ECMA specification.
+                            m_xDocProp->setEditingDuration(nDuration);
+                        }
+                        catch (const lang::IllegalArgumentException&)
+                        {
+                            // ignore
+                        }
                     }
                     break;
-
+                }
                 case EXTPR_TOKEN( Characters ):
                 case EXTPR_TOKEN( CharactersWithSpaces ):
                 case EXTPR_TOKEN( Pages ):
