@@ -301,7 +301,7 @@ bool lcl_IsParagraphSignatureField(const uno::Reference<frame::XModel>& xModel,
 uno::Reference<text::XTextField> lcl_findFieldByRDF(const uno::Reference<frame::XModel>& xModel,
                                                     const uno::Reference<text::XTextContent>& xParagraph,
                                                     const OUString& sRDFName,
-                                                    const OUString& sRDFValue = OUString())
+                                                    const OUString& sRDFValue)
 {
     uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraph, uno::UNO_QUERY);
     if (!xTextPortionEnumerationAccess.is())
@@ -510,7 +510,7 @@ void lcl_RemoveParagraphMetadataField(const uno::Reference<css::text::XTextField
 /// Note: must have associated RDF, since classifications are otherwise just metadata fields.
 bool lcl_IsParagraphClassificationField(const uno::Reference<frame::XModel>& xModel,
                                         const uno::Reference<css::text::XTextField>& xField,
-                                        const OUString& sKey = OUString())
+                                        const OUString& sKey)
 {
     const std::pair<OUString, OUString> rdfPair = lcl_getRDF(xModel, xField, ParagraphClassificationNameRDFName);
     return rdfPair.first == ParagraphClassificationNameRDFName && (sKey.isEmpty() || rdfPair.second == sKey);

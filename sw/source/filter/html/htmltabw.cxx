@@ -77,8 +77,8 @@ class SwHTMLWrtTable : public SwWriteTable
 
 public:
     SwHTMLWrtTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
-                    bool bRel, sal_uInt16 nLeftSub, sal_uInt16 nRightSub=0,
-                    sal_uInt16 nNumOfRowsToRepeat = 0 );
+                    bool bRel, sal_uInt16 nLeftSub, sal_uInt16 nRightSub,
+                    sal_uInt16 nNumOfRowsToRepeat );
     explicit SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 
     void Write( SwHTMLWriter& rWrt, sal_Int16 eAlign=text::HoriOrientation::NONE,
@@ -475,7 +475,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         }
 
         SwHTMLWrtTable aTableWrt( pBox->GetTabLines(), nTWidth,
-                                  nBWidth, HasRelWidths(), nLSub, nRSub );
+                                  nBWidth, HasRelWidths(), nLSub, nRSub, /*nNumOfRowsToRepeat*/0 );
         aTableWrt.Write( rWrt );
     }
 

@@ -47,7 +47,7 @@ public:
 class SwTabLeftPortion : public SwTabPortion
 {
 public:
-    SwTabLeftPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar, bool bAutoTab = true )
+    SwTabLeftPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar, bool bAutoTab )
          : SwTabPortion( nTabPosVal, cFillChar, bAutoTab )
     { SetWhichPor( POR_TABLEFT ); }
     OUTPUT_OPERATOR_OVERRIDE

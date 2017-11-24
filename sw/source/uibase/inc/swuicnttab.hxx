@@ -101,7 +101,7 @@ public:
     SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType,
-                        bool bGlobal = false);
+                        bool bGlobal);
     virtual ~SwMultiTOXTabDialog() override;
     virtual void        dispose() override;
 

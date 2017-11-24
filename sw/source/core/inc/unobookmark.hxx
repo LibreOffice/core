@@ -181,7 +181,7 @@ class SwXFieldmark final
     ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
     bool isReplacementObject;
 
-    SwXFieldmark(bool isReplacementObject, SwDoc* pDoc = nullptr);
+    SwXFieldmark(bool isReplacementObject, SwDoc* pDoc);
 
 public:
     static css::uno::Reference<css::text::XTextContent>

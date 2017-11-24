@@ -876,8 +876,8 @@ public:
                     const OUString& rFileName,
                     const OUString& rBaseURL,
                     bool bReadNewDoc,
-                    SfxMedium* pMed = nullptr, bool bReadUTF8 = false,
-                    bool bIgnoreHTMLComments = false );
+                    SfxMedium* pMed, bool bReadUTF8,
+                    bool bIgnoreHTMLComments );
 
     virtual SvParserState CallParser() override;
 

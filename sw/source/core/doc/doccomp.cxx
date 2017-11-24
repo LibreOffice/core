@@ -334,7 +334,7 @@ protected:
     }
 
     int FindLCS( int *pLcs1, int *pLcs2, int nStt1,
-                    int nEnd1 = 0, int nStt2 = 0, int nEnd2 = 0 );
+                 int nEnd1, int nStt2, int nEnd2 );
 
 public:
     static int IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1, int nLen2,

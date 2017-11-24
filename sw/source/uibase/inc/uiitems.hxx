@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
     void* pMisc;
 
 public:
-    SwPtrItem( const sal_uInt16 nId, void* pPtr = nullptr);
+    SwPtrItem( const sal_uInt16 nId, void* pPtr);
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
     SwPaM* m_pPaM;
 
 public:
-    SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM = nullptr);
+    SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM);
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

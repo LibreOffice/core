@@ -176,7 +176,7 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK(PageNoClickHdl_Impl, Button*, void);
     DECL_LINK( SplitHdl_Impl, Button*, void );
     DECL_STATIC_LINK( SwTextFlowPage, SplitRowHdl_Impl, Button*, void );
-    DECL_LINK( HeadLineCBClickHdl, Button* = nullptr, void );
+    DECL_LINK( HeadLineCBClickHdl, Button*, void );
 
 public:
     SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );

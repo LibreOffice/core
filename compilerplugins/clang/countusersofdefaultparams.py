@@ -9,9 +9,11 @@ callDict = dict()
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
 # so I need to substitute them to ensure we can match correctly.
-normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
+normalizeTypeParamsRegex1 = re.compile(r"type-parameter-\d+-\d+")
+normalizeTypeParamsRegex2 = re.compile(r"typename enable_if<.*")
 def normalizeTypeParams( line ):
-    return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
+    line = normalizeTypeParamsRegex1.sub("type-parameter-?-?", line)
+    return normalizeTypeParamsRegex2.sub("type-parameter-?-?", line)
 
 with io.open("loplugin.countusersofdefaultparams.log", "rb", buffering=1024*1024) as txt:
     for line in txt:

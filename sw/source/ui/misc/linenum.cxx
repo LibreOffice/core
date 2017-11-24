@@ -161,7 +161,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView const *pVw)
     m_pNumberingOnCB->SetClickHdl(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
     m_pDivisorED->SetModifyHdl(LINK(this, SwLineNumberingDlg, ModifyHdl));
     ModifyHdl(*m_pDivisorED);
-    LineOnOffHdl();
+    LineOnOffHdl(nullptr);
 
     get<PushButton>("ok")->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
