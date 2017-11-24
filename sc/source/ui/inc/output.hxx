@@ -251,6 +251,8 @@ private:
                long nEngineHeight, bool bWrapFields);
 
     bool AdjustAreaParamClipRect(OutputAreaParam& rAreaParam);
+    long SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString aSetString,
+                                   long& rNeededPixel, const long nSumM );
 
 public:
     /**

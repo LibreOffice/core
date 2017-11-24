@@ -2755,6 +2755,20 @@ bool ScOutputData::AdjustAreaParamClipRect(OutputAreaParam& rAreaParam)
     return bVClip;
 }
 
+long ScOutputData::SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString aSetString,
+                                             long& rNeededPixel, const long nSumM )
+{
+        rParam.mpEngine->SetText( OUString( aSetString ) );
+        long nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
+        rNeededPixel = nEngineWidth;
+        if ( rParam.mbPixelToLogic )
+            rNeededPixel = mpRefDevice->LogicToPixel( Size( nEngineWidth, 0 ) ).Width();
+
+        rNeededPixel += nSumM;
+
+        return nEngineWidth;
+}
+
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     OSL_ASSERT(rParam.meOrient == SvxCellOrientation::Standard);
@@ -2762,7 +2776,6 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
-    bool bHidden = false;
     bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
     long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
@@ -2785,11 +2798,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     {
         //! set flag to find the cell in DrawRotated again ?
         //! (or flag already set during DrawBackground, then no query here)
-        bHidden = true;     // rotated is outputted separately
+        return;     // rotated is outputted separately
     }
-
-    if (bHidden)
-        return;
 
     SvxCellHorJustify eOutHorJust = rParam.meHorJustContext;
 
@@ -2905,11 +2915,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
                 OUString aCellStr = rParam.mpEngine->GetText();
-                rParam.mpEngine->SetText( aCellStr );
 
-                long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
-                if (rParam.mbPixelToLogic)
-                    nRepeatSize = mpRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
+                long nRepeatSize = 0;
+                SetEngineTextAndGetWidth( rParam, aCellStr, nRepeatSize, ( nLeftM + nRightM ) );
                 if ( pFmtDevice != mpRefDevice )
                     ++nRepeatSize;
                 if ( nRepeatSize > 0 )
@@ -2920,29 +2928,20 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                         OUString aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                             aRepeated += aCellStr;
-                        rParam.mpEngine->SetText( aRepeated );
+
+                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated,
+                                                        nNeededPixel, (nLeftM + nRightM ) );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
-                        nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-                        if (rParam.mbPixelToLogic)
-                            nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-                        else
-                            nNeededPixel = nEngineWidth;
-                        nNeededPixel += nLeftM + nRightM;
                     }
                 }
             }
         }
 
+
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
+            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
@@ -3330,11 +3329,9 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
                 OUString aCellStr = rParam.mpEngine->GetText();
-                rParam.mpEngine->SetText( aCellStr );
 
-                long nRepeatSize = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
-                if (rParam.mbPixelToLogic)
-                    nRepeatSize = mpRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
+                long nRepeatSize = 0;
+                SetEngineTextAndGetWidth( rParam, aCellStr, nRepeatSize, ( nLeftM + nRightM ) );
                 if ( pFmtDevice != mpRefDevice )
                     ++nRepeatSize;
                 if ( nRepeatSize > 0 )
@@ -3345,29 +3342,18 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                         OUString aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                             aRepeated += aCellStr;
-                        rParam.mpEngine->SetText( aRepeated );
+
+                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated,
+                                                            nNeededPixel, (nLeftM + nRightM ) );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
-                        nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
-                        if (rParam.mbPixelToLogic)
-                            nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-                        else
-                            nNeededPixel = nEngineWidth;
-                        nNeededPixel += nLeftM + nRightM;
                     }
                 }
             }
         }
-
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
+            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
@@ -3591,11 +3577,10 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
                 OUString aCellStr = rParam.mpEngine->GetText();
-                rParam.mpEngine->SetText( aCellStr );
 
-                long nRepeatSize = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
-                if (rParam.mbPixelToLogic)
-                    nRepeatSize = mpRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
+               long nRepeatSize = 0;
+               SetEngineTextAndGetWidth( rParam, aCellStr, nRepeatSize, ( nLeftM + nRightM ) );
+
                 if ( pFmtDevice != mpRefDevice )
                     ++nRepeatSize;
                 if ( nRepeatSize > 0 )
@@ -3606,29 +3591,18 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                         OUString aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                             aRepeated += aCellStr;
-                        rParam.mpEngine->SetText( aRepeated );
+
+                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated,
+                                                            nNeededPixel, (nLeftM + nRightM ) );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
-                        nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
-                        if (rParam.mbPixelToLogic)
-                            nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-                        else
-                            nNeededPixel = nEngineWidth;
-                        nNeededPixel += nLeftM + nRightM;
                     }
                 }
             }
         }
-
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
+            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
@@ -3855,13 +3829,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
+            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
@@ -4183,16 +4151,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             nEngineWidth, nEngineHeight, nNeededPixel,
             aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
     }
-
     if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
     {
-        rParam.mpEngine->SetText(OUString("###"));
-        nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-        if (rParam.mbPixelToLogic)
-            nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-        else
-            nNeededPixel = nEngineWidth;
-        nNeededPixel += nLeftM + nRightM;
+        nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
 
         //  No clip marks if "###" doesn't fit (same as in DrawStrings)
     }
