@@ -1142,7 +1142,7 @@ void HTMLTable::FixRowSpan( sal_uInt16 nRow, sal_uInt16 nCol,
 {
     sal_uInt16 nRowSpan=1;
     HTMLTableCell *pCell;
-    while( ( pCell=GetCell(nRow,nCol), pCell->GetContents()==pCnts ) )
+    while( pCell=GetCell(nRow,nCol), pCell->GetContents()==pCnts )
     {
         pCell->SetRowSpan( nRowSpan );
         if( m_pLayoutInfo )
@@ -1404,7 +1404,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                                                       : (nInnerFrameWidth / 2) );
                 // We only set the item if there's a border or a border distance
                 // If the latter is missing, there's gonna be a border and we'll have to set the distance
-                aBoxItem.SetAllDistances((nBDist) ? nBDist : MIN_BORDER_DIST);
+                aBoxItem.SetAllDistances(nBDist ? nBDist : MIN_BORDER_DIST);
                 pFrameFormat->SetFormatAttr( aBoxItem );
             }
             else

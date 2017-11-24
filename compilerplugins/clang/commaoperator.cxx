@@ -50,6 +50,14 @@ public:
         return ret;
     }
 
+    bool TraverseWhileStmt(WhileStmt * stmt) {
+        auto const saved1 = ignore1_;
+        ignore1_ = lookThroughExprWithCleanups(stmt->getCond());
+        auto const ret = RecursiveASTVisitor::TraverseWhileStmt(stmt);
+        ignore1_ = saved1;
+        return ret;
+    }
+
     bool TraverseParenExpr(ParenExpr * expr) {
         auto const saved1 = ignore1_;
         ignore1_ = expr->getSubExpr();

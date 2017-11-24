@@ -22,6 +22,7 @@ int main() {
     S s;
     (s = S(), s = S(), s = S());
     for (s = S(), f(); f(); s = S(), f()) {}
+    while (s = S(), f()) {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
