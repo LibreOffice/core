@@ -116,46 +116,39 @@
 #define ATTR_LRSPACE            TypedWhichId<SvxLRSpaceItem>(157)    // editor: PageDesc-TabPage
 #define ATTR_ULSPACE            TypedWhichId<SvxULSpaceItem>(158)
 #define ATTR_PAGE               TypedWhichId<SvxPageItem>(159)
-#define ATTR_PAGE_PAPERTRAY     (160)
-#define ATTR_PAGE_PAPERBIN      TypedWhichId<SvxPaperBinItem>(161)
-#define ATTR_PAGE_SIZE          TypedWhichId<SvxSizeItem>(162)
-#define ATTR_PAGE_MAXSIZE       (163)
-#define ATTR_PAGE_HORCENTER     TypedWhichId<SfxBoolItem>(164)
-#define ATTR_PAGE_VERCENTER     TypedWhichId<SfxBoolItem>(165)
+#define ATTR_PAGE_PAPERBIN      TypedWhichId<SvxPaperBinItem>(160)
+#define ATTR_PAGE_SIZE          TypedWhichId<SvxSizeItem>(161)
+#define ATTR_PAGE_HORCENTER     TypedWhichId<SfxBoolItem>(162)
+#define ATTR_PAGE_VERCENTER     TypedWhichId<SfxBoolItem>(163)
 
-#define ATTR_PAGE_ON            TypedWhichId<SfxBoolItem>(166)     // editor: header/footer-page
-#define ATTR_PAGE_DYNAMIC       TypedWhichId<SfxBoolItem>(167)
-#define ATTR_PAGE_SHARED        TypedWhichId<SfxBoolItem>(168)
+#define ATTR_PAGE_ON            TypedWhichId<SfxBoolItem>(164)     // editor: header/footer-page
+#define ATTR_PAGE_DYNAMIC       TypedWhichId<SfxBoolItem>(165)
+#define ATTR_PAGE_SHARED        TypedWhichId<SfxBoolItem>(166)
 
-#define ATTR_PAGE_NOTES         TypedWhichId<SfxBoolItem>(169)     // editor: table
-#define ATTR_PAGE_GRID          TypedWhichId<SfxBoolItem>(170)
-#define ATTR_PAGE_HEADERS       TypedWhichId<SfxBoolItem>(171)
-#define ATTR_PAGE_CHARTS        TypedWhichId<ScViewObjectModeItem>(172)
-#define ATTR_PAGE_OBJECTS       TypedWhichId<ScViewObjectModeItem>(173)
-#define ATTR_PAGE_DRAWINGS      TypedWhichId<ScViewObjectModeItem>(174)
-#define ATTR_PAGE_TOPDOWN       TypedWhichId<SfxBoolItem>(175)
-#define ATTR_PAGE_SCALE         TypedWhichId<SfxUInt16Item>(176)
-#define ATTR_PAGE_SCALETOPAGES  TypedWhichId<SfxUInt16Item>(177)
-#define ATTR_PAGE_FIRSTPAGENO   TypedWhichId<SfxUInt16Item>(178)
+#define ATTR_PAGE_NOTES         TypedWhichId<SfxBoolItem>(167)     // editor: table
+#define ATTR_PAGE_GRID          TypedWhichId<SfxBoolItem>(168)
+#define ATTR_PAGE_HEADERS       TypedWhichId<SfxBoolItem>(169)
+#define ATTR_PAGE_CHARTS        TypedWhichId<ScViewObjectModeItem>(170)
+#define ATTR_PAGE_OBJECTS       TypedWhichId<ScViewObjectModeItem>(171)
+#define ATTR_PAGE_DRAWINGS      TypedWhichId<ScViewObjectModeItem>(172)
+#define ATTR_PAGE_TOPDOWN       TypedWhichId<SfxBoolItem>(173)
+#define ATTR_PAGE_SCALE         TypedWhichId<SfxUInt16Item>(174)
+#define ATTR_PAGE_SCALETOPAGES  TypedWhichId<SfxUInt16Item>(175)
+#define ATTR_PAGE_FIRSTPAGENO   TypedWhichId<SfxUInt16Item>(176)
 
-#define ATTR_PAGE_PRINTAREA     (179)     // editor: print areas
-#define ATTR_PAGE_REPEATROW     (180)
-#define ATTR_PAGE_REPEATCOL     (181)
-#define ATTR_PAGE_PRINTTABLES   (182)
+#define ATTR_PAGE_HEADERLEFT    TypedWhichId<ScPageHFItem>(177)     // contents of header/
+#define ATTR_PAGE_FOOTERLEFT    TypedWhichId<ScPageHFItem>(178)     // footer (left)
+#define ATTR_PAGE_HEADERRIGHT   TypedWhichId<ScPageHFItem>(179)     // contents of header/
+#define ATTR_PAGE_FOOTERRIGHT   TypedWhichId<ScPageHFItem>(180)     // footer (right)
+#define ATTR_PAGE_HEADERSET     TypedWhichId<SvxSetItem>(181)     // the corresponding sets
+#define ATTR_PAGE_FOOTERSET     TypedWhichId<SvxSetItem>(182)
 
-#define ATTR_PAGE_HEADERLEFT    TypedWhichId<ScPageHFItem>(183)     // contents of header/
-#define ATTR_PAGE_FOOTERLEFT    TypedWhichId<ScPageHFItem>(184)     // footer (left)
-#define ATTR_PAGE_HEADERRIGHT   TypedWhichId<ScPageHFItem>(185)     // contents of header/
-#define ATTR_PAGE_FOOTERRIGHT   TypedWhichId<ScPageHFItem>(186)     // footer (right)
-#define ATTR_PAGE_HEADERSET     TypedWhichId<SvxSetItem>(187)     // the corresponding sets
-#define ATTR_PAGE_FOOTERSET     TypedWhichId<SvxSetItem>(188)
+#define ATTR_PAGE_FORMULAS      TypedWhichId<SfxBoolItem>(183)
+#define ATTR_PAGE_NULLVALS      TypedWhichId<SfxBoolItem>(184)
 
-#define ATTR_PAGE_FORMULAS      TypedWhichId<SfxBoolItem>(189)
-#define ATTR_PAGE_NULLVALS      TypedWhichId<SfxBoolItem>(190)
+#define ATTR_PAGE_SCALETO       TypedWhichId<ScPageScaleToItem>(185)     // #i8868# scale printout to width/height
 
-#define ATTR_PAGE_SCALETO       TypedWhichId<ScPageScaleToItem>(191)     // #i8868# scale printout to width/height
-
-#define ATTR_HIDDEN             TypedWhichId<SfxBoolItem>(192)
+#define ATTR_HIDDEN             TypedWhichId<SfxBoolItem>(186)
 
 #define ATTR_ENDINDEX           ATTR_HIDDEN        // end of pool-range
 
@@ -171,10 +164,6 @@
 #define SID_SCATTR_PAGE_SCALE           ATTR_PAGE_SCALE
 #define SID_SCATTR_PAGE_SCALETOPAGES    ATTR_PAGE_SCALETOPAGES
 #define SID_SCATTR_PAGE_FIRSTPAGENO     ATTR_PAGE_FIRSTPAGENO
-#define SID_SCATTR_PAGE_PRINTAREA       ATTR_PAGE_PRINTAREA
-#define SID_SCATTR_PAGE_REPEATROW       ATTR_PAGE_REPEATROW
-#define SID_SCATTR_PAGE_REPEATCOL       ATTR_PAGE_REPEATCOL
-#define SID_SCATTR_PAGE_PRINTTABLES     ATTR_PAGE_PRINTTABLES
 #define SID_SCATTR_PAGE_HEADERLEFT      ATTR_PAGE_HEADERLEFT
 #define SID_SCATTR_PAGE_FOOTERLEFT      ATTR_PAGE_FOOTERLEFT
 #define SID_SCATTR_PAGE_HEADERRIGHT     ATTR_PAGE_HEADERRIGHT

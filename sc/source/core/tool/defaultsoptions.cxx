@@ -57,10 +57,6 @@ bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
         && rOpt.aInitTabPrefix == aInitTabPrefix;
 }
 
-ScTableListItem::ScTableListItem()
-    : SfxPoolItem(ATTR_PAGE_PRINTTABLES), nCount(0), pTabArr(nullptr)
-{}
-
 ScTpDefaultsItem::ScTpDefaultsItem( const ScDefaultsOptions& rOpt ) :
     SfxPoolItem ( SID_SCDEFAULTSOPTIONS ),
     theOptions  ( rOpt )

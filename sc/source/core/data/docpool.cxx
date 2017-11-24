@@ -138,10 +138,8 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_LRSPACE,             true },    // ATTR_LRSPACE
     { SID_ATTR_ULSPACE,             true },    // ATTR_ULSPACE
     { SID_ATTR_PAGE,                true },    // ATTR_PAGE
-    { 0,                            true },    // ATTR_PAGE_PAPERTRAY, since 303 just a dummy
     { SID_ATTR_PAGE_PAPERBIN,       true },    // ATTR_PAGE_PAPERBIN
     { SID_ATTR_PAGE_SIZE,           true },    // ATTR_PAGE_SIZE
-    { SID_ATTR_PAGE_MAXSIZE,        true },    // ATTR_PAGE_MAXSIZE
     { SID_ATTR_PAGE_EXT1,           true },    // ATTR_PAGE_HORCENTER
     { SID_ATTR_PAGE_EXT2,           true },    // ATTR_PAGE_VERCENTER
     { SID_ATTR_PAGE_ON,             true },    // ATTR_PAGE_ON
@@ -157,10 +155,6 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_SCATTR_PAGE_SCALE,        true },    // ATTR_PAGE_SCALE
     { SID_SCATTR_PAGE_SCALETOPAGES, true },    // ATTR_PAGE_SCALETOPAGES
     { SID_SCATTR_PAGE_FIRSTPAGENO,  true },    // ATTR_PAGE_FIRSTPAGENO
-    { SID_SCATTR_PAGE_PRINTAREA,    true },    // ATTR_PAGE_PRINTAREA
-    { SID_SCATTR_PAGE_REPEATROW,    true },    // ATTR_PAGE_REPEATROW
-    { SID_SCATTR_PAGE_REPEATCOL,    true },    // ATTR_PAGE_REPEATCOL
-    { SID_SCATTR_PAGE_PRINTTABLES,  true },    // ATTR_PAGE_PRINTTABLES
     { SID_SCATTR_PAGE_HEADERLEFT,   true },    // ATTR_PAGE_HEADERLEFT
     { SID_SCATTR_PAGE_FOOTERLEFT,   true },    // ATTR_PAGE_FOOTERLEFT
     { SID_SCATTR_PAGE_HEADERRIGHT,  true },    // ATTR_PAGE_HEADERRIGHT
@@ -284,10 +278,8 @@ ScDocumentPool::ScDocumentPool()
     rPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     rPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );
     rPoolDefaults[ ATTR_PAGE            - ATTR_STARTINDEX ] = new SvxPageItem( ATTR_PAGE );
-    rPoolDefaults[ ATTR_PAGE_PAPERTRAY  - ATTR_STARTINDEX ] = new SfxAllEnumItem( ATTR_PAGE_PAPERTRAY );
     rPoolDefaults[ ATTR_PAGE_PAPERBIN   - ATTR_STARTINDEX ] = new SvxPaperBinItem( ATTR_PAGE_PAPERBIN );
     rPoolDefaults[ ATTR_PAGE_SIZE       - ATTR_STARTINDEX ] = new SvxSizeItem( ATTR_PAGE_SIZE );
-    rPoolDefaults[ ATTR_PAGE_MAXSIZE    - ATTR_STARTINDEX ] = new SvxSizeItem( ATTR_PAGE_MAXSIZE );
     rPoolDefaults[ ATTR_PAGE_HORCENTER  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HORCENTER );
     rPoolDefaults[ ATTR_PAGE_VERCENTER  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_VERCENTER );
     rPoolDefaults[ ATTR_PAGE_ON         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_ON, true );
@@ -303,10 +295,6 @@ ScDocumentPool::ScDocumentPool()
     rPoolDefaults[ ATTR_PAGE_SCALE      - ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_SCALE, 100 );
     rPoolDefaults[ ATTR_PAGE_SCALETOPAGES-ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 1 );
     rPoolDefaults[ ATTR_PAGE_FIRSTPAGENO- ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 1 );
-    rPoolDefaults[ ATTR_PAGE_PRINTAREA  - ATTR_STARTINDEX ] = new ScRangeItem( ATTR_PAGE_PRINTAREA );
-    rPoolDefaults[ ATTR_PAGE_REPEATROW  - ATTR_STARTINDEX ] = new ScRangeItem( ATTR_PAGE_REPEATROW );
-    rPoolDefaults[ ATTR_PAGE_REPEATCOL  - ATTR_STARTINDEX ] = new ScRangeItem( ATTR_PAGE_REPEATCOL );
-    rPoolDefaults[ ATTR_PAGE_PRINTTABLES- ATTR_STARTINDEX ] = new ScTableListItem;
     rPoolDefaults[ ATTR_PAGE_HEADERLEFT - ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_HEADERLEFT );
     rPoolDefaults[ ATTR_PAGE_FOOTERLEFT - ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERLEFT );
     rPoolDefaults[ ATTR_PAGE_HEADERRIGHT- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
