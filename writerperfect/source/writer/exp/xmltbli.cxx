@@ -42,9 +42,19 @@ rtl::Reference<XMLImportContext> XMLTableCellContext::CreateChildContext(const O
     return CreateTextChildContext(mrImport, rName);
 }
 
-void XMLTableCellContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLTableCellContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
 {
-    mrImport.GetGenerator().openTableCell(librevenge::RVNGPropertyList());
+    librevenge::RVNGPropertyList aPropertyList;
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+
+        OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+        aPropertyList.insert(sName.getStr(), sValue.getStr());
+    }
+    mrImport.GetGenerator().openTableCell(aPropertyList);
 }
 
 void XMLTableCellContext::endElement(const OUString &/*rName*/)
@@ -73,6 +83,10 @@ rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(const OU
 {
     if (rName == "table:table-cell")
         return new XMLTableCellContext(mrImport);
+    if (rName == "table:covered-table-cell")
+        mrImport.GetGenerator().insertCoveredTableCell(librevenge::RVNGPropertyList());
+    else
+        SAL_WARN("writerperfect", "XMLTableRowContext::CreateChildContext: unhandled " << rName);
     return nullptr;
 }
 
