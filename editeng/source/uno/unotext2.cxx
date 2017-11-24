@@ -441,7 +441,7 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     if( maPortions.empty() || mnNextPortion >= maPortions.size() )
         throw container::NoSuchElementException();
 
-    uno::Reference< text::XTextRange > xRange = ( maPortions.at(mnNextPortion) ).get();
+    uno::Reference< text::XTextRange > xRange = maPortions.at(mnNextPortion).get();
     mnNextPortion++;
     return uno::makeAny( xRange );
 }

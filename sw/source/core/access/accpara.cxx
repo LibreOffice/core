@@ -1409,7 +1409,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     }
     if (pTextField)
     {
-        const SwField* pField = (pTextField->GetFormatField()).GetField();
+        const SwField* pField = pTextField->GetFormatField().GetField();
         if (pField)
         {
             strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());

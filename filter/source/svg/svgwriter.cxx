@@ -484,13 +484,13 @@ SVGTextWriter::~SVGTextWriter()
 void SVGTextWriter::implRegisterInterface( const Reference< XInterface >& rxIf )
 {
     if( rxIf.is() )
-        (mrExport.getInterfaceToIdentifierMapper()).registerReference( rxIf );
+        mrExport.getInterfaceToIdentifierMapper().registerReference( rxIf );
 }
 
 
 const OUString & SVGTextWriter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
 {
-   return (mrExport.getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
+   return mrExport.getInterfaceToIdentifierMapper().getIdentifier( rxIf );
 }
 
 

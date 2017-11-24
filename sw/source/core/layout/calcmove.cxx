@@ -306,7 +306,7 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
                     // me when formatting. This as you can see could easily become a
                     // confusing situation that we want to avoid.
                     if ( bFoll && pFrame->IsFlowFrame() &&
-                         (SwFlowFrame::CastFlowFrame(pFrame))->IsAnFollow( pThis ) )
+                         SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow( pThis ) )
                         break;
 
                     pFrame->MakeAll(pRenderContext);
@@ -417,7 +417,7 @@ void SwFrame::PrepareCursor()
                 // me when formatting. This as you can see could easily become a
                 // confusing situation that we want to avoid.
                 if ( bFoll && pFrame->IsFlowFrame() &&
-                     (SwFlowFrame::CastFlowFrame(pFrame))->IsAnFollow( pThis ) )
+                     SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow( pThis ) )
                     break;
 
                 pFrame->MakeAll(getRootFrame()->GetCurrShell()->GetOut());

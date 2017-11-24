@@ -446,7 +446,7 @@ OUString LwpDrawLine::RegisterStyle()
     SetArrowHead(pStyle, m_aLineRec.nLineEnd, m_aLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return (pXFStyleManager->AddStyle(pStyle)).m_pStyle->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 
 }
 

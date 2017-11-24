@@ -616,7 +616,7 @@ void DlgEditor::CreateDefaultObject()
     {
         // set position and size
         Size aSize = rWindow.PixelToLogic( Size( 96, 24 ) );
-        Point aPoint = (pDlgEdForm->GetSnapRect()).Center();
+        Point aPoint = pDlgEdForm->GetSnapRect().Center();
         aPoint.X() -= aSize.Width() / 2;
         aPoint.Y() -= aSize.Height() / 2;
         pDlgEdObj->SetSnapRect( tools::Rectangle( aPoint, aSize ) );
@@ -973,8 +973,8 @@ void DlgEditor::Paste()
                     }
 
                     // center marked objects in dialog editor form
-                    Point aMarkCenter = (pDlgEdView->GetMarkedObjRect()).Center();
-                    Point aFormCenter = (pDlgEdForm->GetSnapRect()).Center();
+                    Point aMarkCenter = pDlgEdView->GetMarkedObjRect().Center();
+                    Point aFormCenter = pDlgEdForm->GetSnapRect().Center();
                     Point aPoint = aFormCenter - aMarkCenter;
                     Size  aSize( aPoint.X() , aPoint.Y() );
                     pDlgEdView->MoveMarkedObj( aSize );                     // update of control model properties (position + size) in NbcMove

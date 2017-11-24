@@ -2212,22 +2212,22 @@ static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const vcl::RenderCont
     aSizedRect.Bottom() += (aTwipToPxSize.Height()/2 + 1);
 
     // adjust left()
-    while ( (aOut.LogicToPixel(aSizedRect)).Left() < aOrgPxRect.Left() )
+    while ( aOut.LogicToPixel(aSizedRect).Left() < aOrgPxRect.Left() )
     {
         ++aSizedRect.Left();
     }
     // adjust right()
-    while ( (aOut.LogicToPixel(aSizedRect)).Right() > aOrgPxRect.Right() )
+    while ( aOut.LogicToPixel(aSizedRect).Right() > aOrgPxRect.Right() )
     {
         --aSizedRect.Right();
     }
     // adjust top()
-    while ( (aOut.LogicToPixel(aSizedRect)).Top() < aOrgPxRect.Top() )
+    while ( aOut.LogicToPixel(aSizedRect).Top() < aOrgPxRect.Top() )
     {
         ++aSizedRect.Top();
     }
     // adjust bottom()
-    while ( (aOut.LogicToPixel(aSizedRect)).Bottom() > aOrgPxRect.Bottom() )
+    while ( aOut.LogicToPixel(aSizedRect).Bottom() > aOrgPxRect.Bottom() )
     {
         --aSizedRect.Bottom();
     }

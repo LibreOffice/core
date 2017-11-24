@@ -2320,7 +2320,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // section which has a height of 0, because this is not growable and thus
             // all kinds of unexpected things could happen.
             if ( !bEmulateTableKeepFwdMoveAllowed ||
-                 ( IsInSct() && (FindSctFrame())->Lower()->IsColumnFrame() &&
+                 ( IsInSct() && FindSctFrame()->Lower()->IsColumnFrame() &&
                    0 == aRectFnSet.GetHeight(GetUpper()->getFrameArea())
                ) )
             {

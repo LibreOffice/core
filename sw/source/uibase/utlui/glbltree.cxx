@@ -1253,7 +1253,7 @@ void SwLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCont
 {
     SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(rEntry.GetUserData());
     if (pCont->GetType() == GLBLDOC_SECTION &&
-      !(pCont->GetSection())->IsConnectFlag())
+      !pCont->GetSection()->IsConnectFlag())
     {
         rRenderContext.Push(PushFlags::FONT);
         vcl::Font aOldFont(rRenderContext.GetFont());
