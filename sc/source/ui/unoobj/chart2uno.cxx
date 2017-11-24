@@ -752,7 +752,7 @@ void Chart2Positioner::createPositionMap()
                 else
                     pCol = it->second;
 
-                sal_uInt32 nInsRow = static_cast<sal_uInt32>(bNoGlue ? nNoGlueRow : nRow1);
+                auto nInsRow = bNoGlue ? nNoGlueRow : nRow1;
                 for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow, ++nInsRow)
                 {
                     ScSingleRefData aCellData;
