@@ -734,7 +734,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     {
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back(std::make_pair("size", rRect.GetSize().toString()));
-        pNotifier->notifyDialog(GetLOKWindowId(), "created", aItems);
+        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
     }
 }
 
