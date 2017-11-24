@@ -2032,7 +2032,7 @@ void SbRtl_DateValue(StarBASIC *, SbxArray & rPar, bool)
     else
     {
         // #39629 check GetSbData()->pInst, can be called from the URL line
-        SvNumberFormatter* pFormatter = nullptr;
+        std::shared_ptr<SvNumberFormatter> pFormatter;
         if( GetSbData()->pInst )
         {
             pFormatter = GetSbData()->pInst->GetNumberFormatter();
@@ -2083,11 +2083,6 @@ void SbRtl_DateValue(StarBASIC *, SbxArray & rPar, bool)
         {
             StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
         }
-        // #39629 pFormatter can be requested itself
-        if( !GetSbData()->pInst )
-        {
-            delete pFormatter;
-        }
     }
 }
 
@@ -2099,7 +2094,7 @@ void SbRtl_TimeValue(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        SvNumberFormatter* pFormatter = nullptr;
+        std::shared_ptr<SvNumberFormatter> pFormatter;
         if( GetSbData()->pInst )
             pFormatter = GetSbData()->pInst->GetNumberFormatter();
         else
@@ -2125,10 +2120,6 @@ void SbRtl_TimeValue(StarBASIC *, SbxArray & rPar, bool)
         else
         {
             StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
-        }
-        if( !GetSbData()->pInst )
-        {
-            delete pFormatter;
         }
     }
 }
@@ -2288,7 +2279,7 @@ void SbRtl_Time(StarBASIC *, SbxArray & rPar, bool bWrite)
             double nDays = (double)nSeconds * ( 1.0 / (24.0*3600.0) );
             Color* pCol;
 
-            SvNumberFormatter* pFormatter = nullptr;
+            std::shared_ptr<SvNumberFormatter> pFormatter;
             sal_uInt32 nIndex;
             if( GetSbData()->pInst )
             {
@@ -2302,11 +2293,6 @@ void SbRtl_Time(StarBASIC *, SbxArray & rPar, bool bWrite)
             }
 
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
-
-            if( !GetSbData()->pInst )
-            {
-                delete pFormatter;
-            }
         }
         pMeth->PutString( aRes );
     }
@@ -2339,7 +2325,7 @@ void SbRtl_Date(StarBASIC *, SbxArray & rPar, bool bWrite)
             OUString aRes;
             Color* pCol;
 
-            SvNumberFormatter* pFormatter = nullptr;
+            std::shared_ptr<SvNumberFormatter> pFormatter;
             sal_uInt32 nIndex;
             if( GetSbData()->pInst )
             {
@@ -2354,11 +2340,6 @@ void SbRtl_Date(StarBASIC *, SbxArray & rPar, bool bWrite)
 
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
             pMeth->PutString( aRes );
-
-            if( !GetSbData()->pInst )
-            {
-                delete pFormatter;
-            }
         }
         else
         {
@@ -3097,7 +3078,7 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
 
         Color* pCol;
 
-        SvNumberFormatter* pFormatter = nullptr;
+        std::shared_ptr<SvNumberFormatter> pFormatter;
         sal_uInt32 nIndex;
         if( GetSbData()->pInst )
         {
@@ -3113,11 +3094,6 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
         OUString aRes;
         pFormatter->GetOutputString( fSerial, nIndex, aRes, &pCol );
         rPar.Get(0)->PutString( aRes );
-
-        if( !GetSbData()->pInst )
-        {
-            delete pFormatter;
-        }
     }
 }
 
