@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5d0c1eed",
+        "filename": "include/android/compatibility.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-24T08:58:32Z",
+      "side": 0,
+      "message": "Oh, too bad the rest has to stay even with libc++.",
+      "revId": "008673c23db0c812eb0b48a1c29ab88b48aaa867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
