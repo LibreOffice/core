@@ -720,6 +720,13 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
         GrabFocus();
     }
     Show( true, ShowFlags::NoActivate );
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", rRect.GetSize().toString()));
+        pNotifier->notifyDialog(GetLOKWindowId(), "created", aItems);
+    }
 }
 
 void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )

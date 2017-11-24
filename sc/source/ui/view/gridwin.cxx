@@ -627,6 +627,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     mpAutoFilterPopup.disposeAndClear();
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
+    mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, Normal));
     mpAutoFilterPopup->setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
