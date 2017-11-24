@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 #include <memory>
+#include <iostream>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
@@ -3550,6 +3551,7 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
+/// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
     // First: sit down and read all dictionaries: yum.
@@ -3559,14 +3561,14 @@ static void preloadData()
 
     css::uno::Reference<linguistic2::XSupportedLocales> xLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     uno::Sequence< css::lang::Locale > aLocales = xLocales->getLocales();
-    SAL_INFO("lok", "Preloading #" << aLocales.getLength() << " dictionaries");
+    std::cerr << "Preloading dictionaries: ";
     for (auto &it : aLocales)
     {
-        SAL_INFO("lok", "    load " << it.Language << "_" << it.Country);
+        std::cerr << it.Language << "_" << it.Country << " ";
         css::beans::PropertyValues aNone;
         xSpellChecker->isValid("forcefed", it, aNone);
     }
-    SAL_INFO("lok", "Preloading done");
+    std::cerr << "\n";
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
@@ -3658,6 +3660,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
             if (eStage == PRE_INIT)
             {
+                std::cerr << "Init vcl\n";
                 InitVCL();
 
                 // pre-load all component libraries.
