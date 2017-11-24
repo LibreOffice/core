@@ -36,6 +36,7 @@
 
 #include "sbxres.hxx"
 #include <sbxbase.hxx>
+#include <sbintern.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/sbxform.hxx>
 
@@ -679,13 +680,24 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         }
 
         LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-        SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), eLangType );
+        std::shared_ptr<SvNumberFormatter> pFormatter;
+        if (GetSbData()->pInst)
+        {
+            pFormatter = GetSbData()->pInst->GetNumberFormatter();
+        }
+        else
+        {
+            sal_uInt32 n;   // Dummy
+            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
+        }
 
-        sal_uInt32 nIndex = 0;
+        // Passing an index of a locale switches IsNumberFormat() to use that
+        // locale in case the formatter wasn't default created with it.
+        sal_uInt32 nIndex = pFormatter->GetStandardIndex( eLangType);
         double nNumber;
         Color* pCol;
 
-        bool bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, nNumber );
+        bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, nNumber );
 
         // number format, use SvNumberFormatter to handle it.
         if( bSuccess )
@@ -698,14 +710,14 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             {
                 if( pInfo->meType == VbaFormatType::Offset )
                 {
-                    nIndex = aFormatter.GetFormatIndex( pInfo->meOffset, eLangType );
+                    nIndex = pFormatter->GetFormatIndex( pInfo->meOffset, eLangType );
                 }
                 else
                 {
                     aFmtStr = OUString::createFromAscii(pInfo->mpOOoFormat);
-                    aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                    pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
                 }
-                aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+                pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
             }
             else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_GENERALDATE )
                     || aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_C ))
@@ -713,16 +725,16 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 if( nNumber <=-1.0 || nNumber >= 1.0 )
                 {
                     // short date
-                    nIndex = aFormatter.GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLangType );
-                    aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+                    nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLangType );
+                    pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
 
                     // long time
                     if( floor( nNumber ) != nNumber )
                     {
                         aFmtStr = "H:MM:SS AM/PM";
-                        aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                        pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
                         OUString aTime;
-                        aFormatter.GetOutputString( nNumber, nIndex, aTime, &pCol );
+                        pFormatter->GetOutputString( nNumber, nIndex, aTime, &pCol );
                         rRes += " " + aTime;
                     }
                 }
@@ -730,8 +742,8 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 {
                     // long time only
                     aFmtStr = "H:MM:SS AM/PM";
-                    aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
-                    aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+                    pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                    pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
                 }
             }
             else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_N ) ||
@@ -766,8 +778,8 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             }
             else
             {
-                aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
-                aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+                pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
             }
 
             return;
