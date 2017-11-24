@@ -67,14 +67,6 @@ public:
              return;
         if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/idlc/source/parser.cxx"))
              return;
-        if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/rsc/source/parser/rscyacc.cxx"))
-             return;
-
-        // TODO yuck, comma operator at work
-        if (loplugin::isSamePathname(fn, SRCDIR "/writerfilter/source/rtftok/rtftokenizer.cxx"))
-             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/filter/html/htmltab.cxx"))
-             return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
