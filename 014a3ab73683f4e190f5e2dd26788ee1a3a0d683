@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b8cd10b9",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2754,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-24T17:44:33Z",
+      "side": 1,
+      "message": "Nitpick: public: and private: should be aligned / indented 0 with the class scope, so everything outdented by one level.",
+      "revId": "014a3ab73683f4e190f5e2dd26788ee1a3a0d683",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_783e488d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2774,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-24T17:44:33Z",
+      "side": 1,
+      "message": "Nitpick: one empty line between multi-line functions does not hurt but increases readability ;-)",
+      "revId": "014a3ab73683f4e190f5e2dd26788ee1a3a0d683",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_98c854aa",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2776,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-24T17:44:33Z",
+      "side": 1,
+      "message": "Comparing with the previous code this is a bit confusing, a comment would be welcome that points out that mpDev here is only set if in the ctor bClip was true. Actually the Pop() or SetClipRegion() calls must only be executed in that case.",
+      "revId": "014a3ab73683f4e190f5e2dd26788ee1a3a0d683",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
