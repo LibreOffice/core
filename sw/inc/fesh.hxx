@@ -643,7 +643,7 @@ public:
     TableMergeErr MergeTab();          /**< Merge selected parts of table */
 
     /// Split cell vertically or horizontally.
-    bool SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight = false );
+    bool SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight );
     bool Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFormatFrameSize &rSz );

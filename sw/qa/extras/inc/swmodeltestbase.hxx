@@ -252,7 +252,7 @@ protected:
      * the initial document condition), exports with the desired
      * export filter and then calls 'verify' method)
      */
-    void executeImportExport(const char* filename, const char* pPassword = nullptr)
+    void executeImportExport(const char* filename, const char* pPassword)
     {
         maTempFile.EnableKillingFile(false);
         header();

@@ -493,7 +493,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
 
     SET_CURR_SHELL( this );
 
-    if( bVert && !CheckSplitCells( *this, nCnt + 1 ) )
+    if( bVert && !CheckSplitCells( *this, nCnt + 1, SwTableSearchType::NONE ) )
     {
         ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR, GetWin(),
                         DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );

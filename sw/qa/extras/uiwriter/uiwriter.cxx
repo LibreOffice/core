@@ -4023,8 +4023,8 @@ void SwUiWriterTest::testTdf87922()
 #if HAVE_MORE_FONTS
 struct PortionItem
 {
-    PortionItem(OUString const & sItemType, sal_Int32 nLength = 0,
-                sal_uInt16 nTextType = 0)
+    PortionItem(OUString const & sItemType, sal_Int32 nLength,
+                sal_uInt16 nTextType)
         : msItemType(sItemType)
         , mnLength(nLength)
         , mnTextType(nTextType)
@@ -4064,17 +4064,17 @@ class PortionHandler : public SwPortionHandler
 
     virtual void LineBreak(sal_Int32 /*nWidth*/) override
     {
-        mPortionItems.emplace_back("line_break");
+        mPortionItems.emplace_back("line_break", 0, 0);
     }
 
     virtual void Skip(sal_Int32 nLength) override
     {
-        mPortionItems.emplace_back("skip", nLength);
+        mPortionItems.emplace_back("skip", nLength, 0);
     }
 
     virtual void Finish() override
     {
-        mPortionItems.emplace_back("finish");
+        mPortionItems.emplace_back("finish", 0, 0);
     }
 };
 
