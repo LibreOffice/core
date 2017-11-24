@@ -1635,6 +1635,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOCX(SvStream &rStream)
     catch (const css::io::IOException&)
     {
     }
+    catch (const css::lang::IllegalArgumentException&)
+    {
+    }
     catch (const css::lang::WrappedTargetRuntimeException&)
     {
     }
