@@ -1065,14 +1065,16 @@ short Dialog::Execute()
 
     VclPtr<vcl::Window> xWindow = this;
 
-
-
-    css::uno::Reference< css::uno::XComponentContext > xContext(
+    {
+        SolarMutexReleaser aReleaser; // tdf#114025
+        css::uno::Reference< css::uno::XComponentContext > xContext(
             comphelper::getProcessComponentContext() );
-    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
-    css::document::DocumentEvent aObject;
-    aObject.EventName = "DialogExecute";
-    xEventBroadcaster->documentEventOccured(aObject);
+        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+        css::document::DocumentEvent aObject;
+        aObject.EventName = "DialogExecute";
+        xEventBroadcaster->documentEventOccured(aObject);
+    }
+
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
     while ( !xWindow->IsDisposed() && mbInExecute )
