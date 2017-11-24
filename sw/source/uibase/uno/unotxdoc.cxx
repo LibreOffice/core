@@ -3639,18 +3639,18 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
-void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice)
+void SwXTextDocument::paintDialog(const vcl::LOKWindowId& rLOKWindowId, VirtualDevice& rDevice)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    VclPtr<Dialog> pDlg = pViewShell->GetOpenedDlg(rDialogID);
+    VclPtr<Dialog> pDlg = pViewShell->GetOpenedDlg(rLOKWindowId);
     if (pDlg)
         pDlg->paintDialog(rDevice);
 }
 
-void SwXTextDocument::getDialogInfo(const vcl::DialogID& rDialogID, OUString& rDialogTitle, int& rWidth, int& rHeight)
+void SwXTextDocument::getDialogInfo(const vcl::LOKWindowId& rLOKWindowId, OUString& rDialogTitle, int& rWidth, int& rHeight)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    VclPtr<Dialog> pDlg = pViewShell->GetOpenedDlg(rDialogID);
+    VclPtr<Dialog> pDlg = pViewShell->GetOpenedDlg(rLOKWindowId);
     if (pDlg)
     {
         rDialogTitle = pDlg->GetText();
@@ -3660,12 +3660,12 @@ void SwXTextDocument::getDialogInfo(const vcl::DialogID& rDialogID, OUString& rD
     }
 }
 
-void SwXTextDocument::postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType, int nCharCode, int nKeyCode)
+void SwXTextDocument::postDialogKeyEvent(const vcl::LOKWindowId& rLOKWindowId, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rLOKWindowId);
     if (pDialog)
     {
         KeyEvent aEvent(nCharCode, nKeyCode, 0);
@@ -3685,13 +3685,13 @@ void SwXTextDocument::postDialogKeyEvent(const vcl::DialogID& rDialogID, int nTy
     }
 }
 
-void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
+void SwXTextDocument::postDialogMouseEvent(const vcl::LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
                                            int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rLOKWindowId);
     if (pDialog)
     {
         Point aPos(nX , nY);
@@ -3716,13 +3716,13 @@ void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& rDialogID, int n
 }
 
 
-void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
+void SwXTextDocument::postDialogChildMouseEvent(const vcl::LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
                                                 int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rLOKWindowId);
     if (pDialog)
     {
         Point aPos(nX , nY);
@@ -3746,10 +3746,10 @@ void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, 
     }
 }
 
-void SwXTextDocument::paintActiveFloatingWindow(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight)
+void SwXTextDocument::paintActiveFloatingWindow(const vcl::LOKWindowId& rLOKWindowId, VirtualDevice& rDevice, int& nWidth, int& nHeight)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rDialogID);
+    VclPtr<Dialog> pDialog = pViewShell->GetOpenedDlg(rLOKWindowId);
     if (pDialog)
     {
         const Size aSize = pDialog->PaintActiveFloatingWindow(rDevice);

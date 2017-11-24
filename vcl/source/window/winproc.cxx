@@ -2493,8 +2493,8 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             break;
         case SalEvent::ShowDialog:
             {
-                ShowDialogId nDialogID = static_cast<ShowDialogId>(reinterpret_cast<sal_IntPtr>(pEvent));
-                bRet = ImplHandleShowDialog( pWindow, nDialogID );
+                ShowDialogId nLOKWindowId = static_cast<ShowDialogId>(reinterpret_cast<sal_IntPtr>(pEvent));
+                bRet = ImplHandleShowDialog( pWindow, nLOKWindowId );
             }
             break;
         case SalEvent::SurroundingTextRequest:

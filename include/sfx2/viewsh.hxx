@@ -142,7 +142,7 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
-class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::IDialogNotifier
+class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::ILibreOfficeKitNotifier
 {
 friend class SfxViewFrame;
 friend class SfxBaseController;
@@ -153,7 +153,7 @@ friend class SfxPrinterController;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
-    std::vector<std::pair<vcl::DialogID, VclPtr<Dialog> > > maOpenedDialogs;
+    std::vector<std::pair<vcl::LOKWindowId, VclPtr<Dialog> > > maOpenedDialogs;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -222,13 +222,13 @@ public:
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
 
-    void                        RegisterDlg(vcl::DialogID nDialogId, VclPtr<Dialog> pDlg);
-    VclPtr<Dialog>              GetOpenedDlg(vcl::DialogID nDialogId);
-    void                        UnregisterDlg(vcl::DialogID nDialogId);
+    void                        RegisterDlg(vcl::LOKWindowId nDialogId, VclPtr<Dialog> pDlg);
+    VclPtr<Dialog>              GetOpenedDlg(vcl::LOKWindowId nDialogId);
+    void                        UnregisterDlg(vcl::LOKWindowId nDialogId);
 
-    // IDialogNotifier
-    virtual void                notifyDialog(const vcl::DialogID& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) override;
-    virtual void                notifyDialogChild(const vcl::DialogID& rDialogId, const OUString& rAction, const Point& rPos) override;
+    // ILibreOfficeKitNotifier
+    virtual void                notifyDialog(const vcl::LOKWindowId& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
+    virtual void                notifyDialogChild(const vcl::LOKWindowId& rDialogId, const OUString& rAction, const Point& rPos) const override;
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );

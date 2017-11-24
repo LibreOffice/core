@@ -144,15 +144,15 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyDialog(vcl::DialogID nDialogID,
+void SfxLokHelper::notifyDialog(vcl::LOKWindowId nLOKWindowId,
                                 const OUString& rAction,
                                 const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
-    if (SfxLokHelper::getViewsCount() <= 0 || nDialogID == 0)
+    if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    OString aPayload = OString("{ \"dialogId\": \"") + OString::number(nDialogID) + OString("\"");
+    OString aPayload = OString("{ \"dialogId\": \"") + OString::number(nLOKWindowId) + OString("\"");
     aPayload += OString(", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
 
     for (const auto& rItem: rPayload)
@@ -172,13 +172,13 @@ void SfxLokHelper::notifyDialog(vcl::DialogID nDialogID,
     }
 }
 
-void SfxLokHelper::notifyDialogChild(vcl::DialogID nDialogID, const OUString& rAction, const Point& rPos)
+void SfxLokHelper::notifyDialogChild(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const Point& rPos)
 {
-    if (SfxLokHelper::getViewsCount() <= 0 || nDialogID == 0)
+    if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    const OString aPayload = OString("{ \"dialogId\": \"") + OString::number(nDialogID) +
+    const OString aPayload = OString("{ \"dialogId\": \"") + OString::number(nLOKWindowId) +
         OString("\", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() +
         OString("\", \"position\": \"") + OString::number(rPos.getX()) + OString(", ") + OString::number(rPos.getY()) +
         + "\" }";

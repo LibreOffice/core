@@ -376,6 +376,10 @@ public:
                         mbDoubleBufferingRequested:1;
 
     css::uno::Reference< css::uno::XInterface > mxDNDListenerContainer;
+
+    const vcl::ILibreOfficeKitNotifier* mpLOKNotifier; ///< To emit the LOK callbacks eg. for dialog tunneling.
+    static vcl::LOKWindowId mnLastWindowId; ///< To be able to have an unique ID for each dealog / window we tunnel.
+    vcl::LOKWindowId mnLOKWindowId; ///< ID of this specific window.
 };
 
 /// Sets up the buffer to have settings matching the window, and restores the original state in the dtor.

@@ -1948,27 +1948,27 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
     return xRender;
 }
 
-void SfxViewShell::notifyDialog(const vcl::DialogID& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
+void SfxViewShell::notifyDialog(const vcl::LOKWindowId& rDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
 {
     SfxLokHelper::notifyDialog(rDialogId, rAction, rPayload);
 }
 
-void SfxViewShell::notifyDialogChild(const vcl::DialogID& rDialogId, const OUString& rAction, const Point& rPos)
+void SfxViewShell::notifyDialogChild(const vcl::LOKWindowId& rDialogId, const OUString& rAction, const Point& rPos) const
 {
     SfxLokHelper::notifyDialogChild(rDialogId, rAction, rPos);
 }
 
-void SfxViewShell::RegisterDlg(vcl::DialogID nDialogId, VclPtr<Dialog> pDlg)
+void SfxViewShell::RegisterDlg(vcl::LOKWindowId nDialogId, VclPtr<Dialog> pDlg)
 {
     if (pDlg)
         maOpenedDialogs.push_back(std::make_pair(nDialogId, pDlg));
 }
 
-VclPtr<Dialog> SfxViewShell::GetOpenedDlg(vcl::DialogID nDialogId)
+VclPtr<Dialog> SfxViewShell::GetOpenedDlg(vcl::LOKWindowId nDialogId)
 {
     const auto it = std::find_if(maOpenedDialogs.begin(),
                                  maOpenedDialogs.end(),
-                                 [&nDialogId](const std::pair<vcl::DialogID, VclPtr<Dialog>> aItem) {
+                                 [&nDialogId](const std::pair<vcl::LOKWindowId, VclPtr<Dialog>> aItem) {
                                      return nDialogId == aItem.first;
                                  });
 
@@ -1980,11 +1980,11 @@ VclPtr<Dialog> SfxViewShell::GetOpenedDlg(vcl::DialogID nDialogId)
     return ret;
 }
 
-void SfxViewShell::UnregisterDlg(vcl::DialogID nDialogId)
+void SfxViewShell::UnregisterDlg(vcl::LOKWindowId nDialogId)
 {
     maOpenedDialogs.erase(std::remove_if(maOpenedDialogs.begin(),
                                          maOpenedDialogs.end(),
-                                         [&nDialogId](const std::pair<vcl::DialogID, VclPtr<Dialog>> aItem) {
+                                         [&nDialogId](const std::pair<vcl::LOKWindowId, VclPtr<Dialog>> aItem) {
                                              return aItem.first == nDialogId;
                                          }));
 }

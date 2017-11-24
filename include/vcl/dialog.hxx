@@ -57,10 +57,6 @@ private:
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;
 
-    vcl::IDialogNotifier*  mpDialogNotifier; // to emit LOK callbacks
-
-    static vcl::DialogID   mnLastDialogId;
-
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
     SAL_DLLPRIVATE VclPtr<vcl::Window> AddBorderWindow(vcl::Window* pParent, WinBits nBits);
@@ -75,10 +71,6 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
-    /// Dialog ID (used for LOK)
-    vcl::DialogID          maID;
-    /// Necessary to register dialog notifier instance to emit LOK callbacks
-    void                   registerDialogNotifier(vcl::IDialogNotifier* pDialogNotifier);
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
