@@ -2755,6 +2755,26 @@ bool ScOutputData::AdjustAreaParamClipRect(OutputAreaParam& rAreaParam)
     return bVClip;
 }
 
+// Set nNeededPixel and nEngineWidth if there are no extanding to empty cells,
+// but cuting on the left or right is
+void ScOutputData::AdjustNeededPixel( DrawEditParam& rParam, OutputAreaParam& rAreaParam,
+                    long& rEngineWidth, long& rNeededPixel, long nLeftM, long nRightM )
+{
+    if ( rParam.mbCellIsValue && ( rAreaParam.mbLeftClip || rAreaParam.mbRightClip ) )
+    {
+        rParam.mpEngine->SetText( OUString( "###" ) );
+        rEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
+        if ( rParam.mbPixelToLogic )
+            rNeededPixel = mpRefDevice->LogicToPixel( Size( rEngineWidth,0 ) ).Width();
+        else
+            rNeededPixel = rEngineWidth;
+
+        rNeededPixel += nLeftM + nRightM;
+
+        //  No clip marks if "###" doesn't fit (same as in DrawStrings)
+    }
+}
+
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     OSL_ASSERT(rParam.meOrient == SvxCellOrientation::Standard);
@@ -2933,19 +2953,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                 }
             }
         }
-
-        if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
-        {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
-
-            //  No clip marks if "###" doesn't fit (same as in DrawStrings)
-        }
+        AdjustNeededPixel( rParam, aAreaParam, nEngineWidth, nNeededPixel, nLeftM, nRightM );
 
         if (eOutHorJust != SvxCellHorJustify::Left)
         {
@@ -3358,19 +3366,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                 }
             }
         }
-
-        if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
-        {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
-
-            //  No clip marks if "###" doesn't fit (same as in DrawStrings)
-        }
+        AdjustNeededPixel( rParam, aAreaParam, nEngineWidth, nNeededPixel, nLeftM, nRightM );
     }
 
     long nStartX = aAreaParam.maAlignRect.Left();
@@ -3619,19 +3615,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                 }
             }
         }
-
-        if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
-        {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
-
-            //  No clip marks if "###" doesn't fit (same as in DrawStrings)
-        }
+        AdjustNeededPixel( rParam, aAreaParam, nEngineWidth, nNeededPixel, nLeftM, nRightM );
     }
 
     long nStartX = aAreaParam.maAlignRect.Left();
@@ -3853,18 +3837,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             nEngineWidth, nEngineHeight, nNeededPixel,
             aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
 
-        if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
-        {
-            rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-            if (rParam.mbPixelToLogic)
-                nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-            else
-                nNeededPixel = nEngineWidth;
-            nNeededPixel += nLeftM + nRightM;
-
-            //  No clip marks if "###" doesn't fit (same as in DrawStrings)
-        }
+        AdjustNeededPixel( rParam, aAreaParam, nEngineWidth, nNeededPixel, nLeftM, nRightM );
 
         if ( eOutHorJust != SvxCellHorJustify::Left )
         {
@@ -4183,19 +4156,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             nEngineWidth, nEngineHeight, nNeededPixel,
             aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
     }
-
-    if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
-    {
-        rParam.mpEngine->SetText(OUString("###"));
-        nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-        if (rParam.mbPixelToLogic)
-            nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-        else
-            nNeededPixel = nEngineWidth;
-        nNeededPixel += nLeftM + nRightM;
-
-        //  No clip marks if "###" doesn't fit (same as in DrawStrings)
-    }
+    AdjustNeededPixel( rParam, aAreaParam, nEngineWidth, nNeededPixel, nLeftM, nRightM );
 
     if (eOutHorJust != SvxCellHorJustify::Left)
     {
