@@ -20,3 +20,14 @@
  
      next:
  	vx += ux;
+--- misc/pixman/pixman/pixman-bits-image.c
++++ misc/build/pixman/pixman/pixman-bits-image.c
+@@ -306,7 +306,7 @@
+     sgtot = CLIP (sgtot, 0, 0xff);
+     sbtot = CLIP (sbtot, 0, 0xff);
+ 
+-    return ((satot << 24) | (srtot << 16) | (sgtot <<  8) | (sbtot));
++    return (((uint32_t)satot << 24) | (srtot << 16) | (sgtot <<  8) | (sbtot));
+ }
+ 
+ static force_inline uint32_t
