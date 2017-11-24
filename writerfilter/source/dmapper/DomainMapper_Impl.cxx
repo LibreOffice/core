@@ -267,7 +267,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
-    m_bUsingEnhancedFields = !utl::ConfigManager::IsFuzzing() ? officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get(m_xComponentContext) : false;
+    m_bUsingEnhancedFields = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get(m_xComponentContext);
 
     m_pSdtHelper.reset(new SdtHelper(*this));
 
