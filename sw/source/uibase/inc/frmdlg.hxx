@@ -50,7 +50,7 @@ public:
     SwFrameDlg(   SfxViewFrame const *pFrame, vcl::Window *pParent,
                 const SfxItemSet& rCoreSet,
                 bool bNewFrame,
-                const OUString& sResType = OUString("FrameDialog"),
+                const OUString& sResType,
                 bool bFormat     = false,
                 const OString& sDefPage = OString(),
                 const OUString* pFormatStr  = nullptr);

@@ -174,8 +174,8 @@ public:
                        SwPageFrame const& rPageFrame,
                        const SwRect& _rRect,
                        const Color* _pPageBackgrdColor,
-                       const bool _bIsPageRightToLeft = false,
-                       sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr );
+                       const bool _bIsPageRightToLeft,
+                       sdr::contact::ViewObjectContactRedirector* pRedirector );
 
     /**
      * Is passed to the DrawEngine as a Link and decides what is painted

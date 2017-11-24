@@ -116,8 +116,8 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     m_pRepeatHeaderNF->SetModifyHdl( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
     m_pHeaderCB->SetClickHdl(LINK(this, SwInsTableDlg, CheckBoxHdl));
     m_pRepeatHeaderCB->SetClickHdl(LINK(this, SwInsTableDlg, ReapeatHeaderCheckBoxHdl));
-    ReapeatHeaderCheckBoxHdl();
-    CheckBoxHdl();
+    ReapeatHeaderCheckBoxHdl(nullptr);
+    CheckBoxHdl(nullptr);
 
     sal_Int64 nMax = m_pRowNF->GetValue();
     if( nMax <= 1 )
@@ -208,7 +208,7 @@ IMPL_LINK( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
 IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, Button*, void)
 {
     m_pRepeatHeaderCB->Enable(m_pHeaderCB->IsChecked());
-    ReapeatHeaderCheckBoxHdl();
+    ReapeatHeaderCheckBoxHdl(nullptr);
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)

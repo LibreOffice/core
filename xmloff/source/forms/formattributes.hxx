@@ -377,7 +377,7 @@ namespace xmloff
         void addEnumPropertyImpl(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
-            const css::uno::Type* _pType = nullptr);
+            const css::uno::Type* _pType);
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,

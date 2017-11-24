@@ -56,14 +56,14 @@ class SwDbgOut
 protected:
         VclPtr<OutputDevice> pOut;
 public:
-        inline SwDbgOut( OutputDevice* pOutDev, const bool bOn = true );
+        inline SwDbgOut( OutputDevice* pOutDev, const bool bOn );
 };
 
 class DbgBackColor : public SwDbgOut
 {
         Color   aOldFillColor;
 public:
-        DbgBackColor( OutputDevice* pOut, const bool bOn = true );
+        DbgBackColor( OutputDevice* pOut, const bool bOn );
        ~DbgBackColor();
 };
 
@@ -71,8 +71,8 @@ class DbgRect : public SwDbgOut
 {
 public:
         DbgRect( OutputDevice* pOut, const tools::Rectangle &rRect,
-                 const bool bOn = true,
-                 ColorData eColor = COL_LIGHTBLUE );
+                 const bool bOn,
+                 ColorData eColor );
 };
 
 inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const bool bOn )

@@ -297,7 +297,7 @@ class XMLNumberWithoutZeroPropHdl : public XMLPropertyHandler
 {
     sal_Int8        nBytes;
 public:
-    explicit XMLNumberWithoutZeroPropHdl( sal_Int8 nB = 4 );
+    explicit XMLNumberWithoutZeroPropHdl( sal_Int8 nB );
     virtual ~XMLNumberWithoutZeroPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -312,6 +312,7 @@ public:
 class XMLNumberWithAutoInsteadZeroPropHdl : public XMLNumberWithoutZeroPropHdl
 {
 public:
+    explicit XMLNumberWithAutoInsteadZeroPropHdl() : XMLNumberWithoutZeroPropHdl(4) {}
     virtual ~XMLNumberWithAutoInsteadZeroPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

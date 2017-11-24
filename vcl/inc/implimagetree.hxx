@@ -70,7 +70,7 @@ public:
     bool loadImage(
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized,
-        const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
+        const ImageLoadFlags eFlags);
 
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,
      *  if the ImplImageTree singleton were destroyed during exit that would

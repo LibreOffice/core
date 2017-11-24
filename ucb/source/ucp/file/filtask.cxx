@@ -409,7 +409,7 @@ TaskManager::startTask(
     {
         throw DuplicateCommandIdentifierException( OSL_LOG_PREFIX );
     }
-    m_aTaskMap[ CommandId ] = TaskHandling( xCommandEnv );
+    m_aTaskMap.emplace( CommandId, TaskHandling( xCommandEnv ));
 }
 
 

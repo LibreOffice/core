@@ -59,8 +59,8 @@ class SwInsTableDlg : public SfxModalDialog
     DECL_LINK( ModifyRowCol, Edit&, void );
     DECL_LINK( AutoFormatHdl, Button*, void );
     DECL_LINK( OKHdl, Button*, void);
-    DECL_LINK( CheckBoxHdl, Button* = nullptr, void);
-    DECL_LINK( ReapeatHeaderCheckBoxHdl, Button* = nullptr, void);
+    DECL_LINK( CheckBoxHdl, Button*, void);
+    DECL_LINK( ReapeatHeaderCheckBoxHdl, Button*, void);
     DECL_LINK( ModifyRepeatHeaderNF_Hdl, Edit&, void );
 
 public:

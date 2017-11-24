@@ -168,8 +168,8 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
     mpHeaderCB->SetClickHdl(LINK(this, SwConvertTableDlg, CheckBoxHdl));
     mpRepeatHeaderCB->SetClickHdl(LINK(this, SwConvertTableDlg, ReapeatHeaderCheckBoxHdl));
-    ReapeatHeaderCheckBoxHdl();
-    CheckBoxHdl();
+    ReapeatHeaderCheckBoxHdl(nullptr);
+    CheckBoxHdl(nullptr);
 }
 
 SwConvertTableDlg:: ~SwConvertTableDlg()
@@ -225,7 +225,7 @@ IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton, void )
 IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, Button*, void)
 {
     mpRepeatHeaderCB->Enable(mpHeaderCB->IsChecked());
-    ReapeatHeaderCheckBoxHdl();
+    ReapeatHeaderCheckBoxHdl(nullptr);
 }
 
 IMPL_LINK_NOARG(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)

@@ -116,17 +116,17 @@ public:
     bool IsFly() const { return m_bFly; }
     void SetRest( const bool bNew ) { m_bRest = bNew; }
     bool IsRest() const { return m_bRest; }
-    void SetBlinking( const bool bNew = true ) { m_bBlinking = bNew; }
+    void SetBlinking( const bool bNew ) { m_bBlinking = bNew; }
     bool IsBlinking() const { return m_bBlinking; }
-    void SetContent( const bool bNew = true ) { m_bContent = bNew; }
+    void SetContent( const bool bNew ) { m_bContent = bNew; }
     bool HasContent() const { return m_bContent; }
-    void SetRedline( const bool bNew = true ) { m_bRedline = bNew; }
+    void SetRedline( const bool bNew ) { m_bRedline = bNew; }
     bool HasRedline() const { return m_bRedline; }
     void SetForcedLeftMargin() { m_bForcedLeftMargin = true; }
     bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
-    void SetHanging( const bool bNew = true ) { m_bHanging = bNew; }
+    void SetHanging( const bool bNew ) { m_bHanging = bNew; }
     bool IsHanging() const { return m_bHanging; }
-    void SetUnderscore( const bool bNew = true ) { m_bUnderscore = bNew; }
+    void SetUnderscore( const bool bNew ) { m_bUnderscore = bNew; }
     bool HasUnderscore() const { return m_bUnderscore; }
 
     // Respecting empty dummy lines

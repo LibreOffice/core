@@ -109,10 +109,10 @@ public:
     // --> OD 2008-02-27 #refactorlists# - removed <rNewSet>
     SwUndoFormatAttr( const SfxItemSet& rOldSet,
                    SwFormat& rFormat,
-                   bool bSaveDrawPt = true );
+                   bool bSaveDrawPt );
     SwUndoFormatAttr( const SfxPoolItem& rItem,
                    SwFormat& rFormat,
-                   bool bSaveDrawPt = true );
+                   bool bSaveDrawPt );
 
     virtual ~SwUndoFormatAttr() override;
 

@@ -296,9 +296,9 @@ public:
     virtual bool UnitDown(SwPaM *, const SwTwips nOffset,
                             bool bSetInReadOnly ) const override;
     bool UnitUp_(SwPaM *, const SwTwips nOffset,
-                            bool bSetInReadOnly = false ) const;
+                            bool bSetInReadOnly ) const;
     bool UnitDown_(SwPaM *, const SwTwips nOffset,
-                            bool bSetInReadOnly = false ) const;
+                            bool bSetInReadOnly ) const;
 
     /**
      * Prepares the cursor position for a visual cursor move (BiDi).

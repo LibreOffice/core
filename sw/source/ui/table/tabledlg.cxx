@@ -1278,7 +1278,7 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
         m_pSplitRowCB->Hide();
     }
 
-    HeadLineCBClickHdl();
+    HeadLineCBClickHdl(nullptr);
 }
 
 SwTextFlowPage::~SwTextFlowPage()
@@ -1628,7 +1628,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     m_pTextDirectionLB->SaveValue();
     m_pVertOrientLB->SaveValue();
 
-    HeadLineCBClickHdl();
+    HeadLineCBClickHdl(nullptr);
 }
 
 void SwTextFlowPage::SetShell(SwWrtShell* pSh)

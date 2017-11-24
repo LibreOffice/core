@@ -133,7 +133,7 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
         m_List.insert(std::move(pBlinkPor));
         pTextFrame->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )
-            const_cast<SwLineLayout*>(static_cast<const SwLineLayout*>(pPor))->SetBlinking();
+            const_cast<SwLineLayout*>(static_cast<const SwLineLayout*>(pPor))->SetBlinking(true);
 
         if( !aTimer.IsActive() )
             aTimer.Start();

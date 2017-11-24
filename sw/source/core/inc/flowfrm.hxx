@@ -137,7 +137,7 @@ protected:
     void LockJoin()   { m_bLockJoin = true;  }
     void UnlockJoin() { m_bLockJoin = false; }
 
-    bool CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnKeepValue = false );
+    bool CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnKeepValue );
     bool MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways = false );
     bool MoveBwd( bool &rbReformat );
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat )=0;

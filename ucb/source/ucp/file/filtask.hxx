@@ -97,8 +97,7 @@ namespace fileaccess
         public:
 
             explicit TaskHandling(
-                const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv
-                = css::uno::Reference< css::ucb::XCommandEnvironment >( nullptr ) )
+                const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv )
                 : m_bAbort( false ),
                   m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),

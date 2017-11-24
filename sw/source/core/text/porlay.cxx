@@ -406,7 +406,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
                 if( pPos->IsHangingPortion() )
                 {
-                    SetHanging();
+                    SetHanging(true);
                     rInf.GetParaPortion()->SetMargin();
                 }
 
@@ -491,11 +491,11 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     {
                         OUString aText;
                         if( pPos->GetExpText( rInf, aText ) && !aText.isEmpty() )
-                            SetContent();
+                            SetContent(true);
                     }
                     else if( ( pPos->InTextGrp() || pPos->IsMultiPortion() ) &&
                              pPos->GetLen() )
-                        SetContent();
+                        SetContent(true);
                 }
 
                 bTmpDummy &= !HasContent() && ( !pPos->Width() || pPos->IsFlyPortion() );

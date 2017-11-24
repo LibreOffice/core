@@ -1871,7 +1871,7 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
             }
         }
 
-        SwUndo * pUndo = new SwUndoFormatAttr(aOldSet, rFormat);
+        SwUndo * pUndo = new SwUndoFormatAttr(aOldSet, rFormat, /*bSaveDrawPt*/true);
 
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
