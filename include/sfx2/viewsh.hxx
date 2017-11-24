@@ -142,11 +142,9 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
 
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell
 {
-#ifdef INCLUDED_SFX2_VIEWSH_HXX
 friend class SfxViewFrame;
 friend class SfxBaseController;
 friend class SfxPrinterController;
-#endif
 
     std::unique_ptr<struct SfxViewShell_Impl>   pImpl;
     SfxViewFrame*               pFrame;
