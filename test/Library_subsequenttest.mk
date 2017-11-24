@@ -107,6 +107,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xmultipleoperation \
 	test/source/sheet/xprintareas \
 	test/source/sheet/xrecentfunctions \
+	test/source/sheet/xscenario \
 	test/source/sheet/xscenarioenhanced \
 	test/source/sheet/xscenarios \
 	test/source/sheet/xscenariossupplier \
