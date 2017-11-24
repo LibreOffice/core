@@ -357,7 +357,7 @@ SbiDllMgr* SbiInstance::GetDllMgr()
 }
 
 // #39629 create NumberFormatter with the help of a static method now
-SvNumberFormatter* SbiInstance::GetNumberFormatter()
+std::shared_ptr<SvNumberFormatter> SbiInstance::GetNumberFormatter()
 {
     LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
     SvtSysLocale aSysLocale;
@@ -367,25 +367,24 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
         if( eLangType != meFormatterLangType ||
             eDate != meFormatterDateOrder )
         {
-            pNumberFormatter.reset(nullptr);
+            pNumberFormatter.reset();
         }
     }
     meFormatterLangType = eLangType;
     meFormatterDateOrder = eDate;
     if( !pNumberFormatter )
     {
-        pNumberFormatter.reset(PrepareNumberFormatter( nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx,
-        &meFormatterLangType, &meFormatterDateOrder ));
+        pNumberFormatter = PrepareNumberFormatter( nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx,
+                &meFormatterLangType, &meFormatterDateOrder);
     }
-    return pNumberFormatter.get();
+    return pNumberFormatter;
 }
 
 // #39629 offer NumberFormatter static too
-SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
+std::shared_ptr<SvNumberFormatter> SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
     sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
     LanguageType const * peFormatterLangType, DateOrder const * peFormatterDateOrder )
 {
-    SvNumberFormatter* pNumberFormater = nullptr;
     LanguageType eLangType;
     if( peFormatterLangType )
     {
@@ -406,10 +405,11 @@ SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx
         eDate = aSysLocale.GetLocaleData().getDateOrder();
     }
 
-    pNumberFormater = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
+    std::shared_ptr<SvNumberFormatter> pNumberFormatter(
+            new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
     sal_Int32 nCheckPos = 0; short nType;
-    rnStdTimeIdx = pNumberFormater->GetStandardFormat( css::util::NumberFormat::TIME, eLangType );
+    rnStdTimeIdx = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eLangType );
 
     // the formatter's standard templates have only got a two-digit date
     // -> registering an own format
@@ -428,14 +428,14 @@ SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx
         case DateOrder::YMD: aDateStr = "YYYY/MM/DD"; break;
     }
     OUString aStr( aDateStr );      // PutandConvertEntry() modifies string!
-    pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,
+    pNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateIdx, LANGUAGE_ENGLISH_US, eLangType );
     nCheckPos = 0;
     aDateStr += " HH:MM:SS";
     aStr = aDateStr;
-    pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,
+    pNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateTimeIdx, LANGUAGE_ENGLISH_US, eLangType );
-    return pNumberFormater;
+    return pNumberFormatter;
 }
 
 

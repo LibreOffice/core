@@ -2332,7 +2332,7 @@ void SbRtl_FormatDateTime(StarBASIC *, SbxArray & rPar, bool)
         // Dienstag, 21. December 2004
     case 1:
         {
-            SvNumberFormatter* pFormatter = nullptr;
+            std::shared_ptr<SvNumberFormatter> pFormatter;
             if( GetSbData()->pInst )
             {
                 pFormatter = GetSbData()->pInst->GetNumberFormatter();
@@ -2347,11 +2347,6 @@ void SbRtl_FormatDateTime(StarBASIC *, SbxArray & rPar, bool)
             const sal_uInt32 nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eLangType );
             Color* pCol;
             pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );
-
-            if( !GetSbData()->pInst )
-            {
-                delete pFormatter;
-            }
             break;
         }
 

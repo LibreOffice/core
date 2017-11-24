@@ -133,7 +133,7 @@ class SbiInstance
     std::unique_ptr<SbiDdeControl>    pDdeCtrl;
     // DLL-Calls (DECLARE)
     std::unique_ptr<SbiDllMgr>        pDllMgr;
-    std::unique_ptr<SvNumberFormatter> pNumberFormatter;
+    std::shared_ptr<SvNumberFormatter> pNumberFormatter;
     StarBASIC*      pBasic;
     LanguageType    meFormatterLangType;
     DateOrder       meFormatterDateOrder;
@@ -186,13 +186,13 @@ public:
     SbiDllMgr* GetDllMgr();
     SbiRTLData* GetRTLData() const { return const_cast<SbiRTLData*>(&aRTLData); }
 
-    SvNumberFormatter* GetNumberFormatter();
+    std::shared_ptr<SvNumberFormatter> GetNumberFormatter();
     sal_uInt32 GetStdDateIdx() const { return nStdDateIdx; }
     sal_uInt32 GetStdTimeIdx() const { return nStdTimeIdx; }
     sal_uInt32 GetStdDateTimeIdx() const { return nStdDateTimeIdx; }
 
     // offer NumberFormatter also static
-    static SvNumberFormatter* PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
+    static std::shared_ptr<SvNumberFormatter> PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
         sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
         LanguageType const * peFormatterLangType=nullptr, DateOrder const * peFormatterDateOrder=nullptr );
 };
