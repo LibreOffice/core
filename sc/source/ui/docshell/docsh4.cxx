@@ -1694,8 +1694,6 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                             rReq.Done();
                         }
                         pDlg.disposeAndClear();
-
-                        rStyleSet.ClearItem( ATTR_PAGE_PAPERTRAY );
                     }
                 }
             }

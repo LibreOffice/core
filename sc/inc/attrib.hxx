@@ -190,31 +190,6 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
     return *this;
 }
 
-// ScTableListItem: manages a list of tables
-
-class ScTableListItem : public SfxPoolItem
-{
-public:
-            ScTableListItem();
-            ScTableListItem( const ScTableListItem& rCpy );
-            virtual ~ScTableListItem() override;
-
-    ScTableListItem& operator=( const ScTableListItem &rCpy );
-
-    // "pure virtual methods" from SfxPoolItem
-    virtual bool                operator==( const SfxPoolItem& ) const override;
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                  MapUnit eCoreMetric,
-                                  MapUnit ePresMetric,
-                                  OUString &rText,
-                                  const IntlWrapper& rIntl ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
-
-public:
-    sal_uInt16  nCount;
-    std::unique_ptr<SCTAB[]>  pTabArr;
-};
-
 // page format item: contents of header and footer
 
 #define SC_HF_LEFTAREA   1
