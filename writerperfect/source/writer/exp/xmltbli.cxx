@@ -50,9 +50,14 @@ void XMLTableCellContext::startElement(const OUString &/*rName*/, const css::uno
         const OUString &rAttributeName = xAttribs->getNameByIndex(i);
         const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
 
-        OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-        OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
-        aPropertyList.insert(sName.getStr(), sValue.getStr());
+        if (rAttributeName == "table:style-name")
+            FillStyles(rAttributeValue, mrImport.GetAutomaticCellStyles(), mrImport.GetCellStyles(), aPropertyList);
+        else
+        {
+            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            aPropertyList.insert(sName.getStr(), sValue.getStr());
+        }
     }
     mrImport.GetGenerator().openTableCell(aPropertyList);
 }

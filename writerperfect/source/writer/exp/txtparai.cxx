@@ -17,13 +17,6 @@ using namespace com::sun::star;
 namespace
 {
 
-/// Looks for rName in rAutomaticStyles (and failing that, in rNamedStyles) and
-/// fills rPropertyList based on that.
-void FillStyles(const OUString &rName,
-                std::map<OUString, librevenge::RVNGPropertyList> &rAutomaticStyles,
-                std::map<OUString, librevenge::RVNGPropertyList> &rNamedStyles,
-                librevenge::RVNGPropertyList &rPropertyList);
-
 /// Looks for rName in rStyles and fills rPropertyList based on that
 /// (rAutomaticStyles and rNamedStyles are a list of possible parents).
 void FillStyle(const OUString &rName,
@@ -42,7 +35,7 @@ void FillStyle(const OUString &rName,
         // Style has a parent.
         OUString aParent = OStringToOUString(rStyle["style:parent-style-name"]->getStr().cstr(), RTL_TEXTENCODING_UTF8);
         if (!aParent.isEmpty())
-            FillStyles(aParent, rAutomaticStyles, rNamedStyles, rPropertyList);
+            writerperfect::exp::FillStyles(aParent, rAutomaticStyles, rNamedStyles, rPropertyList);
     }
 
     // Apply properties from named style.
@@ -52,15 +45,6 @@ void FillStyle(const OUString &rName,
         if (OString("style:parent-style-name") != itProp.key())
             rPropertyList.insert(itProp.key(), itProp()->clone());
     }
-}
-
-void FillStyles(const OUString &rName,
-                std::map<OUString, librevenge::RVNGPropertyList> &rAutomaticStyles,
-                std::map<OUString, librevenge::RVNGPropertyList> &rNamedStyles,
-                librevenge::RVNGPropertyList &rPropertyList)
-{
-    FillStyle(rName, rAutomaticStyles, rAutomaticStyles, rNamedStyles, rPropertyList);
-    FillStyle(rName, rNamedStyles, rAutomaticStyles, rNamedStyles, rPropertyList);
 }
 
 }
@@ -341,6 +325,15 @@ rtl::Reference<XMLImportContext> CreateParagraphOrSpanChildContext(XMLImport &rI
     if (rName == "text:tab")
         return new XMLTabContext(rImport, rTextPropertyList);
     return nullptr;
+}
+
+void FillStyles(const OUString &rName,
+                std::map<OUString, librevenge::RVNGPropertyList> &rAutomaticStyles,
+                std::map<OUString, librevenge::RVNGPropertyList> &rNamedStyles,
+                librevenge::RVNGPropertyList &rPropertyList)
+{
+    FillStyle(rName, rAutomaticStyles, rAutomaticStyles, rNamedStyles, rPropertyList);
+    FillStyle(rName, rNamedStyles, rAutomaticStyles, rNamedStyles, rPropertyList);
 }
 
 } // namespace exp
