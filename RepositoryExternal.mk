@@ -3535,7 +3535,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
-	gpgmepp-w32spawn \
+	gpgme-w32spawn \
 ))
 
 endif

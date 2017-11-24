@@ -23,6 +23,10 @@ else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/libgpgmepp.6.dylib,lang/cpp/src/.libs/libgpgmepp.6.dylib))
 $(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/libgpgme.11.dylib,src/.libs/libgpgme.11.dylib))
 
+else ifeq ($(OS),WNT)
+
+$(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/gpgme-w32spawn.exe,src/gpgme-w32spawn.exe))
+
 endif
 
 endif # $(DISABLE_DYNLOADING)
