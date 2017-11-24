@@ -103,7 +103,7 @@ void SwarmSolverTest::testUnconstrained()
     uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aSolution.getLength(), aVariables.getLength());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], .2);
 }
 
 void SwarmSolverTest::testVariableBounded()
