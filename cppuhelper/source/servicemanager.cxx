@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <iostream>
 #include <cassert>
 #include <vector>
 
@@ -39,6 +40,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 
@@ -1806,6 +1808,33 @@ cppuhelper::ServiceManager::findServiceImplementation(
     return impl;
 }
 
+/// Make a simpler unique name for preload / progress reporting.
+static rtl::OUString simplifyModule(const rtl::OUString &uri)
+{
+    sal_Int32 nIdx;
+    OUStringBuffer edit(uri);
+    if ((nIdx = edit.lastIndexOf('/')) > 0)
+        edit.remove(0,nIdx+1);
+    if ((nIdx = edit.lastIndexOf(':')) > 0)
+        edit.remove(0,nIdx+1);
+    if ((nIdx = edit.lastIndexOf("lo.so")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf(".3")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf("gcc3.so")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf(".so")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf("_uno")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf(".jar")) > 0)
+        edit.truncate(nIdx);
+    if (edit.indexOf("lib") == 0)
+        edit.remove(0,3);
+    return edit.makeStringAndClear();
+}
+
+/// Used only by LibreOfficeKit when used by Online to pre-initialize
 void cppuhelper::ServiceManager::preloadImplementations() {
 #ifdef DISABLE_DYNLOADING
     abort();
@@ -1814,6 +1843,9 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     osl::MutexGuard g(rBHelper.rMutex);
     css::uno::Environment aSourceEnv(css::uno::Environment::getCurrent());
 
+    std::cerr << "preload: ";
+    std::vector<OUString> aReported;
+
     // loop all implementations
     for (Data::NamedImplementations::const_iterator iterator(
             data_.namedImplementations.begin());
@@ -1821,8 +1853,15 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     {
         try
         {
+            const rtl::OUString &aLibrary = iterator->second->info->uri;
+            if (std::find(aReported.begin(), aReported.end(), aLibrary) == aReported.end())
+            {
+                std::cerr << simplifyModule(aLibrary) << " ";
+                aReported.push_back(aLibrary);
+            }
+
             // expand absolute URI implementation component library
-            aUri = cppu::bootstrap_expandUri(iterator->second->info->uri);
+            aUri = cppu::bootstrap_expandUri(aLibrary);
         }
         catch (css::lang::IllegalArgumentException& aError)
         {
@@ -1922,6 +1961,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             aModule.release();
         }
     }
+    std::cerr << std::endl;
 #endif
 }
 
