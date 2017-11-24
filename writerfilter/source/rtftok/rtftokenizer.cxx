@@ -79,7 +79,7 @@ RTFError RTFTokenizer::resolveParse()
         m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
     }
 
-    while ((Strm().ReadChar(ch), !Strm().eof()))
+    while (Strm().ReadChar(ch), !Strm().eof())
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
 
