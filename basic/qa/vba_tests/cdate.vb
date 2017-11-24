@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testCDate()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -28,7 +28,7 @@ Function verify_testCDate() As String
     On Error GoTo errorHandler
 
     date2 = 25246
-    date1 = CDate("12.2.1969") '2/12/1969
+    date1 = CDate("12/02/1969") '02/12/1969
     TestLog_ASSERT date1 = date2, "the return CDate is: " & date1
 
     date2 = 28313
