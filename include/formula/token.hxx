@@ -84,6 +84,9 @@ enum StackVar : sal_uInt8
 
 // Only to be used for debugging output. No guarantee of stability of the
 // return value.
+
+// Turn this into an operator<< when StackVar becomes a scoped enum
+
 inline std::string StackVarEnumToString(StackVar const e)
 {
     switch (e)
