@@ -784,7 +784,7 @@ bool Dialog::ImplStartExecuteModal()
     case Application::DialogCancelMode::Off:
         break;
     case Application::DialogCancelMode::Silent:
-        if (ImplGetDialogText(this) == "Character")
+        if (GetLOKNotifier())
             break;
 
         SAL_INFO(
