@@ -20,6 +20,7 @@
 #include <test/sheet/xdatapilottablessupplier.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xprintareas.hxx>
+#include <test/sheet/xscenario.hxx>
 #include <test/sheet/xscenarioenhanced.hxx>
 #include <test/sheet/xscenariossupplier.hxx>
 #include <test/sheet/xsheetannotationssupplier.hxx>
@@ -60,6 +61,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XMultipleOperation,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
+                                               public apitest::XScenario,
                                                public apitest::XScenarioEnhanced,
                                                public apitest::XScenariosSupplier,
                                                public apitest::XSearchable,
@@ -146,6 +148,10 @@ public:
     CPPUNIT_TEST(testReplaceAll);
     CPPUNIT_TEST(testCreateReplaceDescriptor);
 
+    // XScenario
+    // test was disabled in qadevOOo/tests/java/ifc/sheet/_XScenario.java
+    CPPUNIT_TEST(testScenario);
+
     // XScenarioEnhanced
     CPPUNIT_TEST(testGetRanges);
 
@@ -218,8 +224,8 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     xSheet->getCellByPosition(5 ,5)->setValue(15);
     xSheet->getCellByPosition(2 ,0)->setValue(-5.15);
@@ -232,6 +238,7 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
 
     uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
     aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
+
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
     xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
     xSheets->getByName("Scenario");
