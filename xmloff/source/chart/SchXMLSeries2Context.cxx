@@ -803,7 +803,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                         , uno::makeAny(chart::ChartAxisAssign::SECONDARY_Y) );
                 }
 
-                if( !(iStyle->msStyleName).isEmpty())
+                if( !iStyle->msStyleName.isEmpty())
                 {
                     if( rCurrStyleName != iStyle->msStyleName )
                     {
@@ -967,7 +967,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                 if( !xSeriesProp.is() )
                     continue;
 
-                if( !(iStyle->msStyleName).isEmpty())
+                if( !iStyle->msStyleName.isEmpty())
                 {
                     if( rCurrStyleName != iStyle->msStyleName )
                     {

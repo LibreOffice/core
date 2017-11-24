@@ -170,7 +170,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
         nTextStyle |= DrawTextFlags::Mono;
 
     if( bFillLayout )
-        (mpControlData->mpLayoutData->m_aDisplayText).clear();
+        mpControlData->mpLayoutData->m_aDisplayText.clear();
 
     const tools::Rectangle aRect(aPos, rSize);
     DrawControlText(*pDev, aRect, aText, nTextStyle,

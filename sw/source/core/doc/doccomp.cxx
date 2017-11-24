@@ -1722,7 +1722,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         {
             do {
                 SwPosition& rSttEnd = *pTmp->End(),
-                          & rEndStt = *(pTmp->GetNext())->Start();
+                          & rEndStt = *pTmp->GetNext()->Start();
                 const SwContentNode* pCNd;
                 if( rSttEnd == rEndStt ||
                     (!rEndStt.nContent.GetIndex() &&
@@ -1740,7 +1740,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                     else
                     {
                         // are consecutive, so combine
-                        rSttEnd = *(pTmp->GetNext())->End();
+                        rSttEnd = *pTmp->GetNext()->End();
                         delete pTmp->GetNext();
                     }
                 }

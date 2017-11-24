@@ -103,9 +103,9 @@ bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
     if ( bAtStart )
-        *(aCursorSt.m_pCursor)->GetPoint() = pMark->GetMarkStart();
+        *aCursorSt.m_pCursor->GetPoint() = pMark->GetMarkStart();
     else
-        *(aCursorSt.m_pCursor)->GetPoint() = pMark->GetMarkEnd();
+        *aCursorSt.m_pCursor->GetPoint() = pMark->GetMarkEnd();
 
     if(aCursorSt.RollbackIfIllegal()) return false;
 

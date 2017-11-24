@@ -723,7 +723,7 @@ bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
             pNotesPage->SetPageKind(PageKind::Notes);
 
             // Set notes master page
-            sal_uInt16 nMasterPageAfterPagesMasterPage = (pPage->TRG_GetMasterPage()).GetPageNum() + 1;
+            sal_uInt16 nMasterPageAfterPagesMasterPage = pPage->TRG_GetMasterPage().GetPageNum() + 1;
             pNotesPage->TRG_SetMasterPage(*GetMasterPage(nMasterPageAfterPagesMasterPage));
         }
 

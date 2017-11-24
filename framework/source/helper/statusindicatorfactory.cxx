@@ -152,7 +152,7 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     if (pItem != m_aStack.end())
     {
         pItem->m_nValue = 0;
-        (pItem->m_sText).clear();
+        pItem->m_sText.clear();
     }
 
     css::uno::Reference< css::task::XStatusIndicator > xActive   = m_xActiveChild;

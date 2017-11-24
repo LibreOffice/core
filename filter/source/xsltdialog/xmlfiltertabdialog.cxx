@@ -117,7 +117,7 @@ bool XMLFilterTabDialog::onOk()
                     {
                         nErrorPage = m_nBasicPageId;
                         pErrorId = STR_ERROR_FILTER_NAME_EXISTS;
-                        pFocusWindow = (mpBasicPage->m_pEDFilterName);
+                        pFocusWindow = mpBasicPage->m_pEDFilterName;
                         aReplace1 = mpNewInfo->maFilterName;
                     }
 
@@ -172,7 +172,7 @@ bool XMLFilterTabDialog::onOk()
                                 {
                                     nErrorPage = m_nBasicPageId;
                                     pErrorId = STR_ERROR_TYPE_NAME_EXISTS;
-                                    pFocusWindow = (mpBasicPage->m_pEDInterfaceName);
+                                    pFocusWindow = mpBasicPage->m_pEDInterfaceName;
                                     aReplace1 = mpNewInfo->maInterfaceName;
                                     aReplace2 = *pFilterName;
                                 }
@@ -199,7 +199,7 @@ bool XMLFilterTabDialog::onOk()
             {
                 pErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
                 nErrorPage = m_nXSLTPageId;
-                pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
+                pFocusWindow = mpXSLTPage->m_pEDExportXSLT;
             }
         }
     }
@@ -215,7 +215,7 @@ bool XMLFilterTabDialog::onOk()
             {
                 pErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
                 nErrorPage = m_nXSLTPageId;
-                pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
+                pFocusWindow = mpXSLTPage->m_pEDImportTemplate;
             }
         }
     }
@@ -225,7 +225,7 @@ bool XMLFilterTabDialog::onOk()
     {
         pErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
         nErrorPage = m_nXSLTPageId;
-        pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
+        pFocusWindow = mpXSLTPage->m_pEDExportXSLT;
     }
 
     if (!pErrorId)
@@ -239,7 +239,7 @@ bool XMLFilterTabDialog::onOk()
             {
                 pErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;
                 nErrorPage = m_nXSLTPageId;
-                pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
+                pFocusWindow = mpXSLTPage->m_pEDImportTemplate;
             }
         }
     }

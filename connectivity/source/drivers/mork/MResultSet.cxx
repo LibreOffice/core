@@ -1048,7 +1048,7 @@ void SAL_CALL OResultSet::executeQuery()
         if (rTabs.empty() || !rTabs.begin()->second.is())
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
-        m_xTable = static_cast< OTable* > ((rTabs.begin()->second).get());
+        m_xTable = static_cast< OTable* > (rTabs.begin()->second.get());
     }
 
     m_nRowPos = 0;

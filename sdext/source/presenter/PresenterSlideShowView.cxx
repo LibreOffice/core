@@ -287,7 +287,7 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
         if (pDescriptor.get() != nullptr)
         {
             pDescriptor->msTitleTemplate = msTitleTemplate;
-            (pDescriptor->msTitle).clear();
+            pDescriptor->msTitle.clear();
             mpPresenterController->UpdatePaneTitles();
         }
     }
