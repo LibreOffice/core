@@ -1459,7 +1459,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
         {
             if (m_pImpl->m_bIsDescriptor)
             {
-                (m_pImpl->m_pProps->m_sCondition).clear();
+                m_pImpl->m_pProps->m_sCondition.clear();
             }
             else
             {
@@ -1475,9 +1475,9 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
             if (m_pImpl->m_bIsDescriptor)
             {
                 m_pImpl->m_pProps->m_bDDE = false;
-                (m_pImpl->m_pProps->m_sLinkFileName).clear();
-                (m_pImpl->m_pProps->m_sSectionRegion).clear();
-                (m_pImpl->m_pProps->m_sSectionFilter).clear();
+                m_pImpl->m_pProps->m_sLinkFileName.clear();
+                m_pImpl->m_pProps->m_sSectionRegion.clear();
+                m_pImpl->m_pProps->m_sSectionFilter.clear();
             }
             else
             {

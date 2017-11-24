@@ -175,7 +175,7 @@ Reference< XIdlClass > IdlAttributeFieldImpl::getType()
 
 FieldAccessMode IdlAttributeFieldImpl::getAccessMode()
 {
-    return ((getAttributeTypeDescr())->bReadOnly
+    return (getAttributeTypeDescr()->bReadOnly
             ? FieldAccessMode_READONLY : FieldAccessMode_READWRITE);
 }
 

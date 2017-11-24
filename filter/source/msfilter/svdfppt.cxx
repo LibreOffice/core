@@ -5412,7 +5412,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         if ( !aCharPropList.empty() && ( aCharPropList.back()->mnParagraph != nCurrentPara ) )
         {
             PPTCharPropSet* pCharPropSet = new PPTCharPropSet( *aCharPropList.back(), nCurrentPara );
-            (pCharPropSet->maString).clear();
+            pCharPropSet->maString.clear();
             pCharPropSet->mnOriginalTextPos = nStringLen - 1;
             aCharPropList.push_back( pCharPropSet );
         }
@@ -7060,7 +7060,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                     pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
                                                                     nHyperLenLeft = 0;
                                                                 }
-                                                                (pCurrent->maString).clear();
+                                                                pCurrent->maString.clear();
                                                                 pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
                                                             }
                                                             nIdx++;

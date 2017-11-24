@@ -83,6 +83,7 @@ public:
     bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
     bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *);
     bool TraverseCaseStmt(CaseStmt *);
+    bool VisitMemberExpr(const MemberExpr *f);
 private:
     void VisitSomeStmt(Stmt const * stmt, const Expr* cond, StringRef stmtName);
     Expr const * insideSizeof = nullptr;
@@ -334,10 +335,39 @@ bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)
         || isa<CXXFunctionalCastExpr>(sub))
         return true;
 
-//varDecl->dump();
-
     report(
         DiagnosticsEngine::Warning, "parentheses immediately inside vardecl statement",
+        parenExpr->getLocStart())
+        << parenExpr->getSourceRange();
+    return true;
+}
+
+bool UnnecessaryParen::VisitMemberExpr(const MemberExpr* memberExpr)
+{
+    if (ignoreLocation(memberExpr))
+        return true;
+
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(memberExpr->getBase()));
+    if (!parenExpr)
+        return true;
+    if (parenExpr->getLocStart().isMacroID())
+        return true;
+
+    auto sub = parenExpr->getSubExpr();
+    if (isa<CallExpr>(sub)) {
+        if (isa<CXXOperatorCallExpr>(sub))
+           return true;
+    } else if (isa<CXXConstructExpr>(sub)) {
+        // warn
+    } else if (isa<MemberExpr>(sub)) {
+        // warn
+    } else if (isa<DeclRefExpr>(sub)) {
+        // warn
+    } else
+        return true;
+
+    report(
+        DiagnosticsEngine::Warning, "unnecessary parentheses around member expr",
         parenExpr->getLocStart())
         << parenExpr->getSourceRange();
     return true;

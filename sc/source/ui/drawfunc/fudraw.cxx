@@ -417,7 +417,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if(rKEvt.GetKeyCode().IsMod2())
                     {
                         // move in 1 pixel distance
-                        Size aLogicSizeOnePixel = (pWindow) ? pWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
+                        Size aLogicSizeOnePixel = pWindow ? pWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
                     }

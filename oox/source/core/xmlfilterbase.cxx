@@ -744,7 +744,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                 XML_name,   aName,
                 FSEND);
 
-            switch ( ( aprop[n].Value ).getValueTypeClass() )
+            switch ( aprop[n].Value.getValueTypeClass() )
             {
                 case TypeClass_STRING:
                 {

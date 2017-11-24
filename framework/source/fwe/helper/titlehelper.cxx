@@ -261,7 +261,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
     aLock.clear ();
     // <- SYNCHRONIZED
 
-    if( ! (aEvent.Source).is() )
+    if( ! aEvent.Source.is() )
         return;
 
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListener.getContainer( cppu::UnoType<css::frame::XTitleChangeListener>::get());

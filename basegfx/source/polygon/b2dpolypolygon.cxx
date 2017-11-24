@@ -333,7 +333,7 @@ namespace basegfx
         // no Polygon exists.
         for(sal_uInt32 a(0); bRetval && a < mpPolyPolygon->count(); a++)
         {
-            if(!(mpPolyPolygon->getB2DPolygon(a)).isClosed())
+            if(!mpPolyPolygon->getB2DPolygon(a).isClosed())
             {
                 bRetval = false;
             }
@@ -362,7 +362,7 @@ namespace basegfx
 
         for(sal_uInt32 a(0); !bRetval && a < mpPolyPolygon->count(); a++)
         {
-            if((mpPolyPolygon->getB2DPolygon(a)).hasDoublePoints())
+            if(mpPolyPolygon->getB2DPolygon(a).hasDoublePoints())
             {
                 bRetval = true;
             }

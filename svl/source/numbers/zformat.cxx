@@ -809,7 +809,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
         // Original language/country may have to be reestablished
         if (rScan.GetConvertMode())
         {
-            (rScan.GetNumberformatter())->ChangeIntl(rScan.GetTmpLnge());
+            rScan.GetNumberformatter()->ChangeIntl(rScan.GetTmpLnge());
         }
         OUString sInsertCalendar; // a calendar resulting from parsing LCID
         OUString sStr;

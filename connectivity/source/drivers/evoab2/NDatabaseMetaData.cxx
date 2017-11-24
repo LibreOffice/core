@@ -162,7 +162,7 @@ namespace connectivity
         initFields();
 
         if ( nCol < nFields )
-            return (pFields[nCol]->pField)->value_type;
+            return pFields[nCol]->pField->value_type;
         return G_TYPE_STRING;
     }
 

@@ -559,7 +559,7 @@ bool SwFormatMeta::operator==( const SfxPoolItem & i_rOther ) const
 SfxPoolItem * SwFormatMeta::Clone( SfxItemPool * /*pPool*/ ) const
 {
     // if this is indeed a copy, then DoCopy must be called later!
-    return (m_pMeta) // #i105148# pool default may be cloned also!
+    return m_pMeta // #i105148# pool default may be cloned also!
         ? new SwFormatMeta( m_pMeta, Which() ) : new SwFormatMeta( Which() );
 }
 

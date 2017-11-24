@@ -434,7 +434,7 @@ void ContentIdxStoreImpl::SaveShellCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int
                 } while ( (_pStackCursor != nullptr ) &&
                     ((_pStackCursor = _pStackCursor->GetNext()) != static_cast<SwCursorShell*>(&rCurShell)->GetStackCursor()) );
 
-            for(SwPaM& rPaM : (static_cast<SwCursorShell*>(&rCurShell)->GetCursor_())->GetRingContainer())
+            for(SwPaM& rPaM : static_cast<SwCursorShell*>(&rCurShell)->GetCursor_()->GetRingContainer())
             {
                 lcl_ChkPaMBoth( m_aShellCursorEntries, nNode, nContent, rPaM);
             }
