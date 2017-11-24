@@ -251,6 +251,9 @@ private:
                long nEngineHeight, bool bWrapFields);
 
     bool AdjustAreaParamClipRect(OutputAreaParam& rAreaParam);
+    void AdjustNeededPixel( DrawEditParam& rParam, const OutputAreaParam& rAreaParam,
+                            long& rEngineWidth, long& rNeededPixel, const long nLeftM,
+                            const long nRightM );
 
 public:
     /**
