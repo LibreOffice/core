@@ -9,3 +9,14 @@
  #define pixman_fixed_to_double(f)	(double) ((f) / (double) pixman_fixed_1)
  #define pixman_double_to_fixed(d)	((pixman_fixed_t) ((d) * 65536.0))
  #define pixman_fixed_frac(f)		((f) & pixman_fixed_1_minus_e)
+--- misc/pixman/pixman/pixman-fast-path.c
++++ misc/build/pixman/pixman/pixman-fast-path.c
+@@ -2836,7 +2836,7 @@
+ 	sgtot = CLIP (sgtot, 0, 0xff);
+ 	sbtot = CLIP (sbtot, 0, 0xff);
+ 
+-	buffer[k] = (satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
++	buffer[k] = ((uint32_t)satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
+ 
+     next:
+ 	vx += ux;
