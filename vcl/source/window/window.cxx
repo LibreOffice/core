@@ -42,6 +42,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/IDialogRenderable.hxx>
 
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/uitest.hxx>
@@ -590,6 +591,8 @@ Window::~Window()
 
 } /* namespace vcl */
 
+vcl::LOKWindowId WindowImpl::mnLastWindowId = 1;
+
 WindowImpl::WindowImpl( WindowType nType )
 {
     maZoom                              = Fraction( 1, 1 );
@@ -736,6 +739,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mbNonHomogeneous                    = false;
     static bool bDoubleBuffer = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE");
     mbDoubleBufferingRequested = bDoubleBuffer; // when we are not sure, assume it cannot do double-buffering via RenderContext
+    mpLOKNotifier                       = nullptr;
+    mnLOKWindowId                       = mnLastWindowId++;
 }
 
 WindowImpl::~WindowImpl()
@@ -3146,6 +3151,21 @@ void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > const & x
     SAL_WARN_IF( !pWrapper, "vcl.window", "SetComponentInterface: No Wrapper!" );
     if ( pWrapper )
         pWrapper->SetWindowInterface( this, xIFace );
+}
+
+void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier)
+{
+    mpWindowImpl->mpLOKNotifier = pNotifier;
+}
+
+const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
+{
+    return mpWindowImpl->mpLOKNotifier;
+}
+
+vcl::LOKWindowId Window::GetLOKWindowId() const
+{
+    return mpWindowImpl->mnLOKWindowId;
 }
 
 void Window::ImplCallDeactivateListeners( vcl::Window *pNew )

@@ -23,41 +23,39 @@ namespace vcl
 
 typedef std::pair<const OString, const OString> LOKPayloadItem;
 
-typedef sal_uInt32 DialogID;
-
 class VCL_DLLPUBLIC IDialogRenderable
 {
 public:
     virtual ~IDialogRenderable();
 
-    virtual void paintDialog(const DialogID& rDialogID, VirtualDevice &rDevice) = 0;
+    virtual void paintDialog(const LOKWindowId& rLOKWindowId, VirtualDevice &rDevice) = 0;
 
-    virtual void getDialogInfo(const DialogID& rDialogID, OUString& rDialogTitle, int& rWidth, int& rHeight) = 0;
+    virtual void getDialogInfo(const LOKWindowId& rLOKWindowId, OUString& rDialogTitle, int& rWidth, int& rHeight) = 0;
 
-    virtual void paintActiveFloatingWindow(const DialogID& rDialogID, VirtualDevice &rDevice,
+    virtual void paintActiveFloatingWindow(const LOKWindowId& rLOKWindowId, VirtualDevice &rDevice,
                                            int& nOutputWidth, int& nOutputHeight) = 0;
 
-    virtual void postDialogKeyEvent(const DialogID& rDialogID, int nType,
+    virtual void postDialogKeyEvent(const LOKWindowId& rLOKWindowId, int nType,
                                     int nCharCode, int nKeyCode) = 0;
 
-    virtual void postDialogMouseEvent(const DialogID& rDialogID, int nType, int nX, int nY,
+    virtual void postDialogMouseEvent(const LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
                                       int nCount, int nButtons, int nModifier) = 0;
 
-    virtual void postDialogChildMouseEvent(const DialogID& rDialogID, int nType, int nX, int nY,
+    virtual void postDialogChildMouseEvent(const LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
                                            int nCount, int nButtons, int nModifier) = 0;
 };
 
-class VCL_DLLPUBLIC IDialogNotifier
+class VCL_DLLPUBLIC ILibreOfficeKitNotifier
 {
 public:
-    virtual ~IDialogNotifier() {}
+    virtual ~ILibreOfficeKitNotifier() {}
 
     // Callbacks
-    virtual void notifyDialog(const DialogID& rDialogID,
+    virtual void notifyDialog(const LOKWindowId& rLOKWindowId,
                               const OUString& rAction,
-                              const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) = 0;
+                              const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) const = 0;
 
-    virtual void notifyDialogChild(const DialogID& rDialogID, const OUString& rAction, const Point& rPos) = 0;
+    virtual void notifyDialogChild(const LOKWindowId& rLOKWindowId, const OUString& rAction, const Point& rPos) const = 0;
 };
 
 } // namespace vcl

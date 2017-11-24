@@ -406,8 +406,8 @@ void SfxTabDialog::dispose()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
-        pViewShell->notifyDialog(maID, "close");
-        pViewShell->UnregisterDlg(maID);
+        pViewShell->notifyDialog(GetLOKWindowId(), "close");
+        pViewShell->UnregisterDlg(GetLOKWindowId());
     }
 
     TabDialog::dispose();
@@ -521,12 +521,12 @@ short SfxTabDialog::Execute()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
-        pViewShell->RegisterDlg(maID, this);
-        registerDialogNotifier(static_cast<vcl::IDialogNotifier*>(pViewShell));
+        pViewShell->RegisterDlg(GetLOKWindowId(), this);
+        SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
-        pViewShell->notifyDialog(maID, "created", aItems);
+        pViewShell->notifyDialog(GetLOKWindowId(), "created", aItems);
     }
 
     return TabDialog::Execute();

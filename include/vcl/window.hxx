@@ -430,6 +430,7 @@ const char* ImplDbgCheckWindow( const void* pObj );
 
 namespace vcl { class Window; }
 namespace vcl { class Cursor; }
+namespace vcl { class ILibreOfficeKitNotifier; }
 class Dialog;
 class WindowImpl;
 class PaintHelper;
@@ -487,6 +488,8 @@ public:
                                         Color* pSelectionTextColor = nullptr, long nCornerRadius = 0,
                                         Color const * pPaintColor = nullptr);
 };
+
+typedef sal_uInt32 LOKWindowId;
 
 class VCL_DLLPUBLIC Window : public ::OutputDevice
 {
@@ -1199,6 +1202,11 @@ public:
                                         GetComponentInterface( bool bCreate = true );
 
     void                        SetComponentInterface( css::uno::Reference< css::awt::XWindowPeer > const & xIFace );
+
+    /// Interface to register for dialog tunneling.
+    void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier);
+    const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
+    vcl::LOKWindowId                    GetLOKWindowId() const;
 
     /** @name Accessibility
      */

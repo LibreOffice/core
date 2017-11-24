@@ -164,8 +164,8 @@ void SfxModalDialog::dispose()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
-        pViewShell->notifyDialog(maID, "close");
-        pViewShell->UnregisterDlg(maID);
+        pViewShell->notifyDialog(GetLOKWindowId(), "close");
+        pViewShell->UnregisterDlg(GetLOKWindowId());
     }
 
     ModalDialog::dispose();
@@ -176,12 +176,12 @@ short SfxModalDialog::Execute()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
-        pViewShell->RegisterDlg(maID, this);
-        registerDialogNotifier(static_cast<vcl::IDialogNotifier*>(pViewShell));
+        pViewShell->RegisterDlg(GetLOKWindowId(), this);
+        SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
-        pViewShell->notifyDialog(maID, "created", aItems);
+        pViewShell->notifyDialog(GetLOKWindowId(), "created", aItems);
     }
 
     return ModalDialog::Execute();
@@ -248,14 +248,14 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
         SfxViewShell* pViewShell = SfxViewShell::Current();
         if (comphelper::LibreOfficeKit::isActive() && pViewShell)
         {
-            pViewShell->RegisterDlg(maID, this);
-            registerDialogNotifier(static_cast<vcl::IDialogNotifier*>(pViewShell));
+            pViewShell->RegisterDlg(GetLOKWindowId(), this);
+            SetLOKNotifier(pViewShell);
             // Below method doesn't really give the exact dimensions,
             // Check GetSizePixel() ?
             const Size aOptimalSize = GetOptimalSize();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back(std::make_pair("size", aOptimalSize.toString()));
-            pViewShell->notifyDialog(maID, "created", aItems);
+            pViewShell->notifyDialog(GetLOKWindowId(), "created", aItems);
         }
 
         pImpl->bConstructed = true;
@@ -393,8 +393,8 @@ void SfxModelessDialog::dispose()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
-        pViewShell->notifyDialog(maID, "close");
-        pViewShell->UnregisterDlg(maID);
+        pViewShell->notifyDialog(GetLOKWindowId(), "close");
+        pViewShell->UnregisterDlg(GetLOKWindowId());
     }
 
     ModelessDialog::dispose();
