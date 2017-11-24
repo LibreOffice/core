@@ -2311,14 +2311,13 @@ void WW8TabDesc::CalcDefaults()
         }
         for (int k = 0; k < pR->nWwCols; ++k)
         {
-            WW8_TCell* pT = &pR->pTCs[k];
-            int i, j;
-            for( i = 0; i < 4; i ++ )
+            WW8_TCell& rT = pR->pTCs[k];
+            for (int i = 0; i < 4; ++i)
             {
-                if (pT->rgbrc[i].brcType()==0)
+                if (rT.rgbrc[i].brcType()==0)
                 {
                     // if shadow is set, its invalid
-                    j = i;
+                    int j = i;
                     switch( i )
                     {
                     case 0:
@@ -2339,7 +2338,7 @@ void WW8TabDesc::CalcDefaults()
                         break;
                     }
                     // merge with above defaults
-                    pT->rgbrc[i] = pR->aDefBrcs[j];
+                    rT.rgbrc[i] = pR->aDefBrcs[j];
                 }
             }
         }
