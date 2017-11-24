@@ -176,8 +176,8 @@ short SfxModalDialog::Execute()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
-        pViewShell->RegisterDlg(GetLOKWindowId(), this);
         SetLOKNotifier(pViewShell);
+        pViewShell->RegisterDlg(GetLOKWindowId(), this);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
@@ -248,8 +248,8 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
         SfxViewShell* pViewShell = SfxViewShell::Current();
         if (comphelper::LibreOfficeKit::isActive() && pViewShell)
         {
-            pViewShell->RegisterDlg(GetLOKWindowId(), this);
             SetLOKNotifier(pViewShell);
+            pViewShell->RegisterDlg(GetLOKWindowId(), this);
             // Below method doesn't really give the exact dimensions,
             // Check GetSizePixel() ?
             const Size aOptimalSize = GetOptimalSize();
