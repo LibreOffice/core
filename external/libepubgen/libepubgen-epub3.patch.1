@@ -2782,3 +2782,318 @@ index 20056ad..135a144 100644
 -- 
 2.12.3
 
+From 6c8e86ccebb11df7ece32d10da2894c6698c5515 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 2 Nov 2017 12:07:02 +0100
+Subject: [PATCH 1/4] EPUBTableStyleManager: witdh -> width
+
+---
+ src/lib/EPUBTableStyleManager.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index 4e24611..5795524 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -48,7 +48,7 @@ void EPUBTableStyleManager::closeTable()
+ {
+   if (!m_columWitdhsStack.size())
+   {
+-    EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::closeTable: can not find the columns witdh\n"));
++    EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::closeTable: can not find the columns width\n"));
+     return;
+   }
+   m_columWitdhsStack.pop_back();
+@@ -61,7 +61,7 @@ bool EPUBTableStyleManager::getColumnsWidth(int col, int numSpanned, double &w)
+   std::vector<double> const &widths=m_columWitdhsStack.back();
+   if (col < 0 || size_t(col+numSpanned-1) >= widths.size())
+   {
+-    EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::getColumnsWidth: can not compute the columns witdh\n"));
++    EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::getColumnsWidth: can not compute the columns width\n"));
+     return false;
+   }
+   bool fixed = true;
+-- 
+2.13.6
+
+From 45bf16a8b384010814148538d86ee584b9295c7a Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 3 Nov 2017 12:30:13 +0100
+Subject: [PATCH 2/4] Witdh -> Width
+
+---
+ src/lib/EPUBTableStyleManager.cpp | 10 +++++-----
+ src/lib/EPUBTableStyleManager.h   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index 5795524..6f8b2af 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -41,24 +41,24 @@ void EPUBTableStyleManager::openTable(RVNGPropertyListVector const &colList)
+     }
+     colWidths.push_back(width);
+   }
+-  m_columWitdhsStack.push_back(colWidths);
++  m_columWidthsStack.push_back(colWidths);
+ }
+ 
+ void EPUBTableStyleManager::closeTable()
+ {
+-  if (!m_columWitdhsStack.size())
++  if (!m_columWidthsStack.size())
+   {
+     EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::closeTable: can not find the columns width\n"));
+     return;
+   }
+-  m_columWitdhsStack.pop_back();
++  m_columWidthsStack.pop_back();
+ }
+ 
+ bool EPUBTableStyleManager::getColumnsWidth(int col, int numSpanned, double &w) const
+ {
+-  if (!m_columWitdhsStack.size())
++  if (!m_columWidthsStack.size())
+     return false;
+-  std::vector<double> const &widths=m_columWitdhsStack.back();
++  std::vector<double> const &widths=m_columWidthsStack.back();
+   if (col < 0 || size_t(col+numSpanned-1) >= widths.size())
+   {
+     EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::getColumnsWidth: can not compute the columns width\n"));
+diff --git a/src/lib/EPUBTableStyleManager.h b/src/lib/EPUBTableStyleManager.h
+index 135a144..5f704a1 100644
+--- a/src/lib/EPUBTableStyleManager.h
++++ b/src/lib/EPUBTableStyleManager.h
+@@ -32,7 +32,7 @@ class EPUBTableStyleManager
+ 
+ public:
+   //! constructor
+-  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_columWitdhsStack()
++  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_columWidthsStack()
+   {
+   }
+   //! destructor
+@@ -65,7 +65,7 @@ private:
+   //! a map row content -> name
+   ContentNameMap_t m_rowContentNameMap;
+   //! a stack of column width (in inches )
+-  std::vector<std::vector<double> > m_columWitdhsStack;
++  std::vector<std::vector<double> > m_columWidthsStack;
+ 
+   EPUBTableStyleManager(EPUBTableStyleManager const &orig);
+   EPUBTableStyleManager operator=(EPUBTableStyleManager const &orig);
+-- 
+2.13.6
+
+From 85fe982b2ad158f6e050c15e4a59d51d863cc28d Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 3 Nov 2017 15:33:35 +0100
+Subject: [PATCH 3/4] columWidths -> columnWidths
+
+---
+ src/lib/EPUBTableStyleManager.cpp | 10 +++++-----
+ src/lib/EPUBTableStyleManager.h   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index 6f8b2af..b610c20 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -41,24 +41,24 @@ void EPUBTableStyleManager::openTable(RVNGPropertyListVector const &colList)
+     }
+     colWidths.push_back(width);
+   }
+-  m_columWidthsStack.push_back(colWidths);
++  m_columnWidthsStack.push_back(colWidths);
+ }
+ 
+ void EPUBTableStyleManager::closeTable()
+ {
+-  if (!m_columWidthsStack.size())
++  if (!m_columnWidthsStack.size())
+   {
+     EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::closeTable: can not find the columns width\n"));
+     return;
+   }
+-  m_columWidthsStack.pop_back();
++  m_columnWidthsStack.pop_back();
+ }
+ 
+ bool EPUBTableStyleManager::getColumnsWidth(int col, int numSpanned, double &w) const
+ {
+-  if (!m_columWidthsStack.size())
++  if (!m_columnWidthsStack.size())
+     return false;
+-  std::vector<double> const &widths=m_columWidthsStack.back();
++  std::vector<double> const &widths=m_columnWidthsStack.back();
+   if (col < 0 || size_t(col+numSpanned-1) >= widths.size())
+   {
+     EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::getColumnsWidth: can not compute the columns width\n"));
+diff --git a/src/lib/EPUBTableStyleManager.h b/src/lib/EPUBTableStyleManager.h
+index 5f704a1..4de70e3 100644
+--- a/src/lib/EPUBTableStyleManager.h
++++ b/src/lib/EPUBTableStyleManager.h
+@@ -32,7 +32,7 @@ class EPUBTableStyleManager
+ 
+ public:
+   //! constructor
+-  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_columWidthsStack()
++  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_columnWidthsStack()
+   {
+   }
+   //! destructor
+@@ -65,7 +65,7 @@ private:
+   //! a map row content -> name
+   ContentNameMap_t m_rowContentNameMap;
+   //! a stack of column width (in inches )
+-  std::vector<std::vector<double> > m_columWidthsStack;
++  std::vector<std::vector<double> > m_columnWidthsStack;
+ 
+   EPUBTableStyleManager(EPUBTableStyleManager const &orig);
+   EPUBTableStyleManager operator=(EPUBTableStyleManager const &orig);
+-- 
+2.13.6
+
+From 20930e2d8151fd2ec44feb9cdb8ca502df99365f Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 3 Nov 2017 17:00:12 +0100
+Subject: [PATCH 4/4] EPUBTableStyleManager: handle style:rel-column-width col
+ prop
+
+Previously only fixed width was supported, but relative width works
+better for reflowable formats and ODF has markup to express this.
+---
+ src/lib/EPUBTableStyleManager.cpp  | 42 ++++++++++++++++++++++++++++++++----
+ src/lib/EPUBTableStyleManager.h    |  6 +++++-
+ src/test/EPUBTextGeneratorTest.cpp | 44 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 87 insertions(+), 5 deletions(-)
+
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index b610c20..92078a2 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -7,6 +7,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <numeric>
+ #include <sstream>
+ 
+ #include <librevenge/librevenge.h>
+@@ -25,6 +26,7 @@ using librevenge::RVNGString;
+ void EPUBTableStyleManager::openTable(RVNGPropertyListVector const &colList)
+ {
+   std::vector<double> colWidths;
++  std::vector<double> relColWidths;
+   for (unsigned long i = 0; i < colList.count(); i++)
+   {
+     RVNGPropertyList const &prop=colList[i];
+@@ -40,8 +42,15 @@ void EPUBTableStyleManager::openTable(RVNGPropertyListVector const &colList)
+         width=prop["style:column-width"]->getDouble()/1440.;
+     }
+     colWidths.push_back(width);
++
++    if (prop["style:rel-column-width"])
++    {
++      width = prop["style:rel-column-width"]->getDouble();
++      relColWidths.push_back(width);
++    }
+   }
+   m_columnWidthsStack.push_back(colWidths);
++  m_relColumnWidthsStack.push_back(relColWidths);
+ }
+ 
+ void EPUBTableStyleManager::closeTable()
+@@ -54,14 +63,18 @@ void EPUBTableStyleManager::closeTable()
+   m_columnWidthsStack.pop_back();
+ }
+ 
+-bool EPUBTableStyleManager::getColumnsWidth(int col, int numSpanned, double &w) const
++namespace
+ {
+-  if (!m_columnWidthsStack.size())
++bool extractColumnsWidth(const std::vector< std::vector<double> > &columnWidthsStack, int col, int numSpanned, bool relative, double &w)
++{
++  if (!columnWidthsStack.size())
+     return false;
+-  std::vector<double> const &widths=m_columnWidthsStack.back();
++  std::vector<double> const &widths=columnWidthsStack.back();
++  double total = std::accumulate(widths.begin(), widths.end(), static_cast<double>(0));
+   if (col < 0 || size_t(col+numSpanned-1) >= widths.size())
+   {
+-    EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::getColumnsWidth: can not compute the columns width\n"));
++    if (!relative)
++      EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::getColumnsWidth: can not compute the columns width\n"));
+     return false;
+   }
+   bool fixed = true;
+@@ -82,8 +95,22 @@ bool EPUBTableStyleManager::getColumnsWidth(int col, int numSpanned, double &w)
+     }
+   }
+   if (!fixed) w = -w;
++  if (relative)
++    // Expected unit is percents.
++    w = w * 100 / total;
+   return true;
+ }
++}
++
++bool EPUBTableStyleManager::getColumnsWidth(int col, int numSpanned, double &w) const
++{
++  return extractColumnsWidth(m_columnWidthsStack, col, numSpanned, false, w);
++}
++
++bool EPUBTableStyleManager::getRelColumnsWidth(int col, int numSpanned, double &w) const
++{
++  return extractColumnsWidth(m_relColumnWidthsStack, col, numSpanned, true, w);
++}
+ 
+ std::string EPUBTableStyleManager::getCellClass(RVNGPropertyList const &pList)
+ {
+@@ -176,6 +203,13 @@ void EPUBTableStyleManager::extractCellProperties(RVNGPropertyList const &pList,
+       width << -w << "in";
+       cssProps["min-width"] = width.str();
+     }
++
++    if (getRelColumnsWidth(c, span, w))
++    {
++      std::ostringstream width;
++      width << w << "%";
++      cssProps["width"] = width.str();
++    }
+   }
+   if (pList["fo:text-align"])
+   {
+diff --git a/src/lib/EPUBTableStyleManager.h b/src/lib/EPUBTableStyleManager.h
+index 4de70e3..24ae1a5 100644
+--- a/src/lib/EPUBTableStyleManager.h
++++ b/src/lib/EPUBTableStyleManager.h
+@@ -32,7 +32,7 @@ class EPUBTableStyleManager
+ 
+ public:
+   //! constructor
+-  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_columnWidthsStack()
++  EPUBTableStyleManager() : m_cellContentNameMap(), m_rowContentNameMap(), m_columnWidthsStack(), m_relColumnWidthsStack()
+   {
+   }
+   //! destructor
+@@ -60,12 +60,16 @@ private:
+   void extractRowProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const;
+   //! try to return the col width
+   bool getColumnsWidth(int i, int numSpanned, double &w) const;
++  //! try to return the relative col width
++  bool getRelColumnsWidth(int i, int numSpanned, double &w) const;
+   //! a map cell content -> name
+   ContentNameMap_t m_cellContentNameMap;
+   //! a map row content -> name
+   ContentNameMap_t m_rowContentNameMap;
+   //! a stack of column width (in inches )
+   std::vector<std::vector<double> > m_columnWidthsStack;
++  //! a stack of relative column width (in percents )
++  std::vector<std::vector<double> > m_relColumnWidthsStack;
+ 
+   EPUBTableStyleManager(EPUBTableStyleManager const &orig);
+   EPUBTableStyleManager operator=(EPUBTableStyleManager const &orig);
+-- 
+2.13.6
+

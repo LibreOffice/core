@@ -34,6 +34,7 @@ public:
     librevenge::RVNGPropertyList &GetTextPropertyList();
     librevenge::RVNGPropertyList &GetParagraphPropertyList();
     librevenge::RVNGPropertyList &GetCellPropertyList();
+    librevenge::RVNGPropertyList &GetColumnPropertyList();
 
 private:
     OUString m_aName;
@@ -41,6 +42,7 @@ private:
     librevenge::RVNGPropertyList m_aTextPropertyList;
     librevenge::RVNGPropertyList m_aParagraphPropertyList;
     librevenge::RVNGPropertyList m_aCellPropertyList;
+    librevenge::RVNGPropertyList m_aColumnPropertyList;
     XMLStylesContext &m_rStyles;
 };
 
