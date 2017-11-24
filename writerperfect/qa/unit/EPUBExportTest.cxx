@@ -55,7 +55,7 @@ public:
     /// Loads a CSS representation of the stream named rName in the exported package into rTree.
     void parseCssExport(const OUString &rName, std::map< OString, std::vector<OString> > &rTree);
     /// Loads a CSS style string into a map.
-    void parseCssStyle(const OUString &rStyle, std::map<OUString, OUString> &rCss);
+    static void parseCssStyle(const OUString &rStyle, std::map<OUString, OUString> &rCss);
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
@@ -76,6 +76,7 @@ public:
     void testTable();
     void testTableRowSpan();
     void testTableCellBorder();
+    void testTableCellWidth();
     void testLink();
     void testLinkCharFormat();
     void testLinkNamedCharFormat();
@@ -101,6 +102,7 @@ public:
     CPPUNIT_TEST(testTable);
     CPPUNIT_TEST(testTableRowSpan);
     CPPUNIT_TEST(testTableCellBorder);
+    CPPUNIT_TEST(testTableCellWidth);
     CPPUNIT_TEST(testLink);
     CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST(testLinkNamedCharFormat);
@@ -498,6 +500,29 @@ void EPUBExportTest::testTableCellBorder()
     parseCssStyle(aStyle, aCss);
     // This failed, cell border wasn't exported.
     CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"), aCss["border-left"]);
+}
+
+namespace
+{
+double getCellWidth(const OUString &rStyle)
+{
+    std::map<OUString, OUString> aCss;
+    EPUBExportTest::parseCssStyle(rStyle, aCss);
+    return aCss["width"].toDouble();
+}
+}
+
+void EPUBExportTest::testTableCellWidth()
+{
+    createDoc("table-cell-width.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    OUString aStyle1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "style");
+    OUString aStyle2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[2]", "style");
+    OUString aStyle3 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[3]", "style");
+    // These failed, all widths were 0.
+    CPPUNIT_ASSERT_GREATER(getCellWidth(aStyle2), getCellWidth(aStyle1));
+    CPPUNIT_ASSERT_GREATER(getCellWidth(aStyle3), getCellWidth(aStyle1));
 }
 
 void EPUBExportTest::testLink()

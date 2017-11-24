@@ -75,6 +75,34 @@ void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css
     }
 }
 
+/// Handler for <style:table-column-properties>.
+class XMLTableColumnPropertiesContext : public XMLImportContext
+{
+public:
+    XMLTableColumnPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    XMLStyleContext &mrStyle;
+};
+
+XMLTableColumnPropertiesContext::XMLTableColumnPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+    : XMLImportContext(rImport)
+    , mrStyle(rStyle)
+{
+}
+
+void XMLTableColumnPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+        mrStyle.GetColumnPropertyList().insert(sName.getStr(), sValue.getStr());
+    }
+}
+
 /// Handler for <style:table-cell-properties>.
 class XMLTableCellPropertiesContext : public XMLImportContext
 {
@@ -117,6 +145,8 @@ rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(const OUStr
         return new XMLTextPropertiesContext(mrImport, *this);
     if (rName == "style:table-cell-properties")
         return new XMLTableCellPropertiesContext(mrImport, *this);
+    if (rName == "style:table-column-properties")
+        return new XMLTableColumnPropertiesContext(mrImport, *this);
     return nullptr;
 }
 
@@ -150,6 +180,8 @@ void XMLStyleContext::endElement(const OUString &/*rName*/)
         m_rStyles.GetCurrentParagraphStyles()[m_aName] = m_aParagraphPropertyList;
     if (m_aFamily == "table-cell")
         m_rStyles.GetCurrentCellStyles()[m_aName] = m_aCellPropertyList;
+    if (m_aFamily == "table-column")
+        m_rStyles.GetCurrentColumnStyles()[m_aName] = m_aColumnPropertyList;
 }
 
 librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()
@@ -165,6 +197,11 @@ librevenge::RVNGPropertyList &XMLStyleContext::GetParagraphPropertyList()
 librevenge::RVNGPropertyList &XMLStyleContext::GetCellPropertyList()
 {
     return m_aCellPropertyList;
+}
+
+librevenge::RVNGPropertyList &XMLStyleContext::GetColumnPropertyList()
+{
+    return m_aColumnPropertyList;
 }
 
 } // namespace exp
