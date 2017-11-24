@@ -2605,3 +2605,180 @@ index 11bf7de..25294c6 100644
 -- 
 2.12.3
 
+From f3a04df200d818b4aaa9d54910b670cd6cf3149f Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 31 Oct 2017 15:50:50 +0100
+Subject: [PATCH] EPUBHTMLGenerator: librevenge:type -> xlink:type
+
+That's what libetonyek and LO's librevenge producer generates, also
+matches librevenge documentation. This isn't really a behavior change,
+just makes the warning go away in the xlink case.
+---
+ src/lib/EPUBHTMLGenerator.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 25294c6..0d39c00 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -657,9 +657,9 @@ void EPUBHTMLGenerator::openLink(const RVNGPropertyList &propList)
+   if (m_impl->m_ignore)
+     return;
+ 
+-  if (!propList["librevenge:type"])
++  if (!propList["xlink:type"])
+   {
+-    EPUBGEN_DEBUG_MSG(("EPUBHTMLGenerator::openLink: librevenge:type: not filled, suppose link\n"));
++    EPUBGEN_DEBUG_MSG(("EPUBHTMLGenerator::openLink: xlink:type: not filled, suppose link\n"));
+   }
+   RVNGPropertyList attrs;
+   if (propList["xlink:href"])
+-- 
+2.12.3
+
+From c5e32608ecea8410b11760284d49e1f1958c6f75 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 31 Oct 2017 16:50:50 +0100
+Subject: [PATCH] EPUBTableStyleManager: handle EPUB_STYLES_METHOD_INLINE for
+ rows
+
+This was working for paragraphs and spans only previously.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 10 +++++++++-
+ src/lib/EPUBTableStyleManager.cpp  | 11 +++++++++++
+ src/lib/EPUBTableStyleManager.h    |  2 ++
+ src/test/EPUBTextGeneratorTest.cpp | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 0d39c00..42e8e3e 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -858,7 +858,15 @@ void EPUBHTMLGenerator::openTableRow(const RVNGPropertyList &propList)
+   if (m_impl->m_ignore)
+     return;
+   RVNGPropertyList attrs;
+-  attrs.insert("class", m_impl->m_tableManager.getRowClass(propList).c_str());
++  switch (m_impl->m_stylesMethod)
++  {
++  case EPUB_STYLES_METHOD_CSS:
++    attrs.insert("class", m_impl->m_tableManager.getRowClass(propList).c_str());
++    break;
++  case EPUB_STYLES_METHOD_INLINE:
++    attrs.insert("style", m_impl->m_tableManager.getRowStyle(propList).c_str());
++    break;
++  }
+   m_impl->output().openElement("tr", attrs);
+ }
+ 
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index 52b6959..ead9170 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -111,6 +111,17 @@ std::string EPUBTableStyleManager::getRowClass(RVNGPropertyList const &pList)
+   return s.str();
+ }
+ 
++std::string EPUBTableStyleManager::getRowStyle(RVNGPropertyList const &pList)
++{
++  EPUBCSSProperties content;
++  extractRowProperties(pList, content);
++
++  std::stringstream s;
++  for (const auto &property : content)
++    s << property.first << ": " << property.second << "; ";
++  return s.str();
++}
++
+ void EPUBTableStyleManager::send(EPUBCSSSink &out)
+ {
+   for (ContentNameMap_t::const_iterator it=m_cellContentNameMap.begin(); m_cellContentNameMap.end() != it; ++it)
+diff --git a/src/lib/EPUBTableStyleManager.h b/src/lib/EPUBTableStyleManager.h
+index e6d09bc..20056ad 100644
+--- a/src/lib/EPUBTableStyleManager.h
++++ b/src/lib/EPUBTableStyleManager.h
+@@ -47,6 +47,8 @@ public:
+   std::string getCellClass(librevenge::RVNGPropertyList const &pList);
+   //! returns the class name corresponding to a propertylist
+   std::string getRowClass(librevenge::RVNGPropertyList const &pList);
++  //! returns the style string corresponding to a propertylist
++  std::string getRowStyle(librevenge::RVNGPropertyList const &pList);
+   //! send the data to the sink
+   void send(EPUBCSSSink &out);
+ private:
+-- 
+2.12.3
+
+From 258dcc4a98405238f4e32f89d122a7ccbb9a1357 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 31 Oct 2017 17:45:22 +0100
+Subject: [PATCH] EPUBTableStyleManager: handle EPUB_STYLES_METHOD_INLINE for
+ cells
+
+So that a typical table has an empty CSS when requested.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 10 +++++++++-
+ src/lib/EPUBTableStyleManager.cpp  | 11 +++++++++++
+ src/lib/EPUBTableStyleManager.h    |  2 ++
+ src/test/EPUBTextGeneratorTest.cpp | 13 +++++++++----
+ 4 files changed, 31 insertions(+), 5 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 42e8e3e..86b3ac2 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -882,7 +882,15 @@ void EPUBHTMLGenerator::openTableCell(const RVNGPropertyList &propList)
+   if (m_impl->m_ignore)
+     return;
+   RVNGPropertyList attrs;
+-  attrs.insert("class", m_impl->m_tableManager.getCellClass(propList).c_str());
++  switch (m_impl->m_stylesMethod)
++  {
++  case EPUB_STYLES_METHOD_CSS:
++    attrs.insert("class", m_impl->m_tableManager.getCellClass(propList).c_str());
++    break;
++  case EPUB_STYLES_METHOD_INLINE:
++    attrs.insert("style", m_impl->m_tableManager.getCellStyle(propList).c_str());
++    break;
++  }
+   if (propList["table:number-columns-spanned"])
+     attrs.insert("colspan", propList["table:number-columns-spanned"]->getInt());
+   if (propList["table:number-rows-spanned"])
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index ead9170..4e24611 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -98,6 +98,17 @@ std::string EPUBTableStyleManager::getCellClass(RVNGPropertyList const &pList)
+   return s.str();
+ }
+ 
++std::string EPUBTableStyleManager::getCellStyle(RVNGPropertyList const &pList)
++{
++  EPUBCSSProperties content;
++  extractCellProperties(pList, content);
++
++  std::stringstream s;
++  for (const auto &property : content)
++    s << property.first << ": " << property.second << "; ";
++  return s.str();
++}
++
+ std::string EPUBTableStyleManager::getRowClass(RVNGPropertyList const &pList)
+ {
+   EPUBCSSProperties content;
+diff --git a/src/lib/EPUBTableStyleManager.h b/src/lib/EPUBTableStyleManager.h
+index 20056ad..135a144 100644
+--- a/src/lib/EPUBTableStyleManager.h
++++ b/src/lib/EPUBTableStyleManager.h
+@@ -45,6 +45,8 @@ public:
+   void closeTable();
+   //! returns the class name corresponding to a propertylist
+   std::string getCellClass(librevenge::RVNGPropertyList const &pList);
++  //! returns the style string corresponding to a propertylist
++  std::string getCellStyle(librevenge::RVNGPropertyList const &pList);
+   //! returns the class name corresponding to a propertylist
+   std::string getRowClass(librevenge::RVNGPropertyList const &pList);
+   //! returns the style string corresponding to a propertylist
+-- 
+2.12.3
+

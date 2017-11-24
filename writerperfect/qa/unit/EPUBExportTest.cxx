@@ -74,6 +74,7 @@ public:
     void testList();
     void testImage();
     void testTable();
+    void testTableRowSpan();
     void testLink();
     void testLinkCharFormat();
     void testLinkNamedCharFormat();
@@ -97,6 +98,7 @@ public:
     CPPUNIT_TEST(testList);
     CPPUNIT_TEST(testImage);
     CPPUNIT_TEST(testTable);
+    CPPUNIT_TEST(testTableRowSpan);
     CPPUNIT_TEST(testLink);
     CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST(testLinkNamedCharFormat);
@@ -473,6 +475,15 @@ void EPUBExportTest::testTable()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr/xhtml:td", 4);
+}
+
+void EPUBExportTest::testTableRowSpan()
+{
+    createDoc("table-row-span.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This failed, row span wasn't exported.
+    assertXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "rowspan", "2");
 }
 
 void EPUBExportTest::testLink()
