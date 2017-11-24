@@ -1,27 +1,3 @@
---- libassuan.orig/src/Makefile.in	2017-09-15 08:16:41.601057500 +0200
-+++ libassuan/src/Makefile.in	2017-09-24 13:01:24.950711300 +0200
-@@ -424,7 +424,7 @@
- nodist_include_HEADERS = assuan.h
- @HAVE_LD_VERSION_SCRIPT_FALSE@libassuan_version_script_cmd = 
- @HAVE_LD_VERSION_SCRIPT_TRUE@libassuan_version_script_cmd = -Wl,--version-script=$(srcdir)/libassuan.vers
--CLEANFILES = mkheader assuan.h
-+CLEANFILES = mkheader$(EXEEXT) assuan.h
- BUILT_SOURCES = assuan.h
- parts_of_assuan_h = \
- 	posix-includes.inc.h   w32-includes.inc.h \
-@@ -1183,10 +1183,10 @@
- @HAVE_W32CE_SYSTEM_TRUE@	mv -f $(DESTDIR)$(bindir)/libgpgcedev-0.dll \
- @HAVE_W32CE_SYSTEM_TRUE@              $(DESTDIR)$(bindir)/gpgcedev.dll
- 
--mkheader: mkheader.c Makefile
-+mkheader$(EXEEXT): mkheader.c Makefile
- 	$(CC_FOR_BUILD) -I. -I$(srcdir) -o $@ $(srcdir)/mkheader.c
- 
--assuan.h: assuan.h.in mkheader $(parts_of_assuan_h)
-+assuan.h: assuan.h.in mkheader$(EXEEXT) $(parts_of_assuan_h)
- 	./mkheader $(host_os) $(srcdir)/assuan.h.in \
-                    @VERSION@ @VERSION_NUMBER@ >$@
- 
 --- libassuan.orig/src/mkheader.c	2013-03-15 20:26:09.000000000 +0100
 +++ libassuan/src/mkheader.c	2017-09-24 14:17:33.584583300 +0200
 @@ -99,7 +99,7 @@
