@@ -144,7 +144,7 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyDialog(vcl::LOKWindowId nLOKWindowId,
+void SfxLokHelper::notifyWindow(vcl::LOKWindowId nLOKWindowId,
                                 const OUString& rAction,
                                 const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
@@ -172,7 +172,7 @@ void SfxLokHelper::notifyDialog(vcl::LOKWindowId nLOKWindowId,
     }
 }
 
-void SfxLokHelper::notifyDialogChild(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const Point& rPos)
+void SfxLokHelper::notifyWindowChild(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const Point& rPos)
 {
     if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
         return;
