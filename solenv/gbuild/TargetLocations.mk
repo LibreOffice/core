@@ -128,6 +128,7 @@ gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_CxxClrObject_get_target = $(WORKDIR)/CxxClrObject/$(1).o
+gb_GenCxxClrObject_get_target = $(WORKDIR)/GenCxxClrObject/$(1).o
 gb_Pagein_get_target = $(WORKDIR)/Pagein/pagein-$(1)
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1).filelist
@@ -310,6 +311,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	AsmObject \
 	GenCObject \
 	GenCxxObject \
+	GenCxxClrObject \
 	SdiTarget \
 ))
 

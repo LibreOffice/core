@@ -1074,6 +1074,11 @@ off_t size;
                     created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
+                else if(strncmp(src_relative, "GenCxxClrObject/", 16) == 0)
+                {
+                    created_line = generate_phony_line(src_relative, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
                 else
                 {
                     fprintf(stderr, "no magic for %s(%s) in %s\n", fn, src_relative, work_dir);

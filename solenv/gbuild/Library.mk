@@ -182,6 +182,7 @@ gb_Library_add_objcxxobject = $(call gb_Library__forward_to_Linktarget,$(subst g
 gb_Library_add_objcxxobjects = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_add_cxxclrobject = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_add_cxxclrobjects = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
+gb_Library_add_generated_cxxclrobjects = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_add_asmobject = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_add_asmobjects = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_add_exception_objects = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
