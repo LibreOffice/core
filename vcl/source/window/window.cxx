@@ -749,7 +749,7 @@ WindowImpl::WindowImpl( WindowType nType )
     static bool bDoubleBuffer = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE");
     mbDoubleBufferingRequested = bDoubleBuffer; // when we are not sure, assume it cannot do double-buffering via RenderContext
     mpLOKNotifier                       = nullptr;
-    mnLOKWindowId                       = mnLastWindowId++;
+    mnLOKWindowId                       = 0;
 }
 
 WindowImpl::~WindowImpl()
@@ -3192,6 +3192,13 @@ void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > const & x
 
 void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier)
 {
+    // don't allow setting this twice
+    assert(mpWindowImpl->mpLOKNotifier == nullptr);
+    assert(pNotifier);
+
+    // assign the LOK window id
+    mpWindowImpl->mnLOKWindowId = WindowImpl::mnLastWindowId++;
+
     mpWindowImpl->mpLOKNotifier = pNotifier;
 }
 
@@ -3202,6 +3209,8 @@ const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
 
 vcl::LOKWindowId Window::GetLOKWindowId() const
 {
+    assert(mpWindowImpl->mnLOKWindowId > 0);
+
     return mpWindowImpl->mnLOKWindowId;
 }
 
