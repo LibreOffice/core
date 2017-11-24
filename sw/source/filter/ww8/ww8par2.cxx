@@ -1241,12 +1241,12 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
     if (nCols > MAX_COL)
         return;
 
-    short nOldCols = nWwCols;
-    nWwCols = nCols;
-
     nLen -= 2 * (nCols + 1); //reduce len by claimed amount of next x-borders arguments
     if (nLen < 0)
         return;
+
+    short nOldCols = nWwCols;
+    nWwCols = nCols;
 
     const sal_uInt8* pT = &pS[1];
     for (int i = 0; i <= nCols; i++, pT+=2)
