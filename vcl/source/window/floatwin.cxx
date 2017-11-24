@@ -29,7 +29,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/settings.hxx>
-
+#include <vcl/IDialogRenderable.hxx>
 
 class FloatingWindow::ImplData
 {

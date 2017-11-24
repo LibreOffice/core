@@ -431,16 +431,16 @@ public:
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
 
-    void paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice) override;
-    void getDialogInfo(const vcl::DialogID& rDialogID, OUString& rDialogTitle, int& rWidth, int& rHeight) override;
-    void paintActiveFloatingWindow(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
-    void postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType,
+    void paintDialog(const vcl::LOKWindowId& rLOKWindowId, VirtualDevice& rDevice) override;
+    void getDialogInfo(const vcl::LOKWindowId& rLOKWindowId, OUString& rDialogTitle, int& rWidth, int& rHeight) override;
+    void paintActiveFloatingWindow(const vcl::LOKWindowId& rLOKWindowId, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
+    void postDialogKeyEvent(const vcl::LOKWindowId& rLOKWindowId, int nType,
                             int nCharCode, int nKeyCode) override;
 
-    void postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
+    void postDialogMouseEvent(const vcl::LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
                               int nCount, int nButtons, int nModifier) override;
 
-    void postDialogChildMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
+    void postDialogChildMouseEvent(const vcl::LOKWindowId& rLOKWindowId, int nType, int nX, int nY,
                                    int nCount, int nButtons, int nModifier) override;
 
     // css::tiledrendering::XTiledRenderable

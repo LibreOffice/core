@@ -53,6 +53,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <salframe.hxx>
 
 #include <iostream>
@@ -346,8 +347,6 @@ struct DialogImpl
 
 void Dialog::ImplInitDialogData()
 {
-    maID                    = mnLastDialogId++;
-    mpDialogNotifier        = nullptr;
     mpWindowImpl->mbDialog  = true;
     mpPrevExecuteDlg        = nullptr;
     mbInExecute             = false;
@@ -490,8 +489,6 @@ void Dialog::ImplInitSettings()
     else
         SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
 }
-
-vcl::DialogID Dialog::mnLastDialogId = 1;
 
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
@@ -872,14 +869,6 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
-void Dialog::registerDialogNotifier(vcl::IDialogNotifier* pDialogNotifier)
-{
-    if (pDialogNotifier && !mpDialogNotifier)
-    {
-        mpDialogNotifier = pDialogNotifier;
-    }
-}
-
 void Dialog::paintDialog(VirtualDevice& rDevice)
 {
     setDeferredProperties();
@@ -952,29 +941,28 @@ void Dialog::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
 
 void Dialog::InvalidateFloatingWindow(const Point& rPos)
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && maID != 0)
-    {
-        mpDialogNotifier->notifyDialogChild(maID, "invalidate", rPos);
-    }
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        pNotifier->notifyDialogChild(GetLOKWindowId(), "invalidate", rPos);
 }
 
 void Dialog::CloseFloatingWindow()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpDialogNotifier && maID != 0)
-    {
-        mpDialogNotifier->notifyDialogChild(maID, "close", Point(0, 0));
-    }
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        pNotifier->notifyDialogChild(GetLOKWindowId(), "close", Point(0, 0));
 }
 
 void Dialog::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && maID != 0)
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         std::vector<vcl::LOKPayloadItem> aPayload;
         if (pRectangle)
             aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
 
-        mpDialogNotifier->notifyDialog(maID, "invalidate", aPayload);
+        pNotifier->notifyDialog(GetLOKWindowId(), "invalidate", aPayload);
     }
 }
 
@@ -1020,10 +1008,11 @@ void Dialog::LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloa
 {
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && maID != 0)
-    {
-        mpDialogNotifier->notifyDialog(maID, rAction, rPayload);
-    }
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        pNotifier->notifyDialog(GetLOKWindowId(), rAction, rPayload);
 }
 
 void Dialog::ensureRepaint()
@@ -1340,11 +1329,12 @@ void Dialog::Resize()
 {
     SystemWindow::Resize();
 
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
     // inform LOK clients
-    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogNotifier && maID != 0)
-    {
-        mpDialogNotifier->notifyDialog(maID, "invalidate");
-    }
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        pNotifier->notifyDialog(GetLOKWindowId(), "invalidate");
 }
 
 bool Dialog::set_property(const OString &rKey, const OUString &rValue)
