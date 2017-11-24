@@ -60,6 +60,7 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --lexobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(LEXOBJECTS)) \
 --gencobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCOBJECTS)) \
 --gencxxobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCXXOBJECTS)) \
+--gencxxclrobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCXXCLROBJECTS)) \
 --cobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(COBJECTS)) \
 --javaobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(JAVAOBJECTS)) \
 --pythonobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(PYTHONOBJECTS)) \
@@ -112,6 +113,10 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 endef
 define gb_LinkTarget_add_generated_cxx_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
+
+endef
+define gb_LinkTarget_add_generated_cxxclrobject
+$(call gb_LinkTarget_get_target,$(1)) : GENCXXCLROBJECTS += $(2)
 
 endef
 define gb_LinkTarget_add_objcobject
