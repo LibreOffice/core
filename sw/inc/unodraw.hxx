@@ -215,7 +215,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwXShape(css::uno::Reference< css::uno::XInterface > & xShape);
+    SwXShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const* pDoc);
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
@@ -275,7 +275,7 @@ class SwXGroupShape :
 protected:
     virtual ~SwXGroupShape() override;
 public:
-    SwXGroupShape(css::uno::Reference< css::uno::XInterface > & xShape);
+    SwXGroupShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const* pDoc);
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) throw() override;

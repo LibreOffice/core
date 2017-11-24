@@ -1680,11 +1680,11 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     if (rServiceName == "com.sun.star.drawing.GroupShape"
         || rServiceName == "com.sun.star.drawing.Shape3DSceneObject")
     {
-        return *new SwXGroupShape(xTmp);
+        return *new SwXGroupShape(xTmp, pDocShell->GetDoc());
     }
     if (rServiceName.startsWith("com.sun.star.drawing."))
     {
-        return *new SwXShape(xTmp);
+        return *new SwXShape(xTmp, pDocShell->GetDoc());
     }
     return xTmp;
 }

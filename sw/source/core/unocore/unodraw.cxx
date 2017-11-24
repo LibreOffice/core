@@ -73,6 +73,7 @@ using namespace ::com::sun::star;
 
 class SwShapeDescriptor_Impl
 {
+    bool m_isInReading;
     SwFormatHoriOrient*    pHOrient;
     SwFormatVertOrient*    pVOrient;
     SwFormatAnchor*        pAnchor;
@@ -95,7 +96,9 @@ public:
     bool    bInitializedPropertyNotifier;
 
 public:
-    SwShapeDescriptor_Impl() :
+    SwShapeDescriptor_Impl(SwDoc const*const pDoc)
+        : m_isInReading(pDoc && pDoc->IsInReading())
+        ,
      // #i32349# - no defaults, in order to determine on
      // adding a shape, if positioning attributes are set or not.
      pHOrient( nullptr ),
@@ -149,7 +152,8 @@ public:
         {
             if(bCreate && !pVOrient)
             {
-                if (!GetAnchor(true) || pAnchor->GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                if (m_isInReading && // tdf#113938 extensions might rely on old default
+                    (!GetAnchor(true) || pAnchor->GetAnchorId() == RndStdIds::FLY_AS_CHAR))
                 {   // for as-char, NONE ("from-top") is not a good default
                     pVOrient = new SwFormatVertOrient(0, text::VertOrientation::TOP, text::RelOrientation::FRAME);
                 }
@@ -381,9 +385,9 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
             xRet = nullptr;
             uno::Reference< beans::XPropertySet >  xPrSet;
             if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (dynamic_cast<const E3dScene*>( pObj) !=  nullptr)) )
-                xPrSet = new SwXGroupShape( xCreate );
+                xPrSet = new SwXGroupShape(xCreate, nullptr);
             else
-                xPrSet = new SwXShape( xCreate );
+                xPrSet = new SwXShape(xCreate, nullptr);
             xRet.set(xPrSet, uno::UNO_QUERY);
         }
     }
@@ -900,10 +904,12 @@ namespace
     }
 }
 
-SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
+SwXShape::SwXShape(uno::Reference<uno::XInterface> & xShape,
+                   SwDoc const*const pDoc)
+    :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
     m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),
-    pImpl(new SwShapeDescriptor_Impl()),
+    pImpl(new SwShapeDescriptor_Impl(pDoc)),
     m_bDescriptor(true)
 {
     if(!xShape.is())  // default Ctor
@@ -2716,8 +2722,9 @@ css::drawing::PolyPolygonBezierCoords SwXShape::ConvertPolyPolygonBezierToLayout
     return aConvertedPath;
 }
 
-SwXGroupShape::SwXGroupShape(uno::Reference< XInterface > & xShape) :
-        SwXShape(xShape)
+SwXGroupShape::SwXGroupShape(uno::Reference<XInterface> & xShape,
+                             SwDoc const*const pDoc)
+    : SwXShape(xShape, pDoc)
 {
 #if OSL_DEBUG_LEVEL > 0
     uno::Reference<XShapes> xShapes(xShapeAgg, uno::UNO_QUERY);
