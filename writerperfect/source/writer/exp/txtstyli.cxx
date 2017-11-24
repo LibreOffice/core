@@ -75,6 +75,38 @@ void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css
     }
 }
 
+/// Handler for <style:table-properties>.
+class XMLTablePropertiesContext : public XMLImportContext
+{
+public:
+    XMLTablePropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    XMLStyleContext &mrStyle;
+};
+
+XMLTablePropertiesContext::XMLTablePropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+    : XMLImportContext(rImport)
+    , mrStyle(rStyle)
+{
+}
+
+void XMLTablePropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+        if (sName == "style:rel-width")
+            // Make sure this is passed through as a string, and not parsed as a double.
+            mrStyle.GetTablePropertyList().insert(sName.getStr(), librevenge::RVNGPropertyFactory::newStringProp(sValue.getStr()));
+        else
+            mrStyle.GetTablePropertyList().insert(sName.getStr(), sValue.getStr());
+    }
+}
+
 /// Handler for <style:table-row-properties>.
 class XMLTableRowPropertiesContext : public XMLImportContext
 {
@@ -177,6 +209,8 @@ rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(const OUStr
         return new XMLTableColumnPropertiesContext(mrImport, *this);
     if (rName == "style:table-row-properties")
         return new XMLTableRowPropertiesContext(mrImport, *this);
+    if (rName == "style:table-properties")
+        return new XMLTablePropertiesContext(mrImport, *this);
     return nullptr;
 }
 
@@ -214,6 +248,8 @@ void XMLStyleContext::endElement(const OUString &/*rName*/)
         m_rStyles.GetCurrentColumnStyles()[m_aName] = m_aColumnPropertyList;
     if (m_aFamily == "table-row")
         m_rStyles.GetCurrentRowStyles()[m_aName] = m_aRowPropertyList;
+    if (m_aFamily == "table")
+        m_rStyles.GetCurrentTableStyles()[m_aName] = m_aTablePropertyList;
 }
 
 librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()
@@ -239,6 +275,11 @@ librevenge::RVNGPropertyList &XMLStyleContext::GetColumnPropertyList()
 librevenge::RVNGPropertyList &XMLStyleContext::GetRowPropertyList()
 {
     return m_aRowPropertyList;
+}
+
+librevenge::RVNGPropertyList &XMLStyleContext::GetTablePropertyList()
+{
+    return m_aTablePropertyList;
 }
 
 } // namespace exp
