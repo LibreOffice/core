@@ -252,6 +252,33 @@ protected:
 
 };
 
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScFormatEntry::Type& rType)
+{
+    switch (rType)
+    {
+    case ScFormatEntry::Type::Condition:
+        stream << "Condition";
+        break;
+    case ScFormatEntry::Type::Colorscale:
+        stream << "Colorscale";
+        break;
+    case ScFormatEntry::Type::Databar:
+        stream << "Databar";
+        break;
+    case ScFormatEntry::Type::Iconset:
+        stream << "Iconset";
+        break;
+    case ScFormatEntry::Type::Date:
+        stream << "Data";
+        break;
+    default:
+        stream << "?(" << (int)rType << ")";
+        break;
+    }
+    return stream;
+}
+
 class approx_less
 {
 public:
