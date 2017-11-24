@@ -252,7 +252,7 @@ namespace SwLangHelper
             if (bIsSingleScriptType)
             {
                 // change language for selection or paragraph
-                // (for paragraph is handled by previosuly having set the selection to the
+                // (for paragraph is handled by previously having set the selection to the
                 // whole paragraph)
                 if (bIsForSelection)
                 {
@@ -332,7 +332,7 @@ namespace SwLangHelper
         if (bIsForSelection)
         {
             // change language for selection or paragraph
-            // (for paragraph is handled by previosuly having set the selection to the
+            // (for paragraph is handled by previously having set the selection to the
             // whole paragraph)
 
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : nullptr;
