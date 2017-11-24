@@ -49,7 +49,7 @@ ClassificationEditView::ClassificationEditView(vcl::Window* pParent, WinBits nBi
     Color aBgColor = rStyleSettings.GetWindowColor();
 
     float fScaleFactor = GetDPIScaleFactor();
-    set_width_request(600 * fScaleFactor);
+    set_width_request(500 * fScaleFactor);
     set_height_request(100 * fScaleFactor);
 
     SetMapMode(MapMode(MapUnit::MapTwip));
