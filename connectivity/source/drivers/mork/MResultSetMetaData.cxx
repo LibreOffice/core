@@ -61,7 +61,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 /*column*/ )
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
 {
-    return static_cast<sal_Int32>((m_xColumns->get()).size());
+    return static_cast<sal_Int32>(m_xColumns->get().size());
 }
 
 

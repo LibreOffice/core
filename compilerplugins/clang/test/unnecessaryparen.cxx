@@ -66,4 +66,13 @@ int main()
     (void) sizeof (x); // expect no warning (for whatever reason; for symmetry with above case?)
 };
 
+struct S2 {
+    S2& GetText();
+    void toChar();
+};
+void func2(S2 *p)
+{
+    (p->GetText()).toChar(); // expected-error {{unnecessary parentheses around member expr [loplugin:unnecessaryparen]}}
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
