@@ -3451,6 +3451,8 @@ endef
 
 endif # ENABLE_BREAKPAD
 
+ifeq ($(ENABLE_GPGMEPP),TRUE)
+
 ifneq ($(SYSTEM_GPGMEPP),)
 
 gb_ExternalProject__use_gpgmepp:=
@@ -3566,6 +3568,18 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 endif
 
 endif
+
+else # !ENABLE_GPGMEPP
+
+gb_ExternalProject__use_gpgmepp :=
+gb_ExternalProject__use_libassuan :=
+gb_ExternalProject__use_libgpg-error :=
+
+gb_LinkTarget__use_gpgmepp :=
+gb_LinkTarget__use_libassuan :=
+gb_LinkTarget__use_libgpg-error :=
+
+endif # ENABLE_GPGMEPP
 
 define gb_LinkTarget__use_dconf
 $(call gb_LinkTarget_add_defs,$(1),$(DCONF_CFLAGS))
