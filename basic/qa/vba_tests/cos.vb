@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testCOS()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -31,15 +31,15 @@ Function verify_testCOS() As String
 
     nr2 = -0.532833020333398
     nr1 = Cos(23)
-    TestLog_ASSERT Round(nr1, 14) = Round(nr2, 14), "the return COS is: " & nr1
+    TestLog_ASSERT Round(nr1, 12) = Round(nr2, 12), "the return COS is: " & nr1
 
     nr2 = 0.980066577841242
     nr1 = Cos(0.2)
-    TestLog_ASSERT Round(nr1, 14) = Round(nr2, 14), "the return COS is: " & nr1
+    TestLog_ASSERT Round(nr1, 12) = Round(nr2, 12), "the return COS is: " & nr1
 
     nr2 = 0.487187675007006
     nr1 = Cos(200)
-    TestLog_ASSERT Round(nr1, 14) = Round(nr2, 14), "the return COS is: " & nr1
+    TestLog_ASSERT Round(nr1, 12) = Round(nr2, 12), "the return COS is: " & nr1
 
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)

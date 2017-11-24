@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testATN()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -29,19 +29,19 @@ Function verify_testATN() As String
 
     nr2 = 1.10714871779409
     nr1 = Atn(2)
-    TestLog_ASSERT Round(nr1, 14) = Round(nr2, 14), "the return ATN is: " & nr1
+    TestLog_ASSERT Round(nr1, 12) = Round(nr2, 12), "the return ATN is: " & nr1
 
     nr2 = 1.19166451926354
     nr1 = Atn(2.51)
-    TestLog_ASSERT Round(nr1, 14) = Round(nr2, 14), "the return ATN is: " & nr1
+    TestLog_ASSERT Round(nr1, 12) = Round(nr2, 12), "the return ATN is: " & nr1
 
     nr2 = -1.27229739520872
     nr1 = Atn(-3.25)
-    TestLog_ASSERT Round(nr1, 14) = Round(nr2, 14), "the return ATN is: " & nr1
+    TestLog_ASSERT Round(nr1, 12) = Round(nr2, 12), "the return ATN is: " & nr1
 
     nr2 = 1.56603445802574
     nr1 = Atn(210)
-    TestLog_ASSERT Round(nr1, 14) = Round(nr2, 14), "the return ATN is: " & nr1
+    TestLog_ASSERT Round(nr1, 12) = Round(nr2, 12), "the return ATN is: " & nr1
 
     nr2 = 0
     nr1 = Atn(0)
