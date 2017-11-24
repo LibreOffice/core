@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
     virtual SwField*        Copy() const override;
 
 public:
-    SwUserField(SwUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat = 0);
+    SwUserField(SwUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
 
     virtual sal_uInt16      GetSubType() const override;
     virtual void            SetSubType(sal_uInt16 nSub) override;

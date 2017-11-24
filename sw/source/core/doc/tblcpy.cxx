@@ -680,7 +680,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
         if( pUndo )
             pUndo->InsertRow( *this, aBoxes, aTarget.mnAddLine );
         else
-            InsertRow( pDoc, aBoxes, aTarget.mnAddLine );
+            InsertRow( pDoc, aBoxes, aTarget.mnAddLine, /*bBehind*/true );
 
         aTarget.moreLines( *this );
         bClear = true;
@@ -883,7 +883,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                     ? !pUndo->InsertRow( *this, SelLineFromBox( pInsBox,
                                 aBoxes ), nNewLns )
                     : !InsertRow( pDoc, SelLineFromBox( pInsBox,
-                                aBoxes ), nNewLns ) )
+                                aBoxes ), nNewLns, /*bBehind*/true ) )
                     return false;
             }
 

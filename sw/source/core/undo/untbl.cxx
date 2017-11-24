@@ -2801,7 +2801,7 @@ bool SwUndoTableCpyTable::InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes,
                                        0, 0, nCnt, true, false );
     SwTableSortBoxes aTmpLst( rTable.GetTabSortBoxes() );
 
-    bool bRet = rTable.InsertRow( rTable.GetFrameFormat()->GetDoc(), rBoxes, nCnt );
+    bool bRet = rTable.InsertRow( rTable.GetFrameFormat()->GetDoc(), rBoxes, nCnt, /*bBehind*/true );
     if( bRet )
         pInsRowUndo->SaveNewBoxes( *pTableNd, aTmpLst );
     else

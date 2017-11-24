@@ -462,7 +462,7 @@ public:
                                                 SfxStyleFamily      nRegion,
                                                 const OString&      sPage,
                                                 SwWrtShell*         pActShell,
-                                                bool                bNew = false) = 0;
+                                                bool                bNew) = 0;
     virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0;

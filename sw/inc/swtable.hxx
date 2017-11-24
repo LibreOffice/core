@@ -249,9 +249,9 @@ public:
     void PrepareDeleteCol( long nMin, long nMax );
 
     bool InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt, bool bBehind = true );
+                    sal_uInt16 nCnt, bool bBehind );
     bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt, bool bBehind = true );
+                    sal_uInt16 nCnt, bool bBehind );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrames, const bool bCorrBorder );

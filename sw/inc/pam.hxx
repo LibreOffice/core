@@ -188,13 +188,13 @@ public:
     bool Find(  const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 utl::TextSearch& rSText,
-                SwMoveFnCollection const & fnMove = fnMoveForward,
+                SwMoveFnCollection const & fnMove,
                 const SwPaM *pPam =nullptr, bool bInReadOnly = false);
     bool Find(  const SwFormat& rFormat,
-                SwMoveFnCollection const & fnMove = fnMoveForward,
+                SwMoveFnCollection const & fnMove,
                 const SwPaM *pPam =nullptr, bool bInReadOnly = false);
     bool Find(  const SfxPoolItem& rAttr, bool bValue,
-                SwMoveFnCollection const & fnMove = fnMoveForward,
+                SwMoveFnCollection const & fnMove,
                 const SwPaM *pPam =nullptr, bool bInReadOnly = false );
     bool Find(  const SfxItemSet& rAttr, bool bNoColls,
                 SwMoveFnCollection const & fnMove,

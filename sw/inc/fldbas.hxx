@@ -450,7 +450,7 @@ private:
     OUString m_sFormula;
 
 protected:
-    SwFormulaField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, const double fVal = 0.0 );
+    SwFormulaField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, const double fVal );
     SwFormulaField( const SwFormulaField& rField );
 
 public:

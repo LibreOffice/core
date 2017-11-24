@@ -152,7 +152,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
-    explicit Meta(SwFormatMeta * const i_pFormat = nullptr);
+    explicit Meta(SwFormatMeta * const i_pFormat);
     virtual ~Meta() override;
 
     /// sfx2::Metadatable
@@ -179,9 +179,9 @@ private:
     bool IsFixedLanguage() const    { return m_bIsFixedLanguage; }
     void SetIsFixedLanguage(bool b) { m_bIsFixedLanguage = b; }
 
-    explicit MetaField(SwFormatMeta * const i_pFormat = nullptr,
-            const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
-            const bool bIsFixedLanguage = false );
+    explicit MetaField(SwFormatMeta * const i_pFormat,
+            const sal_uInt32 nNumberFormat,
+            const bool bIsFixedLanguage );
 
 public:
     /// get prefix/suffix from the RDF repository. @throws RuntimeException

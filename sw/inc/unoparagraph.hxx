@@ -74,7 +74,7 @@ private:
 
     SwXParagraph(css::uno::Reference< css::text::XText > const & xParent,
             SwTextNode & rTextNode,
-            const sal_Int32 nSelStart, const sal_Int32 nSelEnd = - 1);
+            const sal_Int32 nSelStart, const sal_Int32 nSelEnd);
 
     /// descriptor
     SwXParagraph();
