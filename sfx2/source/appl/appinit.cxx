@@ -218,6 +218,7 @@ void SfxApplication::Initialize_Impl()
 
     if (!utl::ConfigManager::IsFuzzing())
     {
+        SolarMutexGuard aGuard;
         //ensure instantiation of listener that manages the internal recently-used
         //list
         SfxPickList::ensure();
