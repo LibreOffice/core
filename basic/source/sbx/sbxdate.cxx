@@ -26,6 +26,8 @@
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
+#include <runtime.hxx>
+#include <sbintern.hxx>
 #include <math.h>
 #include <comphelper/processfactory.hxx>
 #include <memory>
@@ -101,8 +103,16 @@ double ImpGetDate( const SbxValues* p )
         else
         {
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-
-            std::unique_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
+            std::shared_ptr<SvNumberFormatter> pFormatter;
+            if (GetSbData()->pInst)
+            {
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
+            }
+            else
+            {
+                sal_uInt32 nDummy;
+                pFormatter = SbiInstance::PrepareNumberFormatter( nDummy, nDummy, nDummy );
+            }
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
@@ -269,7 +279,16 @@ start:
             Color* pColor;
 
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-            std::unique_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
+            std::shared_ptr<SvNumberFormatter> pFormatter;
+            if (GetSbData()->pInst)
+            {
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
+            }
+            else
+            {
+                sal_uInt32 nDummy;
+                pFormatter = SbiInstance::PrepareNumberFormatter( nDummy, nDummy, nDummy );
+            }
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
