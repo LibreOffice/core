@@ -286,20 +286,20 @@ start:
                 {
                     switch( eDate )
                     {
-                    case DateOrder::MDY: aStr = "MM.TT.JJJJ"; break;
-                    case DateOrder::DMY: aStr = "TT.MM.JJJJ"; break;
-                    case DateOrder::YMD: aStr = "JJJJ.MM.TT"; break;
-                    default:               aStr = "MM.TT.JJJJ";
+                        default:
+                        case DateOrder::MDY: aStr = "MM/DD/YYYY"; break;
+                        case DateOrder::DMY: aStr = "DD/MM/YYYY"; break;
+                        case DateOrder::YMD: aStr = "YYYY/MM/DD"; break;
                     }
                 }
                 else
                 {
                     switch( eDate )
                     {
-                    case DateOrder::MDY: aStr = "MM.TT.JJJJ HH:MM:SS"; break;
-                    case DateOrder::DMY: aStr = "TT.MM.JJJJ HH:MM:SS"; break;
-                    case DateOrder::YMD: aStr = "JJJJ.MM.TT HH:MM:SS"; break;
-                    default:              aStr = "MM.TT.JJJJ HH:MM:SS";
+                        default:
+                        case DateOrder::MDY: aStr = "MM/DD/YYYY HH:MM:SS"; break;
+                        case DateOrder::DMY: aStr = "DD/MM/YYYY HH:MM:SS"; break;
+                        case DateOrder::YMD: aStr = "YYYY/MM/DD HH:MM:SS"; break;
                     }
                 }
             }
@@ -311,7 +311,7 @@ start:
                                             nCheckPos,
                                             nType,
                                             nIndex,
-                                            LANGUAGE_GERMAN,
+                                            LANGUAGE_ENGLISH_US,
                                             eLangType );
             pFormatter->GetOutputString( n, nIndex, *p->pOUString, &pColor );
             break;
