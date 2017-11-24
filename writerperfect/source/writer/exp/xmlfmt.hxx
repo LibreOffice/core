@@ -28,7 +28,8 @@ public:
     XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles,
                      std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles,
                      std::map<OUString, librevenge::RVNGPropertyList> &rCellStyles,
-                     std::map<OUString, librevenge::RVNGPropertyList> &rColumnStyles);
+                     std::map<OUString, librevenge::RVNGPropertyList> &rColumnStyles,
+                     std::map<OUString, librevenge::RVNGPropertyList> &rRowStyles);
 
     rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
@@ -36,11 +37,13 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTextStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentCellStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentColumnStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentRowStyles();
 private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rParagraphStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rTextStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rCellStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rColumnStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> &m_rRowStyles;
 };
 
 } // namespace exp
