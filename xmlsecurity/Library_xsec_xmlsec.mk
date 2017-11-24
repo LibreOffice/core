@@ -55,14 +55,10 @@ endif
 
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	boost_headers \
+	gpgmepp \
 	libxml2 \
 	xmlsec \
 ))
-ifeq ($(ENABLE_GPGMEPP),TRUE)
-$(eval $(call gb_Library_use_externals,xsec_xmlsec,\
-	gpgmepp \
-))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/biginteger \
