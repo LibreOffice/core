@@ -12,18 +12,13 @@ $(eval $(call gb_Module_Module,gpgmepp))
 $(eval $(call gb_Module_add_targets,gpgmepp,\
 	UnpackedTarball_gpgmepp \
 	ExternalProject_gpgmepp \
+	ExternalPackage_gpgmepp \
 ))
 
 ifeq ($(COM),MSC)
 
 $(eval $(call gb_Module_add_targets,gpgmepp,\
 	Library_gpgmepp \
-))
-
-else
-
-$(eval $(call gb_Module_add_targets,gpgmepp,\
-	ExternalPackage_gpgmepp \
 ))
 
 endif
