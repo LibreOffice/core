@@ -10,9 +10,9 @@ IOSDEV = /Applications/Xcode.app/Contents/Developer/
 IOSLD = $(IOSDEV)Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
 
 ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT = $(SRCDIR)/ios/generated/libLibreOfficeKit_$(CPUNAME)_debug.o
+IOSKIT = $(SRCDIR)/ios/generated/LibreOfficeKit_$(CPUNAME)_debug.o
 else
-IOSKIT = $(SRCDIR)/ios/generated/libLibreOfficeKit_$(CPUNAME).o
+IOSKIT = $(SRCDIR)/ios/generated/LibreOfficeKit_$(CPUNAME).o
 endif
 
 
