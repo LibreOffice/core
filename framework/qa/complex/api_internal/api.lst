@@ -96,7 +96,6 @@ job96=sc.ScFilterDescriptorBase
 job97=sc.ScFunctionListObj
 job98=sc.ScHeaderFieldObj
 job99=sc.ScHeaderFieldsObj
-job100=sc.ScHeaderFooterContentObj
 job101=sc.ScIndexEnumeration_CellAnnotationsEnumeration
 job102=sc.ScIndexEnumeration_CellAreaLinksEnumeration
 job103=sc.ScIndexEnumeration_DatabaseRangesEnumeration
