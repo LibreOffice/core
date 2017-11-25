@@ -60,6 +60,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xdatapilotfieldgrouping \
 	test/source/sheet/xdatapilottable \
 	test/source/sheet/xdatapilottable2 \
+	test/source/sheet/xheaderfootercontent \
 	test/source/sheet/xlabelrange \
 	test/source/sheet/xlabelranges \
 	test/source/sheet/xnamedrange \
