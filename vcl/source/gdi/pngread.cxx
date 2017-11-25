@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 // -----------
 // - Defines -
@@ -296,7 +297,7 @@ bool PNGReaderImpl::ReadNextChunk()
         if( mnChunkLen < 0 )
             return false;
         const sal_Size nStreamPos = mrPNGStream.Tell();
-        if( nStreamPos + mnChunkLen >= mnStreamSize )
+        if( nStreamPos + mnChunkLen + 4 >= mnStreamSize )
             return false;
 
         // calculate chunktype CRC (swap it back to original byte order)
@@ -434,7 +435,16 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
                 if ( !mpInflateInBuf )  // taking care that the header has properly been read
                     mbStatus = sal_False;
                 else if ( !mbIDAT )     // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
-                    ImplReadIDAT();
+                {
+                    try
+                    {
+                        ImplReadIDAT();
+                    }
+                    catch (::com::sun::star::lang::IndexOutOfBoundsException&)
+                    {
+                        mbStatus = sal_False;
+                    }
+                }
             }
             break;
 
@@ -1644,6 +1654,8 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIn
         return;
     nX >>= mnPreviewShift;
 
+    if (nPalIndex >= mpAcc->GetPaletteEntryCount())
+        throw ::com::sun::star::lang::IndexOutOfBoundsException();
     mpAcc->SetPixelIndex( nY, nX, nPalIndex );
 }
 
@@ -1674,6 +1686,8 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
         return;
     nX >>= mnPreviewShift;
 
+    if (nPalIndex >= mpAcc->GetPaletteEntryCount())
+        throw ::com::sun::star::lang::IndexOutOfBoundsException();
     mpAcc->SetPixelIndex( nY, nX, nPalIndex );
     mpMaskAcc->SetPixelIndex( nY, nX, ~nAlpha );
 }
