@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_134a8755",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-25T13:49:41Z",
+      "side": 1,
+      "message": "Why not just use SCROW instead of auto? anyway..",
+      "range": {
+        "startLine": 755,
+        "startChar": 16,
+        "endLine": 755,
+        "endChar": 20
+      },
+      "revId": "aa763a6bd0f59a5c679b2c8ec795352509914f3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
