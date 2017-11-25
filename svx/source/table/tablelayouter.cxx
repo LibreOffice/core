@@ -85,7 +85,7 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellRef& xCell, const CellPo
                 if( ((sal_Int32)maRows.size()) <= aPos.mnRow )
                     break;
 
-                height += maRows[aPos.mnRow++].mnSize;
+                height = o3tl::saturating_add(height, maRows[aPos.mnRow++].mnSize);
                 nRowSpan--;
             }
 
@@ -96,7 +96,7 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellRef& xCell, const CellPo
                 if( ((sal_Int32)maColumns.size()) <= aPos.mnCol )
                     break;
 
-                width += maColumns[aPos.mnCol++].mnSize;
+                width = o3tl::saturating_add(width, maColumns[aPos.mnCol++].mnSize);
                 nColSpan--;
             }
         }
