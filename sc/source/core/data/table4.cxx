@@ -78,10 +78,10 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
         return 0;
     }
     const sal_Unicode* p = rValue.getStr();
-    sal_Int32 nNeg = 0;
+    sal_Int32 nSign = 0;
     sal_Int32 nNum = 0;
-    if ( p[nNum] == '-' )
-        nNum = nNeg = 1;
+    if ( p[nNum] == '-' || p[nNum] == '+' )
+        nNum = nSign = 1;
     while ( p[nNum] && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
         nNum++;
 
@@ -91,34 +91,37 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
     // #i5550# If there are numbers at the beginning and the end,
     // prefer the one at the beginning only if it's followed by a space.
     // Otherwise, use the number at the end, to enable things like IP addresses.
-    if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(OUString(cLast)) ) )
+    if ( nNum > nSign && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(OUString(cLast)) ) )
     {   // number at the beginning
         nVal = rValue.copy( 0, nNum ).toInt32();
         //  any number with a leading zero sets the minimum number of digits
-        if ( p[nNeg] == '0' && pMinDigits && ( nNum - nNeg > *pMinDigits ) )
-            *pMinDigits = nNum - nNeg;
+        if ( p[nSign] == '0' && pMinDigits && ( nNum - nSign > *pMinDigits ) )
+            *pMinDigits = nNum - nSign;
         rValue = rValue.copy(nNum);
         return -1;
     }
     else
     {
-        nNeg = 0;
+        nSign = 0;
         sal_Int32 nEnd = nNum = rValue.getLength() - 1;
         while ( nNum && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
             nNum--;
-        if ( p[nNum] == '-' )
+        if ( p[nNum] == '-' || p[nNum] == '+' )
         {
             nNum--;
-            nNeg = 1;
+            nSign = 1;
         }
-        if ( nNum < nEnd - nNeg )
+        if ( nNum < nEnd - nSign )
         {   // number at the end
             nVal = rValue.copy( nNum + 1 ).toInt32();
             //  any number with a leading zero sets the minimum number of digits
-            if ( p[nNum+1+nNeg] == '0' && pMinDigits && ( nEnd - nNum - nNeg > *pMinDigits ) )
-                *pMinDigits = nEnd - nNum - nNeg;
+            if ( p[nNum+1+nSign] == '0' && pMinDigits && ( nEnd - nNum - nSign > *pMinDigits ) )
+                *pMinDigits = nEnd - nNum - nSign;
             rValue = rValue.copy(0, nNum + 1);
-            return 1;
+            if (nSign) // use the return value = 2 to put back the '+'
+                return 2;
+            else
+                return 1;
         }
     }
     nVal = 0;
@@ -938,7 +941,6 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                             {
                                 if (aValue == ScGlobal::GetOrdinalSuffix( nVal))
                                     aValue = ScGlobal::GetOrdinalSuffix( nVal + nDelta);
-
                                 aValue = lcl_ValueString( nVal + nDelta, nCellDigits ) + aValue;
                             }
                             else if ( nFlag > 0 )
@@ -1434,23 +1436,32 @@ void ScTable::FillAutoSimple(
                 case CELLTYPE_EDIT:
                     if ( nHeadNoneTail )
                     {
-                        sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
-                        if ( nHeadNoneTail < 0 )
-                        {
-                            setSuffixCell(
-                                aCol[rCol], rRow,
-                                nNextValue, nCellDigits, aValue,
-                                aSrcCell.meType, bIsOrdinalSuffix);
-                        }
-                        else
-                        {
-                            OUString aStr = aValue + lcl_ValueString(nNextValue,
-                                                                     nCellDigits );
-                            aCol[rCol].SetRawString(rRow, aStr);
-                        }
+                      sal_Int32 nNextValue;
+                       if (nStringValue < 0)
+                           nNextValue = nStringValue - (sal_Int32)nDelta;
+                       else
+                           nNextValue = nStringValue + (sal_Int32)nDelta;
+
+                      if ( nHeadNoneTail < 0 )
+                      {
+                          setSuffixCell(
+                              aCol[rCol], rRow,
+                              nNextValue, nCellDigits, aValue,
+                              aSrcCell.meType, bIsOrdinalSuffix);
+                      }
+                      else
+                      {
+                          OUString aStr;
+                          if (nHeadNoneTail == 2 && nNextValue >= 0) // Put back the '+'
+                              aStr = aValue + "+" + lcl_ValueString(nNextValue, nCellDigits);
+                          else
+                              aStr = aValue + lcl_ValueString(nNextValue, nCellDigits);
+
+                          aCol[rCol].SetRawString(rRow, aStr);
+                      }
                     }
                     else
-                        aSrcCell.commit(aCol[rCol], rRow);
+                      aSrcCell.commit(aCol[rCol], rRow);
 
                     break;
                 case CELLTYPE_FORMULA :
@@ -1885,7 +1896,10 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 }
                                 else
                                 {
-                                    aStr = aValue;
+                                    if (nHeadNoneTail == 2 && nStringValue >= 0) // Put back the '+'
+                                        aStr = aValue + "+";
+                                    else
+                                        aStr = aValue;
                                     aStr += lcl_ValueString( nStringValue, nMinDigits );
                                     aCol[nCol].SetRawString(static_cast<SCROW>(nRow), aStr);
                                 }
