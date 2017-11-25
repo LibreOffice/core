@@ -2962,15 +2962,15 @@ sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const
     bool bHidden = false;
     SCCOL nLastHiddenCol = -1;
     auto colWidthIt = mpColWidth->begin() + nStartCol;
-    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol, ++colWidthIt)
     {
         if (nCol > nLastHiddenCol)
             bHidden = ColHidden(nCol, nullptr, &nLastHiddenCol);
 
-        if (!bHidden)
-            nW += *colWidthIt;
+        if (bHidden)
+            continue;
 
-        ++colWidthIt;
+        nW += *colWidthIt;
     }
     return nW;
 }
@@ -3406,12 +3406,9 @@ SCCOL ScTable::GetLastChangedCol() const
 
     SCCOL nLastFound = 0;
     auto colWidthIt = mpColWidth->begin() + 1;
-    for (SCCOL nCol = 1; nCol < aCol.size(); ++nCol)
-    {
+    for ( SCCOL nCol = 1; nCol < aCol.size(); nCol++, ++colWidthIt )
         if ((mpColFlags->GetValue(nCol) & CRFlags::All) || (*colWidthIt != STD_COL_WIDTH))
             nLastFound = nCol;
-        ++colWidthIt;
-    }
 
     return nLastFound;
 }
@@ -3825,13 +3822,11 @@ sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
     sal_uLong n = 0;
     if ( mpColWidth )
     {
+        SCCOL i;
         auto colWidthIt = mpColWidth->begin();
-        for (SCCOL i = 0; i < nCol; ++i)
-        {
+        for( i = 0; i < nCol; i++, ++colWidthIt )
             if (!( bHiddenAsZero && ColHidden(i) ))
                 n += *colWidthIt;
-            ++colWidthIt;
-        }
     }
     else
     {
