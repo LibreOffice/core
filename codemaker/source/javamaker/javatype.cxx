@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <list>
 #include <map>
 #include <memory>
 #include <set>
@@ -752,7 +751,7 @@ void handleEnumType(
         std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();
         defCode->instrAreturn();
-        std::list< ClassFile::Code * > blocks;
+        std::vector< ClassFile::Code * > blocks;
             //FIXME: pointers contained in blocks may leak
         sal_Int32 last = SAL_MAX_INT32;
         for (const auto& pair : map)
@@ -779,7 +778,7 @@ void handleEnumType(
         std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();
         defCode->instrAreturn();
-        std::list< std::pair< sal_Int32, ClassFile::Code * > > blocks;
+        std::vector< std::pair< sal_Int32, ClassFile::Code * > > blocks;
             //FIXME: pointers contained in blocks may leak
         for (const auto& pair : map )
         {

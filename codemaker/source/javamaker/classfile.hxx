@@ -23,7 +23,6 @@
 #include <codemaker/unotype.hxx>
 #include <sal/types.h>
 
-#include <list>
 #include <map>
 #include <utility>
 #include <vector>
@@ -89,7 +88,7 @@ public:
 
         void instrLookupswitch(
             Code const * defaultBlock,
-            std::list< std::pair< sal_Int32, Code * > > const & blocks);
+            std::vector< std::pair< sal_Int32, Code * > > const & blocks);
 
         void instrNew(rtl::OString const & type);
         void instrNewarray(codemaker::UnoType::Sort sort);
@@ -108,7 +107,7 @@ public:
 
         void instrTableswitch(
             Code const * defaultBlock, sal_Int32 low,
-            std::list< Code * > const & blocks);
+            std::vector< Code * > const & blocks);
 
         void loadIntegerConstant(sal_Int32 value);
         void loadStringConstant(rtl::OString const & value);
