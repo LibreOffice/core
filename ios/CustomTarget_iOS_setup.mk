@@ -8,7 +8,6 @@
 #- Env ------------------------------------------------------------------------
 IOSGEN := $(SRCDIR)/ios/generated
 IOSRES := $(IOSGEN)/resources
-IOSAPPXC := $(WORKDIR)/ios/loApp.xcconfig
 
 
 #- Top level  -----------------------------------------------------------------
@@ -16,25 +15,11 @@ $(eval $(call gb_CustomTarget_CustomTarget,ios/iOS_setup))
 
 
 
-$(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSAPPXC) $(IOSGEN)/native-code.h
+$(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 
 
 
 #- Generate dynamic files  ---------------------------------------------------
-$(IOSAPPXC): $(SRCDIR)/ios/loApp.xcconfig.in $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-	@mkdir -p $(WORKDIR)/ios
-	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
-	    -e "s'@INSTDIR@'$(INSTDIR)'g" \
-	    -e "s'@SRCDIR@'$(SRC_ROOT)'g" \
-	    -e "s'@WORKDIR@'$(WORKDIR)'g" \
-	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
-	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
-	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
-	    $(SRCDIR)/ios/loApp.xcconfig.in > $(IOSAPPXC)
-
-
-
 $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
