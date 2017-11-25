@@ -25,9 +25,11 @@ namespace sc {
 
 SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent ) :
     ModelessDialog(pParent, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui"),
+    aSkipped( ScResId( SCSTR_SKIPPED ) ),
+    aTotal( ScResId( SCSTR_TOTAL ) ),
     mpBindings(_pBindings), mpDoc(nullptr)
 {
-    get(mpLabel, "skipped");
+    get(mpSearchResults, "lbSearchResults");
 
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("results");
     Size aControlSize(150, 120);
@@ -50,23 +52,19 @@ SearchResultsDlg::~SearchResultsDlg()
 void SearchResultsDlg::dispose()
 {
     mpList.disposeAndClear();
-    mpLabel.disposeAndClear();
+    mpSearchResults.disposeAndClear();
     ModelessDialog::dispose();
 }
 
 namespace
 {
     class ListWrapper {
-        size_t mnCount;
-        static const size_t mnMaximum = 1000;
         OUStringBuffer maName;
-        VclPtr<FixedText> mpLabel;
         VclPtr<SvSimpleTable> mpList;
     public:
-        ListWrapper(const VclPtr<SvSimpleTable> &pList,
-                    const VclPtr<FixedText> &pLabel) :
-            mnCount(0),
-            mpLabel(pLabel),
+        size_t mnCount = 0;
+        static const size_t mnMaximum = 1000;
+        ListWrapper(const VclPtr<SvSimpleTable> &pList) :
             mpList(pList)
         {
             mpList->Clear();
@@ -88,33 +86,19 @@ namespace
                 mpList->InsertEntry(maName.makeStringAndClear());
             }
         }
-        void Update()
-        {
-            if (mnCount > mnMaximum)
-            {
-                if (mpLabel)
-                {
-                    size_t nSkipped = mnCount - mnMaximum;
-                    OUString aSkipped(mpLabel->GetText());
-                    mpList->InsertEntry(
-                        aSkipped.replaceFirst("$1", OUString::number(nSkipped)));
-                }
-            }
-            mpList->SetUpdateMode(true);
-        }
     };
 }
 
 void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges, bool bCellNotes )
 {
-    ListWrapper aList(mpList, mpLabel);
+    ListWrapper aList(mpList);
     std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
     SCTAB nTabCount = aTabNames.size();
 
     // tdf#92160 - too many results blow the widget's mind
     size_t nMatchMax = rMatchedRanges.size();
-    if (nMatchMax > 1000)
-        nMatchMax = 1000;
+    if (nMatchMax > ListWrapper::mnMaximum)
+        nMatchMax = ListWrapper::mnMaximum;
 
     if (bCellNotes)
     {
@@ -163,7 +147,14 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
             }
         }
     }
-    aList.Update();
+
+    OUString aSearchResults = ScGlobal::ReplaceOrAppend( aTotal, "%1", OUString::number( aList.mnCount ) );
+    if (aList.mnCount > ListWrapper::mnMaximum)
+        aSearchResults += " " + ScGlobal::ReplaceOrAppend( aSkipped, "%1", OUString::number( ListWrapper::mnMaximum ) );
+    mpSearchResults->SetText(aSearchResults);
+
+    mpList->SetUpdateMode(true);
+
     mpDoc = pDoc;
 }
 

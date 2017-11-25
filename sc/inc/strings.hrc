@@ -47,6 +47,8 @@
 #define SCSTR_NO_TAB_BG_COLOR                       NC_("SCSTR_NO_TAB_BG_COLOR", "Default")
 #define SCSTR_RENAMEOBJECT                          NC_("SCSTR_RENAMEOBJECT", "Name Object")
 #define STR_INSERTGRAPHIC                           NC_("STR_INSERTGRAPHIC", "Insert Image")
+#define SCSTR_TOTAL                                 NC_("SCSTR_TOTAL", "%1 results found")
+#define SCSTR_SKIPPED                               NC_("SCSTR_SKIPPED", "(only %1 are listed)")
 // Attribute
 #define SCSTR_PROTECTDOC                            NC_("SCSTR_PROTECTDOC", "Protect Document")
 #define SCSTR_UNPROTECTDOC                          NC_("SCSTR_UNPROTECTDOC", "Unprotect document")
