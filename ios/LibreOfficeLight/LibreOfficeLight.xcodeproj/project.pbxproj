@@ -16,6 +16,7 @@
 		393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975771F8BECB0002DC80B /* libiconv.tbd */; };
 		3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975791F8BECC1002DC80B /* libz.tbd */; };
 		39503A751F94D44900F19C78 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 39503A741F94D44900F19C78 /* libc++.tbd */; };
+		396C83371FC989AB008E662A /* dummyLOkit.c in Sources */ = {isa = PBXBuildFile; fileRef = 39284DB01FA5E150006F43E4 /* dummyLOkit.c */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -267,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				396C83371FC989AB008E662A /* dummyLOkit.c in Sources */,
 				392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */,
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */,

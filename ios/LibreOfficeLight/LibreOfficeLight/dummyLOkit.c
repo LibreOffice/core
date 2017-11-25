@@ -48,3 +48,17 @@ int BridgeLOkit_LeaveHipernate()
 {
     return 0;
 }
+
+
+
+int BridgeLOkit_Sizing(const int countXtiles, const int countYtiles,
+                       const int pixelsXtile, const int pixelsYtile)
+{
+    (void)countXtiles;
+    (void)countYtiles;
+    (void)pixelsXtile;
+    (void)pixelsYtile;
+    return 0;
+}
+
+
