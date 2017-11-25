@@ -18,4 +18,74 @@
 +#include <limits.h>
  
  #include "pixman-private.h"
- 
+
+--- misc/pixman-0.24.4/pixman/pixman-glyph.c	2015-06-30 05:48:31.000000000 -0400
++++ misc/build/pixman-0.24.4/pixman/pixman-glyph.c	2017-11-25 13:26:33.075558418 -0500
+@@ -38,6 +38,7 @@
+
+ /* XXX: These numbers are arbitrary---we've never done any measurements.
+  */
++#define N_PIXELS_HIGH_WATER  (4 * 1024 * 1024)
+ #define N_GLYPHS_HIGH_WATER  (16384)
+ #define N_GLYPHS_LOW_WATER   (8192)
+ #define HASH_SIZE (2 * N_GLYPHS_HIGH_WATER)
+@@ -58,6 +59,7 @@
+     int			n_glyphs;
+     int			n_tombstones;
+     int			freeze_count;
++    long        n_pixels;
+     pixman_list_t	mru;
+     glyph_t *		glyphs[HASH_SIZE];
+ };
+@@ -133,6 +135,7 @@
+     if (*loc == TOMBSTONE)
+ 	cache->n_tombstones--;
+     cache->n_glyphs++;
++    cache->n_pixels += glyph->image->bits.width * glyph->image->bits.height;
+
+     *loc = glyph;
+ }
+@@ -150,6 +153,7 @@
+     cache->glyphs[idx & HASH_MASK] = TOMBSTONE;
+     cache->n_tombstones++;
+     cache->n_glyphs--;
++    cache->n_pixels -= glyph->image->bits.width * glyph->image->bits.height;
+
+     /* Eliminate tombstones if possible */
+     if (cache->glyphs[(idx + 1) & HASH_MASK] == NULL)
+@@ -180,6 +184,7 @@
+
+     cache->n_glyphs = 0;
+     cache->n_tombstones = 0;
++    cache->n_pixels = 0;
+ }
+
+ PIXMAN_EXPORT pixman_glyph_cache_t *
+@@ -194,6 +199,7 @@
+     cache->n_glyphs = 0;
+     cache->n_tombstones = 0;
+     cache->freeze_count = 0;
++    cache->n_pixels = 0;
+
+     pixman_list_init (&cache->mru);
+
+@@ -220,9 +226,9 @@
+ pixman_glyph_cache_thaw (pixman_glyph_cache_t  *cache)
+ {
+     if (--cache->freeze_count == 0					&&
+-	cache->n_glyphs + cache->n_tombstones > N_GLYPHS_HIGH_WATER)
++	(cache->n_glyphs + cache->n_tombstones > N_GLYPHS_HIGH_WATER || cache->n_pixels > N_PIXELS_HIGH_WATER))
+     {
+-	if (cache->n_tombstones > N_GLYPHS_HIGH_WATER)
++	if (cache->n_tombstones > N_GLYPHS_LOW_WATER)
+ 	{
+ 	    /* More than half the entries are
+ 	     * tombstones. Just dump the whole table.
+@@ -230,7 +236,7 @@
+ 	    clear_table (cache);
+ 	}
+
+-	while (cache->n_glyphs > N_GLYPHS_LOW_WATER)
++	while (cache->n_glyphs > N_GLYPHS_LOW_WATER || cache->n_pixels > N_PIXELS_HIGH_WATER)
+ 	{
+ 	    glyph_t *glyph = CONTAINER_OF (glyph_t, mru_link, cache->mru.tail);
