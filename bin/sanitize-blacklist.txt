@@ -1,0 +1,5 @@
+[float-divide-by-zero]
+src:*/sc/source/core/tool/interpr1.cxx
+src:*/sc/source/core/tool/interpr2.cxx
+src:*/scaddins/source/analysis/analysis.cxx
+src:*/scaddins/source/analysis/financial.cxx
