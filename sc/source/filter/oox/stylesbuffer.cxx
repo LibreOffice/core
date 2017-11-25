@@ -266,14 +266,16 @@ void Color::setIndexed( sal_Int32 nPaletteIdx, double fTint )
 
 void Color::importColor( const AttributeList& rAttribs )
 {
-    if( rAttribs.getBool( XML_auto, false ) )
-        setAuto();
+    // tdf#113271 The order of import color is very important in case of more than one color attributes was provided.
+    // This order (theme -> rgb -> indexed -> auto) is not documented and was gathered experimentally based on MS Excel 2013.
+    if( rAttribs.hasAttribute( XML_theme ) )
+        setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_rgb ) )
         setRgb( rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT ), rAttribs.getDouble( XML_tint, 0.0 ) );
-    else if( rAttribs.hasAttribute( XML_theme ) )
-        setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_indexed ) )
         setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
+    else if( rAttribs.getBool( XML_auto, false ) )
+        setAuto();
     else
     {
         OSL_FAIL( "Color::importColor - unknown color type" );
