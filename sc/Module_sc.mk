@@ -140,6 +140,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_scenariosobj \
 	CppunitTest_sc_labelrangesobj \
 	CppunitTest_sc_labelrangeobj \
+	CppunitTest_sc_headerfootercontentobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\

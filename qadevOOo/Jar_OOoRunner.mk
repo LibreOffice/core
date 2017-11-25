@@ -604,7 +604,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XEnhancedMouseClickBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_XFormulaQuery \
     qadevOOo/tests/java/ifc/sheet/_XFunctionDescriptions \
-    qadevOOo/tests/java/ifc/sheet/_XHeaderFooterContent \
     qadevOOo/tests/java/ifc/sheet/_XMultipleOperation \
     qadevOOo/tests/java/ifc/sheet/_XRangeSelection \
     qadevOOo/tests/java/ifc/sheet/_XRecentFunctions \
@@ -1043,7 +1042,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScFunctionListObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFieldObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFieldsObj \
-    qadevOOo/tests/java/mod/_sc/ScHeaderFooterContentObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextCursor \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextObj \
     qadevOOo/tests/java/mod/_sc/ScImportDescriptorBase \
