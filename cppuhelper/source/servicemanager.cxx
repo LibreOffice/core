@@ -1809,6 +1809,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
 }
 
 /// Make a simpler unique name for preload / progress reporting.
+#ifndef IOS
 static rtl::OUString simplifyModule(const rtl::OUString &uri)
 {
     sal_Int32 nIdx;
@@ -1833,6 +1834,7 @@ static rtl::OUString simplifyModule(const rtl::OUString &uri)
         edit.remove(0,3);
     return edit.makeStringAndClear();
 }
+#endif
 
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 void cppuhelper::ServiceManager::preloadImplementations() {
