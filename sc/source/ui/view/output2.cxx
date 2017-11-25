@@ -263,6 +263,83 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )
     SetAutoText( aString );     // same text again, to get text size
 }
 
+struct ScOutputData::OutputAreaParam
+{
+    tools::Rectangle   maAlignRect;
+    tools::Rectangle   maClipRect;
+    long        mnColWidth;
+    long        mnLeftClipLength; /// length of the string getting cut off on the left.
+    long        mnRightClipLength; /// length of the string getting cut off on the right.
+    bool        mbLeftClip;
+    bool        mbRightClip;
+};
+
+class ScOutputData::DrawEditParam
+{
+public:
+    SvxCellHorJustify       meHorJustAttr;      ///< alignment attribute
+    SvxCellHorJustify       meHorJustContext;   ///< context depending on attribute, content and direction
+    SvxCellHorJustify       meHorJustResult;    ///< result for EditEngine
+    SvxCellVerJustify       meVerJust;
+    SvxCellJustifyMethod    meHorJustMethod;
+    SvxCellJustifyMethod    meVerJustMethod;
+    SvxCellOrientation      meOrient;
+    SCSIZE                  mnArrY;
+    SCCOL                   mnX;
+    SCCOL                   mnCellX;
+    SCROW                   mnCellY;
+    long                    mnPosX;
+    long                    mnPosY;
+    long                    mnInitPosX;
+    bool                    mbBreak:1;
+    bool                    mbCellIsValue:1;
+    bool                    mbAsianVertical:1;
+    bool                    mbPixelToLogic:1;
+    bool                    mbHyphenatorSet:1;
+    ScFieldEditEngine*      mpEngine;
+    ScRefCellValue          maCell;
+    const ScPatternAttr*    mpPattern;
+    const SfxItemSet*       mpCondSet;
+    const SfxItemSet*       mpPreviewFontSet;
+    const ScPatternAttr*    mpOldPattern;
+    const SfxItemSet*       mpOldCondSet;
+    const SfxItemSet*       mpOldPreviewFontSet;
+    const RowInfo*          mpThisRowInfo;
+    const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
+
+    explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
+
+    bool readCellContent(const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
+    void setPatternToEngine(bool bUseStyleColor);
+    void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
+    void calcPaperSize(Size& rPaperSize, const tools::Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
+    void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
+    bool hasLineBreak() const;
+    bool isHyperlinkCell() const;
+
+    /**
+     * When the text is vertically oriented, the text is either rotated 90
+     * degrees to the right or 90 degrees to the left.   Note that this is
+     * different from being vertically stacked.
+     */
+    bool isVerticallyOriented() const;
+
+    /**
+     * Calculate offset position for vertically oriented (either
+     * top-bottom or bottom-top orientation) text.
+     *
+     * @param rLogicStart initial position in pixels.  When the call is
+     *                    finished, this parameter will store the new
+     *                    position.
+     */
+    void calcStartPosForVertical(Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, const OutputDevice* pRefDevice);
+
+    void setAlignmentToEngine();
+    bool adjustHorAlignment(ScFieldEditEngine* pEngine);
+    void adjustForRTL();
+    void adjustForHyperlinkInPDF(Point aURLStart, const OutputDevice* pDev);
+};
+
 namespace {
 
 template<typename ItemType, typename EnumType>
