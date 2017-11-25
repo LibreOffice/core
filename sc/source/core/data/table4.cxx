@@ -145,6 +145,23 @@ OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
     }
 }
 
+void correctStringSign(
+  OUString& rStr, double nStartVal, double nVal, sal_Int32 nMinDigits)
+{
+  sal_Int32 nIndex;
+  if (nStartVal <= 0 && nVal >= 0)
+  {
+    nIndex = rStr.getLength() - nMinDigits;
+    rStr = rStr.replaceAt(nIndex, nMinDigits, "+");
+    rStr += lcl_ValueString(nVal, nMinDigits);
+  }
+  else if (nStartVal >= 0 && nVal < 0)
+  {
+    nIndex = rStr.lastIndexOf("+");
+    if (nIndex >= 0) rStr = rStr.replaceAt(nIndex, 1, "");
+  }
+}
+
 void setSuffixCell(
     ScColumn& rColumn, SCROW nRow, sal_Int32 nValue, sal_uInt16 nDigits, const OUString& rSuffix,
     CellType eCellType, bool bIsOrdinalSuffix )
@@ -1434,23 +1451,28 @@ void ScTable::FillAutoSimple(
                 case CELLTYPE_EDIT:
                     if ( nHeadNoneTail )
                     {
-                        sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
-                        if ( nHeadNoneTail < 0 )
-                        {
-                            setSuffixCell(
-                                aCol[rCol], rRow,
-                                nNextValue, nCellDigits, aValue,
-                                aSrcCell.meType, bIsOrdinalSuffix);
-                        }
-                        else
-                        {
-                            OUString aStr = aValue + lcl_ValueString(nNextValue,
-                                                                     nCellDigits );
-                            aCol[rCol].SetRawString(rRow, aStr);
-                        }
+                      sal_Int32 nNextValue;
+                      if (aValue.endsWith("+")) nNextValue = nStringValue + (sal_Int32)nDelta;
+                      else nNextValue = nStringValue - (sal_Int32)nDelta;
+
+                      if ( nHeadNoneTail < 0 )
+                      {
+                          setSuffixCell(
+                              aCol[rCol], rRow,
+                              nNextValue, nCellDigits, aValue,
+                              aSrcCell.meType, bIsOrdinalSuffix);
+                      }
+                      else
+                      {
+                          OUString aStr = aValue + lcl_ValueString(nNextValue,
+                                                                   nCellDigits);
+                          correctStringSign(aStr, nStringValue, nNextValue,
+                                            nCellDigits);
+                          aCol[rCol].SetRawString(rRow, aStr);
+                      }
                     }
                     else
-                        aSrcCell.commit(aCol[rCol], rRow);
+                      aSrcCell.commit(aCol[rCol], rRow);
 
                     break;
                 case CELLTYPE_FORMULA :
@@ -1887,6 +1909,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 {
                                     aStr = aValue;
                                     aStr += lcl_ValueString( nStringValue, nMinDigits );
+                                    correctStringSign(aStr, nStartVal, nVal, nMinDigits);
                                     aCol[nCol].SetRawString(static_cast<SCROW>(nRow), aStr);
                                 }
                             }
