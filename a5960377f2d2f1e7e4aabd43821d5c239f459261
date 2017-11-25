@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_333063e8",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-25T13:44:59Z",
+      "side": 1,
+      "message": "Please use 4 spaces per indentation level, not 2.",
+      "revId": "a5960377f2d2f1e7e4aabd43821d5c239f459261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_534faf6a",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-25T13:44:59Z",
+      "side": 1,
+      "message": "Again, for this entire block, use 4 spaces per indentation level.",
+      "revId": "a5960377f2d2f1e7e4aabd43821d5c239f459261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_935597fb",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-25T13:44:59Z",
+      "side": 1,
+      "message": "The condition probably should be different here. This now creates negative values for all prefixes that do not end with \u0027+\u0027",
+      "range": {
+        "startLine": 1455,
+        "startChar": 26,
+        "endLine": 1455,
+        "endChar": 46
+      },
+      "revId": "a5960377f2d2f1e7e4aabd43821d5c239f459261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7354abfe",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-25T13:44:59Z",
+      "side": 1,
+      "message": "Please place the Then end Else branches on separate lines, so\n\n if (aValue.endsWith(\"+\"))\n     nNextValue \u003d nStringValue + (sal_Int32)nDelta;\n else\n     nNextValue \u003d nStringValue - (sal_Int32)nDelta;",
+      "revId": "a5960377f2d2f1e7e4aabd43821d5c239f459261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b35a9328",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-25T13:44:59Z",
+      "side": 1,
+      "message": "Instead of correcting the already assembled string, wouldn\u0027t it be better to check things before aValue gets the result of lcl_ValueString() appended? Correcting the result unnecessarily adds performance penalty.",
+      "revId": "a5960377f2d2f1e7e4aabd43821d5c239f459261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d3439f40",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-25T13:44:59Z",
+      "side": 1,
+      "message": "Same here, assemble strings differently instead of correcting afterwards.",
+      "revId": "a5960377f2d2f1e7e4aabd43821d5c239f459261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
