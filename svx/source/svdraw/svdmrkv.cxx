@@ -522,23 +522,22 @@ void SdrMarkView::BrkMarkGluePoints()
     }
 }
 
-sal_uIntPtr SdrMarkView::GetMarkableObjCount() const
+bool SdrMarkView::HasMultipleMarkableObjects() const
 {
-    sal_uIntPtr nCount=0;
     SdrPageView* pPV = GetSdrPageView();
+    if (!pPV)
+        return false;
 
-    if(pPV)
-    {
-        SdrObjList* pOL=pPV->GetObjList();
-        const size_t nObjCount = pOL->GetObjCount();
-        for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum) {
-            SdrObject* pObj=pOL->GetObj(nObjNum);
-            if (IsObjMarkable(pObj,pPV)) {
-                nCount++;
-            }
-        }
+    int nCount=0;
+    SdrObjList* pOL=pPV->GetObjList();
+    const size_t nObjCount = pOL->GetObjCount();
+    for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum) {
+        SdrObject* pObj=pOL->GetObj(nObjNum);
+        if (IsObjMarkable(pObj,pPV) && ++nCount>1)
+            return true;
     }
-    return nCount;
+
+    return false;
 }
 
 bool SdrMarkView::HasMarkableObj() const

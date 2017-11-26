@@ -199,7 +199,8 @@ public:
     void SetFrameHandles(bool bOn);
     bool IsFrameHandles() const { return mbForceFrameHandles; }
 
-    sal_uIntPtr GetMarkableObjCount() const;
+    // returns true if number of markable objects is greater than 1
+    bool HasMultipleMarkableObjects() const;
 
     void SetEditMode(SdrViewEditMode eMode);
     SdrViewEditMode GetEditMode() const { return meEditMode; }

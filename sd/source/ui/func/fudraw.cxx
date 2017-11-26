@@ -372,7 +372,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
                     //If there is only one object, don't do the UnmarkAllObj() & MarkNextObj().
-                    if ( mpView->GetMarkableObjCount() > 1 && mpView->AreObjectsMarked() )
+                    if ( mpView->HasMultipleMarkableObjects() && mpView->AreObjectsMarked() )
                     {
                         // No next object: go over open end and get first from
                         // the other side
