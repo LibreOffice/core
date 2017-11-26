@@ -10,9 +10,11 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
 
+#include <array>
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
 #include "rangelst.hxx"
+#include "tokenarray.hxx"
 
 class ScColorScaleFormat;
 class ScColorScaleEntry;
@@ -23,6 +25,21 @@ struct ScIconSetFormatData;
 
 class ScXMLConditionalFormatsContext : public SvXMLImportContext
 {
+private:
+    struct CacheEntry
+    {
+        ScConditionalFormat* mpFormat = nullptr;
+        bool mbSingleRelativeReference;
+        std::unique_ptr<const ScTokenArray> mpTokens;
+        sal_Int64 mnAge = SAL_MAX_INT64;
+    };
+
+    struct CondFormatData
+    {
+        ScConditionalFormat* mpFormat;
+        SCTAB mnTab;
+    };
+
     const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
@@ -36,6 +53,10 @@ public:
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
+
+    std::array<CacheEntry, 4> maCache;
+
+    std::vector<CondFormatData> mvCondFormatData;
 };
 
 class ScXMLConditionalFormatContext : public SvXMLImportContext
@@ -45,7 +66,8 @@ class ScXMLConditionalFormatContext : public SvXMLImportContext
 public:
     ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLConditionalFormatsContext& rParent );
 
     virtual ~ScXMLConditionalFormatContext();
 
@@ -58,6 +80,8 @@ private:
 
     std::unique_ptr<ScConditionalFormat> mxFormat;
     ScRangeList maRange;
+
+    ScXMLConditionalFormatsContext& mrParent;
 };
 
 class ScXMLColorScaleFormatContext : public SvXMLImportContext
