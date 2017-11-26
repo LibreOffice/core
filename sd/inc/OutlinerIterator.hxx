@@ -288,13 +288,6 @@ public:
         it is as a marker in comparisons.
     */
     IteratorPosition();
-    /** Create a new object with all data members set from the given
-        position.
-        @param aPosition
-            The position object from which to take the values that are
-            assigned to the data members of this object.
-    */
-    IteratorPosition (const IteratorPosition& aPosition);
 
     /** Compare two positions for equality.
         @return

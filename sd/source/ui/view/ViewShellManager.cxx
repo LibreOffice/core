@@ -56,8 +56,6 @@ public:
 
     ShellDescriptor ();
     explicit ShellDescriptor (ShellId nId);
-    ShellDescriptor (const ShellDescriptor& rDescriptor);
-    ShellDescriptor& operator= (const ShellDescriptor& rDescriptor);
     vcl::Window* GetWindow() const;
 };
 
@@ -1171,26 +1169,6 @@ ShellDescriptor::ShellDescriptor (
       mpFactory(),
       mbIsListenerAddedToWindow(false)
 {
-}
-
-ShellDescriptor::ShellDescriptor (const ShellDescriptor& rDescriptor)
-    : mpShell(rDescriptor.mpShell),
-      mnId(rDescriptor.mnId),
-      mpFactory(rDescriptor.mpFactory),
-      mbIsListenerAddedToWindow(rDescriptor.mbIsListenerAddedToWindow)
-{
-}
-
-ShellDescriptor& ShellDescriptor::operator= (const ShellDescriptor& rDescriptor)
-{
-    if (this != &rDescriptor)
-    {
-        mpShell = rDescriptor.mpShell;
-        mnId = rDescriptor.mnId;
-        mpFactory = rDescriptor.mpFactory;
-        mbIsListenerAddedToWindow = rDescriptor.mbIsListenerAddedToWindow;
-    }
-    return *this;
 }
 
 vcl::Window* ShellDescriptor::GetWindow() const

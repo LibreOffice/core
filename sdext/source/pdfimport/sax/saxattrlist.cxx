@@ -35,17 +35,6 @@ SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString >& rMap )
     }
 }
 
-SaxAttrList::SaxAttrList( const SaxAttrList& rClone ) :
-    cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable>(rClone),
-    m_aAttributes( rClone.m_aAttributes ),
-    m_aIndexMap( rClone.m_aIndexMap )
-{
-}
-
-SaxAttrList::~SaxAttrList()
-{
-}
-
 namespace {
     OUString getCDATAString()
     {

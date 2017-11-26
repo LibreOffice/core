@@ -46,8 +46,6 @@ public:
         const bool bIsPrecious,
         const std::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
         const std::shared_ptr<PreviewProvider>& rpPreviewProvider);
-    MasterPageDescriptor (const MasterPageDescriptor& rDescriptor);
-    ~MasterPageDescriptor();
 
     void SetToken (MasterPageContainer::Token aToken);
 
