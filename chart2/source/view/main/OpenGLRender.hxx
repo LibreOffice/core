@@ -19,7 +19,7 @@
 #include <boost/shared_array.hpp>
 
 // Include GLM
-#include <list>
+#include <vector>
 #include <map>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -152,22 +152,22 @@ private:
 
     float m_fLineWidth;
 
-    std::list <PointList> m_Line2DShapePointList;
+    std::vector<PointList> m_Line2DShapePointList;
 
     glm::vec4 m_2DColor;
 
     std::vector<GLfloat> m_Bubble2DCircle;
 
-    std::list <Bubble2DPointList> m_Bubble2DShapePointList;
+    std::vector<Bubble2DPointList> m_Bubble2DShapePointList;
     GLint m_CommonProID;
     GLint m_2DVertexID;
     GLint m_2DColorID;
 
     float m_fZStep;
 
-    std::list <RectanglePointList> m_RectangleShapePointList;
+    std::vector<RectanglePointList> m_RectangleShapePointList;
     // add for text
-    std::list <TextInfo> m_TextInfoList;
+    std::vector<TextInfo> m_TextInfoVector;
     GLint m_TextProID;
     GLint m_TextMatrixID;
     GLint m_TextVertexID;
@@ -176,7 +176,7 @@ private:
     GLint m_TextTexID;
 
     PointList m_Area2DPointList;
-    std::list <PointList> m_Area2DShapePointList;
+    std::vector<PointList> m_Area2DShapePointList;
 
     GLint m_BackgroundProID;
     GLint m_BackgroundMatrixID;
@@ -185,7 +185,7 @@ private:
 
     float m_BackgroundColor[16];
 
-    std::list <PointList> m_PieSegment2DShapePointList;
+    std::vector<PointList> m_PieSegment2DShapePointList;
 
     GLuint m_SymbolProID;
     GLuint m_SymbolVertexID;
