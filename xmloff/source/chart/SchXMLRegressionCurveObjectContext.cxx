@@ -41,7 +41,7 @@ SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
                                         SvXMLImport& rImport,
                                         sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
-                                        std::list< RegressionStyle >& rRegressionStyleList,
+                                        std::vector< RegressionStyle >& rRegressionStyleVector,
                                         const css::uno::Reference<
                                                     css::chart2::XDataSeries >& xSeries,
                                         const awt::Size & rChartSize) :
@@ -49,7 +49,7 @@ SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
     mrImportHelper( rImpHelper ),
     mxSeries( xSeries ),
     maChartSize( rChartSize ),
-    mrRegressionStyleList( rRegressionStyleList )
+    mrRegressionStyleVector( rRegressionStyleVector )
 {
 }
 
@@ -79,7 +79,7 @@ void SchXMLRegressionCurveObjectContext::StartElement( const uno::Reference< xml
     }
 
     RegressionStyle aStyle( mxSeries, sAutoStyleName );
-    mrRegressionStyleList.push_back( aStyle );
+    mrRegressionStyleVector.push_back( aStyle );
 }
 
 SvXMLImportContextRef SchXMLRegressionCurveObjectContext::CreateChildContext(
@@ -92,7 +92,7 @@ SvXMLImportContextRef SchXMLRegressionCurveObjectContext::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_CHART && IsXMLToken( rLocalName, XML_EQUATION ) )
     {
         xContext = new SchXMLEquationContext(
-            mrImportHelper, GetImport(), nPrefix, rLocalName, maChartSize, mrRegressionStyleList.back());
+            mrImportHelper, GetImport(), nPrefix, rLocalName, maChartSize, mrRegressionStyleVector.back());
     }
     else
     {
