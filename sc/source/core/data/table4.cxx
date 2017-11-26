@@ -102,21 +102,15 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
     }
     else
     {
-        nNeg = 0;
         sal_Int32 nEnd = nNum = rValue.getLength() - 1;
         while ( nNum && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
             nNum--;
-        if ( p[nNum] == '-' )
-        {
-            nNum--;
-            nNeg = 1;
-        }
-        if ( nNum < nEnd - nNeg )
+        if ( nNum < nEnd )
         {   // number at the end
             nVal = rValue.copy( nNum + 1 ).toInt32();
             //  any number with a leading zero sets the minimum number of digits
-            if ( p[nNum+1+nNeg] == '0' && pMinDigits && ( nEnd - nNum - nNeg > *pMinDigits ) )
-                *pMinDigits = nEnd - nNum - nNeg;
+            if ( p[nNum+1] == '0' && pMinDigits && ( nEnd - nNum > *pMinDigits ) )
+                *pMinDigits = nEnd - nNum;
             rValue = rValue.copy(0, nNum + 1);
             return 1;
         }
