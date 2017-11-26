@@ -235,7 +235,7 @@ FocusManager::FocusHider::FocusHider (FocusManager& rManager)
     mrManager.HideFocus();
 }
 
-FocusManager::FocusHider::~FocusHider()
+FocusManager::FocusHider::~FocusHider() COVERITY_NOEXCEPT_FALSE
 {
     if (mbFocusVisible)
         mrManager.ShowFocus();

@@ -158,7 +158,7 @@ public:
     {
     public:
         FocusHider (FocusManager&);
-        ~FocusHider();
+        ~FocusHider() COVERITY_NOEXCEPT_FALSE;
     private:
         bool mbFocusVisible;
         FocusManager& mrManager;
