@@ -33,7 +33,7 @@ class DlgEdFactory
 {
 public:
     DlgEdFactory();
-    ~DlgEdFactory();
+    ~DlgEdFactory() COVERITY_NOEXCEPT_FALSE;
 
     DECL_STATIC_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, SdrObject* );
 };
