@@ -13,7 +13,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-#include <list>
+#include <deque>
+#include <vector>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <rtl/ustring.hxx>
@@ -28,7 +29,7 @@ class L10N_DLLPUBLIC BasicCodeTagger
 {
   private:
     xmlDocPtr             m_pDocument;
-    std::list<xmlNodePtr> m_BasicCodeContainerTags;
+    std::vector<xmlNodePtr> m_BasicCodeContainerTags;
     LibXmlTreeWalker   *m_pXmlTreeWalker;
     SyntaxHighlighter     m_Highlighter;
     bool m_bTaggingCompleted;
@@ -50,7 +51,7 @@ class L10N_DLLPUBLIC LibXmlTreeWalker
 {
   private:
     xmlNodePtr            m_pCurrentNode;
-    std::list<xmlNodePtr> m_Queue; //!Queue for breath-first search
+    std::deque<xmlNodePtr> m_Queue; //!Queue for breath-first search
 
   public:
     LibXmlTreeWalker( xmlDocPtr doc );

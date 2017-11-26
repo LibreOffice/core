@@ -103,19 +103,17 @@ void BasicCodeTagger::getBasicCodeContainerNodes()
 void BasicCodeTagger::tagBasCodeParagraphs()
 {
     //helper variables
-    xmlNodePtr currBascodeNode;
     xmlNodePtr currParagraph;
-    while ( !m_BasicCodeContainerTags.empty() )
+    for (auto const& currBascodeNode : m_BasicCodeContainerTags)
     {
-        currBascodeNode = m_BasicCodeContainerTags.front();
         currParagraph = currBascodeNode->xmlChildrenNode; //first <paragraph>
         while ( currParagraph != nullptr )
         {
             tagParagraph( currParagraph );
             currParagraph=currParagraph->next;
         }
-        m_BasicCodeContainerTags.pop_front(); //next element
     }
+    m_BasicCodeContainerTags.clear();
 }
 
 //! Used by tagBasCodeParagraphs(). It does the work on the current paragraph containing Basic code.
