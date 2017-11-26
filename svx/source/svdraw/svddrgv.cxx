@@ -63,8 +63,6 @@ void SdrDragView::ImpClearVars()
     mbInsGluePoint=false;
     mbInsObjPointMode=false;
     mbInsGluePointMode=false;
-    mnDragXorPolyLimit=100;
-    mnDragXorPointLimit=500;
     mbNoDragXorPolys=false;
     mbResizeAtCenter=false;
     mbCrookAtCenter=false;

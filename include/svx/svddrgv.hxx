@@ -30,6 +30,12 @@ class SVX_DLLPUBLIC SdrDragView: public SdrExchangeView
     friend class                SdrPageView;
     friend class                SdrDragMethod;
 
+    // See GetDragXorPolyLimit/GetDragXorPointLimit
+    enum : size_t {
+        eDragXorPolyLimit = 100,
+        eDragXorPointLimit = 500
+    };
+
 protected:
     SdrHdl*                     mpDragHdl;
     SdrDragMethod*              mpCurrentSdrDragMethod;
@@ -37,9 +43,6 @@ protected:
     tools::Rectangle            maDragLimit;
     OUString                    maInsPointUndoStr;
     SdrHdlKind                  meDragHdl;
-
-    sal_uIntPtr                 mnDragXorPolyLimit;
-    sal_uIntPtr                 mnDragXorPointLimit;
 
     bool                        mbFramDrag : 1;        // currently frame dragging
     bool                        mbMarkedHitMovesAlways : 1; // Persistent
@@ -150,14 +153,13 @@ public:
     // If the number of selected objects exceeds the value set here,
     // NoDragPolys is (temporarily) activated implicitly.
     // PolyPolygons etc. are regarded as multiple objects respectively.
-    // Default=100
-    sal_uIntPtr GetDragXorPolyLimit() const { return mnDragXorPolyLimit; }
+    size_t GetDragXorPolyLimit() const { return eDragXorPolyLimit; }
 
     // Like DragXorPolyLimit, but in respect to the total number of
-    // all polygons. Default=500.
+    // all polygons.
     // NoDragPolys is (temporarily) activated, if one of the limits
     // is exceeded.
-    sal_uIntPtr GetDragXorPointLimit() const { return mnDragXorPointLimit; }
+    size_t GetDragXorPointLimit() const { return eDragXorPointLimit; }
 
     void SetSolidDragging(bool bOn);
     bool IsSolidDragging() const;
