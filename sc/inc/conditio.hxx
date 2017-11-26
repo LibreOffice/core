@@ -352,6 +352,8 @@ public:
 
     bool            operator== ( const ScConditionEntry& r ) const;
 
+    bool            EqualIgnoringSrcPos( const ScConditionEntry& r ) const;
+
     virtual void SetParent( ScConditionalFormat* pNew ) override;
 
     bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
@@ -360,6 +362,7 @@ public:
     void SetOperation(ScConditionMode eMode);
     bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
     void            SetIgnoreBlank(bool bSet);
+    OUString        GetSrcString() const         { return aSrcString; }
     const ScAddress& GetSrcPos() const           { return aSrcPos; }
 
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions

@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
 
+#include <array>
 #include <memory>
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
@@ -25,6 +26,21 @@ struct ScIconSetFormatData;
 
 class ScXMLConditionalFormatsContext : public ScXMLImportContext
 {
+private:
+    struct CacheEntry
+    {
+        ScConditionalFormat* mpFormat = nullptr;
+        bool mbSingleRelativeReference;
+        std::unique_ptr<const ScTokenArray> mpTokens;
+        sal_Int64 mnAge = SAL_MAX_INT64;
+    };
+
+    struct CondFormatData
+    {
+        ScConditionalFormat* mpFormat;
+        SCTAB mnTab;
+    };
+
 public:
     ScXMLConditionalFormatsContext( ScXMLImport& rImport );
 
@@ -32,13 +48,18 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+
+    std::array<CacheEntry, 4> maCache;
+
+    std::vector<CondFormatData> mvCondFormatData;
 };
 
 class ScXMLConditionalFormatContext : public ScXMLImportContext
 {
 public:
     ScXMLConditionalFormatContext( ScXMLImport& rImport,
-                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
+                                   const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+                                   ScXMLConditionalFormatsContext& rParent );
 
     virtual ~ScXMLConditionalFormatContext() override;
 
@@ -50,6 +71,8 @@ private:
 
     std::unique_ptr<ScConditionalFormat> mxFormat;
     ScRangeList maRange;
+
+    ScXMLConditionalFormatsContext& mrParent;
 };
 
 class ScXMLColorScaleFormatContext : public ScXMLImportContext
