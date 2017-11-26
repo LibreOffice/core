@@ -64,7 +64,7 @@ namespace drawinglayer
         public:
             /// constructor/destructor
             TextLayouterDevice();
-            ~TextLayouterDevice();
+            ~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE;
 
             /// tooling methods
             void setFont(const vcl::Font& rFont);

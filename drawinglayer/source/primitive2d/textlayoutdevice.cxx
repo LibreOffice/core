@@ -157,7 +157,7 @@ namespace drawinglayer
         {
         }
 
-        TextLayouterDevice::~TextLayouterDevice()
+        TextLayouterDevice::~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE
         {
             releaseGlobalVirtualDevice();
         }
