@@ -35,6 +35,7 @@ static double twipsPerXtile, twipsPerYtile;
 
 
 // Bridge functions to LibreOfficeKit
+__attribute__((visibility("default")))
 int BridgeLOkit_Init(const char *path)
 {
     char bufUserPath[200];
@@ -52,6 +53,7 @@ int BridgeLOkit_Init(const char *path)
 
 
 
+__attribute__((visibility("default")))
 int BridgeLOkit_Sizing(const int countXtiles, const int countYtiles,
                        const int pixelsXtile, const int pixelsYtile)
 {
@@ -79,6 +81,7 @@ int BridgeLOkit_Sizing(const int countXtiles, const int countYtiles,
 
 
 
+__attribute__((visibility("default")))
 int BridgeLOkit_open(const char *path)
 {
     document = kit->pClass->documentLoad(kit, path);
@@ -88,6 +91,7 @@ int BridgeLOkit_open(const char *path)
 
 
 
+__attribute__((visibility("default")))
 int BridgeLOkit_ClientCommand(const char *input)
 {
     (void)input;
@@ -96,6 +100,7 @@ int BridgeLOkit_ClientCommand(const char *input)
 
 
 
+__attribute__((visibility("default")))
 int BridgeLOkit_Hipernate()
 {
     //FIXME
@@ -106,6 +111,7 @@ int BridgeLOkit_Hipernate()
 
 
 
+__attribute__((visibility("default")))
 int BridgeLOkit_LeaveHipernate()
 {
     //FIXME

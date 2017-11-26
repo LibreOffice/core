@@ -8,11 +8,12 @@
 #- Env ------------------------------------------------------------------------
 IOSDEV = /Applications/Xcode.app/Contents/Developer/
 IOSLD = $(IOSDEV)Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+IOSOBJ = $(WORKDIR)/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT = $(SRCDIR)/ios/generated/LibreOfficeKit_$(CPUNAME)_debug.o
+IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.a
 else
-IOSKIT = $(SRCDIR)/ios/generated/LibreOfficeKit_$(CPUNAME).o
+IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).a
 endif
 
 
@@ -32,15 +33,11 @@ $(IOSKIT): $(call gb_StaticLibrary_get_target,iOS_kitBridge) FORCE
 	$(IOSLD) -r -ios_version_min 11.1 \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
-	    -o $(IOSKIT) \
-	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o  \
-	    `$(SRCDIR)/bin/lo-all-static-libs`
-
-
-
-# prelink parms: -ios_version_min 11.0 -lz -liconv -g -Wl
-#	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
-#	        -sdk $(IOS_SDK) \
+	    -o $(IOSOBJ) \
+	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
+	    `$(SRCDIR)/bin/lo-all-static-libs` \
+	    $(call gb_StaticLibrary_get_target,iOS_kitBridge)
+	$(AR) -r $(IOSKIT) $(IOSOBJ)
 
 
 
