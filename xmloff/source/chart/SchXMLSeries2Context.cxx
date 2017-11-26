@@ -1014,6 +1014,10 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         if( seriesStyle.m_nPointIndex == -1 )
             continue;
 
+        uno::Reference< beans::XPropertySet > xSeriesProp( seriesStyle.m_xOldAPISeries );
+        if(!xSeriesProp.is())
+            continue;
+
         //ignore datapoint properties for stock charts
         //... todo ...
         if( bIsStockChart )
@@ -1027,10 +1031,6 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         {
             try
             {
-                uno::Reference< beans::XPropertySet > xSeriesProp( seriesStyle.m_xOldAPISeries );
-                if(!xSeriesProp.is())
-                    continue;
-
                 uno::Reference< beans::XPropertySet > xPointProp(
                     SchXMLSeriesHelper::createOldAPIDataPointPropertySet( seriesStyle.m_xSeries, seriesStyle.m_nPointIndex + i
                         , uno::Reference< frame::XModel >( rImportHelper.GetChartDocument(), uno::UNO_QUERY ) ) );
