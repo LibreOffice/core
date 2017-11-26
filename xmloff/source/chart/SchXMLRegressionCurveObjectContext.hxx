@@ -35,7 +35,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        std::list< RegressionStyle >& rRegressionStyleList,
+        std::vector< RegressionStyle >& rRegressionStyleVector,
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const css::awt::Size & rChartSize );
 
@@ -52,7 +52,7 @@ private:
     SchXMLImportHelper&                mrImportHelper;
     css::uno::Reference<css::chart2::XDataSeries > mxSeries;
     css::awt::Size                     maChartSize;
-    std::list< RegressionStyle >&      mrRegressionStyleList;
+    std::vector< RegressionStyle >&    mrRegressionStyleVector;
 };
 
 class SchXMLEquationContext : public SvXMLImportContext

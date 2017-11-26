@@ -244,8 +244,8 @@ SchXMLSeries2Context::SchXMLSeries2Context(
     SvXMLImport& rImport, const OUString& rLocalName,
     const Reference< chart2::XChartDocument > & xNewDoc,
     std::vector< SchXMLAxis >& rAxes,
-    ::std::list< DataRowPointStyle >& rStyleList,
-    ::std::list< RegressionStyle >& rRegressionStyleList,
+    ::std::vector< DataRowPointStyle >& rStyleVector,
+    ::std::vector< RegressionStyle >& rRegressionStyleVector,
     sal_Int32 nSeriesIndex,
     bool bStockHasVolume,
     GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
@@ -257,8 +257,8 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mrImportHelper( rImpHelper ),
         mxNewDoc( xNewDoc ),
         mrAxes( rAxes ),
-        mrStyleList( rStyleList ),
-        mrRegressionStyleList( rRegressionStyleList ),
+        mrStyleVector( rStyleVector ),
+        mrRegressionStyleVector( rRegressionStyleVector ),
         m_xSeries(nullptr),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
@@ -604,7 +604,7 @@ void SchXMLSeries2Context::EndElement()
                 -1, 1,
                 msAutoStyleName, mnAttachedAxis );
             aStyle.mbSymbolSizeForSeriesIsMissingInFile=mbSymbolSizeIsMissingInFile;
-            mrStyleList.push_back( aStyle );
+            mrStyleVector.push_back( aStyle );
         }
     }
 
@@ -660,28 +660,28 @@ SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
                 nPrefix, rLocalName, msAutoStyleName,
-                mrStyleList, m_xSeries,
+                mrStyleVector, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE,
                 mrLSequencesPerIndex );
             break;
         case XML_TOK_SERIES_REGRESSION_CURVE:
             pContext = new SchXMLRegressionCurveObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName, mrRegressionStyleList,
+                nPrefix, rLocalName, mrRegressionStyleVector,
                 m_xSeries, maChartSize );
             break;
         case XML_TOK_SERIES_ERROR_INDICATOR:
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
                 nPrefix, rLocalName, msAutoStyleName,
-                mrStyleList, m_xSeries,
+                mrStyleVector, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR,
                 mrLSequencesPerIndex );
             break;
 
         case XML_TOK_SERIES_DATA_POINT:
             pContext = new SchXMLDataPointContext( GetImport(), rLocalName,
-                                                   mrStyleList, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
+                                                   mrStyleVector, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
         case XML_TOK_SERIES_PROPERTY_MAPPING:
             pContext = new SchXMLPropertyMappingContext( mrImportHelper,
@@ -700,12 +700,12 @@ SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
 void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const uno::Reference< frame::XModel >& xChartModel )
 {
-    ::std::list< DataRowPointStyle >::iterator iStyle;
+    ::std::vector< DataRowPointStyle >::iterator iStyle;
 
     // iterate over series first and remind propertysets in map
     // new api <-> old api wrapper
     ::std::map< Reference< chart2::XDataSeries >, Reference< beans::XPropertySet > > aSeriesMap;
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleVector.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;
@@ -718,7 +718,7 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
     }
 
     //initialize m_xOldAPISeries for all other styles also
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleVector.end(); ++iStyle )
     {
         if( iStyle->meType == DataRowPointStyle::DATA_SERIES )
             continue;
@@ -729,11 +729,11 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
 //static
 void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles )
 {
-    ::std::list< DataRowPointStyle >::iterator iStyle;
+    ::std::vector< DataRowPointStyle >::iterator iStyle;
     // iterate over series
     // call initSeriesPropertySets first
 
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleVector.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;
@@ -784,10 +784,10 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
         , bool bIsStockChart
         , tSchXMLLSequencesPerIndex & rInOutLSequencesPerIndex )
 {
-    ::std::list< DataRowPointStyle >::iterator iStyle;
+    ::std::vector< DataRowPointStyle >::iterator iStyle;
 
     // iterate over series
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleVector.end(); ++iStyle )
     {
         if( iStyle->meType == DataRowPointStyle::DATA_SERIES )
         {
@@ -872,10 +872,10 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                                 const SvXMLStyleContext*& rpStyle,
                                 OUString const & rCurrentStyleName )
 {
-    std::list< RegressionStyle >::iterator iStyle;
+    std::vector< RegressionStyle >::iterator iStyle;
 
     // iterate over regession etc
-    for( iStyle = rSeriesDefaultsAndStyles.maRegressionStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maRegressionStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesDefaultsAndStyles.maRegressionStyleVector.begin(); iStyle != rSeriesDefaultsAndStyles.maRegressionStyleVector.end(); ++iStyle )
     {
         try
         {
@@ -942,10 +942,10 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
         , const SvXMLStyleContext*& rpStyle
         , OUString& rCurrStyleName )
 {
-    ::std::list< DataRowPointStyle >::iterator iStyle;
+    ::std::vector< DataRowPointStyle >::iterator iStyle;
 
     // iterate over regession etc
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleVector.end(); ++iStyle )
     {
         if( iStyle->meType == DataRowPointStyle::ERROR_INDICATOR ||
             iStyle->meType == DataRowPointStyle::MEAN_VALUE )
@@ -1016,8 +1016,8 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
 {
-    ::std::list< DataRowPointStyle >::iterator iStyle;
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
+    ::std::vector< DataRowPointStyle >::iterator iStyle;
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleVector.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_POINT )
             continue;
@@ -1104,12 +1104,12 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
 }
 
 //static
-void SchXMLSeries2Context::switchSeriesLinesOff( ::std::list< DataRowPointStyle >& rSeriesStyleList )
+void SchXMLSeries2Context::switchSeriesLinesOff( ::std::vector< DataRowPointStyle >& rSeriesStyleVector )
 {
-    ::std::list< DataRowPointStyle >::iterator iStyle;
+    ::std::vector< DataRowPointStyle >::iterator iStyle;
     // iterate over series
 
-    for( iStyle = rSeriesStyleList.begin(); iStyle != rSeriesStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesStyleVector.begin(); iStyle != rSeriesStyleVector.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;

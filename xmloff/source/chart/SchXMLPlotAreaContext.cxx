@@ -463,8 +463,8 @@ SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
                     pContext = new SchXMLSeries2Context(
                         mrImportHelper, GetImport(), rLocalName,
                         mxNewDoc, maAxes,
-                        mrSeriesDefaultsAndStyles.maSeriesStyleList,
-                        mrSeriesDefaultsAndStyles.maRegressionStyleList,
+                        mrSeriesDefaultsAndStyles.maSeriesStyleVector,
+                        mrSeriesDefaultsAndStyles.maRegressionStyleVector,
                         mnSeries,
                         mbStockHasVolume,
                         m_aGlobalSeriesImportInfo,
@@ -596,12 +596,12 @@ void SchXMLPlotAreaContext::EndElement()
 }
 
 SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
-                                                 ::std::list< DataRowPointStyle >& rStyleList,
+                                                 ::std::vector< DataRowPointStyle >& rStyleVector,
                                                  const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                                                  sal_Int32& rIndex,
                                                  bool bSymbolSizeForSeriesIsMissingInFile ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrStyleList( rStyleList ),
+        mrStyleVector( rStyleVector ),
         m_xSeries( xSeries ),
         mrIndex( rIndex ),
         mbSymbolSizeForSeriesIsMissingInFile( bSymbolSizeForSeriesIsMissingInFile )
@@ -639,7 +639,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
             DataRowPointStyle::DATA_POINT,
             m_xSeries, mrIndex, nRepeat, sAutoStyleName );
         aStyle.mbSymbolSizeForSeriesIsMissingInFile = mbSymbolSizeForSeriesIsMissingInFile;
-        mrStyleList.push_back( aStyle );
+        mrStyleVector.push_back( aStyle );
     }
     mrIndex += nRepeat;
 }
@@ -917,14 +917,14 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const OUString &rSeriesStyleName,
-    ::std::list< DataRowPointStyle >& rStyleList,
+    ::std::vector< DataRowPointStyle >& rStyleVector,
     const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
     ContextType eContextType,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :
 
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),
-        mrStyleList( rStyleList ),
+        mrStyleVector( rStyleVector ),
         m_xSeries( xSeries ),
         meContextType( eContextType ),
         maSeriesStyleName( rSeriesStyleName),
@@ -1142,7 +1142,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                 break;
         }
 
-        mrStyleList.push_back( aStyle );
+        mrStyleVector.push_back( aStyle );
     }
 }
 
