@@ -70,7 +70,7 @@ ViewShell::Implementation::Implementation (ViewShell& rViewShell)
 {
 }
 
-ViewShell::Implementation::~Implementation()
+ViewShell::Implementation::~Implementation() COVERITY_NOEXCEPT_FALSE
 {
     if ( ! mpUpdateLockForMouse.expired())
     {

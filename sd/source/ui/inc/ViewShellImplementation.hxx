@@ -96,7 +96,7 @@ public:
     std::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 
     Implementation (ViewShell& rViewShell);
-    ~Implementation();
+    ~Implementation() COVERITY_NOEXCEPT_FALSE;
 
     /** Process the SID_MODIFY slot.
     */
