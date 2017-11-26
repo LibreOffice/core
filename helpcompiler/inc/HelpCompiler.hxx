@@ -152,7 +152,7 @@ struct joaat_hash
 #define pref_hash joaat_hash
 
 typedef std::unordered_map<std::string, std::string, pref_hash> Stringtable;
-typedef std::list<std::string> LinkedList;
+typedef std::deque<std::string> LinkedList;
 typedef std::vector<std::string> HashSet;
 
 typedef std::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
