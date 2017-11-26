@@ -71,7 +71,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/classes/image \
 	basic/source/classes/propacc \
 	basic/source/classes/sb \
-	basic/source/classes/sbintern \
 	basic/source/classes/sbunoobj \
 	basic/source/classes/sbxmod \
 	basic/source/comp/basiccharclass \
@@ -97,17 +96,17 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/inputbox \
 	basic/source/runtime/iosys \
 	basic/source/runtime/props \
-	basic/source/runtime/runtime \
 	basic/source/runtime/stdobj \
 	basic/source/runtime/stdobj1 \
 ))
-
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/basrdll \
 	basic/source/runtime/methods \
 	basic/source/runtime/methods1 \
+	basic/source/runtime/runtime \
+	basic/source/classes/sbintern \
 	basic/source/sbx/sbxarray \
 	basic/source/sbx/sbxbool \
 	basic/source/sbx/sbxbyte \
