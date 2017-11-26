@@ -114,7 +114,6 @@ protected:
     tools::Rectangle            maMarkedGluePointsRect;
 
     sal_uInt16                  mnFrameHandlesLimit;
-    sal_uIntPtr                 mnInsPointNum;      // Number of the InsPoint
 
     SdrDragMode                 meDragMode;      // Persistent
     SdrViewEditMode             meEditMode;      // Persistent

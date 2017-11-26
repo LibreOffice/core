@@ -642,14 +642,10 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNew
 
         bool bClosed0 = pMarkedPath->IsClosedObj();
 
-        if(bIdxZwang)
-        {
-            mnInsPointNum = pMarkedPath->NbcInsPoint(aPt, bNewObj);
-        }
-        else
-        {
-            mnInsPointNum = pMarkedPath->NbcInsPointOld(aPt, bNewObj);
-        }
+        const sal_uInt32 nInsPointNum { bIdxZwang
+            ? pMarkedPath->NbcInsPoint(aPt, bNewObj)
+            : pMarkedPath->NbcInsPointOld(aPt, bNewObj)
+        };
 
         if(bClosed0 != pMarkedPath->IsClosedObj())
         {
@@ -659,13 +655,13 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNew
             pMarkedPath->BroadcastObjectChange();
         }
 
-        if(0xffffffff != mnInsPointNum)
+        if (nInsPointNum != SAL_MAX_UINT32)
         {
             mbInsPolyPoint = true;
             UnmarkAllPoints();
             AdjustMarkHdl();
 
-            bRet = BegDragObj(rPnt, pOut, maHdlList.GetHdl(mnInsPointNum), 0);
+            bRet = BegDragObj(rPnt, pOut, maHdlList.GetHdl(nInsPointNum), 0);
 
             if (bRet)
             {

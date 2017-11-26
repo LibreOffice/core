@@ -133,7 +133,6 @@ void SdrMarkView::ImpClearVars()
     mbPlusHdlAlways=false;
     mnFrameHandlesLimit=50;
     mbInsPolyPoint=false;
-    mnInsPointNum = 0;
     mbMarkedObjRectDirty=false;
     mbMarkedPointsRectsDirty=false;
     mbMarkHandlesHidden = false;
