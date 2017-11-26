@@ -1175,23 +1175,6 @@ InsertPosition::InsertPosition()
 {
 }
 
-InsertPosition& InsertPosition::operator= (const InsertPosition& rInsertPosition)
-{
-    if (this != &rInsertPosition)
-    {
-        mnRow = rInsertPosition.mnRow;
-        mnColumn = rInsertPosition.mnColumn;
-        mnIndex = rInsertPosition.mnIndex;
-        mbIsAtRunStart = rInsertPosition.mbIsAtRunStart;
-        mbIsAtRunEnd = rInsertPosition.mbIsAtRunEnd;
-        mbIsExtraSpaceNeeded = rInsertPosition.mbIsExtraSpaceNeeded;
-        maLocation = rInsertPosition.maLocation;
-        maLeadingOffset = rInsertPosition.maLeadingOffset;
-        maTrailingOffset = rInsertPosition.maTrailingOffset;
-    }
-    return *this;
-}
-
 bool InsertPosition::operator== (const InsertPosition& rInsertPosition) const
 {
     // Do not compare the geometrical information (maLocation).

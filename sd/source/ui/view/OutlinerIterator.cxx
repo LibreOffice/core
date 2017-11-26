@@ -44,15 +44,6 @@ IteratorPosition::IteratorPosition()
 {
 }
 
-IteratorPosition::IteratorPosition (const IteratorPosition& aPosition)
-: mxObject(aPosition.mxObject)
-, mnText(aPosition.mnText)
-, mnPageIndex(aPosition.mnPageIndex)
-, mePageKind(aPosition.mePageKind)
-, meEditMode(aPosition.meEditMode)
-{
-}
-
 bool IteratorPosition::operator== (const IteratorPosition& aPosition) const
 {
     return mxObject.get() == aPosition.mxObject.get()

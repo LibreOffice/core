@@ -45,12 +45,6 @@ public:
     public:
         Representative (const Bitmap& rBitmap, const bool bIsExcluded)
             : maBitmap(rBitmap), mbIsExcluded(bIsExcluded) {}
-        Representative (const Representative& rOther)
-            : maBitmap(rOther.maBitmap), mbIsExcluded(rOther.mbIsExcluded) {}
-        Representative& operator= (Representative const& rOther)
-        {   if (&rOther != this) {maBitmap = rOther.maBitmap; mbIsExcluded = rOther.mbIsExcluded; }
-            return *this;
-        }
 
         Bitmap maBitmap;
         bool mbIsExcluded;

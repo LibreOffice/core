@@ -55,29 +55,6 @@ MasterPageDescriptor::MasterPageDescriptor (
 {
 }
 
-MasterPageDescriptor::MasterPageDescriptor (const MasterPageDescriptor& rDescriptor)
-    : maToken(rDescriptor.maToken),
-      meOrigin(rDescriptor.meOrigin),
-      msURL(rDescriptor.msURL),
-      msPageName(rDescriptor.msPageName),
-      msStyleName(rDescriptor.msStyleName),
-      mbIsPrecious(rDescriptor.mbIsPrecious),
-      mpMasterPage(rDescriptor.mpMasterPage),
-      mpSlide(rDescriptor.mpSlide),
-      maSmallPreview(rDescriptor.maSmallPreview),
-      maLargePreview(rDescriptor.maLargePreview),
-      mpPreviewProvider(rDescriptor.mpPreviewProvider),
-      mpPageObjectProvider(rDescriptor.mpPageObjectProvider),
-      mnTemplateIndex(rDescriptor.mnTemplateIndex),
-      meURLClassification(rDescriptor.meURLClassification),
-      mnUseCount(rDescriptor.mnUseCount)
-{
-}
-
-MasterPageDescriptor::~MasterPageDescriptor()
-{
-}
-
 void MasterPageDescriptor::SetToken (MasterPageContainer::Token aToken)
 {
     maToken = aToken;

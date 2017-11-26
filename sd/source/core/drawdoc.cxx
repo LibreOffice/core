@@ -130,23 +130,6 @@ PresentationSettings::PresentationSettings()
 {
 }
 
-PresentationSettings::PresentationSettings( const PresentationSettings& r )
-:   maPresPage( r.maPresPage ),
-    mbAll( r.mbAll ),
-    mbEndless( r.mbEndless ),
-    mbCustomShow( r.mbCustomShow ),
-    mbManual( r.mbManual ),
-    mbMouseVisible( r.mbMouseVisible ),
-    mbMouseAsPen( r.mbMouseAsPen ),
-    mbLockedPages( r.mbLockedPages ),
-    mbAlwaysOnTop( r.mbAlwaysOnTop ),
-    mbFullScreen( r.mbFullScreen ),
-    mbAnimationAllowed( r.mbAnimationAllowed ),
-    mnPauseTimeout( r.mnPauseTimeout ),
-    mbShowPauseLogo( r.mbShowPauseLogo )
-{
-}
-
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 : FmFormModel( !utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : OUString(), nullptr, pDrDocSh )
 , mpOutliner(nullptr)

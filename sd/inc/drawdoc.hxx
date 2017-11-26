@@ -126,7 +126,6 @@ namespace sd
         bool mbShowPauseLogo;
 
         PresentationSettings();
-        PresentationSettings( const PresentationSettings& r );
     };
 }
 

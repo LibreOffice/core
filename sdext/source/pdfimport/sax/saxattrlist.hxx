@@ -48,8 +48,6 @@ namespace pdfi
 
     public:
         explicit SaxAttrList( const std::unordered_map< OUString, OUString >& );
-        SaxAttrList( const SaxAttrList& );
-        virtual ~SaxAttrList() override;
 
         // css::xml::sax::XAttributeList
         virtual sal_Int16 SAL_CALL getLength() override;
