@@ -21,6 +21,7 @@
 #include <docfunc.hxx>
 #include "XMLConverter.hxx"
 #include <stylehelper.hxx>
+#include <tokenarray.hxx>
 
 using namespace xmloff::token;
 
@@ -41,7 +42,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMAT ):
-            pContext = new ScXMLConditionalFormatContext( GetScImport(), pAttribList );
+            pContext = new ScXMLConditionalFormatContext( GetScImport(), pAttribList, *this );
             break;
     }
 
@@ -57,11 +58,18 @@ void SAL_CALL ScXMLConditionalFormatsContext::endFastElement( sal_Int32 /*nEleme
     bool bDeleted = !pCondFormatList->CheckAllEntries();
 
     SAL_WARN_IF(bDeleted, "sc", "conditional formats have been deleted because they contained empty range info");
+
+    for (const auto& i : mvCondFormatData)
+    {
+        pDoc->AddCondFormatData( i.mpFormat->GetRange(), i.mnTab, i.mpFormat->GetKey() );
+    }
 }
 
 ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport,
-                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ):
-    ScXMLImportContext( rImport )
+                                                              const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+                                                              ScXMLConditionalFormatsContext& rParent ):
+    ScXMLImportContext( rImport ),
+    mrParent( rParent )
 {
     OUString sRange;
 
@@ -118,16 +126,227 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
     return pContext;
 }
 
+static bool HasRelRefIgnoringSheet0Relative( ScDocument* pDoc, const ScTokenArray* pTokens, sal_uInt16 nRecursion = 0 )
+{
+    if (pTokens)
+    {
+        formula::FormulaTokenArrayPlainIterator aIter( *pTokens );
+        formula::FormulaToken* t;
+        for( t = aIter.Next(); t; t = aIter.Next() )
+        {
+            switch( t->GetType() )
+            {
+                case formula::svDoubleRef:
+                {
+                    ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+                    if ( rRef2.IsColRel() || rRef2.IsRowRel() || (rRef2.IsFlag3D() && rRef2.IsTabRel()) )
+                        return true;
+                    SAL_FALLTHROUGH;
+                }
+
+                case formula::svSingleRef:
+                {
+                    ScSingleRefData& rRef1 = *t->GetSingleRef();
+                    if ( rRef1.IsColRel() || rRef1.IsRowRel() || (rRef1.IsFlag3D() && rRef1.IsTabRel()) )
+                        return true;
+                }
+                break;
+
+                case formula::svIndex:
+                {
+                    if( t->GetOpCode() == ocName )      // DB areas always absolute
+                        if( ScRangeData* pRangeData = pDoc->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex()) )
+                            if( (nRecursion < 42) && HasRelRefIgnoringSheet0Relative( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
+                                return true;
+                }
+                break;
+
+                // #i34474# function result dependent on cell position
+                case formula::svByte:
+                {
+                    switch( t->GetOpCode() )
+                    {
+                        case ocRow:     // ROW() returns own row index
+                        case ocColumn:  // COLUMN() returns own column index
+                        case ocSheet:   // SHEET() returns own sheet index
+                        case ocCell:    // CELL() may return own cell address
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    return false;
+}
+
+static bool HasOneSingleFullyRelativeReference( const ScTokenArray* pTokens, ScSingleRefData& rOffset )
+{
+    int nCount = 0;
+    if (pTokens)
+    {
+        formula::FormulaTokenArrayPlainIterator aIter( *pTokens );
+        formula::FormulaToken* t;
+        for( t = aIter.Next(); t; t = aIter.Next() )
+        {
+            switch( t->GetType() )
+            {
+                case formula::svSingleRef:
+                {
+                    ScSingleRefData& rRef1 = *t->GetSingleRef();
+                    if ( rRef1.IsColRel() && rRef1.IsRowRel() && !rRef1.IsFlag3D() && rRef1.IsTabRel() )
+                    {
+                        nCount++;
+                        if (nCount == 1)
+                        {
+                            rOffset = rRef1;
+                        }
+                    }
+                }
+                break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    return nCount == 1;
+}
+
 void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
 
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
     ScConditionalFormat* pFormat = mxFormat.release();
-    sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
-    pFormat->SetKey(nIndex);
 
-    pDoc->AddCondFormatData( pFormat->GetRange(), nTab, nIndex);
+    bool bEligibleForCache = true;
+    bool bSingleRelativeReference = false;
+    ScSingleRefData aOffsetForSingleRelRef;
+    const ScTokenArray* pTokens = nullptr;
+    for (size_t nFormatEntryIx = 0; nFormatEntryIx < pFormat->size(); ++nFormatEntryIx)
+    {
+        auto pFormatEntry = pFormat->GetEntry(nFormatEntryIx);
+        auto pCondFormatEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+
+        if (pCondFormatEntry->GetOperation() != ScConditionMode::Equal &&
+            pCondFormatEntry->GetOperation() != ScConditionMode::Direct)
+        {
+            bEligibleForCache = false;
+            break;
+        }
+
+        ScAddress aSrcPos;
+        OUString aSrcString = pCondFormatEntry->GetSrcString();
+        if ( !aSrcString.isEmpty() )
+            aSrcPos.Parse( aSrcString, pDoc );
+        ScCompiler aComp( pDoc, aSrcPos );
+        aComp.SetGrammar( formula::FormulaGrammar::GRAM_ODFF );
+        pTokens = aComp.CompileString( pCondFormatEntry->GetExpression(aSrcPos, 0), "" );
+        if (HasRelRefIgnoringSheet0Relative( pDoc, pTokens ))
+        {
+            // In general not eligible, but some might be. We handle one very special case: When the
+            // conditional format has one entry, the reference position is the first cell of the
+            // range, and with a single fully relative reference in its expression. (Possibly these
+            // conditions could be loosened, but I am too tired to think on that right now.)
+            if (pFormat->size() == 1 &&
+                pFormat->GetRange().size() == 1 &&
+                pFormat->GetRange()[0]->aStart == aSrcPos &&
+                HasOneSingleFullyRelativeReference( pTokens, aOffsetForSingleRelRef ))
+            {
+                bSingleRelativeReference = true;
+            }
+            else
+            {
+                bEligibleForCache = false;
+                break;
+            }
+        }
+    }
+
+    if (bEligibleForCache)
+    {
+        for (auto& aCacheEntry : mrParent.maCache)
+            if (aCacheEntry.mnAge < SAL_MAX_INT64)
+                aCacheEntry.mnAge++;
+
+        for (auto& aCacheEntry : mrParent.maCache)
+        {
+            if (!aCacheEntry.mpFormat)
+                continue;
+
+            if (aCacheEntry.mpFormat->size() != pFormat->size())
+                continue;
+
+            // Check if the conditional format is identical to an existing one (but with different range) and can be shared
+            for (size_t nFormatEntryIx = 0; nFormatEntryIx < pFormat->size(); ++nFormatEntryIx)
+            {
+                auto pCacheFormatEntry = aCacheEntry.mpFormat->GetEntry(nFormatEntryIx);
+                auto pFormatEntry = pFormat->GetEntry(nFormatEntryIx);
+                if (pCacheFormatEntry->GetType() != pFormatEntry->GetType() ||
+                    pFormatEntry->GetType() != ScFormatEntry::Type::Condition)
+                    break;
+
+                auto pCacheCondFormatEntry = static_cast<const ScCondFormatEntry*>(pCacheFormatEntry);
+                auto pCondFormatEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+
+                if (pCacheCondFormatEntry->GetStyle() != pCondFormatEntry->GetStyle())
+                    break;
+
+                // Note That comparing the formulas of the ScConditionEntry at this stage is
+                // comparing just the *strings* of the formulas. For the bSingleRelativeReference
+                // case we compare the tokenized ("compiled") formulas.
+                if (bSingleRelativeReference)
+                {
+                    if (aCacheEntry.mbSingleRelativeReference &&
+                        pTokens->EqualTokens(aCacheEntry.mpTokens.get()))
+                        ;
+                    else
+                        break;
+                }
+                else if (!pCacheCondFormatEntry->EqualIgnoringSrcPos(*pCondFormatEntry))
+                {
+                    break;
+                }
+                // If we get here on the last round through the for loop, we have a cache hit
+                if (nFormatEntryIx == pFormat->size() - 1)
+                {
+                    // Mark cache entry as fresh, do necessary mangling of it and just return
+                    aCacheEntry.mnAge = 0;
+                    for (size_t k = 0; k < pFormat->GetRange().size(); ++k)
+                        aCacheEntry.mpFormat->GetRangeList().Join(*(pFormat->GetRange()[k]));
+                    return;
+                }
+            }
+        }
+
+        // Not found in cache, replace oldest cache entry
+        sal_Int64 nOldestAge = -1;
+        size_t nIndexOfOldest = 0;
+        for (auto& aCacheEntry : mrParent.maCache)
+        {
+            if (aCacheEntry.mnAge > nOldestAge)
+            {
+                nOldestAge = aCacheEntry.mnAge;
+                nIndexOfOldest = (&aCacheEntry - &mrParent.maCache.front());
+            }
+        }
+        mrParent.maCache[nIndexOfOldest].mpFormat = pFormat;
+        mrParent.maCache[nIndexOfOldest].mbSingleRelativeReference = bSingleRelativeReference;
+        mrParent.maCache[nIndexOfOldest].mpTokens.reset(pTokens);
+        mrParent.maCache[nIndexOfOldest].mnAge = 0;
+    }
+
+    sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
+    (void) nIndex; // Avoid 'unused variable' warning when assert() expands to empty
+    assert(pFormat->GetKey() == nIndex);
+
+    mrParent.mvCondFormatData.push_back( { pFormat, nTab } );
 }
 
 ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()

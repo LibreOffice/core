@@ -650,6 +650,25 @@ bool ScConditionEntry::operator== ( const ScConditionEntry& r ) const
     return bEq;
 }
 
+bool ScConditionEntry::EqualIgnoringSrcPos( const ScConditionEntry& r ) const
+{
+    bool bEq = (eOp == r.eOp && nOptions == r.nOptions &&
+                lcl_IsEqual( pFormula1, r.pFormula1 ) &&
+                lcl_IsEqual( pFormula2, r.pFormula2 ));
+    if (bEq)
+    {
+        // Here, ignore the aSrcPoses and aSrcStrings
+
+        // If not formulas, compare values
+        if ( !pFormula1 && ( nVal1 != r.nVal1 || aStrVal1 != r.aStrVal1 || bIsStr1 != r.bIsStr1 ) )
+            bEq = false;
+        if ( !pFormula2 && ( nVal2 != r.nVal2 || aStrVal2 != r.aStrVal2 || bIsStr2 != r.bIsStr2 ) )
+            bEq = false;
+    }
+
+    return bEq;
+}
+
 void ScConditionEntry::Interpret( const ScAddress& rPos )
 {
     // Create formula cells
