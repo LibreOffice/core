@@ -38,7 +38,7 @@
    id="namedview6"
    showgrid="true"
    inkscape:zoom="29.5"
-   inkscape:cx="4.6782498"
+   inkscape:cx="-0.27090274"
    inkscape:cy="9.985658"
    inkscape:window-x="0"
    inkscape:window-y="36"
@@ -49,17 +49,22 @@
      id="grid4148" />
 </sodipodi:namedview>
 
+
      /&gt;
- <path
-   style="fill:#e9e9e9;fill-opacity:1;stroke:#8c8c8c;stroke-linejoin:round;stroke-opacity:1"
-   d="m 8,0.5 c -4.1421356,0 -7.5,2.5183881 -7.5,5.625 0,2.0759552 1.7690972,3.8687004 4,4.843375 l 0,4.53125 L 8,11.5 c 4.142135,0 7.5,-2.2683881 7.5,-5.375 C 15.5,3.0183881 12.142135,0.5 8,0.5 Z"
-   id="path4"
-   inkscape:connector-curvature="0"
-   sodipodi:nodetypes="sscccss" />
-<path
-   style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
-   d="M 8,1 C 4.1340068,1 1,3.2385763 1,6 c 0.00314,1.9291624 1.5597786,3.6849359 4,4.511719 L 5,14.186441 7.8144531,11 7.7890625,10.994141 C 7.8593298,10.996851 7.9296503,10.998804 8,11 11.865993,11 15,8.7614237 15,6 15,3.2385763 11.865993,1 8,1 Z m 0,1 c 3.313708,0 6,1.790861 6,4 0,2.209139 -2.686292,4 -6,4 C 4.6862915,10 2,8.209139 2,6 2,3.790861 4.6862915,2 8,2 Z"
-   id="path4150"
-   inkscape:connector-curvature="0"
-   sodipodi:nodetypes="sccccccsssssss" />
+ <g
+   id="g4135"
+   transform="matrix(-1,0,0,1,16,0)">
+  <path
+     sodipodi:nodetypes="sscccss"
+     inkscape:connector-curvature="0"
+     id="path4"
+     d="m 8,0.5 c -4.1421356,0 -7.5,2.5183881 -7.5,5.625 0,2.0759552 1.7690972,3.8687004 4,4.843375 l 0,4.53125 L 8,11.5 c 4.142135,0 7.5,-2.2683881 7.5,-5.375 C 15.5,3.0183881 12.142135,0.5 8,0.5 Z"
+     style="fill:#e9e9e9;fill-opacity:1;stroke:#8c8c8c;stroke-linejoin:round;stroke-opacity:1" />
+  <path
+     sodipodi:nodetypes="sccccccsssssss"
+     inkscape:connector-curvature="0"
+     id="path4150"
+     d="M 8,1 C 4.1340068,1 1,3.2385763 1,6 1.00314,7.9291624 2.5597786,9.6849359 5,10.511719 L 5,14.186441 7.8144531,11 7.7890625,10.994141 C 7.8593298,10.996851 7.9296503,10.998804 8,11 11.865993,11 15,8.7614237 15,6 15,3.2385763 11.865993,1 8,1 Z m 0,1 c 3.313708,0 6,1.790861 6,4 0,2.209139 -2.686292,4 -6,4 C 4.6862915,10 2,8.209139 2,6 2,3.790861 4.6862915,2 8,2 Z"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" />
+</g>
 </svg>

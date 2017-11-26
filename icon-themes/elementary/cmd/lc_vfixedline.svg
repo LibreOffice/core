@@ -35,7 +35,7 @@
        fx="2.25"
        fy="16"
        r="16.875"
-       gradientTransform="matrix(0.21688641,0,0,0.11633788,11.510946,18.601373)"
+       gradientTransform="matrix(0.21688641,0,0,0.11633788,10.917726,18.626797)"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
@@ -58,7 +58,7 @@
        x2="17.762712"
        y2="18.305084"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.3124287,-1.0140458,0,24.16856,-1.6755193)" />
+       gradientTransform="matrix(0,1.3142331,-1.0026853,0,23.532234,-1.7592702)" />
     <linearGradient
        id="linearGradient6581">
       <stop
@@ -81,26 +81,26 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1301"
+     inkscape:window-height="1375"
      id="namedview6"
      showgrid="false"
      inkscape:zoom="39.333333"
-     inkscape:cx="14.415445"
+     inkscape:cx="10.703581"
      inkscape:cy="6.6436752"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="36"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <ellipse
      style="color:#000000;display:block;overflow:visible;visibility:visible;opacity:0.23800001;fill:url(#radialGradient3947);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none"
      id="path2193"
-     cx="11.99894"
-     cy="20.46278"
+     cx="11.405721"
+     cy="20.488203"
      rx="3.6599579"
      ry="1.9632038" />
   <path
-     style="fill:url(#linearGradient4170);fill-opacity:1;stroke:#888a85;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 10.986175,3.5740661 0,15.9829589 2.02765,0 0,-15.9829589 -2.02765,0 z"
+     style="fill:url(#linearGradient4170);fill-opacity:1;stroke:#888a85;stroke-width:0.99506599;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 10.497533,3.4975329 0,16.0049341 2.004934,0 0,-16.0049341 -2.004934,0 z"
      id="path4-3"
      inkscape:connector-curvature="0" />
 </svg>
