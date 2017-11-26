@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.12"/>
+  <requires lib="" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkMenu" id="AlignPara">
     <property name="visible">True</property>
@@ -4385,7 +4386,6 @@
                       <object class="sfxlo-OptionalBox" id="StylesSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator10">
                             <property name="visible">True</property>
@@ -4518,7 +4518,6 @@
                       <object class="sfxlo-OptionalBox" id="FormatSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator11">
                             <property name="visible">True</property>
@@ -4714,9 +4713,6 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-6"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -4728,7 +4724,6 @@
                       <object class="sfxlo-OptionalBox" id="ParagraphSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator6">
                             <property name="visible">True</property>
@@ -4959,7 +4954,6 @@
                       <object class="sfxlo-OptionalBox" id="InsertSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator18">
                             <property name="visible">True</property>
@@ -5111,7 +5105,6 @@
                       <object class="sfxlo-OptionalBox" id="ReferenceSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator21">
                             <property name="visible">True</property>
@@ -5225,7 +5218,6 @@
                       <object class="sfxlo-OptionalBox" id="ReviewSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator27">
                             <property name="visible">True</property>
@@ -5339,7 +5331,6 @@
                       <object class="sfxlo-OptionalBox" id="ViewSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator24">
                             <property name="visible">True</property>
@@ -5458,10 +5449,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="TableContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="TableContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="StylesSection1">
+                      <object class="sfxlo-OptionalBox" id="StylesSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5579,6 +5570,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-8"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5587,7 +5581,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="FormatSection1">
+                      <object class="sfxlo-OptionalBox" id="FormatSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5794,7 +5788,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ParagraphSection2">
+                      <object class="sfxlo-OptionalBox" id="ParagraphSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5946,6 +5940,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-6"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5954,7 +5951,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="TableSection">
+                      <object class="sfxlo-OptionalBox" id="TableSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6082,6 +6079,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-5"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6090,7 +6090,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="MergeSection">
+                      <object class="sfxlo-OptionalBox" id="MergeSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6192,6 +6192,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-4"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6200,7 +6203,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="RowsColumnSection">
+                      <object class="sfxlo-OptionalBox" id="RowsColumnSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6314,6 +6317,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6322,7 +6328,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="SelectSection">
+                      <object class="sfxlo-OptionalBox" id="SelectSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6439,6 +6445,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6447,7 +6456,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="CalculateSection">
+                      <object class="sfxlo-OptionalBox" id="CalculateSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6550,6 +6559,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6568,10 +6580,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="GraphicContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="GraphicContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GraphicSection">
+                      <object class="sfxlo-OptionalBox" id="GraphicSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6720,7 +6732,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ColorSection">
+                      <object class="sfxlo-OptionalBox" id="ColorSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6836,6 +6848,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-4"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6844,7 +6859,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ColorSectionExt">
+                      <object class="sfxlo-OptionalBox" id="ColorSectionExt">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6937,6 +6952,9 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6945,7 +6963,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ArrangeSection">
+                      <object class="sfxlo-OptionalBox" id="ArrangeSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7166,6 +7184,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7174,7 +7195,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GridSection">
+                      <object class="sfxlo-OptionalBox" id="GridSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7277,6 +7298,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7295,10 +7319,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="ReviewContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="ReviewContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="LanguageSection">
+                      <object class="sfxlo-OptionalBox" id="LanguageSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7390,6 +7414,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-5"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7398,7 +7425,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ReviewSectio">
+                      <object class="sfxlo-OptionalBox" id="ReviewSectio">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7550,6 +7577,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-4"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7558,23 +7588,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="ExtBottom19">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="valign">end</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <property name="icon_size">3</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="sfxlo-DropdownBox" id="CommentsSection">
+                      <object class="sfxlo-OptionalBox" id="CommentsSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7674,7 +7688,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="FilesSectionsRev">
+                      <object class="sfxlo-OptionalBox" id="FilesSectionsRev">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7766,6 +7780,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7774,7 +7791,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection2">
+                      <object class="sfxlo-OptionalBox" id="ViewSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7865,6 +7882,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7883,10 +7903,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="DrawContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="DrawContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="EditSection">
+                      <object class="sfxlo-OptionalBox" id="EditSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8102,7 +8122,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="DrawSelect">
+                      <object class="sfxlo-OptionalBox" id="DrawSelect">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8321,6 +8341,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-5"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8329,7 +8352,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ArrangeSection2">
+                      <object class="sfxlo-OptionalBox" id="ArrangeSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8526,6 +8549,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-4"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8534,7 +8560,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GridSection2">
+                      <object class="sfxlo-OptionalBox" id="GridSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8635,6 +8661,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8643,7 +8672,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GroupSection2">
+                      <object class="sfxlo-OptionalBox" id="GroupSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8744,6 +8773,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8752,7 +8784,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="3DSection">
+                      <object class="sfxlo-OptionalBox" id="3DSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8890,6 +8922,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8908,10 +8943,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="OLEContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="OLEContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="EditSection1">
+                      <object class="sfxlo-OptionalBox" id="EditSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9072,7 +9107,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ArrangeSection1">
+                      <object class="sfxlo-OptionalBox" id="ArrangeSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9242,6 +9277,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9250,7 +9288,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GridSection1">
+                      <object class="sfxlo-OptionalBox" id="GridSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9351,6 +9389,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9359,7 +9400,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection1">
+                      <object class="sfxlo-OptionalBox" id="ViewSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9461,6 +9502,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9480,10 +9524,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="DrawTextContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="DrawTextContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="StylesSection2">
+                      <object class="sfxlo-OptionalBox" id="StylesSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9605,6 +9649,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-4"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9613,7 +9660,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="FormatSection2">
+                      <object class="sfxlo-OptionalBox" id="FormatSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9820,7 +9867,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ParagraphSection1">
+                      <object class="sfxlo-OptionalBox" id="ParagraphSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -10051,6 +10098,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -10059,7 +10109,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection3">
+                      <object class="sfxlo-OptionalBox" id="ViewSection3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -10161,6 +10211,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
