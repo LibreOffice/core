@@ -6046,7 +6046,10 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                 return false;
         }
         else
-            rSt.SeekRel( nLength );
+        {
+            if (!checkSeek(rSt, rSt.Tell() + nLength))
+                return false;
+        }
         nReadSpGrCont += nLength;
     }
     while( nReadSpGrCont < nLenShapeGroupCont );
