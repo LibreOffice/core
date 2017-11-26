@@ -191,15 +191,13 @@ int OpenGLRender::RenderLine2FBO()
 {
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
-    size_t listNum = m_Line2DShapePointList.size();
     PosVecf3 const trans = {0.0f, 0.0f, 0.0f};
     PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 const scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
-    for (size_t i = 0; i < listNum; i++)
+    for (auto const& pointList : m_Line2DShapePointList)
     {
-        PointList &pointList = m_Line2DShapePointList.front();
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
@@ -230,8 +228,8 @@ int OpenGLRender::RenderLine2FBO()
         glUseProgram(0);
         glDisableVertexAttribArray(m_2DVertexID);
         CHECK_GL_ERROR();
-        m_Line2DShapePointList.pop_front();
     }
+    m_Line2DShapePointList.clear();
     CHECK_GL_ERROR();
     CHECK_GL_FRAME_BUFFER_STATUS();
     m_fZStep += Z_STEP;
@@ -416,11 +414,9 @@ int OpenGLRender::RenderBubble2FBO()
 {
     CHECK_GL_ERROR();
     glm::vec4 edgeColor = glm::vec4(0.0, 0.0, 0.0, 1.0);
-    size_t listNum = m_Bubble2DShapePointList.size();
-    for (size_t i = 0; i < listNum; i++)
+    for (auto const& pointList : m_Bubble2DShapePointList)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
-        Bubble2DPointList &pointList = m_Bubble2DShapePointList.front();
         PosVecf3 const trans = {pointList.x, pointList.y, m_fZStep};
         PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 const scale = {pointList.xScale / 2, pointList.yScale / 2 , 1.0f};
@@ -476,9 +472,9 @@ int OpenGLRender::RenderBubble2FBO()
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        m_Bubble2DShapePointList.pop_front();
         glLineWidth(m_fLineWidth);
     }
+    m_Bubble2DShapePointList.clear();
     //if use MSAA, we should copy the data to the FBO texture
     GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if( fbResult != GL_FRAMEBUFFER_COMPLETE )
@@ -514,11 +510,9 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
 
 int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 {
-    size_t listNum = m_RectangleShapePointList.size();
-    for (size_t i = 0; i < listNum; i++)
+    for (auto const& pointList : m_RectangleShapePointList)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
-        RectanglePointList &pointList = m_RectangleShapePointList.front();
         {
             PosVecf3 const trans = {0, 0, 0};
             PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
@@ -614,8 +608,8 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
         glDisableVertexAttribArray(m_BackgroundColorID);
         glUseProgram(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        m_RectangleShapePointList.pop_front();
     }
+    m_RectangleShapePointList.clear();
     CHECK_GL_ERROR();
 
     m_fZStep += Z_STEP;
@@ -693,17 +687,15 @@ int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixel
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
-    m_TextInfoList.push_back(aTextInfo);
+    m_TextInfoVector.push_back(aTextInfo);
     return 0;
 }
 
 int OpenGLRender::RenderTextShape()
 {
     CHECK_GL_ERROR();
-    size_t listNum = m_TextInfoList.size();
-    for (size_t i = 0; i < listNum; i++)
+    for (auto const& textInfo : m_TextInfoVector)
     {
-        TextInfo &textInfo = m_TextInfoList.front();
         PosVecf3 const trans = { textInfo.nDx, textInfo.nDy, 0};
         PosVecf3 const angle = {0.0f, 0.0f, float(textInfo.rotation)};
         PosVecf3 const scale = {1.0, 1.0, 1.0f};
@@ -757,8 +749,8 @@ int OpenGLRender::RenderTextShape()
         glUseProgram(0);
         glDeleteTextures(1, &textInfo.texture);
         CHECK_GL_ERROR();
-        m_TextInfoList.pop_front();
     }
+    m_TextInfoVector.clear();
     CHECK_GL_ERROR();
     m_fZStep += Z_STEP;
     return 0;
@@ -812,15 +804,13 @@ int OpenGLRender::RenderArea2DShape()
     CHECK_GL_ERROR();
 
     glDisable(GL_MULTISAMPLE);
-    size_t listNum = m_Area2DShapePointList.size();
     PosVecf3 const trans = {0.0f, 0.0f, 0.0f};
     PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 const scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
-    for (size_t i = 0; i < listNum; ++i)
+    for (auto const& pointList : m_Area2DShapePointList)
     {
-        PointList &pointList = m_Area2DShapePointList.front();
         bool bIsCCW = checkCCW(pointList); // is it counter clockwise (CCW) or clockwise (CW)
         if(!bIsCCW)
             glFrontFace(GL_CW);
@@ -851,8 +841,8 @@ int OpenGLRender::RenderArea2DShape()
         glUseProgram(0);
         if(!bIsCCW)
             glFrontFace(GL_CCW);
-        m_Area2DShapePointList.pop_front();
     }
+    m_Area2DShapePointList.clear();
     glEnable(GL_MULTISAMPLE);
     m_fZStep += Z_STEP;
 
