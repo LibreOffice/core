@@ -42,8 +42,8 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 
-#include <abi.hxx>
-#include <callvirtualfunction.hxx>
+#include "abi.hxx"
+#include "callvirtualfunction.hxx"
 
 namespace {
 

@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <sal/alloca.h>
 
-#include <callvirtualfunction.hxx>
+#include "callvirtualfunction.hxx"
 
 void callVirtualFunction(
     unsigned long function, unsigned long * gpr, unsigned long * fpr,

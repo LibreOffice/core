@@ -38,7 +38,7 @@
 #include <uno/any2.h>
 #include <uno/mapping.h>
 
-#include <abi.hxx>
+#include "abi.hxx"
 #include <osl/mutex.hxx>
 #include <unordered_map>
 
