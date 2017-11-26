@@ -481,12 +481,10 @@ struct NewDonutSeries
         aRet.push_back( aSeriesStyle );
 
         sal_Int32 nPointIndex=0;
-        ::std::vector< OUString >::iterator aPointIt( m_aPointStyles.begin() );
-        ::std::vector< OUString >::iterator aPointEnd( m_aPointStyles.end() );
-        while( aPointIt != aPointEnd )
+        for (auto const& pointStyle : m_aPointStyles)
         {
             DataRowPointStyle aPointStyle( DataRowPointStyle::DATA_POINT
-                , m_xSeries, nPointIndex, 1, *aPointIt, mnAttachedAxis );
+                , m_xSeries, nPointIndex, 1, pointStyle, mnAttachedAxis );
             if( nPointIndex < static_cast<sal_Int32>(m_aSeriesStyles.size()) )
             {
                 aPointStyle.msSeriesStyleNameForDonuts = m_aSeriesStyles[nPointIndex];
@@ -494,7 +492,6 @@ struct NewDonutSeries
             if( !aPointStyle.msSeriesStyleNameForDonuts.isEmpty()
                 || !aPointStyle.msStyleName.isEmpty() )
                 aRet.push_back( aPointStyle );
-            ++aPointIt;
             ++nPointIndex;
         }
 
@@ -505,9 +502,6 @@ struct NewDonutSeries
 void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyle >& rStyleVector
         , const ::std::map< css::uno::Reference< css::chart2::XDataSeries> , sal_Int32 >& rSeriesMap )
 {
-    ::std::vector< DataRowPointStyle >::iterator aIt(rStyleVector.begin());
-    ::std::vector< DataRowPointStyle >::iterator aEnd(rStyleVector.end());
-
     //detect old series count
     //and add old series to aSeriesMap
     ::std::map< css::uno::Reference<
@@ -516,9 +510,9 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyl
     {
         sal_Int32 nMaxOldSeriesIndex = 0;
         sal_Int32 nOldSeriesIndex = 0;
-        for( aIt = rStyleVector.begin(); aIt != aEnd; ++aIt )
+        for (auto const& style : rStyleVector)
         {
-            DataRowPointStyle aStyle(*aIt);
+            DataRowPointStyle aStyle(style);
             if(aStyle.meType == DataRowPointStyle::DATA_SERIES &&
                     aStyle.m_xSeries.is() )
             {
@@ -534,62 +528,55 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyl
     }
 
     //initialize new series styles
-    ::std::map< Reference< chart2::XDataSeries >, sal_Int32 >::const_iterator aSeriesMapIt( aSeriesMap.begin() );
     ::std::map< Reference< chart2::XDataSeries >, sal_Int32 >::const_iterator aSeriesMapEnd( aSeriesMap.end() );
 
     //sort by index
     ::std::vector< NewDonutSeries > aNewSeriesVector;
     {
         ::std::map< sal_Int32, Reference< chart2::XDataSeries > > aIndexSeriesMap;
-        for( ; aSeriesMapIt != aSeriesMapEnd; ++aSeriesMapIt )
-            aIndexSeriesMap[aSeriesMapIt->second] = aSeriesMapIt->first;
+        for (auto const& series : aSeriesMap)
+            aIndexSeriesMap[series.second] = series.first;
 
-        ::std::map< sal_Int32, Reference< chart2::XDataSeries > >::const_iterator aIndexIt( aIndexSeriesMap.begin() );
-        ::std::map< sal_Int32, Reference< chart2::XDataSeries > >::const_iterator aIndexEnd( aIndexSeriesMap.end() );
-
-        for( ; aIndexIt != aIndexEnd; ++aIndexIt )
-            aNewSeriesVector.emplace_back(aIndexIt->second,nOldSeriesCount );
+        for (auto const& indexSeries : aIndexSeriesMap)
+            aNewSeriesVector.emplace_back(indexSeries.second,nOldSeriesCount );
     }
 
     //overwrite attached axis information according to old series styles
-    for( aIt = rStyleVector.begin(); aIt != aEnd; ++aIt )
+    for (auto const& style : rStyleVector)
     {
-        DataRowPointStyle aStyle(*aIt);
+        DataRowPointStyle aStyle(style);
         if(aStyle.meType == DataRowPointStyle::DATA_SERIES )
         {
-            aSeriesMapIt = aSeriesMap.find( aStyle.m_xSeries );
+            auto aSeriesMapIt = aSeriesMap.find( aStyle.m_xSeries );
             if( aSeriesMapIt != aSeriesMapEnd && aSeriesMapIt->second < static_cast<sal_Int32>(aNewSeriesVector.size()) )
                 aNewSeriesVector[aSeriesMapIt->second].mnAttachedAxis = aStyle.mnAttachedAxis;
         }
     }
 
     //overwrite new series style names with old series style name information
-    for( aIt = rStyleVector.begin(); aIt != aEnd; ++aIt )
+    for (auto const& style : rStyleVector)
     {
-        DataRowPointStyle aStyle(*aIt);
+        DataRowPointStyle aStyle(style);
         if( aStyle.meType == DataRowPointStyle::DATA_SERIES )
         {
-            aSeriesMapIt = aSeriesMap.find(aStyle.m_xSeries);
+            auto aSeriesMapIt = aSeriesMap.find(aStyle.m_xSeries);
             if( aSeriesMapEnd != aSeriesMapIt )
             {
                 sal_Int32 nNewPointIndex = aSeriesMapIt->second;
 
-                ::std::vector< NewDonutSeries >::iterator aNewSeriesIt( aNewSeriesVector.begin() );
-                ::std::vector< NewDonutSeries >::iterator aNewSeriesEnd( aNewSeriesVector.end() );
-
-                for( ;aNewSeriesIt!=aNewSeriesEnd; ++aNewSeriesIt)
-                    aNewSeriesIt->setSeriesStyleNameToPoint( aStyle.msStyleName, nNewPointIndex );
+                for (auto & newSeries : aNewSeriesVector)
+                    newSeries.setSeriesStyleNameToPoint( aStyle.msStyleName, nNewPointIndex );
             }
         }
     }
 
     //overwrite new series style names with point style name information
-    for( aIt = rStyleVector.begin(); aIt != aEnd; ++aIt )
+    for (auto const& style : rStyleVector)
     {
-        DataRowPointStyle aStyle(*aIt);
+        DataRowPointStyle aStyle(style);
         if( aStyle.meType == DataRowPointStyle::DATA_POINT )
         {
-            aSeriesMapIt = aSeriesMap.find(aStyle.m_xSeries);
+            auto aSeriesMapIt = aSeriesMap.find(aStyle.m_xSeries);
             if( aSeriesMapEnd != aSeriesMapIt )
             {
                 sal_Int32 nNewPointIndex = aSeriesMapIt->second;
@@ -611,11 +598,9 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyl
     //put information from aNewSeriesVector to output parameter rStyleVector
     rStyleVector.clear();
 
-    ::std::vector< NewDonutSeries >::iterator aNewSeriesIt( aNewSeriesVector.begin() );
-    ::std::vector< NewDonutSeries >::iterator aNewSeriesEnd( aNewSeriesVector.end() );
-    for( ;aNewSeriesIt!=aNewSeriesEnd; ++aNewSeriesIt)
+    for (auto & newSeries : aNewSeriesVector)
     {
-        ::std::vector< DataRowPointStyle > aVector( aNewSeriesIt->creatStyleVector() );
+        ::std::vector< DataRowPointStyle > aVector( newSeries.creatStyleVector() );
         rStyleVector.insert(rStyleVector.end(),aVector.begin(),aVector.end());
     }
 }
