@@ -52,6 +52,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
+	CppunitTest_sc_cond_format_merge \
 	CppunitTest_sc_condformats \
 	CppunitTest_sc_new_cond_format_api \
 	CppunitTest_sc_subsequent_filters_test \
