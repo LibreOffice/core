@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_33f86349",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-11-26T19:36:40Z",
+      "side": 1,
+      "message": "Can the medium itemset ever contain SID_READONLYDOC, as I don\u0027t see anything that sets it? Anyway, I think that this should always check SID_EDITDOC, so that the following macro will disable the readonly button, as it does with the editdoc button:\n\nSub OpenDoc\nDim url\nurl \u003d ConvertToURL(\"/home/maxim/test.odt\")\n\ndim args(0) as new com.sun.star.beans.PropertyValue\nargs(0).Name \u003d \"DontEdit\"\nargs(0).Value \u003d true\n\nStarDesktop.loadComponentFromURL(url,\"_blank\",0,args)\nEnd Sub",
+      "revId": "f7ffd70adb2a37614ae9a4f159adb02214a255c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5397afeb",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-11-26T19:36:40Z",
+      "side": 1,
+      "message": "else if",
+      "revId": "f7ffd70adb2a37614ae9a4f159adb02214a255c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
