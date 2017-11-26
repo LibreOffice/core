@@ -35,13 +35,13 @@
     </linearGradient>
     <linearGradient
        gradientUnits="userSpaceOnUse"
-       y2="39.486301"
-       x2="37.746555"
+       y2="-4.1306114"
+       x2="-2.3798597"
        y1="23.992306"
        x1="23.598076"
        gradientTransform="matrix(0.38705024,0,0,0.31920189,2.9211253,5.318499)"
        id="linearGradient13217"
-       xlink:href="#linearGradient6581"
+       xlink:href="#linearGradient2980"
        inkscape:collect="always" />
     <radialGradient
        inkscape:collect="always"
@@ -66,19 +66,39 @@
          offset="1"
          id="stop3945" />
     </linearGradient>
+    <linearGradient
+       x1="28.534189"
+       y1="24.239939"
+       x2="16.887266"
+       y2="13.663627"
+       id="linearGradient3064"
+       xlink:href="#linearGradient2980"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.62191463,0,0,0.60974338,-8.2327834,-7.5449149)" />
+    <linearGradient
+       id="linearGradient2980">
+      <stop
+         id="stop2982"
+         style="stop-color:#fcaf3e;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop2984"
+         style="stop-color:#fcaf3e;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
-     inkscape:window-y="34"
+     inkscape:window-y="36"
      inkscape:window-x="0"
-     inkscape:window-height="1377"
+     inkscape:window-height="1375"
      inkscape:window-width="2560"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
      showgrid="true"
      inkscape:current-layer="layer1"
-     inkscape:cy="9.0616418"
-     inkscape:cx="13.810608"
-     inkscape:zoom="45.254832"
+     inkscape:cy="7.1854562"
+     inkscape:cx="8.6059194"
+     inkscape:zoom="22.627416"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1"
@@ -149,7 +169,7 @@
        rx="8.0982113"
        ry="1.9632038" />
     <path
-       style="fill:url(#linearGradient13217);fill-opacity:1;fill-rule:nonzero;stroke:#888a85;stroke-width:0.96712863;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:url(#linearGradient13217);fill-opacity:1;fill-rule:nonzero;stroke:#ce5c00;stroke-width:0.96712863;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 3.484375 6.484375 L 3.484375 20.515625 L 20.515625 20.515625 L 20.515625 14 L 12 14 L 12 6.484375 L 3.484375 6.484375 z "
        transform="translate(0,-2)"
        id="rect8738" />
