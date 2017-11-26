@@ -1226,8 +1226,8 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 
             double fPos1 = aP.X();  //( bFlipH ) ? aLogicRect.GetWidth() - aP.X() : aP.X();
             double fPos2 = aP.Y();  //( bFlipV ) ? aLogicRect.GetHeight() -aP.Y() : aP.Y();
-            fPos1 /= fXScale;
-            fPos2 /= fYScale;
+            fPos1 = !basegfx::fTools::equalZero(fXScale) ? (fPos1 / fXScale) : SAL_MAX_INT32;
+            fPos2 = !basegfx::fTools::equalZero(fYScale) ? (fPos2 / fYScale) : SAL_MAX_INT32;
 
             // Used for scaling the adjustment values based on handle positions
             double fWidth;
