@@ -8,7 +8,7 @@
 #- Env ------------------------------------------------------------------------
 IOSDEV = /Applications/Xcode.app/Contents/Developer/
 IOSLD = $(IOSDEV)Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
-IOSOBJ = $(WORKDIR)/ios/Kit.o
+IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
 IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.a
