@@ -4104,11 +4104,15 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                         return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp && pRet && static_cast<SdrObjGroup*>(pRet)->GetSubList() )
+                    if (pTmp)
                     {
-                        static_cast<SdrObjGroup*>(pRet)->GetSubList()->NbcInsertObject( pTmp );
-                        if( nShapeId )
-                            insertShapeId( nShapeId, pTmp );
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        if (pGroup && pGroup->GetSubList())
+                        {
+                            pGroup->GetSubList()->NbcInsertObject(pTmp);
+                            if (nShapeId)
+                                insertShapeId(nShapeId, pTmp);
+                        }
                     }
                 }
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
@@ -4117,11 +4121,15 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                         return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp && pRet && static_cast<SdrObjGroup*>(pRet)->GetSubList())
+                    if (pTmp)
                     {
-                        static_cast<SdrObjGroup*>(pRet)->GetSubList()->NbcInsertObject( pTmp );
-                        if( nShapeId )
-                            insertShapeId( nShapeId, pTmp );
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        if (pGroup && pGroup->GetSubList())
+                        {
+                            pGroup->GetSubList()->NbcInsertObject(pTmp);
+                            if (nShapeId)
+                                insertShapeId(nShapeId, pTmp);
+                        }
                     }
                 }
                 if (!aRecHd2.SeekToEndOfRecord(rSt))
