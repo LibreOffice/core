@@ -40,7 +40,7 @@
 #include <types.hxx>
 #include <vtablefactory.hxx>
 
-#include <abi.hxx>
+#include "abi.hxx"
 
 extern "C" void vtableSlotCall_();
 
