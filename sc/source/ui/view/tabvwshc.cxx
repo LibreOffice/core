@@ -547,18 +547,42 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
         pWin->updateLibreOfficeKitCellCursor(pOtherShell);
 }
 
-void ScTabViewShell::notifyAllViewsHeaderInvalidation(const OString& rPayload, SCTAB nCurrentTabIndex)
+void ScTabViewShell::notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SCTAB nCurrentTabIndex)
 {
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
+        OString aPayload;
+        switch (eHeaderType)
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, rPayload.getStr());
+            case COLUMN_HEADER:
+                aPayload = "column";
+                break;
+            case ROW_HEADER:
+                aPayload = "row";
+                break;
+            case BOTH_HEADERS:
+            default:
+                aPayload = "all";
+                break;
         }
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
+
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
+            {
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, aPayload.getStr());
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
     }
+}
+
+void ScTabViewShell::notifyAllViewsHeaderInvalidation(bool bColumns, SCTAB nCurrentTabIndex)
+{
+    HeaderType eHeaderType = bColumns ? COLUMN_HEADER : ROW_HEADER;
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(eHeaderType, nCurrentTabIndex);
 }
 
 bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
