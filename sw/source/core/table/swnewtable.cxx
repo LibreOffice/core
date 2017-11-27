@@ -60,11 +60,11 @@
 class SwBoxSelection
 {
 public:
-    std::vector<const SwSelBoxes*> aBoxes;
+    std::vector<SwSelBoxes> maBoxes;
     long mnMergeWidth;
     SwBoxSelection() : mnMergeWidth(0) {}
-    bool isEmpty() const { return aBoxes.empty(); }
-    void insertBoxes( const SwSelBoxes* pNew ){ aBoxes.insert( aBoxes.end(), pNew ); }
+    bool isEmpty() const { return maBoxes.empty(); }
+    void push_back(const SwSelBoxes& rNew) { maBoxes.push_back(rNew); }
 };
 
 /** NewMerge(..) removes the superfluous cells after cell merge
@@ -381,7 +381,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     {
         SwTableLine* pLine = m_aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
-        SwSelBoxes *pBoxes = new SwSelBoxes;
+        SwSelBoxes aBoxes;
         long nRight = 0;
         const size_t nCount = pLine->GetTabBoxes().size();
         for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
@@ -408,7 +408,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                 {
                     if( nCurrBox )
                     {
-                        pBoxes->insert( pBox );
+                        aBoxes.insert(pBox);
                         pInnerBox = pBox;
                         pLeftBox = pLine->GetTabBoxes()[nCurrBox-1];
                         nDiff = nMin - nLeft;
@@ -439,7 +439,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
             }
             else if( nRight <= nMax )
             {
-                pBoxes->insert( pBox );
+                aBoxes.insert(pBox);
                 if( nRow == nTop && nRowSpan < 0 )
                 {
                     bOkay = false;
@@ -458,7 +458,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                 {
                     if( nCurrBox+1 < nCount )
                     {
-                        pBoxes->insert( pBox );
+                        aBoxes.insert(pBox);
                         pInnerBox = pBox;
                         pRightBox = pLine->GetTabBoxes()[nCurrBox+1];
                         nDiff = nRight - nMax;
@@ -558,7 +558,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
             --nLeftSpanCnt;
         if( nRightSpanCnt )
             --nRightSpanCnt;
-        pRet->insertBoxes( pBoxes );
+        pRet->push_back(aBoxes);
     }
     pRet->mnMergeWidth = nMax - nMin;
     if( nCheckBottom > nBottom )
@@ -822,7 +822,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // i.e. contiguous cells in contiguous rows
     bool bMerge = false; // will be set if any content is transferred from
     // a "not already overlapped" cell into the new master cell.
-    SwTableBox *pMergeBox = (*pSel->aBoxes[0])[0]; // the master cell box
+    SwTableBox *pMergeBox = pSel->maBoxes[0][0]; // the master cell box
     if( !pMergeBox )
         return false;
     (*ppMergeBox) = pMergeBox;
@@ -837,7 +837,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     SwPosition aInsPos( *pMergeBox->GetSttNd()->EndOfSectionNode() );
     SwPaM aChkPam( aInsPos );
     // The number of lines in the selection rectangle: nLineCount
-    const size_t nLineCount = pSel->aBoxes.size();
+    const size_t nLineCount = pSel->maBoxes.size();
     // BTW: nLineCount is the rowspan of the new master cell
     long nRowSpan = static_cast<long>(nLineCount);
     // We will need the first and last line of the selection
@@ -848,12 +848,12 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     for( size_t nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
     {
         // The selected boxes in the current line
-        const SwSelBoxes* pBoxes = pSel->aBoxes[ nCurrLine ];
-        size_t nColCount = pBoxes->size();
+        const SwSelBoxes& rLineBoxes = pSel->maBoxes[nCurrLine];
+        size_t nColCount = rLineBoxes.size();
         // Iteration over the selected cell in the current row
         for (size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol)
         {
-            SwTableBox* pBox = (*pBoxes)[nCurrCol];
+            SwTableBox* pBox = rLineBoxes[nCurrCol];
             rMerged.insert( pBox );
             // Only the first selected cell in every row will be alive,
             // the other will be deleted => put into rBoxes
@@ -925,11 +925,11 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
         pNewFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, pSel->mnMergeWidth, 0 ) );
         for( size_t nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
         {
-            const SwSelBoxes* pBoxes = pSel->aBoxes[ nCurrLine ];
-            size_t nColCount = pBoxes->size();
+            const SwSelBoxes& rLineBoxes = pSel->maBoxes[nCurrLine];
+            size_t nColCount = rLineBoxes.size();
             for (size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol)
             {
-                SwTableBox* pBox = (*pBoxes)[nCurrCol];
+                SwTableBox* pBox = rLineBoxes[nCurrCol];
                 if( nCurrCol )
                 {
                     // Even this box will be deleted soon,
