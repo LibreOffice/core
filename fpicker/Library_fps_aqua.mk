@@ -65,7 +65,7 @@ $(eval $(call gb_Library_add_exception_objects,fps_aqua,\
 ))
 
 $(eval $(call gb_Library_add_cxxflags,fps_aqua,\
-    -x objective-c++ -DMACOSX_DEPLOYMENT_TARGET=10.7 \
+    -x objective-c++ \
 ))
 
 # vim: set noet sw=4 ts=4:

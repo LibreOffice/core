@@ -2023,7 +2023,7 @@ File gid_File_Lib_Apr
 	// Looks like the major version number is part of the name, not
 	// part of the suffix.  An error?
 	#ifdef MACOSX
-            Name = STRING(CONCAT6(libapr-1,.0.,APR_MINOR,.,APR_MICRO,UNXSUFFIX));
+            Name = STRING(CONCAT2(libapr-1,UNXSUFFIX));
 	#elif FREEBSD
             Name = STRING(CONCAT3(libapr-1,UNXSUFFIX,.5));
         #else
@@ -2042,7 +2042,7 @@ File gid_File_Lib_AprUtil
 	// Looks like the major version number is part of the name, not
 	// part of the suffix.  An error?
 	#ifdef MACOSX
-            Name = STRING(CONCAT6(libaprutil-1,.0.,APR_UTIL_MINOR,.,APR_UTIL_MICRO,UNXSUFFIX));
+	    Name = STRING(CONCAT2(libaprutil-1,UNXSUFFIX));
 	#elif FREEBSD
             Name = STRING(CONCAT3(libaprutil-1,UNXSUFFIX,.5));
 	#else
@@ -2061,7 +2061,7 @@ File gid_File_Lib_Serf
 	// Looks like the major version number is part of the name, not
 	// part of the suffix.  An error?
 	#ifdef MACOSX
-            Name = STRING(CONCAT4(libserf-,SERF_MAJOR,.0.0.0,UNXSUFFIX));
+            Name = STRING(CONCAT3(libserf-,SERF_MAJOR,UNXSUFFIX));
 	#elif FREEBSD
             Name = STRING(CONCAT3(libserf-1,UNXSUFFIX,.0));
 	#else
