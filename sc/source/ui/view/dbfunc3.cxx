@@ -68,6 +68,9 @@
 #include <tabvwsh.hxx>
 #include <generalfunction.hxx>
 
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
+
 #include <list>
 #include <memory>
 #include <unordered_set>
@@ -98,6 +101,8 @@ void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.MakeOutline( aRange, bColumns, bRecord, false );
+
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, GetViewData().GetTabNo());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -113,6 +118,8 @@ void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.RemoveOutline( aRange, bColumns, bRecord, false );
+
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, GetViewData().GetTabNo());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -186,7 +193,10 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
     bool bOk = aFunc.RemoveAllOutlines( nTab, bRecord );
 
     if (bOk)
+    {
         UpdateScrollBars();
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(BOTH_HEADERS, GetViewData().GetTabNo());
+    }
 }
 
 // auto outlines
@@ -222,6 +232,20 @@ void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord )
 }
 
 // show individual outline groups
+
+void ScDBFunc::SetOutlineState( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bHidden)
+{
+    const sal_uInt16 nHeadEntry = static_cast< sal_uInt16 >( -1 );
+    if ( nEntry ==  nHeadEntry)
+        SelectLevel( bColumns, sal::static_int_cast<sal_uInt16>(nLevel) );
+    else
+    {
+        if ( !bHidden )
+            ShowOutline( bColumns, sal::static_int_cast<sal_uInt16>(nLevel), sal::static_int_cast<sal_uInt16>(nEntry) );
+        else
+            HideOutline( bColumns, sal::static_int_cast<sal_uInt16>(nLevel), sal::static_int_cast<sal_uInt16>(nEntry) );
+    }
+}
 
 void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bRecord, bool bPaint )
 {
@@ -2221,6 +2245,35 @@ void ScDBFunc::RepeatDB( bool bRecord )
     }
     else        // "no not execute any operations"
         ErrorMessage(STR_MSSG_REPEATDB_0);
+}
+
+void ScDBFunc::OnLOKShowHideOutline(bool bColumns, SCCOLROW nStart)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            if (bColumns)
+                pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex)->invalidateByIndex(nStart);
+            else
+                pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex)->invalidateByIndex(nStart);
+
+            if (pTabViewShell->getPart() == nCurrentTabIndex)
+            {
+                pTabViewShell->ShowCursor();
+                pTabViewShell->MarkDataChanged();
+            }
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, nCurrentTabIndex);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

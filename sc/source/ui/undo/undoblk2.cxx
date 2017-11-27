@@ -131,11 +131,7 @@ void ScUndoWidthOrHeight::Undo()
         if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            OString aPayload = bWidth ? "column" : "row";
-            ScTabViewShell::notifyAllViewsHeaderInvalidation(aPayload, pViewShell->GetViewData().GetTabNo());
-        }
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(bWidth, pViewShell->GetViewData().GetTabNo());
     }
 
     EndUndo();

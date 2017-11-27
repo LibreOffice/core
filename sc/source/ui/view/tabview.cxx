@@ -2567,6 +2567,148 @@ void BoundsProvider<IndexType>::GetIndexTowards(
     }
 }
 
+namespace
+{
+
+void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW nEnd, std::vector<size_t>& rGroupIndexes)
+{
+    rGroupIndexes.clear();
+    const size_t nGroupDepth = rArray.GetDepth();
+    rGroupIndexes.resize(nGroupDepth);
+
+    // Get first group per each level
+    for (size_t nLevel = 0; nLevel < nGroupDepth; ++nLevel)
+    {
+        if (rArray.GetCount(nLevel))
+        {
+            // look for a group inside the [nStartRow+1, nEndRow-1] range
+            size_t nIndex;
+            bool bFound = rArray.GetEntryIndexInRange(nLevel, nStart + 1, nEnd - 1, nIndex);
+            if (bFound)
+            {
+                if (nIndex > 0)
+                {
+                    // is there a prevoius group not inside the range
+                    // but anyway intersecting it ?
+                    const ScOutlineEntry* pPrevEntry = rArray.GetEntry(nLevel, nIndex - 1);
+                    if (pPrevEntry && nStart < pPrevEntry->GetEnd())
+                    {
+                        --nIndex;
+                    }
+                }
+            }
+            else
+            {
+                // look for a group which contains nStartRow+1
+                bFound = rArray.GetEntryIndex(nLevel, nStart + 1, nIndex);
+                if (!bFound)
+                {
+                    // look for a group which contains nEndRow-1
+                    bFound = rArray.GetEntryIndex(nLevel, nEnd - 1, nIndex);
+                }
+            }
+
+            if (bFound)
+            {
+                // skip groups with no visible control
+                bFound = false;
+                while (nIndex < rArray.GetCount(nLevel))
+                {
+                    const ScOutlineEntry* pEntry = rArray.GetEntry(nLevel, nIndex);
+                    if (pEntry && pEntry->IsVisible())
+                    {
+                        bFound = true;
+                        break;
+                    }
+                    if (pEntry && pEntry->GetStart() > nEnd - 1)
+                    {
+                        break;
+                    }
+                    ++nIndex;
+                }
+            }
+
+            rGroupIndexes[nLevel] = bFound ? nIndex : -1;
+        }
+    }
+}
+
+void lcl_createGroupsData(
+        SCCOLROW nHeaderIndex, SCCOLROW nEnd, long nSizePx, long nTotalTwips,
+        const ScOutlineArray& rArray, std::vector<size_t>& rGroupIndexes,
+        std::vector<long>& rGroupStartPositions, OUString& rGroupsBuffer)
+{
+    const size_t nGroupDepth = rArray.GetDepth();
+    // create string data for group controls
+    for (size_t nLevel = nGroupDepth - 1; nLevel != size_t(-1); --nLevel)
+    {
+        size_t nIndex = rGroupIndexes[nLevel];
+        if (nIndex == size_t(-1))
+            continue;
+        const ScOutlineEntry* pEntry = rArray.GetEntry(nLevel, nIndex);
+        if (pEntry)
+        {
+            if (nHeaderIndex < pEntry->GetStart())
+            {
+                continue;
+            }
+            else if (nHeaderIndex == pEntry->GetStart())
+            {
+                rGroupStartPositions[nLevel] = nTotalTwips - nSizePx * TWIPS_PER_PIXEL;
+            }
+            else if (nHeaderIndex > pEntry->GetStart() && (nHeaderIndex < nEnd - 1 && nHeaderIndex < pEntry->GetEnd()))
+            {
+                // for handling group started before the current view range
+                if (rGroupStartPositions[nLevel] < 0)
+                    rGroupStartPositions[nLevel] *= -TWIPS_PER_PIXEL;
+                break;
+            }
+            if (nHeaderIndex == pEntry->GetEnd() || (nHeaderIndex == nEnd - 1 && rGroupStartPositions[nLevel] != -1))
+            {
+                // nRow is the end row of a group or is the last row and a group started and not yet ended
+                // append a new group control data
+                if (rGroupsBuffer.endsWith("}"))
+                {
+                    rGroupsBuffer += ", ";
+                }
+
+                bool bGroupHidden = pEntry->IsHidden();
+
+                OUString aGroupData;
+                aGroupData += "{ \"level\": \"" + OUString::number(nLevel + 1) + "\", ";
+                aGroupData += "\"index\": \"" + OUString::number(nIndex) + "\", ";
+                aGroupData += "\"startPos\": \"" + OUString::number(rGroupStartPositions[nLevel]) + "\", ";
+                aGroupData += "\"endPos\": \"" + OUString::number(nTotalTwips) + "\", ";
+                aGroupData += "\"hidden\": \"" + OUString::number(bGroupHidden) + "\" }";
+
+                rGroupsBuffer += aGroupData;
+
+                // look for the next visible group control at level nLevel
+                bool bFound = false;
+                ++nIndex;
+                while (nIndex < rArray.GetCount(nLevel))
+                {
+                    pEntry = rArray.GetEntry(nLevel, nIndex);
+                    if (pEntry && pEntry->IsVisible())
+                    {
+                        bFound = true;
+                        break;
+                    }
+                    if (pEntry && pEntry->GetStart() > nEnd)
+                    {
+                        break;
+                    }
+                    ++nIndex;
+                }
+                rGroupIndexes[nLevel] = bFound ? nIndex : -1;
+                rGroupStartPositions[nLevel] = -1;
+            }
+        }
+    }
+}
+
+} // anonymous namespace
+
 OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 {
     ScDocument* pDoc = aViewData.GetDocument();
@@ -2625,6 +2767,20 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     SAL_INFO("sc.lok.header", "Row Header: visible rows: " << nVisibleRows);
 
 
+    // Get row groups
+    // per each level store the index of the first group intersecting
+    // [nStartRow, nEndRow] range
+
+    const ScOutlineTable* pTable = pDoc->GetOutlineTable(nTab);
+    const ScOutlineArray* pRowArray = pTable ? &(pTable->GetRowArray()) : nullptr;
+    size_t nRowGroupDepth = 0;
+    std::vector<size_t> aRowGroupIndexes;
+    if (pTable)
+    {
+        nRowGroupDepth = pRowArray->GetDepth();
+        lcl_getGroupIndexes(*pRowArray, nStartRow, nEndRow, aRowGroupIndexes);
+    }
+
     /// 2) if we are approaching current max tiled row, signal a size changed event
     ///    and invalidate the involved area
 
@@ -2678,15 +2834,27 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         OUString aText = OUString::number(nStartRow + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\", ");
+        aBuffer.append("\"groupLevels\": \"").append(OUString::number(nRowGroupDepth)).append("\" }");
     }
 
+    OUString aRowGroupsBuffer;
+    aRowGroupsBuffer += "\"rowGroups\": [\n";
+    std::vector<long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
     long nPrevSizePx = -1;
     for (SCROW nRow = nStartRow + 1; nRow < nEndRow; ++nRow)
     {
         // nSize will be 0 for hidden rows.
         const long nSizePx = lcl_GetRowHeightPx(pDoc, nRow, nTab);
         nTotalPixels += nSizePx;
+        const long nTotalTwips = nTotalPixels * TWIPS_PER_PIXEL;
+
+        if (nRowGroupDepth > 0)
+        {
+            lcl_createGroupsData(nRow, nEndRow, nSizePx, nTotalTwips,
+                    *pRowArray, aRowGroupIndexes, aRowGroupStartPositions, aRowGroupsBuffer);
+        }
+
         if (nRow < nEndRow - 1 && nSizePx == nPrevSizePx)
             continue;
         nPrevSizePx = nSizePx;
@@ -2694,10 +2862,13 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
         aBuffer.append(", ");
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalTwips)).append("\" }");
     }
 
+    aRowGroupsBuffer += "]";
     aBuffer.append("]");
+    if (nRowGroupDepth > 0)
+        aBuffer.append(",\n").append(aRowGroupsBuffer);
     ///  end collecting ROWS
 
 
@@ -2737,6 +2908,19 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     if (nVisibleCols < 10)
         nVisibleCols = 10;
 
+
+    // Get column groups
+    // per each level store the index of the first group intersecting
+    // [nStartCol, nEndCol] range
+
+    const ScOutlineArray* pColArray = pTable ? &(pTable->GetColArray()) : nullptr;
+    size_t nColGroupDepth = 0;
+    std::vector<size_t> aColGroupIndexes;
+    if (pTable)
+    {
+        nColGroupDepth = pColArray->GetDepth();
+        lcl_getGroupIndexes(*pColArray, nStartCol, nEndCol, aColGroupIndexes);
+    }
 
     /// 2) if we are approaching current max tiled column, signal a size changed event
     ///    and invalidate the involved area
@@ -2789,27 +2973,41 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         OUString aText = OUString::number(nStartCol + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\", ");
+        aBuffer.append("\"groupLevels\": \"").append(OUString::number(nColGroupDepth)).append("\" }");
     }
 
+    OUString aColGroupsBuffer;
+    aColGroupsBuffer += "\"columnGroups\": [\n";
+    std::vector<long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);
     nPrevSizePx = -1;
     for (SCCOL nCol = nStartCol + 1; nCol < nEndCol; ++nCol)
     {
         // nSize will be 0 for hidden columns.
         const long nSizePx = lcl_GetColWidthPx(pDoc, nCol, nTab);
         nTotalPixels += nSizePx;
+        const long nTotalTwips = nTotalPixels * TWIPS_PER_PIXEL;
+
+        if (nColGroupDepth > 0)
+        {
+            lcl_createGroupsData(nCol, nEndCol, nSizePx, nTotalTwips,
+                    *pColArray, aColGroupIndexes, aColGroupStartPositions, aColGroupsBuffer);
+        }
+
         if (nCol < nEndCol - 1 && nSizePx == nPrevSizePx)
             continue;
         nPrevSizePx = nSizePx;
 
-
         OUString aText = OUString::number(nCol + 1);
         aBuffer.append(", ");
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalTwips)).append("\" }");
     }
 
+    aColGroupsBuffer += "]";
     aBuffer.append("]");
+    if (nColGroupDepth > 0)
+        aBuffer.append(",\n").append(aColGroupsBuffer);
     ///  end collecting COLs
 
     aBuffer.append("\n}");

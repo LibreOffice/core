@@ -23,9 +23,14 @@
 
 #include <docsh.hxx>
 #include <olinetab.hxx>
+#include <tabvwsh.hxx>
 #include <undodat.hxx>
 #include <globstr.hrc>
 #include <sc.hrc>
+
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
+
 
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 {
@@ -398,6 +403,10 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if ( pViewSh )
+        pViewSh->OnLOKShowHideOutline(bColumns, 0);
+
     return true;
 }
 
@@ -458,6 +467,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
                 if (nEnd>nMax) nMax=nEnd;
             }
         }
+        const SCCOLROW nMinStartCol = nMin;
         for ( i=nMin; i<=nMax; i++ )
             rDoc.ShowCol( static_cast<SCCOL>(i), nTab, true );
 
@@ -479,6 +489,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
                 if (nEnd>nMax) nMax=nEnd;
             }
         }
+        const SCCOLROW nMinStartRow = nMin;
         for ( i=nMin; i<=nMax; i++ )
         {
             // show several rows together, don't show filtered rows
@@ -490,6 +501,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
             i = nFilterEnd;
         }
 
+
         rDoc.SetDrawPageSize(nTab);
         rDoc.UpdatePageBreaks( nTab );
 
@@ -498,6 +510,13 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         bDone = true;
 
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
+
+        ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+        if ( pViewSh )
+        {
+            pViewSh->OnLOKShowHideOutline(/*columns: */ true, nMinStartCol - 1);
+            pViewSh->OnLOKShowHideOutline(/*columns: */ false, nMinStartRow - 1);
+        }
     }
 
     return bDone;
@@ -677,6 +696,10 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if ( pViewSh )
+        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
+
     return true;        //! always ???
 }
 
@@ -735,6 +758,10 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDocShell.SetDocumentModified();
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
+
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if ( pViewSh )
+        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
 
     return true;        //! always ???
 }

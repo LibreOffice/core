@@ -2989,6 +2989,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             int nY = 0;
             int nWidth = 0;
             int nHeight = 0;
+            bool bColumn = false;
+            int nLevel = -1;
+            int nGroupIndex = -2;
+            bool bHidden = false;
             OString aArguments = aCommand.copy(aViewRowColumnHeaders.getLength() + 1);
             sal_Int32 nParamIndex = 0;
             do
@@ -3014,9 +3018,23 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
                     nWidth = aValue.toInt32();
                 else if (aKey == "height")
                     nHeight = aValue.toInt32();
+                else if (aKey == "columnOutline")
+                    bColumn = aValue.toBoolean();
+                else if (aKey == "groupLevel")
+                    nLevel = aValue.toInt32();
+                else if (aKey == "groupIndex")
+                    nGroupIndex = aValue.toInt32();
+                else if (aKey == "groupHidden")
+                    bHidden = aValue.toBoolean();
             }
             while (nParamIndex >= 0);
+
             aRectangle = tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight);
+
+            if (nGroupIndex != -2)
+            {
+                pDoc->setOutlineState(bColumn, nLevel, nGroupIndex, bHidden);
+            }
         }
 
         OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
