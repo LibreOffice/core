@@ -12,6 +12,7 @@
 #include "XMLBase64ImportContext.hxx"
 #include "txtparai.hxx"
 #include "xmlimp.hxx"
+#include "xmltext.hxx"
 
 using namespace com::sun::star;
 
@@ -19,6 +20,38 @@ namespace writerperfect
 {
 namespace exp
 {
+
+/// Handler for <draw:text-box>.
+class XMLTextBoxContext : public XMLImportContext
+{
+public:
+    XMLTextBoxContext(XMLImport &rImport);
+
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL endElement(const OUString &rName) override;
+};
+
+XMLTextBoxContext::XMLTextBoxContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+rtl::Reference<XMLImportContext> XMLTextBoxContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    return CreateTextChildContext(mrImport, rName);
+}
+
+void XMLTextBoxContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    mrImport.GetGenerator().openTextBox(librevenge::RVNGPropertyList());
+}
+
+void XMLTextBoxContext::endElement(const OUString &/*rName*/)
+{
+    mrImport.GetGenerator().closeTextBox();
+}
 
 /// Handler for <draw:image>.
 class XMLTextImageContext : public XMLImportContext
@@ -81,6 +114,9 @@ rtl::Reference<XMLImportContext> XMLTextFrameContext::CreateChildContext(const O
 {
     if (rName == "draw:image")
         return new XMLTextImageContext(mrImport);
+    if (rName == "draw:text-box")
+        return new XMLTextBoxContext(mrImport);
+    SAL_WARN("writerperfect", "XMLTextFrameContext::CreateChildContext: unhandled " << rName);
     return nullptr;
 }
 

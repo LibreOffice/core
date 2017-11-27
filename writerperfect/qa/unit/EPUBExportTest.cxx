@@ -82,6 +82,7 @@ public:
     void testLinkCharFormat();
     void testLinkNamedCharFormat();
     void testTableWidth();
+    void testTextBox();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST(testLinkNamedCharFormat);
     CPPUNIT_TEST(testTableWidth);
+    CPPUNIT_TEST(testTextBox);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -569,6 +571,16 @@ void EPUBExportTest::testTableWidth()
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:table", "class");
     // This failed, relative total width of table was lost.
     CPPUNIT_ASSERT_EQUAL(OUString("50%"), EPUBExportTest::getCss(aCssDoc, aClass, "width"));
+}
+
+void EPUBExportTest::testTextBox()
+{
+    createDoc("text-box.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+
+    // This failed, image with caption was lost.
+    assertXPath(mpXmlDoc, "//xhtml:img", "class", "frame1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
