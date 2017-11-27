@@ -54,6 +54,30 @@ namespace writerperfect
 namespace exp
 {
 
+/// Handler for <text:sequence>.
+class XMLTextSequenceContext : public XMLImportContext
+{
+public:
+    XMLTextSequenceContext(XMLImport &rImport);
+
+    void SAL_CALL characters(const OUString &rChars) override;
+};
+
+XMLTextSequenceContext::XMLTextSequenceContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+void XMLTextSequenceContext::characters(const OUString &rChars)
+{
+    mrImport.GetGenerator().openSpan(librevenge::RVNGPropertyList());
+
+    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+
+    mrImport.GetGenerator().closeSpan();
+}
+
 /// Handler for <text:span>.
 class XMLSpanContext : public XMLImportContext
 {
@@ -324,6 +348,8 @@ rtl::Reference<XMLImportContext> CreateParagraphOrSpanChildContext(XMLImport &rI
         return new XMLTabContext(rImport, rTextPropertyList);
     if (rName == "draw:frame")
         return new XMLTextFrameContext(rImport);
+    if (rName == "text:sequence")
+        return new XMLTextSequenceContext(rImport);
     return nullptr;
 }
 
