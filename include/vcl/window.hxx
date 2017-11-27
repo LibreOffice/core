@@ -1208,6 +1208,12 @@ public:
     const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
 
+    /// Indicate that LOK is not going to use this dialog any more.
+    void                                ReleaseLOKNotifier();
+
+    /// Find an existing Window based on the LOKWindowId.
+    static VclPtr<Window>               FindLOKWindow(vcl::LOKWindowId nWindowId);
+
     /// Dialog / window tunneling related methods.
     virtual void paintDialog(VirtualDevice& rDevice);
     Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;

@@ -1322,16 +1322,6 @@ ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
 }
 
-VclPtr<Window> findWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId)
-{
-    ITiledRenderable* pRenderable = getTiledRenderable(pThis);
-
-    if (!pRenderable)
-        return VclPtr<Window>();
-
-    return pRenderable->findWindow(nLOKWindowId);
-}
-
 } // anonymous namespace
 
 // Wonder global state ...
@@ -2265,7 +2255,7 @@ static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis, unsigned nLOKW
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<Window> pWindow = findWindow(pThis, nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
@@ -2443,7 +2433,7 @@ static void doc_postDialogMouseEvent(LibreOfficeKitDocument* pThis, unsigned nLO
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<Window> pWindow = findWindow(pThis, nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
@@ -2474,7 +2464,7 @@ static void doc_postDialogChildMouseEvent(LibreOfficeKitDocument* pThis, unsigne
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<Window> pWindow = findWindow(pThis, nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
@@ -3285,7 +3275,7 @@ static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, unsigned nLOKWindow
 
     SolarMutexGuard aGuard;
 
-    VclPtr<Window> pWindow = findWindow(pThis, nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
@@ -3313,7 +3303,7 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<Window> pWindow = findWindow(pThis, nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
@@ -3338,7 +3328,7 @@ static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, unsigne
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<Window> pWindow = findWindow(pThis, nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";

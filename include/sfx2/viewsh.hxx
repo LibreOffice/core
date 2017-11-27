@@ -153,7 +153,6 @@ friend class SfxPrinterController;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
-    std::vector<std::pair<vcl::LOKWindowId, VclPtr<Dialog> > > maOpenedDialogs;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -221,10 +220,6 @@ public:
 
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
-
-    void                        RegisterDlg(vcl::LOKWindowId nDialogId, VclPtr<Dialog> pDlg);
-    VclPtr<Dialog>              GetOpenedDlg(vcl::LOKWindowId nDialogId);
-    void                        UnregisterDlg(vcl::LOKWindowId nDialogId);
 
     // ILibreOfficeKitNotifier
     virtual void                notifyWindow(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;

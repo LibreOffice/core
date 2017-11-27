@@ -228,12 +228,6 @@ public:
     {
         return OUString();
     }
-
-    /**
-     * Find the window/dialog with the right ID for tunneling of windows,
-     * dialogs or pop-ups.
-     */
-    virtual VclPtr<Window> findWindow(vcl::LOKWindowId nLOKWindowId) const = 0;
 };
 } // namespace vcl
 

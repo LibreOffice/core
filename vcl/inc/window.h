@@ -378,7 +378,6 @@ public:
     css::uno::Reference< css::uno::XInterface > mxDNDListenerContainer;
 
     const vcl::ILibreOfficeKitNotifier* mpLOKNotifier; ///< To emit the LOK callbacks eg. for dialog tunneling.
-    static vcl::LOKWindowId mnLastWindowId; ///< To be able to have an unique ID for each dealog / window we tunnel.
     vcl::LOKWindowId mnLOKWindowId; ///< ID of this specific window.
 };
 
