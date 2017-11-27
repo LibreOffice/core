@@ -128,6 +128,7 @@ void LangSelectionStatusbarController::LangMenu(
     if (!m_bShowMenu)
         return;
 
+    const Reference<XModuleManager> xModuleManager  = ModuleManager::create( m_xContext );
     //add context menu
     Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
@@ -164,36 +165,65 @@ void LangSelectionStatusbarController::LangMenu(
         }
     }
 
-    xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
-    if ( sNone == m_aCurLang )
-        xPopupMenu->checkItem( MID_LANG_SEL_NONE, true );
-    xPopupMenu->insertItem( MID_LANG_SEL_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
-    xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
 
-    // add entries to submenu ('set language for paragraph')
-    nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
-    for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+    if (xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument")
     {
-        const OUString & rStr( *it );
-        if( rStr != sNone &&
-            rStr != sAsterisk &&
-            !rStr.isEmpty()) // 'no language found' from language guessing
-        {
-            SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
-                    "fwk.uielement", "nItemId outside of expected range!" );
-            subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
-            aLangMap[nItemId] = rStr;
-            ++nItemId;
-        }
-    }
-    subPopupMenu->insertItem( MID_LANG_PARA_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_PARA_NONE );
-    subPopupMenu->insertItem( MID_LANG_PARA_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_PARA_RESET );
-    subPopupMenu->insertItem( MID_LANG_PARA_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_PARA_MORE );
+        xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
+        if ( sNone == m_aCurLang )
+            xPopupMenu->checkItem( MID_LANG_SEL_NONE, true );
+        xPopupMenu->insertItem( MID_LANG_SEL_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
+        xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
 
-    // add last two entries to main menu
-    xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
-    xPopupMenu->insertItem( MID_LANG_PARA_STRING, FwkResId(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
-    xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
+        // add entries to submenu ('set language for paragraph')
+        nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
+        for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+        {
+            const OUString & rStr( *it );
+            if( rStr != sNone &&
+                rStr != sAsterisk &&
+                !rStr.isEmpty()) // 'no language found' from language guessing
+            {
+                SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
+                "fwk.uielement", "nItemId outside of expected range!" );
+                subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
+                aLangMap[nItemId] = rStr;
+                ++nItemId;
+            }
+        }
+
+        // add entries to submenu ('set language for paragraph')
+        nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
+        for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+        {
+            const OUString & rStr( *it );
+            if( rStr != sNone &&
+                rStr != sAsterisk &&
+                !rStr.isEmpty()) // 'no language found' from language guessing
+            {
+                SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
+                        "fwk.uielement", "nItemId outside of expected range!" );
+                subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
+                aLangMap[nItemId] = rStr;
+                ++nItemId;
+            }
+        }
+        subPopupMenu->insertItem( MID_LANG_PARA_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_PARA_NONE );
+        subPopupMenu->insertItem( MID_LANG_PARA_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_PARA_RESET );
+        subPopupMenu->insertItem( MID_LANG_PARA_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_PARA_MORE );
+
+        // add last two entries to main menu
+        xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
+        xPopupMenu->insertItem( MID_LANG_PARA_STRING, FwkResId(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
+        xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
+    }
+    else
+    {
+        xPopupMenu->insertItem( MID_LANG_DEF_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_DEF_NONE );
+        if ( sNone == m_aCurLang )
+            xPopupMenu->checkItem( MID_LANG_DEF_NONE, true );
+        xPopupMenu->insertItem( MID_LANG_DEF_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_DEF_RESET );
+        xPopupMenu->insertItem( MID_LANG_DEF_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_DEF_MORE );
+    }
 
     // now display the popup menu and execute every command ...
 
@@ -209,7 +239,10 @@ void LangSelectionStatusbarController::LangMenu(
 
         if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
         {
-            aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
+            if ( xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument" )
+                aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
+            else
+                aBuff.append( ".uno:LanguageStatus?Language:string=Default_" );
             aBuff.append( aSelectedLang );
         }
         else if (nId == MID_LANG_SEL_NONE)
@@ -226,6 +259,18 @@ void LangSelectionStatusbarController::LangMenu(
         {
             //open the dialog "format/character" for current selection
             aBuff.append( ".uno:FontDialog?Page:string=font" );
+        }
+        else if (nId == MID_LANG_DEF_NONE)
+        {
+             aBuff.append( ".uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE" );
+        }
+        else if (nId == MID_LANG_DEF_RESET)
+        {
+             aBuff.append( ".uno:LanguageStatus?Language:string=Default_RESET_LANGUAGES" );
+        }
+        else if (nId == MID_LANG_DEF_MORE)
+        {
+            aBuff.append( ".uno:LanguageStatus?Language:string=*" );
         }
         else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
         {
@@ -286,8 +331,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
     if ( m_bDisposed )
         return;
 
-    const Reference<XModuleManager> xModuleManager  = ModuleManager::create( m_xContext );
-    m_bShowMenu = xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument";
+    m_bShowMenu = true;
     m_nScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;  //set the default value
 
     if ( m_xStatusbarItem.is() )
@@ -296,7 +340,10 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
         Sequence< OUString > aSeq;
 
         if ( Event.State >>= aStrValue )
+        {
             m_xStatusbarItem->setText( aStrValue );
+            m_aCurLang = aStrValue;
+        }
         else if ( Event.State >>= aSeq )
         {
             if ( aSeq.getLength() == 4 )
