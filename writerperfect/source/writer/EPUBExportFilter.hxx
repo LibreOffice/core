@@ -50,8 +50,6 @@ public:
     static sal_Int32 GetDefaultVersion();
     /// Gives the default split method.
     static sal_Int32 GetDefaultSplitMethod();
-    /// Gives the default styles method.
-    static sal_Int32 GetDefaultStylesMethod();
 };
 
 } // namespace writerperfect

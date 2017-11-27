@@ -47,15 +47,13 @@ public:
     void setUp() override;
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx) override;
-    /// Asserts that rCssDoc has a key named rKey and one of its rules is rValue.
-    void assertCss(const std::map< OString, std::vector<OString> > &rCssDoc, const OString &rKey, const OString &rValue);
     void createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData);
     /// Returns an XML representation of the stream named rName in the exported package.
     xmlDocPtr parseExport(const OUString &rName);
-    /// Loads a CSS representation of the stream named rName in the exported package into rTree.
-    void parseCssExport(const OUString &rName, std::map< OString, std::vector<OString> > &rTree);
-    /// Loads a CSS style string into a map.
-    static std::map<OUString, OUString> parseCssStyle(const OUString &rStyle);
+    /// Parses a CSS representation of the stream named rName and returns it.
+    std::map< OUString, std::vector<OUString> > parseCss(const OUString &rName);
+    /// Looks up a key of a class in rCss.
+    static OUString getCss(std::map< OUString, std::vector<OUString> > &rCss, const OUString &rClass, const OUString &rKey);
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
@@ -144,16 +142,6 @@ void EPUBExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
 
-void EPUBExportTest::assertCss(const std::map< OString, std::vector<OString> > &rCssDoc, const OString &rKey, const OString &rValue)
-{
-    auto it = rCssDoc.find(rKey);
-    CPPUNIT_ASSERT(it != rCssDoc.end());
-
-    const std::vector<OString> &rRule = it->second;
-    CPPUNIT_ASSERT_MESSAGE(OString("In '" + rKey + "', rule '" + rValue + "' is not found.").getStr(),
-                           std::find(rRule.begin(), rRule.end(), rValue) != rRule.end());
-}
-
 void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData)
 {
     // Import the bugdoc and export as EPUB.
@@ -177,38 +165,52 @@ xmlDocPtr EPUBExportTest::parseExport(const OUString &rName)
     return parseXmlStream(pStream.get());
 }
 
-void EPUBExportTest::parseCssExport(const OUString &rName, std::map< OString, std::vector<OString> > &rTree)
+std::map< OUString, std::vector<OUString> > EPUBExportTest::parseCss(const OUString &rName)
 {
+    std::map< OUString, std::vector<OUString> > aRet;
+
     uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
     std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
     // Minimal CSS handler till orcus is up to our needs.
     OString aLine;
-    OString aRuleName;
+    OUString aRuleName;
     while (!pStream->eof())
     {
         pStream->ReadLine(aLine);
         if (aLine.endsWith("{"))
             // '.name {' -> 'name'
-            aRuleName = aLine.copy(1, aLine.getLength() - 3);
+            aRuleName = OUString::fromUtf8(aLine.copy(1, aLine.getLength() - 3));
         else if (aLine.endsWith(";"))
-            rTree[aRuleName].push_back(aLine);
+            aRet[aRuleName].push_back(OUString::fromUtf8(aLine));
     }
+
+    return aRet;
 }
 
-std::map<OUString, OUString> EPUBExportTest::parseCssStyle(const OUString &rStyle)
+OUString EPUBExportTest::getCss(std::map< OUString, std::vector<OUString> > &rCss, const OUString &rClass, const OUString &rKey)
 {
-    std::map<OUString, OUString> aCss;
+    OUString aRet;
 
-    for (const auto &rKeyValue : comphelper::string::split(rStyle, ';'))
+    auto it = rCss.find(rClass);
+    CPPUNIT_ASSERT(it != rCss.end());
+
+    for (const auto &rKeyValue : it->second)
     {
         OUString aKeyValue = rKeyValue.trim();
         std::vector<OUString> aTokens = comphelper::string::split(aKeyValue, ':');
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTokens.size());
-        aCss[aTokens[0].trim()] = aTokens[1].trim();
+        if (aTokens[0].trim() == rKey)
+        {
+            aRet = aTokens[1].trim();
+            if (aRet.endsWith(";"))
+                // Ignore trailing semicolon.
+                aRet = aRet.copy(0, aRet.getLength() - 1);
+            break;
+        }
     }
 
-    return aCss;
+    return aRet;
 }
 
 void EPUBExportTest::testOutlineLevel()
@@ -288,12 +290,7 @@ void EPUBExportTest::testPageBreakSplit()
 
 void EPUBExportTest::testSpanAutostyle()
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request in-CSS styles.
-        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
-    }));
-    createDoc("span-autostyle.fodt", aFilterData);
+    createDoc("span-autostyle.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[1]", "class", "span0");
@@ -305,12 +302,7 @@ void EPUBExportTest::testSpanAutostyle()
 
 void EPUBExportTest::testParaAutostyleCharProps()
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request in-CSS styles.
-        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
-    }));
-    createDoc("para-autostyle-char-props.fodt", aFilterData);
+    createDoc("para-autostyle-char-props.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This failed, para-level char props were not exported.
@@ -332,12 +324,7 @@ void EPUBExportTest::testMeta()
 
 void EPUBExportTest::testParaNamedstyle()
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request in-CSS styles.
-        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
-    }));
-    createDoc("para-namedstyle.fodt", aFilterData);
+    createDoc("para-namedstyle.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:p[1]", "class", "para0");
@@ -352,12 +339,7 @@ void EPUBExportTest::testParaNamedstyle()
 
 void EPUBExportTest::testCharNamedstyle()
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request in-CSS styles.
-        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
-    }));
-    createDoc("char-namedstyle.fodt", aFilterData);
+    createDoc("char-namedstyle.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
 
@@ -369,46 +351,34 @@ void EPUBExportTest::testCharNamedstyle()
 
 void EPUBExportTest::testNamedStyleInheritance()
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request in-CSS styles.
-        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
-    }));
-    createDoc("named-style-inheritance.fodt", aFilterData);
+    createDoc("named-style-inheritance.fodt", {});
 
     // Find the CSS rule for the blue text.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    OString aBlue = getXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span[2]", "class").toUtf8();
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    OUString aBlue = getXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span[2]", "class");
 
-    std::map< OString, std::vector<OString> > aCssDoc;
-    parseCssExport("OEBPS/styles/stylesheet.css", aCssDoc);
-    assertCss(aCssDoc, aBlue, "  color: #0000ff;");
+    CPPUNIT_ASSERT_EQUAL(OUString("#0000ff"), EPUBExportTest::getCss(aCssDoc, aBlue, "color"));
     // This failed, the span only had the properties from its style, but not
     // from the style's parent(s).
-    assertCss(aCssDoc, aBlue, "  font-family: 'Liberation Mono';");
+    CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"), EPUBExportTest::getCss(aCssDoc, aBlue, "font-family"));
 }
 
 void EPUBExportTest::testNestedSpan()
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request in-CSS styles.
-        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
-    }));
-    createDoc("nested-span.fodt", aFilterData);
+    createDoc("nested-span.fodt", {});
 
     // Check textural content of nested span.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // This crashed, span had no content.
     assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "red");
 
     // Check formatting of nested span.
-    OString aRed = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class").toUtf8();
-    std::map< OString, std::vector<OString> > aCssDoc;
-    parseCssExport("OEBPS/styles/stylesheet.css", aCssDoc);
+    OUString aRed = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class");
     // This failed, direct formatting on top of named style was lost.
-    assertCss(aCssDoc, aRed, "  color: #ff0000;");
-    assertCss(aCssDoc, aRed, "  font-family: 'Liberation Mono';");
+    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aRed, "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"), EPUBExportTest::getCss(aCssDoc, aRed, "font-family"));
 }
 
 void EPUBExportTest::testLineBreak()
@@ -437,22 +407,16 @@ void EPUBExportTest::testEscape()
 
 void EPUBExportTest::testParaCharProps()
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request in-CSS styles.
-        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
-    }));
-    createDoc("para-char-props.fodt", aFilterData);
+    createDoc("para-char-props.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // Check formatting of the middle span.
-    OString aMiddle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class").toUtf8();
-    std::map< OString, std::vector<OString> > aCssDoc;
-    parseCssExport("OEBPS/styles/stylesheet.css", aCssDoc);
-    assertCss(aCssDoc, aMiddle, "  font-style: italic;");
+    OUString aMiddle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class");
+    CPPUNIT_ASSERT_EQUAL(OUString("italic"), EPUBExportTest::getCss(aCssDoc, aMiddle, "font-style"));
     // Direct para formatting was lost, only direct char formatting was
     // written, so this failed.
-    assertCss(aCssDoc, aMiddle, "  font-weight: bold;");
+    CPPUNIT_ASSERT_EQUAL(OUString("bold"), EPUBExportTest::getCss(aCssDoc, aMiddle, "font-weight"));
 }
 
 void EPUBExportTest::testSection()
@@ -488,9 +452,11 @@ void EPUBExportTest::testImageBorder()
     createDoc("image-border.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:img", "style");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+
+    OUString aClass = getXPath(mpXmlDoc, "//xhtml:img", "class");
     // This failed, image had no border.
-    CPPUNIT_ASSERT_EQUAL(OUString("0.99pt dashed #ed1c24"), EPUBExportTest::parseCssStyle(aStyle)["border"]);
+    CPPUNIT_ASSERT_EQUAL(OUString("0.99pt dashed #ed1c24"), EPUBExportTest::getCss(aCssDoc, aClass, "border"));
 }
 
 void EPUBExportTest::testTable()
@@ -515,22 +481,11 @@ void EPUBExportTest::testTableCellBorder()
     createDoc("table-cell-border.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "style");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+
+    OUString aClass = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "class");
     // This failed, cell border wasn't exported.
-    CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"), EPUBExportTest::parseCssStyle(aStyle)["border-left"]);
-}
-
-namespace
-{
-double getCellWidth(const OUString &rStyle)
-{
-    return EPUBExportTest::parseCssStyle(rStyle)["width"].toDouble();
-}
-
-double getRowHeight(const OUString &rStyle)
-{
-    return EPUBExportTest::parseCssStyle(rStyle)["height"].toDouble();
-}
+    CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"), EPUBExportTest::getCss(aCssDoc, aClass, "border-left"));
 }
 
 void EPUBExportTest::testTableCellWidth()
@@ -538,12 +493,13 @@ void EPUBExportTest::testTableCellWidth()
     createDoc("table-cell-width.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    OUString aStyle1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "style");
-    OUString aStyle2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[2]", "style");
-    OUString aStyle3 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[3]", "style");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    OUString aClass1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "class");
+    OUString aClass2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[2]", "class");
+    OUString aClass3 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[3]", "class");
     // These failed, all widths were 0.
-    CPPUNIT_ASSERT_GREATER(getCellWidth(aStyle2), getCellWidth(aStyle1));
-    CPPUNIT_ASSERT_GREATER(getCellWidth(aStyle3), getCellWidth(aStyle1));
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "width").toDouble(), EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass3, "width").toDouble(), EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
 }
 
 void EPUBExportTest::testTableRowHeight()
@@ -551,10 +507,11 @@ void EPUBExportTest::testTableRowHeight()
     createDoc("table-row-height.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    OUString aStyle1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]", "style");
-    OUString aStyle2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[2]", "style");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    OUString aClass1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]", "class");
+    OUString aClass2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[2]", "class");
     // These failed, both heights were 0.
-    CPPUNIT_ASSERT_GREATER(getRowHeight(aStyle2), getRowHeight(aStyle1));
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "height").toDouble(), EPUBExportTest::getCss(aCssDoc, aClass1, "height").toDouble());
 }
 
 void EPUBExportTest::testLink()
@@ -582,12 +539,13 @@ void EPUBExportTest::testLinkNamedCharFormat()
     createDoc("link-namedcharformat.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // This failed, there was no span inside the hyperlink.
     assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "http://libreoffice.org");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "http://libreoffice.org/");
 
-    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "style");
-    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::parseCssStyle(aStyle)["color"]);
+    OUString aClass = getXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "class");
+    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aClass, "color"));
 }
 
 void EPUBExportTest::testTableWidth()
@@ -595,10 +553,11 @@ void EPUBExportTest::testTableWidth()
     createDoc("table-width.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
 
-    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:table", "style");
+    OUString aClass = getXPath(mpXmlDoc, "//xhtml:table", "class");
     // This failed, relative total width of table was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("50%"), EPUBExportTest::parseCssStyle(aStyle)["width"]);
+    CPPUNIT_ASSERT_EQUAL(OUString("50%"), EPUBExportTest::getCss(aCssDoc, aClass, "width"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
