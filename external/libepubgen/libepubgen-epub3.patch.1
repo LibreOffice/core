@@ -3797,3 +3797,83 @@ index c9f4236..939d350 100644
 -- 
 2.13.6
 
+From da840df8eaacfcfbd93d82751a774371d7e5c9b9 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 10 Nov 2017 15:29:47 +0100
+Subject: [PATCH] EPUBHTMLGenerator: avoid wrap type for as-char anchored
+ images
+
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 40 ++++++++++++++++++++++----------------
+ src/test/EPUBTextGeneratorTest.cpp | 15 +++++++++++++-
+ 2 files changed, 37 insertions(+), 18 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 5f10902..156f042 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -1000,6 +1000,7 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+ 
+   RVNGPropertyList attrs;
+   RVNGString wrap;
++  RVNGString anchorType;
+ 
+   if (!m_impl->m_framePropertiesStack.empty())
+   {
+@@ -1016,6 +1017,8 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+ 
+     if (frameProperties["style:wrap"])
+       wrap = frameProperties["style:wrap"]->getStr();
++    if (frameProperties["text:anchor-type"])
++      anchorType = frameProperties["text:anchor-type"]->getStr();
+   }
+ 
+   attrs.insert("src", path.relativeTo(m_impl->m_path).str().c_str());
+@@ -1023,24 +1026,27 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+   attrs.insert("alt", path.str().c_str());
+   m_impl->output().insertEmptyElement("img", attrs);
+ 
+-  // Emulate wrap type with a break after the image.
+-  RVNGString brStyle;
+-  if (wrap == "none")
+-    brStyle = "clear: both;";
+-  else if (wrap == "left")
+-    // We want content on the left side, space on the right side, so the next
+-    // element should clear on its left.
+-    brStyle = "clear: left;";
+-  else if (wrap == "right")
+-    // Same here.
+-    brStyle = "clear: right;";
+-  else if (wrap == "parallel")
+-    brStyle = "clear: none;";
+-  if (!brStyle.empty())
++  if (anchorType != "as-char")
+   {
+-    attrs.clear();
+-    attrs.insert("style", brStyle);
+-    m_impl->output().insertEmptyElement("br", attrs);
++    // Emulate wrap type with a break after the image.
++    RVNGString brStyle;
++    if (wrap == "none")
++      brStyle = "clear: both;";
++    else if (wrap == "left")
++      // We want content on the left side, space on the right side, so the next
++      // element should clear on its left.
++      brStyle = "clear: left;";
++    else if (wrap == "right")
++      // Same here.
++      brStyle = "clear: right;";
++    else if (wrap == "parallel")
++      brStyle = "clear: none;";
++    if (!brStyle.empty())
++    {
++      attrs.clear();
++      attrs.insert("style", brStyle);
++      m_impl->output().insertEmptyElement("br", attrs);
++    }
+   }
+ }
+ 
+-- 
+2.13.6
+
