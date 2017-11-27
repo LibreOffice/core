@@ -1189,6 +1189,22 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
     }
 }
 
+void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
+{
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        // In case we are routing the window, notify the client
+        std::vector<vcl::LOKPayloadItem> aPayload;
+        if (pRectangle)
+            aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
+
+        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
+    }
+}
+
 void Window::Validate()
 {
     if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )

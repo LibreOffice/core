@@ -895,21 +895,6 @@ void Dialog::CloseFloatingWindow()
         pNotifier->notifyWindowChild(GetLOKWindowId(), "close", Point(0, 0));
 }
 
-void Dialog::LogicInvalidate(const tools::Rectangle* pRectangle)
-{
-    if (comphelper::LibreOfficeKit::isDialogPainting())
-        return;
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aPayload;
-        if (pRectangle)
-            aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
-
-        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
-    }
-}
-
 void Dialog::ensureRepaint()
 {
     // ensure repaint
