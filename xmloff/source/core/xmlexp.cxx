@@ -90,6 +90,11 @@
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <RDFaExportHelper.hxx>
 
+#include <vcl/graphicfilter.hxx>
+#include <vcl/errcode.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
+
 #include <comphelper/xmltools.hxx>
 
 using namespace ::osl;
@@ -1884,24 +1889,82 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     return sRet;
 }
 
-bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
+bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64(const OUString& rGraphicObjectURL)
 {
     bool bRet = false;
 
-    if( (getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
-        rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
-        mxGraphicResolver.is() )
+    if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
+        rGraphicObjectURL.startsWith(msGraphicObjectProtocol) &&
+        mxGraphicResolver.is())
     {
-        Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
+        Reference< XBinaryStreamResolver > xStmResolver(mxGraphicResolver, UNO_QUERY);
 
-        if( xStmResolver.is() )
+        if (xStmResolver.is())
         {
-            Reference< XInputStream > xIn( xStmResolver->getInputStream( rGraphicObjectURL ) );
+            Reference< XInputStream > xIn(xStmResolver->getInputStream(rGraphicObjectURL));
 
-            if( xIn.is() )
+            if (xIn.is())
             {
-                XMLBase64Export aBase64Exp( *this );
-                bRet = aBase64Exp.exportOfficeBinaryDataElement( xIn );
+                XMLBase64Export aBase64Exp(*this);
+                bRet = aBase64Exp.exportOfficeBinaryDataElement(xIn);
+            }
+        }
+    }
+
+    return bRet;
+}
+
+bool SvXMLExport::AddEmbeddedGraphicObjectNotAsSVMAsBase64(const OUString& rGraphicObjectURL)
+{
+    bool bRet = false;
+
+    if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
+        rGraphicObjectURL.startsWith(msGraphicObjectProtocol) &&
+        mxGraphicResolver.is())
+    {
+        Reference< XBinaryStreamResolver > xStmResolver(mxGraphicResolver, UNO_QUERY);
+
+        if (xStmResolver.is())
+        {
+            Reference< XInputStream > xIn(xStmResolver->getInputStream(rGraphicObjectURL));
+
+            //// ErrCode GraphicFilter::ExportGraphic(const Graphic& rGraphic, const OUString& rPath, SvStream& rOStm, sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData)
+            //// ErrCode GraphicFilter::ExportGraphic(const Graphic& rGraphic, const INetURLObject& rPath, sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
+            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(xIn);
+
+            if (pStream && (pStream->GetErrorCode() == ERRCODE_NONE))
+            {
+                SvMemoryStream rOStm;
+                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+                Graphic rGraphic;
+                // rGraphic = new Graphic(mxGraphicResolver.get())
+                // ReadGraphic(*pStream, rGraphic);
+                rFilter.ImportGraphic(rGraphic, OUString(), *pStream);
+
+                sal_uInt16 nFormat = rFilter.GetExportFormatNumberForShortName("SVG");
+                const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr;
+                ErrCode errCode = rFilter.ExportGraphic(rGraphic, rGraphicObjectURL, rOStm, nFormat, pFilterData);
+
+                if (errCode == ERRCODE_NONE)
+                {
+                    rOStm.Seek(0);
+                    // ::utl::OInputStreamWrapper rOInputStreamWrapper(rOStm);
+                    // Reference< XInputStream > xOut(rOInputStreamWrapper);
+                    Reference< XInputStream > xOut(new utl::OInputStreamWrapper(rOStm));
+
+                    if (xOut.is())
+                    {
+                        XMLBase64Export aBase64Exp(*this);
+                        bRet = aBase64Exp.exportOfficeBinaryDataElement(xOut);
+
+                        //// Add mimetype to make it easier for readers to get the base64 image type right, tdf#109202
+                        //OUString aSourceMimeType = getMimeType(sOrigURL);
+                        //if (!aSourceMimeType.isEmpty())
+                        AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", "svg+xml");
+                    }
+                }
+                delete pStream;
             }
         }
     }

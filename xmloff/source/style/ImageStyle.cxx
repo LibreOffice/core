@@ -92,7 +92,7 @@ void XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rVal
             if( !sImageURL.isEmpty() )
             {
                 // optional office:binary-data
-                rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
+                rExport.AddEmbeddedGraphicObjectNotAsSVMAsBase64( sImageURL );
             }
         }
     }
