@@ -178,23 +178,6 @@ public:
                                           x, y, width, height);
     }
 
-    /* Get info about dialog with given dialog id
-     *
-     * @param nDialogId Unique dialog id for which to get info about
-     * @param pDialogTitle Pointer to pointer pointing to string containing the
-     * dialog title. Caller should the pointer to allocated string themselves.
-     * @param pWidth The width of the dialog
-     * @param pHeight The height of the dialog
-     */
-    void getDialogInfo(unsigned nDialogId,
-                       char** pDialogTitle,
-                       int& pWidth,
-                       int& pHeight)
-    {
-        return mpDoc->pClass->getDialogInfo(mpDoc, nDialogId, pDialogTitle, &pWidth, &pHeight);
-
-    }
-
     /**
      * Renders the active floating window of a dialog
      *
