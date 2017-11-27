@@ -2791,8 +2791,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 (void) aSelTxt;
 #endif
 
-                aCurWordBndry = _xBI->nextWord(aNodeStr, nCurrentEnd,
-                        GetLocale( EditPaM( pNode, nCurrentEnd + 1 ) ),
+                aCurWordBndry = _xBI->nextWord(aNodeStr, nCurrentStart,
+                        GetLocale( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nWordType);
             }
             DBG_ASSERT( nCurrentEnd >= aEndBndry.endPos, "failed to reach end of transliteration" );
