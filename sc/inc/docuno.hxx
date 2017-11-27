@@ -363,9 +363,6 @@ public:
 
     /// @see vcl::ITiledRenderable::getPostItsPos().
     OUString getPostItsPos() override;
-
-    /// @see vcl::ITiledRenderable::findWindow().
-    VclPtr<vcl::Window> findWindow(vcl::LOKWindowId nLOKWindowId) const override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<

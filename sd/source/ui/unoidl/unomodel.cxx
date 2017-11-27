@@ -2669,12 +2669,6 @@ Pointer SdXImpressDocument::getPointer()
     return pWindow->GetPointer();
 }
 
-VclPtr<vcl::Window> SdXImpressDocument::findWindow(vcl::LOKWindowId nLOKWindowId) const
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    return pViewShell->GetOpenedDlg(nLOKWindowId);
-}
-
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbiddenCharacters);

@@ -1958,37 +1958,6 @@ void SfxViewShell::notifyWindowChild(vcl::LOKWindowId nDialogId, const OUString&
     SfxLokHelper::notifyWindowChild(nDialogId, rAction, rPos);
 }
 
-void SfxViewShell::RegisterDlg(vcl::LOKWindowId nDialogId, VclPtr<Dialog> pDlg)
-{
-    if (pDlg)
-        maOpenedDialogs.push_back(std::make_pair(nDialogId, pDlg));
-}
-
-VclPtr<Dialog> SfxViewShell::GetOpenedDlg(vcl::LOKWindowId nDialogId)
-{
-    const auto it = std::find_if(maOpenedDialogs.begin(),
-                                 maOpenedDialogs.end(),
-                                 [&nDialogId](const std::pair<vcl::LOKWindowId, VclPtr<Dialog>> aItem) {
-                                     return nDialogId == aItem.first;
-                                 });
-
-    Dialog* ret = nullptr;
-    if (it != maOpenedDialogs.end())
-    {
-        ret = it->second;
-    }
-    return ret;
-}
-
-void SfxViewShell::UnregisterDlg(vcl::LOKWindowId nDialogId)
-{
-    maOpenedDialogs.erase(std::remove_if(maOpenedDialogs.begin(),
-                                         maOpenedDialogs.end(),
-                                         [&nDialogId](const std::pair<vcl::LOKWindowId, VclPtr<Dialog>> aItem) {
-                                             return aItem.first == nDialogId;
-                                         }));
-}
-
 uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetClipboardNotifier()
 {
     uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClipboardNotifier;
