@@ -111,9 +111,9 @@ ScTablePage::ScTablePage(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
     get(m_pEdScaleAll,"spinED_SCALEALL");
     get(m_pGrHeightWidth,"gridWH");
     get(m_pEdScalePageWidth,"spinED_SCALEPAGEWIDTH");
-    get(m_pCbScalePageWidth,"unsetwidth");
+    get(m_pCbScalePageWidth,"labelWP");
     get(m_pEdScalePageHeight,"spinED_SCALEPAGEHEIGHT");
-    get(m_pCbScalePageHeight,"unsetheight");
+    get(m_pCbScalePageHeight,"labelHP");
     get(m_pBxScalePageNum,"boxNP");
     get(m_pEdScalePageNum,"spinED_SCALEPAGENUM");
 
@@ -216,13 +216,17 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 
         /*  width==0 and height==0 is invalid state, used as "not selected".
             Dialog shows width=height=1 then. */
-        bool bValid = nWidth || nHeight;
-        if (bValid)
+        if (nWidth || nHeight)
             m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_TO );
-        m_pEdScalePageWidth->SetValue( bValid ? nWidth : 1 );
-        m_pEdScalePageHeight->SetValue( bValid ? nHeight : 1 );
-        m_pCbScalePageWidth->Check(bValid && !nWidth);
-        m_pCbScalePageHeight->Check(bValid && !nHeight);
+        else
+            nWidth = nHeight = 1;
+
+        m_pEdScalePageWidth->SetValue(nWidth);
+        m_pEdScalePageWidth->Enable(nWidth);
+        m_pEdScalePageHeight->SetValue(nHeight);
+        m_pEdScalePageHeight->Enable(nHeight);
+        m_pCbScalePageWidth->Check(nWidth);
+        m_pCbScalePageHeight->Check(nHeight);
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
@@ -408,7 +412,7 @@ IMPL_LINK(ScTablePage, ToggleHdl, CheckBox&, rBox, void)
 {
     if (&rBox == m_pCbScalePageWidth)
     {
-        if (rBox.IsChecked())
+        if (!rBox.IsChecked())
         {
             m_pEdScalePageWidth->SetText(OUString());
             m_pEdScalePageWidth->Disable();
@@ -421,7 +425,7 @@ IMPL_LINK(ScTablePage, ToggleHdl, CheckBox&, rBox, void)
     }
     else
     {
-        if (rBox.IsChecked())
+        if (!rBox.IsChecked())
         {
             m_pEdScalePageHeight->SetText(OUString());
             m_pEdScalePageHeight->Disable();

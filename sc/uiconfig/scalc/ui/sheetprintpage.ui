@@ -429,12 +429,13 @@
                         <property name="column_spacing">12</property>
                         <property name="row_homogeneous">True</property>
                         <child>
-                          <object class="GtkLabel" id="labelWP">
+                          <object class="GtkCheckButton" id="labelWP">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="label" translatable="yes" context="sheetprintpage|labelWP">_Width in pages:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinED_SCALEPAGEWIDTH</property>
+                            <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -443,12 +444,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="labelHP">
+                          <object class="GtkCheckButton" id="labelHP">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="label" translatable="yes" context="sheetprintpage|labelHP">_Height in pages:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinED_SCALEPAGEHEIGHT</property>
+                            <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -478,32 +480,6 @@
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="unsetwidth">
-                            <property name="label" translatable="yes" context="sheetprintpage|unsetwidth">Unspecified</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="unsetheight">
-                            <property name="label" translatable="yes" context="sheetprintpage|unsetheight">Unspecified</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
