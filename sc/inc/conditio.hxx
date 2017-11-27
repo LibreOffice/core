@@ -318,6 +318,11 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     bool                bFirstRun;
     std::unique_ptr<ScFormulaListener> mpListener;
 
+    void    SimplifyCompiledFormula( ScTokenArray*& rFormula,
+                                     double& rVal,
+                                     bool& rIsStr,
+                                     OUString& rStrVal );
+
     void    MakeCells( const ScAddress& rPos );
     void    Compile( const OUString& rExpr1, const OUString& rExpr2,
                         const OUString& rExprNmsp1, const OUString& rExprNmsp2,
