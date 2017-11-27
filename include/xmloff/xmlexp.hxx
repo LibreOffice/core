@@ -463,6 +463,8 @@ public:
     bool AddEmbeddedGraphicObjectAsBase64(
                             const OUString& rGraphicObjectURL );
 
+    bool AddEmbeddedGraphicObjectNotAsSVMAsBase64(const OUString& rGraphicObjectURL);
+
     OUString AddEmbeddedObject(
                             const OUString& rEmbeddedObjectURL );
     bool AddEmbeddedObjectAsBase64(

@@ -2353,7 +2353,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 if( !sImageURL.isEmpty() )
                 {
                     // optional office:binary-data
-                    mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
+                    // mrExport.AddEmbeddedGraphicObjectAsBase64(sImageURL);
+                    mrExport.AddEmbeddedGraphicObjectNotAsSVMAsBase64(sImageURL);
                 }
                 if( !bIsEmptyPresObj )
                     ImpExportText( xShape );

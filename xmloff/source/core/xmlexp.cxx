@@ -90,6 +90,11 @@
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <RDFaExportHelper.hxx>
 
+#include <vcl/graphicfilter.hxx>
+#include <vcl/errcode.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
+
 #include <comphelper/xmltools.hxx>
 
 using namespace ::osl;
@@ -1884,24 +1889,68 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     return sRet;
 }
 
-bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
+bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64(const OUString& rGraphicObjectURL)
 {
     bool bRet = false;
 
-    if( (getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
-        rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
-        mxGraphicResolver.is() )
+    if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
+        rGraphicObjectURL.startsWith(msGraphicObjectProtocol) &&
+        mxGraphicResolver.is())
     {
-        Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
+        Reference< XBinaryStreamResolver > xStmResolver(mxGraphicResolver, UNO_QUERY);
 
-        if( xStmResolver.is() )
+        if (xStmResolver.is())
         {
-            Reference< XInputStream > xIn( xStmResolver->getInputStream( rGraphicObjectURL ) );
+            Reference< XInputStream > xIn(xStmResolver->getInputStream(rGraphicObjectURL));
 
-            if( xIn.is() )
+            if (xIn.is())
             {
-                XMLBase64Export aBase64Exp( *this );
-                bRet = aBase64Exp.exportOfficeBinaryDataElement( xIn );
+                XMLBase64Export aBase64Exp(*this);
+                bRet = aBase64Exp.exportOfficeBinaryDataElement(xIn);
+            }
+        }
+    }
+
+    return bRet;
+}
+
+bool SvXMLExport::AddEmbeddedGraphicObjectNotAsSVMAsBase64(const OUString& rGraphicObjectURL)
+{
+    bool bRet = false;
+
+    if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
+        rGraphicObjectURL.startsWith(msGraphicObjectProtocol) &&
+        mxGraphicResolver.is())
+    {
+        Reference< XBinaryStreamResolver > xStmResolver(mxGraphicResolver, UNO_QUERY);
+
+        if (xStmResolver.is())
+        {
+            Reference< XInputStream > xIn(xStmResolver->getInputStream(rGraphicObjectURL));
+            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(xIn);
+            if (pStream && (pStream->GetErrorCode() == ERRCODE_NONE))
+            {
+                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+                Graphic rGraphic;
+                rFilter.ImportGraphic(rGraphic, OUString(), *pStream);
+
+                SvMemoryStream rOStm;
+                sal_uInt16 nFormat = rFilter.GetExportFormatNumberForShortName("SVG");
+                ErrCode errCode = rFilter.ExportGraphic(rGraphic, rGraphicObjectURL, rOStm, nFormat, nullptr);
+
+                if (errCode == ERRCODE_NONE)
+                {
+                    rOStm.Seek(0);
+                    Reference< XInputStream > xOut(new utl::OInputStreamWrapper(rOStm));
+
+                    if (xOut.is())
+                    {
+                        AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", "svg+xml");
+                        XMLBase64Export aBase64Exp(*this);
+                        bRet = aBase64Exp.exportOfficeBinaryDataElement(xOut);
+                    }
+                }
+                delete pStream;
             }
         }
     }
