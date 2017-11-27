@@ -3619,3 +3619,67 @@ index 2311e76..8414da5 100644
 -- 
 2.13.6
 
+From 3d47458738729c86992a1ed0002726cba5ec315c Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 10 Nov 2017 12:27:35 +0100
+Subject: [PATCH] EPUBImageManager: initial wrap type handling
+
+You could assume that the wrap is the opposide of clear, but given it's
+an attribute on the next element, they are the same at the end in case
+of left and right.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 24 ++++++++++++++++++++++++
+ src/test/EPUBTextGeneratorTest.cpp | 38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index d81a905..a90ac68 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -982,6 +982,7 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+                            propList["librevenge:mime-type"]->getStr());
+ 
+   RVNGPropertyList attrs;
++  RVNGString wrap;
+ 
+   if (!m_impl->m_framePropertiesStack.empty())
+   {
+@@ -995,12 +996,35 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+       attrs.insert("style", m_impl->m_imageManager.getImageStyle(frameProperties).c_str());
+       break;
+     }
++
++    if (frameProperties["style:wrap"])
++      wrap = frameProperties["style:wrap"]->getStr();
+   }
+ 
+   attrs.insert("src", path.relativeTo(m_impl->m_path).str().c_str());
+   // FIXME: use alternative repr. if available
+   attrs.insert("alt", path.str().c_str());
+   m_impl->output().insertEmptyElement("img", attrs);
++
++  // Emulate wrap type with a break after the image.
++  RVNGString brStyle;
++  if (wrap == "none")
++    brStyle = "clear: both;";
++  else if (wrap == "left")
++    // We want content on the left side, space on the right side, so the next
++    // element should clear on its left.
++    brStyle = "clear: left;";
++  else if (wrap == "right")
++    // Same here.
++    brStyle = "clear: right;";
++  else if (wrap == "parallel")
++    brStyle = "clear: none;";
++  if (!brStyle.empty())
++  {
++    attrs.clear();
++    attrs.insert("style", brStyle);
++    m_impl->output().insertEmptyElement("br", attrs);
++  }
+ }
+ 
+ void EPUBHTMLGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
+-- 
+2.13.6
+
