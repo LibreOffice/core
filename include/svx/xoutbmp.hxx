@@ -66,7 +66,7 @@ public:
 
     static ErrCode      ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
-                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
+                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData );
 
     static Bitmap       DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold );
 

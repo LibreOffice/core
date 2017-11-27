@@ -1052,7 +1052,7 @@ class FmXFilterCell final : public FmXGridCell
                     ,public FmXFilterCell_Base
 {
 public:
-    FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl = nullptr);
+    FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl);
 
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell)

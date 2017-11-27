@@ -62,7 +62,7 @@ class FmFilterData
     OUString         m_aText;
 
 public:
-    FmFilterData(FmParentData* pParent, const OUString& rText = OUString())
+    FmFilterData(FmParentData* pParent, const OUString& rText)
         :m_pParent( pParent )
         ,m_aText( rText )
     {}

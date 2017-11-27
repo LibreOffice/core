@@ -689,7 +689,7 @@ void StyleVectorTable::add(
         // create angle between both. angle() needs vectors pointing away from the same point,
         // so take the mirrored one. Add F_PI to get from -pi..+pi to [0..F_PI2] for sorting
         const double fAngle(basegfx::B2DVector(-rMyVector.getX(), -rMyVector.getY()).angle(rOtherVector) + F_PI);
-        maEntries.emplace_back(rStyle, rOtherVector, fAngle, bMirrored);
+        maEntries.emplace_back(rStyle, rOtherVector, fAngle, bMirrored, nullptr);
     }
 }
 

@@ -64,7 +64,7 @@ SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
     double fLogicHitTolerance,
     bool bTextOnly,
     /// allow to get back the stack of primitives that lead to the hit
-    drawinglayer::primitive2d::Primitive2DContainer* pHitContainer = nullptr);
+    drawinglayer::primitive2d::Primitive2DContainer* pHitContainer);
 
 
 #endif // INCLUDED_SVX_SDRHITTESTHELPER_HXX

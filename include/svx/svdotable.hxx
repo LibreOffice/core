@@ -174,7 +174,7 @@ public:
     /** At the same time, we set the text in the outliner (if applicable the EditOutliners')
      * as well as the PaperSize
      */
-    void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::tools::Rectangle& rTextRect, bool bNoEditText, ::tools::Rectangle* pAnchorRect=nullptr ) const;
+    void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::tools::Rectangle& rTextRect, bool bNoEditText, ::tools::Rectangle* pAnchorRect ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
     void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::tools::Rectangle& rAnchorRect ) const;
     virtual void TakeTextAnchorRect(::tools::Rectangle& rAnchorRect) const override;

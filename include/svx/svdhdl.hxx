@@ -259,7 +259,7 @@ class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
     SVX_DLLPRIVATE static Color GetLuminance(const Color& rCol);
 
 public:
-    explicit SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize = Size(11, 11), bool bLum = false);
+    explicit SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool bLum = false);
     virtual ~SdrHdlColor() override;
 
     bool IsUseLuminance() const { return bUseLuminance; }
