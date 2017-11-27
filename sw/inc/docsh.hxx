@@ -126,7 +126,7 @@ class SW_DLLPUBLIC SwDocShell
         sal_uInt16 nMask,
         const bool bNew,
         const OString& sPageId,
-        SwWrtShell* pActShell = nullptr,
+        SwWrtShell* pActShell,
         const bool bBasic = false );
 
     SAL_DLLPRIVATE bool                  Delete(const OUString &rName, SfxStyleFamily nFamily);
@@ -134,7 +134,7 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE SfxStyleFamily        ApplyStyles(const OUString &rName,
         const SfxStyleFamily nFamily,
         SwWrtShell* pShell,
-        sal_uInt16 nMode = 0);
+        sal_uInt16 nMode);
     SAL_DLLPRIVATE SfxStyleFamily        DoWaterCan( const OUString &rName, SfxStyleFamily nFamily);
     SAL_DLLPRIVATE SfxStyleFamily        UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell);
     SAL_DLLPRIVATE SfxStyleFamily        MakeByExample(const OUString &rName,
@@ -168,7 +168,7 @@ public:
     /// Doc is required for SO data exchange!
     SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
     SwDocShell( SfxModelFlags i_nSfxCreationFlags );
-    SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SfxObjectCreateMode::STANDARD );
+    SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode );
     virtual ~SwDocShell() override;
 
     /// OLE 2.0-notification.

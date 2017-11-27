@@ -58,23 +58,23 @@ typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
                                                 OUString&, OUString*, void* ) const;
 
     void BoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void PtrToBoxNms( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void RelNmsToBoxNms( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void RelBoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void BoxNmsToRelNm( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void MakeFormula_( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void GetFormulaBoxes( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void HasValidBoxes_( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
     void SplitMergeBoxNm_( const SwTable&, OUString&, OUString&, OUString*,
-                        void* pPara = nullptr ) const;
+                        void* pPara ) const;
 
     static void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
                     SwSelBoxes& rBoxes );
