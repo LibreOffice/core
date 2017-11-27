@@ -260,6 +260,7 @@ void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Re
         OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
         m_aTextPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aParagraphPropertyList.insert(sName.getStr(), sValue.getStr());
+        m_aGraphicPropertyList.insert(sName.getStr(), sValue.getStr());
     }
 }
 
