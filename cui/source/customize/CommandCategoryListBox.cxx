@@ -23,6 +23,10 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
+#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <vcl/builderfactory.hxx>
 
 // include search util
@@ -144,6 +148,31 @@ void CommandCategoryListBox::Init(
 
             nEntryPos = InsertEntry( sGroupName );
             m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
+            SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
+        }
+
+        // Add macros
+        css::uno::Reference< css::script::browse::XBrowseNode > rootNode;
+        try
+        {
+            css::uno::Reference< css::script::browse::XBrowseNodeFactory > xFac = css::script::browse::theBrowseNodeFactory::get( m_xContext );
+            rootNode.set( xFac->createView( css::script::browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+        }
+        catch( css::uno::Exception& e )
+        {
+            SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e);
+            // TODO exception handling
+        }
+
+        if ( rootNode.is() && rootNode.get()->getChildNodes().getLength() > 0 )
+        {
+
+            // Add macros category
+            OUString aTitle( CuiResId(RID_SVXSTR_MACROS) );
+            nEntryPos = InsertEntry( aTitle );
+            m_aGroupInfo.push_back(
+                o3tl::make_unique<SfxGroupInfo_Impl>(
+                    SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr) );
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
@@ -271,9 +300,9 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
             FillFunctionsList( lCommands, pFunctionListBox, filterTerm );
             break;
         }
-        case SfxCfgKind::GROUP_SCRIPTCONTAINER:
+        case SfxCfgKind::GROUP_SCRIPTCONTAINER: //Macros
         {
-            //TODO:Implement
+            //TODO: Implement
             break;
         }
         case SfxCfgKind::GROUP_STYLES:
