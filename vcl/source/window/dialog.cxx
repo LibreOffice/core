@@ -1224,9 +1224,12 @@ void Dialog::Resize()
     if (comphelper::LibreOfficeKit::isDialogPainting())
         return;
 
-    // inform LOK clients
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate");
+    {
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", GetOptimalSize().toString()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+    }
 }
 
 bool Dialog::set_property(const OString &rKey, const OUString &rValue)
