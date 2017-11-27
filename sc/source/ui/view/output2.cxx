@@ -2782,8 +2782,8 @@ public:
 
     ~ClearableClipRegion()
     {
-        //The Pop() or SetClipRegion() calls must only be in case mpDev is set
-        //mpDev is only set if in the constructor bClip was true
+        // Pop() or SetClipRegion() must only be called in case bClip was true
+        // in the ctor, and only then mpDev is set.
         if (mpDev)
         {
             if (mbMetaFile)
@@ -2793,7 +2793,7 @@ public:
         }
     }
 
-    const tools::Rectangle& getRect() const{return maRect;}
+    const tools::Rectangle& getRect() const { return maRect; }
 
 private:
     tools::Rectangle        maRect;
@@ -3413,7 +3413,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     Point aURLStart;
 
     {
-        auto ClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
+        const auto pClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
 
         Point aLogicStart(nStartX, nStartY);
         rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
@@ -3672,7 +3672,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     Point aURLStart;
 
     {
-        const auto ClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
+        const auto pClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
 
         Point aLogicStart(nStartX, nStartY);
         rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
