@@ -555,6 +555,7 @@
 #define SC_UNO_AUTOCALC             "AutoCalculate"
 #define SC_UNO_PRINTERNAME          "PrinterName"
 #define SC_UNO_PRINTERSETUP         "PrinterSetup"
+#define SC_UNO_PRINTERPAPER         "PrinterPaperFromSetup"
 #define SC_UNO_APPLYDOCINF          "ApplyUserData"
 #define SC_UNO_CHARCOMP             "CharacterCompressionType"
 #define SC_UNO_ASIANKERN            "IsKernAsianPunctuation"

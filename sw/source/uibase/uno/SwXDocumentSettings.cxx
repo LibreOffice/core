@@ -74,6 +74,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_ALIGN_TAB_STOP_POSITION,
     HANDLE_PRINTER_NAME,
     HANDLE_PRINTER_SETUP,
+    HANDLE_PRINTER_PAPER,
     HANDLE_IS_KERN_ASIAN_PUNCTUATION,
     HANDLE_CHARACTER_COMPRESSION_TYPE,
     HANDLE_APPLY_USER_DATA,
@@ -149,6 +150,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("AlignTabStopPosition"),       HANDLE_ALIGN_TAB_STOP_POSITION,         cppu::UnoType<bool>::get(),           0},
         { OUString("PrinterName"),                HANDLE_PRINTER_NAME,                    cppu::UnoType<OUString>::get(),          0},
         { OUString("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
+        { OUString("PrinterPaperFromSetup"),      HANDLE_PRINTER_PAPER,                   cppu::UnoType<bool>::get(),           0},
         { OUString("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       cppu::UnoType<bool>::get(),           0},
         { OUString("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      cppu::UnoType<sal_Int16>::get(),             0},
         { OUString("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 cppu::UnoType<bool>::get(),           0},
@@ -437,6 +439,23 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 mpPrinter = pPrinter;
             }
 
+        }
+        break;
+        case HANDLE_PRINTER_PAPER:
+        {
+            bool bPreferPrinterPapersize;
+            if( rValue >>= bPreferPrinterPapersize )
+            {
+                if( mpDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+                {
+                    SfxPrinter *pTempPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
+                    if (pTempPrinter)
+                    {
+                        pTempPrinter->SetPrinterSettingsPreferred( bPreferPrinterPapersize );
+                        //pDocSh->SetPrinter( pNewPrinter );
+                    }
+                }
+            }
         }
         break;
         case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
@@ -958,6 +977,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
                 Sequence < sal_Int8 > aSequence ( 0 );
                 rValue <<= aSequence;
             }
+        }
+        break;
+        case HANDLE_PRINTER_PAPER:
+        {
+            SfxPrinter *pTempPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( false );
+            rValue <<= pTempPrinter ? pTempPrinter->GetPrinterSettingsPreferred() : false;
         }
         break;
         case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
