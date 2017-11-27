@@ -156,6 +156,8 @@ static const struct ExceptionalKey
 {
     const sal_uInt16        nKeyCode;
     const unsigned int  nModifierMask;
+    const sal_uInt16        nModifiedKeyCode;
+    const bool              bZeroCharacter;
 } aExceptionalKeys[] =
 {
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -163,8 +165,10 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
         // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
         // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
-    { KEY_D, NSControlKeyMask | NSShiftKeyMask | NSAlternateKeyMask },
-    { KEY_D, NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask }
+        // 'NSNumericPadKeyMask' is deprecated: first deprecated in macOS 10.12
+    { KEY_D, NSControlKeyMask | NSShiftKeyMask | NSAlternateKeyMask, KEY_D, true },
+    { KEY_D, NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask, KEY_D, true },
+    { KEY_POINT, NSNumericPadKeyMask, KEY_DECIMAL, false }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
@@ -1018,7 +1022,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 (mpFrame->mnLastModifierFlags & aExceptionalKeys[i].nModifierMask)
                 == aExceptionalKeys[i].nModifierMask )
             {
-                [self sendKeyInputAndReleaseToFrame: nKeyCode character: 0];
+                [self sendKeyInputAndReleaseToFrame: aExceptionalKeys[i].nModifiedKeyCode character: (aExceptionalKeys[i].bZeroCharacter ? 0 : keyChar) ];
 
                 return YES;
             }
