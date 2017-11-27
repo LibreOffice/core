@@ -273,11 +273,6 @@ struct _LibreOfficeKitDocumentClass
                          const int x, const int y,
                          const int width, const int height);
 
-    /// Get info about dialog with given dialog id
-    /// @see lok::Document::getDialogInfo().
-    void (*getDialogInfo) (LibreOfficeKitDocument* pThis, unsigned nDialogId,
-                           char** pDialogTitle, int* pWidth, int* pHeight);
-
     /// @see lok::Document::paintActiveFloatingWindow().
     void (*paintActiveFloatingWindow) (LibreOfficeKitDocument* pThis, unsigned nDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 

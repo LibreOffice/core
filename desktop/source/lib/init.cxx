@@ -615,9 +615,6 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
-static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
-                              char** pDialogTitle, int* nWidth, int* nHeight);
-
 static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
@@ -670,7 +667,6 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
         m_pDocumentClass->paintDialog = doc_paintDialog;
-        m_pDocumentClass->getDialogInfo = doc_getDialogInfo;
         m_pDocumentClass->paintActiveFloatingWindow = doc_paintActiveFloatingWindow;
 
         gDocumentClass = m_pDocumentClass;
@@ -3265,35 +3261,6 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
         }
     }
     return nullptr;
-}
-
-static void doc_getDialogInfo(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
-                              char** pDialogTitle, int* nWidth, int* nHeight)
-{
-    // FIXME - I guess we should kill this one, and use only the callback
-    // "created"?
-
-    SolarMutexGuard aGuard;
-
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
-    if (!pWindow)
-    {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
-        return;
-    }
-
-    OUString aDialogTitle(pWindow->GetText());
-    const Size aSize = pWindow->GetSizePixel();
-    *nWidth = aSize.getWidth();
-    *nHeight = aSize.getHeight();
-
-    // copy dialog title
-    if (!aDialogTitle.isEmpty())
-    {
-        OString aTitleString = OUStringToOString(aDialogTitle, RTL_TEXTENCODING_UTF8);
-        *pDialogTitle = static_cast<char*>(malloc(aTitleString.getLength() + 1));
-        strcpy(*pDialogTitle, aTitleString.getStr());
-    }
 }
 
 static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
