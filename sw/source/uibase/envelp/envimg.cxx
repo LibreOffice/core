@@ -93,38 +93,38 @@ OUString MakeSender()
 SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
-    aAddrText       = aEmptyOUStr;
-    bSend           = true;
-    aSendText       = MakeSender();
-    lSendFromLeft   = 566; // 1 cm
-    lSendFromTop    = 566; // 1 cm
+    m_aAddrText       = aEmptyOUStr;
+    m_bSend           = true;
+    m_aSendText       = MakeSender();
+    m_nSendFromLeft   = 566; // 1 cm
+    m_nSendFromTop    = 566; // 1 cm
     Size aEnvSz     = SvxPaperInfo::GetPaperSize(PAPER_ENV_C65);
-    lWidth          = aEnvSz.Width();
-    lHeight         = aEnvSz.Height();
-    eAlign          = ENV_HOR_LEFT;
-    bPrintFromAbove = true;
-    lShiftRight     = 0;
-    lShiftDown      = 0;
+    m_nWidth          = aEnvSz.Width();
+    m_nHeight         = aEnvSz.Height();
+    m_eAlign          = ENV_HOR_LEFT;
+    m_bPrintFromAbove = true;
+    m_nShiftRight     = 0;
+    m_nShiftDown      = 0;
 
-    lAddrFromLeft   = std::max(lWidth, lHeight) / 2;
-    lAddrFromTop    = std::min(lWidth, lHeight) / 2;
+    m_nAddrFromLeft   = std::max(m_nWidth, m_nHeight) / 2;
+    m_nAddrFromTop    = std::min(m_nWidth, m_nHeight) / 2;
 }
 
 SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
 {
-    aAddrText       = rItem.aAddrText;
-    bSend           = rItem.bSend;
-    aSendText       = rItem.aSendText;
-    lSendFromLeft   = rItem.lSendFromLeft;
-    lSendFromTop    = rItem.lSendFromTop;
-    lAddrFromLeft   = rItem.lAddrFromLeft;
-    lAddrFromTop    = rItem.lAddrFromTop;
-    lWidth          = rItem.lWidth;
-    lHeight         = rItem.lHeight;
-    eAlign          = rItem.eAlign;
-    bPrintFromAbove = rItem.bPrintFromAbove;
-    lShiftRight     = rItem.lShiftRight;
-    lShiftDown      = rItem.lShiftDown;
+    m_aAddrText       = rItem.m_aAddrText;
+    m_bSend           = rItem.m_bSend;
+    m_aSendText       = rItem.m_aSendText;
+    m_nSendFromLeft   = rItem.m_nSendFromLeft;
+    m_nSendFromTop    = rItem.m_nSendFromTop;
+    m_nAddrFromLeft   = rItem.m_nAddrFromLeft;
+    m_nAddrFromTop    = rItem.m_nAddrFromTop;
+    m_nWidth          = rItem.m_nWidth;
+    m_nHeight         = rItem.m_nHeight;
+    m_eAlign          = rItem.m_eAlign;
+    m_bPrintFromAbove = rItem.m_bPrintFromAbove;
+    m_nShiftRight     = rItem.m_nShiftRight;
+    m_nShiftDown      = rItem.m_nShiftDown;
     return *this;
 }
 
@@ -132,19 +132,19 @@ bool SwEnvItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwEnvItem& rEnv = static_cast<const SwEnvItem&>( rItem);
 
-    return aAddrText       == rEnv.aAddrText       &&
-           bSend           == rEnv.bSend           &&
-           aSendText       == rEnv.aSendText       &&
-           lSendFromLeft   == rEnv.lSendFromLeft   &&
-           lSendFromTop    == rEnv.lSendFromTop    &&
-           lAddrFromLeft   == rEnv.lAddrFromLeft   &&
-           lAddrFromTop    == rEnv.lAddrFromTop    &&
-           lWidth          == rEnv.lWidth          &&
-           lHeight         == rEnv.lHeight         &&
-           eAlign          == rEnv.eAlign          &&
-           bPrintFromAbove == rEnv.bPrintFromAbove &&
-           lShiftRight     == rEnv.lShiftRight     &&
-           lShiftDown      == rEnv.lShiftDown;
+    return m_aAddrText       == rEnv.m_aAddrText       &&
+           m_bSend           == rEnv.m_bSend           &&
+           m_aSendText       == rEnv.m_aSendText       &&
+           m_nSendFromLeft   == rEnv.m_nSendFromLeft   &&
+           m_nSendFromTop    == rEnv.m_nSendFromTop    &&
+           m_nAddrFromLeft   == rEnv.m_nAddrFromLeft   &&
+           m_nAddrFromTop    == rEnv.m_nAddrFromTop    &&
+           m_nWidth          == rEnv.m_nWidth          &&
+           m_nHeight         == rEnv.m_nHeight         &&
+           m_eAlign          == rEnv.m_eAlign          &&
+           m_bPrintFromAbove == rEnv.m_bPrintFromAbove &&
+           m_nShiftRight     == rEnv.m_nShiftRight     &&
+           m_nShiftDown      == rEnv.m_nShiftDown;
 }
 
 SfxPoolItem* SwEnvItem::Clone(SfxItemPool*) const
@@ -168,46 +168,46 @@ SwEnvCfgItem::SwEnvCfgItem() :
             {
                 switch(nProp)
                 {
-                    case  0: pValues[nProp] >>= aEnvItem.aAddrText; break;// "Inscription/Addressee",
-                    case  1: pValues[nProp] >>= aEnvItem.aSendText; break;// "Inscription/Sender",
-                    case  2: aEnvItem.bSend = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseSender",
+                    case  0: pValues[nProp] >>= aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
+                    case  1: pValues[nProp] >>= aEnvItem.m_aSendText; break;// "Inscription/Sender",
+                    case  2: aEnvItem.m_bSend = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseSender",
                     case  3:
-                        pValues[nProp] >>= aEnvItem.lAddrFromLeft;// "Format/AddresseeFromLeft",
-                        aEnvItem.lAddrFromLeft = convertMm100ToTwip(aEnvItem.lAddrFromLeft);
+                        pValues[nProp] >>= aEnvItem.m_nAddrFromLeft;// "Format/AddresseeFromLeft",
+                        aEnvItem.m_nAddrFromLeft = convertMm100ToTwip(aEnvItem.m_nAddrFromLeft);
                     break;
                     case  4:
-                        pValues[nProp] >>= aEnvItem.lAddrFromTop;  // "Format/AddresseeFromTop",
-                        aEnvItem.lAddrFromTop = convertMm100ToTwip(aEnvItem.lAddrFromTop);
+                        pValues[nProp] >>= aEnvItem.m_nAddrFromTop;  // "Format/AddresseeFromTop",
+                        aEnvItem.m_nAddrFromTop = convertMm100ToTwip(aEnvItem.m_nAddrFromTop);
                     break;
                     case  5:
-                        pValues[nProp] >>= aEnvItem.lSendFromLeft; // "Format/SenderFromLeft",
-                        aEnvItem.lSendFromLeft = convertMm100ToTwip(aEnvItem.lSendFromLeft);
+                        pValues[nProp] >>= aEnvItem.m_nSendFromLeft; // "Format/SenderFromLeft",
+                        aEnvItem.m_nSendFromLeft = convertMm100ToTwip(aEnvItem.m_nSendFromLeft);
                     break;
                     case  6:
-                        pValues[nProp] >>= aEnvItem.lSendFromTop;// "Format/SenderFromTop",
-                        aEnvItem.lSendFromTop = convertMm100ToTwip(aEnvItem.lSendFromTop);
+                        pValues[nProp] >>= aEnvItem.m_nSendFromTop;// "Format/SenderFromTop",
+                        aEnvItem.m_nSendFromTop = convertMm100ToTwip(aEnvItem.m_nSendFromTop);
                     break;
                     case  7:
-                        pValues[nProp] >>= aEnvItem.lWidth; // "Format/Width",
-                        aEnvItem.lWidth = convertMm100ToTwip(aEnvItem.lWidth);
+                        pValues[nProp] >>= aEnvItem.m_nWidth; // "Format/Width",
+                        aEnvItem.m_nWidth = convertMm100ToTwip(aEnvItem.m_nWidth);
                     break;
                     case  8:
-                        pValues[nProp] >>= aEnvItem.lHeight; // "Format/Height",
-                        aEnvItem.lHeight = convertMm100ToTwip(aEnvItem.lHeight);
+                        pValues[nProp] >>= aEnvItem.m_nHeight; // "Format/Height",
+                        aEnvItem.m_nHeight = convertMm100ToTwip(aEnvItem.m_nHeight);
                     break;
                     case  9:
                     {
                         sal_Int32 nTemp = 0;
-                        pValues[nProp] >>= nTemp; aEnvItem.eAlign = (SwEnvAlign)nTemp; break;// "Print/Alignment",
+                        pValues[nProp] >>= nTemp; aEnvItem.m_eAlign = (SwEnvAlign)nTemp; break;// "Print/Alignment",
                     }
-                    case 10: aEnvItem.bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
+                    case 10: aEnvItem.m_bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
                     case 11:
-                        pValues[nProp] >>= aEnvItem.lShiftRight;
-                        aEnvItem.lShiftRight = convertMm100ToTwip(aEnvItem.lShiftRight);// "Print/Right",
+                        pValues[nProp] >>= aEnvItem.m_nShiftRight;
+                        aEnvItem.m_nShiftRight = convertMm100ToTwip(aEnvItem.m_nShiftRight);// "Print/Right",
                     break;
                     case 12:
-                        pValues[nProp] >>= aEnvItem.lShiftDown;
-                        aEnvItem.lShiftDown = convertMm100ToTwip(aEnvItem.lShiftDown);
+                        pValues[nProp] >>= aEnvItem.m_nShiftDown;
+                        aEnvItem.m_nShiftDown = convertMm100ToTwip(aEnvItem.m_nShiftDown);
                     break;// "Print/Down"
                 }
             }
@@ -229,19 +229,19 @@ void SwEnvCfgItem::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= aEnvItem.aAddrText; break;// "Inscription/Addressee",
-            case  1: pValues[nProp] <<= aEnvItem.aSendText; break;// "Inscription/Sender",
-            case  2: pValues[nProp] <<= aEnvItem.bSend; break;// "Inscription/UseSender",
-            case  3: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
-            case  4: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lAddrFromTop))  ; break;// "Format/AddresseeFromTop",
-            case  5: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lSendFromLeft)) ; break;// "Format/SenderFromLeft",
-            case  6: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lSendFromTop))  ; break;// "Format/SenderFromTop",
-            case  7: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lWidth))  ; break;// "Format/Width",
-            case  8: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lHeight)) ; break;// "Format/Height",
-            case  9: pValues[nProp] <<= sal_Int32(aEnvItem.eAlign); break;// "Print/Alignment",
-            case 10: pValues[nProp] <<= aEnvItem.bPrintFromAbove; break;// "Print/FromAbove",
-            case 11: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lShiftRight));break; // "Print/Right",
-            case 12: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lShiftDown)); break;// "Print/Down"
+            case  0: pValues[nProp] <<= aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
+            case  1: pValues[nProp] <<= aEnvItem.m_aSendText; break;// "Inscription/Sender",
+            case  2: pValues[nProp] <<= aEnvItem.m_bSend; break;// "Inscription/UseSender",
+            case  3: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
+            case  4: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nAddrFromTop))  ; break;// "Format/AddresseeFromTop",
+            case  5: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nSendFromLeft)) ; break;// "Format/SenderFromLeft",
+            case  6: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nSendFromTop))  ; break;// "Format/SenderFromTop",
+            case  7: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nWidth))  ; break;// "Format/Width",
+            case  8: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nHeight)) ; break;// "Format/Height",
+            case  9: pValues[nProp] <<= sal_Int32(aEnvItem.m_eAlign); break;// "Print/Alignment",
+            case 10: pValues[nProp] <<= aEnvItem.m_bPrintFromAbove; break;// "Print/FromAbove",
+            case 11: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nShiftRight));break; // "Print/Right",
+            case 12: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nShiftDown)); break;// "Print/Down"
         }
     }
     PutProperties(aNames, aValues);
@@ -282,19 +282,19 @@ bool SwEnvItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
     bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
-        case MID_ENV_ADDR_TEXT : rVal <<= aAddrText; break;
-        case MID_ENV_SEND : rVal <<= bSend; break;
-        case MID_SEND_TEXT : rVal <<= aSendText; break;
-        case MID_ENV_ADDR_FROM_LEFT : rVal <<= lAddrFromLeft; break;
-        case MID_ENV_ADDR_FROM_TOP : rVal <<= lAddrFromTop; break;
-        case MID_ENV_SEND_FROM_LEFT : rVal <<= lSendFromLeft; break;
-        case MID_ENV_SEND_FROM_TOP : rVal <<= lSendFromTop; break;
-        case MID_ENV_WIDTH : rVal <<= lWidth; break;
-        case MID_ENV_HEIGHT : rVal <<= lHeight; break;
-        case MID_ENV_ALIGN            : rVal <<= (sal_Int16) eAlign; break;
-        case MID_ENV_PRINT_FROM_ABOVE  : rVal <<= bPrintFromAbove; break;
-        case MID_ENV_SHIFT_RIGHT      : rVal <<= lShiftRight; break;
-        case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
+        case MID_ENV_ADDR_TEXT : rVal <<= m_aAddrText; break;
+        case MID_ENV_SEND : rVal <<= m_bSend; break;
+        case MID_SEND_TEXT : rVal <<= m_aSendText; break;
+        case MID_ENV_ADDR_FROM_LEFT : rVal <<= m_nAddrFromLeft; break;
+        case MID_ENV_ADDR_FROM_TOP : rVal <<= m_nAddrFromTop; break;
+        case MID_ENV_SEND_FROM_LEFT : rVal <<= m_nSendFromLeft; break;
+        case MID_ENV_SEND_FROM_TOP : rVal <<= m_nSendFromTop; break;
+        case MID_ENV_WIDTH : rVal <<= m_nWidth; break;
+        case MID_ENV_HEIGHT : rVal <<= m_nHeight; break;
+        case MID_ENV_ALIGN            : rVal <<= (sal_Int16) m_eAlign; break;
+        case MID_ENV_PRINT_FROM_ABOVE  : rVal <<= m_bPrintFromAbove; break;
+        case MID_ENV_SHIFT_RIGHT      : rVal <<= m_nShiftRight; break;
+        case MID_ENV_SHIFT_DOWN       : rVal <<= m_nShiftDown; break;
         default:
             OSL_FAIL("Wrong memberId");
             bRet = false;
@@ -307,26 +307,26 @@ bool SwEnvItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
     bool bRet = false;
     switch(nMemberId  & ~CONVERT_TWIPS)
     {
-        case MID_ENV_ADDR_TEXT : bRet = (rVal >>= aAddrText); break;
-        case MID_ENV_SEND : bRet = (rVal >>= bSend); break;
-        case MID_SEND_TEXT : bRet = (rVal >>= aSendText); break;
-        case MID_ENV_ADDR_FROM_LEFT : bRet = (rVal >>= lAddrFromLeft); break;
-        case MID_ENV_ADDR_FROM_TOP : bRet = (rVal >>= lAddrFromTop); break;
-        case MID_ENV_SEND_FROM_LEFT : bRet = (rVal >>= lSendFromLeft); break;
-        case MID_ENV_SEND_FROM_TOP : bRet = (rVal >>= lSendFromTop); break;
-        case MID_ENV_WIDTH : bRet = (rVal >>= lWidth); break;
-        case MID_ENV_HEIGHT : bRet = (rVal >>= lHeight); break;
+        case MID_ENV_ADDR_TEXT : bRet = (rVal >>= m_aAddrText); break;
+        case MID_ENV_SEND : bRet = (rVal >>= m_bSend); break;
+        case MID_SEND_TEXT : bRet = (rVal >>= m_aSendText); break;
+        case MID_ENV_ADDR_FROM_LEFT : bRet = (rVal >>= m_nAddrFromLeft); break;
+        case MID_ENV_ADDR_FROM_TOP : bRet = (rVal >>= m_nAddrFromTop); break;
+        case MID_ENV_SEND_FROM_LEFT : bRet = (rVal >>= m_nSendFromLeft); break;
+        case MID_ENV_SEND_FROM_TOP : bRet = (rVal >>= m_nSendFromTop); break;
+        case MID_ENV_WIDTH : bRet = (rVal >>= m_nWidth); break;
+        case MID_ENV_HEIGHT : bRet = (rVal >>= m_nHeight); break;
         case MID_ENV_ALIGN :
         {
             sal_Int16 nTemp = 0;
             bRet = (rVal >>= nTemp);
             if (bRet)
-                eAlign = SwEnvAlign(nTemp);
+                m_eAlign = SwEnvAlign(nTemp);
             break;
         }
-        case MID_ENV_PRINT_FROM_ABOVE  : bRet = (rVal >>= bPrintFromAbove); break;
-        case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= lShiftRight); break;
-        case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= lShiftDown); break;
+        case MID_ENV_PRINT_FROM_ABOVE  : bRet = (rVal >>= m_bPrintFromAbove); break;
+        case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= m_nShiftRight); break;
+        case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= m_nShiftDown); break;
         default:
             OSL_FAIL("Wrong memberId");
     }

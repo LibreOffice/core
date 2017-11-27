@@ -481,25 +481,25 @@ DeactivateRC SwEnvFormatPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwEnvFormatPage::FillItem(SwEnvItem& rItem)
 {
-    rItem.lAddrFromLeft = static_cast< sal_Int32 >(GetFieldVal(*m_pAddrLeftField));
-    rItem.lAddrFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pAddrTopField ));
-    rItem.lSendFromLeft = static_cast< sal_Int32 >(GetFieldVal(*m_pSendLeftField));
-    rItem.lSendFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pSendTopField ));
+    rItem.m_nAddrFromLeft = static_cast< sal_Int32 >(GetFieldVal(*m_pAddrLeftField));
+    rItem.m_nAddrFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pAddrTopField ));
+    rItem.m_nSendFromLeft = static_cast< sal_Int32 >(GetFieldVal(*m_pSendLeftField));
+    rItem.m_nSendFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pSendTopField ));
 
     const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectedEntryPos()];
     if (nPaper == (sal_uInt16)PAPER_USER)
     {
         long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));
         long lHVal = static_cast< long >(GetFieldVal(*m_pSizeHeightField));
-        rItem.lWidth  = std::max(lWVal, lHVal);
-        rItem.lHeight = std::min(lWVal, lHVal);
+        rItem.m_nWidth  = std::max(lWVal, lHVal);
+        rItem.m_nHeight = std::min(lWVal, lHVal);
     }
     else
     {
         long lWVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Width ();
         long lHVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Height();
-        rItem.lWidth  = std::max(lWVal, lHVal);
-        rItem.lHeight = std::min(lWVal, lHVal);
+        rItem.m_nWidth  = std::max(lWVal, lHVal);
+        rItem.m_nHeight = std::min(lWVal, lHVal);
     }
 }
 
@@ -515,19 +515,19 @@ void SwEnvFormatPage::Reset(const SfxItemSet* rSet)
     const SwEnvItem& rItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP));
 
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
-        Size( std::min(rItem.lWidth, rItem.lHeight),
-        std::max(rItem.lWidth, rItem.lHeight)), MapUnit::MapTwip);
+        Size( std::min(rItem.m_nWidth, rItem.m_nHeight),
+        std::max(rItem.m_nWidth, rItem.m_nHeight)), MapUnit::MapTwip);
     for (size_t i = 0; i < aIDs.size(); ++i)
         if (aIDs[i] == (sal_uInt16)ePaper)
             m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
 
     // Metric fields
-    SetFieldVal(*m_pAddrLeftField, rItem.lAddrFromLeft);
-    SetFieldVal(*m_pAddrTopField, rItem.lAddrFromTop );
-    SetFieldVal(*m_pSendLeftField, rItem.lSendFromLeft);
-    SetFieldVal(*m_pSendTopField, rItem.lSendFromTop );
-    SetFieldVal(*m_pSizeWidthField  , std::max(rItem.lWidth, rItem.lHeight));
-    SetFieldVal(*m_pSizeHeightField , std::min(rItem.lWidth, rItem.lHeight));
+    SetFieldVal(*m_pAddrLeftField, rItem.m_nAddrFromLeft);
+    SetFieldVal(*m_pAddrTopField, rItem.m_nAddrFromTop );
+    SetFieldVal(*m_pSendLeftField, rItem.m_nSendFromLeft);
+    SetFieldVal(*m_pSendTopField, rItem.m_nSendFromTop );
+    SetFieldVal(*m_pSizeWidthField  , std::max(rItem.m_nWidth, rItem.m_nHeight));
+    SetFieldVal(*m_pSizeHeightField , std::min(rItem.m_nWidth, rItem.m_nHeight));
     SetMinMax();
 
     DELETEZ(GetParentSwEnvDlg()->pSenderSet);

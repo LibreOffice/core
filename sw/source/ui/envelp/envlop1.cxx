@@ -73,8 +73,8 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     const SwEnvItem& rItem = static_cast<SwEnvDlg*>(GetParentDialog())->aEnvItem;
 
-    const long nPageW = std::max(rItem.lWidth, rItem.lHeight);
-    const long nPageH = std::min(rItem.lWidth, rItem.lHeight);
+    const long nPageW = std::max(rItem.m_nWidth, rItem.m_nHeight);
+    const long nPageH = std::min(rItem.m_nWidth, rItem.m_nHeight);
 
     const double f = 0.8 * std::min(
         double(GetOutputSizePixel().Width()) / double(nPageW),
@@ -97,22 +97,22 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.DrawRect(tools::Rectangle(Point(nX, nY), Size(nW, nH)));
 
     // Sender
-    if (rItem.bSend)
+    if (rItem.m_bSend)
     {
-        const long nSendX = nX + static_cast<long>(f * rItem.lSendFromLeft);
-        const long nSendY = nY + static_cast<long>(f * rItem.lSendFromTop );
-        const long nSendW = static_cast<long>(f * (rItem.lAddrFromLeft - rItem.lSendFromLeft));
-        const long nSendH = static_cast<long>(f * (rItem.lAddrFromTop  - rItem.lSendFromTop  - 566));
+        const long nSendX = nX + static_cast<long>(f * rItem.m_nSendFromLeft);
+        const long nSendY = nY + static_cast<long>(f * rItem.m_nSendFromTop );
+        const long nSendW = static_cast<long>(f * (rItem.m_nAddrFromLeft - rItem.m_nSendFromLeft));
+        const long nSendH = static_cast<long>(f * (rItem.m_nAddrFromTop  - rItem.m_nSendFromTop  - 566));
         rRenderContext.SetFillColor(aMedium);
 
         rRenderContext.DrawRect(tools::Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
     // Addressee
-    const long nAddrX = nX + static_cast<long>(f * rItem.lAddrFromLeft);
-    const long nAddrY = nY + static_cast<long>(f * rItem.lAddrFromTop );
-    const long nAddrW = static_cast<long>(f * (nPageW - rItem.lAddrFromLeft - 566));
-    const long nAddrH = static_cast<long>(f * (nPageH - rItem.lAddrFromTop  - 566));
+    const long nAddrX = nX + static_cast<long>(f * rItem.m_nAddrFromLeft);
+    const long nAddrY = nY + static_cast<long>(f * rItem.m_nAddrFromTop );
+    const long nAddrW = static_cast<long>(f * (nPageW - rItem.m_nAddrFromLeft - 566));
+    const long nAddrH = static_cast<long>(f * (nPageH - rItem.m_nAddrFromTop  - 566));
     rRenderContext.SetFillColor(aMedium);
     rRenderContext.DrawRect(tools::Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl, Button*, void)
 IMPL_LINK_NOARG(SwEnvPage, SenderHdl, Button*, void)
 {
     const bool bEnable = m_pSenderBox->IsChecked();
-    GetParentSwEnvDlg()->aEnvItem.bSend = bEnable;
+    GetParentSwEnvDlg()->aEnvItem.m_bSend = bEnable;
     m_pSenderEdit->Enable(bEnable);
     if ( bEnable )
     {
@@ -339,9 +339,9 @@ DeactivateRC SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwEnvPage::FillItem(SwEnvItem& rItem)
 {
-    rItem.aAddrText = m_pAddrEdit->GetText();
-    rItem.bSend     = m_pSenderBox->IsChecked();
-    rItem.aSendText = m_pSenderEdit->GetText();
+    rItem.m_aAddrText = m_pAddrEdit->GetText();
+    rItem.m_bSend     = m_pSenderBox->IsChecked();
+    rItem.m_aSendText = m_pSenderEdit->GetText();
 }
 
 bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
@@ -354,9 +354,9 @@ bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
 void SwEnvPage::Reset(const SfxItemSet* rSet)
 {
     SwEnvItem aItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP));
-    m_pAddrEdit->SetText(convertLineEnd(aItem.aAddrText, GetSystemLineEnd()));
-    m_pSenderEdit->SetText(convertLineEnd(aItem.aSendText, GetSystemLineEnd()));
-    m_pSenderBox->Check  (aItem.bSend);
+    m_pAddrEdit->SetText(convertLineEnd(aItem.m_aAddrText, GetSystemLineEnd()));
+    m_pSenderEdit->SetText(convertLineEnd(aItem.m_aSendText, GetSystemLineEnd()));
+    m_pSenderBox->Check  (aItem.m_bSend);
     m_pSenderBox->GetClickHdl().Call(m_pSenderBox);
 }
 
