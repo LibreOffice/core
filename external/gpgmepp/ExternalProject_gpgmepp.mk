@@ -38,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
 		   --host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+		   MAKE=$(MAKE) \
 	  && $(MAKE) \
 	)
 else
