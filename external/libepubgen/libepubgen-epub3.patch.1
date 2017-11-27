@@ -3548,3 +3548,32 @@ index 21a1b37..c9f4236 100644
 -- 
 2.13.6
 
+From 094db625e36b91b57e152296a1f7db1bdcc682c5 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 8 Nov 2017 14:10:26 +0100
+Subject: [PATCH] EPUBHTMLGenerator: add missing rel attribute for CSS
+ reference
+
+Turns out a number of readers (checked Calibre and Aldiko on Android) do
+support taking formatting from an external CSS, but only in case this
+attribute is present.
+---
+ src/lib/EPUBHTMLGenerator.cpp      |  1 +
+ src/test/EPUBTextGeneratorTest.cpp | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 4ffa55d..d81a905 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -531,6 +531,7 @@ void EPUBHTMLGenerator::endDocument()
+   RVNGPropertyList linkAttrs;
+   linkAttrs.insert("href", m_impl->m_stylesheetPath.relativeTo(m_impl->m_path).str().c_str());
+   linkAttrs.insert("type", "text/css");
++  linkAttrs.insert("rel", "stylesheet");
+   m_impl->m_document.insertEmptyElement("link", linkAttrs);
+   m_impl->m_document.closeElement("head");
+   m_impl->m_document.openElement("body", RVNGPropertyList());
+-- 
+2.13.6
+

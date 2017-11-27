@@ -25,17 +25,6 @@
 
 using namespace com::sun::star;
 
-#if !LIBEPUBGEN_VERSION_SUPPORT
-namespace libepubgen
-{
-enum EPUBStylesMethod
-{
-    EPUB_STYLES_METHOD_CSS, //< The styles will be described in a separate CSS file.
-    EPUB_STYLES_METHOD_INLINE, //< The styles will be described inline.
-};
-}
-#endif
-
 namespace writerperfect
 {
 
@@ -54,16 +43,10 @@ sal_Int32 EPUBExportFilter::GetDefaultSplitMethod()
     return libepubgen::EPUB_SPLIT_METHOD_HEADING;
 }
 
-sal_Int32 EPUBExportFilter::GetDefaultStylesMethod()
-{
-    return libepubgen::EPUB_STYLES_METHOD_INLINE;
-}
-
 sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
     sal_Int32 nVersion = EPUBExportFilter::GetDefaultVersion();
     sal_Int32 nSplitMethod = EPUBExportFilter::GetDefaultSplitMethod();
-    sal_Int32 nStylesMethod = EPUBExportFilter::GetDefaultStylesMethod();
     uno::Sequence<beans::PropertyValue> aFilterData;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
     {
@@ -80,8 +63,6 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
             aFilterData[i].Value >>= nVersion;
         else if (aFilterData[i].Name == "EPUBSplitMethod")
             aFilterData[i].Value >>= nSplitMethod;
-        else if (aFilterData[i].Name == "EPUBStylesMethod")
-            aFilterData[i].Value >>= nStylesMethod;
     }
 
     // Build the export filter chain: the package has direct access to the ZIP
@@ -93,9 +74,6 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
                                              , nVersion
 #endif
                                             );
-#if LIBEPUBGEN_VERSION_SUPPORT
-    aGenerator.setStylesMethod(static_cast<libepubgen::EPUBStylesMethod>(nStylesMethod));
-#endif
     uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
