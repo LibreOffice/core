@@ -246,6 +246,13 @@ static const char* FMT_REF_ARY[] =
     FMT_REF_NUMBER_FULL_CONTEXT
 };
 
+static const char* FMT_REG_ARY[] =
+{
+    FMT_REG_AUTHOR,
+    FMT_REG_TIME,
+    FMT_REG_DATE
+};
+
 static const char* FMT_DBFLD_ARY[] =
 {
     FMT_DBFLD_DB,
@@ -327,7 +334,7 @@ static const SwFieldPack aSwFields[] =
     { TYP_GETREFFLD,        nullptr,            0,                              FMT_REF_ARY,      SAL_N_ELEMENTS(FMT_REF_ARY) },
 
     // DocInformation
-    { TYP_DOCINFOFLD,       nullptr,            0,                              FMT_REF_ARY,      SAL_N_ELEMENTS(FMT_REF_ARY) },
+    { TYP_DOCINFOFLD,       nullptr,            0,                              FMT_REG_ARY,      SAL_N_ELEMENTS(FMT_REG_ARY) },
 
     // Database
     { TYP_DBFLD,            nullptr,            0,                              FMT_DBFLD_ARY,    SAL_N_ELEMENTS(FMT_DBFLD_ARY) },
