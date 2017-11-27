@@ -445,7 +445,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                  */
                 m_xXMLDocument->clearUselessData(m_pRootBufferNode->getXMLElement(),
                     aChildElements,
-                    bIsNotBlocking?(nullptr):
+                    bIsNotBlocking?nullptr:
                                    (m_pCurrentBlockingBufferNode->getXMLElement()));
 
                 /*
@@ -497,7 +497,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                 m_xXMLDocument->clearUselessData(pBufferNode->getXMLElement(),
                     aChildElements,
                     bIsBlockInside?(m_pCurrentBlockingBufferNode->getXMLElement()):
-                               (nullptr));
+                               nullptr);
 
                 /*
                  * remove the node if it is empty, then if its parent is also

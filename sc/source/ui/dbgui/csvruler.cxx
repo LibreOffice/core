@@ -567,7 +567,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
     maBackgrDev->SetFillColor();
     sal_Int32 nPos;
 
-    sal_Int32 nFirstPos = std::max( GetPosFromX( 0 ) - 1, (sal_Int32)(0) );
+    sal_Int32 nFirstPos = std::max( GetPosFromX( 0 ) - 1, (sal_Int32)0 );
     sal_Int32 nLastPos = GetPosFromX( GetWidth() );
     sal_Int32 nY = (maActiveRect.Top() + maActiveRect.Bottom()) / 2;
     for( nPos = nFirstPos; nPos <= nLastPos; ++nPos )

@@ -436,9 +436,9 @@ void SwEnvFormatPage::SetMinMax()
     m_pAddrLeftField->SetMax((long) 100 * (lWidth  - 2 * 566), FUNIT_TWIP);
     m_pAddrTopField->SetMin((long) 100 * (GetFieldVal(*m_pSendTopField ) + 2 * 566), FUNIT_TWIP);
     m_pAddrTopField->SetMax((long) 100 * (lHeight - 2 * 566), FUNIT_TWIP);
-    m_pSendLeftField->SetMin((long) 100 * (566), FUNIT_TWIP);
+    m_pSendLeftField->SetMin((long) 100 * 566, FUNIT_TWIP);
     m_pSendLeftField->SetMax((long) 100 * (GetFieldVal(*m_pAddrLeftField) - 566), FUNIT_TWIP);
-    m_pSendTopField->SetMin((long) 100 * (566), FUNIT_TWIP);
+    m_pSendTopField->SetMin((long) 100 * 566, FUNIT_TWIP);
     m_pSendTopField->SetMax((long) 100 * (GetFieldVal(*m_pAddrTopField ) - 2 * 566), FUNIT_TWIP);
 
     // First and last

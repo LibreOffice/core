@@ -470,7 +470,7 @@ Any VCLXAccessibleBox::getCurrentValue( )
         {
             if(pList->getSelectedAccessibleChildCount()>0)
             {
-                Reference<XAccessibleContext> xName (pList->getSelectedAccessibleChild((sal_Int32)(0)), UNO_QUERY);
+                Reference<XAccessibleContext> xName (pList->getSelectedAccessibleChild((sal_Int32)0), UNO_QUERY);
                 if(xName.is())
                 {
                     aAny <<= xName->getAccessibleName();

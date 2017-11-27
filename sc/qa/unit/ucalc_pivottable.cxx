@@ -2194,11 +2194,11 @@ void Test::testFuncGETPIVOTDATA()
     aPivotPosStr = aOutRange.aStart.Format(ScRefFlags::ADDR_ABS);
 
     // First, get the grand totals.
-    aFormula = ("=GETPIVOTDATA(\"Sum - Value\";") + aPivotPosStr + ")";
+    aFormula = "=GETPIVOTDATA(\"Sum - Value\";" + aPivotPosStr + ")";
     m_pDoc->SetString(aPos, aFormula);
     fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(21.0, fVal);
-    aFormula = ("=GETPIVOTDATA(\"Count - Value\";") + aPivotPosStr + ")";
+    aFormula = "=GETPIVOTDATA(\"Count - Value\";" + aPivotPosStr + ")";
     m_pDoc->SetString(aPos, aFormula);
     fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(6.0, fVal);

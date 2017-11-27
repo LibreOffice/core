@@ -252,7 +252,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
         default:
             throw CannotDumpException(
                 "unexpected \"" + n + "\" resolved from \"" + name
-                + ("\"in call to TypeManager::decompose"));
+                + "\"in call to TypeManager::decompose");
         }
     }
 }

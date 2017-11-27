@@ -25,7 +25,7 @@ int main()
 
     foo((1)); // expected-error {{parentheses immediately inside single-arg call [loplugin:unnecessaryparen]}}
 
-    int y = (x); // expected-error {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}} expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
+    int y = (x); // expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
     (void)y;
 
     EFoo foo = EFoo::Bar;
@@ -54,7 +54,6 @@ int main()
 
     S s1;
     if ((s1)) { // expected-error {{parentheses immediately inside if statement [loplugin:unnecessaryparen]}}
-        // expected-error@-1 {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
         return 0;
     }
     S s2;
@@ -64,6 +63,10 @@ int main()
 
     (void) sizeof (int);
     (void) sizeof (x); // expect no warning (for whatever reason; for symmetry with above case?)
+
+    // Expecting just one error, not reported twice during TraverseInitListExpr:
+    int a[] = {(x)}; // expected-error {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
+    (void) a;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
