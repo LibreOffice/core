@@ -276,12 +276,11 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("column",  pViewShell->GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER,  pViewShell->GetViewData().GetTabNo());
 
             if (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("row",  pViewShell->GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER,  pViewShell->GetViewData().GetTabNo());
         }
-
     }
 }
 
@@ -536,10 +535,10 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (eCmd == DEL_DELCOLS || eCmd == DEL_CELLSLEFT)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("column",  pViewShell->GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER,  pViewShell->GetViewData().GetTabNo());
 
             if (eCmd == DEL_DELROWS || eCmd == DEL_CELLSUP)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("row",  pViewShell->GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER,  pViewShell->GetViewData().GetTabNo());
         }
 
     }

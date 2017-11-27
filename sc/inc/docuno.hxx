@@ -340,6 +340,9 @@ public:
     /// @see vcl::ITiledRenderable::setClientZoom().
     virtual void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth, int nTileTwipHeight) override;
 
+    /// @see vcl::ITiledRenderable::setOutlineState().
+    virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) override;
+
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
     virtual OUString getRowColumnHeaders(const tools::Rectangle& rRectangle) override;
 
