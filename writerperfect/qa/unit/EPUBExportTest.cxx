@@ -73,6 +73,7 @@ public:
     void testSection();
     void testList();
     void testImage();
+    void testImageBorder();
     void testTable();
     void testTableRowSpan();
     void testTableCellBorder();
@@ -101,6 +102,7 @@ public:
     CPPUNIT_TEST(testSection);
     CPPUNIT_TEST(testList);
     CPPUNIT_TEST(testImage);
+    CPPUNIT_TEST(testImageBorder);
     CPPUNIT_TEST(testTable);
     CPPUNIT_TEST(testTableRowSpan);
     CPPUNIT_TEST(testTableCellBorder);
@@ -479,6 +481,16 @@ void EPUBExportTest::testImage()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:img", 1);
+}
+
+void EPUBExportTest::testImageBorder()
+{
+    createDoc("image-border.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    OUString aStyle = getXPath(mpXmlDoc, "//xhtml:img", "style");
+    // This failed, image had no border.
+    CPPUNIT_ASSERT_EQUAL(OUString("0.99pt dashed #ed1c24"), EPUBExportTest::parseCssStyle(aStyle)["border"]);
 }
 
 void EPUBExportTest::testTable()

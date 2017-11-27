@@ -25,12 +25,7 @@ namespace exp
 class XMLStylesContext : public XMLImportContext
 {
 public:
-    XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles,
-                     std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles,
-                     std::map<OUString, librevenge::RVNGPropertyList> &rCellStyles,
-                     std::map<OUString, librevenge::RVNGPropertyList> &rColumnStyles,
-                     std::map<OUString, librevenge::RVNGPropertyList> &rRowStyles,
-                     std::map<OUString, librevenge::RVNGPropertyList> &rTableStyles);
+    XMLStylesContext(XMLImport &rImport, bool bAutomatic);
 
     rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
@@ -40,6 +35,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentColumnStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTableStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentGraphicStyles();
 private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rParagraphStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rTextStyles;
@@ -47,6 +43,7 @@ private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rColumnStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rRowStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rTableStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> &m_rGraphicStyles;
 };
 
 } // namespace exp

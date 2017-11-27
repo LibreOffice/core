@@ -19,19 +19,15 @@ namespace writerperfect
 namespace exp
 {
 
-XMLStylesContext::XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles,
-                                   std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles,
-                                   std::map<OUString, librevenge::RVNGPropertyList> &rCellStyles,
-                                   std::map<OUString, librevenge::RVNGPropertyList> &rColumnStyles,
-                                   std::map<OUString, librevenge::RVNGPropertyList> &rRowStyles,
-                                   std::map<OUString, librevenge::RVNGPropertyList> &rTableStyles)
+XMLStylesContext::XMLStylesContext(XMLImport &rImport, bool bAutomatic)
     : XMLImportContext(rImport),
-      m_rParagraphStyles(rParagraphStyles),
-      m_rTextStyles(rTextStyles),
-      m_rCellStyles(rCellStyles),
-      m_rColumnStyles(rColumnStyles),
-      m_rRowStyles(rRowStyles),
-      m_rTableStyles(rTableStyles)
+      m_rParagraphStyles(bAutomatic ? mrImport.GetAutomaticParagraphStyles() : mrImport.GetParagraphStyles()),
+      m_rTextStyles(bAutomatic ? mrImport.GetAutomaticTextStyles() : mrImport.GetTextStyles()),
+      m_rCellStyles(bAutomatic ? mrImport.GetAutomaticCellStyles() : mrImport.GetCellStyles()),
+      m_rColumnStyles(bAutomatic ? mrImport.GetAutomaticColumnStyles() : mrImport.GetColumnStyles()),
+      m_rRowStyles(bAutomatic ? mrImport.GetAutomaticRowStyles() : mrImport.GetRowStyles()),
+      m_rTableStyles(bAutomatic ? mrImport.GetAutomaticTableStyles() : mrImport.GetTableStyles()),
+      m_rGraphicStyles(bAutomatic ? mrImport.GetAutomaticGraphicStyles() : mrImport.GetGraphicStyles())
 {
 }
 
@@ -70,6 +66,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentRo
 std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentTableStyles()
 {
     return m_rTableStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentGraphicStyles()
+{
+    return m_rGraphicStyles;
 }
 
 } // namespace exp

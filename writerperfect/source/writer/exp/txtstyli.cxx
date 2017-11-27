@@ -75,6 +75,34 @@ void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css
     }
 }
 
+/// Handler for <style:graphic-properties>.
+class XMLGraphicPropertiesContext : public XMLImportContext
+{
+public:
+    XMLGraphicPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    XMLStyleContext &mrStyle;
+};
+
+XMLGraphicPropertiesContext::XMLGraphicPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+    : XMLImportContext(rImport)
+    , mrStyle(rStyle)
+{
+}
+
+void XMLGraphicPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+        mrStyle.GetGraphicPropertyList().insert(sName.getStr(), sValue.getStr());
+    }
+}
+
 /// Handler for <style:table-properties>.
 class XMLTablePropertiesContext : public XMLImportContext
 {
@@ -211,6 +239,8 @@ rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(const OUStr
         return new XMLTableRowPropertiesContext(mrImport, *this);
     if (rName == "style:table-properties")
         return new XMLTablePropertiesContext(mrImport, *this);
+    if (rName == "style:graphic-properties")
+        return new XMLGraphicPropertiesContext(mrImport, *this);
     return nullptr;
 }
 
@@ -242,14 +272,16 @@ void XMLStyleContext::endElement(const OUString &/*rName*/)
         m_rStyles.GetCurrentTextStyles()[m_aName] = m_aTextPropertyList;
     if (m_aFamily == "paragraph")
         m_rStyles.GetCurrentParagraphStyles()[m_aName] = m_aParagraphPropertyList;
-    if (m_aFamily == "table-cell")
+    else if (m_aFamily == "table-cell")
         m_rStyles.GetCurrentCellStyles()[m_aName] = m_aCellPropertyList;
-    if (m_aFamily == "table-column")
+    else if (m_aFamily == "table-column")
         m_rStyles.GetCurrentColumnStyles()[m_aName] = m_aColumnPropertyList;
-    if (m_aFamily == "table-row")
+    else if (m_aFamily == "table-row")
         m_rStyles.GetCurrentRowStyles()[m_aName] = m_aRowPropertyList;
-    if (m_aFamily == "table")
+    else if (m_aFamily == "table")
         m_rStyles.GetCurrentTableStyles()[m_aName] = m_aTablePropertyList;
+    else if (m_aFamily == "graphic")
+        m_rStyles.GetCurrentGraphicStyles()[m_aName] = m_aGraphicPropertyList;
 }
 
 librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()
@@ -280,6 +312,11 @@ librevenge::RVNGPropertyList &XMLStyleContext::GetRowPropertyList()
 librevenge::RVNGPropertyList &XMLStyleContext::GetTablePropertyList()
 {
     return m_aTablePropertyList;
+}
+
+librevenge::RVNGPropertyList &XMLStyleContext::GetGraphicPropertyList()
+{
+    return m_aGraphicPropertyList;
 }
 
 } // namespace exp

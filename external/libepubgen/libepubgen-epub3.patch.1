@@ -3316,3 +3316,235 @@ index 24ae1a5..ab1f9e6 100644
 -- 
 2.13.6
 
+From 801367ee905aa70bb2ba2ad5b8257cd2a25bed9b Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 8 Nov 2017 10:50:11 +0100
+Subject: [PATCH] EPUBImageManager: add support for borders
+
+The properties are on the frame, but the inner binary object emits the
+"img" element that has the properties in XHTML. Solve this by
+maintaining a stack of currently opened frames, with their properties.
+---
+ src/lib/EPUBGenerator.cpp          |  1 +
+ src/lib/EPUBHTMLGenerator.cpp      | 26 ++++++++++++++++++++
+ src/lib/EPUBImageManager.cpp       | 50 ++++++++++++++++++++++++++++++++++++++
+ src/lib/EPUBImageManager.h         | 16 ++++++++++++
+ src/test/EPUBTextGeneratorTest.cpp | 26 ++++++++++++++++++++
+ 5 files changed, 119 insertions(+)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 75c3076..38c3188 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -230,6 +230,7 @@ void EPUBGenerator::writeStylesheet()
+   m_paragraphStyleManager.send(sink);
+   m_spanStyleManager.send(sink);
+   m_tableStyleManager.send(sink);
++  m_imageManager.send(sink);
+ 
+   sink.writeTo(*m_package, m_stylesheetPath.str().c_str());
+ }
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index e00bea8..4ffa55d 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -364,6 +364,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_ignore(false)
+     , m_hasText(false)
+     , m_frameAnchorTypes()
++    , m_framePropertiesStack()
+     , m_stylesMethod(stylesMethod)
+     , m_actualSink()
+     , m_sinkStack()
+@@ -454,6 +455,7 @@ struct EPUBHTMLGeneratorImpl
+   bool m_hasText;
+ 
+   std::stack<std::string> m_frameAnchorTypes;
++  std::stack<RVNGPropertyList> m_framePropertiesStack;
+ 
+   EPUBStylesMethod m_stylesMethod;
+ 
+@@ -929,20 +931,29 @@ void EPUBHTMLGenerator::openFrame(const RVNGPropertyList &propList)
+ {
+   librevenge::RVNGPropertyList::Iter i(propList);
+   std::string anchorType;
++  RVNGPropertyList frameProperties;
+   for (i.rewind(); i.next();)
+   {
+     if (std::string("text:anchor-type") == i.key())
+       anchorType = i()->getStr().cstr();
++
++    // Remember the property for binary object purposes.
++    frameProperties.insert(i.key(), i()->clone());
+   }
+ 
+   if (anchorType == "page")
+     // Other anchor types are already inside a paragraph.
+     m_impl->output().openElement("p", RVNGPropertyList());
+   m_impl->m_frameAnchorTypes.push(anchorType);
++
++  m_impl->m_framePropertiesStack.push(frameProperties);
+ }
+ 
+ void EPUBHTMLGenerator::closeFrame()
+ {
++  if (!m_impl->m_framePropertiesStack.empty())
++    m_impl->m_framePropertiesStack.pop();
++
+   if (m_impl->m_frameAnchorTypes.empty())
+     return;
+ 
+@@ -970,6 +981,21 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+                            propList["librevenge:mime-type"]->getStr());
+ 
+   RVNGPropertyList attrs;
++
++  if (!m_impl->m_framePropertiesStack.empty())
++  {
++    RVNGPropertyList &frameProperties = m_impl->m_framePropertiesStack.top();
++    switch (m_impl->m_stylesMethod)
++    {
++    case EPUB_STYLES_METHOD_CSS:
++      attrs.insert("class", m_impl->m_imageManager.getImageClass(frameProperties).c_str());
++      break;
++    case EPUB_STYLES_METHOD_INLINE:
++      attrs.insert("style", m_impl->m_imageManager.getImageStyle(frameProperties).c_str());
++      break;
++    }
++  }
++
+   attrs.insert("src", path.relativeTo(m_impl->m_path).str().c_str());
+   // FIXME: use alternative repr. if available
+   attrs.insert("alt", path.str().c_str());
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index 0179cad..2311e76 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -16,6 +16,7 @@
+ #include "EPUBBinarySink.h"
+ #include "EPUBImageManager.h"
+ #include "EPUBManifest.h"
++#include "EPUBCSSSink.h"
+ 
+ namespace libepubgen
+ {
+@@ -68,6 +69,7 @@ EPUBImageManager::EPUBImageManager(EPUBManifest &manifest)
+   : m_manifest(manifest)
+   , m_map()
+   , m_number()
++  , m_imageContentNameMap()
+ {
+ }
+ 
+@@ -105,6 +107,54 @@ void EPUBImageManager::writeTo(EPUBPackage &package)
+   }
+ }
+ 
++std::string EPUBImageManager::getImageClass(librevenge::RVNGPropertyList const &pList)
++{
++  EPUBCSSProperties content;
++  extractImageProperties(pList, content);
++  ContentNameMap_t::const_iterator it=m_imageContentNameMap.find(content);
++  if (it != m_imageContentNameMap.end())
++    return it->second;
++  std::stringstream s;
++  s << "image" << m_imageContentNameMap.size();
++  m_imageContentNameMap[content]=s.str();
++  return s.str();
++}
++
++std::string EPUBImageManager::getImageStyle(librevenge::RVNGPropertyList const &pList)
++{
++  EPUBCSSProperties content;
++  extractImageProperties(pList, content);
++
++  std::stringstream s;
++  for (const auto &property : content)
++    s << property.first << ": " << property.second << "; ";
++  return s.str();
++}
++
++void EPUBImageManager::extractImageProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const
++{
++  // Extract borders.
++  static char const *(type[]) = {"border", "border-left", "border-top", "border-right", "border-bottom" };
++  for (int i = 0; i < 5; i++)
++  {
++    std::string field("fo:");
++    field+=type[i];
++    if (!pList[field.c_str()])
++      continue;
++    cssProps[type[i]] =  pList[field.c_str()]->getStr().cstr();
++  }
++}
++
++void EPUBImageManager::send(EPUBCSSSink &out)
++{
++  for (auto it = m_imageContentNameMap.begin(); m_imageContentNameMap.end() != it; ++it)
++  {
++    librevenge::RVNGPropertyList props;
++    fillPropertyList(it->first, props);
++    out.insertRule(("." + it->second).c_str(), props);
++  }
++}
++
+ }
+ 
+ /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
+diff --git a/src/lib/EPUBImageManager.h b/src/lib/EPUBImageManager.h
+index 21a1b37..c9f4236 100644
+--- a/src/lib/EPUBImageManager.h
++++ b/src/lib/EPUBImageManager.h
+@@ -12,8 +12,10 @@
+ 
+ #include <unordered_map>
+ 
++#include <boost/functional/hash.hpp>
+ #include <librevenge/librevenge.h>
+ 
++#include "EPUBCSSProperties.h"
+ #include "EPUBCounter.h"
+ #include "EPUBPath.h"
+ 
+@@ -22,6 +24,7 @@ namespace libepubgen
+ 
+ class EPUBManifest;
+ class EPUBPackage;
++class EPUBCSSSink;
+ 
+ class EPUBImageManager
+ {
+@@ -40,6 +43,7 @@ class EPUBImageManager
+   };
+ 
+   typedef std::unordered_map<librevenge::RVNGBinaryData, EPUBPath, BinaryDataHash, BinaryDataEqual> MapType_t;
++  typedef std::unordered_map<EPUBCSSProperties, std::string, boost::hash<EPUBCSSProperties>> ContentNameMap_t;
+ 
+ public:
+   explicit EPUBImageManager(EPUBManifest &manifest);
+@@ -48,10 +52,22 @@ public:
+ 
+   void writeTo(EPUBPackage &package);
+ 
++  //! returns the class name corresponding to a propertylist
++  std::string getImageClass(librevenge::RVNGPropertyList const &pList);
++  //! returns the style string corresponding to a propertylist
++  std::string getImageStyle(librevenge::RVNGPropertyList const &pList);
++  //! send the data to the sink
++  void send(EPUBCSSSink &out);
++
+ private:
++  //! convert a property list into a CSS property map
++  void extractImageProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const;
++
+   EPUBManifest &m_manifest;
+   MapType_t m_map;
+   EPUBCounter m_number;
++  //! a map image content -> name
++  ContentNameMap_t m_imageContentNameMap;
+ };
+ 
+ }
+-- 
+2.13.6
+
