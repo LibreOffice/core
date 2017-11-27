@@ -22,7 +22,14 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/xmlsignature_gpgimpl.hxx>
 
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
+#endif
 #include <gpgme.h>
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic pop
+#endif
 #include <context.h>
 #include <key.h>
 #include <data.h>

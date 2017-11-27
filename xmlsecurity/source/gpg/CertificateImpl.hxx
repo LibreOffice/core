@@ -26,7 +26,14 @@
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
+#endif
 #include <key.h>
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 class CertificateImpl : public cppu::WeakImplHelper< css::security::XCertificate,
                                                      css::lang::XUnoTunnel >,
