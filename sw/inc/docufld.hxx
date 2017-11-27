@@ -149,7 +149,7 @@ class SW_DLLPUBLIC SwPageNumberField : public SwField
 
 public:
     SwPageNumberField(SwPageNumberFieldType*, sal_uInt16 nSub,
-                      sal_uInt32 nFormat = 0, short nOff = 0,
+                      sal_uInt32 nFormat, short nOff = 0,
                       sal_uInt16 const nPageNumber = 0,
                       sal_uInt16 const nMaxPage = 0);
 
@@ -262,7 +262,7 @@ class SW_DLLPUBLIC SwDocStatField : public SwField
 
 public:
     SwDocStatField( SwDocStatFieldType*,
-                    sal_uInt16 nSubType, sal_uInt32 nFormat = 0);
+                    sal_uInt16 nSubType, sal_uInt32 nFormat);
 
     void ChangeExpansion( const SwFrame* pFrame );
 
@@ -573,8 +573,7 @@ class SwRefPageSetField : public SwField
     bool    bOn;
 
 public:
-    SwRefPageSetField( SwRefPageSetFieldType*, short nOff,
-                        bool bOn = true );
+    SwRefPageSetField( SwRefPageSetFieldType*, short nOff, bool bOn );
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;

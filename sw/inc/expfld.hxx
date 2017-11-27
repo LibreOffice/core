@@ -96,7 +96,7 @@ class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 
 public:
     SwGetExpField( SwGetExpFieldType*, const OUString& rFormel,
-                   sal_uInt16 nSubType, sal_uLong nFormat = 0);
+                   sal_uInt16 nSubType, sal_uLong nFormat);
 
     virtual void                SetValue( const double& rVal ) override;
     virtual void                SetLanguage(LanguageType nLng) override;
@@ -394,7 +394,7 @@ class SwTableField : public SwValueField, public SwTableFormula
 
 public:
     SwTableField( SwTableFieldType*, const OUString& rFormel,
-                sal_uInt16 nSubType, sal_uLong nFormat = 0);
+                sal_uInt16 nSubType, sal_uLong nFormat);
 
     virtual void        SetValue( const double& rVal ) override;
     virtual sal_uInt16  GetSubType() const override;

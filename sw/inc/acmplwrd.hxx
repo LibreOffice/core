@@ -52,7 +52,7 @@ class SwAutoCompleteWord
 public:
     SwAutoCompleteWord(
         editeng::SortedAutoCompleteStrings::size_type nWords,
-        sal_uInt16 nMWrdLen = 10 );
+        sal_uInt16 nMWrdLen );
     ~SwAutoCompleteWord();
 
     bool InsertWord( const OUString& rWord, SwDoc& rDoc );
