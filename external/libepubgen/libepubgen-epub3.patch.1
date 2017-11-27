@@ -3877,3 +3877,149 @@ index 5f10902..156f042 100644
 -- 
 2.13.6
 
+From 3da66e7b1fbda75e43b3ab63502d66097f39ef7a Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 10 Nov 2017 16:36:11 +0100
+Subject: [PATCH] EPUBImageManager: handle text box wrap types
+
+By sharing the image and textbox wrap code.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 44 ++++++++++++++++----------------------
+ src/lib/EPUBImageManager.cpp       | 29 +++++++++++++++++++++++++
+ src/lib/EPUBImageManager.h         |  2 ++
+ src/test/EPUBTextGeneratorTest.cpp |  2 ++
+ 4 files changed, 51 insertions(+), 26 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 156f042..9d39333 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -859,6 +859,18 @@ void EPUBHTMLGenerator::closeTextBox()
+     return;
+ 
+   m_impl->output().closeElement("div");
++
++  if (!m_impl->m_framePropertiesStack.empty())
++  {
++    RVNGPropertyList &frameProperties = m_impl->m_framePropertiesStack.top();
++    RVNGString wrapStyle = m_impl->m_imageManager.getWrapStyle(frameProperties).c_str();
++    if (!wrapStyle.empty())
++    {
++      RVNGPropertyList attrs;
++      attrs.insert("style", wrapStyle);
++      m_impl->output().insertEmptyElement("br", attrs);
++    }
++  }
+ }
+ 
+ void EPUBHTMLGenerator::openTable(const RVNGPropertyList &propList)
+@@ -999,8 +1011,7 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+                            propList["librevenge:mime-type"]->getStr());
+ 
+   RVNGPropertyList attrs;
+-  RVNGString wrap;
+-  RVNGString anchorType;
++  RVNGString wrapStyle;
+ 
+   if (!m_impl->m_framePropertiesStack.empty())
+   {
+@@ -1015,10 +1026,7 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+       break;
+     }
+ 
+-    if (frameProperties["style:wrap"])
+-      wrap = frameProperties["style:wrap"]->getStr();
+-    if (frameProperties["text:anchor-type"])
+-      anchorType = frameProperties["text:anchor-type"]->getStr();
++    wrapStyle = m_impl->m_imageManager.getWrapStyle(frameProperties).c_str();
+   }
+ 
+   attrs.insert("src", path.relativeTo(m_impl->m_path).str().c_str());
+@@ -1026,27 +1034,11 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+   attrs.insert("alt", path.str().c_str());
+   m_impl->output().insertEmptyElement("img", attrs);
+ 
+-  if (anchorType != "as-char")
++  if (!wrapStyle.empty())
+   {
+-    // Emulate wrap type with a break after the image.
+-    RVNGString brStyle;
+-    if (wrap == "none")
+-      brStyle = "clear: both;";
+-    else if (wrap == "left")
+-      // We want content on the left side, space on the right side, so the next
+-      // element should clear on its left.
+-      brStyle = "clear: left;";
+-    else if (wrap == "right")
+-      // Same here.
+-      brStyle = "clear: right;";
+-    else if (wrap == "parallel")
+-      brStyle = "clear: none;";
+-    if (!brStyle.empty())
+-    {
+-      attrs.clear();
+-      attrs.insert("style", brStyle);
+-      m_impl->output().insertEmptyElement("br", attrs);
+-    }
++    attrs.clear();
++    attrs.insert("style", wrapStyle);
++    m_impl->output().insertEmptyElement("br", attrs);
+   }
+ }
+ 
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index dfa0cb7..c31fb82 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -162,6 +162,35 @@ void EPUBImageManager::extractImageProperties(librevenge::RVNGPropertyList const
+   }
+ }
+ 
++std::string EPUBImageManager::getWrapStyle(librevenge::RVNGPropertyList const &pList)
++{
++  librevenge::RVNGString wrap;
++  librevenge::RVNGString anchorType;
++  std::string ret;
++
++  if (pList["style:wrap"])
++    wrap = pList["style:wrap"]->getStr();
++  if (pList["text:anchor-type"])
++    anchorType = pList["text:anchor-type"]->getStr();
++
++  if (anchorType == "as-char")
++    return ret;
++
++  // Emulate wrap type with a break after the image.
++  if (wrap == "none")
++    ret = "clear: both;";
++  else if (wrap == "left")
++    // We want content on the left side, space on the right side, so the next
++    // element should clear on its left.
++    ret = "clear: left;";
++  else if (wrap == "right")
++    ret = "clear: right;";
++  else if (wrap == "parallel")
++    ret = "clear: none;";
++
++  return ret;
++}
++
+ void EPUBImageManager::send(EPUBCSSSink &out)
+ {
+   for (auto it = m_imageContentNameMap.begin(); m_imageContentNameMap.end() != it; ++it)
+diff --git a/src/lib/EPUBImageManager.h b/src/lib/EPUBImageManager.h
+index 939d350..9d1da4e 100644
+--- a/src/lib/EPUBImageManager.h
++++ b/src/lib/EPUBImageManager.h
+@@ -56,6 +56,8 @@ public:
+   std::string getFrameClass(librevenge::RVNGPropertyList const &pList);
+   //! returns the style string corresponding to a propertylist
+   std::string getFrameStyle(librevenge::RVNGPropertyList const &pList);
++  //! returns the style for a follow-up <br> element, based on wrapping properties.
++  static std::string getWrapStyle(librevenge::RVNGPropertyList const &pList);
+   //! send the data to the sink
+   void send(EPUBCSSSink &out);
+ 
+-- 
+2.13.6
+
