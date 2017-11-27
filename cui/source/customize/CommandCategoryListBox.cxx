@@ -20,9 +20,15 @@
 #include <CommandCategoryListBox.hxx>
 #include <svtools/treelistentry.hxx>
 
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
+#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <vcl/builderfactory.hxx>
 
 // include search util
@@ -65,14 +71,26 @@ void CommandCategoryListBox::dispose()
 
 void CommandCategoryListBox::ClearAll()
 {
-    //TODO: Handle SfxCfgKind::GROUP_SCRIPTCONTAINER when it gets added to Init
-    // Clear style info objects from m_aGroupInfo vector to avoid memory leak
+    // Clear objects from m_aGroupInfo vector to avoid memory leak
     for (const auto & It : m_aGroupInfo)
     {
         if ( It->nKind == SfxCfgKind::GROUP_STYLES && It->pObject )
         {
             SfxStyleInfo_Impl* pStyle = static_cast<SfxStyleInfo_Impl*>(It->pObject);
             delete pStyle;
+        }
+        else if ( It->nKind == SfxCfgKind::FUNCTION_SCRIPT && It->pObject )
+        {
+            OUString* pScriptURI = static_cast<OUString*>(It->pObject);
+            delete pScriptURI;
+        }
+        else if ( It->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER && It->pObject)
+        {
+            css::uno::XInterface* xi = static_cast<css::uno::XInterface *>(It->pObject);
+            if (xi != nullptr)
+            {
+                xi->release();
+            }
         }
     }
 
@@ -85,6 +103,7 @@ void CommandCategoryListBox::Init(
         const css::uno::Reference< css::frame::XFrame >& xFrame,
         const OUString& sModuleLongName)
 {
+    // User will not see incomplete UI
     SetUpdateMode(false);
     ClearAll();
 
@@ -107,7 +126,6 @@ void CommandCategoryListBox::Init(
     m_aStylesInfo.init(sModuleLongName, xModel);
     SetStylesInfo(&m_aStylesInfo);
 
-/**** InitModule Start ****/
     try
     {
         css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider(m_xFrame, css::uno::UNO_QUERY_THROW);
@@ -143,23 +161,32 @@ void CommandCategoryListBox::Init(
             }
 
             nEntryPos = InsertEntry( sGroupName );
-            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
+            m_aGroupInfo.push_back(
+              o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
-        // Add styles
+        // Add macros category
+        OUString sMacros( CuiResId(RID_SVXSTR_MACROS) );
+        nEntryPos = InsertEntry( sMacros );
+        m_aGroupInfo.push_back(
+            o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr) );
+        SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
+
+        // Add styles category
         OUString sStyle( CuiResId(RID_SVXSTR_GROUP_STYLES) );
         nEntryPos = InsertEntry( sStyle );
         //TODO: last param should contain user data?
-        m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) );
+        m_aGroupInfo.push_back(
+            o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) );
         SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
     {}
-/**** InitModule End ****/
 
+    // Reveal the updated UI to user
     SetUpdateMode(true);
     SelectEntryPos(0);
 }
@@ -258,7 +285,6 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                 }
             }
 
-
             break;
         }
         case SfxCfgKind::GROUP_FUNCTION:
@@ -271,9 +297,85 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
             FillFunctionsList( lCommands, pFunctionListBox, filterTerm );
             break;
         }
-        case SfxCfgKind::GROUP_SCRIPTCONTAINER:
+        case SfxCfgKind::GROUP_SCRIPTCONTAINER: //Macros
         {
-            //TODO:Implement
+            SAL_INFO("cui.customize", "** ** About to initialise SF Scripts");
+            // Add Scripting Framework entries
+            css::uno::Reference< css::script::browse::XBrowseNode > rootNode;
+            try
+            {
+                css::uno::Reference< css::script::browse::XBrowseNodeFactory > xFac
+                    = css::script::browse::theBrowseNodeFactory::get( m_xContext );
+                rootNode.set( xFac->createView( css::script::browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+            }
+            catch( css::uno::Exception& e )
+            {
+                SAL_WARN("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e);
+                // TODO exception handling
+            }
+
+            if ( rootNode.is() && rootNode.get()->hasChildNodes() )
+            {
+                //We call acquire on the XBrowseNode so that it does not
+                //get autodestructed and become invalid when accessed later.
+                rootNode->acquire();
+
+                m_aGroupInfo.push_back(
+                    o3tl::make_unique<SfxGroupInfo_Impl>(
+                        SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void *>(rootNode.get()) ) );
+
+                // Add main macro groups
+                for ( auto const & childGroup : rootNode.get()->getChildNodes() )
+                {
+                    OUString sUIName;
+                    childGroup.get()->acquire();
+
+                    if ( childGroup.get()->hasChildNodes() )
+                    {
+                        if ( childGroup.get()->getName() == "user" )
+                        {
+                            sUIName = CuiResId( RID_SVXSTR_MYMACROS );
+                        }
+                        else if ( childGroup.get()->getName() == "share" )
+                        {
+                            sUIName = CuiResId( RID_SVXSTR_PRODMACROS );
+                        }
+                        else
+                        {
+                            sUIName = childGroup.get()->getName();
+                        }
+
+                        if (sUIName.isEmpty())
+                        {
+                            continue;
+                        }
+
+                        SvTreeListEntry* pMacroGroup = pFunctionListBox->InsertEntry(
+                                          sUIName,
+                                            Image( BitmapEx(RID_CUIBMP_EXPANDED) ), Image( BitmapEx(RID_CUIBMP_COLLAPSED) ) );
+                        m_aGroupInfo.push_back(
+                            o3tl::make_unique<SfxGroupInfo_Impl>(
+                                SfxCfgKind::GROUP_SCRIPTCONTAINER, 0 ) );
+                        SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
+                        pMacroGroup->SetUserData(pGrpInfo);
+                        pMacroGroup->EnableChildrenOnDemand();
+
+                        //Add the children and the grand children
+                        addChildren( pMacroGroup, childGroup, pFunctionListBox, filterTerm );
+
+                        // Remove the main group if empty
+                        if (!pMacroGroup->HasChildren())
+                        {
+                            pFunctionListBox->RemoveEntry( pMacroGroup );
+                        }
+                        else if (!filterTerm.isEmpty())
+                        {
+                            pFunctionListBox->Expand( pMacroGroup );
+                        }
+                    }
+                }
+            }
+
             break;
         }
         case SfxCfgKind::GROUP_STYLES:
@@ -335,7 +437,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                 {
                     pFunctionListBox->RemoveEntry(pFuncEntry);
                 }
-                else
+                else if (!filterTerm.isEmpty())
                 {
                     pFunctionListBox->Expand(pFuncEntry);
                 }
@@ -358,6 +460,97 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
 void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 {
     pStylesInfo = pStyles;
+}
+
+void CommandCategoryListBox::addChildren(
+    SvTreeListEntry* parentEntry, const css::uno::Reference< css::script::browse::XBrowseNode > &parentNode,
+    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox, const OUString& filterTerm )
+{
+    // Setup search filter parameters
+    m_searchOptions.searchString = filterTerm;
+    utl::TextSearch textSearch( m_searchOptions );
+
+    for (auto const & child : parentNode.get()->getChildNodes())
+    {
+        // Acquire to prevent auto-destruction
+        child.get()->acquire();
+
+        if (child.get()->hasChildNodes())
+        {
+            OUString sUIName = child.get()->getName();
+
+            SvTreeListEntry* pNewEntry = pFunctionListBox->InsertEntry( sUIName, parentEntry );
+
+            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
+                                                                         0, static_cast<void *>( child.get())));
+            pNewEntry->SetUserData( m_aGroupInfo.back().get() );
+
+
+
+            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, Image( BitmapEx(RID_CUIBMP_EXPANDED) ) );
+            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, Image( BitmapEx(RID_CUIBMP_COLLAPSED) ) );
+            pNewEntry->EnableChildrenOnDemand();
+
+            addChildren(pNewEntry, child, pFunctionListBox, filterTerm);
+
+            // Remove the group if empty
+            if (!pNewEntry->HasChildren())
+                pFunctionListBox->RemoveEntry( pNewEntry );
+            else
+                pFunctionListBox->Expand( pNewEntry );
+
+        }
+        else if ( child.get()->getType() == css::script::browse::BrowseNodeTypes::SCRIPT )
+        {
+            // Prepare for filtering
+            OUString sUIName = child.get()->getName();
+            sal_Int32 aStartPos = 0;
+            sal_Int32 aEndPos = sUIName.getLength();
+
+            // Apply the search filter
+            if (!filterTerm.isEmpty()
+                    && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+            {
+                continue;
+            }
+
+            OUString uri, description;
+
+            css::uno::Reference < css::beans::XPropertySet >xPropSet( child.get(), css::uno::UNO_QUERY );
+
+            if (!xPropSet.is())
+            {
+                continue;
+            }
+
+            css::uno::Any value = xPropSet->getPropertyValue("URI");
+            value >>= uri;
+
+            try
+            {
+                value = xPropSet->getPropertyValue("Description");
+                value >>= description;
+            }
+            catch (css::uno::Exception &) {
+                // do nothing, the description will be empty
+            }
+
+            if (description.isEmpty())
+            {
+                description = CuiResId( RID_SVXSTR_NOMACRODESC );
+            }
+
+            OUString* pScriptURI = new OUString( uri );
+
+            SvTreeListEntry* pNewEntry = pFunctionListBox->InsertEntry( sUIName, parentEntry );
+
+            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+            m_aGroupInfo.back()->sCommand = uri;
+            m_aGroupInfo.back()->sLabel = sUIName;
+            m_aGroupInfo.back()->sHelpText = description;
+            pNewEntry->SetUserData( m_aGroupInfo.back().get() );
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
