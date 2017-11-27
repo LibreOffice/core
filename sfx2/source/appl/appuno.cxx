@@ -208,8 +208,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         sal_uInt16 nSubCount = pType->nAttribs;
 
         const beans::PropertyValue& rProp = pPropsVal[0];
-        OUString aName = rProp.Name;
-        if ( nCount == 1 && aName == OUString( pSlot->pUnoName, strlen( pSlot->pUnoName ), RTL_TEXTENCODING_UTF8 ) )
+        const OUString& rName = rProp.Name;
+        if ( nCount == 1 && rName == OUString( pSlot->pUnoName, strlen( pSlot->pUnoName ), RTL_TEXTENCODING_UTF8 ) )
         {
             // there is only one parameter and its name matches the name of the property,
             // so it's either a simple property or a complex property in one single UNO struct
@@ -225,7 +225,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         else if ( nSubCount == 0 )
         {
             // for a simple property there can be only one parameter and its name *must* match
-            SAL_WARN("sfx.appl", "Property name does not match: " << aName);
+            SAL_WARN("sfx.appl", "Property name does not match: " << rName);
         }
 #endif
         else
@@ -309,8 +309,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             for ( sal_Int32 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rProp = pPropsVal[n];
-                OUString aName = rProp.Name;
-                if ( aName == OUString( rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8 )  )
+                const OUString& rName = rProp.Name;
+                if ( rName == OUString( rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8 )  )
                 {
 #ifdef DBG_UTIL
                     ++nFoundArgs;
@@ -333,8 +333,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             for ( sal_Int32 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rProp = pPropsVal[n];
-                OUString aName = rProp.Name;
-                if ( aName == OUString(rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8) )
+                const OUString& rName = rProp.Name;
+                if ( rName == OUString(rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8) )
                 {
                     bAsWholeItem = true;
 #ifdef DBG_UTIL
@@ -404,15 +404,15 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         for ( sal_Int32 n=0; n<nCount; n++ )
         {
             const beans::PropertyValue& rProp = pPropsVal[n];
-            OUString aName = rProp.Name;
-            if ( aName == sFrame )
+            const OUString& rName = rProp.Name;
+            if ( rName == sFrame )
             {
                 Reference< XFrame > xFrame;
                 OSL_VERIFY( rProp.Value >>= xFrame );
                 rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
             }
             else
-            if ( aName == sHidden )
+            if ( rName == sHidden )
             {
                 bool bVal = false;
                 if (rProp.Value >>= bVal)
