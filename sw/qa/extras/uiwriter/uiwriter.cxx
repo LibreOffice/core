@@ -294,6 +294,7 @@ public:
     void testTdf114536();
     void testTdf115065();
     void testTdf115013();
+    void testTdf108048();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -468,6 +469,7 @@ public:
     CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST(testTdf115065);
     CPPUNIT_TEST(testTdf115013);
+    CPPUNIT_TEST(testTdf108048);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5733,6 +5735,26 @@ void SwUiWriterTest::testTdf115013()
     CPPUNIT_ASSERT_EQUAL(sColumnName, sColumn);
 
     utl::removeTree(aWorkDir);
+}
+
+void SwUiWriterTest::testTdf108048()
+{
+    createDoc();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Kind", uno::makeAny(sal_Int16(3)) },
+        { "TemplateName", uno::makeAny(OUString("Default Style")) },
+        { "PageNumber", uno::makeAny(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
+        { "PageNumberFilled", uno::makeAny(true) },
+    });
+    lcl_dispatchCommand(mxComponent, ".uno:InsertBreak", aPropertyValues);
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // The inserted page must have page number set to 6
+    uno::Reference<text::XTextRange> xPara = getParagraph(2);
+    sal_uInt16 nPageNumber = getProperty< sal_uInt16 >(xPara, "PageNumberOffset");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), nPageNumber);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

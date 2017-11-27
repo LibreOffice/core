@@ -2538,7 +2538,7 @@ SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
 ]
 
 SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
-(SfxInt16Item Kind FN_INSERT_BREAK_DLG,SfxStringItem TemplateName FN_PARAM_1,SfxUInt16Item PageNumber FN_PARAM_2)
+(SfxInt16Item Kind FN_INSERT_BREAK_DLG,SfxStringItem TemplateName FN_PARAM_1,SfxUInt16Item PageNumber FN_PARAM_2,SfxBoolItem PageNumberFilled FN_PARAM_3)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
