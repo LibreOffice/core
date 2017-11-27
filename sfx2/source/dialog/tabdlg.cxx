@@ -409,7 +409,7 @@ void SfxTabDialog::dispose()
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
         pViewShell->notifyWindow(GetLOKWindowId(), "close");
-        pViewShell->UnregisterDlg(GetLOKWindowId());
+        ReleaseLOKNotifier();
     }
 
     TabDialog::dispose();
@@ -524,7 +524,6 @@ short SfxTabDialog::Execute()
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
         SetLOKNotifier(pViewShell);
-        pViewShell->RegisterDlg(GetLOKWindowId(), this);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back(std::make_pair("size", aSize.toString()));

@@ -1130,12 +1130,6 @@ OUString ScModelObj::getPostItsPos()
     return OUString::fromUtf8(aStream.str().c_str());
 }
 
-VclPtr<vcl::Window> ScModelObj::findWindow(vcl::LOKWindowId nLOKWindowId) const
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    return pViewShell->GetOpenedDlg(nLOKWindowId);
-}
-
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
