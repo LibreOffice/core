@@ -7,5 +7,5 @@
 -libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined
 +libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined -release lo
  libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_SOURCES = \
- 	libwps_internal.cpp	\
- 	libwps_tools_win.h	\
+ 	libwps_internal.cpp		\
+ 	libwps_tools_win.h		\

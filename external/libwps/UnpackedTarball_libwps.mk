@@ -35,8 +35,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
 endif
 endif
 
-$(eval $(call gb_UnpackedTarball_add_patches,libwps, \
-    external/libwps/0001-try-to-fix-build-with-older-clang.patch.1 \
+$(eval $(call gb_UnpackedTarball_add_patches,libwps,\
+	external/libwps/0001-drop-unneeded-include.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

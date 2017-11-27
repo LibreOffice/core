@@ -34,15 +34,22 @@ $(eval $(call gb_Library_set_generated_cxx_suffix,wps,cpp))
 $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/DosWord \
 	UnpackedTarball/libwps/src/lib/Lotus \
+	UnpackedTarball/libwps/src/lib/LotusChart \
 	UnpackedTarball/libwps/src/lib/LotusGraph \
 	UnpackedTarball/libwps/src/lib/LotusSpreadsheet \
 	UnpackedTarball/libwps/src/lib/LotusStyleManager \
 	UnpackedTarball/libwps/src/lib/MSWrite \
 	UnpackedTarball/libwps/src/lib/Quattro \
+	UnpackedTarball/libwps/src/lib/QuattroDos \
+	UnpackedTarball/libwps/src/lib/QuattroDosChart \
+	UnpackedTarball/libwps/src/lib/QuattroDosSpreadsheet \
+	UnpackedTarball/libwps/src/lib/QuattroGraph \
 	UnpackedTarball/libwps/src/lib/QuattroSpreadsheet \
 	UnpackedTarball/libwps/src/lib/WKS4 \
+	UnpackedTarball/libwps/src/lib/WKS4Chart \
 	UnpackedTarball/libwps/src/lib/WKS4Format \
 	UnpackedTarball/libwps/src/lib/WKS4Spreadsheet \
+	UnpackedTarball/libwps/src/lib/WKSChart \
 	UnpackedTarball/libwps/src/lib/WKSContentListener \
 	UnpackedTarball/libwps/src/lib/WKSParser \
 	UnpackedTarball/libwps/src/lib/WKSSubDocument \
@@ -65,7 +72,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/WPSHeader \
 	UnpackedTarball/libwps/src/lib/WPSList \
 	UnpackedTarball/libwps/src/lib/WPSOLE1Parser \
+	UnpackedTarball/libwps/src/lib/WPSOLEObject \
 	UnpackedTarball/libwps/src/lib/WPSOLEParser \
+	UnpackedTarball/libwps/src/lib/WPSOLEStream \
 	UnpackedTarball/libwps/src/lib/WPSPageSpan \
 	UnpackedTarball/libwps/src/lib/WPSParagraph \
 	UnpackedTarball/libwps/src/lib/WPSParser \
