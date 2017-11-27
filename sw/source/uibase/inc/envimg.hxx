@@ -39,19 +39,19 @@ class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
 
-    OUString   aAddrText;       // text for receiver
-    bool        bSend;           // sender?
-    OUString   aSendText;       // text for sender
-    sal_Int32       lAddrFromLeft;   // left gap for receiver (twips)
-    sal_Int32       lAddrFromTop;    // upper gap for receiver (twips)
-    sal_Int32       lSendFromLeft;   // left gap for sender (twips)
-    sal_Int32       lSendFromTop;    // upper gap for sender (twips)
-    sal_Int32       lWidth;          // envelope's width (twips)
-    sal_Int32       lHeight;         // envelope's height (twips)
-    SwEnvAlign      eAlign;          // alignment at indent
-    bool        bPrintFromAbove; // print from above?
-    sal_Int32       lShiftRight;     // shift to right (twips)
-    sal_Int32       lShiftDown;      // shift down (twips)
+    OUString   m_aAddrText;       // text for receiver
+    bool        m_bSend;           // sender?
+    OUString   m_aSendText;       // text for sender
+    sal_Int32       m_nAddrFromLeft;   // left gap for receiver (twips)
+    sal_Int32       m_nAddrFromTop;    // upper gap for receiver (twips)
+    sal_Int32       m_nSendFromLeft;   // left gap for sender (twips)
+    sal_Int32       m_nSendFromTop;    // upper gap for sender (twips)
+    sal_Int32       m_nWidth;          // envelope's width (twips)
+    sal_Int32       m_nHeight;         // envelope's height (twips)
+    SwEnvAlign      m_eAlign;          // alignment at indent
+    bool        m_bPrintFromAbove; // print from above?
+    sal_Int32       m_nShiftRight;     // shift to right (twips)
+    sal_Int32       m_nShiftDown;      // shift down (twips)
 
     SwEnvItem();
 

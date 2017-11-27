@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl, ToolBox *, void)
     {
         // GetCurItemId() == 0 is possible!
         const SwEnvItem& rItem = static_cast<const SwEnvItem&>( GetItemSet().Get(FN_ENVELOP) );
-        m_pAlignBox->CheckItem(m_aIds[rItem.eAlign]);
+        m_pAlignBox->CheckItem(m_aIds[rItem.m_eAlign]);
     }
 }
 
@@ -171,10 +171,10 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
         }
     }
 
-    rItem.eAlign          = (SwEnvAlign)nOrient;
-    rItem.bPrintFromAbove = m_pTopButton->IsChecked();
-    rItem.lShiftRight     = static_cast< sal_Int32 >(GetFieldVal(*m_pRightField));
-    rItem.lShiftDown      = static_cast< sal_Int32 >(GetFieldVal(*m_pDownField ));
+    rItem.m_eAlign          = (SwEnvAlign)nOrient;
+    rItem.m_bPrintFromAbove = m_pTopButton->IsChecked();
+    rItem.m_nShiftRight     = static_cast< sal_Int32 >(GetFieldVal(*m_pRightField));
+    rItem.m_nShiftDown      = static_cast< sal_Int32 >(GetFieldVal(*m_pDownField ));
 }
 
 bool SwEnvPrtPage::FillItemSet(SfxItemSet* rSet)
@@ -188,15 +188,15 @@ void SwEnvPrtPage::Reset(const SfxItemSet* rSet)
 {
     // Read item
     const SwEnvItem& rItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP) );
-    m_pAlignBox->CheckItem(m_aIds[rItem.eAlign]);
+    m_pAlignBox->CheckItem(m_aIds[rItem.m_eAlign]);
 
-    if (rItem.bPrintFromAbove)
+    if (rItem.m_bPrintFromAbove)
         m_pTopButton->Check();
     else
         m_pBottomButton->Check();
 
-    SetFieldVal(*m_pRightField, rItem.lShiftRight);
-    SetFieldVal(*m_pDownField , rItem.lShiftDown );
+    SetFieldVal(*m_pRightField, rItem.m_nShiftRight);
+    SetFieldVal(*m_pDownField , rItem.m_nShiftDown );
 
     ActivatePage(*rSet);
     ClickHdl(m_pTopButton);

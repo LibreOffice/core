@@ -350,13 +350,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         if ( aPaperSize.Width() > aPaperSize.Height() )
             Swap( aPaperSize );
 
-        long lLeft  = rItem.lShiftRight,
-             lUpper = rItem.lShiftDown;
+        long lLeft  = rItem.m_nShiftRight,
+             lUpper = rItem.m_nShiftDown;
 
-        sal_uInt16 nPageW = (sal_uInt16) std::max(rItem.lWidth, rItem.lHeight),
-               nPageH = (sal_uInt16) std::min(rItem.lWidth, rItem.lHeight);
+        sal_uInt16 nPageW = (sal_uInt16) std::max(rItem.m_nWidth, rItem.m_nHeight),
+               nPageH = (sal_uInt16) std::min(rItem.m_nWidth, rItem.m_nHeight);
 
-        switch (rItem.eAlign)
+        switch (rItem.m_eAlign)
         {
             case ENV_HOR_LEFT: break;
             case ENV_HOR_CNTR: lLeft  += std::max(0L, long(aPaperSize.Width() - nPageW)) / 2;
@@ -401,8 +401,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             pDesc->SetFollow(pFollow);
 
         // Landscape
-        pDesc->SetLandscape( rItem.eAlign >= ENV_VER_LEFT &&
-                             rItem.eAlign <= ENV_VER_RGHT);
+        pDesc->SetLandscape( rItem.m_eAlign >= ENV_VER_LEFT &&
+                             rItem.m_eAlign <= ENV_VER_RGHT);
 
         // Apply page description
 
@@ -425,19 +425,19 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         aMgr.SetLRSpace( 0L, 0L );
 
         // Sender
-        if (rItem.bSend)
+        if (rItem.m_bSend)
         {
             pSh->SttEndDoc(true);
             aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PAGE,
-                Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
-                Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
+                Point(rItem.m_nSendFromLeft + lLeft, rItem.m_nSendFromTop  + lUpper),
+                Size (rItem.m_nAddrFromLeft - rItem.m_nSendFromLeft, 0));
 
             pSh->EnterSelFrameMode();
             pSh->SetFlyName(sSendMark);
             pSh->UnSelectFrame();
             pSh->LeaveSelFrameMode();
             pSh->SetTextFormatColl( pSend );
-            InsertLabEnvText( *pSh, aFieldMgr, rItem.aSendText );
+            InsertLabEnvText( *pSh, aFieldMgr, rItem.m_aSendText );
             aMgr.UpdateAttrMgr();
         }
 
@@ -445,14 +445,14 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->SttEndDoc(true);
 
         aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PAGE,
-            Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
-            Size (nPageW - rItem.lAddrFromLeft - 566, 0));
+            Point(rItem.m_nAddrFromLeft + lLeft, rItem.m_nAddrFromTop  + lUpper),
+            Size (nPageW - rItem.m_nAddrFromLeft - 566, 0));
         pSh->EnterSelFrameMode();
         pSh->SetFlyName(sAddrMark);
         pSh->UnSelectFrame();
         pSh->LeaveSelFrameMode();
         pSh->SetTextFormatColl( pAddr );
-        InsertLabEnvText(*pSh, aFieldMgr, rItem.aAddrText);
+        InsertLabEnvText(*pSh, aFieldMgr, rItem.m_aAddrText);
 
         // Move Flys to the "old" pages
         if (!aFlyArr.empty())
@@ -472,7 +472,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         {
             pFrame->GetFrame().Appear();
 
-            if ( rItem.aAddrText.indexOf('<') >= 0 )
+            if ( rItem.m_aAddrText.indexOf('<') >= 0 )
             {
                 static sal_uInt16 const aInva[] =
                                     {
