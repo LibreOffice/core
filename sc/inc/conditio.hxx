@@ -302,8 +302,8 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     OUString              aStrVal2;
     OUString              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
     OUString              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
-    formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
-    formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
+    const formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
+    const formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
     bool                bIsStr1;        // for recognition of empty strings
     bool                bIsStr2;
     ScTokenArray*       pFormula1;      // entered formula
