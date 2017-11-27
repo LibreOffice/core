@@ -47,6 +47,8 @@ class XMLImport : public cppu::WeakImplHelper
     std::map<OUString, librevenge::RVNGPropertyList> maRowStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maTableStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> maAutomaticGraphicStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> maGraphicStyles;
 
 public:
     XMLImport(librevenge::RVNGTextInterface &rGenerator);
@@ -60,12 +62,14 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticColumnStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticTableStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticGraphicStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetTextStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetParagraphStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCellStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetColumnStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetTableStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetGraphicStyles();
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

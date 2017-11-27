@@ -10,6 +10,7 @@
 #include "XMLTextFrameContext.hxx"
 
 #include "XMLBase64ImportContext.hxx"
+#include "txtparai.hxx"
 #include "xmlimp.hxx"
 
 using namespace com::sun::star;
@@ -83,9 +84,24 @@ rtl::Reference<XMLImportContext> XMLTextFrameContext::CreateChildContext(const O
     return nullptr;
 }
 
-void XMLTextFrameContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLTextFrameContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
 {
-    mrImport.GetGenerator().openFrame(librevenge::RVNGPropertyList());
+    librevenge::RVNGPropertyList aPropertyList;
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+
+        if (rAttributeName == "draw:style-name")
+            FillStyles(rAttributeValue, mrImport.GetAutomaticGraphicStyles(), mrImport.GetGraphicStyles(), aPropertyList);
+        else
+        {
+            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            aPropertyList.insert(sName.getStr(), sValue.getStr());
+        }
+    }
+    mrImport.GetGenerator().openFrame(aPropertyList);
 }
 
 void XMLTextFrameContext::endElement(const OUString &/*rName*/)
