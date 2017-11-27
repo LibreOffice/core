@@ -331,14 +331,35 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
 
     GList* pChildWins = gtv_application_window_get_all_child_windows(window);
     GList* pIt = nullptr;
-    for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
+    bool found = false;
+    for (pIt = pChildWins; !found && pIt != nullptr; pIt = pIt->next)
     {
         guint nChildDialogId = 0;
         g_object_get(pIt->data, "dialogid", &nChildDialogId, nullptr);
         if (nDialogId == nChildDialogId)
         {
+            found = true;
+
             if (aAction == "close")
                 gtk_widget_destroy(GTK_WIDGET(pIt->data));
+            else if (aAction == "size_changed")
+            {
+                const std::string aSize = aRoot.get<std::string>("size");
+                std::vector<int> aSizePoints = GtvHelpers::splitIntoIntegers(aSize, ", ", 2);
+                if (aSizePoints.size() != 2)
+                {
+                    g_error("Malformed size_changed callback");
+                    break;
+                }
+
+                g_object_set(G_OBJECT(pIt->data),
+                             "width", aSizePoints[0],
+                             "height", aSizePoints[1],
+                             nullptr);
+
+                GdkRectangle aGdkRectangle = {0, 0, 0, 0};
+                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data), aGdkRectangle);
+            }
             else if (aAction == "invalidate")
             {
                 GdkRectangle aGdkRectangle = {0, 0, 0, 0};

@@ -94,9 +94,9 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     GdkRectangle aRect;
     gdk_cairo_get_clip_rectangle(pCairo, &aRect);
     g_info("Painting dialog region: %d, %d, %d, %d", aRect.x, aRect.y, aRect.width, aRect.height);
+
     int nWidth = priv->m_nWidth;
     int nHeight = priv->m_nHeight;
-    g_info("canvas width: %d and height %d", nWidth, nHeight);
     if (aRect.width != 0 && aRect.height != 0)
     {
         nWidth = aRect.width;
@@ -106,18 +106,9 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
-    char* pDialogTitle = nullptr;
     pDocument->pClass->paintDialog(pDocument, priv->dialogid, pBuffer, aRect.x, aRect.y, nWidth, nHeight);
-    int outWidth = 0, outHeight = 0;
-    pDocument->pClass->getDialogInfo(pDocument, priv->dialogid, &pDialogTitle, &outWidth, &outHeight);
-    g_debug("getDialogInfo: width: %d, height: %d", outWidth, outHeight);
-    if (pDialogTitle)
-    {
-        gtk_window_set_title(GTK_WINDOW(pDialog), pDialogTitle);
-        free(pDialogTitle);
-    }
 
-    gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), outWidth, outHeight);
+    gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), priv->m_nWidth, priv->m_nHeight);
 
     cairo_surface_flush(pSurface);
     cairo_surface_mark_dirty(pSurface);
@@ -411,6 +402,9 @@ gtv_lok_dialog_set_property(GObject* object, guint propId, const GValue* value, 
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
     }
+
+    //if (propId == PROP_DIALOG_WIDTH || propId == PROP_DIALOG_HEIGHT)
+    //  gtk_widget_set_size_request(GTK_WIDGET(priv->pDialogDrawingArea), priv->m_nWidth, priv->m_nHeight);
 }
 
 static void
@@ -692,6 +686,7 @@ void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
 GtkWidget*
 gtv_lok_dialog_new(LOKDocView* pDocView, guint dialogId, guint width, guint height)
 {
+    g_debug("Dialog [ %d ] of size: %d x %d created", dialogId, width, height);
     GtkWindow* pWindow = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     return GTK_WIDGET(g_object_new(GTV_TYPE_LOK_DIALOG,
                                    "lokdocview", pDocView,
