@@ -57,6 +57,7 @@
 #include <salframe.hxx>
 
 #include <iostream>
+#include <utility>
 
 static OString ImplGetDialogText( Dialog* pDialog )
 {
@@ -690,6 +691,15 @@ void Dialog::StateChanged( StateChangedType nType )
         }
 
         ImplMouseAutoPos( this );
+    }
+    else if (nType == StateChangedType::Text)
+    {
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            std::vector<vcl::LOKPayloadItem> aPayload;
+            aPayload.push_back(std::make_pair(OString("title"), GetText().toUtf8()));
+            pNotifier->notifyWindow(GetLOKWindowId(), "title_changed", aPayload);
+        }
     }
 
     SystemWindow::StateChanged( nType );
