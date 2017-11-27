@@ -115,12 +115,17 @@ public:
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructExpr( const CXXConstructExpr* );
     bool TraverseCXXRecordDecl( CXXRecordDecl* );
+    bool TraverseFunctionDecl( FunctionDecl* );
+    bool TraverseCXXMethodDecl( CXXMethodDecl* );
+    bool TraverseCXXConversionDecl( CXXConversionDecl* );
+    bool TraverseCXXDeductionGuideDecl( CXXDeductionGuideDecl* );
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
     std::string toString(SourceLocation loc);
     void functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr );
     CXXRecordDecl const * currentCxxRecordDecl = nullptr;
+    FunctionDecl const * currentFunctionDecl = nullptr;
 };
 
 MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
@@ -227,7 +232,10 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
     }
 
 gotfunc:
-    logCallToRootMethods(calleeFunctionDecl, callSet);
+
+    // for "unused method" analysis, ignore recursive calls
+    if (currentFunctionDecl != calleeFunctionDecl)
+        logCallToRootMethods(calleeFunctionDecl, callSet);
 
     const Stmt* parent = getParentStmt(expr);
 
@@ -353,6 +361,39 @@ bool UnusedMethods::TraverseCXXRecordDecl(CXXRecordDecl* cxxRecordDecl)
     currentCxxRecordDecl = cxxRecordDecl;
     bool ret = RecursiveASTVisitor::TraverseCXXRecordDecl(cxxRecordDecl);
     currentCxxRecordDecl = copy;
+    return ret;
+}
+
+bool UnusedMethods::TraverseFunctionDecl(FunctionDecl* f)
+{
+    auto copy = currentFunctionDecl;
+    currentFunctionDecl = f;
+    bool ret = RecursiveASTVisitor::TraverseFunctionDecl(f);
+    currentFunctionDecl = copy;
+    return ret;
+}
+bool UnusedMethods::TraverseCXXMethodDecl(CXXMethodDecl* f)
+{
+    auto copy = currentFunctionDecl;
+    currentFunctionDecl = f;
+    bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(f);
+    currentFunctionDecl = copy;
+    return ret;
+}
+bool UnusedMethods::TraverseCXXConversionDecl(CXXConversionDecl* f)
+{
+    auto copy = currentFunctionDecl;
+    currentFunctionDecl = f;
+    bool ret = RecursiveASTVisitor::TraverseCXXConversionDecl(f);
+    currentFunctionDecl = copy;
+    return ret;
+}
+bool UnusedMethods::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
+{
+    auto copy = currentFunctionDecl;
+    currentFunctionDecl = f;
+    bool ret = RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(f);
+    currentFunctionDecl = copy;
     return ret;
 }
 
