@@ -245,7 +245,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Mode</value>
+          <value xml:lang="en-US">Transformations</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/commontaskbar" oor:op="replace">
