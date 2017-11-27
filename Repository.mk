@@ -793,6 +793,10 @@ $(eval $(call gb_Helper_register_packages, \
 	test_unittest \
 	cli_basetypes_copy \
 	extras_wordbook \
+	$(if $(ENABLE_HTMLHELP),\
+		helpcontent2_html_static \
+		helpcontent2_html \
+	) \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	postprocess_registry \
