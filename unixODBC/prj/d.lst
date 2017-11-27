@@ -1,3 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\external
-mkdir: %_DEST%\inc%_EXT%\external\odbc
-..\inc\*.h %_DEST%\inc%_EXT%\external\odbc\*.h
