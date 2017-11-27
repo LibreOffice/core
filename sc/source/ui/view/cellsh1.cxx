@@ -1169,7 +1169,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         bColumns = true;
                     else if ( !GetViewData()->SimpleColMarked() && GetViewData()->SimpleRowMarked() )
                         bColumns = false;
-                    else
+                    else if ( !comphelper::LibreOfficeKit::isActive() ) // TODO: handle this case in LOK too
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -1228,7 +1228,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     bool bColPoss, bRowPoss;
                     pTabViewShell->TestRemoveOutline( bColPoss, bRowPoss );
-                    if ( bColPoss && bRowPoss )
+                    // TODO: handle this case in LOK too
+                    if ( bColPoss && bRowPoss && !comphelper::LibreOfficeKit::isActive() )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
