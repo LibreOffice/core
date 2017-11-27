@@ -3639,12 +3639,6 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
-VclPtr<vcl::Window> SwXTextDocument::findWindow(vcl::LOKWindowId nLOKWindowId) const
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    return pViewShell->GetOpenedDlg(nLOKWindowId);
-}
-
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);

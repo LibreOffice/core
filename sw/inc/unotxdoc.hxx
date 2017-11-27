@@ -429,9 +429,6 @@ public:
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
 
-    /// @see vcl::ITiledRenderable::findWindow().
-    VclPtr<vcl::Window> findWindow(vcl::LOKWindowId nLOKWindowId) const override;
-
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
 
