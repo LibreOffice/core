@@ -454,7 +454,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                 {
                     for( long nY = 0; nY < nHeight; nY++ )
                         for( long nX = 0; nX < nWidth; nX++ )
-                            pWriteAcc->SetPixelIndex( nY, nX, (pReadAcc->GetPixel( nY, nX ) ).GetLuminance() >> nShift );
+                            pWriteAcc->SetPixelIndex( nY, nX, pReadAcc->GetPixel( nY, nX ).GetLuminance() >> nShift );
                 }
 
                 pWriteAcc.reset();
