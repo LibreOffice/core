@@ -190,6 +190,7 @@ public:
 
     short               Execute() override;
     void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    void                StateChanged( StateChangedType nStateChange ) override;
     void                Start();
 
     const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }

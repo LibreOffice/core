@@ -512,21 +512,29 @@ void SfxTabDialog::RemoveStandardButton()
     m_pBaseFmtBtn->Hide();
 }
 
+void SfxTabDialog::StateChanged( StateChangedType nType  )
+{
+    TabDialog::StateChanged(nType);
+
+    if (comphelper::LibreOfficeKit::isActive() && nType == StateChangedType::InitShow)
+    {
+        const Size aSize = GetOptimalSize();
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", aSize.toString()));
+        SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
+    }
+}
+
 short SfxTabDialog::Execute()
 {
     if ( !m_pTabCtrl->GetPageCount() )
         return RET_CANCEL;
     Start_Impl();
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
-    {
-        SetLOKNotifier(pViewShell);
-        const Size aSize = GetOptimalSize();
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back(std::make_pair("size", aSize.toString()));
-        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
+    // we need to set the notifier here to be able to launch the dialog
+    // otherwise dialog will die out in DialogCancelMode::Silent
+    if (comphelper::LibreOfficeKit::isActive())
+        SetLOKNotifier(SfxViewShell::Current());
 
     return TabDialog::Execute();
 }

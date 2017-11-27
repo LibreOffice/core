@@ -161,9 +161,9 @@ void SfxModalDialog::dispose()
     SetDialogData_Impl();
     delete pOutputSet;
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    if (comphelper::LibreOfficeKit::isActive())
     {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
         pViewShell->notifyWindow(GetLOKWindowId(), "close");
         ReleaseLOKNotifier();
     }
@@ -173,17 +173,26 @@ void SfxModalDialog::dispose()
 
 short SfxModalDialog::Execute()
 {
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    // we need to set the notifier here to be able to launch the dialog
+    // otherwise dialog will die out in DialogCancelMode::Silent
+    if (comphelper::LibreOfficeKit::isActive())
+        SetLOKNotifier(SfxViewShell::Current());
+
+    return ModalDialog::Execute();
+}
+
+void SfxModalDialog::StateChanged(StateChangedType nType)
+{
+    ModalDialog::StateChanged(nType);
+
+    if (comphelper::LibreOfficeKit::isActive() && nType == StateChangedType::InitShow)
     {
-        SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
-        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+        SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
     }
 
-    return ModalDialog::Execute();
 }
 
 void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
@@ -244,22 +253,20 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             }
         }
 
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (comphelper::LibreOfficeKit::isActive() && pViewShell)
-        {
-            SetLOKNotifier(pViewShell);
-            // Below method doesn't really give the exact dimensions,
-            // Check GetSizePixel() ?
-            const Size aOptimalSize = GetOptimalSize();
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back(std::make_pair("size", aOptimalSize.toString()));
-            pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
-        }
-
         pImpl->bConstructed = true;
     }
 
     ModelessDialog::StateChanged( nStateChange );
+
+    if (comphelper::LibreOfficeKit::isActive() &&
+        nStateChange == StateChangedType::InitShow)
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        SetLOKNotifier(pViewShell);
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("size", GetOptimalSize().toString()));
+        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+    }
 }
 
 void SfxModelessDialog::Initialize(SfxChildWinInfo const *pInfo)
@@ -388,9 +395,9 @@ void SfxModelessDialog::dispose()
         pBindings->SetActiveFrame( nullptr );
     pImpl.reset();
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    if (comphelper::LibreOfficeKit::isActive())
     {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
         pViewShell->notifyWindow(GetLOKWindowId(), "close");
         ReleaseLOKNotifier();
     }
