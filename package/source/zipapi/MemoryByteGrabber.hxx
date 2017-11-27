@@ -39,6 +39,8 @@ public:
     }
     const sal_Int8 * getCurrentPos () { return mpBuffer + mnCurrent; }
 
+    sal_Int32 remainingSize() const { return mnEnd - mnCurrent; }
+
     // XInputStream chained
 
     void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
