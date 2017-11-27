@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4e28e686",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-27T01:28:21Z",
+      "side": 1,
+      "message": "In general it\u0027s not a good idea to use such long lines in commit message. For example in console it might be harder to read this message. It would be better to break the lines, having similar line length limit (70-80 character) as in the first line of the commit message.\nAn example commit:\nhttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dae16870b2c84c116cde8279a47db106a4fa9d529",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "6a9a41a7d25082b4cb889abc7356c2b128c579fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
