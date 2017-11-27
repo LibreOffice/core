@@ -568,7 +568,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
             if (pClassificationField)
             {
                 aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName,
-                                                   sDisplayString, pClassificationField->msIdentifier });
+                                                   pClassificationField->msDescription, pClassificationField->msIdentifier });
             }
             else
             {
