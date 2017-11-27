@@ -45,6 +45,7 @@ class SwXDocumentSettings final :
      * printer-related properties, remember the last printer and set it in
      * _postSetValues */
     VclPtr<SfxPrinter>      mpPrinter;
+    bool mbPreferPrinterPapersize;
 
     virtual void _preSetValues () override;
     virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue ) override;
