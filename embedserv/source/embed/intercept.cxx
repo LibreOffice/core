@@ -233,7 +233,7 @@ void Interceptor::generateFeatureStateEvent()
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
                 aStateEvent.FeatureDescriptor = "SaveCopyTo";
-                aStateEvent.State <<= (OUString("($3)"));
+                aStateEvent.State <<= OUString("($3)");
             }
             else
             {
@@ -345,7 +345,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "SaveCopyTo";
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
-        aStateEvent.State <<= (OUString("($3)"));
+        aStateEvent.State <<= OUString("($3)");
         Control->statusChanged(aStateEvent);
 
         {

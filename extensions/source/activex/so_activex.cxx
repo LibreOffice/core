@@ -737,7 +737,7 @@ STDAPI DllRegisterServer()
 
     HMODULE aCurModule = GetModuleHandleW( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
     DWORD nLibNameLen = sal::static_int_cast<DWORD>(
-            wcslen((bX64) ? X64_LIB_NAME : X32_LIB_NAME));
+            wcslen(bX64 ? X64_LIB_NAME : X32_LIB_NAME));
 
     if( aCurModule )
     {

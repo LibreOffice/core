@@ -973,7 +973,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const Imp
             }
         }
     }
-    if( (nFlags & JobSetFlags::DUPLEXMODE) )
+    if( nFlags & JobSetFlags::DUPLEXMODE )
     {
         switch( pSetupData->GetDuplexMode() )
         {
