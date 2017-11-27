@@ -70,6 +70,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {OUString(SC_UNO_AUTOCALC),     0,  cppu::UnoType<bool>::get(),              0, 0},
         {OUString(SC_UNO_PRINTERNAME),  0,  cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNO_PRINTERSETUP), 0,  cppu::UnoType<uno::Sequence<sal_Int8>>::get(), 0, 0},
+        {OUString(SC_UNO_PRINTERPAPER), 0,  cppu::UnoType<bool>::get(),              0, 0},
         {OUString(SC_UNO_APPLYDOCINF),  0,  cppu::UnoType<bool>::get(),              0, 0},
         {OUString(SC_UNO_FORBIDDEN),    0,  cppu::UnoType<i18n::XForbiddenCharacters>::get(), beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_CHARCOMP),     0,  cppu::UnoType<sal_Int16>::get(),        0, 0},
@@ -240,7 +241,28 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                         SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
                         SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS>{} );
-                pDocShell->SetPrinter( SfxPrinter::Create( aStream, std::move(pSet) ) );
+
+                SfxPrinter* pPrinter = pDocShell->GetPrinter();
+                bool bPreferPrinterPapersize = false;
+                if ( pPrinter )
+                    bPreferPrinterPapersize = pPrinter->GetPrinterSettingsPreferred();
+
+                VclPtr<SfxPrinter> pTempPrinter = SfxPrinter::Create( aStream, std::move(pSet) );
+                pTempPrinter->SetPrinterSettingsPreferred( bPreferPrinterPapersize );
+                pDocShell->SetPrinter( pTempPrinter );
+            }
+        }
+    }
+    else if ( aPropertyName == SC_UNO_PRINTERPAPER )
+    {
+        bool bPreferPrinterPapersize;
+        if( aValue >>= bPreferPrinterPapersize )
+        {
+            if( pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+            {
+                SfxPrinter *pTempPrinter = pDocShell->GetPrinter( true );
+                if (pTempPrinter)
+                    pTempPrinter->SetPrinterSettingsPreferred( bPreferPrinterPapersize );
             }
         }
     }
@@ -461,6 +483,12 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         }
         else
             aRet <<= uno::Sequence<sal_Int8>();
+    }
+    else if ( aPropertyName == SC_UNO_PRINTERPAPER)
+    {
+        SfxPrinter *pTempPrinter = pDocShell->GetPrinter( false );
+        aRet <<= pTempPrinter && pTempPrinter->GetPrinterSettingsPreferred();
+
     }
     else if ( aPropertyName == SC_UNO_APPLYDOCINF )
         aRet <<= pDocShell->IsUseUserData();
