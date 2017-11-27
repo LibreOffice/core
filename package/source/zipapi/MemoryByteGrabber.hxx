@@ -36,6 +36,8 @@ public:
     }
     const sal_Int8 * getCurrentPos () { return mpBuffer + mnCurrent; }
 
+    sal_Int32 remainingSize() const { return mnEnd - mnCurrent; }
+
     // XInputStream chained
 
     /// @throws css::io::NotConnectedException
