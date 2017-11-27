@@ -581,6 +581,11 @@ void EPUBExportTest::testTextBox()
 
     // This failed, image with caption was lost.
     assertXPath(mpXmlDoc, "//xhtml:img", "class", "frame1");
+    // Expected spans:
+    // 1) break after the image
+    // 2) "Illustration "
+    // 3) The sequence field, this was missing (was ": foo" instead).
+    assertXPathContent(mpXmlDoc, "//xhtml:div/xhtml:p/xhtml:span[3]", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
