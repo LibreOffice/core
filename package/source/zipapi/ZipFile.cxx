@@ -934,6 +934,9 @@ sal_Int32 ZipFile::readCEN()
             if ( aEntry.nExtraLen < 0 )
                 throw ZipException("unexpected extra header info length" );
 
+            if (aEntry.nPathLen > aMemGrabber.remainingSize())
+                throw ZipException("name too long");
+
             // read always in UTF8, some tools seem not to set UTF8 bit
             aEntry.sPath = OUString::intern ( reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
                                                    aEntry.nPathLen,
