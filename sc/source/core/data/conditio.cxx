@@ -309,49 +309,13 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     if ( pArr1 )
     {
         pFormula1 = new ScTokenArray( *pArr1 );
-        if ( pFormula1->GetLen() == 1 )
-        {
-            // Single (constant number)?
-            FormulaToken* pToken = pFormula1->FirstToken();
-            if ( pToken->GetOpCode() == ocPush )
-            {
-                if ( pToken->GetType() == svDouble )
-                {
-                    nVal1 = pToken->GetDouble();
-                    DELETEZ(pFormula1);             // Do not remember as formula
-                }
-                else if ( pToken->GetType() == svString )
-                {
-                    bIsStr1 = true;
-                    aStrVal1 = pToken->GetString().getString();
-                    DELETEZ(pFormula1);             // Do not remember as formula
-                }
-            }
-        }
+        SimplifyCompiledFormula( pFormula1, nVal1, bIsStr1, aStrVal1 );
         bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1 );
     }
     if ( pArr2 )
     {
         pFormula2 = new ScTokenArray( *pArr2 );
-        if ( pFormula2->GetLen() == 1 )
-        {
-            // Single (constant number)?
-            FormulaToken* pToken = pFormula2->FirstToken();
-            if ( pToken->GetOpCode() == ocPush )
-            {
-                if ( pToken->GetType() == svDouble )
-                {
-                    nVal2 = pToken->GetDouble();
-                    DELETEZ(pFormula2);             // Do not remember as formula
-                }
-                else if ( pToken->GetType() == svString )
-                {
-                    bIsStr2 = true;
-                    aStrVal2 = pToken->GetString().getString();
-                    DELETEZ(pFormula2);             // Do not remember as formula
-                }
-            }
-        }
+        SimplifyCompiledFormula( pFormula2, nVal2, bIsStr2, aStrVal2 );
         bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2 );
     }
 
@@ -367,6 +331,32 @@ ScConditionEntry::~ScConditionEntry()
 
     delete pFormula1;
     delete pFormula2;
+}
+
+void ScConditionEntry::SimplifyCompiledFormula( ScTokenArray*& rFormula,
+                                                double& rVal,
+                                                bool& rIsStr,
+                                                OUString& rStrVal )
+{
+    if ( rFormula->GetLen() == 1 )
+    {
+        // Single (constant number)?
+        FormulaToken* pToken = rFormula->FirstToken();
+        if ( pToken->GetOpCode() == ocPush )
+        {
+            if ( pToken->GetType() == svDouble )
+            {
+                rVal = pToken->GetDouble();
+                DELETEZ(rFormula);             // Do not remember as formula
+            }
+            else if ( pToken->GetType() == svString )
+            {
+                rIsStr = true;
+                rStrVal = pToken->GetString().getString();
+                DELETEZ(rFormula);             // Do not remember as formula
+            }
+        }
+    }
 }
 
 void ScConditionEntry::SetOperation(ScConditionMode eMode)
@@ -396,25 +386,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             else
             {
                 pFormula1 = aComp.CompileString( rExpr1, rExprNmsp1 );
-                if ( pFormula1->GetLen() == 1 )
-                {
-                    // Single (constant number)?
-                    FormulaToken* pToken = pFormula1->FirstToken();
-                    if ( pToken->GetOpCode() == ocPush )
-                    {
-                        if ( pToken->GetType() == svDouble )
-                        {
-                            nVal1 = pToken->GetDouble();
-                            DELETEZ(pFormula1);             // Do not remember as formula
-                        }
-                        else if ( pToken->GetType() == svString )
-                        {
-                            bIsStr1 = true;
-                            aStrVal1 = pToken->GetString().getString();
-                            DELETEZ(pFormula1);             // Do not remember as formula
-                        }
-                    }
-                }
+                SimplifyCompiledFormula( pFormula1, nVal1, bIsStr1, aStrVal1 );
                 bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1 );
             }
         }
@@ -433,25 +405,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             else
             {
                 pFormula2 = aComp.CompileString( rExpr2, rExprNmsp2 );
-                if ( pFormula2->GetLen() == 1 )
-                {
-                    // Sigle (constant number)?
-                    FormulaToken* pToken = pFormula2->FirstToken();
-                    if ( pToken->GetOpCode() == ocPush )
-                    {
-                        if ( pToken->GetType() == svDouble )
-                        {
-                            nVal2 = pToken->GetDouble();
-                            DELETEZ(pFormula2);             // Do not remember as formula
-                        }
-                        else if ( pToken->GetType() == svString )
-                        {
-                            bIsStr2 = true;
-                            aStrVal2 = pToken->GetString().getString();
-                            DELETEZ(pFormula2);             // Do not remember as formula
-                        }
-                    }
-                }
+                SimplifyCompiledFormula( pFormula2, nVal2, bIsStr2, aStrVal2 );
                 bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2 );
             }
         }
