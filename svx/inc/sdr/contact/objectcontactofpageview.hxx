@@ -48,7 +48,7 @@ namespace sdr
 
             // basic constructor, used from SdrPageView.
             explicit ObjectContactOfPageView(SdrPageWindow& rPageWindow,
-                                             const sal_Char *pDebugName = nullptr);
+                                             const sal_Char *pDebugName);
             virtual ~ObjectContactOfPageView() override;
 
             // LazyInvalidate request. This is used from the VOCs to mark that they

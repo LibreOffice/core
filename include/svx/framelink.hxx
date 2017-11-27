@@ -240,7 +240,7 @@ public:
         const basegfx::B2DVector& rB2DVector,
         const double fAngle,
         bool bMirrored,
-        const Color* pForceColor = nullptr);
+        const Color* pForceColor);
 
     double getRefModeOffset() const { return mfRefModeOffset; }
     const basegfx::B2DVector& getB2DVector() const { return maB2DVector; }

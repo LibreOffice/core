@@ -260,7 +260,7 @@ protected:
 public:
 
     SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, SvxRulerSupportFlags nRulerFlags,
-             SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
+             SfxBindings &rBindings, WinBits nWinStyle);
     virtual ~SvxRuler() override;
     virtual void dispose() override;
 

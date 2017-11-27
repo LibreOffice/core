@@ -54,7 +54,7 @@ public:
             Otherwise the navigation position as returned by
             SdrObject::GetNavigationPosition() is used.
     */
-    SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode = SdrIterMode::DeepNoGroups);
+    SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode);
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */

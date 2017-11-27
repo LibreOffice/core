@@ -359,7 +359,7 @@ public:
     // Attention: With each change of the glue point status the handle list is re-calculated.
     // All previously saved SdrHdl* became invalid by this, the same with the point IDs!
     bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV) const;
-    bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, bool bUnmark=false);
+    bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, bool bUnmark);
     void UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId) { MarkGluePoint(pObj,nId,true); }
     bool IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const;
 

@@ -35,7 +35,7 @@ public:
     OUString msIdentifier;      //< The identifier of this entry (from example.xml).
 
     ClassificationResult(ClassificationType eType, const OUString& sName,
-                         const OUString& sAbbreviatedName = "", const OUString& sIdentifier = "")
+                         const OUString& sAbbreviatedName, const OUString& sIdentifier = "")
         : meType(eType)
         , msName(sName)
         , msAbbreviatedName(sAbbreviatedName)
@@ -66,7 +66,7 @@ public:
     OUString msFullClassName;
     OUString msIdentifier;
 
-    ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName, OUString const & sIdentifier = "")
+    ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName, OUString const & sIdentifier)
         : SvxFieldData()
         , meType(eType)
         , msDescription(sDescription)

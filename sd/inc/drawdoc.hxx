@@ -459,7 +459,7 @@ public:
     SAL_DLLPRIVATE void                Merge(SdrModel& rSourceModel,
                                 sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                                 sal_uInt16 nDestPos,
-                                bool bMergeMasterPages = false, bool bAllMasterPages = false,
+                                bool bMergeMasterPages, bool bAllMasterPages = false,
                                 bool bUndo = true, bool bTreadSourceAsConst = false) override;
 
     css::text::WritingMode GetDefaultWritingMode() const;

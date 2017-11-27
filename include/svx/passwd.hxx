@@ -51,7 +51,7 @@ private:
     DECL_LINK(EditModifyHdl, Edit&, void);
 
 public:
-                    SvxPasswordDialog( vcl::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword = false );
+                    SvxPasswordDialog( vcl::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword );
     virtual         ~SvxPasswordDialog() override;
     virtual void    dispose() override;
 

@@ -52,7 +52,7 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
     SFX_DECL_CHILDWINDOW_WITHID( SvxIMapDlgChildWindow );
 
     static void UpdateIMapDlg( const Graphic& rGraphic, const ImageMap* pImageMap,
-                               const TargetList* pTargetList, void* pEditingObj = nullptr );
+                               const TargetList* pTargetList, void* pEditingObj );
 };
 
 
@@ -150,7 +150,7 @@ public:
     void                SetTargetList( const TargetList& rTargetList );
 
     void                UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
-                                const TargetList* pTargetList, void* pEditingObj = nullptr );
+                                const TargetList* pTargetList, void* pEditingObj );
 };
 
 SVX_DLLPUBLIC SvxIMapDlg* GetIMapDlg();

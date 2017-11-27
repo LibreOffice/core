@@ -432,7 +432,7 @@ public:
     virtual void Merge(SdrModel& rSourceModel,
                sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                sal_uInt16 nDestPos,
-               bool bMergeMasterPages = false, bool bAllMasterPages = false,
+               bool bMergeMasterPages, bool bAllMasterPages = false,
                bool bUndo = true, bool bTreadSourceAsConst = false);
 
     // Behaves like Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
