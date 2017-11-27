@@ -1,5 +1,5 @@
 /**************************************************************
- * 
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -7,16 +7,16 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  *************************************************************/
 
 
@@ -29,7 +29,7 @@
 
 #define CLASS_NAME "NSString"
 
-@implementation NSString (OOoAdditions) 
+@implementation NSString (OOoAdditions)
 
 + (id) stringWithOUString:(const rtl::OUString&)ouString
 {
@@ -46,12 +46,12 @@
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "ouString", ouString);
     if ((self = [super init])) {
         self = [self initWithCharacters:ouString.getStr() length:ouString.getLength()];
-        
+
         DBG_PRINT_EXIT(CLASS_NAME, __func__, self);
-        
+
         return self;
     }
-    
+
     DBG_PRINT_EXIT(CLASS_NAME, __func__, self);
     return nil;
 }

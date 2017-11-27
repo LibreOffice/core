@@ -27,6 +27,7 @@
 #include <premac.h>
 #include <Carbon/Carbon.h>
 #include <Cocoa/Cocoa.h>
+#include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
