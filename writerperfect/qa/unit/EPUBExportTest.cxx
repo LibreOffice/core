@@ -578,6 +578,7 @@ void EPUBExportTest::testTextBox()
     createDoc("text-box.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
 
     // This failed, image with caption was lost.
     assertXPath(mpXmlDoc, "//xhtml:img", "class", "frame1");
@@ -586,6 +587,10 @@ void EPUBExportTest::testTextBox()
     // 2) "Illustration "
     // 3) The sequence field, this was missing (was ": foo" instead).
     assertXPathContent(mpXmlDoc, "//xhtml:div/xhtml:p/xhtml:span[3]", "1");
+
+    OUString aClass = getXPath(mpXmlDoc, "//xhtml:div/xhtml:p/xhtml:span[3]", "class");
+    // This failed, the 3rd span was not italic.
+    CPPUNIT_ASSERT_EQUAL(OUString("italic"), EPUBExportTest::getCss(aCssDoc, aClass, "font-style"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
