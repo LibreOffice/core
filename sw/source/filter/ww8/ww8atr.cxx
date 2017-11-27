@@ -1461,7 +1461,7 @@ void WW8AttributeOutput::CharBidiRTL( const SfxPoolItem& rHt )
     if( rAttr.GetValue() == 1 )
     {
         m_rWW8Export.InsUInt16(0x85a);
-        m_rWW8Export.pO->push_back((sal_uInt8)(1));
+        m_rWW8Export.pO->push_back((sal_uInt8)1);
     }
 }
 

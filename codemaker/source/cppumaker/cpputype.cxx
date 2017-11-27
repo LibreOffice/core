@@ -1402,7 +1402,7 @@ void InterfaceType::dumpCppuAttributeRefs(FileStream & out, sal_uInt32 & index)
             << "],\n";
         inc(38);
         out << indent()
-            << ("(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_ATTRIBUTE,\n")
+            << "(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_ATTRIBUTE,\n"
             << indent() << "sAttributeName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1419,7 +1419,7 @@ void InterfaceType::dumpCppuMethodRefs(FileStream & out, sal_uInt32 & index)
             << "],\n";
         inc(38);
         out << indent()
-            << ("(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_METHOD,\n")
+            << "(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_METHOD,\n"
             << indent() << "sMethodName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1965,7 +1965,7 @@ void PlainStructType::dumpLightGetCppuType(FileStream & out)
         << getTypeClass(name_, true) << ", \"" << name_ << "\");\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n");
+        << "return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -2005,7 +2005,7 @@ void PlainStructType::dumpNormalGetCppuType(FileStream & out)
     out << ", " << entity_->getDirectMembers().size() << ", the_members, 0);\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n");
+        << "return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -2418,7 +2418,7 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
         << ", the_buffer.getStr());\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n");
+        << "return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -3558,7 +3558,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "throw;\n";
                 dec();
                 o << indent()
-                  << ("} catch (const ::css::uno::Exception & the_exception) {\n");
+                  << "} catch (const ::css::uno::Exception & the_exception) {\n";
                 inc();
                 o << indent() << "throw ::css::uno::DeploymentException(";
                 failsToSupply(o, name_, baseName);
@@ -3603,7 +3603,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "assert(the_context.is());\n";
                 if (!rest && !cons.parameters.empty()) {
                     o << indent()
-                      << ("::css::uno::Sequence< ::css::uno::Any > the_arguments(")
+                      << "::css::uno::Sequence< ::css::uno::Any > the_arguments("
                       << cons.parameters.size() << ");\n";
                     std::vector<
                     unoidl::SingleInterfaceBasedServiceEntity::Constructor::
@@ -3681,7 +3681,7 @@ void ServiceType::dumpHppFile(
                     o << "the_arguments";
                 }
                 o << ");\n" << indent() << "}\n";
-                o << ("#else\n")
+                o << "#else\n"
                   << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
@@ -3693,7 +3693,7 @@ void ServiceType::dumpHppFile(
                           u2b(cons.parameters.back().name), "param",
                           codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
-                    o << ("::css::uno::Sequence< ::css::uno::Any >()");
+                    o << "::css::uno::Sequence< ::css::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
@@ -3701,7 +3701,7 @@ void ServiceType::dumpHppFile(
                 if (!tree.getRoot().present) {
                     dec();
                     o << indent()
-                      << ("} catch (const ::css::uno::RuntimeException &) {\n");
+                      << "} catch (const ::css::uno::RuntimeException &) {\n";
                     inc();
                     o << indent() << "throw;\n";
                     dec();

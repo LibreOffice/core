@@ -201,11 +201,11 @@ void Includes::dump(
     }
     if (m_includeCppuMacrosHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"cppu/macros.hxx\"\n");
+        out << "#include \"cppu/macros.hxx\"\n";
     }
     if (m_includeCppuUnotypeHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"cppu/unotype.hxx\"\n");
+        out << "#include \"cppu/unotype.hxx\"\n";
     }
     if (m_includeOslMutexHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
@@ -213,7 +213,7 @@ void Includes::dump(
     }
     if (m_includeRtlStrbufHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"rtl/strbuf.hxx\"\n");
+        out << "#include \"rtl/strbuf.hxx\"\n";
     }
     if (m_includeRtlStringH) {
         dumpEmptyLineBeforeFirst(out, &first);
@@ -225,7 +225,7 @@ void Includes::dump(
     }
     if (m_includeRtlUstrbufHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"rtl/ustrbuf.hxx\"\n");
+        out << "#include \"rtl/ustrbuf.hxx\"\n";
     }
     if (m_includeRtlUstringH) {
         dumpEmptyLineBeforeFirst(out, &first);
@@ -233,7 +233,7 @@ void Includes::dump(
     }
     if (m_includeRtlUstringHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"rtl/ustring.hxx\"\n");
+        out << "#include \"rtl/ustring.hxx\"\n";
     }
     if (m_includeRtlInstanceHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
@@ -245,11 +245,11 @@ void Includes::dump(
     }
     if (m_includeTypelibTypeclassH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"typelib/typeclass.h\"\n");
+        out << "#include \"typelib/typeclass.h\"\n";
     }
     if (m_includeTypelibTypedescriptionH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"typelib/typedescription.h\"\n");
+        out << "#include \"typelib/typedescription.h\"\n";
     }
 }
 

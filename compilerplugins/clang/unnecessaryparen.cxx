@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <unordered_set>
 
 #include <clang/AST/CXXInheritance.h>
 #include "compat.hxx"
@@ -81,33 +82,37 @@ public:
     bool VisitCallExpr(const CallExpr *);
     bool VisitVarDecl(const VarDecl *);
     bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
-    bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *);
-    bool TraverseCaseStmt(CaseStmt *);
+    bool VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr const *);
+    bool VisitConditionalOperator(ConditionalOperator const * expr);
     bool VisitMemberExpr(const MemberExpr *f);
 private:
     void VisitSomeStmt(Stmt const * stmt, const Expr* cond, StringRef stmtName);
-    Expr const * insideSizeof = nullptr;
-    Expr const * insideCaseStmt = nullptr;
+
+    // Hack for libxml2's BAD_CAST object-like macro (expanding to "(xmlChar *)"), which is
+    // typically used as if it were a function-like macro, e.g., as "BAD_CAST(pName)" in
+    // SwNode::dumpAsXml (sw/source/core/docnode/node.cxx):
+    bool isPrecededBy_BAD_CAST(Expr const * expr);
+
+    std::unordered_set<ParenExpr const *> handled_;
 };
 
-bool UnnecessaryParen::TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr * expr)
+bool UnnecessaryParen::VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr const * expr)
 {
-    auto old = insideSizeof;
     if (expr->getKind() == UETT_SizeOf && !expr->isArgumentType()) {
-        insideSizeof = ignoreAllImplicit(expr->getArgumentExpr());
+        if (auto const e = dyn_cast<ParenExpr>(ignoreAllImplicit(expr->getArgumentExpr()))) {
+            handled_.insert(e);
+        }
     }
-    bool ret = RecursiveASTVisitor::TraverseUnaryExprOrTypeTraitExpr(expr);
-    insideSizeof = old;
-    return ret;
+    return true;
 }
 
-bool UnnecessaryParen::TraverseCaseStmt(CaseStmt * caseStmt)
-{
-    auto old = insideCaseStmt;
-    insideCaseStmt = ignoreAllImplicit(caseStmt->getLHS());
-    bool ret = RecursiveASTVisitor::TraverseCaseStmt(caseStmt);
-    insideCaseStmt = old;
-    return ret;
+bool UnnecessaryParen::VisitConditionalOperator(ConditionalOperator const * expr) {
+    if (auto const e = dyn_cast<ParenExpr>(ignoreAllImplicit(expr->getCond()))) {
+        if (isa<CXXBoolLiteralExpr>(e->getSubExpr())) {
+            handled_.insert(e);
+        }
+    }
+    return true;
 }
 
 bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
@@ -116,9 +121,7 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
         return true;
     if (parenExpr->getLocStart().isMacroID())
         return true;
-    if (insideSizeof && parenExpr == insideSizeof)
-        return true;
-    if (insideCaseStmt && parenExpr == insideCaseStmt)
+    if (handled_.find(parenExpr) != handled_.end())
         return true;
 
     auto subExpr = ignoreAllImplicit(parenExpr->getSubExpr());
@@ -131,32 +134,53 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
             DiagnosticsEngine::Warning, "parentheses around parentheses",
             parenExpr->getLocStart())
             << parenExpr->getSourceRange();
+        handled_.insert(subParenExpr);
     }
 
-    if (auto declRefExpr = dyn_cast<DeclRefExpr>(subExpr)) {
-        // hack for libxml2's BAD_CAST object-like macro (expanding to "(xmlChar *)"), which is
-        // typically used as if it were a function-like macro, e.g., as "BAD_CAST(pName)" in
-        // SwNode::dumpAsXml (sw/source/core/docnode/node.cxx)
-        if (!declRefExpr->getLocStart().isMacroID()) {
-            SourceManager& SM = compiler.getSourceManager();
-            const char *p1 = SM.getCharacterData( declRefExpr->getLocStart().getLocWithOffset(-10) );
-            const char *p2 = SM.getCharacterData( declRefExpr->getLocStart() );
-            if ( std::string(p1, p2 - p1).find("BAD_CAST") != std::string::npos )
-                return true;
-        }
+    // Somewhat redundantly add parenExpr to handled_, so that issues within InitListExpr don't get
+    // reported twice (without having to change TraverseInitListExpr to only either traverse the
+    // syntactic or semantic form, as other plugins do):
 
+    if (isa<DeclRefExpr>(subExpr)) {
+        if (!isPrecededBy_BAD_CAST(parenExpr)) {
+            report(
+                DiagnosticsEngine::Warning, "unnecessary parentheses around identifier",
+                parenExpr->getLocStart())
+                << parenExpr->getSourceRange();
+            handled_.insert(parenExpr);
+        }
+    } else if (isa<IntegerLiteral>(subExpr) || isa<CharacterLiteral>(subExpr)
+               || isa<FloatingLiteral>(subExpr) || isa<ImaginaryLiteral>(subExpr)
+               || isa<CXXNullPtrLiteralExpr>(subExpr))
+        //TODO: isa<CXXBoolLiteralExpr>(subExpr) || isa<ObjCBoolLiteralExpr>(subExpr)
+    {
+        auto const loc = subExpr->getLocStart();
+        if (loc.isMacroID() && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(loc))
+        {
+            // just in case the macro could also expand to something that /would/ require
+            // parentheses here
+            return true;
+        }
         report(
-            DiagnosticsEngine::Warning, "unnecessary parentheses around identifier",
+            DiagnosticsEngine::Warning, "unnecessary parentheses around literal",
             parenExpr->getLocStart())
             << parenExpr->getSourceRange();
-    }
-
-
-    if (isa<CXXNamedCastExpr>(subExpr)) {
+        handled_.insert(parenExpr);
+    } else if (auto const e = dyn_cast<clang::StringLiteral>(subExpr)) {
+        if (e->getNumConcatenated() == 1 && !isPrecededBy_BAD_CAST(parenExpr)) {
+            report(
+                DiagnosticsEngine::Warning,
+                "unnecessary parentheses around single-token string literal",
+                parenExpr->getLocStart())
+                << parenExpr->getSourceRange();
+            handled_.insert(parenExpr);
+        }
+    } else if (isa<CXXNamedCastExpr>(subExpr)) {
         report(
             DiagnosticsEngine::Warning, "unnecessary parentheses around cast",
             parenExpr->getLocStart())
             << parenExpr->getSourceRange();
+        handled_.insert(parenExpr);
     }
 
     return true;
@@ -217,6 +241,7 @@ bool UnnecessaryParen::VisitReturnStmt(const ReturnStmt* returnStmt)
             DiagnosticsEngine::Warning, "parentheses immediately inside return statement",
             parenExpr->getLocStart())
             << parenExpr->getSourceRange();
+        handled_.insert(parenExpr);
     }
     return true;
 }
@@ -234,6 +259,7 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt * stmt, const Expr* cond, String
         if (isa<CXXBoolLiteralExpr>(parenExpr->getSubExpr())
             && stmtName == "if")
         {
+            handled_.insert(parenExpr);
             return;
         }
         // assignments need extra parentheses or they generate a compiler warning
@@ -250,6 +276,7 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt * stmt, const Expr* cond, String
             parenExpr->getLocStart())
             << stmtName
             << parenExpr->getSourceRange();
+        handled_.insert(parenExpr);
     }
 }
 
@@ -273,6 +300,7 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
         DiagnosticsEngine::Warning, "parentheses immediately inside single-arg call",
         parenExpr->getLocStart())
         << parenExpr->getSourceRange();
+    handled_.insert(parenExpr);
     return true;
 }
 
@@ -311,6 +339,7 @@ bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callE
         DiagnosticsEngine::Warning, "parentheses immediately inside assignment",
         parenExpr->getLocStart())
         << parenExpr->getSourceRange();
+    handled_.insert(parenExpr);
     return true;
 }
 
@@ -339,6 +368,7 @@ bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)
         DiagnosticsEngine::Warning, "parentheses immediately inside vardecl statement",
         parenExpr->getLocStart())
         << parenExpr->getSourceRange();
+    handled_.insert(parenExpr);
     return true;
 }
 
@@ -349,6 +379,8 @@ bool UnnecessaryParen::VisitMemberExpr(const MemberExpr* memberExpr)
 
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(memberExpr->getBase()));
     if (!parenExpr)
+        return true;
+    if (handled_.find(parenExpr) != handled_.end())
         return true;
     if (parenExpr->getLocStart().isMacroID())
         return true;
@@ -370,7 +402,18 @@ bool UnnecessaryParen::VisitMemberExpr(const MemberExpr* memberExpr)
         DiagnosticsEngine::Warning, "unnecessary parentheses around member expr",
         parenExpr->getLocStart())
         << parenExpr->getSourceRange();
+    handled_.insert(parenExpr);
     return true;
+}
+
+bool UnnecessaryParen::isPrecededBy_BAD_CAST(Expr const * expr) {
+    if (expr->getLocStart().isMacroID()) {
+        return false;
+    }
+    SourceManager& SM = compiler.getSourceManager();
+    const char *p1 = SM.getCharacterData( expr->getLocStart().getLocWithOffset(-10) );
+    const char *p2 = SM.getCharacterData( expr->getLocStart() );
+    return std::string(p1, p2 - p1).find("BAD_CAST") != std::string::npos;
 }
 
 loplugin::Plugin::Registration< UnnecessaryParen > X("unnecessaryparen", true);

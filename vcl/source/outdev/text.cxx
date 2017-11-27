@@ -529,7 +529,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                     bool bAlternate = xHyphWord->isAlternativeSpelling();
                                     sal_Int32 _nWordLen = 1 + xHyphWord->getHyphenPos();
 
-                                    if ( ( _nWordLen >= 2 ) && ( (nWordStart+_nWordLen) >= ( 2 ) ) )
+                                    if ( ( _nWordLen >= 2 ) && ( (nWordStart+_nWordLen) >= 2 ) )
                                     {
                                         if ( !bAlternate )
                                         {

@@ -1116,7 +1116,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? (36) : (19) );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? 36 : 19 );
 
     sal_uInt16 i(0);
 

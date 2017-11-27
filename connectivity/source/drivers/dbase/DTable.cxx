@@ -156,7 +156,7 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
         sal_Int32 ka = _nJulianDate;
         if ( _nJulianDate >= 2299161 )
         {
-            ialp = (sal_Int32)( ((double) _nJulianDate - 1867216.25 ) / ( 36524.25 ));
+            ialp = (sal_Int32)( ((double) _nJulianDate - 1867216.25 ) / 36524.25 );
             ka = _nJulianDate + 1 + ialp - ( ialp >> 2 );
         }
         sal_Int32 kb = ka + 1524;

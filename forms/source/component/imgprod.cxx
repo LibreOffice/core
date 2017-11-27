@@ -355,16 +355,16 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
                 {
                     const BitmapColor& rCol = pBmpAcc->GetPaletteColor( (sal_uInt16) i );
 
-                    *pTmp = ( (sal_Int32) rCol.GetRed() ) << (sal_Int32)(24);
-                    *pTmp |= ( (sal_Int32) rCol.GetGreen() ) << (sal_Int32)(16);
-                    *pTmp |= ( (sal_Int32) rCol.GetBlue() ) << (sal_Int32)(8);
-                    *pTmp |= (sal_Int32)(0x000000ffL);
+                    *pTmp = ( (sal_Int32) rCol.GetRed() ) << (sal_Int32)24;
+                    *pTmp |= ( (sal_Int32) rCol.GetGreen() ) << (sal_Int32)16;
+                    *pTmp |= ( (sal_Int32) rCol.GetBlue() ) << (sal_Int32)8;
+                    *pTmp |= (sal_Int32)0x000000ffL;
                 }
 
                 if( rGraphic.IsTransparent() )
                 {
                     // append transparent entry
-                    *pTmp = (sal_Int32)(0xffffff00L);
+                    *pTmp = (sal_Int32)0xffffff00L;
                     mnTransIndex = nPalCount;
                     nPalCount++;
                 }
