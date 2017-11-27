@@ -80,8 +80,6 @@ XMLSpanContext::XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropert
 
 rtl::Reference<XMLImportContext> XMLSpanContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    if (rName == "draw:frame")
-        return new XMLTextFrameContext(mrImport);
     return CreateParagraphOrSpanChildContext(mrImport, rName, m_aPropertyList);
 }
 
@@ -324,6 +322,8 @@ rtl::Reference<XMLImportContext> CreateParagraphOrSpanChildContext(XMLImport &rI
         return new XMLSpaceContext(rImport, rTextPropertyList);
     if (rName == "text:tab")
         return new XMLTabContext(rImport, rTextPropertyList);
+    if (rName == "draw:frame")
+        return new XMLTextFrameContext(rImport);
     return nullptr;
 }
 
