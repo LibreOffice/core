@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0e05fe12",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-27T14:53:10Z",
+      "side": 1,
+      "message": "Nitpick: please keep the indentation at 4 spaces per level.",
+      "range": {
+        "startLine": 1439,
+        "startChar": 0,
+        "endLine": 1461,
+        "endChar": 23
+      },
+      "revId": "cdb6a783d7c5860a40ed69df850160615cff042f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
