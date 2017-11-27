@@ -451,8 +451,7 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
         SfxClassificationPolicyType eType = rPair.first;
         SfxClassificationCategory& rCategory = rPair.second;
         std::map<OUString, OUString> aLabels = rCategory.m_aLabels;
-        const OUString abbreviation = (rCategory.m_aName != rCategory.m_aAbbreviatedName ? " (" + rCategory.m_aAbbreviatedName + ")" : OUString());
-        aLabels[policyTypeToString(eType) + PROP_BACNAME()] = rCategory.m_aName + abbreviation;
+        aLabels[policyTypeToString(eType) + PROP_BACNAME()] = rCategory.m_aName;
         for (const auto& rLabel : aLabels)
         {
             try
