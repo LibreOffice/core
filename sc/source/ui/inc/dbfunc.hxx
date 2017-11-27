@@ -103,6 +103,7 @@ public:
 
     void            SelectLevel( bool bColumns, sal_uInt16 nLevel,
                                     bool bRecord = true );
+    void            SetOutlineState( bool bColumn, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bHidden);
     void            ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord = true, bool bPaint = true );
     void            HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
@@ -115,6 +116,8 @@ public:
     void            UpdateCharts(bool bAllCharts);      // Default: am Cursor
 
     static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts );
+
+    void            OnLOKShowHideOutline(bool bColumns, SCROW nStartRow);
 };
 
 #endif

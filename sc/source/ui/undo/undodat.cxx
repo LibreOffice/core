@@ -44,6 +44,8 @@
 #include "refundo.hxx"
 #include "markdata.hxx"
 
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 // Show or hide outline groups
 
@@ -181,6 +183,8 @@ void ScUndoMakeOutline::Undo()
         pViewShell->SetTabNo( nTab );
 
     pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
+
+    ScTabViewShell::notifyAllViewsHeaderInvalidation( bColumns, nTab );
 
     EndUndo();
 }
@@ -374,6 +378,10 @@ void ScUndoOutlineBlock::Undo()
 
     pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top);
 
+
+    pViewShell->OnLOKShowHideOutline(/*columns: */ true, nStartCol - 1);
+    pViewShell->OnLOKShowHideOutline(/*columns: */ false, nStartRow - 1);
+
     EndUndo();
 }
 
@@ -462,6 +470,8 @@ void ScUndoRemoveAllOutlines::Undo()
         pViewShell->SetTabNo( nTab );
 
     pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
+
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(BOTH_HEADERS, nTab);
 
     EndUndo();
 }

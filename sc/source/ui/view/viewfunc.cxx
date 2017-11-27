@@ -1621,10 +1621,10 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
             if (comphelper::LibreOfficeKit::isActive())
             {
                 if (bInsertCols)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation("column", GetViewData().GetTabNo());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
 
                 if (bInsertRows)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation("row", GetViewData().GetTabNo());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
             }
         }
         return bSuccess;
@@ -1696,10 +1696,10 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (eCmd == DEL_DELCOLS)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("column", GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
 
             if (eCmd == DEL_DELROWS)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("row", GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
         }
     }
     else
@@ -2297,11 +2297,7 @@ void ScViewFunc::SetWidthOrHeight(
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        OString aPayload = bWidth ? "column" : "row";
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(aPayload, GetViewData().GetTabNo());
-    }
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(bWidth, GetViewData().GetTabNo());
 }
 
 //  column width/row height (via marked range)
