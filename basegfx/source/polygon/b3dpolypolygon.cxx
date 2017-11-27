@@ -264,7 +264,7 @@ namespace basegfx
     {
         for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
-            if((mpPolyPolygon->getB3DPolygon(a)).areBColorsUsed())
+            if(mpPolyPolygon->getB3DPolygon(a).areBColorsUsed())
             {
                 return true;
             }
@@ -289,7 +289,7 @@ namespace basegfx
     {
         for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
-            if((mpPolyPolygon->getB3DPolygon(a)).areNormalsUsed())
+            if(mpPolyPolygon->getB3DPolygon(a).areNormalsUsed())
             {
                 return true;
             }
@@ -314,7 +314,7 @@ namespace basegfx
     {
         for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
-            if((mpPolyPolygon->getB3DPolygon(a)).areTextureCoordinatesUsed())
+            if(mpPolyPolygon->getB3DPolygon(a).areTextureCoordinatesUsed())
             {
                 return true;
             }
@@ -365,7 +365,7 @@ namespace basegfx
 
         for(sal_uInt32 a(0); !bRetval && a < mpPolyPolygon->count(); a++)
         {
-            if((mpPolyPolygon->getB3DPolygon(a)).hasDoublePoints())
+            if(mpPolyPolygon->getB3DPolygon(a).hasDoublePoints())
             {
                 bRetval = true;
             }
