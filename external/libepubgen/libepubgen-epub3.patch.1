@@ -3683,3 +3683,117 @@ index d81a905..a90ac68 100644
 -- 
 2.13.6
 
+From 40111db25a92537c922a768dd04916cb5edd0239 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 10 Nov 2017 14:13:29 +0100
+Subject: [PATCH] EPUBHTMLGenerator: map TextBox to <div>
+
+This way e.g. image with caption is no longer lost from the text
+generator. This generalizes image and textbox styles as "frame" styles.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 27 ++++++++++++++++++----
+ src/lib/EPUBImageManager.cpp       |  6 ++---
+ src/lib/EPUBImageManager.h         |  4 ++--
+ src/test/EPUBTextGeneratorTest.cpp | 47 +++++++++++++++++++++++++++++++++-----
+ 4 files changed, 68 insertions(+), 16 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index a90ac68..5f10902 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -833,15 +833,32 @@ void EPUBHTMLGenerator::openTextBox(const RVNGPropertyList & /*propList*/)
+ {
+   if (m_impl->m_ignore)
+     return;
+-  m_impl->push(EPUBHTMLTextZone::Z_TextBox);
+-  m_impl->getSink().addLabel(m_impl->output());
++
++  RVNGPropertyList attrs;
++
++  if (!m_impl->m_framePropertiesStack.empty())
++  {
++    RVNGPropertyList &frameProperties = m_impl->m_framePropertiesStack.top();
++    switch (m_impl->m_stylesMethod)
++    {
++    case EPUB_STYLES_METHOD_CSS:
++      attrs.insert("class", m_impl->m_imageManager.getFrameClass(frameProperties).c_str());
++      break;
++    case EPUB_STYLES_METHOD_INLINE:
++      attrs.insert("style", m_impl->m_imageManager.getFrameStyle(frameProperties).c_str());
++      break;
++    }
++  }
++
++  m_impl->output().openElement("div", attrs);
+ }
+ 
+ void EPUBHTMLGenerator::closeTextBox()
+ {
+   if (m_impl->m_ignore)
+     return;
+-  m_impl->pop();
++
++  m_impl->output().closeElement("div");
+ }
+ 
+ void EPUBHTMLGenerator::openTable(const RVNGPropertyList &propList)
+@@ -990,10 +1007,10 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+     switch (m_impl->m_stylesMethod)
+     {
+     case EPUB_STYLES_METHOD_CSS:
+-      attrs.insert("class", m_impl->m_imageManager.getImageClass(frameProperties).c_str());
++      attrs.insert("class", m_impl->m_imageManager.getFrameClass(frameProperties).c_str());
+       break;
+     case EPUB_STYLES_METHOD_INLINE:
+-      attrs.insert("style", m_impl->m_imageManager.getImageStyle(frameProperties).c_str());
++      attrs.insert("style", m_impl->m_imageManager.getFrameStyle(frameProperties).c_str());
+       break;
+     }
+ 
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index 8414da5..dfa0cb7 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -107,7 +107,7 @@ void EPUBImageManager::writeTo(EPUBPackage &package)
+   }
+ }
+ 
+-std::string EPUBImageManager::getImageClass(librevenge::RVNGPropertyList const &pList)
++std::string EPUBImageManager::getFrameClass(librevenge::RVNGPropertyList const &pList)
+ {
+   EPUBCSSProperties content;
+   extractImageProperties(pList, content);
+@@ -115,12 +115,12 @@ std::string EPUBImageManager::getImageClass(librevenge::RVNGPropertyList const &
+   if (it != m_imageContentNameMap.end())
+     return it->second;
+   std::stringstream s;
+-  s << "image" << m_imageContentNameMap.size();
++  s << "frame" << m_imageContentNameMap.size();
+   m_imageContentNameMap[content]=s.str();
+   return s.str();
+ }
+ 
+-std::string EPUBImageManager::getImageStyle(librevenge::RVNGPropertyList const &pList)
++std::string EPUBImageManager::getFrameStyle(librevenge::RVNGPropertyList const &pList)
+ {
+   EPUBCSSProperties content;
+   extractImageProperties(pList, content);
+diff --git a/src/lib/EPUBImageManager.h b/src/lib/EPUBImageManager.h
+index c9f4236..939d350 100644
+--- a/src/lib/EPUBImageManager.h
++++ b/src/lib/EPUBImageManager.h
+@@ -53,9 +53,9 @@ public:
+   void writeTo(EPUBPackage &package);
+ 
+   //! returns the class name corresponding to a propertylist
+-  std::string getImageClass(librevenge::RVNGPropertyList const &pList);
++  std::string getFrameClass(librevenge::RVNGPropertyList const &pList);
+   //! returns the style string corresponding to a propertylist
+-  std::string getImageStyle(librevenge::RVNGPropertyList const &pList);
++  std::string getFrameStyle(librevenge::RVNGPropertyList const &pList);
+   //! send the data to the sink
+   void send(EPUBCSSSink &out);
+ 
+-- 
+2.13.6
+

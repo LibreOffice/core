@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:style style:name="Graphics" style:family="graphic">
+      <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="dynamic" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
+    </style:style>
+    <style:style style:name="Frame" style:family="graphic">
+      <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" fo:margin-left="0.201cm" fo:margin-right="0.201cm" fo:margin-top="0.201cm" fo:margin-bottom="0.201cm" style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph-content" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" fo:padding="0.15cm" fo:border="0.06pt solid #000000"/>
+    </style:style>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+      <style:graphic-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:padding="0.049cm" fo:border="0.99pt dashed #ed1c24" style:shadow="none" draw:shadow-opacity="100%"/>
+    </style:style>
+    <style:style style:name="fr2" style:family="graphic" style:parent-style-name="Graphics">
+      <style:graphic-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:run-through="foreground" style:wrap="none" style:vertical-pos="top" style:vertical-rel="baseline" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" fo:padding="0cm" fo:border="none" style:shadow="none" draw:shadow-opacity="100%" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" loext:rel-width-rel="paragraph"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:sequence-decls>
+        <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+      </text:sequence-decls>
+      <text:p><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="char" svg:width="5.674cm" draw:z-index="0"><draw:text-box fo:min-height="3.336cm"><text:p><draw:frame draw:style-name="fr2" draw:name="Object0" text:anchor-type="as-char" svg:width="1.663cm" style:rel-width="100%" svg:height="1.663cm" style:rel-height="scale" draw:z-index="1"><draw:image><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+          UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+          AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+          AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+          BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+          cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+          /878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+          QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+          YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+          2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+          cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+          AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+          hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+          5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+          AABJRU5ErkJggg==
+         </office:binary-data></draw:image></draw:frame><text:span><text:line-break/></text:span><text:span>Illustration </text:span><text:span><text:sequence text:ref-name="refIllustration0" text:name="Illustration" text:formula="ooow:Illustration+1" style:num-format="1">1</text:sequence></text:span><text:span>: foo</text:span></text:p></draw:text-box></draw:frame>bar</text:p>
+    </office:text>
+  </office:body>
+</office:document>
