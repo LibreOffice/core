@@ -72,6 +72,7 @@ public:
     void testList();
     void testImage();
     void testImageBorder();
+    void testImageNospan();
     void testTable();
     void testTableRowSpan();
     void testTableCellBorder();
@@ -101,6 +102,7 @@ public:
     CPPUNIT_TEST(testList);
     CPPUNIT_TEST(testImage);
     CPPUNIT_TEST(testImageBorder);
+    CPPUNIT_TEST(testImageNospan);
     CPPUNIT_TEST(testTable);
     CPPUNIT_TEST(testTableRowSpan);
     CPPUNIT_TEST(testTableCellBorder);
@@ -457,6 +459,15 @@ void EPUBExportTest::testImageBorder()
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:img", "class");
     // This failed, image had no border.
     CPPUNIT_ASSERT_EQUAL(OUString("0.99pt dashed #ed1c24"), EPUBExportTest::getCss(aCssDoc, aClass, "border"));
+}
+
+void EPUBExportTest::testImageNospan()
+{
+    createDoc("image-nospan.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // Image outside a span was lost.
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:img", 1);
 }
 
 void EPUBExportTest::testTable()
