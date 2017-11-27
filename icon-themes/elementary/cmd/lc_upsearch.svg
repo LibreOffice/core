@@ -13,7 +13,7 @@
    height="24"
    id="svg4524"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="lc_upsearch.svg">
+   sodipodi:docname="lc_movepageup.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -24,14 +24,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1301"
+     inkscape:window-height="1375"
      id="namedview22"
      showgrid="false"
      inkscape:zoom="27.812867"
-     inkscape:cx="11.838746"
+     inkscape:cx="6.5893771"
      inkscape:cy="4.4660338"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="36"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg4524" />
   <defs
@@ -57,6 +57,36 @@
          offset="1.0000000"
          id="stop3686" />
     </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2867-449-88-871-390-598-476-591-434-148-57-177-641-289-620-227-114-444-680-744-4-1"
+       id="radialGradient4329"
+       cx="17"
+       cy="4.9855304"
+       fx="17"
+       fy="4.9855304"
+       r="7.0144873"
+       gradientTransform="matrix(-5.3946722e-8,3.1363666,-2.1340148,-3.6857973e-8,22.639534,-50.318258)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient2867-449-88-871-390-598-476-591-434-148-57-177-641-289-620-227-114-444-680-744-4-1">
+      <stop
+         offset="0"
+         style="stop-color:#737373;stop-opacity:1"
+         id="stop5430-5-0" />
+      <stop
+         offset="0.26238"
+         style="stop-color:#636363;stop-opacity:1"
+         id="stop5432-2-0" />
+      <stop
+         offset="0.704952"
+         style="stop-color:#4b4b4b;stop-opacity:1"
+         id="stop5434-9-6" />
+      <stop
+         offset="1"
+         style="stop-color:#3f3f3f;stop-opacity:1"
+         id="stop5436-2-7" />
+    </linearGradient>
   </defs>
   <metadata
      id="metadata4529">
@@ -71,8 +101,9 @@
     </rdf:RDF>
   </metadata>
   <path
-     d="m 3.9870319,12.641333 c -0.0098,-0.245789 0.1004486,-0.475448 0.2812496,-0.65625 L 11.237031,4.860082 c 0.146903,-0.146902 0.316938,-0.238675 0.5,-0.281248 0.09402,-0.02187 0.187362,-0.03729 0.28125,-0.03125 0.03029,-0.0017 0.06324,-0.0012 0.09375,0 0.05498,0.0095 0.103995,0.01176 0.156252,0.03125 0.188771,0.04065 0.38004,0.13004 0.531253,0.28125 l 6.968747,7.125002 c 0.361604,0.361604 0.329238,0.952012 -0.0625,1.343749 l -1.406251,1.40625 c -0.391737,0.391737 -1.013395,0.424102 -1.374999,0.0625 l -2.906252,-2.906248 2e-6,6.562498 c -1e-6,0.554 -0.446001,1 -1.000001,1 l -1.999998,-1e-6 c -0.554,-1e-6 -1,-0.445999 -1,-0.999999 l 0,-6.593749 -2.9375003,2.937499 c -0.3616034,0.361603 -0.9520125,0.329238 -1.3437491,-0.0625 L 4.2995303,13.328834 C 4.1036611,13.132967 3.9968641,12.887123 3.9870304,12.641334 Z"
-     id="rect3811-1"
-     style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.66000001;fill:url(#radialGradient3896-0);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-opacity:1;marker:none;enable-background:accumulate"
-     inkscape:connector-curvature="0" />
+     style="fill:url(#radialGradient4329);fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 19.017922,10.058568 c 0.01289,-0.2534533 -0.07927,-0.5202343 -0.324219,-0.7558603 l -5.871094,-5.882812 c -0.190006,-0.267398 -0.498622,-0.424336 -0.826172,-0.419922 l -0.01563,0 c -0.0098,5.23e-4 -0.01956,0.0011 -0.0293,0.002 -0.02345,0.0011 -0.047,0.0031 -0.07031,0.0059 -0.278588,0.03147 -0.530606,0.178911 -0.695312,0.40625 l -5.8789052,5.888672 c -0.979603,0.9425093 0.471546,2.3956933 1.412109,1.4140633 l 4.2832022,-4.2929693 0,14.0859633 c 0,0.271959 0.218755,0.490147 0.49024,0.490147 l 1.015624,0 c 0.271483,0 0.490235,-0.218189 0.490235,-0.490234 l 0,-14.0859643 4.283204,4.2929693 c 0.70542,0.736359 1.697672,0.102153 1.736328,-0.658203 z"
+     id="rect4228-7"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="sccccccccccssssccs" />
 </svg>
