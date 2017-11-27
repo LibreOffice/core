@@ -76,4 +76,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,gpgmepp,\
 	UnpackedTarball/gpgmepp/lang/cpp/src/vfsmountresult \
 ))
 
+ifeq ($(COM),MSC)
+ifeq ($(COM_IS_CLANG),TRUE)
+$(eval $(call gb_Library_add_cxxflags,gpgmepp, \
+    -Wno-c++11-narrowing \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
