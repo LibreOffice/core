@@ -280,10 +280,10 @@
                     "dest-filename": "external/tarballs/libwpg-0.3.2.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libwps-0.4.7.tar.xz",
-                    "sha256": "2f2cab630bceace24f9dbb7d187cd6cd1f4c9f8a7b682c5f7e49c1e2cb58b217",
+                    "url": "https://dev-www.libreoffice.org/src/libwps-0.4.8.tar.xz",
+                    "sha256": "e478e825ef33f6a434a19ff902c5469c9da7acc866ea0d8ab610a8b2aa94177e",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libwps-0.4.7.tar.xz"
+                    "dest-filename": "external/tarballs/libwps-0.4.8.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libzmf-0.0.2.tar.xz",
