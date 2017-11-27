@@ -1411,7 +1411,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
                 {
                     sal_Int32 nLen = 0;
                     nStt = nPos;
-                    if( ('"'==cChar) || ('\'')==cChar )
+                    if( ('"'==cChar) || '\''==cChar )
                     {
                         sal_Unicode cEnd = cChar;
                         nPos++; nStt++;

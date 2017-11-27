@@ -838,9 +838,9 @@ void OptimizerDialog::InitPage4()
             Any( OUString("STR_SAVE_AS") ),
             Any( (sal_Int32)( PAGE_POS_X + 6 ) ),
             Any( (sal_Int32)( DIALOG_HEIGHT - 75 ) ),
-            Any( (sal_Int32)( 0 ) ),
-            Any( (sal_Int32)( 100 ) ),
-            Any( (sal_Int32)( 0 ) ),
+            Any( (sal_Int32)0 ),
+            Any( (sal_Int32)100 ),
+            Any( (sal_Int32)0 ),
             Any( (sal_Int32)( PAGE_WIDTH - 12 ) ) };
 
         sal_Int32 nCount = SAL_N_ELEMENTS( pNames );

@@ -1136,7 +1136,7 @@ OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
                     , const OUString& rDragMethodServiceName
                     , const OUString& rDragParameterString )
 {
-    OUString aChildParticle = getStringForType( eSubObjectType ) + ("=");
+    OUString aChildParticle = getStringForType( eSubObjectType ) + "=";
 
     return createClassifiedIdentifierForParticles(
             rSeriesParticle, aChildParticle
