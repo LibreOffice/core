@@ -167,6 +167,7 @@
 #define UNO_NAME_GRAPHOBJ_URLPREFIX             "vnd.sun.star.GraphicObject:"
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX          "vnd.sun.star.Package:"
 #define UNO_NAME_GRAPHOBJ_GRAPHIC               "Graphic"
+#define UNO_NAME_GRAPHOBJ_IS_SIGNATURELINE      "IsSignatureLine"
 
 #define UNO_NAME_OLE2_METAFILE                  "MetaFile"
 #define UNO_NAME_OLE2_PERSISTNAME               "PersistName"
