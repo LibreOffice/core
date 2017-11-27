@@ -410,7 +410,7 @@ namespace canvas
         // of the above implemented concrete rendering operations
         // was triggered. we therefore need to ask the pagemanager
         // to allocate some space for the fragment we're dedicated to.
-        if(!(mpFragment))
+        if(!mpFragment)
         {
             mpFragment = mpPageManager->allocateSpace(maSize);
             if( mpFragment )
