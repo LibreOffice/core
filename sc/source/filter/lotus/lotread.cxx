@@ -62,7 +62,12 @@ ErrCode ImportLotus::Read()
         pIn->ReadUInt16( nOp ).ReadUInt16( nRecLen );
 
         if (!pIn->good() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4)
+        {
+            eRet = SCERR_IMPORT_FORMAT;
             eAkt = S_END;
+            if (!pIn->good())
+                break;  // while
+        }
 
         nNextRec += nRecLen + 4;
 
