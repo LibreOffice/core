@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libgpg-error,\
 $(eval $(call gb_ExternalProject_use_autoconf,libgpg-error,build))
 
 ifeq ($(COM),MSC)
-$(call gb_ExternalProject_get_state_target,libgpg-error,build):
+$(call gb_ExternalProject_get_state_target,libgpg-error,build): $(call gb_Executable_get_target,cpp)
 	$(call gb_ExternalProject_run,build,\
 		MAKE=$(MAKE) ./configure \
 			--enable-static \
@@ -29,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 			--host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+			RC='windres --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC) -I$(ATL_INCLUDE)'\' \
 	  && $(MAKE) \
 	)
 

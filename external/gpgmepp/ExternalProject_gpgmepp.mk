@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_use_externals,gpgmepp,\
 ))
 
 ifeq ($(COM),MSC)
-$(call gb_ExternalProject_get_state_target,gpgmepp,build):
+$(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_get_target,cpp)
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
@@ -38,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
 		   --host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+		   RC='windres --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC) -I$(ATL_INCLUDE)'\' \
 	  && $(MAKE) \
 	)
 else
