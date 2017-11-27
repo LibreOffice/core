@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
     <node oor:name="impress8" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT PREFERRED ENCRYPTION PASSWORDTOMODIFY</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT PREFERRED ENCRYPTION PASSWORDTOMODIFY GPGENCRYPTION</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>XML</value></prop>
