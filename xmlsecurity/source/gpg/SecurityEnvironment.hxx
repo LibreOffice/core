@@ -24,7 +24,14 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
+#endif
 #include <gpgme.h>
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic pop
+#endif
 #include <context.h>
 
 class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XSecurityEnvironment,
