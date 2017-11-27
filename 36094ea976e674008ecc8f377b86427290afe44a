@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_492d40fd",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-11-27T21:52:17Z",
+      "side": 1,
+      "message": "why is this nSttContent check still here",
+      "revId": "36094ea976e674008ecc8f377b86427290afe44a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8933a861",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-11-27T21:52:17Z",
+      "side": 1,
+      "message": "... while you want to remove the one here?\n\nthat\u0027s obviously inconsistent, the pFrameFormats will be empty here.",
+      "revId": "36094ea976e674008ecc8f377b86427290afe44a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4914609f",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-11-27T21:52:17Z",
+      "side": 1,
+      "message": "similar inconsistency here vs. the constructor",
+      "revId": "36094ea976e674008ecc8f377b86427290afe44a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
