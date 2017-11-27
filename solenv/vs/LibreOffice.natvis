@@ -270,6 +270,18 @@
   <Type Name="SfxInt16Item">
     <DisplayString>{{which={m_nWhich,x}}} Int16: {m_nValue}</DisplayString>
   </Type>
+  <Type Name="CntUInt16Item">
+    <DisplayString>{{which={m_nWhich,x}}} uInt16: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="CntByteItem">
+    <DisplayString>{{which={m_nWhich,x}}} uInt8: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="CntInt32Item">
+    <DisplayString>{{which={m_nWhich,x}}} Int32: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="CntUInt32Item">
+    <DisplayString>{{which={m_nWhich,x}}} uInt32: {m_nValue}</DisplayString>
+  </Type>
   <Type Name="SfxGrabBagItem">
     <DisplayString>
       {{which={m_nWhich,x}}} GrabBag {{size={m_aMap._Mypair._Myval2._Myval2._Mysize,d}}}
