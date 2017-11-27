@@ -151,7 +151,7 @@ void SfxLokHelper::notifyWindow(vcl::LOKWindowId nLOKWindowId,
     if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
         return;
 
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+
     OString aPayload = OString("{ \"dialogId\": \"") + OString::number(nLOKWindowId) + OString("\"");
     aPayload += OString(", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
 
@@ -165,11 +165,8 @@ void SfxLokHelper::notifyWindow(vcl::LOKWindowId nLOKWindowId,
     }
     aPayload += "}";
 
-    while (pViewShell)
-    {
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG, aPayload.getStr());
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
 }
 
 void SfxLokHelper::notifyWindowChild(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const Point& rPos)
@@ -177,17 +174,14 @@ void SfxLokHelper::notifyWindowChild(vcl::LOKWindowId nLOKWindowId, const OUStri
     if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
         return;
 
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+
     const OString aPayload = OString("{ \"dialogId\": \"") + OString::number(nLOKWindowId) +
         OString("\", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() +
         OString("\", \"position\": \"") + OString::number(rPos.getX()) + OString(", ") + OString::number(rPos.getY()) +
         + "\" }";
 
-    while (pViewShell)
-    {
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG_CHILD, aPayload.getStr());
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
 }
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)
