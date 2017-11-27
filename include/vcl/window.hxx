@@ -1066,6 +1066,7 @@ public:
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
+    virtual void                        LogicInvalidate(const Rectangle* pRectangle) override;
     void                                Validate();
     bool                                HasPaintEvent() const;
     void                                Update();
