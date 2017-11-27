@@ -136,8 +136,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
-    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
-    HANDLE_PRINTER_INDEPENDENT_LAYOUT
+    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PRINTERPAPERSIZE, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT,
+    HANDLE_UPDATEFROMTEMPLATE, HANDLE_PRINTER_INDEPENDENT_LAYOUT
     // #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_MODIFY_PASSWD, HANDLE_SAVE_VERSION
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL, HANDLE_EMBED_FONTS
@@ -171,6 +171,7 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("DefaultTabStop"),        HANDLE_TABSTOP,             ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
             { OUString("PrinterName"),           HANDLE_PRINTERNAME,         ::cppu::UnoType<OUString>::get(),     0,  0 },
             { OUString("PrinterSetup"),          HANDLE_PRINTERJOB,          cppu::UnoType<uno::Sequence < sal_Int8 >>::get(),  0, MID_PRINTER },
+            { OUString("PrinterPreferPapersize"), HANDLE_PRINTPAGENAME,      cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
 
             { OUString("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
             { OUString("IsPrintDate"),           HANDLE_PRINTDATE,           cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
@@ -770,6 +771,25 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 }
                 break;
 
+            case HANDLE_PRINTERPAPERSIZE:
+                {
+                    bool bPreferPrinterPapersize;
+                    if( *pValues >>= bPreferPrinterPapersize )
+                    {
+                        bOk = true;
+                        if( pDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+                        {
+                            SfxPrinter *pTempPrinter = pDocSh->GetPrinter( true );
+                            if (pTempPrinter)
+                            {
+                                pTempPrinter->SetPrinterSettingsPreferred( bPreferPrinterPapersize );
+                                //pDocSh->SetPrinter( pNewPrinter );
+                            }
+                        }
+                    }
+                }
+                break;
+
             case HANDLE_PARAGRAPHSUMMATION :
             {
                 bool bIsSummationOfParagraphs = false;
@@ -1119,6 +1139,13 @@ DocumentSettings::_getPropertyValues(
                         Sequence < sal_Int8 > aSequence;
                         *pValue <<= aSequence;
                     }
+                }
+                break;
+
+            case HANDLE_PRINTERPAPERSIZE:
+                {
+                    SfxPrinter *pTempPrinter = pDocSh->GetPrinter( false );
+                    *pValue <<= pTempPrinter ? pTempPrinter->GetPrinterSettingsPreferred() : false;
                 }
                 break;
 
