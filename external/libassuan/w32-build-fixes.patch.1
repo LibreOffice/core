@@ -1,3 +1,14 @@
+--- libassuan/src/Makefile.am
++++ libassuan/src/Makefile.am
+@@ -81,7 +81,7 @@
+ 
+ if HAVE_W32_SYSTEM
+ 
+-LTRCCOMPILE = $(LIBTOOL) --mode=compile $(RC) \
++LTRCCOMPILE = $(LIBTOOL) --mode=compile --tag=RC $(RC) \
+      `echo $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) | \
+      sed -e 's/-I/--include-dir /g;s/-D/--define /g'`
+ 
 --- libassuan.orig/src/mkheader.c	2013-03-15 20:26:09.000000000 +0100
 +++ libassuan/src/mkheader.c	2017-09-24 14:17:33.584583300 +0200
 @@ -99,7 +99,7 @@
