@@ -58,19 +58,26 @@ namespace exp
 class XMLTextSequenceContext : public XMLImportContext
 {
 public:
-    XMLTextSequenceContext(XMLImport &rImport);
+    XMLTextSequenceContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
 
     void SAL_CALL characters(const OUString &rChars) override;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
 };
 
-XMLTextSequenceContext::XMLTextSequenceContext(XMLImport &rImport)
+XMLTextSequenceContext::XMLTextSequenceContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
     : XMLImportContext(rImport)
 {
+    // Inherit properties from parent.
+    librevenge::RVNGPropertyList::Iter itProp(rPropertyList);
+    for (itProp.rewind(); itProp.next();)
+        m_aPropertyList.insert(itProp.key(), itProp()->clone());
 }
 
 void XMLTextSequenceContext::characters(const OUString &rChars)
 {
-    mrImport.GetGenerator().openSpan(librevenge::RVNGPropertyList());
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
 
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
@@ -349,7 +356,7 @@ rtl::Reference<XMLImportContext> CreateParagraphOrSpanChildContext(XMLImport &rI
     if (rName == "draw:frame")
         return new XMLTextFrameContext(rImport);
     if (rName == "text:sequence")
-        return new XMLTextSequenceContext(rImport);
+        return new XMLTextSequenceContext(rImport, rTextPropertyList);
     return nullptr;
 }
 

@@ -9,6 +9,9 @@
     </style:style>
   </office:styles>
   <office:automatic-styles>
+    <style:style style:name="T1" style:family="text">
+      <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
+    </style:style>
     <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
       <style:graphic-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:padding="0.049cm" fo:border="0.99pt dashed #ed1c24" style:shadow="none" draw:shadow-opacity="100%"/>
     </style:style>
@@ -24,7 +27,7 @@
         <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
         <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
       </text:sequence-decls>
-      <text:p><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="char" svg:width="5.674cm" draw:z-index="0"><draw:text-box fo:min-height="3.336cm"><text:p><draw:frame draw:style-name="fr2" draw:name="Object0" text:anchor-type="as-char" svg:width="1.663cm" style:rel-width="100%" svg:height="1.663cm" style:rel-height="scale" draw:z-index="1"><draw:image><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+      <text:p text:style-name="Standard"><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="char" svg:width="5.674cm" draw:z-index="0"><draw:text-box fo:min-height="3.336cm"><text:p text:style-name="Frame_20_contents"><draw:frame draw:style-name="fr2" draw:name="Object0" text:anchor-type="as-char" svg:width="1.663cm" style:rel-width="100%" svg:height="1.663cm" style:rel-height="scale" draw:z-index="1"><draw:image loext:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
           UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
           AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
           AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
@@ -39,7 +42,7 @@
           hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
           5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
           AABJRU5ErkJggg==
-         </office:binary-data></draw:image></draw:frame><text:span><text:line-break/></text:span><text:span>Illustration </text:span><text:span><text:sequence text:ref-name="refIllustration0" text:name="Illustration" text:formula="ooow:Illustration+1" style:num-format="1">1</text:sequence></text:span><text:span>: foo</text:span></text:p></draw:text-box></draw:frame>bar</text:p>
+         </office:binary-data></draw:image></draw:frame><text:line-break/><text:span text:style-name="T1">Illustration </text:span><text:span text:style-name="T1"><text:sequence text:ref-name="refIllustration0" text:name="Illustration" text:formula="ooow:Illustration+1" style:num-format="1">1</text:sequence></text:span><text:span text:style-name="T1">: foo</text:span></text:p></draw:text-box></draw:frame>bar</text:p>
     </office:text>
   </office:body>
 </office:document>
