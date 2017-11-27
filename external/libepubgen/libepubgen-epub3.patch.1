@@ -3577,3 +3577,45 @@ index 4ffa55d..d81a905 100644
 -- 
 2.13.6
 
+From 0f5073481b094562f2c78481475a660fb6826cdb Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 9 Nov 2017 11:32:27 +0100
+Subject: [PATCH] EPUBImageManager: initial horizontal positioning
+
+For now position everything to the left, except for explicit "right".
+---
+ src/lib/EPUBImageManager.cpp       | 17 ++++++++++
+ src/test/EPUBTextGeneratorTest.cpp | 66 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 83 insertions(+)
+
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index 2311e76..8414da5 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -133,6 +133,23 @@ std::string EPUBImageManager::getImageStyle(librevenge::RVNGPropertyList const &
+ 
+ void EPUBImageManager::extractImageProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const
+ {
++  // Positioning.
++  librevenge::RVNGString anchorType;
++  if (pList["text:anchor-type"])
++    anchorType = pList["text:anchor-type"]->getStr();
++  if (anchorType != "as-char")
++  {
++    // Horizontal position.
++    librevenge::RVNGString horizontalPos;
++    if (pList["style:horizontal-pos"])
++      horizontalPos = pList["style:horizontal-pos"]->getStr();
++
++    if (horizontalPos == "right")
++      cssProps["float"] = "right";
++    else
++      cssProps["float"] = "left";
++  }
++
+   // Extract borders.
+   static char const *(type[]) = {"border", "border-left", "border-top", "border-right", "border-bottom" };
+   for (int i = 0; i < 5; i++)
+-- 
+2.13.6
+
