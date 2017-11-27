@@ -26,6 +26,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build):
 		&& ./configure \
 		--enable-static \
 		--disable-shared \
+		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		CXXFLAGS="$(CXXFLAGS)" \
 		GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
