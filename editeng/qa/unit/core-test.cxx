@@ -89,6 +89,8 @@ public:
 
     void testLargeParaCopyPaste();
 
+    void testTransliterate();
+
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
     CPPUNIT_TEST_SUITE(Test);
@@ -107,6 +109,7 @@ public:
     CPPUNIT_TEST(testParaStartCopyPaste);
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST(testLargeParaCopyPaste);
+    CPPUNIT_TEST(testTransliterate);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1739,6 +1742,18 @@ void Test::testLargeParaCopyPaste()
     CPPUNIT_ASSERT_EQUAL( aEighthPara, rDoc.GetParaAsString(sal_Int32(9)) );
     CPPUNIT_ASSERT_EQUAL( aNinthPara, rDoc.GetParaAsString(sal_Int32(10)) );
     CPPUNIT_ASSERT_EQUAL( aTenthPara, rDoc.GetParaAsString(sal_Int32(11)) );
+}
+
+void Test::testTransliterate()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    OUString sText("one (two) three");
+    aEditEngine.SetText(sText);
+    aEditEngine.TransliterateText(ESelection(0, 0, 0, sText.getLength()), TransliterationFlags::TITLE_CASE);
+    OUString aExpected("One (Two) Three");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aEditEngine.GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

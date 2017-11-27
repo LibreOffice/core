@@ -1757,8 +1757,8 @@ void SwTextNode::TransliterateText(
                 }
 
                 aCurWordBndry = g_pBreakIt->GetBreakIter()->nextWord(
-                        GetText(), nEnd,
-                        g_pBreakIt->GetLocale( GetLang( nEnd ) ),
+                        GetText(), nStt,
+                        g_pBreakIt->GetLocale(GetLang(nStt, 1)),
                         nWordType);
             }
         }

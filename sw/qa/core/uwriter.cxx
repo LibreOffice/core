@@ -1492,6 +1492,12 @@ void SwDocTest::testTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::HIRAGANA_KATAKANA));
+
+    m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "one (two) three");
+    CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"),
+            translitTest(*m_pDoc, aPaM,
+                TransliterationFlags::TITLE_CASE));
 }
 
 namespace
