@@ -46,6 +46,7 @@ protected:
      * printer-related properties, remember the last printer and set it in
      * _postSetValues */
     VclPtr<SfxPrinter>      mpPrinter;
+    bool mbPreferPrinterPapersize;
 
     virtual void _preSetValues ()
         throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
