@@ -1075,7 +1075,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
             else if( nPart == ControlPart::MenuItem )
             {
-                if( (nState & ControlState::ENABLED) )
+                if( nState & ControlState::ENABLED )
                     iState = (nState & ControlState::SELECTED) ? MPI_HOT : MPI_NORMAL;
                 else
                     iState = (nState & ControlState::SELECTED) ? MPI_DISABLEDHOT : MPI_DISABLED;
@@ -1083,7 +1083,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
             else if( nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark )
             {
-                if( (nState & ControlState::PRESSED) )
+                if( nState & ControlState::PRESSED )
                 {
                     RECT aBGRect = rc;
                     if( aValue.getType() == ControlType::MenuPopup )

@@ -293,9 +293,9 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     if( nMode & StreamMode::SHARE_DENYALL)
         nShareMode = 0;
 
-    if( (nMode & StreamMode::READ) )
+    if( nMode & StreamMode::READ )
         nAccessMode |= GENERIC_READ;
-    if( (nMode & StreamMode::WRITE) )
+    if( nMode & StreamMode::WRITE )
         nAccessMode |= GENERIC_WRITE;
 
     if( nAccessMode == GENERIC_READ )       // ReadOnly ?

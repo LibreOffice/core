@@ -496,7 +496,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 // Unix is case sensitive
         ( sNewPathStr != sWritable );
 #else
-        ( !sNewPathStr.equalsIgnoreAsciiCase( sWritable ) );
+        !sNewPathStr.equalsIgnoreAsciiCase( sWritable );
 #endif
 
     if ( bChanged )

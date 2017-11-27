@@ -1234,7 +1234,7 @@ sal_Bool SAL_CALL osl_isReceiveReady (
                    &fds,                        /* check read operations */
                    nullptr,                     /* check write ops */
                    nullptr,                     /* ckeck for OOB */
-                   (pTimeout) ? &tv : nullptr)==1); /* use timeout? */
+                   pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 
 /*****************************************************************************/
@@ -1263,7 +1263,7 @@ sal_Bool SAL_CALL osl_isSendReady (
                    nullptr,                     /* check read operations */
                    &fds,                        /* check write ops */
                    nullptr,                     /* ckeck for OOB */
-                   (pTimeout) ? &tv : nullptr)==1); /* use timeout? */
+                   pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 
 sal_Bool SAL_CALL osl_isExceptionPending (
@@ -1289,7 +1289,7 @@ sal_Bool SAL_CALL osl_isExceptionPending (
                    nullptr,                     /* check read operations */
                    nullptr,                     /* check write ops */
                    &fds,                        /* ckeck for OOB */
-                   (pTimeout) ? &tv : nullptr)==1); /* use timeout? */
+                   pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 
 sal_Bool SAL_CALL osl_shutdownSocket (
