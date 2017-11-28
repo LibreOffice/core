@@ -70,8 +70,6 @@ static const OUString sPlaceholderTag( "<[:isPlaceholder:]>" );
 
 class SVGExport : public SvXMLExport
 {
-    typedef ::std::list< ::basegfx::B2DPolyPolygon > B2DPolyPolygonList;
-
     bool    mbIsUseTinyProfile;
     bool    mbIsEmbedFonts;
     bool    mbIsUseOpacity;
