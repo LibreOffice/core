@@ -275,6 +275,8 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     aConv.Reset( aAddr );
     aConv.SetWK3();
     aConv.Convert( pErg, nRest );
+    if (!aConv.good())
+        return;
 
     ScFormulaCell* pCell = pErg ? new ScFormulaCell(pD, aAddr, *pErg) : new ScFormulaCell(pD, aAddr);
     pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );

@@ -151,7 +151,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
     LotusToSc aConv(rContext, r, rSPool, rContext.pLotusRoot->eCharsetQ, false);
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
-    if (!r.good())
+    if (!aConv.good())
         return;
 
     if (ValidColRow(nCol, nRow))
@@ -401,7 +401,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     LotusToSc aConv(rContext, r, rSPool, rContext.pLotusRoot->eCharsetQ, true);
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
-    if (!r.good())
+    if (!aConv.good())
         return;
 
     if (ValidColRow(nCol, nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
