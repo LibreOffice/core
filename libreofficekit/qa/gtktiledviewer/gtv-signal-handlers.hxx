@@ -22,6 +22,8 @@ void createView(GtkWidget* pButton, gpointer /*pItem*/);
 
 void getRulerState(GtkWidget* pButton, gpointer /*pItem*/);
 
+void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ );
+
 void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */);
 
 void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/);

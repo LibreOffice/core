@@ -195,6 +195,37 @@ static void iterateUnoParams(GtkWidget* pWidget, gpointer userdata)
     pTree->put(boost::property_tree::ptree::path_type(g_strconcat(unoParam[1], "/", "value", nullptr), '/'), unoParam[2]);
 }
 
+void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ )
+{
+    GtvApplicationWindow* pWindow = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
+    gchar* pUnoCmd = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(pSelector));
+
+    GtvMainToolbar* pToolbar = gtv_application_window_get_main_toolbar(pWindow);
+    const std::string aUnoArgs = gtv_main_toolbar_get_recent_uno_args(pToolbar, pUnoCmd);
+    // this will also discard our default placeholder string, "Recent UNO"
+    if (aUnoArgs.empty())
+        return;
+
+    lok_doc_view_post_command(LOK_DOC_VIEW(pWindow->lokdocview), pUnoCmd, (aUnoArgs.empty() ? nullptr : aUnoArgs.c_str()), false);
+    g_free(pUnoCmd);
+}
+
+static void addToRecentUnoCommands(GtvApplicationWindow* pWindow, const std::string& rUnoCmd, std::string rArgs)
+{
+    GtvMainToolbar* pToolbar = gtv_application_window_get_main_toolbar(pWindow);
+    rArgs.erase(std::find_if(rArgs.begin(), rArgs.end(), [](char ch) { return ch == '\n'; }));
+    const std::string rUnoCmdStr = rUnoCmd + " | " + rArgs;
+
+
+    // add to file
+    std::ofstream outfile("/tmp/gtv-recentunos.txt", std::ios_base::app | std::ios_base::out);
+    if (outfile.good())
+        outfile << rUnoCmdStr << '\n';
+
+    // add to combo box
+    gtv_main_toolbar_add_recent_uno(pToolbar, rUnoCmdStr);
+}
+
 void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
@@ -235,12 +266,13 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
         gtk_container_foreach(GTK_CONTAINER(pUnoParamAreaBox), iterateUnoParams, &aTree);
 
         std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
+        boost::property_tree::write_json(aStream, aTree, false);
         std::string aArguments = aStream.str();
 
         g_info("Generated UNO command: %s %s", sUnoCmd, aArguments.c_str());
 
         lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
+        addToRecentUnoCommands(window, sUnoCmd, aArguments);
     }
         break;
     }
