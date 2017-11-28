@@ -27,6 +27,7 @@
 #include <svtools/imapobj.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <sfx2/app.hxx>
@@ -269,6 +270,11 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                       aVEvt.eEvent == SDREVENT_EXECUTEURL )
              {
                 mpWindow->ReleaseMouse();
+
+                SvtSecurityOptions aSecOpt;
+                if (!rMEvt.IsMod1() && aSecOpt.IsOptionSet(SvtSecurityOptions::E_CTRLCLICK_HYPERLINK))
+                    return true;
+
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
