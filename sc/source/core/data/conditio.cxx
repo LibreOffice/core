@@ -619,26 +619,11 @@ void ScConditionEntry::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     StartListening();
 }
 
-//FIXME: Make this a comparison operator at the TokenArray?
 static bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
 {
     // We only compare the non-RPN array
     if ( pArr1 && pArr2 )
-    {
-        sal_uInt16 nLen = pArr1->GetLen();
-        if ( pArr2->GetLen() != nLen )
-            return false;
-
-        FormulaToken** ppToken1 = pArr1->GetArray();
-        FormulaToken** ppToken2 = pArr2->GetArray();
-        for (sal_uInt16 i=0; i<nLen; i++)
-        {
-            if ( ppToken1[i] != ppToken2[i] &&
-                 !(*ppToken1[i] == *ppToken2[i]) )
-                return false; // Difference
-        }
-        return true; // All entries are the same
-    }
+        return pArr1->EqualTokens( pArr2 );
     else
         return !pArr1 && !pArr2; // Both 0? -> the same
 }
