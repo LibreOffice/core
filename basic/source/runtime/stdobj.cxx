@@ -769,11 +769,23 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
              && ( p->nHash == nHash_ )
              && ( rName.equalsIgnoreAsciiCaseAscii( p->pName ) ) )
             {
-                SbiInstance* pInst = GetSbData()->pInst;
                 bFound = true;
                 if( p->nArgs & COMPTMASK_ )
                 {
-                    if ( !pInst || ( pInst->IsCompatibility()  && ( NORMONLY_ & p->nArgs )  ) || ( !pInst->IsCompatibility()  && ( COMPATONLY_ & p->nArgs )  ) )
+                    bool bCompatibility = false;
+                    SbiInstance* pInst = GetSbData()->pInst;
+                    if (pInst)
+                    {
+                        bCompatibility = pInst->IsCompatibility();
+                    }
+                    else
+                    {
+                        // No instance running => compiling a source on module level.
+                        const SbModule* pModule = GetSbData()->pCompMod;
+                        if (pModule)
+                            bCompatibility = pModule->IsVBACompat();
+                    }
+                    if ((bCompatibility && (NORMONLY_ & p->nArgs)) || (!bCompatibility && (COMPATONLY_ & p->nArgs)))
                         bFound = false;
                 }
                 break;
