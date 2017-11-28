@@ -3731,7 +3731,14 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
     {
         // Sprm found?
         const sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
+        sal_Int32 nRemLen = nSprmSiz - i;
+        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nRemLen);
+        bool bValid = x <= nRemLen;
+        if (!bValid)
+        {
+            SAL_WARN("sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
+            break;
+        }
         bool bOk = true;
         if( nAktId  == nId1 )
         {
