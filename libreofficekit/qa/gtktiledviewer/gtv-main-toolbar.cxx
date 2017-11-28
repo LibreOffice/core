@@ -35,6 +35,8 @@ struct GtvMainToolbarPrivateImpl
     GtkWidget* m_pDeleteComment;
     GtkWidget* m_pPartSelector;
     GtkWidget* m_pPartModeSelector;
+    GtkWidget* m_pRecentUnoSelector;
+    std::map<std::string, std::string> m_pRecentUnoCommands;
 
     /// Sensitivity (enabled or disabled) for each tool item, ignoring edit state
     std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
@@ -49,7 +51,8 @@ struct GtvMainToolbarPrivateImpl
         m_pJustifypara(nullptr),
         m_pDeleteComment(nullptr),
         m_pPartSelector(nullptr),
-        m_pPartModeSelector(nullptr)
+        m_pPartModeSelector(nullptr),
+        m_pRecentUnoSelector(nullptr)
         { }
 };
 
@@ -96,6 +99,7 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     priv->m_pDeleteComment = GTK_WIDGET(gtk_builder_get_object(builder.get(), "btn_removeannotation"));
     priv->m_pPartSelector = GTK_WIDGET(gtk_builder_get_object(builder.get(), "combo_partselector"));
     priv->m_pPartModeSelector = GTK_WIDGET(gtk_builder_get_object(builder.get(), "combo_partsmodeselector"));
+    priv->m_pRecentUnoSelector = GTK_WIDGET(gtk_builder_get_object(builder.get(), "combo_recentunoselector"));
 
     toolbar->m_pAddressbar = GTK_WIDGET(gtk_builder_get_object(builder.get(), "addressbar_entry"));
     toolbar->m_pFormulabar = GTK_WIDGET(gtk_builder_get_object(builder.get(), "formulabar_entry"));
@@ -106,6 +110,7 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder.get(), "doPaste", G_CALLBACK(doPaste));
     gtk_builder_add_callback_symbol(builder.get(), "createView", G_CALLBACK(createView));
     gtk_builder_add_callback_symbol(builder.get(), "getRulerState", G_CALLBACK(getRulerState));
+    gtk_builder_add_callback_symbol(builder.get(), "recentUnoChanged", G_CALLBACK(recentUnoChanged));
     gtk_builder_add_callback_symbol(builder.get(), "unoCommandDebugger", G_CALLBACK(unoCommandDebugger));
     gtk_builder_add_callback_symbol(builder.get(), "toggleEditing", G_CALLBACK(toggleEditing));
     gtk_builder_add_callback_symbol(builder.get(), "changePartMode", G_CALLBACK(changePartMode));
@@ -178,6 +183,29 @@ static void populatePartSelector(GtvMainToolbar* toolbar)
     gtv_application_window_set_part_broadcast(window, true);
 }
 
+static void populateRecentUnoSelector(GtvMainToolbar* toolbar)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    GtkComboBoxText* pSelector = GTK_COMBO_BOX_TEXT(priv->m_pRecentUnoSelector);
+
+    unsigned counter = 0;
+    std::ifstream is("/tmp/gtv-recentunos.txt");
+    while (is.good() && counter < 10)
+    {
+        std::string unoCommandStr;
+        std::getline(is, unoCommandStr);
+        std::vector<std::string> aUnoCmd = GtvHelpers::split<std::string>(unoCommandStr, " | ", 2);
+        if (aUnoCmd.size() != 2)
+            continue;
+        auto it = priv->m_pRecentUnoCommands.emplace(aUnoCmd[0], aUnoCmd[1]);
+        if (it.second)
+        {
+            gtk_combo_box_text_append_text(pSelector, aUnoCmd[0].c_str());
+            ++counter;
+        }
+    }
+}
+
 void
 gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode)
 {
@@ -204,6 +232,36 @@ gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType 
 
     // populate combo boxes
     populatePartSelector(toolbar);
+
+    // populate recent uno selector
+    populateRecentUnoSelector(toolbar);
+}
+
+void
+gtv_main_toolbar_add_recent_uno(GtvMainToolbar* toolbar, const std::string& rUnoCmdStr)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    GtkComboBoxText* pSelector = GTK_COMBO_BOX_TEXT(priv->m_pRecentUnoSelector);
+
+    const std::vector<std::string> aUnoCmd = GtvHelpers::split<std::string>(rUnoCmdStr, " | ", 2);
+    priv->m_pRecentUnoCommands[aUnoCmd[0]] = aUnoCmd[1];
+    // keep placeholder string at the top
+    gtk_combo_box_text_insert_text(pSelector, 1, aUnoCmd[0].c_str());
+    // TODO: Remove other text entries with same key
+}
+
+const std::string
+gtv_main_toolbar_get_recent_uno_args(GtvMainToolbar* toolbar, const std::string& rUnoCmd)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    auto it = std::find_if(priv->m_pRecentUnoCommands.begin(), priv->m_pRecentUnoCommands.end(),
+                           [&rUnoCmd](const std::pair<std::string, std::string>& pair) {
+                               return rUnoCmd == pair.first;
+                           });
+    std::string ret;
+    if (it != priv->m_pRecentUnoCommands.end())
+        ret = it->second;
+    return ret;
 }
 
 GtkContainer*
