@@ -805,7 +805,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     for( nRow = 0; nRow < nRowCount; ++nRow )
     {
         maRows[nRow].mnPos = nNewHeight;
-        nNewHeight += maRows[nRow].mnSize;
+        nNewHeight = o3tl::saturating_add(nNewHeight, maRows[nRow].mnSize);
 
         if( bFit )
         {
