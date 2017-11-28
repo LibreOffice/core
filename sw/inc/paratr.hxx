@@ -202,37 +202,37 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
 
 //  Implementation of paragraph-attributes methods of SwAttrSet
 inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(bool bInP) const
-    {   return static_cast<const SvxLineSpacingItem&>(Get( RES_PARATR_LINESPACING,bInP)); }
+    {   return Get( RES_PARATR_LINESPACING,bInP); }
 inline const SvxAdjustItem &SwAttrSet::GetAdjust(bool bInP) const
-    {   return static_cast<const SvxAdjustItem&>(Get( RES_PARATR_ADJUST,bInP)); }
+    {   return Get( RES_PARATR_ADJUST,bInP); }
 inline const SvxFormatSplitItem &SwAttrSet::GetSplit(bool bInP) const
-    {   return static_cast<const SvxFormatSplitItem&>(Get( RES_PARATR_SPLIT,bInP)); }
+    {   return Get( RES_PARATR_SPLIT,bInP); }
 inline const SwRegisterItem &SwAttrSet::GetRegister(bool bInP) const
-    {   return static_cast<const SwRegisterItem&>(Get( RES_PARATR_REGISTER,bInP)); }
+    {   return Get( RES_PARATR_REGISTER,bInP); }
 inline const SvxWidowsItem &SwAttrSet::GetWidows(bool bInP) const
-    {   return static_cast<const SvxWidowsItem&>(Get( RES_PARATR_WIDOWS,bInP)); }
+    {   return Get( RES_PARATR_WIDOWS,bInP); }
 inline const SvxOrphansItem &SwAttrSet::GetOrphans(bool bInP) const
-    {   return static_cast<const SvxOrphansItem&>(Get( RES_PARATR_ORPHANS,bInP)); }
+    {   return Get( RES_PARATR_ORPHANS,bInP); }
 inline const SvxTabStopItem &SwAttrSet::GetTabStops(bool bInP) const
-    {   return static_cast<const SvxTabStopItem&>(Get( RES_PARATR_TABSTOP,bInP)); }
+    {   return Get( RES_PARATR_TABSTOP,bInP); }
 inline const SvxHyphenZoneItem &SwAttrSet::GetHyphenZone(bool bInP) const
-    {   return static_cast<const SvxHyphenZoneItem&>(Get(RES_PARATR_HYPHENZONE,bInP)); }
+    {   return Get(RES_PARATR_HYPHENZONE,bInP); }
 inline const SwFormatDrop &SwAttrSet::GetDrop(bool bInP) const
-    {   return static_cast<const SwFormatDrop&>(Get(RES_PARATR_DROP,bInP)); }
+    {   return Get(RES_PARATR_DROP,bInP); }
 inline const SwNumRuleItem &SwAttrSet::GetNumRule(bool bInP) const
-    {   return static_cast<const SwNumRuleItem&>(Get(RES_PARATR_NUMRULE,bInP)); }
+    {   return Get(RES_PARATR_NUMRULE,bInP); }
 inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(bool bInP) const
-    {   return static_cast<const SvxScriptSpaceItem&>(Get(RES_PARATR_SCRIPTSPACE,bInP)); }
+    {   return Get(RES_PARATR_SCRIPTSPACE,bInP); }
 inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(bool bInP) const
-    {   return static_cast<const SvxHangingPunctuationItem&>(Get(RES_PARATR_HANGINGPUNCTUATION,bInP)); }
+    {   return Get(RES_PARATR_HANGINGPUNCTUATION,bInP); }
 inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(bool bInP) const
-    {   return static_cast<const SvxForbiddenRuleItem&>(Get(RES_PARATR_FORBIDDEN_RULES, bInP)); }
+    {   return Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
 inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(bool bInP) const
-    {   return static_cast<const SvxParaVertAlignItem&>(Get( RES_PARATR_VERTALIGN, bInP )); }
+    {   return Get( RES_PARATR_VERTALIGN, bInP ); }
 inline const SvxParaGridItem &SwAttrSet::GetParaGrid(bool bInP) const
-    {   return static_cast<const SvxParaGridItem&>(Get( RES_PARATR_SNAPTOGRID, bInP )); }
+    {   return Get( RES_PARATR_SNAPTOGRID, bInP ); }
 inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(bool bInP) const
-    {   return static_cast<const SwParaConnectBorderItem&>(Get( RES_PARATR_CONNECT_BORDER, bInP )); }
+    {   return Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 // Implementation of paragraph-attributes methods of SwFormat
 inline const SvxLineSpacingItem &SwFormat::GetLineSpacing(bool bInP) const

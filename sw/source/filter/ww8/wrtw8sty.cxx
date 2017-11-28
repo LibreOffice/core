@@ -849,7 +849,7 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
     GetId(wwFont("Arial", PITCH_VARIABLE, FAMILY_SWISS,
         RTL_TEXTENCODING_MS_1252));
 
-    const SvxFontItem* pFont = static_cast<const SvxFontItem*>(GetDfltAttr(RES_CHRATR_FONT));
+    const SvxFontItem* pFont = GetDfltAttr(RES_CHRATR_FONT);
 
     GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
         pFont->GetFamily(), pFont->GetCharSet()));
