@@ -404,6 +404,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const SwFrame& rPageAlignLayFrame,
                                                          const SwTwips nProposedRelPosY,
                                                          const bool bFollowTextFlow,
+                                                         const bool bBrowse,
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
@@ -455,6 +456,14 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         }
         else
         {
+            // tdf#112443
+            // if not browsing a file AND the position is completely off-page,
+            // return the proposed position and do not adjust it.
+            if ( !bBrowse && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Right() )
+            {
+                return nProposedRelPosY;
+            }
+
             if ( bCheckBottom &&
                  nTopOfAnch + nAdjustedRelPosY + aObjSize.Width() >
                     aPgAlignArea.Right() )
@@ -471,6 +480,14 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     }
     else
     {
+        // tdf#112443
+        // if not browsing a file AND the position is completely off-page,
+        // return the proposed position and do not adjust it.
+        if ( !bBrowse && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Bottom() )
+        {
+            return nProposedRelPosY;
+        }
+
         // #i31805# - consider value of <bCheckBottom>
         if ( bCheckBottom &&
              nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >

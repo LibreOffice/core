@@ -491,7 +491,11 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             // If the fly moves, some paragraphs have to be formatted, this
             // could cause a change of the height of the headerframe,
             // now the flyframe can change its position and so on ...
-            if ( !pHeader || !pHeader->IsHeaderFrame() )
+
+            //only move fly objects when in browse mode
+            bool bBrowse = GetAnchorFrame()->IsInDocBody() && !GetAnchorFrame()->IsInTab();
+
+            if ( bBrowse && (!pHeader || !pHeader->IsHeaderFrame()) )
             {
                 const long nOld = getFrameArea().Top();
 
