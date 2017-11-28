@@ -239,6 +239,50 @@ OUString lcl_checkFontFile( const OUString &fileUrl )
     return OUString();
 }
 
+/// Contains information about a single variant of an embedded font.
+struct EmbeddedFontInfo
+{
+    OUString aURL;
+    FontWeight eWeight = WEIGHT_NORMAL;
+    FontItalic eItalic = ITALIC_NONE;
+};
+
+/// Converts FontWeight to CSS-compatible string representation.
+OUString FontWeightToString(FontWeight eWeight)
+{
+    OUString aRet;
+
+    switch (eWeight)
+    {
+    case WEIGHT_BOLD:
+        aRet = "bold";
+        break;
+    default:
+        aRet = "normal";
+        break;
+    }
+
+    return aRet;
+}
+
+/// Converts FontItalic to CSS-compatible string representation.
+OUString FontItalicToString(FontItalic eWeight)
+{
+    OUString aRet;
+
+    switch (eWeight)
+    {
+    case ITALIC_NORMAL:
+        aRet = "italic";
+        break;
+    default:
+        aRet = "normal";
+        break;
+    }
+
+    return aRet;
+}
+
 }
 
 void XMLFontAutoStylePool::exportXML()
@@ -296,7 +340,7 @@ void XMLFontAutoStylePool::exportXML()
         if( tryToEmbedFonts )
         {
             const bool bExportFlat( GetExport().getExportFlags() & SvXMLExportFlags::EMBEDDED );
-            std::vector< OUString > fileUrls;
+            std::vector< EmbeddedFontInfo > aEmbeddedFonts;
             static const FontWeight weight[] = { WEIGHT_NORMAL, WEIGHT_BOLD, WEIGHT_NORMAL, WEIGHT_BOLD };
             static const FontItalic italic[] = { ITALIC_NONE, ITALIC_NONE, ITALIC_NORMAL, ITALIC_NORMAL };
             assert( SAL_N_ELEMENTS( weight ) == SAL_N_ELEMENTS( italic ));
@@ -319,23 +363,33 @@ void XMLFontAutoStylePool::exportXML()
                     else
                         continue; // --> failed to embed
                 }
-                fileUrls.push_back( fileUrl );
+                EmbeddedFontInfo aEmbeddedFont;
+                aEmbeddedFont.aURL = fileUrl;
+                aEmbeddedFont.eWeight = weight[j];
+                aEmbeddedFont.eItalic = italic[j];
+                aEmbeddedFonts.push_back(aEmbeddedFont);
             }
-            if( !fileUrls.empty())
+            if (!aEmbeddedFonts.empty())
             {
                 SvXMLElementExport fontFaceSrc( GetExport(), XML_NAMESPACE_SVG,
                     XML_FONT_FACE_SRC, true, true );
-                for( std::vector< OUString >::const_iterator it = fileUrls.begin();
-                     it != fileUrls.end();
+                for( auto it = aEmbeddedFonts.begin();
+                     it != aEmbeddedFonts.end();
                      ++it )
                 {
-                    if( fontFilesMap.count( *it ))
+                    if (fontFilesMap.count(it->aURL))
                     {
                         if( !bExportFlat )
                         {
-                            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, fontFilesMap[ *it ] );
+                            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, fontFilesMap[it->aURL]);
                             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
                         }
+
+                        // Help consumers of our output by telling them which
+                        // font file is which one.
+                        GetExport().AddAttribute( XML_NAMESPACE_LO_EXT, XML_FONT_STYLE, FontItalicToString(it->eItalic) );
+                        GetExport().AddAttribute( XML_NAMESPACE_LO_EXT, XML_FONT_WEIGHT, FontWeightToString(it->eWeight) );
+
                         SvXMLElementExport fontFaceUri( GetExport(), XML_NAMESPACE_SVG,
                             XML_FONT_FACE_URI, true, true );
 
@@ -344,7 +398,7 @@ void XMLFontAutoStylePool::exportXML()
                             const uno::Reference< ucb::XSimpleFileAccess > xFileAccess( ucb::SimpleFileAccess::create( GetExport().getComponentContext() ) );
                             try
                             {
-                                const uno::Reference< io::XInputStream > xInput( xFileAccess->openFileRead( fontFilesMap[ *it ] ) );
+                                const uno::Reference< io::XInputStream > xInput( xFileAccess->openFileRead( fontFilesMap[ it->aURL ] ) );
                                 XMLBase64Export aBase64Exp( GetExport() );
                                 aBase64Exp.exportOfficeBinaryDataElement( xInput );
                             }
