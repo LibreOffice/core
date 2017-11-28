@@ -481,7 +481,7 @@ void push_token(MzString const &white, MzString const &token, istream *strm)
  * It returns the length of the read tokens.
  *
  * control char, control sequence, binary sequence,
- * alphabet string, sigle character */
+ * alphabet string, single character */
 static int next_token(MzString &white, MzString &token, istream *strm)
 {
   std::istream::int_type ch = 0;
