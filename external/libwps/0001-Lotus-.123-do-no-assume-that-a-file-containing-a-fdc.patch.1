@@ -1,0 +1,27 @@
+From 2a3465442d1305c7fec55e986c9793a86e571baa Mon Sep 17 00:00:00 2001
+From: osnola <alonso@loria.fr>
+Date: Fri, 24 Nov 2017 12:32:30 +0100
+Subject: [PATCH] Lotus .123: do no assume that a file containing a fdc's
+ structure is   a Mac file :-~
+
+---
+ src/lib/Lotus.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/lib/Lotus.cpp b/src/lib/Lotus.cpp
+index d145014..514faad 100644
+--- a/src/lib/Lotus.cpp
++++ b/src/lib/Lotus.cpp
+@@ -3046,8 +3046,7 @@ bool LotusParser::readMacFontName(std::shared_ptr<WPSStream> stream, long endPos
+ 	}
+ 	else if (nameOk && !name.empty())
+ 	{
+-		auto encoding=name!="Symbol" ? libwps_tools_win::Font::MAC_ROMAN : libwps_tools_win::Font::MAC_SYMBOL;
+-		LotusParserInternal::Font font(encoding);
++		LotusParserInternal::Font font(getDefaultFontType());
+ 		font.m_name=name;
+ 		m_state->m_fontsMap.insert(std::map<int, LotusParserInternal::Font>::value_type(id,font));
+ 	}
+-- 
+2.14.3
+
