@@ -221,11 +221,20 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         else
             nWidth = nHeight = 1;
 
-        m_pEdScalePageWidth->SetValue(nWidth);
+        if (nWidth)
+            m_pEdScalePageWidth->SetValue(nWidth);
+        else
+            m_pEdScalePageWidth->SetText(OUString());
+
         m_pEdScalePageWidth->Enable(nWidth);
-        m_pEdScalePageHeight->SetValue(nHeight);
-        m_pEdScalePageHeight->Enable(nHeight);
         m_pCbScalePageWidth->Check(nWidth);
+
+        if(nHeight)
+            m_pEdScalePageHeight->SetValue(nHeight);
+        else
+            m_pEdScalePageHeight->SetText(OUString());
+
+        m_pEdScalePageHeight->Enable(nHeight);
         m_pCbScalePageHeight->Check(nHeight);
     }
 
