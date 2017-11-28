@@ -1141,36 +1141,230 @@
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce18"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:formula="of:=REPLACE(&quot;&quot;;5;1;&quot;Q&quot;)" office:value-type="string" office:string-value="Q" calcext:value-type="string">
+      <text:p>Q</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>Q</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce43" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce57" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=REPLACE(&quot;&quot;;5;1;&quot;Q&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(&quot;&quot;;5;1;&quot;Q&quot;)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>B😂</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5" table:number-rows-repeated="6">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce34" table:formula="of:=REPLACE([.I11];4;3;[.I10])" office:value-type="string" office:string-value="ab😂B😂gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!" calcext:value-type="string">
+      <text:p>ab😂B😂gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>ab😂B😂gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce44" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=REPLACE(I11;4;3;I10)" calcext:value-type="string">
+      <text:p>=REPLACE(I11;4;3;I10)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>ab😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce34" table:formula="of:=REPLACE([.I12];3;1;&quot;xXx&quot;)" office:value-type="string" office:string-value="B😂xXx😂d" calcext:value-type="string">
+      <text:p>B😂xXx😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>B😂xXx😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce45" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=REPLACE(I12;3;1;&quot;xXx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;3;1;&quot;xXx&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>B😂c😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" table:formula="of:=REPLACE([.I12];2;1;&quot;xXx&quot;)" office:value-type="string" office:string-value="BxXxc😂d" calcext:value-type="string">
+      <text:p>BxXxc😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>BxXxc😂d</text:p>
+      </table:table-cell>
+     <table:table-cell table:style-name="ce46" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=REPLACE(I12;2;1;&quot;xXx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;2;1;&quot;xXx&quot;)</text:p>
+      </table:table-cell>
+      <table:table-cell table:number-columns-repeated="7"/>
+     </table:table-row>
+     <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce37" table:formula="of:=REPLACE([.I12];3;1;&quot;𝖍𝖙&quot;)" office:value-type="string" office:string-value="B😂𝖍𝖙😂d" calcext:value-type="string">
+      <text:p>B😂𝖍𝖙😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>B😂𝖍𝖙😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce47" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=REPLACE(I12;3;1;&quot;𝖍𝖙&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;3;1;&quot;𝖍𝖙&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+      <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce37" table:formula="of:=REPLACE([.I12];2;1;&quot;x𝖍𝖙x&quot;)" office:value-type="string" office:string-value="Bx𝖍𝖙xc😂d" calcext:value-type="string">
+      <text:p>Bx𝖍𝖙xc😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Bx𝖍𝖙xc😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce48" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=REPLACE(I12;2;1;&quot;x𝖍𝖙x&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;2;1;&quot;x𝖍𝖙x&quot;)</text:p>
+     </table:table-cell>
+      <table:table-cell table:number-columns-repeated="4"/>
+      <table:table-cell table:style-name="ce17"/>
+      <table:table-cell table:number-columns-repeated="2"/>
+     </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce37" table:formula="of:=REPLACE([.I12];2;0;&quot;xXx&quot;)" office:value-type="string" office:string-value="BxXx😂c😂d" calcext:value-type="string">
+      <text:p>BxXx😂c😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>BxXx😂c😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce49" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=REPLACE(I12;2;0;&quot;xXx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;2;0;&quot;xXx&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+      <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce37" table:formula="of:=REPLACE([.I12];3;0;&quot;xXx&quot;)" office:value-type="string" office:string-value="B😂xXxc😂d" calcext:value-type="string">
+      <text:p>B😂xXxc😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>B😂xXxc😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce50" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=REPLACE(I12;3;0;&quot;xXx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;3;0;&quot;xXx&quot;)</text:p>
+     </table:table-cell>
+      <table:table-cell table:number-columns-repeated="4"/>
+      <table:table-cell table:style-name="ce17"/>
+      <table:table-cell table:number-columns-repeated="2"/>
+     </table:table-row>
+     <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=REPLACE([.I12];1;0;&quot;xYx&quot;)" office:value-type="string" office:string-value="xYxB😂c😂d" calcext:value-type="string">
+      <text:p>xYxB😂c😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>xYxB😂c😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce51" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=REPLACE(I12;1;0;&quot;xYx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;1;0;&quot;xYx&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="7"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=REPLACE([.I12];1;1;&quot;xYx&quot;)" office:value-type="string" office:string-value="xYx😂c😂d" calcext:value-type="string">
+      <text:p>xYx😂c😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>xYx😂c😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce52" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=REPLACE(I12;1;1;&quot;xYx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;1;1;&quot;xYx&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+      <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=REPLACE([.I12];1;2;&quot;xYx&quot;)" office:value-type="string" office:string-value="xYxc😂d" calcext:value-type="string">
+      <text:p>xYxc😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>xYxc😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce53" table:formula="of:=[.A20]=[.B20]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=REPLACE(I12;1;2;&quot;xYx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;1;2;&quot;xYx&quot;)</text:p>
+     </table:table-cell>
+      <table:table-cell table:number-columns-repeated="4"/>
+      <table:table-cell table:style-name="ce17"/>
+      <table:table-cell table:number-columns-repeated="2"/>
+     </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=REPLACE([.I12];1;3;&quot;xYx&quot;)" office:value-type="string" office:string-value="xYx😂d" calcext:value-type="string">
+      <text:p>xYx😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>xYx😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce54" table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=REPLACE(I12;1;3;&quot;xYx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;1;3;&quot;xYx&quot;)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce14" table:formula="of:=REPLACE([.I12];1;4;&quot;xYx&quot;)" office:value-type="string" office:string-value="xYxd" calcext:value-type="string">
+      <text:p>xYxd</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>xYxd</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce55" table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=REPLACE(I12;1;4;&quot;xYx&quot;)" calcext:value-type="string">
+      <text:p>=REPLACE(I12;1;4;&quot;xYx&quot;)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5" table:number-rows-repeated="20">
-     <table:table-cell table:style-name="ce14"/>
+    <table:table-row table:style-name="ro5" table:number-rows-repeated="15">
      <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
      <table:table-cell table:style-name="ce11"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce17"/>
