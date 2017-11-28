@@ -187,6 +187,11 @@ void SfxModalDialog::StateChanged(StateChangedType nType)
 
     if (comphelper::LibreOfficeKit::isActive() && nType == StateChangedType::InitShow)
     {
+        // There are some dialogs, like Hyperlink dialog, which inherit from
+        // ModalDialog even though they are modeless, i.e., their Execute method
+        // isn't called. We need to set the notifier for them.
+        if (!GetLOKNotifier())
+            SetLOKNotifier(SfxViewShell::Current());
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
