@@ -320,7 +320,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
         {
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(RES_PARATR_ADJUST) )
             {
-                const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>( pArgs->Get(RES_PARATR_ADJUST) );
+                const SvxAdjustItem& rAdj = pArgs->Get(RES_PARATR_ADJUST);
                 SvxAdjustItem aAdj( rAdj.GetAdjust(), RES_PARATR_ADJUST );
                 if ( rAdj.GetAdjust() == SvxAdjust::Block )
                 {
@@ -378,8 +378,8 @@ SET_LINESPACE:
             SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, false);
             if(eAdjustState  >= SfxItemState::DEFAULT)
             {
-                SvxAdjust eAdjust = static_cast<const SvxAdjustItem& >(
-                        aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
+                SvxAdjust eAdjust =
+                        aAdjustSet.Get(RES_PARATR_ADJUST).GetAdjust();
                 bChgAdjust = (SvxAdjust::Left  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
                              (SvxAdjust::Right == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
             }
@@ -459,7 +459,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 OUString sCharStyleName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                 SfxItemSet aSet(GetPool(), svl::Items<RES_PARATR_DROP, RES_PARATR_DROP>{});
                 rSh.GetCurAttr(aSet);
-                SwFormatDrop aDropItem(static_cast<const SwFormatDrop&>(aSet.Get(RES_PARATR_DROP)));
+                SwFormatDrop aDropItem(aSet.Get(RES_PARATR_DROP));
                 SwCharFormat* pFormat = nullptr;
                 if(!sCharStyleName.isEmpty())
                     pFormat = rSh.FindCharFormatByName( sCharStyleName );

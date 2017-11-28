@@ -1171,7 +1171,7 @@ void RtfExport::OutColorTable()
 
     // char color
     {
-        auto pCol = static_cast<const SvxColorItem*>(GetDfltAttr(RES_CHRATR_COLOR));
+        auto pCol = GetDfltAttr(RES_CHRATR_COLOR);
         InsColor(pCol->GetValue());
         if ((pCol = rPool.GetPoolDefaultItem(RES_CHRATR_COLOR)))
             InsColor(pCol->GetValue());
@@ -1182,7 +1182,7 @@ void RtfExport::OutColorTable()
                 InsColor(pCol->GetValue());
         }
 
-        auto pUnder = static_cast<const SvxUnderlineItem*>(GetDfltAttr(RES_CHRATR_UNDERLINE));
+        auto pUnder = GetDfltAttr(RES_CHRATR_UNDERLINE);
         InsColor(pUnder->GetColor());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_UNDERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
@@ -1191,7 +1191,7 @@ void RtfExport::OutColorTable()
                 InsColor(pUnder->GetColor());
         }
 
-        auto pOver = static_cast<const SvxOverlineItem*>(GetDfltAttr(RES_CHRATR_OVERLINE));
+        auto pOver = GetDfltAttr(RES_CHRATR_OVERLINE);
         InsColor(pOver->GetColor());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_OVERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)

@@ -631,7 +631,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             // we don't calculate the same value on the same TabStop (pooled!) for all sets.
             // We send a FormatChg to modify.
             SwTwips nNewWidth = (*static_cast<const SvxTabStopItem*>(pTmpItem))[ 0 ].GetTabPos(),
-                    nOldWidth = static_cast<const SvxTabStopItem&>(aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
+                    nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
 
             bool bChg = false;
             sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_PARATR_TABSTOP );

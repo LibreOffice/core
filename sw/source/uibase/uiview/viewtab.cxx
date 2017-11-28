@@ -711,7 +711,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 SfxItemSet aSet( GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{} );
 
                 rSh.GetCurAttr( aSet );
-                const SvxTabStopItem&  rTabStops = static_cast<const SvxTabStopItem&>(aSet.Get(RES_PARATR_TABSTOP));
+                const SvxTabStopItem&  rTabStops = aSet.Get(RES_PARATR_TABSTOP);
 
                 // Do we have a tab at position zero?
                 sal_uInt16 i;
@@ -1433,8 +1433,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 rSet.DisableItem( nWhich );
             else
             {
-                SvxTabStopItem aTabStops(static_cast<const SvxTabStopItem&>(
-                                            aCoreSet.Get( RES_PARATR_TABSTOP )));
+                SvxTabStopItem aTabStops(aCoreSet.Get( RES_PARATR_TABSTOP ));
 
                 const SvxTabStopItem& rDefTabs = static_cast<const SvxTabStopItem&>(
                                             rSh.GetDefault(RES_PARATR_TABSTOP));
