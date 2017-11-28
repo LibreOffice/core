@@ -98,6 +98,7 @@
 #include <editeng/twolinesitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/xdef.hxx>
 #include "unomapproperties.hxx"
 

@@ -262,17 +262,17 @@ void SwAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
 }
 
 SwBoxAutoFormat::SwBoxAutoFormat()
-    : m_aFont( *static_cast<const SvxFontItem*>(GetDfltAttr( RES_CHRATR_FONT )) ),
+    : m_aFont( *GetDfltAttr( RES_CHRATR_FONT ) ),
     m_aHeight( 240, 100, RES_CHRATR_FONTSIZE ),
     m_aWeight( WEIGHT_NORMAL, RES_CHRATR_WEIGHT ),
     m_aPosture( ITALIC_NONE, RES_CHRATR_POSTURE ),
 
-    m_aCJKFont( *static_cast<const SvxFontItem*>(GetDfltAttr( RES_CHRATR_CJK_FONT )) ),
+    m_aCJKFont( *GetDfltAttr( RES_CHRATR_CJK_FONT ) ),
     m_aCJKHeight( 240, 100, RES_CHRATR_CJK_FONTSIZE ),
     m_aCJKWeight( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT ),
     m_aCJKPosture( ITALIC_NONE, RES_CHRATR_CJK_POSTURE ),
 
-    m_aCTLFont( *static_cast<const SvxFontItem*>(GetDfltAttr( RES_CHRATR_CTL_FONT )) ),
+    m_aCTLFont( *GetDfltAttr( RES_CHRATR_CTL_FONT ) ),
     m_aCTLHeight( 240, 100, RES_CHRATR_CTL_FONTSIZE ),
     m_aCTLWeight( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ),
     m_aCTLPosture( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ),
@@ -759,7 +759,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
         pFormat->SetContour( rSet.Get( RES_CHRATR_CONTOUR ) );
         pFormat->SetShadowed( rSet.Get( RES_CHRATR_SHADOWED ) );
         pFormat->SetColor( rSet.Get( RES_CHRATR_COLOR ) );
-        pFormat->SetAdjust( static_cast<const SvxAdjustItem&>(rSet.Get( RES_PARATR_ADJUST )) );
+        pFormat->SetAdjust( rSet.Get( RES_PARATR_ADJUST ) );
     }
     if( UPDATE_BOX & eFlags )
     {
