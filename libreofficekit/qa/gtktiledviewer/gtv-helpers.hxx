@@ -39,7 +39,28 @@ namespace GtvHelpers
 
     const std::string getDirPath(const std::string& filePath);
 
-    const std::vector<int> splitIntoIntegers(const std::string& aPayload, const std::string& aDelim, const int nItems);
+    template<typename T>
+    const std::vector<T> split(const std::string& aPayload, const std::string& aDelim, const int nItems)
+    {
+        std::vector<T> aRet;
+
+        if (!aPayload.empty())
+        {
+            gchar** ppCoordinates = g_strsplit(aPayload.c_str(), aDelim.c_str(), nItems);
+            gchar** ppCoordinate  = ppCoordinates;
+            while (*ppCoordinate)
+            {
+                std::stringstream strstream(*ppCoordinate);
+                T item;
+                strstream >> item;
+                aRet.push_back(item);
+                ++ppCoordinate;
+            }
+            g_strfreev(ppCoordinates);
+        }
+
+        return aRet;
+    }
 }
 
 #endif
