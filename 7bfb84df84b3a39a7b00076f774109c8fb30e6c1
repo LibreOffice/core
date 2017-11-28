@@ -16,6 +16,24 @@
       "revId": "7bfb84df84b3a39a7b00076f774109c8fb30e6c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4dc0eb2a",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_arm/except.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-11-28T10:44:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_3d0752cb",
+      "revId": "7bfb84df84b3a39a7b00076f774109c8fb30e6c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

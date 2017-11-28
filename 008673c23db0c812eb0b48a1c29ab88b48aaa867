@@ -16,6 +16,24 @@
       "revId": "008673c23db0c812eb0b48a1c29ab88b48aaa867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ade5cfdc",
+        "filename": "include/android/compatibility.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-11-28T10:44:43Z",
+      "side": 0,
+      "message": "in fact all can go, this one just was the only thing clang complained about being redefined :-)",
+      "parentUuid": "1a430d35_5d0c1eed",
+      "revId": "008673c23db0c812eb0b48a1c29ab88b48aaa867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
