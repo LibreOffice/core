@@ -79,7 +79,7 @@ public:
         is used (simply casting between list position and values). If the map
         exists, it *MUST* be terminated by an entry containing the special
         "not found" list position. */
-    explicit     PosValueMapper( PosT nNFPos, const MapEntryType* pMap = nullptr ) :
+    explicit     PosValueMapper( PosT nNFPos, const MapEntryType* pMap ) :
                             mpMap( pMap ), mnNFPos( nNFPos ) {}
 
     /** Returns the value at the specified list position.
@@ -251,7 +251,7 @@ template< typename ValueT >
 class MetricFieldWrapper : public SingleControlWrapper< MetricField, ValueT >
 {
 public:
-    explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit = FUNIT_NONE ) :
+    explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit ) :
                             SingleControlWrapper< MetricField, ValueT >( rField ), meUnit( eUnit ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
@@ -285,7 +285,7 @@ public:
 
     /** @param pMap  Optional list position <-> value map.
         See PosValueMapper documentation for details. */
-    explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap = nullptr ) :
+    explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap ) :
                             SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( WRAPPER_LISTBOX_ENTRY_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE
@@ -318,7 +318,7 @@ public:
 
     /** @param pMap  Optional position <-> value map.
         See PosValueMapper documentation for details. */
-    explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap = nullptr ) :
+    explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap ) :
                             SingleControlWrapper< ValueSet, ValueT >( rValueSet ), MapperType( WRAPPER_VALUESET_ITEM_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE

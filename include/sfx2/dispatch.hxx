@@ -129,7 +129,7 @@ public:
                                 SfxItemSet const * pArgs,
                                 SfxItemSet const * pInternalArgs,
                                 sal_uInt16 nModi,
-                                vcl::Window* pDialogParent = nullptr);
+                                vcl::Window* pDialogParent);
 
     const SfxPoolItem*  ExecuteList( sal_uInt16 nSlot,
                                  SfxCallMode nCall,

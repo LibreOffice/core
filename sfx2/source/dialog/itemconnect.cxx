@@ -281,6 +281,7 @@ bool ItemConnectionArrayImpl::FillItemSet( SfxItemSet& rDestSet, const SfxItemSe
 
 
 ItemConnectionArray::ItemConnectionArray() :
+    ItemConnectionBase(ItemConnFlags::NONE),
     mxImpl( new ItemConnectionArrayImpl )
 {
 }

@@ -172,7 +172,7 @@ public:
     //  constructor/destructor
 
 
-    SfxBaseModel( SfxObjectShell *pObjectShell = nullptr ) ;
+    SfxBaseModel( SfxObjectShell *pObjectShell ) ;
 
     virtual ~SfxBaseModel() override ;
 

@@ -366,7 +366,7 @@ public:
     virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet& );
 
     ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,
-                                    SbxArray* pArgs = nullptr, SbxValue* pRet = nullptr );
+                                    SbxArray* pArgs, SbxValue* pRet = nullptr );
 
     ErrCode     CallXScript(
         const OUString& rScriptURL,

@@ -93,7 +93,7 @@ class SfxInfoBarContainerWindow : public vcl::Window
         VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId,
                                         const OUString& sMessage,
                                         InfoBarType ibType,
-                                        WinBits nMessageStyle = WB_LEFT|WB_VCENTER);
+                                        WinBits nMessageStyle);
         VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
         bool hasInfoBarWithID(const OUString& sId);
         void removeInfoBar(VclPtr<SfxInfoBarWindow> const & pInfoBar);

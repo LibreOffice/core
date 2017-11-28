@@ -176,7 +176,7 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
                             bool bExportSelection, bool bIsExportVectorFormat, bool bGraphicsSource,
-                            const css::uno::Reference< css::graphic::XGraphic >& rxGraphic = nullptr);
+                            const css::uno::Reference< css::graphic::XGraphic >& rxGraphic);
                         virtual ~ExportDialog() override;
                         virtual void dispose() override;
 };

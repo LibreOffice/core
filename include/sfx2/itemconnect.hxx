@@ -180,7 +180,7 @@ public:
     bool                DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
 
 protected:
-    explicit            ItemConnectionBase( ItemConnFlags nFlags = ItemConnFlags::NONE );
+    explicit            ItemConnectionBase( ItemConnFlags nFlags );
 
     /** Derived classes implement actions according to current flags here. */
     virtual void        ApplyFlags( const SfxItemSet* pItemSet ) = 0;
@@ -223,7 +223,7 @@ public:
     /** Receives pointer to a newly created control wrapper.
         @descr  Takes ownership of the control wrapper. */
     explicit            ItemControlConnection( sal_uInt16 nSlot, ControlWrpT* pNewCtrlWrp,
-                            ItemConnFlags nFlags = ItemConnFlags::NONE );
+                            ItemConnFlags nFlags );
 
     /** Convenience constructor. Receives reference to a control directly.
         @descr  May only be used, if ControlWrpT::ControlWrpT( ControlType& )
@@ -261,7 +261,7 @@ class SFX2_DLLPUBLIC DummyItemConnection:
 {
 public:
     explicit            DummyItemConnection( sal_uInt16 nSlot, vcl::Window& rWindow,
-                            ItemConnFlags nFlags = ItemConnFlags::NONE );
+                            ItemConnFlags nFlags );
 
 protected:
     virtual void        ApplyFlags( const SfxItemSet* pItemSet ) override;
@@ -296,7 +296,7 @@ public:
     typedef typename ItemControlConnectionType::ControlWrapperType MetricFieldWrapperType;
 
     explicit            MetricConnection( sal_uInt16 nSlot, MetricField& rField,
-                            FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ItemConnFlags::NONE );
+                            FieldUnit eItemUnit, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
 
@@ -321,7 +321,7 @@ public:
     typedef typename ListBoxWrapperType::MapEntryType               MapEntryType;
 
     explicit            ListBoxConnection( sal_uInt16 nSlot, ListBox& rListBox,
-                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ItemConnFlags::NONE );
+                            const MapEntryType* pMap, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
 
@@ -346,7 +346,7 @@ public:
     typedef typename ValueSetWrapperType::MapEntryType              MapEntryType;
 
     explicit            ValueSetConnection( sal_uInt16 nSlot, ValueSet& rValueSet,
-                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ItemConnFlags::NONE );
+                            const MapEntryType* pMap, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
 
