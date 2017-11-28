@@ -448,6 +448,19 @@ public:
     }
 
     /**
+     * Show/Hide a single row/column header outline for Calc documents.
+     *
+     * @param bColumn - if we are dealing with a column or row group
+     * @param nLevel - the level to which the group belongs
+     * @param nIndex - the group entry index
+     * @param bHidden - the new group state (collapsed/expanded)
+     */
+    void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
+    {
+        mpDoc->pClass->setOutlineState(mpDoc, bColumn, nLevel, nIndex, bHidden);
+    }
+
+    /**
      * Create a new view for an existing document.
      * By default a loaded document has 1 view.
      * @return the ID of the new view.

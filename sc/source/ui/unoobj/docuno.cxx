@@ -958,20 +958,6 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     mnTileTwipHeight = nTileTwipHeight_;
 }
 
-
-void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
-{
-    ScViewData* pViewData = ScDocShell::GetViewData();
-
-    if (!pViewData)
-        return;
-
-    ScDBFunc* pFunc = pViewData->GetView();
-
-    if (pFunc)
-        pFunc->SetOutlineState(bColumn, nLevel, nIndex, bHidden);
-}
-
 OUString ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1043,6 +1029,19 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
 
     // set the PgUp/PgDown offset
     pViewData->ForcePageUpDownOffset(rRectangle.GetHeight());
+}
+
+void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+
+    if (!pViewData)
+        return;
+
+    ScDBFunc* pFunc = pViewData->GetView();
+
+    if (pFunc)
+        pFunc->SetOutlineState(bColumn, nLevel, nIndex, bHidden);
 }
 
 OUString ScModelObj::getPostIts()

@@ -599,6 +599,7 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis,
                                     int nTileTwipWidth,
                                     int nTileTwipHeight);
 static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
+static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden);
 static int doc_createView(LibreOfficeKitDocument* pThis);
 static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
 static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
@@ -656,6 +657,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getCommandValues = doc_getCommandValues;
         m_pDocumentClass->setClientZoom = doc_setClientZoom;
         m_pDocumentClass->setClientVisibleArea = doc_setClientVisibleArea;
+        m_pDocumentClass->setOutlineState = doc_setOutlineState;
 
         m_pDocumentClass->createView = doc_createView;
         m_pDocumentClass->destroyView = doc_destroyView;
@@ -2986,10 +2988,6 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             int nY = 0;
             int nWidth = 0;
             int nHeight = 0;
-            bool bColumn = false;
-            int nLevel = -1;
-            int nGroupIndex = -2;
-            bool bHidden = false;
             OString aArguments = aCommand.copy(aViewRowColumnHeaders.getLength() + 1);
             sal_Int32 nParamIndex = 0;
             do
@@ -3015,23 +3013,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
                     nWidth = aValue.toInt32();
                 else if (aKey == "height")
                     nHeight = aValue.toInt32();
-                else if (aKey == "columnOutline")
-                    bColumn = aValue.toBoolean();
-                else if (aKey == "groupLevel")
-                    nLevel = aValue.toInt32();
-                else if (aKey == "groupIndex")
-                    nGroupIndex = aValue.toInt32();
-                else if (aKey == "groupHidden")
-                    bHidden = aValue.toBoolean();
             }
             while (nParamIndex >= 0);
 
             aRectangle = tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight);
-
-            if (nGroupIndex != -2)
-            {
-                pDoc->setOutlineState(bColumn, nLevel, nGroupIndex, bHidden);
-            }
         }
 
         OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
@@ -3131,6 +3116,20 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
 
     tools::Rectangle aRectangle(Point(nX, nY), Size(nWidth, nHeight));
     pDoc->setClientVisibleArea(aRectangle);
+}
+
+static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden)
+{
+    SolarMutexGuard aGuard;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->setOutlineState(bColumn, nLevel, nIndex, bHidden);
 }
 
 static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)

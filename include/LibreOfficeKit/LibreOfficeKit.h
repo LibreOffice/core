@@ -224,8 +224,12 @@ struct _LibreOfficeKitDocumentClass
             int nTilePixelHeight,
             int nTileTwipWidth,
             int nTileTwipHeight);
+
     /// @see lok::Document::setVisibleArea).
     void (*setClientVisibleArea) (LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
+
+    /// @see lok::Document::setOutlineState).
+    void (*setOutlineState) (LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden);
 
     /// @see lok::Document::createView().
     int (*createView) (LibreOfficeKitDocument* pThis);
