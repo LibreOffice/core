@@ -299,8 +299,8 @@ IMPL_LINK( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
         SfxAllItemSet aTmpSet(*pCollSet);
 
         // Insert tabs, default tabs into ItemSet
-        const SvxTabStopItem& rDefTabs = static_cast<const SvxTabStopItem&>(
-            pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP));
+        const SvxTabStopItem& rDefTabs =
+            pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
         const sal_uInt16 nDefDist = static_cast<sal_uInt16>(::GetTabDist( rDefTabs ));
         SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );

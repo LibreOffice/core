@@ -759,7 +759,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
         pFormat->SetContour( rSet.Get( RES_CHRATR_CONTOUR ) );
         pFormat->SetShadowed( rSet.Get( RES_CHRATR_SHADOWED ) );
         pFormat->SetColor( rSet.Get( RES_CHRATR_COLOR ) );
-        pFormat->SetAdjust( static_cast<const SvxAdjustItem&>(rSet.Get( RES_PARATR_ADJUST )) );
+        pFormat->SetAdjust( rSet.Get( RES_PARATR_ADJUST ) );
     }
     if( UPDATE_BOX & eFlags )
     {
