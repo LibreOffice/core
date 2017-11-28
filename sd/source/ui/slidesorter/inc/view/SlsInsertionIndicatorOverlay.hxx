@@ -53,7 +53,7 @@ class InsertionIndicatorOverlay
 {
 public:
     InsertionIndicatorOverlay (SlideSorter& rSlideSorter);
-    virtual ~InsertionIndicatorOverlay() override;
+    virtual ~InsertionIndicatorOverlay() COVERITY_NOEXCEPT_FALSE override;
 
     virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator) override;
 
