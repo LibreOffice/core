@@ -393,6 +393,7 @@
         "--socket=pulseaudio",
         "--filesystem=host",
         "--env=LIBO_FLATPAK=1",
-        "--own-name=org.libreoffice.LibreOfficeIpc0"
+        "--own-name=org.libreoffice.LibreOfficeIpc0",
+        "--talk-name=org.gtk.vfs.*"
     ]
 }
