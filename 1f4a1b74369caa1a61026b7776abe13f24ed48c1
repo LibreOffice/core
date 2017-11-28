@@ -16,6 +16,24 @@
       "revId": "1f4a1b74369caa1a61026b7776abe13f24ed48c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8dbd73b9",
+        "filename": "sc/source/ui/view/gridwin5.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2017-11-28T10:35:40Z",
+      "side": 0,
+      "message": "This code is incorrect in my mind:\n1) It is duplication of already existing SyncForGrid code;\n2) Here it is calculating grid offset for note, but using coordinates of cell. This is not true since note is located somewhere else, but not in this cell. And we do not know note location at this moment.\n\nResult of step 2 problem is visible note artifacts in tdf#113901 attached document: they happen due to incorrect grid offset calculated in this place.\n\n\n* In case of split I see no problems.\n\n* In case of zoom SyncForGrid is always called: see ScDrawView::RecalcScale()\n\n* \"when FitCaptionToRect was not able to call SyncForGrid\" — fixed, by moving that call to other place.",
+      "parentUuid": "1a430d35_6f7a0979",
+      "revId": "1f4a1b74369caa1a61026b7776abe13f24ed48c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
