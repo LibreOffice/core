@@ -45,7 +45,6 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 
-
 using namespace com::sun::star;
 
 
@@ -65,7 +64,6 @@ namespace pdfi
     m_aFontToId(),
     m_aGCStack(),
     m_nNextGCId( 1 ),
-    m_aIdToGC(),
     m_aGCToId(),
     m_aImages(),
     m_nPages(0),
@@ -82,8 +80,7 @@ namespace pdfi
 
     GraphicsContext aDefGC;
     m_aGCStack.push_back( aDefGC );
-    m_aIdToGC[ 0 ] = aDefGC;
-    m_aGCToId[ aDefGC ] = 0;
+    m_aGCToId.insert(GCToIdBiMap::relation(aDefGC, 0));
 }
 
 void PDFIProcessor::setPageNum( sal_Int32 nPages )
@@ -481,13 +478,12 @@ const FontAttributes& PDFIProcessor::getFont( sal_Int32 nFontId ) const
 sal_Int32 PDFIProcessor::getGCId( const GraphicsContext& rGC )
 {
     sal_Int32 nGCId = 0;
-    GCToIdMap::const_iterator it = m_aGCToId.find( rGC );
-    if( it != m_aGCToId.end() )
+    auto it = m_aGCToId.left.find( rGC );
+    if( it != m_aGCToId.left.end() )
         nGCId = it->second;
     else
     {
-        m_aGCToId[ rGC ] = m_nNextGCId;
-        m_aIdToGC[ m_nNextGCId ] = rGC;
+        m_aGCToId.insert(GCToIdBiMap::relation(rGC, m_nNextGCId));
         nGCId = m_nNextGCId;
         m_nNextGCId++;
     }
@@ -497,9 +493,9 @@ sal_Int32 PDFIProcessor::getGCId( const GraphicsContext& rGC )
 
 const GraphicsContext& PDFIProcessor::getGraphicsContext( sal_Int32 nGCId ) const
 {
-    IdToGCMap::const_iterator it = m_aIdToGC.find( nGCId );
-    if( it == m_aIdToGC.end() )
-        it = m_aIdToGC.find( 0 );
+    auto it = m_aGCToId.right.find( nGCId );
+    if( it == m_aGCToId.right.end() )
+        it = m_aGCToId.right.find( 0 );
     return it->second;
 }
 
