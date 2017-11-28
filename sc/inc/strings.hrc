@@ -277,8 +277,8 @@
 /* Names of dialogs */
 #define STR_FTEST                                   NC_("STR_FTEST", "F-test")
 #define STR_FTEST_UNDO_NAME                         NC_("STR_FTEST_UNDO_NAME", "F-test")
-#define STR_TTEST                                   NC_("STR_TTEST", "t-test")
-#define STR_TTEST_UNDO_NAME                         NC_("STR_TTEST_UNDO_NAME", "t-test")
+#define STR_TTEST                                   NC_("STR_TTEST", "Paired t-test")
+#define STR_TTEST_UNDO_NAME                         NC_("STR_TTEST_UNDO_NAME", "Paired t-test")
 #define STR_ZTEST                                   NC_("STR_ZTEST", "z-test")
 #define STR_ZTEST_UNDO_NAME                         NC_("STR_ZTEST_UNDO_NAME", "z-test")
 #define STR_CHI_SQUARE_TEST                         NC_("STR_CHI_SQUARE_TEST", "Test of Independence (Chi-Square)")
