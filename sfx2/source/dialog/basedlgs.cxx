@@ -224,6 +224,7 @@ void SfxModalDialog::StateChanged( StateChangedType nType )
             SetLOKNotifier(SfxViewShell::Current());
             const Size aSize = GetOptimalSize();
             std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back(std::make_pair("type", "dialog"));
             aItems.emplace_back(std::make_pair("size", aSize.toString()));
             SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
