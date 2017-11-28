@@ -237,7 +237,7 @@ InsertionIndicatorHandler::ForceShowContext::ForceShowContext (
     mpHandler->ForceShow();
 }
 
-InsertionIndicatorHandler::ForceShowContext::~ForceShowContext()
+InsertionIndicatorHandler::ForceShowContext::~ForceShowContext() COVERITY_NOEXCEPT_FALSE
 {
     mpHandler->ForceEnd();
 }
