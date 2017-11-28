@@ -1,0 +1,26 @@
+<?x                                 ?> <office:document   xmlns:office="urn:oasis:names:tc:            :xmlns:office:1. "   xmlns:tex ="                                              "   xmlns:style="urn:oasis:names:tc:            :xmlns:style:1. "   xmlns:fo="                                                           "   office:mimetyp ="                                       "   office:versio ="   " >   <office:styles>     <style:default-style style:family="paragraph">
+      <style:text-properties
+       complex="Lohit Devanagari" style:font-size-complex="12pt" style:language-ountry-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-ct="2"/>
+  </style:default-style>
+  <style:default-style style:famiÊ±ly="table">getBrea="1.0" encoding="UTF-8"?>
+<office:document
+  xmlns:office="uopendocument.text"
+  office:version="2.2"
+>
+  <office:styles>
+    <style:default-style style:family="paragraph">
+      <style:text-properties
+        fo:languageeep-together="auto"/>
+   <stylele:tyle:table-row-properties fo:keep-together="auto"/>
+   <stybe:table-row-properties fo:keep-together="auto"/>
+   <s-row-proptable-row-propropertiekIteratle-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="autoo"/>
+   <stybe:table-row-properties fo:keep-together="auto"/>
+   <style:table-row-properties fo:keep-together="auto"/>
+   <style:table-row-prperties foekp:e-together="auto"/>
+   <style:perties fo:ketogeth fo:keep-together="auto"/>
+   <stw-properties fo:oÿ
+eep-together="auto"/>
+   <st
