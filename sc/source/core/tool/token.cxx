@@ -1852,6 +1852,24 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
     return *this;
 }
 
+bool ScTokenArray::EqualTokens( const ScTokenArray* pArr2) const
+{
+    // We only compare the non-RPN array
+    sal_uInt16 nLen = GetLen();
+    if ( pArr2->GetLen() != nLen )
+        return false;
+
+    FormulaToken** ppToken1 = GetArray();
+    FormulaToken** ppToken2 = pArr2->GetArray();
+    for (sal_uInt16 i=0; i<nLen; i++)
+    {
+        if ( ppToken1[i] != ppToken2[i] &&
+             !(*ppToken1[i] == *ppToken2[i]) )
+            return false; // Difference
+    }
+    return true; // All entries are the same
+}
+
 void ScTokenArray::Clear()
 {
     mnHashValue = 0;
