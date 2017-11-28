@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
+#include <vcl/EnumContext.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -129,6 +130,7 @@ void LangSelectionStatusbarController::LangMenu(
         return;
 
     const Reference<XModuleManager> xModuleManager  = ModuleManager::create( m_xContext );
+    vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
     //add context menu
     Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
@@ -165,31 +167,13 @@ void LangSelectionStatusbarController::LangMenu(
         }
     }
 
-
-    if (xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument")
+    if (eApp == vcl::EnumContext::Application::Writer)
     {
         xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
         if ( sNone == m_aCurLang )
             xPopupMenu->checkItem( MID_LANG_SEL_NONE, true );
         xPopupMenu->insertItem( MID_LANG_SEL_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
         xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
-
-        // add entries to submenu ('set language for paragraph')
-        nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
-        for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
-        {
-            const OUString & rStr( *it );
-            if( rStr != sNone &&
-                rStr != sAsterisk &&
-                !rStr.isEmpty()) // 'no language found' from language guessing
-            {
-                SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
-                "fwk.uielement", "nItemId outside of expected range!" );
-                subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
-                aLangMap[nItemId] = rStr;
-                ++nItemId;
-            }
-        }
 
         // add entries to submenu ('set language for paragraph')
         nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
@@ -239,7 +223,7 @@ void LangSelectionStatusbarController::LangMenu(
 
         if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
         {
-            if ( xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument" )
+            if ( eApp == vcl::EnumContext::Application::Writer )
                 aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
             else
                 aBuff.append( ".uno:LanguageStatus?Language:string=Default_" );
