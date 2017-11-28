@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0ddb43ed",
+        "filename": "framework/source/uielement/langselectionstatusbarcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-11-28T12:59:30Z",
+      "side": 1,
+      "message": "Other variants of Writer (Writer/Web, forms, master document etc.) will return different names here, but all probably should be handled as main Writer.",
+      "revId": "6db709ba79fec6f75dd7385ce57c65a62fc2254e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2de47faa",
+        "filename": "framework/source/uielement/langselectionstatusbarcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-11-28T12:59:30Z",
+      "side": 1,
+      "message": "All this block looks like a duplicate of the previous one. I guess this isn\u0027t intentional?",
+      "revId": "6db709ba79fec6f75dd7385ce57c65a62fc2254e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
