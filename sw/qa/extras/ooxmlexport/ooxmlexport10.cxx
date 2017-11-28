@@ -759,6 +759,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("r"), xRange2->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(1));
+    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("test"));
+
+    uno::Reference<text::XTextContent> xContent3(xBookmarksByName->getByName("test"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange3(xContent3->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xRange3->getString(), OUString("foo bar"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
 {
     const sal_Unicode aExpectedPrefix[2] = { 0x7b2c, 0x0020 };
