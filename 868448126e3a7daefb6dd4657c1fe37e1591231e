@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3075b431",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-28T19:09:13Z",
+      "side": 1,
+      "message": "It seems to me this sentence is not finished. Something is missing here. Do you mean layout sidebar tab?",
+      "range": {
+        "startLine": 10,
+        "startChar": 11,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "868448126e3a7daefb6dd4657c1fe37e1591231e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
