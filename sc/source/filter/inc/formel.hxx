@@ -130,6 +130,8 @@ public:
 
     virtual void        Convert( const ScTokenArray*& rpErg, sal_Int32& nRest ) = 0;
 
+    bool good() const { return aIn.good(); }
+
 protected:
     using               ConverterBase::Reset;
 };
