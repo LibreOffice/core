@@ -6015,6 +6015,10 @@ elif test "$GCC" = "yes"; then
             void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                 std::sort(v.begin(), v.end(), fn);
             }
+
+            #if defined __COVERITY__ && __cplusplus >= 201703L
+            #error "Coverity Scan appears to have issues with C++17, e.g., cid#1424266"
+            #endif
             ]])],[CXXFLAGS_CXX11=$flag])
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
