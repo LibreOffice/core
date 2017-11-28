@@ -247,7 +247,7 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
 }
 
 SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
-: mpDoc( pDoc )
+: SfxBaseModel(nullptr), mpDoc( pDoc )
 {
 }
 

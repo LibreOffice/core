@@ -584,7 +584,7 @@ namespace svt
             // secure starting of StartEditHdl
 
     public:
-        EditBrowseBox(vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags, WinBits nBits = WB_TABSTOP, BrowserMode nMode = BrowserMode::NONE );
+        EditBrowseBox(vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags, WinBits nBits, BrowserMode nMode = BrowserMode::NONE );
         virtual ~EditBrowseBox() override;
         virtual void dispose() override;
 

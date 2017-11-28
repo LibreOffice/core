@@ -166,7 +166,7 @@ public:
 
 
     /// Templatized static version of GetItem() to directly return the correct type if the SfxItemSet is available.
-    template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich, bool bSearchInParent = true)
+    template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich, bool bSearchInParent)
     {
         if (pItemSet)
             return pItemSet->GetItem<T>(nWhich, bSearchInParent);
@@ -201,7 +201,7 @@ public:
     bool                        Put( const SfxItemSet&,
                                      bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,
-                                             SfxItemState eDontCareAs = SfxItemState::UNKNOWN,
+                                             SfxItemState eDontCareAs,
                                              SfxItemState eDefaultAs = SfxItemState::UNKNOWN );
 
     bool                        Set( const SfxItemSet&, bool bDeep = true );

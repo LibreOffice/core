@@ -147,7 +147,7 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
     @return  The input URI with any password component removed.
  */
 SVL_DLLPUBLIC OUString removePassword(OUString const & rURI,
-                                      INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::EncodeMechanism::WasEncoded,
+                                      INetURLObject::EncodeMechanism eEncodeMechanism,
                                       INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DecodeMechanism::ToIUri,
                                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 

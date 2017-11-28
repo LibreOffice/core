@@ -252,7 +252,7 @@ ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
                              SfxItemSet *& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
-                             const OUString& rStandardDir = OUString(),
+                             const OUString& rStandardDir,
                              const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());
 
 
