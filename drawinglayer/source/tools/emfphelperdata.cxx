@@ -286,6 +286,9 @@ namespace emfplushelper
         maMapTransform *= basegfx::utils::createScaleB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY);
         maMapTransform *= basegfx::utils::createTranslateB2DHomMatrix(double(-mnFrameLeft), double(-mnFrameTop));
         maMapTransform *= maBaseTransform;
+
+        SAL_INFO("drawinglayer",
+                "EMF+\t Mapping changed, maBaseTransform: "<< maBaseTransform<<" maWorldTransform: " << maWorldTransform << " maMapTransform: "<< maMapTransform);
     }
 
     ::basegfx::B2DPoint EmfPlusHelperData::Map(double ix, double iy) const
@@ -1265,9 +1268,11 @@ namespace emfplushelper
                             }
 
                             basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
-
+                            //basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize, font->emSize), Map(lx, ly+font->emSize));
+                            //basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize*1.1, font->emSize*1.1), ::basegfx::B2DPoint(lx + maMapTransform.get(0, 2), ly + maMapTransform.get(1, 2)));
                             basegfx::BColor color = EMFPGetBrushColorOrARGBColor(flags,brushId);
-
+                            //obrot maWorldTransform: [0 1 0; -1 0 0; 0 0 1]
+                            SAL_INFO("drawinglayer", "\t EMF+ DrawString transform matrix : " << transformMatrix << " maMapTransform:" << maMapTransform << " maWorldTransform: " <<   maWorldTransform <<  " maBaseTransform :"<< maBaseTransform);
                             mrPropertyHolders.Current().setTextColor(color);
                             mrPropertyHolders.Current().setTextColorActive(true);
 
@@ -1310,7 +1315,9 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetRenderingOrigin:
                     {
                         rMS.ReadInt32(mnOriginX).ReadInt32(mnOriginY);
-                        SAL_INFO("drawinglayer", "EMF+ SetRenderingOrigin, [x,y]: " << mnOriginX << "," << mnOriginY);
+                        SAL_INFO("drawinglayer", "TODO\t EMF+ SetRenderingOrigin, [x,y]: " << mnOriginX << "," << mnOriginY);
+
+                        mappingChanged();
                         break;
                     }
                     case EmfPlusRecordTypeSetTextRenderingHint:
@@ -1593,7 +1600,19 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\thas matrix: " << hasMatrix);
                         SAL_INFO("drawinglayer", "EMF+\tglyphs: " << glyphsCount);
 
-                        if ((optionFlags & 1) && glyphsCount > 0)
+                        if (optionFlags & 0x2)
+                        {
+                            SAL_WARN("drawinglayer", "EMF+\tTODO: DrawDriverString add support for DriverStringOptionsVertical");
+                        }
+                        if (optionFlags & 0x4)
+                        {
+                            SAL_WARN("drawinglayer", "EMF+\tTODO: DrawDriverString add support for DriverStringOptionsRealizedAdvance");
+                        }
+                        if (optionFlags & 0x8)
+                        {
+                            SAL_WARN("drawinglayer", "EMF+\tTODO: DrawDriverString add support for DriverStringOptionsLimitSubpixel");
+                        }
+                        if ((optionFlags & 0x1) && glyphsCount > 0)
                         {
                             std::unique_ptr<float[]> charsPosX(new float[glyphsCount]);
                             std::unique_ptr<float[]> charsPosY(new float[glyphsCount]);
@@ -1640,29 +1659,22 @@ namespace emfplushelper
 
                             // generate TextSimplePortionPrimitive2Ds for all portions of text with
                             // the same charsPosY values
-                            sal_uInt32 pos = 0;
-                            while (pos < glyphsCount)
+                            for (sal_uInt32 pos = 0; pos < glyphsCount; pos++)
                             {
-                                //determine the current length
-                                sal_uInt32 aLength = 1;
-                                while (pos + aLength < glyphsCount && std::abs( charsPosY[pos + aLength] - charsPosY[pos] ) < std::numeric_limits< float >::epsilon())
-                                    aLength++;
-
-                                // generate the DX-Array
-                                aDXArray.clear();
-                                double mappedPosX = Map(charsPosX[pos],charsPosY[pos]).getX();
-                                for (size_t i=0; i<aLength-1; i++)
-                                {
-                                    aDXArray.push_back(Map(charsPosX[pos+i+1],charsPosY[pos+i+1]).getX() - mappedPosX);
-                                }
-                                // last entry
-                                aDXArray.push_back(0);
-
                                 // prepare transform matrix
-                                basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    MapSize(font->emSize,font->emSize),Map(charsPosX[pos],charsPosY[pos]));
+                                basegfx::B2DHomMatrix transformMatrix = maMapTransform;
+
+                                //transformMatrix.scale(MapSize(font->emSize, font->emSize).getX(), MapSize(font->emSize, font->emSize).getY());
+                                //transformMatrix.scale(0.1, 0.1);
+                                transformMatrix.scale(0.00025* MapSize(font->emSize, font->emSize).getX(), 0.00025 *MapSize(font->emSize, font->emSize).getY());
+                                transformMatrix.translate(Map(charsPosX[pos], charsPosY[pos]).getX(), Map(charsPosX[pos], charsPosY[pos]).getY());
+
+                                //basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                //    MapSize(font->emSize, font->emSize), Map(charsPosX[pos], charsPosY[pos]));
                                 if (hasMatrix)
                                     transformMatrix *= transform;
+
+                                SAL_INFO("drawinglayer", "EMF+\t bako matrix: " << transformMatrix <<" maMapTransform:" << maMapTransform << " MapSize(font->emSize, font->emSize).getX()" << MapSize(font->emSize, font->emSize).getX());
 
                                 //generate TextSimplePortionPrimitive2D
                                 mrTargetHolders.Current().append(
@@ -1670,19 +1682,17 @@ namespace emfplushelper
                                     transformMatrix,
                                     text,
                                     pos,            // take character at current pos
-                                    aLength,        // use determined length
-                                    aDXArray,       // generated DXArray
+                                    1,              // Always draw one character
+                                    aDXArray,       // empty DXArray
                                     fontAttribute,
                                     Application::GetSettings().GetLanguageTag().getLocale(),
                                     color));
-
-                                // update pos
-                                pos += aLength;
                             }
                         }
                         else
                         {
-                            SAL_WARN("drawinglayer", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
+                            SAL_WARN("drawinglayer", "EMF+\tTODO: DrawDriverString add support for non-unicode glyphs chars "
+                                                     "(index to a character glyph in the EmfPlusFont object)");
                         }
                         break;
                     }
