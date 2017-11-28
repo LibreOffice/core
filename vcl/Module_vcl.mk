@@ -157,6 +157,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_wksfuzzer \
     Executable_diffuzzer \
     Executable_docxfuzzer \
+    Executable_xlsxfuzzer \
 ))
 endif
 
