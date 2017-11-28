@@ -103,6 +103,7 @@ public:
     void testConditionalFormatRangeListXLSX();
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
+    void testBuiltinRangesXLSX();
     void testRichTextExportODS();
     void testRichTextCellFormatXLSX();
     void testFormulaRefSheetNameODS();
@@ -212,6 +213,7 @@ public:
     CPPUNIT_TEST(testConditionalFormatRangeListXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
+    CPPUNIT_TEST(testBuiltinRangesXLSX);
     CPPUNIT_TEST(testRichTextExportODS);
     CPPUNIT_TEST(testRichTextCellFormatXLSX);
     CPPUNIT_TEST(testFormulaRefSheetNameODS);
@@ -1155,6 +1157,32 @@ void ScExportTest::testNamedRangeBugfdo62729()
     pNames = rDoc2.GetRangeName();
     //after reload should still have a named range
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testBuiltinRangesXLSX()
+{
+    ScDocShellRef xShell = loadDoc("built-in_ranges.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xShell->DoClose();
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    //assert the existing OOXML built-in names are still there
+    assertXPathContent(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm._FilterDatabase'][@localSheetId='0']", "'Sheet1 Test'!$A$1:$A$5");
+    assertXPathContent(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm._FilterDatabase'][@localSheetId='1']", "'Sheet2 Test'!$K$10:$K$14");
+    assertXPathContent(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm.Print_Area'][@localSheetId='0']", "'Sheet1 Test'!$A$1:$A$5");
+    assertXPathContent(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm.Print_Area'][@localSheetId='1']", "'Sheet2 Test'!$K$10:$M$18");
+
+    //...and that no extra ones are added (see tdf#112571)
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm._FilterDatabase_0'][@localSheetId='0']", 0);
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm._FilterDatabase_0'][@localSheetId='1']", 0);
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm.Print_Area_0'][@localSheetId='0']", 0);
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName[@name='_xlnm.Print_Area_0'][@localSheetId='1']", 0);
 
     xDocSh->DoClose();
 }
