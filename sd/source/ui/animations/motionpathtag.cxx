@@ -255,7 +255,7 @@ private:
 };
 
 SdPathHdl::SdPathHdl( const SmartTagReference& xTag, SdrPathObj* pPathObj )
-: SmartHdl( xTag, pPathObj->GetCurrentBoundRect().TopLeft() )
+: SmartHdl( xTag, pPathObj->GetCurrentBoundRect().TopLeft(), SdrHdlKind::SmartTag )
 , mpPathObj( pPathObj )
 {
 }

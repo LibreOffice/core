@@ -140,7 +140,7 @@ protected:
         pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
         std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
-        ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false);
+        ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
         SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, pParams);
         if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.is() )
         {

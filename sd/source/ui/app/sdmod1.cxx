@@ -261,7 +261,7 @@ bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
             SfxObjectShellLock xDocShell;
             ::sd::DrawDocShell* pDocSh;
             xDocShell = pDocSh = new ::sd::DrawDocShell(
-                SfxObjectCreateMode::STANDARD, false);
+                SfxObjectCreateMode::STANDARD, false, DocumentType::Impress);
 
             pDocSh->DoInitNew();
             SdDrawDocument* pDoc = pDocSh->GetDoc();

@@ -166,7 +166,7 @@ private:
 };
 
 AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt )
-: SmartHdl( xTag, rPnt )
+: SmartHdl( xTag, rPnt, SdrHdlKind::SmartTag )
 , mxAnnotation( xAnnotation )
 , mxTag( dynamic_cast< AnnotationTag* >( xTag.get() ) )
 {

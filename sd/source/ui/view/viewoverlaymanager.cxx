@@ -158,7 +158,7 @@ private:
 };
 
 ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
-: SmartHdl( xTag, rPnt )
+: SmartHdl( xTag, rPnt, SdrHdlKind::SmartTag )
 , mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
 , mnHighlightId( -1 )
 , maImageSize( 42, 42 )

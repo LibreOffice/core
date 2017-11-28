@@ -824,7 +824,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
         if( pMed )
         {
             // in this mode the document is also owned and controlled by this instance
-            mxBookmarkDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true);
+            mxBookmarkDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true, DocumentType::Impress);
             if (mxBookmarkDocShRef->DoLoad(pMed))
                 mpBookmarkDoc = mxBookmarkDocShRef->GetDoc();
             else
