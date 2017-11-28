@@ -8451,9 +8451,22 @@ void ScInterpreter::ScReplace()
                 nPos = nLen + 1;
             if (nCount > nLen - nPos + 1)
                 nCount = nLen - nPos + 1;
-            aOldStr = aOldStr.replaceAt( nPos-1, nCount, "" );
+            sal_Int32 nIdx = 0;
+            sal_Int32 nCnt = 0;
+            while ( nIdx < nLen && nPos > nCnt + 1 )
+            {
+                aOldStr.iterateCodePoints( &nIdx );
+                ++nCnt;
+            }
+            sal_Int32 nStart = nIdx;
+            while ( nIdx < nLen && nPos + nCount - 1 > nCnt )
+            {
+                aOldStr.iterateCodePoints( &nIdx );
+                ++nCnt;
+            }
+            aOldStr = aOldStr.replaceAt( nStart, nIdx - nStart, "" );
             if ( CheckStringResultLen( aOldStr, aNewStr ) )
-                aOldStr = aOldStr.replaceAt( nPos-1, 0, aNewStr );
+                aOldStr = aOldStr.replaceAt( nStart, 0, aNewStr );
             PushString( aOldStr );
         }
     }
