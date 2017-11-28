@@ -1514,8 +1514,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
 
     case RES_POOLCHR_RUBYTEXT:
         {
-            long nH = static_cast<const SvxFontHeightItem*>(GetDfltAttr(
-                                RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
+            long nH = GetDfltAttr( RES_CHRATR_CJK_FONTSIZE )->GetHeight() / 2;
             SetAllScriptItem( aSet, SvxFontHeightItem( nH, 100, RES_CHRATR_FONTSIZE));
             aSet.Put(SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE ));
             aSet.Put(SvxEmphasisMarkItem( FontEmphasisMark::NONE, RES_CHRATR_EMPHASIS_MARK) );

@@ -4155,7 +4155,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                             aLR.SetTextLeft(pNumFormat->GetIndentAt());
 
                             // If have not explicit left, set number format list tab position is doc default tab
-                            const SvxTabStopItem *pDefaultStopItem = static_cast<const SvxTabStopItem *>(m_rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP));
+                            const SvxTabStopItem *pDefaultStopItem = m_rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP);
                             if ( pDefaultStopItem &&  pDefaultStopItem->Count() > 0 )
                                 const_cast<SwNumFormat*>(pNumFormat)->SetListtabPos( const_cast<SvxTabStop&>((*pDefaultStopItem)[0]).GetTabPos() );
                         }

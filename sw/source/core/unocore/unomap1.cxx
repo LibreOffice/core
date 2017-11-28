@@ -99,6 +99,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/memberids.h>
@@ -114,6 +115,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svx/xdef.hxx>
+#include <paratr.hxx>
 #include "unomapproperties.hxx"
 
 using namespace ::com::sun::star;
