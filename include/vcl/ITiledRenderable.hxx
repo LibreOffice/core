@@ -151,19 +151,6 @@ public:
     }
 
     /**
-     * Show/Hide a single row/column header outline for Calc dosuments.
-     *
-     * @param bColumn - if we are dealing with a column or row group
-     * @param nLevel - the level to which the group belongs
-     * @param nIndex - the group entry index
-     * @param bHidden - the new group state (collapsed/expanded)
-     */
-    virtual void setOutlineState(bool /*bColumn*/, int /*nLevel*/, int /*nIndex*/, bool /*bHidden*/)
-    {
-        return;
-    }
-
-    /**
      * Get position and content of row/column headers of Calc documents.
      *
      * @param rRectangle - if not empty, then limit the output only to the area of this rectangle
@@ -217,6 +204,19 @@ public:
     /// @see lok::Document::setClientVisibleArea().
     virtual void setClientVisibleArea(const Rectangle& /*rRectangle*/)
     {
+    }
+
+    /**
+     * Show/Hide a single row/column header outline for Calc dosuments.
+     *
+     * @param bColumn - if we are dealing with a column or row group
+     * @param nLevel - the level to which the group belongs
+     * @param nIndex - the group entry index
+     * @param bHidden - the new group state (collapsed/expanded)
+     */
+    virtual void setOutlineState(bool /*bColumn*/, int /*nLevel*/, int /*nIndex*/, bool /*bHidden*/)
+    {
+        return;
     }
 
     /// Implementation for
