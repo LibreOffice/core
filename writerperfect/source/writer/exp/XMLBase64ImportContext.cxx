@@ -9,6 +9,8 @@
 
 #include "XMLBase64ImportContext.hxx"
 
+#include <comphelper/base64.hxx>
+
 using namespace com::sun::star;
 
 namespace writerperfect
@@ -27,12 +29,31 @@ void XMLBase64ImportContext::startElement(const OUString &/*rName*/, const css::
 
 void XMLBase64ImportContext::endElement(const OUString &/*rName*/)
 {
+    m_aBinaryData.append(static_cast<const unsigned char *>(m_aStream.GetBuffer()), m_aStream.GetSize());
 }
 
 void XMLBase64ImportContext::characters(const OUString &rChars)
 {
-    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    m_aBinaryData.appendBase64Data(librevenge::RVNGString(sCharU8.getStr()));
+    OUString aTrimmedChars(rChars.trim());
+
+    if (!aTrimmedChars.isEmpty())
+    {
+        OUString aChars;
+        if (!m_aBase64CharsLeft.isEmpty())
+        {
+            aChars = m_aBase64CharsLeft;
+            aChars += aTrimmedChars;
+            m_aBase64CharsLeft.clear();
+        }
+        else
+            aChars = aTrimmedChars;
+
+        uno::Sequence<sal_Int8> aBuffer((aChars.getLength() / 4) * 3);
+        const sal_Int32 nCharsDecoded = comphelper::Base64::decodeSomeChars(aBuffer, aChars);
+        m_aStream.WriteBytes(aBuffer.getArray(), aBuffer.getLength());
+        if (nCharsDecoded != aChars.getLength())
+            m_aBase64CharsLeft = aChars.copy(nCharsDecoded);
+    }
 }
 
 const librevenge::RVNGBinaryData &XMLBase64ImportContext::getBinaryData() const

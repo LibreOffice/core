@@ -12,6 +12,8 @@
 
 #include <librevenge/RVNGBinaryData.h>
 
+#include <tools/stream.hxx>
+
 #include "xmlictxt.hxx"
 
 namespace writerperfect
@@ -33,6 +35,8 @@ public:
 
 private:
     librevenge::RVNGBinaryData m_aBinaryData;
+    SvMemoryStream m_aStream;
+    OUString m_aBase64CharsLeft;
 };
 
 } // namespace exp

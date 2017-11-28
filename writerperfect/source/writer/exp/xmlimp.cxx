@@ -66,6 +66,8 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
         return new XMLStylesContext(mrImport, /*bAutomatic=*/true);
     else if (rName == "office:styles")
         return new XMLStylesContext(mrImport, /*bAutomatic=*/false);
+    else if (rName == "office:font-face-decls")
+        return new XMLFontFaceDeclsContext(mrImport);
     return nullptr;
 }
 
