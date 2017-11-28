@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_702d7cfd",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-11-28T20:52:44Z",
+      "side": 1,
+      "message": "Nitpick: I would name it \"IsTokensEqual\", to state that return value is Boolean.",
+      "revId": "c1c700338bca0ea15e1c44bd86c416186fda1881",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d038f03f",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-11-28T20:52:44Z",
+      "side": 1,
+      "message": "Do you know where we could find code formatting rules for LibreOffice?\n\nNitpick: This code style is not match into this file.\n\nSee below Clone():\n\"for( sal_uInt16 i \u003d 0; i \u003c nLen; i++, pp++ )\"\n\nI would suggest to format it according to new formatting rules (I heard that there is some), especially for this new code.",
+      "revId": "c1c700338bca0ea15e1c44bd86c416186fda1881",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f0416caa",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-11-28T20:52:44Z",
+      "side": 1,
+      "message": "Here is the code formatted differently.\nWhat is recommended code style?",
+      "revId": "c1c700338bca0ea15e1c44bd86c416186fda1881",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
