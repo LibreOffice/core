@@ -79,7 +79,7 @@ public:
     /**
      @overload void ShowFullScreenMode(bool bFullScreenMode, sal_Int32 nDisplayScreen)
     */
-    void            ShowFullScreenMode( bool bFullScreenMode = true );
+    void            ShowFullScreenMode( bool bFullScreenMode );
     bool            IsFullScreenMode() const { return mbFullScreenMode; }
 
     void            StartPresentationMode( bool   bPresentation,
