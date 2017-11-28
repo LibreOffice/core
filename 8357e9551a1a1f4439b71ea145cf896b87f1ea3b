@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d0d470be",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10138,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-11-28T21:45:49Z",
+      "side": 1,
+      "message": "This comment is now stale and could be removed?",
+      "range": {
+        "startLine": 10138,
+        "startChar": 0,
+        "endLine": 10138,
+        "endChar": 67
+      },
+      "revId": "8357e9551a1a1f4439b71ea145cf896b87f1ea3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_30e4d4aa",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10139,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-11-28T21:45:49Z",
+      "side": 1,
+      "message": "This condition could be removed as well? These are all supported platforms, not? Or put it differently, on what platform should this condition be false?",
+      "revId": "8357e9551a1a1f4439b71ea145cf896b87f1ea3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
