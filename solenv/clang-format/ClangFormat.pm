@@ -73,9 +73,9 @@ sub find()
         {
             foreach my $dir (split /:/, $ENV{PATH})
             {
-                $clang_format = "$dir/clang-format";
-                if (is_matching_clang_format_version($clang_format, $version))
+                if (is_matching_clang_format_version("$dir/clang-format", $version))
                 {
+                    $clang_format = "$dir/clang-format";
                     last;
                 }
             }
