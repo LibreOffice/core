@@ -1085,6 +1085,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         // so navigator (and effect window) notice that
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, true);
         rBindings.Invalidate(SID_STATUS_PAGE, true);
         rBindings.Invalidate(SID_DELETE_MASTER_PAGE, true);
