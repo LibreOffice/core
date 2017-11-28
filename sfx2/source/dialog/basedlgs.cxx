@@ -206,6 +206,28 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 }
 
 
+void SfxModalDialog::StateChanged( StateChangedType nType )
+{
+    if (comphelper::LibreOfficeKit::isActive() && nType == StateChangedType::InitShow)
+    {
+        // There are some dialogs, like Hyperlink dialog, which inherit from
+        // SfxModalDialog even though they are modeless, i.e., their Execute method
+        // isn't called.
+        if (!GetLOKNotifier())
+        {
+            SetLOKNotifier(SfxViewShell::Current());
+            const Size aSize = GetOptimalSize();
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back(std::make_pair("type", "dialog"));
+            aItems.emplace_back(std::make_pair("size", aSize.toString()));
+            SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+    }
+
+    ModalDialog::StateChanged(nType);
+}
+
+
 void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == StateChangedType::InitShow )
