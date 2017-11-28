@@ -248,8 +248,8 @@ class StringHelper
 public:
     // append string to string ------------------------------------------------
 
-    static void         appendChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_Int32 nCount = 1 );
-    static void         appendString( OUStringBuffer& rStr, const OUString& rData, sal_Int32 nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         appendChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_Int32 nCount );
+    static void         appendString( OUStringBuffer& rStr, const OUString& rData, sal_Int32 nWidth, sal_Unicode cFill = ' ' );
 
     // append decimal ---------------------------------------------------------
 
@@ -313,7 +313,7 @@ public:
     // encoded text output ----------------------------------------------------
 
     static void         appendCChar( OUStringBuffer& rStr, sal_Unicode cChar, bool bPrefix = true );
-    static void         appendEncChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_Int32 nCount = 1, bool bPrefix = true );
+    static void         appendEncChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_Int32 nCount, bool bPrefix = true );
     static void         appendEncString( OUStringBuffer& rStr, const OUString& rData, bool bPrefix = true );
 
     // token list -------------------------------------------------------------
@@ -967,7 +967,7 @@ public:
     void                writeBin( Type nData, bool bDots = true )
                             { StringHelper::appendBin( maLine, nData, bDots ); }
     template< typename Type >
-    void                writeFix( Type nData, sal_Int32 nWidth = 0 )
+    void                writeFix( Type nData, sal_Int32 nWidth )
                             { StringHelper::appendFix( maLine, nData, nWidth ); }
     template< typename Type >
     void                writeValue( Type nData, FormatType eFmtType )
@@ -1367,7 +1367,7 @@ protected:
     virtual bool        implIsValid() const override;
 
     void                skipBlock( sal_Int64 nBytes, bool bShowSize = true );
-    void                dumpRawBinary( sal_Int64 nBytes, bool bShowOffset = true, bool bStream = false );
+    void                dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bStream = false );
 
     void                dumpBinary( const String& rName, sal_Int64 nBytes, bool bShowOffset = true );
     void                dumpRemaining( sal_Int64 nBytes );

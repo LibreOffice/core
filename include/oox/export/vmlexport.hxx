@@ -137,7 +137,7 @@ public:
     OString AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const bool bOOxmlExport = false );
-    OString AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport = false );
+    OString AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);
 

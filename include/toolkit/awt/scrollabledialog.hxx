@@ -45,7 +45,7 @@ namespace toolkit
         DECL_LINK( ScrollBarHdl, ScrollBar*, void );
 
     public:
-        ScrollableDialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
+        ScrollableDialog( vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
         virtual ~ScrollableDialog() override;
         virtual void dispose() override;
         // Window
