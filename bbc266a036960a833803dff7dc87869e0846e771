@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ad806ff8",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2965,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-28T10:33:42Z",
+      "side": 1,
+      "message": "How about\n\n (...; (++nCol \u003c\u003d nEndCol ? ++colWidthIt : false))",
+      "revId": "bbc266a036960a833803dff7dc87869e0846e771",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
