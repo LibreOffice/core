@@ -60,6 +60,14 @@ DECLARE_RTFEXPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
                                  getProperty<sal_Int32>(xFootnote->getAnchor(), "CharColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf104035, "tdf104035.rtf")
+{
+    auto aTabStops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops");
+    CPPUNIT_ASSERT(aTabStops.hasElements());
+    // This was 3330 twips instead, as tabs were assumed to be relative.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(450)), aTabStops[0].Position);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
