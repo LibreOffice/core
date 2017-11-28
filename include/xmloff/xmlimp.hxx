@@ -202,7 +202,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     std::unique_ptr<SvXMLNamespaceMap>    mpNamespaceMap;
     std::unique_ptr<SvXMLUnitConverter>   mpUnitConv;
-    std::stack<SvXMLImportContextRef>     maContexts;
+    std::deque<SvXMLImportContextRef>     maContexts;
     std::stack<css::uno::Reference<css::xml::sax::XFastContextHandler>>
                                           maFastContexts;
     std::unique_ptr<SvXMLNumFmtHelper>    mpNumImport;
@@ -579,6 +579,8 @@ public:
     virtual void NotifyEmbeddedFontRead() {};
 
     bool needFixPositionAfterZ() const;
+
+    bool InContextStack(sal_uInt16 nPrefix, const OUString& rLocalName);
 };
 
 inline rtl::Reference< XMLTextImportHelper > const & SvXMLImport::GetTextImport()

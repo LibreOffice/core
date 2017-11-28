@@ -422,9 +422,9 @@ void SvXMLImport::cleanup() throw ()
     }
     while (!maContexts.empty())
     {
-        if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maContexts.top().get()))
+        if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maContexts.back().get()))
             pStylesContext->Clear();
-        maContexts.pop();
+        maContexts.pop_back();
     }
     DisposingModel();
 }
@@ -713,7 +713,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     SvXMLImportContextRef xContext;
     if(!maContexts.empty())
     {
-        xContext = maContexts.top()->CreateChildContext(nPrefix, aLocalName, xAttrList);
+        xContext = maContexts.back()->CreateChildContext(nPrefix, aLocalName, xAttrList);
         SAL_WARN_IF( !xContext.is() || (xContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
@@ -743,7 +743,18 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     xContext->StartElement( xAttrList );
 
     // Push context on stack.
-    maContexts.push(xContext);
+    maContexts.push_back(xContext);
+}
+
+bool SvXMLImport::InContextStack(sal_uInt16 nPrefix, const OUString& rLocalName)
+{
+    for (const auto& rElem : maContexts)
+    {
+        if (nPrefix == rElem->GetPrefix() && rLocalName == rElem->GetLocalName())
+            return true;
+    }
+
+    return false;
 }
 
 void SAL_CALL SvXMLImport::endElement( const OUString&
@@ -762,8 +773,8 @@ rName
 
     {
         // Get topmost context and remove it from the stack.
-        SvXMLImportContextRef xContext = maContexts.top();
-        maContexts.pop();
+        SvXMLImportContextRef xContext = maContexts.back();
+        maContexts.pop_back();
 
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
@@ -797,7 +808,7 @@ void SAL_CALL SvXMLImport::characters( const OUString& rChars )
     }
     else if( !maContexts.empty() )
     {
-        maContexts.top()->Characters( rChars );
+        maContexts.back()->Characters( rChars );
     }
 }
 
@@ -805,7 +816,7 @@ void SvXMLImport::Characters( const OUString& rChars )
 {
     if( !maContexts.empty() )
     {
-        maContexts.top()->Characters( rChars );
+        maContexts.back()->Characters( rChars );
     }
 }
 
@@ -879,7 +890,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
         SvXMLImportContext *pContext = static_cast<SvXMLImportContext*>( xContext.get() );
         if (pRewindMap)
             pContext->PutRewindMap(std::move(pRewindMap));
-        maContexts.push(pContext);
+        maContexts.push_back(pContext);
     }
 
     // Push context on stack.
@@ -914,7 +925,7 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
         isFastContext = true;
         xContext->endFastElement( Element );
         if (isFastContext)
-            maContexts.pop();
+            maContexts.pop_back();
 
         xContext = nullptr;
     }

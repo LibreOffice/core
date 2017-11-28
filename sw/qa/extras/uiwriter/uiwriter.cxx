@@ -125,6 +125,7 @@ public:
     void testReplaceBackward();
     void testRedlineFrame();
     void testThreadedException();
+    void testStylesInStylesLeak();
     void testBookmarkCopy();
     void testFdo69893();
     void testFdo70807();
@@ -294,6 +295,7 @@ public:
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testRedlineFrame);
     CPPUNIT_TEST(testThreadedException);
+    CPPUNIT_TEST(testStylesInStylesLeak);
     CPPUNIT_TEST(testBookmarkCopy);
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo70807);
@@ -560,6 +562,14 @@ void SwUiWriterTest::testThreadedException()
     //from a SvFileStream to ensure that
     bool bRes = TestImportFODT(aFileStream);
 
+    CPPUNIT_ASSERT(!bRes);
+}
+
+void SwUiWriterTest::testStylesInStylesLeak()
+{
+    //this shouldn't leak
+    SvFileStream aFileStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "stylesInStyles.fodt", StreamMode::READ);
+    bool bRes = TestImportFODT(aFileStream);
     CPPUNIT_ASSERT(!bRes);
 }
 

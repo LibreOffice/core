@@ -218,6 +218,10 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
                                                              xAttrList );
         break;
     case XML_TOK_DOC_STYLES:
+
+        if (GetSwImport().InContextStack(nPrefix, rLocalName))
+            throw xml::sax::SAXException("unexpected recursive styles element", Reference< XInterface >(), Any());
+
         GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       false );

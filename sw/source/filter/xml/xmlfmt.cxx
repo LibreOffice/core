@@ -713,9 +713,13 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleChildContext( sal_uInt16 
 {
     SvXMLStyleContext* pContext = nullptr;
 
-    if(nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(rLocalName, XML_TABLE_TEMPLATE))
+    SvXMLImport& rImport = GetImport();
+    if (rImport.GetStyles() != this && rImport.GetAutoStyles() != this)
+        return pContext;
+
+    if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(rLocalName, XML_TABLE_TEMPLATE))
     {
-        rtl::Reference<XMLTableImport> xTableImport = GetImport().GetShapeImport()->GetShapeTableImport();
+        rtl::Reference<XMLTableImport> xTableImport = rImport.GetShapeImport()->GetShapeTableImport();
         pContext = xTableImport->CreateTableTemplateContext(nPrefix, rLocalName, xAttrList);
     }
     if (!pContext)
