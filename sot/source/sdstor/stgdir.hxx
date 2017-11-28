@@ -68,7 +68,6 @@ public:
     void Enum( sal_Int32& );                // enumerate entries for iteration
     void DelTemp( bool );                   // delete temporary entries
     bool Store( StgDirStrm& );              // save entry into dir strm
-    bool IsContained( StgDirEntry* );       // check if subentry
 
     void SetDirty()  { m_bDirty = true; }
     bool IsDirty();

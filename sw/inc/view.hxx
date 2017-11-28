@@ -528,7 +528,6 @@ public:
     bool            IsFormMode() const;
     bool            IsBezierEditMode();
     bool            AreOnlyFormsSelected() const;
-    bool            HasDrwObj(SdrObject const *pSdrObj) const;
     bool            HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const;
     bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );

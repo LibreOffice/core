@@ -153,43 +153,6 @@ public:
             }
 };
 
-// ScRangeItem: manages an area of a table
-class ScRangeItem : public SfxPoolItem
-{
-public:
-            inline  ScRangeItem( const sal_uInt16 nWhich );
-            inline  ScRangeItem( const ScRangeItem& rCpy );
-
-    inline ScRangeItem& operator=( const ScRangeItem &rCpy );
-
-    // "pure virtual methods" from SfxPoolItem
-    virtual bool                operator==( const SfxPoolItem& ) const override;
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                  MapUnit eCoreMetric,
-                                  MapUnit ePresMetric,
-                                  OUString &rText,
-                                  const IntlWrapper& rIntl ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
-
-private:
-    ScRange aRange;
-};
-
-inline ScRangeItem::ScRangeItem( const sal_uInt16 nWhichP )
-    :   SfxPoolItem( nWhichP )
-{
-}
-
-inline ScRangeItem::ScRangeItem( const ScRangeItem& rCpy )
-    : SfxPoolItem( rCpy.Which() ), aRange( rCpy.aRange )
-{}
-
-inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
-{
-    aRange = rCpy.aRange;
-    return *this;
-}
-
 // page format item: contents of header and footer
 
 #define SC_HF_LEFTAREA   1

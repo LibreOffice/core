@@ -346,7 +346,6 @@ namespace svxform
         virtual ~NavigatorTreeModel() override;
 
         void FillBranch( FmFormData* pParentData );
-        void ClearBranch( FmFormData const * pParentData );
         void UpdateContent( FmFormShell* pNewShell );
 
         void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = CONTAINER_APPEND,
@@ -365,7 +364,6 @@ namespace svxform
         FmEntryData*        FindData( const OUString& rText, FmFormData const * pParentData, bool bRecurs );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
         static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData const * pParentFormData );
-        SdrObject*          Search(SdrObjListIter& rIter, const css::uno::Reference< css::form::XFormComponent >& xComp);
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     };

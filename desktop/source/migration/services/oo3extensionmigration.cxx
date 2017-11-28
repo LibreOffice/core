@@ -80,18 +80,6 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
 {
 }
 
-void OO3ExtensionMigration::checkAndCreateDirectory( INetURLObject const & rDirURL )
-{
-    ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
-    if ( aResult == ::osl::FileBase::E_NOENT )
-    {
-        INetURLObject aBaseURL( rDirURL );
-        aBaseURL.removeSegment();
-        checkAndCreateDirectory( aBaseURL );
-        ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
-    }
-}
-
 void OO3ExtensionMigration::scanUserExtensions( const OUString& sSourceDir, TStringVector& aMigrateExtensions )
 {
     osl::Directory    aScanRootDir( sSourceDir );

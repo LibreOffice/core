@@ -267,8 +267,6 @@ public:
     static SwPageDesc* GetByName(SwDoc& rDoc, const OUString& rName);
 
     SwPageDesc& operator=( const SwPageDesc& );
-    bool        operator<(const SwPageDesc& pd) const
-        { return m_StyleName < pd.m_StyleName; }
 
     SwPageDesc( const SwPageDesc& );
     virtual ~SwPageDesc() override;

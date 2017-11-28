@@ -127,8 +127,6 @@ namespace rptui
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     private:
-        void TogglePropertyListening(const css::uno::Reference< css::uno::XInterface>& Element);
-
         void    implSetModified();
 
         void    switchListening( const css::uno::Reference< css::container::XIndexAccess >& _rxContainer, bool _bStartListening );

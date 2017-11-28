@@ -84,7 +84,6 @@ public:
     TOOLS_DLLPUBLIC friend SvStream & WriteSvGlobalName( SvStream &, const SvGlobalName & );
 
     bool          operator < ( const SvGlobalName & rObj ) const;
-    SvGlobalName& operator += ( sal_uInt32 );
 
     bool          operator == ( const SvGlobalName & rObj ) const;
     bool          operator != ( const SvGlobalName & rObj ) const

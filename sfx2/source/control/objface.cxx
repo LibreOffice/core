@@ -262,24 +262,6 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 }
 
 
-const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
-{
-
-    assert( pSlots );
-    assert( nCount );
-
-    const SfxSlot *pSlot = GetSlot(nSlotId);
-    if ( !pSlot )
-    {
-        if(pGenoType)
-            return pGenoType->GetRealSlot(nSlotId);
-        SAL_WARN( "sfx.control", "unknown Slot" );
-        return nullptr;
-    }
-
-    return nullptr;
-}
-
 void SfxInterface::RegisterPopupMenu( const OUString& rResourceName )
 {
     pImplData->aPopupName = rResourceName;

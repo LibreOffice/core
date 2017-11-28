@@ -98,7 +98,6 @@ private:
         SCCOLROW nSearchPos, size_t& rFindLevel, size_t& rFindIndex,
         size_t nMaxLevel = SC_OL_MAXDEPTH);
 
-    void RemoveSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nLevel);
     void PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nStartLevel);
 
 public:

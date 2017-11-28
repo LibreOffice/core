@@ -28,96 +28,18 @@ chart2/source/view/main/OpenGLRender.hxx:104
     int OpenGLRender::RenderSymbol2DShape(float,float,int)
 chart2/source/view/main/OpenGLRender.hxx:121
     int OpenGLRender::Create2DCircle(int)
-connectivity/source/drivers/evoab2/NResultSet.hxx:123
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> connectivity::evoab::OEvoabResultSet::operator*()
-connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:51
-    class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
 connectivity/source/inc/java/lang/Object.hxx:118
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
-connectivity/source/inc/OColumn.hxx:131
-    const class rtl::OUString & connectivity::OColumn::getSchemaName() const
-connectivity/source/inc/OColumn.hxx:133
-    const class rtl::OUString & connectivity::OColumn::getCatalogName() const
-connectivity/source/inc/odbc/OConnection.hxx:82
+connectivity/source/inc/odbc/OConnection.hxx:83
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 cppcanvas/source/inc/canvasgraphichelper.hxx:59
     const class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> & cppcanvas::internal::CanvasGraphicHelper::getGraphicDevice() const
-dbaccess/source/ui/browser/genericcontroller.cxx:1258
-    const type-parameter-?-? & dbaui::(anonymous namespace)::SGI_identity::operator()(const type-parameter-?-? &) const
 i18nlangtag/source/languagetag/languagetag.cxx:275
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
-include/basegfx/matrix/b2dhommatrix.hxx:90
-    class basegfx::B2DHomMatrix & basegfx::B2DHomMatrix::operator*=(double)
-include/basegfx/matrix/b2dhommatrix.hxx:91
-    class basegfx::B2DHomMatrix & basegfx::B2DHomMatrix::operator/=(double)
-include/basegfx/matrix/b3dhommatrix.hxx:103
-    class basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator*=(double)
-include/basegfx/matrix/b3dhommatrix.hxx:104
-    class basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator/=(double)
-include/basegfx/point/b2dpoint.hxx:93
-    class basegfx::B2DPoint & basegfx::B2DPoint::operator*=(double)
-include/basegfx/point/b2ipoint.hxx:72
-    class basegfx::B2IPoint & basegfx::B2IPoint::operator*=(const class basegfx::B2IPoint &)
-include/basegfx/point/b2ipoint.hxx:81
-    class basegfx::B2IPoint & basegfx::B2IPoint::operator*=(int)
-include/basegfx/point/b2ipoint.hxx:98
-    class basegfx::B2IPoint & basegfx::B2IPoint::operator*=(const class basegfx::B2DHomMatrix &)
-include/basegfx/point/b3dpoint.hxx:85
-    class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(const class basegfx::B3DPoint &)
-include/basegfx/point/b3dpoint.hxx:95
-    class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(double)
-include/basegfx/utils/unopolypolygon.hxx:91
-    const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const
-include/basegfx/tuple/b2i64tuple.hxx:92
-    const long & basegfx::B2I64Tuple::operator[](int) const
-include/basegfx/tuple/b2i64tuple.hxx:101
-    long & basegfx::B2I64Tuple::operator[](int)
-include/basegfx/tuple/b2i64tuple.hxx:126
-    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator/=(const class basegfx::B2I64Tuple &)
-include/basegfx/tuple/b2i64tuple.hxx:133
-    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator*=(const class basegfx::B2I64Tuple &)
-include/basegfx/tuple/b2i64tuple.hxx:140
-    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator*=(long)
-include/basegfx/tuple/b2i64tuple.hxx:147
-    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator/=(long)
-include/basegfx/tuple/b2i64tuple.hxx:154
-    class basegfx::B2I64Tuple basegfx::B2I64Tuple::operator-() const
-include/basegfx/tuple/b2ituple.hxx:128
-    class basegfx::B2ITuple & basegfx::B2ITuple::operator/=(const class basegfx::B2ITuple &)
-include/basegfx/tuple/b2ituple.hxx:135
-    class basegfx::B2ITuple & basegfx::B2ITuple::operator*=(const class basegfx::B2ITuple &)
-include/basegfx/tuple/b2ituple.hxx:149
-    class basegfx::B2ITuple & basegfx::B2ITuple::operator/=(int)
-include/basegfx/tuple/b2ituple.hxx:156
-    class basegfx::B2ITuple basegfx::B2ITuple::operator-() const
-include/basegfx/tuple/b3dtuple.hxx:171
-    class basegfx::B3DTuple & basegfx::B3DTuple::operator/=(const class basegfx::B3DTuple &)
-include/basegfx/tuple/b3ituple.hxx:88
-    const int & basegfx::B3ITuple::operator[](int) const
-include/basegfx/tuple/b3ituple.hxx:97
-    int & basegfx::B3ITuple::operator[](int)
-include/basegfx/tuple/b3ituple.hxx:124
-    class basegfx::B3ITuple & basegfx::B3ITuple::operator/=(const class basegfx::B3ITuple &)
-include/basegfx/tuple/b3ituple.hxx:132
-    class basegfx::B3ITuple & basegfx::B3ITuple::operator*=(const class basegfx::B3ITuple &)
-include/basegfx/tuple/b3ituple.hxx:140
-    class basegfx::B3ITuple & basegfx::B3ITuple::operator*=(int)
-include/basegfx/tuple/b3ituple.hxx:148
-    class basegfx::B3ITuple & basegfx::B3ITuple::operator/=(int)
-include/basegfx/tuple/b3ituple.hxx:156
-    class basegfx::B3ITuple basegfx::B3ITuple::operator-() const
 include/basegfx/vector/b2dvector.hxx:115
     class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
-include/basegfx/vector/b2ivector.hxx:75
-    class basegfx::B2IVector & basegfx::B2IVector::operator*=(const class basegfx::B2IVector &)
-include/basegfx/vector/b2ivector.hxx:84
-    class basegfx::B2IVector & basegfx::B2IVector::operator*=(int)
 include/basegfx/vector/b2ivector.hxx:101
     class basegfx::B2IVector & basegfx::B2IVector::setLength(double)
-include/basegfx/vector/b2ivector.hxx:118
-    class basegfx::B2IVector & basegfx::B2IVector::operator*=(const class basegfx::B2DHomMatrix &)
-include/basegfx/vector/b3dvector.hxx:85
-    class basegfx::B3DVector & basegfx::B3DVector::operator*=(const class basegfx::B3DVector &)
 include/basegfx/vector/b3dvector.hxx:155
     class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:180
@@ -138,52 +60,36 @@ include/canvas/vclwrapper.hxx:134
     type-parameter-?-? & canvas::vcltools::VCLObject::get()
 include/canvas/vclwrapper.hxx:135
     const type-parameter-?-? & canvas::vcltools::VCLObject::get() const
-include/comphelper/unique_disposing_ptr.hxx:45
-    type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
-include/connectivity/FValue.hxx:327
-    unsigned short connectivity::ORowSetValue::operator unsigned short() const
-include/editeng/editview.hxx:219
+include/editeng/editview.hxx:220
     class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:63
     struct _LibreOfficeKitDocument * lok::Document::get()
 include/LibreOfficeKit/LibreOfficeKit.hxx:71
     int lok::Document::getDocumentType()
-include/LibreOfficeKit/LibreOfficeKit.hxx:96
+include/LibreOfficeKit/LibreOfficeKit.hxx:97
     char * lok::Document::getPartPageRectangles()
-include/LibreOfficeKit/LibreOfficeKit.hxx:102
+include/LibreOfficeKit/LibreOfficeKit.hxx:103
     int lok::Document::getPart()
-include/LibreOfficeKit/LibreOfficeKit.hxx:120
+include/LibreOfficeKit/LibreOfficeKit.hxx:121
     char * lok::Document::getPartHash(int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:162
+include/LibreOfficeKit/LibreOfficeKit.hxx:222
     int lok::Document::getTileMode()
-include/LibreOfficeKit/LibreOfficeKit.hxx:281
+include/LibreOfficeKit/LibreOfficeKit.hxx:387
     char * lok::Document::getTextSelection(const char *,char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:324
+include/LibreOfficeKit/LibreOfficeKit.hxx:430
     char * lok::Document::getCommandValues(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:366
+include/LibreOfficeKit/LibreOfficeKit.hxx:472
     int lok::Document::createView()
-include/LibreOfficeKit/LibreOfficeKit.hxx:393
+include/LibreOfficeKit/LibreOfficeKit.hxx:499
     int lok::Document::getView()
-include/LibreOfficeKit/LibreOfficeKit.hxx:401
+include/LibreOfficeKit/LibreOfficeKit.hxx:507
     int lok::Document::getViewsCount()
-include/LibreOfficeKit/LibreOfficeKit.hxx:410
+include/LibreOfficeKit/LibreOfficeKit.hxx:516
     unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:543
+include/LibreOfficeKit/LibreOfficeKit.hxx:651
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:593
+include/LibreOfficeKit/LibreOfficeKit.hxx:705
     char * lok::Office::getVersionInfo()
-include/o3tl/array_view.hxx:158
-    unsigned long std::hash::operator()(array_view<type-parameter-?-?>)
-include/o3tl/enumarray.hxx:100
-    typename type-parameter-?-?::value_type * o3tl::enumarray_iterator::operator->()
-include/o3tl/string_view.hxx:844
-    unsigned long std::hash::operator()(class o3tl::basic_string_view<char, struct std::char_traits<char> >)
-include/o3tl/string_view.hxx:849
-    unsigned long std::hash::operator()(class o3tl::basic_string_view<char16_t, struct std::char_traits<char16_t> >)
-include/o3tl/string_view.hxx:854
-    unsigned long std::hash::operator()(class o3tl::basic_string_view<char32_t, struct std::char_traits<char32_t> >)
-include/o3tl/string_view.hxx:859
-    unsigned long std::hash::operator()(class o3tl::basic_string_view<wchar_t, struct std::char_traits<wchar_t> >)
 include/oox/dump/dumperbase.hxx:637
     long oox::dump::FlagsList::getIgnoreFlags() const
 include/oox/dump/dumperbase.hxx:1392
@@ -230,8 +136,6 @@ include/oox/dump/oledumper.hxx:326
     unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
 include/oox/dump/oledumper.hxx:327
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
-include/oox/export/shapes.hxx:158
-    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
 include/oox/export/shapes.hxx:203
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
 include/oox/export/shapes.hxx:204
@@ -240,19 +144,17 @@ include/oox/helper/binaryoutputstream.hxx:78
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
 include/oox/helper/binaryoutputstream.hxx:79
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
-include/oox/helper/containerhelper.hxx:113
-    typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::reference oox::Matrix::operator()(typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type,typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type)
-include/sax/fshelper.hxx:205
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
 include/sax/fshelper.hxx:206
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
+include/sax/fshelper.hxx:207
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
-include/sax/fshelper.hxx:209
+include/sax/fshelper.hxx:210
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
-include/svl/poolitem.hxx:171
+include/svl/poolitem.hxx:173
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
-include/svx/framelink.hxx:157
+include/svx/framelink.hxx:204
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
@@ -264,36 +166,26 @@ include/test/sheet/xstyleloader.hxx:27
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
 include/test/sheet/xusedareacursor.hxx:25
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
-include/tools/bigint.hxx:114
-    unsigned short BigInt::operator unsigned short() const
-include/tools/bigint.hxx:115
-    unsigned long BigInt::operator unsigned long() const
-include/tools/color.hxx:141
+include/tools/color.hxx:140
     class SvStream & Color::Read(class SvStream &)
-include/tools/color.hxx:142
+include/tools/color.hxx:141
     class SvStream & Color::Write(class SvStream &) const
 include/vcl/fontcharmap.hxx:48
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
 include/vcl/gdimtf.hxx:185
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:258
+include/vcl/graphicfilter.hxx:254
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
-include/vcl/menu.hxx:460
-    unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
-lotuswordpro/source/filter/lwpsvstream.hxx:76
+lotuswordpro/inc/lwpsvstream.hxx:75
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
-lotuswordpro/source/filter/lwpsvstream.hxx:77
+lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
-lotuswordpro/source/filter/lwpsvstream.hxx:78
+lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/source/core/opencl/formulagroupcl.cxx:968
+sc/source/core/opencl/formulagroupcl.cxx:966
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1413
+sc/source/core/opencl/formulagroupcl.cxx:1408
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
-sc/source/core/tool/scmatrix.cxx:2217
-    type-parameter-?-? * wrapped_iterator::operator->() const
-sc/source/core/tool/scmatrix.cxx:3183
-    const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
 sc/source/ui/vba/vbaformat.hxx:69
     class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
 sc/source/ui/vba/vbaformat.hxx:73
@@ -326,23 +218,17 @@ sc/source/ui/vba/vbaformat.hxx:145
     class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:131
+sd/source/filter/eppt/pptx-epptooxml.cxx:136
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/ui/inc/OutlineViewShell.hxx:114
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sfx2/source/inc/childwinimpl.hxx:75
-    class SfxFrame * SfxFrameArr_Impl::operator[](unsigned long)
 sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/editsh.hxx:617
+sw/inc/editsh.hxx:646
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/source/uibase/inc/fldmgr.hxx:113
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
-vcl/inc/PhysicalFontFace.hxx:79
-    int PhysicalFontFace::GetWidth() const
-vcl/inc/unx/gtk/gtkdata.hxx:153
+vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
-vcl/source/filter/FilterConfigCache.hxx:89
-    class rtl::OUString FilterConfigCache::GetImportFormatMediaType(unsigned short)

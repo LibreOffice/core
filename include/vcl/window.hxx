@@ -825,7 +825,6 @@ public:
 
     void                                IncrementLockCount();
     void                                DecrementLockCount();
-    bool                                IsLocked() const;
 
                                         // returns the input language used for the last key stroke
                                         // may be LANGUAGE_DONTKNOW if not supported by the OS
@@ -928,8 +927,6 @@ public:
 
     void                                SetWindowRegionPixel();
     void                                SetWindowRegionPixel( const vcl::Region& rRegion );
-    const vcl::Region&                  GetWindowRegionPixel() const;
-    bool                                IsWindowRegionPixel() const;
     vcl::Region                         GetWindowClipRegionPixel() const;
     vcl::Region                         GetPaintRegion() const;
     bool                                IsInPaint() const;

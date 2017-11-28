@@ -1818,19 +1818,6 @@ sal_uInt16 ScCheckListBox::GetCheckedEntryCount() const
     return nCount;
 }
 
-void ScCheckListBox::ExpandChildren( SvTreeListEntry* pParent )
-{
-    if ( pParent )
-        Expand( pParent );
-    // Iterate over the children
-    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
-    while ( pEntry )
-    {
-        ExpandChildren( pEntry );
-        pEntry = NextSibling( pEntry );
-    }
-}
-
 void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
 {
     const vcl::KeyCode& rKey = rKEvt.GetKeyCode();
