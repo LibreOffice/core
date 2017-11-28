@@ -205,6 +205,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(VERSIONMAP),$(gb_Library_VERSIONMAPFLAG) $(VERSIONMAP)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -246,6 +247,7 @@ gb_Library_STLEXT := port_sunpro$(gb_Library_PLAINEXT)
 else
 gb_Library_STLEXT := port_sunpro_debug$(gb_Library_PLAINEXT)
 endif
+gb_Library_VERSIONMAPFLAG := -M
 
 ifeq ($(CPUNAME),INTEL)
 gb_Library_OOOEXT := $(gb_Library_PLAINEXT)

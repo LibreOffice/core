@@ -133,6 +133,7 @@ $(eval $(foreach method,\
 	add_package_headers \
 	add_sdi_headers \
 	add_precompiled_header \
+	set_versionmap \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))

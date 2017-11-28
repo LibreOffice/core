@@ -281,6 +281,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
+		$(if $(VERSIONMAP),$(gb_Library_VERSIONMAPFLAG) $(VERSIONMAP)) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -319,6 +320,7 @@ endef
 
 gb_Library_DEFS :=
 gb_Library_TARGETTYPEFLAGS := -dynamiclib -single_module
+gb_Library_VERSIONMAPFLAG := -Wl,-exported_symbols_list
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib

@@ -308,6 +308,8 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 #   files.
 # - TARGETTYPE is the type of linktarget as some platforms need very different
 #   command to link different targettypes.
+# - VERSIONMAP is the linker script, usually used to version a dynamic
+#   library's symbols (on *nix/Mac).
 #
 # Since most variables are set on the linktarget and not on the object, the
 # object learns about these setting via GNU makes scoping of target variables.
@@ -351,6 +353,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE := 
+$(call gb_LinkTarget_get_target,$(1)) : VERSIONMAP := 
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
@@ -373,6 +376,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULT
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := 
+$(call gb_LinkTarget_get_dep_target,$(1)) : VERSIONMAP := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
 endif
 
@@ -679,6 +683,11 @@ endef
 define gb_LinkTarget_set_targettype
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := $(2)
+endef
+
+define gb_LinkTarget_set_versionmap
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : VERSIONMAP := $(2)
 endef
 
 define gb_LinkTarget_set_dlltarget

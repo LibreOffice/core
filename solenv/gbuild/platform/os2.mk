@@ -322,6 +322,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+		$(if $(VERSIONMAP),$(gb_Library_VERSIONMAPFLAG) $(VERSIONMAP)) \
 		$(T_LDFLAGS) \
 		@$${RESPONSEFILE} \
 		$(if $(DLLTARGET), $(DLLDEF)) \
@@ -361,6 +362,7 @@ endef
 
 gb_Library_DEFS := -D_DLL_
 gb_Library_TARGETTYPEFLAGS := -Zdll
+gb_Library_VERSIONMAPFLAG := -Wl,--version-script
 gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := 
