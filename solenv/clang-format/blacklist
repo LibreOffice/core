@@ -18624,6 +18624,7 @@ vcl/workben/602fuzzer.cxx
 vcl/workben/bmpfuzzer.cxx
 vcl/workben/cgmfuzzer.cxx
 vcl/workben/commonfuzzer.hxx
+vcl/workben/docxfuzzer.cxx
 vcl/workben/dxffuzzer.cxx
 vcl/workben/epsfuzzer.cxx
 vcl/workben/fftester.cxx
