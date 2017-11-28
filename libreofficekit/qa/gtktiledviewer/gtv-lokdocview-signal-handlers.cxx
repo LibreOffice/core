@@ -314,7 +314,7 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     if (aAction == "created")
     {
         const std::string aSize = aRoot.get<std::string>("size");
-        std::vector<int> aPoints = GtvHelpers::splitIntoIntegers(aSize, ", ", 2);
+        std::vector<int> aPoints = GtvHelpers::split<int>(aSize, ", ", 2);
         GtkWidget* pDialog = gtv_lok_dialog_new(pDocView, nDialogId, aPoints[0], aPoints[1]);
         g_info("created  dialog, for dialogid: %d with size: %s", nDialogId, aSize.c_str());
 
@@ -345,7 +345,7 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
             else if (aAction == "size_changed")
             {
                 const std::string aSize = aRoot.get<std::string>("size");
-                std::vector<int> aSizePoints = GtvHelpers::splitIntoIntegers(aSize, ", ", 2);
+                std::vector<int> aSizePoints = GtvHelpers::split<int>(aSize, ", ", 2);
                 if (aSizePoints.size() != 2)
                 {
                     g_error("Malformed size_changed callback");
@@ -366,7 +366,7 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
                 try
                 {
                     const std::string aRectangle = aRoot.get<std::string>("rectangle");
-                    std::vector<int> aRectPoints = GtvHelpers::splitIntoIntegers(aRectangle, ", ", 4);
+                    std::vector<int> aRectPoints = GtvHelpers::split<int>(aRectangle, ", ", 4);
                     if (aRectPoints.size() == 4)
                         aGdkRectangle = {aRectPoints[0], aRectPoints[1], aRectPoints[2], aRectPoints[3]};
                 }

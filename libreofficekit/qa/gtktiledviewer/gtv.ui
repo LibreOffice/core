@@ -459,6 +459,38 @@
       </packing>
     </child>
     <child>
+      <object class="GtkSeparatorToolItem" id="separator5">
+        <property name="use_action_appearance">False</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolItem" id="recentunoselectortoolitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkComboBoxText" id="combo_recentunoselector">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="active">0</property>
+            <items>
+              <item translatable="no">Select UNO</item>
+            </items>
+            <signal name="changed" handler="recentUnoChanged" swapped="no"/>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkToolButton" id="btn_unodebugger">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -470,6 +502,17 @@
       <packing>
         <property name="expand">False</property>
         <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="separator6">
+        <property name="use_action_appearance">False</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">False</property>
       </packing>
     </child>
     <child>
@@ -562,7 +605,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="separator5">
+      <object class="GtkSeparatorToolItem" id="separator7">
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -601,7 +644,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="separator6">
+      <object class="GtkSeparatorToolItem" id="separator8">
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -668,7 +711,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="separator7">
+      <object class="GtkSeparatorToolItem" id="separator9">
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
