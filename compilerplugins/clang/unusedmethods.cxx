@@ -118,6 +118,9 @@ public:
     bool TraverseFunctionDecl( FunctionDecl* );
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
     bool TraverseCXXConversionDecl( CXXConversionDecl* );
+#if CLANG_VERSION >= 50000
+    bool TraverseCXXDeductionGuideDecl( CXXDeductionGuideDecl* );
+#endif
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
@@ -387,6 +390,16 @@ bool UnusedMethods::TraverseCXXConversionDecl(CXXConversionDecl* f)
     currentFunctionDecl = copy;
     return ret;
 }
+#if CLANG_VERSION >= 50000
+bool UnusedMethods::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
+{
+    auto copy = currentFunctionDecl;
+    currentFunctionDecl = f;
+    bool ret = RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(f);
+    currentFunctionDecl = copy;
+    return ret;
+}
+#endif
 
 loplugin::Plugin::Registration< UnusedMethods > X("unusedmethods", false);
 
