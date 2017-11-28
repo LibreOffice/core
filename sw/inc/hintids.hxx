@@ -148,43 +148,37 @@ RES_TXTATR_NOEND_END,
 RES_TXTATR_END = RES_TXTATR_NOEND_END
 };
 
-enum RES_PARATR
-{
-RES_PARATR_BEGIN = RES_TXTATR_END,
-    RES_PARATR_LINESPACING = RES_PARATR_BEGIN,      // 63
-    RES_PARATR_ADJUST,                              // 64
-    RES_PARATR_SPLIT,                               // 65
-    RES_PARATR_ORPHANS,                             // 66
-    RES_PARATR_WIDOWS,                              // 67
-    RES_PARATR_TABSTOP,                             // 68
-    RES_PARATR_HYPHENZONE,                          // 69
-    RES_PARATR_DROP,                                // 70
-    RES_PARATR_REGISTER,                            // 71
-    RES_PARATR_NUMRULE,                             // 72
-    RES_PARATR_SCRIPTSPACE,                         // 73
-    RES_PARATR_HANGINGPUNCTUATION,                  // 74
-    RES_PARATR_FORBIDDEN_RULES,                     // 75
-    RES_PARATR_VERTALIGN,                           // 76
-    RES_PARATR_SNAPTOGRID,                          // 77
-    RES_PARATR_CONNECT_BORDER,                      // 78
-    RES_PARATR_OUTLINELEVEL,                        // 79
-    RES_PARATR_RSID,                                // 80
-    RES_PARATR_GRABBAG,                             // 81
-RES_PARATR_END
-};
+#define RES_PARATR_BEGIN RES_TXTATR_END
+#define    RES_PARATR_LINESPACING                  TypedWhichId<SvxLineSpacingItem>(RES_PARATR_BEGIN) // 63
+#define    RES_PARATR_ADJUST                       TypedWhichId<SvxAdjustItem>(64)
+#define    RES_PARATR_SPLIT                        TypedWhichId<SvxFormatSplitItem>(65)
+#define    RES_PARATR_ORPHANS                      TypedWhichId<SvxOrphansItem>(66)
+#define    RES_PARATR_WIDOWS                       TypedWhichId<SvxWidowsItem>(67)
+#define    RES_PARATR_TABSTOP                      TypedWhichId<SvxTabStopItem>(68)
+#define    RES_PARATR_HYPHENZONE                   TypedWhichId<SvxHyphenZoneItem>(69)
+#define    RES_PARATR_DROP                         TypedWhichId<SwFormatDrop>(70)
+#define    RES_PARATR_REGISTER                     TypedWhichId<SwRegisterItem>(71)
+#define    RES_PARATR_NUMRULE                      TypedWhichId<SwNumRuleItem>(72)
+#define    RES_PARATR_SCRIPTSPACE                  TypedWhichId<SvxScriptSpaceItem>(73)
+#define    RES_PARATR_HANGINGPUNCTUATION           TypedWhichId<SvxHangingPunctuationItem>(74)
+#define    RES_PARATR_FORBIDDEN_RULES              TypedWhichId<SvxForbiddenRuleItem>(75)
+#define    RES_PARATR_VERTALIGN                    TypedWhichId<SvxParaVertAlignItem>(76)
+#define    RES_PARATR_SNAPTOGRID                   TypedWhichId<SvxParaGridItem>(77)
+#define    RES_PARATR_CONNECT_BORDER               TypedWhichId<SwParaConnectBorderItem>(78)
+#define    RES_PARATR_OUTLINELEVEL                 TypedWhichId<SfxUInt16Item>(79)
+#define    RES_PARATR_RSID                         TypedWhichId<SvxRsidItem>(80)
+#define    RES_PARATR_GRABBAG                      TypedWhichId<SfxGrabBagItem>(81)
+#define RES_PARATR_END (82)
 
 // list attributes for paragraphs.
 // intentionally these list attributes are not contained in paragraph styles
-enum RES_PARATR_LIST
-{
-RES_PARATR_LIST_BEGIN = RES_PARATR_END,
-    RES_PARATR_LIST_ID = RES_PARATR_LIST_BEGIN,     // 82
-    RES_PARATR_LIST_LEVEL,                          // 83
-    RES_PARATR_LIST_ISRESTART,                      // 84
-    RES_PARATR_LIST_RESTARTVALUE,                   // 85
-    RES_PARATR_LIST_ISCOUNTED,                      // 86
-RES_PARATR_LIST_END
-};
+#define RES_PARATR_LIST_BEGIN RES_PARATR_END
+#define     RES_PARATR_LIST_ID                     TypedWhichId<SfxStringItem>(RES_PARATR_LIST_BEGIN) // 82
+#define     RES_PARATR_LIST_LEVEL                  TypedWhichId<SfxInt16Item>(83)
+#define     RES_PARATR_LIST_ISRESTART              TypedWhichId<SfxBoolItem>(84)
+#define     RES_PARATR_LIST_RESTARTVALUE           TypedWhichId<SfxInt16Item>(85)
+#define     RES_PARATR_LIST_ISCOUNTED              TypedWhichId<SfxBoolItem>(86)
+#define RES_PARATR_LIST_END (87)
 
 enum RES_FRMATR
 {
@@ -423,6 +417,9 @@ extern SfxItemInfo   aSlotTab[];
     @return Attribute if found, null pointer otherwise
 */
 SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich );
+
+template<class T> inline const T* GetDfltAttr( TypedWhichId<T> nWhich )
+{ return static_cast<const T*>(GetDfltAttr(sal_uInt16(nWhich))); }
 
 SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript );
 

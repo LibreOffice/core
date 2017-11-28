@@ -937,8 +937,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             ::GetHtmlMode(GetView().GetDocShell())));
 
             // Tabulators: Put DefaultTabs into ItemSet
-            const SvxTabStopItem& rDefTabs = static_cast<const SvxTabStopItem&>(
-                            GetPool().GetDefaultItem(RES_PARATR_TABSTOP));
+            const SvxTabStopItem& rDefTabs =
+                            GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
             const sal_uInt16 nDefDist = static_cast<sal_uInt16>(::GetTabDist( rDefTabs ));
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );

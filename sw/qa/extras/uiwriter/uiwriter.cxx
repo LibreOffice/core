@@ -57,6 +57,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/rsiditem.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <reffld.hxx>
