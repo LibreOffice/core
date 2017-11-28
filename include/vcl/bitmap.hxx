@@ -574,7 +574,7 @@ public:
                                 const Color* pSearchColors,
                                 const Color* rReplaceColors,
                                 sal_uLong nColorCount,
-                                sal_uLong* pTols = nullptr );
+                                sal_uLong* pTols );
 
     /** Convert the bitmap to a meta file
 

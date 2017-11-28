@@ -327,7 +327,7 @@ public:
     void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId );
     void                Clear();
 
-    void                SetButtonType( ButtonType eNewType = ButtonType::SYMBOLONLY );
+    void                SetButtonType( ButtonType eNewType );
     ButtonType          GetButtonType() const { return meButtonType; }
 
     // sets a fixed button size (small, large or dontcare (==autosize))
