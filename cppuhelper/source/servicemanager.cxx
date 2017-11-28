@@ -1809,7 +1809,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
 }
 
 /// Make a simpler unique name for preload / progress reporting.
-#ifndef IOS
+#ifndef DISABLE_DYNLOADING
 static rtl::OUString simplifyModule(const rtl::OUString &uri)
 {
     sal_Int32 nIdx;
