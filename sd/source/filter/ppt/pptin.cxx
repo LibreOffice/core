@@ -2781,7 +2781,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(SvStream &rStream)
     xDocStream->SetVersion(xStorage->GetVersion());
     xDocStream->SetCryptMaskKey(xStorage->GetKey());
 
-    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false);
+    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
 
     bool bRet = ImportPPT(pDoc, *xDocStream, *xStorage, aSrcMed);

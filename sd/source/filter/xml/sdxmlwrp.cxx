@@ -1013,7 +1013,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODP(SvStream &rStream)
 {
     SdDLL::Init();
 
-    sd::DrawDocShellRef xDocSh(new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false));
+    sd::DrawDocShellRef xDocSh(new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress));
     xDocSh->DoInitNew();
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 

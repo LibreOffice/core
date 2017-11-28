@@ -682,7 +682,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
         {
-            DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL, false);
+            DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL, false, DocumentType::Impress);
             xShell->DoInitNew();
 
             SdDrawDocument* pModel = xShell->GetDoc();
