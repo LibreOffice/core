@@ -66,19 +66,6 @@ private:
             mIndices[ msNames[ nIndex ] ] = nIndex;
         }
     }
-    void getNestedControls( ControlVec& vControls, uno::Reference< awt::XControlContainer > const & xContainer )
-    {
-        uno::Sequence< uno::Reference< awt::XControl > > aControls = xContainer->getControls();
-        const uno::Reference< awt::XControl >* pCtrl = aControls.getConstArray();
-        const uno::Reference< awt::XControl >* pCtrlsEnd = pCtrl + aControls.getLength();
-        for ( ; pCtrl < pCtrlsEnd; ++pCtrl )
-        {
-            uno::Reference< awt::XControlContainer > xC( *pCtrl, uno::UNO_QUERY );
-            vControls.push_back( *pCtrl );
-            if ( xC.is() )
-                getNestedControls( vControls, xC );
-        }
-    }
 public:
     explicit ControlArrayWrapper( const uno::Reference< awt::XControl >& xDialog )
     {

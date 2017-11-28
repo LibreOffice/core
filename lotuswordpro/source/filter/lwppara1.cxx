@@ -547,17 +547,6 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty const * pProps)
     m_pParaNumbering = std::move(pOver);
 }
 
-void LwpPara::FindLayouts()
-{
-    m_Fribs.SetPara(this);
-    m_Fribs.FindLayouts();
-    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext().obj().get());
-    if(pNextPara)
-    {
-        pNextPara->FindLayouts();
-    }
-}
-
 /**************************************************************************
  * @descr:  Get property according to the property type
 **************************************************************************/

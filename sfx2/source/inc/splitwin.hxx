@@ -100,7 +100,6 @@ public:
                         {
                             SetUpdateMode( !bLock );
                         }
-    using Window::IsLocked;
 
     bool                GetWindowPos( const SfxDockingWindow* pWindow,
                                       sal_uInt16& rLine, sal_uInt16& rPos ) const;

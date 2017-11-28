@@ -269,7 +269,6 @@ public:
     void                    ResetObjectBars_Impl();
     void                    SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId,
                                     SfxInterface *pIFace);
-    bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
     bool                    IsVisible_Impl();
     void                    MakeVisible_Impl( bool );
     void                    Lock_Impl( bool );

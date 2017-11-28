@@ -672,27 +672,6 @@ bool StgDirEntry::Tmp2Strm()
     return true;
 }
 
-// Check if the given entry is contained in this entry
-
-bool StgDirEntry::IsContained( StgDirEntry* pStg )
-{
-    if( m_aEntry.GetType() == STG_STORAGE )
-    {
-        StgIterator aIter( *this );
-        StgDirEntry* p = aIter.First();
-        while( p )
-        {
-            if( !p->m_aEntry.Compare( pStg->m_aEntry ) )
-                return false;
-            if( p->m_aEntry.GetType() == STG_STORAGE )
-                if( !p->IsContained( pStg ) )
-                    return false;
-            p = aIter.Next();
-        }
-    }
-    return true;
-}
-
 // Invalidate all open entries by setting the RefCount to 0. If the bDel
 // flag is set, also set the invalid flag to indicate deletion during the
 // next dir stream flush.

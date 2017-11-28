@@ -508,32 +508,6 @@ void OXUndoEnvironment::RemoveSection(const Reference< report::XSection > & _xSe
 }
 
 
-void OXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & Element)
-{
-    // am Container horchen
-    Reference< XIndexAccess >  xContainer(Element, UNO_QUERY);
-    if (xContainer.is())
-    {
-        Reference< XInterface > xInterface;
-        sal_Int32 nCount = xContainer->getCount();
-        for(sal_Int32 i = 0;i != nCount;++i)
-        {
-            xInterface.set(xContainer->getByIndex( i ),uno::UNO_QUERY);
-            TogglePropertyListening(xInterface);
-        }
-    }
-
-    Reference< XPropertySet >  xSet(Element, UNO_QUERY);
-    if (xSet.is())
-    {
-        if (!m_pImpl->m_bReadOnly)
-            xSet->addPropertyChangeListener( OUString(), this );
-        else
-            xSet->removePropertyChangeListener( OUString(), this );
-    }
-}
-
-
 void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxContainer, bool _bStartListening )
 {
     OSL_PRECOND( _rxContainer.is(), "OXUndoEnvironment::switchListening: invalid container!" );

@@ -123,9 +123,6 @@ private:
     bool            mbTfHasChanged          : 1;
     bool            mbIsSelected            : 1;
 
- public:
-    void SetBoundVolInvalid();
-
  protected:
     void SetTransformChanged();
     virtual void NewObjectInserted(const E3dObject* p3DObj);

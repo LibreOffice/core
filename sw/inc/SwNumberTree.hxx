@@ -280,13 +280,6 @@ public:
     void InvalidateMe();
 
     /**
-       Validate the tree.
-
-       Validates all nodes in this subtree.
-    */
-    void ValidateTree();
-
-    /**
        Validates this node.
 
        Calls Validate(this) on parent.

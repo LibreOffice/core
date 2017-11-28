@@ -691,19 +691,6 @@ bool SdrObjList::IsReadOnly() const
     return bRet;
 }
 
-size_t SdrObjList::CountAllObjects() const
-{
-    const size_t nCount=GetObjCount();
-    size_t nCnt=nCount;
-    for (size_t nNum=0; nNum<nCount; nNum++) {
-        SdrObjList* pSubOL=GetObj(nNum)->GetSubList();
-        if (pSubOL!=nullptr) {
-            nCnt+=pSubOL->CountAllObjects();
-        }
-    }
-    return nCnt;
-}
-
 void SdrObjList::FlattenGroups()
 {
     const size_t nObj = GetObjCount();

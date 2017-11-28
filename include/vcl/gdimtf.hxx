@@ -157,7 +157,6 @@ public:
 
     void            AddAction( MetaAction* pAction );
     void            AddAction( MetaAction* pAction, size_t nPos );
-    void            RemoveAction( size_t nPos );
     void            push_back( MetaAction* pAction );
     /**
      * @param pAction takes ownership

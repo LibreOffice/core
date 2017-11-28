@@ -64,14 +64,6 @@ void LocaleNode::print () const {
     printf (">\n");
 }
 
-void LocaleNode::printR () const {
-    print();
-    for (size_t i=0;i<children.size();i++)
-        children[i]->printR();
-    printf ("\t");
-    print();
-}
-
 void LocaleNode::addChild ( LocaleNode * node) {
     children.emplace_back(node);
     node->parent = this;
