@@ -4023,3 +4023,365 @@ index 939d350..9d1da4e 100644
 -- 
 2.13.6
 
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 38c3188..64707c5 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -35,6 +35,7 @@ EPUBGenerator::EPUBGenerator(EPUBPackage *const package, const EPUBSplitMethod s
+   , m_manifest()
+   , m_htmlManager(m_manifest)
+   , m_imageManager(m_manifest)
++  , m_fontManager(m_manifest)
+   , m_listStyleManager()
+   , m_paragraphStyleManager()
+   , m_spanStyleManager()
+@@ -79,6 +80,7 @@ void EPUBGenerator::endDocument()
+   writeStylesheet();
+   m_htmlManager.writeTo(*m_package);
+   m_imageManager.writeTo(*m_package);
++  m_fontManager.writeTo(*m_package);
+ }
+ 
+ void EPUBGenerator::setDocumentMetaData(const RVNGPropertyList &props)
+@@ -97,7 +99,7 @@ void EPUBGenerator::startNewHtmlFile()
+ 
+   m_splitGuard.onSplit();
+ 
+-  m_currentHtml = m_htmlManager.create(m_imageManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod);
++  m_currentHtml = m_htmlManager.create(m_imageManager, m_fontManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod);
+ 
+   // restore state in the new file
+   m_currentHtml->startDocument(m_documentProps);
+@@ -226,6 +228,7 @@ void EPUBGenerator::writeStylesheet()
+ {
+   EPUBCSSSink sink;
+ 
++  m_fontManager.send(sink);
+   m_listStyleManager.send(sink);
+   m_paragraphStyleManager.send(sink);
+   m_spanStyleManager.send(sink);
+diff --git a/src/lib/EPUBGenerator.h b/src/lib/EPUBGenerator.h
+index 099eb4a..abc6a9a 100644
+--- a/src/lib/EPUBGenerator.h
++++ b/src/lib/EPUBGenerator.h
+@@ -68,6 +68,7 @@ private:
+   EPUBManifest m_manifest;
+   EPUBHTMLManager m_htmlManager;
+   EPUBImageManager m_imageManager;
++  EPUBFontManager m_fontManager;
+   EPUBListStyleManager m_listStyleManager;
+   EPUBParagraphStyleManager m_paragraphStyleManager;
+   EPUBSpanStyleManager m_spanStyleManager;
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 9d39333..614dd02 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -351,9 +351,10 @@ std::string EPUBHTMLTextZone::label(int id) const
+ struct EPUBHTMLGeneratorImpl
+ {
+   //! constructor
+-  EPUBHTMLGeneratorImpl(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
++  EPUBHTMLGeneratorImpl(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
+     : m_document(document)
+     , m_imageManager(imageManager)
++    , m_fontManager(fontManager)
+     , m_listManager(listStyleManager)
+     , m_paragraphManager(paragraphStyleManager)
+     , m_spanManager(spanStyleManager)
+@@ -442,6 +443,7 @@ struct EPUBHTMLGeneratorImpl
+ 
+   EPUBXMLSink &m_document;
+   EPUBImageManager &m_imageManager;
++  EPUBFontManager &m_fontManager;
+   EPUBListStyleManager &m_listManager;
+   EPUBParagraphStyleManager &m_paragraphManager;
+   EPUBSpanStyleManager &m_spanManager;
+@@ -469,8 +471,8 @@ private:
+   EPUBHTMLGeneratorImpl operator=(EPUBHTMLGeneratorImpl const &orig);
+ };
+ 
+-EPUBHTMLGenerator::EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
+-  : m_impl(new EPUBHTMLGeneratorImpl(document, imageManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, path, stylesheetPath, stylesMethod))
++EPUBHTMLGenerator::EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
++  : m_impl(new EPUBHTMLGeneratorImpl(document, imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, path, stylesheetPath, stylesMethod))
+ {
+ }
+ 
+@@ -540,8 +542,9 @@ void EPUBHTMLGenerator::endDocument()
+   m_impl->m_document.closeElement("html");
+ }
+ 
+-void EPUBHTMLGenerator::defineEmbeddedFont(const RVNGPropertyList &/*propList*/)
++void EPUBHTMLGenerator::defineEmbeddedFont(const RVNGPropertyList &propList)
+ {
++  m_impl->m_fontManager.insert(propList, m_impl->m_path);
+ }
+ 
+ void EPUBHTMLGenerator::openPageSpan(const RVNGPropertyList & /* propList */)
+diff --git a/src/lib/EPUBHTMLGenerator.h b/src/lib/EPUBHTMLGenerator.h
+index d8783ed..49f76a3 100644
+--- a/src/lib/EPUBHTMLGenerator.h
++++ b/src/lib/EPUBHTMLGenerator.h
+@@ -21,6 +21,7 @@ namespace libepubgen
+ 
+ struct EPUBHTMLGeneratorImpl;
+ class EPUBImageManager;
++class EPUBFontManager;
+ class EPUBListStyleManager;
+ class EPUBSpanStyleManager;
+ class EPUBParagraphStyleManager;
+@@ -30,7 +31,7 @@ class EPUBPath;
+ class EPUBHTMLGenerator : public librevenge::RVNGTextInterface
+ {
+ public:
+-  EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod);
++  EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod);
+   ~EPUBHTMLGenerator() override;
+ 
+   void setDocumentMetaData(const librevenge::RVNGPropertyList &propList) override;
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 33cba11..9d4c507 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -41,7 +41,7 @@ EPUBHTMLManager::EPUBHTMLManager(EPUBManifest &manifest)
+ {
+ }
+ 
+-const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
++const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
+ {
+   std::ostringstream nameBuf;
+   nameBuf << "section" << std::setw(4) << std::setfill('0') << m_number.next();
+@@ -55,7 +55,7 @@ const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageMana
+   m_contents.push_back(EPUBXMLSink());
+ 
+   const EPUBHTMLGeneratorPtr_t gen(
+-    new EPUBHTMLGenerator(m_contents.back(), imageManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, m_paths.back(), stylesheetPath, stylesMethod));
++    new EPUBHTMLGenerator(m_contents.back(), imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, m_paths.back(), stylesheetPath, stylesMethod));
+ 
+   return gen;
+ }
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index f034657..ef56a52 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -41,7 +41,7 @@ class EPUBHTMLManager
+ public:
+   explicit EPUBHTMLManager(EPUBManifest &manifest);
+ 
+-  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod);
++  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod);
+ 
+   void writeTo(EPUBPackage &package);
+ 
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index c31fb82..c4c9457 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -42,6 +42,17 @@ string getExtension(const string &mimetype)
+   return (extensionMap.end() == it) ? string("img") : it->second;
+ }
+ 
++std::string getFontExtension(const std::string &mimetype)
++{
++  static const std::unordered_map<std::string, std::string> extensionMap =
++  {
++    {"application/vnd.ms-opentype", "otf"},
++  };
++
++  const auto it = extensionMap.find(mimetype);
++  return it == extensionMap.end() ? std::string("ttf") : it->second;
++}
++
+ }
+ 
+ std::size_t EPUBImageManager::BinaryDataHash::operator()(const librevenge::RVNGBinaryData &data) const
+@@ -201,6 +212,113 @@ void EPUBImageManager::send(EPUBCSSSink &out)
+   }
+ }
+ 
++std::size_t EPUBFontManager::BinaryDataHash::operator()(const librevenge::RVNGBinaryData &data) const
++{
++  size_t seed = 0;
++
++  const unsigned char *const buf = data.getDataBuffer();
++  for (size_t i = 0; data.size() != i; ++i)
++    boost::hash_combine(seed, buf[i]);
++
++  return seed;
++}
++
++bool EPUBFontManager::BinaryDataEqual::operator()(const librevenge::RVNGBinaryData &left, const librevenge::RVNGBinaryData &right) const
++{
++  if (left.empty() && right.empty())
++    return true;
++  if (left.size() != right.size())
++    return false;
++  const unsigned char *const leftData = left.getDataBuffer();
++  return std::equal(leftData, leftData + left.size(), right.getDataBuffer());
++}
++
++EPUBFontManager::EPUBFontManager(EPUBManifest &manifest)
++  : m_manifest(manifest)
++  , m_map()
++  , m_number()
++  , m_set()
++{
++}
++
++void EPUBFontManager::insert(const librevenge::RVNGPropertyList &propertyList, const EPUBPath &base)
++{
++  librevenge::RVNGBinaryData data(propertyList["office:binary-data"]->getStr());
++  librevenge::RVNGString mimetype(propertyList["librevenge:mime-type"]->getStr());
++  if (mimetype == "truetype")
++    // librevenge's truetype is EPUB's opentype.
++    mimetype = "application/vnd.ms-opentype";
++
++  MapType_t::const_iterator it = m_map.find(data);
++  if (m_map.end() == it)
++  {
++    const std::string mime(mimetype.cstr());
++
++    std::ostringstream nameBuf;
++    nameBuf << "font" << std::setw(4) << std::setfill('0') << m_number.next();
++    const std::string id = nameBuf.str();
++
++    nameBuf << "." << getFontExtension(mime);
++
++    const EPUBPath path(EPUBPath("OEBPS/fonts") / nameBuf.str());
++
++    m_manifest.insert(path, mime, id, "");
++    it = m_map.insert(MapType_t::value_type(data, path)).first;
++  }
++
++  assert(m_map.end() != it); // the font must be present at this point
++
++  // Now collect CSS properties.
++  EPUBCSSProperties content;
++  extractFontProperties(propertyList, content);
++  std::stringstream ss;
++  ss << "url(";
++  ss << it->second.relativeTo(base).str();
++  ss << ")";
++  content["src"] = ss.str();
++  SetType_t::const_iterator contentIt = m_set.find(content);
++  if (contentIt != m_set.end())
++    return;
++
++  m_set.insert(content);
++}
++
++void EPUBFontManager::extractFontProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const
++{
++  if (pList["librevenge:name"])
++  {
++    std::ostringstream name;
++    name << '\'' << pList["librevenge:name"]->getStr().cstr() << '\'';
++    cssProps["font-family"] = name.str();
++  }
++
++  if (pList["librevenge:font-style"])
++    cssProps["font-style"] = pList["librevenge:font-style"]->getStr().cstr();
++
++  if (pList["librevenge:font-weight"])
++    cssProps["font-weight"] = pList["librevenge:font-weight"]->getStr().cstr();
++}
++
++void EPUBFontManager::writeTo(EPUBPackage &package)
++{
++  for (MapType_t::const_iterator it = m_map.begin(); m_map.end() != it; ++it)
++  {
++    EPUBBinarySink sink;
++    sink.insertBinaryData(it->first);
++    sink.writeTo(package, it->second.str().c_str());
++  }
++}
++
++void EPUBFontManager::send(EPUBCSSSink &out)
++{
++  for (const auto &fontProperties : m_set)
++  {
++    librevenge::RVNGPropertyList props;
++    fillPropertyList(fontProperties, props);
++    out.insertRule("@font-face", props);
++  }
++}
++
+ }
+ 
+ /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
+diff --git a/src/lib/EPUBImageManager.h b/src/lib/EPUBImageManager.h
+index 9d1da4e..3f4bf3c 100644
+--- a/src/lib/EPUBImageManager.h
++++ b/src/lib/EPUBImageManager.h
+@@ -11,6 +11,7 @@
+ #define INCLUDED_EPUBIMAGEMANAGER_H
+ 
+ #include <unordered_map>
++#include <unordered_set>
+ 
+ #include <boost/functional/hash.hpp>
+ #include <librevenge/librevenge.h>
+@@ -72,6 +73,48 @@ private:
+   ContentNameMap_t m_imageContentNameMap;
+ };
+ 
++/// Manages embedded fonts.
++class EPUBFontManager
++{
++  // disable copying
++  EPUBFontManager(const EPUBFontManager &);
++  EPUBFontManager &operator=(const EPUBFontManager &);
++
++  struct BinaryDataHash // : public std::unary_function<librevenge::RVNGBinaryData, std::size_t>
++  {
++    std::size_t operator()(const librevenge::RVNGBinaryData &data) const;
++  };
++
++  struct BinaryDataEqual // : public std::binary_function<librevenge::RVNGBinaryData, librevenge::RVNGBinaryData, bool>
++  {
++    bool operator()(const librevenge::RVNGBinaryData &left, const librevenge::RVNGBinaryData &right) const;
++  };
++
++  typedef std::unordered_map<librevenge::RVNGBinaryData, EPUBPath, BinaryDataHash, BinaryDataEqual> MapType_t;
++  typedef std::unordered_set<EPUBCSSProperties, boost::hash<EPUBCSSProperties>> SetType_t;
++
++public:
++  explicit EPUBFontManager(EPUBManifest &manifest);
++
++  void insert(const librevenge::RVNGPropertyList &propertyList, const EPUBPath &path);
++
++  void writeTo(EPUBPackage &package);
++
++  //! send the data to the sink
++  void send(EPUBCSSSink &out);
++
++private:
++  //! convert a property list into a CSS property map
++  void extractFontProperties(librevenge::RVNGPropertyList const &pList, EPUBCSSProperties &cssProps) const;
++
++  EPUBManifest &m_manifest;
++  /// Font filename -> content map.
++  MapType_t m_map;
++  EPUBCounter m_number;
++  /// Set of font properties.
++  SetType_t m_set;
++};
++
+ }
+ 
+ #endif // INCLUDED_EPUBIMAGEMANAGER
+diff --git a/src/lib/EPUBTableStyleManager.cpp b/src/lib/EPUBTableStyleManager.cpp
+index d5e650c..a1ce33e 100644
+--- a/src/lib/EPUBTableStyleManager.cpp
++++ b/src/lib/EPUBTableStyleManager.cpp
+@@ -78,7 +78,9 @@ bool extractColumnsWidth(const std::vector< std::vector<double> > &columnWidthsS
+   if (col < 0 || size_t(col+numSpanned-1) >= widths.size())
+   {
+     if (!relative)
++    {
+       EPUBGEN_DEBUG_MSG(("EPUBTableStyleManager::getColumnsWidth: can not compute the columns width\n"));
++    }
+     return false;
+   }
+   bool fixed = true;

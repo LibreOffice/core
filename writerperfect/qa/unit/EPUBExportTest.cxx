@@ -83,6 +83,7 @@ public:
     void testLinkNamedCharFormat();
     void testTableWidth();
     void testTextBox();
+    void testFontEmbedding();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -114,6 +115,7 @@ public:
     CPPUNIT_TEST(testLinkNamedCharFormat);
     CPPUNIT_TEST(testTableWidth);
     CPPUNIT_TEST(testTextBox);
+    CPPUNIT_TEST(testFontEmbedding);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -591,6 +593,28 @@ void EPUBExportTest::testTextBox()
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:div/xhtml:p/xhtml:span[3]", "class");
     // This failed, the 3rd span was not italic.
     CPPUNIT_ASSERT_EQUAL(OUString("italic"), EPUBExportTest::getCss(aCssDoc, aClass, "font-style"));
+}
+
+void EPUBExportTest::testFontEmbedding()
+{
+#if !defined(MACOSX)
+    createDoc("font-embedding.fodt", {});
+
+    // Make sure that the params of defineEmbeddedFont() are all handled.
+    // librevenge:name
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    // 'SketchFlow Print' or ''SketchFlow Print1'
+    CPPUNIT_ASSERT(EPUBExportTest::getCss(aCssDoc, "font-face", "font-family").startsWith("'SketchFlow Print"));
+    // librevenge:mime-type
+    mpXmlDoc = parseExport("OEBPS/content.opf");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='fonts/font0001.otf']", "media-type", "application/vnd.ms-opentype");
+    // office:binary-data
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/fonts/font0001.otf"));
+    // librevenge:font-style
+    CPPUNIT_ASSERT_EQUAL(OUString("normal"), EPUBExportTest::getCss(aCssDoc, "font-face", "font-style"));
+    // librevenge:font-weight
+    CPPUNIT_ASSERT_EQUAL(OUString("normal"), EPUBExportTest::getCss(aCssDoc, "font-face", "font-weight"));
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
