@@ -294,7 +294,6 @@ public:
     virtual bool IsMenuBar() const = 0;
 
     void RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
-    bool HasValidEntries();
 
     void UpdateNativeMenu();
 

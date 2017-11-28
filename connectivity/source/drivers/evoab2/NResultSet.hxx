@@ -118,11 +118,6 @@ namespace connectivity
             OEvoabResultSet( OCommonStatement *pStmt, OEvoabConnection *pConnection );
             void construct( const QueryData& _rData );
 
-            css::uno::Reference< css::uno::XInterface > operator *()
-            {
-                return css::uno::Reference< css::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
-            }
-
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface

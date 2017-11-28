@@ -994,34 +994,6 @@ void SvxRTFItemStackType::SetStartPos( const EditPosition& rPos )
     nSttCnt = rPos.GetCntIdx();
 }
 
-void SvxRTFItemStackType::MoveFullNode(const EditNodeIdx &rOldNode,
-    const EditNodeIdx &rNewNode)
-{
-    bool bSameEndAsStart = (pSttNd == pEndNd);
-
-    if (pSttNd->GetIdx() == rOldNode.GetIdx())
-    {
-        delete pSttNd;
-        pSttNd = rNewNode.Clone();
-        if (bSameEndAsStart)
-            pEndNd = pSttNd;
-    }
-
-    if (!bSameEndAsStart && pEndNd->GetIdx() == rOldNode.GetIdx())
-    {
-        delete pEndNd;
-        pEndNd = rNewNode.Clone();
-    }
-
-    //And the same for all the children
-    sal_Int32 nCount = m_pChildList ? m_pChildList->size() : 0;
-    for (sal_Int32 i = 0; i < nCount; ++i)
-    {
-        auto const& pStk = (*m_pChildList)[i];
-        pStk->MoveFullNode(rOldNode, rNewNode);
-    }
-}
-
 void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
 {
     ENSURE_OR_RETURN_VOID(m_pChildList, "Compress: no ChildList" );

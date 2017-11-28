@@ -1016,28 +1016,6 @@ void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags
     aObjBarList.push_back( aObjBar );
 }
 
-bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
-
-/*  [Description]
-
-    Determines if a object list is available at the position in question.
-    This is independent for the fact whether it is actually turned on or off.
-*/
-
-{
-    if ( pParent && IsAppWorkWinToolbox_Impl( nPos ) )
-        return pParent->KnowsObjectBar_Impl( nPos );
-
-    for (const SfxObjectBar_Impl& rBar : aObjBarList)
-    {
-        if ( rBar.nPos == nPos )
-            return true;
-    }
-
-    return false;
-}
-
-
 bool SfxWorkWindow::IsVisible_Impl( SfxVisibilityFlags nMode ) const
 {
     switch( nUpdateMode )

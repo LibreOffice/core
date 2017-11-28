@@ -485,23 +485,6 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::ClearBranch( FmFormData const * pParentData )
-    {
-
-        // delete all entries of this branch
-        FmEntryDataList* pChildList = pParentData->GetChildList();
-
-        for( size_t i = pChildList->size(); i > 0; )
-        {
-            FmEntryData* pChildData = pChildList->at( --i );
-            if( dynamic_cast<const FmFormData*>( pChildData) !=  nullptr )
-                ClearBranch( static_cast<FmFormData*>(pChildData) );
-
-            pChildList->remove( pChildData );
-        }
-    }
-
-
     void NavigatorTreeModel::FillBranch( FmFormData* pFormData )
     {
 
@@ -924,31 +907,6 @@ namespace svxform
 
         return true;
     }
-
-
-    SdrObject* NavigatorTreeModel::Search(SdrObjListIter& rIter, const Reference< XFormComponent > & xComp)
-    {
-        while (rIter.IsMore())
-        {
-            SdrObject* pObj = rIter.Next();
-            FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
-            if ( pFormObject )
-            {
-                Reference< XFormComponent > xFormViewControl( pFormObject->GetUnoControlModel(), UNO_QUERY );
-                if ( xFormViewControl == xComp )
-                    return pObj;
-            }
-            else if ( pObj->IsGroupObject() )
-            {
-                SdrObjListIter aIter( *pObj->GetSubList() );
-                pObj = Search( aIter, xComp );
-                if ( pObj )
-                    return pObj;
-            }
-        }
-        return nullptr;
-    }
-
 
 }
 

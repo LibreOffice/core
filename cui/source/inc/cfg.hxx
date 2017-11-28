@@ -558,8 +558,6 @@ public:
 
     sal_Int32       GetSystemStyle( const OUString& rResourceURL );
 
-    void            SetSystemStyle( const OUString& rResourceURL, sal_Int32 nStyle );
-
     SvxEntries*     GetEntries() override;
     void            SetEntries( SvxEntries* ) override;
     bool            HasSettings() override;

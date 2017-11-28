@@ -398,42 +398,4 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     return pMemChart;
 }
 
-ScChartCollection::ScChartCollection() {}
-ScChartCollection::ScChartCollection(const ScChartCollection& r)
-{
-    for (auto const& it : r.m_Data)
-    {
-        m_Data.push_back(o3tl::make_unique<ScChartArray>(*it));
-    }
-}
-
-void ScChartCollection::clear()
-{
-    m_Data.clear();
-}
-
-size_t ScChartCollection::size() const
-{
-    return m_Data.size();
-}
-
-bool ScChartCollection::empty() const
-{
-    return m_Data.empty();
-}
-
-ScChartArray* ScChartCollection::operator[](size_t nIndex)
-{
-    if (m_Data.size() <= nIndex)
-        return nullptr;
-    return m_Data[nIndex].get();
-}
-
-const ScChartArray* ScChartCollection::operator[](size_t nIndex) const
-{
-    if (m_Data.size() <= nIndex)
-        return nullptr;
-    return m_Data[nIndex].get();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

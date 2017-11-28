@@ -244,7 +244,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     }
     pDBCollection = new ScDBCollection(this);
     pSelectionAttr = nullptr;
-    pChartCollection = new ScChartCollection;
     apTemporaryChartLock.reset( new ScTemporaryChartLock(this) );
     xColNameRanges = new ScRangePairList;
     xRowNameRanges = new ScRangePairList;
@@ -427,7 +426,6 @@ ScDocument::~ScDocument()
     delete pDBCollection;
     delete pSelectionAttr;
     apTemporaryChartLock.reset();
-    delete pChartCollection;
     DeleteDrawLayer();
     delete pFormatExchangeList;
     mpPrinter.disposeAndClear();

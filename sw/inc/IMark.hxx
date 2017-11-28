@@ -62,8 +62,6 @@ namespace sw { namespace mark
             // make sure to update the sorting in Markmanager in this case
 
             //operators and comparisons (non-virtual)
-            bool operator<(const IMark& rOther) const
-                { return GetMarkStart() < rOther.GetMarkStart(); }
             bool operator==(const IMark& rOther) const
                 { return GetMarkStart() == rOther.GetMarkStart(); }
             bool StartsBefore(const SwPosition& rPos) const

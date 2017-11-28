@@ -177,18 +177,6 @@ bool SbiExprNode::IsLvalue()
     return IsVariable();
 }
 
-// Identify of the depth of a tree
-
-short SbiExprNode::GetDepth()
-{
-    if( IsOperand() ) return 0;
-    else
-    {
-        return std::max(pLeft->GetDepth(), pRight->GetDepth()) + 1;
-    }
-}
-
-
 // Adjustment of a tree:
 // 1. Constant Folding
 // 2. Type-Adjustment

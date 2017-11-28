@@ -147,19 +147,6 @@ bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
     return pImp->szData.Data1 < rObj.pImp->szData.Data1;
 }
 
-SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
-{
-    sal_uInt32 nOld = pImp->szData.Data1;
-    pImp->szData.Data1 += n;
-
-    if( nOld > pImp->szData.Data1 )
-    {
-        // overflow
-        pImp->szData.Data2++;
-    }
-    return *this;
-}
-
 bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
 {
     return pImp == rObj.pImp;

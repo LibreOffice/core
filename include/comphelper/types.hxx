@@ -52,18 +52,6 @@ namespace comphelper
         }
     }
 
-    template <class TYPE>
-    bool getImplementation(TYPE*& _pObject, const css::uno::Reference< css::uno::XInterface >& _rxIFace)
-    {
-        _pObject = nullptr;
-        css::uno::Reference< css::lang::XUnoTunnel > xTunnel(_rxIFace, css::uno::UNO_QUERY);
-        if (xTunnel.is())
-            _pObject = reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
-
-        return (_pObject != nullptr);
-    }
-
-
     /** get a css::awt::FontDescriptor that is fully initialized with
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it
         via the default constructor)

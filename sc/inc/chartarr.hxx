@@ -77,25 +77,8 @@ public:
     void    SetHeaders(bool bCol, bool bRow) { aPositioner.SetHeaders(bCol, bRow); }
     bool    HasColHeaders() const { return aPositioner.HasColHeaders(); }
     bool    HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
-    const OUString& GetName() const { return aName; }
 
     ScMemChart* CreateMemChart();
-};
-
-class ScChartCollection
-{
-    typedef ::std::vector<std::unique_ptr<ScChartArray>> DataType;
-    DataType m_Data;
-
-public:
-    ScChartCollection();
-    ScChartCollection(const ScChartCollection& rColl);
-
-    void clear();
-    size_t size() const;
-    bool empty() const;
-    ScChartArray* operator[](size_t nIndex);
-    const ScChartArray* operator[](size_t nIndex) const;
 };
 
 #endif

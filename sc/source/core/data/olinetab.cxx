@@ -317,60 +317,6 @@ bool ScOutlineArray::FindTouchedLevel(
     return bFound;
 }
 
-void ScOutlineArray::RemoveSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nLevel)
-{
-    if ( nLevel >= nDepth )
-        return;
-
-    ScOutlineCollection& rColl = aCollections[nLevel];
-
-    ScOutlineCollection::iterator it = rColl.begin(), itEnd = rColl.end();
-    while (it != itEnd)
-    {
-        ScOutlineEntry *const pEntry = &it->second;
-        SCCOLROW nStart = pEntry->GetStart();
-        SCCOLROW nEnd   = pEntry->GetEnd();
-        if (nStart >= nStartPos && nEnd <= nEndPos)
-        {
-            // Overlaps
-            RemoveSub( nStart, nEnd, nLevel+1 );
-
-            // Re-calc iterator positions after the tree gets invalidated
-            size_t nPos = std::distance(rColl.begin(), it);
-            rColl.erase(it);
-            it = rColl.begin();
-            std::advance(it, nPos);
-            itEnd = rColl.end();
-        }
-        else
-            ++it;
-    }
-
-    it = rColl.begin();
-    itEnd = rColl.end();
-
-    while (it != itEnd)
-    {
-        ScOutlineEntry *const pEntry = &it->second;
-        SCCOLROW nStart = pEntry->GetStart();
-        SCCOLROW nEnd   = pEntry->GetEnd();
-
-        if (nStart >= nStartPos && nEnd <= nEndPos)
-        {
-            RemoveSub( nStart, nEnd, nLevel+1 );
-
-            // Re-calc iterator positions after the tree gets invalidated
-            size_t nPos = std::distance(rColl.begin(), it);
-            rColl.erase(it);
-            it = rColl.begin();
-            std::advance(it, nPos);
-            itEnd = rColl.end();
-        }
-        else
-            ++it;
-    }
-}
-
 void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nStartLevel)
 {
     if (nStartLevel==0)

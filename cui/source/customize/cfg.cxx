@@ -2155,45 +2155,6 @@ ToolbarSaveInData::~ToolbarSaveInData()
 {
 }
 
-void ToolbarSaveInData::SetSystemStyle(
-    const OUString& rResourceURL,
-    sal_Int32 nStyle )
-{
-    if ( rResourceURL.startsWith( "private" ) &&
-         m_xPersistentWindowState.is() &&
-         m_xPersistentWindowState->hasByName( rResourceURL ) )
-    {
-        try
-        {
-            uno::Sequence< beans::PropertyValue > aProps;
-
-            uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
-
-            if ( a >>= aProps )
-            {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
-                {
-                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
-                    {
-                        aProps[ i ].Value <<= nStyle;
-                        break;
-                    }
-                }
-            }
-
-            uno::Reference< container::XNameReplace >
-                xNameReplace( m_xPersistentWindowState, uno::UNO_QUERY );
-
-            xNameReplace->replaceByName( rResourceURL, uno::Any( aProps ) );
-        }
-        catch ( uno::Exception& )
-        {
-            // do nothing, a default value is returned
-            SAL_WARN("cui.customize", "Exception setting toolbar style");
-        }
-    }
-}
-
 sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 {
     sal_Int32 result = 0;

@@ -1942,22 +1942,6 @@ void Window::StateChanged(StateChangedType eType)
     }
 }
 
-bool Window::IsLocked() const
-{
-    if ( mpWindowImpl->mnLockCount != 0 )
-        return true;
-
-    VclPtr<vcl::Window> pChild = mpWindowImpl->mpFirstChild;
-    while ( pChild )
-    {
-        if ( pChild->IsLocked() )
-            return true;
-        pChild = pChild->mpWindowImpl->mpNext;
-    }
-
-    return false;
-}
-
 void Window::SetStyle( WinBits nStyle )
 {
     if ( mpWindowImpl && mpWindowImpl->mnStyle != nStyle )
