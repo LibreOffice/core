@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6dd5a71a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-28T09:43:01Z",
+      "side": 1,
+      "message": "This only touches ODF Export, so a better title is:\n\ntdf#113696 ODF Export: Convert exotic image formats to svg/png",
+      "revId": "d120926fd52cf0f1e351e3df990b8607b61719c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2d19df22",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-28T09:43:01Z",
+      "side": 1,
+      "message": "No need for a separate method, we need to convert every graphic object.",
+      "revId": "d120926fd52cf0f1e351e3df990b8607b61719c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0d20a347",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-28T09:43:01Z",
+      "side": 1,
+      "message": "We also need to convert in this case.",
+      "revId": "d120926fd52cf0f1e351e3df990b8607b61719c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cde05bfd",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2351,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-28T09:43:01Z",
+      "side": 1,
+      "message": "For the mimetype to appear on the draw:image element, you need to add the attribute before this call (the draw:image element is created here with all attributes that have been added before via mrExport.AddAttribute).",
+      "revId": "d120926fd52cf0f1e351e3df990b8607b61719c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
