@@ -921,7 +921,7 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
 {
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
     if (xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonShape")
-        || xServiceInfo->supportsService("com.sun.star.drawing.PolyLineShape"))
+            || xServiceInfo->supportsService("com.sun.star.drawing.PolyLineShape"))
         return false;
 
     // For signature line shapes, we don't want DML, just the VML shape.
