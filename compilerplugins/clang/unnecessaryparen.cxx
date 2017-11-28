@@ -149,9 +149,9 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
                 << parenExpr->getSourceRange();
             handled_.insert(parenExpr);
         }
-    } else if (isa<IntegerLiteral>(subExpr) || isa<CharacterLiteral>(subExpr)
-               || isa<FloatingLiteral>(subExpr) || isa<ImaginaryLiteral>(subExpr)
-               || isa<CXXNullPtrLiteralExpr>(subExpr))
+    } else if (isa<CharacterLiteral>(subExpr) || isa<FloatingLiteral>(subExpr)
+               || isa<ImaginaryLiteral>(subExpr) || isa<CXXNullPtrLiteralExpr>(subExpr))
+        //TODO: isa<IntegerLiteral>(subExpr)
         //TODO: isa<CXXBoolLiteralExpr>(subExpr) || isa<ObjCBoolLiteralExpr>(subExpr)
     {
         auto const loc = subExpr->getLocStart();
