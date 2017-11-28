@@ -189,8 +189,8 @@ public:
     static OUString GetBuiltInDefNameXml( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name index of the passed defined name from Calc.
         @descr  Ignores any characters following a valid representation of a built-in name.
-        @param pcBuiltIn  (out-param) If not 0, the index of the built-in name will be returned here.
-        @return  true = passed string is a built-in name; false = user-defined name. */
+        @param rDefName  raw English UI representation of a built-in defined name used in NAME records.
+        @return  the index of the built-in name, or EXC_BUILTIN_UNKNOWN if it is not a built-in name. */
     static sal_Unicode  GetBuiltInDefNameIndex( const OUString& rDefName );
 
     // built-in style names ---------------------------------------------------

@@ -482,8 +482,12 @@ OUString XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
 
 sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 {
-    sal_Int32 nPrefixLen = strlen(maDefNamePrefix);
+    sal_Int32 nPrefixLen = 0;
     if( rDefName.startsWithIgnoreAsciiCase( maDefNamePrefix ) )
+        nPrefixLen = strlen(maDefNamePrefix);
+    else if( rDefName.startsWithIgnoreAsciiCase( maDefNamePrefixXml ) )
+        nPrefixLen = strlen(maDefNamePrefixXml);
+    if( nPrefixLen > 0 )
     {
         for( sal_Unicode cBuiltIn = 0; cBuiltIn < EXC_BUILTIN_UNKNOWN; ++cBuiltIn )
         {
