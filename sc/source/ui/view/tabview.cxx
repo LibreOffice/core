@@ -2665,14 +2665,14 @@ void lcl_createGroupsData(
                     rGroupsBuffer += ", ";
                 }
 
-                bool bGroupHidden = pEntry->IsHidden();
+                int nGroupHidden = static_cast<int>(pEntry->IsHidden());
 
                 OUString aGroupData;
                 aGroupData += "{ \"level\": \"" + OUString::number(nLevel + 1) + "\", ";
                 aGroupData += "\"index\": \"" + OUString::number(nIndex) + "\", ";
                 aGroupData += "\"startPos\": \"" + OUString::number(rGroupStartPositions[nLevel]) + "\", ";
                 aGroupData += "\"endPos\": \"" + OUString::number(nTotalTwips) + "\", ";
-                aGroupData += "\"hidden\": \"" + OUString::number(bGroupHidden) + "\" }";
+                aGroupData += "\"hidden\": \"" + OUString::number(nGroupHidden) + "\" }";
 
                 rGroupsBuffer += aGroupData;
 
