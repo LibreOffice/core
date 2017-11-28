@@ -1266,24 +1266,25 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
     {
         if( !bVer67 )
         {
-            SprmResult aSprm[4];
-
+            SprmResult a8Sprm[4];
             if (pSep->Find4Sprms(
                     NS_sprm::sprmSBrcTop80, NS_sprm::sprmSBrcLeft80,
                     NS_sprm::sprmSBrcBottom80, NS_sprm::sprmSBrcRight80,
-                    aSprm[0], aSprm[1], aSprm[2], aSprm[3]))
+                    a8Sprm[0], a8Sprm[1], a8Sprm[2], a8Sprm[3]))
             {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= int(SetWW8_BRC(8, brc[i], aSprm[i].pSprm, aSprm[i].nRemainingData))<<i;
+                    nBorder |= int(SetWW8_BRC(8, brc[i], a8Sprm[i].pSprm, a8Sprm[i].nRemainingData))<<i;
             }
+
             // Version 9 BRCs if present will override version 8
+            SprmResult a9Sprm[4];
             if (pSep->Find4Sprms(
                     NS_sprm::sprmSBrcTop, NS_sprm::sprmSBrcLeft,
                     NS_sprm::sprmSBrcBottom, NS_sprm::sprmSBrcRight,
-                    aSprm[0], aSprm[1], aSprm[2], aSprm[3]))
+                    a9Sprm[0], a9Sprm[1], a9Sprm[2], a9Sprm[3]))
             {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= int(SetWW8_BRC(9, brc[i], aSprm[i].pSprm, aSprm[i].nRemainingData))<<i;
+                    nBorder |= int(SetWW8_BRC(9, brc[i], a9Sprm[i].pSprm, a9Sprm[i].nRemainingData))<<i;
             }
         }
     }
