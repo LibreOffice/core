@@ -34,6 +34,7 @@
 #include <sal/types.h>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -128,7 +129,8 @@ void LangSelectionStatusbarController::LangMenu(
     if (!m_bShowMenu)
         return;
 
-    const Reference<XModuleManager> xModuleManager  = ModuleManager::create( m_xContext );
+    const Reference<XServiceInfo> xService(m_xFrame->getController()->getModel(), UNO_QUERY);
+    bool bWriter = xService.is() && xService->supportsService("com.sun.star.text.GenericTextDocument");
     //add context menu
     Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
@@ -165,31 +167,13 @@ void LangSelectionStatusbarController::LangMenu(
         }
     }
 
-
-    if (xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument")
+    if (bWriter)
     {
         xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
         if ( sNone == m_aCurLang )
             xPopupMenu->checkItem( MID_LANG_SEL_NONE, true );
         xPopupMenu->insertItem( MID_LANG_SEL_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
         xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
-
-        // add entries to submenu ('set language for paragraph')
-        nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
-        for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
-        {
-            const OUString & rStr( *it );
-            if( rStr != sNone &&
-                rStr != sAsterisk &&
-                !rStr.isEmpty()) // 'no language found' from language guessing
-            {
-                SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
-                "fwk.uielement", "nItemId outside of expected range!" );
-                subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
-                aLangMap[nItemId] = rStr;
-                ++nItemId;
-            }
-        }
 
         // add entries to submenu ('set language for paragraph')
         nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
@@ -239,10 +223,11 @@ void LangSelectionStatusbarController::LangMenu(
 
         if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
         {
-            if ( xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument" )
+            if (bWriter)
                 aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
             else
                 aBuff.append( ".uno:LanguageStatus?Language:string=Default_" );
+
             aBuff.append( aSelectedLang );
         }
         else if (nId == MID_LANG_SEL_NONE)
