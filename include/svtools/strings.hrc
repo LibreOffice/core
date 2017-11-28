@@ -94,6 +94,7 @@
 #define STR_FORMAT_ID_DIALOG_60                 NC_("STR_FORMAT_ID_DIALOG_60", "OpenOffice.org 1.0 dialog")
 #define STR_FORMAT_ID_FILEGRPDESCRIPTOR         NC_("STR_FORMAT_ID_FILEGRPDESCRIPTOR", "Link")
 #define STR_FORMAT_ID_HTML_NO_COMMENT           NC_("STR_FORMAT_ID_HTML_NO_COMMENT", "HTML format without comments")
+#define STR_FORMAT_ID_PNG_BITMAP                NC_("STR_FORMAT_ID_PNG_BITMAP", "PNG Bitmap")
 
 #define STR_ERROR_OBJNOCREATE                   NC_("STR_ERROR_OBJNOCREATE", "Object % could not be inserted.")
 #define STR_ERROR_OBJNOCREATE_FROM_FILE         NC_("STR_ERROR_OBJNOCREATE_FROM_FILE", "Object from file % could not be inserted.")
