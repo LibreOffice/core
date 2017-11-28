@@ -16,6 +16,24 @@
       "revId": "bbc266a036960a833803dff7dc87869e0846e771",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5047a04a",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2965,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-11-28T15:20:06Z",
+      "side": 1,
+      "message": "++operator returns void so have different types then which doesn\u0027t compile",
+      "parentUuid": "1a430d35_ad806ff8",
+      "revId": "bbc266a036960a833803dff7dc87869e0846e771",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
