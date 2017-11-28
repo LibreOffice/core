@@ -139,6 +139,7 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <vcl/settings.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <paratr.hxx>
 
 #include <memory>
 
@@ -1505,8 +1506,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                aSet.GetItemState(RES_PARATR_NUMRULE))
                             {
                                 const OUString& rNumStyle =
-                                    static_cast<const SfxStringItem &>(
-                                     aSet.Get(RES_PARATR_NUMRULE)).GetValue();
+                                    aSet.Get(RES_PARATR_NUMRULE).GetValue();
                                 if(!rNumStyle.isEmpty())
                                 {
                                     if(!sStr.isEmpty())
