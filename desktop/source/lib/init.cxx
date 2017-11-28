@@ -2247,7 +2247,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
 }
 
-static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
+static void doc_postDialogKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
@@ -2425,7 +2425,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 }
 
-static void doc_postDialogMouseEvent(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postDialogMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -2456,7 +2456,7 @@ static void doc_postDialogMouseEvent(LibreOfficeKitDocument* pThis, unsigned nLO
     }
 }
 
-static void doc_postDialogChildMouseEvent(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postDialogChildMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -3263,7 +3263,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
     return nullptr;
 }
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_paintDialog(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId,
                             unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight)
@@ -3291,7 +3291,7 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
     comphelper::LibreOfficeKit::setDialogPainting(false);
 }
 
-static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer, int* nWidth, int* nHeight)
+static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, unsigned char* pBuffer, int* nWidth, int* nHeight)
 {
     SolarMutexGuard aGuard;
 
