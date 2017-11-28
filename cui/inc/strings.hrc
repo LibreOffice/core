@@ -268,6 +268,20 @@
 #define RID_SVXSTR_CHG_SMARTART                     NC_("RID_SVXSTR_CHG_SMARTART", "SmartArt to %PRODUCTNAME shapes or reverse")
 
 #define RID_SVXSTR_OPT_DOUBLE_DICTS                 NC_("RID_SVXSTR_OPT_DOUBLE_DICTS", "The specified name already exists.\nPlease enter a new name.")
+/* To translators:
+   Please, try to find a similar *short* translation to avoid
+   to get narrow "New" field in the "Edit custom dictionary" window,
+   for example, "Model word for optional affixation and compounding"
+   is too long, but "Grammar By" is a good name here (help page of
+   the window contains the details).
+
+   "Grammar By" text entry box of the "Edit custom dictionary" window
+   contains an optional model word associated to the new user word,
+   allowing its affixation or compounding during spell checking.
+   For example, adding "Grammar By" word "fund" to the new user
+   word "crowdfund", the spell checker will recogize "crowdfund"
+   with suffixes of "fund": "crowdfunding", "crowdfund's" etc.
+*/
 #define RID_SVXSTR_OPT_GRAMMAR_BY                   NC_("RID_SVXSTR_OPT_GRAMMAR_BY", "~Grammar By")
 #define STR_MODIFY                                  NC_("STR_MODIFY", "~Replace")
 #define RID_SVXSTR_CONFIRM_SET_LANGUAGE             NC_("RID_SVXSTR_CONFIRM_SET_LANGUAGE", "Do you want to change the '%1' dictionary language?")
