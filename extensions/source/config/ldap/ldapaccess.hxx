@@ -82,7 +82,7 @@ struct LdapDefinition
 
 typedef std::map< rtl::OUString, rtl::OUString > LdapData; // key/value pairs
 
-/** Class encapulating all LDAP functionality */
+/** Class encapsulating all LDAP functionality */
 class LdapConnection
 {
     friend struct LdapMessageHolder;
