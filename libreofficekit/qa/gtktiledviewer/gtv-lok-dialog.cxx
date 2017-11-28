@@ -459,7 +459,6 @@ gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
                                                       "Dialog width",
                                                       0, 1024, 0,
                                                       static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                                               G_PARAM_CONSTRUCT_ONLY |
                                                                                G_PARAM_STATIC_STRINGS));
 
     properties[PROP_DIALOG_HEIGHT] = g_param_spec_uint("height",
@@ -467,7 +466,6 @@ gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
                                                        "Dialog height",
                                                        0, 1024, 0,
                                                        static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                                                G_PARAM_CONSTRUCT_ONLY |
                                                                                 G_PARAM_STATIC_STRINGS));
 
     g_object_class_install_properties (G_OBJECT_CLASS(klass), PROP_LAST, properties);
