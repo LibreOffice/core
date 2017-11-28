@@ -82,6 +82,8 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/util/MalformedNumberFormatException.hpp>
@@ -2095,6 +2097,50 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODS(SvStream &rStream)
     //to update the properties, which throws cause the properties are uninitialized
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
     bool ret = xFilter->filter(aArgs);
+    xDocSh->SetLoading(SfxLoadedFlags::ALL);
+
+    xDocSh->DoClose();
+
+    return ret;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLSX(SvStream &rStream)
+{
+    ScDLL::Init();
+
+    SfxObjectShellLock xDocSh(new ScDocShell);
+    xDocSh->DoInitNew();
+    uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
+
+    uno::Reference<document::XFilter> xFilter(xMultiServiceFactory->createInstance("com.sun.star.comp.oox.xls.ExcelFilter"), uno::UNO_QUERY_THROW);
+
+    uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::makeAny(xStream) },
+        { "InputMode", uno::makeAny(true) },
+    }));
+    xImporter->setTargetDocument(xModel);
+
+    //SetLoading hack because the document properties will be re-initted
+    //by the xml filter and during the init, while its considered uninitialized,
+    //setting a property will inform the document its modified, which attempts
+    //to update the properties, which throws cause the properties are uninitialized
+    xDocSh->SetLoading(SfxLoadedFlags::NONE);
+    bool ret = false;
+    try
+    {
+        ret = xFilter->filter(aArgs);
+    }
+    catch (const css::io::IOException&)
+    {
+    }
+    catch (const css::lang::WrappedTargetRuntimeException&)
+    {
+    }
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
     xDocSh->DoClose();
