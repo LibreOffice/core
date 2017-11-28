@@ -75,7 +75,7 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
 {
 }
 
-InsertionIndicatorOverlay::~InsertionIndicatorOverlay()
+InsertionIndicatorOverlay::~InsertionIndicatorOverlay() COVERITY_NOEXCEPT_FALSE
 {
     Hide();
 }
