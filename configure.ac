@@ -10135,10 +10135,7 @@ fi
 AC_SUBST(ENABLE_PDFIUM)
 
 SYSTEM_GPGMEPP=
-# need matching cygwin arch for building gpgme sadly, for the while
-if test "$_os" = "Linux" -o "$_os" = "Darwin" \
-   -o \( "$_os" = "WINNT" -a "$host_cpu" = "i686" -a "$WINDOWS_SDK_ARCH" = "x86" \) \
-   -o \( "$_os" = "WINNT" -a "$host_cpu" = "x86_64" -a "$WINDOWS_SDK_ARCH" = "x64" \) ; then
+if test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT"; then
 
     dnl ===================================================================
     dnl Check for system gpgme
