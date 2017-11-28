@@ -46,6 +46,15 @@ private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rGraphicStyles;
 };
 
+/// Handler for <office:font-face-decls>.
+class XMLFontFaceDeclsContext : public XMLImportContext
+{
+public:
+    XMLFontFaceDeclsContext(XMLImport &rImport);
+
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+};
+
 } // namespace exp
 } // namespace writerperfect
 
