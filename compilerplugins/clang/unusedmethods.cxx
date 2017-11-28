@@ -118,7 +118,6 @@ public:
     bool TraverseFunctionDecl( FunctionDecl* );
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
     bool TraverseCXXConversionDecl( CXXConversionDecl* );
-    bool TraverseCXXDeductionGuideDecl( CXXDeductionGuideDecl* );
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
@@ -385,14 +384,6 @@ bool UnusedMethods::TraverseCXXConversionDecl(CXXConversionDecl* f)
     auto copy = currentFunctionDecl;
     currentFunctionDecl = f;
     bool ret = RecursiveASTVisitor::TraverseCXXConversionDecl(f);
-    currentFunctionDecl = copy;
-    return ret;
-}
-bool UnusedMethods::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
-{
-    auto copy = currentFunctionDecl;
-    currentFunctionDecl = f;
-    bool ret = RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(f);
     currentFunctionDecl = copy;
     return ret;
 }
