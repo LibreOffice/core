@@ -2011,7 +2011,6 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
     {
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
-        aTxt = pDlg->GetText() + aTxt;
         pDlg->SetText( aTxt );
 
         if ( pDlg->Execute() == RET_OK )
