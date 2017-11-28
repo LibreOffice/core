@@ -78,6 +78,7 @@
 #include <lineinfo.hxx>
 #include <rtf.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -2838,8 +2839,12 @@ void RtfAttributeOutput::ParaWidows(const SvxWidowsItem& rWidows)
 
 void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 {
-    long nOffset
-        = static_cast<const SvxLRSpaceItem&>(m_rExport.GetItem(RES_LR_SPACE)).GetTextLeft();
+    long nOffset = 0;
+    // Tabs are absolute by default.
+    if (m_rExport.m_pDoc->getIDocumentSettingAccess().get(
+            DocumentSettingId::TABS_RELATIVE_TO_INDENT))
+        nOffset = static_cast<const SvxLRSpaceItem&>(m_rExport.GetItem(RES_LR_SPACE)).GetTextLeft();
+
     for (sal_uInt16 n = 0; n < rTabStop.Count(); n++)
     {
         const SvxTabStop& rTS = rTabStop[n];
