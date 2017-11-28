@@ -3415,13 +3415,13 @@ const char* SC_OPCODE_LOOKUP_ARY[] =
 // -=*# Resource for function MATCH #*=-
 const char* SC_OPCODE_MATCH_ARY[] =
 {
-    NC_("SC_OPCODE_MATCH", "Defines a position in a array after comparing values."),
+    NC_("SC_OPCODE_MATCH", "Defines a position in an array after comparing values."),
     NC_("SC_OPCODE_MATCH", "Search criterion"),
     NC_("SC_OPCODE_MATCH", "The value to be used for comparison."),
     NC_("SC_OPCODE_MATCH", "Lookup array"),
     NC_("SC_OPCODE_MATCH", "The array (range) in which the search is made."),
     NC_("SC_OPCODE_MATCH", "Type"),
-    NC_("SC_OPCODE_MATCH", "Type can take the value 1, 0 or -1 and determines the criteria are to be used for comparison purposes.")
+    NC_("SC_OPCODE_MATCH", "Type can take the value 1, 0 or -1 and determines the criteria to be used for comparison purposes.")
 };
 
 // -=*# Resource for function OFFSET #*=-
