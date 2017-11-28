@@ -58,6 +58,9 @@ public:
     /// Assignment with references to FormulaToken entries (not copied!)
     ScTokenArray( const ScTokenArray& );
     virtual ~ScTokenArray();
+
+    bool EqualTokens( const ScTokenArray* pArr2 ) const;
+
     void ClearScTokenArray();
     ScTokenArray* Clone() const;    /// True copy!
 
