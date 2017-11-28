@@ -175,7 +175,6 @@ public:
     void ParseFrameInPage(IXFStream* pOutputStream);
 
 private:
-    void MaxNumberOfPages(sal_uInt16& nNumPages);
     LwpDocument* ImplGetFirstDivisionWithContentsThatIsNotOLE();
     void XFConvertFrameInPage(XFContentContainer* pCont);
     static void ChangeStyleName();

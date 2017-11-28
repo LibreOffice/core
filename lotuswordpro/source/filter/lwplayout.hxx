@@ -364,9 +364,6 @@ public:
         sal_uInt16 GetScaleMode();
     sal_uInt16 GetScaleTile();
     sal_uInt16 GetScaleCenter();
-    sal_uInt32 GetScalePercentage();
-    double GetScaleWidth();
-    double GetScaleHeight();
 
     bool CanSizeRight();
     virtual double GetWidth() override;

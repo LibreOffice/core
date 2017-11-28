@@ -125,7 +125,6 @@ struct ScAttrEntry;
 class ScAutoFormatData;
 class ScBroadcastAreaSlotMachine;
 class ScChangeViewSettings;
-class ScChartCollection;
 class ScChartListenerCollection;
 class ScClipOptions;
 class ScConditionalFormat;
@@ -364,7 +363,6 @@ private:
     mutable ScRangeName* pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
-    ScChartCollection*  pChartCollection;
     std::unique_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attributes of a block
     ScFormulaCell*      pFormulaTree;                   // formula tree (start)

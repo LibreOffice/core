@@ -246,7 +246,6 @@ class ScCheckListBox : public SvTreeListBox
     bool IsChecked( const OUString& sName, SvTreeListEntry* pParent );
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;
-    void         ExpandChildren( SvTreeListEntry* pParent );
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;

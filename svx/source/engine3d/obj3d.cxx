@@ -570,23 +570,6 @@ void E3dObject::InvalidateBoundVolume()
     maLocalBoundVol.reset();
 }
 
-// Pass on the changes of the BoundVolumes to all child objects
-
-void E3dObject::SetBoundVolInvalid()
-{
-    InvalidateBoundVolume();
-
-    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
-    {
-        E3dObject* pCandidate = dynamic_cast< E3dObject* >(maSubList.GetObj(a));
-
-        if(pCandidate)
-        {
-            pCandidate->SetBoundVolInvalid();
-        }
-    }
-}
-
 // Pass on the changes in transformation to all child objects
 
 void E3dObject::SetTransformChanged()

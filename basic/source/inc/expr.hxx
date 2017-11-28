@@ -136,7 +136,6 @@ public:
     SbiSymDef* GetVar();
     SbiSymDef* GetRealVar();        // last variable in x.y.z
     SbiExprNode* GetRealNode();     // last node in x.y.z
-    short GetDepth();               // compute a tree's depth
     const OUString& GetString()     { return aStrVal; }
     short GetNumber()               { return (short)nVal; }
     SbiExprList* GetParameters()    { return aVar.pPar; }

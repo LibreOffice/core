@@ -677,28 +677,6 @@ bool SwView::AreOnlyFormsSelected() const
     return bForm;
 }
 
-bool SwView::HasDrwObj(SdrObject const *pSdrObj) const
-{
-    bool bRet = false;
-
-    if (pSdrObj->IsGroupObject())
-    {
-        SdrObjList* pList = pSdrObj->GetSubList();
-        const size_t nCnt = pList->GetObjCount();
-
-        for (size_t i = 0; i < nCnt; ++i)
-        {
-            bRet = HasDrwObj(pList->GetObj(i));
-            if (bRet)
-                break;
-        }
-    }
-    else if (SdrInventor::Default == pSdrObj->GetObjInventor() || pSdrObj->Is3DObj())
-        return true;
-
-    return bRet;
-}
-
 bool SwView::HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const
 {
     bool bRet = false;

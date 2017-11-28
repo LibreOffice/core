@@ -1126,24 +1126,6 @@ void Window::SetWindowRegionPixel( const vcl::Region& rRegion )
     }
 }
 
-const vcl::Region& Window::GetWindowRegionPixel() const
-{
-
-    if ( mpWindowImpl->mpBorderWindow )
-        return mpWindowImpl->mpBorderWindow->GetWindowRegionPixel();
-    else
-        return mpWindowImpl->maWinRegion;
-}
-
-bool Window::IsWindowRegionPixel() const
-{
-
-    if ( mpWindowImpl->mpBorderWindow )
-        return mpWindowImpl->mpBorderWindow->IsWindowRegionPixel();
-    else
-        return mpWindowImpl->mbWinRegion;
-}
-
 vcl::Region Window::GetPaintRegion() const
 {
 

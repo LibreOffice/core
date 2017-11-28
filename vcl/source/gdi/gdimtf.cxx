@@ -588,21 +588,6 @@ void GDIMetaFile::push_back( MetaAction* pAction )
     m_aList.push_back( pAction );
 }
 
-void GDIMetaFile::RemoveAction( size_t nPos )
-{
-    if ( nPos < m_aList.size() )
-    {
-        ::std::vector< MetaAction* >::iterator it = m_aList.begin();
-        ::std::advance( it, nPos );
-        (*it)->Delete();
-        m_aList.erase( it );
-
-    }
-
-    if( m_pPrev )
-        m_pPrev->RemoveAction( nPos );
-}
-
 bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     const Size  aOldPrefSize( GetPrefSize() );

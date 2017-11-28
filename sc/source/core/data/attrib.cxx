@@ -373,54 +373,6 @@ void ScProtectionAttr::SetHidePrint( bool bHPrint)
 }
 
 /**
- * ScRangeItem - Table range
- */
-bool ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    assert(SfxPoolItem::operator==(rAttr));
-
-    return aRange == static_cast<const ScRangeItem&>(rAttr).aRange;
-}
-
-SfxPoolItem* ScRangeItem::Clone( SfxItemPool* ) const
-{
-    return new ScRangeItem( *this );
-}
-
-bool ScRangeItem::GetPresentation
-    (
-        SfxItemPresentation ePres,
-        MapUnit             /* eCoreUnit */,
-        MapUnit             /* ePresUnit */,
-        OUString&           rText,
-        const IntlWrapper&  /* rIntl */
-    ) const
-{
-    rText.clear();
-
-    switch ( ePres )
-    {
-        case SfxItemPresentation::Complete:
-        rText = ScGlobal::GetRscString(STR_AREA) + ": ";
-        SAL_FALLTHROUGH;
-
-        case SfxItemPresentation::Nameless:
-        {
-            /* Always use OOo:A1 format */
-            rText += aRange.Format();
-        }
-        break;
-
-        default:
-        {
-            // added to avoid warnings
-        }
-    }
-
-    return true;
-}
-
-/**
  * ScPageHFItem - Dates from the Head and Foot lines
  */
 ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )

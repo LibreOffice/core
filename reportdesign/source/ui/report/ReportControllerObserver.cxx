@@ -204,29 +204,6 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
 }
 
 
-void OXReportControllerObserver::TogglePropertyListening(const uno::Reference< uno::XInterface > & Element)
-{
-    // listen at Container
-    uno::Reference< container::XIndexAccess >  xContainer(Element, uno::UNO_QUERY);
-    if (xContainer.is())
-    {
-        uno::Reference< uno::XInterface > xInterface;
-        sal_Int32 nCount = xContainer->getCount();
-        for(sal_Int32 i = 0;i != nCount;++i)
-        {
-            xInterface.set(xContainer->getByIndex( i ),uno::UNO_QUERY);
-            TogglePropertyListening(xInterface);
-        }
-    }
-
-    uno::Reference< beans::XPropertySet >  xSet(Element, uno::UNO_QUERY);
-    if (xSet.is())
-    {
-        xSet->addPropertyChangeListener( OUString(), this );
-    }
-}
-
-
 void OXReportControllerObserver::switchListening( const uno::Reference< container::XIndexAccess >& _rxContainer, bool _bStartListening )
 {
     OSL_PRECOND( _rxContainer.is(), "OXReportControllerObserver::switchListening: invalid container!" );
@@ -324,21 +301,6 @@ void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInter
 }
 
 
-::std::vector< uno::Reference< container::XChild> >::const_iterator OXReportControllerObserver::getSection(const uno::Reference<container::XChild>& _xContainer) const
-{
-    ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = m_pImpl->m_aSections.end();
-    if ( _xContainer.is() )
-    {
-        aFind = ::std::find(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),_xContainer);
-
-        if ( aFind == m_pImpl->m_aSections.end() )
-        {
-            uno::Reference<container::XChild> xParent(_xContainer->getParent(),uno::UNO_QUERY);
-            aFind = getSection(xParent);
-        }
-    }
-    return aFind;
-}
 // XContainerListener
 
 void SAL_CALL OXReportControllerObserver::elementInserted(const container::ContainerEvent& evt)

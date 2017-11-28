@@ -140,9 +140,6 @@ public:
     /// linked page or linked group object
     virtual bool IsReadOnly() const;
 
-    /// count all objects including objects in Groups
-    size_t CountAllObjects() const;
-
     /** Makes the object list flat, i.e. the object list content are
         then tree leaves
 

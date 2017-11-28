@@ -701,23 +701,6 @@ sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
 }
 
  /**
- * @descr    Get Max number of pages
- */
- void  LwpDocument::MaxNumberOfPages(sal_uInt16& nNumPages)
-{
-    LwpDocument* pDivision = GetFirstDivision();
-
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(m_DivInfo.obj().get());
-    if(pDivInfo)
-        nNumPages += pDivInfo->GetMaxNumberOfPages();
-    while(pDivision)
-    {
-        pDivision->MaxNumberOfPages(nNumPages);
-        pDivision = pDivision->GetNextDivision();
-    }
-}
-
- /**
  * @descr    Parse the frame which anchor is to page before parse other contents,
  *           This method is called when the document is root document.
  */

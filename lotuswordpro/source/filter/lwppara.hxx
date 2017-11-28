@@ -180,7 +180,6 @@ public:
     XFContentContainer* GetXFContainer();
     void AddXFContent(XFContent* pCont);
     void SetXFContainer(XFContentContainer* pCont);
-    void FindLayouts();// for register pagelayout
     void RegisterTabStyle(XFParaStyle* pXFParaStyle);
 
     LwpBulletStyleMgr* GetBulletStyleMgr();

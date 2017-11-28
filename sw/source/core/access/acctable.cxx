@@ -83,8 +83,6 @@ class SwAccessibleTableData_Impl
     bool mbOnlyTableColumnHeader;
 
     void CollectData( const SwFrame *pFrame );
-    void CollectColumnHeaderData( const SwFrame *pFrame );
-    void CollectRowHeaderData( const SwFrame *pFrame );
     void CollectExtents( const SwFrame *pFrame );
 
     bool FindCell( const Point& rPos, const SwFrame *pFrame ,
@@ -168,95 +166,6 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
             else
             {
                 CollectData( pLower );
-            }
-        }
-        ++aIter;
-    }
-}
-
-void SwAccessibleTableData_Impl::CollectRowHeaderData( const SwFrame *pFrame )
-{
-    const SwAccessibleChildSList aList( *pFrame, mrAccMap );
-    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
-    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
-    while( aIter != aEndIter )
-    {
-        const SwAccessibleChild& rLower = *aIter;
-        const SwFrame *pLower = rLower.GetSwFrame();
-        if( pLower )
-        {
-            if( pLower->IsRowFrame() )
-            {
-
-                const SwTableLine* pLine = static_cast<const SwRowFrame*>(pLower)->GetTabLine();
-                while( pLine->GetUpper() )
-                    pLine = pLine->GetUpper()->GetUpper();
-
-                // Headerline?
-                //if(mpTabFrame->GetTable()->GetTabLines()[ 0 ] != pLine)
-                //return ;
-
-                maRows.insert( pLower->getFrameArea().Top() - maTabFramePos.Y() );
-
-                CollectRowHeaderData( pLower );
-
-            }
-            else if( pLower->IsCellFrame() &&
-                     rLower.IsAccessible( mbIsInPagePreview ) )
-            {
-                //Added by yanjun. Can't find the "GetRowHeaderFlag" function (need verify).
-                //if(static_cast<SwCellFrame*>(pLower)->GetRowHeaderFlag())
-                //  maColumns.insert( pLower->getFrameArea().Left() - maTabFramePos.X() );
-            }
-            else
-            {
-                CollectRowHeaderData( pLower );
-            }
-        }
-        ++aIter;
-    }
-}
-
-void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrame *pFrame )
-{
-    const SwAccessibleChildSList aList( *pFrame, mrAccMap );
-    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
-    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
-    while( aIter != aEndIter )
-    {
-        const SwAccessibleChild& rLower = *aIter;
-        const SwFrame *pLower = rLower.GetSwFrame();
-        if( pLower )
-        {
-            if( pLower->IsRowFrame() )
-            {
-
-                const SwTableLine* pLine = static_cast<const SwRowFrame*>(pLower)->GetTabLine();
-                while( pLine->GetUpper() )
-                    pLine = pLine->GetUpper()->GetUpper();
-
-                // Headerline?
-                //if(mpTabFrame->GetTable()->GetTabLines()[ 0 ] != pLine)
-                //return ;
-
-                //if the current line is now header line, then return ;
-                sal_Int16 iCurrentRowIndex = mpTabFrame->GetTable()->GetTabLines().GetPos( pLine);
-                if(iCurrentRowIndex >= mpTabFrame->GetTable()->GetRowsToRepeat_())
-                    return ;
-
-                maRows.insert( pLower->getFrameArea().Top() - maTabFramePos.Y() );
-
-                CollectColumnHeaderData( pLower );
-
-            }
-            else if( pLower->IsCellFrame() &&
-                     rLower.IsAccessible( mbIsInPagePreview ) )
-            {
-                maColumns.insert( pLower->getFrameArea().Left() - maTabFramePos.X() );
-            }
-            else
-            {
-                CollectColumnHeaderData( pLower );
             }
         }
         ++aIter;

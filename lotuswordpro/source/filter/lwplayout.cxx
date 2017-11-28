@@ -945,38 +945,6 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter()
         return 0;
 }
 
-sal_uInt32 LwpMiddleLayout::GetScalePercentage()
-{
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
-        return GetLayoutScale()->GetScalePercentage()/10;//m_nScalePercentage 1000 = 100%
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScalePercentage();
-    else
-        return 100;
-}
-
-double LwpMiddleLayout::GetScaleWidth()
-{
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
-        return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleWidth());
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleWidth();
-    else
-        return 0;
-}
-
-double LwpMiddleLayout::GetScaleHeight()
-{
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
-        return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleHeight());
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleHeight();
-    else
-        return 0;
-}
 bool LwpMiddleLayout::CanSizeRight()
 {
     sal_uInt8 RelType = GetRelativeType();

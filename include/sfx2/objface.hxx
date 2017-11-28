@@ -78,7 +78,6 @@ public:
     inline sal_uInt16           Count() const;
 
     const SfxSlot*          GetRealSlot( const SfxSlot * ) const;
-    const SfxSlot*          GetRealSlot( sal_uInt16 nSlotId ) const;
     const SfxSlot*  GetSlot( sal_uInt16 nSlotId ) const;
     const SfxSlot*          GetSlot( const OUString& rCommand ) const;
 

@@ -336,9 +336,6 @@ public:
     //bad, consider this deprecated.
     void SetStartPos( const EditPosition& rPos );
 
-    void MoveFullNode(const EditNodeIdx &rOldNode,
-        const EditNodeIdx &rNewNode);
-
     const EditNodeIdx& GetSttNode() const { return *pSttNd; }
     const EditNodeIdx& GetEndNode() const { return *pEndNd; }
 

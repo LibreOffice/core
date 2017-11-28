@@ -297,32 +297,6 @@ void SwNumberTreeNode::Validate(const SwNumberTreeNode * pNode) const
     }
 }
 
-void SwNumberTreeNode::ValidateTree()
-{
-    if (! IsContinuous())
-    {
-        {
-            tSwNumberTreeChildren::reverse_iterator aIt = mChildren.rbegin();
-
-            if (aIt != mChildren.rend())
-                Validate(*aIt);
-        }
-        {
-            tSwNumberTreeChildren::iterator aIt;
-
-            for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
-                (*aIt)->ValidateTree();
-        }
-    }
-    else
-    {
-        SwNumberTreeNode * pNode = GetLastDescendant();
-
-        if (pNode && pNode->mpParent)
-            pNode->mpParent->Validate(pNode);
-    }
-}
-
 void SwNumberTreeNode::GetNumberVector_(vector<SwNumberTree::tSwNumTreeNumber> & rVector,
                                         bool bValidate) const
 {

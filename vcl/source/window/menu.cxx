@@ -2112,24 +2112,6 @@ void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
     mpLayoutData = nullptr;
 }
 
-bool Menu::HasValidEntries()
-{
-    bool bValidEntries = false;
-    sal_uInt16 nCount = GetItemCount();
-    for ( sal_uInt16 n = 0; !bValidEntries && ( n < nCount ); n++ )
-    {
-        MenuItemData* pItem = pItemList->GetDataFromPos( n );
-        if ( pItem->bEnabled && ( pItem->eType != MenuItemType::SEPARATOR ) )
-        {
-            if ( pItem->pSubMenu )
-                bValidEntries = pItem->pSubMenu->HasValidEntries();
-            else
-                bValidEntries = true;
-        }
-    }
-    return bValidEntries;
-}
-
 void Menu::UpdateNativeMenu()
 {
     if ( ImplGetSalMenu() )
