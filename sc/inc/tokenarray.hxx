@@ -61,6 +61,9 @@ public:
         (not copied!) */
     ScTokenArray( const ScTokenArray& );
     virtual ~ScTokenArray() override;
+
+    bool EqualTokens( const ScTokenArray* pArr2 ) const;
+
     virtual void Clear() override;
     ScTokenArray* Clone() const;    /// True copy!
 
