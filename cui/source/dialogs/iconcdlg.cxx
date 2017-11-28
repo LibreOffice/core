@@ -256,7 +256,7 @@ void IconChoiceDialog::dispose()
     m_pHelpBtn.clear();
     m_pResetBtn.clear();
     m_pTabContainer.clear();
-    ModalDialog::dispose();
+    SfxModalDialog::dispose();
 }
 
 /**********************************************************************
