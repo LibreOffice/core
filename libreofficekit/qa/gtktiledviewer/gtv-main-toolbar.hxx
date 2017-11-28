@@ -12,9 +12,9 @@
 
 #include <gtk/gtk.h>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <string>
 
-G_BEGIN_DECLS
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #define GTV_TYPE_MAIN_TOOLBAR            (gtv_main_toolbar_get_type())
 #define GTV_MAIN_TOOLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTV_TYPE_MAIN_TOOLBAR, GtvMainToolbar))
@@ -51,7 +51,9 @@ void gtv_main_toolbar_set_edit(GtvMainToolbar* toolbar, gboolean bEdit);
 
 void gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode);
 
-G_END_DECLS
+void gtv_main_toolbar_add_recent_uno(GtvMainToolbar* toolbar, const std::string& rUnoCmdStr);
+
+const std::string gtv_main_toolbar_get_recent_uno_args(GtvMainToolbar* toolbar, const std::string& rUnoCmd);
 
 #endif /* GTV_MAIN_TOOLBAR_H */
 
