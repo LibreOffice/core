@@ -1026,15 +1026,6 @@ SwFltBookmark::SwFltBookmark( const OUString& rNa, const OUString& rVa,
     }
 }
 
-SwFltBookmark::SwFltBookmark(const SwFltBookmark& rCpy)
-    : SfxPoolItem( RES_FLTR_BOOKMARK )
-    , mnHandle( rCpy.mnHandle )
-    , maName( rCpy.maName )
-    , maVal( rCpy.maVal )
-    , mbIsTOCBookmark( rCpy.mbIsTOCBookmark )
-{
-}
-
 bool SwFltBookmark::operator==(const SfxPoolItem& rItem) const
 {
     return ( maName == static_cast<const SwFltBookmark&>(rItem).maName)
@@ -1049,13 +1040,6 @@ SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
 SwFltRDFMark::SwFltRDFMark()
     : SfxPoolItem(RES_FLTR_RDFMARK),
       m_nHandle(0)
-{
-}
-
-SwFltRDFMark::SwFltRDFMark(const SwFltRDFMark& rMark)
-    : SfxPoolItem(RES_FLTR_RDFMARK),
-      m_nHandle(rMark.m_nHandle),
-      m_aAttributes(rMark.m_aAttributes)
 {
 }
 
@@ -1098,12 +1082,6 @@ const std::vector< std::pair<OUString, OUString> >& SwFltRDFMark::GetAttributes(
 SwFltTOX::SwFltTOX(SwTOXBase* pBase)
     : SfxPoolItem(RES_FLTR_TOX), pTOXBase(pBase),
       bHadBreakItem( false ), bHadPageDescItem( false )
-{
-}
-
-SwFltTOX::SwFltTOX(const SwFltTOX& rCpy)
-    : SfxPoolItem(RES_FLTR_TOX), pTOXBase(rCpy.pTOXBase),
-      bHadBreakItem( rCpy.bHadBreakItem ), bHadPageDescItem( rCpy.bHadPageDescItem )
 {
 }
 

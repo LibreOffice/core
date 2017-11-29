@@ -36,14 +36,6 @@ SwSortKey::SwSortKey(sal_uInt16 nId, const OUString& rSrtType, SwSortOrder eOrde
 {
 }
 
-SwSortKey::SwSortKey(const SwSortKey& rOld) :
-    sSortType( rOld.sSortType ),
-    eSortOrder( rOld.eSortOrder ),
-    nColumnId( rOld.nColumnId ),
-    bIsNumeric( rOld.bIsNumeric )
-{
-}
-
 SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
     cDeli( 9 ),

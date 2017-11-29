@@ -631,7 +631,6 @@ namespace sw
             SdrLayerID mnHeavenLayer, mnHellLayer, mnFormLayer;
             enum Layer {eHeaven, eHell};
             void SetObjectLayer(SdrObject &rObject, Layer eLayer) const;
-            void Swap(SetLayer &rOther) throw();
         public:
 
             /** Make Object live in the bottom drawing layer
@@ -655,9 +654,6 @@ namespace sw
                 objects into
             */
             explicit SetLayer(const SwDoc &rDoc);
-
-            SetLayer(const SetLayer &rOther) throw();
-            SetLayer& operator=(const SetLayer &rOther) throw();
         };
     }
 

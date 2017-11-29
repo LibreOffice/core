@@ -32,12 +32,6 @@ SwFormatWrapInfluenceOnObjPos::SwFormatWrapInfluenceOnObjPos( sal_Int16 _nWrapIn
 {
 }
 
-SwFormatWrapInfluenceOnObjPos::SwFormatWrapInfluenceOnObjPos( const SwFormatWrapInfluenceOnObjPos& _rCpy )
-    : SfxPoolItem( RES_WRAP_INFLUENCE_ON_OBJPOS ),
-    mnWrapInfluenceOnPosition( _rCpy.GetWrapInfluenceOnObjPos() )
-{
-}
-
 SwFormatWrapInfluenceOnObjPos::~SwFormatWrapInfluenceOnObjPos()
 {
 }

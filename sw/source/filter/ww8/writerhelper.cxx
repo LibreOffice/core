@@ -376,12 +376,6 @@ namespace sw
         }
 
         //SetLayer boilerplate begin
-        void SetLayer::Swap(SetLayer& rOther) throw()
-        {
-            std::swap(mnHeavenLayer, rOther.mnHeavenLayer);
-            std::swap(mnHellLayer, rOther.mnHellLayer);
-            std::swap(mnFormLayer, rOther.mnFormLayer);
-        }
 
         // #i38889# - by default put objects into the invisible layers.
         SetLayer::SetLayer(const SwDoc &rDoc)
@@ -389,20 +383,6 @@ namespace sw
               mnHellLayer(rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId()),
               mnFormLayer(rDoc.getIDocumentDrawModelAccess().GetInvisibleControlsId())
         {
-        }
-
-        SetLayer::SetLayer(const SetLayer& rOther) throw()
-            : mnHeavenLayer(rOther.mnHeavenLayer),
-            mnHellLayer(rOther.mnHellLayer),
-            mnFormLayer(rOther.mnFormLayer)
-        {
-        }
-
-        SetLayer& SetLayer::operator=(const SetLayer& rOther) throw()
-        {
-            SetLayer aTemp(rOther);
-            Swap(aTemp);
-            return *this;
         }
         //SetLayer boilerplate end
 

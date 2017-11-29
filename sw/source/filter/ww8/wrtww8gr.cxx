@@ -477,15 +477,6 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
         m_pAttrOutput->EndURL(false);
 }
 
-GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
-{
-    maFly = rOther.maFly;
-    mnPos = rOther.mnPos;
-    mnWid = rOther.mnWid;
-    mnHei = rOther.mnHei;
-    return *this;
-}
-
 void SwWW8WrGrf::Insert(const ww8::Frame &rFly)
 {
     const Size aSize( rFly.GetLayoutSize() );

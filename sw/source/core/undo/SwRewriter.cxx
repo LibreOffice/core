@@ -31,11 +31,6 @@ SwRewriter::SwRewriter()
 {
 }
 
-SwRewriter::SwRewriter(const SwRewriter & rSrc)
-    : mRules(rSrc.mRules)
-{
-}
-
 SwRewriter::~SwRewriter()
 {
 }

@@ -31,7 +31,6 @@ struct SW_DLLPUBLIC SwSortKey
 {
     SwSortKey();
     SwSortKey( sal_uInt16 nId, const OUString& rSrtType, SwSortOrder eOrder );
-    SwSortKey( const SwSortKey& rOld );
 
     OUString        sSortType;
     SwSortOrder     eSortOrder;

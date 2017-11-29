@@ -116,15 +116,6 @@ SwFormatAutoFormat::SwFormatAutoFormat( sal_uInt16 nInitWhich )
 {
 }
 
-SwFormatAutoFormat::SwFormatAutoFormat( const SwFormatAutoFormat& rAttr )
-    : SfxPoolItem( rAttr.Which() ), mpHandle( rAttr.mpHandle )
-{
-}
-
-SwFormatAutoFormat::~SwFormatAutoFormat()
-{
-}
-
 bool SwFormatAutoFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));

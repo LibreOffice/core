@@ -35,7 +35,6 @@ class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem<css::text::WrapTextMode>
     bool    bOutside    :1;
 public:
     SwFormatSurround( css::text::WrapTextMode eNew = css::text::WrapTextMode_PARALLEL );
-    SwFormatSurround( const SwFormatSurround & );
     inline SwFormatSurround &operator=( const SwFormatSurround &rCpy );
 
     // "Pure virtual Methods" of SfxPoolItem.

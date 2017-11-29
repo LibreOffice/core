@@ -108,15 +108,7 @@ protected:
 
 public:
 
-    SwTableFormula( const SwTableFormula& rCpy )    { *this = rCpy; }
     virtual ~SwTableFormula();
-    SwTableFormula& operator=( const SwTableFormula& rCpy )
-    {
-        m_sFormula = rCpy.m_sFormula;
-        m_eNmType = rCpy.m_eNmType;
-        m_bValidValue = rCpy.m_bValidValue;
-        return *this;
-    }
 
     /// create from the internal formula (for CORE) the external formula (for UI)
     void PtrToBoxNm( const SwTable* pTable );

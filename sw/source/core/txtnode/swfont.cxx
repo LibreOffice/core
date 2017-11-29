@@ -890,18 +890,7 @@ SwFont::~SwFont()
 {
 }
 
-SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
-{
-    SvxFont::operator=( rFont );
-    m_pMagic = rFont.m_pMagic;
-    m_nFontIndex = rFont.m_nFontIndex;
-    m_nOrgHeight = rFont.m_nOrgHeight;
-    m_nOrgAscent = rFont.m_nOrgAscent;
-    m_nProportionalWidth = rFont.m_nProportionalWidth;
-    m_aSize = rFont.m_aSize;
-    m_bSmallCapsPercentage66 = rFont.m_bSmallCapsPercentage66;
-    return *this;
-}
+SwSubFont& SwSubFont::operator=( const SwSubFont& ) = default;
 
 SwFont& SwFont::operator=( const SwFont &rFont )
 {

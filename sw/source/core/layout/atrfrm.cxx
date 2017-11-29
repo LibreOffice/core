@@ -1148,14 +1148,6 @@ SwFormatSurround::SwFormatSurround( css::text::WrapTextMode eFly ) :
     bAnchorOnly = bContour = bOutside = false;
 }
 
-SwFormatSurround::SwFormatSurround( const SwFormatSurround &rCpy ) :
-    SfxEnumItem( RES_SURROUND, rCpy.GetValue() )
-{
-    bAnchorOnly = rCpy.bAnchorOnly;
-    bContour = rCpy.bContour;
-    bOutside = rCpy.bOutside;
-}
-
 bool SwFormatSurround::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
