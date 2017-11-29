@@ -29,12 +29,13 @@ protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                   const OUString& rLocalName,
                   const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+
 public:
-    std::vector<OUString*> &rSectionList;
+    std::vector<OUString> & m_rSectionList;
 
     SwXMLSectionList(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        std::vector<OUString*> &rNewSectionList );
+        std::vector<OUString> & rNewSectionList);
 
     virtual ~SwXMLSectionList ( )
         throw() override;

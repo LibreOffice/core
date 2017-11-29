@@ -84,9 +84,9 @@ public:
 
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< uno::XComponentContext >& rContext,
-    std::vector<OUString*> &rNewSectionList)
-:   SvXMLImport( rContext, "" ),
-    rSectionList ( rNewSectionList )
+    std::vector<OUString> &rNewSectionList)
+: SvXMLImport(rContext, "")
+, m_rSectionList(rNewSectionList)
 {
     // TODO: verify if these should match the same-name constants
     //       in xmloff/source/core/xmlimp.cxx ("_office" and "_office")
@@ -143,7 +143,7 @@ SvXMLImportContextRef SvXMLSectionListContext::CreateChildContext(
                 sName = xAttrList->getValueByIndex( i );
         }
         if ( !sName.isEmpty() )
-            m_rImport.rSectionList.push_back( new OUString(sName) );
+            m_rImport.m_rSectionList.push_back(sName);
     }
 
     pContext = new SvXMLSectionListContext(m_rImport, nPrefix, rLocalName, xAttrList);

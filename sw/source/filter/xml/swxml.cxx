@@ -957,7 +957,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
 size_t XMLReader::GetSectionList( SfxMedium& rMedium,
-                                  std::vector<OUString*>& rStrings ) const
+                                  std::vector<OUString>& rStrings) const
 {
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();

@@ -1379,22 +1379,22 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
     }
 }
 
-// helper function - read region names from medium
+// helper function - read section names from medium
 static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();
     uno::Reference < embed::XStorage > xStg;
     if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
     {
-        std::vector<OUString*> aArr;
+        std::vector<OUString> aArr;
         SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStg );
         if ( nFormat == SotClipboardFormatId::STARWRITER_60 || nFormat == SotClipboardFormatId::STARWRITERGLOB_60 ||
             nFormat == SotClipboardFormatId::STARWRITER_8 || nFormat == SotClipboardFormatId::STARWRITERGLOB_8)
             SwGetReaderXML()->GetSectionList( rMedium, aArr );
 
-        for(std::vector<OUString*>::const_iterator it(aArr.begin()); it != aArr.end(); ++it) {
-            rBox.InsertEntry( **it );
-            delete *it;
+        for (auto const& it : aArr)
+        {
+            rBox.InsertEntry(it);
         }
     }
 }

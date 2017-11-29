@@ -632,7 +632,7 @@ void Reader::ResetFrameFormats( SwDoc& rDoc )
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-size_t Reader::GetSectionList( SfxMedium&, std::vector<OUString*>& ) const
+size_t Reader::GetSectionList(SfxMedium&, std::vector<OUString>&) const
 {
     return 0;
 }

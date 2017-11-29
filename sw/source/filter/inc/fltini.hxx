@@ -50,7 +50,7 @@ public:
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
     virtual size_t GetSectionList( SfxMedium& rMedium,
-                                   std::vector<OUString*>& rStrings ) const override;
+                                   std::vector<OUString>& rStrings) const override;
 };
 
 // the special writers

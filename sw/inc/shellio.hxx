@@ -251,7 +251,7 @@ public:
     // Read the sections of the document, which is equal to the medium.
     // Returns the count of it
     virtual size_t GetSectionList( SfxMedium& rMedium,
-                                   std::vector<OUString*>& rStrings ) const;
+                                   std::vector<OUString>& rStrings) const;
 
     const tools::SvRef<SotStorage>& getSotStorageRef() { return pStg; };
     void setSotStorageRef(const tools::SvRef<SotStorage>& pStgRef) { pStg = pStgRef; };
