@@ -144,7 +144,7 @@ public:
     }
 
     /**
-     * Show/Hide a single row/column header outline for Calc dosuments.
+     * Show/Hide a single row/column header outline for Calc documents.
      *
      * @param bColumn - if we are dealing with a column or row group
      * @param nLevel - the level to which the group belongs
