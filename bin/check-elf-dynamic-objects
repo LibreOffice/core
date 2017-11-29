@@ -188,7 +188,7 @@ else
 	)>> check_elf.out &
     done
 
-    for file in ${files}; do wait; done
+    wait
 
     if [ -s check_elf.out ] ; then
 	cat check_elf.out
