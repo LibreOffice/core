@@ -404,10 +404,10 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 
 }
 
-SwRect SwTextFrame::Paint()
+SwRect SwTextFrame::GetPaintSwRect()
 {
     // finger layout
-    OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::Paint: no Calc()" );
+    OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::GetPaintSwRect: no Calc()" );
 
     SwRect aRet( getFramePrintArea() );
     if ( IsEmpty() || !HasPara() )
@@ -569,7 +569,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
     return false;
 }
 
-void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
@@ -591,7 +591,7 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
     // It can happen that the IdleCollector withdrew my cached information
     if( !HasPara() )
     {
-        OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::Paint: no Calc()" );
+        OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::PaintSwFrame: no Calc()" );
 
         // #i29062# pass info that we are currently
         // painting.
@@ -603,7 +603,7 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
         }
         if( !HasPara() )
         {
-            OSL_ENSURE( false, "+SwTextFrame::Paint: missing format information" );
+            OSL_ENSURE( false, "+SwTextFrame::PaintSwFrame: missing format information" );
             return;
         }
     }

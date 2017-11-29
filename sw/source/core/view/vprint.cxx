@@ -530,7 +530,7 @@ bool SwViewShell::PrintOrPDFExport(
 
         ::SetSwVisArea( pViewSh2, pStPage->getFrameArea() );
 
-        pStPage->GetUpper()->Paint( *pOutDev, pStPage->getFrameArea(), &rPrintData );
+        pStPage->GetUpper()->PaintSwFrame( *pOutDev, pStPage->getFrameArea(), &rPrintData );
 
         SwPaintQueue::Repaint();
 
@@ -606,14 +606,14 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         }
 
         // CalcPagesForPrint() should not be necessary here. The pages in the
-        // visible area will be formatted in SwRootFrame::Paint().
+        // visible area will be formatted in SwRootFrame::PaintSwFrame().
         // Removing this gives us a performance gain during saving the
         // document because the thumbnail creation will not trigger a complete
         // formatting of the document.
 
         rRenderContext.Push( PushFlags::CLIPREGION );
         rRenderContext.IntersectClipRegion( aSwRect.SVRect() );
-        pSh->GetLayout()->Paint( rRenderContext, aSwRect );
+        pSh->GetLayout()->PaintSwFrame( rRenderContext, aSwRect );
 
         rRenderContext.Pop();
         // first the CurrShell object needs to be destroyed!

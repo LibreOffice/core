@@ -67,7 +67,7 @@
  *      program execution, then set the lowest bit (PROT::Init) of
  *      SwProtocol::nRecord. This activates the function group of the following
  *      macro and causes it to be logged in the future.
- * 3.   There's a special case for 2: If one uses 2. in SwRootFrame::Paint(..),
+ * 3.   There's a special case for 2: If one uses 2. in SwRootFrame::PaintSwFrame(..),
  *      the log settings are taken from the file "dbg_lay.ini"!
  *      In this INI-file you can have comment lines starting with a '#'.
  *      The sections "[frmid]", "[frmtype]" and "[record]" are relevant.

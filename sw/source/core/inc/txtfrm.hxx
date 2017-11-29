@@ -278,8 +278,8 @@ public:
             { return GetCursorOfst_( pPos, rPoint, false ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
-    SwRect Paint();
-    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
+    SwRect GetPaintSwRect();
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetInfo( SfxPoolItem & ) const override;
 

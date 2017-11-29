@@ -203,7 +203,7 @@ void SwViewShell::PrintProspect(
             aPos -= aShell.maVisArea.Pos();
             aMapMode.SetOrigin( aPos );
             pPrinter->SetMapMode( aMapMode );
-            pStPage->GetUpper()->Paint( *pOutDev, pStPage->getFrameArea() );
+            pStPage->GetUpper()->PaintSwFrame( *pOutDev, pStPage->getFrameArea() );
         }
 
         pStPage = pNxtPage;

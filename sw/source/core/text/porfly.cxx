@@ -226,7 +226,7 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
         // GetFlyFrame() may change the layout mode at the output device.
         {
             SwLayoutModeModifier aLayoutModeModifier(*rInf.GetOut());
-            m_pFly->Paint(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
+            m_pFly->PaintSwFrame(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
         }
         const_cast<SwTextPaintInfo&>(rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
 
