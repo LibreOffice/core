@@ -52,15 +52,6 @@ void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
 
         maMouseClickHdl.Call(this);
     }
-
-    if(rMEvt.IsRight())
-    {
-        Point aPosition (rMEvt.GetPosPixel());
-        maPosition = aPosition;
-        GrabFocus();
-        Invalidate();
-        createContextMenu();
-    }
 }
 
 void SvxCharView::KeyInput( const KeyEvent& rKEvt )
@@ -92,34 +83,6 @@ void SvxCharView::InsertCharToDoc()
     aArgs[1].Value <<= maFont.GetFamilyName();
 
     comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
-}
-
-void SvxCharView::createContextMenu()
-{
-    ScopedVclPtrInstance<PopupMenu> pItemMenu;
-    pItemMenu->InsertItem(0,SfxResId(STR_CLEAR_CHAR));
-    pItemMenu->InsertItem(1,SfxResId(STR_CLEAR_ALL_CHAR));
-    pItemMenu->SetSelectHdl(LINK(this, SvxCharView, ContextMenuSelectHdl));
-    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
-    Invalidate();
-}
-
-IMPL_LINK(SvxCharView, ContextMenuSelectHdl, Menu*, pMenu, bool)
-{
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
-
-    switch(nMenuId)
-    {
-    case 0:
-        maClearClickHdl.Call(this);
-        break;
-    case 1:
-        maClearAllClickHdl.Call(this);
-        break;
-    default:
-        break;
-    }
-    return false;
 }
 
 void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
