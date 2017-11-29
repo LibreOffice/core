@@ -84,12 +84,6 @@ using namespace ::com::sun::star::datatransfer::dnd;
 
 namespace vcl {
 
-/// Counter to be able to have unique id's for each window.
-static vcl::LOKWindowId sLastLOKWindowId = 1;
-
-/// Map to remember the LOKWindowId <-> Window binding.
-static std::map<vcl::LOKWindowId, VclPtr<vcl::Window>> sLOKWindows;
-
 Window::Window( WindowType nType ) :
     mpWindowImpl(new WindowImpl( nType ))
 {
@@ -3158,24 +3152,47 @@ void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > const & x
         pWrapper->SetWindowInterface( this, xIFace );
 }
 
+typedef std::map<vcl::LOKWindowId, VclPtr<vcl::Window>> LOKWindowsMap;
+
+namespace {
+
+LOKWindowsMap& GetLOKWindowsMap()
+{
+    // never use this in the desktop case
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    // Map to remember the LOKWindowId <-> Window binding.
+    static std::unique_ptr<LOKWindowsMap> s_pLOKWindowsMap;
+
+    if (!s_pLOKWindowsMap)
+        s_pLOKWindowsMap.reset(new LOKWindowsMap);
+
+    return *s_pLOKWindowsMap.get();
+}
+
+}
+
 void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier)
 {
     // don't allow setting this twice
     assert(mpWindowImpl->mpLOKNotifier == nullptr);
     assert(pNotifier);
 
+    // Counter to be able to have unique id's for each window.
+    static vcl::LOKWindowId sLastLOKWindowId = 1;
+
     // assign the LOK window id
     assert(mpWindowImpl->mnLOKWindowId == 0);
     mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
-    sLOKWindows.insert(std::map<vcl::LOKWindowId, VclPtr<vcl::Window>>::value_type(mpWindowImpl->mnLOKWindowId, this));
+    GetLOKWindowsMap().insert(std::map<vcl::LOKWindowId, VclPtr<vcl::Window>>::value_type(mpWindowImpl->mnLOKWindowId, this));
 
     mpWindowImpl->mpLOKNotifier = pNotifier;
 }
 
 VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
 {
-    const auto it = sLOKWindows.find(nWindowId);
-    if (it != sLOKWindows.end())
+    const auto it = GetLOKWindowsMap().find(nWindowId);
+    if (it != GetLOKWindowsMap().end())
         return it->second;
 
     return VclPtr<Window>();
@@ -3185,7 +3202,7 @@ void Window::ReleaseLOKNotifier()
 {
     // unregister the LOK window binding
     if (mpWindowImpl->mnLOKWindowId > 0)
-        sLOKWindows.erase(mpWindowImpl->mnLOKWindowId);
+        GetLOKWindowsMap().erase(mpWindowImpl->mnLOKWindowId);
 
     mpWindowImpl->mpLOKNotifier = nullptr;
     mpWindowImpl->mnLOKWindowId = 0;
