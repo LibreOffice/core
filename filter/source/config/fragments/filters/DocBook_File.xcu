@@ -24,7 +24,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"><value>../$(share_subdir_name)/xslt/docbook/DocBookTemplate.stw</value></prop>
         <prop oor:name="UIName">
-            <value>DocBook</value>
+            <value xml:lang="en-US">DocBook</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
     </node>
