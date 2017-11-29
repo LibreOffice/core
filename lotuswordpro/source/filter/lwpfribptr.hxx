@@ -84,7 +84,6 @@ public:
     XFParagraph* GetXFPara(){return m_pXFPara;}
     void SetPara(LwpPara* para){m_pPara=para;}
     void RegisterStyle();
-    void FindLayouts();// for register pagelayout
     LwpFrib* GetFribs(){return m_pFribs;}
     LwpFrib* HasFrib(sal_uInt8 nType);
     bool ComparePagePosition(LwpVirtualLayout const * pPreLayout, LwpVirtualLayout const * pNextLayout);

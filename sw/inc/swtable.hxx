@@ -195,7 +195,6 @@ public:
     void SetTableStyleName(const OUString& rName) { maTableStyleName = rName; }
 
     sal_uInt16 GetRowsToRepeat() const { return std::min( (sal_uInt16)GetTabLines().size(), m_nRowsToRepeat ); }
-    sal_uInt16 GetRowsToRepeat_() const { return m_nRowsToRepeat; }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { m_nRowsToRepeat = nNumOfRows; }
 
     bool IsHeadline( const SwTableLine& rLine ) const;
