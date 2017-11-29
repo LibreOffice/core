@@ -148,18 +148,13 @@ VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err);
 
 enum class ErrCodeArea {
     Io                  = 0 ,
-    Sv                  = 1 ,
     Sfx                 = 2 ,
     Inet                = 3 ,
     Vcl                 = 4 ,
     Svx                 = 8 ,
     So                  = 9 ,
     Sbx                 = 10,
-    Db                  = 11,
-    Java                = 12,
     Uui                 = 13,
-    Lib2                = 14,
-    Chaos               = 15,
     Sc                  = 32,
     Sd                  = 40,
     Sw                  = 56,

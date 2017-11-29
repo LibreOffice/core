@@ -32,9 +32,6 @@ VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err)
             case ErrCodeArea::Io:
                 os << "Io";
                 break;
-            case ErrCodeArea::Sv:
-                os << "Sv";
-                break;
             case ErrCodeArea::Sfx:
                 os << "Sfx";
                 break;
@@ -53,20 +50,8 @@ VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err)
             case ErrCodeArea::Sbx:
                 os << "Sbx";
                 break;
-            case ErrCodeArea::Db:
-                os << "Db";
-                break;
-            case ErrCodeArea::Java:
-                os << "Java";
-                break;
             case ErrCodeArea::Uui:
                 os << "Uui";
-                break;
-            case ErrCodeArea::Lib2:
-                os << "Lib2";
-                break;
-            case ErrCodeArea::Chaos:
-                os << "Chaos";
                 break;
             case ErrCodeArea::Sc:
                 os << "Sc";
