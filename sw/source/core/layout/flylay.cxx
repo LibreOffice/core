@@ -495,6 +495,9 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             {
                 const long nOld = getFrameArea().Top();
 
+                // tdf#112443 disable positioning if content is completely off page
+                bool bDisableOffPagePositioning = GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+                if ( !bDisableOffPagePositioning || nOld <= nClipBot)
                 {
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     aFrm.Pos().Y() = std::max( aClip.Top(), nClipBot - aFrm.Height() );
@@ -512,6 +515,9 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
         {
             const long nOld = getFrameArea().Left();
 
+            // tdf#112443 disable positioning if content is completely off page
+            bool bDisableOffPagePositioning = GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+            if ( !bDisableOffPagePositioning || nOld <= nClipRig )
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.Pos().X() = std::max( aClip.Left(), nClipRig - aFrm.Width() );

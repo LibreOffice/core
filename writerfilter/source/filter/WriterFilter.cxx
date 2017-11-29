@@ -266,7 +266,6 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
     return false;
 }
 
-
 void WriterFilter::cancel()
 {
 }
@@ -303,6 +302,7 @@ void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& x
     xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::makeAny(true));
     xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::makeAny(true));
     xSettings->setPropertyValue("DoNotCaptureDrawObjsOnPage", uno::makeAny(true));
+    xSettings->setPropertyValue("DisableOffPagePositioning", uno::makeAny(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc)
