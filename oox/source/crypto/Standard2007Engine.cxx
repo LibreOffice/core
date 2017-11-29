@@ -113,6 +113,8 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         buffer[i] ^= hash[i];
 
     hash = comphelper::Hash::calculateHash(buffer.data(), buffer.size(), comphelper::HashType::SHA1);
+    if (mKey.size() > hash.size())
+        return false;
     std::copy(hash.begin(), hash.begin() + mKey.size(), mKey.begin());
 
     return true;
