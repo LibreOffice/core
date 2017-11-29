@@ -154,6 +154,7 @@ class DocumentSettingManager :
     bool mApplyParagraphMarkFormatToNumbering;
 
     bool mbLastBrowseMode                           : 1;
+    bool mbOffPagePositioning; // tdf#112443
 
 public:
 

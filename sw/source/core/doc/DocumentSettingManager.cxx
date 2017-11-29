@@ -87,7 +87,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbPropLineSpacingShrinksFirstLine(true),
     mbSubtractFlys(false),
     mApplyParagraphMarkFormatToNumbering(false),
-    mbLastBrowseMode( false )
+    mbLastBrowseMode( false ),
+    mbOffPagePositioning ( false )
 
     // COMPATIBILITY FLAGS END
 {
@@ -202,6 +203,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::EMBED_FONTS: return mEmbedFonts;
         case DocumentSettingId::EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
+        case DocumentSettingId::OFF_PAGE_POSITIONING: return mbOffPagePositioning;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -415,6 +417,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
             mApplyParagraphMarkFormatToNumbering = value;
+            break;
+        case DocumentSettingId::OFF_PAGE_POSITIONING:
+            mbOffPagePositioning = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");
