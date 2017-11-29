@@ -130,7 +130,7 @@ bool AgileEngine::generateEncryptionKey(const OUString& rPassword)
     std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
     hashCalc(hash, hashInput, mInfo.hashAlgorithm);
 
-    if (std::equal (hash.begin(), hash.end(), hashValue.begin()) )
+    if (hash.size() <= hashValue.size() && std::equal(hash.begin(), hash.end(), hashValue.begin()))
     {
         std::vector<sal_uInt8>& encryptedKeyValue = mInfo.encryptedKeyValue;
         calculateBlock(constBlock3, hashFinal, encryptedKeyValue, mKey);
