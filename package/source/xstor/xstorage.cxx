@@ -592,13 +592,13 @@ void OStorage_Impl::ReadContents()
 
             uno::Reference< container::XNameContainer > xNameContainer( xNamed, uno::UNO_QUERY );
 
-            SotElement_Impl* pNewElement = new SotElement_Impl( aName, xNameContainer.is(), false );
+            std::unique_ptr<SotElement_Impl> xNewElement(new SotElement_Impl(aName, xNameContainer.is(), false));
             if ( m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
             {
-                if ( !pNewElement->m_bIsStorage )
+                if (!xNewElement->m_bIsStorage)
                     throw io::IOException( THROW_WHERE ); // TODO: Unexpected format
 
-                m_pRelStorElement = pNewElement;
+                m_pRelStorElement = xNewElement.release();
                 CreateRelStorage();
             }
             else
@@ -606,10 +606,10 @@ void OStorage_Impl::ReadContents()
                 if ( ( m_nStorageMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE )
                 {
                     // if a storage is truncated all of it elements are marked as deleted
-                    pNewElement->m_bIsRemoved = true;
+                    xNewElement->m_bIsRemoved = true;
                 }
 
-                m_aChildrenVector.push_back( pNewElement );
+                m_aChildrenVector.push_back(xNewElement.release());
             }
         }
         catch( const container::NoSuchElementException& rNoSuchElementException )
