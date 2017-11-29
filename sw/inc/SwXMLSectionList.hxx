@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_SWXMLSECTIONLIST_HXX
 #define INCLUDED_SW_INC_SWXMLSECTIONLIST_HXX
 
-#include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 
 class SwXMLSectionList : public SvXMLImport
@@ -39,21 +38,6 @@ public:
 
     virtual ~SwXMLSectionList ( )
         throw() override;
-};
-
-class SvXMLSectionListContext : public SvXMLImportContext
-{
-private:
-    SwXMLSectionList & rLocalRef;
-public:
-    SvXMLSectionListContext ( SwXMLSectionList& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-    virtual ~SvXMLSectionListContext() override;
 };
 
 #endif

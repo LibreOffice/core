@@ -18,12 +18,30 @@
  */
 
 #include <SwXMLSectionList.hxx>
+#include <xmloff/xmlictxt.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+
+class SvXMLSectionListContext : public SvXMLImportContext
+{
+private:
+    SwXMLSectionList & m_rImport;
+
+public:
+    SvXMLSectionListContext(SwXMLSectionList& rImport,
+           sal_uInt16 nPrefix,
+           const OUString& rLocalName,
+           const uno::Reference<xml::sax::XAttributeList> & xAttrList);
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
+           const OUString& rLocalName,
+           const uno::Reference<xml::sax::XAttributeList> & xAttrList) override;
+    virtual ~SvXMLSectionListContext() override;
+};
+
 
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< uno::XComponentContext >& rContext,
@@ -80,7 +98,7 @@ SvXMLSectionListContext::SvXMLSectionListContext(
    const OUString& rLocalName,
    const uno::Reference<   xml::sax::XAttributeList > & ) :
    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
-   rLocalRef(rImport)
+   m_rImport(rImport)
 {
 }
 
@@ -101,15 +119,15 @@ SvXMLImportContextRef SvXMLSectionListContext::CreateChildContext(
         {
             const OUString& rAttrName = xAttrList->getNameByIndex( i );
             OUString aLocalName;
-            sal_uInt16 nPrefx = rLocalRef.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
+            sal_uInt16 nPrefx = m_rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
             if (XML_NAMESPACE_TEXT == nPrefx && IsXMLToken ( aLocalName, XML_NAME ) )
                 sName = xAttrList->getValueByIndex( i );
         }
         if ( !sName.isEmpty() )
-            rLocalRef.rSectionList.push_back( new OUString(sName) );
+            m_rImport.rSectionList.push_back( new OUString(sName) );
     }
 
-    pContext = new SvXMLSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);
+    pContext = new SvXMLSectionListContext(m_rImport, nPrefix, rLocalName, xAttrList);
     return pContext;
 }
 SvXMLSectionListContext::~SvXMLSectionListContext()
