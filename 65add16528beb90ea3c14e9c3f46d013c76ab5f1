@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_16c4308f",
+        "filename": "compilerplugins/clang/salcall.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-29T14:09:58Z",
+      "side": 1,
+      "message": "Good idea. I\u0027ll try that. \n\nNote that these modules are not random, they are either\n(a) the modules implementing our ABI\n(b) modules I\u0027m too scared too touch.\n\nbinaryurp and bridges are in category (b).\n\nBut if you\u0027re happy that your condition is necessary and sufficient, I can drop the exclusions.",
+      "parentUuid": "1a430d35_96d7404a",
+      "revId": "65add16528beb90ea3c14e9c3f46d013c76ab5f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_f6dfa466",
         "filename": "compilerplugins/clang/salcall.cxx",
         "patchSetId": 2
