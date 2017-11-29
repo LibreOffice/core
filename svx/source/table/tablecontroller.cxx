@@ -2757,12 +2757,12 @@ IMPL_LINK_NOARG(SvxTableController, UpdateHdl, void*, void)
         CellPos aEnd( maCursorLastPos );
         checkCell(aStart);
         checkCell(aEnd);
-        if( aStart != maCursorFirstPos  || aEnd != maCursorLastPos )
+        if( aStart != maCursorFirstPos || aEnd != maCursorLastPos )
         {
             setSelectedCells( aStart, aEnd );
+            updateSelectionOverlay();
         }
     }
-    updateSelectionOverlay();
 }
 
 namespace
