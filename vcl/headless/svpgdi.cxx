@@ -282,10 +282,32 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
 
     cairo_clip(cr);
 
+    cairo_pattern_t* maskpattern = cairo_pattern_create_for_surface(mask);
     cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+    double fXScale = (double)(rTR.mnDestWidth)/rTR.mnSrcWidth;
+    double fYScale = ((double)rTR.mnDestHeight)/rTR.mnSrcHeight;
+    cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
-    cairo_mask_surface(cr, mask, -rTR.mnSrcX, -rTR.mnSrcY);
+
+    //tdf#114117 when stretching a single pixel width/height source to fit an area
+    //set extend and filter to stretch it with simplest expected interpolation
+    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
+    {
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
+        cairo_pattern_set_extend(maskpattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(maskpattern, CAIRO_FILTER_NEAREST);
+    }
+
+    //this block is just "cairo_mask_surface", but we have to make it explicit
+    //because of the cairo_pattern_set_filter etc we may want applied
+    cairo_matrix_t matrix;
+    cairo_matrix_init_translate(&matrix, rTR.mnSrcX, rTR.mnSrcY);
+    cairo_pattern_set_matrix(maskpattern, &matrix);
+    cairo_mask(cr, maskpattern);
+
+    cairo_pattern_destroy(maskpattern);
 
     releaseCairoContext(cr, false, extents);
 
@@ -993,12 +1015,22 @@ static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
     cairo_clip(cr);
 
     cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
+    double fXScale = 1.0f;
+    double fYScale = 1.0f;
     if (rTR.mnSrcWidth != 0 && rTR.mnSrcHeight != 0) {
-        cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+        fXScale = (double)(rTR.mnDestWidth)/rTR.mnSrcWidth;
+        fYScale = ((double)rTR.mnDestHeight)/rTR.mnSrcHeight;
+        cairo_scale(cr, fXScale, fYScale);
     }
 
     cairo_save(cr);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
+    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
+    {
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
+    }
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     cairo_paint(cr);
     cairo_restore(cr);
@@ -1135,8 +1167,16 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     cairo_clip(cr);
 
     cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+    double fXScale = (double)(rTR.mnDestWidth)/rTR.mnSrcWidth;
+    double fYScale = ((double)rTR.mnDestHeight)/rTR.mnSrcHeight;
+    cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, aSurface.getSurface(), -rTR.mnSrcX, -rTR.mnSrcY);
+    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
+    {
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
+    }
     cairo_paint(cr);
 
     releaseCairoContext(cr, false, extents);
