@@ -2223,14 +2223,16 @@ Label_MaskStateMachine:
                 {
                     // One range operator may form Sheet1.A:A, which we need to
                     // pass as one entity to IsReference().
-                    mnRangeOpPosInSymbol = pSym - &cSymbol[0];
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
                         SetError(errStringOverflow);
                         eState = ssStop;
                     }
                     else
+                    {
+                        mnRangeOpPosInSymbol = pSym - &cSymbol[0];
                         *pSym++ = c;
+                    }
                 }
                 else if ( 128 <= c || '\'' == c )
                 {   // High values need reparsing with i18n,
