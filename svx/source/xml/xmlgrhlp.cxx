@@ -141,17 +141,14 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId, co
 
                     bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForMediaType( aFormat ) ) == ERRCODE_NONE );
                 }
-                else if( rMimeType.isEmpty() && aGraphic.GetType() == GraphicType::GdiMetafile )
+                else if( aGraphic.GetType() == GraphicType::GdiMetafile )
                 {
-                    pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
-                    pStm->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
-                    const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ).Write( *pStm );
-                    bRet = ( pStm->GetError() == ERRCODE_NONE );
-                }
-                else if( !rMimeType.isEmpty() )
-                {
+                    // Save metafiles as svg, other apps can't read our internal metafile format
+                    OUString aFormat = rMimeType;
+                    if( aFormat.isEmpty() )
+                        aFormat = "image/svg+xml";
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForMediaType( rMimeType ) ) == ERRCODE_NONE );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForMediaType( aFormat ) ) == ERRCODE_NONE );
                 }
             }
 
