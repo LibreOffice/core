@@ -454,7 +454,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OAccessibleContextWrapperHelper::dispose()
+    void OAccessibleContextWrapperHelper::dispose()
     {
         ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
 

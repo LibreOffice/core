@@ -106,9 +106,9 @@ namespace comphelper
 
         // XInterface and XTypeProvider
         /// @throws css::uno::RuntimeException
-        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType );
+        css::uno::Any queryAggregation( const css::uno::Type& _rType );
         /// @throws css::uno::RuntimeException
-        css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
+        css::uno::Sequence< css::uno::Type > getTypes(  );
 
     private:
         OProxyAggregation( const OProxyAggregation& ) = delete;
@@ -169,7 +169,7 @@ namespace comphelper
 
         // XComponent
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL dispose() = 0;
+        virtual void dispose() = 0;
 
     private:
         OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& ) = delete;

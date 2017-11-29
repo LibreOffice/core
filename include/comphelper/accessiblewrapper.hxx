@@ -214,7 +214,7 @@ namespace comphelper
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XComponent/OComponentProxyAggregationHelper
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
         // own overridables
         /** notify an accessible event which has been translated (if necessary)

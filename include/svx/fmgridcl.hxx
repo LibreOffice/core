@@ -109,7 +109,7 @@ public:
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
     // css::beans::XPropertyChangeListener
-    void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt);
+    void propertyChange(const css::beans::PropertyChangeEvent& evt);
 
     // css::form::XPositioningListener
     void positioned();

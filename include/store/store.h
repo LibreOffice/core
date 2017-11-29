@@ -37,7 +37,7 @@ typedef void* storeHandle;
     @param  Handle [in] the Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
+STORE_DLLPUBLIC storeError store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
@@ -46,7 +46,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_releaseHandle (
+STORE_DLLPUBLIC storeError store_releaseHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
@@ -60,7 +60,7 @@ typedef void* storeFileHandle;
     @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
+STORE_DLLPUBLIC storeError store_createMemoryFile (
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C();
@@ -77,7 +77,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
     @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
+STORE_DLLPUBLIC storeError store_openFile (
     rtl_uString     *pFilename,
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize,
@@ -89,7 +89,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
     @return store_E_None upon     success,
             store_E_InvalidHandle otherwise.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
+STORE_DLLPUBLIC storeError store_closeFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
@@ -97,7 +97,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
     @param  hFile [in] the File Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_flushFile (
+STORE_DLLPUBLIC storeError store_flushFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 

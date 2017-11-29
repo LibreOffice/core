@@ -215,7 +215,7 @@ Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Seq
     return xResult;
 }
 
-OUString SAL_CALL Clipboard_getImplementationName()
+OUString Clipboard_getImplementationName()
 {
     return OUString(
     #if defined MACOSX
@@ -230,7 +230,7 @@ OUString SAL_CALL Clipboard_getImplementationName()
      );
 }
 
-Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory()
+Reference< XSingleServiceFactory > Clipboard_createFactory()
 {
     return Reference< XSingleServiceFactory >( new ClipboardFactory() );
 }
@@ -303,7 +303,7 @@ void GenericDragSource::initialize( const Sequence< Any >& )
 {
 }
 
-Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
+Sequence< OUString > DragSource_getSupportedServiceNames()
 {
 #if defined MACOSX
     return { "com.sun.star.datatransfer.dnd.OleDragSource" };
@@ -314,7 +314,7 @@ Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 #endif
 }
 
-OUString SAL_CALL DragSource_getImplementationName()
+OUString DragSource_getImplementationName()
 {
 #if defined MACOSX
     return OUString("com.sun.star.comp.datatransfer.dnd.OleDragSource_V1");
@@ -325,7 +325,7 @@ OUString SAL_CALL DragSource_getImplementationName()
 #endif
 }
 
-Reference< XInterface > SAL_CALL DragSource_createInstance( const Reference< XMultiServiceFactory >&  )
+Reference< XInterface > DragSource_createInstance( const Reference< XMultiServiceFactory >&  )
 {
     SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDragSource();
@@ -404,7 +404,7 @@ void GenericDropTarget::setDefaultActions( sal_Int8)
 {
 }
 
-Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
+Sequence< OUString > DropTarget_getSupportedServiceNames()
 {
 #if defined MACOSX
     return Sequence< OUString > {  "com.sun.star.datatransfer.dnd.OleDropTarget" };
@@ -415,7 +415,7 @@ Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 #endif
 }
 
-OUString SAL_CALL DropTarget_getImplementationName()
+OUString DropTarget_getImplementationName()
 {
     return OUString(
     #if defined MACOSX
@@ -428,7 +428,7 @@ OUString SAL_CALL DropTarget_getImplementationName()
                    );
 }
 
-Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )
+Reference< XInterface > DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )
 {
     SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDropTarget();

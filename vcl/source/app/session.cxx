@@ -383,14 +383,14 @@ void VCLSession::disposing() {
 
 // service implementation
 
-OUString SAL_CALL vcl_session_getImplementationName()
+OUString vcl_session_getImplementationName()
 {
     SAL_INFO("vcl.se", "vcl_session_getImplementationName");
 
     return OUString( "com.sun.star.frame.VCLSessionManagerClient" );
 }
 
-Sequence< OUString > SAL_CALL vcl_session_getSupportedServiceNames()
+Sequence< OUString > vcl_session_getSupportedServiceNames()
 {
     SAL_INFO("vcl.se", "vcl_session_getSupportedServiceNames");
 
@@ -398,7 +398,7 @@ Sequence< OUString > SAL_CALL vcl_session_getSupportedServiceNames()
     return aRet;
 }
 
-css::uno::Reference< XInterface > SAL_CALL vcl_session_createInstance( SAL_UNUSED_PARAMETER const css::uno::Reference< XMultiServiceFactory > & )
+css::uno::Reference< XInterface > vcl_session_createInstance( SAL_UNUSED_PARAMETER const css::uno::Reference< XMultiServiceFactory > & )
 {
     SAL_INFO("vcl.se", "vcl_session_createInstance");
 

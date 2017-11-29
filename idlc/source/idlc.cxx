@@ -40,7 +40,7 @@
 
 #include <algorithm>
 
-AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
+AstDeclaration* scopeAsDecl(AstScope* pScope)
 {
     if (pScope == nullptr) return nullptr;
 
@@ -69,7 +69,7 @@ AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
     }
 }
 
-AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
+AstScope* declAsScope(AstDeclaration* pDecl)
 {
     if (pDecl == nullptr) return nullptr;
 
@@ -98,7 +98,7 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
    }
 }
 
-static void SAL_CALL predefineXInterface(AstModule* pRoot)
+static void predefineXInterface(AstModule* pRoot)
 {
     // define the modules  com::sun::star::uno
     AstModule* pParentScope = pRoot;
@@ -146,7 +146,7 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     pInterface->addMember(pOp);
 }
 
-static void SAL_CALL initializePredefinedTypes(AstModule* pRoot)
+static void initializePredefinedTypes(AstModule* pRoot)
 {
     if ( pRoot )
     {
@@ -348,12 +348,12 @@ Idlc::dumpDeps(OString const& rDepFile, OString const& rTarget)
 
 static Idlc* pStaticIdlc = nullptr;
 
-Idlc* SAL_CALL idlc()
+Idlc* idlc()
 {
     return pStaticIdlc;
 }
 
-Idlc* SAL_CALL setIdlc(Options* pOptions)
+Idlc* setIdlc(Options* pOptions)
 {
     delete pStaticIdlc;
     pStaticIdlc = new Idlc(pOptions);

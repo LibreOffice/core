@@ -610,7 +610,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     return aRet;
 }
 
-uno::Reference< rendering::XBitmapPalette > SAL_CALL VclCanvasBitmap::getPalette()
+uno::Reference< rendering::XBitmapPalette > VclCanvasBitmap::getPalette()
 {
     SolarMutexGuard aGuard;
 

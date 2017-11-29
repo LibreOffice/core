@@ -548,7 +548,7 @@ public:
     // XAuthFallback
     virtual void SAL_CALL setCode( const OUString& code ) override;
     /// @throws css::uno::RuntimeException
-    const OUString& SAL_CALL getCode() const;
+    const OUString& getCode() const;
 
 
 };

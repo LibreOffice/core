@@ -126,7 +126,7 @@ static const sal_uInt64 vcl_crc64Table[256] = {
 /*
  * vcl_crc64.
  */
-sal_uInt64 SAL_CALL vcl_crc64 (
+sal_uInt64 vcl_crc64 (
     sal_uInt64  Crc,
     const void *Data, sal_uInt32 DatLen)  SAL_THROW_EXTERN_C()
 {

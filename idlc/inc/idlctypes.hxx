@@ -36,8 +36,8 @@ class AstDeclaration;
 typedef std::list< AstDeclaration* > DeclList;
 
 class AstScope;
-AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope);
-AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl);
+AstDeclaration* scopeAsDecl(AstScope* pScope);
+AstScope* declAsScope(AstDeclaration* pDecl);
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4541 )
