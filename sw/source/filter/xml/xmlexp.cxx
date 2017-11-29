@@ -126,6 +126,11 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SwDoc *pDoc = getDoc();
 
+    // Make sure the layout is available to have more stability in the output
+    // markup.
+    if (SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell())
+        pViewShell->CalcLayout();
+
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
                             SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
     {
