@@ -34,9 +34,12 @@ Crypto::~Crypto()
     EVP_CIPHER_CTX_cleanup( &mContext );
 #endif
 #if USE_TLS_NSS
-    PK11_DestroyContext( mContext, PR_TRUE );
-    PK11_FreeSymKey( mSymKey );
-    SECITEM_FreeItem( mSecParam, PR_TRUE );
+    if (mContext)
+        PK11_DestroyContext(mContext, PR_TRUE);
+    if (mSymKey)
+        PK11_FreeSymKey(mSymKey);
+    if (mSecParam)
+        SECITEM_FreeItem(mSecParam, PR_TRUE);
 #endif
 }
 
@@ -101,6 +104,9 @@ void Crypto::setupContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& i
     keyItem.len  = key.size();
 
     mSymKey = PK11_ImportSymKey(pSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr);
+    if (!mSymKey)
+        throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
+
     mSecParam = PK11_ParamFromIV(mechanism, pIvItem);
     mContext = PK11_CreateContextBySymKey(mechanism, operation, mSymKey, mSecParam);
 }
