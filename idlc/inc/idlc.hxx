@@ -150,8 +150,8 @@ bool isFileUrl(const OString& fileName);
 OString convertToAbsoluteSystemPath(const OString& fileName);
 OString convertToFileUrl(const OString& fileName);
 
-Idlc* SAL_CALL idlc();
-Idlc* SAL_CALL setIdlc(Options* pOptions);
+Idlc* idlc();
+Idlc* setIdlc(Options* pOptions);
 
 AstDeclaration const * resolveTypedefs(AstDeclaration const * type);
 

@@ -39,7 +39,7 @@ namespace cppu
  * @param rType         enum type
  * @return enum or empty any.
  */
-inline css::uno::Any SAL_CALL int2enum(
+inline css::uno::Any int2enum(
     sal_Int32 nEnum, const css::uno::Type & rType )
 {
     assert(rType.getTypeClass() == css::uno::TypeClass_ENUM);

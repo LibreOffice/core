@@ -784,7 +784,7 @@ void SAL_CALL InteractionAuthFallback::setCode( const OUString& code )
     m_aCode = code;
 }
 
-const OUString& SAL_CALL InteractionAuthFallback::getCode() const
+const OUString& InteractionAuthFallback::getCode() const
 {
     return m_aCode;
 }

@@ -39,7 +39,7 @@ namespace comphelper
     }
 
 
-    bool SAL_CALL OCommonAccessibleComponent::containsPoint( const Point& _rPoint )
+    bool OCommonAccessibleComponent::containsPoint( const Point& _rPoint )
     {
         OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
@@ -50,7 +50,7 @@ namespace comphelper
     }
 
 
-    Point SAL_CALL OCommonAccessibleComponent::getLocation(  )
+    Point OCommonAccessibleComponent::getLocation(  )
     {
         OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
@@ -58,7 +58,7 @@ namespace comphelper
     }
 
 
-    Point SAL_CALL OCommonAccessibleComponent::getLocationOnScreen(  )
+    Point OCommonAccessibleComponent::getLocationOnScreen(  )
     {
         OExternalLockGuard aGuard( this );
 
@@ -78,7 +78,7 @@ namespace comphelper
     }
 
 
-    Size SAL_CALL OCommonAccessibleComponent::getSize(  )
+    Size OCommonAccessibleComponent::getSize(  )
     {
         OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
@@ -86,7 +86,7 @@ namespace comphelper
     }
 
 
-    Rectangle SAL_CALL OCommonAccessibleComponent::getBounds(  )
+    Rectangle OCommonAccessibleComponent::getBounds(  )
     {
         OExternalLockGuard aGuard( this );
         return implGetBounds();

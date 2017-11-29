@@ -57,15 +57,15 @@ namespace comphelper
 
             @throws css::uno::RuntimeException
         */
-        bool SAL_CALL containsPoint( const css::awt::Point& aPoint );
+        bool containsPoint( const css::awt::Point& aPoint );
         /// @throws css::uno::RuntimeException
-        css::awt::Point SAL_CALL getLocation(  );
+        css::awt::Point getLocation(  );
         /// @throws css::uno::RuntimeException
-        css::awt::Point SAL_CALL getLocationOnScreen(  );
+        css::awt::Point getLocationOnScreen(  );
         /// @throws css::uno::RuntimeException
-        css::awt::Size SAL_CALL getSize(  );
+        css::awt::Size getSize(  );
         /// @throws css::uno::RuntimeException
-        css::awt::Rectangle SAL_CALL getBounds(  );
+        css::awt::Rectangle getBounds(  );
     };
 
 

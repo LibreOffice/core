@@ -71,22 +71,22 @@ namespace comphelper
             @throws css::lang::IndexOutOfBoundsException
             @throws css::uno::RuntimeException
         */
-        void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex );
+        void selectAccessibleChild( sal_Int32 nChildIndex );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex );
+        bool isAccessibleChildSelected( sal_Int32 nChildIndex );
         /// @throws css::uno::RuntimeException
-        void SAL_CALL clearAccessibleSelection(  );
+        void clearAccessibleSelection(  );
         /// @throws css::uno::RuntimeException
-        void SAL_CALL selectAllAccessibleChildren(  );
+        void selectAllAccessibleChildren(  );
         /// @throws css::uno::RuntimeException
-        sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  );
+        sal_Int32 getSelectedAccessibleChildCount(  );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex );
+        css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex );
+        void deselectAccessibleChild( sal_Int32 nSelectedChildIndex );
     };
 
 

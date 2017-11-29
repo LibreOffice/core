@@ -65,13 +65,13 @@ namespace comphelper
     }
 
 
-    Any SAL_CALL OProxyAggregation::queryAggregation( const Type& _rType )
+    Any OProxyAggregation::queryAggregation( const Type& _rType )
     {
         return m_xProxyAggregate.is() ? m_xProxyAggregate->queryAggregation( _rType ) : Any();
     }
 
 
-    Sequence< Type > SAL_CALL OProxyAggregation::getTypes(  )
+    Sequence< Type > OProxyAggregation::getTypes(  )
     {
         Sequence< Type > aTypes;
         if ( m_xProxyAggregate.is() )
@@ -161,7 +161,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OComponentProxyAggregationHelper::dispose()
+    void OComponentProxyAggregationHelper::dispose()
     {
         ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
 

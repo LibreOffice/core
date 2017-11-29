@@ -69,23 +69,23 @@ namespace comphelper
             @throws css::lang::IndexOutOfBoundsException
             @throws css::uno::RuntimeException
         */
-        OUString SAL_CALL getSelectedText();
+        OUString getSelectedText();
         /// @throws css::uno::RuntimeException
-        sal_Int32 SAL_CALL getSelectionStart();
+        sal_Int32 getSelectionStart();
         /// @throws css::uno::RuntimeException
-        sal_Int32 SAL_CALL getSelectionEnd();
+        sal_Int32 getSelectionEnd();
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
-        css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType );
+        css::accessibility::TextSegment getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
-        css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType );
+        css::accessibility::TextSegment getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
-        css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType );
+        css::accessibility::TextSegment getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType );
 
     public:
 

@@ -121,7 +121,7 @@ void removeIfExists(const OString& pathname)
     osl::File::remove(OStringToOUString(pathname, RTL_TEXTENCODING_UTF8));
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 produceFile(const OString& regFileName, sPair_t const*const pDepFile)
 {
     Options* pOptions = idlc()->getOptions();

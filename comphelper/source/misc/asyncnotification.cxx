@@ -107,7 +107,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL AsyncEventNotifierBase::terminate()
+    void AsyncEventNotifierBase::terminate()
     {
         ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 

@@ -32,13 +32,13 @@
 namespace xmlscript
 {
 
-XMLSCRIPT_DLLPUBLIC void SAL_CALL exportDialogModel(
+XMLSCRIPT_DLLPUBLIC void exportDialogModel(
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > const & xOut,
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
     css::uno::Reference< css::frame::XModel > const & xDocument );
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::xml::sax::XDocumentHandler >
-SAL_CALL importDialogModel(
+importDialogModel(
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
     css::uno::Reference< css::uno::XComponentContext > const & xContext,
     css::uno::Reference< css::frame::XModel > const & xDocument );
@@ -46,12 +46,12 @@ SAL_CALL importDialogModel(
 // additional functions for convenience
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStreamProvider >
-SAL_CALL exportDialogModel(
+exportDialogModel(
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
     css::uno::Reference< css::uno::XComponentContext > const & xContext,
     css::uno::Reference< css::frame::XModel > const & xDocument );
 
-XMLSCRIPT_DLLPUBLIC void SAL_CALL importDialogModel(
+XMLSCRIPT_DLLPUBLIC void importDialogModel(
     css::uno::Reference< css::io::XInputStream > const & xInput,
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
     css::uno::Reference< css::uno::XComponentContext > const & xContext,
