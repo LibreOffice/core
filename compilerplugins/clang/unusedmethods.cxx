@@ -235,8 +235,16 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 
 gotfunc:
 
-    // for "unused method" analysis, ignore recursive calls
-    if (currentFunctionDecl != calleeFunctionDecl)
+
+    if (currentFunctionDecl == calleeFunctionDecl)
+        ; // for "unused method" analysis, ignore recursive calls
+    else if (currentFunctionDecl
+            && currentFunctionDecl->getIdentifier()
+            && currentFunctionDecl->getName() == "Clone"
+            && currentFunctionDecl->getParent() == calleeFunctionDecl->getParent()
+            && isa<CXXConstructorDecl>(calleeFunctionDecl))
+        ; // if we are inside Clone(), ignore calls to the same class's constructor
+    else
         logCallToRootMethods(calleeFunctionDecl, callSet);
 
     const Stmt* parent = getParentStmt(expr);
