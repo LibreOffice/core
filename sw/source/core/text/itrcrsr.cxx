@@ -1752,8 +1752,8 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
 bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) const
 {
     bool bRet = false;
-    // PaintArea() instead getFrameArea() for negative indents
-    SwRect aTmpFrame( PaintArea() );
+    // GetPaintArea() instead getFrameArea() for negative indents
+    SwRect aTmpFrame( GetPaintArea() );
     if( !rRect.IsOver( aTmpFrame ) )
         return false;
     if( rSelList.checkContext( this ) )

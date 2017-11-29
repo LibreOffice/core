@@ -1249,7 +1249,7 @@ SwSpaceManipulator::~SwSpaceManipulator()
 
 // Manages the paint for a SwMultiPortion.
 // External, for the calling function, it seems to be a normal Paint-function,
-// internal it is like a SwTextFrame::Paint with multiple DrawTextLines
+// internal it is like a SwTextFrame::PaintSwFrame with multiple DrawTextLines
 void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti, const SwMultiPortion* pEnvPor )
 {

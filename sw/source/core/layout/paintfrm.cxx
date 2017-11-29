@@ -257,7 +257,7 @@ struct SwPaintProperties {
     SwViewShell        *pSGlobalShell;
 
     // Retouch for transparent Flys is done by the background of the Flys.
-    // The Fly itself should certainly not be spared out. See PaintBackground and
+    // The Fly itself should certainly not be spared out. See PaintSwFrameBackground and
     // lcl_SubtractFlys()
     SwFlyFrame           *pSRetoucheFly;
     SwFlyFrame           *pSRetoucheFly2;
@@ -277,7 +277,7 @@ struct SwPaintProperties {
     SfxProgress        *pSProgress;
 
     // Sizes of a pixel and the corresponding halves. Will be reset when
-    // entering SwRootFrame::Paint
+    // entering SwRootFrame::PaintSwFrame
     long                nSPixelSzW;
     long                nSPixelSzH;
     long                nSHalfPixelSzW;
@@ -2179,7 +2179,7 @@ void DrawGraphic(
 }
 
 /**
- * Local helper for SwRootFrame::Paint(..) - Adjust given rectangle to pixel size
+ * Local helper for SwRootFrame::PaintSwFrame(..) - Adjust given rectangle to pixel size
  *
  * By OD at 27.09.2002 for #103636#
  * In order to avoid paint errors caused by multiple alignments (e.g. ::SwAlignRect(..))
@@ -2956,7 +2956,7 @@ namespace
  * 3. Paint the document content (text)
  * 4. Paint the draw layer that is above the document
 |*/
-void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const pPrintData) const
+void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "Lower of root is no page." );
 
@@ -3171,7 +3171,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                     gProp.pSSpecSubsLines->PaintSubsidiary( pSh->GetOut(), nullptr, gProp );
                 }
 
-                pPage->Paint( rRenderContext, aPaintRect );
+                pPage->PaintSwFrame( rRenderContext, aPaintRect );
 
                 // no paint of page border and shadow, if writer is in place mode.
                 if( pSh->GetWin() && pSh->GetDoc()->GetDocShell() &&
@@ -3370,7 +3370,7 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     // #i16816# tagged pdf support
     Frame_Info aFrameInfo( *this );
@@ -3396,7 +3396,7 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
 
     while ( IsAnLower( pFrame ) )
     {
-        SwRect aPaintRect( pFrame->PaintArea() );
+        SwRect aPaintRect( pFrame->GetPaintArea() );
         if( aShortCut.Stop( aPaintRect ) )
             break;
         if ( bCnt && gProp.pSProgress )
@@ -3456,7 +3456,7 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
             pFrame->ResetCompletePaint();
             aPaintRect.Intersection_( rRect );
 
-            pFrame->Paint( rRenderContext, aPaintRect );
+            pFrame->PaintSwFrame( rRenderContext, aPaintRect );
 
             if ( Lower() && Lower()->IsColumnFrame() )
             {
@@ -3881,10 +3881,10 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     return bPaint;
 }
 
-void SwCellFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     if ( GetLayoutRowSpan() >= 1 )
-        SwLayoutFrame::Paint( rRenderContext, rRect );
+        SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
 }
 
 struct BorderLinesGuard
@@ -3902,7 +3902,7 @@ private:
     BorderLines *const m_pBorderLines;
 };
 
-void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#
     SwViewShell *pShell = getRootFrame()->GetCurrShell();
@@ -4017,7 +4017,7 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
                 SwRect aPaintRect( aRect );
                 aPaintRect.Intersection_( pParentFlyFrame->getFrameArea() );
-                pParentFlyFrame->PaintBackground( aPaintRect, pPage, rAttrs );
+                pParentFlyFrame->PaintSwFrameBackground( aPaintRect, pPage, rAttrs );
 
                 gProp.pSRetoucheFly2 = pOldRet;
             }
@@ -4025,8 +4025,8 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
 
         if ( bPaintCompleteBack || bPaintMarginOnly )
         {
-            //#24926# JP 01.02.96, PaintBaBo is here partially so PaintBorder
-            //receives the original Rect but PaintBackground only the limited
+            //#24926# JP 01.02.96, PaintBaBo is here partially so PaintSwFrameShadowAndBorder
+            //receives the original Rect but PaintSwFrameBackground only the limited
             //one.
 
             // OD 2004-04-23 #116347#
@@ -4057,26 +4057,35 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
                     rRenderContext.Push();
                     // #i80822#
                     // apply clip region under the same conditions, which are
-                    // used in <SwNoTextFrame::Paint(..)> to set the clip region
+                    // used in <SwNoTextFrame::PaintSwFrame(..)> to set the clip region
                     // for painting the graphic/OLE. Thus, the clip region is
                     // also applied for the PDF export.
                     SwViewShell *pSh = getRootFrame()->GetCurrShell();
+
                     if ( !rRenderContext.GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     {
                         rRenderContext.SetClipRegion(vcl::Region(aPoly));
                     }
+
                     for ( size_t i = 0; i < aRegion.size(); ++i )
-                        PaintBackground( aRegion[i], pPage, rAttrs, false, true );
+                    {
+                        PaintSwFrameBackground( aRegion[i], pPage, rAttrs, false, true );
+                    }
+
                     rRenderContext.Pop();
                 }
                 else
+                {
                     for ( size_t i = 0; i < aRegion.size(); ++i )
-                        PaintBackground( aRegion[i], pPage, rAttrs, false, true );
+                    {
+                        PaintSwFrameBackground( aRegion[i], pPage, rAttrs, false, true );
+                    }
+                }
             }
 
             // OD 06.08.2002 #99657# - paint border before painting background
             // paint border
-            PaintBorder( rRect, pPage, rAttrs );
+            PaintSwFrameShadowAndBorder( rRect, pPage, rAttrs );
 
             rRenderContext.Pop();
         }
@@ -4137,7 +4146,7 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
         }
     }
 
-    SwLayoutFrame::Paint( rRenderContext, aRect );
+    SwLayoutFrame::PaintSwFrame( rRenderContext, aRect );
 
     Validate();
 
@@ -4154,7 +4163,7 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
         gProp.pSProgress->Reschedule();
 }
 
-void SwTabFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
@@ -4177,7 +4186,7 @@ void SwTabFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
             aHelper.PaintLines(rRenderContext, rRect);
         }
 
-        SwLayoutFrame::Paint( rRenderContext, rRect );
+        SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
     }
     // OD 10.01.2003 #i6467# - no light grey rectangle for page preview
     else if ( gProp.pSGlobalShell->GetWin() && !gProp.pSGlobalShell->IsPreview() )
@@ -5232,7 +5241,7 @@ void SwFrame::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DCon
 }
 
 /// Paints shadows and borders
-void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
+void SwFrame::PaintSwFrameShadowAndBorder( const SwRect& rRect, const SwPageFrame *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
     // There's nothing (Row,Body,Footnote,Root,Column,NoText) need to do here
@@ -5374,7 +5383,7 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
  * Currently only the top frame needs to be taken into account
  * Other lines and shadows are set aside
  */
-void SwFootnoteContFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
+void SwFootnoteContFrame::PaintSwFrameShadowAndBorder( const SwRect& rRect, const SwPageFrame *pPage,
                                 const SwBorderAttrs & ) const
 {
     //If the rectangle is completely inside the PrtArea, no border needs to
@@ -6248,7 +6257,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     // OD 20.11.2002 #104598# - take care of page margin area
-    // Note: code move from <SwFrame::PaintBackground(..)> to new method
+    // Note: code move from <SwFrame::PaintSwFrameBackground(..)> to new method
     // <SwPageFrame::Paintmargin(..)>.
     if ( IsPageFrame() && !bOnlyTextBackground)
     {
@@ -6257,7 +6266,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
 
     // paint background
     {
-        PaintBackground( rRect, pPage, rAttrs, false, true/*bLowerBorder*/, bOnlyTextBackground );
+        PaintSwFrameBackground( rRect, pPage, rAttrs, false, true/*bLowerBorder*/, bOnlyTextBackground );
     }
 
     // OD 06.08.2002 #99657# - paint border before painting background
@@ -6267,7 +6276,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
         SwRect aRect( rRect );
         if( IsPageFrame() )
             static_cast<const SwPageFrame*>(this)->PaintGrid( pOut, aRect );
-        PaintBorder( aRect, pPage, rAttrs );
+        PaintSwFrameShadowAndBorder( aRect, pPage, rAttrs );
     }
 
     pOut->Pop();
@@ -6285,7 +6294,7 @@ static bool lcl_compareFillAttributes(const drawinglayer::attribute::SdrAllFillA
 /// OD 05.09.2002 #102912#
 /// Do not paint background for fly frames without a background brush by
 /// calling <PaintBaBo> at the page or at the fly frame its anchored
-void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
+void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pPage,
                              const SwBorderAttrs & rAttrs,
                              const bool bLowerMode,
                              const bool bLowerBorder,
@@ -6489,7 +6498,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
     if ( pFrame )
     {
         SwRect aFrameRect;
-        SwRect aRect( PaintArea() );
+        SwRect aRect( GetPaintArea() );
         aRect.Intersection_( rRect );
         SwRect aBorderRect( aRect );
         SwShortCut aShortCut( *pFrame, aBorderRect );
@@ -6497,17 +6506,21 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
         {   if ( gProp.pSProgress )
                 gProp.pSProgress->Reschedule();
 
-            aFrameRect = pFrame->PaintArea();
+            aFrameRect = pFrame->GetPaintArea();
             if ( aFrameRect.IsOver( aBorderRect ) )
             {
                 SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
                 const SwBorderAttrs &rTmpAttrs = *aAccess.Get();
-                if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) ||
-                     aFrameRect.IsOver( aRect ) )
-                    pFrame->PaintBackground( aRect, pPage, rTmpAttrs, bLowMode,
+                if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) || aFrameRect.IsOver( aRect ) )
+                {
+                    pFrame->PaintSwFrameBackground( aRect, pPage, rTmpAttrs, bLowMode,
                                            bLowerBorder, bOnlyTextBackground );
+                }
+
                 if ( bLowerBorder )
-                    pFrame->PaintBorder( aBorderRect, pPage, rTmpAttrs );
+                {
+                    pFrame->PaintSwFrameShadowAndBorder( aBorderRect, pPage, rTmpAttrs );
+                }
             }
             pFrame = pFrame->GetNext();
         } while ( pFrame && pFrame->GetUpper() == this &&
@@ -7178,7 +7191,7 @@ const vcl::Font& SwPageFrame::GetEmptyPageFont()
  *
  * Retouch will only be done, if the Frame is the last one in his chain.
  * The whole area of the upper which is located below the Frame will be
- * cleared using PaintBackground.
+ * cleared using PaintSwFrameBackground.
  */
 void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
 {
@@ -7188,7 +7201,7 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
     OSL_ENSURE( GetUpper(), "Retouche try without Upper." );
     OSL_ENSURE( getRootFrame()->GetCurrShell() && gProp.pSGlobalShell->GetWin(), "Retouche on a printer?" );
 
-    SwRect aRetouche( GetUpper()->PaintArea() );
+    SwRect aRetouche( GetUpper()->GetPaintArea() );
     aRetouche.Top( getFrameArea().Top() + getFrameArea().Height() );
     aRetouche.Intersection( gProp.pSGlobalShell->VisArea() );
 
@@ -7515,7 +7528,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
                           &aSwRedirector );
         gProp.pSLines->PaintLines( pDev, gProp );
         if ( pFly->IsFlyInContentFrame() )
-            pFly->Paint( *pDev, aOut );
+            pFly->PaintSwFrame( *pDev, aOut );
         gProp.pSLines->PaintLines( pDev, gProp );
         // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( rIDDMA.GetHeavenId(), nullptr,
