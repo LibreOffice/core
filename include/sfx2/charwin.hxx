@@ -27,7 +27,6 @@ class SFX2_DLLPUBLIC SvxCharView : public Control
 {
 public:
     SvxCharView(vcl::Window* pParent);
-
     void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) override;
     void            InsertCharToDoc();
@@ -55,6 +54,7 @@ private:
     long            mnY;
     Point           maPosition;
     vcl::Font       maFont;
+    bool            bIsFloating;
 
     Link<SvxCharView*, void> maMouseClickHdl;
     Link<SvxCharView*, void> maClearClickHdl;
