@@ -156,25 +156,23 @@ public:
     }
 
     /**
-     * Renders a dialog with give dialog id and writes the width and height of the rendered dialog
+     * Renders a window (dialog, popup, etc.) with give id
      *
-     * Client must truncate pBuffer according to the nWidth and nHeight returned after the call.
-     *
-     * @param nDialogId Unique dialog id to be painted
+     * @param nWindowId
      * @param pBuffer Buffer with enough memory allocated to render any dialog
      * @param x x-coordinate from where the dialog should start painting
      * @param y y-coordinate from where the dialog should start painting
      * @param width The width of the dialog image to be painted
      * @param height The height of the dialog image to be painted
      */
-    void paintDialog(unsigned nDialogId,
+    void paintWindow(unsigned nWindowId,
                      unsigned char* pBuffer,
                      const int x,
                      const int y,
                      const int width,
                      const int height)
     {
-        return mpDoc->pClass->paintDialog(mpDoc, nDialogId, pBuffer,
+        return mpDoc->pClass->paintWindow(mpDoc, nWindowId, pBuffer,
                                           x, y, width, height);
     }
 
@@ -195,6 +193,16 @@ public:
     {
         return mpDoc->pClass->paintActiveFloatingWindow(mpDoc, nDialogId, pBuffer,
                                                         &nWidth, &nHeight);
+    }
+
+    /**
+     * Posts a command to the window (dialog, popup, etc.) with given id
+     *
+     * @param nWindowid
+     */
+    void postWindow(unsigned nWindowId, int nAction)
+    {
+        return mpDoc->pClass->postWindow(mpDoc, nWindowId, nAction);
     }
 
     /**
