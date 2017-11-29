@@ -530,6 +530,7 @@ void DesktopLOKTest::testPasteWriter()
 
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OString("hello"), OString(pText));
     free(pText);
 
@@ -902,6 +903,7 @@ void DesktopLOKTest::testSheetOperations()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Remove",
           "{ \"Index\": { \"type\": \"long\", \"value\": 3 } }", false);
 
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(pDocument->pClass->getParts(pDocument), 6);
 
     std::vector<OString> aExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
