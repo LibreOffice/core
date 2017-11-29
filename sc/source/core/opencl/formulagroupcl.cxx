@@ -920,7 +920,7 @@ class DynamicKernelSlidingArgument : public Base
 public:
     DynamicKernelSlidingArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
-        int index = 0 ) :
+        int index ) :
         Base(config, s, ft, index), mpCodeGen(CodeGen)
     {
         FormulaToken* t = ft->GetFormulaToken();
@@ -1094,7 +1094,7 @@ class DynamicKernelMixedSlidingArgument : public VectorRef
 public:
     DynamicKernelMixedSlidingArgument( const ScCalcConfig& config, const std::string& s,
         const FormulaTreeNodeRef& ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
-        int index = 0 ) :
+        int index ) :
         VectorRef(config, s, ft),
         mDoubleArgument(mCalcConfig, s, ft, CodeGen, index),
         mStringArgument(mCalcConfig, s + "s", ft, CodeGen, index) { }
@@ -1205,7 +1205,7 @@ class ParallelReductionVectorRef : public Base
 public:
     ParallelReductionVectorRef( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
-        int index = 0 ) :
+        int index ) :
         Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(nullptr)
     {
         FormulaToken* t = ft->GetFormulaToken();
@@ -1395,7 +1395,7 @@ public:
         }
 
     }
-    virtual std::string GenSlidingWindowDeclRef( bool = false ) const
+    virtual std::string GenSlidingWindowDeclRef( bool ) const
     {
         std::stringstream ss;
         if (!bIsStartFixed && !bIsEndFixed)

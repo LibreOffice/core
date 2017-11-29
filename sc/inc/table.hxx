@@ -577,7 +577,7 @@ public:
 
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
                                       SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
-                                      bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes=false ) const;
+                                      bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes ) const;
 
     SCROW GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 
@@ -794,7 +794,7 @@ public:
 
     sal_uInt16      GetColWidth( SCCOL nCol, bool bHiddenAsZero = true ) const;
     sal_uLong GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const;
-    SC_DLLPUBLIC sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow = nullptr, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
     sal_uLong       GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true ) const;
     sal_uLong       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
     sal_uLong       GetColOffset( SCCOL nCol, bool bHiddenAsZero = true ) const;

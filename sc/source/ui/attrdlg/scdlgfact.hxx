@@ -456,7 +456,7 @@ public:
                                                                 long            nDefault,
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals,
-                                                                long            nMaximum  = 1000,
+                                                                long            nMaximum,
                                                                 long            nMinimum  = 0 ) override;
 
     virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(vcl::Window * pParent,
@@ -510,7 +510,7 @@ public:
 
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
-                                                                    const OUString*         pStrTitle = nullptr,
+                                                                    const OUString*         pStrTitle,
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg( vcl::Window*          pParent,
