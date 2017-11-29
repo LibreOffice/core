@@ -913,8 +913,9 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
     if ( n < 0 )
         return 0;
 
-    if( ( m_nPos + n ) > m_nSize )
-        n = m_nSize - m_nPos;
+    const auto nAvailable = m_nSize - m_nPos;
+    if (n > nAvailable)
+        n = nAvailable;
     sal_Int32 nDone = 0;
     while( n )
     {
