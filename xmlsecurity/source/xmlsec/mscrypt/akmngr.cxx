@@ -151,7 +151,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
         return (-1) ;
     }
 
-    return (0) ;
+    return 0 ;
 }
 
 int
@@ -186,7 +186,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore(
         return (-1) ;
     }
 
-    return (0) ;
+    return 0 ;
 }
 
 int
@@ -221,7 +221,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore(
         return (-1) ;
     }
 
-    return (0) ;
+    return 0 ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

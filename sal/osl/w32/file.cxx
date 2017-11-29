@@ -253,7 +253,7 @@ oslFileError FileHandle_Impl::setPos(sal_uInt64 uPos)
 
 sal_uInt64 FileHandle_Impl::getSize() const
 {
-    LONGLONG bufend = std::max((LONGLONG)(0), m_bufptr) + m_buflen;
+    LONGLONG bufend = std::max((LONGLONG)0, m_bufptr) + m_buflen;
     return std::max(m_size, sal::static_int_cast< sal_uInt64 >(bufend));
 }
 

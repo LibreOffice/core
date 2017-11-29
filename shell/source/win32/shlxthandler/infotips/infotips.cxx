@@ -106,7 +106,7 @@ std::wstring getFileTypeInfo(const std::wstring& file_extension)
     wchar_t extKeyValue[MAX_STRING];
     wchar_t typeKeyValue[MAX_STRING];
     ::std::wstring sDot(L".");
-    if (QueryRegistryKey(HKEY_CLASSES_ROOT, (sDot.append(file_extension)).c_str(), L"", extKeyValue, MAX_STRING))
+    if (QueryRegistryKey(HKEY_CLASSES_ROOT, sDot.append(file_extension).c_str(), L"", extKeyValue, MAX_STRING))
         if (QueryRegistryKey( HKEY_CLASSES_ROOT, extKeyValue, L"",typeKeyValue, MAX_STRING))
             return typeKeyValue;
 

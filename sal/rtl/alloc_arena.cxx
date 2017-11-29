@@ -1064,7 +1064,7 @@ void SAL_CALL rtl_machdep_free(
 #if defined(SAL_UNX)
     (void) munmap(pAddr, nSize);
 #elif defined(SAL_W32)
-    (void) VirtualFree (pAddr, (SIZE_T)(0), MEM_RELEASE);
+    (void) VirtualFree (pAddr, (SIZE_T)0, MEM_RELEASE);
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
