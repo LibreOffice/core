@@ -12,6 +12,7 @@
 
 #include <docsh.hxx>
 #include <chart2uno.hxx>
+#include <charthelper.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
@@ -70,11 +71,15 @@ void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cellRange,
 
     CPPUNIT_ASSERT_EQUAL(expectedRows, xSequences.getLength());
 
-    for (sal_Int32 nIdx = 0; nIdx < xSequences.getLength(); ++nIdx)
+    sal_Int32 nStartRow = hasCategories ? 1 : 0;
+    for (sal_Int32 nIdx = nStartRow; nIdx < xSequences.getLength(); ++nIdx)
     {
         Reference<chart2::data::XDataSequence> xValues(xSequences[nIdx]->getValues());
         if (xValues.is())
-            CPPUNIT_ASSERT_EQUAL(expectedCols, xValues->getData().getLength());
+        {
+            sal_Int32 colsNum = xValues->getData().getLength();
+            CPPUNIT_ASSERT_EQUAL(expectedCols, colsNum);
+        }
     }
 }
 
@@ -88,7 +93,9 @@ void ScChart2DataProviderTest::testHeaderExpansion()
     lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$1:$D$4", false, false, 4, 4);
     lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$1:$D$4", true, true, 4, 3);
 
-    lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$9:$D$12", true, true, 1, 2);
+    lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$17:$D$20", true, true, 3, 2);
+
+    lcl_createAndCheckDataProvider(rDoc, "$Sheet1.$A$25:$D$28", true, true, 4, 2);
 
     xDocSh->DoClose();
 }
