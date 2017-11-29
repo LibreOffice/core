@@ -8901,23 +8901,15 @@ void ScInterpreter::ScRight()
             n = 1;
         OUString aStr = GetString().getString();
         sal_Int32 nLen = aStr.getLength();
-        sal_Int32 nIdx = 0;
-        sal_Int32 nCnt = 0;
-        while ( nIdx < nLen )
-        {
-            aStr.iterateCodePoints( &nIdx );
-            ++nCnt;
-        }
-        if ( nCnt <= n )
+        if ( nLen <= n )
             PushString( aStr );
         else
         {
-            sal_Int32 nCLen = nCnt;
-            nIdx = 0;
-            nCnt = 0;
-            while ( nIdx < nLen && n < ( nCLen - nCnt ) )
+            sal_Int32 nIdx = nLen;
+            sal_Int32 nCnt = 0;
+            while ( nIdx > 0 && n > nCnt )
             {
-                aStr.iterateCodePoints( &nIdx );
+                aStr.iterateCodePoints( &nIdx, -1 );
                 ++nCnt;
             }
             aStr = aStr.copy( nIdx, nLen - nIdx );
