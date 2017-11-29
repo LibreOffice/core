@@ -40,7 +40,7 @@
 using namespace ::com::sun::star;
 
 
-uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.EmbeddedObjectCreator";
@@ -49,13 +49,13 @@ uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSuppo
 }
 
 
-OUString SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetImplementationName()
+OUString UNOEmbeddedObjectCreator::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new UNOEmbeddedObjectCreator( comphelper::getComponentContext(xServiceManager) ) );

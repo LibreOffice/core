@@ -36,7 +36,7 @@
    @returns nothing
 
 */
-void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath);
+void osl_systemPathRemoveSeparator(rtl_uString* pustrPath);
 
 /**
    Adds a trailing path separator to the given system path if not already there
@@ -50,7 +50,7 @@ void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath);
    @returns nothing
 
 */
-void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath);
+void osl_systemPathEnsureSeparator(rtl_uString** ppustrPath);
 
 /**
    Returns true if the given path is a relative path and so starts not with '/'
@@ -61,7 +61,7 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath);
    @retval  sal_False   the given path starts with a separator
 
 */
-bool SAL_CALL osl_systemPathIsRelativePath(
+bool osl_systemPathIsRelativePath(
     const rtl_uString* pustrPath);
 
 /**
@@ -83,7 +83,7 @@ bool SAL_CALL osl_systemPathIsRelativePath(
                                 NULL and *ppustrAbsolutePath must be 0 or point to
                                 a valid rtl_uString
 */
-void SAL_CALL osl_systemPathMakeAbsolutePath(
+void osl_systemPathMakeAbsolutePath(
     const rtl_uString* pustrBasePath,
     const rtl_uString* pustrRelPath,
     rtl_uString**      ppustrAbsolutePath);
@@ -103,7 +103,7 @@ void SAL_CALL osl_systemPathMakeAbsolutePath(
    @returns nothing
 
 */
-void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
+void osl_systemPathGetFileNameOrLastDirectoryPart(
     const rtl_uString*  pustrPath,
     rtl_uString**       ppustrFileNameOrLastDirPart);
 
@@ -115,7 +115,7 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
                 alone or doesn't start with a dot
 
 */
-bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
+bool osl_systemPathIsHiddenFileOrDirectoryEntry(
     const rtl_uString* pustrPath);
 
 /************************************************
@@ -133,7 +133,7 @@ bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
 
 ************************************************/
 
-bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
+bool osl_systemPathIsLocalOrParentDirectoryEntry(
     const rtl_uString* pustrPath);
 
 /************************************************
@@ -159,7 +159,7 @@ bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
    directory was found else sal_False
  ***********************************************/
 
-bool SAL_CALL osl_searchPath(
+bool osl_searchPath(
     const rtl_uString* pustrFilePath,
     const rtl_uString* pustrSearchPathList,
     rtl_uString**      ppustrPathFound);

@@ -46,9 +46,9 @@ class INetURLObject;
 namespace migration
 {
 
-    OUString SAL_CALL OO3ExtensionMigration_getImplementationName();
-    css::uno::Sequence< OUString > SAL_CALL OO3ExtensionMigration_getSupportedServiceNames();
-    css::uno::Reference< css::uno::XInterface > SAL_CALL OO3ExtensionMigration_create(
+    OUString OO3ExtensionMigration_getImplementationName();
+    css::uno::Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > OO3ExtensionMigration_create(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 

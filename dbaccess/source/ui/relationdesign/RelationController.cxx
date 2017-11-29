@@ -72,7 +72,7 @@
 
 #define MAX_THREADS 10
 
-extern "C" void SAL_CALL createRegistryInfo_ORelationControl()
+extern "C" void createRegistryInfo_ORelationControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::ORelationController > aAutoRegistration;
 }
@@ -114,7 +114,7 @@ Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ORelationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new ORelationController(comphelper::getComponentContext(_rxFactory)));
 }

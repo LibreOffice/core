@@ -564,7 +564,7 @@ uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
     return StaticConvDicList::get();
 }
 
-void * SAL_CALL ConvDicList_getFactory(
+void * ConvDicList_getFactory(
         const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager  )
 {

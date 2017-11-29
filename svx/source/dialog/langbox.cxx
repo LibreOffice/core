@@ -110,7 +110,7 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
     return i >= 0  &&  i < nLen;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxLanguageBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
@@ -123,7 +123,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxLanguageBox(VclPtr<vcl::Win
     rRet = pLanguageBox;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxLanguageComboBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageComboBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     bool bDropdown = BuilderUtils::extractDropdown(rMap);

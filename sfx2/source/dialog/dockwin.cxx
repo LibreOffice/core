@@ -326,7 +326,7 @@ static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::
     The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot range located
     in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
-void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
+void SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nID = sal_uInt16(rDockingWindowName.toInt32());
@@ -351,7 +351,7 @@ void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rF
     a special name. The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot
     range located in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
-bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
+bool IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
 {
     SolarMutexGuard aGuard;
 

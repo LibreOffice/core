@@ -155,7 +155,7 @@ using namespace ::comphelper;
 using namespace ::svx;
 
 // SbaTableQueryBrowser
-extern "C" void SAL_CALL createRegistryInfo_OBrowser()
+extern "C" void createRegistryInfo_OBrowser()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SbaTableQueryBrowser > aAutoRegistration;
 }
@@ -201,7 +201,7 @@ css::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames_Stat
     return aSupported;
 }
 
-Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     SolarMutexGuard aGuard;
     return *(new SbaTableQueryBrowser(comphelper::getComponentContext(_rxFactory)));

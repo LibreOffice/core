@@ -78,7 +78,7 @@ namespace dbaui
     {
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeDbaIndexFieldsControl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT void makeDbaIndexFieldsControl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
     {
         rRet = VclPtr<IndexFieldsControl>::Create(pParent, WB_BORDER | WB_NOTABSTOP);
     }

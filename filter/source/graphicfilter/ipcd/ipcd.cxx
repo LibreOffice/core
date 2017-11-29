@@ -359,7 +359,7 @@ void PCDReader::ReadImage()
 
 //================== GraphicImport - the exported Function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 icdGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
     PCDReader aPCDReader(rStream);

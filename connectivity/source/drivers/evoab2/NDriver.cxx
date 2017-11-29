@@ -111,7 +111,7 @@ Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  )
 }
 
 
-css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::evoab::OEvoabDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
+css::uno::Reference< css::uno::XInterface > connectivity::evoab::OEvoabDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new OEvoabDriver(_rxFactory));
 }

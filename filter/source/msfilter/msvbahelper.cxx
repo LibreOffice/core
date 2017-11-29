@@ -509,7 +509,7 @@ OUString VBAMacroResolver_getImplementationName()
     return OUString( "com.sun.star.comp.vba.VBAMacroResolver" );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& )
+uno::Reference< uno::XInterface > VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& )
 {
     return static_cast< ::cppu::OWeakObject* >( new VBAMacroResolver );
 }

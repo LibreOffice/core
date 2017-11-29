@@ -86,8 +86,8 @@ namespace bib
         void Init( OComponentListener* _pListener );
 
     // base for ref-counting, implemented by OComponentAdapter
-        virtual void SAL_CALL acquire(  ) throw () = 0;
-        virtual void SAL_CALL release(  ) throw () = 0;
+        virtual void acquire(  ) throw () = 0;
+        virtual void release(  ) throw () = 0;
 
         /// dispose the object - stop listening and such
         void dispose();
@@ -95,7 +95,7 @@ namespace bib
     protected:
     // XEventListener
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source );
+        virtual void disposing( const  css::lang::EventObject& Source );
     };
 
     class OLoadListener : public OComponentListener

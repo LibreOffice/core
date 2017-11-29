@@ -57,7 +57,7 @@
 
 
 // !!! outside the namespace !!!
-extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController()
+extern "C" void createRegistryInfo_OPropertyBrowserController()
 {
     ::pcr::OAutoRegistration< ::pcr::OPropertyBrowserController > aAutoRegistration;
 }
@@ -570,7 +570,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL OPropertyBrowserController::Create(const Reference< XComponentContext >& _rxContext)
+    Reference< XInterface > OPropertyBrowserController::Create(const Reference< XComponentContext >& _rxContext)
     {
         return *(new OPropertyBrowserController( _rxContext ) );
     }

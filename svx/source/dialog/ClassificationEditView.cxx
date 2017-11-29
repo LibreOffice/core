@@ -17,7 +17,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeClassificationEditView(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeClassificationEditView(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<svx::ClassificationEditView>::Create(pParent, WB_BORDER|WB_TABSTOP);
 }

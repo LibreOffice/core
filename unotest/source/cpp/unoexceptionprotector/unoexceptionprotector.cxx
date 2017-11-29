@@ -75,7 +75,7 @@ bool Prot::protect(
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT CppUnit::Protector * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT CppUnit::Protector *
 unoexceptionprotector() {
     return new Prot;
 }

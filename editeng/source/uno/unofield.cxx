@@ -902,7 +902,7 @@ sal_Bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName 
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUString& ServiceSpecifier )
+uno::Reference< uno::XInterface > SvxUnoTextCreateTextField( const OUString& ServiceSpecifier )
 {
     uno::Reference< uno::XInterface > xRet;
 

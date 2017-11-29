@@ -139,7 +139,7 @@ namespace connectivity
         void clear(bool _bDispose);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info );
+        css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info );
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
         // XPropertyChangeListener

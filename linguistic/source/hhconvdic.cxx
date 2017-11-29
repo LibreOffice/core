@@ -56,7 +56,7 @@ using namespace i18n;
 
 // from i18npool/source/textconversion/textconversion_ko.cxx
 /// @throws RuntimeException
-sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
+sal_Int16 checkScriptType(sal_Unicode c)
 {
   UErrorCode status = U_ZERO_ERROR;
 

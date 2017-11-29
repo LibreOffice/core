@@ -47,7 +47,7 @@ namespace cppu
 /** Shared mutex for implementation helper initialization.
     Not for public use.
 */
-::osl::Mutex & SAL_CALL getImplHelperInitMutex()
+::osl::Mutex & getImplHelperInitMutex()
 {
     return theImplHelperInitMutex::get();
 }

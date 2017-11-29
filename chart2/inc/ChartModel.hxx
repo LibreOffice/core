@@ -187,14 +187,11 @@ private:
         impl_getCurrentController();
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
-        impl_notifyModifiedListeners();
+    void impl_notifyModifiedListeners();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
-        impl_notifyCloseListeners();
+    void impl_notifyCloseListeners();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
-        impl_notifyStorageChangeListeners();
+    void impl_notifyStorageChangeListeners();
 
     void impl_store(
         const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,

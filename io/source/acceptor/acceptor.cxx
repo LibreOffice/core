@@ -252,7 +252,7 @@ namespace io_acceptor
         return OUString( IMPLEMENTATION_NAME );
     }
 
-    Reference< XInterface > SAL_CALL acceptor_CreateInstance( const Reference< XComponentContext > & xCtx)
+    Reference< XInterface > acceptor_CreateInstance( const Reference< XComponentContext > & xCtx)
     {
         return Reference < XInterface >( static_cast<OWeakObject *>(new OAcceptor(xCtx)) );
     }

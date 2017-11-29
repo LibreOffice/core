@@ -49,7 +49,7 @@ ODatabaseMetaData::~ODatabaseMetaData()
 }
 
 
-ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
+ODatabaseMetaDataResultSet::ORows& ODatabaseMetaData::getColumnRows(
         const OUString& tableNamePattern,
         const OUString& columnNamePattern )
 {

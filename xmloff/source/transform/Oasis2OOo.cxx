@@ -1956,12 +1956,12 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 
 // Service registration
 
-OUString SAL_CALL Oasis2OOoTransformer_getImplementationName() throw()
+OUString Oasis2OOoTransformer_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Oasis2OOoTransformer" );
 }
 
-Sequence< OUString > SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames()
+Sequence< OUString > Oasis2OOoTransformer_getSupportedServiceNames()
     throw()
 {
     const OUString aServiceName( Oasis2OOoTransformer_getImplementationName() );
@@ -1969,7 +1969,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames()
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
+Reference< XInterface > Oasis2OOoTransformer_createInstance(
         const Reference< XMultiServiceFactory > &)
 {
     SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");

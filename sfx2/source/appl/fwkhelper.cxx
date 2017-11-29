@@ -29,7 +29,7 @@
 #include <workwin.hxx>
 #include <sfx2/frame.hxx>
 
-void SAL_CALL RefreshToolbars( css::uno::Reference< css::frame::XFrame > const & xFrame )
+void RefreshToolbars( css::uno::Reference< css::frame::XFrame > const & xFrame )
 {
     SolarMutexGuard aGuard;
     if ( xFrame.is() )

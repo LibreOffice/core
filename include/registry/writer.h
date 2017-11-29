@@ -62,7 +62,7 @@ extern "C" {
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void * SAL_CALL typereg_writer_create(
+REG_DLLPUBLIC void * typereg_writer_create(
     typereg_Version version, rtl_uString const * documentation,
     rtl_uString const * fileName, RTTypeClass typeClass, sal_Bool published,
     rtl_uString const * typeName, sal_uInt16 superTypeCount,
@@ -77,7 +77,7 @@ REG_DLLPUBLIC void * SAL_CALL typereg_writer_create(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C();
+REG_DLLPUBLIC void typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C();
 
 /**
    Sets the type name of a super type of a type writer.
@@ -94,7 +94,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_writer_destroy(void * handle) SAL_THROW_EXTE
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setSuperTypeName(
+REG_DLLPUBLIC sal_Bool typereg_writer_setSuperTypeName(
     void const * handle, sal_uInt16 index, rtl_uString const * typeName)
         SAL_THROW_EXTERN_C();
 
@@ -124,7 +124,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setSuperTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setFieldData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setFieldData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     rtl_uString const * fileName, RTFieldAccess flags, rtl_uString const * name,
     rtl_uString const * typeName, RTValueType valueType,
@@ -155,7 +155,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setFieldData(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setMethodData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     RTMethodMode flags, rtl_uString const * name,
     rtl_uString const * returnTypeName, sal_uInt16 parameterCount,
@@ -184,7 +184,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodData(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodParameterData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setMethodParameterData(
     void const * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
     RTParamMode flags, rtl_uString const * name, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C();
@@ -207,7 +207,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodParameterData(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodExceptionTypeName(
+REG_DLLPUBLIC sal_Bool typereg_writer_setMethodExceptionTypeName(
     void const * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
     rtl_uString const * typeName)
     SAL_THROW_EXTERN_C();
@@ -233,7 +233,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodExceptionTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setReferenceData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setReferenceData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     RTReferenceType sort, RTFieldAccess flags, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C();
@@ -250,7 +250,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setReferenceData(
    the given type writer; if an out-of-memory condition occurs, null is returned
    and <code>size</code> is not modified
  */
-REG_DLLPUBLIC void const * SAL_CALL typereg_writer_getBlob(void * handle, sal_uInt32 * size)
+REG_DLLPUBLIC void const * typereg_writer_getBlob(void * handle, sal_uInt32 * size)
     SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus

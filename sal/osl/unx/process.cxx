@@ -96,16 +96,16 @@ static oslMutex        ChildListMutex;
 
 } //Anonymous namespace
 
-oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
-                                                sal_Char *pszArguments[],
-                                                oslProcessOption Options,
-                                                oslSecurity Security,
-                                                sal_Char *pszDirectory,
-                                                sal_Char *pszEnvironments[],
-                                                oslProcess *pProcess,
-                                                oslFileHandle *pInputWrite,
-                                                oslFileHandle *pOutputRead,
-                                                oslFileHandle *pErrorRead );
+oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
+                                       sal_Char *pszArguments[],
+                                       oslProcessOption Options,
+                                       oslSecurity Security,
+                                       sal_Char *pszDirectory,
+                                       sal_Char *pszEnvironments[],
+                                       oslProcess *pProcess,
+                                       oslFileHandle *pInputWrite,
+                                       oslFileHandle *pOutputRead,
+                                       oslFileHandle *pErrorRead );
 
 extern "C" {
 
@@ -565,17 +565,17 @@ oslProcessError SAL_CALL osl_executeProcess(
         );
 }
 
-oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
-                                                sal_Char *pszArguments[],
-                                                oslProcessOption Options,
-                                                oslSecurity Security,
-                                                sal_Char *pszDirectory,
-                                                sal_Char *pszEnvironments[],
-                                                oslProcess *pProcess,
-                                                oslFileHandle   *pInputWrite,
-                                                oslFileHandle   *pOutputRead,
-                                                oslFileHandle   *pErrorRead
-                                                )
+oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
+                                       sal_Char *pszArguments[],
+                                       oslProcessOption Options,
+                                       oslSecurity Security,
+                                       sal_Char *pszDirectory,
+                                       sal_Char *pszEnvironments[],
+                                       oslProcess *pProcess,
+                                       oslFileHandle   *pInputWrite,
+                                       oslFileHandle   *pOutputRead,
+                                       oslFileHandle   *pErrorRead
+                                      )
 {
     int i;
     ProcessData Data;

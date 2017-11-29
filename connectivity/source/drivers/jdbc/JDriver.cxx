@@ -65,7 +65,7 @@ Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  )
     return aSNS;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
+css::uno::Reference< css::uno::XInterface > connectivity::java_sql_Driver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new java_sql_Driver( comphelper::getComponentContext(_rxFactory)));
 }

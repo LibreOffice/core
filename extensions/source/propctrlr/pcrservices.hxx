@@ -26,25 +26,25 @@
 
 extern "C" {
 
-void SAL_CALL createRegistryInfo_ButtonNavigationHandler();
-void SAL_CALL createRegistryInfo_CellBindingPropertyHandler();
-void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel();
-void SAL_CALL createRegistryInfo_DefaultHelpProvider();
-void SAL_CALL createRegistryInfo_EFormsPropertyHandler();
-void SAL_CALL createRegistryInfo_EditPropertyHandler();
-void SAL_CALL createRegistryInfo_EventHandler();
-void SAL_CALL createRegistryInfo_FormComponentPropertyHandler();
-void SAL_CALL createRegistryInfo_FormController();
-void SAL_CALL createRegistryInfo_FormGeometryHandler();
-void SAL_CALL createRegistryInfo_GenericPropertyHandler();
-void SAL_CALL createRegistryInfo_MasterDetailLinkDialog();
-void SAL_CALL createRegistryInfo_OControlFontDialog();
-void SAL_CALL createRegistryInfo_OPropertyBrowserController();
-void SAL_CALL createRegistryInfo_OTabOrderDialog();
-void SAL_CALL createRegistryInfo_ObjectInspectorModel();
-void SAL_CALL createRegistryInfo_StringRepresentation();
-void SAL_CALL createRegistryInfo_SubmissionPropertyHandler();
-void SAL_CALL createRegistryInfo_XSDValidationPropertyHandler();
+void createRegistryInfo_ButtonNavigationHandler();
+void createRegistryInfo_CellBindingPropertyHandler();
+void createRegistryInfo_DefaultFormComponentInspectorModel();
+void createRegistryInfo_DefaultHelpProvider();
+void createRegistryInfo_EFormsPropertyHandler();
+void createRegistryInfo_EditPropertyHandler();
+void createRegistryInfo_EventHandler();
+void createRegistryInfo_FormComponentPropertyHandler();
+void createRegistryInfo_FormController();
+void createRegistryInfo_FormGeometryHandler();
+void createRegistryInfo_GenericPropertyHandler();
+void createRegistryInfo_MasterDetailLinkDialog();
+void createRegistryInfo_OControlFontDialog();
+void createRegistryInfo_OPropertyBrowserController();
+void createRegistryInfo_OTabOrderDialog();
+void createRegistryInfo_ObjectInspectorModel();
+void createRegistryInfo_StringRepresentation();
+void createRegistryInfo_SubmissionPropertyHandler();
+void createRegistryInfo_XSDValidationPropertyHandler();
 
 }
 

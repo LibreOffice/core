@@ -43,7 +43,7 @@ namespace connectivity
     namespace mysql
     {
         /// @throws css::uno::Exception
-        css::uno::Reference< css::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxMSF);
+        css::uno::Reference< css::uno::XInterface > ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxMSF);
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
                                                ,   css::sdbcx::XDataDefinitionSupplier

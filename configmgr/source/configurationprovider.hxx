@@ -41,13 +41,13 @@ css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext >
         const & context);
 
-OUString SAL_CALL getImplementationName();
+OUString getImplementationName();
 
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
 getSupportedServiceNames();
 
 css::uno::Reference< css::lang::XSingleComponentFactory >
-SAL_CALL createFactory(
+createFactory(
     cppu::ComponentFactoryFunc, OUString const &,
     css::uno::Sequence< OUString > const &, rtl_ModuleCount *);
 

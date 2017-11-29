@@ -180,7 +180,7 @@ OUString SvtFolderPicker::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL SvtFolderPicker::impl_createInstance( const Reference< XComponentContext >&  )
+Reference< XInterface > SvtFolderPicker::impl_createInstance( const Reference< XComponentContext >&  )
 {
     return Reference< XInterface >( *new SvtFolderPicker );
 }

@@ -104,7 +104,7 @@ private:
     /** IStoreHandle query() template specialization.
      */
     friend OStoreLockBytes*
-    SAL_CALL query<> (OStoreObject *pHandle, OStoreLockBytes*);
+    query<> (OStoreObject *pHandle, OStoreLockBytes*);
 
     /** Representation.
      */
@@ -123,7 +123,7 @@ private:
 };
 
 template<> inline OStoreLockBytes*
-SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStoreLockBytes*)
+query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStoreLockBytes*)
 {
     if (pHandle && pHandle->isKindOf (OStoreLockBytes::m_nTypeId))
     {

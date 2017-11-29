@@ -96,7 +96,7 @@ Prot::~Prot()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT CppUnit::Protector * SAL_CALL unobootstrapprotector()
+extern "C" SAL_DLLPUBLIC_EXPORT CppUnit::Protector * unobootstrapprotector()
 {
     return new Prot;
 }

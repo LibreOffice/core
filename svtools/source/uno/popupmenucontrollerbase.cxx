@@ -174,7 +174,7 @@ void SAL_CALL PopupMenuControllerBase::updatePopupMenu()
     updateCommand( m_aCommandURL );
 }
 
-void SAL_CALL PopupMenuControllerBase::updateCommand( const OUString& rCommandURL )
+void PopupMenuControllerBase::updateCommand( const OUString& rCommandURL )
 {
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );

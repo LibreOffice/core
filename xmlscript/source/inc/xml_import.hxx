@@ -46,7 +46,7 @@ namespace xmlscript
             document handler for parser
 */
 css::uno::Reference< css::xml::sax::XDocumentHandler >
-SAL_CALL createDocumentHandler(
+createDocumentHandler(
     css::uno::Reference<
     css::xml::input::XRoot > const & xRoot );
 

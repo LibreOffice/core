@@ -46,14 +46,14 @@ OUString SVGDialog_getImplementationName ()
 }
 
 
-Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
+Sequence< OUString > SVGDialog_getSupportedServiceNames()
 {
     Sequence< OUString > aRet { SVG_DIALOG_SERVICE_NAME };
     return aRet;
 }
 
 
-Reference< XInterface > SAL_CALL SVGDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr )
+Reference< XInterface > SVGDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr )
 {
     return static_cast< cppu::OWeakObject* >( new SVGDialog( comphelper::getComponentContext(rSMgr) ) );
 }

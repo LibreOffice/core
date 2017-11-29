@@ -131,7 +131,7 @@ public:
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_static();
     static css::uno::Reference< css::uno::XInterface >
-        SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
+        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;

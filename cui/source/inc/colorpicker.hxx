@@ -36,13 +36,13 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace cui {
 
-OUString SAL_CALL ColorPicker_getImplementationName();
+OUString ColorPicker_getImplementationName();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL ColorPicker_createInstance(
+css::uno::Reference<css::uno::XInterface> ColorPicker_createInstance(
     css::uno::Reference<css::uno::XComponentContext> const &);
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence<OUString> SAL_CALL ColorPicker_getSupportedServiceNames();
+css::uno::Sequence<OUString> ColorPicker_getSupportedServiceNames();
 }
 
 #endif

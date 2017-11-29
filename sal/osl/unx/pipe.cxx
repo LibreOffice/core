@@ -39,7 +39,7 @@
 #define PIPENAMEMASK        "OSL_PIPE_%s"
 #define SECPIPENAMEMASK     "OSL_PIPE_%s_%s"
 
-oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
+oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
 static struct
 {
@@ -158,8 +158,8 @@ cpyBootstrapSocketPath(sal_Char *name, size_t len)
     return bRet;
 }
 
-oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
-                                    oslSecurity Security)
+oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
+                           oslSecurity Security)
 {
     int Flags;
     size_t len;

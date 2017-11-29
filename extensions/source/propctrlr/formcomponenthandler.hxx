@@ -104,9 +104,9 @@ namespace pcr
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         /// @throws css::uno::RuntimeException
-        static OUString SAL_CALL getImplementationName_static(  );
+        static OUString getImplementationName_static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
 
     protected:
         virtual ~FormComponentPropertyHandler() override;

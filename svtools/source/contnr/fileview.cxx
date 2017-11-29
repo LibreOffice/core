@@ -985,7 +985,7 @@ void SvtFileView::dispose()
     Control::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvtFileView(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSvtFileView(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

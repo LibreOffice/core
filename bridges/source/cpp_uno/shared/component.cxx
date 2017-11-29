@@ -42,7 +42,7 @@ namespace {
 static OUString * s_pStaticOidPart = nullptr;
 #endif
 
-const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart()
+const OUString & cppu_cppenv_getStaticOIdPart()
 {
 #if ! (defined(__GNUC__) && defined(__APPLE__))
     static OUString * s_pStaticOidPart = nullptr;
@@ -169,7 +169,7 @@ static void SAL_CALL environmentDisposing(
 #define uno_initEnvironment CPPU_ENV_uno_initEnvironment
 #endif
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
+SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment * pCppEnv)
     SAL_THROW_EXTERN_C()
 {
     assert(pCppEnv->pExtEnv);
@@ -189,7 +189,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv
 #define uno_ext_getMapping CPPU_ENV_uno_ext_getMapping
 #endif
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo)
     SAL_THROW_EXTERN_C()
 {

@@ -40,7 +40,7 @@ class SvxFieldData;
 
 /// @throws css::uno::Exception
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SAL_CALL SvxUnoTextCreateTextField(
+css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
     const OUString& ServiceSpecifier );
 
 class EDITENG_DLLPUBLIC SvxUnoTextField final : public SvxMutexHelper,

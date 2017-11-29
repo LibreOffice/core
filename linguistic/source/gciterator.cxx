@@ -1129,7 +1129,7 @@ static uno::Reference< uno::XInterface > SAL_CALL GrammarCheckingIterator_create
 }
 
 
-void * SAL_CALL GrammarCheckingIterator_getFactory(
+void * GrammarCheckingIterator_getFactory(
     const sal_Char *pImplName,
     lang::XMultiServiceFactory *pServiceManager )
 {

@@ -47,14 +47,14 @@ OUString SWFDialog_getImplementationName ()
 }
 
 
-Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
+Sequence< OUString > SWFDialog_getSupportedServiceNames()
 {
     Sequence<OUString> aRet { SERVICE_NAME };
     return aRet;
 }
 
 
-Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SWFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SWFDialog( comphelper::getComponentContext(rSMgr) ));
 }

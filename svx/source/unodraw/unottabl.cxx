@@ -79,7 +79,7 @@ uno::Type SAL_CALL SvxUnoTransGradientTable::getElementType(  )
 /**
  * Create a hatchtable
  */
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoTransGradientTable_createInstance( SdrModel* pModel )
+uno::Reference< uno::XInterface > SvxUnoTransGradientTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoTransGradientTable(pModel);
 }

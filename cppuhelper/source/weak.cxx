@@ -76,7 +76,7 @@ public:
     /// Called from the weak object if the reference count goes to zero.
     ///
     /// @throws css::uno::RuntimeException
-    void SAL_CALL dispose();
+    void dispose();
 
 private:
     virtual ~OWeakConnectionPoint() {}
@@ -109,7 +109,7 @@ void SAL_CALL OWeakConnectionPoint::release() throw()
         delete this;
 }
 
-void SAL_CALL OWeakConnectionPoint::dispose()
+void OWeakConnectionPoint::dispose()
 {
     std::vector<Reference<XReference>> aCopy;
     { // only hold the mutex while we access the field

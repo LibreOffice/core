@@ -486,13 +486,13 @@ OUString FlashExportFilter_getImplementationName ()
     return OUString ( "com.sun.star.comp.Impress.FlashExportFilter" );
 }
 
-Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  )
+Sequence< OUString > FlashExportFilter_getSupportedServiceNames(  )
 {
     Sequence<OUString> aRet { "com.sun.star.document.ExportFilter" };
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL FlashExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > FlashExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new FlashExportFilter( comphelper::getComponentContext(rSMgr) ));
 }

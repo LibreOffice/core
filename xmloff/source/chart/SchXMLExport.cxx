@@ -3673,34 +3673,34 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
 
 // first version: everything goes in one storage
 
-Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw()
+Sequence< OUString > SchXMLExport_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLExporter" };
 }
 
-OUString SAL_CALL SchXMLExport_getImplementationName() throw()
+OUString SchXMLExport_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Compact"  );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
+Reference< uno::XInterface > SchXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     // #103997# removed some flags from EXPORT_ALL
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_getImplementationName(), SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::SCRIPTS )));
 }
 
 // Oasis format
-Sequence< OUString > SAL_CALL SchXMLExport_Oasis_getSupportedServiceNames() throw()
+Sequence< OUString > SchXMLExport_Oasis_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisExporter" };
 }
 
-OUString SAL_CALL SchXMLExport_Oasis_getImplementationName() throw()
+OUString SchXMLExport_Oasis_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Oasis.Compact"  );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
+Reference< uno::XInterface > SchXMLExport_Oasis_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     // #103997# removed some flags from EXPORT_ALL
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr),
@@ -3710,80 +3710,80 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_createInstance(const Re
 
 // multiple storage version: one for content / styles / meta
 
-Sequence< OUString > SAL_CALL SchXMLExport_Styles_getSupportedServiceNames() throw()
+Sequence< OUString > SchXMLExport_Styles_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLStylesExporter" };
 }
 
-OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
+OUString SchXMLExport_Styles_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Styles" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr)
+Reference< uno::XInterface > SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Styles_getImplementationName(), SvXMLExportFlags::STYLES ));
 }
 
 // Oasis format
-Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw()
+Sequence< OUString > SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisStylesExporter" };
 }
 
-OUString SAL_CALL SchXMLExport_Oasis_Styles_getImplementationName() throw()
+OUString SchXMLExport_Oasis_Styles_getImplementationName() throw()
 {
     return OUString( "SchXMLExport.Oasis.Styles" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
+Reference< uno::XInterface > SchXMLExport_Oasis_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Styles_getImplementationName(), SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS ));
 }
 
-Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw()
+Sequence< OUString > SchXMLExport_Content_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLContentExporter" };
 }
 
-OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
+OUString SchXMLExport_Content_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Content" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
+Reference< uno::XInterface > SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS ));
 }
 
 // Oasis format
-Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Content_getSupportedServiceNames() throw()
+Sequence< OUString > SchXMLExport_Oasis_Content_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisContentExporter" };
 }
 
-OUString SAL_CALL SchXMLExport_Oasis_Content_getImplementationName() throw()
+OUString SchXMLExport_Oasis_Content_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Oasis.Content" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
+Reference< uno::XInterface > SchXMLExport_Oasis_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS ));
 }
 
 // Oasis format
-Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
+Sequence< OUString > SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisMetaExporter" };
 }
 
-OUString SAL_CALL SchXMLExport_Oasis_Meta_getImplementationName() throw()
+OUString SchXMLExport_Oasis_Meta_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Oasis.Meta" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
+Reference< uno::XInterface > SchXMLExport_Oasis_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Meta_getImplementationName(), SvXMLExportFlags::META | SvXMLExportFlags::OASIS  ));
 }

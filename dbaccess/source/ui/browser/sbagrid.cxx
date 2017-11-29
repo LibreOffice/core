@@ -105,7 +105,7 @@ using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::svt;
 
-extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
+extern "C" void createRegistryInfo_SbaXGridControl()
 {
     static OMultiInstanceAutoRegistration< SbaXGridControl > aAutoRegistration;
 }
@@ -115,7 +115,7 @@ css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames(
     return getSupportedServiceNames_Static();
 }
 
-Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SbaXGridControl::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new SbaXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }

@@ -201,7 +201,7 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 }
 
 
-OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName() {
+OUString LdapUserProfileBe::getLdapUserProfileBeName() {
     return OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
 }
 
@@ -212,7 +212,7 @@ OUString SAL_CALL LdapUserProfileBe::getImplementationName()
 }
 
 
-uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames()
+uno::Sequence<OUString> LdapUserProfileBe::getLdapUserProfileBeServiceNames()
 {
     uno::Sequence<OUString> aServices { "com.sun.star.configuration.backend.LdapUserProfileBe" };
     return aServices ;

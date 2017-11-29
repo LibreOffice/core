@@ -202,7 +202,7 @@ namespace dbaccess
             @return
                 <TRUE/> if movement was successful.
         */
-        bool SAL_CALL move( std::mem_fun_t<bool,ORowSetBase> const & _aCheckFunctor,
+        bool move( std::mem_fun_t<bool,ORowSetBase> const & _aCheckFunctor,
                             std::mem_fun_t<bool,ORowSetCache> const & _aMovementFunctor);
 
         /** same meaning as isFirst. Only need by mem_fun
@@ -235,7 +235,7 @@ namespace dbaccess
         virtual ~ORowSetBase() override;
 
     // OComponentHelper
-        virtual void SAL_CALL disposing();
+        virtual void disposing();
 
     // css::beans::XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override

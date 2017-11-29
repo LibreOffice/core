@@ -122,12 +122,12 @@ void BSeqOutputStream::closeOutput()
 {
 }
 
-Reference< io::XInputStream > SAL_CALL createInputStream( std::vector<sal_Int8> const & rInData )
+Reference< io::XInputStream > createInputStream( std::vector<sal_Int8> const & rInData )
 {
     return new BSeqInputStream( rInData );
 }
 
-Reference< io::XInputStream > SAL_CALL createInputStream( const sal_Int8* pData, int len )
+Reference< io::XInputStream > createInputStream( const sal_Int8* pData, int len )
 {
     std::vector<sal_Int8> rInData(len);
     if (len != 0) {
@@ -136,7 +136,7 @@ Reference< io::XInputStream > SAL_CALL createInputStream( const sal_Int8* pData,
     return new BSeqInputStream( rInData );
 }
 
-Reference< io::XOutputStream > SAL_CALL createOutputStream( std::vector<sal_Int8> * pOutData )
+Reference< io::XOutputStream > createOutputStream( std::vector<sal_Int8> * pOutData )
 {
     return new BSeqOutputStream( pOutData );
 }

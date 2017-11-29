@@ -320,20 +320,20 @@ void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< c
 // XServiceInfo
 
 
-OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
+OUString ExtrusionDirectionControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionDirectionController" );
 }
 
 
-Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames()
+Sequence< OUString > ExtrusionDirectionControl_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstance(
+Reference< XInterface > ExtrusionDirectionControl_createInstance(
     const Reference< XMultiServiceFactory >& rSMgr
 )
 {
@@ -573,20 +573,20 @@ void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< cs
 // XServiceInfo
 
 
-OUString SAL_CALL ExtrusionDepthController_getImplementationName()
+OUString ExtrusionDepthController_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionDepthController" );
 }
 
 
-Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames()
+Sequence< OUString > ExtrusionDepthController_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
+Reference< XInterface > ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     return *new ExtrusionDepthController( comphelper::getComponentContext(rSMgr) );
 }
@@ -833,20 +833,20 @@ void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< cs
 // XServiceInfo
 
 
-OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
+OUString ExtrusionLightingControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionLightingController" );
 }
 
 
-Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames()
+Sequence< OUString > ExtrusionLightingControl_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstance(
+Reference< XInterface > ExtrusionLightingControl_createInstance(
     const Reference< XMultiServiceFactory >& rSMgr
 )
 {
@@ -968,20 +968,20 @@ void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< css
 // XServiceInfo
 
 
-OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
+OUString ExtrusionSurfaceControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionSurfaceController" );
 }
 
 
-Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames()
+Sequence< OUString > ExtrusionSurfaceControl_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance(
+Reference< XInterface > ExtrusionSurfaceControl_createInstance(
     const Reference< XMultiServiceFactory >& rSMgr
 )
 {

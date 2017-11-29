@@ -235,15 +235,15 @@ SvXMLImportContextRef SdXMLFlatDocContext_Impl::CreateChildContext(
 }
 
 #define SERVICE(classname,servicename,implementationname,draw,flags)\
-uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
+uno::Sequence< OUString > classname##_getSupportedServiceNames() throw()\
 {\
     return uno::Sequence< OUString > { servicename };\
 }\
-OUString SAL_CALL classname##_getImplementationName() throw()\
+OUString classname##_getImplementationName() throw()\
 {\
     return OUString( implementationname );\
 }\
-uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr)\
+uno::Reference< uno::XInterface > classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr)\
 {\
     return static_cast<cppu::OWeakObject*>(new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags )); \
 }

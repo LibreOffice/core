@@ -67,9 +67,9 @@ public:
 /// @throws RuntimeException
 OUString PDFDialog_getImplementationName ();
 /// @throws RuntimeException
-Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames();
+Sequence< OUString > PDFDialog_getSupportedServiceNames();
 /// @throws Exception
-Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
+Reference< XInterface > PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
 
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 

@@ -35,28 +35,28 @@ CRC32::CRC32()
 CRC32::~CRC32()
 {
 }
-void SAL_CALL CRC32::reset()
+void CRC32::reset()
 {
     nCRC=0;
 }
-sal_Int32 SAL_CALL CRC32::getValue()
+sal_Int32 CRC32::getValue()
 {
     return nCRC & 0xFFFFFFFFL;
 }
 /** Update CRC32 with specified sequence of bytes
  */
-void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b, sal_Int32 len)
+void CRC32::updateSegment(const Sequence< sal_Int8 > &b, sal_Int32 len)
 {
     nCRC = rtl_crc32(nCRC, b.getConstArray(), len );
 }
 /** Update CRC32 with specified sequence of bytes
  */
-void SAL_CALL CRC32::update(const Sequence< sal_Int8 > &b)
+void CRC32::update(const Sequence< sal_Int8 > &b)
 {
     nCRC = rtl_crc32(nCRC, b.getConstArray(),b.getLength());
 }
 
-sal_Int64 SAL_CALL CRC32::updateStream( Reference < XInputStream > const & xStream )
+sal_Int64 CRC32::updateStream( Reference < XInputStream > const & xStream )
 {
     sal_Int32 nLength;
     sal_Int64 nTotal = 0;

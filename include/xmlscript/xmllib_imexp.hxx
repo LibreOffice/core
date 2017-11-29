@@ -59,23 +59,23 @@ struct XMLSCRIPT_DLLPUBLIC LibDescriptorArray
 };
 
 XMLSCRIPT_DLLPUBLIC void
-SAL_CALL exportLibraryContainer(
+exportLibraryContainer(
     css::uno::Reference< css::xml::sax::XWriter > const & xOut,
     const LibDescriptorArray* pLibArray );
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference<
     css::xml::sax::XDocumentHandler >
-SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray );
+importLibraryContainer( LibDescriptorArray* pLibArray );
 
 
 XMLSCRIPT_DLLPUBLIC void
-SAL_CALL exportLibrary(
+exportLibrary(
     css::uno::Reference< css::xml::sax::XWriter > const & xOut,
     const LibDescriptor& rLib );
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference<
     css::xml::sax::XDocumentHandler >
-SAL_CALL importLibrary( LibDescriptor& rLib );
+importLibrary( LibDescriptor& rLib );
 
 }
 

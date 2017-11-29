@@ -120,8 +120,8 @@ public:
     SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const vcl::Window& rWindow );
     virtual ~SvxTextEditSourceImpl() override;
 
-    void SAL_CALL acquire();
-    void SAL_CALL release();
+    void acquire();
+    void release();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -251,13 +251,13 @@ void SvxTextEditSourceImpl::removeRange( SvxUnoTextRangeBase* pOldRange )
 }
 
 
-void SAL_CALL SvxTextEditSourceImpl::acquire()
+void SvxTextEditSourceImpl::acquire()
 {
     osl_atomic_increment( &maRefCount );
 }
 
 
-void SAL_CALL SvxTextEditSourceImpl::release()
+void SvxTextEditSourceImpl::release()
 {
     if( ! osl_atomic_decrement( &maRefCount ) )
         delete this;

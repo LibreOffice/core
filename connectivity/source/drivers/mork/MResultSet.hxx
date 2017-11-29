@@ -279,7 +279,7 @@ public:
             // MozAddressbook Specific methods
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void SAL_CALL executeQuery();
+            void executeQuery();
 
             void setTable(OTable* _rTable);
 

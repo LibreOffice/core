@@ -81,8 +81,8 @@ public:
     virtual             ~ContextHandler2Helper();
 
     // allow instances to be stored in ::rtl::Reference
-    virtual void SAL_CALL acquire() throw() = 0;
-    virtual void SAL_CALL release() throw() = 0;
+    virtual void acquire() throw() = 0;
+    virtual void release() throw() = 0;
 
     // interface --------------------------------------------------------------
 

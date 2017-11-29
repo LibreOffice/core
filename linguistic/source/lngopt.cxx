@@ -449,7 +449,7 @@ Locale LinguProps::getPropertyLocale(const OUString& aPropertyName)
    return b;
 }
 
-void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
+void * LinguProps_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory *pServiceManager )
 {
     void * pRet = nullptr;

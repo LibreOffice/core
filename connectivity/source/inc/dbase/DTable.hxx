@@ -133,7 +133,7 @@ namespace connectivity
             /// @throws css::sdbc::SQLException
             /// @throws css::container::ElementExistException
             /// @throws css::uno::RuntimeException
-            void SAL_CALL renameImpl( const OUString& newName );
+            void renameImpl( const OUString& newName );
             void throwInvalidColumnType(const char* pErrorId, const OUString& _sColumnName);
 
         protected:

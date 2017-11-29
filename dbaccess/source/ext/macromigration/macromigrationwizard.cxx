@@ -40,7 +40,7 @@ namespace dbmm
         }
     }
 
-    Reference< XInterface > SAL_CALL MacroMigrationDialogService::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > MacroMigrationDialogService::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *(new MacroMigrationDialogService( _rxContext ) );
     }
@@ -55,12 +55,12 @@ namespace dbmm
         return css::uno::Sequence<sal_Int8>();
     }
 
-    OUString SAL_CALL MacroMigrationDialogService::getImplementationName_static()
+    OUString MacroMigrationDialogService::getImplementationName_static()
     {
         return OUString( "com.sun.star.comp.dbaccess.macromigration.MacroMigrationDialogService" );
     }
 
-    Sequence< OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames_static()
+    Sequence< OUString > MacroMigrationDialogService::getSupportedServiceNames_static()
     {
         Sequence< OUString > aServices { "com.sun.star.sdb.application.MacroMigrationWizard" };
         return aServices;

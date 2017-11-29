@@ -298,7 +298,7 @@ void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
     Application::PostUserEvent( LINK( nullptr, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
 }
 
-oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(SAL_UNUSED_PARAMETER void* /*pData*/, oslSignalInfo* pInfo)
+oslSignalAction SalMainPipeExchangeSignal_impl(SAL_UNUSED_PARAMETER void* /*pData*/, oslSignalInfo* pInfo)
 {
     if( pInfo->Signal == osl_Signal_Terminate )
         RequestHandler::SetDowning();

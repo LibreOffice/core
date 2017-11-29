@@ -150,7 +150,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
 }
 
 // OComponentHelper
-void SAL_CALL ORowSetBase::disposing()
+void ORowSetBase::disposing()
 {
     MutexGuard aGuard(*m_pMutex);
 
@@ -776,7 +776,7 @@ void SAL_CALL ORowSetBase::afterLast(  )
     SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
 }
 
-bool SAL_CALL ORowSetBase::move(    std::mem_fun_t<bool,ORowSetBase> const & _aCheckFunctor,
+bool ORowSetBase::move(    std::mem_fun_t<bool,ORowSetBase> const & _aCheckFunctor,
                                     std::mem_fun_t<bool,ORowSetCache> const & _aMovementFunctor)
 {
     SAL_INFO("dbaccess", "ORowSetBase::move() Clone = " << m_bClone);

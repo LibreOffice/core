@@ -115,10 +115,10 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void SAL_CALL checkColumnIndex( sal_Int32 index );
+            void checkColumnIndex( sal_Int32 index );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void SAL_CALL checkRowIndex();
+            void checkRowIndex();
 
             // you can't delete objects of this type
             virtual ~OResultSet() override;

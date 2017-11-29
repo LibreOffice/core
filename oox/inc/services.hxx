@@ -24,52 +24,52 @@
 
 namespace oox {
     namespace core {
-        extern OUString SAL_CALL FastTokenHandler_getImplementationName();
-        extern css::uno::Sequence< OUString > SAL_CALL FastTokenHandler_getSupportedServiceNames();
+        extern OUString FastTokenHandler_getImplementationName();
+        extern css::uno::Sequence< OUString > FastTokenHandler_getSupportedServiceNames();
         /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > SAL_CALL FastTokenHandler_createInstance(
+        extern css::uno::Reference< css::uno::XInterface > FastTokenHandler_createInstance(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     }
     namespace core {
-        extern OUString SAL_CALL FilterDetect_getImplementationName();
-        extern css::uno::Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames();
+        extern OUString FilterDetect_getImplementationName();
+        extern css::uno::Sequence< OUString > FilterDetect_getSupportedServiceNames();
         /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > SAL_CALL FilterDetect_createInstance(
+        extern css::uno::Reference< css::uno::XInterface > FilterDetect_createInstance(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     }
     namespace docprop {
-        extern OUString SAL_CALL DocumentPropertiesImport_getImplementationName();
-        extern css::uno::Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames();
+        extern OUString DocumentPropertiesImport_getImplementationName();
+        extern css::uno::Sequence< OUString > DocumentPropertiesImport_getSupportedServiceNames();
         /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > SAL_CALL DocumentPropertiesImport_createInstance(
+        extern css::uno::Reference< css::uno::XInterface > DocumentPropertiesImport_createInstance(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     }
     namespace ppt {
-        extern OUString SAL_CALL PowerPointImport_getImplementationName();
-        extern css::uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames();
+        extern OUString PowerPointImport_getImplementationName();
+        extern css::uno::Sequence< OUString > PowerPointImport_getSupportedServiceNames();
         /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > SAL_CALL PowerPointImport_createInstance(
+        extern css::uno::Reference< css::uno::XInterface > PowerPointImport_createInstance(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     }
     namespace ppt {
-        extern OUString SAL_CALL QuickDiagrammingImport_getImplementationName();
-        extern css::uno::Sequence< OUString > SAL_CALL QuickDiagrammingImport_getSupportedServiceNames();
+        extern OUString QuickDiagrammingImport_getImplementationName();
+        extern css::uno::Sequence< OUString > QuickDiagrammingImport_getSupportedServiceNames();
         /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > SAL_CALL QuickDiagrammingImport_createInstance(
+        extern css::uno::Reference< css::uno::XInterface > QuickDiagrammingImport_createInstance(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     }
     namespace ppt {
-        extern OUString SAL_CALL QuickDiagrammingLayout_getImplementationName();
-        extern css::uno::Sequence< OUString > SAL_CALL QuickDiagrammingLayout_getSupportedServiceNames();
+        extern OUString QuickDiagrammingLayout_getImplementationName();
+        extern css::uno::Sequence< OUString > QuickDiagrammingLayout_getSupportedServiceNames();
         /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > SAL_CALL QuickDiagrammingLayout_createInstance(
+        extern css::uno::Reference< css::uno::XInterface > QuickDiagrammingLayout_createInstance(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     }
     namespace shape {
-        extern OUString SAL_CALL ShapeContextHandler_getImplementationName();
-        extern css::uno::Sequence< OUString > SAL_CALL ShapeContextHandler_getSupportedServiceNames();
+        extern OUString ShapeContextHandler_getImplementationName();
+        extern css::uno::Sequence< OUString > ShapeContextHandler_getSupportedServiceNames();
         /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > SAL_CALL ShapeContextHandler_createInstance(
+        extern css::uno::Reference< css::uno::XInterface > ShapeContextHandler_createInstance(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     }
 }

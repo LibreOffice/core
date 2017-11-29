@@ -937,7 +937,7 @@ SvxShapePolyPolygon::~SvxShapePolyPolygon() throw()
 {
 }
 
-basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( const drawing::PointSequenceSequence* pOuterSequence) throw()
+basegfx::B2DPolyPolygon ImplSvxPointSequenceSequenceToB2DPolyPolygon( const drawing::PointSequenceSequence* pOuterSequence) throw()
 {
     basegfx::B2DPolyPolygon aRetval;
 
@@ -1033,7 +1033,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     throw lang::IllegalArgumentException();
 }
 
-void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
+void B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
 {
     if( (sal_uInt32)rRetval.getLength() != rPolyPoly.count() )
         rRetval.realloc( rPolyPoly.count() );

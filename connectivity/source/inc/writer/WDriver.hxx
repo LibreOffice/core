@@ -29,7 +29,7 @@ namespace connectivity
 namespace writer
 {
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
 ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
 class ODriver : public file::OFileDriver

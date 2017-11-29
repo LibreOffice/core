@@ -35,12 +35,12 @@ namespace com { namespace sun { namespace star {
 
 namespace emfio { namespace emfreader {
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
 XEmfParser_createInstance( css::uno::Reference< css::uno::XComponentContext > const &);
 
-OUString SAL_CALL XEmfParser_getImplementationName();
+OUString XEmfParser_getImplementationName();
 
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
 XEmfParser_getSupportedServiceNames();
 
 } }

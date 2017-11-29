@@ -390,7 +390,7 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 ipxGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PCXReader aPCXReader(rStream);

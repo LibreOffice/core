@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 // TODO: do not create OLE objects that represent OOo documents
 
 
-uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.OLEEmbeddedObjectFactory";
@@ -44,13 +44,13 @@ uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSuppo
 }
 
 
-OUString SAL_CALL OleEmbeddedObjectFactory::impl_staticGetImplementationName()
+OUString OleEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OleEmbeddedObjectFactory( xServiceManager ) );

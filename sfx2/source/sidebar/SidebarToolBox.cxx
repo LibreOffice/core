@@ -323,14 +323,14 @@ public:
     }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSidebarToolBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSidebarToolBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     VclPtrInstance<SidebarToolBox> pBox(pParent);
     pBox->InitToolBox(rMap);
     rRet = pBox;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeNotebookbarToolBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeNotebookbarToolBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     VclPtrInstance<NotebookbarToolBox> pBox(pParent);
     pBox->InitToolBox(rMap);

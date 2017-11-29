@@ -1890,7 +1890,7 @@ void SAL_CALL OOo2OasisTransformer::startDocument()
     XMLTransformerBase::startDocument();
 }
 
-void SAL_CALL OOo2OasisTransformer::Initialize(
+void OOo2OasisTransformer::Initialize(
                 const Sequence< Any >& rArguments )
 {
     OSL_ENSURE( !GetDocHandler().is(), "duplication initialization" );
@@ -1985,38 +1985,38 @@ Sequence< css::uno::Type > SAL_CALL
 
 // Service registration
 
-OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw()
+OUString OOo2OasisTransformer_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.OOo2OasisTransformer" );
 }
 
-Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() throw()
+Sequence< OUString > OOo2OasisTransformer_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( OOo2OasisTransformer_getImplementationName() );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
+Reference< XInterface > OOo2OasisTransformer_createInstance(
         const Reference< XMultiServiceFactory > & )
 {
     return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer());
 }
 
 #define OOO_IMPORTER( className, implName, subServiceName )             \
-OUString SAL_CALL className##_getImplementationName() throw()           \
+OUString className##_getImplementationName() throw()           \
 {                                                                       \
     return OUString( implName );         \
 }                                                                       \
                                                                         \
-Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw()\
+Sequence< OUString > className##_getSupportedServiceNames() throw()\
 {                                                                       \
     const OUString aServiceName( className##_getImplementationName() ); \
     const Sequence< OUString > aSeq( &aServiceName, 1 );                \
     return aSeq;                                                        \
 }                                                                       \
                                                                         \
-Reference< XInterface > SAL_CALL className##_createInstance(            \
+Reference< XInterface > className##_createInstance(            \
         const Reference< XMultiServiceFactory > & )                     \
 {                                                                       \
     return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer( implName,      \

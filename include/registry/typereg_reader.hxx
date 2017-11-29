@@ -56,7 +56,7 @@
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC bool SAL_CALL typereg_reader_create(
+REG_DLLPUBLIC bool typereg_reader_create(
     void const * buffer, sal_uInt32 length, bool copy,
     typereg_Version maxVersion, void ** result);
 
@@ -67,7 +67,7 @@ REG_DLLPUBLIC bool SAL_CALL typereg_reader_create(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_acquire(void * handle);
+REG_DLLPUBLIC void typereg_reader_acquire(void * handle);
 
 /**
    Decrements the reference count of a type reader.
@@ -78,7 +78,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_acquire(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_release(void * handle);
+REG_DLLPUBLIC void typereg_reader_release(void * handle);
 
 /**
    Returns the binary blob version of a type reader.
@@ -91,7 +91,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_release(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC typereg_Version SAL_CALL typereg_reader_getVersion(void const * handle);
+REG_DLLPUBLIC typereg_Version typereg_reader_getVersion(void const * handle);
 
 /**
    Returns the documentation of a type reader.
@@ -104,7 +104,7 @@ REG_DLLPUBLIC typereg_Version SAL_CALL typereg_reader_getVersion(void const * ha
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getDocumentation(
+REG_DLLPUBLIC void typereg_reader_getDocumentation(
     void * handle, rtl_uString ** result);
 
 /**
@@ -119,7 +119,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getDocumentation(
    @since UDK 3.2.0
    @deprecated
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result);
+REG_DLLPUBLIC void typereg_reader_getFileName(void * handle, rtl_uString ** result);
 
 /**
    Returns the type class of a type reader.
@@ -136,7 +136,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uStrin
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle);
+REG_DLLPUBLIC RTTypeClass typereg_reader_getTypeClass(void * handle);
 
 /**
    Returns whether a type reader is published.
@@ -148,7 +148,7 @@ REG_DLLPUBLIC RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC bool SAL_CALL typereg_reader_isPublished(void * handle);
+REG_DLLPUBLIC bool typereg_reader_isPublished(void * handle);
 
 /**
    Returns the type name of a type reader.
@@ -161,7 +161,7 @@ REG_DLLPUBLIC bool SAL_CALL typereg_reader_isPublished(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getTypeName(void * handle, rtl_uString ** result);
+REG_DLLPUBLIC void typereg_reader_getTypeName(void * handle, rtl_uString ** result);
 
 /**
    Returns the number of super types of a type reader.
@@ -173,7 +173,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getTypeName(void * handle, rtl_uStrin
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getSuperTypeCount(void * handle);
+REG_DLLPUBLIC sal_uInt16 typereg_reader_getSuperTypeCount(void * handle);
 
 /**
    Returns the type name of a super type of a type reader.
@@ -189,7 +189,7 @@ REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getSuperTypeCount(void * handle
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getSuperTypeName(
+REG_DLLPUBLIC void typereg_reader_getSuperTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -202,7 +202,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getSuperTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getFieldCount(void * handle);
+REG_DLLPUBLIC sal_uInt16 typereg_reader_getFieldCount(void * handle);
 
 /**
    Returns the documentation of a field of a type reader.
@@ -217,7 +217,7 @@ REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getFieldCount(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldDocumentation(
+REG_DLLPUBLIC void typereg_reader_getFieldDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -234,7 +234,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldDocumentation(
    @since UDK 3.2.0
    @deprecated
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldFileName(
+REG_DLLPUBLIC void typereg_reader_getFieldFileName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -248,7 +248,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldFileName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC RTFieldAccess SAL_CALL typereg_reader_getFieldFlags(
+REG_DLLPUBLIC RTFieldAccess typereg_reader_getFieldFlags(
     void * handle, sal_uInt16 index);
 
 /**
@@ -264,7 +264,7 @@ REG_DLLPUBLIC RTFieldAccess SAL_CALL typereg_reader_getFieldFlags(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldName(
+REG_DLLPUBLIC void typereg_reader_getFieldName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -280,7 +280,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldTypeName(
+REG_DLLPUBLIC void typereg_reader_getFieldTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -301,7 +301,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC bool SAL_CALL typereg_reader_getFieldValue(
+REG_DLLPUBLIC bool typereg_reader_getFieldValue(
     void * handle, sal_uInt16 index, RTValueType * type,
     union RTConstValueUnion * value);
 
@@ -315,7 +315,7 @@ REG_DLLPUBLIC bool SAL_CALL typereg_reader_getFieldValue(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodCount(void * handle);
+REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodCount(void * handle);
 
 /**
    Returns the documentation of a method of a type reader.
@@ -330,7 +330,7 @@ REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodCount(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodDocumentation(
+REG_DLLPUBLIC void typereg_reader_getMethodDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -344,7 +344,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodDocumentation(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC RTMethodMode SAL_CALL typereg_reader_getMethodFlags(
+REG_DLLPUBLIC RTMethodMode typereg_reader_getMethodFlags(
     void * handle, sal_uInt16 index);
 
 /**
@@ -360,7 +360,7 @@ REG_DLLPUBLIC RTMethodMode SAL_CALL typereg_reader_getMethodFlags(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodName(
+REG_DLLPUBLIC void typereg_reader_getMethodName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -376,7 +376,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodReturnTypeName(
+REG_DLLPUBLIC void typereg_reader_getMethodReturnTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -390,7 +390,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodReturnTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodParameterCount(
+REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodParameterCount(
     void * handle, sal_uInt16 index);
 
 /**
@@ -409,7 +409,7 @@ REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodParameterCount(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC RTParamMode SAL_CALL typereg_reader_getMethodParameterFlags(
+REG_DLLPUBLIC RTParamMode typereg_reader_getMethodParameterFlags(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex);
 
 /**
@@ -429,7 +429,7 @@ REG_DLLPUBLIC RTParamMode SAL_CALL typereg_reader_getMethodParameterFlags(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodParameterName(
+REG_DLLPUBLIC void typereg_reader_getMethodParameterName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
     sal_uInt16 parameterIndex);
 
@@ -450,7 +450,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodParameterName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodParameterTypeName(
+REG_DLLPUBLIC void typereg_reader_getMethodParameterTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
     sal_uInt16 parameterIndex);
 
@@ -465,7 +465,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodParameterTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodExceptionCount(
+REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodExceptionCount(
     void * handle, sal_uInt16 index);
 
 /**
@@ -485,7 +485,7 @@ REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodExceptionCount(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodExceptionTypeName(
+REG_DLLPUBLIC void typereg_reader_getMethodExceptionTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
     sal_uInt16 exceptionIndex);
 
@@ -499,7 +499,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getMethodExceptionTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getReferenceCount(void * handle);
+REG_DLLPUBLIC sal_uInt16 typereg_reader_getReferenceCount(void * handle);
 
 /**
    Returns the documentation of a reference of a type reader.
@@ -515,7 +515,7 @@ REG_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getReferenceCount(void * handle
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getReferenceDocumentation(
+REG_DLLPUBLIC void typereg_reader_getReferenceDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 /**
@@ -530,7 +530,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getReferenceDocumentation(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC RTFieldAccess SAL_CALL typereg_reader_getReferenceFlags(
+REG_DLLPUBLIC RTFieldAccess typereg_reader_getReferenceFlags(
     void * handle, sal_uInt16 index);
 
 /**
@@ -545,7 +545,7 @@ REG_DLLPUBLIC RTFieldAccess SAL_CALL typereg_reader_getReferenceFlags(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC RTReferenceType SAL_CALL typereg_reader_getReferenceSort(
+REG_DLLPUBLIC RTReferenceType typereg_reader_getReferenceSort(
     void * handle, sal_uInt16 index);
 
 /**
@@ -562,7 +562,7 @@ REG_DLLPUBLIC RTReferenceType SAL_CALL typereg_reader_getReferenceSort(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC void SAL_CALL typereg_reader_getReferenceTypeName(
+REG_DLLPUBLIC void typereg_reader_getReferenceTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
 
 #endif

@@ -206,14 +206,14 @@ namespace accessibility
 
         // child-related methods from XAccessibleContext
         /// @throws css::uno::RuntimeException
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount();
+        virtual sal_Int32 getAccessibleChildCount();
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i );
+        virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int32 i );
 
         // child-related methods from XAccessibleComponent
         /// @throws css::uno::RuntimeException
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint );
+        virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint );
 
     protected:
         tools::Rectangle GetParagraphBoundingBox() const;

@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-extern "C" void SAL_CALL pcr_initializeModule()
+extern "C" void pcr_initializeModule()
 {
     static bool s_bInit = false;
     if (!s_bInit)

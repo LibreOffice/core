@@ -116,7 +116,7 @@ HwpReader::~HwpReader()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHWP(SvStream &rStream)
 {
     try
     {

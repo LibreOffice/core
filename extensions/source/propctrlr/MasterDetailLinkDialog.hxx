@@ -41,7 +41,7 @@ namespace pcr
         /// @throws css::uno::RuntimeException
         static OUString getImplementationName_static();
         static css::uno::Reference< css::uno::XInterface >
-                SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
+                Create(const css::uno::Reference< css::uno::XComponentContext >&);
     private:
         // XTypeProvider
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;

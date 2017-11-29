@@ -188,7 +188,7 @@ namespace stoc_connector
         return connector_getSupportedServiceNames();
     }
 
-    Reference< XInterface > SAL_CALL connector_CreateInstance( const Reference< XComponentContext > & xCtx)
+    Reference< XInterface > connector_CreateInstance( const Reference< XComponentContext > & xCtx)
     {
         return Reference < XInterface >( static_cast<OWeakObject *>(new OConnector(xCtx)) );
     }

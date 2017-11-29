@@ -98,7 +98,7 @@ private:
 
     VtableFactory::Slot * vtables[1];
 
-    friend void SAL_CALL freeCppInterfaceProxy(
+    friend void freeCppInterfaceProxy(
         uno_ExtEnvironment * pEnv, void * pInterface);
 };
 

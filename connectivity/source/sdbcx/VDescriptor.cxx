@@ -122,7 +122,7 @@ namespace connectivity
         }
 
 
-        Sequence< Type > SAL_CALL ODescriptor::getTypes(  )
+        Sequence< Type > ODescriptor::getTypes(  )
         {
             ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
                                             cppu::UnoType<XFastPropertySet>::get(),

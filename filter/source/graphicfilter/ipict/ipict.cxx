@@ -2012,7 +2012,7 @@ void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 iptGraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
 {
     GDIMetaFile aMTF;

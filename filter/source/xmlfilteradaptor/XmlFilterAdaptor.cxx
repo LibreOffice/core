@@ -59,7 +59,7 @@ using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::task;
 
-bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     OUString udConvertClass    = msUserData[0];
     const OUString sXMLImportService = msUserData[2];
@@ -171,7 +171,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
     return true;
 }
 
-bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
 
     OUString udConvertClass = msUserData[0];
@@ -325,7 +325,7 @@ OUString XmlFilterAdaptor_getImplementationName ()
     return OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
 }
 
-Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
+Sequence< OUString > XmlFilterAdaptor_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -334,7 +334,7 @@ Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new XmlFilterAdaptor( comphelper::getComponentContext(rSMgr) ));
 }

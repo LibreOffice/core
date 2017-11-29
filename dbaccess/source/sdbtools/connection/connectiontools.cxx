@@ -106,18 +106,18 @@ namespace sdbtools
         return getSupportedServiceNames_static();
     }
 
-    OUString SAL_CALL ConnectionTools::getImplementationName_static()
+    OUString ConnectionTools::getImplementationName_static()
     {
         return OUString( "com.sun.star.comp.dbaccess.ConnectionTools" );
     }
 
-    Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames_static()
+    Sequence< OUString > ConnectionTools::getSupportedServiceNames_static()
     {
         Sequence<OUString> aSupported { "com.sun.star.sdb.tools.ConnectionTools" };
         return aSupported;
     }
 
-    Reference< XInterface > SAL_CALL ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
     {
         return *( new ConnectionTools( Reference<XComponentContext>( _rxContext ) ) );
     }

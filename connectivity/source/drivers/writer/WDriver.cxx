@@ -43,7 +43,7 @@ OUString SAL_CALL ODriver::getImplementationName()
     return getImplementationName_Static();
 }
 
-uno::Reference< css::uno::XInterface > SAL_CALL
+uno::Reference< css::uno::XInterface >
 ODriver_CreateInstance(const uno::Reference<
                        lang::XMultiServiceFactory >& _rxFactory)
 {

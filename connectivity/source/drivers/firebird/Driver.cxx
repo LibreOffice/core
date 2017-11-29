@@ -47,7 +47,7 @@ namespace connectivity
 {
     namespace firebird
     {
-        Reference< XInterface >  SAL_CALL FirebirdDriver_CreateInstance(
+        Reference< XInterface > FirebirdDriver_CreateInstance(
             const Reference< XMultiServiceFactory >& _rxFactory)
         {
             SAL_INFO("connectivity.firebird", "FirebirdDriver_CreateInstance()" );

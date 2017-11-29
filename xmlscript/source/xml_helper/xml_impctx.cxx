@@ -702,7 +702,7 @@ OUString ExtendedAttributes::getValueByUidName(
     return OUString();
 }
 
-Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
+Reference< xml::sax::XDocumentHandler > createDocumentHandler(
     Reference< xml::input::XRoot > const & xRoot )
 {
     SAL_WARN_IF( !xRoot.is(), "xmlscript.xmlhelper", "xRoot is NULL" );
@@ -714,7 +714,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
     return Reference< xml::sax::XDocumentHandler >();
 }
 
-Reference< XInterface > SAL_CALL create_DocumentHandlerImpl(
+Reference< XInterface > create_DocumentHandlerImpl(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
 {
     return static_cast< ::cppu::OWeakObject * >(

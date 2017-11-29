@@ -31,7 +31,7 @@ const char aTrueStr[] = "true";
 const char aFalseStr[] = "false";
 
 void
-SAL_CALL exportLibraryContainer(
+exportLibraryContainer(
     Reference< xml::sax::XWriter > const & xOut,
     const LibDescriptorArray* pLibArray )
 {
@@ -89,7 +89,7 @@ SAL_CALL exportLibraryContainer(
 }
 
 void
-SAL_CALL exportLibrary(
+exportLibrary(
     css::uno::Reference< css::xml::sax::XWriter > const & xOut,
     const LibDescriptor& rLib )
 {

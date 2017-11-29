@@ -30,7 +30,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel()
+extern "C" void createRegistryInfo_OColumnControlModel()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OColumnControlModel> aAutoRegistration;
 }

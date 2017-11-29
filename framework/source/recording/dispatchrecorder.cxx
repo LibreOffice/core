@@ -157,7 +157,7 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro()
     return sScript;
 }
 
-void SAL_CALL DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuffer& aArgumentBuffer )
+void DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuffer& aArgumentBuffer )
 {
     // if value == bool
     if (aValue.getValueTypeClass() == css::uno::TypeClass_STRUCT )
@@ -284,7 +284,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUS
     }
 }
 
-void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
+void DispatchRecorder::implts_recordMacro( const OUString& aURL,
                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                           bool bAsComment, OUStringBuffer& aScriptBuffer )
 {

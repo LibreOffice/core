@@ -26,7 +26,7 @@
 #include <dbu_reghelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_OColumnControl()
+extern "C" void createRegistryInfo_OColumnControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OColumnControl> aAutoRegistration;
 }
@@ -48,7 +48,7 @@ IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControl, SERVICE_CONTROLDEFAULT)
 IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControl)
 IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(OColumnControl, "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
 
-Reference< XInterface > SAL_CALL OColumnControl::Create(const Reference< XMultiServiceFactory >& _rxORB)
+Reference< XInterface > OColumnControl::Create(const Reference< XMultiServiceFactory >& _rxORB)
 {
     return static_cast< XServiceInfo* >(new OColumnControl(comphelper::getComponentContext(_rxORB)));
 }

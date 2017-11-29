@@ -36,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.OOoEmbeddedObjectFactory";
@@ -44,12 +44,12 @@ uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::impl_staticGetSuppo
     return aRet;
 }
 
-OUString SAL_CALL OOoEmbeddedObjectFactory::impl_staticGetImplementationName()
+OUString OOoEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.OOoEmbeddedObjectFactory");
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OOoEmbeddedObjectFactory( comphelper::getComponentContext(xServiceManager) ) );
@@ -385,7 +385,7 @@ uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedService
     return impl_staticGetSupportedServiceNames();
 }
 
-uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory";
@@ -393,12 +393,12 @@ uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticG
     return aRet;
 }
 
-OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName()
+OUString OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory");
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OOoSpecialEmbeddedObjectFactory( comphelper::getComponentContext(xServiceManager) ) );

@@ -786,7 +786,7 @@ bool TGAReader::ImplReadPalette()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 itgGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     TGAReader aTGAReader(rStream);

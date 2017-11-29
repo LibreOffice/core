@@ -70,7 +70,7 @@ public:
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () override;
 
-    void SAL_CALL ImplInsertByName( const OUString& aName, const uno::Any& aElement );
+    void ImplInsertByName( const OUString& aName, const uno::Any& aElement );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -139,7 +139,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
     return aSNS;
 }
 
-void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
+void SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
     maItemSetVector.push_back(
         o3tl::make_unique<SfxItemSet>( *mpModelPool, svl::Items<XATTR_LINESTART, XATTR_LINEEND>{} ));
@@ -412,7 +412,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
 /**
  * Create a hatchtable
  */
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoMarkerTable_createInstance( SdrModel* pModel )
+uno::Reference< uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoMarkerTable(pModel);
 }

@@ -27,7 +27,7 @@ namespace xmlscript
 {
 
 void
-SAL_CALL exportScriptModule(
+exportScriptModule(
     Reference< xml::sax::XWriter > const & xOut,
     const ModuleDescriptor& rMod )
 {

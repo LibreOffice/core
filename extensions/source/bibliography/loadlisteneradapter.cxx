@@ -92,7 +92,7 @@ namespace bib
     // XEventListener
 
 
-    void SAL_CALL OComponentAdapterBase::disposing( const EventObject& )
+    void OComponentAdapterBase::disposing( const EventObject& )
     {
         if ( m_pListener )
         {

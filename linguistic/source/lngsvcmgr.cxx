@@ -1968,7 +1968,7 @@ uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
     return xService;
 }
 
-void * SAL_CALL LngSvcMgr_getFactory(
+void * LngSvcMgr_getFactory(
             const sal_Char * pImplName,
             lang::XMultiServiceFactory * pServiceManager )
 {

@@ -34,7 +34,7 @@ using namespace dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 
-extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog()
+extern "C" void createRegistryInfo_OSQLMessageDialog()
 {
     static OMultiInstanceAutoRegistration< OSQLMessageDialog > aAutoRegistration;
 }
@@ -60,7 +60,7 @@ Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new OSQLMessageDialog( comphelper::getComponentContext(_rxFactory) ));
 }

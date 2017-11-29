@@ -1231,7 +1231,7 @@ css::uno::Sequence< OUString > TypeDetection::impl_getSupportedServiceNames()
 }
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL TypeDetection::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+css::uno::Reference< css::uno::XInterface > TypeDetection::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     TypeDetection* pNew = new TypeDetection( comphelper::getComponentContext(xSMGR) );
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::document::XTypeDetection* >(pNew), css::uno::UNO_QUERY);

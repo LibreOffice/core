@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler()
+extern "C" void createRegistryInfo_CellBindingPropertyHandler()
 {
     ::pcr::CellBindingPropertyHandler::registerImplementation();
 }
@@ -57,13 +57,13 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL CellBindingPropertyHandler::getImplementationName_static(  )
+    OUString CellBindingPropertyHandler::getImplementationName_static(  )
     {
         return OUString( "com.sun.star.comp.extensions.CellBindingPropertyHandler" );
     }
 
 
-    Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > CellBindingPropertyHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.CellBindingPropertyHandler" };
         return aSupported;

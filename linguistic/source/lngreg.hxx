@@ -28,31 +28,31 @@ namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
 
-extern void * SAL_CALL LngSvcMgr_getFactory
+extern void * LngSvcMgr_getFactory
 (
     const sal_Char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
-extern void * SAL_CALL DicList_getFactory
+extern void * DicList_getFactory
 (
     const sal_Char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
-void * SAL_CALL LinguProps_getFactory
+void * LinguProps_getFactory
 (
     const sal_Char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
-extern void * SAL_CALL ConvDicList_getFactory
+extern void * ConvDicList_getFactory
 (
     const sal_Char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
-extern void * SAL_CALL GrammarCheckingIterator_getFactory
+extern void * GrammarCheckingIterator_getFactory
 (
     const sal_Char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager

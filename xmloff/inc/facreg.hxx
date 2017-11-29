@@ -34,281 +34,281 @@ namespace com { namespace sun { namespace star {
 } } }
 
 // impress oasis import
-OUString SAL_CALL XMLImpressImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressImportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressStylesImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressStylesImportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressStylesImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressStylesImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressStylesImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressStylesImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressContentImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressContentImportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressContentImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressContentImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressContentImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressContentImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressMetaImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressMetaImportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressMetaImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressMetaImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressMetaImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressMetaImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressSettingsImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressSettingsImportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressSettingsImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressSettingsImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressSettingsImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressSettingsImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // impress oasis export
-OUString SAL_CALL XMLImpressExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressExportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressStylesExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressStylesExportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressStylesExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressStylesExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressStylesExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressStylesExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressContentExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressContentExportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressContentExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressContentExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressContentExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressContentExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressMetaExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressMetaExportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressMetaExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressMetaExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressMetaExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressMetaExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressSettingsExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressSettingsExportOasis_getSupportedServiceNames() throw();
+OUString XMLImpressSettingsExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressSettingsExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressSettingsExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressSettingsExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // impress OOo import
 
 // impress OOo export
-OUString SAL_CALL XMLImpressExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressExportOOO_getSupportedServiceNames() throw();
+OUString XMLImpressExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressStylesExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressStylesExportOOO_getSupportedServiceNames() throw();
+OUString XMLImpressStylesExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressStylesExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressStylesExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressStylesExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressContentExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressContentExportOOO_getSupportedServiceNames() throw();
+OUString XMLImpressContentExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressContentExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressContentExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressContentExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressMetaExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressMetaExportOOO_getSupportedServiceNames() throw();
+OUString XMLImpressMetaExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressMetaExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressMetaExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressMetaExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLImpressSettingsExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressSettingsExportOOO_getSupportedServiceNames() throw();
+OUString XMLImpressSettingsExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressSettingsExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressSettingsExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressSettingsExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // draw oasis import
-OUString SAL_CALL XMLDrawImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawImportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawStylesImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawStylesImportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawStylesImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawStylesImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawStylesImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawStylesImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawContentImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawContentImportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawContentImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawContentImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawContentImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawContentImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawMetaImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawMetaImportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawMetaImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawMetaImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawMetaImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawMetaImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawSettingsImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawSettingsImportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawSettingsImportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawSettingsImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawSettingsImportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawSettingsImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // draw oasis export
-OUString SAL_CALL XMLDrawExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawExportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawStylesExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawStylesExportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawStylesExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawStylesExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawStylesExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawStylesExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawContentExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawContentExportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawContentExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawContentExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawContentExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawContentExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawMetaExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawMetaExportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawMetaExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawMetaExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawMetaExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawMetaExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawSettingsExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawSettingsExportOasis_getSupportedServiceNames() throw();
+OUString XMLDrawSettingsExportOasis_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawSettingsExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawSettingsExportOasis_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawSettingsExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // draw OOo import
 
 // draw OOo export
-OUString SAL_CALL XMLDrawExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawExportOOO_getSupportedServiceNames() throw();
+OUString XMLDrawExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawStylesExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawStylesExportOOO_getSupportedServiceNames() throw();
+OUString XMLDrawStylesExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawStylesExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawStylesExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawStylesExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawContentExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawContentExportOOO_getSupportedServiceNames() throw();
+OUString XMLDrawContentExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawContentExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawContentExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawContentExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawMetaExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawMetaExportOOO_getSupportedServiceNames() throw();
+OUString XMLDrawMetaExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawMetaExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawMetaExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawMetaExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL XMLDrawSettingsExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawSettingsExportOOO_getSupportedServiceNames() throw();
+OUString XMLDrawSettingsExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawSettingsExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawSettingsExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawSettingsExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // impress animation import
-OUString SAL_CALL AnimationsImport_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL AnimationsImport_getSupportedServiceNames() throw();
+OUString AnimationsImport_getImplementationName() throw();
+css::uno::Sequence<OUString> AnimationsImport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL AnimationsImport_createInstance(
+css::uno::Reference<css::uno::XInterface> AnimationsImport_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // drawing layer export
-OUString SAL_CALL XMLDrawingLayerExport_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLDrawingLayerExport_getSupportedServiceNames() throw();
+OUString XMLDrawingLayerExport_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLDrawingLayerExport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawingLayerExport_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLDrawingLayerExport_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // impress xml clipboard export
-OUString SAL_CALL XMLImpressClipboardExport_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressClipboardExport_getSupportedServiceNames() throw();
+OUString XMLImpressClipboardExport_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLImpressClipboardExport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressClipboardExport_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLImpressClipboardExport_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // chart oasis import
-OUString SAL_CALL SchXMLImport_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLImport_getSupportedServiceNames() throw();
+OUString SchXMLImport_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLImport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLImport_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLImport_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw();
+OUString SchXMLImport_Meta_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLImport_Meta_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLImport_Meta_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLImport_Meta_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw();
+OUString SchXMLImport_Styles_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLImport_Styles_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLImport_Styles_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLImport_Styles_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw();
+OUString SchXMLImport_Content_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLImport_Content_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLImport_Content_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLImport_Content_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // chart oasis export
-OUString SAL_CALL SchXMLExport_Oasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_getSupportedServiceNames() throw();
+OUString SchXMLExport_Oasis_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLExport_Oasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLExport_Oasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLExport_Oasis_Meta_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw();
+OUString SchXMLExport_Oasis_Meta_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_Meta_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLExport_Oasis_Meta_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLExport_Oasis_Styles_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw();
+OUString SchXMLExport_Oasis_Styles_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_Styles_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLExport_Oasis_Styles_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLExport_Oasis_Content_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_Content_getSupportedServiceNames() throw();
+OUString SchXMLExport_Oasis_Content_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLExport_Oasis_Content_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_Content_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLExport_Oasis_Content_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // chart OOo import
 
 // chart OOo export
-OUString SAL_CALL SchXMLExport_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLExport_getSupportedServiceNames() throw();
+OUString SchXMLExport_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLExport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLExport_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Styles_getSupportedServiceNames() throw();
+OUString SchXMLExport_Styles_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLExport_Styles_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Styles_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLExport_Styles_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw();
+OUString SchXMLExport_Content_getImplementationName() throw();
+css::uno::Sequence<OUString> SchXMLExport_Content_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Content_createInstance(
+css::uno::Reference<css::uno::XInterface> SchXMLExport_Content_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // meta export OOo
-OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLMetaExportOOO_getSupportedServiceNames() throw();
+OUString XMLMetaExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLMetaExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLMetaExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLMetaExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // writer autotext event export
-OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames() throw();
+OUString XMLAutoTextEventExport_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLAutoTextEventExport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLAutoTextEventExport_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLAutoTextEventExport_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // writer autotext event import
-OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLAutoTextEventImport_getSupportedServiceNames() throw();
+OUString XMLAutoTextEventImport_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLAutoTextEventImport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLAutoTextEventImport_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLAutoTextEventImport_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // writer autotext event export OOo
-OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames() throw();
+OUString XMLAutoTextEventExportOOO_getImplementationName() throw();
+css::uno::Sequence<OUString> XMLAutoTextEventExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLAutoTextEventExportOOO_createInstance(
+css::uno::Reference<css::uno::XInterface> XMLAutoTextEventExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 #endif

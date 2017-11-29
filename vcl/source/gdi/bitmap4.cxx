@@ -967,7 +967,7 @@ struct PopArtEntry
     sal_uInt32  mnCount;
 };
 
-extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
+extern "C" int ImplPopArtCmpFnc( const void* p1, const void* p2 )
 {
     int nRet;
 

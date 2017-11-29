@@ -32,12 +32,12 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
 } } }
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL FilePicker_CreateInstance(
+css::uno::Reference<css::uno::XInterface> FilePicker_CreateInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context);
 css::uno::Sequence<OUString> FilePicker_getSupportedServiceNames();
 OUString FilePicker_getImplementationName();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL FolderPicker_CreateInstance(
+css::uno::Reference<css::uno::XInterface> FolderPicker_CreateInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context);
 css::uno::Sequence<OUString> FolderPicker_getSupportedServiceNames();
 OUString FolderPicker_getImplementationName();

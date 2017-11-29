@@ -106,7 +106,7 @@
 
 #define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
-extern "C" void SAL_CALL createRegistryInfo_FormComponentPropertyHandler()
+extern "C" void createRegistryInfo_FormComponentPropertyHandler()
 {
     ::pcr::FormComponentPropertyHandler::registerImplementation();
 }
@@ -161,13 +161,13 @@ namespace pcr
 
     IMPLEMENT_FORWARD_XINTERFACE2(FormComponentPropertyHandler,FormComponentPropertyHandler_Base,::comphelper::OPropertyContainer)
 
-    OUString SAL_CALL FormComponentPropertyHandler::getImplementationName_static(  )
+    OUString FormComponentPropertyHandler::getImplementationName_static(  )
     {
         return OUString(  "com.sun.star.comp.extensions.FormComponentPropertyHandler"  );
     }
 
 
-    Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > FormComponentPropertyHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.FormComponentPropertyHandler" };
         return aSupported;

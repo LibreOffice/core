@@ -278,7 +278,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
     }
 }
 
-void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 nIndex)
+void OResultSet::checkColumnIndex(sal_Int32 nIndex)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -292,7 +292,7 @@ void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 nIndex)
     }
 }
 
-void SAL_CALL OResultSet::checkRowIndex()
+void OResultSet::checkRowIndex()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

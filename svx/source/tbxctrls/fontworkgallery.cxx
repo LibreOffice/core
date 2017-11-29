@@ -377,20 +377,20 @@ void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cs
 // XServiceInfo
 
 
-OUString SAL_CALL FontworkAlignmentControl_getImplementationName()
+OUString FontworkAlignmentControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.FontworkAlignmentController" );
 }
 
 
-Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames()
+Sequence< OUString > FontworkAlignmentControl_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL FontworkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
+Reference< XInterface > FontworkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     return *new FontworkAlignmentControl( comphelper::getComponentContext(rSMgr) );
 }
@@ -601,20 +601,20 @@ void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Seque
 // XServiceInfo
 
 
-OUString SAL_CALL FontworkCharacterSpacingControl_getImplementationName()
+OUString FontworkCharacterSpacingControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.FontworkCharacterSpacingController" );
 }
 
 
-Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames()
+Sequence< OUString > FontworkCharacterSpacingControl_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL FontworkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
+Reference< XInterface > FontworkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     return *new FontworkCharacterSpacingControl( comphelper::getComponentContext(rSMgr) );
 }

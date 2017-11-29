@@ -193,7 +193,7 @@ namespace svxform
 
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
     LegacyFormController_NewInstance_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxORB )
 {
     return ::svxform::LegacyFormController::Create( _rxORB );

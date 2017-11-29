@@ -141,7 +141,7 @@ public:
         Ace();
         ~Ace();
 
-        static int SAL_CALL constructor (void * obj, void * arg);
+        static int constructor (void * obj, void * arg);
 
         static Ace * find   (Ace * head, sal_uInt32 addr);
         static void  insert (Ace * head, Ace * entry);

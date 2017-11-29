@@ -485,12 +485,12 @@ namespace x11 {
         virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
     };
 
-    css::uno::Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames();
-    css::uno::Reference< css::uno::XInterface > SAL_CALL Xdnd_createInstance(
+    css::uno::Sequence< OUString > Xdnd_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > Xdnd_createInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
-    css::uno::Sequence< OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames();
-    css::uno::Reference< css::uno::XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
+    css::uno::Sequence< OUString > Xdnd_dropTarget_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > Xdnd_dropTarget_createInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 }

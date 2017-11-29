@@ -78,7 +78,7 @@ namespace connectivity
             /// @throws css::uno::RuntimeException
             OUString getDefaultProfile( css::mozilla::MozillaProductType product );
             /// @throws css::uno::RuntimeException
-            bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName );
+            bool getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName );
         private:
             ProductStruct m_ProductProfileList[4];
             void      LoadProductsInfo();

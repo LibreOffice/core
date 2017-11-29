@@ -27,21 +27,21 @@
 #include "gridwizard.hxx"
 
 // the registration methods
-extern "C" void SAL_CALL createRegistryInfo_OGroupBoxWizard()
+extern "C" void createRegistryInfo_OGroupBoxWizard()
 {
     static compmodule::OMultiInstanceAutoRegistration<
         ::dbp::OUnoAutoPilot< ::dbp::OGroupBoxWizard, ::dbp::OGroupBoxSI >
     > aAutoRegistration;
 }
 
-extern "C" void SAL_CALL createRegistryInfo_OListComboWizard()
+extern "C" void createRegistryInfo_OListComboWizard()
 {
     static compmodule::OMultiInstanceAutoRegistration<
         ::dbp::OUnoAutoPilot< ::dbp::OListComboWizard, ::dbp::OListComboSI >
     > aAutoRegistration;
 }
 
-extern "C" void SAL_CALL createRegistryInfo_OGridWizard()
+extern "C" void createRegistryInfo_OGridWizard()
 {
     static compmodule::OMultiInstanceAutoRegistration<
         ::dbp::OUnoAutoPilot< ::dbp::OGridWizard, ::dbp::OGridSI >

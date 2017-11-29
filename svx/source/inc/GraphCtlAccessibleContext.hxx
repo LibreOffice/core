@@ -183,7 +183,7 @@ private:
 
     void CommitChange (sal_Int16 aEventId, const css::uno::Any& rNewValue, const css::uno::Any& rOldValue);
 
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessible( const SdrObject* pObj );
+    css::uno::Reference< css::accessibility::XAccessible > getAccessible( const SdrObject* pObj );
 
     ::accessibility::AccessibleShapeTreeInfo maTreeInfo;
 

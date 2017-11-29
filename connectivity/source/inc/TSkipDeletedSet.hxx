@@ -41,13 +41,13 @@ namespace connectivity
         OSkipDeletedSet(IResultSetHelper* _pHelper);
         ~OSkipDeletedSet();
 
-        static void * SAL_CALL operator new( size_t nSize )
+        static void * operator new( size_t nSize )
             { return ::rtl_allocateMemory( nSize ); }
-        static void * SAL_CALL operator new( size_t,void* _pHint )
+        static void * operator new( size_t,void* _pHint )
             { return _pHint; }
-        static void SAL_CALL operator delete( void * pMem )
+        static void operator delete( void * pMem )
             { ::rtl_freeMemory( pMem ); }
-        static void SAL_CALL operator delete( void *,void* )
+        static void operator delete( void *,void* )
             {  }
 
         /**

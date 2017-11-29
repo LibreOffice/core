@@ -623,7 +623,7 @@ void ODatabaseModelImpl::reset()
     }
 }
 
-void SAL_CALL ODatabaseModelImpl::disposing( const css::lang::EventObject& Source )
+void ODatabaseModelImpl::disposing( const css::lang::EventObject& Source )
 {
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if ( xCon.is() )
@@ -975,12 +975,12 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership()
     return xModel;
 }
 
-void SAL_CALL ODatabaseModelImpl::acquire()
+void ODatabaseModelImpl::acquire()
 {
     osl_atomic_increment(&m_refCount);
 }
 
-void SAL_CALL ODatabaseModelImpl::release()
+void ODatabaseModelImpl::release()
 {
     if ( osl_atomic_decrement(&m_refCount) == 0 )
     {

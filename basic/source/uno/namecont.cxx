@@ -2642,7 +2642,7 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
     throw IllegalArgumentException();
 }
 
-void SAL_CALL SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument )
+void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument )
 {
     // check whether this is a valid OfficeDocument, and obtain the document's root storage
     Reference< XStorage > xDocStorage;

@@ -659,9 +659,9 @@ public:
 
     // why isn't this part of the XScrollbar?
     /// @throws css::uno::RuntimeException
-    void SAL_CALL setMinimum( sal_Int32 n );
+    void setMinimum( sal_Int32 n );
     /// @throws css::uno::RuntimeException
-    sal_Int32 SAL_CALL getMinimum(  );
+    sal_Int32 getMinimum(  );
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
@@ -670,7 +670,7 @@ public:
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize() override;
     /// @throws css::uno::RuntimeException
-    static css::awt::Size SAL_CALL implGetMinimumSize( vcl::Window const * p );
+    static css::awt::Size implGetMinimumSize( vcl::Window const * p );
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

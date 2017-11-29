@@ -104,17 +104,17 @@ private:
 
     bool bExportCpp2Uno;
 
-    friend void SAL_CALL freeMapping(uno_Mapping * pMapping);
+    friend void freeMapping(uno_Mapping * pMapping);
 
-    friend void SAL_CALL acquireMapping(uno_Mapping * pMapping);
+    friend void acquireMapping(uno_Mapping * pMapping);
 
-    friend void SAL_CALL releaseMapping(uno_Mapping * pMapping);
+    friend void releaseMapping(uno_Mapping * pMapping);
 
-    friend void SAL_CALL cpp2unoMapping(
+    friend void cpp2unoMapping(
         uno_Mapping * pMapping, void ** ppUnoI, void * pCppI,
         typelib_InterfaceTypeDescription * pTypeDescr);
 
-    friend void SAL_CALL uno2cppMapping(
+    friend void uno2cppMapping(
         uno_Mapping * pMapping, void ** ppCppI, void * pUnoI,
         typelib_InterfaceTypeDescription * pTypeDescr);
 };

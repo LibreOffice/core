@@ -37,7 +37,7 @@ inline const rtl::OUString FPH_LOCAL_DIR_ENTRY()
 inline const rtl::OUString FPH_PARENT_DIR_ENTRY()
 { return rtl::OUString(".."); }
 
-void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
+void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 {
     OSL_PRECOND(nullptr != pustrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
     if (pustrPath != nullptr)
@@ -57,7 +57,7 @@ void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
     }
 }
 
-void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
+void osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
 {
     OSL_PRECOND((nullptr != ppustrPath) && (nullptr != *ppustrPath), "osl_systemPathEnsureSeparator: Invalid parameter");
     if ((ppustrPath != nullptr) && (*ppustrPath != nullptr))
@@ -78,13 +78,13 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
     }
 }
 
-bool SAL_CALL osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
+bool osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
 {
     OSL_PRECOND(nullptr != pustrPath, "osl_systemPathIsRelativePath: Invalid parameter");
     return ((pustrPath == nullptr) || (pustrPath->length == 0) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
 }
 
-void SAL_CALL osl_systemPathMakeAbsolutePath(
+void osl_systemPathMakeAbsolutePath(
     const rtl_uString* pustrBasePath,
     const rtl_uString* pustrRelPath,
     rtl_uString**      ppustrAbsolutePath)
@@ -101,7 +101,7 @@ void SAL_CALL osl_systemPathMakeAbsolutePath(
     *ppustrAbsolutePath = base.pData;
 }
 
-void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
+void osl_systemPathGetFileNameOrLastDirectoryPart(
     const rtl_uString*     pustrPath,
     rtl_uString**       ppustrFileNameOrLastDirPart)
 {
@@ -123,7 +123,7 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
     rtl_uString_assign(ppustrFileNameOrLastDirPart, last_part.pData);
 }
 
-bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
+bool osl_systemPathIsHiddenFileOrDirectoryEntry(
     const rtl_uString* pustrPath)
 {
     OSL_PRECOND(nullptr != pustrPath, "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
@@ -138,7 +138,7 @@ bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
             !osl_systemPathIsLocalOrParentDirectoryEntry(fdp.pData));
 }
 
-bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
+bool osl_systemPathIsLocalOrParentDirectoryEntry(
     const rtl_uString* pustrPath)
 {
     OSL_PRECOND(pustrPath, "osl_systemPathIsLocalOrParentDirectoryEntry: Invalid parameter");
@@ -218,7 +218,7 @@ private:
     const sal_Unicode*  m_path_segment_end;
 };
 
-bool SAL_CALL osl_searchPath(
+bool osl_searchPath(
     const rtl_uString* pustrFilePath,
     const rtl_uString* pustrSearchPathList,
     rtl_uString**      ppustrPathFound)

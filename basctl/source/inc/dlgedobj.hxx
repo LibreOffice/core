@@ -117,21 +117,21 @@ public:
     virtual void PositionAndSizeChange( const css::beans::PropertyChangeEvent& evt );
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL NameChange( const  css::beans::PropertyChangeEvent& evt );
+    void NameChange( const  css::beans::PropertyChangeEvent& evt );
     /// @throws css::uno::RuntimeException
-    void SAL_CALL TabIndexChange( const  css::beans::PropertyChangeEvent& evt );
+    void TabIndexChange( const  css::beans::PropertyChangeEvent& evt );
 
     // PropertyChangeListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _propertyChange(const css::beans::PropertyChangeEvent& evt);
+    void _propertyChange(const css::beans::PropertyChangeEvent& evt);
 
     // ContainerListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementInserted();
+    void _elementInserted();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementReplaced();
+    void _elementReplaced();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementRemoved();
+    void _elementRemoved();
 
     virtual void SetLayer(SdrLayerID nLayer) override;
     void MakeDataAware( const css::uno::Reference< css::frame::XModel >& xModel );

@@ -242,7 +242,7 @@ OUString FilterDetect_getImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext >& rxContext )
+Reference< XInterface > FilterDetect_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast< ::cppu::OWeakObject* >( new FilterDetect( rxContext ) );
 }

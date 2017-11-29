@@ -64,8 +64,8 @@ public:
     Mapping(Mapping && other): _pMapping(other._pMapping)
     { other._pMapping = nullptr; }
     inline ~Mapping();
-    inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping );
-    Mapping & SAL_CALL operator = ( const Mapping & rMapping )
+    inline Mapping & operator = ( uno_Mapping * pMapping );
+    Mapping & operator = ( const Mapping & rMapping )
         { return operator = ( rMapping._pMapping ); }
     Mapping & operator =(Mapping && other) {
         if (_pMapping != nullptr) {
@@ -75,9 +75,9 @@ public:
         other._pMapping = nullptr;
         return *this;
     }
-    uno_Mapping * SAL_CALL get() const
+    uno_Mapping * get() const
         { return _pMapping; }
-    bool SAL_CALL is() const
+    bool is() const
         { return (_pMapping != nullptr); }
 };
 

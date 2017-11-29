@@ -1422,7 +1422,7 @@ extern "C" { UnoWrapperBase* CreateUnoWrapper(); }
 
 #else
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #endif
 

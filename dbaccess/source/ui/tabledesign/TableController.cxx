@@ -69,7 +69,7 @@
 #include <algorithm>
 #include <functional>
 
-extern "C" void SAL_CALL createRegistryInfo_OTableControl()
+extern "C" void createRegistryInfo_OTableControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OTableController > aAutoRegistration;
 }
@@ -128,7 +128,7 @@ Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OTableController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new OTableController(comphelper::getComponentContext(_rxFactory)));
 }

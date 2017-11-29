@@ -541,7 +541,7 @@ void GIFWriter::WriteTerminator()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem )
 {
     GIFWriter aWriter(rStream);

@@ -30,7 +30,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_FormController()
+extern "C" void createRegistryInfo_FormController()
 {
     ::pcr::OAutoRegistration< ::pcr::FormController > aFormControllerRegistration;
     ::pcr::OAutoRegistration< ::pcr::DialogController > aDialogControllerRegistration;
@@ -135,7 +135,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL FormController::Create(const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > FormController::Create(const Reference< XComponentContext >& _rxContext )
     {
         ServiceDescriptor aService;
         aService.GetImplementationName = &FormController::getImplementationName_static;
@@ -262,7 +262,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL DialogController::Create(const Reference< XComponentContext >& _rxContext)
+    Reference< XInterface > DialogController::Create(const Reference< XComponentContext >& _rxContext)
     {
         ServiceDescriptor aService;
         aService.GetImplementationName = &DialogController::getImplementationName_static;

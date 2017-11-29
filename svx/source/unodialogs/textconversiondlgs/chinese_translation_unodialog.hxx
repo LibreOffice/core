@@ -79,7 +79,7 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     /// @throws css::uno::Exception
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
             create( css::uno::Reference< css::uno::XComponentContext > const & )
     {
         return static_cast<cppu::OWeakObject *>( new ChineseTranslation_UnoDialog );

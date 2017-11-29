@@ -25,12 +25,12 @@
 
 class SdrModel;
 
-SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoGradientTable_createInstance( SdrModel* pModel );
-SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoHatchTable_createInstance( SdrModel* pModel );
-SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoBitmapTable_createInstance( SdrModel* pModel );
-SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoTransGradientTable_createInstance( SdrModel* pModel );
-SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoMarkerTable_createInstance( SdrModel* pModel );
-SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoDashTable_createInstance( SdrModel* pModel );
+SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoGradientTable_createInstance( SdrModel* pModel );
+SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoHatchTable_createInstance( SdrModel* pModel );
+SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoBitmapTable_createInstance( SdrModel* pModel );
+SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoTransGradientTable_createInstance( SdrModel* pModel );
+SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel );
+SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoDashTable_createInstance( SdrModel* pModel );
 
 #endif // INCLUDED_SVX_UNOFILL_HXX
 

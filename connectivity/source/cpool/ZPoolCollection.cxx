@@ -149,19 +149,19 @@ Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  )
 }
 
 //---------------------------------------OPoolCollection----------------------------------
-Reference< XInterface > SAL_CALL OPoolCollection::CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OPoolCollection::CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return static_cast<XDriverManager*>(new OPoolCollection(comphelper::getComponentContext(_rxFactory)));
 }
 
 
-OUString SAL_CALL OPoolCollection::getImplementationName_Static(  )
+OUString OPoolCollection::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.sdbc.OConnectionPool");
 }
 
 
-Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  )
+Sequence< OUString > OPoolCollection::getSupportedServiceNames_Static(  )
 {
     Sequence< OUString > aSupported { "com.sun.star.sdbc.ConnectionPool" };
     return aSupported;

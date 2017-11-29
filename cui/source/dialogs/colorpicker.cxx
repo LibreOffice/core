@@ -1406,17 +1406,17 @@ private:
     Reference<css::awt::XWindow> mxParent;
 };
 
-OUString SAL_CALL ColorPicker_getImplementationName()
+OUString ColorPicker_getImplementationName()
 {
     return OUString( "com.sun.star.cui.ColorPicker" );
 }
 
-Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XComponentContext > const & )
+Reference< XInterface > ColorPicker_createInstance( Reference< XComponentContext > const & )
 {
     return static_cast<XWeak*>( new ColorPicker );
 }
 
-Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames()
+Sequence< OUString > ColorPicker_getSupportedServiceNames()
 {
     Sequence< OUString > seq { "com.sun.star.ui.dialogs.ColorPicker" };
     return seq;

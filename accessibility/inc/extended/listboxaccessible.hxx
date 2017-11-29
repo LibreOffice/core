@@ -60,7 +60,7 @@ namespace accessibility
 
             @throws css::uno::RuntimeException
         */
-        virtual void SAL_CALL dispose() = 0;
+        virtual void dispose() = 0;
 
         /// to be called in the dispose method of your derived class
         void disposing();

@@ -415,7 +415,7 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
     }
 }
 
-void SAL_CALL ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagram )
+void ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagram )
 {
     // apply chart-type specific styles, like "symbols on" for example
     Sequence< Sequence< Reference< XDataSeries > > > aNewSeriesSeq(

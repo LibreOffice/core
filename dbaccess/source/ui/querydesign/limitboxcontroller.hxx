@@ -43,11 +43,11 @@ class LimitBoxController: public svt::ToolboxController,
         /// XServiceInfo
         DECLARE_SERVICE_INFO();
         /// @throws css::uno::RuntimeException
-        static OUString SAL_CALL getImplementationName_Static(  );
+        static OUString getImplementationName_Static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
         static css::uno::Reference< css::uno::XInterface >
-        SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+        Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         /// XComponent
         virtual void SAL_CALL dispose() override;

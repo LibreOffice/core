@@ -27,7 +27,7 @@
 typedef VclAbstractDialogFactory* (SAL_CALL *FuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 #else
 extern "C" VclAbstractDialogFactory* CreateDialogFactory();
 #endif

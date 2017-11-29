@@ -562,7 +562,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 //================== GraphicImport - the exported function ================
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     if ( rStream.GetError() )

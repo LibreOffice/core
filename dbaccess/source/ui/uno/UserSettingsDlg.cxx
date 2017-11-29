@@ -25,7 +25,7 @@
 
 using namespace dbaui;
 
-extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog()
+extern "C" void createRegistryInfo_OUserSettingsDialog()
 {
     static OMultiInstanceAutoRegistration< OUserSettingsDialog > aAutoRegistration;
 }
@@ -47,7 +47,7 @@ Sequence<sal_Int8> SAL_CALL OUserSettingsDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > SAL_CALL OUserSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OUserSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new OUserSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
 }

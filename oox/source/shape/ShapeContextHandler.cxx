@@ -43,19 +43,19 @@ using namespace ::com::sun::star;
 using namespace core;
 using namespace drawingml;
 
-OUString SAL_CALL ShapeContextHandler_getImplementationName()
+OUString ShapeContextHandler_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.ShapeContextHandler" );
 }
 
-uno::Sequence< OUString > SAL_CALL
+uno::Sequence< OUString >
 ShapeContextHandler_getSupportedServiceNames()
 {
     uno::Sequence< OUString > s { "com.sun.star.xml.sax.FastShapeContextHandler" };
     return s;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< uno::XInterface >
 ShapeContextHandler_createInstance( const uno::Reference< uno::XComponentContext > & context)
 {
     return static_cast< ::cppu::OWeakObject* >( new ShapeContextHandler(context) );

@@ -170,7 +170,7 @@ OUString XMLFilterDialogComponent_getImplementationName()
 }
 
 /// @throws RuntimeException
-Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames()
+Sequence< OUString > XMLFilterDialogComponent_getSupportedServiceNames()
 {
     Sequence< OUString > aSupported { "com.sun.star.ui.dialogs.XSLTFilterDialog" };
     return aSupported;

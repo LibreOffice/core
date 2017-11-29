@@ -144,11 +144,11 @@ namespace pcr
         void                        CommitModified( );
 
         /// @throws css::uno::RuntimeException
-        void SAL_CALL               focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control );
+        void               focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control );
         /// @throws css::uno::RuntimeException
-        void SAL_CALL               valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control );
+        void               valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control );
         /// @throws css::uno::RuntimeException
-        void SAL_CALL               activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl );
+        void               activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl );
 
     private:
         // IButtonClickListener

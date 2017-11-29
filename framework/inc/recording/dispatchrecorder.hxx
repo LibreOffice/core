@@ -63,8 +63,8 @@ class DispatchRecorder
         DECLARE_XSERVICEINFO_NOFACTORY
         /* Helper for registry */
         /// @throws css::uno::Exception
-        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
-        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+        static css::uno::Reference< css::uno::XInterface >             impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
         // XDispatchRecorder
         virtual void SAL_CALL            startRecording         ( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
@@ -85,10 +85,10 @@ class DispatchRecorder
 
     // private functions
     private:
-        void SAL_CALL implts_recordMacro( const OUString& aURL,
+        void implts_recordMacro( const OUString& aURL,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                 bool bAsComment, OUStringBuffer& );
-        void SAL_CALL AppendToBuffer( const css::uno::Any& aValue, OUStringBuffer& aArgumentBuffer );
+        void AppendToBuffer( const css::uno::Any& aValue, OUStringBuffer& aArgumentBuffer );
 
 }; // class DispatcRecorder
 

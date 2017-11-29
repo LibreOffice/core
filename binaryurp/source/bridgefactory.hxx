@@ -58,13 +58,13 @@ class BridgeFactory : private cppu::BaseMutex, public BridgeFactoryBase
 {
 public:
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-    SAL_CALL static_create(
+    static_create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & xContext);
 
-    static OUString SAL_CALL static_getImplementationName();
+    static OUString static_getImplementationName();
 
-    static com::sun::star::uno::Sequence< OUString > SAL_CALL
+    static com::sun::star::uno::Sequence< OUString >
     static_getSupportedServiceNames();
 
     void removeBridge(

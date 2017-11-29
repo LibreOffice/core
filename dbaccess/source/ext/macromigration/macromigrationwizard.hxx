@@ -77,11 +77,11 @@ namespace dbmm
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // helper for factories
-        static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& _rxContext );
+        static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
         /// @throws RuntimeException
-        static OUString SAL_CALL getImplementationName_static();
+        static OUString getImplementationName_static();
         /// @throws RuntimeException
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
+        static Sequence< OUString > getSupportedServiceNames_static();
 
     protected:
         virtual ~MacroMigrationDialogService() override;

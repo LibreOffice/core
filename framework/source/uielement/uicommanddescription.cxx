@@ -92,7 +92,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
 
     protected:
-        css::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
+        css::uno::Any getByNameImpl( const OUString& aName );
 
         struct CmdToInfoMap
         {
@@ -208,7 +208,7 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 }
 
 // XNameAccess
-Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
+Any ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
 {
     static sal_Int32 nRequests  = 0;
 

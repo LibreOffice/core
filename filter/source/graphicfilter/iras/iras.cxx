@@ -380,7 +380,7 @@ sal_uInt8 RASReader::ImplGetByte()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 iraGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     RASReader aRASReader(rStream);

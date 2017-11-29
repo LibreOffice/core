@@ -91,7 +91,7 @@ public:
 
     /* Helper for registry */
     /// @throws css::uno::Exception
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance (
+    static css::uno::Reference< css::uno::XInterface > impl_createInstance (
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
 protected:

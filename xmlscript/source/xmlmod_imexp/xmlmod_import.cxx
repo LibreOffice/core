@@ -143,7 +143,7 @@ ModuleImport::~ModuleImport()
 }
 
 Reference< xml::sax::XDocumentHandler >
-SAL_CALL importScriptModule( ModuleDescriptor& rMod )
+importScriptModule( ModuleDescriptor& rMod )
 {
     return ::xmlscript::createDocumentHandler(
         static_cast< xml::input::XRoot * >( new ModuleImport( rMod ) ) );

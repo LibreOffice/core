@@ -36,7 +36,7 @@ namespace svxform
     {
     public:
         static css::uno::Reference< css::uno::XInterface >
-            SAL_CALL Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
+            Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
     private:
         OAddConditionDialog( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );

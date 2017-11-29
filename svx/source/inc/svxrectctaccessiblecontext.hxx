@@ -102,8 +102,7 @@ public:
         getSize() override;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL
-        isVisible();
+    bool isVisible();
 
     virtual void SAL_CALL
         grabFocus() override;

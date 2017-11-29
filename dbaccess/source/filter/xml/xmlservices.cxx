@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-extern "C" void SAL_CALL createRegistryInfo_dbaxml()
+extern "C" void createRegistryInfo_dbaxml()
 {
     static bool bInit = false;
     if (!bInit)

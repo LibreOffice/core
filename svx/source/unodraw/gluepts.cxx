@@ -503,7 +503,7 @@ sal_Bool SAL_CALL SvxUnoGluePointAccess::hasElements()
 /**
  * Create a SvxUnoGluePointAccess
  */
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject )
+uno::Reference< uno::XInterface > SvxUnoGluePointAccess_createInstance( SdrObject* pObject )
 {
     return *new SvxUnoGluePointAccess(pObject);
 }

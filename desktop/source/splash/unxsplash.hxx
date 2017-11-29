@@ -65,9 +65,9 @@ public:
 }
 
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL UnxSplash_createInstance(const css::uno::Reference< css::uno::XComponentContext > & xCtx );
+css::uno::Reference< css::uno::XInterface > UnxSplash_createInstance(const css::uno::Reference< css::uno::XComponentContext > & xCtx );
 OUString UnxSplash_getImplementationName();
-css::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();
+css::uno::Sequence< OUString > UnxSplash_getSupportedServiceNames() throw ();
 
 #endif // INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
 

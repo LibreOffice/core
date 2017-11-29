@@ -36,19 +36,19 @@ using namespace oox::core;
 
 namespace oox { namespace ppt {
 
-OUString SAL_CALL QuickDiagrammingImport_getImplementationName()
+OUString QuickDiagrammingImport_getImplementationName()
 {
     return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingImport" );
 }
 
-uno::Sequence< OUString > SAL_CALL QuickDiagrammingImport_getSupportedServiceNames()
+uno::Sequence< OUString > QuickDiagrammingImport_getSupportedServiceNames()
 {
     const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.import";
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL QuickDiagrammingImport_createInstance( const Reference< XComponentContext >& rxContext )
+uno::Reference< uno::XInterface > QuickDiagrammingImport_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast<cppu::OWeakObject*>(new QuickDiagrammingImport( rxContext ));
 }

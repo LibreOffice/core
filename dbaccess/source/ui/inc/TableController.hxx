@@ -129,7 +129,7 @@ namespace dbaui
         /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         static css::uno::Reference< css::uno::XInterface >
-                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+                Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     private:
         void startTableListening();

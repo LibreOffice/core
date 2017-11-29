@@ -108,7 +108,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 }
 
 
-css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
+css::uno::Any DispatchHelper::executeDispatch(
                                  const css::uno::Reference< css::frame::XDispatch >&  xDispatch     ,
                                  const  css::util::URL&                                 aURL        ,
                                  bool                                                   SyncronFlag ,

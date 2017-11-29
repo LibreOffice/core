@@ -1352,7 +1352,7 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
     }
 }
 
-void SAL_CALL exportDialogModel(
+void exportDialogModel(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< frame::XModel > const & xDocument )

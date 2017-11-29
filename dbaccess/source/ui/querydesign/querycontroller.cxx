@@ -85,7 +85,7 @@
 #include <memory>
 #include <vector>
 
-extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
+extern "C" void createRegistryInfo_OQueryControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OQueryController > aAutoRegistration;
 }
@@ -124,14 +124,14 @@ namespace dbaui
             Sequence<OUString> aSupported { "com.sun.star.sdb.ViewDesign" };
             return aSupported;
         }
-        static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
+        static Reference< XInterface > Create(const Reference< XMultiServiceFactory >& _rM)
         {
             return *(new OViewController(comphelper::getComponentContext(_rM)));
         }
     };
 }
 
-extern "C" void SAL_CALL createRegistryInfo_OViewControl()
+extern "C" void createRegistryInfo_OViewControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OViewController > aAutoRegistration;
 }
@@ -299,7 +299,7 @@ Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OQueryController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new OQueryController(comphelper::getComponentContext(_rxFactory)));
 }

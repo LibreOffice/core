@@ -54,7 +54,7 @@ private:
 /** Template helper function as dynamic_cast replacement.
  */
 template<class store_handle_type>
-store_handle_type * SAL_CALL query (
+store_handle_type * query (
     OStoreObject * pHandle, store_handle_type *);
 
 } // namespace store

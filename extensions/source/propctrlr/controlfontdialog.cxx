@@ -25,7 +25,7 @@
 #include "pcrcommon.hxx"
 #include "pcrservices.hxx"
 
-extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog()
+extern "C" void createRegistryInfo_OControlFontDialog()
 {
     ::pcr::OAutoRegistration< ::pcr::OControlFontDialog > aAutoRegistration;
 }
@@ -71,7 +71,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL OControlFontDialog::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > OControlFontDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new OControlFontDialog( _rxContext ) );
     }

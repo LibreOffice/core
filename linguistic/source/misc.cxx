@@ -604,7 +604,7 @@ bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageTyp
             && !(nFlags & KCharacterType::LOWER);
 }
 
-CapType SAL_CALL capitalType(const OUString& aTerm, CharClass const * pCC)
+CapType capitalType(const OUString& aTerm, CharClass const * pCC)
 {
         sal_Int32 tlen = aTerm.getLength();
         if (pCC && tlen)

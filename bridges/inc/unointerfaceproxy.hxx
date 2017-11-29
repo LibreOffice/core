@@ -95,16 +95,16 @@ private:
     typelib_InterfaceTypeDescription * pTypeDescr;
     OUString oid;
 
-    friend void SAL_CALL freeUnoInterfaceProxy(
+    friend void freeUnoInterfaceProxy(
         uno_ExtEnvironment * pEnv, void * pProxy);
 
-    friend void SAL_CALL unoInterfaceProxyDispatch(
+    friend void unoInterfaceProxyDispatch(
         uno_Interface * pUnoI, typelib_TypeDescription const * pMemberDescr,
         void * pReturn, void * pArgs[], uno_Any ** ppException);
 
-    friend void SAL_CALL acquireProxy(uno_Interface * pUnoI);
+    friend void acquireProxy(uno_Interface * pUnoI);
 
-    friend void SAL_CALL releaseProxy(uno_Interface * pUnoI);
+    friend void releaseProxy(uno_Interface * pUnoI);
 };
 
 } } }

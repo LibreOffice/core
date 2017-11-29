@@ -22,7 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 
-Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ )
+Reference< XInterface > ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ )
 {
     return *( new ScannerManager() );
 }

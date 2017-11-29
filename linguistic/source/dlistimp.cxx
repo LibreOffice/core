@@ -703,7 +703,7 @@ uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
     return aSNS;
 }
 
-void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
+void * DicList_getFactory( const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;

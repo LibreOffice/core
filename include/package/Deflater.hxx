@@ -43,15 +43,15 @@ class DLLPUBLIC_PACKAGE Deflater final
 public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel, bool bNowrap);
-    void SAL_CALL setInputSegment( const css::uno::Sequence< sal_Int8 >& rBuffer );
-    bool SAL_CALL needsInput(  );
-    void SAL_CALL finish(  );
-    bool SAL_CALL finished(  ) { return bFinished;}
-    sal_Int32 SAL_CALL doDeflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    sal_Int64 SAL_CALL getTotalIn(  );
-    sal_Int64 SAL_CALL getTotalOut(  );
-    void SAL_CALL reset(  );
-    void SAL_CALL end(  );
+    void setInputSegment( const css::uno::Sequence< sal_Int8 >& rBuffer );
+    bool needsInput(  );
+    void finish(  );
+    bool finished(  ) { return bFinished;}
+    sal_Int32 doDeflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    sal_Int64 getTotalIn(  );
+    sal_Int64 getTotalOut(  );
+    void reset(  );
+    void end(  );
 };
 
 }

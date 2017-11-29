@@ -103,7 +103,7 @@ public:
     //=====  XTypeProvider  ===================================================
 
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type>
         getTypes();
 
 };

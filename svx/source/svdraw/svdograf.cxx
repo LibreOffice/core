@@ -132,7 +132,7 @@ class SdrGraphicUpdater : public ::osl::Thread
 public:
     SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& );
 
-    void SAL_CALL Terminate();
+    void Terminate();
 
     bool GraphicLinkChanged( const OUString& rFileName ){ return maFileName != rFileName;    };
 

@@ -67,8 +67,8 @@ namespace comphelper
         */
         virtual void processEvent( const AnyEvent& _rEvent ) = 0;
 
-        virtual void SAL_CALL acquire() throw () = 0;
-        virtual void SAL_CALL release() throw () = 0;
+        virtual void acquire() throw () = 0;
+        virtual void release() throw () = 0;
 
     protected:
         ~IEventProcessor() {}
@@ -118,7 +118,7 @@ namespace comphelper
             itself, it will return immediately, and the thread will be terminated as soon as
             the current notification is finished.
         */
-        virtual void SAL_CALL terminate();
+        virtual void terminate();
 
         /** adds an event to the queue, together with the instance which is responsible for
             processing it

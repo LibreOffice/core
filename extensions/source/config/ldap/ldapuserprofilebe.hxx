@@ -102,12 +102,12 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
           Provides the implementation name.
           @return   implementation name
           */
-        static OUString SAL_CALL getLdapUserProfileBeName() ;
+        static OUString getLdapUserProfileBeName() ;
         /**
           Provides the supported services names
           @return   service names
           */
-        static uno::Sequence<OUString> SAL_CALL
+        static uno::Sequence<OUString>
             getLdapUserProfileBeServiceNames() ;
 
     private:

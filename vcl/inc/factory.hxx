@@ -35,41 +35,41 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
 } } }
 
-css::uno::Sequence<OUString> SAL_CALL vcl_session_getSupportedServiceNames();
+css::uno::Sequence<OUString> vcl_session_getSupportedServiceNames();
 
-OUString SAL_CALL vcl_session_getImplementationName();
+OUString vcl_session_getImplementationName();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL vcl_session_createInstance(
+css::uno::Reference<css::uno::XInterface> vcl_session_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory > const &);
 
 namespace vcl {
 
-css::uno::Sequence<OUString> SAL_CALL
+css::uno::Sequence<OUString>
 FontIdentificator_getSupportedServiceNames();
 
-OUString SAL_CALL FontIdentificator_getImplementationName();
+OUString FontIdentificator_getImplementationName();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 FontIdentificator_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory > const &);
 
-OUString SAL_CALL Clipboard_getImplementationName();
+OUString Clipboard_getImplementationName();
 
-css::uno::Reference<css::lang::XSingleServiceFactory> SAL_CALL
+css::uno::Reference<css::lang::XSingleServiceFactory>
 Clipboard_createFactory();
 
-css::uno::Sequence<OUString> SAL_CALL DragSource_getSupportedServiceNames();
+css::uno::Sequence<OUString> DragSource_getSupportedServiceNames();
 
-OUString SAL_CALL DragSource_getImplementationName();
+OUString DragSource_getImplementationName();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL DragSource_createInstance(
+css::uno::Reference<css::uno::XInterface> DragSource_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory > const &);
 
-css::uno::Sequence<OUString> SAL_CALL DropTarget_getSupportedServiceNames();
+css::uno::Sequence<OUString> DropTarget_getSupportedServiceNames();
 
-OUString SAL_CALL DropTarget_getImplementationName();
+OUString DropTarget_getImplementationName();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL DropTarget_createInstance(
+css::uno::Reference<css::uno::XInterface> DropTarget_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory > const &);
 
 }

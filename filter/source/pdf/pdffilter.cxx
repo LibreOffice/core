@@ -202,14 +202,14 @@ OUString PDFFilter_getImplementationName ()
 }
 
 
-Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
+Sequence< OUString > PDFFilter_getSupportedServiceNames(  )
 {
     Sequence<OUString> aRet { "com.sun.star.document.PDFFilter" };
     return aRet;
 }
 
 
-Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new PDFFilter( comphelper::getComponentContext(rSMgr) ));
 }

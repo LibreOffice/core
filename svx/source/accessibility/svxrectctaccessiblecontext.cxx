@@ -183,7 +183,7 @@ awt::Size SAL_CALL SvxRectCtlAccessibleContext::getSize()
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-bool SAL_CALL SvxRectCtlAccessibleContext::isVisible()
+bool SvxRectCtlAccessibleContext::isVisible()
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
 

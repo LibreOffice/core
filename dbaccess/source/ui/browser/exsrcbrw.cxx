@@ -45,7 +45,7 @@ using namespace ::com::sun::star::frame;
 using namespace dbaui;
 
 // SbaExternalSourceBrowser
-extern "C" void SAL_CALL createRegistryInfo_OFormGridView()
+extern "C" void createRegistryInfo_OFormGridView()
 {
     static OMultiInstanceAutoRegistration< SbaExternalSourceBrowser > aAutoRegistration;
 }
@@ -91,7 +91,7 @@ css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_
     return aSupported;
 }
 
-Reference< XInterface > SAL_CALL SbaExternalSourceBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SbaExternalSourceBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new SbaExternalSourceBrowser( comphelper::getComponentContext(_rxFactory)));
 }
