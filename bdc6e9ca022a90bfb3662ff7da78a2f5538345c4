@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_361ccc69",
+        "filename": "bin/list-uitest.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-29T13:09:35Z",
+      "side": 1,
+      "message": "writerperfect/qa/uitest/ is currently also Writer-only.",
+      "revId": "bdc6e9ca022a90bfb3662ff7da78a2f5538345c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
