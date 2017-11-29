@@ -204,7 +204,7 @@ found:
     if ( pItem )
         pTopic->aItem = pItem->GetName();
     else
-        (pTopic->aItem).clear();
+        pTopic->aItem.clear();
 
     bool bRes = false;
     switch( nCode )

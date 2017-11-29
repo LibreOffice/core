@@ -235,7 +235,7 @@ static void deleteSystrayMenu( HMENU hMenu )
         MYITEM *pMyItem = reinterpret_cast<MYITEM*>(mi.dwItemData);
         if( pMyItem )
         {
-            (pMyItem->text).clear();
+            pMyItem->text.clear();
             delete pMyItem;
         }
         mi.fMask = MIIM_DATA;

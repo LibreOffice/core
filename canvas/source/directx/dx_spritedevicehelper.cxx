@@ -194,7 +194,7 @@ namespace dxcanvas
     void SpriteDeviceHelper::resizeBackBuffer( const ::basegfx::B2ISize& rNewSize )
     {
         // disposed?
-        if(!(mpBackBuffer))
+        if(!mpBackBuffer)
             return;
 
         mpBackBuffer->resize(rNewSize);
