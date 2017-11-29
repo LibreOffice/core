@@ -69,4 +69,18 @@ class EPUBExportTest(UITestCase):
         # Make sure that initializing with 2 different versions results in 2 different widget states.
         self.assertEqual(2, len(set(positions)))
 
+    def testCoverImage(self):
+        def handleDialog(dialog):
+            dialog.getChild("coverpath").executeAction("TYPE", mkPropertyValues({"TEXT": "cover.png"}))
+            dialog.getChild("ok").executeAction("CLICK", tuple())
+
+        uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
+
+        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        propertyValues = uiComponent.getPropertyValues()
+        filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
+        # The EPUBCoverImage key was missing, EPUBExportDialog::OKClickHdl() did not set it.
+        coverImage = [i.Value for i in filterData if i.Name == "EPUBCoverImage"][0]
+        self.assertEqual("cover.png", coverImage)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

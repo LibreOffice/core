@@ -9,6 +9,8 @@
 
 #include "EPUBExportDialog.hxx"
 
+#include <sfx2/opengrf.hxx>
+
 #include "EPUBExportFilter.hxx"
 
 using namespace com::sun::star;
@@ -90,6 +92,14 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
     else
         m_pSplit->SelectEntryPos(EPUBExportFilter::GetDefaultSplitMethod());
     m_pSplit->SetSelectHdl(LINK(this, EPUBExportDialog, SplitSelectHdl));
+
+    get(m_pCoverPath, "coverpath");
+
+    get(m_pCoverButton, "coverbutton");
+    m_pCoverButton->SetClickHdl(LINK(this, EPUBExportDialog, CoverClickHdl));
+
+    get(m_pOKButton, "ok");
+    m_pOKButton->SetClickHdl(LINK(this, EPUBExportDialog, OKClickHdl));
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, ListBox &, void)
@@ -104,6 +114,22 @@ IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, ListBox &, void)
     mrFilterData["EPUBSplitMethod"] <<= m_pSplit->GetSelectedEntryPos();
 }
 
+IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
+{
+    SvxOpenGraphicDialog aDlg("Import", this);
+    aDlg.EnableLink(false);
+    if (aDlg.Execute() == ERRCODE_NONE)
+        m_pCoverPath->SetText(aDlg.GetPath());
+}
+
+IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, Button *, void)
+{
+    if (!m_pCoverPath->GetText().isEmpty())
+        mrFilterData["EPUBCoverImage"] <<= m_pCoverPath->GetText();
+
+    EndDialog(RET_OK);
+}
+
 EPUBExportDialog::~EPUBExportDialog()
 {
     disposeOnce();
@@ -113,6 +139,9 @@ void EPUBExportDialog::dispose()
 {
     m_pVersion.clear();
     m_pSplit.clear();
+    m_pCoverPath.clear();
+    m_pCoverButton.clear();
+    m_pOKButton.clear();
     ModalDialog::dispose();
 }
 
