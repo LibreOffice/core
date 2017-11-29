@@ -46,10 +46,38 @@ OUString GetMimeType(const OUString &rExtension)
 }
 
 /// Picks up a cover image from the base directory.
-OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType)
+OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
     OUString aRet;
 
+    // See if filter data contains a cover image explicitly.
+    uno::Sequence<beans::PropertyValue> aFilterData;
+    for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
+    {
+        if (rDescriptor[i].Name == "FilterData")
+        {
+            rDescriptor[i].Value >>= aFilterData;
+            break;
+        }
+    }
+
+    for (sal_Int32 i = 0; i < aFilterData.getLength(); ++i)
+    {
+        if (aFilterData[i].Name == "EPUBCoverImage")
+        {
+            aFilterData[i].Value >>= aRet;
+            break;
+        }
+    }
+
+    if (!aRet.isEmpty())
+    {
+        INetURLObject aRetURL(aRet);
+        rMimeType = GetMimeType(aRetURL.GetExtension());
+        return aRet;
+    }
+
+    // Not set explicitly, try to pick it up from the base directory.
     if (rDocumentBaseURL.isEmpty())
         return aRet;
 
@@ -142,11 +170,11 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
     return nullptr;
 }
 
-XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &/*rDescriptor*/)
+XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor)
     : mrGenerator(rGenerator)
 {
     OUString aMimeType;
-    OUString aCoverImage = FindCoverImage(rURL, aMimeType);
+    OUString aCoverImage = FindCoverImage(rURL, aMimeType, rDescriptor);
     if (!aCoverImage.isEmpty())
     {
         librevenge::RVNGBinaryData aBinaryData;
