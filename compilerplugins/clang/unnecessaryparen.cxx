@@ -76,6 +76,7 @@ public:
     bool VisitIfStmt(const IfStmt *);
     bool VisitDoStmt(const DoStmt *);
     bool VisitWhileStmt(const WhileStmt *);
+    bool VisitForStmt(ForStmt const * stmt);
     bool VisitSwitchStmt(const SwitchStmt *);
     bool VisitCaseStmt(const CaseStmt *);
     bool VisitReturnStmt(const ReturnStmt* );
@@ -84,9 +85,12 @@ public:
     bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
     bool VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr const *);
     bool VisitConditionalOperator(ConditionalOperator const * expr);
+    bool VisitBinaryConditionalOperator(BinaryConditionalOperator const * expr);
     bool VisitMemberExpr(const MemberExpr *f);
 private:
     void VisitSomeStmt(Stmt const * stmt, const Expr* cond, StringRef stmtName);
+
+    void handleUnreachableCodeConditionParens(Expr const * expr);
 
     // Hack for libxml2's BAD_CAST object-like macro (expanding to "(xmlChar *)"), which is
     // typically used as if it were a function-like macro, e.g., as "BAD_CAST(pName)" in
@@ -107,11 +111,12 @@ bool UnnecessaryParen::VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr co
 }
 
 bool UnnecessaryParen::VisitConditionalOperator(ConditionalOperator const * expr) {
-    if (auto const e = dyn_cast<ParenExpr>(ignoreAllImplicit(expr->getCond()))) {
-        if (isa<CXXBoolLiteralExpr>(e->getSubExpr())) {
-            handled_.insert(e);
-        }
-    }
+    handleUnreachableCodeConditionParens(expr->getCond());
+    return true;
+}
+
+bool UnnecessaryParen::VisitBinaryConditionalOperator(BinaryConditionalOperator const * expr) {
+    handleUnreachableCodeConditionParens(expr->getCond());
     return true;
 }
 
@@ -149,10 +154,10 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
                 << parenExpr->getSourceRange();
             handled_.insert(parenExpr);
         }
-    } else if (isa<CharacterLiteral>(subExpr) || isa<FloatingLiteral>(subExpr)
-               || isa<ImaginaryLiteral>(subExpr) || isa<CXXNullPtrLiteralExpr>(subExpr))
-        //TODO: isa<IntegerLiteral>(subExpr)
-        //TODO: isa<CXXBoolLiteralExpr>(subExpr) || isa<ObjCBoolLiteralExpr>(subExpr)
+    } else if (isa<IntegerLiteral>(subExpr) || isa<CharacterLiteral>(subExpr)
+               || isa<FloatingLiteral>(subExpr) || isa<ImaginaryLiteral>(subExpr)
+               || isa<CXXBoolLiteralExpr>(subExpr) || isa<CXXNullPtrLiteralExpr>(subExpr)
+               || isa<ObjCBoolLiteralExpr>(subExpr))
     {
         auto const loc = subExpr->getLocStart();
         if (loc.isMacroID() && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(loc))
@@ -188,6 +193,7 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
 
 bool UnnecessaryParen::VisitIfStmt(const IfStmt* ifStmt)
 {
+    handleUnreachableCodeConditionParens(ifStmt->getCond());
     VisitSomeStmt(ifStmt, ifStmt->getCond(), "if");
     return true;
 }
@@ -200,7 +206,15 @@ bool UnnecessaryParen::VisitDoStmt(const DoStmt* doStmt)
 
 bool UnnecessaryParen::VisitWhileStmt(const WhileStmt* whileStmt)
 {
+    handleUnreachableCodeConditionParens(whileStmt->getCond());
     VisitSomeStmt(whileStmt, whileStmt->getCond(), "while");
+    return true;
+}
+
+bool UnnecessaryParen::VisitForStmt(ForStmt const * stmt) {
+    if (auto const cond = stmt->getCond()) {
+        handleUnreachableCodeConditionParens(cond);
+    }
     return true;
 }
 
@@ -253,15 +267,11 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt * stmt, const Expr* cond, String
 
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(cond));
     if (parenExpr) {
-        if (parenExpr->getLocStart().isMacroID())
-            return;
-        // Used to silence -Wunreachable-code:
-        if (isa<CXXBoolLiteralExpr>(parenExpr->getSubExpr())
-            && stmtName == "if")
-        {
-            handled_.insert(parenExpr);
+        if (handled_.find(parenExpr) != handled_.end()) {
             return;
         }
+        if (parenExpr->getLocStart().isMacroID())
+            return;
         // assignments need extra parentheses or they generate a compiler warning
         auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
         if (binaryOp && binaryOp->getOpcode() == BO_Assign)
@@ -404,6 +414,34 @@ bool UnnecessaryParen::VisitMemberExpr(const MemberExpr* memberExpr)
         << parenExpr->getSourceRange();
     handled_.insert(parenExpr);
     return true;
+}
+
+// Conservatively assume any parenthesised integer or Boolean (incl. Objective-C ones) literal in
+// certain condition expressions (i.e., those for which handleUnreachableCodeConditionParens is
+// called) to be parenthesised to silence Clang -Wunreachable-code, if that is either the whole
+// condition expression or appears as a certain sub-expression (looking at what isConfigurationValue
+// in Clang's lib/Analysis/ReachableCode.cpp looks for, descending into certain unary and binary
+// operators):
+void UnnecessaryParen::handleUnreachableCodeConditionParens(Expr const * expr) {
+    // Cf. :
+    auto const e = ignoreAllImplicit(expr);
+    if (auto const e1 = dyn_cast<ParenExpr>(e)) {
+        auto const sub = e1->getSubExpr();
+        if (isa<IntegerLiteral>(sub) || isa<CXXBoolLiteralExpr>(sub)
+            || isa<ObjCBoolLiteralExpr>(sub))
+        {
+            handled_.insert(e1);
+        }
+    } else if (auto const e1 = dyn_cast<UnaryOperator>(e)) {
+        if (e1->getOpcode() == UO_LNot) {
+            handleUnreachableCodeConditionParens(e1->getSubExpr());
+        }
+    } else if (auto const e1 = dyn_cast<BinaryOperator>(e)) {
+        if (e1->isLogicalOp() || e1->isComparisonOp()) {
+            handleUnreachableCodeConditionParens(e1->getLHS());
+            handleUnreachableCodeConditionParens(e1->getRHS());
+        }
+    }
 }
 
 bool UnnecessaryParen::isPrecededBy_BAD_CAST(Expr const * expr) {
