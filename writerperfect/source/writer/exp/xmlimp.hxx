@@ -15,6 +15,7 @@
 
 #include <librevenge/librevenge.h>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -49,9 +50,10 @@ class XMLImport : public cppu::WeakImplHelper
     std::map<OUString, librevenge::RVNGPropertyList> maTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticGraphicStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maGraphicStyles;
+    librevenge::RVNGPropertyListVector maCoverImages;
 
 public:
-    XMLImport(librevenge::RVNGTextInterface &rGenerator);
+    XMLImport(librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
 
     rtl::Reference<XMLImportContext> CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
 
@@ -70,6 +72,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetGraphicStyles();
+    const librevenge::RVNGPropertyListVector &GetCoverImages();
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

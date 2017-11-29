@@ -14,6 +14,7 @@
 #include <libepubgen/EPUBTextGenerator.h>
 #include <libepubgen/libepubgen-decls.h>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -74,7 +75,11 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
                                              , nVersion
 #endif
                                             );
-    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator));
+    OUString aSourceURL;
+    uno::Reference<frame::XModel> xSourceModel(mxSourceDocument, uno::UNO_QUERY);
+    if (xSourceModel.is())
+        aSourceURL = xSourceModel->getURL();
+    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator, aSourceURL, rDescriptor));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
     xInitialization->initialize({uno::makeAny(xExportHandler)});

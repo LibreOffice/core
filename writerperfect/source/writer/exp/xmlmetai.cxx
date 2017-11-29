@@ -131,6 +131,7 @@ void XMLMetaInitialCreatorContext::characters(const OUString &rChars)
 XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
+    m_aPropertyList.insert("librevenge:cover-images", mrImport.GetCoverImages());
 }
 
 rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)

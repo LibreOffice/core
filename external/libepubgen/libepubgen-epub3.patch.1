@@ -4385,3 +4385,85 @@ index d5e650c..a1ce33e 100644
      return false;
    }
    bool fixed = true;
+From 0d06b60d45b3e1465976eb027c3fde31fccdc025 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 17 Nov 2017 15:45:12 +0100
+Subject: [PATCH] EPUBGenerator: add support for cover image metadata
+
+The librevenge:cover-images key can't have a property list as a value,
+so go with a list of cover images, though in practice more than one
+won't result in a valid EPUB3 file.
+---
+ src/lib/EPUBGenerator.cpp          | 18 ++++++++++++++++++
+ src/lib/EPUBImageManager.cpp       |  4 ++--
+ src/lib/EPUBImageManager.h         |  2 +-
+ src/test/EPUBTextGeneratorTest.cpp | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 64707c5..62dac6e 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -86,6 +86,24 @@ void EPUBGenerator::endDocument()
+ void EPUBGenerator::setDocumentMetaData(const RVNGPropertyList &props)
+ {
+   m_metadata = props;
++
++  if (m_version == 30)
++  {
++    const librevenge::RVNGPropertyListVector *coverImages = props.child("librevenge:cover-images");
++    if (coverImages)
++    {
++      for (size_t i = 0; i < coverImages->count(); ++i)
++      {
++        librevenge::RVNGPropertyList const &propertyList = (*coverImages)[i];
++        if (propertyList["office:binary-data"] && propertyList["librevenge:mime-type"])
++        {
++          m_imageManager.insert(librevenge::RVNGBinaryData(propertyList["office:binary-data"]->getStr()),
++                                propertyList["librevenge:mime-type"]->getStr(),
++                                "cover-image");
++        }
++      }
++    }
++  }
+ }
+ 
+ void EPUBGenerator::startNewHtmlFile()
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index c4c9457..bdf3bf0 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -84,7 +84,7 @@ EPUBImageManager::EPUBImageManager(EPUBManifest &manifest)
+ {
+ }
+ 
+-const EPUBPath &EPUBImageManager::insert(const librevenge::RVNGBinaryData &data, const librevenge::RVNGString &mimetype)
++const EPUBPath &EPUBImageManager::insert(const librevenge::RVNGBinaryData &data, const librevenge::RVNGString &mimetype, const librevenge::RVNGString &properties)
+ {
+   MapType_t::const_iterator it = m_map.find(data);
+   if (m_map.end() == it)
+@@ -99,7 +99,7 @@ const EPUBPath &EPUBImageManager::insert(const librevenge::RVNGBinaryData &data,
+ 
+     const EPUBPath path(EPUBPath("OEBPS/images") / nameBuf.str());
+ 
+-    m_manifest.insert(path, mime, id, "");
++    m_manifest.insert(path, mime, id, properties.cstr());
+     it = m_map.insert(MapType_t::value_type(data, path)).first;
+   }
+ 
+diff --git a/src/lib/EPUBImageManager.h b/src/lib/EPUBImageManager.h
+index 3f4bf3c..cbb83b7 100644
+--- a/src/lib/EPUBImageManager.h
++++ b/src/lib/EPUBImageManager.h
+@@ -49,7 +49,7 @@ class EPUBImageManager
+ public:
+   explicit EPUBImageManager(EPUBManifest &manifest);
+ 
+-  const EPUBPath &insert(const librevenge::RVNGBinaryData &data, const librevenge::RVNGString &mimetype);
++  const EPUBPath &insert(const librevenge::RVNGBinaryData &data, const librevenge::RVNGString &mimetype, const librevenge::RVNGString &properties="");
+ 
+   void writeTo(EPUBPackage &package);
+ 
+-- 
+2.13.6
+
