@@ -42,6 +42,45 @@ public:
     virtual ~SvXMLSectionListContext() override;
 };
 
+class SwXMLParentContext : public SvXMLImportContext
+{
+private:
+    SwXMLSectionList & m_rImport;
+
+public:
+    SwXMLParentContext(SwXMLSectionList& rImport,
+           sal_uInt16 nPrefix,
+           const OUString& rLocalName)
+        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+        , m_rImport(rImport)
+    {
+    }
+
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
+           const OUString& rLocalName,
+           const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
+    {
+        if ((nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken(rLocalName, XML_BODY)) ||
+            (nPrefix == XML_NAMESPACE_TEXT &&
+                (   IsXMLToken(rLocalName, XML_P)
+                 || IsXMLToken(rLocalName, XML_H)
+                 || IsXMLToken(rLocalName, XML_A)
+                 || IsXMLToken(rLocalName, XML_SPAN)
+                 || IsXMLToken(rLocalName, XML_SECTION)
+                 || IsXMLToken(rLocalName, XML_INDEX_BODY)
+                 || IsXMLToken(rLocalName, XML_INDEX_TITLE)
+                 || IsXMLToken(rLocalName, XML_INSERTION)
+                 || IsXMLToken(rLocalName, XML_DELETION))))
+        {
+            return new SvXMLSectionListContext(m_rImport, nPrefix, rLocalName, xAttrList);
+        }
+        else
+        {
+            return new SwXMLParentContext(m_rImport, nPrefix, rLocalName);
+        }
+    }
+};
+
 
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< uno::XComponentContext >& rContext,
@@ -67,29 +106,9 @@ SwXMLSectionList::~SwXMLSectionList()
 SvXMLImportContext *SwXMLSectionList::CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference<xml::sax::XAttributeList> & )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if(( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken ( rLocalName, XML_BODY )) ||
-        ( nPrefix == XML_NAMESPACE_TEXT &&
-            (IsXMLToken ( rLocalName, XML_P ) ||
-            IsXMLToken ( rLocalName, XML_H ) ||
-            IsXMLToken ( rLocalName, XML_A ) ||
-            IsXMLToken ( rLocalName, XML_SPAN ) ||
-            IsXMLToken ( rLocalName, XML_SECTION ) ||
-            IsXMLToken ( rLocalName, XML_INDEX_BODY ) ||
-            IsXMLToken ( rLocalName, XML_INDEX_TITLE )||
-            IsXMLToken ( rLocalName, XML_INSERTION ) ||
-            IsXMLToken ( rLocalName, XML_DELETION ) )
-        )
-      )
-    {
-        pContext = new SvXMLSectionListContext (*this, nPrefix, rLocalName, xAttrList);
-    }
-    else
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
-    return pContext;
+    return new SwXMLParentContext(*this, nPrefix, rLocalName);
 }
 
 SvXMLSectionListContext::SvXMLSectionListContext(
