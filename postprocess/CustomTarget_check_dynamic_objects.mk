@@ -19,7 +19,6 @@ $(call gb_CustomTarget_get_workdir,postprocess/check_dynamic_objects)/check.done
 		$(call gb_Postprocess_get_target,AllPackages)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,2)
 	# currently we only check ELF objects
-	# FIXME fails currently, disabled
-	$(SRCDIR)/bin/check-elf-dynamic-objects -p || true
+	$(SRCDIR)/bin/check-elf-dynamic-objects -p
 
 # vim: set noet sw=4 ts=4:
