@@ -462,7 +462,7 @@ public:
                                                                 long            nDefault,
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals,
-                                                                long            nMaximum  = 1000,
+                                                                long            nMaximum,
                                                                 long            nMinimum  = 0 ) = 0;
 
     virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(vcl::Window * pParent,
@@ -516,7 +516,7 @@ public:
 
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
-                                                                    const OUString*         pStrTitle = nullptr,
+                                                                    const OUString*         pStrTitle,
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) = 0;
 

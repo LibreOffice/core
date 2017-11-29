@@ -275,7 +275,7 @@ public:
     virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
     virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
                                    double nOutputFactor, bool bCalcWidthHeight,
-                                   SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;
+                                   SvNumberFormatter* pFormatter, bool bConvertDate = true ) override;
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) override;

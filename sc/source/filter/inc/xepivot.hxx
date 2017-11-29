@@ -43,7 +43,7 @@ public:
     explicit            XclExpPCItem( double fValue, const OUString& rText = OUString() );
     explicit            XclExpPCItem( const DateTime& rDateTime, const OUString& rText = OUString() );
     explicit            XclExpPCItem( sal_Int16 nValue );
-    explicit            XclExpPCItem( bool bValue, const OUString& rText = OUString() );
+    explicit            XclExpPCItem( bool bValue, const OUString& rText );
 
     sal_uInt16   GetTypeFlag() const { return mnTypeFlag; }
 

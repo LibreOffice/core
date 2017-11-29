@@ -69,7 +69,7 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
                  const rtl_TextEncoding eSrc ) = 0;
     virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
     virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor,
-                                   bool bCalcWidthHeight, SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;
+                                   bool bCalcWidthHeight, SvNumberFormatter* pFormatter, bool bConvertDate = true ) = 0;
 
     // various import helpers
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;

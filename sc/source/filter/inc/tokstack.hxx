@@ -100,7 +100,7 @@ struct TokenPoolPool
         return true;
     }
     /** Returns the new number of elements, or 0 if overflow. */
-    static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin = 1 )
+    static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin )
     {
         if (!nOld)
             return nByMin ? nByMin : 1;
@@ -213,7 +213,7 @@ private:
 #endif
         ScTokenArray*               pScToken;   // Token array
 
-        bool                        GrowTripel( sal_uInt16 nByMin = 1 );
+        bool                        GrowTripel( sal_uInt16 nByMin );
         bool                        GrowId();
         bool                        GrowElement();
         bool                        GrowMatrix();
