@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <algorithm>
 #include <memory>
 #include <iostream>
 #include <boost/property_tree/json_parser.hpp>
@@ -2340,24 +2341,19 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         beans::PropertyValue aValue;
         aValue.Name = "InteractionHandler";
         aValue.Value <<= xInteraction;
-
         aPropertyValuesVector.push_back(aValue);
 
-        // Check if DontSaveIfUnmodified is specified
         bool bDontSaveIfUnmodified = false;
-        auto it = aPropertyValuesVector.begin();
-        while (it != aPropertyValuesVector.end())
-        {
-            if (it->Name == "DontSaveIfUnmodified")
-            {
-                bDontSaveIfUnmodified = it->Value.get<bool>();
-
-                // Also remove this param before handling to core
-                it = aPropertyValuesVector.erase(it);
-            }
-            else
-                it++;
-        }
+        aPropertyValuesVector.erase(std::remove_if(aPropertyValuesVector.begin(),
+                                                   aPropertyValuesVector.end(),
+                                                   [&bDontSaveIfUnmodified](const beans::PropertyValue& aItem){
+                                                       if (aItem.Name == "DontSaveIfUnmodified")
+                                                       {
+                                                           bDontSaveIfUnmodified = aItem.Value.get<bool>();
+                                                           return true;
+                                                       }
+                                                       return false;
+                                                   }), aPropertyValuesVector.end());
 
         // skip saving and tell the result via UNO_COMMAND_RESULT
         if (bDontSaveIfUnmodified && !pDocSh->IsModified())
