@@ -188,6 +188,8 @@ else
 	)>> check_elf.out &
     done
 
+    for file in ${files}; do wait; done
+
     if [ -s check_elf.out ] ; then
 	cat check_elf.out
 	status=1
