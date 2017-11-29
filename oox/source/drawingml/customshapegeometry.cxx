@@ -929,7 +929,7 @@ class Path2DContext : public ContextHandler2
 {
 public:
     Path2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
-    virtual ~Path2DContext() override;
+    virtual void onEndElement() override;
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
@@ -952,7 +952,7 @@ Path2DContext::Path2DContext( ContextHandler2Helper const & rParent, const Attri
     rPath2D.extrusionOk = rAttribs.getBool( XML_extrusionOk, true );
 }
 
-Path2DContext::~Path2DContext()
+void Path2DContext::onEndElement()
 {
     EnhancedCustomShapeSegment aNewSegment;
     switch ( mrPath2D.fill )
@@ -987,6 +987,7 @@ Path2DContext::~Path2DContext()
     aNewSegment.Count = 0;
     mrSegments.push_back( aNewSegment );
 }
+
 
 ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
     const AttributeList& rAttribs )
