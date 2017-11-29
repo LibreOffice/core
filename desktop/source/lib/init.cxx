@@ -613,11 +613,13 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
 static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer, int* nWidth, int* nHeight);
+
+static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -669,8 +671,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
-        m_pDocumentClass->paintDialog = doc_paintDialog;
+        m_pDocumentClass->paintWindow = doc_paintWindow;
         m_pDocumentClass->paintActiveFloatingWindow = doc_paintActiveFloatingWindow;
+        m_pDocumentClass->postWindow = doc_postWindow;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3283,7 +3286,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
     return nullptr;
 }
 
-static void doc_paintDialog(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId,
+static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId,
                             unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight)
@@ -3332,6 +3335,24 @@ static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* /*pThis*/, uns
     *nWidth = aSize.getWidth();
     *nHeight = aSize.getHeight();
     comphelper::LibreOfficeKit::setDialogPainting(false);
+}
+
+static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction)
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    if (!pWindow)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+        return;
+    }
+
+    if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
+    {
+        if (nAction == LOK_WINDOW_CLOSE)
+            pDialog->EndDialog( RET_CANCEL );
+    }
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
