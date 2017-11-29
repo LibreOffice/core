@@ -53,7 +53,7 @@
 class ScDocument;
 
 // DataProvider
-class ScChart2DataProvider : public
+class SC_DLLPUBLIC ScChart2DataProvider : public
                 ::cppu::WeakImplHelper<
                     css::chart2::data::XDataProvider,
                     css::chart2::data::XSheetDataProvider,
