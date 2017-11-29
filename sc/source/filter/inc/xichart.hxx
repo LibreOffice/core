@@ -507,7 +507,7 @@ public:
     /** Converts and writes the contained number format to the passed property set. */
     void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
     /** Converts and writes all contained data to the passed data point label property set. */
-    void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo, const ScfPropertySet* pGlobalPropSet = nullptr ) const;
+    void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo, const ScfPropertySet* pGlobalPropSet ) const;
     /** Creates a title text object. */
     css::uno::Reference< css::chart2::XTitle >
                         CreateTitle() const;

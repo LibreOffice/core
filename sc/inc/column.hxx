@@ -188,7 +188,7 @@ public:
     ScColumn();
     ~ScColumn() COVERITY_NOEXCEPT_FALSE;
 
-    void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray = false);
+    void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray);
 
     ScDocument& GetDoc() { return *pDocument;}
     const ScDocument& GetDoc() const { return *pDocument;}
@@ -385,7 +385,7 @@ public:
     bool    HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
     sc::MultiDataCellState::StateType HasDataCellsInRange(
-        SCROW nRow1, SCROW nRow2, SCROW* pRow1 = nullptr ) const;
+        SCROW nRow1, SCROW nRow2, SCROW* pRow1 ) const;
 
     bool IsFormulaDirty( SCROW nRow ) const;
 
@@ -500,7 +500,7 @@ public:
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged = nullptr );
+    SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged );
     void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
