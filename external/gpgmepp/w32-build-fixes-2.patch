@@ -1,0 +1,12 @@
+Avoid MFC dependency - can go with very basic includes instead
+
+--- src/versioninfo.rc.in~	2017-03-28 15:12:30.000000000 +0200
++++ src/versioninfo.rc.in	2017-11-29 04:22:18.607421900 +0100
+@@ -14,7 +14,6 @@
+ 
+ #line __LINE__ "versioninfo.rc.in"
+ 
+-#include <afxres.h>
+ 
+ 
+ VS_VERSION_INFO VERSIONINFO
