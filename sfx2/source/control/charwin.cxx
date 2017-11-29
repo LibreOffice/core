@@ -52,15 +52,15 @@ void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
 
         maMouseClickHdl.Call(this);
     }
-
-    if(rMEvt.IsRight())
+// no context menu on floating windows
+/*    if(rMEvt.IsRight())
     {
         Point aPosition (rMEvt.GetPosPixel());
         maPosition = aPosition;
         GrabFocus();
         Invalidate();
         createContextMenu();
-    }
+    } */
 }
 
 void SvxCharView::KeyInput( const KeyEvent& rKEvt )
