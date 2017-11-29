@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <gpg/SEInitializer.hxx>
 #include "SecurityEnvironment.hxx"
 #include "XMLSecurityContext.hxx"
@@ -52,6 +54,43 @@ Reference< XXMLSecurityContext > SAL_CALL SEInitializerGpg::createSecurityContex
 
 void SAL_CALL SEInitializerGpg::freeSecurityContext( const uno::Reference< XXMLSecurityContext >& )
 {
+}
+
+
+
+uno::Reference< uno::XInterface > SAL_CALL SEInitializerGpg::impl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & /*rxMSF*/)
+{
+    return static_cast<cppu::OWeakObject*>(new SEInitializerGpg());
+}
+
+uno::Reference< XSingleServiceFactory > SEInitializerGpg::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
+    return cppu::createSingleFactory( aServiceManager, impl_getImplementationName(), impl_createInstance, impl_getSupportedServiceNames() ) ;
+}
+
+/* XServiceInfo */
+OUString SAL_CALL SEInitializerGpg::impl_getImplementationName()
+{
+    return OUString("com.sun.star.xml.security.SEInitializer_Gpg");
+}
+
+uno::Sequence< OUString > SAL_CALL SEInitializerGpg::impl_getSupportedServiceNames()
+{
+    return {"com.sun.star.xml.crypto.GpgSEInitializer"};
+}
+
+sal_Bool SAL_CALL SEInitializerGpg::supportsService( const OUString& rServiceName )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+uno::Sequence< OUString > SAL_CALL SEInitializerGpg::getSupportedServiceNames()
+{
+    return impl_getSupportedServiceNames();
+}
+
+OUString SAL_CALL SEInitializerGpg::getImplementationName()
+{
+    return impl_getImplementationName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

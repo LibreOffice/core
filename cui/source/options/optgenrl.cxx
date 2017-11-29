@@ -18,6 +18,8 @@
  */
 
 #include <comphelper/string.hxx>
+#include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -31,6 +33,8 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxids.hrc>
+
+using namespace css;
 
 namespace
 {
@@ -205,6 +209,16 @@ SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCo
     InitControls();
     SetExchangeSupport(); // this page needs ExchangeSupport
     SetLinks();
+    uno::Reference< com::sun::star::xml::crypto::XSEInitializer > xSEInitializer;
+         try
+         {
+            xSEInitializer = xml::crypto::GPGSEInitializer::create( comphelper::getProcessComponentContext() );
+            uno::Reference<xml::crypto::XXMLSecurityContext> xSC = xSEInitializer->createSecurityContext( OUString() );
+            uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSC->getSecurityEnvironment();
+            uno::Sequence< uno::Reference<security::XCertificate> > aCertificates = xSE->getPersonalCertificates();
+         }
+         catch ( uno::Exception const & )
+         {}
 }
 
 SvxGeneralTabPage::~SvxGeneralTabPage()
