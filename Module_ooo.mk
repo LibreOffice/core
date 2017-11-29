@@ -59,8 +59,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oox \
     padmin \
     package \
+    rdbmaker \
     reportdesign \
     remotebridges \
+    sane \
     sax \
     sc \
     sccomp \
@@ -84,6 +86,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     vbahelper \
     vcl \
     udm \
+    unixODBC \
     wizards \
     writerfilter \
     x11_extensions \

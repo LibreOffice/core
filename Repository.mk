@@ -29,6 +29,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bmpsum \
     g2g \
     mkunroll \
+    rdbmaker \
     rscdep \
     so_checksum \
     srvdepy \
@@ -100,6 +101,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     oox \
     package2 \
     qstart_gtk \
+    reg \
     rpt \
     rptui \
     rptxml \
