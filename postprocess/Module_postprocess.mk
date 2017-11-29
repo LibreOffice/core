@@ -41,6 +41,12 @@ $(eval $(call gb_Module_add_targets,postprocess, \
 ))
 endif
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_check_targets,postprocess,\
+	CustomTarget_check_dynamic_objects \
+))
+endif
+
 $(eval $(call gb_Module_add_check_targets,postprocess,\
 	CppunitTest_services \
 ))
