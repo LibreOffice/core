@@ -1498,9 +1498,6 @@ struct DelTabPara
 
     DelTabPara( SwNodes& rNodes, sal_Unicode cChar, SwUndoTableToText* pU ) :
         pLastNd(nullptr), rNds( rNodes ), pUndo( pU ), cCh( cChar ) {}
-    DelTabPara( const DelTabPara& rPara ) :
-        pLastNd(rPara.pLastNd), rNds( rPara.rNds ),
-        pUndo( rPara.pUndo ), cCh( rPara.cCh ) {}
 };
 
 // Forward declare so that the Lines and Boxes can use recursion

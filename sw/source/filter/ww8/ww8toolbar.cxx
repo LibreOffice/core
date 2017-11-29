@@ -1319,37 +1319,6 @@ MCD::MCD() :  reserved1(0x56)
 {
 }
 
-MCD::MCD(const MCD& rO)
-    : TBBase(rO)
-    , reserved1(rO.reserved1)
-    , reserved2(rO.reserved2)
-    , ibst(rO.ibst)
-    , ibstName(rO.ibstName)
-    , reserved3(rO.reserved3)
-    , reserved4(rO.reserved4)
-    , reserved5(rO.reserved5)
-    , reserved6(rO.reserved6)
-    , reserved7(rO.reserved7)
-{
-}
-
-MCD& MCD::operator=(const MCD& rO)
-{
-    if (this != &rO)
-    {
-        reserved1 = rO.reserved1;
-        reserved2 = rO.reserved2;
-        ibst = rO.ibst;
-        ibstName = rO.ibstName;
-        reserved3 = rO.reserved3;
-        reserved4 = rO.reserved4;
-        reserved5 = rO.reserved5;
-        reserved6 = rO.reserved6;
-        reserved7 = rO.reserved7;
-    }
-    return *this;
-}
-
 bool MCD::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","MCD::Read() stream pos 0x" << rS.Tell() );

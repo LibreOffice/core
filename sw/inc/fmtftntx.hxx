@@ -45,11 +45,6 @@ protected:
     SwFormatFootnoteEndAtTextEnd( sal_uInt16 nWhichL, SwFootnoteEndPosEnum ePos )
         : SfxEnumItem( nWhichL, ePos ), nOffset( 0 )
     {}
-    SwFormatFootnoteEndAtTextEnd( const SwFormatFootnoteEndAtTextEnd& rAttr )
-        : SfxEnumItem( rAttr ), sPrefix( rAttr.sPrefix ),
-        sSuffix( rAttr.sSuffix ), aFormat( rAttr.aFormat ),
-        nOffset( rAttr.nOffset )
-    {}
 
 public:
     virtual sal_uInt16       GetValueCount() const override;

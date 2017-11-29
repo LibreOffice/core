@@ -64,7 +64,7 @@ class SwSubFont : public SvxFont
                           const sal_uInt16 nOldAscent ) const;
     void CalcEsc( SwDrawTextInfo const & rInf, Point& rPos );
 
-    SwSubFont& operator=( const SwSubFont &rFont );
+    SwSubFont& operator=( const SwSubFont& );
 
     short CheckKerning_( );
 

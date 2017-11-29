@@ -40,12 +40,9 @@ class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
 
     bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
-    SwFormatURL& operator=( const SwFormatURL& ) = delete;
-
 public:
     SwFormatURL();
 
-    /// @@@ copy construction allowed, but assignment is not? @@@
     SwFormatURL( const SwFormatURL& );
 
     virtual ~SwFormatURL() override;

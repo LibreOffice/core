@@ -39,7 +39,6 @@ class SW_DLLPUBLIC SwRewriter
 
 public:
     SwRewriter();
-    SwRewriter(const SwRewriter & rSrc);
     ~SwRewriter();
 
     void AddRule(SwUndoArg eWhat, const OUString & rWith);

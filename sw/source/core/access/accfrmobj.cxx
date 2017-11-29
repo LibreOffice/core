@@ -167,21 +167,6 @@ bool SwAccessibleChild::IsBoundAsChar() const
     return bRet;
 }
 
-SwAccessibleChild::SwAccessibleChild( const SwAccessibleChild& r )
-    : mpFrame( r.mpFrame )
-    , mpDrawObj( r.mpDrawObj )
-    , mpWindow( r.mpWindow )
-{}
-
-SwAccessibleChild& SwAccessibleChild::operator=( const SwAccessibleChild& r )
-{
-    mpDrawObj = r.mpDrawObj;
-    mpFrame = r.mpFrame;
-    mpWindow = r.mpWindow;
-
-    return *this;
-}
-
 SwAccessibleChild& SwAccessibleChild::operator=( const SdrObject* pDrawObj )
 {
     Init( pDrawObj );

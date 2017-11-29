@@ -116,7 +116,6 @@ public:
 
     inline SwRegisterItem( const bool bRegister = false );
 
-    /// @@@ public copy assignment, but no copy ctor?
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
 
     /// "pure virtual methods" of SfxPoolItem
@@ -150,9 +149,6 @@ public:
     SwNumRuleItem( const OUString& rRuleName )
         : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}
 
-    SwNumRuleItem( const SwNumRuleItem& rCpy )
-        : SfxStringItem( RES_PARATR_NUMRULE, rCpy.GetValue() ) {}
-
     SwNumRuleItem& operator=( const SwNumRuleItem& rCpy )
     { SetValue( rCpy.GetValue() ); return *this; }
 
@@ -177,7 +173,6 @@ public:
 
     inline SwParaConnectBorderItem( const bool bConnect = true );
 
-    /// @@@ public copy assignment, but no copy ctor?
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
 
     /// "pure virtual methods" of SfxPoolItem

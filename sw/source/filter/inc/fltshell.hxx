@@ -53,17 +53,6 @@ public:
     SwNodeIndex m_nNode;
     sal_Int32 m_nContent;
 public:
-    SwFltPosition(const SwFltPosition &rOther)
-        : m_nNode(rOther.m_nNode)
-        , m_nContent(rOther.m_nContent)
-    {
-    }
-    SwFltPosition &operator=(const SwFltPosition &rOther)
-    {
-        m_nNode = rOther.m_nNode;
-        m_nContent = rOther.m_nContent;
-        return *this;
-    }
     bool operator==(const SwFltPosition &rOther) const
     {
         return (m_nContent == rOther.m_nContent &&
@@ -247,15 +236,6 @@ public:
     {
     }
 
-    SwFltRedline(const SwFltRedline& rCpy):
-        SfxPoolItem(RES_FLTR_REDLINE),
-        aStamp(         rCpy.aStamp       ),
-        aStampPrev(     rCpy.aStampPrev   ),
-        eType(          rCpy.eType        ),
-        eTypePrev(      rCpy.eTypePrev    ),
-        nAutorNo(       rCpy.nAutorNo     ),
-        nAutorNoPrev(   rCpy.nAutorNoPrev )
-        {}
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem& rItem) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
@@ -275,7 +255,6 @@ public:
                    const OUString& rVa,
                    long nHand,
                    const bool bIsTOCBookmark = false );
-    SwFltBookmark( const SwFltBookmark& );
 
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
@@ -298,7 +277,6 @@ class SW_DLLPUBLIC SwFltRDFMark : public SfxPoolItem
 
 public:
     SwFltRDFMark();
-    SwFltRDFMark(const SwFltRDFMark&);
 
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
@@ -316,7 +294,6 @@ class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
     bool bHadPageDescItem;
 public:
     SwFltTOX(SwTOXBase* pBase);
-    SwFltTOX(const SwFltTOX&);
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;

@@ -858,18 +858,6 @@ WW8_CP HdFtPlcDrawObj::GetCpOffset(const WW8Fib &rFib) const
     return rFib.m_ccpText + rFib.m_ccpFootnote;
 }
 
-DrawObj& DrawObj::operator=(const DrawObj& rOther)
-{
-    mnCp = rOther.mnCp;
-    mnShapeId = rOther.mnShapeId;
-    maContent = rOther.maContent;
-    maParentPos = rOther.maParentPos;
-    mnThick = rOther.mnThick;
-    mnDirection = rOther.mnDirection;
-    mnHdFtIndex = rOther.mnHdFtIndex;
-    return *this;
-}
-
 bool PlcDrawObj::Append( WW8Export const & rWrt, WW8_CP nCp, const ww8::Frame& rFormat,
     const Point& rNdTopLeft )
 {

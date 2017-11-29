@@ -45,10 +45,6 @@ public:
     SwMirrorGrf( MirrorGraph eMiro = MirrorGraph::Dont )
         : SfxEnumItem( RES_GRFATR_MIRRORGRF, eMiro ), bGrfToggle( false )
     {}
-    SwMirrorGrf( const SwMirrorGrf &rMirrorGrf )
-        : SfxEnumItem( RES_GRFATR_MIRRORGRF, rMirrorGrf.GetValue()),
-        bGrfToggle( rMirrorGrf.IsGrfToggle() )
-    {}
 
     // pure virtual methods of SfxPoolItem
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;

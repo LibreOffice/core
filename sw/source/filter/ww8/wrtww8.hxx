@@ -350,7 +350,6 @@ public:
         : mnCp(nCp), mnShapeId(0), maContent(rContent), maParentPos(aParentPos),
         mnThick(0), mnDirection(nDir), mnHdFtIndex(nHdFtIndex) {}
     void SetShapeDetails(sal_uInt32 nId, sal_Int32 nThick);
-    DrawObj& operator=(const DrawObj &rOther);
 };
 
 typedef std::vector<DrawObj> DrawObjVector;
@@ -1344,7 +1343,6 @@ public:
     GraphicDetails(const ww8::Frame &rFly, sal_uInt16 nWid, sal_uInt16 nHei)
         : maFly(rFly), mnPos(0), mnWid(nWid), mnHei(nHei)
     {}
-    GraphicDetails& operator=(const GraphicDetails& rOther);
 
     bool operator==(const GraphicDetails& rIn) const
     {
