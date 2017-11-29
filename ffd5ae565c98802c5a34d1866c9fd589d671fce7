@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b3336e61",
+        "filename": "basic/qa/vba_tests/atn.vb",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-29T10:49:21Z",
+      "side": 1,
+      "message": "See mail, changing Round() decimals to such a low value probably is not necessary.",
+      "revId": "ffd5ae565c98802c5a34d1866c9fd589d671fce7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9332f25d",
+        "filename": "basic/qa/vba_tests/cdate.vb",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-29T10:49:21Z",
+      "side": 1,
+      "message": "Changing all date serial numbers to CDate() calls as well isn\u0027t ideal. In case the CDate() function failed for all arguments equally in that it returned the same bad value, the test would still pass. I suggest to keep the serial values, which as a side effect also tests date calculation from the null date in CDate(). To add other date serial values you can use the DateSerial() function to find the value.",
+      "revId": "ffd5ae565c98802c5a34d1866c9fd589d671fce7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f34176aa",
+        "filename": "basic/qa/vba_tests/cos.vb",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-29T10:49:21Z",
+      "side": 1,
+      "message": "I think keeping 14 decimals (making it 15 significant digits with the leading 0) will be ok. Try.",
+      "revId": "ffd5ae565c98802c5a34d1866c9fd589d671fce7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
