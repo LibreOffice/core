@@ -13,14 +13,20 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
 #include <xsecgpgdllapi.h>
 #include <cppuhelper/implbase.hxx>
 
-class XSECGPG_DLLPUBLIC SEInitializerGpg : public cppu::WeakImplHelper< css::xml::crypto::XSEInitializer >
+class XSECGPG_DLLPUBLIC SEInitializerGpg : public cppu::WeakImplHelper
+<
+    css::xml::crypto::XSEInitializer,
+    css::lang::XServiceInfo
+>
 {
 public:
     SEInitializerGpg();
@@ -32,6 +38,20 @@ public:
 
     virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<
         css::xml::crypto::XXMLSecurityContext >& securityContext ) override;
+
+    static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
+
+    static OUString impl_getImplementationName();
+
+    /* XServiceInfo */
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
+    static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 };
 
 #endif
