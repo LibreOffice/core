@@ -272,6 +272,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 SvtSecurityOptions aSecOpt;
                 if (!rMEvt.IsMod1() && aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
                     return true;
+                if (rMEvt.IsMod1() && !aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
+                    return true;
 
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
