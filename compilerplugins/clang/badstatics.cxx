@@ -202,6 +202,7 @@ public:
                 || name == "m_aUncommitedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
+                || name == "s_pLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
                ) // these variables appear unproblematic
             {
                 return true;
@@ -211,12 +212,6 @@ public:
                 || name == "xCell"              // svx/source/table/svdotable.cxx
                )
             {
-                return true;
-            }
-            //TODO: Ignore for now to unbreak the build post
-            // d516c5c9819dcd7dc6dded2f8f9d9e44061b23c0 "lokdialog: Move the LOKWindowId <->
-            // VclPtr<Window> mapping to Window":
-            if (name == "sLOKWindows") { // vcl/source/window/window.cxx
                 return true;
             }
             // ignore pointers, nothing happens to them on shutdown
