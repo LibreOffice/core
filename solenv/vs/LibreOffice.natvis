@@ -258,6 +258,9 @@
   <Type Name="SfxBoolItem">
     <DisplayString>{{which={m_nWhich,x}}} {m_bValue}</DisplayString>
   </Type>
+  <Type Name="SfxEnumItem &lt; * &gt;">
+    <DisplayString>{{which={m_nWhich,x}}} {m_nValue}</DisplayString>
+  </Type>
   <Type Name="CntUnencodedStringItem">
     <DisplayString>{{which={m_nWhich,x}}} {m_aValue}</DisplayString>
   </Type>
