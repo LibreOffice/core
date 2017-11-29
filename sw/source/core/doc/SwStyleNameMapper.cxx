@@ -302,6 +302,9 @@ const struct SwTableEntry NumRuleProgNameTable [] =
     { 0, nullptr }
 };
 
+// XXX MUST match the entries of STR_TABSTYLE_ARY in
+// sw/source/core/doc/DocumentStylePoolManager.cxx and MUST match the order of
+// RES_POOL_TABSTYLE_TYPE in sw/inc/poolfmt.hxx
 const struct SwTableEntry TableStyleProgNameTable [] =
 {
     ENTRY( "Default Style" ),     // RES_POOLTABLESTYLE_DEFAULT
@@ -321,6 +324,16 @@ const struct SwTableEntry TableStyleProgNameTable [] =
     ENTRY( "Red" ),               // RES_POOLTABLESTYLE_RED
     ENTRY( "Turquoise" ),         // RES_POOLTABLESTYLE_TURQUOISE
     ENTRY( "Yellow" ),            // RES_POOLTABLESTYLE_YELLOW
+    ENTRY( "Academic" ),          // RES_POOLTABLESTYLE_LO6_ACADEMIC
+    ENTRY( "Box List Blue" ),     // RES_POOLTABLESTYLE_LO6_BOX_LIST_BLUE
+    ENTRY( "Box List Green" ),    // RES_POOLTABLESTYLE_LO6_BOX_LIST_GREEN
+    ENTRY( "Box List Red" ),      // RES_POOLTABLESTYLE_LO6_BOX_LIST_RED
+    ENTRY( "Box List Yellow" ),   // RES_POOLTABLESTYLE_LO6_BOX_LIST_YELLOW
+    ENTRY( "Elegant" ),           // RES_POOLTABLESTYLE_LO6_ELEGANT
+    ENTRY( "Financial" ),         // RES_POOLTABLESTYLE_LO6_FINANCIAL
+    ENTRY( "Simple Grid Columns" ), // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_COLUMNS
+    ENTRY( "Simple Grid Rows" ),  // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
+    ENTRY( "Simple List Shaded" ),// RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
     { 0, nullptr }
 };
 #undef ENTRY

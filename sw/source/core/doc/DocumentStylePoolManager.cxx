@@ -58,6 +58,8 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 #include <strings.hrc>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -516,25 +518,42 @@ static const char* STR_POOLNUMRULE_NUM_ARY[] =
     STR_POOLNUMRULE_BUL5
 };
 
+// XXX MUST match the entries of TableStyleProgNameTable in
+// sw/source/core/doc/SwStyleNameMapper.cxx and MUST match the order of
+// RES_POOL_TABSTYLE_TYPE in sw/inc/poolfmt.hxx
 static const char* STR_TABSTYLE_ARY[] =
 {
+    // XXX MUST be in order, Writer first, then Svx old, then Svx new
+    // 1 Writer resource string
     STR_TABSTYLE_DEFAULT,
-    STR_TABSTYLE_3D,
-    STR_TABSTYLE_BLACK1,
-    STR_TABSTYLE_BLACK2,
-    STR_TABSTYLE_BLUE,
-    STR_TABSTYLE_BROWN,
-    STR_TABSTYLE_CURRENCY,
-    STR_TABSTYLE_CURRENCY_3D,
-    STR_TABSTYLE_CURRENCY_GRAY,
-    STR_TABSTYLE_CURRENCY_LAVENDER,
-    STR_TABSTYLE_CURRENCY_TURQUOISE,
-    STR_TABSTYLE_GRAY,
-    STR_TABSTYLE_GREEN,
-    STR_TABSTYLE_LAVENDER,
-    STR_TABSTYLE_RED,
-    STR_TABSTYLE_TURQUOISE,
-    STR_TABSTYLE_YELLOW
+    // 16 old styles Svx resource strings
+    RID_SVXSTR_TBLAFMT_3D,
+    RID_SVXSTR_TBLAFMT_BLACK1,
+    RID_SVXSTR_TBLAFMT_BLACK2,
+    RID_SVXSTR_TBLAFMT_BLUE,
+    RID_SVXSTR_TBLAFMT_BROWN,
+    RID_SVXSTR_TBLAFMT_CURRENCY,
+    RID_SVXSTR_TBLAFMT_CURRENCY_3D,
+    RID_SVXSTR_TBLAFMT_CURRENCY_GRAY,
+    RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER,
+    RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE,
+    RID_SVXSTR_TBLAFMT_GRAY,
+    RID_SVXSTR_TBLAFMT_GREEN,
+    RID_SVXSTR_TBLAFMT_LAVENDER,
+    RID_SVXSTR_TBLAFMT_RED,
+    RID_SVXSTR_TBLAFMT_TURQUOISE,
+    RID_SVXSTR_TBLAFMT_YELLOW,
+    // 10 new styles since LibreOffice 6.0 Svx resource strings
+    RID_SVXSTR_TBLAFMT_LO6_ACADEMIC,
+    RID_SVXSTR_TBLAFMT_LO6_BOX_LIST_BLUE,
+    RID_SVXSTR_TBLAFMT_LO6_BOX_LIST_GREEN,
+    RID_SVXSTR_TBLAFMT_LO6_BOX_LIST_RED,
+    RID_SVXSTR_TBLAFMT_LO6_BOX_LIST_YELLOW,
+    RID_SVXSTR_TBLAFMT_LO6_ELEGANT,
+    RID_SVXSTR_TBLAFMT_LO6_FINANCIAL,
+    RID_SVXSTR_TBLAFMT_LO6_SIMPLE_GRID_COLUMNS,
+    RID_SVXSTR_TBLAFMT_LO6_SIMPLE_GRID_ROWS,
+    RID_SVXSTR_TBLAFMT_LO6_SIMPLE_LIST_SHADED
 };
 
 namespace sw
@@ -2517,12 +2536,16 @@ std::vector<OUString> *SwStyleNameMapper::s_pTextUINameArray = nullptr,
                 *SwStyleNameMapper::s_pCellStyleUINameArray = nullptr;
 
 std::vector<OUString>*
-lcl_NewUINameArray(const char** pIds, const size_t nLen)
+lcl_NewUINameArray(const char** pIds, const size_t nLen, const size_t nSvxIds = 0)
 {
+    assert(nSvxIds <= nLen);
+    const size_t nWriterIds = nLen - nSvxIds;
     std::vector<OUString> *const pNameArray = new std::vector<OUString>;
     pNameArray->reserve(nLen);
-    for (size_t i = 0; i < nLen; ++i)
+    for (size_t i = 0; i < nWriterIds; ++i)
         pNameArray->push_back(SwResId(pIds[i]));
+    for (size_t i = nWriterIds; i < nLen; ++i)
+        pNameArray->push_back(SvxResId(pIds[i]));
     return pNameArray;
 }
 
@@ -2606,7 +2629,9 @@ const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
 {
     if (!s_pTableStyleUINameArray)
-        s_pTableStyleUINameArray = lcl_NewUINameArray(STR_TABSTYLE_ARY, SAL_N_ELEMENTS(STR_TABSTYLE_ARY));
+        // 1 Writer resource string (XXX if this ever changes rather use offset math)
+        s_pTableStyleUINameArray = lcl_NewUINameArray(STR_TABSTYLE_ARY, SAL_N_ELEMENTS(STR_TABSTYLE_ARY),
+                static_cast<size_t>(SAL_N_ELEMENTS(STR_TABSTYLE_ARY) - 1));
     return *s_pTableStyleUINameArray;
 }
 
