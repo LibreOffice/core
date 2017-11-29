@@ -730,6 +730,27 @@ sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceT
     return FastToken::DONTKNOW;
 }
 
+namespace
+{
+    class ParserCleanup
+    {
+    private:
+        FastSaxParserImpl& m_rParser;
+        Entity& m_rEntity;
+    public:
+        ParserCleanup(FastSaxParserImpl& rParser, Entity& rEntity)
+            : m_rParser(rParser)
+            , m_rEntity(rEntity)
+        {
+        }
+        ~ParserCleanup()
+        {
+            //xmlFreeParserCtxt accepts a null arg
+            xmlFreeParserCtxt(m_rEntity.mpParser);
+            m_rParser.popEntity();
+        }
+    };
+}
 /***************
 *
 * parseStream does Parser-startup initializations. The FastSaxParser::parse() method does
@@ -755,104 +776,81 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
 
     pushEntity( entity );
     Entity& rEntity = getEntity();
-    try
+    ParserCleanup aEnsureFree(*this, rEntity);
+
+    // start the document
+    if( rEntity.mxDocumentHandler.is() )
     {
-        // start the document
-        if( rEntity.mxDocumentHandler.is() )
-        {
-            Reference< XLocator > xLoc( mxDocumentLocator.get() );
-            rEntity.mxDocumentHandler->setDocumentLocator( xLoc );
-            rEntity.mxDocumentHandler->startDocument();
-        }
+        Reference< XLocator > xLoc( mxDocumentLocator.get() );
+        rEntity.mxDocumentHandler->setDocumentLocator( xLoc );
+        rEntity.mxDocumentHandler->startDocument();
+    }
 
-        rEntity.mbEnableThreads = rEntity.maStructSource.aInputStream->available() > 10000
-            && !getenv("SAX_DISABLE_THREADS");
+    rEntity.mbEnableThreads = rEntity.maStructSource.aInputStream->available() > 10000
+        && !getenv("SAX_DISABLE_THREADS");
 
-        if (rEntity.mbEnableThreads)
-        {
-            rtl::Reference<ParserThread> xParser;
-            xParser = new ParserThread(this);
-            xParser->launch();
-            bool done = false;
-            do {
-                rEntity.maConsumeResume.wait();
-                rEntity.maConsumeResume.reset();
+    if (rEntity.mbEnableThreads)
+    {
+        rtl::Reference<ParserThread> xParser;
+        xParser = new ParserThread(this);
+        xParser->launch();
+        bool done = false;
+        do {
+            rEntity.maConsumeResume.wait();
+            rEntity.maConsumeResume.reset();
 
-                osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
-                while (!rEntity.maPendingEvents.empty())
+            osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
+            while (!rEntity.maPendingEvents.empty())
+            {
+                if (rEntity.maPendingEvents.size() <= Entity::mnEventLowWater)
+                    rEntity.maProduceResume.set(); // start producer again
+
+                std::unique_ptr<EventList> xEventList = std::move(rEntity.maPendingEvents.front());
+                rEntity.maPendingEvents.pop();
+                aGuard.clear(); // unlock
+
+                if (!consume(*xEventList))
+                    done = true;
+
+                aGuard.reset(); // lock
+
+                if ( rEntity.maPendingEvents.size() <= Entity::mnEventLowWater )
                 {
-                    if (rEntity.maPendingEvents.size() <= Entity::mnEventLowWater)
-                        rEntity.maProduceResume.set(); // start producer again
-
-                    std::unique_ptr<EventList> xEventList = std::move(rEntity.maPendingEvents.front());
-                    rEntity.maPendingEvents.pop();
-                    aGuard.clear(); // unlock
-
-                    if (!consume(*xEventList))
-                        done = true;
-
-                    aGuard.reset(); // lock
-
-                    if ( rEntity.maPendingEvents.size() <= Entity::mnEventLowWater )
+                    aGuard.clear();
+                    for (auto aEventIt = xEventList->maEvents.begin();
+                        aEventIt != xEventList->maEvents.end(); ++aEventIt)
                     {
-                        aGuard.clear();
-                        for (auto aEventIt = xEventList->maEvents.begin();
-                            aEventIt != xEventList->maEvents.end(); ++aEventIt)
+                        if (aEventIt->mxAttributes.is())
                         {
-                            if (aEventIt->mxAttributes.is())
-                            {
-                                aEventIt->mxAttributes->clear();
-                                if( rEntity.mxNamespaceHandler.is() )
-                                    aEventIt->mxDeclAttributes->clear();
-                            }
-                            xEventList->mbIsAttributesEmpty = true;
+                            aEventIt->mxAttributes->clear();
+                            if( rEntity.mxNamespaceHandler.is() )
+                                aEventIt->mxDeclAttributes->clear();
                         }
-                        aGuard.reset();
+                        xEventList->mbIsAttributesEmpty = true;
                     }
-
-                    rEntity.maUsedEvents.push(std::move(xEventList));
+                    aGuard.reset();
                 }
-            } while (!done);
-            xParser->join();
-            deleteUsedEvents();
 
-            // callbacks used inside XML_Parse may have caught an exception
-            if( rEntity.maSavedException.hasValue() )
-                rEntity.throwException( mxDocumentLocator, true );
-        }
-        else
-        {
-            parse();
-        }
+                rEntity.maUsedEvents.push(std::move(xEventList));
+            }
+        } while (!done);
+        xParser->join();
+        deleteUsedEvents();
 
-        // finish document
-        if( rEntity.mxDocumentHandler.is() )
-        {
-            rEntity.mxDocumentHandler->endDocument();
-        }
+        // callbacks used inside XML_Parse may have caught an exception
+        if( rEntity.maSavedException.hasValue() )
+            rEntity.throwException( mxDocumentLocator, true );
     }
-    catch (const SAXException&)
+    else
     {
-        // TODO free mpParser.myDoc ?
-        xmlFreeParserCtxt( rEntity.mpParser );
-        popEntity();
-        throw;
-    }
-    catch (const IOException&)
-    {
-        xmlFreeParserCtxt( rEntity.mpParser );
-        popEntity();
-        throw;
-    }
-    catch (const RuntimeException&)
-    {
-        xmlFreeParserCtxt( rEntity.mpParser );
-        popEntity();
-        throw;
+        parse();
     }
 
-    xmlFreeParserCtxt( rEntity.mpParser );
-    popEntity();
+    // finish document
+    if( rEntity.mxDocumentHandler.is() )
+    {
+        rEntity.mxDocumentHandler->endDocument();
+    }
 }
 
 void FastSaxParserImpl::setFastDocumentHandler( const Reference< XFastDocumentHandler >& Handler )
