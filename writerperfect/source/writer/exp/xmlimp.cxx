@@ -9,6 +9,13 @@
 
 #include "xmlimp.hxx"
 
+#include <initializer_list>
+#include <unordered_map>
+
+#include <rtl/uri.hxx>
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
+
 #include "xmlfmt.hxx"
 #include "xmlictxt.hxx"
 #include "xmlmetai.hxx"
@@ -20,6 +27,70 @@ namespace writerperfect
 {
 namespace exp
 {
+
+namespace
+{
+/// Looks up mime type for a given image extension.
+OUString GetMimeType(const OUString &rExtension)
+{
+    static const std::unordered_map<OUString, OUString> vMimeTypes =
+    {
+        {"gif", "image/gif"},
+        {"jpg", "image/jpeg"},
+        {"png", "image/png"},
+        {"svg", "image/svg+xml"},
+    };
+
+    auto it = vMimeTypes.find(rExtension);
+    return it == vMimeTypes.end() ? OUString() : it->second;
+}
+
+/// Picks up a cover image from the base directory.
+OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType)
+{
+    OUString aRet;
+
+    if (rDocumentBaseURL.isEmpty())
+        return aRet;
+
+    INetURLObject aDocumentBaseURL(rDocumentBaseURL);
+
+    static const std::initializer_list<OUStringLiteral> vExtensions =
+    {
+        "gif",
+        "jpg",
+        "png",
+        "svg"
+    };
+
+    for (const auto &rExtension : vExtensions)
+    {
+        try
+        {
+            aRet = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aDocumentBaseURL.GetBase() + ".cover-image." + rExtension);
+        }
+        catch (const rtl::MalformedUriException &rException)
+        {
+            SAL_WARN("writerfilter", "FindCoverImage: convertRelToAbs() failed:" << rException.getMessage());
+        }
+
+        if (!aRet.isEmpty())
+        {
+            SvFileStream aStream(aRet, StreamMode::READ);
+            if (aStream.IsOpen())
+            {
+                rMimeType = GetMimeType(rExtension);
+                // File exists.
+                return aRet;
+            }
+            else
+                aRet.clear();
+        }
+    }
+
+    return aRet;
+}
+}
 
 /// Handler for <office:body>.
 class XMLBodyContext : public XMLImportContext
@@ -71,9 +142,28 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
     return nullptr;
 }
 
-XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator)
+XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &/*rDescriptor*/)
     : mrGenerator(rGenerator)
 {
+    OUString aMimeType;
+    OUString aCoverImage = FindCoverImage(rURL, aMimeType);
+    if (!aCoverImage.isEmpty())
+    {
+        librevenge::RVNGBinaryData aBinaryData;
+        SvFileStream aStream(aCoverImage, StreamMode::READ);
+        SvMemoryStream aMemoryStream;
+        aMemoryStream.WriteStream(aStream);
+        aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
+        librevenge::RVNGPropertyList aCoverImageProperties;
+        aCoverImageProperties.insert("office:binary-data", aBinaryData);
+        aCoverImageProperties.insert("librevenge:mime-type", aMimeType.toUtf8().getStr());
+        maCoverImages.append(aCoverImageProperties);
+    }
+}
+
+const librevenge::RVNGPropertyListVector &XMLImport::GetCoverImages()
+{
+    return maCoverImages;
 }
 
 rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)

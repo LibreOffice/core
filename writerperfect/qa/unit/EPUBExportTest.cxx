@@ -326,6 +326,11 @@ void EPUBExportTest::testMeta()
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "Title");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:language", "hu");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2017-09-27T09:51:19Z");
+
+    // Make sure that cover image next to the source document is picked up.
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "properties", "cover-image");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "media-type", "image/png");
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
 }
 
 void EPUBExportTest::testParaNamedstyle()
