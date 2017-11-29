@@ -200,6 +200,7 @@ public:
                 || name == "m_aUncommitedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
+                || name == "s_pLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
                ) // these variables appear unproblematic
             {
                 return true;
