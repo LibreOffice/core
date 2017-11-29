@@ -82,6 +82,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -2352,6 +2353,16 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         }
 
         {
+            // We can't guess the mimetype from sImageURL because the image type might be changed
+            // while creating the stream (by SvXMLGraphicInputStream). So we first need to create
+            // the stream, get the mime type and then write the stream.
+            uno::Reference<io::XInputStream> xInputStream(
+                mrExport.GetEmbeddedGraphicObjectStream(sImageURL));
+            OUString aMimeType(
+                comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageStream(xInputStream));
+            if (!aMimeType.isEmpty())
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
+
             SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
             if( !sImageURL.isEmpty() )

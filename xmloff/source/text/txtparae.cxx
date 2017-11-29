@@ -117,7 +117,6 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/graphicmimetype.hxx>
 
 using namespace ::std;
@@ -3016,25 +3015,6 @@ void XMLTextParagraphExport::exportContour(
                               true, true );
 }
 
-static OUString getMimeType(const OUString& sImageUrl)
-{
-    // Create the graphic to retrieve the mimetype from it
-    Reference< XGraphicProvider > xProvider = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
-    Sequence< PropertyValue > aMediaProperties( 1 );
-    aMediaProperties[0].Name = "URL";
-    aMediaProperties[0].Value <<= sImageUrl;
-    Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
-
-    OUString aSourceMimeType;
-    Reference<XPropertySet> const xGraphicPropertySet(xGraphic, UNO_QUERY);
-    if (xGraphicPropertySet.is() && // it's null if it's an external link
-        (xGraphicPropertySet->getPropertyValue("MimeType") >>= aSourceMimeType))
-    {
-        return aSourceMimeType;
-    }
-    return OUString("");
-}
-
 void XMLTextParagraphExport::_exportTextGraphic(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
@@ -3101,7 +3081,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     OUString aSourceMimeType = GetExport().GetImageFilterName();
     // otherwise determine mimetype from graphic
     if ( aSourceMimeType.isEmpty() )
-        aSourceMimeType = getMimeType(sOrigURL);
+        aSourceMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(sOrigURL);
     else //  !aSourceMimeType.isEmpty()
     {
         const OString aExt( OUStringToOString( aSourceMimeType, RTL_TEXTENCODING_ASCII_US ) );

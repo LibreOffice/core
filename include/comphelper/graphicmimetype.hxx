@@ -13,12 +13,20 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
 namespace comphelper
 {
 class COMPHELPER_DLLPUBLIC GraphicMimeTypeHelper
 {
 public:
     static OUString GetMimeTypeForExtension(const OString& rExt);
+    static OUString GetMimeTypeForXGraphic(css::uno::Reference<css::graphic::XGraphic> xGraphic);
+    static OUString GetMimeTypeForImageUrl(const OUString& rImageUrl);
+    static OUString
+    GetMimeTypeForImageStream(css::uno::Reference<css::io::XInputStream> xInputStream);
 };
 }
 
