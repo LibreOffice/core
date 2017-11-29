@@ -5908,7 +5908,6 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     for (tools::Rectangle aTile = tools::Rectangle(aPoint, aTileSize); true; aTile.Move(iterX, iterY))
     {
         tools::Rectangle aRender = aComplete.GetIntersection(aTile);
-        SAL_DEBUG("Intersect " << aComplete << " with " << aTile << " to " << aRender << "bitmap is " << rBitmapEx.GetSizePixel());
         if (aRender.IsEmpty())
             break;
         pOut->DrawBitmapEx(pOut->PixelToLogic(aRender.TopLeft()),
