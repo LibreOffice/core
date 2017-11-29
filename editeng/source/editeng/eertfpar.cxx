@@ -615,11 +615,6 @@ sal_Int32 EditNodeIdx::GetIdx() const
     return mpEditEngine->GetEditDoc().GetPos(mpNode);
 }
 
-EditNodeIdx* EditNodeIdx::Clone() const
-{
-    return new EditNodeIdx(mpEditEngine, mpNode);
-}
-
 EditPosition::EditPosition(EditEngine* pEE, EditSelection* pSel) :
     mpEditEngine(pEE), mpCurSel(pSel) {}
 

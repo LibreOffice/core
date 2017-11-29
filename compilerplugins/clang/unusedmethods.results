@@ -6,14 +6,8 @@ basic/source/inc/buffer.hxx:42
     void SbiBuffer::operator+=(short)
 basic/source/inc/buffer.hxx:46
     void SbiBuffer::operator+=(int)
-basic/source/inc/expr.hxx:139
-    short SbiExprNode::GetDepth()
-connectivity/source/drivers/evoab2/NResultSet.hxx:121
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> connectivity::evoab::OEvoabResultSet::operator*()
 connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:51
     class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
-connectivity/source/drivers/mork/mork_helper.cxx:36
-    int main(int,char **)
 connectivity/source/inc/dbase/dindexnode.hxx:70
     _Bool connectivity::dbase::ONDXKey::operator<(const class connectivity::dbase::ONDXKey &) const
 connectivity/source/inc/OColumn.hxx:119
@@ -34,8 +28,6 @@ connectivity/source/inc/OTypeInfo.hxx:55
     _Bool connectivity::OTypeInfo::operator==(const struct connectivity::OTypeInfo &) const
 connectivity/source/inc/OTypeInfo.hxx:56
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
-cui/source/inc/cfg.hxx:561
-    void ToolbarSaveInData::SetSystemStyle(const class rtl::OUString &,int)
 dbaccess/source/ui/browser/genericcontroller.cxx:1258
     const type-parameter-?-? & dbaui::(anonymous namespace)::SGI_identity::operator()(const type-parameter-?-? &) const
 dbaccess/source/ui/inc/indexcollection.hxx:54
@@ -52,8 +44,6 @@ desktop/inc/lib/init.hxx:45
     _Bool desktop::CallbackFlushHandler::isEventLatchOn() const
 desktop/inc/lib/init.hxx:47
     _Bool desktop::CallbackFlushHandler::isPartTilePainting() const
-desktop/source/migration/services/oo3extensionmigration.hxx:81
-    void migration::OO3ExtensionMigration::checkAndCreateDirectory(const class INetURLObject &)
 drawinglayer/source/tools/emfpcustomlinecap.hxx:37
     void emfplushelper::EMFPCustomLineCap::SetAttributes(struct com::sun::star::rendering::StrokeAttributes &)
 drawinglayer/source/tools/emfpfont.hxx:38
@@ -90,8 +80,10 @@ hwpfilter/source/mzstring.h:101
     class MzString & MzString::operator<<(long)
 hwpfilter/source/mzstring.h:102
     class MzString & MzString::operator<<(short)
-i18npool/source/localedata/LocaleNode.hxx:104
-    void LocaleNode::printR() const
+i18npool/source/localedata/LocaleNode.hxx:103
+    void LocaleNode::print() const
+idl/source/prj/svidl.cxx:105
+    int main(int,char **)
 include/basegfx/color/bcolormodifier.hxx:76
     _Bool basegfx::BColorModifier::operator!=(const class basegfx::BColorModifier &) const
 include/basegfx/curve/b2dcubicbezier.hxx:52
@@ -328,8 +320,8 @@ include/drawinglayer/primitive3d/baseprimitive3d.hxx:113
     _Bool drawinglayer::primitive3d::BasePrimitive3D::operator!=(const class drawinglayer::primitive3d::BasePrimitive3D &) const
 include/drawinglayer/texture/texture.hxx:44
     _Bool drawinglayer::texture::GeoTexSvx::operator!=(const class drawinglayer::texture::GeoTexSvx &) const
-include/editeng/svxrtf.hxx:339
-    void SvxRTFItemStackType::MoveFullNode(const class EditNodeIdx &,const class EditNodeIdx &)
+include/editeng/svxrtf.hxx:64
+    class EditNodeIdx * EditNodeIdx::Clone() const
 include/filter/msfilter/mstoolbar.hxx:98
      Indent::Indent(_Bool)
 include/formula/opcode.hxx:521
@@ -450,8 +442,6 @@ include/sfx2/lokcharthelper.hxx:41
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
-include/sfx2/objface.hxx:81
-    const class SfxSlot * SfxInterface::GetRealSlot(unsigned short) const
 include/sfx2/sidebar/Context.hxx:55
     _Bool sfx2::sidebar::Context::operator==(const class sfx2::sidebar::Context &) const
 include/svl/itempool.hxx:167
@@ -470,12 +460,8 @@ include/svx/framelink.hxx:209
     _Bool svx::frame::Style::operator==(const class svx::frame::Style &) const
 include/svx/framelink.hxx:250
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
-include/svx/obj3d.hxx:127
-    void E3dObject::SetBoundVolInvalid()
 include/svx/svdlayer.hxx:72
     _Bool SdrLayer::operator==(const class SdrLayer &) const
-include/svx/svdpage.hxx:144
-    unsigned long SdrObjList::CountAllObjects() const
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:94
@@ -524,8 +510,6 @@ include/tools/fract.hxx:106
     class Fraction operator-(const class Fraction &,double)
 include/tools/fract.hxx:108
     class Fraction operator/(const class Fraction &,double)
-include/tools/globname.hxx:87
-    class SvGlobalName & SvGlobalName::operator+=(unsigned int)
 include/tools/poly.hxx:162
     _Bool tools::Polygon::operator!=(const class tools::Polygon &) const
 include/tools/poly.hxx:249
@@ -572,8 +556,6 @@ include/vcl/errcode.hxx:84
     _Bool ErrCode::operator>=(const class ErrCode &) const
 include/vcl/gdimtf.hxx:109
     _Bool GDIMetaFile::operator!=(const class GDIMetaFile &) const
-include/vcl/gdimtf.hxx:160
-    void GDIMetaFile::RemoveAction(unsigned long)
 include/vcl/gradient.hxx:104
     _Bool Gradient::operator!=(const class Gradient &) const
 include/vcl/hatch.hxx:56
@@ -582,8 +564,6 @@ include/vcl/inputctx.hxx:63
     _Bool InputContext::operator!=(const class InputContext &) const
 include/vcl/listctrl.hxx:48
     void ListControl::deleteEntry(unsigned int)
-include/vcl/menu.hxx:297
-    _Bool Menu::HasValidEntries()
 include/vcl/opengl/OpenGLContext.hxx:98
     void OpenGLContext::UseNoProgram()
 include/vcl/opengl/OpenGLHelper.hxx:93
@@ -636,22 +616,8 @@ include/vcl/wall.hxx:98
     _Bool Wallpaper::operator!=(const class Wallpaper &) const
 include/vcl/window.hxx:428
     const char * ImplDbgCheckWindow(const void *)
-include/vcl/window.hxx:828
-    _Bool vcl::Window::IsLocked() const
-include/vcl/window.hxx:931
-    const class vcl::Region & vcl::Window::GetWindowRegionPixel() const
-include/vcl/window.hxx:932
-    _Bool vcl::Window::IsWindowRegionPixel() const
-lotuswordpro/source/filter/lwpdoc.hxx:178
-    void LwpDocument::MaxNumberOfPages(unsigned short &)
-lotuswordpro/source/filter/lwplayout.hxx:367
-    unsigned int LwpMiddleLayout::GetScalePercentage()
-lotuswordpro/source/filter/lwplayout.hxx:368
-    double LwpMiddleLayout::GetScaleWidth()
-lotuswordpro/source/filter/lwplayout.hxx:369
-    double LwpMiddleLayout::GetScaleHeight()
-lotuswordpro/source/filter/lwppara.hxx:183
-    void LwpPara::FindLayouts()
+lotuswordpro/source/filter/lwpfribptr.hxx:87
+    void LwpFribPtr::FindLayouts()
 o3tl/qa/cow_wrapper_clients.hxx:140
     _Bool o3tltests::cow_wrapper_client4::operator==(const class o3tltests::cow_wrapper_client4 &) const
 o3tl/qa/cow_wrapper_clients.hxx:141
@@ -662,30 +628,10 @@ o3tl/qa/cow_wrapper_clients.hxx:193
     _Bool o3tltests::cow_wrapper_client5::operator!=(const class o3tltests::cow_wrapper_client5 &) const
 oox/inc/drawingml/textliststyle.hxx:49
     void oox::drawingml::TextListStyle::dump() const
-reportdesign/inc/UndoEnv.hxx:130
-    void rptui::OXUndoEnvironment::TogglePropertyListening(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
-reportdesign/source/ui/inc/ReportControllerObserver.hxx:100
-    void rptui::OXReportControllerObserver::TogglePropertyListening(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
-reportdesign/source/ui/inc/ReportControllerObserver.hxx:107
-    class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class com::sun::star::uno::Reference<class com::sun::star::container::XChild> *, class std::__cxx1998::vector<class com::sun::star::uno::Reference<class com::sun::star::container::XChild>, class std::allocator<class com::sun::star::uno::Reference<class com::sun::star::container::XChild> > > >, class std::__debug::vector<class com::sun::star::uno::Reference<class com::sun::star::container::XChild>, class std::allocator<class com::sun::star::uno::Reference<class com::sun::star::container::XChild> > > > rptui::OXReportControllerObserver::getSection(const class com::sun::star::uno::Reference<class com::sun::star::container::XChild> &) const
 sc/inc/address.hxx:650
     _Bool ScRange::operator<=(const class ScRange &) const
-sc/inc/attrib.hxx:160
-     ScRangeItem::ScRangeItem(const unsigned short)
 sc/inc/bigrange.hxx:71
     _Bool ScBigAddress::operator!=(const class ScBigAddress &) const
-sc/inc/chartarr.hxx:80
-    const class rtl::OUString & ScChartArray::GetName() const
-sc/inc/chartarr.hxx:94
-    void ScChartCollection::clear()
-sc/inc/chartarr.hxx:95
-    unsigned long ScChartCollection::size() const
-sc/inc/chartarr.hxx:96
-    _Bool ScChartCollection::empty() const
-sc/inc/chartarr.hxx:97
-    class ScChartArray * ScChartCollection::operator[](unsigned long)
-sc/inc/chartarr.hxx:98
-    const class ScChartArray * ScChartCollection::operator[](unsigned long) const
 sc/inc/columniterator.hxx:74
     int sc::ColumnIterator::getType() const
 sc/inc/compressedarray.hxx:73
@@ -704,8 +650,6 @@ sc/inc/formulagroup.hxx:140
     void sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
 sc/inc/formulagroup.hxx:141
     void sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly()
-sc/inc/olinetab.hxx:101
-    void ScOutlineArray::RemoveSub(int,int,unsigned long)
 sc/inc/postit.hxx:47
      ScCaptionPtr::ScCaptionPtr(class SdrCaptionObj *)
 sc/inc/scdll.hxx:42
@@ -778,8 +722,6 @@ sc/source/filter/inc/xestream.hxx:106
     class XclExpStream & XclExpStream::operator<<(float)
 sc/source/filter/inc/xiescher.hxx:159
     class Color XclImpDrawObjBase::GetSolidLineColor(const struct XclObjLineData &) const
-sc/source/ui/inc/checklistmenu.hxx:249
-    void ScCheckListBox::ExpandChildren(class SvTreeListEntry *)
 sc/source/ui/inc/dataprovider.hxx:72
     _Bool sc::CSVFetchThread::IsRequestedTerminate()
 sc/source/ui/inc/dataprovider.hxx:73
@@ -818,8 +760,6 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:43
     const class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > & sd::ZeroconfService::getName() const
 sd/source/ui/remotecontrol/ZeroconfService.hxx:44
     void sd::ZeroconfService::setName(const char *)
-sfx2/source/inc/workwin.hxx:272
-    _Bool SfxWorkWindow::KnowsObjectBar_Impl(unsigned short) const
 slideshow/source/engine/activities/activitiesfactory.cxx:173
     void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:241
@@ -856,16 +796,10 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::finish(double,double,double,double,double)
 slideshow/source/inc/shapeattributelayer.hxx:391
     void slideshow::internal::ShapeAttributeLayer::setCharRotationAngle(const double &)
-sot/source/sdstor/stgdir.hxx:71
-    _Bool StgDirEntry::IsContained(class StgDirEntry *)
 svgio/inc/svgstyleattributes.hxx:352
     class svgio::svgreader::SvgNumber svgio::svgreader::SvgStyleAttributes::getStrokeDashOffset() const
 svgio/inc/svgstyleattributes.hxx:376
     enum svgio::svgreader::FontStretch svgio::svgreader::SvgStyleAttributes::getFontStretch() const
-svx/source/inc/fmexpl.hxx:349
-    void svxform::NavigatorTreeModel::ClearBranch(const class FmFormData *)
-svx/source/inc/fmexpl.hxx:368
-    class SdrObject * svxform::NavigatorTreeModel::Search(class SdrObjListIter &,const class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &)
 sw/inc/dbgoutsw.hxx:53
     const char * dbg_out(const void *)
 sw/inc/dbgoutsw.hxx:55
@@ -936,13 +870,11 @@ sw/inc/IDocumentLinksAdministration.hxx:55
     _Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &)
 sw/inc/IMark.hxx:65
     _Bool sw::mark::IMark::operator<(const class sw::mark::IMark &) const
-sw/inc/pagedesc.hxx:270
-    _Bool SwPageDesc::operator<(const class SwPageDesc &) const
-sw/inc/pagedesc.hxx:418
+sw/inc/pagedesc.hxx:416
     void SwPageDescs::erase(class SwPageDesc *const &)
-sw/inc/pagedesc.hxx:426
+sw/inc/pagedesc.hxx:424
     class SwPageDesc *const & SwPageDescs::front() const
-sw/inc/pagedesc.hxx:427
+sw/inc/pagedesc.hxx:425
     class SwPageDesc *const & SwPageDescs::back() const
 sw/inc/rdfhelper.hxx:59
     void SwRDFHelper::cloneStatements(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::rdf::XResource> &,const class com::sun::star::uno::Reference<class com::sun::star::rdf::XResource> &)
@@ -954,18 +886,14 @@ sw/inc/ring.hxx:204
      sw::RingIterator::RingIterator<value_type>()
 sw/inc/swatrset.hxx:227
     const class SvxNoHyphenItem & SwAttrSet::GetNoHyphenHere(_Bool) const
-sw/inc/SwNumberTree.hxx:287
-    void SwNumberTreeNode::ValidateTree()
 sw/inc/swrect.hxx:105
     class SvStream & WriteSwRect(class SvStream &,const class SwRect &)
-sw/inc/view.hxx:531
-    _Bool SwView::HasDrwObj(const class SdrObject *) const
+sw/inc/swtable.hxx:198
+    unsigned short SwTable::GetRowsToRepeat_() const
 sw/qa/extras/inc/swmodeltestbase.hxx:543
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/source/core/access/acctable.cxx:86
-    void SwAccessibleTableData_Impl::CollectColumnHeaderData(const class SwFrame *)
-sw/source/core/access/acctable.cxx:87
-    void SwAccessibleTableData_Impl::CollectRowHeaderData(const class SwFrame *)
+sw/qa/extras/uiwriter/uiwriter.cxx:5605
+    int main()
 sw/source/core/inc/frame.hxx:1334
     class Size SwRectFnSet::GetSize(const class SwRect &) const
 sw/source/core/inc/frame.hxx:1365
@@ -998,8 +926,6 @@ ucb/source/ucp/ftp/ftpurl.hxx:112
     class rtl::OUString ftp::FTPURL::child() const
 ucb/source/ucp/webdav-neon/NeonUri.hxx:65
     _Bool webdav_ucp::NeonUri::operator!=(const class webdav_ucp::NeonUri &) const
-vbahelper/source/msforms/vbacontrols.cxx:69
-    void ControlArrayWrapper::getNestedControls(class std::__debug::vector<class com::sun::star::uno::Reference<class com::sun::star::awt::XControl>, class std::allocator<class com::sun::star::uno::Reference<class com::sun::star::awt::XControl> > > &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &)
 vcl/inc/fontselect.hxx:47
     _Bool FontSelectPatternAttributes::operator!=(const class FontSelectPatternAttributes &) const
 vcl/inc/opengl/BufferObject.hxx:50
@@ -1088,7 +1014,5 @@ writerfilter/source/ooxml/OOXMLPropertySet.hxx:158
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::end() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:161
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > writerfilter::ooxml::OOXMLPropertySet::toString()
-writerperfect/qa/unit/EPUBExportTest.cxx:596
-    int main()
 xmlsecurity/source/gpg/XMLEncryption.hxx:27
      XMLEncryptionGpg::XMLEncryptionGpg()

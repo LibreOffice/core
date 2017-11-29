@@ -374,54 +374,6 @@ void LwpFribPtr::XFConvert()
 
 }
 
-void LwpFribPtr::FindLayouts()
-{
-    LwpFrib* pFrib = m_pFribs;
-    while(pFrib)
-    {
-        switch(pFrib->GetType())
-        {
-            case FRIB_TAG_SECTION:
-            {
-                LwpFribSection* pSectionFrib = static_cast<LwpFribSection*>(pFrib);
-                LwpSection* pSection = pSectionFrib->GetSection();
-                if(pSection)
-                {
-                    LwpPageLayout* pLayout = pSection->GetPageLayout();
-                    if(pLayout)
-                    {
-                        LwpLayout::UseWhenType eSectionType = pLayout->GetUseWhenType();
-                        if(eSectionType==LwpLayout::StartWithinColume)
-                        {
-                            //StartWithinColume type not support now
-                            break;
-                        }
-                        LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
-                        if (pStory)
-                            pStory->AddPageLayout(pSection->GetPageLayout());
-                    }
-                }
-
-                break;
-            }
-            case FRIB_TAG_PAGEBREAK:
-            {
-                LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-                LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(pPageBreak->GetLayout().obj().get());
-                if(pLayout)
-                {
-                    LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
-                    if (pStory)
-                        pStory->AddPageLayout(pLayout);
-                }
-                break;
-            }
-            default:
-                break;
-        }
-        pFrib = pFrib->GetNext();
-    }
-}
 /**************************************************************************
  * @descr:  Whether has a frib which type is nType
 **************************************************************************/

@@ -61,7 +61,6 @@ class EditNodeIdx
 public:
     EditNodeIdx(EditEngine* pEE, ContentNode* pNd);
     sal_Int32   GetIdx() const;
-    EditNodeIdx* Clone() const;  // Cloning itself
     ContentNode* GetNode() { return mpNode; }
 private:
     EditEngine*   mpEditEngine;

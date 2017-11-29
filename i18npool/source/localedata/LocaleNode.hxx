@@ -100,7 +100,6 @@ public:
     sal_Int32 getNumberOfChildren () const { return sal_Int32(children.size()); };
     LocaleNode * getChildAt (sal_Int32 idx) const { return children[idx].get(); };
     const LocaleNode * findNode ( const sal_Char *name) const;
-    void print () const;
     virtual ~LocaleNode();
     void addChild (  LocaleNode * node);
     const LocaleNode* getRoot() const;

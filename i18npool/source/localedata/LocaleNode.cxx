@@ -56,14 +56,6 @@ int LocaleNode::getError() const
     return err;
 }
 
-void LocaleNode::print () const {
-    printf ("<");
-    OUString str (aName);
-    for(sal_Int32 i = 0; i < str.getLength(); i++)
-        printf( "%c", str[i]);
-    printf (">\n");
-}
-
 void LocaleNode::addChild ( LocaleNode * node) {
     children.emplace_back(node);
     node->parent = this;
