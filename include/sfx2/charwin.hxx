@@ -32,8 +32,6 @@ public:
     void            SetText( const OUString& rText ) override;
     void            InsertCharToDoc();
 
-    void            createContextMenu();
-
     virtual void    Resize() override;
 
     virtual Size    GetOptimalSize() const override;
@@ -41,8 +39,6 @@ public:
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
-
-    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
 protected:
     virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
