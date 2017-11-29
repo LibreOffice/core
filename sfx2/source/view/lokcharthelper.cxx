@@ -236,6 +236,10 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
                                           int nTilePosX, int nTilePosY,
                                           long nTileWidth, long nTileHeight)
 {
+    // TODO: Hack to make Android Viewer render at least *something* again, but of
+    // course it's just a crude hack to just disable this instead of debugging further
+    // and fixing it for Android case
+#if !defined(ANDROID)
     // Resizes the virtual device so to contain the entries context
     rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
 
@@ -259,6 +263,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
     rDevice.Pop();
+#endif
 }
 
 bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
