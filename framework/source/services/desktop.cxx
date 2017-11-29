@@ -1796,10 +1796,30 @@ struct Instance {
     rtl::Reference<framework::Desktop> instance;
 };
 
-struct Singleton:
-    public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
-{};
+struct InstanceInit {
+    Instance * operator() (css::uno::Reference<css::uno::XComponentContext> const& xContext) {
+        static Instance instance(xContext);
+        return &instance;
+    }
+};
+
+struct GetSolarMutex {
+    comphelper::SolarMutex * operator() ()
+    {
+        return &Application::GetSolarMutex();
+    }
+};
+
+Instance & getInstance(css::uno::Reference<css::uno::XComponentContext> const& xContext)
+{
+    // tdf#114025 init with SolarMutex to avoid deadlock
+    return *rtl_Instance<Instance,
+                         InstanceInit,
+                         osl::Guard<comphelper::SolarMutex>,
+                         GetSolarMutex,
+                         css::uno::Reference<css::uno::XComponentContext> const>
+                ::create(InstanceInit(), GetSolarMutex(), xContext);
+}
 
 }
 
@@ -1808,7 +1828,7 @@ com_sun_star_comp_framework_Desktop_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(Singleton::get(context).instance.get());
+    return cppu::acquire(getInstance(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
