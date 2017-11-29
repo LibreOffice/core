@@ -455,6 +455,15 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         }
         else
         {
+            /// tdf#112443 if position is completely off-page
+            // return the proposed position and do not adjust it.
+            bool bDisablePositioning = mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+
+            if ( bDisablePositioning && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Right() )
+            {
+                return nProposedRelPosY;
+            }
+
             if ( bCheckBottom &&
                  nTopOfAnch + nAdjustedRelPosY + aObjSize.Width() >
                     aPgAlignArea.Right() )
@@ -471,6 +480,15 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     }
     else
     {
+        // tdf#112443 if position is completely off-page
+        // return the proposed position and do not adjust it.
+        bool bDisablePositioning =  mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+
+        if ( bDisablePositioning && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Bottom() )
+        {
+            return nProposedRelPosY;
+        }
+
         // #i31805# - consider value of <bCheckBottom>
         if ( bCheckBottom &&
              nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >

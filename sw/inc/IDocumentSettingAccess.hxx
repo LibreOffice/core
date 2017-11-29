@@ -81,6 +81,8 @@ enum class DocumentSettingId
     SURROUND_TEXT_WRAP_SMALL,
     PROP_LINE_SPACING_SHRINKS_FIRST_LINE,
     SUBTRACT_FLYS,
+    // tdf#112443 disable off-page content positioning
+    DISABLE_OFF_PAGE_POSITIONING,
     // COMPATIBILITY FLAGS END
     BROWSE_MODE,
     HTML_MODE,
