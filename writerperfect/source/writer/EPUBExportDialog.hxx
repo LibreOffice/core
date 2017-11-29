@@ -11,7 +11,9 @@
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTDIALOG_HXX
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 
 namespace writerperfect
@@ -28,10 +30,15 @@ public:
 private:
     DECL_LINK(VersionSelectHdl, ListBox &, void);
     DECL_LINK(SplitSelectHdl, ListBox &, void);
+    DECL_LINK(CoverClickHdl, Button *, void);
+    DECL_LINK(OKClickHdl, Button *, void);
 
     comphelper::SequenceAsHashMap &mrFilterData;
     VclPtr<ListBox> m_pVersion;
     VclPtr<ListBox> m_pSplit;
+    VclPtr<Edit> m_pCoverPath;
+    VclPtr<PushButton> m_pCoverButton;
+    VclPtr<PushButton> m_pOKButton;
 };
 
 } // namespace writerperfect
