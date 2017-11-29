@@ -256,7 +256,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     const Stmt* parent = getParentStmt(memberExpr);
     bool bPotentiallyAssignedTo = false;
     bool bDump = false;
-    std::string assignValue;
+    std::string assignValue = "?";
 
     // check for field being returned by non-const ref eg. Foo& getFoo() { return f; }
     if (parentFunction && parent && isa<ReturnStmt>(parent)) {
@@ -264,7 +264,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         if (parent2 && isa<CompoundStmt>(parent2)) {
             QualType qt = compat::getReturnType(*parentFunction).getDesugaredType(compiler.getASTContext());
             if (!qt.isConstQualified() && qt->isReferenceType()) {
-                assignValue = "?";
                 bPotentiallyAssignedTo = true;
             }
         }
@@ -279,7 +278,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
             if (varDecl) {
                 QualType qt = varDecl->getType().getDesugaredType(compiler.getASTContext());
                 if (!qt.isConstQualified() && qt->isReferenceType()) {
-                    assignValue = "?";
                     bPotentiallyAssignedTo = true;
                     break;
                 }
@@ -310,7 +308,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         else if (isa<CXXOperatorCallExpr>(parent))
         {
             // FIXME need to handle this properly
-            assignValue = "?";
             bPotentiallyAssignedTo = true;
             break;
         }
@@ -330,7 +327,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
                     const ParmVarDecl* parmVarDecl = consDecl->getParamDecl(i);
                     QualType qt = parmVarDecl->getType().getDesugaredType(compiler.getASTContext());
                     if (!qt.isConstQualified() && qt->isReferenceType()) {
-                        assignValue = "?";
                         bPotentiallyAssignedTo = true;
                     }
                     break;
@@ -348,7 +344,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
                 assignValue = getExprValue(binaryOp->getRHS());
                 bPotentiallyAssignedTo = true;
             } else {
-                assignValue = "?";
                 bPotentiallyAssignedTo = true;
             }
             break;
@@ -375,6 +370,13 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         {
             break;
         }
+#if CLANG_VERSION >= 40000
+        else if ( isa<ArrayInitLoopExpr>(parent) )
+        {
+            bPotentiallyAssignedTo = true;
+            break;
+        }
+#endif
         else {
             bPotentiallyAssignedTo = true;
             bDump = true;

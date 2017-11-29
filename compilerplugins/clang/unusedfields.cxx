@@ -159,7 +159,7 @@ private:
                                         CalleeWrapper calleeFunctionDecl);
     llvm::Optional<CalleeWrapper> getCallee(CallExpr const *);
 
-    RecordDecl *   insideMoveOrCopyDeclParent = nullptr;
+    RecordDecl *   insideMoveOrCopyOrCloneDeclParent = nullptr;
     RecordDecl *   insideStreamOutputOperator = nullptr;
     // For reasons I do not understand, parentFunctionDecl() is not reliable, so
     // we store the parent function on the way down the AST.
@@ -361,29 +361,31 @@ bool startswith(const std::string& rStr, const char* pSubStr)
 
 bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructorDecl)
 {
-    auto copy = insideMoveOrCopyDeclParent;
+    auto copy = insideMoveOrCopyOrCloneDeclParent;
     if (!ignoreLocation(cxxConstructorDecl) && cxxConstructorDecl->isThisDeclarationADefinition())
     {
         if (cxxConstructorDecl->isCopyOrMoveConstructor())
-            insideMoveOrCopyDeclParent = cxxConstructorDecl->getParent();
+            insideMoveOrCopyOrCloneDeclParent = cxxConstructorDecl->getParent();
     }
     bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(cxxConstructorDecl);
-    insideMoveOrCopyDeclParent = copy;
+    insideMoveOrCopyOrCloneDeclParent = copy;
     return ret;
 }
 
 bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
 {
-    auto copy1 = insideMoveOrCopyDeclParent;
+    auto copy1 = insideMoveOrCopyOrCloneDeclParent;
     auto copy2 = insideFunctionDecl;
     if (!ignoreLocation(cxxMethodDecl) && cxxMethodDecl->isThisDeclarationADefinition())
     {
-        if (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator())
-            insideMoveOrCopyDeclParent = cxxMethodDecl->getParent();
+        if (cxxMethodDecl->isCopyAssignmentOperator()
+            || cxxMethodDecl->isMoveAssignmentOperator()
+            || (cxxMethodDecl->getIdentifier() && cxxMethodDecl->getName() == "Clone"))
+            insideMoveOrCopyOrCloneDeclParent = cxxMethodDecl->getParent();
     }
     insideFunctionDecl = cxxMethodDecl;
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
-    insideMoveOrCopyDeclParent = copy1;
+    insideMoveOrCopyOrCloneDeclParent = copy1;
     insideFunctionDecl = copy2;
     return ret;
 }
@@ -435,11 +437,11 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 
 void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr)
 {
-    if (insideMoveOrCopyDeclParent || insideStreamOutputOperator)
+    if (insideMoveOrCopyOrCloneDeclParent || insideStreamOutputOperator)
     {
         RecordDecl const * cxxRecordDecl1 = fieldDecl->getParent();
         // we don't care about reads from a field when inside the copy/move constructor/operator= for that field
-        if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyDeclParent))
+        if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyOrCloneDeclParent))
             return;
         // we don't care about reads when the field is being used in an output operator, this is normally
         // debug stuff
@@ -629,11 +631,11 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
 
 void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberExpr)
 {
-    if (insideMoveOrCopyDeclParent)
+    if (insideMoveOrCopyOrCloneDeclParent)
     {
         RecordDecl const * cxxRecordDecl1 = fieldDecl->getParent();
         // we don't care about writes to a field when inside the copy/move constructor/operator= for that field
-        if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyDeclParent))
+        if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyOrCloneDeclParent))
             return;
     }
 
@@ -878,7 +880,7 @@ bool UnusedFields::VisitCXXConstructorDecl( const CXXConstructorDecl* cxxConstru
        return true;
 
     // we don't care about writes to a field when inside the copy/move constructor/operator= for that field
-    if (insideMoveOrCopyDeclParent && cxxConstructorDecl->getParent() == insideMoveOrCopyDeclParent)
+    if (insideMoveOrCopyOrCloneDeclParent && cxxConstructorDecl->getParent() == insideMoveOrCopyOrCloneDeclParent)
         return true;
 
     for(auto it = cxxConstructorDecl->init_begin(); it != cxxConstructorDecl->init_end(); ++it)
@@ -975,33 +977,7 @@ llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
         }
     }
 
-    llvm::Optional<CalleeWrapper> ret;
-    auto callee = callExpr->getCallee()->IgnoreParenImpCasts();
-    if (isa<CXXDependentScopeMemberExpr>(callee)) // template stuff
-        return ret;
-    if (isa<UnresolvedLookupExpr>(callee)) // template stuff
-        return ret;
-    if (isa<UnresolvedMemberExpr>(callee)) // template stuff
-        return ret;
-    calleeType = calleeType->getUnqualifiedDesugaredType();
-    if (isa<TemplateSpecializationType>(calleeType)) // template stuff
-        return ret;
-    if (auto builtinType = dyn_cast<BuiltinType>(calleeType)) {
-        if (builtinType->getKind() == BuiltinType::Kind::Dependent) // template stuff
-            return ret;
-        if (builtinType->getKind() == BuiltinType::Kind::BoundMember) // template stuff
-            return ret;
-    }
-    if (isa<TemplateTypeParmType>(calleeType)) // template stuff
-        return ret;
-
-    callExpr->dump();
-    callExpr->getCallee()->getType()->dump();
-    report(
-         DiagnosticsEngine::Warning, "can't get callee",
-        callExpr->getExprLoc())
-      << callExpr->getSourceRange();
-    return ret;
+    return llvm::Optional<CalleeWrapper>();
 }
 
 loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);

@@ -184,6 +184,22 @@ try_again:
                 || isa<ExprWithCleanups>(parent))
     {
         goto try_again;
+    } else if (isa<CXXDefaultArgExpr>(parent))
+    {
+        // TODO this could be improved
+        bWrite = true;
+    } else if (isa<DeclRefExpr>(parent))
+    {
+        // slightly weird case I saw in basegfx where the enum is being used as a template param
+        bWrite = true;
+    } else if (isa<MemberExpr>(parent))
+    {
+        // slightly weird case I saw in sc where the enum is being used as a template param
+        bWrite = true;
+    } else if (isa<UnresolvedLookupExpr>(parent))
+    {
+        bRead = true;
+        bWrite = true;
     } else {
         bDump = true;
     }
@@ -191,6 +207,7 @@ try_again:
     // to let me know if I missed something
     if (bDump) {
         parent->dump();
+        declRefExpr->dump();
         report( DiagnosticsEngine::Warning,
                 "unhandled clang AST node type",
                 parent->getLocStart());
