@@ -18,6 +18,13 @@
  */
 
 #include <comphelper/string.hxx>
+
+#include <config_gpgme.h>
+#if GPGME_HAVE_GPGME
+#include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#endif
+
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -31,6 +38,8 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxids.hrc>
+
+using namespace css;
 
 namespace
 {
@@ -205,6 +214,19 @@ SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCo
     InitControls();
     SetExchangeSupport(); // this page needs ExchangeSupport
     SetLinks();
+#if GPGME_HAVE_GPGME
+    // unused yet, I just wanted to see if this delivers the desired results
+    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
+    try
+    {
+        xSEInitializer = xml::crypto::GPGSEInitializer::create( comphelper::getProcessComponentContext() );
+        uno::Reference<xml::crypto::XXMLSecurityContext> xSC = xSEInitializer->createSecurityContext( OUString() );
+        // completely bogus, this is just to appease loplugins
+        xSEInitializer->freeSecurityContext( xSC );
+    }
+    catch ( uno::Exception const & )
+    {}
+#endif
 }
 
 SvxGeneralTabPage::~SvxGeneralTabPage()
