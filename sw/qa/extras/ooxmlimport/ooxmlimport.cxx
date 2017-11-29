@@ -118,7 +118,6 @@ public:
     }
 };
 
-
 DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
 {
     OUString URL = getProperty<OUString>(getShape(1), "HyperLinkURL");
@@ -1559,6 +1558,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
         sal_Int32(-1), getProperty<sal_Int32>(xText, "CharColor"));
 }
 
+
+DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
+{
+    // the position of the flying text frame should be off page
+    // 30624 below its anchor
+    OUString aTop = parseDump("//fly[1]/infos/bounds", "top");
+    CPPUNIT_ASSERT_EQUAL( OUString("30624"), aTop );
+
+}
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
