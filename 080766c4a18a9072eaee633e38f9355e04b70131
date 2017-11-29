@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f3741669",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-11-29T06:54:04Z",
+      "side": 1,
+      "message": "Then we could clean up Stephan change, that added:\n\n -I$(ATL_INCLUDE)\n\nto resolve afxres.h, quoting the commit message:\n\n* Additional arguments that turned out to be necessary are:\n\n -I$(ATL_INCLUDE)\n  So that\n    #include \u003cafxres.h\u003e\n  in workdir/UnpackedTarball/libgpg-error/src/versioninfo.rc is found.\n\nLet\u0027s remove it already here or follow-up change. All these guys are affected:\n\n* gpgmepp/ExternalProject_gpgmepp.mk\n* libassuan/ExternalProject_libassuan.mk\n* libgpg-error/ExternalProject_libgpg-error.mk",
+      "revId": "080766c4a18a9072eaee633e38f9355e04b70131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
