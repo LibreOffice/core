@@ -1885,6 +1885,24 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     return sRet;
 }
 
+Reference< XInputStream > SvXMLExport::GetEmbeddedGraphicObjectStream( const OUString& rGraphicObjectURL )
+{
+    if( (getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
+        rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
+        mxGraphicResolver.is() )
+    {
+        Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
+
+        if( xStmResolver.is() )
+        {
+            Reference< XInputStream > xIn( xStmResolver->getInputStream( rGraphicObjectURL ) );
+            return xIn;
+        }
+    }
+
+    return nullptr;
+}
+
 bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
 {
     bool bRet = false;
