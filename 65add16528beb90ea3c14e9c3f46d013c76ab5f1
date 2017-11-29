@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_96d7404a",
+        "filename": "compilerplugins/clang/salcall.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-29T14:06:43Z",
+      "side": 1,
+      "message": "shouldn\u0027t the check for whether SAL_CALL is needed rather be that either the function is declared in an isInUnoIncludeFile, or is overriding (see below), or its address is taken and bound to a SAL_CALL-carrying function type?  that should remove the need to exclude a random selection of source modules here",
+      "revId": "65add16528beb90ea3c14e9c3f46d013c76ab5f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f6dfa466",
+        "filename": "compilerplugins/clang/salcall.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-29T14:06:43Z",
+      "side": 1,
+      "message": "why not just don\u0027t check overriding functions at all?  that should remove to check whether a function is declared in a UnoApiHeadersTarget include file",
+      "revId": "65add16528beb90ea3c14e9c3f46d013c76ab5f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
