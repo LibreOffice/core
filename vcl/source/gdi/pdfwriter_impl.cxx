@@ -26,6 +26,7 @@
 
 #if defined __GNUC__ && __cplusplus > 201402L
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wregister"
 #endif
 #include <lcms2.h>
