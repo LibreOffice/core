@@ -113,7 +113,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <comphelper/processfactory.hxx>
+#include <comphelper/graphicmimetype.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -3046,22 +3046,6 @@ void XMLTextParagraphExport::exportContour(
                               true, true );
 }
 
-static OUString getMimeType(const OUString& sImageUrl)
-{
-    // Create the graphic to retrieve the mimetype from it
-    Reference< XGraphicProvider > xProvider = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
-    Sequence< PropertyValue > aMediaProperties( 1 );
-    aMediaProperties[0].Name = "URL";
-    aMediaProperties[0].Value <<= sImageUrl;
-    Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
-
-    OUString aSourceMimeType;
-    Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
-    if ( xGraphicPropertySet->getPropertyValue( "MimeType" ) >>= aSourceMimeType )
-        return aSourceMimeType;
-    return OUString("");
-}
-
 void XMLTextParagraphExport::_exportTextGraphic(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
@@ -3124,7 +3108,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
                                   sGrfFilter );
 
     // Add mimetype to make it easier for readers to get the base64 image type right, tdf#109202
-    OUString aSourceMimeType = getMimeType(sOrigURL);
+    OUString aSourceMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(sOrigURL);
     if ( !aSourceMimeType.isEmpty() )
         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
 
