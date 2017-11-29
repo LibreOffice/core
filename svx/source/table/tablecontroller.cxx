@@ -1230,6 +1230,8 @@ void SvxTableController::MergeMarkedCells()
 
         TableModelNotifyGuard aGuard( mxTable.get() );
         MergeRange( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow );
+        aEnd.mnCol -= 1;
+        setSelectedCells(aStart, aEnd);
     }
 }
 
@@ -2757,7 +2759,7 @@ IMPL_LINK_NOARG(SvxTableController, UpdateHdl, void*, void)
         CellPos aEnd( maCursorLastPos );
         checkCell(aStart);
         checkCell(aEnd);
-        if( aStart != maCursorFirstPos  || aEnd != maCursorLastPos )
+        if( aStart != maCursorFirstPos || aEnd != maCursorLastPos )
         {
             setSelectedCells( aStart, aEnd );
         }
