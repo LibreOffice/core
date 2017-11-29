@@ -1317,7 +1317,7 @@ void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHead
     DataPilotTablePositionData aPosData;
     pOutput->GetPositionData(rPos, aPosData);
     const sal_Int32 nPosType = aPosData.PositionType;
-    if (nPosType == COLUMN_HEADER || nPosType == ROW_HEADER)
+    if (nPosType == com::sun::star::sheet::DataPilotTablePositionType::COLUMN_HEADER || nPosType == com::sun::star::sheet::DataPilotTablePositionType::ROW_HEADER)
         aPosData.PositionData >>= rData;
 }
 
