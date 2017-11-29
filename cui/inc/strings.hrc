@@ -279,7 +279,7 @@
    contains an optional model word associated to the new user word,
    allowing its affixation or compounding during spell checking.
    For example, adding "Grammar By" word "fund" to the new user
-   word "crowdfund", the spell checker will recogize "crowdfund"
+   word "crowdfund", the spell checker will recognize "crowdfund"
    with suffixes of "fund": "crowdfunding", "crowdfund's" etc.
 */
 #define RID_SVXSTR_OPT_GRAMMAR_BY                   NC_("RID_SVXSTR_OPT_GRAMMAR_BY", "~Grammar By")
