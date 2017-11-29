@@ -19,6 +19,22 @@
 
 #include <comphelper/graphicmimetype.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+#include <comphelper/processfactory.hxx>
+
+using namespace css;
+using namespace css::beans;
+using namespace css::graphic;
+using namespace css::io;
+using namespace css::uno;
+
 namespace comphelper
 {
 OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(const OString& rExt)
@@ -46,6 +62,44 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(const OString& rExt)
     }
 
     return aMimeType;
+}
+
+OUString GraphicMimeTypeHelper::GetMimeTypeForXGraphic(Reference<XGraphic> xGraphic)
+{
+    OUString aSourceMimeType;
+    Reference<XPropertySet> const xGraphicPropertySet(xGraphic, UNO_QUERY);
+    if (xGraphicPropertySet.is() && // it's null if it's an external link
+        (xGraphicPropertySet->getPropertyValue("MimeType") >>= aSourceMimeType))
+    {
+        return aSourceMimeType;
+    }
+    return OUString("");
+}
+
+OUString GraphicMimeTypeHelper::GetMimeTypeForImageUrl(const OUString& rImageUrl)
+{
+    // Create the graphic to retrieve the mimetype from it
+    Reference<XGraphicProvider> xProvider
+        = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
+    Sequence<PropertyValue> aMediaProperties(1);
+    aMediaProperties[0].Name = "URL";
+    aMediaProperties[0].Value <<= rImageUrl;
+    Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
+
+    return GetMimeTypeForXGraphic(xGraphic);
+}
+
+OUString GraphicMimeTypeHelper::GetMimeTypeForImageStream(Reference<XInputStream> xInputStream)
+{
+    // Create the graphic to retrieve the mimetype from it
+    Reference<XGraphicProvider> xProvider
+        = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
+    Sequence<PropertyValue> aMediaProperties(1);
+    aMediaProperties[0].Name = "InputStream";
+    aMediaProperties[0].Value <<= xInputStream;
+    Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
+
+    return GetMimeTypeForXGraphic(xGraphic);
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
