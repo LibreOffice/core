@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes-2.patch.1) \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes-3.patch.1) \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-disable-dllinit.patch.1) \
+	external/libgpg-error/w32-build-fixes-4.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

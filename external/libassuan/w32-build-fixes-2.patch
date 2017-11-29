@@ -1,0 +1,15 @@
+Avoid MFC dependency - can go with very basic includes instead
+
+--- src/versioninfo.rc.in~	2015-10-16 15:40:36.000000000 +0200
++++ src/versioninfo.rc.in	2017-11-29 04:19:57.870117200 +0100
+@@ -14,7 +14,9 @@
+ 
+ #line __LINE__ "versioninfo.rc.in"
+ 
+-#include <afxres.h>
++#define WIN32_LEAN_AND_MEAN
++#include <windows.h>
++#include <winver.h>
+ 
+ 
+ VS_VERSION_INFO VERSIONINFO
