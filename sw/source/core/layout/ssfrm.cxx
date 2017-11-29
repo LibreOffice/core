@@ -593,7 +593,7 @@ SwLayoutFrame::~SwLayoutFrame()
 |*  to be displayed. This region could be larger than the printarea (getFramePrintArea())
 |*  of the upper, it includes e.g. often the margin of the page.
 |*/
-const SwRect SwFrame::PaintArea() const
+const SwRect SwFrame::GetPaintArea() const
 {
     // NEW TABLES
     // Cell frames may not leave their upper:
@@ -623,7 +623,7 @@ const SwRect SwFrame::PaintArea() const
             else
                 nTmpRight = (pNxt->getFrameArea().*fnRect->fnGetRight)();
         }
-        OSL_ENSURE( pTmp, "PaintArea lost in time and space" );
+        OSL_ENSURE( pTmp, "GetPaintArea lost in time and space" );
         if( pTmp->IsPageFrame() || pTmp->IsFlyFrame() ||
             pTmp->IsCellFrame() || pTmp->IsRowFrame() || //nobody leaves a table!
             pTmp->IsRootFrame() )

@@ -2781,7 +2781,7 @@ void SwTextFrame::repaintTextFrames( const SwTextNode& rNode )
     SwIterator<SwTextFrame,SwTextNode> aIter( rNode );
     for( const SwTextFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
-        SwRect aRec( pFrame->PaintArea() );
+        SwRect aRec( pFrame->GetPaintArea() );
         const SwRootFrame *pRootFrame = pFrame->getRootFrame();
         SwViewShell *pCurShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
         if( pCurShell )

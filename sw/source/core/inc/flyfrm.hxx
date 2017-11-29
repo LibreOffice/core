@@ -149,7 +149,7 @@ public:
 
     // get client information
     virtual bool GetInfo( SfxPoolItem& ) const override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetCursorOfst( SwPosition *, Point&,

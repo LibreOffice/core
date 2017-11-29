@@ -383,7 +383,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             mpOut = pVout.get();
                             if ( bPaintsFromSystem )
                                 PaintDesktop(*mpOut, aRect);
-                            pCurrentLayout->Paint( *mpOut, aRect );
+                            pCurrentLayout->PaintSwFrame( *mpOut, aRect );
                             pOld->DrawOutDev( aRect.Pos(), aRect.SSize(),
                                               aRect.Pos(), aRect.SSize(), *pVout );
                             mpOut = pOld;
@@ -409,7 +409,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             if ( bPaintsFromSystem )
                                 PaintDesktop(*GetOut(), aRect);
                             if (!comphelper::LibreOfficeKit::isActive())
-                                pCurrentLayout->Paint( *mpOut, aRect );
+                                pCurrentLayout->PaintSwFrame( *mpOut, aRect );
                             else
                                 pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
 
@@ -1068,7 +1068,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
     //When there a PaintRegion still exists and the VisArea has changed,
     //the PaintRegion is at least by now obsolete. The PaintRegion can
-    //have been created by RootFrame::Paint.
+    //have been created by RootFrame::PaintSwFrame.
     if ( !mbInEndAction &&
          Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
         Imp()->DelRegion();
@@ -1312,7 +1312,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
                 // SW paint stuff
                 PaintDesktop(*GetOut(), aRect);
                 SwViewShell::mbLstAct = true;
-                GetLayout()->Paint( *GetOut(), aRect );
+                GetLayout()->PaintSwFrame( *GetOut(), aRect );
                 SwViewShell::mbLstAct = false;
 
                 // end paint and destroy ObjectContact again
@@ -1785,7 +1785,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                 if ( aRect.IsInside( maInvalidRect ) )
                     ResetInvalidRect();
                 SwViewShell::mbLstAct = true;
-                GetLayout()->Paint( rRenderContext, aRect );
+                GetLayout()->PaintSwFrame( rRenderContext, aRect );
                 SwViewShell::mbLstAct = false;
             }
             else
@@ -1806,7 +1806,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                     if ( aRect.IsInside( maInvalidRect ) )
                         ResetInvalidRect();
                     SwViewShell::mbLstAct = true;
-                    GetLayout()->Paint( rRenderContext, aRect );
+                    GetLayout()->PaintSwFrame( rRenderContext, aRect );
                     SwViewShell::mbLstAct = false;
                     // --> OD 2009-08-12 #i101192#
                     // end Pre/PostPaint encapsulation
