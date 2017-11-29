@@ -542,8 +542,6 @@ class SwDistance
 public:
     SwTwips nMain, nSub;
     SwDistance() { nMain = nSub = 0; }
-    SwDistance& operator=( const SwDistance &rTwo )
-        { nMain = rTwo.nMain; nSub = rTwo.nSub; return *this; }
     bool operator<( const SwDistance& rTwo ) const
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && nSub &&
           rTwo.nSub && nSub < rTwo.nSub ); }

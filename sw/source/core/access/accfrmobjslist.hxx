@@ -47,12 +47,6 @@ private:
     SwAccessibleChildSList_const_iterator& next_visible();
 
 public:
-    SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList_const_iterator& rIter )
-        : m_rList( rIter.m_rList )
-        , m_aCurr( rIter.m_aCurr )
-        , m_nNextObj( rIter.m_nNextObj )
-    {}
-
     bool operator==( const SwAccessibleChildSList_const_iterator& r ) const
     {
         return m_aCurr == r.m_aCurr;

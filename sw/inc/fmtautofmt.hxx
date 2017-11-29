@@ -30,14 +30,6 @@ class SwFormatAutoFormat: public SfxPoolItem
 public:
     SwFormatAutoFormat( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
 
-    /// single argument ctors shall be explicit.
-    virtual ~SwFormatAutoFormat() override;
-
-    /// @@@ public copy ctor, but no copy assignment?
-    SwFormatAutoFormat( const SwFormatAutoFormat& rAttr );
-private:
-    /// @@@ public copy ctor, but no copy assignment?
-    SwFormatAutoFormat & operator= (const SwFormatAutoFormat &) = delete;
 public:
 
 

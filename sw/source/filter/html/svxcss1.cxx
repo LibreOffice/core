@@ -301,11 +301,6 @@ struct SvxCSS1BorderInfo
         nNamedWidth( USHRT_MAX ), eStyle( CSS1_BS_NONE )
     {}
 
-    SvxCSS1BorderInfo( const SvxCSS1BorderInfo& rInfo ) :
-        aColor( rInfo.aColor ), nAbsWidth( rInfo.nAbsWidth ),
-        nNamedWidth( rInfo.nNamedWidth ), eStyle( rInfo.eStyle )
-    {}
-
     void SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxItem ) const;
 };
 

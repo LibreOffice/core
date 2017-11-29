@@ -186,8 +186,6 @@ class MCD : public TBBase
 
 public:
     MCD();
-    MCD(const MCD&);
-    MCD& operator = ( const MCD&);
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
