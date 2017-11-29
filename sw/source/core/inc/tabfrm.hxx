@@ -125,7 +125,7 @@ public:
     SwTabFrame* FindMaster( bool bFirstMaster = false ) const;
 
     virtual bool GetInfo( SfxPoolItem &rHint ) const override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual void CheckDirection( bool bVert ) override;
 

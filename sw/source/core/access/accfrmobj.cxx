@@ -286,7 +286,7 @@ SwRect SwAccessibleChild::GetBounds( const SwAccessibleMap& rAccMap ) const
             aBound = SwRect( mpFrame->Frame().Left(), mpFrame->Frame().Top()-1, 0, 0 );
         }
         else
-            aBound = mpFrame->PaintArea();
+            aBound = mpFrame->GetPaintArea();
     }
     else if( mpDrawObj )
     {

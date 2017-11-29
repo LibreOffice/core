@@ -386,11 +386,11 @@ public:
     // #i28701# - change purpose of method and adjust its name
     void InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs = true );
 
-    virtual void PaintBorder( const SwRect&, const SwPageFrame *pPage,
+    virtual void PaintSwFrameShadowAndBorder( const SwRect&, const SwPageFrame *pPage,
                               const SwBorderAttrs & ) const;
     void PaintBaBo( const SwRect&, const SwPageFrame *pPage = nullptr,
                     const bool bOnlyTextBackground = false) const;
-    void PaintBackground( const SwRect&, const SwPageFrame *pPage,
+    void PaintSwFrameBackground( const SwRect&, const SwPageFrame *pPage,
                           const SwBorderAttrs &,
                           const bool bLowerMode = false,
                           const bool bLowerBorder = false,
@@ -563,7 +563,8 @@ public:
 
     // PaintArea is the area where content might be displayed.
     // The margin of a page or the space between columns belongs to it.
-    const SwRect PaintArea() const;
+    const SwRect GetPaintArea() const;
+
     // UnionFrame is the union of Frame- and PrtArea, normally identical
     // to the FrameArea except in case of negative Prt margins.
     const SwRect UnionFrame( bool bBorder = false ) const;
@@ -665,7 +666,7 @@ public:
                                  SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCursorMoveState* = nullptr ) const;
-    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const;
 
     // HACK: shortcut between frame and formatting

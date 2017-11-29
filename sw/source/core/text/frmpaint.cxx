@@ -401,7 +401,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     }
 }
 
-SwRect SwTextFrame::Paint()
+SwRect SwTextFrame::GetPaintSwRect()
 {
 #if OSL_DEBUG_LEVEL > 1
     const SwTwips nDbgY = Frame().Top();
@@ -573,7 +573,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
     return false;
 }
 
-void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
@@ -588,32 +588,25 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
 
     if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        const SwTwips nDbgY = Frame().Top();
-        (void)nDbgY;
-#endif
-
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 
         // It can happen that the IdleCollector withdrew my cached information
+        OSL_ENSURE( GetValidPosFlag(), "+SwTextFrame::Paint: no Calc()" );
+
+        // #i29062# pass info that we are currently
+        // painting.
+        const_cast<SwTextFrame*>(this)->GetFormatted( true );
+        if( IsEmpty() )
+        {
+            PaintEmpty( rRect, false );
+            return;
+        }
+
         if( !HasPara() )
         {
-            OSL_ENSURE( GetValidPosFlag(), "+SwTextFrame::Paint: no Calc()" );
-
-            // #i29062# pass info that we are currently
-            // painting.
-            const_cast<SwTextFrame*>(this)->GetFormatted( true );
-            if( IsEmpty() )
-            {
-                PaintEmpty( rRect, false );
-                return;
-            }
-            if( !HasPara() )
-            {
-                OSL_ENSURE( false, "+SwTextFrame::Paint: missing format information" );
-                return;
-            }
+            OSL_ENSURE( false, "+SwTextFrame::Paint: missing format information" );
+            return;
         }
 
         // We don't want to be interrupted while painting.

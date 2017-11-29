@@ -250,14 +250,14 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
         if( pEndFrame != pStartFrame )
         {
             bSameFrame = false;
-            SwRect aStFrame( pStartFrame->PaintArea() );
+            SwRect aStFrame( pStartFrame->GetPaintArea() );
             {
                 SWRECTFN( pStartFrame )
                 (aTmp.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
                 (aTmp.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
                 (aTmp.*fnRect->fnSetBottom)( (aStFrame.*fnRect->fnGetBottom)() );
             }
-            aStFrame = pEndFrame->PaintArea();
+            aStFrame = pEndFrame->GetPaintArea();
             {
                 SWRECTFN( pEndFrame )
                 (aRect.*fnRect->fnSetTop)( (aStFrame.*fnRect->fnGetTop)() );
@@ -270,7 +270,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
                 pStartFrame = pStartFrame->GetFollow();
                 if( pStartFrame == pEndFrame )
                     break;
-                aRect.Union( pStartFrame->PaintArea() );
+                aRect.Union( pStartFrame->GetPaintArea() );
             }
         }
     }
@@ -281,7 +281,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
             (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
         else
         {
-            SwRect aStFrame( pStartFrame->PaintArea() );
+            SwRect aStFrame( pStartFrame->GetPaintArea() );
             (aRect.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
             (aRect.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
             (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );

@@ -154,7 +154,7 @@ bool SwLayoutFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         const bool bContentCheck = pFrame->IsTextFrame() && pCMS && pCMS->m_bContentCheck;
         const SwRect aPaintRect( bContentCheck ?
                                  pFrame->UnionFrame() :
-                                 pFrame->PaintArea() );
+                                 pFrame->GetPaintArea() );
 
         if ( aPaintRect.IsInside( rPoint ) &&
              ( bContentCheck || pFrame->GetCursorOfst( pPos, rPoint, pCMS ) ) )
@@ -359,7 +359,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 bool SwLayoutFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
 {
     bool bRet = false;
-    if( rRect.IsOver(PaintArea()) )
+    if( rRect.IsOver(GetPaintArea()) )
     {
         const SwFrame* pFrame = Lower();
         while( pFrame )
@@ -374,7 +374,7 @@ bool SwLayoutFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect )
 bool SwPageFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
 {
     bool bRet = false;
-    if( rRect.IsOver(PaintArea()) )
+    if( rRect.IsOver(GetPaintArea()) )
     {
         bRet = SwLayoutFrame::FillSelection( rList, rRect );
         if( GetSortedObjs() )
@@ -2124,11 +2124,11 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     Sw2LinesPos *pEnd2Pos = aTmpState.m_p2Lines;
 
     SwRect aStFrame ( pStartFrame->UnionFrame( true ) );
-    aStFrame.Intersection( pStartFrame->PaintArea() );
+    aStFrame.Intersection( pStartFrame->GetPaintArea() );
     SwRect aEndFrame( pStartFrame == pEndFrame ? aStFrame : pEndFrame->UnionFrame( true ) );
     if( pStartFrame != pEndFrame )
     {
-        aEndFrame.Intersection( pEndFrame->PaintArea() );
+        aEndFrame.Intersection( pEndFrame->GetPaintArea() );
     }
     SWRECTFN( pStartFrame )
     const bool bR2L = pStartFrame->IsRightToLeft();
@@ -2505,7 +2505,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                 ( !pCellBox || pCellBox == pTmpCellBox ) )
             {
                 SwRect aCRect( pContent->UnionFrame( true ) );
-                aCRect.Intersection( pContent->PaintArea() );
+                aCRect.Intersection( pContent->GetPaintArea() );
                 if( aCRect.IsOver( aRegion.GetOrigin() ))
                 {
                     SwRect aTmp( aPrvRect );

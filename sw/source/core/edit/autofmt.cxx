@@ -255,7 +255,7 @@ SwTextFrame* SwAutoFormat::GetFrame( const SwTextNode& rTextNd ) const
         SwRect aTmpPrt( pFrame->Prt() );
         pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());
         if( pFrame->Frame() != aTmpFrame || pFrame->Prt() != aTmpPrt ||
-            ( pFrame->IsTextFrame() && !const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->Paint().IsEmpty() ) )
+            ( pFrame->IsTextFrame() && !const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->GetPaintSwRect().IsEmpty() ) )
             pFrame->SetCompletePaint();
     }
     return const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->GetFormatted();

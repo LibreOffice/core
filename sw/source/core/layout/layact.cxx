@@ -217,7 +217,7 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
 
     if ( pCnt->IsCompletePaint() || !pCnt->IsTextFrame() )
     {
-        SwRect aPaint( pCnt->PaintArea() );
+        SwRect aPaint( pCnt->GetPaintArea() );
         if ( !PaintContent_( pCnt, pPage, aPaint ) )
             pCnt->ResetCompletePaint();
     }
@@ -231,14 +231,14 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
         if( bHeightDiff )
         {
             // OD 05.11.2002 #94454# - consider whole potential paint area.
-            SwRect aDrawRect( pCnt->PaintArea() );
+            SwRect aDrawRect( pCnt->GetPaintArea() );
             if( nOldHeight > nNewHeight )
                 nOldBottom = (pCnt->*fnRect->fnGetPrtBottom)();
             (aDrawRect.*fnRect->fnSetTop)( nOldBottom );
             PaintContent_( pCnt, pPage, aDrawRect );
         }
         // paint content area
-        SwRect aPaintRect = static_cast<SwTextFrame*>(const_cast<SwContentFrame*>(pCnt))->Paint();
+        SwRect aPaintRect = static_cast<SwTextFrame*>(const_cast<SwContentFrame*>(pCnt))->GetPaintSwRect();
         PaintContent_( pCnt, pPage, aPaintRect );
     }
 
@@ -251,7 +251,7 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
             if( pSct->IsRetouche() && !pSct->GetNext() )
                 pTmp = pSct;
         }
-        SwRect aRect( pTmp->GetUpper()->PaintArea() );
+        SwRect aRect( pTmp->GetUpper()->GetPaintArea() );
         (aRect.*fnRect->fnSetTop)( (pTmp->*fnRect->fnGetPrtBottom)() );
         if ( !PaintContent_( pCnt, pPage, aRect ) )
             pCnt->ResetRetouche();
@@ -1354,7 +1354,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
     {
         // OD 15.11.2002 #105155# - vertical layout support
         SWRECTFN( pLay );
-        SwRect aRect( pLay->GetUpper()->PaintArea() );
+        SwRect aRect( pLay->GetUpper()->GetPaintArea() );
         (aRect.*fnRect->fnSetTop)( (pLay->*fnRect->fnGetPrtBottom)() );
         if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
             pLay->ResetRetouche();
@@ -1495,7 +1495,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
         {
             bChanged = true;
         }
-        const SwRect aPaintFrame = pTab->PaintArea();
+        const SwRect aPaintFrame = pTab->GetPaintArea();
 
         if ( IsPaint() && bAddRect )
         {
@@ -1550,7 +1550,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
 
             if ( pTab->IsRetouche() && !pTab->GetNext() )
             {
-                SwRect aRect( pTab->GetUpper()->PaintArea() );
+                SwRect aRect( pTab->GetUpper()->GetPaintArea() );
                 // OD 04.11.2002 #104100# - vertical layout support
                 (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
                 if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
@@ -1569,7 +1569,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
         // OD 04.10.2002 #102779#
         // set correct rectangle for retouche: area between bottom of table frame
         // and bottom of paint area of the upper frame.
-        SwRect aRect( pTab->GetUpper()->PaintArea() );
+        SwRect aRect( pTab->GetUpper()->GetPaintArea() );
         // OD 04.11.2002 #104100# - vertical layout support
         (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
         if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
