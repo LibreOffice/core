@@ -61,6 +61,7 @@ public:
     void testSpanAutostyle();
     void testParaAutostyleCharProps();
     void testMeta();
+    void testCoverImage();
     void testParaNamedstyle();
     void testCharNamedstyle();
     void testNamedStyleInheritance();
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST(testParaAutostyleCharProps);
     CPPUNIT_TEST(testMeta);
+    CPPUNIT_TEST(testCoverImage);
     CPPUNIT_TEST(testParaNamedstyle);
     CPPUNIT_TEST(testCharNamedstyle);
     CPPUNIT_TEST(testNamedStyleInheritance);
@@ -328,6 +330,23 @@ void EPUBExportTest::testMeta()
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2017-09-27T09:51:19Z");
 
     // Make sure that cover image next to the source document is picked up.
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "properties", "cover-image");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "media-type", "image/png");
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
+}
+
+void EPUBExportTest::testCoverImage()
+{
+    OUString aCoverURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "meta.cover-image.png";
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        {"EPUBCoverImage", uno::makeAny(aCoverURL)}
+    }));
+    createDoc("hello.fodt", aFilterData);
+    mpXmlDoc = parseExport("OEBPS/content.opf");
+
+    // Make sure that the explicitly set cover image is used.
+    // This failed, as the image was not part of the package.
     assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "properties", "cover-image");
     assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "media-type", "image/png");
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
