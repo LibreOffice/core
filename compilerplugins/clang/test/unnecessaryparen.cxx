@@ -10,6 +10,8 @@
 #include <string>
 #include <rtl/ustring.hxx>
 
+#define MACRO (1)
+
 bool foo(int);
 
 enum class EFoo { Bar };
@@ -28,8 +30,8 @@ int main()
     int y = (x); // expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
     (void)y;
 
-    EFoo foo = EFoo::Bar;
-    switch (foo) {
+    EFoo efoo = EFoo::Bar;
+    switch (efoo) {
         case (EFoo::Bar): break; // expected-error {{parentheses immediately inside case statement [loplugin:unnecessaryparen]}}
     }
 
@@ -44,6 +46,19 @@ int main()
         return 0;
     }
     x = (true) ? 0 : 1;
+
+    // More "no warnings", at least potentially used to silence -Wunreachable-code:
+    while ((false)) {
+        return 0;
+    }
+    for (; (false);) {
+        return 0;
+    }
+    x = foo(0) && (false) ? 0 : 1;
+    x = MACRO < (0) ? 0 : 1;
+        // cf. odd Clang -Wunreachable-code--suppression mechanism when the macro itself contains
+        // parentheses, causing the issue that lead to c421ac3f9432f2e9468d28447dc4c2e45b6f4da3
+        // "Revert loplugin:unnecessaryparen warning around integer literals"
 
     int v2 = (1); // expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
     (void)v2;
