@@ -40,6 +40,12 @@ typedef enum
 }
 LibreOfficeKitTileMode;
 
+typedef enum
+{
+    LOK_WINDOW_CLOSE
+}
+LibreOfficeKitWindowAction;
+
 /** Optional features of LibreOfficeKit, in particular callbacks that block
  *  LibreOfficeKit until the corresponding reply is received, which would
  *  deadlock if the client does not support the feature.

@@ -271,14 +271,17 @@ struct _LibreOfficeKitDocumentClass
                        size_t nSize);
 
     /// Paints dialog with given dialog id to the buffer
-    /// @see lok::Document::paintDialog().
-    void (*paintDialog) (LibreOfficeKitDocument* pThis, unsigned nDialogId,
+    /// @see lok::Document::paintWindow().
+    void (*paintWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId,
                          unsigned char* pBuffer,
                          const int x, const int y,
                          const int width, const int height);
 
     /// @see lok::Document::paintActiveFloatingWindow().
     void (*paintActiveFloatingWindow) (LibreOfficeKitDocument* pThis, unsigned nDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
+
+    /// @see lok::Document::postWindow().
+    void (*postWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId, int nAction);
 
     /// @see lok::Document::postDialogKeyEvent().
     void (*postDialogKeyEvent) (LibreOfficeKitDocument* pThis,
