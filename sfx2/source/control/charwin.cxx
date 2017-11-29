@@ -29,12 +29,13 @@
 
 using namespace com::sun::star;
 
-
 SvxCharView::SvxCharView(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , mnY(0)
     , maPosition(0,0)
 {
+   OUString aName = pParent->get_id();
+   bIsFloating = (aName == "grid1" || aName == "grid2"); //box3 or grid6 in case of special characters dialog
 }
 
 VCL_BUILDER_FACTORY(SvxCharView)
@@ -53,7 +54,8 @@ void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
         maMouseClickHdl.Call(this);
     }
 
-    if(rMEvt.IsRight())
+    // suppress context menu on floating windows
+    if(rMEvt.IsRight() && !bIsFloating)
     {
         Point aPosition (rMEvt.GetPosPixel());
         maPosition = aPosition;
