@@ -2392,13 +2392,12 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
-                    // xlink:href for replacement, only written for Svg content
-                    SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
-
-                    // optional office:binary-data
-                    mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
                 }
+                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+
+                // optional office:binary-data
+                mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
+
             }
         }
     }
