@@ -217,7 +217,7 @@ namespace XSLT
     {
         //        const char *ptr = (const char *) context;
         if (buffer == nullptr || len < 0)
-            return (-1);
+            return -1;
         sal_Int32 n;
         css::uno::Reference<XInputStream> xis = m_transformer->getInputStream();
         n = xis.get()->readBytes(m_readBuf, len);

@@ -1327,7 +1327,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
     {
         css::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
 
-        if ( aDescr.ParentIndex == (-1) )
+        if ( aDescr.ParentIndex == -1 )
             aDescr.Parent = nullptr;
         else if ( ( aDescr.ParentIndex >= 0 ) && ( aDescr.ParentIndex < (short)n ) )
             aDescr.Parent = aSeq.getConstArray()[aDescr.ParentIndex];

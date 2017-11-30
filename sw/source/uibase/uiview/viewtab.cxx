@@ -662,7 +662,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         SvxLRSpaceItem aNewMargin( RES_LR_SPACE );
         aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOfst() );
         aNewMargin.SetRight( aParaMargin.GetRight() );
-        aNewMargin.SetTextFirstLineOfst( (aParaMargin.GetTextFirstLineOfst()) * (-1) );
+        aNewMargin.SetTextFirstLineOfst( (aParaMargin.GetTextFirstLineOfst()) * -1 );
 
         rSh.SetAttrItem( aNewMargin );
         break;

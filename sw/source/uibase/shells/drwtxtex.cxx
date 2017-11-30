@@ -229,7 +229,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     short int nFirstLineOffset = aParaMargin.GetTextFirstLineOfst();
                     aParaMargin.SetTextLeft( aParaMargin.GetTextLeft() + nFirstLineOffset );
                     aParaMargin.SetRight( aParaMargin.GetRight() );
-                    aParaMargin.SetTextFirstLineOfst( nFirstLineOffset * (-1) );
+                    aParaMargin.SetTextFirstLineOfst( nFirstLineOffset * -1 );
                     aNewAttr.Put(aParaMargin);
                     rReq.Done();
                 }

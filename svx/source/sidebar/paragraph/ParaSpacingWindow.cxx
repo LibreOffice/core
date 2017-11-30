@@ -217,7 +217,7 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
              && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
              && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Table))
         {
-            m_pFLSpacing->SetMin(aTxtLeft*(-1), FUNIT_100TH_MM);
+            m_pFLSpacing->SetMin(aTxtLeft*-1, FUNIT_100TH_MM);
         }
 
         aTxtRight = (long)m_pAfterSpacing->Normalize(aTxtRight);
