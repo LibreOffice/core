@@ -41,6 +41,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclptr.hxx>
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
@@ -4424,16 +4425,18 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put(makeSdrTextAutoGrowWidthItem(false));
 
                         double fRatio = 0;
-                        OutputDevice* pOut = Application::GetDefaultDevice();
-                        vcl::Font aFont( pOut->GetFont() );
+                        VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+                        vcl::Font aFont = pDevice->GetFont();
                         aFont.SetFamilyName( aFontName );
-                        tools::Rectangle aBoundingRect;
-                        pOut->GetTextBoundRect( aBoundingRect, aObjectText );
+                        aFont.SetFontSize( Size( 0, 96 ) );
+                        pDevice->SetFont( aFont );
 
-                        OUString aObjName = GetPropertyString(DFF_Prop_wzName, rSt);
-                        if ( aBoundingRect.GetWidth() && aObjData.eShapeType == mso_sptTextPlainText && aObjName.match( "PowerPlusWaterMarkObject" ) )
+                        auto nTextWidth = pDevice->GetTextWidth( aObjectText );
+                        OUString aObjName = GetPropertyString( DFF_Prop_wzName, rSt );
+                        if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText
+                            && aObjName.match( "PowerPlusWaterMarkObject" ) )
                         {
-                            fRatio = (double)aBoundingRect.GetHeight() / aBoundingRect.GetWidth();
+                            fRatio = (double)pDevice->GetTextHeight() / nTextWidth;
                             sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
                             sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
 

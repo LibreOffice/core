@@ -1464,21 +1464,24 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     // Calc the ratio.
     double fRatio = 0;
     double fRatioFrame = 0;
-    OutputDevice* pOut = Application::GetDefaultDevice();
-    vcl::Font aFont(pOut->GetFont());
+
+    VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+    vcl::Font aFont = pDevice->GetFont();
     aFont.SetFamilyName(sFont);
+    aFont.SetFontSize(Size(0, 96));
+    pDevice->SetFont(aFont);
 
     tools::Rectangle aBoundingRect;
-    pOut->GetTextBoundRect(aBoundingRect, rWatermark.GetText());
+    pDevice->GetTextBoundRect(aBoundingRect, rWatermark.GetText());
     if (aBoundingRect.GetWidth())
     {
-        fRatio = (double)aBoundingRect.GetHeight() / aBoundingRect.GetWidth();
-        auto nTextWidth = pOut->GetTextWidth(rWatermark.GetText());
-        if (nTextWidth)
-        {
-            fRatioFrame = aFont.GetFontSize().Height();
-            fRatioFrame /= nTextWidth;
-        }
+        fRatio = (double)aBoundingRect.getHeight() / aBoundingRect.getWidth();
+    }
+    auto nTextWidth = pDevice->GetTextWidth(rWatermark.GetText());
+    if (nTextWidth)
+    {
+        fRatioFrame = pDevice->GetTextHeight();
+        fRatioFrame /= nTextWidth;
     }
 
     // Calc the size.
@@ -1510,7 +1513,7 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     uno::Reference<drawing::XShape> xShape(xMultiServiceFactory->createInstance(aShapeServiceName), uno::UNO_QUERY);
     basegfx::B2DHomMatrix aTransformation;
     aTransformation.identity();
-    aTransformation.scale(nWidth, nHeight);
+    aTransformation.scale(nWidth, nFrameHeight);
     aTransformation.rotate(F_PI180 * -1 * nAngle);
     drawing::HomogenMatrix3 aMatrix;
     aMatrix.Line1.Column1 = aTransformation.get(0, 0);
@@ -1538,13 +1541,13 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, uno::makeAny(false));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::makeAny(false));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny(false));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nHeight));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nFrameHeight));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGH));
     xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(sFont));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, uno::makeAny(WATERMARK_AUTO_SIZE));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_UPPERDIST, uno::makeAny(sal_uInt32(nFrameHeight - nHeight)));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_UPPERDIST, uno::makeAny(sal_Int32(nFrameHeight - nHeight)));
     xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
     xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
     xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
