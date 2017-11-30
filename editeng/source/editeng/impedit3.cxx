@@ -934,7 +934,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     nTmpWidth -= rPrev.GetSize().Width();
                     nTmpPos = nTmpPos - rPrev.GetLen();
                     rPrev.SetLen(rPrev.GetLen() + nTmpLen);
-                    rPrev.GetSize().Width() = (-1);
+                    rPrev.GetSize().Width() = -1;
                 }
 
                 DBG_ASSERT( nTmpPortion < pParaPortion->GetTextPortions().Count(), "No more Portions left!" );
@@ -2384,7 +2384,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
         }
     }
     else
-        pTextPortion->GetSize().Width() = (-1);
+        pTextPortion->GetSize().Width() = -1;
 
     return nSplitPortion;
 }
@@ -2523,7 +2523,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
                 FindPortion( nStartPos, nPortionStart );
             TextPortion& rTP = pParaPortion->GetTextPortions()[ nTP ];
             rTP.SetLen( rTP.GetLen() + nNewChars );
-            rTP.GetSize().Width() = (-1);
+            rTP.GetSize().Width() = -1;
         }
     }
     else
@@ -2589,7 +2589,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
                     TextPortion& rPrev = pParaPortion->GetTextPortions()[nLastPortion - 1];
                     DBG_ASSERT( rPrev.GetKind() == PortionKind::TEXT, "Portion?!" );
                     rPrev.SetLen( rPrev.GetLen() + pTP->GetLen() );
-                    rPrev.GetSize().Width() = (-1);
+                    rPrev.GetSize().Width() = -1;
                 }
                 pParaPortion->GetTextPortions().Remove( nLastPortion );
             }

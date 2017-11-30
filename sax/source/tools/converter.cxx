@@ -1778,12 +1778,12 @@ static bool lcl_parseDateTime(
 
     if (bSuccess)
     {
-        sal_Int16 const nTimezoneOffset = (bHaveTimezoneMinus ? (-1) : (+1))
+        sal_Int16 const nTimezoneOffset = (bHaveTimezoneMinus ? -1 : +1)
                         * ((nTimezoneHours * 60) + nTimezoneMinutes);
         if (!pDate || bHaveTime) // time is optional
         {
             rDateTime.Year =
-                (isNegative ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
+                (isNegative ? -1 : +1) * static_cast<sal_Int16>(nYear);
             rDateTime.Month = static_cast<sal_uInt16>(nMonth);
             rDateTime.Day = static_cast<sal_uInt16>(nDay);
             rDateTime.Hours = static_cast<sal_uInt16>(nHours);
@@ -1818,7 +1818,7 @@ static bool lcl_parseDateTime(
         else
         {
             pDate->Year =
-                (isNegative ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
+                (isNegative ? -1 : +1) * static_cast<sal_Int16>(nYear);
             pDate->Month = static_cast<sal_uInt16>(nMonth);
             pDate->Day = static_cast<sal_uInt16>(nDay);
             if (bHaveTimezone)

@@ -430,7 +430,7 @@ public:
     sal_Unicode    GetExtraValue() const       { return nExtraValue; }
     void           SetExtraValue( sal_Unicode n )  { nExtraValue = n; }
 
-    bool           HasValidSize() const        { return aOutSz.Width() != (-1); }
+    bool           HasValidSize() const        { return aOutSz.Width() != -1; }
 
     ExtraPortionInfo*   GetExtraInfos() const { return xExtraInfos.get(); }
     void                SetExtraInfos( ExtraPortionInfo* p ) { xExtraInfos.reset(p); }

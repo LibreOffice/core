@@ -82,6 +82,15 @@ int main()
     // Expecting just one error, not reported twice during TraverseInitListExpr:
     int a[] = {(x)}; // expected-error {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
     (void) a;
+
+    (void) (+1); // expected-error {{unnecessary parentheses around signed numeric literal [loplugin:unnecessaryparen]}}
+    (void) (-1); // expected-error {{unnecessary parentheses around signed numeric literal [loplugin:unnecessaryparen]}}
+
+    // For simplicity's sake, even warn about pathological cases that would require adding
+    // whitespace when removing the parentheses (as is also necessary in other cases anyway, like
+    // "throw(x);"); it is unlikely that there are any actual occurrences of code like "-(-1)" that
+    // would benefit from the parentheses readability-wise, compared to "- -1":
+    (void) -(-1); // expected-error {{unnecessary parentheses around signed numeric literal [loplugin:unnecessaryparen]}}
 };
 
 struct S2 {

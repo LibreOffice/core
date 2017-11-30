@@ -276,7 +276,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Table))
         {
-            mpFLineIndent->SetMin( nVal*(-1), FUNIT_100TH_MM );
+            mpFLineIndent->SetMin( nVal*-1, FUNIT_100TH_MM );
         }
 
         long nrVal = OutputDevice::LogicToLogic( aTxtRight, MapUnit::MapTwip, MapUnit::Map100thMM );

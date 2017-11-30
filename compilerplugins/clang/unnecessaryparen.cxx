@@ -180,6 +180,19 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
                 << parenExpr->getSourceRange();
             handled_.insert(parenExpr);
         }
+    } else if (auto const e = dyn_cast<UnaryOperator>(subExpr)) {
+        auto const op = e->getOpcode();
+        if (op == UO_Plus || op == UO_Minus) {
+            auto const e2 = e->getSubExpr();
+            if (isa<IntegerLiteral>(e2) || isa<FloatingLiteral>(e2) || isa<ImaginaryLiteral>(e2)) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    "unnecessary parentheses around signed numeric literal",
+                    parenExpr->getLocStart())
+                    << parenExpr->getSourceRange();
+                handled_.insert(parenExpr);
+            }
+        }
     } else if (isa<CXXNamedCastExpr>(subExpr)) {
         report(
             DiagnosticsEngine::Warning, "unnecessary parentheses around cast",
