@@ -16,6 +16,29 @@
       "revId": "080766c4a18a9072eaee633e38f9355e04b70131",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0196ac92",
+        "filename": "external/libgpg-error/w32-build-fixes-4.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-11-30T00:50:05Z",
+      "side": 1,
+      "message": "for me, simply removing the above, without adding this, has worked",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 20
+      },
+      "revId": "080766c4a18a9072eaee633e38f9355e04b70131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
