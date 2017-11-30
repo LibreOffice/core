@@ -232,10 +232,11 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
     for (size_t nFormatEntryIx = 0; nFormatEntryIx < pFormat->size(); ++nFormatEntryIx)
     {
         auto pFormatEntry = pFormat->GetEntry(nFormatEntryIx);
-        auto pCondFormatEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+        auto pCondFormatEntry = dynamic_cast<const ScCondFormatEntry*>(pFormatEntry);
 
-        if (pCondFormatEntry->GetOperation() != ScConditionMode::Equal &&
-            pCondFormatEntry->GetOperation() != ScConditionMode::Direct)
+        if (pCondFormatEntry == nullptr ||
+            (pCondFormatEntry->GetOperation() != ScConditionMode::Equal &&
+             pCondFormatEntry->GetOperation() != ScConditionMode::Direct))
         {
             bEligibleForCache = false;
             break;
