@@ -31,7 +31,6 @@ class SwTmpEndPortion : public SwLinePortion
 public:
     explicit SwTmpEndPortion( const SwLinePortion &rPortion );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwBreakPortion : public SwLinePortion
@@ -47,8 +46,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwKernPortion : public SwLinePortion
@@ -73,8 +70,6 @@ public:
 
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwArrowPortion : public SwLinePortion
@@ -88,7 +83,6 @@ public:
     virtual SwLinePortion *Compress() override;
     bool IsLeft() const { return bLeft; }
     const Point& GetPos() const { return aPos; }
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 // The characters which are forbidden at the start of a line like the dot and

@@ -99,8 +99,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /**
@@ -117,7 +115,6 @@ public:
 
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwNumberPortion : public SwFieldPortion
@@ -141,8 +138,6 @@ public:
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwBulletPortion : public SwNumberPortion
@@ -155,7 +150,6 @@ public:
                      const bool bCenter,
                      const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwGrfNumPortion : public SwNumberPortion
@@ -191,8 +185,6 @@ public:
     SwTwips GetRelPos() const { return nYPos; }
     SwTwips GetGrfHeight() const { return nGrfHeight; }
     sal_Int16 GetOrient() const { return eOrient; }
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /**
@@ -216,7 +208,6 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 namespace sw { namespace mark {

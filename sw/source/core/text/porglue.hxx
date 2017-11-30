@@ -44,8 +44,6 @@ public:
     virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwFixPortion : public SwGluePortion
@@ -56,7 +54,6 @@ public:
     SwFixPortion();
     void   SetFix( const sal_uInt16 nNewFix ) { nFix = nNewFix; }
     sal_uInt16 GetFix() const { return nFix; }
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwMarginPortion : public SwGluePortion
@@ -64,7 +61,6 @@ class SwMarginPortion : public SwGluePortion
 public:
     explicit SwMarginPortion();
     void AdjustRight( const SwLineLayout* pCurr );
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 inline short SwGluePortion::GetPrtGlue() const
