@@ -91,6 +91,7 @@ using namespace css;
 #define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 #define DECLARE_ODFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 #define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+#define DECLARE_FODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 #define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
@@ -696,6 +697,16 @@ protected:
             return nullptr;
 
         return parseExportInternal( maTempFile.GetURL(), rStreamName );
+    }
+
+    /**
+     * Returns an xml stream of a an exported file.
+     * To be used when the exporter doesn't create zip archives, but single files
+     * (like Flat ODF Export)
+     */
+    xmlDocPtr parseExportedFile()
+    {
+        return parseXmlStream(maTempFile.GetStream(StreamMode::READ));
     }
 
     xmlDocPtr parseExportInternal( const OUString& url, const OUString& rStreamName )
