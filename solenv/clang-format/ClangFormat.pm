@@ -109,7 +109,7 @@ sub is_matching_clang_format_version($$)
         return 0;
     }
 
-    return `'$clang_format' -version` =~ /^clang-format version $version \(tags/;
+    return `'$clang_format' -version` =~ /^clang-format version $version(-\d+)? \(tags/;
 }
 
 1;
