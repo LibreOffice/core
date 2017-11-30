@@ -5053,3 +5053,304 @@ index 96e7623..6b4c7c2 100644
 -- 
 2.13.6
 
+From bc80bf98172e8e0f8c803dec0b8e74e233ac482e Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 24 Nov 2017 16:28:58 +0100
+Subject: [PATCH 1/2] EPUBHTMLGenerator: support image popup for images
+
+If the user of the lib uses the librevenge:mime-type and
+office:binary-data keys (instead of xlink:href) for a link around an
+image, then open that image in a popup (using the footnote markup).
+
+The usual assumption is that the footnote anchor is trivial (just a
+string) and the content is complex, but here the situation is the
+opposite: the anchor can be something complex, OTOH the footnote content
+is always a single inline image -- this requires the new
+closeAnchor mode when adding the footnote label.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 79 ++++++++++++++++++++++++++++++--------
+ src/test/EPUBTextGeneratorTest.cpp | 34 ++++++++++++++++
+ 2 files changed, 96 insertions(+), 17 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 6b4c7c2..75b0866 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -222,7 +222,8 @@ struct TextZoneSink
+   //! destructor
+   ~TextZoneSink() { }
+   //! add a label called on main and a label in this ( delayed to allow openParagraph to be called )
+-  void addLabel(EPUBXMLSink &output, const librevenge::RVNGString &number)
++  //! @param closeAnchor determintes if the anchor on the main sink should be closed or not.
++  void addLabel(EPUBXMLSink &output, const librevenge::RVNGString &number, bool closeAnchor)
+   {
+     // Unique label, e.g. 'F1' for the first footnote.
+     std::string lbl=label();
+@@ -244,9 +245,12 @@ struct TextZoneSink
+         aAttrs.insert("epub:type", "noteref");
+       aAttrs.insert("href", ("#data" + lbl).c_str());
+       output.openElement("a", aAttrs);
+-      output.insertCharacters(uiLabel.c_str());
+-      output.closeElement("a");
+-      output.closeElement("sup");
++      if (closeAnchor)
++      {
++        output.insertCharacters(uiLabel.c_str());
++        output.closeElement("a");
++        output.closeElement("sup");
++      }
+     }
+     flush();
+     if (version == 30)
+@@ -259,13 +263,16 @@ struct TextZoneSink
+     RVNGPropertyList supAttrs;
+     if (version < 30)
+       supAttrs.insert("id", ("data" + lbl).c_str());
+-    m_delayedLabel.openElement("sup", supAttrs);
+-    RVNGPropertyList aAttrs;
+-    aAttrs.insert("href", ("#called" + lbl).c_str());
+-    m_delayedLabel.openElement("a", aAttrs);
+-    m_delayedLabel.insertCharacters(uiLabel.c_str());
+-    m_delayedLabel.closeElement("a");
+-    m_delayedLabel.closeElement("sup");
++    if (closeAnchor)
++    {
++      m_delayedLabel.openElement("sup", supAttrs);
++      RVNGPropertyList aAttrs;
++      aAttrs.insert("href", ("#called" + lbl).c_str());
++      m_delayedLabel.openElement("a", aAttrs);
++      m_delayedLabel.insertCharacters(uiLabel.c_str());
++      m_delayedLabel.closeElement("a");
++      m_delayedLabel.closeElement("sup");
++    }
+   }
+   //! flush delayed label, ...
+   void flush()
+@@ -379,6 +386,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_version(version)
+     , m_frameAnchorTypes()
+     , m_framePropertiesStack()
++    , m_linkPropertiesStack()
+     , m_stylesMethod(stylesMethod)
+     , m_actualSink()
+     , m_sinkStack()
+@@ -475,6 +483,8 @@ struct EPUBHTMLGeneratorImpl
+ 
+   std::stack<std::string> m_frameAnchorTypes;
+   std::stack<RVNGPropertyList> m_framePropertiesStack;
++  /// This is used for links which don't have a href.
++  std::stack<RVNGPropertyList> m_linkPropertiesStack;
+ 
+   EPUBStylesMethod m_stylesMethod;
+ 
+@@ -702,14 +712,29 @@ void EPUBHTMLGenerator::openLink(const RVNGPropertyList &propList)
+ 
+     attrs.insert("href", href.c_str());
+   }
+-  m_impl->output(false).openElement("a", attrs);
++  const librevenge::RVNGProperty *binaryDataProp = propList["office:binary-data"];
++  const librevenge::RVNGProperty *mimeTypeProp = propList["librevenge:mime-type"];
++  if (binaryDataProp && mimeTypeProp)
++  {
++    // This is not a real link, but more an additional image on top of an
++    // existing one, map it to footnotes instead.
++    RVNGPropertyList linkProperties;
++    linkProperties.insert("office:binary-data", binaryDataProp->clone());
++    linkProperties.insert("librevenge:mime-type", mimeTypeProp->clone());
++    m_impl->m_linkPropertiesStack.push(linkProperties);
++  }
++  else
++    m_impl->output(false).openElement("a", attrs);
+ }
+ 
+ void EPUBHTMLGenerator::closeLink()
+ {
+   if (m_impl->m_ignore)
+     return;
+-  m_impl->output().closeElement("a");
++  if (!m_impl->m_linkPropertiesStack.empty())
++    m_impl->m_linkPropertiesStack.pop();
++  else
++    m_impl->output().closeElement("a");
+ }
+ 
+ void EPUBHTMLGenerator::insertTab()
+@@ -820,7 +845,8 @@ void EPUBHTMLGenerator::openFootnote(const RVNGPropertyList &propList)
+   librevenge::RVNGString number;
+   if (const librevenge::RVNGProperty *numProp = propList["librevenge:number"])
+     number = numProp->getStr();
+-  m_impl->getSink().addLabel(output, number);
++  bool closeAnchor = m_impl->m_linkPropertiesStack.empty();
++  m_impl->getSink().addLabel(output, number, closeAnchor);
+ }
+ 
+ void EPUBHTMLGenerator::closeFootnote()
+@@ -838,7 +864,7 @@ void EPUBHTMLGenerator::openEndnote(const RVNGPropertyList &)
+     return;
+   EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_EndNote);
+-  m_impl->getSink().addLabel(output, librevenge::RVNGString());
++  m_impl->getSink().addLabel(output, librevenge::RVNGString(), true);
+ }
+ 
+ void EPUBHTMLGenerator::closeEndnote()
+@@ -854,7 +880,7 @@ void EPUBHTMLGenerator::openComment(const RVNGPropertyList & /*propList*/)
+     return;
+   EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_Comment);
+-  m_impl->getSink().addLabel(output, librevenge::RVNGString());
++  m_impl->getSink().addLabel(output, librevenge::RVNGString(), true);
+ }
+ 
+ void EPUBHTMLGenerator::closeComment()
+@@ -1067,7 +1093,26 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+   attrs.insert("src", path.relativeTo(m_impl->m_path).str().c_str());
+   // FIXME: use alternative repr. if available
+   attrs.insert("alt", path.str().c_str());
+-  m_impl->output().insertEmptyElement("img", attrs);
++  if (!m_impl->m_linkPropertiesStack.empty())
++  {
++    RVNGPropertyList &linkProperties = m_impl->m_linkPropertiesStack.top();
++    // Save the main sink, as m_impl->output() will point to the footnote sink.
++    libepubgen::EPUBXMLSink &main = m_impl->output();
++    openFootnote(RVNGPropertyList());
++    main.insertEmptyElement("img", attrs);
++    main.closeElement("a");
++    main.closeElement("sup");
++    const EPUBPath &linkPath = m_impl->m_imageManager.insert(
++                                 RVNGBinaryData(linkProperties["office:binary-data"]->getStr()),
++                                 linkProperties["librevenge:mime-type"]->getStr());
++    RVNGPropertyList linkAttrs;
++    linkAttrs.insert("src", linkPath.relativeTo(m_impl->m_path).str().c_str());
++    linkAttrs.insert("alt", linkPath.str().c_str());
++    m_impl->output().insertEmptyElement("img", linkAttrs);
++    closeFootnote();
++  }
++  else
++    m_impl->output().insertEmptyElement("img", attrs);
+ 
+   if (!wrapStyle.empty())
+   {
+-- 
+2.13.6
+
+
+From 6e094bbe9fd8c1784ef3c348d04e2add8b48fc67 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 24 Nov 2017 17:18:53 +0100
+Subject: [PATCH 2/2] EPUBHTMLGenerator: support image popup for text
+
+And also make sure that the popup anchor is not superscript.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 44 ++++++++++++++++++++++++++------------
+ src/lib/EPUBHTMLGenerator.h        |  4 ++++
+ src/test/EPUBTextGeneratorTest.cpp | 31 ++++++++++++++++++++++++++-
+ 3 files changed, 64 insertions(+), 15 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 75b0866..5c6421c 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -239,7 +239,8 @@ struct TextZoneSink
+     {
+       RVNGPropertyList supAttrs;
+       supAttrs.insert("id", ("called" + lbl).c_str());
+-      output.openElement("sup", supAttrs);
++      if (closeAnchor)
++        output.openElement("sup", supAttrs);
+       RVNGPropertyList aAttrs;
+       if (version == 30)
+         aAttrs.insert("epub:type", "noteref");
+@@ -769,7 +770,9 @@ void EPUBHTMLGenerator::insertText(const RVNGString &text)
+ {
+   if (m_impl->m_ignore)
+     return;
+-  m_impl->output().insertCharacters(text);
++  EPUBXMLSink &sink = openPopup();
++  sink.insertCharacters(text);
++  closePopup(sink);
+   m_impl->m_hasText = true;
+ }
+ 
+@@ -1093,15 +1096,37 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+   attrs.insert("src", path.relativeTo(m_impl->m_path).str().c_str());
+   // FIXME: use alternative repr. if available
+   attrs.insert("alt", path.str().c_str());
++  EPUBXMLSink &sink = openPopup();
++  sink.insertEmptyElement("img", attrs);
++  closePopup(sink);
++
++  if (!wrapStyle.empty())
++  {
++    attrs.clear();
++    attrs.insert("style", wrapStyle);
++    m_impl->output().insertEmptyElement("br", attrs);
++  }
++}
++
++EPUBXMLSink &EPUBHTMLGenerator::openPopup()
++{
+   if (!m_impl->m_linkPropertiesStack.empty())
+   {
+-    RVNGPropertyList &linkProperties = m_impl->m_linkPropertiesStack.top();
+     // Save the main sink, as m_impl->output() will point to the footnote sink.
+     libepubgen::EPUBXMLSink &main = m_impl->output();
+     openFootnote(RVNGPropertyList());
+-    main.insertEmptyElement("img", attrs);
++    return main;
++  }
++  else
++    return m_impl->output();
++}
++
++void EPUBHTMLGenerator::closePopup(EPUBXMLSink &main)
++{
++  if (!m_impl->m_linkPropertiesStack.empty())
++  {
++    RVNGPropertyList &linkProperties = m_impl->m_linkPropertiesStack.top();
+     main.closeElement("a");
+-    main.closeElement("sup");
+     const EPUBPath &linkPath = m_impl->m_imageManager.insert(
+                                  RVNGBinaryData(linkProperties["office:binary-data"]->getStr()),
+                                  linkProperties["librevenge:mime-type"]->getStr());
+@@ -1111,15 +1136,6 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+     m_impl->output().insertEmptyElement("img", linkAttrs);
+     closeFootnote();
+   }
+-  else
+-    m_impl->output().insertEmptyElement("img", attrs);
+-
+-  if (!wrapStyle.empty())
+-  {
+-    attrs.clear();
+-    attrs.insert("style", wrapStyle);
+-    m_impl->output().insertEmptyElement("br", attrs);
+-  }
+ }
+ 
+ void EPUBHTMLGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
+diff --git a/src/lib/EPUBHTMLGenerator.h b/src/lib/EPUBHTMLGenerator.h
+index 11f20cb..3699179 100644
+--- a/src/lib/EPUBHTMLGenerator.h
++++ b/src/lib/EPUBHTMLGenerator.h
+@@ -27,6 +27,7 @@ class EPUBSpanStyleManager;
+ class EPUBParagraphStyleManager;
+ class EPUBTableStyleManager;
+ class EPUBPath;
++class EPUBXMLSink;
+ 
+ class EPUBHTMLGenerator : public librevenge::RVNGTextInterface
+ {
+@@ -112,6 +113,9 @@ public:
+   void insertEquation(const librevenge::RVNGPropertyList &propList) override;
+ 
+ private:
++  EPUBXMLSink &openPopup();
++  void closePopup(EPUBXMLSink &main);
++
+   std::unique_ptr<EPUBHTMLGeneratorImpl> m_impl;
+ 
+   // Unimplemented to prevent compiler from creating crasher ones
+-- 
+2.13.6
+

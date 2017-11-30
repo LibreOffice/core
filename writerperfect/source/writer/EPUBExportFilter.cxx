@@ -14,11 +14,15 @@
 #include <libepubgen/EPUBTextGenerator.h>
 #include <libepubgen/libepubgen-decls.h>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "exp/xmlimp.hxx"
@@ -82,7 +86,17 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(mxContext, aGenerator, aSourceURL, rDescriptor));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
-    xInitialization->initialize({uno::makeAny(xExportHandler)});
+
+    // A subset of parameters are passed in as a property set.
+    comphelper::PropertyMapEntry const aInfoMap[] =
+    {
+        {OUString("BaseURI"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        {OUString(), 0, css::uno::Type(), 0, 0}
+    };
+    uno::Reference<beans::XPropertySet> xInfoSet(comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
+    xInfoSet->setPropertyValue("BaseURI", uno::makeAny(aSourceURL));
+
+    xInitialization->initialize({uno::makeAny(xExportHandler), uno::makeAny(xInfoSet)});
     uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxSourceDocument);
     uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);

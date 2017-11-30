@@ -17,6 +17,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -55,6 +56,8 @@ class XMLImport : public cppu::WeakImplHelper
     /// Author, date, etc -- overwrites what would be from the document out of the box.
     librevenge::RVNGPropertyList maMetaData;
     const css::uno::Reference<css::uno::XComponentContext> &mxContext;
+    css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
+    OUString maDocumentBaseURL;
 
 public:
     XMLImport(const css::uno::Reference<css::uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
@@ -78,6 +81,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetGraphicStyles();
     const librevenge::RVNGPropertyListVector &GetCoverImages();
     const librevenge::RVNGPropertyList &GetMetaData();
+    bool FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

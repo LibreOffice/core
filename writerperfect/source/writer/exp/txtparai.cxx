@@ -265,6 +265,9 @@ void XMLTextFrameHyperlinkContext::startElement(const OUString &/*rName*/, const
             FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aPropertyList);
         else
         {
+            if (rAttributeName == "xlink:href" && mrImport.FillPopupData(rAttributeValue, aPropertyList))
+                continue;
+
             // This affects the link's properties.
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
             OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
@@ -331,6 +334,9 @@ void XMLHyperlinkContext::startElement(const OUString &/*rName*/, const css::uno
             FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aPropertyList);
         else
         {
+            if (rAttributeName == "xlink:href" && mrImport.FillPopupData(rAttributeValue, aPropertyList))
+                continue;
+
             // This affects the link's properties.
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
             OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
