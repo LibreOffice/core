@@ -2387,6 +2387,13 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                     }
 
+                    uno::Reference<io::XInputStream> xInputStream(
+                        mrExport.GetEmbeddedGraphicObjectStream(aReplacementUrl));
+                    OUString aMimeType(
+                        comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageStream(xInputStream));
+                    if (!aMimeType.isEmpty())
+                        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
+
                      SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
                     // optional office:binary-data
