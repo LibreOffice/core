@@ -213,6 +213,7 @@
 #define STR_SVT_ESTIMATED_SIZE_VEC              NC_("STR_SVT_ESTIMATED_SIZE_VEC", "The file size is %1 KB.")
 #define STR_SVT_HOST                            NC_("STR_SVT_HOST", "host")
 #define STR_SVT_PORT                            NC_("STR_SVT_PORT", "port")
+#define STR_SVT_OTHER_CMIS                      NC_("STR_SVT_OTHER_CMIS", "Other CMIS")
 #define STR_SVT_PRNDLG_READY                    NC_("STR_SVT_PRNDLG_READY", "Ready")
 #define STR_SVT_PRNDLG_PAUSED                   NC_("STR_SVT_PRNDLG_PAUSED", "Paused")
 #define STR_SVT_PRNDLG_PENDING                  NC_("STR_SVT_PRNDLG_PENDING", "Pending deletion")
