@@ -51,6 +51,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <o3tl/deleter.hxx>
 #include <vcl/svapp.hxx>
 #include <retrieveinputstreamconsumer.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
@@ -1121,7 +1122,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
 
     if ( mpThreadConsumer.get() == nullptr )
     {
-        mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
+        mpThreadConsumer.reset(new SwAsyncRetrieveInputStreamThreadConsumer(*this), o3tl::default_delete<SwAsyncRetrieveInputStreamThreadConsumer>());
 
         OUString sGrfNm;
         sfx2::LinkManager::GetDisplayNames( refLink.get(), nullptr, &sGrfNm );
