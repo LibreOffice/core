@@ -16,6 +16,24 @@
       "revId": "6acc3f6729c37875e27c221d63cd9797d9259914",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9cae7f7f",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2017-11-30T14:37:18Z",
+      "side": 1,
+      "message": "I tried:\ndiff --git a/officecfg/registry/data/org/openoffice/Office/Common.xcu b/officecfg/registry/data/org/openoffice/Office/Common.xcu\nindex 6b94ff9be853..de3e51282d86 100644\n--- a/officecfg/registry/data/org/openoffice/Office/Common.xcu\n+++ b/officecfg/registry/data/org/openoffice/Office/Common.xcu\n@@ -462,7 +462,7 @@\n       \u003c/value\u003e\n     \u003c/prop\u003e\n     \u003cprop oor:name\u003d\"CmisServersNames\"\u003e\n-      \u003cvalue\u003e\n+      \u003cvalue xml:lang\u003d\"en-US\"\u003e\n         \u003cit\u003eGoogle Drive\u003c/it\u003e\n         \u003cit\u003eOneDrive\u003c/it\u003e\n         \u003cit\u003eAlfresco Cloud\u003c/it\u003e\n\nIt extracted:\n#. riX4s\n#: Common.xcu\nmsgctxt \"\"\n\"Common.xcu\\n\"\n\"..Common.Misc.CmisServersNames.\\n\"\n\"value.text\"\nmsgid \"        \"\nmsgstr \"\"\n\nI did not find examples of localization of string lists in config.",
+      "parentUuid": "1a430d35_3c9bcb73",
+      "revId": "6acc3f6729c37875e27c221d63cd9797d9259914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
