@@ -4349,8 +4349,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
 
     if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() &&
-        pCode->GetVectorState() == FormulaVectorEnabledForThreading &&
-        officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
+        pCode->IsEnabledForThreading() &&
+        ScCalcConfig::isThreadingEnabled())
     {
         // iterate over code in the formula ...
         // ensure all input is pre-calculated -
@@ -4444,12 +4444,11 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return true;
     }
 
-    bool bCanVectorize = false;
+    bool bCanVectorize = pCode->IsEnabledForOpenCL();
     switch (pCode->GetVectorState())
     {
         case FormulaVectorEnabled:
         case FormulaVectorCheckReference:
-            bCanVectorize = true; // Good.
         break;
 
         // Not good.
@@ -4464,9 +4463,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
             break;
         case FormulaVectorDisabledNotInSubSet:
             aScope.addMessage("group calc disabled due to vector state (opcode not in subset)");
-            break;
-        case FormulaVectorEnabledForThreading:
-            aScope.addMessage("group calc disabled due to vector state (wanted to try threading but couldn't)");
             break;
         case FormulaVectorDisabled:
         case FormulaVectorUnknown:
