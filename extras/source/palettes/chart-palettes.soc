@@ -14,34 +14,4 @@
   <draw:color draw:name="Chart 11" draw:color="#c5000b"/>
   <draw:color draw:name="Chart 12" draw:color="#0084d1"/>
 
-  <!-- MS Office 2013 Colors -->
-  <draw:color draw:name="MS Office 2013 Light Blue 1" draw:color="#5b9bd5"/>
-  <draw:color draw:name="MS Office 2013 Orange 1" draw:color="#ed7d31"/>
-  <draw:color draw:name="MS Office 2013 Gray 1" draw:color="#a5a5a5"/>
-  <draw:color draw:name="MS Office 2013 Gold 1" draw:color="#ffc000"/>
-  <draw:color draw:name="MS Office 2013 Dark Blue 1" draw:color="#4472c4"/>
-  <draw:color draw:name="MS Office 2013 Green 1" draw:color="#83caff"/>
-  <draw:color draw:name="MS Office 2013 Light Blue 2" draw:color="#255e91"/>
-  <draw:color draw:name="MS Office 2013 Orange 2" draw:color="#9e480e"/>
-  <draw:color draw:name="MS Office 2013 Gray 2" draw:color="#636363"/>
-  <draw:color draw:name="MS Office 2013 Gold 2" draw:color="#997300"/>
-  <draw:color draw:name="MS Office 2013 Dark Blue 2" draw:color="#264478"/>
-  <draw:color draw:name="MS Office 2013 Green 2" draw:color="#43682b"/>
-  <!-- more colors: 7cafdd, f1975a, b7b7b7, ffcd33, 698ed0, 8cc168, 327dc2, d26012, 848484, cc9a00, 335aa1, 5a8a39, 9dc3e6, f4b183, c9c9c9, ffd966, 8faadc, a9d18e -->
-
-  <!-- MS Office 2010/2007 Colors -->
-  <draw:color draw:name="MS Office 2010 Blue 1" draw:color="#3c6494"/>
-  <draw:color draw:name="MS Office 2010 Red 1" draw:color="#963d3b"/>
-  <draw:color draw:name="MS Office 2010 Olive Green 1" draw:color="#799244"/>
-  <draw:color draw:name="MS Office 2010 Purple 1" draw:color="#634d7e"/>
-  <draw:color draw:name="MS Office 2010 Aqua 1" draw:color="#39869b"/>
-  <draw:color draw:name="MS Office 2010 Orange 1" draw:color="#c27535"/>
-  <draw:color draw:name="MS Office 2010 Blue 2" draw:color="#4978b1"/>
-  <draw:color draw:name="MS Office 2010 Red 2" draw:color="#b34a47"/>
-  <draw:color draw:name="MS Office 2010 Olive Green 2" draw:color="#91af53"/>
-  <draw:color draw:name="MS Office 2010 Purple 2" draw:color="#775d97"/>
-  <draw:color draw:name="MS Office 2010 Aqua 2" draw:color="#46a1b9"/>
-  <draw:color draw:name="MS Office 2010 Orange 2" draw:color="#e78c41"/>
-  <!-- more colors: 7e9bc8, ca7e7d, aec683, 9b89b3, 7cbbcf, f8aa79, 4f81bd, c0504d, 9bbb59, 8064a2, 4bacc6, f79646, 85a0ca, cd8684, b1c98a, a08fb6, 83bed1, f8ae81 -->
-
 </office:color-table>
