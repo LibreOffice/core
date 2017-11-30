@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_41543420",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8897,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-30T10:35:55Z",
+      "side": 1,
+      "message": "This should be nIdx \u003e 0 because when iterating backwards nIdx is decremented before returning the previous character. That\u0027s why you start on the length position, which is one behind the string. For 0 nIdx would be -1 and access an invalid position. It doesn\u0027t happen here because of the additional n \u003e nCnt condition.",
+      "range": {
+        "startLine": 8897,
+        "startChar": 20,
+        "endLine": 8897,
+        "endChar": 29
+      },
+      "revId": "171a2548551306e14083fd731959a03e69ebb352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
