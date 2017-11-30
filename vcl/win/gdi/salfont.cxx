@@ -826,6 +826,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
             memcpy( &rLogFont.lfFaceName[0], aName.getStr(), nNameLen*sizeof(wchar_t) );
             if( nNameLen < LF_FACESIZE )
                 rLogFont.lfFaceName[nNameLen] = '\0';
+            // keep it upright and create the font for sideway glyphs later.
+            rLogFont.lfEscapement = rLogFont.lfEscapement - 2700;
+            rLogFont.lfOrientation = rLogFont.lfEscapement;
         }
     }
 }
