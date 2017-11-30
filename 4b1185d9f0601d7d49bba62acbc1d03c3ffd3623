@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1cc36f39",
+        "filename": "configmgr/source/configurationprovider.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-30T14:43:57Z",
+      "side": 1,
+      "message": "the addresses of these functions are stored in configmgr/source/services.cxx into cppu::ImplementationEntry structs, which need SAL_CALL",
+      "revId": "4b1185d9f0601d7d49bba62acbc1d03c3ffd3623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
