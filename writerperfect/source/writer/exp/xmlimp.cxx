@@ -49,70 +49,6 @@ OUString GetMimeType(const OUString &rExtension)
     return it == vMimeTypes.end() ? OUString() : it->second;
 }
 
-/// Picks up a cover image from the base directory.
-OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, const uno::Sequence<beans::PropertyValue> &rFilterData)
-{
-    OUString aRet;
-
-    // See if filter data contains a cover image explicitly.
-    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
-    {
-        if (rFilterData[i].Name == "RVNGCoverImage")
-        {
-            rFilterData[i].Value >>= aRet;
-            break;
-        }
-    }
-
-    if (!aRet.isEmpty())
-    {
-        INetURLObject aRetURL(aRet);
-        rMimeType = GetMimeType(aRetURL.GetExtension());
-        return aRet;
-    }
-
-    // Not set explicitly, try to pick it up from the base directory.
-    if (rDocumentBaseURL.isEmpty())
-        return aRet;
-
-    INetURLObject aDocumentBaseURL(rDocumentBaseURL);
-
-    static const std::initializer_list<OUStringLiteral> vExtensions =
-    {
-        "gif",
-        "jpg",
-        "png",
-        "svg"
-    };
-
-    for (const auto &rExtension : vExtensions)
-    {
-        try
-        {
-            aRet = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aDocumentBaseURL.GetBase() + ".cover-image." + rExtension);
-        }
-        catch (const rtl::MalformedUriException &rException)
-        {
-            SAL_WARN("writerperfect", "FindCoverImage: convertRelToAbs() failed:" << rException.getMessage());
-        }
-
-        if (!aRet.isEmpty())
-        {
-            SvFileStream aStream(aRet, StreamMode::READ);
-            if (aStream.IsOpen())
-            {
-                rMimeType = GetMimeType(rExtension);
-                // File exists.
-                return aRet;
-            }
-            else
-                aRet.clear();
-        }
-    }
-
-    return aRet;
-}
-
 /// Determines the base directory for cover images, XMP metadata, popup images.
 OUString FindMediaDir(const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &rFilterData)
 {
@@ -142,6 +78,61 @@ OUString FindMediaDir(const OUString &rDocumentBaseURL, const uno::Sequence<bean
         SAL_WARN("writerperfect", "FindMediaDir: convertRelToAbs() failed:" << rException.getMessage());
     }
     return aMediaDir;
+}
+
+/// Picks up a cover image from the base directory.
+OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, const uno::Sequence<beans::PropertyValue> &rFilterData)
+{
+    OUString aRet;
+
+    // See if filter data contains a cover image explicitly.
+    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
+    {
+        if (rFilterData[i].Name == "RVNGCoverImage")
+        {
+            rFilterData[i].Value >>= aRet;
+            break;
+        }
+    }
+
+    if (!aRet.isEmpty())
+    {
+        INetURLObject aRetURL(aRet);
+        rMimeType = GetMimeType(aRetURL.GetExtension());
+        return aRet;
+    }
+
+    // Not set explicitly, try to pick it up from the base directory.
+    if (rDocumentBaseURL.isEmpty())
+        return aRet;
+
+    static const std::initializer_list<OUStringLiteral> vExtensions =
+    {
+        "gif",
+        "jpg",
+        "png",
+        "svg"
+    };
+
+    OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
+    for (const auto &rExtension : vExtensions)
+    {
+        aRet = aMediaDir + "cover." + rExtension;
+        if (!aRet.isEmpty())
+        {
+            SvFileStream aStream(aRet, StreamMode::READ);
+            if (aStream.IsOpen())
+            {
+                rMimeType = GetMimeType(rExtension);
+                // File exists.
+                return aRet;
+            }
+            else
+                aRet.clear();
+        }
+    }
+
+    return aRet;
 }
 
 /// Picks up XMP metadata from the base directory.
@@ -187,18 +178,9 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, con
     if (rDocumentBaseURL.isEmpty())
         return;
 
+    OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
     INetURLObject aDocumentBaseURL(rDocumentBaseURL);
-    OUString aURL;
-    try
-    {
-        aURL = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aDocumentBaseURL.GetBase() + ".xmp");
-    }
-    catch (const rtl::MalformedUriException &rException)
-    {
-        SAL_WARN("writerperfect", "FindXMPMetadata: convertRelToAbs() failed:" << rException.getMessage());
-        return;
-    }
-
+    OUString aURL = aMediaDir + aDocumentBaseURL.GetBase() + ".xmp";
     SvFileStream aStream(aURL, StreamMode::READ);
     if (!aStream.IsOpen())
         return;
