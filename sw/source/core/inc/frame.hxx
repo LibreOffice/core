@@ -382,8 +382,6 @@ protected:
     SwFrameType mnFrameType;  //Who am I?
 
     bool mbInDtor      : 1;
-    bool mbReverse     : 1; // Next line above/at the right side instead
-                                 // under/at the left side of the previous line
     bool mbInvalidR2L  : 1;
     bool mbDerivedR2L  : 1;
     bool mbRightToLeft : 1;
@@ -583,9 +581,7 @@ public:
 
     bool IsInBalancedSection() const;
 
-    bool IsReverse() const { return mbReverse; }
     inline bool IsVertical() const;
-
     inline bool IsVertLR() const;
 
     void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
@@ -1291,31 +1287,24 @@ struct SwRectFnCollection
 typedef SwRectFnCollection* SwRectFn;
 
 // This class allows to use proper methods regardless of orientation (LTR/RTL, horizontal or vertical)
-extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
+extern SwRectFn fnRectHori, fnRectVert, fnRectVertL2R;
 class SwRectFnSet {
 public:
     explicit SwRectFnSet(const SwFrame *pFrame)
         : m_bVert(pFrame->IsVertical())
-        , m_bRev(pFrame->IsReverse())
         , m_bVertL2R(pFrame->IsVertLR())
     {
-        m_fnRect = m_bVert ?
-            (m_bRev ? fnRectVL2R : (m_bVertL2R ? fnRectVertL2R : fnRectVert)) :
-            (m_bRev ? fnRectB2T : fnRectHori);
+        m_fnRect = m_bVert ? (m_bVertL2R ? fnRectVertL2R : fnRectVert) : fnRectHori;
     }
 
     void Refresh(const SwFrame *pFrame)
     {
         m_bVert = pFrame->IsVertical();
-        m_bRev = pFrame->IsReverse();
         m_bVertL2R = pFrame->IsVertLR();
-        m_fnRect = m_bVert ?
-            (m_bRev ? fnRectVL2R : (m_bVertL2R ? fnRectVertL2R : fnRectVert)) :
-            (m_bRev ? fnRectB2T : fnRectHori);
+        m_fnRect = m_bVert ? (m_bVertL2R ? fnRectVertL2R : fnRectVert) : fnRectHori;
     }
 
     bool IsVert() const    { return m_bVert; }
-    bool IsRev() const     { return m_bRev; }
     bool IsVertL2R() const { return m_bVertL2R; }
     SwRectFn FnRect() const { return m_fnRect; }
 
@@ -1380,7 +1369,6 @@ public:
 
 private:
     bool m_bVert;
-    bool m_bRev;
     bool m_bVertL2R;
     SwRectFn m_fnRect;
 };

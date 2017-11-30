@@ -4502,7 +4502,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             aRectFnSet.SetHeight( aFrm, nHeight - nReal );
 
-            if( IsVertical() && !IsVertLR() && !aRectFnSet.IsRev() )
+            if( IsVertical() && !IsVertLR() )
             {
                 aFrm.Pos().X() += nReal;
             }
@@ -4521,7 +4521,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aRectFnSet.SetHeight( aFrm, nHeight + nReal );
 
-                if( IsVertical() && !IsVertLR() && !aRectFnSet.IsRev() )
+                if( IsVertical() && !IsVertLR() )
                 {
                     aFrm.Pos().X() -= nReal;
                 }

@@ -1399,8 +1399,6 @@ void SwFrame::SetDirFlags( bool bVert )
             if( pAsk )
             {
                 mbVertical = pAsk->IsVertical();
-                mbReverse  = pAsk->IsReverse();
-
                 mbVertLR  = pAsk->IsVertLR();
 
                 if ( !pAsk->mbInvalidVert )
