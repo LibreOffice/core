@@ -609,7 +609,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     EscherPropSortStruct aStruct;
                     const SdrGrafObj* pSdrGrafObj = dynamic_cast<const SdrGrafObj*>(m_pSdrObject);
 
-                    if (pSdrGrafObj && pSdrGrafObj->isSignatureLine())
+                    if (pSdrGrafObj && pSdrGrafObj->isSignatureLine() && m_pTextExport)
                     {
                         sax_fastparser::FastAttributeList* pAttrListSignatureLine
                             = FastSerializerHelper::createAttrList();
