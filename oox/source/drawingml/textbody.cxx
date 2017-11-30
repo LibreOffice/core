@@ -95,6 +95,9 @@ void TextBody::ApplyStyleEmpty(
 {
     assert(isEmpty());
 
+    if (maParagraphs.empty())
+        return;
+
     // Apply character properties
     TextListStyle aCombinedTextStyle;
     aCombinedTextStyle.apply( *pMasterTextListStylePtr );
