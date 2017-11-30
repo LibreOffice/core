@@ -23,7 +23,7 @@ namespace writerperfect
 class EPUBExportDialog : public ModalDialog
 {
 public:
-    EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData);
+    EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, const css::uno::Reference<css::uno::XComponentContext> &xContext);
     ~EPUBExportDialog() override;
     void dispose() override;
 
@@ -31,13 +31,17 @@ private:
     DECL_LINK(VersionSelectHdl, ListBox &, void);
     DECL_LINK(SplitSelectHdl, ListBox &, void);
     DECL_LINK(CoverClickHdl, Button *, void);
+    DECL_LINK(MediaClickHdl, Button *, void);
     DECL_LINK(OKClickHdl, Button *, void);
 
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
     comphelper::SequenceAsHashMap &mrFilterData;
     VclPtr<ListBox> m_pVersion;
     VclPtr<ListBox> m_pSplit;
     VclPtr<Edit> m_pCoverPath;
     VclPtr<PushButton> m_pCoverButton;
+    VclPtr<Edit> m_pMediaDir;
+    VclPtr<PushButton> m_pMediaButton;
     VclPtr<PushButton> m_pOKButton;
     VclPtr<Edit> m_pIdentifier;
     VclPtr<Edit> m_pTitle;

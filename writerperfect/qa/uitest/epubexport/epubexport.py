@@ -83,6 +83,20 @@ class EPUBExportTest(UITestCase):
         coverImage = [i.Value for i in filterData if i.Name == "RVNGCoverImage"][0]
         self.assertEqual("cover.png", coverImage)
 
+    def testMediaDir(self):
+        def handleDialog(dialog):
+            dialog.getChild("mediadir").executeAction("TYPE", mkPropertyValues({"TEXT": "file:///foo/bar"}))
+            dialog.getChild("ok").executeAction("CLICK", tuple())
+
+        uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
+
+        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        propertyValues = uiComponent.getPropertyValues()
+        filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
+        # The RVNGMediaDir key was missing, EPUBExportDialog::OKClickHdl() did not set it.
+        mediaDir = [i.Value for i in filterData if i.Name == "RVNGMediaDir"][0]
+        self.assertEqual("file:///foo/bar", mediaDir)
+
     def testMeta(self):
         def handleDialog(dialog):
             dialog.getChild("identifier").executeAction("TYPE", mkPropertyValues({"TEXT": "baddcafe-e394-4cd6-9b83-7172794612e5"}))

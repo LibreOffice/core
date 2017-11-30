@@ -9,6 +9,8 @@
 
 #include "EPUBExportDialog.hxx"
 
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <sfx2/opengrf.hxx>
 
 #include "EPUBExportFilter.hxx"
@@ -63,8 +65,9 @@ sal_Int32 PositionToVersion(sal_Int32 nPosition)
 namespace writerperfect
 {
 
-EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData)
+EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, const uno::Reference<uno::XComponentContext> &xContext)
     : ModalDialog(pParent, "EpubDialog", "writerperfect/ui/exportepub.ui"),
+      mxContext(xContext),
       mrFilterData(rFilterData)
 {
     get(m_pVersion, "versionlb");
@@ -98,6 +101,11 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
     get(m_pCoverButton, "coverbutton");
     m_pCoverButton->SetClickHdl(LINK(this, EPUBExportDialog, CoverClickHdl));
 
+    get(m_pMediaDir, "mediadir");
+
+    get(m_pMediaButton, "mediabutton");
+    m_pMediaButton->SetClickHdl(LINK(this, EPUBExportDialog, MediaClickHdl));
+
     get(m_pIdentifier, "identifier");
     get(m_pTitle, "title");
     get(m_pInitialCreator, "author");
@@ -128,11 +136,22 @@ IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
         m_pCoverPath->SetText(aDlg.GetPath());
 }
 
+IMPL_LINK_NOARG(EPUBExportDialog, MediaClickHdl, Button *, void)
+{
+    uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(mxContext);
+    if (xFolderPicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
+        return;
+
+    m_pMediaDir->SetText(xFolderPicker->getDirectory());
+}
+
 IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, Button *, void)
 {
     // General
     if (!m_pCoverPath->GetText().isEmpty())
         mrFilterData["RVNGCoverImage"] <<= m_pCoverPath->GetText();
+    if (!m_pMediaDir->GetText().isEmpty())
+        mrFilterData["RVNGMediaDir"] <<= m_pMediaDir->GetText();
 
     // Metadata
     if (!m_pIdentifier->GetText().isEmpty())
@@ -166,6 +185,8 @@ void EPUBExportDialog::dispose()
     m_pInitialCreator.clear();
     m_pLanguage.clear();
     m_pDate.clear();
+    m_pMediaDir.clear();
+    m_pMediaButton.clear();
     ModalDialog::dispose();
 }
 

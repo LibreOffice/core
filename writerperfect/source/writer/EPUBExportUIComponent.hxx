@@ -52,6 +52,8 @@ private:
     comphelper::SequenceAsHashMap maMediaDescriptor;
     /// The filter data key.
     comphelper::SequenceAsHashMap maFilterData;
+    /// UNO context.
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
 };
 
 } // namespace writerperfect
