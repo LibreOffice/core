@@ -22,6 +22,30 @@
       "revId": "171a2548551306e14083fd731959a03e69ebb352",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7c8f132a",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8897,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-11-30T14:19:18Z",
+      "side": 1,
+      "message": "I missed that (I started with nIdx \u003d nLen - 1, but found out that that was wrong and forgot to change the lower limit of nIdx with the change start of initial value.)\nRunning make check on the amended code, will upload new patch set as soon as that is done.",
+      "parentUuid": "1a430d35_41543420",
+      "range": {
+        "startLine": 8897,
+        "startChar": 20,
+        "endLine": 8897,
+        "endChar": 29
+      },
+      "revId": "171a2548551306e14083fd731959a03e69ebb352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
