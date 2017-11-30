@@ -250,6 +250,7 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     HFONT hFont = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
     HFONT hAltFont = nullptr;
     bool bUseAltFont = false;
+    bool bShift = false;
     if (rLayout.getFontSelData().mbVertical)
     {
         LOGFONTW aLogFont;
@@ -260,8 +261,16 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
                 sizeof(aLogFont.lfFaceName)-sizeof(aLogFont.lfFaceName[0]));
             hAltFont = CreateFontIndirectW(&aLogFont);
         }
+        else
+        {
+            bShift = true;
+            aLogFont.lfEscapement += 2700;
+            aLogFont.lfOrientation = aLogFont.lfEscapement;
+            hAltFont = CreateFontIndirectW(&aLogFont);
+        }
     }
 
+    UINT nTextAlign = GetTextAlign ( hDC );
     int nStart = 0;
     Point aPos(0, 0);
     const GlyphItem* pGlyph;
@@ -273,7 +282,13 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
             bUseAltFont = !bUseAltFont;
             SelectFont(hDC, bUseAltFont ? hAltFont : hFont);
         }
+        if (bShift && pGlyph->IsVertical())
+            SetTextAlign(hDC, TA_TOP|TA_LEFT);
+
         ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
+
+        if (bShift && pGlyph->IsVertical())
+            SetTextAlign(hDC, nTextAlign);
     }
     if (hAltFont)
     {
