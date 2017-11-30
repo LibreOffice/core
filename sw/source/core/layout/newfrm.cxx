@@ -167,116 +167,6 @@ static SwRectFnCollection aVertical = {
     /*.fnSetTopAndHeight =*/&SwRect::SetRightAndWidth
 };
 
-static SwRectFnCollection aBottomToTop = {
-    /*.fnGetTop =*/&SwRect::Bottom_,
-    /*.fnGetBottom =*/&SwRect::Top_,
-    /*.fnGetLeft =*/&SwRect::Left_,
-    /*.fnGetRight =*/&SwRect::Right_,
-    /*.fnGetWidth =*/&SwRect::Width_,
-    /*.fnGetHeight =*/&SwRect::Height_,
-    /*.fnGetPos =*/&SwRect::BottomLeft,
-    /*.fnGetSize =*/&SwRect::Size_,
-
-    /*.fnSetTop =*/&SwRect::Bottom_,
-    /*.fnSetBottom =*/&SwRect::Top_,
-    /*.fnSetLeft =*/&SwRect::Left_,
-    /*.fnSetRight =*/&SwRect::Right_,
-    /*.fnSetWidth =*/&SwRect::Width_,
-    /*.fnSetHeight =*/&SwRect::Height_,
-
-    /*.fnSubTop =*/&SwRect::AddBottom,
-    /*.fnAddBottom =*/&SwRect::SubTop,
-    /*.fnSubLeft =*/&SwRect::SubLeft,
-    /*.fnAddRight =*/&SwRect::AddRight,
-    /*.fnAddWidth =*/&SwRect::AddWidth,
-    /*.fnAddHeight =*/&SwRect::AddHeight,
-
-    /*.fnSetPosX =*/&SwRect::SetPosX,
-    /*.fnSetPosY =*/&SwRect::SetPosY,
-
-    /*.fnGetTopMargin =*/&SwFrame::GetBottomMargin,
-    /*.fnGetBottomMargin =*/&SwFrame::GetTopMargin,
-    /*.fnGetLeftMargin =*/&SwFrame::GetLeftMargin,
-    /*.fnGetRightMargin =*/&SwFrame::GetRightMargin,
-    /*.fnSetXMargins =*/&SwFrame::SetLeftRightMargins,
-    /*.fnSetYMargins =*/&SwFrame::SetBottomTopMargins,
-    /*.fnGetPrtTop =*/&SwFrame::GetPrtBottom,
-    /*.fnGetPrtBottom =*/&SwFrame::GetPrtTop,
-    /*.fnGetPrtLeft =*/&SwFrame::GetPrtLeft,
-    /*.fnGetPrtRight =*/&SwFrame::GetPrtRight,
-    /*.fnTopDist =*/&SwRect::GetBottomDistance,
-    /*.fnBottomDist =*/&SwRect::GetTopDistance,
-    /*.fnLeftDist =*/&SwRect::GetLeftDistance,
-    /*.fnRightDist =*/&SwRect::GetRightDistance,
-    /*.fnSetLimit =*/&SwFrame::SetMinTop,
-    /*.fnOverStep =*/&SwRect::OverStepTop,
-
-    /*.fnSetPos =*/&SwRect::SetLowerLeftCorner,
-    /*.fnMakePos =*/&SwFrame::MakeUpperPos,
-    /*.fnXDiff =*/&FirstMinusSecond,
-    /*.fnYDiff =*/&SecondMinusFirst,
-    /*.fnXInc =*/&SwIncrement,
-    /*.fnYInc =*/&SwDecrement,
-
-    /*.fnSetLeftAndWidth =*/&SwRect::SetLeftAndWidth,
-    /*.fnSetTopAndHeight =*/&SwRect::SetBottomAndHeight
-};
-
-static SwRectFnCollection aVerticalRightToLeft = {
-    /*.fnGetTop =*/&SwRect::Left_,
-    /*.fnGetBottom =*/&SwRect::Right_,
-    /*.fnGetLeft =*/&SwRect::Top_,
-    /*.fnGetRight =*/&SwRect::Bottom_,
-    /*.fnGetWidth =*/&SwRect::Height_,
-    /*.fnGetHeight =*/&SwRect::Width_,
-    /*.fnGetPos =*/&SwRect::BottomRight,
-    /*.fnGetSize =*/&SwRect::SwappedSize,
-
-    /*.fnSetTop =*/&SwRect::Left_,
-    /*.fnSetBottom =*/&SwRect::Right_,
-    /*.fnSetLeft =*/&SwRect::Top_,
-    /*.fnSetRight =*/&SwRect::Bottom_,
-    /*.fnSetWidth =*/&SwRect::Height_,
-    /*.fnSetHeight =*/&SwRect::Width_,
-
-    /*.fnSubTop =*/&SwRect::SubLeft,
-    /*.fnAddBottom =*/&SwRect::AddRight,
-    /*.fnSubLeft =*/&SwRect::SubTop,
-    /*.fnAddRight =*/&SwRect::AddBottom,
-    /*.fnAddWidth =*/&SwRect::AddHeight,
-    /*.fnAddHeight =*/&SwRect::AddWidth,
-
-    /*.fnSetPosX =*/&SwRect::SetPosY,
-    /*.fnSetPosY =*/&SwRect::SetPosX,
-
-    /*.fnGetTopMargin =*/&SwFrame::GetLeftMargin,
-    /*.fnGetBottomMargin =*/&SwFrame::GetRightMargin,
-    /*.fnGetLeftMargin =*/&SwFrame::GetTopMargin,
-    /*.fnGetRightMargin =*/&SwFrame::GetBottomMargin,
-    /*.fnSetXMargins =*/&SwFrame::SetTopBottomMargins,
-    /*.fnSetYMargins =*/&SwFrame::SetLeftRightMargins,
-    /*.fnGetPrtTop =*/&SwFrame::GetPrtLeft,
-    /*.fnGetPrtBottom =*/&SwFrame::GetPrtRight,
-    /*.fnGetPrtLeft =*/&SwFrame::GetPrtBottom,
-    /*.fnGetPrtRight =*/&SwFrame::GetPrtTop,
-    /*.fnTopDist =*/&SwRect::GetLeftDistance,
-    /*.fnBottomDist =*/&SwRect::GetRightDistance,
-    /*.fnLeftDist =*/&SwRect::GetBottomDistance,
-    /*.fnRightDist =*/&SwRect::GetTopDistance,
-    /*.fnSetLimit =*/&SwFrame::SetMaxRight,
-    /*.fnOverStep =*/&SwRect::OverStepRight,
-
-    /*.fnSetPos =*/&SwRect::SetLowerLeftCorner,
-    /*.fnMakePos =*/&SwFrame::MakeRightPos,
-    /*.fnXDiff =*/&FirstMinusSecond,
-    /*.fnYDiff =*/&FirstMinusSecond,
-    /*.fnXInc =*/&SwDecrement,
-    /*.fnYInc =*/&SwIncrement,
-
-    /*.fnSetLeftAndWidth =*/&SwRect::SetBottomAndHeight,
-    /*.fnSetTopAndHeight =*/&SwRect::SetLeftAndWidth
-};
-
 static SwRectFnCollection aVerticalLeftToRight = {
     /*.fnGetTop =*/&SwRect::Left_,
     /*.fnGetBottom =*/&SwRect::Right_,
@@ -334,11 +224,7 @@ static SwRectFnCollection aVerticalLeftToRight = {
 
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
-
 SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
-
-SwRectFn fnRectB2T = &aBottomToTop;
-SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
 // #i65250#
 sal_uInt32 SwFrame::mnLastFrameId=0;

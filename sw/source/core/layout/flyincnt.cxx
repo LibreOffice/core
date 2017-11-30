@@ -36,7 +36,7 @@ SwFlyInContentFrame::SwFlyInContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
     if( pAnch && pAnch->IsVertical() )
-        aRelPos.setX(pAnch->IsReverse() ? nRel : -nRel);
+        aRelPos.setX(-nRel);
     else
         aRelPos.setY(nRel);
     SetCurrRelPos( aRelPos );
@@ -163,11 +163,8 @@ void SwFlyInContentFrame::MakeObjPos()
         //Update the current values in the format if needed, during this we of
         //course must not send any Modify.
         const bool bVert = GetAnchorFrame()->IsVertical();
-        const bool bRev = GetAnchorFrame()->IsReverse();
         SwTwips nOld = rVert.GetPos();
         SwTwips nAct = bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y();
-        if( bRev )
-            nAct = -nAct;
         if( nAct != nOld )
         {
             SwFormatVertOrient aVert( rVert );

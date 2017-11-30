@@ -1041,7 +1041,7 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
         if( nDiff > 0 )
         {
             long nAdd = GetUpper()->Grow( nDiff );
-            if( aRectFnSet.IsVert() && !aRectFnSet.IsRev() )
+            if( aRectFnSet.IsVert() )
                 nDeadLine -= nAdd;
             else
                 nDeadLine += nAdd;

@@ -232,13 +232,12 @@ void SwFrame::SetRightLeftMargins( long nRight, long nLeft)
 void SwFrame::CheckDirChange()
 {
     bool bOldVert = mbVertical;
-    bool bOldRev = IsReverse();
     bool bOldR2L = mbRightToLeft;
     SetInvalidVert( true );
     mbInvalidR2L = true;
     bool bChg = bOldR2L != IsRightToLeft();
     bool bOldVertL2R = IsVertLR();
-    if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )
+    if( ( IsVertical() != bOldVert ) || bChg || bOldVertL2R != IsVertLR() )
     {
         InvalidateAll();
         if( IsLayoutFrame() )

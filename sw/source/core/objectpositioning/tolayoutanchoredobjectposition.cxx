@@ -105,8 +105,6 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // anchor position, depending on layout-direction
         if( aRectFnSet.IsVert() )
         {
-            OSL_ENSURE( !aRectFnSet.IsRev(), "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
-
             if ( aRectFnSet.IsVertL2R() )
                    aRelPos.X() = nRelPosY;
             else
