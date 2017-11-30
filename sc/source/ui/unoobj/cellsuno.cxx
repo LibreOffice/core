@@ -3038,7 +3038,7 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
         }
         if (!xChartRanges.is())         //  otherwise take Ranges directly
             xChartRanges = new ScRangeList(aRanges);
-        ScChartArray aArr( &pDocShell->GetDocument(), xChartRanges, OUString() );
+        ScChartArray aArr( &pDocShell->GetDocument(), xChartRanges );
 
         // RowAsHdr = ColHeaders and vice versa
         aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );
@@ -3118,7 +3118,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
     if ( pDocShell && xChartRanges.is() )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
-        ScChartArray aArr( &rDoc, xChartRanges, OUString() );
+        ScChartArray aArr( &rDoc, xChartRanges );
         aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
         const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
         if (pPosMap)
@@ -3189,7 +3189,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
         if ( pDocShell && xChartRanges.is() )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
-            ScChartArray aArr( &rDoc, xChartRanges, OUString() );
+            ScChartArray aArr( &rDoc, xChartRanges );
             aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
@@ -3258,7 +3258,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
         if ( pDocShell && xChartRanges.is() )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
-            ScChartArray aArr( &rDoc, xChartRanges, OUString() );
+            ScChartArray aArr( &rDoc, xChartRanges );
             aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)

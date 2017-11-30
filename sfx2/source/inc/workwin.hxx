@@ -47,13 +47,11 @@ struct SfxObjectBar_Impl
 {
     ToolbarId          eId;   // ConfigId of Toolbox
     SfxVisibilityFlags nMode; // special visibility flags
-    sal_uInt16         nPos;
     bool               bDestroy;
 
     SfxObjectBar_Impl() :
         eId(ToolbarId::None),
         nMode(SfxVisibilityFlags::Invisible),
-        nPos(0),
         bDestroy(false)
     {}
 };

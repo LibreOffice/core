@@ -68,7 +68,6 @@ public:
 
 private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
-    bool                    mbMapNames;     // true if MapNames are available
 
     typedef std::unordered_map<OUString, PhysicalFontFamily*> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
@@ -83,7 +82,6 @@ private:
     void                    ImplInitGenericGlyphFallback() const;
 
     PhysicalFontFamily*     ImplFindFontFamilyBySearchName( const OUString& ) const;
-    PhysicalFontFamily*     ImplFindFontFamilyByAliasName ( const OUString& rSearchName, const OUString& rShortName) const;
     PhysicalFontFamily*     ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
 
     PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;

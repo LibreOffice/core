@@ -483,7 +483,6 @@ private:
     sal_Int32          nEndPortion;
     sal_uInt16          nHeight;    //  Total height of the line
     sal_uInt16          nTxtHeight; // Pure Text height
-    sal_uInt16          nCrsrHeight;    // For contour flow high lines => cursor is large.
     sal_uInt16          nMaxAscent;
     bool            bHangingPunctuation:1;
     bool            bInvalid:1;   // for skillful formatting
@@ -515,7 +514,7 @@ public:
     sal_Int32       GetEndPortion() const           { return nEndPortion; }
     sal_Int32&      GetEndPortion()                 { return nEndPortion; }
 
-    void            SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH = 0, sal_uInt16 nCrsrH = 0 );
+    void            SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH = 0 );
     sal_uInt16      GetHeight() const               { return nHeight; }
     sal_uInt16      GetTxtHeight() const            { return nTxtHeight; }
 
