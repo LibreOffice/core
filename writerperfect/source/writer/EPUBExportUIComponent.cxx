@@ -23,7 +23,8 @@ using namespace com::sun::star;
 namespace writerperfect
 {
 
-EPUBExportUIComponent::EPUBExportUIComponent(const uno::Reference<uno::XComponentContext> &/*xContext*/)
+EPUBExportUIComponent::EPUBExportUIComponent(const uno::Reference<uno::XComponentContext> &xContext)
+    : mxContext(xContext)
 {
 }
 
@@ -76,7 +77,7 @@ sal_Int16 EPUBExportUIComponent::execute()
 {
     SolarMutexGuard aGuard;
 
-    ScopedVclPtrInstance<EPUBExportDialog> pDialog(Application::GetDefDialogParent(), maFilterData);
+    ScopedVclPtrInstance<EPUBExportDialog> pDialog(Application::GetDefDialogParent(), maFilterData, mxContext);
     if (pDialog->Execute() == RET_OK)
         return ui::dialogs::ExecutableDialogResults::OK;
     return ui::dialogs::ExecutableDialogResults::CANCEL;
