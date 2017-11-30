@@ -644,10 +644,9 @@ SfxShell* ViewShellManager::Implementation::GetShell (ShellId nId) const
     else
     {
         // Now search the active sub shells of every active view shell.
-        SubShellList::const_iterator iList;
-        for (iList=maActiveSubShells.begin(); iList!=maActiveSubShells.end(); ++iList)
+        for (auto const& activeSubShell : maActiveSubShells)
         {
-            const SubShellSubList& rList (iList->second);
+            const SubShellSubList& rList (activeSubShell.second);
             SubShellSubList::const_iterator iSubShell(
                 ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
             if (iSubShell != rList.end())
@@ -880,12 +879,11 @@ void ViewShellManager::Implementation::CreateShells()
             SubShellSubList& rList (iList->second);
 
             // Iterate over all sub shells of the current view shell.
-            SubShellSubList::iterator iSubShell;
-            for (iSubShell=rList.begin(); iSubShell!=rList.end(); ++iSubShell)
+            for (auto & subShell : rList)
             {
-                if (iSubShell->mpShell == nullptr)
+                if (subShell.mpShell == nullptr)
                 {
-                    *iSubShell = CreateSubShell(iShell->mpShell,iSubShell->mnId);
+                    subShell = CreateSubShell(iShell->mpShell,subShell.mnId);
                 }
             }
         }
@@ -941,13 +939,11 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&,
         {
             case VclEventId::WindowGetFocus:
             {
-                for (ActiveShellList::iterator aI(maActiveViewShells.begin());
-                     aI!=maActiveViewShells.end();
-                     ++aI)
+                for (auto const& activeShell : maActiveViewShells)
                 {
-                    if (pEventWindow == aI->GetWindow())
+                    if (pEventWindow == activeShell.GetWindow())
                     {
-                        MoveToTop(*aI->mpShell);
+                        MoveToTop(*activeShell.mpShell);
                         break;
                     }
                 }
@@ -960,15 +956,11 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&,
             case VclEventId::ObjectDying:
                 // Remember that we do not have to remove the window
                 // listener for this window.
-                for (ActiveShellList::iterator
-                         iShell(maActiveViewShells.begin()),
-                         iEnd(maActiveViewShells.end());
-                     iShell!=iEnd;
-                     ++iShell)
+                for (auto & activeViewShell : maActiveViewShells)
                 {
-                    if (iShell->GetWindow() == pEventWindow)
+                    if (activeViewShell.GetWindow() == pEventWindow)
                     {
-                        iShell->mbIsListenerAddedToWindow = false;
+                        activeViewShell.mbIsListenerAddedToWindow = false;
                         break;
                     }
                 }
@@ -1050,10 +1042,9 @@ void ViewShellManager::Implementation::InvalidateAllSubShells (const SfxShell* p
     if (iList != maActiveSubShells.end())
     {
         SubShellSubList& rList (iList->second);
-        SubShellSubList::iterator iShell;
-        for (iShell=rList.begin(); iShell!=rList.end(); ++iShell)
-            if (iShell->mpShell != nullptr)
-                iShell->mpShell->Invalidate();
+        for (auto const& shell : rList)
+            if (shell.mpShell != nullptr)
+                shell.mpShell->Invalidate();
     }
 }
 
