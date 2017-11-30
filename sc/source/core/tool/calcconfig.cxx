@@ -33,12 +33,28 @@ static rtl::Reference<ConfigurationListener> const & getMiscListener()
     return xListener;
 }
 
+static rtl::Reference<ConfigurationListener> const & getFormulaCalculationListener()
+{
+    static rtl::Reference<ConfigurationListener> xListener;
+    if (!xListener.is())
+        xListener.set(new ConfigurationListener("/org.openoffice.Office.Calc/Formula/Calculation"));
+    return xListener;
+}
+
 bool ScCalcConfig::isOpenCLEnabled()
 {
     if (utl::ConfigManager::IsFuzzing())
         return false;
     static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), "UseOpenCL");
     return gOpenCLEnabled.get();
+}
+
+bool ScCalcConfig::isThreadingEnabled()
+{
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
+    static comphelper::ConfigurationListenerProperty<bool> gThreadingEnabled(getFormulaCalculationListener(), "UseThreadedCalculationForFormulaGroups");
+    return gThreadingEnabled.get();
 }
 
 bool ScCalcConfig::isSwInterpreterEnabled()

@@ -358,7 +358,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
 
-    bool bUseThreading = !bThreadingProhibited && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
+    bool bUseThreading = !bThreadingProhibited && ScCalcConfig::isThreadingEnabled();
 
     SvNumberFormatter* pFormatter = rDoc.GetNonThreadedContext().GetFormatTable();
 

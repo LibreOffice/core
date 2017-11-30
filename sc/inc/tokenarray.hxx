@@ -51,7 +51,9 @@ class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
     bool ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
 
     size_t mnHashValue;
-    ScFormulaVectorState meVectorState;
+    ScFormulaVectorState meVectorState : 4; // Only 4 bits
+    bool mbOpenCLEnabled : 1;
+    bool mbThreadingEnabled : 1;
 
 public:
     ScTokenArray();
@@ -69,7 +71,7 @@ public:
     size_t GetHash() const { return mnHashValue;}
 
     ScFormulaVectorState GetVectorState() const { return meVectorState;}
-    void ResetVectorState() { meVectorState = FormulaVectorEnabled; }
+    void ResetVectorState();
     bool IsFormulaVectorDisabled() const;
 
     /**
@@ -261,6 +263,9 @@ public:
     bool NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const;
 
     sal_Int32 GetWeight() const;
+
+    bool IsEnabledForOpenCL() const { return mbOpenCLEnabled; }
+    bool IsEnabledForThreading() const { return !mbOpenCLEnabled && mbThreadingEnabled; }
 
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
