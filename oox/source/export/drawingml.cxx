@@ -1286,13 +1286,18 @@ void DrawingML::WriteTransformation(const tools::Rectangle& rRect,
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
 
-void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation, bool bSuppressFlipping )
+void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation, bool bSuppressFlipping, bool bFlippedBeforeRotation )
 {
     SAL_INFO("oox.shape",  "write shape transformation");
 
     sal_Int32 nRotation=0;
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
+
+    bool bFlipHWrite = bFlipH && !bSuppressFlipping;
+    bool bFlipVWrite = bFlipV && !bSuppressFlipping;
+    bFlipH = bFlipH && !bFlippedBeforeRotation;
+    bFlipV = bFlipV && !bFlippedBeforeRotation;
 
     bool bPositiveY = true;
     bool bPositiveX = true;
@@ -1345,14 +1350,11 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     if(bFlipH != bFlipV)
         nRotation = nRotation * -1 + 36000;
 
-    if(bSuppressFlipping)
-        bFlipH = bFlipV = false;
-
     uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
     bool bIsGroupShape = (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"));
 
     WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
-            bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), bIsGroupShape);
+            bFlipHWrite, bFlipVWrite, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), bIsGroupShape);
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,

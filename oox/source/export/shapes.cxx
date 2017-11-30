@@ -1186,7 +1186,12 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    bool bFlipH = false;
+    if( xShapeProps->getPropertySetInfo()->hasPropertyByName("IsMirrored") )
+    {
+        xShapeProps->getPropertyValue("IsMirrored") >>= bFlipH;
+    }
+    WriteShapeTransformation( xShape, XML_a, bFlipH, false, false, false, true );
     WritePresetShape( "rect" );
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
