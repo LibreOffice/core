@@ -12,6 +12,7 @@
 #include <initializer_list>
 #include <unordered_map>
 
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <rtl/uri.hxx>
@@ -242,7 +243,8 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
 
 XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor)
     : mrGenerator(rGenerator),
-      mxContext(xContext)
+      mxContext(xContext),
+      maDocumentBaseURL(rURL)
 {
     uno::Sequence<beans::PropertyValue> aFilterData;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
@@ -270,6 +272,8 @@ XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, lib
     }
 
     FindXMPMetadata(mxContext, rURL, aFilterData, maMetaData);
+
+    mxUriReferenceFactory = uri::UriReferenceFactory::create(mxContext);
 }
 
 const librevenge::RVNGPropertyListVector &XMLImport::GetCoverImages()
@@ -280,6 +284,54 @@ const librevenge::RVNGPropertyListVector &XMLImport::GetCoverImages()
 const librevenge::RVNGPropertyList &XMLImport::GetMetaData()
 {
     return maMetaData;
+}
+
+bool XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList)
+{
+    uno::Reference<uri::XUriReference> xUriRef;
+    try
+    {
+        xUriRef = mxUriReferenceFactory->parse(rURL);
+    }
+    catch (const uno::Exception &rException)
+    {
+        SAL_WARN("writerperfect", "XMLImport::FillPopupData: XUriReference::parse() failed:" << rException.Message);
+    }
+    bool bRelative = false;
+    if (xUriRef.is())
+        bRelative = !xUriRef->isAbsolute();
+    if (!bRelative)
+        return false;
+
+    OUString aAbs;
+    INetURLObject aBaseURL(maDocumentBaseURL);
+    try
+    {
+        aAbs = rtl::Uri::convertRelToAbs(maDocumentBaseURL, aBaseURL.GetBase() + "/" + rURL);
+    }
+    catch (const rtl::MalformedUriException &rException)
+    {
+        SAL_WARN("writerperfect", "XMLImport::FillPopupData: convertRelToAbs() failed:" << rException.getMessage());
+    }
+    if (aAbs.isEmpty())
+        return false;
+
+    SvFileStream aStream(aAbs, StreamMode::READ);
+    if (aStream.IsOpen())
+    {
+        librevenge::RVNGBinaryData aBinaryData;
+        SvMemoryStream aMemoryStream;
+        aMemoryStream.WriteStream(aStream);
+        aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
+        rPropList.insert("office:binary-data", aBinaryData);
+
+        INetURLObject aAbsURL(aAbs);
+        OUString aMimeType = GetMimeType(aAbsURL.GetExtension());
+        rPropList.insert("librevenge:mime-type", aMimeType.toUtf8().getStr());
+        return true;
+    }
+
+    return false;
 }
 
 rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)

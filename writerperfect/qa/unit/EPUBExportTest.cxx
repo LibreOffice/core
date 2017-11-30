@@ -89,6 +89,7 @@ public:
     void testFontEmbedding();
     void testImageLink();
     void testFootnote();
+    void testPopup();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -126,6 +127,7 @@ public:
     CPPUNIT_TEST(testFontEmbedding);
     CPPUNIT_TEST(testImageLink);
     CPPUNIT_TEST(testFootnote);
+    CPPUNIT_TEST(testPopup);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -700,6 +702,26 @@ void EPUBExportTest::testFootnote()
     // These were missing, footnote was lost.
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:sup/xhtml:a", "type", "noteref");
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside", "type", "footnote");
+}
+
+void EPUBExportTest::testPopup()
+{
+    createDoc("popup.odt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // Test image popup anchor.
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p[1]/xhtml:a", "type", "noteref");
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p[1]/xhtml:a/xhtml:img", 1);
+    // Test image popup content.
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[1]", "type", "footnote");
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[1]/xhtml:img", 1);
+
+    // Test text popup anchor.
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p[2]/xhtml:span/xhtml:a", "type", "noteref");
+    assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p[2]/xhtml:span/xhtml:a", "link");
+    // Test text popup content.
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[2]", "type", "footnote");
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[2]/xhtml:img", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
