@@ -48,6 +48,7 @@ SwFieldVarPage::SwFieldVarPage(vcl::Window* pParent, const SfxItemSet *const pCo
     get(m_pTypeLB, "type");
     get(m_pSelection, "selectframe");
     get(m_pSelectionLB, "select");
+    m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() | WB_SORT);
     get(m_pFormat, "formatframe");
     get(m_pChapterFrame, "chapterframe");
     get(m_pNameFT, "nameft");
