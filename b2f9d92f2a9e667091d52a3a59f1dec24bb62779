@@ -16,6 +16,24 @@
       "revId": "b2f9d92f2a9e667091d52a3a59f1dec24bb62779",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7ca2b3fe",
+        "filename": "android/source/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-11-30T12:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_7404e314",
+      "revId": "b2f9d92f2a9e667091d52a3a59f1dec24bb62779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
