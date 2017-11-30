@@ -48,7 +48,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-
 #include <unordered_map>
 #include <unordered_set>
 #include <algorithm>
@@ -1155,6 +1154,13 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         auto iter = m_DimList.begin();
         for (long i = 0; iter != m_DimList.end(); ++iter, ++i)
         {
+	    /*
+             * adding of extra condition to make sure that dimension is set correctly
+             * todo: make sure that any dimension that is added before doesn't hold any nullptr
+             */
+            if((*iter)->GetSortInfo() == nullptr)
+                continue;
+
             OUString aName = (*iter)->GetName();
             OUString aCoreName = ScDPUtil::getSourceDimensionName(aName);
 
@@ -1202,8 +1208,15 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                             }
                         }
                     }
-                    else
-                        (*iter)->WriteToSource( xIntDim );
+		    else
+	            {
+			/*
+			 * adding of extra condition to filter the adding of non ascending fiels
+			 * that provokes a wrong behaviour while trying to use "Enable drill to details" option on the pivot table
+			 */
+			if (GetDrillDown() && (*iter)->GetSortInfo()->IsAscending)
+                            (*iter)->WriteToSource(xIntDim);
+                    }
                 }
             }
             SAL_WARN_IF(!bFound, "sc.core", "WriteToSource: Dimension not found: " + aName + ".");
@@ -1219,6 +1232,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     SC_UNO_DP_ROWGRAND, (bool)nRowGrandMode );
         }
     }
+
     catch(uno::Exception&)
     {
         SAL_WARN("sc.core", "exception in WriteToSource");
