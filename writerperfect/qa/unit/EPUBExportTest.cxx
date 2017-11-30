@@ -88,6 +88,7 @@ public:
     void testTextBox();
     void testFontEmbedding();
     void testImageLink();
+    void testFootnote();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -124,6 +125,7 @@ public:
     CPPUNIT_TEST(testTextBox);
     CPPUNIT_TEST(testFontEmbedding);
     CPPUNIT_TEST(testImageLink);
+    CPPUNIT_TEST(testFootnote);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -688,6 +690,16 @@ void EPUBExportTest::testImageLink()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This failed, image was missing.
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:img", 1);
+}
+
+void EPUBExportTest::testFootnote()
+{
+    createDoc("footnote.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // These were missing, footnote was lost.
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:sup/xhtml:a", "type", "noteref");
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside", "type", "footnote");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
