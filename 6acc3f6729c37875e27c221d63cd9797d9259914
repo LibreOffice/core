@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3c9bcb73",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-30T14:18:18Z",
+      "side": 1,
+      "message": "Any reason why the string(s) can\u0027t be localized in .xcu file?",
+      "revId": "6acc3f6729c37875e27c221d63cd9797d9259914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
