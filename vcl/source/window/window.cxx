@@ -3203,15 +3203,6 @@ vcl::LOKWindowId Window::GetLOKWindowId() const
     return mpWindowImpl->mnLOKWindowId;
 }
 
-void Window::paintDialog(VirtualDevice& rDevice)
-{
-    // FIXME are these two necessary?
-    Show();
-    ToTop();
-
-    PaintToDevice(&rDevice, Point(0, 0), Size());
-}
-
 Size Window::PaintActiveFloatingWindow(VirtualDevice& rDevice) const
 {
     Size aRet;

@@ -882,17 +882,6 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
-void Dialog::paintDialog(VirtualDevice& rDevice)
-{
-    setDeferredProperties();
-    ImplAdjustNWFSizes();
-    Show();
-    ToTop();
-    ensureRepaint();
-
-    PaintToDevice(&rDevice, Point(0, 0), Size());
-}
-
 void Dialog::InvalidateFloatingWindow(const Point& rPos)
 {
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
