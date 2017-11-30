@@ -1064,7 +1064,8 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
                     case css::ui::dialogs::ControlActions::ADD_ITEMS :
                         {
                             css::uno::Sequence< OUString > lItems;
-                                                       aValue >>= lItems;
+                            aValue >>= lItems;
+                            aValue >>= gItems;
                             for (::sal_Int32 i=0; i<lItems.getLength(); ++i)
                             {
                                 const OUString& sItem = lItems[i];
@@ -1118,6 +1119,19 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
                 HRESULT hResult = iCustom->GetCheckButtonState(nId, &bValue);
                 if ( SUCCEEDED(hResult) )
                     aValue <<= bool(bValue);
+            }
+            break;
+        case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_VERSION:
+        case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
+        case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
+            {
+                DWORD    bValue = 0;
+                HRESULT hResult = iCustom->GetSelectedControlItem(nId, &bValue);
+                if ( SUCCEEDED(hResult) )
+                {
+                    const OUString& sItem = gItems[bValue];
+                    aValue = css::uno::makeAny(OUString(sItem.getStr()));
+                }
             }
             break;
         }

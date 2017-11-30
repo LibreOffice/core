@@ -102,7 +102,8 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 {
     public:
 
-
+        // Workaround made to get input in Template Listbox
+        css::uno::Sequence< OUString > gItems;
         /** used for marshalling requests.
          *  Will be used to map requests to the right implementations.
          */
