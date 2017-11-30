@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <i18nutil/searchopt.hxx>
+#include <o3tl/deleter.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/settings.hxx>
@@ -124,11 +125,10 @@ struct ImpTextView
     VclPtr<vcl::Window> mpWindow;
     TextSelection       maSelection;
     Point               maStartDocPos;
-//    TextPaM             maMBDownPaM;
 
-    std::unique_ptr<vcl::Cursor> mpCursor;
+    std::unique_ptr<vcl::Cursor, o3tl::default_delete<vcl::Cursor>> mpCursor;
 
-    std::unique_ptr<TextDDInfo> mpDDInfo;
+    std::unique_ptr<TextDDInfo, o3tl::default_delete<TextDDInfo>> mpDDInfo;
 
     std::unique_ptr<SelectionEngine> mpSelEngine;
     std::unique_ptr<TextSelFunctionSet> mpSelFuncSet;
@@ -176,7 +176,7 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
     mpImpl->mpSelEngine->SetSelectionMode( SelectionMode::Range );
     mpImpl->mpSelEngine->EnableDrag( true );
 
-    mpImpl->mpCursor = o3tl::make_unique<vcl::Cursor>();
+    mpImpl->mpCursor.reset(new vcl::Cursor);
     mpImpl->mpCursor->Show();
     pWindow->SetCursor( mpImpl->mpCursor.get() );
     pWindow->SetInputContext( InputContext( pEng->GetFont(), InputContextFlags::Text|InputContextFlags::ExtText ) );
@@ -1858,7 +1858,7 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
 
         SAL_WARN_IF( !mpImpl->maSelection.HasRange(), "vcl", "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
 
-        mpImpl->mpDDInfo = o3tl::make_unique<TextDDInfo>();
+        mpImpl->mpDDInfo.reset(new TextDDInfo);
         mpImpl->mpDDInfo->mbStarterOfDD = true;
 
         TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
@@ -1997,8 +1997,8 @@ void TextView::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTD
 {
     SolarMutexGuard aVclGuard;
 
-    if ( !mpImpl->mpDDInfo )
-        mpImpl->mpDDInfo = o3tl::make_unique<TextDDInfo>();
+    if (!mpImpl->mpDDInfo)
+        mpImpl->mpDDInfo.reset(new TextDDInfo);
 
     TextPaM aPrevDropPos = mpImpl->mpDDInfo->maDropPos;
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );

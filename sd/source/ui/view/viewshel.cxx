@@ -1273,7 +1273,7 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
 {
     //The xWatcher keeps the SlideSorter selection in sync
     //with the page insertions/deletions that Undo may introduce
-    std::unique_ptr<KeepSlideSorterInSyncWithPageChanges> xWatcher;
+    std::unique_ptr<KeepSlideSorterInSyncWithPageChanges, o3tl::default_delete<KeepSlideSorterInSyncWithPageChanges>> xWatcher;
     slidesorter::SlideSorterViewShell* pSlideSorterViewShell
         = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
     if (pSlideSorterViewShell)
@@ -1342,7 +1342,7 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
 {
     //The xWatcher keeps the SlideSorter selection in sync
     //with the page insertions/deletions that Undo may introduce
-    std::unique_ptr<KeepSlideSorterInSyncWithPageChanges> xWatcher;
+    std::unique_ptr<KeepSlideSorterInSyncWithPageChanges, o3tl::default_delete<KeepSlideSorterInSyncWithPageChanges>> xWatcher;
     slidesorter::SlideSorterViewShell* pSlideSorterViewShell
         = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
     if (pSlideSorterViewShell)

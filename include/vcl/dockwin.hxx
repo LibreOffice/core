@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/floatwin.hxx>
+#include <o3tl/deleter.hxx>
 #include <memory>
 #include <vector>
 
@@ -167,7 +168,7 @@ public:
 
 class VCL_DLLPUBLIC DockingManager
 {
-    std::vector<std::unique_ptr<ImplDockingWindowWrapper>> mvDockingWindows;
+    std::vector<std::unique_ptr<ImplDockingWindowWrapper, o3tl::default_delete<ImplDockingWindowWrapper>>> mvDockingWindows;
 
 public:
     DockingManager();
