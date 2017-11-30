@@ -87,6 +87,12 @@ SvXMLImportContextRef OXMLSubDocument::CreateChildContext_(
                 }
             }
             break;
+        // FIXME: is it *intentional* that this is supported?
+        // ORptExport::exportContainer() can export this but the import
+        // used to be rather accidental previously
+        case XML_TOK_SUB_BODY:
+            xContext = new RptXMLDocumentBodyContext(GetImport(), _nPrefix, _rLocalName);
+            break;
         default:
             break;
     }

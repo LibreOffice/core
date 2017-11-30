@@ -70,6 +70,7 @@ private:
     TGroupFunctionMap                               m_aFunctions;
 
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocContentElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pReportElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pGroupElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSectionElemTokenMap;
@@ -94,6 +95,8 @@ private:
     /// @throws RuntimeException
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor );
 
+public:
+    using SvXMLImport::SetMasterStyles;
     SvXMLImportContext* CreateStylesContext(const OUString& rLocalName,
                                             const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
     SvXMLImportContext* CreateMetaContext(const OUString& rLocalName);
@@ -131,6 +134,7 @@ public:
     virtual void SAL_CALL endDocument() override;
 
     const SvXMLTokenMap& GetDocElemTokenMap() const;
+    const SvXMLTokenMap& GetDocContentElemTokenMap() const;
     const SvXMLTokenMap& GetReportElemTokenMap() const;
     const SvXMLTokenMap& GetGroupElemTokenMap() const;
     const SvXMLTokenMap& GetSectionElemTokenMap() const;
@@ -227,6 +231,21 @@ public:
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
+
+class RptXMLDocumentBodyContext : public SvXMLImportContext
+{
+public:
+    RptXMLDocumentBodyContext(SvXMLImport & rImport,
+           sal_uInt16 const nPrefix,
+           const OUString& rLocalName)
+        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    {
+    }
+
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
+           const OUString& rLocalName,
+           const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+};
 
 } // rptxml
 

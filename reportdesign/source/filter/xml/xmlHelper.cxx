@@ -352,6 +352,7 @@ SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
         { XML_NAMESPACE_DRAW,   XML_NAME,                       XML_TOK_REPORT_NAME             },
         { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS,       XML_TOK_MASTER_DETAIL_FIELDS    },
         { XML_NAMESPACE_DRAW,   XML_FRAME,                      XML_TOK_SUB_FRAME               },
+        { XML_NAMESPACE_OFFICE, XML_BODY,                       XML_TOK_SUB_BODY },
         XML_TOKEN_MAP_END
     };
     return new SvXMLTokenMap( aElemTokenMap );
