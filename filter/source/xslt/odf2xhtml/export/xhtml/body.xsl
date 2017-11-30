@@ -1483,27 +1483,32 @@
     <xsl:template match="draw:image | draw:object-ole">
         <xsl:param name="globalData"/>
 
-        <xsl:choose>
-            <xsl:when test="ancestor::text:p or parent::text:span or parent::text:h or parent::draw:a or parent::text:a or text:ruby-base">
-                <!-- XHTML does not allow the mapped elements to contain paragraphs -->
-                <xsl:call-template name="create-image-element">
-                    <xsl:with-param name="globalData" select="$globalData"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- images are embedded in a paragraph, but are in CSS not able to express a horizontal alignment for themself.
-                    A 'div' element taking over the image style would solve that problem, but is invalid as child of a paragraph -->
-                <xsl:element name="p">
-                    <xsl:apply-templates select="@draw:style-name">
-                        <xsl:with-param name="globalData" select="$globalData"/>
-                    </xsl:apply-templates>
-
+        <!-- If there is a replacement graphic, we take it.
+             It is a png which browsers are more likely able to render than the original graphic
+             which might have arbitrary formats. -->
+        <xsl:if test="not(following-sibling::draw:image)">
+            <xsl:choose>
+                <xsl:when test="ancestor::text:p or parent::text:span or parent::text:h or parent::draw:a or parent::text:a or text:ruby-base">
+                    <!-- XHTML does not allow the mapped elements to contain paragraphs -->
                     <xsl:call-template name="create-image-element">
                         <xsl:with-param name="globalData" select="$globalData"/>
                     </xsl:call-template>
-                </xsl:element>
-            </xsl:otherwise>
-        </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- images are embedded in a paragraph, but are in CSS not able to express a horizontal alignment for themself.
+                        A 'div' element taking over the image style would solve that problem, but is invalid as child of a paragraph -->
+                    <xsl:element name="p">
+                        <xsl:apply-templates select="@draw:style-name">
+                            <xsl:with-param name="globalData" select="$globalData"/>
+                        </xsl:apply-templates>
+
+                        <xsl:call-template name="create-image-element">
+                            <xsl:with-param name="globalData" select="$globalData"/>
+                        </xsl:call-template>
+                    </xsl:element>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="create-image-element">
