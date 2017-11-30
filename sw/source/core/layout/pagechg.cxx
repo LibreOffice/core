@@ -94,7 +94,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             nHeight = 0;
         Frame().Height( nHeight );
 
-        if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != Frame().Width() )
+        if( IsVertical() && !IsVertLR() && nWidth != Frame().Width() )
             Frame().Pos().setX(Frame().Pos().getX() + Frame().Width() - nWidth);
         Frame().Width( nWidth );
     }
@@ -326,7 +326,6 @@ void SwPageFrame::CheckDirection( bool bVert )
             }
         }
 
-        mbReverse = false;
         mbInvalidVert = false;
     }
     else

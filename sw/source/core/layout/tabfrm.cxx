@@ -4340,7 +4340,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             SwTwips nHeight = (Frame().*fnRect->fnGetHeight)();
             (Frame().*fnRect->fnSetHeight)( nHeight - nReal );
 
-            if( IsVertical() && !IsVertLR() && !bRev )
+            if( IsVertical() && !IsVertLR() )
                 Frame().Pos().X() += nReal;
         }
 
@@ -4356,7 +4356,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 SwTwips nHeight = (Frame().*fnRect->fnGetHeight)();
                 (Frame().*fnRect->fnSetHeight)( nHeight + nReal );
 
-                if( IsVertical() && !IsVertLR() && !bRev )
+                if( IsVertical() && !IsVertLR() )
                     Frame().Pos().X() -= nReal;
             }
             nReal = nTmp;

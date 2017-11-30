@@ -331,11 +331,7 @@ static SwRectFnCollection aVerticalLeftToRight = {
 
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
-
 SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
-
-SwRectFn fnRectB2T = &aBottomToTop;
-SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
 // #i65250#
 sal_uInt32 SwFrame::mnLastFrameId=0;

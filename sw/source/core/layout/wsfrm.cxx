@@ -56,7 +56,6 @@ using namespace ::com::sun::star;
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib ) :
     SwClient( pMod ),
     mbIfAccTableShouldDisposing( false ), //A member to identify if the acc table should dispose
-    mbInDtor(false),
     mnFrameId( SwFrame::mnLastFrameId++ ),
     mpRoot( pSib ? pSib->getRootFrame() : nullptr ),
     mpUpper(nullptr),
@@ -64,6 +63,19 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib ) :
     mpPrev(nullptr),
     mpDrawObjs(nullptr),
     mnFrameType(SwFrameType::None),
+    mbInDtor(false),
+    mbInvalidR2L(true),
+    mbDerivedR2L(false),
+    mbRightToLeft(false),
+    mbInvalidVert(true),
+    mbDerivedVert(false),
+    mbVertical(false),
+    mbVertLR(false),
+    mbValidLineNum(false),
+    mbFixSize(false),
+    mbCompletePaint(true),
+    mbRetouche(false),
+    mbInfInvalid(true),
     mbInfBody( false ),
     mbInfTab ( false ),
     mbInfFly ( false ),
@@ -73,7 +85,7 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib ) :
 {
     OSL_ENSURE( pMod, "No frame format given." );
     mbInvalidR2L = mbInvalidVert = true;
-    mbDerivedR2L = mbDerivedVert = mbRightToLeft = mbVertical = mbReverse = mbVertLR = false;
+    mbDerivedR2L = mbDerivedVert = mbRightToLeft = mbVertical = mbVertLR = false;
 
     mbValidPos = mbValidPrtArea = mbValidSize = mbValidLineNum = mbRetouche =
     mbFixSize = mbColLocked = false;
@@ -1488,7 +1500,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 if ( !bTst )
                 {
                     (pFrame->GetNext()->Frame().*fnRect->fnSetHeight)(nAddMax-nAdd);
-                    if( bVert && !bVertL2R && !bRev )
+                    if( bVert && !bVertL2R )
                         pFrame->GetNext()->Frame().Pos().X() += nAdd;
                     pFrame->GetNext()->InvalidatePrt();
                     if ( pFrame->GetNext()->GetNext() )
@@ -1502,7 +1514,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     {
         SwTwips nTmp = (pFrame->Frame().*fnRect->fnGetHeight)();
         (pFrame->Frame().*fnRect->fnSetHeight)( nTmp - nReal );
-        if( bVert && !bVertL2R && !bRev )
+        if( bVert && !bVertL2R )
             pFrame->Frame().Pos().X() += nReal;
         pFrame->InvalidatePrt();
         if ( pFrame->GetNext() )
@@ -1725,7 +1737,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         if ( !bTst )
         {
             (Frame().*fnRect->fnSetHeight)( nFrameHeight + nDist );
-            if( IsVertical() && !IsVertLR() && !IsReverse() )
+            if( IsVertical() && !IsVertLR() )
                 Frame().Pos().X() -= nDist;
             if ( GetNext() )
             {
@@ -1756,7 +1768,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         //Contents are always resized to the wished value.
         long nOld = (Frame().*fnRect->fnGetHeight)();
         (Frame().*fnRect->fnSetHeight)( nOld + nDist );
-        if( IsVertical()&& !IsVertLR() && !IsReverse() )
+        if( IsVertical()&& !IsVertLR() )
             Frame().Pos().X() -= nDist;
         SwTabFrame *pTab = (nOld && IsInTab()) ? FindTabFrame() : nullptr;
         if (pTab)
@@ -2229,7 +2241,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     SwRect aOldFrame( Frame() );
     bool bMoveAccFrame = false;
 
-    bool bChgPos = IsVertical() && !IsReverse();
+    bool bChgPos = IsVertical();
     if ( !bTst )
     {
         (Frame().*fnRect->fnSetHeight)( nFrameHeight + nDist );
@@ -2390,7 +2402,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         nDist = nFrameHeight;
 
     SwTwips nMin = 0;
-    bool bChgPos = IsVertical() && !IsReverse();
+    bool bChgPos = IsVertical();
     if ( Lower() )
     {
         if( !Lower()->IsNeighbourFrame() )

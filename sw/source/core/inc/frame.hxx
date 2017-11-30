@@ -149,7 +149,6 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
     static SwCache *mpCache;
 
     bool mbIfAccTableShouldDisposing;
-    bool mbInDtor;
 
     // #i65250#
     // frame ID is now in general available - used for layout loop control
@@ -236,8 +235,7 @@ protected:
 
     SwFrameType mnFrameType;  //Who am I?
 
-    bool mbReverse     : 1; // Next line above/at the right side instead
-                                 // under/at the left side of the previous line
+    bool mbInDtor      : 1;
     bool mbInvalidR2L  : 1;
     bool mbDerivedR2L  : 1;
     bool mbRightToLeft : 1;
@@ -438,9 +436,7 @@ public:
 
     bool IsInBalancedSection() const;
 
-    inline bool IsReverse() const { return mbReverse; }
     inline bool IsVertical() const;
-
     inline bool IsVertLR() const;
     inline bool GetVerticalFlag() const { return mbVertical; }
 
@@ -1152,27 +1148,23 @@ struct SwRectFnCollection
 
 typedef SwRectFnCollection* SwRectFn;
 
-extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
+extern SwRectFn fnRectHori, fnRectVert, fnRectVertL2R;
 #define SWRECTFN( pFrame )    bool bVert = pFrame->IsVertical(); \
-                            bool bRev = pFrame->IsReverse(); \
                             bool bVertL2R = pFrame->IsVertLR(); \
                             SwRectFn fnRect = bVert ? \
-                                ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
-                                ( bRev ? fnRectB2T : fnRectHori );
+                                ( bVertL2R ? fnRectVertL2R : fnRectVert ): \
+                                fnRectHori;
 #define SWRECTFNX( pFrame )   bool bVertX = pFrame->IsVertical(); \
-                            bool bRevX = pFrame->IsReverse(); \
                             bool bVertL2RX = pFrame->IsVertLR(); \
                             SwRectFn fnRectX = bVertX ? \
-                                ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
-                                ( bRevX ? fnRectB2T : fnRectHori );
-#define SWREFRESHFN( pFrame ) { if( bVert != pFrame->IsVertical() || \
-                                  bRev  != pFrame->IsReverse() ) \
+                                ( bVertL2RX ? fnRectVertL2R : fnRectVert ): \
+                                fnRectHori;
+#define SWREFRESHFN( pFrame ) { if( bVert != pFrame->IsVertical() ) \
                                 bVert = pFrame->IsVertical(); \
-                                bRev = pFrame->IsReverse(); \
                                 bVertL2R = pFrame->IsVertLR(); \
                                 fnRect = bVert ? \
-                                    ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
-                                    ( bRev ? fnRectB2T : fnRectHori ); }
+                                    ( bVertL2R ? fnRectVertL2R : fnRectVert ): \
+                                    fnRectHori; }
 
 #define POS_DIFF( aFrame1, aFrame2 ) \
             ( (aFrame1.*fnRect->fnGetTop)() != (aFrame2.*fnRect->fnGetTop)() || \
