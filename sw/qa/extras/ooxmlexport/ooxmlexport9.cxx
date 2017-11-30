@@ -614,8 +614,9 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkSize, "watermark.docx")
     // Rounding errors
     sal_Int32 nDifference = 5198 - nTotalHeight;
     std::stringstream ss;
-    ss << "Difference: " << nDifference;
+    ss << "Difference: " << nDifference << " TotalHeight: " << nTotalHeight;
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference <= 4);
+    CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
