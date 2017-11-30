@@ -52,6 +52,7 @@ class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 
     size_t mnHashValue;
     ScFormulaVectorState meVectorState;
+    bool mbHasTokensBlacklistedForThreading;
 
 public:
     ScTokenArray();
@@ -261,6 +262,8 @@ public:
     bool NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const;
 
     sal_Int32 GetWeight() const;
+
+    bool HasBlacklistedTokenForThreading() const { return mbHasTokensBlacklistedForThreading; }
 
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;

@@ -362,7 +362,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 
     SvNumberFormatter* pFormatter = rDoc.GetNonThreadedContext().GetFormatTable();
 
-    if (bUseThreading)
+    if (bUseThreading && !rCode.HasBlacklistedTokenForThreading())
     {
         comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
         sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
