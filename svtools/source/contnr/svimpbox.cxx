@@ -338,7 +338,7 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
     }
     else
     {
-        nDelta *= (-1);
+        nDelta *= -1;
         if( nDelta == 1 )
             CursorUp();
         else

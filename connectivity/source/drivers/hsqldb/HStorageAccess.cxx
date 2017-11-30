@@ -164,7 +164,7 @@ jint read_from_storage_stream( JNIEnv * env, jstring name, jstring key )
         }
         if (nBytesRead <= 0)
         {
-            return (-1);
+            return -1;
         }
         else
         {

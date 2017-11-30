@@ -2865,7 +2865,7 @@ void WW8TabDesc::FinishSwTable()
                     {
                         const long nRowSpanSet = (n == 0) && (i == 0) ?
                             nRowSpan :
-                            ((-1) * (nRowSpan - n));
+                            (-1 * (nRowSpan - n));
                         SwTableBox* pCurrentBox = rRow[i];
                         pCurrentBox->setRowSpan(nRowSpanSet);
 

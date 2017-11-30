@@ -423,7 +423,7 @@ OUString lcl_getGridCIDForCommand( const OString& rDispatchCommand, const uno::R
 
     uno::Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, true/*bMainAxis*/, xDiagram ) );
 
-    sal_Int32   nSubGridIndex= bMainGrid ? (-1) : 0;
+    sal_Int32   nSubGridIndex= bMainGrid ? -1 : 0;
     OUString aCID( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGridIndex ) );
     return aCID;
 }

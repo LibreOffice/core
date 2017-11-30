@@ -80,7 +80,7 @@ namespace ftp {
         FTPDirentry()
             : m_aDate(),
               m_nMode(INETCOREFTP_FILEMODE_UNKNOWN),
-              m_nSize((sal_uInt32)(-1)) { }
+              m_nSize((sal_uInt32)-1) { }
 
         void clear() {
             m_aURL.clear();

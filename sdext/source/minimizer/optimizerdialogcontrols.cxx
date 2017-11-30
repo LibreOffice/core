@@ -594,8 +594,8 @@ void OptimizerDialog::UpdateControlStatesPage4()
     bool bSaveAs( GetConfigProperty( TK_SaveAs, true ) );
     if ( mbIsReadonly )
     {
-        setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( false ) ) );
-        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16)( true ) ) );
+        setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)false ) );
+        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16)true ) );
     }
     else
     {

@@ -1849,7 +1849,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
             TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
             SAL_WARN_IF( !pTP, "vcl", "RecalcTextPortion: Portion not found!"  );
             pTP->GetLen() += nNewChars;
-            pTP->GetWidth() = (-1);
+            pTP->GetWidth() = -1;
         }
     }
     else

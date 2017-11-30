@@ -152,13 +152,13 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                          ( pOwner->ImplGetOutlinerMode() != OutlinerMode::TitleObject ) &&
                          ( bSelection || !aSel.nStartPos ) )
                     {
-                        Indent( aKeyCode.IsShift() ? (-1) : (+1) );
+                        Indent( aKeyCode.IsShift() ? -1 : +1 );
                         bKeyProcessed = true;
                     }
                     else if ( ( pOwner->ImplGetOutlinerMode() == OutlinerMode::TextObject ) &&
                               !bSelection && !aSel.nEndPos && pOwner->ImplHasNumberFormat( aSel.nEndPara ) )
                     {
-                        Indent( aKeyCode.IsShift() ? (-1) : (+1) );
+                        Indent( aKeyCode.IsShift() ? -1 : +1 );
                         bKeyProcessed = true;
                     }
                 }

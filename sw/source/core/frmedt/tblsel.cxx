@@ -606,7 +606,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                                     aRectFnSet.GetLeft(rCF.pFrame->getFrameArea()) ) &&
                          nHeight == aRectFnSet.GetHeight(rCF.pFrame->getFrameArea()) )
                 {
-                    nXPos += ( bRTL ? (-1) : 1 ) *
+                    nXPos += ( bRTL ? -1 : 1 ) *
                              aRectFnSet.GetWidth(rCF.pFrame->getFrameArea());
                     ++nCellCnt;
                 }
@@ -1509,7 +1509,7 @@ static SwTwips lcl_CalcWish( const SwLayoutFrame *pCell, long nWish,
             pTmp = static_cast<const SwLayoutFrame*>(pTmp->GetPrev());
             sal_Int64 nTmp = pTmp->GetFormat()->GetFrameSize().GetWidth();
             // multiply in 64-bit to avoid overflow here!
-            nRet += ( bRTL ? ( -1 ) : 1 ) * nTmp * nAct / nWish;
+            nRet += ( bRTL ? -1 : 1 ) * nTmp * nAct / nWish;
         }
         pTmp = pTmp->GetUpper()->GetUpper();
         if ( pTmp && !pTmp->IsCellFrame() )

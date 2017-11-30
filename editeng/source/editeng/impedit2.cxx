@@ -1454,7 +1454,7 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM )
         if ( aBoundary.startPos >= nCurrentPos )
             aBoundary = _xBI->previousWord(
                 aNewPaM.GetNode()->GetString(), nCurrentPos, aLocale, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
-        aNewPaM.SetIndex( ( aBoundary.startPos != (-1) ) ? aBoundary.startPos : 0 );
+        aNewPaM.SetIndex( ( aBoundary.startPos != -1 ) ? aBoundary.startPos : 0 );
     }
 
     return aNewPaM;
@@ -1674,7 +1674,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         short nScriptType = _xBI->getScriptType( aText, nPos );
         rTypes.emplace_back( nScriptType, nPos, nTextLen );
         nPos = _xBI->endOfScript( aText, nPos, nScriptType );
-        while ( ( nPos != (-1) ) && ( nPos < nTextLen ) )
+        while ( ( nPos != -1 ) && ( nPos < nTextLen ) )
         {
             rTypes.back().nEndPos = nPos;
 

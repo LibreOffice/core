@@ -122,7 +122,7 @@ sal_Bool UnoPropertyArrayHelper::hasPropertyByName(const OUString& rPropertyName
 sal_Int32 UnoPropertyArrayHelper::getHandleByName( const OUString & rPropertyName )
 {
     sal_Int32 nId = (sal_Int32 ) GetPropertyId( rPropertyName );
-    return nId ? nId : (-1);
+    return nId ? nId : -1;
 }
 
 sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const css::uno::Sequence< OUString > & rPropNames )
