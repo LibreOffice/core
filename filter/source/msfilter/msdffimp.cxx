@@ -4416,16 +4416,18 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put(makeSdrTextAutoGrowWidthItem(false));
 
                         double fRatio = 0;
-                        OutputDevice* pOut = Application::GetDefaultDevice();
-                        vcl::Font aFont( pOut->GetFont() );
+                        VirtualDevice aDevice;
+                        vcl::Font aFont = aDevice.GetFont();
                         aFont.SetFamilyName( aFontName );
-                        tools::Rectangle aBoundingRect;
-                        pOut->GetTextBoundRect( aBoundingRect, aObjectText );
+                        aFont.SetFontSize( Size( 0, 96 ) );
+                        aDevice.SetFont( aFont );
 
-                        OUString aObjName = GetPropertyString(DFF_Prop_wzName, rSt);
-                        if ( aBoundingRect.GetWidth() && aObjData.eShapeType == mso_sptTextPlainText && aObjName.match( "PowerPlusWaterMarkObject" ) )
+                        auto nTextWidth = aDevice.GetTextWidth( aObjectText );
+                        OUString aObjName = GetPropertyString( DFF_Prop_wzName, rSt );
+                        if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText
+                            && aObjName.match( "PowerPlusWaterMarkObject" ) )
                         {
-                            fRatio = (double)aBoundingRect.GetHeight() / aBoundingRect.GetWidth();
+                            fRatio = (double)aDevice.GetTextHeight() / nTextWidth;
                             sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
                             sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
 
