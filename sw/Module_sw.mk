@@ -52,6 +52,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sw_uwriter) \
     CppunitTest_sw_docbookexport \
+    CppunitTest_sw_fodfexport \
     CppunitTest_sw_htmlexport \
     CppunitTest_sw_htmlimport \
     CppunitTest_sw_macros_test \
