@@ -248,11 +248,19 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
 
     OString sUrl;
 
-    task::DocumentPasswordRequest2 passwordRequest;
+    task::DocumentPasswordRequest passwordRequest;
     if (rRequest >>= passwordRequest)
     {
-        bIsRequestPasswordToModify = passwordRequest.IsRequestPasswordToModify;
+        bIsRequestPasswordToModify = false;
         sUrl = passwordRequest.Name.toUtf8();
+        bPasswordRequestFound = true;
+    }
+
+    task::DocumentPasswordRequest2 passwordRequest2;
+    if (rRequest >>= passwordRequest2)
+    {
+        bIsRequestPasswordToModify = passwordRequest2.IsRequestPasswordToModify;
+        sUrl = passwordRequest2.Name.toUtf8();
         bPasswordRequestFound = true;
     }
 
