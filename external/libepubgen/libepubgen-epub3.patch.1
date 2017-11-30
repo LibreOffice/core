@@ -4467,3 +4467,33 @@ index 3f4bf3c..cbb83b7 100644
 -- 
 2.13.6
 
+From 631b21834883aa8f2ee83a20717dd37900331696 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 21 Nov 2017 11:52:03 +0100
+Subject: [PATCH] EPUBGenerator: allow overwriting dc:identifier default
+
+All other types had a way to be overwritten.
+---
+ src/lib/EPUBGenerator.cpp          | 5 ++++-
+ src/test/EPUBTextGeneratorTest.cpp | 3 +++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 62dac6e..1cb1112 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -285,7 +285,10 @@ void EPUBGenerator::writeRoot()
+   boost::uuids::uuid uuid = boost::uuids::random_generator()();
+   identifierStream << uuid;
+   std::string identifierCharactrs = identifierStream.str();
+-  sink.insertCharacters(identifierCharactrs.c_str());
++  RVNGString identifier = identifierCharactrs.c_str();
++  if (m_metadata["dc:identifier"] && !m_metadata["dc:identifier"]->getStr().empty())
++    identifier = m_metadata["dc:identifier"]->getStr();
++  sink.insertCharacters(identifier);
+   sink.closeElement("dc:identifier");
+ 
+   RVNGString title("Unknown Title");
+-- 
+2.13.6
+

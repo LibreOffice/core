@@ -131,6 +131,9 @@ void XMLMetaInitialCreatorContext::characters(const OUString &rChars)
 XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
+    librevenge::RVNGPropertyList::Iter it(mrImport.GetMetaData());
+    for (it.rewind(); it.next();)
+        m_aPropertyList.insert(it.key(), it()->clone());
     m_aPropertyList.insert("librevenge:cover-images", mrImport.GetCoverImages());
 }
 
@@ -152,6 +155,94 @@ rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(cons
 void XMLMetaDocumentContext::endElement(const OUString &/*rName*/)
 {
     mrImport.GetGenerator().setDocumentMetaData(m_aPropertyList);
+}
+
+XMPParser::XMPParser() = default;
+
+XMPParser::~XMPParser() = default;
+
+void XMPParser::startDocument()
+{
+}
+
+void XMPParser::endDocument()
+{
+}
+
+void XMPParser::startElement(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    if (rName == "dc:identifier")
+        m_bInIdentifier = true;
+    else if (rName == "dc:title")
+        m_bInTitle = true;
+    else if (rName == "dc:creator")
+        m_bInCreator = true;
+    else if (rName == "dc:language")
+        m_bInLanguage = true;
+    else if (rName == "dc:date")
+        m_bInDate = true;
+    else if (rName == "rdf:li")
+    {
+        if (m_bInTitle)
+            m_bInTitleItem = true;
+        else if (m_bInCreator)
+            m_bInCreatorItem = true;
+        else if (m_bInLanguage)
+            m_bInLanguageItem = true;
+        else if (m_bInDate)
+            m_bInDateItem = true;
+    }
+}
+
+void XMPParser::endElement(const OUString &rName)
+{
+    if (rName == "dc:identifier")
+        m_bInIdentifier = false;
+    else if (rName == "dc:title")
+        m_bInTitle = false;
+    else if (rName == "dc:creator")
+        m_bInCreator = false;
+    else if (rName == "dc:language")
+        m_bInLanguage = false;
+    else if (rName == "dc:date")
+        m_bInDate = false;
+    else if (rName == "rdf:li")
+    {
+        if (m_bInTitle)
+            m_bInTitleItem = false;
+        else if (m_bInCreator)
+            m_bInCreatorItem = false;
+        else if (m_bInLanguage)
+            m_bInLanguageItem = false;
+        else if (m_bInDate)
+            m_bInDateItem = false;
+    }
+}
+
+void XMPParser::characters(const OUString &rChars)
+{
+    if (m_bInIdentifier)
+        m_aIdentifier += rChars;
+    else if (m_bInTitleItem)
+        m_aTitle += rChars;
+    else if (m_bInCreatorItem)
+        m_aCreator += rChars;
+    else if (m_bInLanguageItem)
+        m_aLanguage += rChars;
+    else if (m_bInDateItem)
+        m_aDate += rChars;
+}
+
+void XMPParser::ignorableWhitespace(const OUString &/*rWhitespace*/)
+{
+}
+
+void XMPParser::processingInstruction(const OUString &/*rTarget*/, const OUString &/*rData*/)
+{
+}
+
+void XMPParser::setDocumentLocator(const uno::Reference<xml::sax::XLocator> &/*xLocator*/)
+{
 }
 
 } // namespace exp

@@ -61,6 +61,7 @@ public:
     void testSpanAutostyle();
     void testParaAutostyleCharProps();
     void testMeta();
+    void testMetaXMP();
     void testCoverImage();
     void testParaNamedstyle();
     void testCharNamedstyle();
@@ -94,6 +95,7 @@ public:
     CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST(testParaAutostyleCharProps);
     CPPUNIT_TEST(testMeta);
+    CPPUNIT_TEST(testMetaXMP);
     CPPUNIT_TEST(testCoverImage);
     CPPUNIT_TEST(testParaNamedstyle);
     CPPUNIT_TEST(testCharNamedstyle);
@@ -333,6 +335,19 @@ void EPUBExportTest::testMeta()
     assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "properties", "cover-image");
     assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "media-type", "image/png");
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
+}
+
+void EPUBExportTest::testMetaXMP()
+{
+    createDoc("meta-xmp.fodt", {});
+    mpXmlDoc = parseExport("OEBPS/content.opf");
+
+    // These were the libepubgen default values, metadata from a matching .xmp file was not picked up.
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:identifier", "deadbeef-e394-4cd6-9b83-7172794612e5");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "unknown title from xmp");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "unknown author from xmp");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:language", "nl");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2016-11-20T17:16:07Z");
 }
 
 void EPUBExportTest::testCoverImage()
