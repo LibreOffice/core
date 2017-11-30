@@ -1741,7 +1741,6 @@ compilerplugins/clang/faileddyncast.cxx
 compilerplugins/clang/finalclasses.cxx
 compilerplugins/clang/finalprotected.cxx
 compilerplugins/clang/flatten.cxx
-compilerplugins/clang/fpcomparison.cxx
 compilerplugins/clang/fragiledestructor.cxx
 compilerplugins/clang/functionaddress.hxx
 compilerplugins/clang/getimplementationname.cxx
@@ -1800,6 +1799,7 @@ compilerplugins/clang/store/defaultparams.cxx
 compilerplugins/clang/store/deletedspecial.cxx
 compilerplugins/clang/store/derivedclass.cxx
 compilerplugins/clang/store/findoncontainer.cxx
+compilerplugins/clang/store/fpcomparison.cxx
 compilerplugins/clang/store/lclstaticfix.cxx
 compilerplugins/clang/store/lclstaticfix.hxx
 compilerplugins/clang/store/manualrefcount.cxx
