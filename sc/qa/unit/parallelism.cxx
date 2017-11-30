@@ -45,11 +45,13 @@ public:
     void testSUMIFS();
     void testDivision();
     void testVLOOKUP();
+    void testVLOOKUPSUM();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
     CPPUNIT_TEST(testDivision);
     CPPUNIT_TEST(testVLOOKUP);
+    CPPUNIT_TEST(testVLOOKUPSUM);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -259,6 +261,38 @@ void ScParallelismTest::testVLOOKUP()
         }
     }
 
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testVLOOKUPSUM()
+{
+    m_pDoc->InsertTab(0, "1");
+
+    const size_t nNumRows = 4096*4;
+    OUString aTableRef = "$A$1:$B$" + OUString::number(nNumRows);
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        m_pDoc->SetValue(0, i, 0, static_cast<double>(i));
+        m_pDoc->SetValue(1, i, 0, static_cast<double>(5*i + 100));
+        m_pDoc->SetValue(2, i, 0, static_cast<double>(nNumRows - i - 1));
+    }
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OUString aArgNum = "C" + OUString::number(i+1);
+        m_pDoc->SetFormula(ScAddress(3, i, 0),
+                           "=SUM(" + aArgNum + ";VLOOKUP(" + aArgNum + ";" + aTableRef + "; 2; 0)) + SUM($A1:$A2)",
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    size_t nArg;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OString aMsg = "At row " + OString::number(i);
+        nArg = nNumRows - i - 1;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), 6*nArg + 101, static_cast<size_t>(m_pDoc->GetValue(3, i, 0)));
+    }
     m_pDoc->DeleteTab(0);
 }
 

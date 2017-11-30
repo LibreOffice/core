@@ -59,7 +59,6 @@ enum ScFormulaVectorState
 
     FormulaVectorEnabled,
     FormulaVectorCheckReference,
-    FormulaVectorEnabledForThreading,
     FormulaVectorUnknown
 };
 
