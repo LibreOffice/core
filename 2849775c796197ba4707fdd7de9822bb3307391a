@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e179a0c9",
+        "filename": "sfx2/source/control/charwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-30T10:08:15Z",
+      "side": 0,
+      "message": "You might also remove the definition in the header file.",
+      "revId": "2849775c796197ba4707fdd7de9822bb3307391a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_01778cd3",
+        "filename": "sfx2/source/control/charwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-30T10:08:15Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "2849775c796197ba4707fdd7de9822bb3307391a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
