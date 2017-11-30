@@ -357,12 +357,13 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     };
 
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
+    static const bool bThreadingEnabled = officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
 
-    bool bUseThreading = !bThreadingProhibited && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
+    bool bUseThreading = !bThreadingProhibited && bThreadingEnabled;
 
     SvNumberFormatter* pFormatter = rDoc.GetNonThreadedContext().GetFormatTable();
 
-    if (bUseThreading)
+    if (bUseThreading && !rCode.HasBlacklistedTokenForThreading())
     {
         comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
         sal_Int32 nThreadCount = rThreadPool.getWorkerCount();

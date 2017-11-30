@@ -4325,6 +4325,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
     }
 
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
+    static const bool bOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
+    static const bool bThreadingEnabled = officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
 
     // To temporarily use threading for sc unit tests regardless of the size of the formula group,
     // add the condition !std::getenv("LO_TESTNAME") below (with &&)
@@ -4342,9 +4344,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() &&
+    if (!bThreadingProhibited && !bOpenCLEnabled &&
         pCode->GetVectorState() == FormulaVectorEnabledForThreading &&
-        officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
+        bThreadingEnabled)
     {
         // iterate over code in the formula ...
         // ensure all input is pre-calculated -

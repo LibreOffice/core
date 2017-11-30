@@ -1350,13 +1350,20 @@ void ScTokenArray::CheckForThreading( OpCode eOp  )
     // We only call this if it was already disabled
     assert(IsFormulaVectorDisabled());
 
-    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
+    if (mbHasTokensBlacklistedForThreading)
+        return;
 
-    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
+    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
+    static const bool bOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
+    static const bool bThreadingEnabled = officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
+
+    if (!bThreadingProhibited && !bOpenCLEnabled && bThreadingEnabled)
     {
         if (aThreadedCalcBlackList.count(eOp))
         {
             SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables threaded calculation of formula group");
+            mbHasTokensBlacklistedForThreading = true;
+            meVectorState = FormulaVectorDisabled;
         }
         else
         {
@@ -1369,8 +1376,11 @@ void ScTokenArray::CheckForThreading( OpCode eOp  )
 void ScTokenArray::CheckToken( const FormulaToken& r )
 {
     if (IsFormulaVectorDisabled())
+    {
+        CheckForThreading( r.GetOpCode() );
         // It's already disabled.  No more checking needed.
         return;
+    }
 
     OpCode eOp = r.GetOpCode();
 
@@ -1828,14 +1838,16 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
     mnHashValue(0),
-    meVectorState(FormulaVectorEnabled)
+    meVectorState(FormulaVectorEnabled),
+    mbHasTokensBlacklistedForThreading(false)
 {
 }
 
 ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
     FormulaTokenArray(rArr),
     mnHashValue(rArr.mnHashValue),
-    meVectorState(rArr.meVectorState)
+    meVectorState(rArr.meVectorState),
+    mbHasTokensBlacklistedForThreading(rArr.mbHasTokensBlacklistedForThreading)
 {
 }
 
