@@ -254,8 +254,10 @@ ClientData::ClientData() :
 {
 }
 
-ShapeModel::ShapeModel() :
-    mbIsSignatureLine(false)
+ShapeModel::ShapeModel()
+    : mbIsSignatureLine(false)
+    , mbSignatureLineShowSignDate(true)
+    , mbSignatureLineCanAddComment(false)
 {
 }
 
