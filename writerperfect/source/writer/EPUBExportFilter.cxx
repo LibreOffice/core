@@ -79,7 +79,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     uno::Reference<frame::XModel> xSourceModel(mxSourceDocument, uno::UNO_QUERY);
     if (xSourceModel.is())
         aSourceURL = xSourceModel->getURL();
-    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator, aSourceURL, rDescriptor));
+    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(mxContext, aGenerator, aSourceURL, rDescriptor));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
     xInitialization->initialize({uno::makeAny(xExportHandler)});

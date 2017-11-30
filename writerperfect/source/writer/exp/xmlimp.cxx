@@ -12,9 +12,12 @@
 #include <initializer_list>
 #include <unordered_map>
 
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <rtl/uri.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include "xmlfmt.hxx"
 #include "xmlictxt.hxx"
@@ -46,26 +49,16 @@ OUString GetMimeType(const OUString &rExtension)
 }
 
 /// Picks up a cover image from the base directory.
-OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, const uno::Sequence<beans::PropertyValue> &rDescriptor)
+OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, const uno::Sequence<beans::PropertyValue> &rFilterData)
 {
     OUString aRet;
 
     // See if filter data contains a cover image explicitly.
-    uno::Sequence<beans::PropertyValue> aFilterData;
-    for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
+    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
     {
-        if (rDescriptor[i].Name == "FilterData")
+        if (rFilterData[i].Name == "EPUBCoverImage")
         {
-            rDescriptor[i].Value >>= aFilterData;
-            break;
-        }
-    }
-
-    for (sal_Int32 i = 0; i < aFilterData.getLength(); ++i)
-    {
-        if (aFilterData[i].Name == "EPUBCoverImage")
-        {
-            aFilterData[i].Value >>= aRet;
+            rFilterData[i].Value >>= aRet;
             break;
         }
     }
@@ -99,7 +92,7 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
         }
         catch (const rtl::MalformedUriException &rException)
         {
-            SAL_WARN("writerfilter", "FindCoverImage: convertRelToAbs() failed:" << rException.getMessage());
+            SAL_WARN("writerperfect", "FindCoverImage: convertRelToAbs() failed:" << rException.getMessage());
         }
 
         if (!aRet.isEmpty())
@@ -117,6 +110,57 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
     }
 
     return aRet;
+}
+
+/// Picks up XMP metadata from the base directory.
+void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &/*rFilterData*/, librevenge::RVNGPropertyList &rMetaData)
+{
+    if (rDocumentBaseURL.isEmpty())
+        return;
+
+    INetURLObject aDocumentBaseURL(rDocumentBaseURL);
+    OUString aURL;
+    try
+    {
+        aURL = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aDocumentBaseURL.GetBase() + ".xmp");
+    }
+    catch (const rtl::MalformedUriException &rException)
+    {
+        SAL_WARN("writerperfect", "FindXMPMetadata: convertRelToAbs() failed:" << rException.getMessage());
+        return;
+    }
+
+    SvFileStream aStream(aURL, StreamMode::READ);
+    if (!aStream.IsOpen())
+        return;
+
+    xml::sax::InputSource aInputSource;
+    uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(aStream));
+    aInputSource.aInputStream = xStream;
+    uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xContext);
+    rtl::Reference<XMPParser> xXMP(new XMPParser());
+    uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xXMP.get());
+    xParser->setDocumentHandler(xDocumentHandler);
+    try
+    {
+        xParser->parseStream(aInputSource);
+    }
+    catch (const uno::Exception &rException)
+    {
+        SAL_WARN("writerperfect", "FindXMPMetadata: parseStream() failed:" << rException.Message);
+        return;
+    }
+
+    if (!xXMP->m_aIdentifier.isEmpty())
+        rMetaData.insert("dc:identifier", xXMP->m_aIdentifier.toUtf8().getStr());
+    if (!xXMP->m_aTitle.isEmpty())
+        rMetaData.insert("dc:title", xXMP->m_aTitle.toUtf8().getStr());
+    if (!xXMP->m_aCreator.isEmpty())
+        rMetaData.insert("meta:initial-creator", xXMP->m_aCreator.toUtf8().getStr());
+    if (!xXMP->m_aLanguage.isEmpty())
+        rMetaData.insert("dc:language", xXMP->m_aLanguage.toUtf8().getStr());
+    if (!xXMP->m_aDate.isEmpty())
+        rMetaData.insert("dc:date", xXMP->m_aDate.toUtf8().getStr());
 }
 }
 
@@ -170,11 +214,22 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
     return nullptr;
 }
 
-XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor)
-    : mrGenerator(rGenerator)
+XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor)
+    : mrGenerator(rGenerator),
+      mxContext(xContext)
 {
+    uno::Sequence<beans::PropertyValue> aFilterData;
+    for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
+    {
+        if (rDescriptor[i].Name == "FilterData")
+        {
+            rDescriptor[i].Value >>= aFilterData;
+            break;
+        }
+    }
+
     OUString aMimeType;
-    OUString aCoverImage = FindCoverImage(rURL, aMimeType, rDescriptor);
+    OUString aCoverImage = FindCoverImage(rURL, aMimeType, aFilterData);
     if (!aCoverImage.isEmpty())
     {
         librevenge::RVNGBinaryData aBinaryData;
@@ -187,11 +242,18 @@ XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator, const OUString &
         aCoverImageProperties.insert("librevenge:mime-type", aMimeType.toUtf8().getStr());
         maCoverImages.append(aCoverImageProperties);
     }
+
+    FindXMPMetadata(mxContext, rURL, aFilterData, maMetaData);
 }
 
 const librevenge::RVNGPropertyListVector &XMLImport::GetCoverImages()
 {
     return maCoverImages;
+}
+
+const librevenge::RVNGPropertyList &XMLImport::GetMetaData()
+{
+    return maMetaData;
 }
 
 rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
