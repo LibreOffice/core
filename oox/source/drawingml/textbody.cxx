@@ -73,7 +73,7 @@ void TextBody::insertAt(
 
 bool TextBody::isEmpty() const
 {
-    if ( maParagraphs.size() <= 0 )
+    if (maParagraphs.empty())
         return true;
     if ( maParagraphs.size() > 1 )
         return false;
