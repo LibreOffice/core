@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e18b60c1",
+        "filename": "solenv/clang-format/ClangFormat.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-30T09:39:06Z",
+      "side": 1,
+      "message": "Won\u0027t this break .git-hooks/pre-commit:160? It would say you have to download https://dev-www.libreoffice.org/bin/clang-format-5.0.0.*-$platform, which is a non-existing URL.\n\nsolenv/clang-format/ClangFormat.pm:112 could be adjusted instead, to match $version(-\\d+)?, not just $version. (In is_matching_clang_format_version()).",
+      "revId": "6c102a50f08dfcd290506b659f81e93098603934",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
