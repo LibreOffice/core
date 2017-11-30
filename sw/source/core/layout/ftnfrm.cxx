@@ -340,7 +340,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nDist );
 
-        if( IsVertical() && !IsVertLR() && !IsReverse() )
+        if( IsVertical() && !IsVertLR() )
         {
             aFrm.Pos().X() -= nDist;
         }
@@ -387,7 +387,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             aFrm.SSize().Height() -= nDist;
 
-            if( IsVertical() && !IsVertLR() && !IsReverse() )
+            if( IsVertical() && !IsVertLR() )
             {
                 aFrm.Pos().X() += nDist;
             }

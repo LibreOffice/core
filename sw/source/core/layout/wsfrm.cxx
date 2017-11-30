@@ -300,7 +300,6 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
     mpDrawObjs(nullptr),
     mnFrameType(SwFrameType::None),
     mbInDtor(false),
-    mbReverse(false),
     mbInvalidR2L(true),
     mbDerivedR2L(false),
     mbRightToLeft(false),
@@ -1787,7 +1786,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFrame->GetNext());
                         aRectFnSet.SetHeight(aFrm, nAddMax-nAdd);
 
-                        if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
+                        if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() )
                         {
                             aFrm.Pos().X() += nAdd;
                         }
@@ -1812,7 +1811,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFrame);
             aRectFnSet.SetHeight( aFrm, nTmp - nReal );
 
-            if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
+            if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() )
             {
                 aFrm.Pos().X() += nReal;
             }
@@ -2047,7 +2046,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aRectFnSet.SetHeight( aFrm, nFrameHeight + nDist );
 
-                if( IsVertical() && !IsVertLR() && !IsReverse() )
+                if( IsVertical() && !IsVertLR() )
                 {
                     aFrm.Pos().X() -= nDist;
                 }
@@ -2087,7 +2086,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
             aRectFnSet.SetHeight( aFrm, nOld + nDist );
 
-            if( IsVertical()&& !IsVertLR() && !IsReverse() )
+            if( IsVertical()&& !IsVertLR() )
             {
                 aFrm.Pos().X() -= nDist;
             }
@@ -2574,7 +2573,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     SwRect aOldFrame( getFrameArea() );
     bool bMoveAccFrame = false;
 
-    bool bChgPos = IsVertical() && !IsReverse();
+    bool bChgPos = IsVertical();
     if ( !bTst )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -2745,7 +2744,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         nDist = nFrameHeight;
 
     SwTwips nMin = 0;
-    bool bChgPos = IsVertical() && !IsReverse();
+    bool bChgPos = IsVertical();
     if ( Lower() )
     {
         if( !Lower()->IsNeighbourFrame() )

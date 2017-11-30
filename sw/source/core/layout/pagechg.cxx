@@ -99,7 +99,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Height( nHeight );
 
-        if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != aFrm.Width() )
+        if( IsVertical() && !IsVertLR() && nWidth != aFrm.Width() )
         {
             aFrm.Pos().setX(aFrm.Pos().getX() + aFrm.Width() - nWidth);
         }
@@ -353,7 +353,6 @@ void SwPageFrame::CheckDirection( bool bVert )
             }
         }
 
-        mbReverse = false;
         mbInvalidVert = false;
     }
     else
