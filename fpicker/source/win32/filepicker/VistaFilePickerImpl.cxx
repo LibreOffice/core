@@ -27,6 +27,8 @@
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <comphelper/sequence.hxx>
+#include <fpicker/strings.hrc>
+#include <fpsofficeResMgr.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
@@ -549,7 +551,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
     if ((nFeatures & FEATURE_VERSION) == FEATURE_VERSION)
     {
-        iCustom->StartVisualGroup (GROUP_VERSION, L"Version");
+        iCustom->StartVisualGroup (GROUP_VERSION, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_VERSION).replaceFirst("~","").getStr()));
         iCustom->AddComboBox      (css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_VERSION);
         iCustom->EndVisualGroup   ();
         iCustom->MakeProminent    (GROUP_VERSION);
@@ -557,7 +559,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
     if ((nFeatures & FEATURE_TEMPLATE) == FEATURE_TEMPLATE)
     {
-        iCustom->StartVisualGroup (GROUP_TEMPLATE, L"Template");
+        iCustom->StartVisualGroup (GROUP_TEMPLATE, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_TEMPLATES).replaceFirst("~","").getStr()));
         iCustom->AddComboBox      (css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_TEMPLATE);
         iCustom->EndVisualGroup   ();
         iCustom->MakeProminent    (GROUP_TEMPLATE);
@@ -565,7 +567,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
     if ((nFeatures & FEATURE_IMAGETEMPLATE) == FEATURE_IMAGETEMPLATE)
     {
-        iCustom->StartVisualGroup (GROUP_IMAGETEMPLATE, L"Style");
+        iCustom->StartVisualGroup (GROUP_IMAGETEMPLATE, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_IMAGE_TEMPLATE).replaceFirst("~","").getStr()));
         iCustom->AddComboBox      (css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE);
         iCustom->EndVisualGroup   ();
         iCustom->MakeProminent    (GROUP_IMAGETEMPLATE);
@@ -577,42 +579,42 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
     if ((nFeatures & FEATURE_AUTOEXTENSION) == FEATURE_AUTOEXTENSION)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION;
-        iCustom->AddCheckButton (nControlId, L"Auto Extension", true);
+        iCustom->AddCheckButton (nControlId, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_AUTO_EXTENSION).replaceFirst("~","").getStr()), true);
         setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_PASSWORD) == FEATURE_PASSWORD)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD;
-        iCustom->AddCheckButton (nControlId, L"Password", false);
+        iCustom->AddCheckButton (nControlId, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_PASSWORD).replaceFirst("~","").getStr()), false);
         setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_READONLY) == FEATURE_READONLY)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY;
-        iCustom->AddCheckButton (nControlId, L"Readonly", false);
+        iCustom->AddCheckButton (nControlId, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_READONLY).replaceFirst("~","").getStr()), false);
         setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_FILTEROPTIONS) == FEATURE_FILTEROPTIONS)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS;
-        iCustom->AddCheckButton (nControlId, L"Filter Options", false);
+        iCustom->AddCheckButton (nControlId, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_FILTER_OPTIONS).replaceFirst("~","").getStr()), false);
         setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_LINK) == FEATURE_LINK)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK;
-        iCustom->AddCheckButton (nControlId, L"Link", false);
+        iCustom->AddCheckButton (nControlId, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_INSERT_AS_LINK).replaceFirst("~","").getStr()), false);
         setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_SELECTION) == FEATURE_SELECTION)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION;
-        iCustom->AddCheckButton (nControlId, L"Selection", false);
+        iCustom->AddCheckButton (nControlId, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_SELECTION).replaceFirst("~","").getStr()), false);
         setLabelToControl(iCustom, nControlId);
     }
 
@@ -624,7 +626,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
     iCustom->EndVisualGroup();
 
     if ((nFeatures & FEATURE_PLAY) == FEATURE_PLAY)
-        iCustom->AddPushButton (css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, L"Play");
+        iCustom->AddPushButton (css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_PLAY).replaceFirst("~","").getStr()));
 
 }
 
