@@ -79,8 +79,8 @@ class EPUBExportTest(UITestCase):
         self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
         propertyValues = uiComponent.getPropertyValues()
         filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
-        # The EPUBCoverImage key was missing, EPUBExportDialog::OKClickHdl() did not set it.
-        coverImage = [i.Value for i in filterData if i.Name == "EPUBCoverImage"][0]
+        # The RVNGCoverImage key was missing, EPUBExportDialog::OKClickHdl() did not set it.
+        coverImage = [i.Value for i in filterData if i.Name == "RVNGCoverImage"][0]
         self.assertEqual("cover.png", coverImage)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
