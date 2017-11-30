@@ -113,6 +113,37 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
     return aRet;
 }
 
+/// Determines the base directory for cover images, XMP metadata, popup images.
+OUString FindMediaDir(const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &rFilterData)
+{
+    OUString aMediaDir;
+
+    // See if filter data contains a media directory explicitly.
+    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
+    {
+        if (rFilterData[i].Name == "RVNGMediaDir")
+        {
+            rFilterData[i].Value >>= aMediaDir;
+            break;
+        }
+    }
+
+    if (!aMediaDir.isEmpty())
+        return aMediaDir + "/";
+
+    // Not set explicitly, try to pick it up from the base directory.
+    INetURLObject aURL(rDocumentBaseURL);
+    try
+    {
+        aMediaDir = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aURL.GetBase()) + "/";
+    }
+    catch (const rtl::MalformedUriException &rException)
+    {
+        SAL_WARN("writerperfect", "FindMediaDir: convertRelToAbs() failed:" << rException.getMessage());
+    }
+    return aMediaDir;
+}
+
 /// Picks up XMP metadata from the base directory.
 void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &rFilterData, librevenge::RVNGPropertyList &rMetaData)
 {
@@ -256,6 +287,8 @@ XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, lib
         }
     }
 
+    maMediaDir = FindMediaDir(rURL, aFilterData);
+
     OUString aMimeType;
     OUString aCoverImage = FindCoverImage(rURL, aMimeType, aFilterData);
     if (!aCoverImage.isEmpty())
@@ -303,16 +336,7 @@ bool XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList
     if (!bRelative)
         return false;
 
-    OUString aAbs;
-    INetURLObject aBaseURL(maDocumentBaseURL);
-    try
-    {
-        aAbs = rtl::Uri::convertRelToAbs(maDocumentBaseURL, aBaseURL.GetBase() + "/" + rURL);
-    }
-    catch (const rtl::MalformedUriException &rException)
-    {
-        SAL_WARN("writerperfect", "XMLImport::FillPopupData: convertRelToAbs() failed:" << rException.getMessage());
-    }
+    OUString aAbs = maMediaDir + rURL;
     if (aAbs.isEmpty())
         return false;
 

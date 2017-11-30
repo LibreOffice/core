@@ -58,6 +58,7 @@ class XMLImport : public cppu::WeakImplHelper
     const css::uno::Reference<css::uno::XComponentContext> &mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maDocumentBaseURL;
+    OUString maMediaDir;
 
 public:
     XMLImport(const css::uno::Reference<css::uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
