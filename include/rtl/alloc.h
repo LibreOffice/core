@@ -294,6 +294,23 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 ) SAL_THROW_EXTERN_C();
 
 
+#ifdef LIBO_INTERNAL_ONLY
+
+/** rtl_alloc_preInit
+ *
+ * This function, is called at the beginning and again
+ * at the end of LibreOfficeKit pre-initialization to enable
+ * various optimizations. It is almost certainly not the method
+ * that you want.
+ *
+ * @since LibreOffice 6.1
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
+    sal_Bool start
+) SAL_THROW_EXTERN_C();
+
+#endif
+
 #ifdef __cplusplus
 }
 #endif

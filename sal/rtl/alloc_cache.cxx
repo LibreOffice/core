@@ -1290,6 +1290,26 @@ SAL_CALL rtl_cache_free (
     }
 }
 
+// FIXME: foreachFn called for free'd blocks and will break free-chains.
+extern "C" {
+void SAL_CALL rtl_cache_foreach(rtl_cache_type *cache, ArenaForeachFn foreachFn, void *user_data) SAL_THROW_EXTERN_C()
+{
+    for (rtl_cache_slab_type *cur = &(cache->m_used_head);
+         cur && cur->m_slab_next != &(cache->m_used_head);
+         cur = cur->m_slab_next)
+    {
+        for (char *item = reinterpret_cast<char *>(cur->m_data);
+             item < reinterpret_cast<char *>(cur->m_bp);
+             item += cache->m_type_size)
+        {
+            foreachFn(item, cache->m_type_size, user_data);
+        }
+    }
+
+    RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
+}
+} // extern "C"
+
 #if defined(SAL_UNX)
 
 void SAL_CALL

@@ -381,6 +381,8 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
     }
 }
 
+/* ================================================================= */
+
 void* SAL_CALL rtl_allocateAlignedMemory (sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     return osl_aligned_alloc(Alignment, Bytes);
@@ -390,7 +392,5 @@ void SAL_CALL rtl_freeAlignedMemory (void* Ptr) SAL_THROW_EXTERN_C()
 {
     osl_aligned_free(Ptr);
 }
-
-/* ================================================================= */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
