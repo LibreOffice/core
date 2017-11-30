@@ -62,8 +62,9 @@ one go*/
 #include "mathmlattr.hxx"
 #include "mathmlimport.hxx"
 #include "register.hxx"
-#include <unomodel.hxx>
 #include <document.hxx>
+#include <smdll.hxx>
+#include <unomodel.hxx>
 #include <utility.hxx>
 
 using namespace ::com::sun::star::beans;
@@ -3103,5 +3104,32 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
     }
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportMML(SvStream &rStream)
+{
+    SmGlobals::ensure();
+
+    SfxObjectShellLock xDocSh(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT));
+    xDocSh->DoInitNew();
+    uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
+
+    uno::Reference<beans::XPropertySet> xInfoSet;
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
+
+    //SetLoading hack because the document properties will be re-initted
+    //by the xml filter and during the init, while its considered uninitialized,
+    //setting a property will inform the document its modified, which attempts
+    //to update the properties, which throws cause the properties are uninitialized
+    xDocSh->SetLoading(SfxLoadedFlags::NONE);
+
+    auto nRet = SmXMLImportWrapper::ReadThroughComponent(xStream, xModel, xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false);
+
+    xDocSh->SetLoading(SfxLoadedFlags::ALL);
+
+    xDocSh->DoClose();
+
+    return nRet != ERRCODE_NONE;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
