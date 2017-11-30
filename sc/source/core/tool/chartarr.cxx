@@ -56,13 +56,11 @@ ScMemChart::~ScMemChart()
 }
 
 ScChartArray::ScChartArray(
-    ScDocument* pDoc, const ScRangeListRef& rRangeList, const OUString& rChartName ) :
-    aName( rChartName ),
+    ScDocument* pDoc, const ScRangeListRef& rRangeList ) :
     pDocument( pDoc ),
     aPositioner(pDoc, rRangeList) {}
 
 ScChartArray::ScChartArray( const ScChartArray& rArr ) :
-    aName(rArr.aName),
     pDocument(rArr.pDocument),
     aPositioner(rArr.aPositioner) {}
 

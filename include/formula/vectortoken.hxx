@@ -62,11 +62,10 @@ struct FORMULA_DLLPUBLIC VectorRefArray
 class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 {
     VectorRefArray maArray;
-    size_t mnRequestedLength;
     size_t mnArrayLength;
 
 public:
-    SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength );
+    SingleVectorRefToken( const VectorRefArray& rArray, size_t nArrayLength );
 
     virtual FormulaToken* Clone() const override;
 
@@ -82,7 +81,6 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 {
     std::vector<VectorRefArray> maArrays;
 
-    size_t mnRequestedLength; /// requested length of all arrays which include trailing empty region.
     size_t mnArrayLength; /// length of all arrays which does not include trailing empty region.
     size_t mnRefRowSize; /// original reference row size. The row size may
                          /// change as it goes down the array if either the
@@ -93,7 +91,7 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 
 public:
     DoubleVectorRefToken(
-        const std::vector<VectorRefArray>& rArrays, size_t nReqLength, size_t nArrayLength,
+        const std::vector<VectorRefArray>& rArrays, size_t nArrayLength,
         size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
 
     virtual FormulaToken* Clone() const override;

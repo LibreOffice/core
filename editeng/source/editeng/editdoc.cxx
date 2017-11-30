@@ -926,7 +926,6 @@ EditLine::EditLine() :
     nEndPortion(0),
     nHeight(0),
     nTxtHeight(0),
-    nCrsrHeight(0),
     nMaxAscent(0),
     bHangingPunctuation(false),
     bInvalid(true)
@@ -942,7 +941,6 @@ EditLine::EditLine( const EditLine& r ) :
     nEndPortion(r.nEndPortion),
     nHeight(0),
     nTxtHeight(0),
-    nCrsrHeight(0),
     nMaxAscent(0),
     bHangingPunctuation(r.bHangingPunctuation),
     bInvalid(true)
@@ -966,7 +964,6 @@ EditLine* EditLine::Clone() const
     pL->nHeight         = nHeight;
     pL->nTxtWidth       = nTxtWidth;
     pL->nTxtHeight      = nTxtHeight;
-    pL->nCrsrHeight     = nCrsrHeight;
     pL->nMaxAscent      = nMaxAscent;
 
     return pL;
@@ -999,11 +996,10 @@ EditLine& EditLine::operator = ( const EditLine& r )
 }
 
 
-void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH, sal_uInt16 nCrsrH )
+void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH )
 {
     nHeight = nH;
     nTxtHeight = ( nTxtH ? nTxtH : nH );
-    nCrsrHeight = ( nCrsrH ? nCrsrH : nTxtHeight );
 }
 
 void EditLine::SetStartPosX( long start )

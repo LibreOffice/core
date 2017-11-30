@@ -41,15 +41,15 @@ bool VectorRefArray::isValid() const
     return mbValid;
 }
 
-SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength ) :
-    FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength)
+SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nArrayLength ) :
+    FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnArrayLength(nArrayLength)
 {
-    SAL_INFO("formula.core", "Created SingleVectorRefToken nReqLength=" << nReqLength << " nArrayLength=" << nArrayLength);
+    SAL_INFO("formula.core", "Created SingleVectorRefToken nArrayLength=" << nArrayLength);
 }
 
 FormulaToken* SingleVectorRefToken::Clone() const
 {
-    return new SingleVectorRefToken(maArray, mnRequestedLength, mnArrayLength);
+    return new SingleVectorRefToken(maArray, mnArrayLength);
 }
 
 const VectorRefArray& SingleVectorRefToken::GetArray() const
@@ -63,19 +63,19 @@ size_t SingleVectorRefToken::GetArrayLength() const
 }
 
 DoubleVectorRefToken::DoubleVectorRefToken(
-    const std::vector<VectorRefArray>& rArrays, size_t nReqLength, size_t nArrayLength,
+    const std::vector<VectorRefArray>& rArrays, size_t nArrayLength,
     size_t nRefRowSize, bool bStartFixed, bool bEndFixed ) :
     FormulaToken(svDoubleVectorRef, ocPush),
-    maArrays(rArrays), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength),
+    maArrays(rArrays), mnArrayLength(nArrayLength),
     mnRefRowSize(nRefRowSize), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed)
 {
-    SAL_INFO("formula.core", "Created DoubleVectorRefToken nReqLength=" << nReqLength << " nArrayLength=" << nArrayLength);
+    SAL_INFO("formula.core", "Created DoubleVectorRefToken nArrayLength=" << nArrayLength);
 }
 
 FormulaToken* DoubleVectorRefToken::Clone() const
 {
     return new DoubleVectorRefToken(
-        maArrays, mnRequestedLength, mnArrayLength, mnRefRowSize, mbStartFixed, mbEndFixed);
+        maArrays, mnArrayLength, mnRefRowSize, mbStartFixed, mbEndFixed);
 }
 
 const std::vector<VectorRefArray>& DoubleVectorRefToken::GetArrays() const

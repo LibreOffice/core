@@ -61,7 +61,6 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 
 PhysicalFontCollection::PhysicalFontCollection()
     : mbMatchData( false )
-    , mbMapNames( false )
     , mpPreMatchHook( nullptr )
     , mpFallbackHook( nullptr )
     , mpFallbackList( nullptr )
@@ -304,43 +303,6 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyBySearchName( cons
 
     PhysicalFontFamily* pFoundData = (*it).second;
     return pFoundData;
-}
-
-PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyByAliasName(const OUString& rSearchName,
-    const OUString& rShortName) const
-{
-    // short circuit for impossible font name alias
-    if (rSearchName.isEmpty())
-        return nullptr;
-
-    // short circuit if no alias names are available
-    if (!mbMapNames)
-        return nullptr;
-
-    // use the font's alias names to find the font
-    // TODO: get rid of linear search
-    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
-    while( it != maPhysicalFontFamilies.end() )
-    {
-        PhysicalFontFamily* pData = (*it).second;
-        if( pData->GetAliasNames().isEmpty() )
-            continue;
-
-        // if one alias name matches we found a matching font
-        OUString aTempName;
-        sal_Int32 nIndex = 0;
-
-        do
-        {
-            aTempName = GetNextFontToken( pData->GetAliasNames(), nIndex );
-           // Test, if the Font name match with one of the mapping names
-           if ( (aTempName == rSearchName) || (aTempName == rShortName) )
-              return pData;
-        }
-        while ( nIndex != -1 );
-     }
-
-     return nullptr;
 }
 
 PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFontName ) const
@@ -922,7 +884,6 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
 PhysicalFontCollection* PhysicalFontCollection::Clone() const
 {
     PhysicalFontCollection* pClonedCollection = new PhysicalFontCollection;
-    pClonedCollection->mbMapNames     = mbMapNames;
     pClonedCollection->mpPreMatchHook = mpPreMatchHook;
     pClonedCollection->mpFallbackHook = mpFallbackHook;
 
@@ -1262,14 +1223,6 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
             if( !pFontAttr )
                 pFontAttr = pTempFontAttr;
         }
-    }
-
-    // if still needed use the alias names of the installed fonts
-    if( mbMapNames )
-    {
-        PhysicalFontFamily* pFoundData = ImplFindFontFamilyByAliasName( rFSD.maTargetName, aSearchShortName );
-        if( pFoundData )
-            return pFoundData;
     }
 
     // if still needed use the font request's attributes to find a good match

@@ -46,7 +46,7 @@ bridges/source/jni_uno/jni_java2uno.cxx:150
     jni_uno::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:151
     jni_uno::largest a uno_Any
-chart2/source/model/main/DataPoint.hxx:108
+chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed _Bool
 chart2/source/view/inc/GL3DRenderer.hxx:54
     chart::opengl3D::MaterialParameters pad float
@@ -364,10 +364,6 @@ sal/rtl/uuid.cxx:64
     UUID clock_seq_low sal_uInt8
 sal/rtl/uuid.cxx:65
     UUID node sal_uInt8 [6]
-sc/inc/attrib.hxx:175
-    ScRangeItem aRange class ScRange
-sc/inc/attrib.hxx:214
-    ScTableListItem nCount sal_uInt16
 sc/inc/compiler.hxx:126
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:127
@@ -378,7 +374,7 @@ sc/inc/formulagroup.hxx:42
     sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
 sc/inc/reordermap.hxx:21
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
-sc/source/core/inc/interpre.hxx:104
+sc/source/core/inc/interpre.hxx:105
     ScTokenStack pPointer const formula::FormulaToken *[512]
 sc/source/filter/inc/autofilterbuffer.hxx:178
     oox::xls::FilterColumn mxSettings std::shared_ptr<FilterSettingsBase>
@@ -414,6 +410,10 @@ sd/inc/sdmod.hxx:117
     SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
 sd/inc/sdmod.hxx:118
     SdModule gImplDrawPropertySetInfoCache SdExtPropertySetInfoCache
+sd/source/core/CustomAnimationCloner.cxx:69
+    sd::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
+sd/source/core/CustomAnimationCloner.cxx:70
+    sd::CustomAnimationClonerImpl maCloneNodeVector std::vector<Reference<XAnimationNode> >
 sd/source/ui/sidebar/MasterPageContainer.cxx:148
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:149
@@ -520,7 +520,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:107
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:77
     SwInsertField_Data m_aDBDataSource css::uno::Any
-sw/source/uibase/inc/labimg.hxx:50
+sw/source/uibase/inc/labimg.hxx:49
     SwLabItem m_aBin class rtl::OUString
 toolkit/source/awt/vclxtoolkit.cxx:179
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
@@ -564,6 +564,8 @@ unoidl/source/unoidlprovider.cxx:456
     unoidl::detail::MapEntry data struct unoidl::detail::(anonymous namespace)::Memory32
 unotools/source/config/saveopt.cxx:82
     SvtSaveOptions_Impl bROUserAutoSave _Bool
+vcl/inc/PhysicalFontCollection.hxx:71
+    PhysicalFontCollection mbMapNames _Bool
 vcl/inc/printerinfomanager.hxx:72
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
 vcl/inc/salwtype.hxx:153
@@ -576,17 +578,17 @@ vcl/inc/salwtype.hxx:202
     SalSurroundingTextSelectionChangeEvent mnEnd sal_uLong
 vcl/inc/salwtype.hxx:208
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:268
+vcl/inc/svdata.hxx:267
     ImplSVNWFData mnStatusBarLowerRightOffset int
-vcl/inc/svdata.hxx:274
+vcl/inc/svdata.hxx:273
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:284
+vcl/inc/svdata.hxx:283
     ImplSVNWFData mbCenteredTabs _Bool
-vcl/inc/svdata.hxx:285
+vcl/inc/svdata.hxx:284
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
-vcl/inc/svdata.hxx:287
+vcl/inc/svdata.hxx:286
     ImplSVNWFData mbProgressNeedsErase _Bool
-vcl/inc/svdata.hxx:296
+vcl/inc/svdata.hxx:295
     ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/unx/i18n_status.hxx:56
     vcl::I18NStatus m_aCurrentIM class rtl::OUString
@@ -654,6 +656,8 @@ vcl/unx/gtk/gloactiongroup.cxx:28
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance GMenuModel
+writerfilter/source/dmapper/DomainMapper_Impl.hxx:395
+    writerfilter::dmapper::DomainMapper_Impl m_aSaveOpt class SvtSaveOptions
 writerfilter/source/ooxml/OOXMLFactory.hxx:61
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:62
@@ -664,17 +668,17 @@ xmloff/inc/MultiPropertySetHelper.hxx:78
     MultiPropertySetHelper aEmptyAny css::uno::Any
 xmloff/source/chart/SchXMLChartContext.cxx:447
     (anonymous namespace)::NewDonutSeries msStyleName class rtl::OUString
-xmloff/source/chart/SchXMLChartContext.hxx:53
-    SeriesDefaultsAndStyles maErrorIndicatorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:54
-    SeriesDefaultsAndStyles maErrorCategoryDefault css::uno::Any
+    SeriesDefaultsAndStyles maErrorIndicatorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:55
-    SeriesDefaultsAndStyles maConstantErrorLowDefault css::uno::Any
+    SeriesDefaultsAndStyles maErrorCategoryDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:56
-    SeriesDefaultsAndStyles maConstantErrorHighDefault css::uno::Any
+    SeriesDefaultsAndStyles maConstantErrorLowDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:57
-    SeriesDefaultsAndStyles maPercentageErrorDefault css::uno::Any
+    SeriesDefaultsAndStyles maConstantErrorHighDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:58
+    SeriesDefaultsAndStyles maPercentageErrorDefault css::uno::Any
+xmloff/source/chart/SchXMLChartContext.hxx:59
     SeriesDefaultsAndStyles maErrorMarginDefault css::uno::Any
 xmloff/source/core/xmlexp.cxx:251
     SvXMLExport_Impl maSaveOptions class SvtSaveOptions

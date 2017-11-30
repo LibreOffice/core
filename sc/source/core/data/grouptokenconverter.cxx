@@ -135,7 +135,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                     if (!aArray.isValid())
                         return false;
 
-                    formula::SingleVectorRefToken aTok(aArray, nLen, nTrimLen);
+                    formula::SingleVectorRefToken aTok(aArray, nTrimLen);
                     mrGroupTokens.AddToken(aTok);
                     rScope.addRefMessage(mrPos, aRefPos, nLen, aArray);
 
@@ -225,7 +225,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                     aArrays.push_back(aArray);
                 }
 
-                formula::DoubleVectorRefToken aTok(aArrays, nRequestedLength, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
+                formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                 mrGroupTokens.AddToken(aTok);
                 rScope.addRefMessage(mrPos, aAbs.aStart, nRequestedLength, aArrays);
 

@@ -1,5 +1,5 @@
-basctl/source/inc/dlged.hxx:121
-    basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory>
+basctl/source/inc/dlged.hxx:122
+    basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
 basic/source/runtime/dllmgr.hxx:48
@@ -24,7 +24,7 @@ connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
-cppu/source/threadpool/threadpool.cxx:377
+cppu/source/threadpool/threadpool.cxx:355
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
     AlignSize_Impl nInt16 sal_Int16
@@ -34,8 +34,6 @@ emfio/source/emfuno/xemfparser.cxx:59
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:44
     ScannerManager maProtector osl::Mutex
-include/comphelper/MasterPropertySet.hxx:38
-    comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/unotext.hxx:608
@@ -113,7 +111,7 @@ pyuno/source/module/pyuno_impl.hxx:224
 pyuno/source/module/pyuno_impl.hxx:324
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/ui/inc/ReportWindow.hxx:54
-    rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
+    rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 sal/osl/unx/thread.cxx:90
     osl_thread_priority_st m_Highest int
 sal/osl/unx/thread.cxx:91
@@ -128,8 +126,12 @@ sal/osl/unx/thread.cxx:112
     osl_thread_global_st m_priority struct osl_thread_priority_st
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
+sc/inc/interpretercontext.hxx:23
+    ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
+sc/source/core/data/formulacell.cxx:1741
+    (anonymous namespace)::StackCleaner pInt std::unique_ptr<ScInterpreter>
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/ui/inc/docsh.hxx:439
@@ -152,12 +154,6 @@ sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:115
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-sfx2/source/inc/shellimpl.hxx:33
-    SfxObjectShellArr_Impl maData SfxObjectShellArr_Impl::DataType
-sfx2/source/inc/shellimpl.hxx:54
-    SfxViewFrameArr_Impl maData SfxViewFrameArr_Impl::DataType
-sfx2/source/inc/shellimpl.hxx:75
-    SfxViewShellArr_Impl maData SfxViewShellArr_Impl::DataType
 starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
 starmath/inc/view.hxx:218
@@ -196,8 +192,6 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
-vcl/inc/svdata.hxx:149
-    ImplSVAppData mbShutdownDelayed _Bool
 vcl/inc/unx/cpdmgr.hxx:60
     psp::CPDPrinterOption name class rtl::OUString
 vcl/inc/unx/cpdmgr.hxx:61
@@ -214,7 +208,3 @@ vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:663
-    writerfilter::rtftok::RTFDocumentImpl m_hasLHeader _Bool
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:666
-    writerfilter::rtftok::RTFDocumentImpl m_hasLFooter _Bool

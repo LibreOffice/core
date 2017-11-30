@@ -58,7 +58,6 @@ public:
 
 class SC_DLLPUBLIC ScChartArray             // only parameter-struct
 {
-    OUString aName;
     ScDocument* pDocument;
     ScChartPositioner aPositioner;
 
@@ -66,8 +65,7 @@ private:
     ScMemChart* CreateMemChartSingle();
     ScMemChart* CreateMemChartMulti();
 public:
-    ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
-                  const OUString& rChartName );
+    ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList );
     ScChartArray( const ScChartArray& rArr );
     ~ScChartArray();
 

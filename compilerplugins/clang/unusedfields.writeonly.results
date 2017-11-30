@@ -64,7 +64,7 @@ chart2/inc/ChartModel.hxx:483
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
-chart2/source/inc/MediaDescriptorHelper.hxx:85
+chart2/source/inc/MediaDescriptorHelper.hxx:82
     apphelper::MediaDescriptorHelper ReadOnly _Bool
 chart2/source/model/inc/BaseCoordinateSystem.hxx:118
     chart::BaseCoordinateSystem m_xContext css::uno::Reference<css::uno::XComponentContext>
@@ -174,7 +174,7 @@ desktop/qa/desktop_lib/test_desktop_lib.cxx:176
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:119
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
-desktop/unx/source/splashx.c:369
+desktop/unx/source/splashx.c:371
      input_mode long
 drawinglayer/source/tools/emfpbrush.hxx:104
     emfplushelper::EMFPBrush wrapMode sal_Int32
@@ -194,6 +194,8 @@ drawinglayer/source/tools/emfppen.hxx:63
     emfplushelper::EMFPPen customStartCap struct emfplushelper::EMFPCustomLineCap *
 drawinglayer/source/tools/emfppen.hxx:65
     emfplushelper::EMFPPen customEndCap struct emfplushelper::EMFPCustomLineCap *
+editeng/inc/editdoc.hxx:486
+    EditLine nCrsrHeight sal_uInt16
 embeddedobj/source/inc/oleembobj.hxx:127
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:139
@@ -244,6 +246,10 @@ include/connectivity/OSubComponent.hxx:54
     connectivity::OSubComponent m_xParent css::uno::Reference<css::uno::XInterface>
 include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
+include/formula/vectortoken.hxx:65
+    formula::SingleVectorRefToken mnRequestedLength size_t
+include/formula/vectortoken.hxx:85
+    formula::DoubleVectorRefToken mnRequestedLength size_t
 include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
 include/opencl/openclwrapper.hxx:36
@@ -266,6 +272,8 @@ include/svx/srchdlg.hxx:231
     SvxSearchDialog pSearchController class SvxSearchController *
 include/svx/srchdlg.hxx:232
     SvxSearchDialog pOptionsController class SvxSearchController *
+include/vcl/opengl/OpenGLContext.hxx:41
+    GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:415
     ToolbarValue mbIsTopDockingArea _Bool
 include/vcl/salnativewidgets.hxx:463
@@ -310,7 +318,7 @@ sal/rtl/alloc_cache.hxx:36
     rtl_cache_stat_type m_mem_alloc sal_Size
 sal/rtl/alloc_cache.hxx:151
     rtl_cache_st m_cpu_stats struct rtl_cache_stat_type
-sal/rtl/math.cxx:996
+sal/rtl/math.cxx:1004
      md union sal_math_Double
 sal/textenc/tcvtutf7.cxx:96
     ImplUTF7ToUCContextData mbShifted _Bool
@@ -328,26 +336,28 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
+sc/inc/chartarr.hxx:61
+    ScChartArray aName class rtl::OUString
 sc/inc/compiler.hxx:258
     ScCompiler::AddInMap pODFF const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:261
     ScCompiler::AddInMap pUpper const char *
+sc/inc/document.hxx:2483
+    ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:74
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:77
     ScDPLabelData mbIsValue _Bool
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
-sc/source/core/data/column4.cxx:1291
+sc/source/core/data/column4.cxx:1290
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/document.cxx:1257
+sc/source/core/data/document.cxx:1269
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1258
+sc/source/core/data/document.cxx:1270
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
-sc/source/core/data/formulacell.cxx:1756
-    StackCleaner pInt class ScInterpreter *
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:24
@@ -380,9 +390,9 @@ sc/source/filter/inc/exp_op.hxx:52
     ExportBiff5 pExcRoot struct RootData *
 sc/source/filter/inc/imp_op.hxx:88
     ImportExcel::LastFormula mpCell class ScFormulaCell *
-sc/source/filter/inc/orcusinterface.hxx:352
+sc/source/filter/inc/orcusinterface.hxx:355
     ScOrcusStyles::xf mnStyleXf size_t
-sc/source/filter/inc/orcusinterface.hxx:370
+sc/source/filter/inc/orcusinterface.hxx:373
     ScOrcusStyles::cell_style mnBuiltInId size_t
 sc/source/filter/inc/root.hxx:95
     LOTUS_ROOT eActType enum Lotus123Typ
@@ -398,6 +408,8 @@ sc/source/filter/xml/xmldrani.hxx:75
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
+sc/source/ui/inc/AccessibleText.hxx:195
+    ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
 sc/source/ui/inc/datastream.hxx:108
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/filtdlg.hxx:198
@@ -436,6 +448,8 @@ sfx2/source/inc/appdata.hxx:75
     SfxAppData_Impl pTriggerTopic class SfxDdeTriggerTopic_Impl *
 sfx2/source/inc/appdata.hxx:76
     SfxAppData_Impl pDdeService2 class DdeService *
+sfx2/source/inc/workwin.hxx:50
+    SfxObjectBar_Impl nPos sal_uInt16
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
@@ -444,6 +458,8 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
 slideshow/source/engine/slideshowimpl.cxx:1044
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
+soltools/cpp/cpp.h:143
+    macroValidator pMacro Nlist *
 starmath/inc/view.hxx:158
     SmCmdBoxWindow aController class SmEditController
 store/source/storbase.hxx:248
@@ -568,9 +584,9 @@ vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
 vcl/source/filter/jpeg/Exif.hxx:57
     Exif::ExifIFD count sal_uInt32
-vcl/unx/generic/app/wmadaptor.cxx:1270
-    _mwmhints input_mode long
 vcl/unx/generic/app/wmadaptor.cxx:1271
+    _mwmhints input_mode long
+vcl/unx/generic/app/wmadaptor.cxx:1272
     _mwmhints status unsigned long
 vcl/unx/gtk/a11y/atkwrapper.hxx:45
     AtkObjectWrapper aParent AtkObject
