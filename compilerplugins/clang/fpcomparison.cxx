@@ -327,7 +327,11 @@ bool FpComparison::ignore(FunctionDecl* function)
         || dc.Function("SetScreenNumber").Class("AquaSalFrame").GlobalNamespace()
         || (vclFloatDevicePixel
             && (dc.Function("Justify").Class("GenericSalLayout").GlobalNamespace()
-                || dc.Function("AdjustLayout").Class("MultiSalLayout").GlobalNamespace())))
+                || dc.Function("AdjustLayout").Class("MultiSalLayout").GlobalNamespace()))
+        // vcl/headless/svpgdi.cxx, ba4a124b0c0c66fd275f5147d55eeec27ce78da9:
+        || dc.Function("drawAlphaBitmap").Class("SvpSalGraphics").GlobalNamespace()
+        || dc.Function("drawMask").Class("SvpSalGraphics").GlobalNamespace()
+        || dc.Function("renderSource").GlobalNamespace())
     {
         return true;
     }
