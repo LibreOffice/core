@@ -76,7 +76,7 @@ const sal_uInt16 LN_TDiagLine = 0xd62a;
 namespace v6
 {
 // Microsoft Word for Windows 6.0 Binary File Format
-                                             // Parameter size
+//                                              Parameter size
 const sal_uInt16 sprmPIstd            = 2;   // short
 const sal_uInt16 sprmPIstdPermute     = 3;   // variable
 const sal_uInt16 sprmPIncLv1          = 4;   // byte
