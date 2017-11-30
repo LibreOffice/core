@@ -24,6 +24,7 @@
 
 #include <oox/vml/vmlshape.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/virdev.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1174,15 +1175,17 @@ sal_Int32 lcl_correctWatermarkRect( awt::Rectangle& rShapeRect, const OUString& 
 {
     sal_Int32 nPaddingY = 0;
     double fRatio = 0;
-    OutputDevice* pOut = Application::GetDefaultDevice();
-    vcl::Font aFont( pOut->GetFont() );
+    VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+    vcl::Font aFont = pDevice->GetFont();
     aFont.SetFamilyName( sFont );
+    aFont.SetFontSize( Size( 0, 96 ) );
+    pDevice->SetFont( aFont );
 
-    tools::Rectangle aBoundingRect;
-    pOut->GetTextBoundRect( aBoundingRect, sText );
-    if( aBoundingRect.GetWidth() )
+    auto nTextWidth = pDevice->GetTextWidth( sText );
+    if( nTextWidth )
     {
-        fRatio = (double)aBoundingRect.GetHeight() / aBoundingRect.GetWidth();
+        fRatio = pDevice->GetTextHeight();
+        fRatio /= nTextWidth;
 
         sal_Int32 nNewHeight = fRatio * rShapeRect.Width;
         nPaddingY = rShapeRect.Height - nNewHeight;
