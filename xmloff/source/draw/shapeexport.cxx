@@ -2386,7 +2386,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             {
                 const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
 
-                if(aStr.getLength())
+                if(!aStr.isEmpty())
                 {
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr);
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
