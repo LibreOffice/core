@@ -43,7 +43,7 @@ sub set_blacklist
 # Returns the clang-format version used of style enforcement.
 sub get_wanted_version()
 {
-    return "5.0.0";
+    return "5.0.0.*";
 }
 
 # Returns the directory that can host a binary which is used automatically, even
