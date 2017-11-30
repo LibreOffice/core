@@ -90,6 +90,7 @@ public:
     void testImageLink();
     void testFootnote();
     void testPopup();
+    void testPopupAPI();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -128,6 +129,7 @@ public:
     CPPUNIT_TEST(testImageLink);
     CPPUNIT_TEST(testFootnote);
     CPPUNIT_TEST(testPopup);
+    CPPUNIT_TEST(testPopupAPI);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -722,6 +724,27 @@ void EPUBExportTest::testPopup()
     // Test text popup content.
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[2]", "type", "footnote");
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[2]/xhtml:img", 1);
+}
+
+void EPUBExportTest::testPopupAPI()
+{
+    // Make sure that the popup works with data from a media directory.
+    OUString aMediaDir = m_directories.getURLFromSrc(DATA_DIRECTORY) + "popup";
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        {"RVNGMediaDir", uno::makeAny(aMediaDir)}
+    }));
+    createDoc("popup-api.odt", aFilterData);
+
+    // We have a non-empty anchor image.
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    OUString aAnchor = getXPath(mpXmlDoc, "//xhtml:body/xhtml:p[1]/xhtml:a/xhtml:img", "src");
+    CPPUNIT_ASSERT(!aAnchor.isEmpty());
+    // We have a non-empty popup image.
+    OUString aData = getXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[1]/xhtml:img", "src");
+    CPPUNIT_ASSERT(!aData.isEmpty());
+    // The anchor is different from the popup image.
+    CPPUNIT_ASSERT(aAnchor != aData);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
