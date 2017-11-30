@@ -39,6 +39,11 @@ private:
     VclPtr<Edit> m_pCoverPath;
     VclPtr<PushButton> m_pCoverButton;
     VclPtr<PushButton> m_pOKButton;
+    VclPtr<Edit> m_pIdentifier;
+    VclPtr<Edit> m_pTitle;
+    VclPtr<Edit> m_pInitialCreator;
+    VclPtr<Edit> m_pLanguage;
+    VclPtr<Edit> m_pDate;
 };
 
 } // namespace writerperfect

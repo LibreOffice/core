@@ -98,6 +98,12 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
     get(m_pCoverButton, "coverbutton");
     m_pCoverButton->SetClickHdl(LINK(this, EPUBExportDialog, CoverClickHdl));
 
+    get(m_pIdentifier, "identifier");
+    get(m_pTitle, "title");
+    get(m_pInitialCreator, "author");
+    get(m_pLanguage, "language");
+    get(m_pDate, "date");
+
     get(m_pOKButton, "ok");
     m_pOKButton->SetClickHdl(LINK(this, EPUBExportDialog, OKClickHdl));
 }
@@ -124,8 +130,21 @@ IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
 
 IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, Button *, void)
 {
+    // General
     if (!m_pCoverPath->GetText().isEmpty())
         mrFilterData["RVNGCoverImage"] <<= m_pCoverPath->GetText();
+
+    // Metadata
+    if (!m_pIdentifier->GetText().isEmpty())
+        mrFilterData["RVNGIdentifier"] <<= m_pIdentifier->GetText();
+    if (!m_pTitle->GetText().isEmpty())
+        mrFilterData["RVNGTitle"] <<= m_pTitle->GetText();
+    if (!m_pInitialCreator->GetText().isEmpty())
+        mrFilterData["RVNGInitialCreator"] <<= m_pInitialCreator->GetText();
+    if (!m_pLanguage->GetText().isEmpty())
+        mrFilterData["RVNGLanguage"] <<= m_pLanguage->GetText();
+    if (!m_pDate->GetText().isEmpty())
+        mrFilterData["RVNGDate"] <<= m_pDate->GetText();
 
     EndDialog(RET_OK);
 }
@@ -142,6 +161,11 @@ void EPUBExportDialog::dispose()
     m_pCoverPath.clear();
     m_pCoverButton.clear();
     m_pOKButton.clear();
+    m_pIdentifier.clear();
+    m_pTitle.clear();
+    m_pInitialCreator.clear();
+    m_pLanguage.clear();
+    m_pDate.clear();
     ModalDialog::dispose();
 }
 
