@@ -83,4 +83,30 @@ class EPUBExportTest(UITestCase):
         coverImage = [i.Value for i in filterData if i.Name == "RVNGCoverImage"][0]
         self.assertEqual("cover.png", coverImage)
 
+    def testMeta(self):
+        def handleDialog(dialog):
+            dialog.getChild("identifier").executeAction("TYPE", mkPropertyValues({"TEXT": "baddcafe-e394-4cd6-9b83-7172794612e5"}))
+            dialog.getChild("title").executeAction("TYPE", mkPropertyValues({"TEXT": "unknown title from ui"}))
+            dialog.getChild("author").executeAction("TYPE", mkPropertyValues({"TEXT": "unknown author from ui"}))
+            dialog.getChild("language").executeAction("TYPE", mkPropertyValues({"TEXT": "sk"}))
+            dialog.getChild("date").executeAction("TYPE", mkPropertyValues({"TEXT": "2013-11-20T17:16:07Z"}))
+            dialog.getChild("ok").executeAction("CLICK", tuple())
+
+        uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
+
+        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        propertyValues = uiComponent.getPropertyValues()
+        filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
+        # These keys were missing, EPUBExportDialog::OKClickHdl() did not set them.
+        identifier = [i.Value for i in filterData if i.Name == "RVNGIdentifier"][0]
+        self.assertEqual("baddcafe-e394-4cd6-9b83-7172794612e5", identifier)
+        title = [i.Value for i in filterData if i.Name == "RVNGTitle"][0]
+        self.assertEqual("unknown title from ui", title)
+        initialCreator = [i.Value for i in filterData if i.Name == "RVNGInitialCreator"][0]
+        self.assertEqual("unknown author from ui", initialCreator)
+        language = [i.Value for i in filterData if i.Name == "RVNGLanguage"][0]
+        self.assertEqual("sk", language)
+        date = [i.Value for i in filterData if i.Name == "RVNGDate"][0]
+        self.assertEqual("2013-11-20T17:16:07Z", date)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -72,132 +72,27 @@
           </packing>
         </child>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <object class="GtkBox" id="box5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkBox" id="box1">
+              <object class="GtkBox" id="box6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="versionft">
+                  <object class="GtkLabel" id="generalft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_top">6</property>
-                    <property name="label" translatable="yes" context="exportepub|versionft">Version:</property>
+                    <property name="label" translatable="yes" context="exportepub|generalft">General</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">versionlb</property>
                     <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="versionlb">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="active">0</property>
-                    <items>
-                      <item translatable="yes" context="exportepub|epub3">EPUB 3.0</item>
-                      <item translatable="yes" context="exportepub|epub2">EPUB 2.0</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkAlignment" id="alignment2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkBox" id="box2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="splitft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">6</property>
-                    <property name="label" translatable="yes" context="exportepub|splitft">Split method:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">versionlb</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="splitlb">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="active">0</property>
-                    <items>
-                      <item translatable="yes" context="exportepub|splitpage">Page break</item>
-                      <item translatable="yes" context="exportepub|splitheading">Heading</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkAlignment" id="alignment3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkBox" id="box3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="coverimageft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">6</property>
-                    <property name="label" translatable="yes" context="exportepub|coverimageft">Custom cover image:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">versionlb</property>
-                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -206,33 +101,352 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box4">
+                  <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
+                    <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkEntry" id="coverpath">
+                      <object class="GtkBox" id="box1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="versionft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|versionft">Version:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="versionlb">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="active">0</property>
+                            <items>
+                              <item translatable="yes" context="exportepub|epub3">EPUB 3.0</item>
+                              <item translatable="yes" context="exportepub|epub2">EPUB 2.0</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment" id="alignment2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkButton" id="coverbutton">
-                        <property name="label" translatable="yes" context="exportepub|coverbutton">Browse...</property>
+                      <object class="GtkBox" id="box2">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="splitft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|splitft">Split method:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="splitlb">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="active">0</property>
+                            <items>
+                              <item translatable="yes" context="exportepub|splitpage">Page break</item>
+                              <item translatable="yes" context="exportepub|splitheading">Heading</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment" id="alignment3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkBox" id="box3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="coverimageft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|coverimageft">Custom cover image:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkEntry" id="coverpath">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="coverbutton">
+                                <property name="label" translatable="yes" context="exportepub|coverbutton">Browse...</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="metadataft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
+                    <property name="label" translatable="yes" context="exportepub|generalft">Metadata</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">versionlb</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment" id="alignment4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkGrid" id="grid1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="row_spacing">12</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkEntry" id="identifier">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="identifierft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|identifierft">Identifier:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="titleft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|titleft">Title:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="authorft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|authorft">Author:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="author">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="languageft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|languageft">Language:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="language">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="dateft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes" context="exportepub|dateft">Date:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">versionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="date">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -242,12 +456,17 @@
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
