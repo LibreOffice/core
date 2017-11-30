@@ -9,6 +9,7 @@
 
 #include "txtparai.hxx"
 
+#include "XMLFootnoteImportContext.hxx"
 #include "XMLTextFrameContext.hxx"
 #include "xmlimp.hxx"
 
@@ -425,6 +426,9 @@ rtl::Reference<XMLImportContext> CreateParagraphOrSpanChildContext(XMLImport &rI
         return new XMLTextFrameContext(rImport);
     if (rName == "text:sequence")
         return new XMLTextSequenceContext(rImport, rTextPropertyList);
+    if (rName == "text:note")
+        return new XMLFootnoteImportContext(rImport);
+    SAL_WARN("writerperfect", "CreateParagraphOrSpanChildContext: unhandled " << rName);
     return nullptr;
 }
 

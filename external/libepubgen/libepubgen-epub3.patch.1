@@ -4497,3 +4497,559 @@ index 62dac6e..1cb1112 100644
 -- 
 2.13.6
 
+From 8c447caee18b4400170ecce36ea3714fdc377989 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 23 Nov 2017 16:42:13 +0100
+Subject: [PATCH 1/4] EPUBHTMLGenerator: fix footnotes/endnotes/comments
+
+There were two problems here:
+
+- when working with two sinks (footnote and main), make sure that we
+  save the main one before the push of the sink stack
+
+- when handing out a non-const xml sink reference, make sure there is no
+  parallel empty bool that tracks its size, otherwise these can out of
+  sync (empty is still true, even if there is footnote content)
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 24 +++++++-----------------
+ src/lib/EPUBXMLSink.cpp            |  5 +++++
+ src/lib/EPUBXMLSink.h              |  2 ++
+ src/test/EPUBTextGeneratorTest.cpp | 24 ++++++++++++++++++++++++
+ 4 files changed, 38 insertions(+), 17 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 614dd02..3c8862b 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -51,20 +51,16 @@ public:
+   const EPUBXMLSink &get() const;
+   EPUBXMLSink &get();
+ 
+-  bool empty() const;
+-
+   bool endsInLineBreak() const;
+ 
+ private:
+   EPUBXMLSink m_sink;
+   std::string m_lastCloseElement;
+-  bool m_empty;
+ };
+ 
+ ZoneSinkImpl::ZoneSinkImpl()
+   : m_sink()
+   , m_lastCloseElement()
+-  , m_empty(true)
+ {
+ }
+ 
+@@ -72,28 +68,24 @@ void ZoneSinkImpl::openElement(const char *const name, const librevenge::RVNGPro
+ {
+   m_sink.openElement(name, attributes);
+   m_lastCloseElement.clear();
+-  m_empty = false;
+ }
+ 
+ void ZoneSinkImpl::closeElement(const char *const name)
+ {
+   m_sink.closeElement(name);
+   m_lastCloseElement = name;
+-  m_empty = false;
+ }
+ 
+ void ZoneSinkImpl::insertCharacters(const librevenge::RVNGString &characters)
+ {
+   m_sink.insertCharacters(characters);
+   m_lastCloseElement.clear();
+-  m_empty = false;
+ }
+ 
+ void ZoneSinkImpl::append(const ZoneSinkImpl &other)
+ {
+   m_sink.append(other.m_sink);
+   m_lastCloseElement = other.m_lastCloseElement;
+-  m_empty |= other.m_empty;
+ }
+ 
+ const EPUBXMLSink &ZoneSinkImpl::get() const
+@@ -106,11 +98,6 @@ EPUBXMLSink &ZoneSinkImpl::get()
+   return m_sink;
+ }
+ 
+-bool ZoneSinkImpl::empty() const
+-{
+-  return m_empty;
+-}
+-
+ bool ZoneSinkImpl::endsInLineBreak() const
+ {
+   return m_lastCloseElement == "p"
+@@ -154,7 +141,7 @@ struct EPUBHTMLTextZone
+   bool isEmpty() const
+   {
+     for (const auto &zoneSink : m_zoneSinks)
+-      if (!zoneSink.empty())
++      if (!zoneSink.get().empty())
+         return false;
+     return true;
+   }
+@@ -791,8 +778,9 @@ void EPUBHTMLGenerator::openFootnote(const RVNGPropertyList &)
+ {
+   if (m_impl->m_ignore)
+     return;
++  EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_FootNote);
+-  m_impl->getSink().addLabel(m_impl->output());
++  m_impl->getSink().addLabel(output);
+ }
+ 
+ void EPUBHTMLGenerator::closeFootnote()
+@@ -806,8 +794,9 @@ void EPUBHTMLGenerator::openEndnote(const RVNGPropertyList &)
+ {
+   if (m_impl->m_ignore)
+     return;
++  EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_EndNote);
+-  m_impl->getSink().addLabel(m_impl->output());
++  m_impl->getSink().addLabel(output);
+ }
+ 
+ void EPUBHTMLGenerator::closeEndnote()
+@@ -821,8 +810,9 @@ void EPUBHTMLGenerator::openComment(const RVNGPropertyList & /*propList*/)
+ {
+   if (m_impl->m_ignore)
+     return;
++  EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_Comment);
+-  m_impl->getSink().addLabel(m_impl->output());
++  m_impl->getSink().addLabel(output);
+ }
+ 
+ void EPUBHTMLGenerator::closeComment()
+diff --git a/src/lib/EPUBXMLSink.cpp b/src/lib/EPUBXMLSink.cpp
+index 7c12c6d..db480d7 100644
+--- a/src/lib/EPUBXMLSink.cpp
++++ b/src/lib/EPUBXMLSink.cpp
+@@ -155,6 +155,11 @@ void EPUBXMLSink::append(const EPUBXMLSink &other)
+   m_elements.insert(m_elements.end(), other.m_elements.begin(), other.m_elements.end());
+ }
+ 
++bool EPUBXMLSink::empty() const
++{
++  return m_elements.empty();
++}
++
+ void EPUBXMLSink::writeTo(EPUBPackage &package, const char *const name)
+ {
+   package.openXMLFile(name);
+diff --git a/src/lib/EPUBXMLSink.h b/src/lib/EPUBXMLSink.h
+index ea7ac7a..a2bf951 100644
+--- a/src/lib/EPUBXMLSink.h
++++ b/src/lib/EPUBXMLSink.h
+@@ -40,6 +40,8 @@ public:
+ 
+   void writeTo(EPUBPackage &package, const char *name);
+ 
++  bool empty() const;
++
+ private:
+   std::deque<EPUBXMLElementPtr_t> m_elements;
+ };
+-- 
+2.13.6
+
+
+From 9c723bbe42673906d8d0faf5083a186cf86d05ce Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 23 Nov 2017 17:27:00 +0100
+Subject: [PATCH 2/4] EPUBHTMLGenerator: avoid <title> in EPUB3 XHTML content
+ documents
+
+- there were multiple of them, which is invalid
+- just don't write them, content.opf has the same info
+---
+ src/lib/EPUBGenerator.cpp          |  2 +-
+ src/lib/EPUBHTMLGenerator.cpp      | 18 ++++++++++++------
+ src/lib/EPUBHTMLGenerator.h        |  2 +-
+ src/lib/EPUBHTMLManager.cpp        |  4 ++--
+ src/lib/EPUBHTMLManager.h          |  2 +-
+ src/test/EPUBTextGeneratorTest.cpp |  5 ++++-
+ 6 files changed, 21 insertions(+), 12 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 1cb1112..571f0eb 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -117,7 +117,7 @@ void EPUBGenerator::startNewHtmlFile()
+ 
+   m_splitGuard.onSplit();
+ 
+-  m_currentHtml = m_htmlManager.create(m_imageManager, m_fontManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod);
++  m_currentHtml = m_htmlManager.create(m_imageManager, m_fontManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod, m_version);
+ 
+   // restore state in the new file
+   m_currentHtml->startDocument(m_documentProps);
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 3c8862b..209e7e1 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -338,7 +338,7 @@ std::string EPUBHTMLTextZone::label(int id) const
+ struct EPUBHTMLGeneratorImpl
+ {
+   //! constructor
+-  EPUBHTMLGeneratorImpl(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
++  EPUBHTMLGeneratorImpl(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version)
+     : m_document(document)
+     , m_imageManager(imageManager)
+     , m_fontManager(fontManager)
+@@ -351,6 +351,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_actualPage(0)
+     , m_ignore(false)
+     , m_hasText(false)
++    , m_version(version)
+     , m_frameAnchorTypes()
+     , m_framePropertiesStack()
+     , m_stylesMethod(stylesMethod)
+@@ -442,6 +443,7 @@ struct EPUBHTMLGeneratorImpl
+   bool m_ignore;
+   /// Does the currently opened paragraph have some text?
+   bool m_hasText;
++  int m_version;
+ 
+   std::stack<std::string> m_frameAnchorTypes;
+   std::stack<RVNGPropertyList> m_framePropertiesStack;
+@@ -458,8 +460,8 @@ private:
+   EPUBHTMLGeneratorImpl operator=(EPUBHTMLGeneratorImpl const &orig);
+ };
+ 
+-EPUBHTMLGenerator::EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
+-  : m_impl(new EPUBHTMLGeneratorImpl(document, imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, path, stylesheetPath, stylesMethod))
++EPUBHTMLGenerator::EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version)
++  : m_impl(new EPUBHTMLGeneratorImpl(document, imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, path, stylesheetPath, stylesMethod, version))
+ {
+ }
+ 
+@@ -509,14 +511,18 @@ void EPUBHTMLGenerator::endDocument()
+   htmlAttrs.insert("xmlns", "http://www.w3.org/1999/xhtml");
+   m_impl->m_document.openElement("html", htmlAttrs);
+   m_impl->m_document.openElement("head", RVNGPropertyList());
+-  m_impl->m_document.openElement("title", RVNGPropertyList());
+-  m_impl->m_document.closeElement("title");
++  if (m_impl->m_version != 30)
++  {
++    m_impl->m_document.openElement("title", RVNGPropertyList());
++    m_impl->m_document.closeElement("title");
++  }
+   RVNGPropertyList metaAttrs;
+   metaAttrs.insert("http-equiv", "content-type");
+   metaAttrs.insert("content", "text/html; charset=UTF-8");
+   m_impl->m_document.openElement("meta", metaAttrs);
+   m_impl->m_document.closeElement("meta");
+-  m_impl->sendMetaData(m_impl->m_document);
++  if (m_impl->m_version != 30)
++    m_impl->sendMetaData(m_impl->m_document);
+   RVNGPropertyList linkAttrs;
+   linkAttrs.insert("href", m_impl->m_stylesheetPath.relativeTo(m_impl->m_path).str().c_str());
+   linkAttrs.insert("type", "text/css");
+diff --git a/src/lib/EPUBHTMLGenerator.h b/src/lib/EPUBHTMLGenerator.h
+index 49f76a3..11f20cb 100644
+--- a/src/lib/EPUBHTMLGenerator.h
++++ b/src/lib/EPUBHTMLGenerator.h
+@@ -31,7 +31,7 @@ class EPUBPath;
+ class EPUBHTMLGenerator : public librevenge::RVNGTextInterface
+ {
+ public:
+-  EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod);
++  EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version);
+   ~EPUBHTMLGenerator() override;
+ 
+   void setDocumentMetaData(const librevenge::RVNGPropertyList &propList) override;
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 9d4c507..d2c21da 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -41,7 +41,7 @@ EPUBHTMLManager::EPUBHTMLManager(EPUBManifest &manifest)
+ {
+ }
+ 
+-const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod)
++const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version)
+ {
+   std::ostringstream nameBuf;
+   nameBuf << "section" << std::setw(4) << std::setfill('0') << m_number.next();
+@@ -55,7 +55,7 @@ const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageMana
+   m_contents.push_back(EPUBXMLSink());
+ 
+   const EPUBHTMLGeneratorPtr_t gen(
+-    new EPUBHTMLGenerator(m_contents.back(), imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, m_paths.back(), stylesheetPath, stylesMethod));
++    new EPUBHTMLGenerator(m_contents.back(), imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, m_paths.back(), stylesheetPath, stylesMethod, version));
+ 
+   return gen;
+ }
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index ef56a52..e1205e6 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -41,7 +41,7 @@ class EPUBHTMLManager
+ public:
+   explicit EPUBHTMLManager(EPUBManifest &manifest);
+ 
+-  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod);
++  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version);
+ 
+   void writeTo(EPUBPackage &package);
+ 
+-- 
+2.13.6
+
+
+From 502948041df07729572bf4f2b222e03073baa6c8 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 24 Nov 2017 10:29:15 +0100
+Subject: [PATCH 3/4] EPUBHTMLGenerator: implement EPUB3 footnote markup
+
+The main difference is that in the EPUB3 case the footnote has an
+explicit end.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 56 ++++++++++++++++++++++++++++----------
+ src/test/EPUBTextGeneratorTest.cpp | 26 ++++++++++++++++++
+ 2 files changed, 68 insertions(+), 14 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 209e7e1..96e7623 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -122,7 +122,7 @@ struct EPUBHTMLTextZone
+   //! the different zone
+   enum Type { Z_Comment=0, Z_EndNote, Z_FootNote, Z_Main, Z_MetaData, Z_TextBox, Z_Unknown, Z_NumZones= Z_Unknown+1};
+   //! constructor for basic stream
+-  EPUBHTMLTextZone(Type tp=Z_Unknown) : m_type(tp), m_actualId(0), m_zoneSinks()
++  EPUBHTMLTextZone(Type tp=Z_Unknown) : m_type(tp), m_actualId(0), m_zoneSinks(), m_version(20)
+   {
+   }
+   //! the type
+@@ -135,6 +135,14 @@ struct EPUBHTMLTextZone
+   {
+     m_type=tp;
+   }
++  void setVersion(int version)
++  {
++    m_version = version;
++  }
++  int getVersion() const
++  {
++    return m_version;
++  }
+   //! returns a new sink corresponding to this zone
+   std::unique_ptr<TextZoneSink> getNewSink();
+   //! returns true if there is no data
+@@ -150,7 +158,7 @@ struct EPUBHTMLTextZone
+   {
+     if (isEmpty() || m_type==Z_Unknown || m_type==Z_Main)
+       return;
+-    if (m_type!=Z_MetaData)
++    if (m_type!=Z_MetaData && m_version < 30)
+     {
+       out.openElement("hr", RVNGPropertyList());
+       out.closeElement("hr");
+@@ -197,6 +205,7 @@ protected:
+   mutable int m_actualId;
+   //! the list of data string
+   std::vector<ZoneSinkImpl> m_zoneSinks;
++  int m_version;
+ private:
+   EPUBHTMLTextZone(EPUBHTMLTextZone const &orig);
+   EPUBHTMLTextZone operator=(EPUBHTMLTextZone const &orig);
+@@ -218,11 +227,16 @@ struct TextZoneSink
+     std::string lbl=label();
+     if (!lbl.length())
+       return;
++    int version = 20;
++    if (m_zone)
++      version = m_zone->getVersion();
+     {
+       RVNGPropertyList supAttrs;
+       supAttrs.insert("id", ("called" + lbl).c_str());
+       output.openElement("sup", supAttrs);
+       RVNGPropertyList aAttrs;
++      if (version == 30)
++        aAttrs.insert("epub:type", "noteref");
+       aAttrs.insert("href", ("#data" + lbl).c_str());
+       output.openElement("a", aAttrs);
+       output.insertCharacters(lbl.c_str());
+@@ -230,17 +244,23 @@ struct TextZoneSink
+       output.closeElement("sup");
+     }
+     flush();
++    if (version == 30)
+     {
+-      RVNGPropertyList supAttrs;
+-      supAttrs.insert("id", ("data" + lbl).c_str());
+-      m_delayedLabel.openElement("sup", supAttrs);
+-      RVNGPropertyList aAttrs;
+-      aAttrs.insert("href", ("#called" + lbl).c_str());
+-      m_delayedLabel.openElement("a", aAttrs);
+-      m_delayedLabel.insertCharacters(lbl.c_str());
+-      m_delayedLabel.closeElement("a");
+-      m_delayedLabel.closeElement("sup");
++      RVNGPropertyList asideAttrs;
++      asideAttrs.insert("epub:type", "footnote");
++      asideAttrs.insert("id", ("data" + lbl).c_str());
++      m_sink.openElement("aside", asideAttrs);
+     }
++    RVNGPropertyList supAttrs;
++    if (version < 30)
++      supAttrs.insert("id", ("data" + lbl).c_str());
++    m_delayedLabel.openElement("sup", supAttrs);
++    RVNGPropertyList aAttrs;
++    aAttrs.insert("href", ("#called" + lbl).c_str());
++    m_delayedLabel.openElement("a", aAttrs);
++    m_delayedLabel.insertCharacters(lbl.c_str());
++    m_delayedLabel.closeElement("a");
++    m_delayedLabel.closeElement("sup");
+   }
+   //! flush delayed label, ...
+   void flush()
+@@ -359,7 +379,10 @@ struct EPUBHTMLGeneratorImpl
+     , m_sinkStack()
+   {
+     for (int i = 0; i < EPUBHTMLTextZone::Z_NumZones; ++i)
++    {
+       m_zones[i].setType(EPUBHTMLTextZone::Type(i));
++      m_zones[i].setVersion(version);
++    }
+     m_actualSink=m_zones[EPUBHTMLTextZone::Z_Main].getNewSink();
+   }
+   //! destructor
+@@ -511,7 +534,7 @@ void EPUBHTMLGenerator::endDocument()
+   htmlAttrs.insert("xmlns", "http://www.w3.org/1999/xhtml");
+   m_impl->m_document.openElement("html", htmlAttrs);
+   m_impl->m_document.openElement("head", RVNGPropertyList());
+-  if (m_impl->m_version != 30)
++  if (m_impl->m_version < 30)
+   {
+     m_impl->m_document.openElement("title", RVNGPropertyList());
+     m_impl->m_document.closeElement("title");
+@@ -521,7 +544,7 @@ void EPUBHTMLGenerator::endDocument()
+   metaAttrs.insert("content", "text/html; charset=UTF-8");
+   m_impl->m_document.openElement("meta", metaAttrs);
+   m_impl->m_document.closeElement("meta");
+-  if (m_impl->m_version != 30)
++  if (m_impl->m_version < 30)
+     m_impl->sendMetaData(m_impl->m_document);
+   RVNGPropertyList linkAttrs;
+   linkAttrs.insert("href", m_impl->m_stylesheetPath.relativeTo(m_impl->m_path).str().c_str());
+@@ -529,7 +552,10 @@ void EPUBHTMLGenerator::endDocument()
+   linkAttrs.insert("rel", "stylesheet");
+   m_impl->m_document.insertEmptyElement("link", linkAttrs);
+   m_impl->m_document.closeElement("head");
+-  m_impl->m_document.openElement("body", RVNGPropertyList());
++  RVNGPropertyList bodyAttrs;
++  if (m_impl->m_version == 30)
++    bodyAttrs.insert("xmlns:epub", "http://www.idpf.org/2007/ops");
++  m_impl->m_document.openElement("body", bodyAttrs);
+   m_impl->flushUnsent(m_impl->m_document);
+   m_impl->m_document.closeElement("body");
+   m_impl->m_document.closeElement("html");
+@@ -793,6 +819,8 @@ void EPUBHTMLGenerator::closeFootnote()
+ {
+   if (m_impl->m_ignore)
+     return;
++  if (m_impl->m_version == 30)
++    m_impl->output().closeElement("aside");
+   m_impl->pop();
+ }
+ 
+-- 
+2.13.6
+
+
+From a8444b113df52769849ad45ea440def8d1884b15 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 24 Nov 2017 11:10:34 +0100
+Subject: [PATCH 4/4] EPUBHTMLGenerator: implement custom footnote anchor text
+
+Try to avoid our default F<N> anchor text if possible, which only makes
+sense in English.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 22 +++++++++++++++-------
+ src/test/EPUBTextGeneratorTest.cpp | 25 +++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+), 7 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 96e7623..6b4c7c2 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -222,9 +222,14 @@ struct TextZoneSink
+   //! destructor
+   ~TextZoneSink() { }
+   //! add a label called on main and a label in this ( delayed to allow openParagraph to be called )
+-  void addLabel(EPUBXMLSink &output)
++  void addLabel(EPUBXMLSink &output, const librevenge::RVNGString &number)
+   {
++    // Unique label, e.g. 'F1' for the first footnote.
+     std::string lbl=label();
++    // User-visible label, e.g. '1'.
++    std::string uiLabel = lbl;
++    if (!number.empty())
++      uiLabel = number.cstr();
+     if (!lbl.length())
+       return;
+     int version = 20;
+@@ -239,7 +244,7 @@ struct TextZoneSink
+         aAttrs.insert("epub:type", "noteref");
+       aAttrs.insert("href", ("#data" + lbl).c_str());
+       output.openElement("a", aAttrs);
+-      output.insertCharacters(lbl.c_str());
++      output.insertCharacters(uiLabel.c_str());
+       output.closeElement("a");
+       output.closeElement("sup");
+     }
+@@ -258,7 +263,7 @@ struct TextZoneSink
+     RVNGPropertyList aAttrs;
+     aAttrs.insert("href", ("#called" + lbl).c_str());
+     m_delayedLabel.openElement("a", aAttrs);
+-    m_delayedLabel.insertCharacters(lbl.c_str());
++    m_delayedLabel.insertCharacters(uiLabel.c_str());
+     m_delayedLabel.closeElement("a");
+     m_delayedLabel.closeElement("sup");
+   }
+@@ -806,13 +811,16 @@ void EPUBHTMLGenerator::closeListElement()
+   m_impl->output().closeElement("li");
+ }
+ 
+-void EPUBHTMLGenerator::openFootnote(const RVNGPropertyList &)
++void EPUBHTMLGenerator::openFootnote(const RVNGPropertyList &propList)
+ {
+   if (m_impl->m_ignore)
+     return;
+   EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_FootNote);
+-  m_impl->getSink().addLabel(output);
++  librevenge::RVNGString number;
++  if (const librevenge::RVNGProperty *numProp = propList["librevenge:number"])
++    number = numProp->getStr();
++  m_impl->getSink().addLabel(output, number);
+ }
+ 
+ void EPUBHTMLGenerator::closeFootnote()
+@@ -830,7 +838,7 @@ void EPUBHTMLGenerator::openEndnote(const RVNGPropertyList &)
+     return;
+   EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_EndNote);
+-  m_impl->getSink().addLabel(output);
++  m_impl->getSink().addLabel(output, librevenge::RVNGString());
+ }
+ 
+ void EPUBHTMLGenerator::closeEndnote()
+@@ -846,7 +854,7 @@ void EPUBHTMLGenerator::openComment(const RVNGPropertyList & /*propList*/)
+     return;
+   EPUBXMLSink &output = m_impl->output();
+   m_impl->push(EPUBHTMLTextZone::Z_Comment);
+-  m_impl->getSink().addLabel(output);
++  m_impl->getSink().addLabel(output, librevenge::RVNGString());
+ }
+ 
+ void EPUBHTMLGenerator::closeComment()
+-- 
+2.13.6
+
