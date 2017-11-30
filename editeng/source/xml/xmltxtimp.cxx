@@ -104,14 +104,16 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const uno::Reference< XText > & rText );
 
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
         const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& xAttrList )  override;
 
 private:
     const uno::Reference< XText > mxText;
 };
 
-SvXMLImportContext *SvxXMLXTextImportComponent::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+SvXMLImportContext *SvxXMLXTextImportComponent::CreateDocumentContext(
+        sal_uInt16 const nPrefix, const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/)
 {
     SvXMLImportContext* pContext = nullptr;
 

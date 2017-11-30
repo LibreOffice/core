@@ -417,7 +417,9 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
     return bRet;
 }
 
-SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& /*xAttrList*/ )
+SvXMLImportContext *SvxXMLXTableImport::CreateDocumentContext(
+        sal_uInt16 const nPrefix, const OUString& rLocalName,
+        const uno::Reference< XAttributeList >& /*xAttrList*/)
 {
     if( XML_NAMESPACE_OOO == nPrefix ||
         XML_NAMESPACE_OFFICE == nPrefix )

@@ -87,7 +87,7 @@ public:
 
     virtual void SAL_CALL startDocument() override;
 
-    virtual SvXMLImportContext * CreateContext(
+    virtual SvXMLImportContext * CreateDocumentContext(
         sal_uInt16 nPrefix, const OUString &rLocalName,
         const css::uno::Reference < css::xml::sax::XAttributeList > &rxAttrList ) override;
 

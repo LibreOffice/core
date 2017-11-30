@@ -2789,7 +2789,7 @@ void SmXMLActionContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSelected));
 }
 
-SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
+SvXMLImportContext *SmXMLImport::CreateDocumentContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
     const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {

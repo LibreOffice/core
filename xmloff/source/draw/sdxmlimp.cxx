@@ -584,7 +584,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
     return *mpPresentationPlaceholderAttrTokenMap;
 }
 
-SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
+SvXMLImportContext *SdXMLImport::CreateDocumentContext(sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -607,7 +607,7 @@ SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
         pContext = new SdXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
                         xAttrList, xDPS->getDocumentProperties());
     } else {
-        pContext = SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
+        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
     }
 
     return pContext;

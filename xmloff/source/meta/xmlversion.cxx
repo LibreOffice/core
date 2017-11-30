@@ -112,7 +112,7 @@ XMLVersionListImport::XMLVersionListImport(
 XMLVersionListImport::~XMLVersionListImport() throw()
 {}
 
-SvXMLImportContext *XMLVersionListImport::CreateContext(
+SvXMLImportContext *XMLVersionListImport::CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
@@ -126,7 +126,7 @@ SvXMLImportContext *XMLVersionListImport::CreateContext(
     }
     else
     {
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
     }
 
     return pContext;

@@ -386,7 +386,7 @@ public:
     {
     }
 
-    virtual SvXMLImportContext * CreateContext(
+    virtual SvXMLImportContext * CreateDocumentContext(
         sal_uInt16 const nPrefix, OUString const& rLocalName,
         uno::Reference<xml::sax::XAttributeList> const& xAttrList) override
     {
@@ -395,7 +395,7 @@ public:
             return new StoredChapterNumberingRootContext(m_rNumRules,
                     *this, nPrefix, rLocalName);
         }
-        return SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
+        return SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
     }
 };
 

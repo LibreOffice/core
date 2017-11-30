@@ -725,7 +725,7 @@ public:
     }
 };
 
-SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
+SvXMLImportContext* ORptFilter::CreateDocumentContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -753,7 +753,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
     }
 
     if ( !pContext )
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
 
     return pContext;
 }

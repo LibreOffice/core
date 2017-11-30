@@ -1243,7 +1243,7 @@ class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
 public:
     explicit AnimationsImport( const Reference< XComponentContext > & rxContext );
 
-    SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList) override;
+    SvXMLImportContext* CreateDocumentContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList) override;
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) override;
@@ -1305,7 +1305,9 @@ void SAL_CALL AnimationsImport::release() throw ()
     SvXMLImport::release();
 }
 
-SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
+SvXMLImportContext *AnimationsImport::CreateDocumentContext(
+        sal_uInt16 const nPrefix, const OUString& rLocalName,
+        const Reference<XAttributeList>& xAttrList)
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -1315,7 +1317,7 @@ SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OU
     }
     else
     {
-        pContext = SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
+        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
     }
 
     return pContext;

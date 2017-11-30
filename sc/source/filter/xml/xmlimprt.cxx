@@ -658,7 +658,7 @@ sc::PivotTableSources& ScXMLImport::GetPivotTableSources()
     return *mpPivotSources;
 }
 
-SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLImport::CreateDocumentContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
@@ -676,7 +676,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                 xDPS->getDocumentProperties());
     }
     else
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
 
     return pContext;
 }

@@ -103,7 +103,7 @@ SwXMLSectionList::~SwXMLSectionList()
 {
 }
 
-SvXMLImportContext *SwXMLSectionList::CreateContext(
+SvXMLImportContext *SwXMLSectionList::CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList> & )

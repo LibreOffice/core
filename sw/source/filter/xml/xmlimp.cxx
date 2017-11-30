@@ -353,7 +353,7 @@ const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
     return *m_pDocElemTokenMap;
 }
 
-SvXMLImportContext *SwXMLImport::CreateContext(
+SvXMLImportContext *SwXMLImport::CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -385,7 +385,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
                         xDocProps);
     }
     else
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
 }

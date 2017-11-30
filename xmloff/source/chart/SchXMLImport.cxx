@@ -510,7 +510,8 @@ SchXMLImport::~SchXMLImport() throw ()
 
 // create the main context (subcontexts are created
 // by the one created here)
-SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName,
+SvXMLImportContext *SchXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix,
+        const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
@@ -540,12 +541,12 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
                             xDPS->getDocumentProperties());
         } else {
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
-                ? SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList )
+                ? SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList)
                 : new SchXMLDocContext( *maImportHelper.get(), *this,
                                         nPrefix, rLocalName );
         }
     } else {
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
     }
 
     return pContext;

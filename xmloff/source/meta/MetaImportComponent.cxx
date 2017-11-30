@@ -43,7 +43,7 @@ public:
 
 protected:
 
-    virtual SvXMLImportContext* CreateContext(
+    virtual SvXMLImportContext* CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
@@ -68,7 +68,7 @@ XMLMetaImportComponent::XMLMetaImportComponent(
 {
 }
 
-SvXMLImportContext* XMLMetaImportComponent::CreateContext(
+SvXMLImportContext* XMLMetaImportComponent::CreateDocumentContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList > & xAttrList )
@@ -86,7 +86,7 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     }
     else
     {
-        return SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
+        return SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
     }
 }
 

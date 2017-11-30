@@ -85,7 +85,7 @@ void XMLAutoTextEventImport::initialize(
 }
 
 
-SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
+SvXMLImportContext* XMLAutoTextEventImport::CreateDocumentContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList > & xAttrList )
@@ -98,7 +98,7 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
     }
     else
     {
-        return SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
+        return SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
     }
 }
 

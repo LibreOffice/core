@@ -370,7 +370,7 @@ void SAL_CALL ConvDicXMLImport::startDocument()
     SvXMLImport::startDocument();
 }
 
-SvXMLImportContext * ConvDicXMLImport::CreateContext(
+SvXMLImportContext * ConvDicXMLImport::CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString &rLocalName,
         const uno::Reference < xml::sax::XAttributeList > & /*rxAttrList*/ )

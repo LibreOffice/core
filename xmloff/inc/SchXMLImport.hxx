@@ -154,7 +154,7 @@ private:
     rtl::Reference<SchXMLImportHelper> maImportHelper;
 
 protected:
-    virtual SvXMLImportContext *CreateContext(
+    virtual SvXMLImportContext *CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;

@@ -48,10 +48,10 @@ SvXMLImportContext::~SvXMLImportContext()
 }
 
 SvXMLImportContextRef SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLocalName,
-                                            const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+        const OUString& rLocalName,
+        const uno::Reference<xml::sax::XAttributeList>& )
 {
-    return mrImport.CreateContext( nPrefix, rLocalName, xAttrList );
+    return new SvXMLImportContext(mrImport, nPrefix, rLocalName);
 }
 
 void SvXMLImportContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& )

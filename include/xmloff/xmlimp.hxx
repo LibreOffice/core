@@ -240,9 +240,11 @@ protected:
     bool                        mbIsTableShapeSupported;
     bool                        mbIsGraphicLoadOnDemandSupported;
 
+    // Create top-level element context.
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
+    // This base class implementation returns a context that ignores everything.
+    virtual SvXMLImportContext *CreateDocumentContext(sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,

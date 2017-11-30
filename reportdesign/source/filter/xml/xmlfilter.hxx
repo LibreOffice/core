@@ -104,7 +104,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 protected:
     // SvXMLImport
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 

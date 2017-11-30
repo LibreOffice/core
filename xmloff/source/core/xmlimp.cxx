@@ -308,7 +308,7 @@ public:
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper maInterfaceToIdentifierMapper;
 };
 
-SvXMLImportContext *SvXMLImport::CreateContext( sal_uInt16 nPrefix,
+SvXMLImportContext *SvXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix,
                                          const OUString& rLocalName,
                                          const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -719,7 +719,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     }
     else
     {
-        xContext.set(CreateContext( nPrefix, aLocalName, xAttrList ));
+        xContext.set(CreateDocumentContext(nPrefix, aLocalName, xAttrList));
         if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
             dynamic_cast< const SvXMLImportContext*>(xContext.get()) !=  nullptr )
         {
