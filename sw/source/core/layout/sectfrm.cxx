@@ -979,7 +979,7 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
         if( nDiff > 0 )
         {
             long nAdd = GetUpper()->Grow( nDiff );
-            if( bVert && !bRev )
+            if( bVert )
                 nDeadLine -= nAdd;
             else
                 nDeadLine += nAdd;

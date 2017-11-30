@@ -329,7 +329,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
     {
         (Frame().*fnRect->fnSetHeight)( (Frame().*fnRect->fnGetHeight)() + nDist );
 
-        if( IsVertical() && !IsVertLR() && !IsReverse() )
+        if( IsVertical() && !IsVertLR() )
             Frame().Pos().X() -= nDist;
     }
     long nGrow = nDist - nAvail,
@@ -372,7 +372,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             // We can only respect the boundless wish so much
             Frame().SSize().Height() -= nDist;
 
-            if( IsVertical() && !IsVertLR() && !IsReverse() )
+            if( IsVertical() && !IsVertLR() )
                 Frame().Pos().X() += nDist;
         }
 

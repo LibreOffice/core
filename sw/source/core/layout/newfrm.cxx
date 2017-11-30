@@ -164,116 +164,6 @@ static SwRectFnCollection aVertical = {
     &SwRect::SetRightAndWidth
 };
 
-static SwRectFnCollection aBottomToTop = {
-    /* fnRectGet      */
-    &SwRect::Bottom_,
-    &SwRect::Top_,
-    &SwRect::Left_,
-    &SwRect::Rigth_,
-    &SwRect::Width_,
-    &SwRect::Height_,
-    &SwRect::BottomLeft,
-    &SwRect::Size_,
-    /* fnRectSet      */
-    &SwRect::Bottom_,
-    &SwRect::Top_,
-    &SwRect::Left_,
-    &SwRect::Rigth_,
-    &SwRect::Width_,
-    &SwRect::Height_,
-
-    &SwRect::AddBottom,
-    &SwRect::SubTop,
-    &SwRect::SubLeft,
-    &SwRect::AddRight,
-    &SwRect::AddWidth,
-    &SwRect::AddHeight,
-
-    &SwRect::SetPosX,
-    &SwRect::SetPosY,
-
-    &SwFrame::GetBottomMargin,
-    &SwFrame::GetTopMargin,
-    &SwFrame::GetLeftMargin,
-    &SwFrame::GetRightMargin,
-    &SwFrame::SetLeftRightMargins,
-    &SwFrame::SetBottomTopMargins,
-    &SwFrame::GetPrtBottom,
-    &SwFrame::GetPrtTop,
-    &SwFrame::GetPrtLeft,
-    &SwFrame::GetPrtRight,
-    &SwRect::GetBottomDistance,
-    &SwRect::GetTopDistance,
-    &SwRect::GetLeftDistance,
-    &SwRect::GetRightDistance,
-    &SwFrame::SetMinTop,
-    &SwRect::OverStepTop,
-
-    &SwRect::SetLowerLeftCorner,
-    &SwFrame::MakeUpperPos,
-    &FirstMinusSecond,
-    &SecondMinusFirst,
-    &SwIncrement,
-    &SwDecrement,
-    &SwRect::SetLeftAndWidth,
-    &SwRect::SetBottomAndHeight
-};
-
-static SwRectFnCollection aVerticalRightToLeft = {
-    /* fnRectGet      */
-    &SwRect::Left_,
-    &SwRect::Rigth_,
-    &SwRect::Top_,
-    &SwRect::Bottom_,
-    &SwRect::Height_,
-    &SwRect::Width_,
-    &SwRect::BottomRight,
-    &SwRect::SwappedSize,
-    /* fnRectSet      */
-    &SwRect::Left_,
-    &SwRect::Rigth_,
-    &SwRect::Top_,
-    &SwRect::Bottom_,
-    &SwRect::Height_,
-    &SwRect::Width_,
-
-    &SwRect::SubLeft,
-    &SwRect::AddRight,
-    &SwRect::SubTop,
-    &SwRect::AddBottom,
-    &SwRect::AddHeight,
-    &SwRect::AddWidth,
-
-    &SwRect::SetPosY,
-    &SwRect::SetPosX,
-
-    &SwFrame::GetLeftMargin,
-    &SwFrame::GetRightMargin,
-    &SwFrame::GetTopMargin,
-    &SwFrame::GetBottomMargin,
-    &SwFrame::SetTopBottomMargins,
-    &SwFrame::SetLeftRightMargins,
-    &SwFrame::GetPrtLeft,
-    &SwFrame::GetPrtRight,
-    &SwFrame::GetPrtBottom,
-    &SwFrame::GetPrtTop,
-    &SwRect::GetLeftDistance,
-    &SwRect::GetRightDistance,
-    &SwRect::GetBottomDistance,
-    &SwRect::GetTopDistance,
-    &SwFrame::SetMaxRight,
-    &SwRect::OverStepRight,
-
-    &SwRect::SetLowerLeftCorner,
-    &SwFrame::MakeRightPos,
-    &FirstMinusSecond,
-    &FirstMinusSecond,
-    &SwDecrement,
-    &SwIncrement,
-    &SwRect::SetBottomAndHeight,
-    &SwRect::SetLeftAndWidth
-};
-
 static SwRectFnCollection aVerticalLeftToRight = {
     /* fnRectGet      */
     &SwRect::Left_,
@@ -331,11 +221,7 @@ static SwRectFnCollection aVerticalLeftToRight = {
 
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
-
 SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
-
-SwRectFn fnRectB2T = &aBottomToTop;
-SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
 // #i65250#
 sal_uInt32 SwFrame::mnLastFrameId=0;

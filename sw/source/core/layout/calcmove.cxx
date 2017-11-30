@@ -507,20 +507,15 @@ void SwFrame::MakePos()
                                           (pPrv->Frame().*fnRect->fnGetWidth)() );
 
                 // cells may now leave their uppers
-                if( bVert && SwFrameType::Cell & nMyType && !mbReverse )
+                if( bVert && SwFrameType::Cell & nMyType )
                     maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + pPrv->Frame().Width());
             }
             else if( bVert && FRM_NOTE_VERT & nMyType )
             {
-                if( mbReverse )
-                    maFrame.Pos().setX(maFrame.Pos().getX() + pPrv->Frame().Width());
+                if ( bVertL2R )
+                        maFrame.Pos().setX(maFrame.Pos().getX() + pPrv->Frame().Width());
                 else
-                {
-                    if ( bVertL2R )
-                           maFrame.Pos().setX(maFrame.Pos().getX() + pPrv->Frame().Width());
-                    else
-                           maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width());
-                  }
+                        maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width());
             }
             else
                 maFrame.Pos().setY(maFrame.Pos().getY() + pPrv->Frame().Height());
@@ -561,15 +556,12 @@ void SwFrame::MakePos()
                                           (pPrv->Frame().*fnRect->fnGetWidth)() );
 
                     // cells may now leave their uppers
-                    if( bVert && SwFrameType::Cell & nMyType && !mbReverse )
+                    if( bVert && SwFrameType::Cell & nMyType )
                         maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + pPrv->Frame().Width());
                 }
                 else if( bVert && FRM_NOTE_VERT & nMyType )
                 {
-                    if( mbReverse )
-                        maFrame.Pos().setX(maFrame.Pos().getX() + pPrv->Frame().Width());
-                    else
-                        maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width());
+                    maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width());
                 }
                 else
                     maFrame.Pos().setY(maFrame.Pos().getY() + pPrv->Frame().Height());
@@ -591,7 +583,7 @@ void SwFrame::MakePos()
                         maFrame.Pos().setX(maFrame.Pos().getX() + GetUpper()->Prt().Width()
                                           - maFrame.Width());
                 }
-                else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !mbReverse )
+                else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType )
                     maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + GetUpper()->Prt().Width());
             }
         }
@@ -601,7 +593,7 @@ void SwFrame::MakePos()
             maFrame.Pos().setY(0);
         }
 
-        if( IsBodyFrame() && bVert && !bVertL2R && !mbReverse && GetUpper() )
+        if( IsBodyFrame() && bVert && !bVertL2R && GetUpper() )
             maFrame.Pos().setX(maFrame.Pos().getX() + GetUpper()->Prt().Width() - maFrame.Width());
         mbValidPos = true;
     }
@@ -1048,7 +1040,7 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 nLower=0;
             }
 
-            (Prt().*fnRect->fnSetPosY)( (!bVert || mbReverse) ? nUpper : nLower);
+            (Prt().*fnRect->fnSetPosY)( (!bVert) ? nUpper : nLower);
             nUpper += nLower;
             nUpper -= (Frame().*fnRect->fnGetHeight)() -
                       (Prt().*fnRect->fnGetHeight)();

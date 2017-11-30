@@ -2533,9 +2533,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
 
         //At least the endframe...
         bVert = pEndFrame->IsVertical();
-        bRev = pEndFrame->IsReverse();
-        fnRect = bVert ? ( bRev ? fnRectVL2R : ( pEndFrame->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
-            ( bRev ? fnRectB2T : fnRectHori );
+        fnRect = bVert ? ( ( pEndFrame->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
+            ( fnRectHori );
         nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
         if( (aEndFrame.*fnRect->fnGetTop)() != nTmpTwips )
         {
