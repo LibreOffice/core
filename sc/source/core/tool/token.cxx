@@ -1350,27 +1350,36 @@ void ScTokenArray::CheckForThreading( OpCode eOp  )
     // We only call this if it was already disabled
     assert(IsFormulaVectorDisabled());
 
+    // Don't enable threading once we decided to disable it.
+    if (!mbThreadingEnabled)
+        return;
+
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
 
-    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
+    if (!bThreadingProhibited)
     {
         if (aThreadedCalcBlackList.count(eOp))
         {
             SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables threaded calculation of formula group");
+            mbThreadingEnabled = false;
         }
         else
-        {
             SAL_INFO("sc.core.formulagroup", "but enabling for threading instead");
-            meVectorState = FormulaVectorEnabledForThreading;
-        }
+
     }
+    else
+        mbThreadingEnabled = false;
 }
 
 void ScTokenArray::CheckToken( const FormulaToken& r )
 {
     if (IsFormulaVectorDisabled())
+    {
+        if (mbThreadingEnabled)
+            CheckForThreading(r.GetOpCode());
         // It's already disabled.  No more checking needed.
         return;
+    }
 
     OpCode eOp = r.GetOpCode();
 
@@ -1381,6 +1390,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         {
             SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
             meVectorState = FormulaVectorDisabledNotInSubSet;
+            mbOpenCLEnabled = false;
             CheckForThreading(eOp);
             return;
         }
@@ -1393,6 +1403,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         {
             SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables S/W interpreter for formula group");
             meVectorState = FormulaVectorDisabledNotInSoftwareSubset;
+            mbOpenCLEnabled = false;
             CheckForThreading(eOp);
             return;
         }
@@ -1583,6 +1594,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             default:
                 SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
                 meVectorState = FormulaVectorDisabledByOpCode;
+                mbOpenCLEnabled = false;
         }
     }
     else if (eOp == ocPush)
@@ -1621,6 +1633,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 // We don't support vectorization on these.
                 SAL_INFO("sc.opencl", "opcode ocPush: variable type " << StackVarEnumToString(r.GetType()) << " disables vectorisation for formula group");
                 meVectorState = FormulaVectorDisabledByStackVariable;
+                mbOpenCLEnabled = false;
                 CheckForThreading(eOp);
             break;
             default:
@@ -1633,6 +1646,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     {
         SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
         meVectorState = FormulaVectorDisabledNotInSubSet;
+        mbOpenCLEnabled = false;
         CheckForThreading(eOp);
     }
     // only when openCL interpreter is not enabled - the assumption is that
@@ -1644,6 +1658,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     {
         SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables S/W interpreter for formula group");
         meVectorState = FormulaVectorDisabledNotInSoftwareSubset;
+        mbOpenCLEnabled = false;
         CheckForThreading(eOp);
     }
 }
@@ -1763,6 +1778,13 @@ void ScTokenArray::GenHash()
     mnHashValue = nHash;
 }
 
+void ScTokenArray::ResetVectorState()
+{
+    meVectorState = FormulaVectorEnabled;
+    mbOpenCLEnabled = true;
+    mbThreadingEnabled = !ScCalcConfig::isOpenCLEnabled() && ScCalcConfig::isThreadingEnabled();
+}
+
 bool ScTokenArray::IsFormulaVectorDisabled() const
 {
     switch (meVectorState)
@@ -1772,7 +1794,6 @@ bool ScTokenArray::IsFormulaVectorDisabled() const
         case FormulaVectorDisabledNotInSoftwareSubset:
         case FormulaVectorDisabledByStackVariable:
         case FormulaVectorDisabledNotInSubSet:
-        case FormulaVectorEnabledForThreading:
             return true;
         default:
             ;
@@ -1828,14 +1849,18 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
     mnHashValue(0),
-    meVectorState(FormulaVectorEnabled)
+    meVectorState(FormulaVectorEnabled),
+    mbOpenCLEnabled(true),
+    mbThreadingEnabled(!ScCalcConfig::isOpenCLEnabled() && ScCalcConfig::isThreadingEnabled())
 {
 }
 
 ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
     FormulaTokenArray(rArr),
     mnHashValue(rArr.mnHashValue),
-    meVectorState(rArr.meVectorState)
+    meVectorState(rArr.meVectorState),
+    mbOpenCLEnabled(rArr.mbOpenCLEnabled),
+    mbThreadingEnabled(rArr.mbThreadingEnabled)
 {
 }
 
@@ -1849,6 +1874,8 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
     Assign( rArr );
     mnHashValue = rArr.mnHashValue;
     meVectorState = rArr.meVectorState;
+    mbOpenCLEnabled = rArr.mbOpenCLEnabled;
+    mbThreadingEnabled = rArr.mbThreadingEnabled;
     return *this;
 }
 
@@ -1873,6 +1900,8 @@ void ScTokenArray::Clear()
 {
     mnHashValue = 0;
     meVectorState = FormulaVectorEnabled;
+    mbOpenCLEnabled = true;
+    mbThreadingEnabled = !ScCalcConfig::isOpenCLEnabled() && ScCalcConfig::isThreadingEnabled();
     FormulaTokenArray::Clear();
 }
 
@@ -1886,6 +1915,8 @@ ScTokenArray* ScTokenArray::Clone() const
     p->bHyperLink = bHyperLink;
     p->mnHashValue = mnHashValue;
     p->meVectorState = meVectorState;
+    p->mbOpenCLEnabled = mbOpenCLEnabled;
+    p->mbThreadingEnabled = mbThreadingEnabled;
     p->mbFromRangeName = mbFromRangeName;
     p->mbShareable = mbShareable;
 
