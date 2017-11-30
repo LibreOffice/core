@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
 IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, Button *, void)
 {
     if (!m_pCoverPath->GetText().isEmpty())
-        mrFilterData["EPUBCoverImage"] <<= m_pCoverPath->GetText();
+        mrFilterData["RVNGCoverImage"] <<= m_pCoverPath->GetText();
 
     EndDialog(RET_OK);
 }

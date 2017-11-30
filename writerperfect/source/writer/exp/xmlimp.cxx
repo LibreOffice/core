@@ -56,7 +56,7 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
     // See if filter data contains a cover image explicitly.
     for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
     {
-        if (rFilterData[i].Name == "EPUBCoverImage")
+        if (rFilterData[i].Name == "RVNGCoverImage")
         {
             rFilterData[i].Value >>= aRet;
             break;
@@ -113,8 +113,45 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
 }
 
 /// Picks up XMP metadata from the base directory.
-void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &/*rFilterData*/, librevenge::RVNGPropertyList &rMetaData)
+void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &rFilterData, librevenge::RVNGPropertyList &rMetaData)
 {
+    // See if filter data contains metadata explicitly.
+    OUString aValue;
+    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
+    {
+        if (rFilterData[i].Name == "RVNGIdentifier")
+        {
+            rFilterData[i].Value >>= aValue;
+            if (!aValue.isEmpty())
+                rMetaData.insert("dc:identifier", aValue.toUtf8().getStr());
+        }
+        else if (rFilterData[i].Name == "RVNGTitle")
+        {
+            rFilterData[i].Value >>= aValue;
+            if (!aValue.isEmpty())
+                rMetaData.insert("dc:title", aValue.toUtf8().getStr());
+        }
+        else if (rFilterData[i].Name == "RVNGInitialCreator")
+        {
+            rFilterData[i].Value >>= aValue;
+            if (!aValue.isEmpty())
+                rMetaData.insert("meta:initial-creator", aValue.toUtf8().getStr());
+        }
+        else if (rFilterData[i].Name == "RVNGLanguage")
+        {
+            rFilterData[i].Value >>= aValue;
+            if (!aValue.isEmpty())
+                rMetaData.insert("dc:language", aValue.toUtf8().getStr());
+        }
+        else if (rFilterData[i].Name == "RVNGDate")
+        {
+            rFilterData[i].Value >>= aValue;
+            if (!aValue.isEmpty())
+                rMetaData.insert("dc:date", aValue.toUtf8().getStr());
+        }
+    }
+
+    // If not set explicitly, try to pick it up from the base directory.
     if (rDocumentBaseURL.isEmpty())
         return;
 
@@ -138,7 +175,7 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, con
     uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(aStream));
     aInputSource.aInputStream = xStream;
     uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xContext);
-    rtl::Reference<XMPParser> xXMP(new XMPParser());
+    rtl::Reference<XMPParser> xXMP(new XMPParser(rMetaData));
     uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xXMP.get());
     xParser->setDocumentHandler(xDocumentHandler);
     try
@@ -150,17 +187,6 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, con
         SAL_WARN("writerperfect", "FindXMPMetadata: parseStream() failed:" << rException.Message);
         return;
     }
-
-    if (!xXMP->m_aIdentifier.isEmpty())
-        rMetaData.insert("dc:identifier", xXMP->m_aIdentifier.toUtf8().getStr());
-    if (!xXMP->m_aTitle.isEmpty())
-        rMetaData.insert("dc:title", xXMP->m_aTitle.toUtf8().getStr());
-    if (!xXMP->m_aCreator.isEmpty())
-        rMetaData.insert("meta:initial-creator", xXMP->m_aCreator.toUtf8().getStr());
-    if (!xXMP->m_aLanguage.isEmpty())
-        rMetaData.insert("dc:language", xXMP->m_aLanguage.toUtf8().getStr());
-    if (!xXMP->m_aDate.isEmpty())
-        rMetaData.insert("dc:date", xXMP->m_aDate.toUtf8().getStr());
 }
 }
 

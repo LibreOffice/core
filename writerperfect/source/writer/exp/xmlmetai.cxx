@@ -37,7 +37,8 @@ XMLDcTitleContext::XMLDcTitleContext(XMLImport &rImport, XMLMetaDocumentContext 
 void XMLDcTitleContext::characters(const OUString &rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrMeta.m_aPropertyList.insert("dc:title", librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.m_aPropertyList["dc:title"])
+        mrMeta.m_aPropertyList.insert("dc:title", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 /// Handler for <dc:language>.
@@ -59,7 +60,8 @@ XMLDcLanguageContext::XMLDcLanguageContext(XMLImport &rImport, XMLMetaDocumentCo
 void XMLDcLanguageContext::characters(const OUString &rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrMeta.m_aPropertyList.insert("dc:language", librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.m_aPropertyList["dc:language"])
+        mrMeta.m_aPropertyList.insert("dc:language", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 /// Handler for <dc:date>.
@@ -81,7 +83,8 @@ XMLDcDateContext::XMLDcDateContext(XMLImport &rImport, XMLMetaDocumentContext &r
 void XMLDcDateContext::characters(const OUString &rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrMeta.m_aPropertyList.insert("dc:date", librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.m_aPropertyList["dc:date"])
+        mrMeta.m_aPropertyList.insert("dc:date", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 /// Handler for <meta:generator>.
@@ -125,7 +128,8 @@ XMLMetaInitialCreatorContext::XMLMetaInitialCreatorContext(XMLImport &rImport, X
 void XMLMetaInitialCreatorContext::characters(const OUString &rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrMeta.m_aPropertyList.insert("meta:initial-creator", librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.m_aPropertyList["meta:initial-creator"])
+        mrMeta.m_aPropertyList.insert("meta:initial-creator", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
@@ -157,7 +161,10 @@ void XMLMetaDocumentContext::endElement(const OUString &/*rName*/)
     mrImport.GetGenerator().setDocumentMetaData(m_aPropertyList);
 }
 
-XMPParser::XMPParser() = default;
+XMPParser::XMPParser(librevenge::RVNGPropertyList &rMetaData)
+    : mrMetaData(rMetaData)
+{
+}
 
 XMPParser::~XMPParser() = default;
 
@@ -167,6 +174,17 @@ void XMPParser::startDocument()
 
 void XMPParser::endDocument()
 {
+
+    if (!mrMetaData["dc:identifier"] && !m_aIdentifier.isEmpty())
+        mrMetaData.insert("dc:identifier", m_aIdentifier.toUtf8().getStr());
+    if (!mrMetaData["dc:title"] && !m_aTitle.isEmpty())
+        mrMetaData.insert("dc:title", m_aTitle.toUtf8().getStr());
+    if (!mrMetaData["meta:initial-creator"] && !m_aCreator.isEmpty())
+        mrMetaData.insert("meta:initial-creator", m_aCreator.toUtf8().getStr());
+    if (!mrMetaData["dc:language"] && !m_aLanguage.isEmpty())
+        mrMetaData.insert("dc:language", m_aLanguage.toUtf8().getStr());
+    if (!mrMetaData["dc:date"] && !m_aDate.isEmpty())
+        mrMetaData.insert("dc:date", m_aDate.toUtf8().getStr());
 }
 
 void XMPParser::startElement(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)

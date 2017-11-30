@@ -62,6 +62,7 @@ public:
     void testParaAutostyleCharProps();
     void testMeta();
     void testMetaXMP();
+    void testMetaAPI();
     void testCoverImage();
     void testParaNamedstyle();
     void testCharNamedstyle();
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testParaAutostyleCharProps);
     CPPUNIT_TEST(testMeta);
     CPPUNIT_TEST(testMetaXMP);
+    CPPUNIT_TEST(testMetaAPI);
     CPPUNIT_TEST(testCoverImage);
     CPPUNIT_TEST(testParaNamedstyle);
     CPPUNIT_TEST(testCharNamedstyle);
@@ -350,12 +352,33 @@ void EPUBExportTest::testMetaXMP()
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2016-11-20T17:16:07Z");
 }
 
+void EPUBExportTest::testMetaAPI()
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        {"RVNGIdentifier", uno::makeAny(OUString("deadc0de-e394-4cd6-9b83-7172794612e5"))},
+        {"RVNGTitle", uno::makeAny(OUString("unknown title from api"))},
+        {"RVNGInitialCreator", uno::makeAny(OUString("unknown author from api"))},
+        {"RVNGLanguage", uno::makeAny(OUString("hu"))},
+        {"RVNGDate", uno::makeAny(OUString("2015-11-20T17:16:07Z"))}
+    }));
+    createDoc("meta-xmp.fodt", aFilterData);
+    mpXmlDoc = parseExport("OEBPS/content.opf");
+
+    // These were values from XMP (deadbeef, etc.), not from API.
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:identifier", "deadc0de-e394-4cd6-9b83-7172794612e5");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "unknown title from api");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "unknown author from api");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:language", "hu");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2015-11-20T17:16:07Z");
+}
+
 void EPUBExportTest::testCoverImage()
 {
     OUString aCoverURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "meta.cover-image.png";
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
     {
-        {"EPUBCoverImage", uno::makeAny(aCoverURL)}
+        {"RVNGCoverImage", uno::makeAny(aCoverURL)}
     }));
     createDoc("hello.fodt", aFilterData);
     mpXmlDoc = parseExport("OEBPS/content.opf");

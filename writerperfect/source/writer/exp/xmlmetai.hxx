@@ -39,7 +39,7 @@ class XMPParser: public cppu::WeakImplHelper
     >
 {
 public:
-    explicit XMPParser();
+    explicit XMPParser(librevenge::RVNGPropertyList &rMetaData);
     virtual ~XMPParser() override;
 
     // XDocumentHandler
@@ -59,22 +59,22 @@ public:
 
     virtual void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &xLocator) override;
 
-    OUString m_aIdentifier;
-    OUString m_aTitle;
-    OUString m_aCreator;
-    OUString m_aLanguage;
-    OUString m_aDate;
-
 private:
+    librevenge::RVNGPropertyList &mrMetaData;
     bool m_bInIdentifier = false;
+    OUString m_aIdentifier;
     bool m_bInTitle = false;
     bool m_bInTitleItem = false;
+    OUString m_aTitle;
     bool m_bInCreator = false;
     bool m_bInCreatorItem = false;
+    OUString m_aCreator;
     bool m_bInLanguage = false;
     bool m_bInLanguageItem = false;
+    OUString m_aLanguage;
     bool m_bInDate = false;
     bool m_bInDateItem = false;
+    OUString m_aDate;
 };
 
 } // namespace exp
