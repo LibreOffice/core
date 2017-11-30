@@ -1215,7 +1215,6 @@ public:
     static VclPtr<Window>               FindLOKWindow(vcl::LOKWindowId nWindowId);
 
     /// Dialog / window tunneling related methods.
-    virtual void paintDialog(VirtualDevice& rDevice);
     Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
 
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);

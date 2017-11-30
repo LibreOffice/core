@@ -78,9 +78,6 @@ public:
                    void    InvalidateFloatingWindow(const Point& rPos);
                    void    CloseFloatingWindow();
 
-    /// Paints the current dialog to the given virtual device
-    void paintDialog(VirtualDevice& rDevice) override;
-
 protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default, bool bBorder = false );
