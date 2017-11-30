@@ -26,6 +26,7 @@
 #include <sdxfer.hxx>
 
 #include <sal/types.h>
+#include <o3tl/deleter.hxx>
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
 
@@ -134,7 +135,7 @@ private:
     class UndoContext;
     std::unique_ptr<UndoContext> mxUndoContext;
 
-    std::unique_ptr<SelectionObserver::Context> mxSelectionObserverContext;
+    std::unique_ptr<SelectionObserver::Context, o3tl::default_delete<SelectionObserver::Context>> mxSelectionObserverContext;
     ImplSVEvent * mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (

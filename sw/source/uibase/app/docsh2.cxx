@@ -119,6 +119,7 @@
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <o3tl/deleter.hxx>
 #include <officecfg/Office/Security.hxx>
 
 #include <sfx2/fcontnr.hxx>
@@ -1546,7 +1547,7 @@ ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
     if ( bImport )
     {
         SwRead pRead =  ReadXML;
-        std::unique_ptr<SwReader> pReader;
+        std::unique_ptr<SwReader, o3tl::default_delete<SwReader>> pReader;
         std::unique_ptr<SwPaM> pPam;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!

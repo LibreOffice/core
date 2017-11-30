@@ -51,6 +51,7 @@
 #include <fmtsrnd.hxx>
 #include <ndtxt.hxx>
 #include <editeng/lrspitem.hxx>
+#include <o3tl/deleter.hxx>
 #include <oox/ole/olehelper.hxx>
 
 #define SW_UD_IMAPDATA      2
@@ -1209,7 +1210,7 @@ private:
     std::shared_ptr<WW8Fib> m_xWwFib;
     std::unique_ptr<WW8Fonts> m_xFonts;
     std::unique_ptr<WW8Dop> m_xWDop;
-    std::unique_ptr<WW8ListManager> m_xLstManager;
+    std::unique_ptr<WW8ListManager, o3tl::default_delete<WW8ListManager>> m_xLstManager;
     std::unique_ptr<WW8ScannerBase> m_xSBase;
     std::shared_ptr<WW8PLCFMan> m_xPlcxMan;
     std::map<short, OUString> m_aLinkStringMap;
