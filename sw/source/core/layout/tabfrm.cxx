@@ -259,6 +259,8 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                 pAnchoredObj->UnlockPosition();
                 pAnchoredObj->InvalidateObjPos();
 
+                SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+
                 // move anchored object 'out of range'
                 if ( _bMoveObjsOutOfRange )
                 {
@@ -279,18 +281,16 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                                 ->Prepare( PREP_FLY_ATTR_CHG,
                                            &(pAnchoredObj->GetFrameFormat()) );
                     }
-                    if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                    if ( pFly != nullptr )
                     {
-                        SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                         pFly->GetVirtDrawObj()->SetRectsDirty();
                         pFly->GetVirtDrawObj()->SetChanged();
                     }
                 }
 
                 // If anchored object is a fly frame, invalidate its lower objects
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( pFly != nullptr )
                 {
-                    SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                     ::lcl_InvalidateLowerObjs( *pFly, _bMoveObjsOutOfRange, _pPageFrame );
                 }
             }
