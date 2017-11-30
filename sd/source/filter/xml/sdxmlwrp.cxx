@@ -1093,6 +1093,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPTX(SvStream &rStream)
     catch (const css::io::IOException&)
     {
     }
+    catch (const css::xml::sax::SAXException&)
+    {
+    }
     catch (const css::lang::WrappedTargetRuntimeException&)
     {
     }
