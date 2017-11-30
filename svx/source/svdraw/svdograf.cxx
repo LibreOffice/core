@@ -327,12 +327,12 @@ void SdrGrafObj::onGraphicChanged()
 
 
 SdrGrafObj::SdrGrafObj()
-:   SdrRectObj(),
-    pGraphicLink    ( nullptr ),
-    bMirrored       ( false ),
-    mbIsSignatureLine(false),
-    mbIsSignatureLineShowSignDate(true),
-    mbIsSignatureLineCanAddComment(false)
+    : SdrRectObj()
+    ,  pGraphicLink(nullptr)
+    ,  bMirrored(false)
+    ,  mbIsSignatureLine(false)
+    ,  mbIsSignatureLineShowSignDate(true)
+    ,  mbIsSignatureLineCanAddComment(false)
 {
     pGraphic = new GraphicObject;
     mpReplacementGraphic = nullptr;
@@ -354,9 +354,12 @@ SdrGrafObj::SdrGrafObj()
 }
 
 SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const tools::Rectangle& rRect)
-:   SdrRectObj      ( rRect ),
-    pGraphicLink    ( nullptr ),
-    bMirrored       ( false )
+    : SdrRectObj(rRect)
+    , pGraphicLink(nullptr)
+    , bMirrored(false)
+    , mbIsSignatureLine(false)
+    , mbIsSignatureLineShowSignDate(true)
+    , mbIsSignatureLineCanAddComment(false)
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = nullptr;
@@ -378,9 +381,12 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const tools::Rectangle& rRect)
 }
 
 SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
-:   SdrRectObj(),
-    pGraphicLink    ( nullptr ),
-    bMirrored       ( false )
+    : SdrRectObj()
+    , pGraphicLink(nullptr)
+    , bMirrored(false)
+    , mbIsSignatureLine(false)
+    , mbIsSignatureLineShowSignDate(true)
+    , mbIsSignatureLineCanAddComment(false)
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = nullptr;
