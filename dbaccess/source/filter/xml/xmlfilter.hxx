@@ -65,6 +65,7 @@ private:
     TInfoSequence                                   m_aInfoSequence;
 
     mutable std::unique_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDocContentElemTokenMap;
     mutable std::unique_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
     mutable std::unique_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
     mutable std::unique_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
@@ -92,6 +93,7 @@ private:
     */
     static void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
 
+public:
     SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
 
@@ -128,6 +130,7 @@ public:
     const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
 
     const SvXMLTokenMap& GetDocElemTokenMap() const;
+    const SvXMLTokenMap& GetDocContentElemTokenMap() const;
     const SvXMLTokenMap& GetDatabaseElemTokenMap() const;
     const SvXMLTokenMap& GetDataSourceElemTokenMap() const;
     const SvXMLTokenMap& GetLoginElemTokenMap() const;

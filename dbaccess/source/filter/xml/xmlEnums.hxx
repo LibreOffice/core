@@ -25,11 +25,17 @@ namespace dbaxml
 {
     enum XMLDocTokens
     {
-        XML_TOK_DOC_AUTOSTYLES,
         XML_TOK_DOC_SETTINGS,
-        XML_TOK_DOC_DATABASE,
         XML_TOK_DOC_STYLES,
-        XML_TOK_DOC_SCRIPT
+        XML_TOK_DOC_CONTENT,
+        XML_TOK_DOC_META
+    };
+    enum XMLDocContentTokens
+    {
+        XML_TOK_CONTENT_AUTOSTYLES,
+        XML_TOK_CONTENT_STYLES,
+        XML_TOK_CONTENT_SCRIPTS,
+        XML_TOK_CONTENT_BODY,
     };
     enum XMLDatabaseToken
     {

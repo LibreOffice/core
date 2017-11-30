@@ -382,6 +382,137 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     return bRet;
 }
 
+class DBXMLDocumentSettingsContext : public SvXMLImportContext
+{
+public:
+    DBXMLDocumentSettingsContext(SvXMLImport & rImport,
+           sal_uInt16 const nPrefix,
+           const OUString& rLocalName)
+        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    {
+    }
+
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
+           const OUString& rLocalName,
+           const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
+    {
+        if (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken(rLocalName, XML_SETTINGS))
+        {
+            return new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList);
+        }
+        else
+        {
+            return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+        }
+    }
+};
+
+class DBXMLDocumentStylesContext : public SvXMLImportContext
+{
+public:
+    DBXMLDocumentStylesContext(SvXMLImport & rImport,
+            sal_uInt16 const nPrefix,
+            const OUString& rLocalName)
+        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    {
+    }
+
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
+    {
+        SvXMLImportContext *pContext = nullptr;
+
+        ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
+        const SvXMLTokenMap& rTokenMap = rImport.GetDocContentElemTokenMap();
+        switch (rTokenMap.Get(nPrefix, rLocalName))
+        {
+            case XML_TOK_CONTENT_STYLES:
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                pContext = rImport.CreateStylesContext(nPrefix, rLocalName, xAttrList, false);
+                break;
+            case XML_TOK_CONTENT_AUTOSTYLES:
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                pContext = rImport.CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
+                break;
+            default:
+                break;
+        }
+
+        if (!pContext)
+            pContext = new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+
+        return pContext;
+    }
+};
+
+class DBXMLDocumentBodyContext : public SvXMLImportContext
+{
+public:
+    DBXMLDocumentBodyContext(SvXMLImport & rImport,
+           sal_uInt16 const nPrefix,
+           const OUString& rLocalName)
+        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    {
+    }
+
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
+           const OUString& rLocalName,
+           const uno::Reference<xml::sax::XAttributeList> &) override
+    {
+        if ((XML_NAMESPACE_OFFICE == nPrefix || XML_NAMESPACE_OOO == nPrefix)
+            && IsXMLToken(rLocalName, XML_DATABASE))
+        {
+            ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
+            rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            return new OXMLDatabase(rImport, nPrefix, rLocalName );
+        }
+        else
+        {
+            return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+        }
+    }
+};
+
+class DBXMLDocumentContentContext : public SvXMLImportContext
+{
+public:
+    DBXMLDocumentContentContext(SvXMLImport & rImport,
+            sal_uInt16 const nPrefix,
+            const OUString& rLocalName)
+        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    {
+    }
+
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
+    {
+        SvXMLImportContext *pContext = nullptr;
+
+        ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
+        const SvXMLTokenMap& rTokenMap = rImport.GetDocContentElemTokenMap();
+        switch (rTokenMap.Get(nPrefix, rLocalName))
+        {
+            case XML_TOK_CONTENT_AUTOSTYLES:
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                pContext = rImport.CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
+                break;
+            case XML_TOK_CONTENT_SCRIPTS:
+                pContext = new XMLScriptContext(GetImport(), rLocalName, rImport.GetModel());
+                break;
+            case XML_TOK_CONTENT_BODY:
+                pContext = new DBXMLDocumentBodyContext(rImport, nPrefix, rLocalName);
+            default:
+                break;
+        }
+
+        if (!pContext)
+            pContext = new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+
+        return pContext;
+    }
+};
 
 SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
@@ -394,22 +525,15 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
     {
         case XML_TOK_DOC_SETTINGS:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new XMLDocumentSettingsContext( *this, nPrefix, rLocalName,xAttrList );
-            break;
-        case XML_TOK_DOC_DATABASE:
-            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDatabase( *this, nPrefix, rLocalName );
+            pContext = new DBXMLDocumentSettingsContext(*this, nPrefix, rLocalName);
             break;
         case XML_TOK_DOC_STYLES:
-            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, false);
+            pContext = new DBXMLDocumentStylesContext(*this, nPrefix, rLocalName);
             break;
-        case XML_TOK_DOC_AUTOSTYLES:
-            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
+        case XML_TOK_DOC_CONTENT:
+            pContext = new DBXMLDocumentContentContext(*this, nPrefix, rLocalName);
             break;
-        case XML_TOK_DOC_SCRIPT:
-            pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
+        default:
             break;
     }
 
@@ -478,20 +602,36 @@ const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OOO,    XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OOO,    XML_STYLES,             XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OFFICE, XML_DATABASE,           XML_TOK_DOC_DATABASE    },
-            { XML_NAMESPACE_OOO,    XML_DATABASE,           XML_TOK_DOC_DATABASE    },
-            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT      },
+            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_SETTINGS,  XML_TOK_DOC_SETTINGS    },
+            { XML_NAMESPACE_OOO,    XML_DOCUMENT_SETTINGS,  XML_TOK_DOC_SETTINGS    },
+            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_STYLES,    XML_TOK_DOC_STYLES      },
+            { XML_NAMESPACE_OOO,    XML_DOCUMENT_STYLES,    XML_TOK_DOC_STYLES      },
+            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_CONTENT,   XML_TOK_DOC_CONTENT     },
+            { XML_NAMESPACE_OOO,    XML_DOCUMENT_CONTENT,   XML_TOK_DOC_CONTENT     },
             XML_TOKEN_MAP_END
         };
         m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
     }
     return *m_pDocElemTokenMap;
+}
+
+const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
+{
+    if (!m_pDocContentElemTokenMap.get())
+    {
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_CONTENT_STYLES      },
+            { XML_NAMESPACE_OOO,    XML_STYLES,             XML_TOK_CONTENT_STYLES      },
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_CONTENT_AUTOSTYLES  },
+            { XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,   XML_TOK_CONTENT_AUTOSTYLES  },
+            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_CONTENT_SCRIPTS     },
+            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_CONTENT_BODY        },
+            XML_TOKEN_MAP_END
+        };
+        m_pDocContentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pDocContentElemTokenMap;
 }
 
 
