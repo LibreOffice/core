@@ -27,7 +27,6 @@ class SwToxPortion : public SwTextPortion
 public:
     SwToxPortion(){ SetWhichPor( POR_TOX ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwIsoToxPortion : public SwToxPortion
@@ -43,8 +42,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

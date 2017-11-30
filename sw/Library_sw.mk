@@ -392,7 +392,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/text/txtftn \
     sw/source/core/text/txthyph \
     sw/source/core/text/txtinit \
-    sw/source/core/text/txtio \
     sw/source/core/text/txtpaint \
     sw/source/core/text/txttab \
     sw/source/core/text/widorp \

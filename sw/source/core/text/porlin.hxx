@@ -31,15 +31,6 @@ class SwTextPaintInfo;
 class SwTextFormatInfo;
 class SwPortionHandler;
 
-// The portions output operators are virtual methods of the portion.
-#ifdef DBG_UTIL
-#define OUTPUT_OPERATOR  virtual SvStream & operator<<( SvStream & aOs ) const;
-#define OUTPUT_OPERATOR_OVERRIDE virtual SvStream & operator<<( SvStream & aOs ) const override;
-#else
-#define OUTPUT_OPERATOR
-#define OUTPUT_OPERATOR_OVERRIDE
-#endif
-
 // Portion groups
 #define PORGRP_TXT      0x8000
 #define PORGRP_EXP      0x4000
@@ -178,8 +169,6 @@ public:
     bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
     void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
-
-    OUTPUT_OPERATOR
 };
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)

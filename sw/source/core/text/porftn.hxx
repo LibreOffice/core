@@ -45,7 +45,6 @@ public:
     void SetPreferredScriptType( SwFontScript nPreferredScriptType );
 
     const SwTextFootnote* GetTextFootnote() const { return pFootnote; };
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwFootnoteNumPortion : public SwNumberPortion
@@ -54,8 +53,6 @@ public:
     SwFootnoteNumPortion( const OUString &rExpand, SwFont *pFntL )
          : SwNumberPortion( rExpand, pFntL, true, false, 0, false )
          { SetWhichPor( POR_FTNNUM ); }
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwQuoVadisPortion : public SwFieldPortion
@@ -76,8 +73,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwErgoSumPortion : public SwFieldPortion
@@ -89,7 +84,6 @@ public:
 
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

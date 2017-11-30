@@ -222,7 +222,6 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = nullptr,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-    OUTPUT_OPERATOR_OVERRIDE
     DECL_FIXEDMEMPOOL_NEWDEL(SwLineLayout)
 };
 
@@ -305,7 +304,6 @@ public:
 
     const SwDropPortion *FindDropPortion() const;
 
-    OUTPUT_OPERATOR_OVERRIDE
     DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)
 };
 

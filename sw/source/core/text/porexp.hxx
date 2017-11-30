@@ -34,8 +34,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwBlankPortion : public SwExpandPortion
@@ -57,8 +55,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwPostItsPortion : public SwExpandPortion
@@ -71,7 +67,6 @@ public:
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     bool IsScript() const { return bScript; }
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

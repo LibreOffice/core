@@ -40,8 +40,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwTabLeftPortion : public SwTabPortion
@@ -50,7 +48,6 @@ public:
     SwTabLeftPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar, bool bAutoTab )
          : SwTabPortion( nTabPosVal, cFillChar, bAutoTab )
     { SetWhichPor( POR_TABLEFT ); }
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwTabRightPortion : public SwTabPortion
@@ -59,7 +56,6 @@ public:
     SwTabRightPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar )
          : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABRIGHT ); }
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwTabCenterPortion : public SwTabPortion
@@ -68,7 +64,6 @@ public:
     SwTabCenterPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar )
          : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABCENTER ); }
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwTabDecimalPortion : public SwTabPortion
@@ -100,8 +95,6 @@ public:
     {
         return mnWidthOfPortionsUpTpDecimalPosition;
     }
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwAutoTabDecimalPortion : public SwTabDecimalPortion

@@ -99,8 +99,6 @@ public:
     SwFont* GetFnt() const { return pPart ? &pPart->GetFont() : nullptr; }
 
     static void DeleteDropCapCache();
-
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

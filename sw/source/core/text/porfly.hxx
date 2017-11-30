@@ -39,7 +39,6 @@ public:
     void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /// This portion represents an as-character anchored fly (shape, frame, etc.)
@@ -60,7 +59,6 @@ public:
     void SetMax(bool bMax) { m_bMax = bMax; }
     void SetBase(const SwTextFrame& rFrame, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
     virtual bool Format(SwTextFormatInfo& rInf) override;
-    OUTPUT_OPERATOR_OVERRIDE
 };
 
 namespace sw

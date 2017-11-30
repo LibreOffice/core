@@ -51,7 +51,6 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
-    OUTPUT_OPERATOR_OVERRIDE
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextPortion)
 };
 
@@ -80,7 +79,6 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
-    OUTPUT_OPERATOR_OVERRIDE
     DECL_FIXEDMEMPOOL_NEWDEL(SwHolePortion)
 };
 
