@@ -87,6 +87,7 @@ public:
     void testTableWidth();
     void testTextBox();
     void testFontEmbedding();
+    void testImageLink();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -122,6 +123,7 @@ public:
     CPPUNIT_TEST(testTableWidth);
     CPPUNIT_TEST(testTextBox);
     CPPUNIT_TEST(testFontEmbedding);
+    CPPUNIT_TEST(testImageLink);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -677,6 +679,15 @@ void EPUBExportTest::testFontEmbedding()
     // librevenge:font-weight
     CPPUNIT_ASSERT_EQUAL(OUString("normal"), EPUBExportTest::getCss(aCssDoc, "font-face", "font-weight"));
 #endif
+}
+
+void EPUBExportTest::testImageLink()
+{
+    createDoc("image-link.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This failed, image was missing.
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:img", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);

@@ -223,6 +223,72 @@ void XMLTabContext::startElement(const OUString &/*rName*/, const css::uno::Refe
     mrImport.GetGenerator().closeSpan();
 }
 
+/// Handler for <draw:a>.
+class XMLTextFrameHyperlinkContext : public XMLImportContext
+{
+public:
+    XMLTextFrameHyperlinkContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL characters(const OUString &rChars) override;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
+};
+
+XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
+    : XMLImportContext(rImport)
+{
+    // Inherit properties from parent.
+    librevenge::RVNGPropertyList::Iter itProp(rPropertyList);
+    for (itProp.rewind(); itProp.next();)
+        m_aPropertyList.insert(itProp.key(), itProp()->clone());
+}
+
+rtl::Reference<XMLImportContext> XMLTextFrameHyperlinkContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aPropertyList);
+}
+
+void XMLTextFrameHyperlinkContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    librevenge::RVNGPropertyList aPropertyList;
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        if (rAttributeName == "text:style-name")
+            // This affects the nested span's properties.
+            FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aPropertyList);
+        else
+        {
+            // This affects the link's properties.
+            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            aPropertyList.insert(sName.getStr(), sValue.getStr());
+        }
+    }
+
+    mrImport.GetGenerator().openLink(aPropertyList);
+}
+
+void XMLTextFrameHyperlinkContext::endElement(const OUString &/*rName*/)
+{
+    mrImport.GetGenerator().closeLink();
+}
+
+void XMLTextFrameHyperlinkContext::characters(const OUString &rChars)
+{
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
+
+    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+
+    mrImport.GetGenerator().closeSpan();
+}
+
 /// Handler for <text:a>.
 class XMLHyperlinkContext : public XMLImportContext
 {
@@ -298,6 +364,8 @@ rtl::Reference<XMLImportContext> XMLParaContext::CreateChildContext(const OUStri
 {
     if (rName == "text:a")
         return new XMLHyperlinkContext(mrImport, m_aTextPropertyList);
+    if (rName == "draw:a")
+        return new XMLTextFrameHyperlinkContext(mrImport, m_aTextPropertyList);
     return CreateParagraphOrSpanChildContext(mrImport, rName, m_aTextPropertyList);
 }
 
