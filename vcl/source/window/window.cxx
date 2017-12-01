@@ -3203,27 +3203,19 @@ vcl::LOKWindowId Window::GetLOKWindowId() const
     return mpWindowImpl->mnLOKWindowId;
 }
 
-Size Window::PaintActiveFloatingWindow(VirtualDevice& rDevice) const
+vcl::Window* Window::GetParentWithLOKNotifier()
 {
-    Size aRet;
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat)
+    vcl::Window* pWindow = this;
+    bool found = false;
+    while (pWindow && !found)
     {
-        // TODO:: run a while loop here and check all the active floating
-        // windows ( chained together, cf. pFirstFloat->mpNextFloat )
-        // For now just assume that the active floating window is the one we
-        // want to render
-        if (pFirstFloat->GetParentDialog() == this)
-        {
-            pFirstFloat->PaintToDevice(&rDevice, Point(0, 0), Size());
-            aRet = pFirstFloat->GetSizePixel();
-        }
-
-        pFirstFloat = nullptr;
+        if (pWindow->GetLOKNotifier())
+            found = true;
+        else
+            pWindow = pWindow->GetParent();
     }
 
-    return aRet;
+    return found ? pWindow : nullptr;
 }
 
 void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
@@ -3254,36 +3246,21 @@ void Window::LogicMouseButtonDownChild(const MouseEvent& rMouseEvent)
 {
     assert(comphelper::LibreOfficeKit::isActive());
 
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
-    {
-        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
-    }
+    ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
 }
 
 void Window::LogicMouseButtonUpChild(const MouseEvent& rMouseEvent)
 {
     assert(comphelper::LibreOfficeKit::isActive());
 
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
-    {
-        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
-    }
+    ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
 }
 
 void Window::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
 {
     assert(comphelper::LibreOfficeKit::isActive());
 
-    ImplSVData* pSVData = ImplGetSVData();
-    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
-    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
-    {
-        ImplWindowFrameProc(pFirstFloat->ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
-    }
+    ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
 }
 
 void Window::LOKKeyInput(const KeyEvent& rKeyEvent)
