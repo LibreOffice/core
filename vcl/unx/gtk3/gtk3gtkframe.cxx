@@ -2452,7 +2452,6 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const tools::Rectangle&
     return true;
 }
 
-#if GTK_CHECK_VERSION(3,12,0)
 namespace
 {
     void set_pointing_to(GtkPopover *pPopOver, const tools::Rectangle& rHelpArea, const SalFrameGeometry& rGeometry)
@@ -2482,11 +2481,9 @@ namespace
         gtk_popover_set_pointing_to(pPopOver, &aRect);
     }
 }
-#endif
 
 sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags)
 {
-#if GTK_CHECK_VERSION(3,12,0)
     GtkWidget *pWidget = gtk_popover_new(getMouseEventWidget());
     OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
     GtkWidget *pLabel =  gtk_label_new(sUTF.getStr());
@@ -2508,17 +2505,10 @@ sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rec
     gtk_widget_show_all(pWidget);
 
     return reinterpret_cast<sal_uIntPtr>(pWidget);
-#else
-    (void)rHelpText;
-    (void)rHelpArea;
-    (void)nFlags;
-    return 0;
-#endif
 }
 
 bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea)
 {
-#if GTK_CHECK_VERSION(3,12,0)
     GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
 
     set_pointing_to(GTK_POPOVER(pWidget), rHelpArea, maGeometry);
@@ -2528,24 +2518,13 @@ bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, cons
     gtk_label_set_text(GTK_LABEL(pLabel), sUTF.getStr());
 
     return true;
-#else
-    (void)nId;
-    (void)rHelpText;
-    (void)rHelpArea;
-    return false;
-#endif
 }
 
 bool GtkSalFrame::HidePopover(sal_uIntPtr nId)
 {
-#if GTK_CHECK_VERSION(3,12,0)
     GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
     gtk_widget_destroy(pWidget);
     return true;
-#else
-    (void)nId;
-    return false;
-#endif
 }
 
 void GtkSalFrame::addGrabLevel()

@@ -82,11 +82,9 @@ gtv_comments_sidebar_init(GtvCommentsSidebar* sidebar)
     g_object_set(sidebar->commentsgrid, "orientation", GTK_ORIENTATION_VERTICAL, nullptr);
 
     sidebar->viewannotationsButton = gtk_button_new_with_label(".uno:ViewAnnotations");
-#if GTK_CHECK_VERSION(3,12,0)
     // Hack to make sidebar grid wide enough to not need any horizontal scrollbar
     gtk_widget_set_margin_start(sidebar->viewannotationsButton, 20);
     gtk_widget_set_margin_end(sidebar->viewannotationsButton, 20);
-#endif
     gtk_container_add(GTK_CONTAINER(sidebar), sidebar->viewannotationsButton);
     g_signal_connect_swapped(sidebar->viewannotationsButton, "clicked", G_CALLBACK(gtv_comments_sidebar_view_annotations_cb), sidebar);
 
