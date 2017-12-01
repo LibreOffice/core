@@ -1657,7 +1657,7 @@ void SwUndoTableNdsChg::SaveSection( SwStartNode* pSttNd )
         m_pDelSects.reset(new SwUndoSaveSections);
 
     SwTableNode* pTableNd = pSttNd->FindTableNode();
-    std::unique_ptr<SwUndoSaveSection> pSave(new SwUndoSaveSection);
+    std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> pSave(new SwUndoSaveSection);
     pSave->SaveSection( SwNodeIndex( *pSttNd ));
 
     m_pDelSects->push_back(std::move(pSave));

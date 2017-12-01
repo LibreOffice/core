@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
+#include <o3tl/deleter.hxx>
 #include <ndarr.hxx>
 #include <undobj.hxx>
 #include <set>
@@ -161,7 +162,7 @@ public:
     void SaveBoxContent( const SwTableBox& rBox );
 };
 
-using SwUndoSaveSections = std::vector<std::unique_ptr<SwUndoSaveSection>>;
+using SwUndoSaveSections = std::vector<std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>>>;
 
 class SwUndoTableNdsChg : public SwUndo
 {
