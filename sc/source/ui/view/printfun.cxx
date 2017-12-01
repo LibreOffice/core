@@ -248,6 +248,41 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
     Construct( pOptions );
 }
 
+ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter,
+                         const ScPrintState& rState, const ScPrintOptions* pOptions)
+    :   pDocShell           ( pShell ),
+        pPrinter            ( pNewPrinter ),
+        pDrawView           ( nullptr ),
+        pUserArea           ( nullptr ),
+        bSourceRangeValid   ( false ),
+        bPrintCurrentTable  ( false ),
+        bMultiArea          ( false ),
+        mbHasPrintRange(true),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
+        pPageData           ( nullptr )
+{
+    pDev = pPrinter.get();
+
+    nPrintTab   = rState.nPrintTab;
+    nStartCol   = rState.nStartCol;
+    nStartRow   = rState.nStartRow;
+    nEndCol     = rState.nEndCol;
+    nEndRow     = rState.nEndRow;
+    nZoom       = rState.nZoom;
+    nPagesX     = rState.nPagesX;
+    nPagesY     = rState.nPagesY;
+    nTabPages   = rState.nTabPages;
+    nTotalPages = rState.nTotalPages;
+    nPageStart  = rState.nPageStart;
+    nDocPages   = rState.nDocPages;
+    bState      = true;
+
+    aSrcOffset = pPrinter->PixelToLogic(pPrinter->GetPageOffsetPixel(), MapMode(MapUnit::Map100thMM));
+    Construct( pOptions );
+}
+
 ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
                             long nPage, long nDocP, const ScRange* pArea,
                             const ScPrintOptions* pOptions )
