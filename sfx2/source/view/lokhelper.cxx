@@ -144,10 +144,13 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyWindow(vcl::LOKWindowId nLOKWindowId,
+void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
+                                vcl::LOKWindowId nLOKWindowId,
                                 const OUString& rAction,
                                 const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
+    assert(pThisView);
+
     if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
         return;
 
@@ -164,8 +167,7 @@ void SfxLokHelper::notifyWindow(vcl::LOKWindowId nLOKWindowId,
     }
     aPayload += "}";
 
-    if (SfxViewShell* pViewShell = SfxViewShell::Current())
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, aPayload.getStr());
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, aPayload.getStr());
 }
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)

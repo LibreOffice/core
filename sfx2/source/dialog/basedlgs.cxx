@@ -249,12 +249,9 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
         if (comphelper::LibreOfficeKit::isActive() && pViewShell)
         {
             SetLOKNotifier(pViewShell);
-            // Below method doesn't really give the exact dimensions,
-            // Check GetSizePixel() ?
-            const Size aOptimalSize = GetOptimalSize();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back(std::make_pair("type", "dialog"));
-            aItems.emplace_back(std::make_pair("size", aOptimalSize.toString()));
+            aItems.emplace_back(std::make_pair("size", GetOptimalSize().toString()));
             pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
 

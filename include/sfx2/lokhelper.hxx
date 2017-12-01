@@ -42,7 +42,8 @@ public:
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload);
     /// Emits a LOK_CALLBACK_WINDOW
-    static void notifyWindow(vcl::LOKWindowId nWindowId,
+    static void notifyWindow(const SfxViewShell* pThisView,
+                             vcl::LOKWindowId nWindowId,
                              const OUString& rAction,
                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
