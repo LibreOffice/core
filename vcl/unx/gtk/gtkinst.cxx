@@ -87,13 +87,6 @@ extern "C"
             g_warning("require a newer gtk than 3.%d for theme expectations", gtk_minor_version);
             return nullptr;
         }
-
-        const gchar* pVersion = gtk_check_version( 3, 2, 0 );
-        if( pVersion )
-        {
-            SAL_WARN("vcl.gtk", "gtk version conflict: " << pVersion);
-            return nullptr;
-        }
 #endif
 
         GtkYieldMutex *pYieldMutex;
