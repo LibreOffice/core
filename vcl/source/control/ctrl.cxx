@@ -421,25 +421,15 @@ void Control::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
     // ignore all of those
     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
     {
-        // If parent is a floating window, trigger an invalidate there
-        vcl::Window* pWindow = this;
-        while (pWindow)
+        if (vcl::Window* pParent = GetParentWithLOKNotifier())
         {
-            if (pWindow->ImplIsFloatingWindow())
-            {
-                static_cast<FloatingWindow*>(pWindow)->LogicInvalidate(nullptr);
-                return;
-            }
+            // invalidate the complete floating window for now
+            if (pParent->ImplIsFloatingWindow())
+                return pParent->LogicInvalidate(nullptr);
 
-            pWindow = pWindow->GetParent();
+            const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
+            pParent->LogicInvalidate(&aRect);
         }
-
-        // otherwise, for now, just invalidate the whole dialog
-        Dialog* pParentDlg = GetParentDialog();
-
-        const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
-        if (pParentDlg)
-            pParentDlg->LogicInvalidate(&aRect);
     }
 }
 

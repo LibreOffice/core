@@ -41,12 +41,10 @@ public:
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload);
-    /// Emits a LOK_CALLBACK_DIALOG
-    static void notifyWindow(vcl::LOKWindowId nDialogId,
+    /// Emits a LOK_CALLBACK_WINDOW
+    static void notifyWindow(vcl::LOKWindowId nWindowId,
                              const OUString& rAction,
                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
-    /// Emits a LOK_CALLBACK_DIALOG_CHILD
-    static void notifyWindowChild(vcl::LOKWindowId nDialogId, const OUString& rAction, const Point& rPos);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload);
     /// A special value to signify 'infinity'.

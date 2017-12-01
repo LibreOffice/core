@@ -882,18 +882,6 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
-void Dialog::InvalidateFloatingWindow(const Point& rPos)
-{
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        pNotifier->notifyWindowChild(GetLOKWindowId(), "invalidate", rPos);
-}
-
-void Dialog::CloseFloatingWindow()
-{
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        pNotifier->notifyWindowChild(GetLOKWindowId(), "close", Point(0, 0));
-}
-
 void Dialog::ensureRepaint()
 {
     // ensure repaint

@@ -587,10 +587,10 @@ bool FloatingWindow::EventNotify( NotifyEvent& rNEvt )
 
 void FloatingWindow::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
 {
-    Dialog* pParentDlg = GetParentDialog();
-    if (pParentDlg)
+    if (vcl::Window* pParent = GetParentWithLOKNotifier())
     {
-        pParentDlg->InvalidateFloatingWindow(mpImplData->maPos);
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate");
     }
 }
 
@@ -602,14 +602,26 @@ void FloatingWindow::StateChanged( StateChangedType nType )
     }
 
     SystemWindow::StateChanged( nType );
-    Dialog* pParentDlg = GetParentDialog();
-    if (pParentDlg && nType == StateChangedType::InitShow && IsVisible())
+
+    if (vcl::Window* pParent = GetParentWithLOKNotifier())
     {
-        pParentDlg->InvalidateFloatingWindow(mpImplData->maPos);
-    }
-    else if (pParentDlg && !IsVisible())
-    {
-        pParentDlg->CloseFloatingWindow();
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        if (nType == StateChangedType::InitShow && IsVisible())
+        {
+            SetLOKNotifier(pNotifier);
+
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back(std::make_pair("type", "child"));
+            aItems.emplace_back(std::make_pair("parentId", OString::number(pParent->GetLOKWindowId())));
+            aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
+            aItems.emplace_back(std::make_pair("position", mpImplData->maPos.toString()));
+            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+        else if (!IsVisible())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
+        }
     }
 
     if ( nType == StateChangedType::ControlBackground )
@@ -720,13 +732,6 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
         GrabFocus();
     }
     Show( true, ShowFlags::NoActivate );
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back(std::make_pair("size", rRect.GetSize().toString()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
 }
 
 void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
