@@ -397,6 +397,13 @@ void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Ref
         }
     }
 
+    if (!mrImport.IsPageSpanOpened())
+    {
+        auto it = mrImport.GetMasterPages().find("Standard");
+        if (it != mrImport.GetMasterPages().end())
+            mrImport.GetGenerator().openPageSpan(it->second);
+        mrImport.SetPageSpanOpened(true);
+    }
     mrImport.GetGenerator().openParagraph(aPropertyList);
 }
 
