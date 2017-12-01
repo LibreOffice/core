@@ -2268,6 +2268,8 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
 
                     if( (!bNewIsTextFormat && nOldFormat != nNewFormat) || pNewFormula )
                     {
+                        bool bIsNumFormat = false;
+                        OUString aOrigText;
                         bool bChgText = true;
                         double fVal = 0;
                         if( !pNewVal && SfxItemState::SET != GetItemState(
@@ -2280,6 +2282,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                                 sal_uInt32 nTmpFormatIdx = nNewFormat;
                                 OUString aText( GetDoc()->GetNodes()[ nNdPos ]
                                                 ->GetTextNode()->GetRedlineText());
+                                aOrigText = aText;
                                 if( aText.isEmpty() )
                                     bChgText = false;
                                 else
@@ -2289,7 +2292,6 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
 
                                     // JP 22.04.98: Bug 49659 -
                                     //  Special casing for percent
-                                    bool bIsNumFormat = false;
                                     if( css::util::NumberFormat::PERCENT ==
                                         pNumFormatr->GetType( nNewFormat ))
                                     {
@@ -2322,7 +2324,10 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                             }
                         }
                         else
+                        {
                             fVal = pNewVal->GetValue();
+                            bIsNumFormat = true;
+                        }
 
                         // format contents with the new value assigned and write to paragraph
                         Color* pCol = nullptr;
@@ -2333,7 +2338,25 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                         }
                         else
                         {
-                            pNumFormatr->GetOutputString( fVal, nNewFormat, sNewText, &pCol );
+                            if (bIsNumFormat)
+                                pNumFormatr->GetOutputString( fVal, nNewFormat, sNewText, &pCol );
+                            else
+                            {
+                                // Original text could not be parsed as
+                                // number/date/time/..., so keep the text.
+#if 0
+                                // Actually the text should be formatted
+                                // according to the format, which may include
+                                // additional text from the format, for example
+                                // in {0;-0;"BAD: "@}. But other places when
+                                // entering a new value or changing text or
+                                // changing to a different format of type Text
+                                // don't do this (yet?).
+                                pNumFormatr->GetOutputString( aOrigText, nNewFormat, sNewText, &pCol );
+#else
+                                sNewText = aOrigText;
+#endif
+                            }
 
                             if( !bChgText )
                             {
