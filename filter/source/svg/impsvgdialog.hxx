@@ -31,6 +31,7 @@
 
 #define SVG_EXPORTFILTER_CONFIGPATH         "Office.Common/Filter/SVG/Export/"
 #define SVG_PROP_TINYPROFILE                "TinyMode"
+#define SVG_PROP_DTDSTRING                  "DTDString"
 #define SVG_PROP_EMBEDFONTS                 "EmbedFonts"
 #define SVG_PROP_NATIVEDECORATION           "UseNativeTextDecoration"
 #define SVG_PROP_OPACITY                    "Opacity"
