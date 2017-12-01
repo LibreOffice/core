@@ -30,6 +30,7 @@
 
 #include <servuno.hxx>
 #include <unonames.hxx>
+#include <appluno.hxx>
 #include <cellsuno.hxx>
 #include <fielduno.hxx>
 #include <styleuno.hxx>
@@ -263,6 +264,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.style.PageStyle",                   Type::PAGESTYLE },
     { "com.sun.star.sheet.TableAutoFormat",             Type::AUTOFORMAT },
     { "com.sun.star.sheet.SheetCellRanges",             Type::CELLRANGES },
+    { "com.sun.star.sheet.RecentFunctions",             Type::RECENTFUNCTIONS },
     { "com.sun.star.drawing.GradientTable",             Type::GRADTAB },
     { "com.sun.star.drawing.HatchTable",                Type::HATCHTAB },
     { "com.sun.star.drawing.BitmapTable",               Type::BITMAPTAB },
@@ -419,6 +421,9 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case Type::AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));
+            break;
+        case Type::RECENTFUNCTIONS:
+            xRet.set(static_cast<sheet::XRecentFunctions*>(new ScRecentFunctionsObj()));
             break;
         case Type::CELLRANGES:
             //  isn't inserted, rather filled
