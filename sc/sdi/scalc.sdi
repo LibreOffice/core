@@ -3723,6 +3723,24 @@ SfxVoidItem NumberFormatTime SID_NUMBER_TIME
 ]
 
 
+SfxVoidItem NumberFormatThousands SID_NUMBER_THOUSANDS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
 SfxInt32Item ObjectHeight SID_OBJECT_HEIGHT
 
 [
