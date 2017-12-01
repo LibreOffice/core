@@ -101,11 +101,8 @@ ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
     nStartRow = r.nStartRow;
     nEndRow   = r.nEndRow;
     nPagesX   = r.nPagesX;
-    if (r.pHidden && nPagesX)
-    {
-        pHidden.reset( new bool[nPagesX] );
-        memcpy( pHidden.get(), r.pHidden.get(), nPagesX * sizeof(bool) );
-    }
+    aHidden   = r.aHidden;
+    aHidden.resize(nPagesX, false);
 }
 
 ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
@@ -113,25 +110,15 @@ ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
     nStartRow = r.nStartRow;
     nEndRow   = r.nEndRow;
     nPagesX   = r.nPagesX;
-    if (r.pHidden && nPagesX)
-    {
-        pHidden.reset( new bool[nPagesX] );
-        memcpy( pHidden.get(), r.pHidden.get(), nPagesX * sizeof(bool) );
-    }
-    else
-        pHidden.reset();
-
+    aHidden   = r.aHidden;
+    aHidden.resize(nPagesX, false);
     return *this;
 }
 
 void ScPageRowEntry::SetPagesX(size_t nNew)
 {
-    if (pHidden)
-    {
-        OSL_FAIL("SetPagesX not after SetHidden");
-        pHidden.reset();
-    }
     nPagesX = nNew;
+    aHidden.resize(nPagesX, false);
 }
 
 void ScPageRowEntry::SetHidden(size_t nX)
@@ -142,28 +129,24 @@ void ScPageRowEntry::SetHidden(size_t nX)
             --nPagesX;
         else
         {
-            if (!pHidden)
-            {
-                pHidden.reset( new bool[nPagesX] );
-                memset( pHidden.get(), false, nPagesX * sizeof(bool) );
-            }
-            pHidden[nX] = true;
+            aHidden.resize(nPagesX, false);
+            aHidden[nX] = true;
         }
     }
 }
 
 bool ScPageRowEntry::IsHidden(size_t nX) const
 {
-    return nX>=nPagesX || ( pHidden && pHidden[nX] );       //! inline?
+    return nX >= nPagesX || aHidden[nX];       //! inline?
 }
 
 size_t ScPageRowEntry::CountVisible() const
 {
-    if ( pHidden )
+    if (!aHidden.empty())
     {
         size_t nVis = 0;
         for (size_t i=0; i<nPagesX; i++)
-            if (!pHidden[i])
+            if (!aHidden[i])
                 ++nVis;
         return nVis;
     }
