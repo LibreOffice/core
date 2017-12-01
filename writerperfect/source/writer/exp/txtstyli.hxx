@@ -52,35 +52,6 @@ private:
     XMLStylesContext &m_rStyles;
 };
 
-/// Handler for <style:master-page>.
-class XMLMasterPageContext : public XMLImportContext
-{
-public:
-    XMLMasterPageContext(XMLImport &rImport, XMLStylesContext &rStyles);
-
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-
-private:
-    XMLStylesContext &m_rStyles;
-};
-
-/// Handler for <style:page-layout>.
-class XMLPageLayoutContext : public XMLImportContext
-{
-public:
-    XMLPageLayoutContext(XMLImport &rImport, XMLStylesContext &rStyles);
-
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
-
-    librevenge::RVNGPropertyList &GetPropertyList();
-private:
-    OUString m_aName;
-    librevenge::RVNGPropertyList m_aPropertyList;
-    XMLStylesContext &m_rStyles;
-};
-
 } // namespace exp
 } // namespace writerperfect
 

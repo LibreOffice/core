@@ -54,15 +54,12 @@ class XMLImport : public cppu::WeakImplHelper
     std::map<OUString, librevenge::RVNGPropertyList> maTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticGraphicStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maGraphicStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> maPageLayouts;
-    std::map<OUString, librevenge::RVNGPropertyList> maMasterPages;
     librevenge::RVNGPropertyListVector maCoverImages;
     /// Author, date, etc -- overwrites what would be from the document out of the box.
     librevenge::RVNGPropertyList maMetaData;
     const css::uno::Reference<css::uno::XComponentContext> &mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maMediaDir;
-    bool mbPageSpanOpened = false;
     const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &mrPageMetafiles;
 
 public:
@@ -85,13 +82,9 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetGraphicStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetPageLayouts();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetMasterPages();
     const librevenge::RVNGPropertyListVector &GetCoverImages();
     const librevenge::RVNGPropertyList &GetMetaData();
     bool FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
-    void SetPageSpanOpened(bool bPageSpanOpened);
-    bool IsPageSpanOpened() const;
     const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &GetPageMetafiles() const;
     const css::uno::Reference<css::uno::XComponentContext> &GetComponentContext() const;
 
