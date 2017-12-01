@@ -100,42 +100,25 @@ ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
     nStartRow = r.nStartRow;
     nEndRow   = r.nEndRow;
     nPagesX   = r.nPagesX;
-    if (r.pHidden && nPagesX)
-    {
-        pHidden = new bool[nPagesX];
-        memcpy( pHidden, r.pHidden, nPagesX * sizeof(bool) );
-    }
-    else
-        pHidden = nullptr;
+
+    aHidden   = r.aHidden;
+    aHidden.resize(nPagesX, false);
 }
 
 ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
 {
-    delete[] pHidden;
-
     nStartRow = r.nStartRow;
     nEndRow   = r.nEndRow;
     nPagesX   = r.nPagesX;
-    if (r.pHidden && nPagesX)
-    {
-        pHidden = new bool[nPagesX];
-        memcpy( pHidden, r.pHidden, nPagesX * sizeof(bool) );
-    }
-    else
-        pHidden = nullptr;
-
+    aHidden   = r.aHidden;
+    aHidden.resize(nPagesX, false);
     return *this;
 }
 
 void ScPageRowEntry::SetPagesX(size_t nNew)
 {
-    if (pHidden)
-    {
-        OSL_FAIL("SetPagesX nicht nach SetHidden");
-        delete[] pHidden;
-        pHidden = nullptr;
-    }
     nPagesX = nNew;
+    aHidden.resize(nPagesX, false);
 }
 
 void ScPageRowEntry::SetHidden(size_t nX)
@@ -146,28 +129,24 @@ void ScPageRowEntry::SetHidden(size_t nX)
             --nPagesX;
         else
         {
-            if (!pHidden)
-            {
-                pHidden = new bool[nPagesX];
-                memset( pHidden, false, nPagesX * sizeof(bool) );
-            }
-            pHidden[nX] = true;
+            aHidden.resize(nPagesX, false);
+            aHidden[nX] = true;
         }
     }
 }
 
 bool ScPageRowEntry::IsHidden(size_t nX) const
 {
-    return nX>=nPagesX || ( pHidden && pHidden[nX] );       //! inline?
+    return nX >= nPagesX || aHidden[nX];       //! inline?
 }
 
 size_t ScPageRowEntry::CountVisible() const
 {
-    if ( pHidden )
+    if (!aHidden.empty())
     {
         size_t nVis = 0;
         for (size_t i=0; i<nPagesX; i++)
-            if (!pHidden[i])
+            if (!aHidden[i])
                 ++nVis;
         return nVis;
     }

@@ -102,12 +102,12 @@ private:
     SCROW   nStartRow;
     SCROW   nEndRow;
     size_t  nPagesX;
-    bool*   pHidden;
+    std::vector<bool> aHidden;
     //!     Cache Number of really visible?
 
 public:
-            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; pHidden = nullptr; }
-            ~ScPageRowEntry()   { delete[] pHidden; }
+            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; }
+            ~ScPageRowEntry()   { }
 
             ScPageRowEntry(const ScPageRowEntry& r);
     ScPageRowEntry& operator=(const ScPageRowEntry& r);
