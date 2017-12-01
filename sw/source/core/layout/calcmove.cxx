@@ -213,14 +213,14 @@ inline void PrepareUnlock( SwFlowFrame *pTab )
 }
 
 // hopefully, one day this function simply will return 'false'
-static bool lcl_IsCalcUpperAllowed( const SwFrame& rFrame )
+static bool lcl_IsCalcUpperAllowed(const SwFrame& rFrame)
 {
     return !rFrame.GetUpper()->IsSctFrame() &&
-           !rFrame.GetUpper()->IsFooterFrame() &&
-           // #i23129#, #i36347# - no format of upper Writer fly frame
-           !rFrame.GetUpper()->IsFlyFrame() &&
-           !( rFrame.GetUpper()->IsTabFrame() && rFrame.GetUpper()->GetUpper()->IsInTab() ) &&
-           !( rFrame.IsTabFrame() && rFrame.GetUpper()->IsInTab() );
+        !rFrame.GetUpper()->IsFooterFrame() &&
+        // #i23129#, #i36347# - no format of upper Writer fly frame
+        !rFrame.GetUpper()->IsFlyFrame() &&
+        !(rFrame.GetUpper()->IsTabFrame() && rFrame.GetUpper()->GetUpper()->IsInTab()) &&
+        !(rFrame.IsTabFrame() && rFrame.GetUpper()->IsInTab());
 }
 
 /** Prepares the Frame for "formatting" (MakeAll()).

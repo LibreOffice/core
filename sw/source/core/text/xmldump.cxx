@@ -226,6 +226,21 @@ namespace
     }
 }
 
+void SwFrame::dumpTopMostAsXml(xmlTextWriterPtr writer) const
+{
+    const SwFrame* pFrame = this;
+    if (!pFrame)
+    {
+        return;
+    }
+    while (pFrame->GetUpper())
+    {
+        pFrame = pFrame->GetUpper();
+    }
+
+    pFrame->dumpAsXml(writer);
+}
+
 void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 {
     bool bCreateWriter = ( nullptr == writer );

@@ -44,26 +44,27 @@ endif
 # like std::copy, std::transform (when MSVC_USE_DEBUG_RUNTIME is enabled)
 
 gb_COMPILERDEFS := \
-	-DBOOST_ERROR_CODE_HEADER_ONLY \
-	-DBOOST_OPTIONAL_USE_OLD_DEFINITION_OF_NONE \
-	-DBOOST_SYSTEM_NO_DEPRECATED \
-	-D_CRT_NON_CONFORMING_SWPRINTFS \
-	-D_CRT_NONSTDC_NO_DEPRECATE \
-	-D_CRT_SECURE_NO_DEPRECATE \
-	-D_SCL_SECURE_NO_WARNINGS \
-	-D_MT \
-	-D_DLL \
-	-DCPPU_ENV=$(gb_CPPU_ENV) \
+        -DDBG_UTIL \
+        -DBOOST_ERROR_CODE_HEADER_ONLY \
+        -DBOOST_OPTIONAL_USE_OLD_DEFINITION_OF_NONE \
+        -DBOOST_SYSTEM_NO_DEPRECATED \
+        -D_CRT_NON_CONFORMING_SWPRINTFS \
+        -D_CRT_NONSTDC_NO_DEPRECATE \
+        -D_CRT_SECURE_NO_DEPRECATE \
+        -D_SCL_SECURE_NO_WARNINGS \
+        -D_MT \
+        -D_DLL \
+        -DCPPU_ENV=$(gb_CPPU_ENV) \
 
 ifeq ($(CPUNAME),INTEL)
 gb_COMPILERDEFS += \
-	-DBOOST_MEM_FN_ENABLE_CDECL \
+        -DBOOST_MEM_FN_ENABLE_CDECL \
 
 endif
 
 gb_RCDEFS := \
-	-DWINVER=0x0502 \
-	-DWIN32 \
+        -DWINVER=0x0502 \
+        -DWIN32 \
 
 gb_RCFLAGS :=
 
@@ -132,80 +133,80 @@ gb_AFLAGS := $(AFLAGS)
 #   warning)
 
 gb_CFLAGS := \
-	-utf-8 \
-	-Gd \
-	-GR \
-	-Gs \
-	-GS \
-	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
-	-nologo \
-	-W4 \
-	-wd4091 \
-	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
-	-wd4127 \
-	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
-	-wd4200 \
-	-wd4244 \
-	-wd4251 \
-	-wd4505 \
-	-wd4512 \
-	-wd4706 \
-	-wd4800 \
-	-wd4267 \
+        -utf-8 \
+        -Gd \
+        -GR \
+        -Gs \
+        -GS \
+        $(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
+        -nologo \
+        -W4 \
+        -wd4091 \
+        $(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
+        -wd4127 \
+        $(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
+        -wd4200 \
+        -wd4244 \
+        -wd4251 \
+        -wd4505 \
+        -wd4512 \
+        -wd4706 \
+        -wd4800 \
+        -wd4267 \
 
 ifneq ($(COM_IS_CLANG),TRUE)
 
 # clang-cl doesn't support -Wv:18 for now
 gb_CFLAGS += \
-	-Wv:18 \
+        -Wv:18 \
 
 endif
 
 gb_CXXFLAGS := \
-	-utf-8 \
-	-Gd \
-	-GR \
-	-Gs \
-	-GS \
-	-Gy \
-	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
-	-nologo \
-	-W4 \
-	-wd4091 \
-	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
-	-wd4127 \
-	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
-	-wd4201 \
-	-wd4244 \
-	-wd4250 \
-	-wd4251 \
-	-wd4267 \
-	-wd4275 \
-	-wd4290 \
-	-wd4351 \
-	-wd4373 \
-	-wd4505 \
-	-wd4510 \
-	-wd4512 \
-	-wd4610 \
-	-wd4611 \
-	-wd4706 \
-	-wd4800 \
+        -utf-8 \
+        -Gd \
+        -GR \
+        -Gs \
+        -GS \
+        -Gy \
+        $(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
+        -nologo \
+        -W4 \
+        -wd4091 \
+        $(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
+        -wd4127 \
+        $(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
+        -wd4201 \
+        -wd4244 \
+        -wd4250 \
+        -wd4251 \
+        -wd4267 \
+        -wd4275 \
+        -wd4290 \
+        -wd4351 \
+        -wd4373 \
+        -wd4505 \
+        -wd4510 \
+        -wd4512 \
+        -wd4610 \
+        -wd4611 \
+        -wd4706 \
+        -wd4800 \
 
 ifeq ($(CPUNAME),INTEL)
 
 gb_CXXFLAGS += \
-	-Zm500 \
+        -Zm500 \
 
 gb_CFLAGS += \
-	-Zm500 \
+        -Zm500 \
 
 endif
 
 ifneq ($(COM_IS_CLANG),TRUE)
 
 gb_CXXFLAGS += \
-	-Wv:18 \
+        -Wv:18 \
 
 endif
 
@@ -215,14 +216,14 @@ gb_RCFLAGS += -nologo
 # C4005: 'identifier' : macro redefinition
 
 gb_PCHWARNINGS = \
-	-we4650 \
-	-we4651 \
-	-we4652 \
-	-we4653 \
-	-we4005 \
+        -we4650 \
+        -we4651 \
+        -we4652 \
+        -we4653 \
+        -we4005 \
 
 gb_STDLIBS := \
-	advapi32.lib \
+        advapi32.lib \
 
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-WX)
 
@@ -230,25 +231,25 @@ gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-WX)
 gb_CXX03FLAGS :=
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
-	-EHs \
+        -DEXCEPTIONS_ON \
+        -EHs \
 
 gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
-	$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-nologo,) \
-	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
+        $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-nologo,) \
+        $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
 # Prevent warning spamming
 # Happens because of the way we link our unit tests with our libraries.
 # LNK4049: locally defined symbol
 gb_LinkTarget_LDFLAGS += \
-	/ignore:4217 /ignore:4049
+        /ignore:4217 /ignore:4049
 
 
 gb_DEBUGINFO_FLAGS := \
-	-FS \
-	-Zi \
+        -FS \
+        -Zi \
 
 gb_DEBUG_CFLAGS :=
 
@@ -271,33 +272,33 @@ gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
 gb_CXXCLRFLAGS := $(gb_CXXFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
-	-EHa \
-	-clr \
-	-wd4339 \
-	-Wv:18 \
-	-wd4267 \
+        -AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
+        -EHa \
+        -clr \
+        -wd4339 \
+        -Wv:18 \
+        -wd4267 \
 
 ifeq ($(COM_IS_CLANG),TRUE)
 
 gb_CFLAGS += \
-	-Wdeclaration-after-statement \
-	-Wendif-labels \
-	-Wshadow \
-	-Wstrict-prototypes \
-	-Wundef \
-	-Wunused-macros \
+        -Wdeclaration-after-statement \
+        -Wendif-labels \
+        -Wshadow \
+        -Wstrict-prototypes \
+        -Wundef \
+        -Wunused-macros \
 
 gb_CXXFLAGS += \
-	-Wendif-labels \
-	-Wimplicit-fallthrough \
-	-Wno-missing-braces \
-	-Wno-missing-braces \
-	-Wnon-virtual-dtor \
-	-Woverloaded-virtual \
-	-Wshadow \
-	-Wundef \
-	-Wunused-macros \
+        -Wendif-labels \
+        -Wimplicit-fallthrough \
+        -Wno-missing-braces \
+        -Wno-missing-braces \
+        -Wnon-virtual-dtor \
+        -Woverloaded-virtual \
+        -Wshadow \
+        -Wundef \
+        -Wunused-macros \
 
 endif
 

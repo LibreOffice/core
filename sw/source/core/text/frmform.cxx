@@ -1059,8 +1059,8 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // i#84870 - No split, if text frame only contains one
             // as-character anchored object.
             if ( !bOnlyContainsAsCharAnchoredObj &&
-                 ( nStrLen > 0 ||
-                   ( nStrLen == 0 && GetTextNode()->GetNumRule() ) )
+                ( nStrLen > 0 ||
+                ( nStrLen == 0 && GetTextNode()->GetNumRule() ) )
                )
             {
                 SplitFrame( nEnd );
@@ -1104,8 +1104,10 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
 
     AdjustFrame( nChg, bHasToFit );
 
-    if( HasFollow() || IsInFootnote() )
-        AdjustFollow_( rLine, nEnd, nStrLen, nNew );
+    if (HasFollow() || IsInFootnote())
+    {
+        AdjustFollow_(rLine, nEnd, nStrLen, nNew);
+    }
 
     pPara->SetPrepMustFit( false );
 }

@@ -101,6 +101,14 @@
 #include "txtfrm.hxx"
 #include <fntcache.hxx>
 
+#include "tabfrm.hxx"
+#include "swtblfmt.hxx"
+#include "rowfrm.hxx"
+#include "cellfrm.hxx"
+#include "layfrm.hxx"
+#include "frame.hxx"
+#include "swtable.hxx"
+
 #include <comphelper/string.hxx>
 
 PROT SwProtocol::nRecord = PROT::FileInit;
@@ -230,7 +238,29 @@ void SwProtocol::Record( const SwFrame* pFrame, PROT nFunction, DbgAction nAct, 
 
 void SwProtocol::Init()
 {
-    nRecord = PROT::FileInit;
+    nRecord = PROT::FileInit;   // Snapshot   = 0x00040000 nRecord = 0x00077777
+    nRecord =
+        PROT::Init |
+        PROT::MakeAll |
+        PROT::MoveFwd |
+        PROT::MoveBack |
+        PROT::Grow |
+        PROT::Shrink |
+        PROT::GrowTest |
+        PROT::ShrinkTest |
+        PROT::Size |
+        PROT::PrintArea |
+        PROT::Pos |
+        PROT::AdjustN |
+        PROT::Section |
+        PROT::Cut |
+        PROT::Paste |
+        PROT::Leaf |
+        PROT::TestFormat |
+        PROT::FrmChanges |
+        PROT::Snapshot
+        ;
+
     OUString aName("dbg_lay.go");
     SvFileStream aStream( aName, StreamMode::READ );
     if( aStream.IsOpen() )
@@ -282,8 +312,11 @@ SwImplProtocol::~SwImplProtocol()
         pStream->Close();
         delete pStream;
     }
-    pFrameIds->clear();
-    delete pFrameIds;
+    if (pFrameIds)
+    {
+        pFrameIds->clear();
+        delete pFrameIds;
+    }
     aVars.clear();
 }
 
@@ -446,8 +479,145 @@ static void lcl_Flags(OStringBuffer& rOut, const SwFrame* pFrame)
     rOut.append(pFrame->GetValidPrtAreaFlag() ? '+' : '-');
 }
 
+static void lcl_Padded(OStringBuffer& rOut, const OString s, size_t length)
+{
+    rOut.append(s);
+    if (length > (size_t)s.getLength())
+    for (size_t i = 0; i < length - s.getLength(); i++)
+    {
+        rOut.append(" ");
+    }
+}
+
+static void lcl_Padded(OStringBuffer& rOut, const long n, size_t length = 5)
+{
+    sal_Char sz[RTL_STR_MAX_VALUEOFINT64];
+    rtl_str_valueOfInt64(sz, n, 10);
+    OString s(sz);
+    lcl_Padded(rOut, s, length);
+}
+
+/// output the frame as plain text.
+static void lcl_FrameRect(OStringBuffer& rOut, const char* hint, const SwRect rect)
+{
+    rOut.append("[");
+    rOut.append(hint);
+    rOut.append(":X:");
+    lcl_Padded(rOut, rect.Pos().X());
+    rOut.append(", Y:");
+    lcl_Padded(rOut, rect.Pos().Y());
+    rOut.append(", Width:");
+    lcl_Padded(rOut, rect.SSize().Width());
+    rOut.append(", Height:");
+    lcl_Padded(rOut, rect.SSize().Height());
+    rOut.append("] ");
+}
+
+static bool lcl_StartWith(OStringBuffer& rOut, std::string test)
+{
+    OStringBuffer tsb1(test.c_str());
+    return rOut.toString().compareTo(tsb1.toString(), test.length()) == 0;
+}
+
+static std::size_t lcl_StartWith(OStringBuffer& rOut, std::vector<std::string> tests)
+{
+    for (size_t i = 0; i < tests.size(); ++i)
+    {
+        if (lcl_StartWith(rOut, tests[i]))
+        {
+            return i+1;
+        }
+    }
+    return 0;
+}
+
+static void lcl_Breakpoint(size_t index = 1)
+{
+    size_t result;
+    if (index)
+    {
+        result = index;
+    }
+    else
+    {
+        result = index;
+    }
+
+    if (result)
+    {
+        result = index;
+    }
+}
+
+static OString lcl_TableInfo(const SwTabFrame* pTabFrame)
+{
+    const SwTable* pTable = pTabFrame->GetTable();
+    const SwModify* pModify = pTable->GetRegisteredIn();
+    const SwFormat* pFormat = static_cast<const SwFormat*>(pModify);
+    const OUString& text = pFormat->GetName();
+    return OUStringToOString(text, RTL_TEXTENCODING_ASCII_US);
+}
+
+static OString lcl_RowInfo(const SwRowFrame* pFrame)
+{
+    if (pFrame == nullptr) return "";
+    const SwTableLine* pTabLine = pFrame->GetTabLine();
+    if (pTabLine == nullptr) return "";
+    // ToDo
+
+    return "RowInfo";
+}
+
+static OUString lcl_CellText(const SwCellFrame* pFrame)
+{
+    OUString result;
+    int n = 0;
+    sal_Char sz[RTL_STR_MAX_VALUEOFINT64];
+
+    const SwStartNode* pStartNode = pFrame->GetTabBox()->GetSttNd();
+    if (!pStartNode) return result;
+    const SwEndNode* pEndNode = pStartNode->EndOfSectionNode();
+    const SwNodes& nodes = pStartNode->GetNodes();
+
+    for (sal_uLong i = pStartNode->GetIndex(); i < nodes.Count(); i++)
+    {
+        SwNode* pNode = nodes[i];
+
+        if (pNode->IsEndNode())
+        {
+            if (pNode->EndOfSectionNode() == pEndNode)
+            {
+                break;
+            }
+        }
+        else if (pNode->IsTextNode())
+        {
+            n++;
+            result += "Para:";
+            rtl_str_valueOfInt64(sz, n, 10);
+            OUString s = OUString::createFromAscii(sz);
+            result += s;
+            result += " ";
+            result += pNode->GetTextNode()->GetText();
+        }
+    }
+
+    rtl_str_valueOfInt64(sz, n, 10);
+    OUString s = OUString::createFromAscii(sz);
+    s += " para(s):";
+    s += result;
+
+    return s;
+}
+
+static OString lcl_CellInfo(const SwCellFrame* pFrame)
+{
+    const OUString text = "CellInfo: " + pFrame->GetTabBox()->GetName() + " Text: " + lcl_CellText(pFrame);
+    return OUStringToOString(text, RTL_TEXTENCODING_ASCII_US);
+}
+
 /// output the type of the frame as plain text.
-static void lcl_FrameType( OStringBuffer& rOut, const SwFrame* pFrame )
+static void lcl_FrameType(OStringBuffer& rOut, const SwFrame* pFrame)
 {
     if( pFrame->IsTextFrame() )
         rOut.append("Text ");
@@ -655,6 +825,80 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                             }
         default: break;
     }
+
+    aOut.append("  ");
+    while (aOut.getLength() < 40) aOut.append(" ");
+    // pFrame->Frame();   // absolute position in document and size of the Frame
+    lcl_FrameRect(aOut, "Fra", pFrame->Frame());
+
+    aOut.append(" ");
+    while (aOut.getLength() < 90) aOut.append(" ");
+    // pFrame->Prt() ;      // position relatively to Frame and size of PrtArea
+    lcl_FrameRect(aOut, "Prt", pFrame->Prt());
+
+    if (pFrame->IsTextFrame())
+    {
+        aOut.append(" ");
+        while (aOut.getLength() < 140) aOut.append(" ");
+        const OUString& text = static_cast<const SwTextFrame*>(pFrame)->GetTextNode()->GetText();
+        OString o = OUStringToOString(text, RTL_TEXTENCODING_ASCII_US);
+        aOut.append(o);
+    }
+    else if (pFrame->IsTabFrame())
+    {
+        const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(pFrame);
+        aOut.append(lcl_TableInfo(pTabFrame));
+    }
+    else if (pFrame->IsRowFrame())
+    {
+        const SwRowFrame* pRowFrame = static_cast<const SwRowFrame*>(pFrame);
+        aOut.append(lcl_RowInfo(pRowFrame));
+
+    }
+    else if (pFrame->IsCellFrame())
+    {
+        const SwCellFrame* pCellFrame = static_cast<const SwCellFrame*>(pFrame);
+        aOut.append(lcl_CellInfo(pCellFrame));
+    }
+
+    /*OStringBuffer tsb1("      11 Text TestGrow ");
+    if (!aOut.toString().compareTo(tsb1.toString(), 10))
+    {
+    }*/
+
+
+    std::string test1("      11 Text TestGrow ");
+    std::string test2("    18 Text TestGrow ");
+    std::string test3("    19 Text TestGrow ");
+    std::string test4("    12 Text TestGrow ");
+
+    if (lcl_StartWith(aOut, test1))
+    {
+        lcl_Breakpoint();
+    }
+
+    if (lcl_StartWith(aOut, test2))
+    {
+        lcl_Breakpoint();
+    }
+
+    if (lcl_StartWith(aOut, test3))
+    {
+        lcl_Breakpoint();
+    }
+
+    if (lcl_StartWith(aOut, test4))
+    {
+        lcl_Breakpoint();
+    }
+
+    std::vector<std::string> breakpoints = { test1, test2, test3, test4};
+    size_t index;
+    if (index = lcl_StartWith(aOut, breakpoints))
+    {
+        lcl_Breakpoint(index);
+    }
+
     pStream->WriteCharPtr( aOut.getStr() );
     (*pStream) << endl;  // output
     pStream->Flush();   // to the disk, so we can read it immediately

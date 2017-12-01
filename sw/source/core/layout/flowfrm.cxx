@@ -1823,7 +1823,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         return static_cast<SwContentFrame&>(m_rThis).MoveFootnoteCntFwd( bMakePage, pOldBoss );
     }
 
-    if( !IsFwdMoveAllowed() && !bMoveAlways )
+    if( !IsFwdMoveAllowed() && !bMoveAlways)
     {
         bool bNoFwd = true;
         if( m_rThis.IsInSct() )
@@ -1858,7 +1858,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 
     bool bSamePage = true;
     SwLayoutFrame *pNewUpper =
-            m_rThis.GetLeaf( bMakePage ? MAKEPAGE_INSERT : MAKEPAGE_NONE, true );
+        m_rThis.GetLeaf(bMakePage ? MAKEPAGE_INSERT : MAKEPAGE_NONE, true);
 
     if ( pNewUpper )
     {
@@ -1939,7 +1939,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
                 pOldSct = static_cast<SwSectionFrame*>(m_rThis.GetUpper());
             }
 
-            MoveSubTree( pNewUpper, pNewUpper->Lower() );
+            MoveSubTree(pNewUpper, pNewUpper->Lower());
 
             // #i27145#
             if ( pOldSct && pOldSct->GetSection() )
@@ -2022,14 +2022,19 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         const SwLayoutFrame* pUpperFrame = m_rThis.GetUpper();
         while ( pUpperFrame )
         {
-            if ( pUpperFrame->IsTabFrame() )
+            if ( pUpperFrame->IsTabFrame() || pUpperFrame->IsRowFrame() )
             {
                 return false;
             }
             // If the text frame is a follow-section-in-table, that can move
             // backward as well.
             bool bIsFollowSection = pUpperFrame->IsSctFrame() && static_cast<const SwSectionFrame*>(pUpperFrame)->GetPrecede();
-            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() ) || bIsFollowSection )
+
+            // If the text frame is a follow-in-table, that can move
+            // backward as well.
+            bool bIsFollow = const_cast<SwLayoutFrame*>(pUpperFrame)->GetPrevCellLeaf();
+
+            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() ) || bIsFollowSection || bIsFollow )
             {
                 break;
             }
