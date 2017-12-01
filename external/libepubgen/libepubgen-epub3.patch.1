@@ -5354,3 +5354,307 @@ index 11f20cb..3699179 100644
 -- 
 2.13.6
 
+From bd49e1672d0e914736824dadc8f89c26ae955088 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 28 Nov 2017 14:50:34 +0100
+Subject: [PATCH] [ABI CHANGE] optionally support the EPUB3 fixed layout
+
+Default is still the reflowable method, of course.
+---
+ inc/libepubgen/EPUBTextGenerator.h |  1 +
+ inc/libepubgen/libepubgen-decls.h  |  8 ++++++++
+ src/lib/EPUBGenerator.cpp          | 17 +++++++++++++++-
+ src/lib/EPUBGenerator.h            |  3 +++
+ src/lib/EPUBHTMLGenerator.cpp      | 41 ++++++++++++++++++++++++++++++++++----
+ src/lib/EPUBHTMLGenerator.h        |  2 +-
+ src/lib/EPUBHTMLManager.cpp        |  4 ++--
+ src/lib/EPUBHTMLManager.h          |  2 +-
+ src/lib/EPUBTextGenerator.cpp      |  5 +++++
+ src/test/EPUBTextGeneratorTest.cpp | 27 +++++++++++++++++++++++++
+ 10 files changed, 101 insertions(+), 9 deletions(-)
+
+diff --git a/inc/libepubgen/EPUBTextGenerator.h b/inc/libepubgen/EPUBTextGenerator.h
+index cb2d9a6..beb05aa 100644
+--- a/inc/libepubgen/EPUBTextGenerator.h
++++ b/inc/libepubgen/EPUBTextGenerator.h
+@@ -43,6 +43,7 @@ public:
+   void setSplitHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
+   void setStylesMethod(EPUBStylesMethod styles);
++  void setLayoutMethod(EPUBLayoutMethod layout);
+ 
+   /** Register a handler for embedded images.
+     *
+diff --git a/inc/libepubgen/libepubgen-decls.h b/inc/libepubgen/libepubgen-decls.h
+index 2657a2d..3eb206e 100644
+--- a/inc/libepubgen/libepubgen-decls.h
++++ b/inc/libepubgen/libepubgen-decls.h
+@@ -69,6 +69,14 @@ enum EPUBStylesMethod
+   EPUB_STYLES_METHOD_INLINE, //< The styles will be described inline.
+ };
+ 
++/** The possible ways to lay out HTML files.
++  */
++enum EPUBLayoutMethod
++{
++  EPUB_LAYOUT_METHOD_REFLOWABLE, //< Dynamic pagination.
++  EPUB_LAYOUT_METHOD_FIXED, //< Exactly one page per HTML file.
++};
++
+ }
+ 
+ #endif // INCLUDED_LIBEPUBGEN_LIBEPUBGEN_DECLS_H
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 571f0eb..4a62d7f 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -47,6 +47,7 @@ EPUBGenerator::EPUBGenerator(EPUBPackage *const package, const EPUBSplitMethod s
+   , m_splitGuard(split)
+   , m_version(version)
+   , m_stylesMethod(EPUB_STYLES_METHOD_CSS)
++  , m_layoutMethod(EPUB_LAYOUT_METHOD_REFLOWABLE)
+ {
+ }
+ 
+@@ -117,7 +118,7 @@ void EPUBGenerator::startNewHtmlFile()
+ 
+   m_splitGuard.onSplit();
+ 
+-  m_currentHtml = m_htmlManager.create(m_imageManager, m_fontManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod, m_version);
++  m_currentHtml = m_htmlManager.create(m_imageManager, m_fontManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod, m_layoutMethod, m_version);
+ 
+   // restore state in the new file
+   m_currentHtml->startDocument(m_documentProps);
+@@ -156,6 +157,11 @@ void EPUBGenerator::setStylesMethod(EPUBStylesMethod styles)
+   m_stylesMethod = styles;
+ }
+ 
++void EPUBGenerator::setLayoutMethod(EPUBLayoutMethod layout)
++{
++  m_layoutMethod = layout;
++}
++
+ void EPUBGenerator::writeContainer()
+ {
+   EPUBXMLSink sink;
+@@ -362,6 +368,15 @@ void EPUBGenerator::writeRoot()
+     metaAttrs.insert("content", generator.c_str());
+     sink.openElement("meta", metaAttrs);
+     sink.closeElement("meta");
++
++    if (m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED)
++    {
++      metaAttrs.clear();
++      metaAttrs.insert("property", "rendition:layout");
++      sink.openElement("meta", metaAttrs);
++      sink.insertCharacters("pre-paginated");
++      sink.closeElement("meta");
++    }
+   }
+ 
+   sink.closeElement("metadata");
+diff --git a/src/lib/EPUBGenerator.h b/src/lib/EPUBGenerator.h
+index abc6a9a..5a0df86 100644
+--- a/src/lib/EPUBGenerator.h
++++ b/src/lib/EPUBGenerator.h
+@@ -53,6 +53,8 @@ public:
+ 
+   void setStylesMethod(EPUBStylesMethod stylesMethod);
+ 
++  void setLayoutMethod(EPUBLayoutMethod layoutMethod);
++
+ private:
+   virtual void startHtmlFile() = 0;
+   virtual void endHtmlFile() = 0;
+@@ -84,6 +86,7 @@ private:
+ 
+   int m_version;
+   EPUBStylesMethod m_stylesMethod;
++  EPUBLayoutMethod m_layoutMethod;
+ };
+ 
+ }
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 5c6421c..4260858 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -7,6 +7,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <cmath>
+ #include <memory>
+ #include <sstream>
+ #include <stack>
+@@ -107,6 +108,11 @@ bool ZoneSinkImpl::endsInLineBreak() const
+          ;
+ }
+ 
++/// Convers inches to CSS pixels.
++int inchToCSSPixel(const librevenge::RVNGProperty *property)
++{
++  return round(property->getDouble() * 96);
++}
+ }
+ 
+ namespace
+@@ -371,7 +377,7 @@ std::string EPUBHTMLTextZone::label(int id) const
+ struct EPUBHTMLGeneratorImpl
+ {
+   //! constructor
+-  EPUBHTMLGeneratorImpl(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version)
++  EPUBHTMLGeneratorImpl(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, EPUBLayoutMethod layoutMethod, int version)
+     : m_document(document)
+     , m_imageManager(imageManager)
+     , m_fontManager(fontManager)
+@@ -382,6 +388,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_path(path)
+     , m_stylesheetPath(stylesheetPath)
+     , m_actualPage(0)
++    , m_actualPageProperties()
+     , m_ignore(false)
+     , m_hasText(false)
+     , m_version(version)
+@@ -389,6 +396,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_framePropertiesStack()
+     , m_linkPropertiesStack()
+     , m_stylesMethod(stylesMethod)
++    , m_layoutMethod(layoutMethod)
+     , m_actualSink()
+     , m_sinkStack()
+   {
+@@ -477,6 +485,7 @@ struct EPUBHTMLGeneratorImpl
+   const EPUBPath m_stylesheetPath;
+ 
+   int m_actualPage;
++  RVNGPropertyList m_actualPageProperties;
+   bool m_ignore;
+   /// Does the currently opened paragraph have some text?
+   bool m_hasText;
+@@ -488,6 +497,7 @@ struct EPUBHTMLGeneratorImpl
+   std::stack<RVNGPropertyList> m_linkPropertiesStack;
+ 
+   EPUBStylesMethod m_stylesMethod;
++  EPUBLayoutMethod m_layoutMethod;
+ 
+ protected:
+   std::unique_ptr<TextZoneSink> m_actualSink;
+@@ -499,8 +509,8 @@ private:
+   EPUBHTMLGeneratorImpl operator=(EPUBHTMLGeneratorImpl const &orig);
+ };
+ 
+-EPUBHTMLGenerator::EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version)
+-  : m_impl(new EPUBHTMLGeneratorImpl(document, imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, path, stylesheetPath, stylesMethod, version))
++EPUBHTMLGenerator::EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, EPUBLayoutMethod layoutMethod, int version)
++  : m_impl(new EPUBHTMLGeneratorImpl(document, imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, path, stylesheetPath, stylesMethod, layoutMethod, version))
+ {
+ }
+ 
+@@ -560,6 +570,25 @@ void EPUBHTMLGenerator::endDocument()
+   metaAttrs.insert("content", "text/html; charset=UTF-8");
+   m_impl->m_document.openElement("meta", metaAttrs);
+   m_impl->m_document.closeElement("meta");
++  if (m_impl->m_version >= 30 && m_impl->m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED)
++  {
++    metaAttrs.clear();
++    metaAttrs.insert("name", "viewport");
++    std::stringstream content;
++    if (const librevenge::RVNGProperty *pageWidth = m_impl->m_actualPageProperties["fo:page-width"])
++    {
++      content << "width=";
++      content << inchToCSSPixel(pageWidth);
++    }
++    if (const librevenge::RVNGProperty *pageHeight = m_impl->m_actualPageProperties["fo:page-height"])
++    {
++      content << ", height=";
++      content << inchToCSSPixel(pageHeight);
++    }
++    metaAttrs.insert("content", content.str().c_str());
++    m_impl->m_document.openElement("meta", metaAttrs);
++    m_impl->m_document.closeElement("meta");
++  }
+   if (m_impl->m_version < 30)
+     m_impl->sendMetaData(m_impl->m_document);
+   RVNGPropertyList linkAttrs;
+@@ -582,9 +611,13 @@ void EPUBHTMLGenerator::defineEmbeddedFont(const RVNGPropertyList &propList)
+   m_impl->m_fontManager.insert(propList, m_impl->m_path);
+ }
+ 
+-void EPUBHTMLGenerator::openPageSpan(const RVNGPropertyList & /* propList */)
++void EPUBHTMLGenerator::openPageSpan(const RVNGPropertyList &propList)
+ {
+   m_impl->m_actualPage++;
++
++  librevenge::RVNGPropertyList::Iter i(propList);
++  for (i.rewind(); i.next();)
++    m_impl->m_actualPageProperties.insert(i.key(), i()->clone());
+ }
+ 
+ void EPUBHTMLGenerator::closePageSpan()
+diff --git a/src/lib/EPUBHTMLGenerator.h b/src/lib/EPUBHTMLGenerator.h
+index 3699179..3c6577f 100644
+--- a/src/lib/EPUBHTMLGenerator.h
++++ b/src/lib/EPUBHTMLGenerator.h
+@@ -32,7 +32,7 @@ class EPUBXMLSink;
+ class EPUBHTMLGenerator : public librevenge::RVNGTextInterface
+ {
+ public:
+-  EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version);
++  EPUBHTMLGenerator(EPUBXMLSink &document, EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &path, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, EPUBLayoutMethod layoutMethod, int version);
+   ~EPUBHTMLGenerator() override;
+ 
+   void setDocumentMetaData(const librevenge::RVNGPropertyList &propList) override;
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index d2c21da..363b33e 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -41,7 +41,7 @@ EPUBHTMLManager::EPUBHTMLManager(EPUBManifest &manifest)
+ {
+ }
+ 
+-const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version)
++const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, EPUBLayoutMethod layoutMethod, int version)
+ {
+   std::ostringstream nameBuf;
+   nameBuf << "section" << std::setw(4) << std::setfill('0') << m_number.next();
+@@ -55,7 +55,7 @@ const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageMana
+   m_contents.push_back(EPUBXMLSink());
+ 
+   const EPUBHTMLGeneratorPtr_t gen(
+-    new EPUBHTMLGenerator(m_contents.back(), imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, m_paths.back(), stylesheetPath, stylesMethod, version));
++    new EPUBHTMLGenerator(m_contents.back(), imageManager, fontManager, listStyleManager, paragraphStyleManager, spanStyleManager, tableStyleManager, m_paths.back(), stylesheetPath, stylesMethod, layoutMethod, version));
+ 
+   return gen;
+ }
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index e1205e6..31e6dfe 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -41,7 +41,7 @@ class EPUBHTMLManager
+ public:
+   explicit EPUBHTMLManager(EPUBManifest &manifest);
+ 
+-  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, int version);
++  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBFontManager &fontManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, EPUBStylesMethod stylesMethod, EPUBLayoutMethod layoutMethod, int version);
+ 
+   void writeTo(EPUBPackage &package);
+ 
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 5d4e8f2..c3bc963 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -147,6 +147,11 @@ void EPUBTextGenerator::setStylesMethod(EPUBStylesMethod styles)
+   m_impl->setStylesMethod(styles);
+ }
+ 
++void EPUBTextGenerator::setLayoutMethod(EPUBLayoutMethod layout)
++{
++  m_impl->setLayoutMethod(layout);
++}
++
+ void EPUBTextGenerator::registerEmbeddedImageHandler(const librevenge::RVNGString &mimeType, EPUBEmbeddedImage imageHandler)
+ {
+   if (!mimeType.empty() && imageHandler)
+-- 
+2.13.6
+
