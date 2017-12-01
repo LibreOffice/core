@@ -244,6 +244,7 @@ public:
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
 
     bool operator==( const ScFormatEntry& ) const;
+    bool IsEqual( const ScFormatEntry&, bool bIgnoreSrcPos = false ) const;
 
     virtual void startRendering();
     virtual void endRendering();
@@ -572,7 +573,7 @@ public:
 
     ScCondFormatData GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
-    bool            EqualEntries( const ScConditionalFormat& r ) const;
+    bool            EqualEntries( const ScConditionalFormat& r, bool bIgnoreSrcPos = false ) const;
 
     void            DoRepaint();
 
