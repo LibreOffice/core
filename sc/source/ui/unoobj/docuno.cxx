@@ -1296,6 +1296,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
 
         DELETEZ( pPrintFuncCache );     // must be deleted because it has a pointer to the DocShell
+        m_pPrintState.reset();
     }
     else if ( nId == SfxHintId::DataChanged )
     {
@@ -1303,6 +1304,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
 
         DELETEZ( pPrintFuncCache );
+        m_pPrintState.reset();
 
         // handle "OnCalculate" sheet events (search also for VBA event handlers)
         if ( pDocShell )
@@ -1660,6 +1662,8 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     }
     sal_Int32 nPages = pPrintFuncCache->GetPageCount();
 
+    m_pPrintState.reset();
+
     sal_Int32 nSelectCount = nPages;
     if ( !aPagesStr.isEmpty() )
     {
@@ -1806,7 +1810,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         if (!m_pPrintState)
         {
             m_pPrintState.reset(new ScPrintState());
-            pPrintFunc->GetPrintState(*m_pPrintState);
+            pPrintFunc->GetPrintState(*m_pPrintState, true);
         }
 
         aPageSize.Width = TwipsToHMM( aTwips.Width());
@@ -1929,11 +1933,16 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     //  pages of the same sheet
 
 
-    ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
-    aFunc.SetDrawView( aDrawViewKeeper.mpDrawView );
-    aFunc.SetRenderFlag( true );
+    std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
+    if (m_pPrintState)
+        pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, *m_pPrintState, &aStatus.GetOptions()));
+    else
+        pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
+
+    pPrintFunc->SetDrawView( aDrawViewKeeper.mpDrawView );
+    pPrintFunc->SetRenderFlag( true );
     if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
-        aFunc.SetExclusivelyDrawOleAndDrawObjects();
+        pPrintFunc->SetExclusivelyDrawOleAndDrawObjects();
 
     Range aPageRange( nRenderer+1, nRenderer+1 );
     MultiSelection aPage( aPageRange );
@@ -1969,7 +1978,13 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         }
     }
 
-    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, true, nullptr );
+    (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, true, nullptr );
+
+    if (!m_pPrintState)
+    {
+        m_pPrintState.reset(new ScPrintState());
+        pPrintFunc->GetPrintState(*m_pPrintState, true);
+    }
 
     //  resolve the hyperlinks for PDF export
 
