@@ -185,6 +185,7 @@ short SfxModalDialog::Execute()
         SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("type", "dialog"));
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
         pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
     }
@@ -279,6 +280,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             // Check GetSizePixel() ?
             const Size aOptimalSize = GetOptimalSize();
             std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back(std::make_pair("type", "dialog"));
             aItems.emplace_back(std::make_pair("size", aOptimalSize.toString()));
             pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
@@ -545,6 +547,7 @@ bool SfxFloatingWindow::Close()
     pBindings->GetDispatcher_Impl()->ExecuteList(
             pImpl->pMgr->GetType(),
             SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue });
+
     return true;
 }
 

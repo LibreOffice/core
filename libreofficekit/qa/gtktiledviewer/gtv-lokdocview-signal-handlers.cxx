@@ -301,47 +301,60 @@ void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpoin
     }
 }
 
-void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpointer)
+void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
 
     std::stringstream aStream(pPayload);
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
-    const unsigned nDialogId = aRoot.get<unsigned>("dialogId");
+    const unsigned nWinId = aRoot.get<unsigned>("id");
     const std::string aAction = aRoot.get<std::string>("action");
 
     if (aAction == "created")
     {
+        const std::string aType = aRoot.get<std::string>("type");
         const std::string aSize = aRoot.get<std::string>("size");
-        std::vector<int> aPoints = GtvHelpers::split<int>(aSize, ", ", 2);
-        GtkWidget* pDialog = gtv_lok_dialog_new(pDocView, nDialogId, aPoints[0], aPoints[1]);
-        g_info("created  dialog, for dialogid: %d with size: %s", nDialogId, aSize.c_str());
+        std::vector<int> aSizePoints = GtvHelpers::split<int>(aSize, ", ", 2);
 
-        gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
-        g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
-        g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
-
-        gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
-        gtk_widget_show_all(GTK_WIDGET(pDialog));
-        gtk_window_present(GTK_WINDOW(pDialog));
-
-        return;
-    }
-
-    GList* pChildWins = gtv_application_window_get_all_child_windows(window);
-    GList* pIt = nullptr;
-    bool found = false;
-    for (pIt = pChildWins; !found && pIt != nullptr; pIt = pIt->next)
-    {
-        guint nChildDialogId = 0;
-        g_object_get(pIt->data, "dialogid", &nChildDialogId, nullptr);
-        if (nDialogId == nChildDialogId)
+        if (aType == "dialog")
         {
-            found = true;
+            GtkWidget* pDialog = gtv_lok_dialog_new(pDocView, nWinId, aSizePoints[0], aSizePoints[1]);
+            g_info("created  dialog, for dialogid: %d with size: %s", nWinId, aSize.c_str());
 
+            gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
+            g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
+            g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
+
+            gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
+            gtk_widget_show_all(GTK_WIDGET(pDialog));
+            gtk_window_present(GTK_WINDOW(pDialog));
+        }
+        else if (aType == "child")
+        {
+            const unsigned nParentId = std::atoi(aRoot.get<std::string>("parentId").c_str());
+            GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, nParentId);
+            const std::string aPos = aRoot.get<std::string>("position");
+            std::vector<int> aPosPoints = GtvHelpers::split<int>(aPos, ", ", 2);
+            gtv_lok_dialog_child_create(GTV_LOK_DIALOG(pDialog), nWinId, aPosPoints[0], aPosPoints[1], aSizePoints[0], aSizePoints[1]);
+        }
+    }
+    else
+    {
+        // check if it's a child window
+        GtkWidget* pParent = gtv_application_window_get_parent(window, nWinId);
+        if (pParent) // it's a floating window in the dialog
+        {
+            if (aAction == "invalidate")
+                gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pParent));
+            else if (aAction == "close")
+                gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pParent));
+        }
+        else // it's the dialog window itself
+        {
+            GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, nWinId);
             if (aAction == "close")
-                gtk_widget_destroy(GTK_WIDGET(pIt->data));
+                gtk_widget_destroy(GTK_WIDGET(pDialog));
             else if (aAction == "size_changed")
             {
                 const std::string aSize = aRoot.get<std::string>("size");
@@ -349,16 +362,16 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
                 if (aSizePoints.size() != 2)
                 {
                     g_error("Malformed size_changed callback");
-                    break;
+                    return;
                 }
 
-                g_object_set(G_OBJECT(pIt->data),
+                g_object_set(G_OBJECT(pDialog),
                              "width", aSizePoints[0],
                              "height", aSizePoints[1],
                              nullptr);
 
                 GdkRectangle aGdkRectangle = {0, 0, 0, 0};
-                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data), aGdkRectangle);
+                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog), aGdkRectangle);
             }
             else if (aAction == "invalidate")
             {
@@ -373,47 +386,8 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
                 catch(const std::exception& e)
                 {}
 
-                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data), aGdkRectangle);
+                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog), aGdkRectangle);
             }
-        }
-    }
-}
-
-void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, gpointer)
-{
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-
-    std::stringstream aStream(pPayload);
-    boost::property_tree::ptree aRoot;
-    boost::property_tree::read_json(aStream, aRoot);
-    const unsigned nDialogId = aRoot.get<unsigned>("dialogId");
-    const std::string aAction = aRoot.get<std::string>("action");
-    const std::string aPos = aRoot.get<std::string>("position");
-    gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
-    gchar** ppCoordinate = ppCoordinates;
-    int nX = 0;
-    int nY = 0;
-
-    if (*ppCoordinate)
-        nX = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (*ppCoordinate)
-        nY = atoi(*ppCoordinate);
-
-    g_strfreev(ppCoordinates);
-
-    GList* pChildWins = gtv_application_window_get_all_child_windows(window);
-    GList* pIt = nullptr;
-    for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
-    {
-        guint nChildDialogId = 0;
-        g_object_get(pIt->data, "dialogid", &nChildDialogId, nullptr);
-        if (nDialogId == nChildDialogId)
-        {
-            if (aAction == "invalidate")
-                gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
-            else if (aAction == "close")
-                gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
         }
     }
 }
