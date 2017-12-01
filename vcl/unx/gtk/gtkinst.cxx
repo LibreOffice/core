@@ -82,7 +82,7 @@ extern "C"
             XInitThreads();
 
 #if GTK_CHECK_VERSION(3,0,0)
-        if (gtk_minor_version < 18)
+        if (gtk_minor_version < 20)
         {
             g_warning("require a newer gtk than 3.%d for theme expectations", gtk_minor_version);
             return nullptr;
