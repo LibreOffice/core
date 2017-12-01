@@ -113,6 +113,7 @@ interface FormatForSelection
     SID_NUMBER_STANDARD     [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
     SID_NUMBER_INCDEC       [ ExecMethod = ExecuteNumFormat;]
     SID_NUMBER_DECDEC       [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_THOUSANDS    [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
 
     SID_NUMBER_TYPE_FORMAT  [ ExecMethod = ExecuteNumFormat;StateMethod = GetNumFormatState; ]
 

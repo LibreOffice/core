@@ -113,6 +113,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, void )
         GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_TYPE_FORMAT,
                 SfxCallMode::RECORD, { &aItem });
         mnCategorySelected = nVal;
+        NumFormatValueHdl(*mpEdDecimals);  //#tdf114216
     }
 }
 

@@ -1013,6 +1013,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             case SID_NUMBER_FORMAT:
             case SID_NUMBER_INCDEC:
             case SID_NUMBER_DECDEC:
+            case SID_NUMBER_THOUSANDS:
             case FID_DEFINE_NAME:
             case FID_ADD_NAME:
             case FID_USE_NAME:
@@ -1133,7 +1134,48 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             pTabViewShell->ChangeNumFmtDecimals( false );
             rReq.Done();
             break;
+        case SID_NUMBER_THOUSANDS:
+        {
+            ScDocument* pDoc                = pViewData->GetDocument();
+            SvNumberFormatter* pFormatter   = pDoc->GetFormatTable();
+            sal_uInt32 nCurrentNumberFormat;
 
+            bool bThousand(false);
+            bool bNegRed(false);
+            sal_uInt16 nPrecision(0);
+            sal_uInt16 nLeadZeroes(0);
+
+            pDoc->GetNumberFormat(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo(), nCurrentNumberFormat);
+            pFormatter->GetFormatSpecialInfo(nCurrentNumberFormat, bThousand, bNegRed, nPrecision, nLeadZeroes);
+
+            bThousand = !bThousand;
+
+            OUString aFormat;
+            static OUString sBreak = ",";
+            const OUString sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
+            const OUString sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
+            const OUString sPrecision = OUString::number(nPrecision);
+            const OUString sLeadZeroes = OUString::number(nLeadZeroes);
+
+            aFormat += sThousand;
+            aFormat += sBreak;
+            aFormat += sNegRed;
+            aFormat += sBreak;
+            aFormat += sPrecision;
+            aFormat += sBreak;
+            aFormat += sLeadZeroes;
+            aFormat += sBreak;
+
+            pTabViewShell->SetNumFmtByStr( aFormat );
+
+            aSet.Put( SfxBoolItem( nSlot, bThousand ) );
+            rBindings.Invalidate( nSlot );
+            rReq.Done();
+
+            SfxStringItem aItem( SID_NUMBER_FORMAT,  aFormat );
+            GetDispatcher()->ExecuteList(SID_NUMBER_FORMAT, SfxCallMode::RECORD, { &aItem });
+        }
+        break;
         case SID_NUMBER_FORMAT:
             // symphony version with format interpretation
             if(pReqArgs)
@@ -2490,6 +2532,26 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
     {
         switch ( nWhich )
         {
+            case SID_NUMBER_THOUSANDS:
+                {
+                    const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
+                    if ( pFormatEntry && ( pFormatEntry->GetType() &
+                                           ( css::util::NumberFormat::NUMBER |
+                                             css::util::NumberFormat::PERCENT |
+                                             css::util::NumberFormat::CURRENCY |
+                                             css::util::NumberFormat::FRACTION) ) )
+                    {
+                        bool bThousand( false );
+                        bool bNegRed( false );
+                        sal_uInt16 nPrecision( 0 );
+                        sal_uInt16 nLeadZeroes( 0 );
+                        pFormatter->GetFormatSpecialInfo( nNumberFormat, bThousand, bNegRed, nPrecision, nLeadZeroes );
+                        rSet.Put( SfxBoolItem( nWhich, bThousand ) );
+                    }
+                    else
+                        rSet.DisableItem( nWhich );
+                }
+                break;
             case SID_NUMBER_FORMAT:
                 // symphony version with format interpretation
                 {
