@@ -255,8 +255,6 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
         return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_NONE);
     if (rName == "office:font-face-decls")
         return new XMLFontFaceDeclsContext(mrImport);
-    if (rName == "office:master-styles")
-        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_MASTER);
     if (rName == "office:body")
     {
         if (mrImport.GetPageMetafiles().empty())
@@ -409,16 +407,6 @@ bool XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList
     return false;
 }
 
-void XMLImport::SetPageSpanOpened(bool bPageSpanOpened)
-{
-    mbPageSpanOpened = bPageSpanOpened;
-}
-
-bool XMLImport::IsPageSpanOpened() const
-{
-    return mbPageSpanOpened;
-}
-
 const std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &XMLImport::GetPageMetafiles() const
 {
     return mrPageMetafiles;
@@ -511,16 +499,6 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetGraphicStyles()
     return maGraphicStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetPageLayouts()
-{
-    return maPageLayouts;
-}
-
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetMasterPages()
-{
-    return maMasterPages;
-}
-
 void XMLImport::startDocument()
 {
     mrGenerator.startDocument(librevenge::RVNGPropertyList());
@@ -528,11 +506,6 @@ void XMLImport::startDocument()
 
 void XMLImport::endDocument()
 {
-    if (mbPageSpanOpened)
-    {
-        mrGenerator.closePageSpan();
-        mbPageSpanOpened = false;
-    }
     mrGenerator.endDocument();
 }
 
