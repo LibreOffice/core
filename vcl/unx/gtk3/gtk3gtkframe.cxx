@@ -1903,11 +1903,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
             gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
         else
         {
-#if GTK_CHECK_VERSION(3,18,0)
             gtk_window_fullscreen_on_monitor(GTK_WINDOW(m_pWindow), pScreen, nMonitor);
-#else
-            gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
-#endif
         }
 
     }
@@ -2281,10 +2277,8 @@ KeyIndicatorState GtkSalFrame::GetIndicatorState()
         nState |= KeyIndicatorState::CAPSLOCK;
     if (gdk_keymap_get_num_lock_state(pKeyMap))
         nState |= KeyIndicatorState::NUMLOCK;
-#if GTK_CHECK_VERSION(3,18,0)
     if (gdk_keymap_get_scroll_lock_state(pKeyMap))
         nState |= KeyIndicatorState::SCROLLLOCK;
-#endif
 
     return nState;
 }
