@@ -129,7 +129,6 @@
 "ScTableSheetObj";"com::sun::star::sheet::XCellRangeFormula#optional";"setFormulaArray()"
 "ScTableSheetObj";"com::sun::star::util::XIndent";"decrementIndent()"
 "ScTableSheetObj";"com::sun::star::util::XIndent";"incrementIndent()"
-"ScTableSheetObj";"com::sun::star::sheet::XMultipleOperation";"setTableOperation()"
 "ScTableSheetObj";"com::sun::star::table::XAutoFormattable";"autoFormat()"
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"IsVisible"
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"PageStyle"
