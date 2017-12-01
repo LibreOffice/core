@@ -7688,7 +7688,8 @@ AS_IF([test "$SYSTEM_EPUBGEN" = "TRUE"], [
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
             #include <libepubgen/libepubgen.h>
         ], [
-            const libepubgen::EPUBTextGenerator generator(nullptr, EPUB_SPLIT_METHOD_NONE, 30);
+            libepubgen::EPUBTextGenerator generator(nullptr);
+            generator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, libepubgen::EPUB_SPLIT_METHOD_NONE);
         ])],
         [
             AC_MSG_RESULT([yes])
