@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	sal \
 	sfx \
 	sot \
+	svt \
 	svx \
 	tl \
 	ucbhelper \

@@ -18,12 +18,16 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <svtools/DocumentToGraphicRenderer.hxx>
 
 #include "exp/xmlimp.hxx"
 #include "EPUBPackage.hxx"
@@ -103,7 +107,14 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     uno::Reference<frame::XModel> xSourceModel(mxSourceDocument, uno::UNO_QUERY);
     if (xSourceModel.is())
         aSourceURL = xSourceModel->getURL();
-    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(mxContext, aGenerator, aSourceURL, rDescriptor));
+
+    std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> aPageMetafiles;
+#if LIBEPUBGEN_VERSION_SUPPORT
+    if (nLayoutMethod == libepubgen::EPUB_LAYOUT_METHOD_FIXED)
+        CreateMetafiles(aPageMetafiles);
+#endif
+
+    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(mxContext, aGenerator, aSourceURL, rDescriptor, aPageMetafiles));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
 
@@ -111,7 +122,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     comphelper::PropertyMapEntry const aInfoMap[] =
     {
         {OUString("BaseURI"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        {OUString(), 0, css::uno::Type(), 0, 0}
+        {OUString(), 0, uno::Type(), 0, 0}
     };
     uno::Reference<beans::XPropertySet> xInfoSet(comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
     xInfoSet->setPropertyValue("BaseURI", uno::makeAny(aSourceURL));
@@ -120,7 +131,41 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxSourceDocument);
     uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);
+
     return xFilter->filter(rDescriptor);
+}
+
+void EPUBExportFilter::CreateMetafiles(std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &rPageMetafiles)
+{
+    DocumentToGraphicRenderer aRenderer(mxSourceDocument, /*bSelectionOnly=*/false);
+    uno::Reference<frame::XModel> xModel(mxSourceDocument, uno::UNO_QUERY);
+    if (!xModel.is())
+        return;
+
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    if (!xTextViewCursorSupplier.is())
+        return;
+
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    if (!xCursor.is())
+        return;
+
+    xCursor->jumpToLastPage();
+    sal_Int16 nPages = xCursor->getPage();
+    for (sal_Int16 nPage = 1; nPage <= nPages; ++nPage)
+    {
+        Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
+        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aDocumentSizePixel, COL_WHITE);
+        const GDIMetaFile &rGDIMetaFile = aGraphic.GetGDIMetaFile();
+        SvMemoryStream aMemoryStream;
+        const_cast<GDIMetaFile &>(rGDIMetaFile).Write(aMemoryStream);
+        uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8 *>(aMemoryStream.GetData()), aMemoryStream.Tell());
+
+        Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage);
+        // Get the CSS pixel size of the page (mm100 -> pixel using 96 DPI, independent from system DPI).
+        Size aCss(static_cast<double>(aLogic.getWidth()) / 26.4583, static_cast<double>(aLogic.getHeight()) / 26.4583);
+        rPageMetafiles.emplace_back(aSequence, aCss);
+    }
 }
 
 void EPUBExportFilter::cancel()
