@@ -95,13 +95,14 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     // file, the flat ODF filter has access to the doc model, everything else
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
-    libepubgen::EPUBTextGenerator aGenerator(&aPackage, static_cast<libepubgen::EPUBSplitMethod>(nSplitMethod)
+    libepubgen::EPUBTextGenerator aGenerator(&aPackage
 #if LIBEPUBGEN_VERSION_SUPPORT
                                              , nVersion
 #endif
                                             );
 #if LIBEPUBGEN_VERSION_SUPPORT
-    aGenerator.setLayoutMethod(static_cast<libepubgen::EPUBLayoutMethod>(nLayoutMethod));
+    aGenerator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, nSplitMethod);
+    aGenerator.setOption(libepubgen::EPUB_GENERATOR_OPTION_LAYOUT, nLayoutMethod);
 #endif
     OUString aSourceURL;
     uno::Reference<frame::XModel> xSourceModel(mxSourceDocument, uno::UNO_QUERY);
