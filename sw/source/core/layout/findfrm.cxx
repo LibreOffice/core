@@ -1304,7 +1304,10 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
                   _pLayoutFrame->IsInFootnote() )
         {
             if ( _pLayoutFrame->IsInTab() && !IsTabFrame() &&
-                 ( !IsContentFrame() || !const_cast<SwFrame*>(this)->GetNextCellLeaf() ) )
+                 ( !IsContentFrame() || (!const_cast<SwFrame*>(this)->GetNextCellLeaf() && !const_cast<SwFrame*>(this)->GetPrevCellLeaf())
+                     // || this->IsInRowSplit()
+                     // || this->IsInTableSplit()
+                     ) )
             {
                 bRetVal = false;
             }
@@ -1439,6 +1442,84 @@ SwLayoutFrame* SwFrame::GetNextCellLeaf()
 
     SAL_WARN_IF(!pTmpFrame, "sw.core", "SwFrame::GetNextCellLeaf() without cell");
     return pTmpFrame ? static_cast<SwCellFrame*>(pTmpFrame)->GetFollowCell() : nullptr;
+}
+
+const bool SwFrame::IsInRowSplit() const
+{
+    const SwFrame* pTmpFrame = this;
+    while (pTmpFrame && !pTmpFrame->IsCellFrame())
+        pTmpFrame = pTmpFrame->GetUpper();
+
+    SAL_WARN_IF(!pTmpFrame, "sw.core", "SwFrame::IsInRowSplit() without cell");
+    if (!pTmpFrame) return false;
+
+    pTmpFrame = pTmpFrame->GetUpper();
+    SAL_WARN_IF(!pTmpFrame, "sw.core", "SwFrame::IsInRowSplit() cell without Upper()");
+    if (!pTmpFrame) return false;
+
+    if (!pTmpFrame->IsRowFrame())
+    {
+        SAL_WARN_IF(true, "sw.core", "SwFrame::IsInRowSplit() cell without row");
+        return false;
+    }
+
+    const SwRowFrame* pTmpRowFrame = static_cast<const SwRowFrame*>(pTmpFrame);
+
+    bool flag1 = pTmpRowFrame->IsInSplit();
+    // bool flag2 = pTmpRowFrame->IsInSplitTableRow(); // means: is in splitted table row...
+
+    // bool result = flag1 || flag2;
+    bool result = flag1;
+
+    return result;
+}
+
+const bool SwFrame::IsInTableSplit() const
+{
+    static bool newLogic = false;
+    if (!newLogic)
+    {
+        return false;
+    }
+
+    const SwFrame* pTmpFrame = this;
+    while (pTmpFrame && !pTmpFrame->IsCellFrame())
+        pTmpFrame = pTmpFrame->GetUpper();
+
+    SAL_WARN_IF(!pTmpFrame, "sw.core", "SwFrame::IsInRowSplit() without cell");
+    if (!pTmpFrame) return false;
+
+    pTmpFrame = pTmpFrame->GetUpper();
+    SAL_WARN_IF(!pTmpFrame, "sw.core", "SwFrame::IsInRowSplit() cell without Upper()");
+    if (!pTmpFrame) return false;
+
+    if (!pTmpFrame->IsRowFrame())
+    {
+        SAL_WARN_IF(true, "sw.core", "SwFrame::IsInRowSplit() cell without row");
+        return false;
+    }
+
+    pTmpFrame = pTmpFrame->GetUpper();
+    SAL_WARN_IF(!pTmpFrame, "sw.core", "SwFrame::IsInRowSplit() row without Upper()");
+    if (!pTmpFrame) return false;
+
+    if (!pTmpFrame->IsTabFrame())
+    {
+        SAL_WARN_IF(true, "sw.core", "SwFrame::IsInRowSplit() row without table");
+        return false;
+    }
+
+    const SwTabFrame* pTmpTabFrame = static_cast<const SwTabFrame*>(pTmpFrame);
+    const SwRowFrame* pTmpRowFrame = static_cast<const SwRowFrame*>(pTmpTabFrame->Lower());
+
+    bool result = false;
+    while (!result && pTmpRowFrame)
+    {
+        result |= pTmpRowFrame->IsInSplit();
+        pTmpRowFrame = static_cast<const SwRowFrame*>(pTmpRowFrame->GetNext());
+    }
+
+    return result;
 }
 
 SwLayoutFrame* SwFrame::GetPrevCellLeaf()

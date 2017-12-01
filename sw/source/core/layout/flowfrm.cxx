@@ -1823,7 +1823,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         return static_cast<SwContentFrame&>(m_rThis).MoveFootnoteCntFwd( bMakePage, pOldBoss );
     }
 
-    if( !IsFwdMoveAllowed() && !bMoveAlways )
+    if( !IsFwdMoveAllowed() && !bMoveAlways)
     {
         bool bNoFwd = true;
         if( m_rThis.IsInSct() )
@@ -1858,7 +1858,17 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 
     bool bSamePage = true;
     SwLayoutFrame *pNewUpper =
-            m_rThis.GetLeaf( bMakePage ? MAKEPAGE_INSERT : MAKEPAGE_NONE, true );
+        m_rThis.GetLeaf(bMakePage ? MAKEPAGE_INSERT : MAKEPAGE_NONE, true);
+    //SwLayoutFrame *pNewUpper = nullptr;
+    //if (!m_rThis.IsInTableSplit())
+    //{
+    //    pNewUpper = m_rThis.GetLeaf(bMakePage ? MAKEPAGE_INSERT : MAKEPAGE_NONE, true);
+    //}
+    //else
+    //{
+    //    // pNewUpper = nullptr;
+    //    pNewUpper = m_rThis.GetLeaf(bMakePage ? MAKEPAGE_INSERT : MAKEPAGE_NONE, true);
+    //}
 
     if ( pNewUpper )
     {
@@ -1930,7 +1940,9 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         // by pNewUpper->Calc(), for instance into the pNewUpper.
         // MoveSubTree or PasteTree respectively is not prepared to handle such a
         // situation.
-        if( pNewUpper != m_rThis.GetUpper() )
+        if( pNewUpper != m_rThis.GetUpper()
+            // && !m_rThis.IsInTableSplit()
+            )
         {
             // #i27145#
             SwSectionFrame* pOldSct = nullptr;
@@ -1939,7 +1951,11 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
                 pOldSct = static_cast<SwSectionFrame*>(m_rThis.GetUpper());
             }
 
-            MoveSubTree( pNewUpper, pNewUpper->Lower() );
+            // MoveSubTree(pNewUpper, pNewUpper->Lower());
+            if (!m_rThis.IsInTableSplit())
+            {
+                MoveSubTree(pNewUpper, pNewUpper->Lower());
+            }
 
             // #i27145#
             if ( pOldSct && pOldSct->GetSection() )
@@ -2022,14 +2038,22 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         const SwLayoutFrame* pUpperFrame = m_rThis.GetUpper();
         while ( pUpperFrame )
         {
-            if ( pUpperFrame->IsTabFrame() )
+            bool dummy = true;
+            if ( pUpperFrame->IsTabFrame() || pUpperFrame->IsRowFrame() )
             {
+                dummy = true;
                 return false;
             }
             // If the text frame is a follow-section-in-table, that can move
             // backward as well.
-            bool bIsFollowSection = pUpperFrame->IsSctFrame() && static_cast<const SwSectionFrame*>(pUpperFrame)->GetPrecede();
-            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() ) || bIsFollowSection )
+            bool bIsFollowSection = pUpperFrame->IsSctFrame() && static_cast<const SwSectionFrame*>(pUpperFrame)->GetPrecede(); // MB: delete pUpperFrame->IsSctFrame() &&
+
+            bool bIsFollow = const_cast<SwLayoutFrame*>(pUpperFrame)->GetPrevCellLeaf();
+
+            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() )
+                || bIsFollowSection
+                || bIsFollow
+                )
             {
                 break;
             }

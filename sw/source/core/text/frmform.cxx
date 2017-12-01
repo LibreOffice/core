@@ -251,7 +251,9 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
                         break;
                 }
                 // i#11760 - Intrinsic format of follow is controlled.
-                if ( FollowFormatAllowed() )
+                if ( FollowFormatAllowed()
+                    // && !IsInTableSplit()
+                    )
                 {
                     // i#11760 - No nested format of follows, if
                     // text frame is contained in a column frame.
@@ -980,6 +982,11 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         nNew = 0;
     }
 
+    /*if (nNew && IsInTableSplit())
+    {
+        nNew = 0;
+    }*/
+
     if ( nNew )
     {
         SplitFrame( nEnd );
@@ -1059,8 +1066,8 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // i#84870 - No split, if text frame only contains one
             // as-character anchored object.
             if ( !bOnlyContainsAsCharAnchoredObj &&
-                 ( nStrLen > 0 ||
-                   ( nStrLen == 0 && GetTextNode()->GetNumRule() ) )
+                // !IsInTableSplit() &&
+                 ( nStrLen > 0 || ( nStrLen == 0 && GetTextNode()->GetNumRule() ) )
                )
             {
                 SplitFrame( nEnd );
@@ -1104,8 +1111,18 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
 
     AdjustFrame( nChg, bHasToFit );
 
-    if( HasFollow() || IsInFootnote() )
-        AdjustFollow_( rLine, nEnd, nStrLen, nNew );
+    if (HasFollow() || IsInFootnote())
+    {
+        AdjustFollow_(rLine, nEnd, nStrLen, nNew);
+        //if (!IsInTableSplit())
+        //{
+        //    AdjustFollow_(rLine, nEnd, nStrLen, nNew);
+        //}
+        //else
+        //{
+        //    AdjustFollow_(rLine, nEnd, nStrLen, nNew);
+        //}
+    }
 
     pPara->SetPrepMustFit( false );
 }

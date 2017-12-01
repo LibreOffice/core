@@ -173,7 +173,7 @@ void SwTabFrame::RegistFlys()
 }
 
 void SwInvalidateAll( SwFrame *pFrame, long nBottom );
-static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom );
+static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom, bool bSkipCellsWithNegativeRowSpan = false );
 static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva );
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
@@ -679,7 +679,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     rLastLine.SetInSplit();
 
     // Do the recalculation
-    lcl_RecalcRow( rLastLine, LONG_MAX );
+    lcl_RecalcRow( rLastLine, LONG_MAX, true );
     // #115759# - force a format of the last line in order to
     // get the correct height.
     rLastLine.InvalidateSize();
@@ -1542,7 +1542,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
     return bRet;
 }
 
-static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom )
+static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom, bool bSkipCellsWithNegativeRowSpan )
 {
     // FME 2007-08-30 #i81146# new loop control
     int nLoopControlRuns_1 = 0;
@@ -1597,7 +1597,14 @@ static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom )
                         SwCellFrame& rToRecalc = 0 == i ?
                                                const_cast<SwCellFrame&>(pCellFrame->FindStartEndOfRowSpanCell( true )) :
                                                *pCellFrame;
-                        bCheck  |= SwContentFrame::CalcLowers( &rToRecalc, &rToRecalc, nBottom, false );
+                        bool bSkipRowSpanCells = false;
+                        if (bSkipCellsWithNegativeRowSpan && pCellFrame->GetLayoutRowSpan() < 1)
+                        {
+                            bSkipRowSpanCells = true;
+                        }
+                        bSkipRowSpanCells = false;
+
+                        bCheck |= SwContentFrame::CalcLowers(&rToRecalc, &rToRecalc, nBottom, bSkipRowSpanCells);  // try true ?
                     }
 
                     pCellFrame = static_cast<SwCellFrame*>(pCellFrame->GetNext());

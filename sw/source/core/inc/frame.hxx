@@ -367,6 +367,9 @@ public:
     const SwLayoutFrame *GetLeaf ( MakePageType eMakePage, bool bFwd,
                                  const SwFrame *pAnch ) const;
 
+    const bool IsInRowSplit() const;
+    const bool IsInTableSplit() const;
+
     bool WrongPageDesc( SwPageFrame* pNew );
 
     //#i28701# - new methods to append/remove drawing objects
@@ -755,6 +758,7 @@ public:
 public:
     // if writer is NULL, dumps the layout structure as XML in layout.xml
     virtual void dumpAsXml(xmlTextWriterPtr writer = nullptr) const;
+    virtual void dumpTopMostAsXml(xmlTextWriterPtr writer = nullptr) const;
     void dumpInfosAsXml(xmlTextWriterPtr writer) const;
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
     void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
