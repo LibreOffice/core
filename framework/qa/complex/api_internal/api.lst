@@ -118,7 +118,6 @@ job119=sc.ScIndexEnumeration_TableConditionalEntryEnumeration
 job120=sc.ScIndexEnumeration_TextFieldEnumeration
 job122=sc.ScLabelRangesObj
 job123=sc.ScNamedRangeObj
-job124=sc.ScRecentFunctionsObj
 job125=sc.ScScenariosObj
 job126=sc.ScSheetLinkObj
 job127=sc.ScSheetLinksObj

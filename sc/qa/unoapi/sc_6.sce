@@ -23,7 +23,6 @@
 -o sc.ScModelObj
 -o sc.ScNamedRangeObj
 -o sc.ScNamedRangesObj
--o sc.ScRecentFunctionsObj
 # -o sc.ScScenariosObj
 # -o sc.ScShapeObj
 # -o sc.ScSheetLinkObj
