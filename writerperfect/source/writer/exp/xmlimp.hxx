@@ -57,7 +57,6 @@ class XMLImport : public cppu::WeakImplHelper
     librevenge::RVNGPropertyList maMetaData;
     const css::uno::Reference<css::uno::XComponentContext> &mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
-    OUString maDocumentBaseURL;
     OUString maMediaDir;
 
 public:

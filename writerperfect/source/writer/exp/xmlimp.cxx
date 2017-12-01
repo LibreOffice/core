@@ -256,8 +256,7 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
 
 XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor)
     : mrGenerator(rGenerator),
-      mxContext(xContext),
-      maDocumentBaseURL(rURL)
+      mxContext(xContext)
 {
     uno::Sequence<beans::PropertyValue> aFilterData;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
