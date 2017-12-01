@@ -2638,10 +2638,9 @@ void SmXMLTableContext_Impl::EndElement()
     auto nRows = rNodeStack.size()-nElementCount;
     sal_uInt16 nCols = 0;
 
-    SmStructureNode *pArray;
     for (auto i=nRows;i > 0;i--)
     {
-        pArray = static_cast<SmStructureNode *>(rNodeStack.front().release());
+        SmStructureNode* pArray = static_cast<SmStructureNode *>(rNodeStack.front().release());
         rNodeStack.pop_front();
         if (pArray->GetNumSubNodes() == 0)
         {
@@ -2669,10 +2668,11 @@ void SmXMLTableContext_Impl::EndElement()
     size_t j=0;
     while ( !aReverseStack.empty() )
     {
-        pArray = static_cast<SmStructureNode *>(aReverseStack.front().release());
+        std::unique_ptr<SmStructureNode> xArray(static_cast<SmStructureNode*>(aReverseStack.front().release()));
         aReverseStack.pop_front();
-        for (sal_uInt16 i=0;i<pArray->GetNumSubNodes();i++)
-            aExpressionArray[j++] = pArray->GetSubNode(i);
+        for (sal_uInt16 i = 0; i < xArray->GetNumSubNodes(); ++i)
+            aExpressionArray[j++] = xArray->GetSubNode(i);
+        xArray->SetSubNodes(SmNodeArray());
     }
 
     SmToken aToken;
