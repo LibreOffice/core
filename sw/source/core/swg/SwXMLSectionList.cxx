@@ -39,7 +39,6 @@ public:
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
            const OUString& rLocalName,
            const uno::Reference<xml::sax::XAttributeList> & xAttrList) override;
-    virtual ~SvXMLSectionListContext() override;
 };
 
 class SwXMLParentContext : public SvXMLImportContext
@@ -148,9 +147,6 @@ SvXMLImportContextRef SvXMLSectionListContext::CreateChildContext(
 
     pContext = new SvXMLSectionListContext(m_rImport, nPrefix, rLocalName, xAttrList);
     return pContext;
-}
-SvXMLSectionListContext::~SvXMLSectionListContext()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
