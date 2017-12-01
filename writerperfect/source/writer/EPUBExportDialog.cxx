@@ -90,11 +90,25 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
         if (it->second >>= nSplitMethod)
             // No conversion, 1:1 mapping between libepubgen::EPUBSplitMethod
             // and entry positions.
-            m_pVersion->SelectEntryPos(nSplitMethod);
+            m_pSplit->SelectEntryPos(nSplitMethod);
     }
     else
         m_pSplit->SelectEntryPos(EPUBExportFilter::GetDefaultSplitMethod());
     m_pSplit->SetSelectHdl(LINK(this, EPUBExportDialog, SplitSelectHdl));
+
+    get(m_pLayout, "layoutlb");
+    it = rFilterData.find("EPUBLayoutMethod");
+    if (it != rFilterData.end())
+    {
+        sal_Int32 nLayoutMethod = 0;
+        if (it->second >>= nLayoutMethod)
+            // No conversion, 1:1 mapping between libepubgen::EPUBLayoutMethod
+            // and entry positions.
+            m_pLayout->SelectEntryPos(nLayoutMethod);
+    }
+    else
+        m_pLayout->SelectEntryPos(EPUBExportFilter::GetDefaultLayoutMethod());
+    m_pLayout->SetSelectHdl(LINK(this, EPUBExportDialog, LayoutSelectHdl));
 
     get(m_pCoverPath, "coverpath");
 
@@ -126,6 +140,13 @@ IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, ListBox &, void)
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBSplitMethod.
     mrFilterData["EPUBSplitMethod"] <<= m_pSplit->GetSelectedEntryPos();
+}
+
+IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, ListBox &, void)
+{
+    // No conversion, 1:1 mapping between entry positions and
+    // libepubgen::EPUBLayoutMethod.
+    mrFilterData["EPUBLayoutMethod"] <<= m_pLayout->GetSelectedEntryPos();
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
@@ -187,6 +208,7 @@ void EPUBExportDialog::dispose()
     m_pDate.clear();
     m_pMediaDir.clear();
     m_pMediaButton.clear();
+    m_pLayout.clear();
     ModalDialog::dispose();
 }
 

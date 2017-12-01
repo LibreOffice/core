@@ -30,6 +30,7 @@ public:
 private:
     DECL_LINK(VersionSelectHdl, ListBox &, void);
     DECL_LINK(SplitSelectHdl, ListBox &, void);
+    DECL_LINK(LayoutSelectHdl, ListBox &, void);
     DECL_LINK(CoverClickHdl, Button *, void);
     DECL_LINK(MediaClickHdl, Button *, void);
     DECL_LINK(OKClickHdl, Button *, void);
@@ -38,6 +39,7 @@ private:
     comphelper::SequenceAsHashMap &mrFilterData;
     VclPtr<ListBox> m_pVersion;
     VclPtr<ListBox> m_pSplit;
+    VclPtr<ListBox> m_pLayout;
     VclPtr<Edit> m_pCoverPath;
     VclPtr<PushButton> m_pCoverButton;
     VclPtr<Edit> m_pMediaDir;

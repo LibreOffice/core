@@ -97,6 +97,22 @@ class EPUBExportTest(UITestCase):
         mediaDir = [i.Value for i in filterData if i.Name == "RVNGMediaDir"][0]
         self.assertEqual("file:///foo/bar", mediaDir)
 
+    def testFixedLayout(self):
+        def handleDialog(dialog):
+            # Select the second entry to request fixed, not reflowable layout.
+            dialog.getChild("layoutlb").executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+            dialog.getChild("ok").executeAction("CLICK", tuple())
+
+        uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
+
+        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        propertyValues = uiComponent.getPropertyValues()
+        filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
+        # The EPUBLayoutMethod key was missing, EPUBExportDialog::OKClickHdl() did not set it.
+        layout = [i.Value for i in filterData if i.Name == "EPUBLayoutMethod"][0]
+        # 1 stands for libepubgen::EPUB_LAYOUT_METHOD_FIXED.
+        self.assertEqual(1, layout)
+
     def testMeta(self):
         def handleDialog(dialog):
             dialog.getChild("identifier").executeAction("TYPE", mkPropertyValues({"TEXT": "baddcafe-e394-4cd6-9b83-7172794612e5"}))
