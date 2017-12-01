@@ -198,8 +198,8 @@ namespace emfplushelper
         float                       mfPageScale;
         sal_Int32                   mnOriginX;
         sal_Int32                   mnOriginY;
-        sal_Int32                   mnHDPI;
-        sal_Int32                   mnVDPI;
+        sal_uInt32                  mnHDPI;
+        sal_uInt32                  mnVDPI;
 
         /* EMF+ emf header info */
         sal_Int32                   mnFrameLeft;

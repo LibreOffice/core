@@ -283,8 +283,8 @@ namespace emfplushelper
         // To evtl. correct and see where this came from, please compare with the implementations
         // of EmfPlusHelperData::MapToDevice and EmfPlusHelperData::Map* in prev versions
         maMapTransform = maWorldTransform;
-        maMapTransform *= basegfx::utils::createScaleB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY);
-        maMapTransform *= basegfx::utils::createTranslateB2DHomMatrix(double(-mnFrameLeft), double(-mnFrameTop));
+        maMapTransform *= basegfx::utils::createScaleTranslateB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY,
+                                                                           double(-mnFrameLeft), double(-mnFrameTop));
         maMapTransform *= maBaseTransform;
     }
 
@@ -812,7 +812,7 @@ namespace emfplushelper
                     {
                         sal_uInt32 header, version;
 
-                        rMS.ReadUInt32(header).ReadUInt32(version).ReadInt32(mnHDPI).ReadInt32(mnVDPI);
+                        rMS.ReadUInt32(header).ReadUInt32(version).ReadUInt32(mnHDPI).ReadUInt32(mnVDPI);
                         SAL_INFO("drawinglayer", "EMF+ Header");
                         SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << header << " version: " << std::dec << version << " horizontal DPI: " << mnHDPI << " vertical DPI: " << mnVDPI << " dual: " << (flags & 1));
                         break;
