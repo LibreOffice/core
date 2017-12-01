@@ -310,7 +310,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
                     else
                         break;
                 }
-                else if (!pCacheCondFormatEntry->EqualIgnoringSrcPos(*pCondFormatEntry))
+                else if (!pCacheCondFormatEntry->IsEqual(*pCondFormatEntry, /*bIgnoreSrcPos*/true))
                 {
                     break;
                 }

@@ -57,20 +57,15 @@ ScFormatEntry::ScFormatEntry(ScDocument* pDoc):
 
 bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
 {
-    if(GetType() != r.GetType())
-        return false;
+    return IsEqual(r, false);
+}
 
-    switch(GetType())
-    {
-        case Type::Condition:
-            return static_cast<const ScCondFormatEntry&>(*this) == static_cast<const ScCondFormatEntry&>(r);
-        default:
-            // TODO: implement also this case
-            // actually return false for these cases is not that bad
-            // as soon as databar and color scale are tested we need
-            // to think about the range
-            return false;
-    }
+// virtual
+bool ScFormatEntry::IsEqual( const ScFormatEntry& /*r*/, bool /*bIgnoreSrcPos*/ ) const
+{
+    // By default, return false; this makes sense for all cases except ScConditionEntry
+    // As soon as databar and color scale are tested we need to think about the range
+    return false;
 }
 
 void ScFormatEntry::startRendering()
@@ -628,43 +623,31 @@ static bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
         return !pArr1 && !pArr2; // Both 0? -> the same
 }
 
-bool ScConditionEntry::operator== ( const ScConditionEntry& r ) const
+// virtual
+bool ScConditionEntry::IsEqual( const ScFormatEntry& rOther, bool bIgnoreSrcPos ) const
 {
+    if (GetType() != rOther.GetType())
+        return false;
+
+    const ScCondFormatEntry& r = static_cast<const ScCondFormatEntry&>(rOther);
+
     bool bEq = (eOp == r.eOp && nOptions == r.nOptions &&
                 lcl_IsEqual( pFormula1, r.pFormula1 ) &&
                 lcl_IsEqual( pFormula2, r.pFormula2 ));
-    if (bEq)
+
+    if (!bIgnoreSrcPos)
     {
         // for formulas, the reference positions must be compared, too
         // (including aSrcString, for inserting the entries during XML import)
-        if ( ( pFormula1 || pFormula2 ) && ( aSrcPos != r.aSrcPos || aSrcString != r.aSrcString ) )
-            bEq = false;
-
-        // If not formulas, compare values
-        if ( !pFormula1 && ( nVal1 != r.nVal1 || aStrVal1 != r.aStrVal1 || bIsStr1 != r.bIsStr1 ) )
-            bEq = false;
-        if ( !pFormula2 && ( nVal2 != r.nVal2 || aStrVal2 != r.aStrVal2 || bIsStr2 != r.bIsStr2 ) )
+        if ( bEq && ( pFormula1 || pFormula2 ) && ( aSrcPos != r.aSrcPos || aSrcString != r.aSrcString ) )
             bEq = false;
     }
 
-    return bEq;
-}
-
-bool ScConditionEntry::EqualIgnoringSrcPos( const ScConditionEntry& r ) const
-{
-    bool bEq = (eOp == r.eOp && nOptions == r.nOptions &&
-                lcl_IsEqual( pFormula1, r.pFormula1 ) &&
-                lcl_IsEqual( pFormula2, r.pFormula2 ));
-    if (bEq)
-    {
-        // Here, ignore the aSrcPoses and aSrcStrings
-
-        // If not formulas, compare values
-        if ( !pFormula1 && ( nVal1 != r.nVal1 || aStrVal1 != r.aStrVal1 || bIsStr1 != r.bIsStr1 ) )
-            bEq = false;
-        if ( !pFormula2 && ( nVal2 != r.nVal2 || aStrVal2 != r.aStrVal2 || bIsStr2 != r.bIsStr2 ) )
-            bEq = false;
-    }
+    // If not formulas, compare values
+    if ( bEq && !pFormula1 && ( nVal1 != r.nVal1 || aStrVal1 != r.aStrVal1 || bIsStr1 != r.bIsStr1 ) )
+        bEq = false;
+    if ( bEq && !pFormula2 && ( nVal2 != r.nVal2 || aStrVal2 != r.aStrVal2 || bIsStr2 != r.bIsStr2 ) )
+        bEq = false;
 
     return bEq;
 }
@@ -1527,10 +1510,11 @@ ScCondFormatEntry::ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatE
 {
 }
 
-bool ScCondFormatEntry::operator== ( const ScCondFormatEntry& r ) const
+// virtual
+bool ScCondFormatEntry::IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) const
 {
-    return ScConditionEntry::operator==( r ) &&
-            aStyleName == r.aStyleName;
+    return ScConditionEntry::IsEqual(r, bIgnoreSrcPos) &&
+        (aStyleName == static_cast<const ScCondFormatEntry&>(r).aStyleName);
 }
 
 ScCondFormatEntry::~ScCondFormatEntry()
@@ -1744,13 +1728,17 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
     return pNew;
 }
 
-bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
+bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r, bool bIgnoreSrcPos ) const
 {
     if( size() != r.size())
         return false;
 
     //TODO: Test for same entries in reverse order?
-    if ( ! ::comphelper::ContainerUniquePtrEquals(maEntries, r.maEntries) )
+    if (! std::equal(maEntries.begin(), maEntries.end(), r.maEntries.begin(),
+        [&bIgnoreSrcPos](const std::unique_ptr<ScFormatEntry>& p1, const std::unique_ptr<ScFormatEntry>& p2) -> bool
+            {
+                return p1->IsEqual(*p2, bIgnoreSrcPos);
+            }))
         return false;
 
     // right now don't check for same range
