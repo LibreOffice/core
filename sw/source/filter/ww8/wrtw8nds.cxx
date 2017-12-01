@@ -2169,6 +2169,32 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nA
     }
 }
 
+bool MSWordExportBase::NeedSectionBreak( const SwNode& rNd ) const
+{
+    if ( m_bStyDef || m_bOutKF || m_bInWriteEscher || m_bOutPageDescs || m_pAktPageDesc == nullptr )
+        return false;
+
+    const SwPageDesc * pPageDesc = rNd.FindPageDesc()->GetFollow();
+
+    if (m_pAktPageDesc != pPageDesc)
+    {
+        if (!sw::util::IsPlausableSingleWordSection(m_pAktPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreakList& pList ) const
+{
+    rNd.fillSoftPageBreakList( pList );
+    pList.insert(0);
+    pList.insert( rNd.GetText().getLength() );
+    return pList.size() > 2 && NeedSectionBreak( rNd );
+}
+
 void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 {
     SAL_INFO( "sw.ww8", "<OutWW8_SwTextNode>" );
@@ -2190,7 +2216,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     SwWW8AttrIter aWatermarkAttrIter( *this, rNode );
     if (( TXT_HDFT != m_nTextTyp) && aWatermarkAttrIter.IsWatermarkFrame())
     {
-       return;
+        return;
     }
 
     bool bFlyInTable = m_pParentFrame && IsInTable();
@@ -2246,741 +2272,768 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         }
     }
 
-    AttrOutput().StartParagraph( pTextNodeInfo );
+    SwSoftPageBreakList softBreakList;
+    // Let's decide if we need to split the paragraph because of a section break
+    bool bNeedParaSplit = NeedTextNodeSplit( rNode, softBreakList );
 
-    const SwSection* pTOXSect = nullptr;
-    if( m_bInWriteTOX )
+    auto aBreakIt = softBreakList.begin();
+    // iterate through portions on different pages
+    do
     {
-        // check for end of TOX
-        SwNodeIndex aIdx( rNode, 1 );
-        if( !aIdx.GetNode().IsTextNode() )
+        sal_Int32 nAktPos = *aBreakIt;
+        ++aBreakIt;
+
+        AttrOutput().StartParagraph( pTextNodeInfo );
+
+        const SwSection* pTOXSect = nullptr;
+        if( m_bInWriteTOX )
         {
-            const SwSectionNode* pTOXSectNd = rNode.FindSectionNode();
-            if ( pTOXSectNd )
+            // check for end of TOX
+            SwNodeIndex aIdx( rNode, 1 );
+            if( !aIdx.GetNode().IsTextNode() )
             {
-                pTOXSect = &pTOXSectNd->GetSection();
-
-                const SwNode* pNxt = rNode.GetNodes().GoNext( &aIdx );
-                if( pNxt && pNxt->FindSectionNode() == pTOXSectNd )
-                    pTOXSect = nullptr;
-            }
-        }
-    }
-
-    if ( aAttrIter.RequiresImplicitBookmark() )
-    {
-        OUString sBkmkName =  "_toc" + OUString::number( rNode.GetIndex() );
-        // Add a bookmark converted to a Word name.
-        AppendBookmark( BookmarkToWord( sBkmkName ) );
-    }
-
-    // Call this before write out fields and runs
-    AttrOutput().GenerateBookmarksForSequenceField(rNode, aAttrIter);
-
-    const OUString& aStr( rNode.GetText() );
-
-    sal_Int32 nAktPos = 0;
-    sal_Int32 const nEnd = aStr.getLength();
-    bool bIncludeEndOfParaCRInRedlineProperties = false;
-    sal_Int32 nOpenAttrWithRange = 0;
-
-    ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
-    if ( pTextNodeInfo.get() != nullptr )
-    {
-        pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
-    }
-
-    do {
-
-        const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
-        FlyProcessingState nStateOfFlyFrame = FLY_PROCESSED;
-        bool bPostponeWritingText    = false ;
-        OUString aSavedSnippet ;
-
-        sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
-
-        // Skip un-exportable attributes.
-        if (!aAttrIter.IsExportableAttr(nAktPos))
-        {
-            nAktPos = nNextAttr;
-            UpdatePosition(&aAttrIter, nAktPos);
-            eChrSet = aAttrIter.GetCharSet();
-            continue;
-        }
-
-        // Is this the only run in this paragraph and it's empty?
-        bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
-        AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
-
-        if( nNextAttr > nEnd )
-            nNextAttr = nEnd;
-
-        if( m_nTextTyp == TXT_FTN || m_nTextTyp == TXT_EDN )
-        {
-            if( AttrOutput().FootnoteEndnoteRefTag() )
-            {
-                AttrOutput().EndRun( &rNode, nAktPos, nNextAttr == nEnd );
-                AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
-            }
-        }
-
-        /*
-            1) If there is a text node and an overlapping anchor, then write them in two different
-            runs and not as part of the same run.
-            2) Ensure that it is a text node and not in a fly.
-            3) If the anchor is associated with a text node with empty text then we ignore.
-        */
-        if( rNode.IsTextNode()
-            && aStr != "\001" && !aStr.isEmpty()
-            && !rNode.GetFlyFormat()
-            && !(IsInTable() && !AllowPostponedTextInTable())
-            && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
-        {
-            bPostponeWritingText = true ;
-        }
-
-        nStateOfFlyFrame = aAttrIter.OutFlys( nAktPos );
-        AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
-        AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
-        // Append bookmarks in this range after flys, exclusive of final
-        // position of this range
-        AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
-        AppendAnnotationMarks( rNode, nAktPos, nNextAttr - nAktPos );
-
-        // At the moment smarttags are only written for paragraphs, at the
-        // beginning of the paragraph.
-        if (nAktPos == 0)
-            AppendSmartTags(rNode);
-
-        bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
-        nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nAktPos );
-
-        sal_Int32 nLen = nNextAttr - nAktPos;
-        if ( !bTextAtr && nLen )
-        {
-            sal_Unicode ch = aStr[nAktPos];
-            const sal_Int32 ofs = ( ch == CH_TXT_ATR_FIELDSTART || ch == CH_TXT_ATR_FIELDEND || ch == CH_TXT_ATR_FORMELEMENT? 1 : 0 );
-
-            IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
-            if ( ch == CH_TXT_ATR_FIELDSTART )
-            {
-                SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
-                ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
-                OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
-
-                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
-                    AppendBookmark( pFieldmark->GetName() );
-                ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                OUString sCode = lcl_getFieldCode( pFieldmark );
-                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                const SwSectionNode* pTOXSectNd = rNode.FindSectionNode();
+                if ( pTOXSectNd )
                 {
-                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
-                    if ( it != pFieldmark->GetParameters()->end() )
-                    {
-                        OUString sFieldId;
-                        it->second >>= sFieldId;
-                        eFieldId = (ww::eField)sFieldId.toInt32();
-                    }
+                    pTOXSect = &pTOXSectNd->GetSection();
 
-                    it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
-                    if ( it != pFieldmark->GetParameters()->end() )
-                    {
-                        it->second >>= sCode;
-                    }
-                }
-
-                OutputField( nullptr, eFieldId, sCode, FieldFlags::Start | FieldFlags::CmdStart );
-
-                if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
-                    WriteFormData( *pFieldmark );
-                else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
-                    WriteHyperlinkData( *pFieldmark );
-                OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::CmdEnd );
-
-                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
-                {
-                    // Check for the presence of a linked OLE object
-                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
-                    if ( it != pFieldmark->GetParameters()->end() )
-                    {
-                        OUString sOleId;
-                        uno::Any aValue = it->second;
-                        aValue >>= sOleId;
-                        if ( !sOleId.isEmpty() )
-                            OutputLinkedOLE( sOleId );
-                    }
+                    const SwNode* pNxt = rNode.GetNodes().GoNext( &aIdx );
+                    if( pNxt && pNxt->FindSectionNode() == pTOXSectNd )
+                        pTOXSect = nullptr;
                 }
             }
-            else if ( ch == CH_TXT_ATR_FIELDEND )
+        }
+
+        if ( aAttrIter.RequiresImplicitBookmark() )
+        {
+            OUString sBkmkName =  "_toc" + OUString::number( rNode.GetIndex() );
+            // Add a bookmark converted to a Word name.
+            AppendBookmark( BookmarkToWord( sBkmkName ) );
+        }
+
+        // Call this before write out fields and runs
+        AttrOutput().GenerateBookmarksForSequenceField(rNode, aAttrIter);
+
+        const OUString& aStr( rNode.GetText() );
+
+        sal_Int32 const nEnd = aStr.getLength();
+        bool bIncludeEndOfParaCRInRedlineProperties = false;
+        sal_Int32 nOpenAttrWithRange = 0;
+
+        ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
+        if ( pTextNodeInfo.get() != nullptr )
+        {
+            pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
+        }
+
+        do {
+
+            const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
+            FlyProcessingState nStateOfFlyFrame = FLY_PROCESSED;
+            bool bPostponeWritingText    = false ;
+            OUString aSavedSnippet ;
+
+            sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
+
+            // Skip un-exportable attributes.
+            if (!aAttrIter.IsExportableAttr(nAktPos))
             {
-                SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
-                ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
+                nAktPos = nNextAttr;
+                UpdatePosition(&aAttrIter, nAktPos);
+                eChrSet = aAttrIter.GetCharSet();
+                continue;
+            }
 
-                OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
+            // Is this the only run in this paragraph and it's empty?
+            bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
+            AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
 
-                ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+            if( nNextAttr > nEnd )
+                nNextAttr = nEnd;
+
+            if( m_nTextTyp == TXT_FTN || m_nTextTyp == TXT_EDN )
+            {
+                if( AttrOutput().FootnoteEndnoteRefTag() )
                 {
-                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
-                    if ( it != pFieldmark->GetParameters()->end() )
-                    {
-                        OUString sFieldId;
-                        it->second >>= sFieldId;
-                        eFieldId = (ww::eField)sFieldId.toInt32();
-                    }
+                    AttrOutput().EndRun( &rNode, nAktPos, nNextAttr == nEnd );
+                    AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
                 }
-
-                OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
-
-                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
-                    AppendBookmark( pFieldmark->GetName() );
-            }
-            else if ( ch == CH_TXT_ATR_FORMELEMENT )
-            {
-                SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
-                ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
-                OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
-
-                bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
-                    pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
-
-                if ( isDropdownOrCheckbox )
-                    AppendBookmark( pFieldmark->GetName() );
-                OutputField( nullptr, lcl_getFieldId( pFieldmark ),
-                        lcl_getFieldCode( pFieldmark ),
-                        FieldFlags::Start | FieldFlags::CmdStart );
-                if ( isDropdownOrCheckbox )
-                    WriteFormData( *pFieldmark );
-                OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
-                if ( isDropdownOrCheckbox )
-                    AppendBookmark( pFieldmark->GetName() );
-            }
-            nLen -= ofs;
-
-            OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
-            if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
-            {
-                // Insert tab for aesthetic purposes #i24762#
-                if ( aSnippet[0] != 0x09 )
-                    aSnippet = "\x09" + aSnippet;
             }
 
-            if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
+            /*
+               1) If there is a text node and an overlapping anchor, then write them in two different
+               runs and not as part of the same run.
+               2) Ensure that it is a text node and not in a fly.
+               3) If the anchor is associated with a text node with empty text then we ignore.
+               */
+            if( rNode.IsTextNode()
+                    && aStr != "\001" && !aStr.isEmpty()
+                    && !rNode.GetFlyFormat()
+                    && !(IsInTable() && !AllowPostponedTextInTable())
+                    && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
             {
                 bPostponeWritingText = true ;
-                aSavedSnippet = aSnippet ;
             }
-            else
+
+            nStateOfFlyFrame = aAttrIter.OutFlys( nAktPos );
+            AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
+            AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
+            // Append bookmarks in this range after flys, exclusive of final
+            // position of this range
+            AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
+            AppendAnnotationMarks( rNode, nAktPos, nNextAttr - nAktPos );
+
+            // At the moment smarttags are only written for paragraphs, at the
+            // beginning of the paragraph.
+            if (nAktPos == 0)
+                AppendSmartTags(rNode);
+
+            bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
+            nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nAktPos );
+
+            sal_Int32 nLen = nNextAttr - nAktPos;
+            if ( !bTextAtr && nLen )
             {
-                bPostponeWritingText = false ;
-                AttrOutput().RunText( aSnippet, eChrSet );
-            }
-        }
+                sal_Unicode ch = aStr[nAktPos];
+                const sal_Int32 ofs = ( ch == CH_TXT_ATR_FIELDSTART || ch == CH_TXT_ATR_FIELDEND || ch == CH_TXT_ATR_FORMELEMENT? 1 : 0 );
 
-        if ( aAttrIter.IsDropCap( nNextAttr ) )
-            AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFormatDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
+                IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
+                if ( ch == CH_TXT_ATR_FIELDSTART )
+                {
+                    SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
+                    ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
+                    OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-        // Only output character attributes if this is not a postponed text run.
-        if (0 != nEnd && !(bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame))
-        {
-            // Output the character attributes
-            // #i51277# do this before writing flys at end of paragraph
-            AttrOutput().StartRunProperties();
-            aAttrIter.OutAttr( nAktPos );
-            AttrOutput().EndRunProperties( pRedlineData );
-        }
+                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
+                        AppendBookmark( pFieldmark->GetName() );
+                    ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                    OUString sCode = lcl_getFieldCode( pFieldmark );
+                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                    {
+                        IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
+                        if ( it != pFieldmark->GetParameters()->end() )
+                        {
+                            OUString sFieldId;
+                            it->second >>= sFieldId;
+                            eFieldId = (ww::eField)sFieldId.toInt32();
+                        }
 
-        // At the end of line, output the attributes until the CR.
-        // Exception: footnotes at the end of line
-        if ( nNextAttr == nEnd )
-        {
-            OSL_ENSURE( nOpenAttrWithRange >= 0, "odd to see this happening, expected >= 0" );
-            if ( !bTextAtr && nOpenAttrWithRange <= 0 )
-            {
-                if ( aAttrIter.IncludeEndOfParaCRInRedlineProperties( nEnd ) )
-                    bIncludeEndOfParaCRInRedlineProperties = true;
+                        it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
+                        if ( it != pFieldmark->GetParameters()->end() )
+                        {
+                            it->second >>= sCode;
+                        }
+                    }
+
+                    OutputField( nullptr, eFieldId, sCode, FieldFlags::Start | FieldFlags::CmdStart );
+
+                    if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
+                        WriteFormData( *pFieldmark );
+                    else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
+                        WriteHyperlinkData( *pFieldmark );
+                    OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::CmdEnd );
+
+                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                    {
+                        // Check for the presence of a linked OLE object
+                        IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
+                        if ( it != pFieldmark->GetParameters()->end() )
+                        {
+                            OUString sOleId;
+                            uno::Any aValue = it->second;
+                            aValue >>= sOleId;
+                            if ( !sOleId.isEmpty() )
+                                OutputLinkedOLE( sOleId );
+                        }
+                    }
+                }
+                else if ( ch == CH_TXT_ATR_FIELDEND )
+                {
+                    SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
+                    ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
+
+                    OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
+
+                    ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                    {
+                        IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
+                        if ( it != pFieldmark->GetParameters()->end() )
+                        {
+                            OUString sFieldId;
+                            it->second >>= sFieldId;
+                            eFieldId = (ww::eField)sFieldId.toInt32();
+                        }
+                    }
+
+                    OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
+
+                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
+                        AppendBookmark( pFieldmark->GetName() );
+                }
+                else if ( ch == CH_TXT_ATR_FORMELEMENT )
+                {
+                    SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
+                    ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
+                    OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
+
+                    bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
+                            pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
+
+                    if ( isDropdownOrCheckbox )
+                        AppendBookmark( pFieldmark->GetName() );
+                    OutputField( nullptr, lcl_getFieldId( pFieldmark ),
+                            lcl_getFieldCode( pFieldmark ),
+                            FieldFlags::Start | FieldFlags::CmdStart );
+                    if ( isDropdownOrCheckbox )
+                        WriteFormData( *pFieldmark );
+                    OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
+                    if ( isDropdownOrCheckbox )
+                        AppendBookmark( pFieldmark->GetName() );
+                }
+                nLen -= ofs;
+
+                // if paragraph needs to be split, write only until split postition
+                if( bNeedParaSplit && nAktPos + ofs + nLen > *aBreakIt)
+                    nLen = *aBreakIt - nAktPos - ofs;
+
+                OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
+                if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
+                {
+                    // Insert tab for aesthetic purposes #i24762#
+                    if ( aSnippet[0] != 0x09 )
+                        aSnippet = "\x09" + aSnippet;
+                }
+
+                if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
+                {
+                    bPostponeWritingText = true ;
+                    aSavedSnippet = aSnippet ;
+                }
                 else
+                {
+                    bPostponeWritingText = false ;
+                    AttrOutput().RunText( aSnippet, eChrSet );
+                }
+            }
+
+            if ( aAttrIter.IsDropCap( nNextAttr ) )
+                AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFormatDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
+
+            // Only output character attributes if this is not a postponed text run.
+            if (0 != nEnd && !(bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame))
+            {
+                // Output the character attributes
+                // #i51277# do this before writing flys at end of paragraph
+                AttrOutput().StartRunProperties();
+                aAttrIter.OutAttr( nAktPos );
+                AttrOutput().EndRunProperties( pRedlineData );
+            }
+
+            // At the end of line, output the attributes until the CR.
+            // Exception: footnotes at the end of line
+            if ( nNextAttr == nEnd )
+            {
+                OSL_ENSURE( nOpenAttrWithRange >= 0, "odd to see this happening, expected >= 0" );
+                if ( !bTextAtr && nOpenAttrWithRange <= 0 )
+                {
+                    if ( aAttrIter.IncludeEndOfParaCRInRedlineProperties( nEnd ) )
+                        bIncludeEndOfParaCRInRedlineProperties = true;
+                    else
+                    {
+                        // insert final graphic anchors if any before CR
+                        nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
+                        // insert final bookmarks if any before CR and after flys
+                        AppendBookmarks( rNode, nEnd, 1 );
+                        AppendAnnotationMarks( rNode, nEnd, 1 );
+                        if ( pTOXSect )
+                        {
+                            m_aCurrentCharPropStarts.pop();
+                            AttrOutput().EndTOX( *pTOXSect ,false);
+                        }
+                        //For i120928,the position of the bullet's graphic is at end of doc
+                        if (bLastCR && (!bExported))
+                        {
+                            ExportGrfBullet(rNode);
+                            bExported = true;
+                        }
+
+                        WriteCR( pTextNodeInfoInner );
+                    }
+                }
+            }
+
+            if (0 == nEnd)
+            {
+                // Output the character attributes
+                // do it after WriteCR for an empty paragraph (otherwise
+                // WW8_WrFkp::Append throws SPRMs away...)
+                AttrOutput().StartRunProperties();
+                aAttrIter.OutAttr( nAktPos );
+                AttrOutput().EndRunProperties( pRedlineData );
+            }
+
+            // Exception: footnotes at the end of line
+            if ( nNextAttr == nEnd )
+            {
+                OSL_ENSURE(nOpenAttrWithRange >= 0,
+                        "odd to see this happening, expected >= 0");
+                bool bAttrWithRange = (nOpenAttrWithRange > 0);
+                if ( nAktPos != nEnd )
+                {
+                    nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nEnd );
+                    OSL_ENSURE(nOpenAttrWithRange == 0,
+                            "odd to see this happening, expected 0");
+                }
+
+                // !bIncludeEndOfParaCRInRedlineProperties implies we have just
+                // emitted a CR, in which case we want to pass force=true to
+                // OutputFKP to ensure that an FKP entry for direct character
+                // formatting is written even if empty, so that the next one will
+                // start after the CR.
+                AttrOutput().OutputFKP(!bIncludeEndOfParaCRInRedlineProperties);
+
+                if (bTextAtr || bAttrWithRange || bIncludeEndOfParaCRInRedlineProperties)
                 {
                     // insert final graphic anchors if any before CR
                     nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
                     // insert final bookmarks if any before CR and after flys
                     AppendBookmarks( rNode, nEnd, 1 );
                     AppendAnnotationMarks( rNode, nEnd, 1 );
-                    if ( pTOXSect )
-                    {
-                        m_aCurrentCharPropStarts.pop();
-                        AttrOutput().EndTOX( *pTOXSect ,false);
-                    }
-                    //For i120928,the position of the bullet's graphic is at end of doc
+                    WriteCR( pTextNodeInfoInner );
+                    // #i120928 - position of the bullet's graphic is at end of doc
                     if (bLastCR && (!bExported))
                     {
                         ExportGrfBullet(rNode);
                         bExported = true;
                     }
 
-                    WriteCR( pTextNodeInfoInner );
+                    if ( pTOXSect )
+                    {
+                        m_aCurrentCharPropStarts.pop();
+                        AttrOutput().EndTOX( *pTOXSect );
+                    }
+
+                    if (bIncludeEndOfParaCRInRedlineProperties)
+                    {
+                        AttrOutput().Redline( aAttrIter.GetRunLevelRedline( nEnd ) );
+                        //If there was no redline property emitted, force adding
+                        //another entry for the CR so that in the case that this
+                        //has no redline, but the next para does, then this one is
+                        //not merged with the next
+                        AttrOutput().OutputFKP(true);
+                    }
                 }
             }
-        }
 
-        if (0 == nEnd)
-        {
-            // Output the character attributes
-            // do it after WriteCR for an empty paragraph (otherwise
-            // WW8_WrFkp::Append throws SPRMs away...)
-            AttrOutput().StartRunProperties();
-            aAttrIter.OutAttr( nAktPos );
-            AttrOutput().EndRunProperties( pRedlineData );
-        }
+            AttrOutput().WritePostitFieldReference();
 
-        // Exception: footnotes at the end of line
-        if ( nNextAttr == nEnd )
-        {
-            OSL_ENSURE(nOpenAttrWithRange >= 0,
-                "odd to see this happening, expected >= 0");
-            bool bAttrWithRange = (nOpenAttrWithRange > 0);
-            if ( nAktPos != nEnd )
+            if( bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame )
             {
-                nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nEnd );
-                OSL_ENSURE(nOpenAttrWithRange == 0,
-                    "odd to see this happening, expected 0");
+                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
+                //write the postponed text run
+                AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
+                AttrOutput().SetAnchorIsLinkedToNode( false );
+                AttrOutput().ResetFlyProcessingFlag();
+                if (0 != nEnd)
+                {
+                    AttrOutput().StartRunProperties();
+                    aAttrIter.OutAttr( nAktPos );
+                    AttrOutput().EndRunProperties( pRedlineData );
+                }
+                AttrOutput().RunText( aSavedSnippet, eChrSet );
+                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
             }
-
-            // !bIncludeEndOfParaCRInRedlineProperties implies we have just
-            // emitted a CR, in which case we want to pass force=true to
-            // OutputFKP to ensure that an FKP entry for direct character
-            // formatting is written even if empty, so that the next one will
-            // start after the CR.
-            AttrOutput().OutputFKP(!bIncludeEndOfParaCRInRedlineProperties);
-
-            if (bTextAtr || bAttrWithRange || bIncludeEndOfParaCRInRedlineProperties)
+            else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
             {
-                // insert final graphic anchors if any before CR
-                nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
-                // insert final bookmarks if any before CR and after flys
-                AppendBookmarks( rNode, nEnd, 1 );
-                AppendAnnotationMarks( rNode, nEnd, 1 );
-                WriteCR( pTextNodeInfoInner );
-                // #i120928 - position of the bullet's graphic is at end of doc
-                if (bLastCR && (!bExported))
-                {
-                    ExportGrfBullet(rNode);
-                    bExported = true;
-                }
-
-                if ( pTOXSect )
-                {
-                    m_aCurrentCharPropStarts.pop();
-                    AttrOutput().EndTOX( *pTOXSect );
-                }
-
-                if (bIncludeEndOfParaCRInRedlineProperties)
-                {
-                    AttrOutput().Redline( aAttrIter.GetRunLevelRedline( nEnd ) );
-                    //If there was no redline property emitted, force adding
-                    //another entry for the CR so that in the case that this
-                    //has no redline, but the next para does, then this one is
-                    //not merged with the next
-                    AttrOutput().OutputFKP(true);
-                }
+                //write the postponed text run
+                AttrOutput().RunText( aSavedSnippet, eChrSet );
+                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
             }
+            else
+                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
+
+            nAktPos = nNextAttr;
+            UpdatePosition( &aAttrIter, nAktPos );
+            eChrSet = aAttrIter.GetCharSet();
         }
+        while ( nAktPos < nEnd );
 
-        AttrOutput().WritePostitFieldReference();
-
-        if( bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame )
+        // if paragraph is split, put the section break between the parts
+        // else check if section break needed after the paragraph
+        if( !bNeedParaSplit || *aBreakIt != rNode.GetText().getLength() )
         {
-            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
-            //write the postponed text run
-            AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
-            AttrOutput().SetAnchorIsLinkedToNode( false );
-            AttrOutput().ResetFlyProcessingFlag();
-            if (0 != nEnd)
+            AttrOutput().SectionBreaks(rNode);
+            SwNodeIndex aNextIndex( rNode, 1 );
+            const SwNode& pNextNode = aNextIndex.GetNode();
+            if( pNextNode.IsTextNode() && bNeedParaSplit )
             {
-                AttrOutput().StartRunProperties();
-                aAttrIter.OutAttr( nAktPos );
-                AttrOutput().EndRunProperties( pRedlineData );
+                SectionBreaksAndFrames( *static_cast<SwTextNode*>(
+                            &aNextIndex.GetNode() ));
             }
-            AttrOutput().RunText( aSavedSnippet, eChrSet );
-            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
         }
-        else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
+
+        AttrOutput().StartParagraphProperties();
+
+        AttrOutput().ParagraphStyle( nStyle );
+
+        if ( m_pParentFrame && IsInTable() )    // Fly-Attrs
+            OutputFormat( m_pParentFrame->GetFrameFormat(), false, false, true );
+
+        if ( pTextNodeInfo.get() != nullptr )
         {
-            //write the postponed text run
-            AttrOutput().RunText( aSavedSnippet, eChrSet );
-            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
-        }
-        else
-            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
-
-        nAktPos = nNextAttr;
-        UpdatePosition( &aAttrIter, nAktPos );
-        eChrSet = aAttrIter.GetCharSet();
-    }
-    while ( nAktPos < nEnd );
-
-    AttrOutput().SectionBreaks(rNode);
-
-    AttrOutput().StartParagraphProperties();
-
-    AttrOutput().ParagraphStyle( nStyle );
-
-    if ( m_pParentFrame && IsInTable() )    // Fly-Attrs
-        OutputFormat( m_pParentFrame->GetFrameFormat(), false, false, true );
-
-    if ( pTextNodeInfo.get() != nullptr )
-    {
 #ifdef DBG_UTIL
-        SAL_INFO( "sw.ww8", pTextNodeInfo->toString());
+            SAL_INFO( "sw.ww8", pTextNodeInfo->toString());
 #endif
 
-        AttrOutput().TableInfoCell( pTextNodeInfoInner );
-        if (pTextNodeInfoInner->isFirstInTable())
-        {
-            const SwTable * pTable = pTextNodeInfoInner->getTable();
-
-            const SwTableFormat* pTabFormat = pTable->GetFrameFormat();
-            if (pTabFormat != nullptr)
+            AttrOutput().TableInfoCell( pTextNodeInfoInner );
+            if (pTextNodeInfoInner->isFirstInTable())
             {
-                if (pTabFormat->GetBreak().GetBreak() == SvxBreak::PageBefore)
-                    AttrOutput().PageBreakBefore(true);
-            }
-        }
-    }
+                const SwTable * pTable = pTextNodeInfoInner->getTable();
 
-    if ( !bFlyInTable )
-    {
-        SfxItemSet* pTmpSet = nullptr;
-        const sal_uInt8 nPrvNxtNd = rNode.HasPrevNextLayNode();
-
-        if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
-        {
-            const SfxPoolItem* pItem;
-            if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState(
-                    RES_UL_SPACE, true, &pItem ) &&
-                ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
-                   static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()) ||
-                  ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
-                   static_cast<const SvxULSpaceItem*>(pItem)->GetLower()) ))
-            {
-                pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
-                SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(pItem) );
-                // #i25901#- consider compatibility option
-                if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES))
+                const SwTableFormat* pTabFormat = pTable->GetFrameFormat();
+                if (pTabFormat != nullptr)
                 {
-                    if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
-                        aUL.SetUpper( 0 );
+                    if (pTabFormat->GetBreak().GetBreak() == SvxBreak::PageBefore)
+                        AttrOutput().PageBreakBefore(true);
                 }
-                // #i25901# - consider compatibility option
-                if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS))
-                {
-                    if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
-                        aUL.SetLower( 0 );
-                }
-                pTmpSet->Put( aUL );
             }
         }
 
-        bool bParaRTL = aAttrIter.IsParaRTL();
-
-        int nNumberLevel = -1;
-        if (rNode.IsNumbered())
-            nNumberLevel = rNode.GetActualListLevel();
-        if (nNumberLevel >= 0 && nNumberLevel < MAXLEVEL)
+        if ( !bFlyInTable )
         {
-            const SwNumRule* pRule = rNode.GetNumRule();
-            sal_uInt8 nLvl = static_cast< sal_uInt8 >(nNumberLevel);
-            const SwNumFormat* pFormat = pRule->GetNumFormat( nLvl );
-            if( !pFormat )
-                pFormat = &pRule->Get( nLvl );
+            SfxItemSet* pTmpSet = nullptr;
+            const sal_uInt8 nPrvNxtNd = rNode.HasPrevNextLayNode();
 
-            if( !pTmpSet )
-                pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
-
-            SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
-            // #i86652#
-            if ( pFormat->GetPositionAndSpaceMode() ==
-                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
             {
-                aLR.SetTextLeft( aLR.GetTextLeft() + pFormat->GetAbsLSpace() );
+                const SfxPoolItem* pItem;
+                if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState(
+                        RES_UL_SPACE, true, &pItem ) &&
+                    ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
+                       static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()) ||
+                      ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
+                       static_cast<const SvxULSpaceItem*>(pItem)->GetLower()) ))
+                {
+                    pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
+                    SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(pItem) );
+                    // #i25901#- consider compatibility option
+                    if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES))
+                    {
+                        if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
+                            aUL.SetUpper( 0 );
+                    }
+                    // #i25901# - consider compatibility option
+                    if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS))
+                    {
+                        if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
+                            aUL.SetLower( 0 );
+                    }
+                    pTmpSet->Put( aUL );
+                }
             }
 
-            if( rNode.IsNumbered() && rNode.IsCountedInList() )
+            bool bParaRTL = aAttrIter.IsParaRTL();
+
+            int nNumberLevel = -1;
+            if (rNode.IsNumbered())
+                nNumberLevel = rNode.GetActualListLevel();
+            if (nNumberLevel >= 0 && nNumberLevel < MAXLEVEL)
             {
+                const SwNumRule* pRule = rNode.GetNumRule();
+                sal_uInt8 nLvl = static_cast< sal_uInt8 >(nNumberLevel);
+                const SwNumFormat* pFormat = pRule->GetNumFormat( nLvl );
+                if( !pFormat )
+                    pFormat = &pRule->Get( nLvl );
+
+                if( !pTmpSet )
+                    pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
+
+                SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
                 // #i86652#
                 if ( pFormat->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    if (bParaRTL)
-                        aLR.SetTextFirstLineOfstValue(pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset());
-                    else
-                        aLR.SetTextFirstLineOfst(GetWordFirstLineOffset(*pFormat));
+                    aLR.SetTextLeft( aLR.GetTextLeft() + pFormat->GetAbsLSpace() );
                 }
 
-                // correct fix for issue i94187
-                if (SfxItemState::SET !=
-                    pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                if( rNode.IsNumbered() && rNode.IsCountedInList() )
                 {
-                    // List style set via paragraph style - then put it into the itemset.
-                    // This is needed to get list level and list id exported for
-                    // the paragraph.
-                    pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
-
-                    // Put indent values into the itemset in case that the list
-                    // style is applied via paragraph style and the list level
-                    // indent values are not applicable.
+                    // #i86652#
                     if ( pFormat->GetPositionAndSpaceMode() ==
-                                            SvxNumberFormat::LABEL_ALIGNMENT &&
-                         !rNode.AreListLevelIndentsApplicable() )
+                                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                     {
-                        pTmpSet->Put( aLR );
+                        if (bParaRTL)
+                            aLR.SetTextFirstLineOfstValue(pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset());
+                        else
+                            aLR.SetTextFirstLineOfst(GetWordFirstLineOffset(*pFormat));
+                    }
+
+                    // correct fix for issue i94187
+                    if (SfxItemState::SET !=
+                        pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                    {
+                        // List style set via paragraph style - then put it into the itemset.
+                        // This is needed to get list level and list id exported for
+                        // the paragraph.
+                        pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+
+                        // Put indent values into the itemset in case that the list
+                        // style is applied via paragraph style and the list level
+                        // indent values are not applicable.
+                        if ( pFormat->GetPositionAndSpaceMode() ==
+                                                SvxNumberFormat::LABEL_ALIGNMENT &&
+                             !rNode.AreListLevelIndentsApplicable() )
+                        {
+                            pTmpSet->Put( aLR );
+                        }
                     }
                 }
-            }
-            else
-                pTmpSet->ClearItem(RES_PARATR_NUMRULE);
+                else
+                    pTmpSet->ClearItem(RES_PARATR_NUMRULE);
 
-            // #i86652#
-            if ( pFormat->GetPositionAndSpaceMode() ==
-                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-            {
-                pTmpSet->Put(aLR);
+                // #i86652#
+                if ( pFormat->GetPositionAndSpaceMode() ==
+                                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                {
+                    pTmpSet->Put(aLR);
 
-                //#i21847#
-                SvxTabStopItem aItem(
-                    ItemGet<SvxTabStopItem>(*pTmpSet, RES_PARATR_TABSTOP));
-                SvxTabStop aTabStop(pFormat->GetAbsLSpace());
-                aItem.Insert(aTabStop);
-                pTmpSet->Put(aItem);
+                    //#i21847#
+                    SvxTabStopItem aItem(
+                        ItemGet<SvxTabStopItem>(*pTmpSet, RES_PARATR_TABSTOP));
+                    SvxTabStop aTabStop(pFormat->GetAbsLSpace());
+                    aItem.Insert(aTabStop);
+                    pTmpSet->Put(aItem);
 
-                MSWordExportBase::CorrectTabStopInSet(*pTmpSet, pFormat->GetAbsLSpace());
-            }
-        }
-
-        /*
-        If a given para is using the SvxFrameDirection::Environment direction we
-        cannot export that, if it's ltr then that's ok as that is word's
-        default. Otherwise we must add a RTL attribute to our export list
-        */
-        const SvxFrameDirectionItem* pItem = static_cast<const SvxFrameDirectionItem*>(
-            rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR));
-        if (
-            (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
-            aAttrIter.IsParaRTL()
-           )
-        {
-            if ( !pTmpSet )
-                pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
-
-            pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
-        }
-        // move code for handling of numbered,
-        // but not counted paragraphs to this place. Otherwise, the paragraph
-        // isn't exported as numbered, but not counted, if no other attribute
-        // is found in <pTmpSet>
-        // #i44815# adjust numbering/indents for numbered paragraphs
-        //          without number (NO_NUMLEVEL)
-        // #i47013# need to check rNode.GetNumRule()!=NULL as well.
-        if ( ! rNode.IsCountedInList() && rNode.GetNumRule()!=nullptr )
-        {
-            // WW8 does not know numbered paragraphs without number
-            // (NO_NUMLEVEL). In WW8AttributeOutput::ParaNumRule(), we will export
-            // the RES_PARATR_NUMRULE as list-id 0, which in WW8 means
-            // no numbering. Here, we will adjust the indents to match
-            // visually.
-
-            if ( !pTmpSet )
-                pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
-
-            // create new LRSpace item, based on the current (if present)
-            const SfxPoolItem* pPoolItem = nullptr;
-            pTmpSet->GetItemState(RES_LR_SPACE, true, &pPoolItem);
-            SvxLRSpaceItem aLRSpace(
-                ( pPoolItem == nullptr )
-                    ? SvxLRSpaceItem(0, 0, 0, 0, RES_LR_SPACE)
-                    : *static_cast<const SvxLRSpaceItem*>( pPoolItem ) );
-
-            // new left margin = old left + label space
-            const SwNumRule* pRule = rNode.GetNumRule();
-            int nLevel = rNode.GetActualListLevel();
-
-            if (nLevel < 0)
-                nLevel = 0;
-
-            if (nLevel >= MAXLEVEL)
-                nLevel = MAXLEVEL - 1;
-
-            const SwNumFormat& rNumFormat = pRule->Get( static_cast< sal_uInt16 >(nLevel) );
-
-            // #i86652#
-            if ( rNumFormat.GetPositionAndSpaceMode() ==
-                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-            {
-                aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetAbsLSpace() );
-            }
-            else
-            {
-                aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetIndentAt() );
+                    MSWordExportBase::CorrectTabStopInSet(*pTmpSet, pFormat->GetAbsLSpace());
+                }
             }
 
-            // new first line indent = 0
-            // (first line indent is ignored for NO_NUMLEVEL)
-            if (!bParaRTL)
-                aLRSpace.SetTextFirstLineOfst( 0 );
-
-            // put back the new item
-            pTmpSet->Put( aLRSpace );
-
-            // assure that numbering rule is in <pTmpSet>
-            if (SfxItemState::SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
-            {
-                pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
-            }
-        }
-
-        // #i75457#
-        // Export page break after attribute from paragraph style.
-        // If page break attribute at the text node exist, an existing page
-        // break after at the paragraph style hasn't got to be considered.
-        if ( !rNode.GetpSwAttrSet() ||
-             SfxItemState::SET != rNode.GetpSwAttrSet()->GetItemState(RES_BREAK, false) )
-        {
-            const SvxFormatBreakItem* pBreakAtParaStyle =
-                &(ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK));
-            if ( pBreakAtParaStyle &&
-                 pBreakAtParaStyle->GetBreak() == SvxBreak::PageAfter )
+            /*
+            If a given para is using the SvxFrameDirection::Environment direction we
+            cannot export that, if it's ltr then that's ok as that is word's
+            default. Otherwise we must add a RTL attribute to our export list
+            */
+            const SvxFrameDirectionItem* pItem = static_cast<const SvxFrameDirectionItem*>(
+                rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR));
+            if (
+                (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
+                aAttrIter.IsParaRTL()
+               )
             {
                 if ( !pTmpSet )
-                {
                     pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
-                }
-                pTmpSet->Put( *pBreakAtParaStyle );
-            }
-            else if( pTmpSet )
-            {   // Even a pagedesc item is set, the break item can be set 'NONE',
-                // this has to be overruled.
-                const SwFormatPageDesc& rPageDescAtParaStyle =
-                    ItemGet<SwFormatPageDesc>( rNode, RES_PAGEDESC );
-                if( rPageDescAtParaStyle.KnowsPageDesc() )
-                    pTmpSet->ClearItem( RES_BREAK );
-            }
-        }
 
-        // #i76520# Emulate non-splitting tables
-        if ( IsInTable() )
-        {
-            const SwTableNode* pTableNode = rNode.FindTableNode();
-
-            if ( pTableNode )
+                pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
+            }
+            // move code for handling of numbered,
+            // but not counted paragraphs to this place. Otherwise, the paragraph
+            // isn't exported as numbered, but not counted, if no other attribute
+            // is found in <pTmpSet>
+            // #i44815# adjust numbering/indents for numbered paragraphs
+            //          without number (NO_NUMLEVEL)
+            // #i47013# need to check rNode.GetNumRule()!=NULL as well.
+            if ( ! rNode.IsCountedInList() && rNode.GetNumRule()!=nullptr )
             {
-                const SwTable& rTable = pTableNode->GetTable();
-                const SvxFormatKeepItem& rKeep = rTable.GetFrameFormat()->GetKeep();
-                const bool bKeep = rKeep.GetValue();
-                const bool bDontSplit = !(bKeep ||
-                                          rTable.GetFrameFormat()->GetLayoutSplit().GetValue());
+                // WW8 does not know numbered paragraphs without number
+                // (NO_NUMLEVEL). In WW8AttributeOutput::ParaNumRule(), we will export
+                // the RES_PARATR_NUMRULE as list-id 0, which in WW8 means
+                // no numbering. Here, we will adjust the indents to match
+                // visually.
 
-                if ( bKeep || bDontSplit )
+                if ( !pTmpSet )
+                    pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
+
+                // create new LRSpace item, based on the current (if present)
+                const SfxPoolItem* pPoolItem = nullptr;
+                pTmpSet->GetItemState(RES_LR_SPACE, true, &pPoolItem);
+                SvxLRSpaceItem aLRSpace(
+                    ( pPoolItem == nullptr )
+                        ? SvxLRSpaceItem(0, 0, 0, 0, RES_LR_SPACE)
+                        : *static_cast<const SvxLRSpaceItem*>( pPoolItem ) );
+
+                // new left margin = old left + label space
+                const SwNumRule* pRule = rNode.GetNumRule();
+                int nLevel = rNode.GetActualListLevel();
+
+                if (nLevel < 0)
+                    nLevel = 0;
+
+                if (nLevel >= MAXLEVEL)
+                    nLevel = MAXLEVEL - 1;
+
+                const SwNumFormat& rNumFormat = pRule->Get( static_cast< sal_uInt16 >(nLevel) );
+
+                // #i86652#
+                if ( rNumFormat.GetPositionAndSpaceMode() ==
+                                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    // bKeep: set keep at first paragraphs in all lines
-                    // bDontSplit : set keep at first paragraphs in all lines except from last line
-                    // but only for non-complex tables
-                    const SwTableBox* pBox = rNode.GetTableBox();
-                    const SwTableLine* pLine = pBox ? pBox->GetUpper() : nullptr;
+                    aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetAbsLSpace() );
+                }
+                else
+                {
+                    aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetIndentAt() );
+                }
 
-                    if ( pLine && !pLine->GetUpper() )
+                // new first line indent = 0
+                // (first line indent is ignored for NO_NUMLEVEL)
+                if (!bParaRTL)
+                    aLRSpace.SetTextFirstLineOfst( 0 );
+
+                // put back the new item
+                pTmpSet->Put( aLRSpace );
+
+                // assure that numbering rule is in <pTmpSet>
+                if (SfxItemState::SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                {
+                    pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+                }
+            }
+
+            // #i75457#
+            // Export page break after attribute from paragraph style.
+            // If page break attribute at the text node exist, an existing page
+            // break after at the paragraph style hasn't got to be considered.
+            if ( !rNode.GetpSwAttrSet() ||
+                 SfxItemState::SET != rNode.GetpSwAttrSet()->GetItemState(RES_BREAK, false) )
+            {
+                const SvxFormatBreakItem* pBreakAtParaStyle =
+                    &(ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK));
+                if ( pBreakAtParaStyle &&
+                     pBreakAtParaStyle->GetBreak() == SvxBreak::PageAfter )
+                {
+                    if ( !pTmpSet )
                     {
-                        // check if box is first in that line:
-                        if ( 0 == pLine->GetBoxPos( pBox ) && pBox->GetSttNd() )
+                        pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
+                    }
+                    pTmpSet->Put( *pBreakAtParaStyle );
+                }
+                else if( pTmpSet )
+                {   // Even a pagedesc item is set, the break item can be set 'NONE',
+                    // this has to be overruled.
+                    const SwFormatPageDesc& rPageDescAtParaStyle =
+                        ItemGet<SwFormatPageDesc>( rNode, RES_PAGEDESC );
+                    if( rPageDescAtParaStyle.KnowsPageDesc() )
+                        pTmpSet->ClearItem( RES_BREAK );
+                }
+            }
+
+            // #i76520# Emulate non-splitting tables
+            if ( IsInTable() )
+            {
+                const SwTableNode* pTableNode = rNode.FindTableNode();
+
+                if ( pTableNode )
+                {
+                    const SwTable& rTable = pTableNode->GetTable();
+                    const SvxFormatKeepItem& rKeep = rTable.GetFrameFormat()->GetKeep();
+                    const bool bKeep = rKeep.GetValue();
+                    const bool bDontSplit = !(bKeep ||
+                                              rTable.GetFrameFormat()->GetLayoutSplit().GetValue());
+
+                    if ( bKeep || bDontSplit )
+                    {
+                        // bKeep: set keep at first paragraphs in all lines
+                        // bDontSplit : set keep at first paragraphs in all lines except from last line
+                        // but only for non-complex tables
+                        const SwTableBox* pBox = rNode.GetTableBox();
+                        const SwTableLine* pLine = pBox ? pBox->GetUpper() : nullptr;
+
+                        if ( pLine && !pLine->GetUpper() )
                         {
-                            // check if paragraph is first in that line:
-                            if ( 1 == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )
+                            // check if box is first in that line:
+                            if ( 0 == pLine->GetBoxPos( pBox ) && pBox->GetSttNd() )
                             {
-                                bool bSetAtPara = false;
-                                if ( bKeep )
-                                    bSetAtPara = true;
-                                else if ( bDontSplit )
+                                // check if paragraph is first in that line:
+                                if ( 1 == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )
                                 {
-                                    // check if pLine isn't last line in table
-                                    if ( rTable.GetTabLines().size() - rTable.GetTabLines().GetPos( pLine ) != 1 )
+                                    bool bSetAtPara = false;
+                                    if ( bKeep )
                                         bSetAtPara = true;
-                                }
+                                    else if ( bDontSplit )
+                                    {
+                                        // check if pLine isn't last line in table
+                                        if ( rTable.GetTabLines().size() - rTable.GetTabLines().GetPos( pLine ) != 1 )
+                                            bSetAtPara = true;
+                                    }
 
-                                if ( bSetAtPara )
-                                {
-                                    if ( !pTmpSet )
-                                        pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
+                                    if ( bSetAtPara )
+                                    {
+                                        if ( !pTmpSet )
+                                            pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
 
-                                    const SvxFormatKeepItem aKeepItem( true, RES_KEEP );
-                                    pTmpSet->Put( aKeepItem );
+                                        const SvxFormatKeepItem aKeepItem( true, RES_KEEP );
+                                        pTmpSet->Put( aKeepItem );
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
 
-        const SfxItemSet* pNewSet = pTmpSet ? pTmpSet : rNode.GetpSwAttrSet();
-        if( pNewSet )
-        {                                               // Para-Attrs
-            m_pStyAttr = &rNode.GetAnyFormatColl().GetAttrSet();
+            const SfxItemSet* pNewSet = pTmpSet ? pTmpSet : rNode.GetpSwAttrSet();
+            if( pNewSet )
+            {                                               // Para-Attrs
+                m_pStyAttr = &rNode.GetAnyFormatColl().GetAttrSet();
 
-            const SwModify* pOldMod = m_pOutFormatNode;
-            m_pOutFormatNode = &rNode;
+                const SwModify* pOldMod = m_pOutFormatNode;
+                m_pOutFormatNode = &rNode;
 
-            // Pap-Attrs, so script is not necessary
-            OutputItemSet( *pNewSet, true, false, i18n::ScriptType::LATIN, false);
+                // Pap-Attrs, so script is not necessary
+                OutputItemSet( *pNewSet, true, false, i18n::ScriptType::LATIN, false);
 
-            m_pStyAttr = nullptr;
-            m_pOutFormatNode = pOldMod;
+                m_pStyAttr = nullptr;
+                m_pOutFormatNode = pOldMod;
 
-            if( pNewSet != rNode.GetpSwAttrSet() )
-                delete pNewSet;
-        }
-    }
-
-    // The formatting of the paragraph marker has two sources:
-    // 1) If there are hints at the end of the paragraph, then use that.
-    // 2) Else use the RES_CHRATR_BEGIN..RES_TXTATR_END range of the paragraph
-    // properties.
-    //
-    // Exception: if there is a character style hint at the end of the
-    // paragraph only, then still go with 2), as RES_TXTATR_CHARFMT is always
-    // set as a hint.
-    SfxItemSet aParagraphMarkerProperties(m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END>{});
-    bool bCharFormatOnly = true;
-    if(const SwpHints* pTextAttrs = rNode.GetpSwpHints())
-    {
-        for( size_t i = 0; i < pTextAttrs->Count(); ++i )
-        {
-            const SwTextAttr* pHt = pTextAttrs->Get(i);
-            const sal_Int32 startPos = pHt->GetStart();    // first Attr characters
-            const sal_Int32* endPos = pHt->End();    // end Attr characters
-            // Check if these attributes are for the last character in the paragraph
-            // - which means the paragraph marker. If a paragraph has 7 characters,
-            // then properties on character 8 are for the paragraph marker
-            if( endPos && (startPos == *endPos ) && (*endPos == rNode.GetText().getLength()) )
-            {
-                SAL_INFO( "sw.ww8", startPos << "startPos == endPos" << *endPos);
-                sal_uInt16 nWhich = pHt->GetAttr().Which();
-                SAL_INFO( "sw.ww8", "nWhich" << nWhich);
-                if (nWhich == RES_TXTATR_AUTOFMT || nWhich == RES_TXTATR_CHARFMT)
-                    aParagraphMarkerProperties.Put(pHt->GetAttr());
-                if (nWhich != RES_TXTATR_CHARFMT)
-                    bCharFormatOnly = false;
+                if( pNewSet != rNode.GetpSwAttrSet() )
+                    delete pNewSet;
             }
         }
-    }
-    if (rNode.GetpSwAttrSet() && bCharFormatOnly)
-    {
-        aParagraphMarkerProperties.Put(*rNode.GetpSwAttrSet());
-    }
-    const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
-    const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
-    const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
-    AttrOutput().EndParagraphProperties(aParagraphMarkerProperties, pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert);
 
-    AttrOutput().EndParagraph( pTextNodeInfoInner );
+        // The formatting of the paragraph marker has two sources:
+        // 1) If there are hints at the end of the paragraph, then use that.
+        // 2) Else use the RES_CHRATR_BEGIN..RES_TXTATR_END range of the paragraph
+        // properties.
+        //
+        // Exception: if there is a character style hint at the end of the
+        // paragraph only, then still go with 2), as RES_TXTATR_CHARFMT is always
+        // set as a hint.
+        SfxItemSet aParagraphMarkerProperties(m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END>{});
+        bool bCharFormatOnly = true;
+        if(const SwpHints* pTextAttrs = rNode.GetpSwpHints())
+        {
+            for( size_t i = 0; i < pTextAttrs->Count(); ++i )
+            {
+                const SwTextAttr* pHt = pTextAttrs->Get(i);
+                const sal_Int32 startPos = pHt->GetStart();    // first Attr characters
+                const sal_Int32* endPos = pHt->End();    // end Attr characters
+                // Check if these attributes are for the last character in the paragraph
+                // - which means the paragraph marker. If a paragraph has 7 characters,
+                // then properties on character 8 are for the paragraph marker
+                if( endPos && (startPos == *endPos ) && (*endPos == rNode.GetText().getLength()) )
+                {
+                    SAL_INFO( "sw.ww8", startPos << "startPos == endPos" << *endPos);
+                    sal_uInt16 nWhich = pHt->GetAttr().Which();
+                    SAL_INFO( "sw.ww8", "nWhich" << nWhich);
+                    if (nWhich == RES_TXTATR_AUTOFMT || nWhich == RES_TXTATR_CHARFMT)
+                        aParagraphMarkerProperties.Put(pHt->GetAttr());
+                    if (nWhich != RES_TXTATR_CHARFMT)
+                        bCharFormatOnly = false;
+                }
+            }
+        }
+        if (rNode.GetpSwAttrSet() && bCharFormatOnly)
+        {
+            aParagraphMarkerProperties.Put(*rNode.GetpSwAttrSet());
+        }
+        const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
+        const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
+        const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
+        AttrOutput().EndParagraphProperties(aParagraphMarkerProperties, pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert);
+
+        AttrOutput().EndParagraph( pTextNodeInfoInner );
+    }while(*aBreakIt != rNode.GetText().getLength() && bNeedParaSplit );
 
     SAL_INFO( "sw.ww8", "</OutWW8_SwTextNode>" );
 }
