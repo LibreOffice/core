@@ -57,19 +57,31 @@ ScFormatEntry::ScFormatEntry(ScDocument* pDoc):
 
 bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
 {
-    if(GetType() != r.GetType())
+    return IsEqual(r /*, bIgnoreSrcPos=false*/);
+}
+
+bool ScFormatEntry::IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) const
+{
+    if (GetType() != r.GetType())
         return false;
 
-    switch(GetType())
+    switch (GetType())
     {
-        case Type::Condition:
+    case Type::Condition:
+        if (bIgnoreSrcPos)
+        {
+            return static_cast<const ScCondFormatEntry&>(*this).EqualIgnoringSrcPos(static_cast<const ScCondFormatEntry&>(r));
+        }
+        else
+        {
             return static_cast<const ScCondFormatEntry&>(*this) == static_cast<const ScCondFormatEntry&>(r);
-        default:
-            // TODO: implement also this case
-            // actually return false for these cases is not that bad
-            // as soon as databar and color scale are tested we need
-            // to think about the range
-            return false;
+        }
+    default:
+        // TODO: implement also this case
+        // actually return false for these cases is not that bad
+        // as soon as databar and color scale are tested we need
+        // to think about the range
+        return false;
     }
 }
 
@@ -1744,13 +1756,17 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
     return pNew;
 }
 
-bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
+bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r, bool bIgnoreSrcPos ) const
 {
     if( size() != r.size())
         return false;
 
     //TODO: Test for same entries in reverse order?
-    if ( ! ::comphelper::ContainerUniquePtrEquals(maEntries, r.maEntries) )
+    if (! std::equal(maEntries.begin(), maEntries.end(), r.maEntries.begin(),
+        [&bIgnoreSrcPos](const auto& p1, const auto& p2) -> bool
+            {
+                return p1->IsEqual(*p2, bIgnoreSrcPos);
+            }))
         return false;
 
     // right now don't check for same range
