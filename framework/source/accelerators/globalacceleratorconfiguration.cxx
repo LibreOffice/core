@@ -19,6 +19,7 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
+#include <accelerators/keymapping.hxx>
 #include <helper/mischelper.hxx>
 
 #include <acceleratorconst.h>
@@ -81,6 +82,8 @@ private:
 GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : GlobalAcceleratorConfiguration_BASE(xContext)
 {
+    // force keyboard string registration.
+    KeyMapping::get();
 }
 
 void GlobalAcceleratorConfiguration::fillCache()
