@@ -539,12 +539,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="textdirection">
+                  <object class="svxlo-FrameDirectionListBox" id="comboLB_TEXTDIRECTION">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">liststore1</property>
                   </object>
-                  <packing>
+                 <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
                     <property name="width">1</property>
