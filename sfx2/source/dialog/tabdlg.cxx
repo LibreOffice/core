@@ -524,6 +524,7 @@ short SfxTabDialog::Execute()
         SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("type", "dialog"));
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
         pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
     }

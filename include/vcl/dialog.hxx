@@ -75,8 +75,6 @@ protected:
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     virtual        void    doDeferredInit(WinBits nBits) override;
-                   void    InvalidateFloatingWindow(const Point& rPos);
-                   void    CloseFloatingWindow();
 
 protected:
     explicit        Dialog( WindowType nType );

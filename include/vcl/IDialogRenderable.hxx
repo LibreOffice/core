@@ -34,8 +34,6 @@ public:
     virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
                               const OUString& rAction,
                               const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) const = 0;
-
-    virtual void notifyWindowChild(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const Point& rPos) const = 0;
 };
 
 } // namespace vcl
