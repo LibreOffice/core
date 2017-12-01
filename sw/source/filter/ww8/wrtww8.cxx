@@ -2662,7 +2662,12 @@ void MSWordExportBase::WriteText()
         SwNode& rNd = m_pCurPam->GetNode();
 
         if ( rNd.IsTextNode() )
-            SectionBreaksAndFrames( *rNd.GetTextNode() );
+        {
+            SwSoftPageBreakList breakList;
+            // if paragraph need to be split than handle section break somewhere else.
+            if( !NeedTextNodeSplit( *rNd.GetTextNode(), breakList) )
+                SectionBreaksAndFrames( *rNd.GetTextNode() );
+        }
 
         // output the various types of nodes
         if ( rNd.IsContentNode() )
