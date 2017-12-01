@@ -1398,7 +1398,7 @@ bool SwUndo::FillSaveData(
              && eCmpPos != SwComparePosition::CollideStart )
         {
 
-            rSData.push_back(o3tl::make_unique<SwRedlineSaveData>(eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext));
+            rSData.push_back(std::unique_ptr<SwRedlineSaveData, o3tl::default_delete<SwRedlineSaveData>>(new SwRedlineSaveData(eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext)));
         }
     }
     if( !rSData.empty() && bDelRange )
@@ -1429,7 +1429,7 @@ bool SwUndo::FillSaveDataForFormat(
                  && eCmpPos != SwComparePosition::CollideEnd
                  && eCmpPos != SwComparePosition::CollideStart )
             {
-                rSData.push_back(o3tl::make_unique<SwRedlineSaveData>(eCmpPos, *pStt, *pEnd, *pRedl, true));
+                rSData.push_back(std::unique_ptr<SwRedlineSaveData, o3tl::default_delete<SwRedlineSaveData>>(new SwRedlineSaveData(eCmpPos, *pStt, *pEnd, *pRedl, true)));
             }
 
         }

@@ -22,6 +22,7 @@
 
 #include <undobj.hxx>
 #include <calbck.hxx>
+#include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
 #include <redline.hxx>
 
@@ -66,7 +67,7 @@ public:
 
 class SwRedlineSaveDatas {
 private:
-    std::vector<std::unique_ptr<SwRedlineSaveData>> m_Data;
+    std::vector<std::unique_ptr<SwRedlineSaveData, o3tl::default_delete<SwRedlineSaveData>>> m_Data;
 
 public:
     SwRedlineSaveDatas() : m_Data() {}
@@ -74,7 +75,7 @@ public:
     void clear() { m_Data.clear(); }
     bool empty() const { return m_Data.empty(); }
     size_t size() const { return m_Data.size(); }
-    void push_back(std::unique_ptr<SwRedlineSaveData> pNew) { m_Data.push_back(std::move(pNew)); }
+    void push_back(std::unique_ptr<SwRedlineSaveData, o3tl::default_delete<SwRedlineSaveData>> pNew) { m_Data.push_back(std::move(pNew)); }
     const SwRedlineSaveData& operator[](size_t const nIdx) const { return *m_Data[ nIdx ]; }
     SwRedlineSaveData& operator[](size_t const nIdx) { return *m_Data[ nIdx ]; }
 };

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
 
+#include <o3tl/deleter.hxx>
 #include <svl/itemset.hxx>
 #include <tools/solar.h>
 #include <vcl/keycod.hxx>
@@ -194,7 +195,7 @@ public:
 
 class SwHistorySetFootnote : public SwHistoryHint
 {
-    const std::unique_ptr<SwUndoSaveSection> m_pUndo;
+    const std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> m_pUndo;
     const OUString m_FootnoteNumber;
     sal_uLong m_nNodeIndex;
     const sal_Int32 m_nStart;
