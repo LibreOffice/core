@@ -339,7 +339,7 @@ gtv_lok_dialog_signal_key(GtkWidget* pDialogDrawingArea, GdkEventKey* pEvent)
     ss << "gtv_lok_dialog::postKey(" << pEvent->type << ", " << nCharCode << ", " << nKeyCode << ")";
     g_info("%s", ss.str().c_str());
 
-    pDocument->pClass->postDialogKeyEvent(pDocument,
+    pDocument->pClass->postWindowKeyEvent(pDocument,
                                           priv->dialogid,
                                           pEvent->type == GDK_KEY_RELEASE ? LOK_KEYEVENT_KEYUP : LOK_KEYEVENT_KEYINPUT,
                                           nCharCode,
