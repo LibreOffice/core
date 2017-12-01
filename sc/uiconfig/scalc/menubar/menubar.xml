@@ -374,6 +374,8 @@
                     <menu:menuitem menu:id=".uno:NumberFormatDate"/>
                     <menu:menuitem menu:id=".uno:NumberFormatTime"/>
                     <menu:menuitem menu:id=".uno:NumberFormatScientific"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:NumberFormatThousands"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>

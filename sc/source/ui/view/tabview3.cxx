@@ -323,6 +323,7 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_NUMBER_TWODEC );
     rBindings.Invalidate( SID_NUMBER_TIME );
     rBindings.Invalidate( SID_NUMBER_STANDARD );
+    rBindings.Invalidate( SID_NUMBER_THOUSANDS );
 }
 
 // SetCursor - Cursor, set, draw, update InputWin
