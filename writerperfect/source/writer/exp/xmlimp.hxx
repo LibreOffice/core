@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <tools/gen.hxx>
 
 namespace writerperfect
 {
@@ -61,9 +62,10 @@ class XMLImport : public cppu::WeakImplHelper
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maMediaDir;
     bool mbPageSpanOpened = false;
+    const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &mrPageMetafiles;
 
 public:
-    XMLImport(const css::uno::Reference<css::uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
+    XMLImport(const css::uno::Reference<css::uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor, const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &rPageMetafiles);
 
     rtl::Reference<XMLImportContext> CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
 
@@ -89,6 +91,8 @@ public:
     bool FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
     void SetPageSpanOpened(bool bPageSpanOpened);
     bool IsPageSpanOpened() const;
+    const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &GetPageMetafiles() const;
+    const css::uno::Reference<css::uno::XComponentContext> &GetComponentContext() const;
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

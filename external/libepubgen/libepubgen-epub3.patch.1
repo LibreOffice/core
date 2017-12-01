@@ -5831,3 +5831,28 @@ index c3bc963..02c299a 100644
 -- 
 2.13.6
 
+From 88b9d9a1efb9b064ea99c57ec273f76712d361ff Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 30 Nov 2017 11:32:41 +0100
+Subject: [PATCH] EPUBTextGenerator: allow a single image on a page
+
+---
+ src/lib/EPUBTextGenerator.cpp      |  1 +
+ src/test/EPUBTextGeneratorTest.cpp | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 02c299a..38573ec 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -684,6 +684,7 @@ void EPUBTextGenerator::insertBinaryObject(const librevenge::RVNGPropertyList &p
+   if (m_impl->m_inHeader || m_impl->m_inFooter)
+     m_impl->m_currentHeaderOrFooter->addInsertBinaryObject(newPropList);
+ 
++  m_impl->getSplitGuard().incrementSize(1);
+   m_impl->getHtml()->insertBinaryObject(newPropList);
+ }
+ 
+-- 
+2.13.6
+
