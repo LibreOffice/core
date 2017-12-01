@@ -277,9 +277,6 @@ struct _LibreOfficeKitDocumentClass
                          const int x, const int y,
                          const int width, const int height);
 
-    /// @see lok::Document::paintActiveFloatingWindow().
-    void (*paintActiveFloatingWindow) (LibreOfficeKitDocument* pThis, unsigned nDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
-
     /// @see lok::Document::postWindow().
     void (*postWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId, int nAction);
 

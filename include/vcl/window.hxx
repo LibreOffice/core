@@ -1210,6 +1210,7 @@ public:
     void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier);
     const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
+    vcl::Window*                        GetParentWithLOKNotifier();
 
     /// Indicate that LOK is not going to use this dialog any more.
     void                                ReleaseLOKNotifier();

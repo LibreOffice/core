@@ -617,8 +617,6 @@ static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
-static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer, int* nWidth, int* nHeight);
-
 static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
@@ -672,7 +670,6 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
         m_pDocumentClass->paintWindow = doc_paintWindow;
-        m_pDocumentClass->paintActiveFloatingWindow = doc_paintActiveFloatingWindow;
         m_pDocumentClass->postWindow = doc_postWindow;
 
         gDocumentClass = m_pDocumentClass;
@@ -792,8 +789,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_SET_PART:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         case LOK_CALLBACK_INVALIDATE_HEADER:
-        case LOK_CALLBACK_DIALOG:
-        case LOK_CALLBACK_DIALOG_CHILD:
+        case LOK_CALLBACK_WINDOW:
         {
             const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
                     [type] (const queue_type::value_type& elem) { return (elem.first == type); });
@@ -1026,27 +1022,27 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             }
             break;
 
-            case LOK_CALLBACK_DIALOG:
+            case LOK_CALLBACK_WINDOW:
             {
                 // reading JSON by boost might be slow?
                 boost::property_tree::ptree aTree;
                 std::stringstream aStream(payload);
                 boost::property_tree::read_json(aStream, aTree);
-                const unsigned nLOKWindowId = aTree.get<unsigned>("dialogId", 0);
+                const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
                 if (aTree.get<std::string>("action", "") == "invalidate")
                 {
                     std::string aRectStr = aTree.get<std::string>("rectangle", "");
-                    // no 'rectangle' field => invalidate all of the dialog =>
-                    // remove all previous dialog part invalidations
+                    // no 'rectangle' field => invalidate all of the window =>
+                    // remove all previous window part invalidations
                     if (aRectStr.empty())
                     {
                         removeAll([&nLOKWindowId] (const queue_type::value_type& elem) {
-                                if (elem.first == LOK_CALLBACK_DIALOG)
+                                if (elem.first == LOK_CALLBACK_WINDOW)
                                 {
                                     boost::property_tree::ptree aOldTree;
                                     std::stringstream aOldStream(elem.second);
                                     boost::property_tree::read_json(aOldStream, aOldTree);
-                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("dialogId", 0);
+                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
                                     if (aOldTree.get<std::string>("action", "") == "invalidate" &&
                                         nLOKWindowId == nOldDialogId)
                                     {
@@ -1058,18 +1054,18 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     }
                     else
                     {
-                        // if we have to invalidate all of the dialog, ignore
+                        // if we have to invalidate all of the window, ignore
                         // any part invalidation message
                         const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
                                                        [&nLOKWindowId] (const queue_type::value_type& elem)
                                                        {
-                                                           if (elem.first != LOK_CALLBACK_DIALOG)
+                                                           if (elem.first != LOK_CALLBACK_WINDOW)
                                                                return false;
 
                                                            boost::property_tree::ptree aOldTree;
                                                            std::stringstream aOldStream(elem.second);
                                                            boost::property_tree::read_json(aOldStream, aOldTree);
-                                                           const unsigned nOldDialogId = aOldTree.get<unsigned>("dialogId", 0);
+                                                           const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
                                                            if (aOldTree.get<std::string>("action", "") == "invalidate" &&
                                                                nLOKWindowId == nOldDialogId &&
                                                                aOldTree.get<std::string>("rectangle", "").empty())
@@ -1079,10 +1075,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                                            return false;
                                                        });
 
-                        // we found a invalidate-all dialog callback
+                        // we found a invalidate-all window callback
                         if (pos != m_queue.rend())
                         {
-                            SAL_INFO("lok.dialog", "Skipping queue [" << type << "]: [" << payload << "] since whole dialog needs to be invalidated.");
+                            SAL_INFO("lok.dialog", "Skipping queue [" << type << "]: [" << payload << "] since whole window needs to be invalidated.");
                             return;
                         }
 
@@ -1093,7 +1089,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         tools::Rectangle aNewRect = tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
                         bool currentIsRedundant = false;
                         removeAll([&aNewRect, &nLOKWindowId, &currentIsRedundant] (const queue_type::value_type& elem) {
-                                if (elem.first != LOK_CALLBACK_DIALOG)
+                                if (elem.first != LOK_CALLBACK_WINDOW)
                                     return false;
 
                                 boost::property_tree::ptree aOldTree;
@@ -1101,7 +1097,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 boost::property_tree::read_json(aOldStream, aOldTree);
                                 if (aOldTree.get<std::string>("action", "") == "invalidate")
                                 {
-                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("dialogId", 0);
+                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
                                     std::string aOldRectStr = aOldTree.get<std::string>("rectangle", "");
                                     // not possible that we encounter an empty
                                     // rectangle here; we already handled this
@@ -3311,29 +3307,6 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
 
     comphelper::LibreOfficeKit::setDialogPainting(true);
     pWindow->PaintToDevice(pDevice.get(), Point(0, 0), Size());
-    comphelper::LibreOfficeKit::setDialogPainting(false);
-}
-
-static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, unsigned char* pBuffer, int* nWidth, int* nHeight)
-{
-    SolarMutexGuard aGuard;
-
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
-    if (!pWindow)
-    {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
-        return;
-    }
-
-    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
-    pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
-
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(*nWidth, *nHeight), Fraction(1.0), Point(), pBuffer);
-
-    comphelper::LibreOfficeKit::setDialogPainting(true);
-    const Size aSize = pWindow->PaintActiveFloatingWindow(*pDevice.get());
-    *nWidth = aSize.getWidth();
-    *nHeight = aSize.getHeight();
     comphelper::LibreOfficeKit::setDialogPainting(false);
 }
 

@@ -177,25 +177,6 @@ public:
     }
 
     /**
-     * Renders the active floating window of a dialog
-     *
-     * Client must truncate pBuffer according to the nWidth and nHeight returned after the call.
-     *
-     * @param nDialogId Unique dialog id
-     * @param pBuffer Buffer with enough memory allocated to render any dialog
-     * @param nWidth output parameter returning the width of the rendered dialog.
-     * @param nHeight output parameter returning the height of the rendered dialog
-     */
-    void paintActiveFloatingWindow(unsigned nDialogId,
-                                   unsigned char* pBuffer,
-                                   int& nWidth,
-                                   int& nHeight)
-    {
-        return mpDoc->pClass->paintActiveFloatingWindow(mpDoc, nDialogId, pBuffer,
-                                                        &nWidth, &nHeight);
-    }
-
-    /**
      * Posts a command to the window (dialog, popup, etc.) with given id
      *
      * @param nWindowid

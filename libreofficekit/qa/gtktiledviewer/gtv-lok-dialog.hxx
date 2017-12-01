@@ -39,9 +39,13 @@ GtkWidget* gtv_lok_dialog_new(LOKDocView* pDocView, guint dialogId, guint width,
 
 void gtv_lok_dialog_invalidate(GtvLokDialog* dialog, const GdkRectangle& aRectangle);
 
-void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog, int nX, int nY);
+void gtv_lok_dialog_child_create(GtvLokDialog* dialog, guint childId, guint nX, guint nY, guint width, guint height);
+
+void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog);
 
 void gtv_lok_dialog_child_close(GtvLokDialog* dialog);
+
+gboolean gtv_lok_dialog_is_parent_of(GtvLokDialog* dialog, guint childId);
 
 G_END_DECLS
 

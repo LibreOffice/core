@@ -43,6 +43,9 @@ struct GtvLokDialogPrivate
     guint32 m_nHeight;
 
     // state for child floating windows
+    guint32 m_nChildId;
+    guint32 m_nChildWidth;
+    guint32 m_nChildHeight;
     guint32 m_nChildLastButtonPressTime;
     guint32 m_nChildLastButtonReleaseTime;
     guint32 m_nChildKeyModifier;
@@ -132,11 +135,9 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
     else if (pEvent->type == GDK_BUTTON_RELEASE)
         aEventType = "BUTTON_RELEASE";
 
-    g_info("lok_dialog_signal_button (type: %s): %d, %d (in twips: %d, %d)",
+    g_info("lok_dialog_signal_button (type: %s): %d, %d",
            aEventType.c_str(),
-           (int)pEvent->x, (int)pEvent->y,
-           (int)pixelToTwip(pEvent->x),
-           (int)pixelToTwip(pEvent->y));
+           (int)pEvent->x, (int)pEvent->y);
     gtk_widget_grab_focus(pDialogDrawingArea);
 
     switch (pEvent->type)
@@ -355,6 +356,9 @@ gtv_lok_dialog_init(GtvLokDialog* dialog)
     GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     priv->pDialogDrawingArea = gtk_drawing_area_new();
     priv->pFloatingWin = nullptr;
+    priv->m_nChildId = 0;
+    priv->m_nChildWidth = 0;
+    priv->m_nChildHeight = 0;
 
     priv->m_nLastButtonPressTime = 0;
     priv->m_nLastButtonReleaseTime = 0;
@@ -478,33 +482,20 @@ gtv_lok_dialog_floating_win_draw(GtkWidget* pDrawingArea, cairo_t* pCairo, gpoin
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
     g_info("gtv_lok_dialog_floating_win_draw triggered");
-    int nWidth = 800;
-    int nHeight = 600;
-    cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+    cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, priv->m_nChildWidth, priv->m_nChildHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
-    pDocument->pClass->paintActiveFloatingWindow(pDocument, priv->dialogid, pBuffer, &nWidth, &nHeight);
-    g_info("Size of floating window: %d x %d", nWidth, nHeight);
+    pDocument->pClass->paintWindow(pDocument, priv->m_nChildId, pBuffer, 0, 0, priv->m_nChildWidth, priv->m_nChildHeight);
 
-    gtk_widget_set_size_request(GTK_WIDGET(pDrawingArea), nWidth, nHeight);
-    gtk_widget_set_size_request(GTK_WIDGET(pDialog), nWidth, nHeight);
-    gtk_window_resize(GTK_WINDOW(pDialog), nWidth, nHeight);
+    gtk_widget_set_size_request(GTK_WIDGET(pDrawingArea), priv->m_nChildWidth, priv->m_nChildHeight);
+    //gtk_widget_set_size_request(GTK_WIDGET(pDialog), nWidth, nHeight);
+    //gtk_window_resize(GTK_WINDOW(pDialog), nWidth, nHeight);
 
     cairo_surface_flush(pSurface);
     cairo_surface_mark_dirty(pSurface);
 
     cairo_set_source_surface(pCairo, pSurface, 0, 0);
     cairo_paint(pCairo);
-}
-
-void
-gtv_lok_dialog_invalidate(GtvLokDialog* dialog, const GdkRectangle& aRectangle)
-{
-    GtvLokDialogPrivate* priv = getPrivate(dialog);
-    if (aRectangle.width != 0 && aRectangle.height != 0)
-        gtk_widget_queue_draw_area(priv->pDialogDrawingArea, aRectangle.x, aRectangle.y, aRectangle.width, aRectangle.height);
-    else
-        gtk_widget_queue_draw(priv->pDialogDrawingArea);
 }
 
 static gboolean
@@ -551,13 +542,13 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
         }
         priv->m_nChildLastButtonPressed = nEventButton;
         pDocument->pClass->postDialogChildMouseEvent(pDocument,
-                                                priv->dialogid,
-                                                LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                                (pEvent->x),
-                                                (pEvent->y),
-                                                nCount,
-                                                nEventButton,
-                                                priv->m_nChildKeyModifier);
+                                                     priv->m_nChildId,
+                                                     LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                                     (pEvent->x),
+                                                     (pEvent->y),
+                                                     nCount,
+                                                     nEventButton,
+                                                     priv->m_nChildKeyModifier);
 
         break;
     }
@@ -582,7 +573,7 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
         }
         priv->m_nChildLastButtonPressed = nEventButton;
         pDocument->pClass->postDialogChildMouseEvent(pDocument,
-                                                     priv->dialogid,
+                                                     priv->m_nChildId,
                                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
                                                      (pEvent->x),
                                                      (pEvent->y),
@@ -612,7 +603,7 @@ gtv_lok_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
            (int)pixelToTwip(pEvent->y));
 
     pDocument->pClass->postDialogChildMouseEvent(pDocument,
-                                                 priv->dialogid,
+                                                 priv->m_nChildId,
                                                  LOK_MOUSEEVENT_MOUSEMOVE,
                                                  (pEvent->x),
                                                  (pEvent->y),
@@ -623,40 +614,58 @@ gtv_lok_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
     return FALSE;
 }
 
-void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog, int nX, int nY)
+// Public methods below
+
+void gtv_lok_dialog_invalidate(GtvLokDialog* dialog, const GdkRectangle& aRectangle)
 {
-    g_info("Dialog's floating window invalidate");
-
     GtvLokDialogPrivate* priv = getPrivate(dialog);
-    // create new if doesn't exist
-    if (!priv->pFloatingWin)
-    {
-        priv->pFloatingWin = gtk_window_new(GTK_WINDOW_POPUP);
-        GtkWidget* pDrawingArea = gtk_drawing_area_new();
-        gtk_container_add(GTK_CONTAINER(priv->pFloatingWin), pDrawingArea);
+    if (aRectangle.width != 0 && aRectangle.height != 0)
+        gtk_widget_queue_draw_area(priv->pDialogDrawingArea, aRectangle.x, aRectangle.y, aRectangle.width, aRectangle.height);
+    else
+        gtk_widget_queue_draw(priv->pDialogDrawingArea);
+}
 
-        gtk_window_set_transient_for(GTK_WINDOW(priv->pFloatingWin), GTK_WINDOW(dialog));
-        gtk_window_set_destroy_with_parent(GTK_WINDOW(priv->pFloatingWin), true);
+// checks if we are the parent of given childId
+gboolean gtv_lok_dialog_is_parent_of(GtvLokDialog* dialog, guint childId)
+{
+    GtvLokDialogPrivate* priv = getPrivate(dialog);
 
-        gtk_widget_add_events(pDrawingArea,
-                              GDK_BUTTON_PRESS_MASK
-                              |GDK_POINTER_MOTION_MASK
-                              |GDK_BUTTON_RELEASE_MASK
-                              |GDK_BUTTON_MOTION_MASK);
+    return priv->m_nChildId == childId;
+}
 
-        g_signal_connect(G_OBJECT(pDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_floating_win_draw), dialog);
-        g_signal_connect(G_OBJECT(pDrawingArea), "button-press-event", G_CALLBACK(gtv_lok_dialog_floating_win_signal_button), dialog);
-        g_signal_connect(G_OBJECT(pDrawingArea), "button-release-event", G_CALLBACK(gtv_lok_dialog_floating_win_signal_button), dialog);
-        g_signal_connect(G_OBJECT(pDrawingArea), "motion-notify-event", G_CALLBACK(gtv_lok_dialog_floating_win_signal_motion), dialog);
+void gtv_lok_dialog_child_create(GtvLokDialog* dialog, guint childId, guint nX, guint nY, guint width, guint height)
+{
+    GtvLokDialogPrivate* priv = getPrivate(dialog);
 
-        gtk_widget_set_size_request(priv->pFloatingWin, 1, 1);
-        gtk_window_set_type_hint(GTK_WINDOW(priv->pFloatingWin), GDK_WINDOW_TYPE_HINT_POPUP_MENU);
-        gtk_window_set_screen(GTK_WINDOW(priv->pFloatingWin), gtk_window_get_screen(GTK_WINDOW(dialog)));
+    g_debug("Dialog [ %d ] child window [ %d]  being created, with dimensions [%dx%d]@(%d,%d)", priv->dialogid, childId, width, height, nX, nY);
+    priv->pFloatingWin = gtk_window_new(GTK_WINDOW_POPUP);
+    priv->m_nChildId = childId;
+    priv->m_nChildWidth = width;
+    priv->m_nChildHeight = height;
+    GtkWidget* pDrawingArea = gtk_drawing_area_new();
+    gtk_container_add(GTK_CONTAINER(priv->pFloatingWin), pDrawingArea);
 
-        gtk_widget_show_all(priv->pFloatingWin);
-        gtk_window_present(GTK_WINDOW(priv->pFloatingWin));
-        gtk_widget_grab_focus(pDrawingArea);
-    }
+    gtk_window_set_transient_for(GTK_WINDOW(priv->pFloatingWin), GTK_WINDOW(dialog));
+    gtk_window_set_destroy_with_parent(GTK_WINDOW(priv->pFloatingWin), true);
+
+    gtk_widget_add_events(pDrawingArea,
+                          GDK_BUTTON_PRESS_MASK
+                          |GDK_POINTER_MOTION_MASK
+                          |GDK_BUTTON_RELEASE_MASK
+                          |GDK_BUTTON_MOTION_MASK);
+
+    g_signal_connect(G_OBJECT(pDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_floating_win_draw), dialog);
+    g_signal_connect(G_OBJECT(pDrawingArea), "button-press-event", G_CALLBACK(gtv_lok_dialog_floating_win_signal_button), dialog);
+    g_signal_connect(G_OBJECT(pDrawingArea), "button-release-event", G_CALLBACK(gtv_lok_dialog_floating_win_signal_button), dialog);
+    g_signal_connect(G_OBJECT(pDrawingArea), "motion-notify-event", G_CALLBACK(gtv_lok_dialog_floating_win_signal_motion), dialog);
+
+    gtk_widget_set_size_request(priv->pFloatingWin, 1, 1);
+    gtk_window_set_type_hint(GTK_WINDOW(priv->pFloatingWin), GDK_WINDOW_TYPE_HINT_POPUP_MENU);
+    gtk_window_set_screen(GTK_WINDOW(priv->pFloatingWin), gtk_window_get_screen(GTK_WINDOW(dialog)));
+
+    gtk_widget_show_all(priv->pFloatingWin);
+    gtk_window_present(GTK_WINDOW(priv->pFloatingWin));
+    gtk_widget_grab_focus(pDrawingArea);
 
     // Get the root coords of our new floating window
     GdkWindow* pGdkWin = gtk_widget_get_window(GTK_WIDGET(dialog));
@@ -664,7 +673,12 @@ void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog, int nX, int nY)
     int nrY = 0;
     gdk_window_get_root_coords(pGdkWin, nX, nY, &nrX, &nrY);
     gtk_window_move(GTK_WINDOW(priv->pFloatingWin), nrX, nrY);
+}
 
+void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog)
+{
+    GtvLokDialogPrivate* priv = getPrivate(dialog);
+    g_debug("Dialog [ %d ] child invalidate request", priv->dialogid);
     gtk_widget_queue_draw(priv->pFloatingWin);
 }
 
@@ -677,12 +691,13 @@ void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
     {
         gtk_widget_destroy(priv->pFloatingWin);
         priv->pFloatingWin = nullptr;
+        priv->m_nChildId = 0;
+        priv->m_nChildWidth = 0;
+        priv->m_nChildHeight = 0;
     }
 }
 
-
-GtkWidget*
-gtv_lok_dialog_new(LOKDocView* pDocView, guint dialogId, guint width, guint height)
+GtkWidget* gtv_lok_dialog_new(LOKDocView* pDocView, guint dialogId, guint width, guint height)
 {
     g_debug("Dialog [ %d ] of size: %d x %d created", dialogId, width, height);
     GtkWindow* pWindow = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
