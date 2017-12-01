@@ -258,7 +258,7 @@ public:
 
     // the ID for XUnoTunnel calls
     static css::uno::Sequence<sal_Int8> getUnoTunnelID();
-    static Binding* getBinding( const css::uno::Reference<css::beans::XPropertySet>& );
+    static Binding* SAL_CALL getBinding( const css::uno::Reference<css::beans::XPropertySet>& );
 
 
 private:

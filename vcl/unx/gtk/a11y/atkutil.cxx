@@ -185,10 +185,10 @@ public:
     static uno::Reference< accessibility::XAccessible > getAccessible(const lang::EventObject& aEvent );
 
     // XEventListener
-    virtual void disposing( const lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
 
     // XAccessibleEventListener
-    virtual void notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
+    virtual void SAL_CALL notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
 };
 
 /*****************************************************************************/

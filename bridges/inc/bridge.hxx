@@ -33,28 +33,21 @@
 namespace bridges { namespace cpp_uno { namespace shared {
 
 // private:
-extern "C" typedef void SAL_CALL FreeMapping(uno_Mapping *);
-FreeMapping freeMapping;
+extern "C" void SAL_CALL freeMapping(uno_Mapping *);
 
 // private:
-extern "C"
-typedef void SAL_CALL AcquireMapping(uno_Mapping *);
-AcquireMapping acquireMapping;
+extern "C" void SAL_CALL acquireMapping(uno_Mapping *);
 
 // private:
-extern "C"
-typedef void SAL_CALL ReleaseMapping(uno_Mapping *);
-ReleaseMapping releaseMapping;
+extern "C" void SAL_CALL releaseMapping(uno_Mapping *);
 
 // private:
-extern "C" typedef void SAL_CALL Cpp2unoMapping(
+extern "C" void SAL_CALL cpp2unoMapping(
     uno_Mapping *, void **, void *, typelib_InterfaceTypeDescription *);
-Cpp2unoMapping cpp2unoMapping;
 
 // private:
-extern "C" typedef void SAL_CALL Uno2cppMapping(
+extern "C" void SAL_CALL uno2cppMapping(
     uno_Mapping *, void **, void *, typelib_InterfaceTypeDescription *);
-Uno2cppMapping uno2cppMapping;
 
 /**
  * Holding environments and mappings.

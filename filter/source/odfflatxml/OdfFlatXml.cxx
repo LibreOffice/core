@@ -97,7 +97,7 @@ namespace filter {
 
             static Sequence< OUString > impl_getSupportedServiceNames();
 
-            static Reference< XInterface > impl_createInstance(const Reference< XMultiServiceFactory >& fact);
+            static Reference< XInterface > SAL_CALL impl_createInstance(const Reference< XMultiServiceFactory >& fact);
         };
     }
 }
