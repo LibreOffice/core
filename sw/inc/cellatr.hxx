@@ -28,11 +28,17 @@
 
 namespace rtl { class OUString; }
 
+/** The number formatter's default locale's @ Text format.
+    Not necessarily system locale, but the locale the formatter was constructed
+    with. For this SvNumberFormatter::IsTextFormat() always returns true.
+ */
+constexpr sal_uInt32 getSwDefaultTextFormat() { return NF_STANDARD_FORMAT_TEXT; }
+
 class SW_DLLPUBLIC SwTableBoxNumFormat : public SfxUInt32Item
 {
     bool m_bAuto;     ///< automatically given flag
 public:
-    SwTableBoxNumFormat( sal_uInt32 nFormat = css::util::NumberFormat::TEXT,
+    SwTableBoxNumFormat( sal_uInt32 nFormat = getSwDefaultTextFormat(),
                         bool bAuto = false );
 
     // "pure virtual methods" of SfxPoolItem

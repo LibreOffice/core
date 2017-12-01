@@ -86,6 +86,8 @@ using namespace ::std;
 #define ZF_STANDARD_LOGICAL     SV_MAX_COUNT_STANDARD_FORMATS-1 //  99
 #define ZF_STANDARD_TEXT        SV_MAX_COUNT_STANDARD_FORMATS   // 100
 
+static_assert( ZF_STANDARD_TEXT == NF_STANDARD_FORMAT_TEXT, "definition mismatch" );
+
 /* Locale that is set if an unknown locale (from another system) is loaded of
  * legacy documents. Can not be SYSTEM because else, for example, a German "DM"
  * (old currency) is recognized as a date (#53155#). */
