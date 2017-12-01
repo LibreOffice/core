@@ -77,8 +77,12 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
         }
     }
 
-    for( nLauf = 0 ; nLauf < nCnt ; nLauf++ )
+    for( nLauf = 0 ; nLauf < nCnt && aStack.HasMoreTokens() ; nLauf++ )
         aStack >> eParam[ nLauf ];
+
+    if (nLauf < nCnt)
+        // Adapt count to reality. All sort of binary crap is possible.
+        nCnt = static_cast<sal_uInt8>(nLauf);
 
     // special cases...
     switch( eOc )

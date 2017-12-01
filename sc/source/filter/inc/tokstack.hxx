@@ -217,6 +217,13 @@ private:
         bool                        GrowId();
         bool                        GrowElement();
         bool                        GrowMatrix();
+                                    /** @return false means nElementAkt range
+                                        below nScTokenOff would overflow or
+                                        further allocation is not possible, no
+                                        new ID available other than
+                                        nElementAkt+1.
+                                     */
+        bool                        CheckElementOrGrow();
         bool                        GetElement( const sal_uInt16 nId );
         bool                        GetElementRek( const sal_uInt16 nId );
         void                        ClearMatrix();
@@ -317,6 +324,7 @@ inline void TokenStack::operator >>( TokenId& rId )
     else
     {
         SAL_WARN("sc.filter", "*TokenStack::>>(): is empty, is empty, ...");
+        rId = 0;
     }
 }
 
@@ -331,7 +339,13 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
     //       finalize with >> or Store()
     // rId -> ( sal_uInt16 ) rId - 1;
     sal_uInt16 nId = static_cast<sal_uInt16>(rId);
-    if (nId >= nScTokenOff)
+    if (nId == 0)
+    {
+        // This would result in nId-1==0xffff, create error.
+        SAL_WARN("sc.filter", "-TokenPool::operator <<: TokenId 0");
+        nId = static_cast<sal_uInt16>(ocErrNull) + nScTokenOff + 1;
+    }
+    else if (nId >= nScTokenOff)
     {
         SAL_WARN("sc.filter", "-TokenPool::operator <<: TokenId in DefToken-Range! " << static_cast<sal_uInt16>(rId));
 
@@ -374,7 +388,13 @@ inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
         if (!GrowId())
             return *this;
 
-    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) rStack.Get() ) - 1;
+    sal_uInt16 nId = static_cast<sal_uInt16>(rStack.Get());
+    if (nId == 0)
+    {
+        // Indicates error, so generate one. Empty stack, overflow, ...
+        nId = static_cast<sal_uInt16>(ocErrNull) + nScTokenOff + 1;
+    }
+    pP_Id[ nP_IdAkt ] = nId - 1;
     nP_IdAkt++;
 
     return *this;
