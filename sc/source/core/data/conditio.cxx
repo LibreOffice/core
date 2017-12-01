@@ -1750,9 +1750,8 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
         return false;
 
     //TODO: Test for same entries in reverse order?
-    for (size_t i=0; i<size(); i++)
-        if ( ! ::comphelper::ContainerUniquePtrEquals(maEntries, r.maEntries) )
-            return false;
+    if ( ! ::comphelper::ContainerUniquePtrEquals(maEntries, r.maEntries) )
+        return false;
 
     // right now don't check for same range
     // we only use this method to merge same conditional formats from
