@@ -1757,7 +1757,7 @@ OUString ScUndoDataForm::GetComment() const
 
 void ScUndoDataForm::SetChangeTrack()
 {
-    nStartChangeAction = nEndChangeAction = 0;
+    nStartChangeAction = 0;
 }
 
 void ScUndoDataForm::Undo()
@@ -1849,7 +1849,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
     {
         ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
         if ( pChangeTrack )
-            pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
+            pChangeTrack->Undo( nStartChangeAction, 0 );
     }
     else
         SetChangeTrack();

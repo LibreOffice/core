@@ -129,7 +129,6 @@ class SfxConfigGroupListBox : public SvTreeListBox
     std::unique_ptr<SvxConfigGroupBoxResource_Impl> xImp;
     VclPtr<SfxConfigFunctionListBox>  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
-    SaveInData* m_pImageProvider;
     OUString m_sModuleLongName;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::frame::XFrame > m_xFrame;

@@ -122,7 +122,6 @@ MediaWindowImpl::MediaWindowImpl(vcl::Window* pParent, MediaWindow* pMediaWindow
     , DropTargetHelper(this)
     , DragSourceHelper(this)
     , mpMediaWindow(pMediaWindow)
-    , mbEventTransparent(true)
     , mpMediaWindowControl(bInternalMediaControl ? VclPtr<MediaWindowControl>::Create(this) : nullptr)
     , mpEmptyBmpEx(nullptr)
     , mpAudioBmpEx(nullptr)
@@ -637,53 +636,53 @@ void MediaWindowImpl::GetFocus()
 
 void MediaWindowImpl::MouseMove(const MouseEvent& rMEvt)
 {
-    if (mpMediaWindow && mbEventTransparent)
+    if (mpMediaWindow)
         mpMediaWindow->MouseMove(rMEvt);
 }
 
 void MediaWindowImpl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    if (mpMediaWindow && mbEventTransparent)
+    if (mpMediaWindow)
         mpMediaWindow->MouseButtonDown(rMEvt);
 }
 
 void MediaWindowImpl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if (mpMediaWindow && mbEventTransparent)
+    if (mpMediaWindow)
         mpMediaWindow->MouseButtonUp(rMEvt);
 }
 
 void MediaWindowImpl::KeyInput(const KeyEvent& rKEvt)
 {
-    if (mpMediaWindow && mbEventTransparent)
+    if (mpMediaWindow)
         mpMediaWindow->KeyInput(rKEvt);
 }
 
 void MediaWindowImpl::KeyUp(const KeyEvent& rKEvt)
 {
-    if (mpMediaWindow && mbEventTransparent)
+    if (mpMediaWindow)
         mpMediaWindow->KeyUp(rKEvt);
 }
 
 void MediaWindowImpl::Command(const CommandEvent& rCEvt)
 {
-    if (mpMediaWindow && mbEventTransparent)
+    if (mpMediaWindow)
         mpMediaWindow->Command(rCEvt);
 }
 
 sal_Int8 MediaWindowImpl::AcceptDrop(const AcceptDropEvent& rEvt)
 {
-    return (mpMediaWindow && mbEventTransparent ? mpMediaWindow->AcceptDrop(rEvt) : 0);
+    return (mpMediaWindow ? mpMediaWindow->AcceptDrop(rEvt) : 0);
 }
 
 sal_Int8 MediaWindowImpl::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    return (mpMediaWindow && mbEventTransparent ? mpMediaWindow->ExecuteDrop(rEvt) : 0);
+    return (mpMediaWindow ? mpMediaWindow->ExecuteDrop(rEvt) : 0);
 }
 
 void MediaWindowImpl::StartDrag(sal_Int8 nAction, const Point& rPosPixel)
 {
-    if (mpMediaWindow && mbEventTransparent)
+    if (mpMediaWindow)
         mpMediaWindow->StartDrag(nAction, rPosPixel);
 }
 

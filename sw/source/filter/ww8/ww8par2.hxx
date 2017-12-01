@@ -55,7 +55,7 @@ struct WW8SwFlyPara
     sal_Int16 nNetWidth;
 
     SwFrameSize eHeightFix;         // height fixed or min
-    RndStdIds   eAnchor;            // binding
+    static constexpr RndStdIds eAnchor = RndStdIds::FLY_AT_PARA; // binding
     short       eHRel;              // page or page border
     short       eVRel;              // page or page border
     sal_Int16   eVAlign;            // up, down, centered

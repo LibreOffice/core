@@ -396,7 +396,6 @@ SfxConfigGroupListBox::SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     : SvTreeListBox(pParent, nStyle)
     , xImp(new SvxConfigGroupBoxResource_Impl())
     , pFunctionListBox(nullptr)
-    , m_pImageProvider(nullptr)
     , pStylesInfo(nullptr)
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
@@ -647,16 +646,7 @@ void SfxConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchI
     for (const auto & rInfo : xCommands)
     {
         OUString sUIName = MapCommand2UIName(rInfo.Command);
-        Image aImage;
-        if ( m_pImageProvider )
-            aImage = m_pImageProvider->GetImage( rInfo.Command );
-
-        SvTreeListEntry* pFuncEntry = nullptr;
-        if ( !!aImage )
-            pFuncEntry = pFunctionListBox->InsertEntry( sUIName, aImage, aImage );
-        else
-            pFuncEntry = pFunctionListBox->InsertEntry(sUIName );
-
+        SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(sUIName );
         aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
         SfxGroupInfo_Impl* pGrpInfo = aArr.back().get();
         pGrpInfo->sCommand = rInfo.Command;

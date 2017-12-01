@@ -362,7 +362,7 @@ SwFlyFrameFormat* SwWW8ImplReader::MakeGrafNotInContent(const WW8PicDesc& rPD,
 
     WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), true);
 
-    SwFormatAnchor aAnchor(m_xSFlyPara->eAnchor);
+    SwFormatAnchor aAnchor(WW8SwFlyPara::eAnchor);
     aAnchor.SetAnchor(m_pPaM->GetPoint());
     aFlySet.Put(aAnchor);
 
@@ -598,7 +598,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     {
                         WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), true);
 
-                        SwFormatAnchor aAnchor(m_xSFlyPara->eAnchor);
+                        SwFormatAnchor aAnchor(WW8SwFlyPara::eAnchor);
                         aAnchor.SetAnchor(m_pPaM->GetPoint());
                         aFlySet.Put(aAnchor);
 

@@ -1809,7 +1809,6 @@ nWidth(rWW.nSp28),
 nHeight(rWW.nSp45),
 nNetWidth(rWW.nSp28),
 eHeightFix(ATT_FIX_SIZE),
-eAnchor(RndStdIds::FLY_AT_PARA),
 eHRel(text::RelOrientation::PAGE_FRAME),
 eVRel(text::RelOrientation::FRAME),
 eVAlign(text::VertOrientation::NONE),
@@ -2097,7 +2096,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 
     if( !bGraf )
     {
-        Put( SwFormatAnchor(pFS->eAnchor) );
+        Put( SwFormatAnchor(WW8SwFlyPara::eAnchor) );
         // adjust size
 
         //Ordinarily with frames, the border width and spacing is
@@ -2390,10 +2389,10 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         }
         else
         {
-            m_xSFlyPara->pFlyFormat = m_rDoc.MakeFlySection(m_xSFlyPara->eAnchor,
+            m_xSFlyPara->pFlyFormat = m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
                     m_pPaM->GetPoint(), &aFlySet);
             OSL_ENSURE(m_xSFlyPara->pFlyFormat->GetAnchor().GetAnchorId() ==
-                    m_xSFlyPara->eAnchor, "Not the anchor type requested!");
+                    WW8SwFlyPara::eAnchor, "Not the anchor type requested!");
         }
 
         if (m_xSFlyPara->pFlyFormat)
@@ -2405,7 +2404,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
             m_xWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
-        if (RndStdIds::FLY_AS_CHAR != m_xSFlyPara->eAnchor && m_xSFlyPara->pFlyFormat)
+        if (RndStdIds::FLY_AS_CHAR != WW8SwFlyPara::eAnchor && m_xSFlyPara->pFlyFormat)
         {
             m_xAnchorStck->AddAnchor(*m_pPaM->GetPoint(), m_xSFlyPara->pFlyFormat);
         }
