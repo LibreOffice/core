@@ -42,6 +42,7 @@ class EPUBExportTest : public test::BootstrapFixture, public unotest::MacrosTest
     utl::TempFile maTempFile;
     xmlDocPtr mpXmlDoc = nullptr;
     uno::Reference<packages::zip::XZipFileAccess2> mxZipFile;
+    OUString maFilterOptions;
 
 public:
     void setUp() override;
@@ -58,6 +59,7 @@ public:
     void testMimetype();
     void testEPUB2();
     void testEPUBFixedLayout();
+    void testEPUBFixedLayoutOption();
     void testPageBreakSplit();
     void testSpanAutostyle();
     void testParaAutostyleCharProps();
@@ -99,6 +101,7 @@ public:
     CPPUNIT_TEST(testMimetype);
     CPPUNIT_TEST(testEPUB2);
     CPPUNIT_TEST(testEPUBFixedLayout);
+    CPPUNIT_TEST(testEPUBFixedLayoutOption);
     CPPUNIT_TEST(testPageBreakSplit);
     CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST(testParaAutostyleCharProps);
@@ -177,7 +180,10 @@ void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans:
     maTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("EPUB");
-    aMediaDescriptor["FilterData"] <<= rFilterData;
+    if (maFilterOptions.isEmpty())
+        aMediaDescriptor["FilterData"] <<= rFilterData;
+    else
+        aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     mxZipFile = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
 }
@@ -307,6 +313,17 @@ void EPUBExportTest::testEPUBFixedLayout()
 
     mpXmlDoc = parseExport("OEBPS/content.opf");
     // This was missing, EPUBLayoutMethod filter option was ignored and we always emitted reflowable layout.
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']", "pre-paginated");
+}
+
+void EPUBExportTest::testEPUBFixedLayoutOption()
+{
+    // Explicitly request fixed layout, this time via FilterOptions.
+    maFilterOptions = "layout=fixed";
+    createDoc("hello.fodt", {});
+
+    // This failed, fixed layout was only working via the FilterData map.
+    mpXmlDoc = parseExport("OEBPS/content.opf");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']", "pre-paginated");
 }
 
