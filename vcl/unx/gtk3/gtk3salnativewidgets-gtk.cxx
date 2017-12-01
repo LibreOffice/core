@@ -3016,7 +3016,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     ::Color aHighlightTextColor = getColor( color );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
-#if GTK_CHECK_VERSION(3, 12, 0)
     // hyperlink colors
     style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_LINK);
     gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
@@ -3024,7 +3023,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_VISITED);
     gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
     aStyleSet.SetVisitedLinkColor(getColor(text_color));
-#endif
 
     {
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabLabelStyle;
