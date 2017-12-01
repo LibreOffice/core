@@ -54,6 +54,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
@@ -83,6 +84,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <unicode/uchar.h>
@@ -94,6 +96,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <app.hxx>
 
@@ -3546,6 +3549,20 @@ static void preloadData()
         xSpellChecker->isValid("forcefed", it, aNone);
     }
     std::cerr << "\n";
+
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg;
+    xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
+        comphelper::getProcessComponentContext());
+    xGlobalCfg->getAllKeyEvents();
+
+    std::cerr << "Preload icons\n";
+    ImageTree &images = ImageTree::get();
+    images.getImageUrl("forcefed.png", "style", "FO_oo");
+
+    std::cerr << "Preload languages\n";
+    // force load language singleton
+    SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
+    LanguageTag::isValidBcp47("foo");
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
