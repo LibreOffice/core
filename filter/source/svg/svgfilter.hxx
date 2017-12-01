@@ -71,6 +71,7 @@ static const OUString sPlaceholderTag( "<[:isPlaceholder:]>" );
 class SVGExport : public SvXMLExport
 {
     bool    mbIsUseTinyProfile;
+    bool    mbIsUseDTDString;
     bool    mbIsEmbedFonts;
     bool    mbIsUseOpacity;
     bool    mbIsUseNativeTextDecoration;
@@ -85,6 +86,7 @@ public:
     virtual ~SVGExport() override;
 
     bool IsUseTinyProfile() const { return mbIsUseTinyProfile; };
+    bool IsUseDTDString() const { return mbIsUseDTDString; };
     bool IsEmbedFonts() const { return mbIsEmbedFonts; };
     bool IsUseOpacity() const { return mbIsUseOpacity; };
     bool IsUseNativeTextDecoration() const { return mbIsUseNativeTextDecoration; };

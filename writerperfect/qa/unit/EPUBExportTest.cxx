@@ -96,6 +96,7 @@ public:
     void testPopup();
     void testPopupAPI();
     void testPageSize();
+    void testSVG();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testPopup);
     CPPUNIT_TEST(testPopupAPI);
     CPPUNIT_TEST(testPageSize);
+    CPPUNIT_TEST(testSVG);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -811,6 +813,29 @@ void EPUBExportTest::testPageSize()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // 21,59cm x 27.94cm (letter).
     assertXPath(mpXmlDoc, "/xhtml:html/xhtml:head/xhtml:meta[@name='viewport']", "content", "width=816, height=1056");
+}
+
+void EPUBExportTest::testSVG()
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
+    }));
+    createDoc("hello.fodt", aFilterData);
+
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.svg"));
+    uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName("OEBPS/images/image0001.svg"), uno::UNO_QUERY);
+    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+
+    SvMemoryStream aMemoryStream;
+    aMemoryStream.WriteStream(*pStream);
+    OString aExpected("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<svg");
+    CPPUNIT_ASSERT(aMemoryStream.GetSize() > static_cast<sal_uInt64>(aExpected.getLength()));
+
+    // This failed, there was a '<!DOCTYPE' line between the xml and the svg
+    // one, causing a validation error.
+    OString aActual(static_cast<const char *>(aMemoryStream.GetBuffer()), aExpected.getLength());
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
