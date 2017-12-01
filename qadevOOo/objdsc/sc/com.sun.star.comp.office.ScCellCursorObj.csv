@@ -123,7 +123,6 @@
 "ScCellCursorObj";"com::sun::star::sheet::XCellRangeFormula#optional";"setFormulaArray()"
 "ScCellCursorObj";"com::sun::star::util::XIndent";"decrementIndent()"
 "ScCellCursorObj";"com::sun::star::util::XIndent";"incrementIndent()"
-"ScCellCursorObj";"com::sun::star::sheet::XMultipleOperation";"setTableOperation()"
 "ScCellCursorObj";"com::sun::star::table::XAutoFormattable";"autoFormat()"
 "ScCellCursorObj";"com::sun::star::sheet::XCellRangesQuery";"queryVisibleCells()"
 "ScCellCursorObj";"com::sun::star::sheet::XCellRangesQuery";"queryEmptyCells()"
