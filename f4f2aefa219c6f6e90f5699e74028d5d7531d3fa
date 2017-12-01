@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_62620e40",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3271,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-01T10:19:52Z",
+      "side": 1,
+      "message": "I think this being MAXSTRLEN and thus pointing behind the string can\u0027t happen anymore. It\u0027s in since a5550289a37950195b7a7e5b22cba79ce5b5a673, but that seemed to be a workaround and the real cause was fixed with 1d961ae75321cd04f40fcee8fae94c059fc466f1 so we can probably even remove the check.",
+      "revId": "f4f2aefa219c6f6e90f5699e74028d5d7531d3fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
