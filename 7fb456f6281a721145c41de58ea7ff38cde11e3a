@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8219bad9",
+        "filename": "writerperfect/source/writer/exp/xmlfmt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-01T10:05:03Z",
+      "side": 0,
+      "message": "Eh, forgot to remove this.",
+      "revId": "7fb456f6281a721145c41de58ea7ff38cde11e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
