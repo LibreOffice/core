@@ -556,7 +556,7 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nCount,
                                 int nButtons,
                                 int nModifier);
-static void doc_postDialogMouseEvent (LibreOfficeKitDocument* pThis,
+static void doc_postWindowMouseEvent (LibreOfficeKitDocument* pThis,
                                       unsigned nLOKWindowId,
                                       int nType,
                                       int nX,
@@ -564,14 +564,6 @@ static void doc_postDialogMouseEvent (LibreOfficeKitDocument* pThis,
                                       int nCount,
                                       int nButtons,
                                       int nModifier);
-static void doc_postDialogChildMouseEvent (LibreOfficeKitDocument* pThis,
-                                           unsigned nLOKWindowId,
-                                           int nType,
-                                           int nX,
-                                           int nY,
-                                           int nCount,
-                                           int nButtons,
-                                           int nModifier);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
@@ -646,8 +638,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
         m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
-        m_pDocumentClass->postDialogMouseEvent = doc_postDialogMouseEvent;
-        m_pDocumentClass->postDialogChildMouseEvent = doc_postDialogChildMouseEvent;
+        m_pDocumentClass->postWindowMouseEvent = doc_postWindowMouseEvent;
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
@@ -2429,7 +2420,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 }
 
-static void doc_postDialogMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -2453,37 +2444,6 @@ static void doc_postDialogMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
             break;
         case LOK_MOUSEEVENT_MOUSEMOVE:
             pWindow->LogicMouseMove(aEvent);
-            break;
-        default:
-            assert(false);
-            break;
-    }
-}
-
-static void doc_postDialogChildMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
-{
-    SolarMutexGuard aGuard;
-
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
-    if (!pWindow)
-    {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
-        return;
-    }
-
-    Point aPos(nX, nY);
-    MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
-
-    switch (nType)
-    {
-        case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-            pWindow->LogicMouseButtonDownChild(aEvent);
-            break;
-        case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-            pWindow->LogicMouseButtonUpChild(aEvent);
-            break;
-        case LOK_MOUSEEVENT_MOUSEMOVE:
-            pWindow->LogicMouseMoveChild(aEvent);
             break;
         default:
             assert(false);
