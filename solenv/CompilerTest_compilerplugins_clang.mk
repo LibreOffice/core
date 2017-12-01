@@ -38,6 +38,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/redundantpointerops \
     compilerplugins/clang/test/refcounting \
     compilerplugins/clang/test/salbool \
+    compilerplugins/clang/test/salcall \
     compilerplugins/clang/test/salunicodeliteral \
     compilerplugins/clang/test/simplifybool \
     compilerplugins/clang/test/simplifydynamiccast \

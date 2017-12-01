@@ -171,7 +171,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
             @return The new instance of this service as an uno reference.
          */
-        static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 };
 
     } // namespace config

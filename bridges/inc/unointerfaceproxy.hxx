@@ -39,25 +39,21 @@ namespace bridges { namespace cpp_uno { namespace shared {
 
 class Bridge;
 
-extern "C" typedef void SAL_CALL FreeUnoInterfaceProxy(
+extern "C" void SAL_CALL freeUnoInterfaceProxy(
     uno_ExtEnvironment * pEnv, void * pProxy);
-FreeUnoInterfaceProxy freeUnoInterfaceProxy;
 
 // private:
-extern "C" typedef void SAL_CALL UnoInterfaceProxyDispatch(
+extern "C" void SAL_CALL unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException);
-UnoInterfaceProxyDispatch unoInterfaceProxyDispatch;
     // this function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge
 
 // private:
-extern "C" typedef void SAL_CALL AcquireProxy(uno_Interface *);
-AcquireProxy acquireProxy;
+extern "C" void SAL_CALL acquireProxy(uno_Interface *);
 
 // private:
-extern "C" typedef void SAL_CALL ReleaseProxy(uno_Interface *);
-ReleaseProxy releaseProxy;
+extern "C" void SAL_CALL releaseProxy(uno_Interface *);
 
 /**
  * A uno proxy wrapping a cpp interface.

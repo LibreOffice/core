@@ -45,9 +45,8 @@ namespace bridges { namespace cpp_uno { namespace shared {
 
 class Bridge;
 
-extern "C" typedef void SAL_CALL FreeCppInterfaceProxy(
+extern "C" void SAL_CALL freeCppInterfaceProxy(
     uno_ExtEnvironment * pEnv, void * pInterface);
-FreeCppInterfaceProxy freeCppInterfaceProxy;
 
 /**
  * A cpp proxy wrapping a uno interface.

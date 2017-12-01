@@ -1056,7 +1056,7 @@ oslFileError SAL_CALL osl_openFile(rtl_uString* ustrFileURL, oslFileHandle* pHan
     return openFile(ustrFileURL, pHandle, uFlags, mode_t(-1));
 }
 
-oslFileError SAL_CALL openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags, mode_t mode)
+oslFileError openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags, mode_t mode)
 {
     oslFileError eRet;
 

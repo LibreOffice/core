@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star {
 namespace connectivity { namespace odbc {
 
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< css::uno::XInterface > SAL_CALL
 ODBCDriver_CreateInstance( css::uno::Reference< css::lang::XMultiServiceFactory > const & factory);
 
 } }

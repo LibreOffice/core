@@ -35,12 +35,12 @@ namespace com { namespace sun { namespace star {
 css::uno::Reference<css::uno::XInterface> SAL_CALL FilePicker_CreateInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context);
 css::uno::Sequence<OUString> FilePicker_getSupportedServiceNames();
-OUString FilePicker_getImplementationName();
+OUString SAL_CALL FilePicker_getImplementationName();
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL FolderPicker_CreateInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context);
 css::uno::Sequence<OUString> FolderPicker_getSupportedServiceNames();
-OUString FolderPicker_getImplementationName();
+OUString SAL_CALL FolderPicker_getImplementationName();
 
 #endif
 
