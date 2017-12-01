@@ -320,6 +320,102 @@ librevenge::RVNGPropertyList &XMLStyleContext::GetGraphicPropertyList()
     return m_aGraphicPropertyList;
 }
 
+XMLMasterPageContext::XMLMasterPageContext(XMLImport &rImport, XMLStylesContext &rStyles)
+    : XMLImportContext(rImport),
+      m_rStyles(rStyles)
+{
+    // I'll remove this in a follow-up commit.
+    (void)m_rStyles;
+}
+
+void XMLMasterPageContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    OUString aName;
+    OUString aPageLayoutName;
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        if (rAttributeName == "style:name")
+            aName = rAttributeValue;
+        else if (rAttributeName == "style:page-layout-name")
+            aPageLayoutName = rAttributeValue;
+    }
+    auto it = mrImport.GetPageLayouts().find(aPageLayoutName);
+    if (it == mrImport.GetPageLayouts().end())
+        return;
+
+    librevenge::RVNGPropertyList::Iter itProp(it->second);
+    librevenge::RVNGPropertyList aPropertyList;
+    for (itProp.rewind(); itProp.next();)
+        aPropertyList.insert(itProp.key(), itProp()->clone());
+    mrImport.GetMasterPages()[aName] = aPropertyList;
+}
+
+/// Handler for <style:page-layout-properties>.
+class XMLPageLayoutPropertiesContext : public XMLImportContext
+{
+public:
+    XMLPageLayoutPropertiesContext(XMLImport &rImport, XMLPageLayoutContext &rStyle);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    XMLPageLayoutContext &m_rStyle;
+};
+
+XMLPageLayoutPropertiesContext::XMLPageLayoutPropertiesContext(XMLImport &rImport, XMLPageLayoutContext &rStyle)
+    : XMLImportContext(rImport)
+    , m_rStyle(rStyle)
+{
+}
+
+void XMLPageLayoutPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+        m_rStyle.GetPropertyList().insert(sName.getStr(), sValue.getStr());
+    }
+}
+
+XMLPageLayoutContext::XMLPageLayoutContext(XMLImport &rImport, XMLStylesContext &rStyles)
+    : XMLImportContext(rImport),
+      m_rStyles(rStyles)
+{
+}
+
+void XMLPageLayoutContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        if (rAttributeName == "style:name")
+            m_aName = rAttributeValue;
+    }
+}
+
+rtl::Reference<XMLImportContext> XMLPageLayoutContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    if (rName == "style:page-layout-properties")
+        return new XMLPageLayoutPropertiesContext(mrImport, *this);
+    return nullptr;
+}
+
+void XMLPageLayoutContext::endElement(const OUString &/*rName*/)
+{
+    if (m_aName.isEmpty())
+        return;
+
+    m_rStyles.GetCurrentPageLayouts()[m_aName] = m_aPropertyList;
+}
+
+librevenge::RVNGPropertyList &XMLPageLayoutContext::GetPropertyList()
+{
+    return m_aPropertyList;
+}
 } // namespace exp
 } // namespace writerperfect
 

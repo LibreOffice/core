@@ -20,15 +20,17 @@ namespace writerperfect
 namespace exp
 {
 
-XMLStylesContext::XMLStylesContext(XMLImport &rImport, bool bAutomatic)
+XMLStylesContext::XMLStylesContext(XMLImport &rImport, StyleType eType)
     : XMLImportContext(rImport),
-      m_rParagraphStyles(bAutomatic ? mrImport.GetAutomaticParagraphStyles() : mrImport.GetParagraphStyles()),
-      m_rTextStyles(bAutomatic ? mrImport.GetAutomaticTextStyles() : mrImport.GetTextStyles()),
-      m_rCellStyles(bAutomatic ? mrImport.GetAutomaticCellStyles() : mrImport.GetCellStyles()),
-      m_rColumnStyles(bAutomatic ? mrImport.GetAutomaticColumnStyles() : mrImport.GetColumnStyles()),
-      m_rRowStyles(bAutomatic ? mrImport.GetAutomaticRowStyles() : mrImport.GetRowStyles()),
-      m_rTableStyles(bAutomatic ? mrImport.GetAutomaticTableStyles() : mrImport.GetTableStyles()),
-      m_rGraphicStyles(bAutomatic ? mrImport.GetAutomaticGraphicStyles() : mrImport.GetGraphicStyles())
+      m_rParagraphStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticParagraphStyles() : mrImport.GetParagraphStyles()),
+      m_rTextStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticTextStyles() : mrImport.GetTextStyles()),
+      m_rCellStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticCellStyles() : mrImport.GetCellStyles()),
+      m_rColumnStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticColumnStyles() : mrImport.GetColumnStyles()),
+      m_rRowStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticRowStyles() : mrImport.GetRowStyles()),
+      m_rTableStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticTableStyles() : mrImport.GetTableStyles()),
+      m_rGraphicStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticGraphicStyles() : mrImport.GetGraphicStyles()),
+      m_rPageLayouts(mrImport.GetPageLayouts()),
+      m_eType(eType)
 {
 }
 
@@ -36,6 +38,10 @@ rtl::Reference<XMLImportContext> XMLStylesContext::CreateChildContext(const OUSt
 {
     if (rName == "style:style")
         return new XMLStyleContext(mrImport, *this);
+    if (m_eType == StyleType_MASTER && rName == "style:master-page")
+        return new XMLMasterPageContext(mrImport, *this);
+    if (m_eType == StyleType_AUTOMATIC && rName == "style:page-layout")
+        return new XMLPageLayoutContext(mrImport, *this);
     return nullptr;
 }
 
@@ -72,6 +78,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentTa
 std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentGraphicStyles()
 {
     return m_rGraphicStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentPageLayouts()
+{
+    return m_rPageLayouts;
 }
 
 /// Handler for <style:font-face>.

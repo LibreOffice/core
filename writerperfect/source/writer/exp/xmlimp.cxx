@@ -246,11 +246,13 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
     else if (rName == "office:meta")
         return new XMLMetaDocumentContext(mrImport);
     else if (rName == "office:automatic-styles")
-        return new XMLStylesContext(mrImport, /*bAutomatic=*/true);
+        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_AUTOMATIC);
     else if (rName == "office:styles")
-        return new XMLStylesContext(mrImport, /*bAutomatic=*/false);
+        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_NONE);
     else if (rName == "office:font-face-decls")
         return new XMLFontFaceDeclsContext(mrImport);
+    else if (rName == "office:master-styles")
+        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_MASTER);
     return nullptr;
 }
 
@@ -339,6 +341,16 @@ bool XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList
     return false;
 }
 
+void XMLImport::SetPageSpanOpened(bool bPageSpanOpened)
+{
+    mbPageSpanOpened = bPageSpanOpened;
+}
+
+bool XMLImport::IsPageSpanOpened() const
+{
+    return mbPageSpanOpened;
+}
+
 rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "office:document")
@@ -421,6 +433,16 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetGraphicStyles()
     return maGraphicStyles;
 }
 
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetPageLayouts()
+{
+    return maPageLayouts;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetMasterPages()
+{
+    return maMasterPages;
+}
+
 void XMLImport::startDocument()
 {
     mrGenerator.startDocument(librevenge::RVNGPropertyList());
@@ -428,6 +450,11 @@ void XMLImport::startDocument()
 
 void XMLImport::endDocument()
 {
+    if (mbPageSpanOpened)
+    {
+        mrGenerator.closePageSpan();
+        mbPageSpanOpened = false;
+    }
     mrGenerator.endDocument();
 }
 

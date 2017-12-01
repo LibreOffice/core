@@ -5658,3 +5658,176 @@ index 5d4e8f2..c3bc963 100644
 -- 
 2.13.6
 
+From 38aa728708641942371507b975193f0ab60f0b50 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 29 Nov 2017 11:00:32 +0100
+Subject: [PATCH] EPUBGenerator: fixed layout implies split on page break
+
+---
+ Makefile.am                        |  3 +++
+ src/lib/EPUBGenerator.cpp          |  8 ++++++++
+ src/lib/EPUBHTMLGenerator.cpp      | 16 ++++++++++++++++
+ src/lib/EPUBHTMLGenerator.h        |  5 +++++
+ src/lib/EPUBSplitGuard.cpp         |  5 +++++
+ src/lib/EPUBSplitGuard.h           |  4 +++-
+ src/test/EPUBTextGeneratorTest.cpp | 31 +++++++++++++++++++++++++++++++
+ 7 files changed, 71 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 4a62d7f..f608331 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -118,7 +118,12 @@ void EPUBGenerator::startNewHtmlFile()
+ 
+   m_splitGuard.onSplit();
+ 
++  librevenge::RVNGPropertyList pageProperties;
++  if (m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED && m_currentHtml)
++    m_currentHtml->getPageProperties(pageProperties);
+   m_currentHtml = m_htmlManager.create(m_imageManager, m_fontManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod, m_layoutMethod, m_version);
++  if (m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED)
++    m_currentHtml->setPageProperties(pageProperties);
+ 
+   // restore state in the new file
+   m_currentHtml->startDocument(m_documentProps);
+@@ -160,6 +165,9 @@ void EPUBGenerator::setStylesMethod(EPUBStylesMethod styles)
+ void EPUBGenerator::setLayoutMethod(EPUBLayoutMethod layout)
+ {
+   m_layoutMethod = layout;
++  if (m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED)
++    // Fixed layout implies split on page break.
++    m_splitGuard.setSplitMethod(EPUB_SPLIT_METHOD_PAGE_BREAK);
+ }
+ 
+ void EPUBGenerator::writeContainer()
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 4260858..7a53ce3 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -1173,6 +1173,22 @@ void EPUBHTMLGenerator::closePopup(EPUBXMLSink &main)
+ 
+ void EPUBHTMLGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
+ 
++void EPUBHTMLGenerator::getPageProperties(librevenge::RVNGPropertyList &propList) const
++{
++  propList.clear();
++  librevenge::RVNGPropertyList::Iter i(m_impl->m_actualPageProperties);
++  for (i.rewind(); i.next();)
++    propList.insert(i.key(), i()->clone());
++}
++
++void EPUBHTMLGenerator::setPageProperties(const librevenge::RVNGPropertyList &propList)
++{
++  m_impl->m_actualPageProperties.clear();
++  librevenge::RVNGPropertyList::Iter i(propList);
++  for (i.rewind(); i.next();)
++    m_impl->m_actualPageProperties.insert(i.key(), i()->clone());
++}
++
+ }
+ 
+ /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
+diff --git a/src/lib/EPUBHTMLGenerator.h b/src/lib/EPUBHTMLGenerator.h
+index 3c6577f..ef7d542 100644
+--- a/src/lib/EPUBHTMLGenerator.h
++++ b/src/lib/EPUBHTMLGenerator.h
+@@ -112,6 +112,11 @@ public:
+   void insertBinaryObject(const librevenge::RVNGPropertyList &propList) override;
+   void insertEquation(const librevenge::RVNGPropertyList &propList) override;
+ 
++  /// Gets the actual page properties into propList.
++  void getPageProperties(librevenge::RVNGPropertyList &propList) const;
++  /// Sets the actual page properties from propList.
++  void setPageProperties(const librevenge::RVNGPropertyList &propList);
++
+ private:
+   EPUBXMLSink &openPopup();
+   void closePopup(EPUBXMLSink &main);
+diff --git a/src/lib/EPUBSplitGuard.cpp b/src/lib/EPUBSplitGuard.cpp
+index 890500b..4f7531d 100644
+--- a/src/lib/EPUBSplitGuard.cpp
++++ b/src/lib/EPUBSplitGuard.cpp
+@@ -40,6 +40,11 @@ void EPUBSplitGuard::setSplitSize(const unsigned size)
+   m_size = size;
+ }
+ 
++void EPUBSplitGuard::setSplitMethod(EPUBSplitMethod method)
++{
++  m_method = method;
++}
++
+ void EPUBSplitGuard::openLevel()
+ {
+   ++m_nestingLevel;
+diff --git a/src/lib/EPUBSplitGuard.h b/src/lib/EPUBSplitGuard.h
+index 1a74079..ff55846 100644
+--- a/src/lib/EPUBSplitGuard.h
++++ b/src/lib/EPUBSplitGuard.h
+@@ -23,6 +23,8 @@ public:
+   void setSplitHeadingLevel(unsigned level);
+   void setCurrentHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
++  /// Allows overwriting the value given in the constructor.
++  void setSplitMethod(EPUBSplitMethod method);
+ 
+   void openLevel();
+   void closeLevel();
+@@ -39,7 +41,7 @@ private:
+   bool canSplit(EPUBSplitMethod method) const;
+ 
+ private:
+-  const EPUBSplitMethod m_method;
++  EPUBSplitMethod m_method;
+   unsigned m_headingLevel;
+   unsigned m_currentHeadingLevel;
+   unsigned m_size;
+-- 
+2.13.6
+
+From d9921c47befa3eabcfc916e26e273667232be637 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 29 Nov 2017 14:44:55 +0100
+Subject: [PATCH] EPUBTextGenerator: page-break=auto is not a page break
+
+---
+ src/lib/EPUBTextGenerator.cpp      | 14 ++++++++++++--
+ src/test/EPUBTextGeneratorTest.cpp | 21 +++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index c3bc963..02c299a 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -53,6 +53,16 @@ bool operator!=(const char *const left, const RVNGString &right)
+   return right != left;
+ }
+ 
++/// Determines if this break property a page break one.
++bool isPageBreak(const librevenge::RVNGProperty *property)
++{
++  if (!property)
++    return false;
++
++  librevenge::RVNGString str = property->getStr();
++  return str != "column" && str != "auto";
++}
++
+ }
+ 
+ struct EPUBTextGenerator::Impl : public EPUBGenerator
+@@ -259,10 +269,10 @@ void EPUBTextGenerator::defineParagraphStyle(const librevenge::RVNGPropertyList
+ void EPUBTextGenerator::openParagraph(const librevenge::RVNGPropertyList &propList)
+ {
+   const RVNGProperty *const breakBefore = propList["fo:break-before"];
+-  if (breakBefore && ("column" != breakBefore->getStr()) && m_impl->getSplitGuard().splitOnPageBreak())
++  if (isPageBreak(breakBefore) && m_impl->getSplitGuard().splitOnPageBreak())
+     m_impl->startNewHtmlFile();
+   const RVNGProperty *const breakAfter = propList["fo:break-after"];
+-  m_impl->m_breakAfterPara = breakAfter && ("column" != breakAfter->getStr());
++  m_impl->m_breakAfterPara = isPageBreak(breakAfter);
+   if (m_impl->getSplitGuard().splitOnSize())
+     m_impl->startNewHtmlFile();
+ 
+-- 
+2.13.6
+

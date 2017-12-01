@@ -92,6 +92,7 @@ public:
     void testFootnote();
     void testPopup();
     void testPopupAPI();
+    void testPageSize();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testFootnote);
     CPPUNIT_TEST(testPopup);
     CPPUNIT_TEST(testPopupAPI);
+    CPPUNIT_TEST(testPageSize);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -761,6 +763,20 @@ void EPUBExportTest::testPopupAPI()
     CPPUNIT_ASSERT(!aData.isEmpty());
     // The anchor is different from the popup image.
     CPPUNIT_ASSERT(aAnchor != aData);
+}
+
+void EPUBExportTest::testPageSize()
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
+    }));
+    createDoc("hello.fodt", aFilterData);
+
+    // This failed, viewport was empty, so page size was lost.
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // 21,59cm x 27.94cm (letter).
+    assertXPath(mpXmlDoc, "/xhtml:html/xhtml:head/xhtml:meta[@name='viewport']", "content", "width=816, height=1056");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
