@@ -592,12 +592,36 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         pNewFormat->UpdateReference(aRefCxt, true);
 
         sal_uLong nMax = 0;
+        bool bDuplicate = false;
         for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();
                 itrCond != mpCondFormatList->end(); ++itrCond)
         {
+            // Check if there is the same format in the destination
+            // If there is, then simply expand its range
+            if ((*itrCond)->EqualEntries(*pNewFormat, true))
+            {
+                bDuplicate = true;
+                pDocument->RemoveCondFormatData((*itrCond)->GetRange(), nTab, (*itrCond)->GetKey());
+                const ScRangeList& rNewRangeList = pNewFormat->GetRange();
+                ScRangeList& rDstRangeList = (*itrCond)->GetRangeList();
+                for (size_t i = 0; i < rNewRangeList.size(); ++i)
+                {
+                    rDstRangeList.Join(*rNewRangeList[i]);
+                }
+                pDocument->AddCondFormatData((*itrCond)->GetRange(), nTab, (*itrCond)->GetKey());
+                break;
+            }
+
             if ((*itrCond)->GetKey() > nMax)
                 nMax = (*itrCond)->GetKey();
         }
+        // Do not add duplicate entries
+        if (bDuplicate)
+        {
+            delete pNewFormat;
+            continue;
+        }
+
         pNewFormat->SetKey(nMax + 1);
         mpCondFormatList->InsertNew(pNewFormat);
 
