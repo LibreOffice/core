@@ -269,8 +269,8 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::postWindow().
     void (*postWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId, int nAction);
 
-    /// @see lok::Document::postDialogKeyEvent().
-    void (*postDialogKeyEvent) (LibreOfficeKitDocument* pThis,
+    /// @see lok::Document::postWindowKeyEvent().
+    void (*postWindowKeyEvent) (LibreOfficeKitDocument* pThis,
                                 unsigned nDialogId,
                                 int nType,
                                 int nCharCode,
