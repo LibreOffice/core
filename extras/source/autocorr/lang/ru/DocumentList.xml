@@ -1037,7 +1037,6 @@
   <block-list:block block-list:abbreviated-name=":почтовый ящик 5:" block-list:name="📮"/>
   <block-list:block block-list:abbreviated-name=":почтовый ящик:" block-list:name="📪"/>
   <block-list:block block-list:abbreviated-name=":православный крест:" block-list:name="☦"/>
-  <block-list:block block-list:abbreviated-name=":правый треугольник:" block-list:name="⊿"/>
   <block-list:block block-list:abbreviated-name=":праздник:" block-list:name="🙌"/>
   <block-list:block block-list:abbreviated-name=":предостережение:" block-list:name="☡"/>
   <block-list:block block-list:abbreviated-name=":предупреждение:" block-list:name="⚠"/>
@@ -1054,6 +1053,7 @@
   <block-list:block block-list:abbreviated-name=":прямое попадание:" block-list:name="🎯"/>
   <block-list:block block-list:abbreviated-name=":прямоугольник 2:" block-list:name="▬"/>
   <block-list:block block-list:abbreviated-name=":прямоугольник:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":прямоугольный треугольник:" block-list:name="⊿"/>
   <block-list:block block-list:abbreviated-name=":пси:" block-list:name="ψ"/>
   <block-list:block block-list:abbreviated-name=":Пси:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":птенец 2:" block-list:name="🐤"/>
