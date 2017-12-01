@@ -162,7 +162,7 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
             break;
         }
         priv->m_nLastButtonPressed = nEventButton;
-        pDocument->pClass->postDialogMouseEvent(pDocument,
+        pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->dialogid,
                                                 LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                                 (pEvent->x),
@@ -193,7 +193,7 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
             break;
         }
         priv->m_nLastButtonPressed = nEventButton;
-        pDocument->pClass->postDialogMouseEvent(pDocument,
+        pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->dialogid,
                                                 LOK_MOUSEEVENT_MOUSEBUTTONUP,
                                                 (pEvent->x),
@@ -223,7 +223,7 @@ gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
            (int)pixelToTwip(pEvent->x),
            (int)pixelToTwip(pEvent->y));
 
-    pDocument->pClass->postDialogMouseEvent(pDocument,
+    pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->dialogid,
                                             LOK_MOUSEEVENT_MOUSEMOVE,
                                             (pEvent->x),
@@ -541,14 +541,14 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
             break;
         }
         priv->m_nChildLastButtonPressed = nEventButton;
-        pDocument->pClass->postDialogChildMouseEvent(pDocument,
-                                                     priv->m_nChildId,
-                                                     LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                                     (pEvent->x),
-                                                     (pEvent->y),
-                                                     nCount,
-                                                     nEventButton,
-                                                     priv->m_nChildKeyModifier);
+        pDocument->pClass->postWindowMouseEvent(pDocument,
+                                                priv->m_nChildId,
+                                                LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                                (pEvent->x),
+                                                (pEvent->y),
+                                                nCount,
+                                                nEventButton,
+                                                priv->m_nChildKeyModifier);
 
         break;
     }
@@ -572,14 +572,14 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
             break;
         }
         priv->m_nChildLastButtonPressed = nEventButton;
-        pDocument->pClass->postDialogChildMouseEvent(pDocument,
-                                                     priv->m_nChildId,
-                                                     LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                                     (pEvent->x),
-                                                     (pEvent->y),
-                                                     nCount,
-                                                     nEventButton,
-                                                     priv->m_nChildKeyModifier);
+        pDocument->pClass->postWindowMouseEvent(pDocument,
+                                                priv->m_nChildId,
+                                                LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                                (pEvent->x),
+                                                (pEvent->y),
+                                                nCount,
+                                                nEventButton,
+                                                priv->m_nChildKeyModifier);
         break;
     }
     default:
@@ -602,14 +602,14 @@ gtv_lok_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
            (int)pixelToTwip(pEvent->x),
            (int)pixelToTwip(pEvent->y));
 
-    pDocument->pClass->postDialogChildMouseEvent(pDocument,
-                                                 priv->m_nChildId,
-                                                 LOK_MOUSEEVENT_MOUSEMOVE,
-                                                 (pEvent->x),
-                                                 (pEvent->y),
-                                                 1,
-                                                 priv->m_nChildLastButtonPressed,
-                                                 priv->m_nChildKeyModifier);
+    pDocument->pClass->postWindowMouseEvent(pDocument,
+                                            priv->m_nChildId,
+                                            LOK_MOUSEEVENT_MOUSEMOVE,
+                                            (pEvent->x),
+                                            (pEvent->y),
+                                            1,
+                                            priv->m_nChildLastButtonPressed,
+                                            priv->m_nChildKeyModifier);
 
     return FALSE;
 }

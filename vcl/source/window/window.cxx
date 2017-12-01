@@ -3223,7 +3223,10 @@ void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
+    if (dynamic_cast<FloatingWindow*>(this) != nullptr)
+        ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
+    else
+        ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
 }
 
 void Window::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
@@ -3231,7 +3234,10 @@ void Window::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
+    if (dynamic_cast<FloatingWindow*>(this) != nullptr)
+        ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
+    else
+        ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
 }
 
 void Window::LogicMouseMove(const MouseEvent& rMouseEvent)
@@ -3239,28 +3245,10 @@ void Window::LogicMouseMove(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
-}
-
-void Window::LogicMouseButtonDownChild(const MouseEvent& rMouseEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
-}
-
-void Window::LogicMouseButtonUpChild(const MouseEvent& rMouseEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
-}
-
-void Window::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
+    if (dynamic_cast<FloatingWindow*>(this) != nullptr)
+        ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
+    else
+        ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
 }
 
 void Window::LOKKeyInput(const KeyEvent& rKeyEvent)
