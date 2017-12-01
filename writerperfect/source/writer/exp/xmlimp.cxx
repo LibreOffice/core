@@ -17,6 +17,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <rtl/uri.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -283,7 +284,10 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const uno::Sequence<sal_Int8> &r
     if (!xSaxWriter.is())
         return;
 
-    uno::Sequence<uno::Any> aArguments;
+    uno::Sequence<uno::Any> aArguments =
+    {
+        uno::makeAny(uno::Sequence<beans::PropertyValue>({comphelper::makePropertyValue("DTDString", false)}))
+    };
     uno::Reference<svg::XSVGWriter> xSVGWriter(xCtx->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.svg.SVGWriter", aArguments, xCtx), uno::UNO_QUERY);
     if (!xSVGWriter.is())
         return;
