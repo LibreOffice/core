@@ -158,3 +158,6 @@ fuzzer_draw_libraries = \
     sd \
     sdd \
     icg \
+
+fuzzer_math_libraries = \
+    sm \

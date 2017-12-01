@@ -113,11 +113,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_nativecalc \
     CustomTarget_nativedraw \
     CustomTarget_nativewriter \
+    CustomTarget_nativemath \
     StaticLibrary_fuzzerstubs \
     StaticLibrary_fuzzer_core \
     StaticLibrary_fuzzer_calc \
     StaticLibrary_fuzzer_draw \
     StaticLibrary_fuzzer_writer \
+    StaticLibrary_fuzzer_math \
     Executable_wmffuzzer \
     Executable_jpgfuzzer \
     Executable_giffuzzer \
@@ -159,6 +161,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_docxfuzzer \
     Executable_xlsxfuzzer \
     Executable_pptxfuzzer \
+    Executable_mmlfuzzer \
 ))
 endif
 
