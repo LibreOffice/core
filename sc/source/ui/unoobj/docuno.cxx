@@ -22,6 +22,7 @@
 #include "scitems.hxx"
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
@@ -1555,9 +1556,14 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         aMark.GetMarkArea( aRange );
         pSelRange = &aRange;
     }
-    ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
-                        pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
-    aFunc.SetRenderFlag( true );
+
+    std::unique_ptr<ScPrintFunc> pPrintFunc;
+    if (m_pPrintState)
+        pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), *m_pPrintState, &aStatus.GetOptions()));
+    else
+        pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), nTab,
+                                             pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
+    pPrintFunc->SetRenderFlag( true );
 
     Range aPageRange( nRenderer+1, nRenderer+1 );
     MultiSelection aPage( aPageRange );
@@ -1567,12 +1573,18 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, nullptr );
+    (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, false, nullptr );
 
     ScRange aCellRange;
-    bool bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
-    Size aTwips = aFunc.GetPageSize();
+    bool bWasCellRange = pPrintFunc->GetLastSourceRange( aCellRange );
+    Size aTwips = pPrintFunc->GetPageSize();
     awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
+
+    if (!m_pPrintState)
+    {
+        m_pPrintState.reset(new ScPrintState());
+        pPrintFunc->GetPrintState(*m_pPrintState);
+    }
 
     long nPropCount = bWasCellRange ? 3 : 2;
     uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
