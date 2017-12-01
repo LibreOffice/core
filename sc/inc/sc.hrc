@@ -107,6 +107,7 @@
 #define SID_NUMBER_TIME         (SC_VIEW_START + 56)
 #define SID_NUMBER_INCDEC       (SC_VIEW_START + 57)
 #define SID_NUMBER_DECDEC       (SC_VIEW_START + 58)
+#define SID_NUMBER_THOUSANDS    (SC_VIEW_START + 59)
 
 // misc:
 #define SID_LINKS               (SC_VIEW_START + 60)
