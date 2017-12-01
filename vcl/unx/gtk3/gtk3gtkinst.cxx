@@ -911,7 +911,6 @@ Reference< XInterface > GtkInstance::CreateDragSource()
 class GtkOpenGLContext : public OpenGLContext
 {
     GLWindow m_aGLWin;
-#if GTK_CHECK_VERSION(3,16,0)
     GtkWidget *m_pGLArea;
     GdkGLContext *m_pContext;
     guint m_nAreaFrameBuffer;
@@ -921,12 +920,10 @@ class GtkOpenGLContext : public OpenGLContext
     guint m_nFrameScratchBuffer;
     guint m_nRenderScratchBuffer;
     guint m_nDepthScratchBuffer;
-#endif
 
 public:
     GtkOpenGLContext()
         : OpenGLContext()
-#if GTK_CHECK_VERSION(3,16,0)
         , m_pGLArea(nullptr)
         , m_pContext(nullptr)
         , m_nAreaFrameBuffer(0)
@@ -936,7 +933,6 @@ public:
         , m_nFrameScratchBuffer(0)
         , m_nRenderScratchBuffer(0)
         , m_nDepthScratchBuffer(0)
-#endif
     {
     }
 
@@ -960,7 +956,6 @@ private:
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
     virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
 
-#if GTK_CHECK_VERSION(3,16,0)
     static void signalDestroy(GtkWidget*, gpointer context)
     {
         GtkOpenGLContext* pThis = static_cast<GtkOpenGLContext*>(context);
@@ -987,11 +982,8 @@ private:
         return true;
     }
 
-#endif
-
     virtual void adjustToNewSize() override
     {
-#if GTK_CHECK_VERSION(3,16,0)
         if (!m_pGLArea)
             return;
 
@@ -1030,13 +1022,10 @@ private:
         glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
                                      GL_RENDERBUFFER_EXT, m_nDepthScratchBuffer);
         glViewport(0, 0, width, height);
-
-#endif
     }
 
     virtual bool ImplInit() override
     {
-#if GTK_CHECK_VERSION(3,16,0)
         const SystemEnvData* pEnvData = m_pChildWindow->GetSystemData();
         GtkWidget *pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
         m_pGLArea = gtk_gl_area_new();
@@ -1063,13 +1052,12 @@ private:
         glGenFramebuffersEXT(1, &m_nFrameScratchBuffer);
         glGenRenderbuffersEXT(1, &m_nRenderScratchBuffer);
         glGenRenderbuffersEXT(1, &m_nDepthScratchBuffer);
-#endif
+
         bool bRet = InitGL();
         InitGLDebugging();
         return bRet;
     }
 
-#if GTK_CHECK_VERSION(3,16,0)
     virtual void restoreDefaultFramebuffer() override
     {
         OpenGLContext::restoreDefaultFramebuffer();
@@ -1077,7 +1065,6 @@ private:
         glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
                                      GL_RENDERBUFFER_EXT, m_nRenderScratchBuffer);
     }
-#endif
 
     virtual void makeCurrent() override
     {
@@ -1086,7 +1073,6 @@ private:
 
         clearCurrent();
 
-#if GTK_CHECK_VERSION(3,16,0)
         if (m_pGLArea)
         {
             int scale = gtk_widget_get_scale_factor(m_pGLArea);
@@ -1104,25 +1090,18 @@ private:
                                          GL_RENDERBUFFER_EXT, m_nDepthScratchBuffer);
             glViewport(0, 0, width, height);
         }
-#endif
 
         registerAsCurrent();
     }
 
     virtual void destroyCurrentContext() override
     {
-#if GTK_CHECK_VERSION(3,16,0)
         gdk_gl_context_clear_current();
-#endif
     }
 
     virtual bool isCurrent() override
     {
-#if GTK_CHECK_VERSION(3,16,0)
         return m_pGLArea && gdk_gl_context_get_current() == m_pContext;
-#else
-        return false;
-#endif
     }
 
     virtual void sync() override
@@ -1132,14 +1111,11 @@ private:
     virtual void resetCurrent() override
     {
         clearCurrent();
-#if GTK_CHECK_VERSION(3,16,0)
         gdk_gl_context_clear_current();
-#endif
     }
 
     virtual void swapBuffers() override
     {
-#if GTK_CHECK_VERSION(3,16,0)
         int scale = gtk_widget_get_scale_factor(m_pGLArea);
         int width = m_aGLWin.Width * scale;
         int height = m_aGLWin.Height * scale;
@@ -1157,10 +1133,9 @@ private:
         glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
 
         gtk_gl_area_queue_render(GTK_GL_AREA(m_pGLArea));
-#endif
         BuffersSwapped();
     }
-#if GTK_CHECK_VERSION(3,16,0)
+
     virtual ~GtkOpenGLContext() override
     {
         if (m_pContext)
@@ -1168,7 +1143,6 @@ private:
             g_clear_object(&m_pContext);
         }
     }
-#endif
 };
 
 OpenGLContext* GtkInstance::CreateOpenGLContext()
