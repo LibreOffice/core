@@ -59,6 +59,7 @@ class ScDocShell;
 class ScAnnotationObj;
 class ScMarkData;
 class ScPrintFuncCache;
+struct ScPrintState;
 class ScPrintSelectionStatus;
 class ScTableColumnObj;
 class ScTableRowObj;
@@ -92,6 +93,7 @@ private:
     ScDocShell*             pDocShell;
     ScPrintFuncCache*       pPrintFuncCache;
     ScPrintUIOptions*       pPrinterOptions;
+    std::unique_ptr<ScPrintState> m_pPrintState;
     css::uno::Reference<css::uno::XAggregation> xNumberAgg;
     css::uno::Reference<css::uno::XInterface> xDrawGradTab;
     css::uno::Reference<css::uno::XInterface> xDrawHatchTab;
