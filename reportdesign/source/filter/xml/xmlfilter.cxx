@@ -714,6 +714,7 @@ public:
                 break;
             case XML_TOK_CONTENT_BODY:
                 pContext = new RptXMLDocumentBodyContext(rImport, nPrefix, rLocalName);
+                break;
             default:
                 break;
         }
