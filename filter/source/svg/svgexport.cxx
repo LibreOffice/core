@@ -317,6 +317,9 @@ SVGExport::SVGExport(
     // TinyProfile
     mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_TINYPROFILE, false);
 
+    // DTD string
+    mbIsUseDTDString = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_DTDSTRING, true);
+
     // Font Embedding
     comphelper::SequenceAsHashMap::const_iterator iter = aFilterDataHashMap.find(SVG_PROP_EMBEDFONTS);
     if(iter==aFilterDataHashMap.end())
@@ -2307,7 +2310,7 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
     rtl::OUString aAttr;
     Reference< XExtendedDocumentHandler> xExtDocHandler( GetDocHandler(), UNO_QUERY );
 
-    if( xExtDocHandler.is() )
+    if( xExtDocHandler.is() && IsUseDTDString() )
         xExtDocHandler->unknown( SVG_DTD_STRING );
 
     aAttr = OUString::number( aSize.Width() );
