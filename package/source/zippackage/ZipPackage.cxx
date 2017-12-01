@@ -524,7 +524,12 @@ void ZipPackage::getZipFileContents()
                     pCurrent = pPkgFolder;
                 }
                 else
-                    pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
+                {
+                    ZipContentInfo& rInfo = pCurrent->doGetByName(sTemp);
+                    if (!rInfo.bFolder)
+                        throw css::packages::zip::ZipIOException("Bad Zip File, stream as folder");
+                    pCurrent = rInfo.pFolder;
+                }
                 nOldIndex = nIndex+1;
             }
             if ( nStreamIndex != -1 && !sDirName.isEmpty() )
@@ -825,7 +830,10 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         if ( pCurrent->hasByName( sTemp ) )
         {
             pPrevious = pCurrent;
-            pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
+            ZipContentInfo& rInfo = pCurrent->doGetByName(sTemp);
+            if (!rInfo.bFolder)
+                throw css::packages::zip::ZipIOException("Bad Zip File, stream as folder");
+            pCurrent = rInfo.pFolder;
         }
         else
             throw NoSuchElementException(THROW_WHERE );
@@ -908,7 +916,10 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
             if ( pCurrent->hasByName( sTemp ) )
             {
                 pPrevious = pCurrent;
-                pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
+                ZipContentInfo& rInfo = pCurrent->doGetByName(sTemp);
+                if (!rInfo.bFolder)
+                    throw css::packages::zip::ZipIOException("Bad Zip File, stream as folder");
+                pCurrent = rInfo.pFolder;
             }
             else
                 return false;
