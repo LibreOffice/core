@@ -30,9 +30,7 @@ void GtvHelpers::userPromptDialog(GtkWindow* pWindow, const std::string& aTitle,
     for (const auto& entry : aEntries)
     {
         GtkWidget* pEntry = gtk_entry_new();
-#if GTK_CHECK_VERSION(3,2,0)
         gtk_entry_set_placeholder_text(GTK_ENTRY(pEntry), entry.first.c_str());
-#endif
         gtk_container_add(GTK_CONTAINER(pEntryArea), pEntry);
     }
 

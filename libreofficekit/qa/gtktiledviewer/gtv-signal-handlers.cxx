@@ -159,21 +159,15 @@ static void addMoreUnoParam(GtkWidget* /*pWidget*/, gpointer userdata)
 
     GtkWidget* pTypeEntry = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(pParamContainer), pTypeEntry, TRUE, TRUE, 2);
-#if GTK_CHECK_VERSION(3,2,0)
     gtk_entry_set_placeholder_text(GTK_ENTRY(pTypeEntry), "Param type (Eg. boolean, string etc.)");
-#endif
 
     GtkWidget* pNameEntry = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(pParamContainer), pNameEntry, TRUE, TRUE, 2);
-#if GTK_CHECK_VERSION(3,2,0)
     gtk_entry_set_placeholder_text(GTK_ENTRY(pNameEntry), "Param name");
-#endif
 
     GtkWidget* pValueEntry = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(pParamContainer), pValueEntry, TRUE, TRUE, 2);
-#if GTK_CHECK_VERSION(3,2,0)
     gtk_entry_set_placeholder_text(GTK_ENTRY(pValueEntry), "Param value");
-#endif
 
     GtkWidget* pRemoveButton = gtk_button_new_from_icon_name("list-remove-symbolic", GTK_ICON_SIZE_BUTTON);
     g_signal_connect(pRemoveButton, "clicked", G_CALLBACK(removeUnoParam), pUnoParamAreaBox);
@@ -220,9 +214,7 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
 
     GtkWidget* pUnoCmdEntry = gtk_entry_new ();
     gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdEntry, TRUE, TRUE, 2);
-#if GTK_CHECK_VERSION(3,2,0)
     gtk_entry_set_placeholder_text(GTK_ENTRY(pUnoCmdEntry), "UNO command (Eg. Bold, Italic etc.)");
-#endif
     GtkWidget* pUnoParamAreaBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoParamAreaBox, TRUE, TRUE, 2);
 
