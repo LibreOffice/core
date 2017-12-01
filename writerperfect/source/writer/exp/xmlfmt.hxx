@@ -21,11 +21,17 @@ namespace writerperfect
 namespace exp
 {
 
-/// Handler for <office:automatic-styles>/<office:styles>.
+/// Handler for <office:automatic-styles>/<office:master-styles>/<office:styles>.
 class XMLStylesContext : public XMLImportContext
 {
 public:
-    XMLStylesContext(XMLImport &rImport, bool bAutomatic);
+    enum StyleType
+    {
+        StyleType_NONE,
+        StyleType_AUTOMATIC,
+        StyleType_MASTER
+    };
+    XMLStylesContext(XMLImport &rImport, StyleType eType);
 
     rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
@@ -36,6 +42,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentPageLayouts();
 private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rParagraphStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rTextStyles;
@@ -44,6 +51,8 @@ private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rRowStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rGraphicStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> &m_rPageLayouts;
+    StyleType m_eType;
 };
 
 /// Handler for <office:font-face-decls>.
