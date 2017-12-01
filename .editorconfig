@@ -11,7 +11,7 @@ charset = utf-8
 trim_trailing_whitespace = true
 
 # Source code files
-[*.{c,cxx,cpp,h,hxx,hpp,java,py,xsl}]
+[*.{c,cxx,cpp,h,hxx,hpp,java,mm,py,swift,xsl}]
 indent_style = space
 indent_size = 4
 
