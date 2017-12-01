@@ -244,6 +244,7 @@ public:
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
 
     bool operator==( const ScFormatEntry& ) const;
+    virtual bool IsEqual( const ScFormatEntry&, bool bIgnoreSrcPos ) const;
 
     virtual void startRendering();
     virtual void endRendering();
@@ -350,9 +351,7 @@ public:
             ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r );
     virtual ~ScConditionEntry() override;
 
-    bool            operator== ( const ScConditionEntry& r ) const;
-
-    bool            EqualIgnoringSrcPos( const ScConditionEntry& r ) const;
+    bool            IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) const override;
 
     virtual void SetParent( ScConditionalFormat* pNew ) override;
 
@@ -440,8 +439,6 @@ class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
     OUString                  aStyleName;
 
-    using ScConditionEntry::operator==;
-
 public:
             ScCondFormatEntry( ScConditionMode eOper,
                                 const OUString& rExpr1, const OUString& rExpr2,
@@ -459,7 +456,7 @@ public:
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
     virtual ~ScCondFormatEntry() override;
 
-    bool            operator== ( const ScCondFormatEntry& r ) const;
+    bool            IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) const override;
 
     const OUString&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
@@ -572,7 +569,7 @@ public:
 
     ScCondFormatData GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
-    bool            EqualEntries( const ScConditionalFormat& r ) const;
+    bool            EqualEntries( const ScConditionalFormat& r, bool bIgnoreSrcPos = false ) const;
 
     void            DoRepaint();
 
