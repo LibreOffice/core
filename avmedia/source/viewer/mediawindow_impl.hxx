@@ -147,7 +147,6 @@ private:
     MediaWindow* mpMediaWindow;
 
     rtl::Reference<MediaEventListenersImpl> mxEvents;
-    bool mbEventTransparent;
     VclPtr<MediaChildWindow> mpChildWindow;
     VclPtr<MediaWindowControl> mpMediaWindowControl;
     BitmapEx* mpEmptyBmpEx;

@@ -26,7 +26,10 @@ with io.open("loplugin.singlevalfields.log", "rb", buffering=1024*1024) as txt:
         elif tokens[0] == "asgn:":
             parentClass = normalizeTypeParams(tokens[1])
             fieldName = normalizeTypeParams(tokens[2])
-            assignValue = tokens[3]
+            if len(tokens) > 3:
+                assignValue = tokens[3]
+            else:
+                assignValue = ""
             fieldInfo = (parentClass, fieldName)
             if not fieldInfo in fieldAssignDict:
                 fieldAssignDict[fieldInfo] = set()

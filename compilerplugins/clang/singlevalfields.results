@@ -1,4 +1,7 @@
-chart2/source/model/main/DataPoint.hxx:109
+avmedia/source/viewer/mediawindow_impl.hxx:150
+    avmedia::priv::MediaWindowImpl mbEventTransparent
+    1
+chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed
     0
 chart2/source/view/inc/GL3DRenderer.hxx:161
@@ -7,74 +10,62 @@ chart2/source/view/inc/GL3DRenderer.hxx:161
 connectivity/source/inc/odbc/OBoundParam.hxx:113
     connectivity::odbc::OBoundParam paramLength
     0
-connectivity/source/inc/OTypeInfo.hxx:37
-    connectivity::OTypeInfo nPrecision
-    0
-connectivity/source/inc/OTypeInfo.hxx:39
-    connectivity::OTypeInfo nMaximumScale
-    0
-connectivity/source/inc/OTypeInfo.hxx:40
-    connectivity::OTypeInfo nMinimumScale
-    0
-connectivity/source/inc/OTypeInfo.hxx:43
-    connectivity::OTypeInfo nSearchType
-    3
-connectivity/source/inc/OTypeInfo.hxx:44
-    connectivity::OTypeInfo nNumPrecRadix
-    0
-connectivity/source/inc/OTypeInfo.hxx:46
-    connectivity::OTypeInfo bCurrency
-    0
-connectivity/source/inc/OTypeInfo.hxx:47
-    connectivity::OTypeInfo bAutoIncrement
-    0
-connectivity/source/inc/OTypeInfo.hxx:48
-    connectivity::OTypeInfo bNullable
-    1
-connectivity/source/inc/OTypeInfo.hxx:49
-    connectivity::OTypeInfo bCaseSensitive
-    0
-connectivity/source/inc/OTypeInfo.hxx:50
-    connectivity::OTypeInfo bUnsigned
+cui/source/inc/cfgutil.hxx:132
+    SfxConfigGroupListBox m_pImageProvider
     0
 include/basic/sbxvar.hxx:67
     SbxValues::(anonymous) pData
     0
-include/filter/msfilter/dffpropset.hxx:33
-    DffPropFlags bSet
-    0
-include/filter/msfilter/dffpropset.hxx:35
-    DffPropFlags bBlip
-    1
 include/o3tl/vector_pool.hxx:93
     o3tl::detail::struct_from_value::type nextFree
     -1
-include/vcl/field.hxx:100
+include/svtools/svparser.hxx:74
+    SvParser::TokenStackType nTokenValue
+    0
+include/svtools/svparser.hxx:75
+    SvParser::TokenStackType bTokenHasValue
+    0
+include/vcl/field.hxx:99
     PatternFormatter mbInPattKeyInput
     0
-include/vcl/filter/pdfdocument.hxx:174
+include/vcl/filter/pdfdocument.hxx:173
     vcl::filter::PDFNameElement m_nLength
     0
-libreofficekit/source/gtk/lokdocview.cxx:85
+include/vcl/pdfwriter.hxx:549
+    vcl::PDFWriter::PDFSignContext m_pDerEncoded
+    0
+include/vcl/pdfwriter.hxx:551
+    vcl::PDFWriter::PDFSignContext m_nDerEncoded
+    0
+include/vcl/pdfwriter.hxx:553
+    vcl::PDFWriter::PDFSignContext m_pByteRange1
+    0
+include/vcl/pdfwriter.hxx:555
+    vcl::PDFWriter::PDFSignContext m_nByteRange1
+    0
+include/vcl/pdfwriter.hxx:557
+    vcl::PDFWriter::PDFSignContext m_pByteRange2
+    0
+include/vcl/pdfwriter.hxx:559
+    vcl::PDFWriter::PDFSignContext m_nByteRange2
+    0
+libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
     0
-opencl/source/opencl_device.cxx:63
-    opencl::(anonymous namespace)::LibreOfficeDeviceEvaluationIO inputSize
+opencl/source/opencl_device.cxx:53
+    (anonymous namespace)::LibreOfficeDeviceEvaluationIO inputSize
     15360
-opencl/source/opencl_device.cxx:64
-    opencl::(anonymous namespace)::LibreOfficeDeviceEvaluationIO outputSize
+opencl/source/opencl_device.cxx:54
+    (anonymous namespace)::LibreOfficeDeviceEvaluationIO outputSize
     15360
-pyuno/source/module/pyuno_impl.hxx:314
+pyuno/source/module/pyuno_impl.hxx:312
     pyuno::RuntimeCargo valid
     1
-rsc/inc/rscdef.hxx:55
-    RscExpType cUnused
-    0
 sax/source/tools/fastserializer.hxx:231
     sax_fastparser::FastSaxSerializer mbXescape
     1
 sc/inc/compiler.hxx:108
-    ScRawToken::(anonymous union)::(anonymous) bIsInForceArray
+    ScRawToken::(anonymous union)::(anonymous) eInForceArray
     0
 sc/inc/recursionhelper.hxx:56
     ScRecursionHelper bConverging
@@ -82,6 +73,9 @@ sc/inc/recursionhelper.hxx:56
 sc/qa/unit/ucalc.hxx:41
     Test::RangeNameDef mnIndex
     1
+sc/source/ui/inc/undodat.hxx:448
+    ScUndoDataForm nEndChangeAction
+    0
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
@@ -91,22 +85,22 @@ sd/source/filter/html/htmlex.hxx:114
 sd/source/ui/remotecontrol/DiscoveryService.hxx:43
     sd::DiscoveryService zService
     0
-sfx2/source/appl/lnkbase2.cxx:75
+sfx2/source/appl/lnkbase2.cxx:76
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
-sfx2/source/appl/lnkbase2.cxx:80
+sfx2/source/appl/lnkbase2.cxx:81
     sfx2::ImplBaseLinkData::(anonymous) DDEType
     0
-sfx2/source/doc/doctemplates.cxx:134
+sfx2/source/doc/doctemplates.cxx:136
     (anonymous namespace)::WaitWindow_Impl mnTextStyle
     12576
-sfx2/source/view/ipclient.cxx:76
+sfx2/source/view/ipclient.cxx:78
     SfxBooleanFlagGuard m_bLifeValue
     1
 shell/source/sessioninstall/SyncDbusSessionHelper.cxx:26
     (anonymous namespace)::GErrorWrapper m_pError
     0
-soltools/cpp/cpp.h:121
+soltools/cpp/cpp.h:120
     includelist deleted
     1
 soltools/mkdepend/def.h:130
@@ -115,31 +109,31 @@ soltools/mkdepend/def.h:130
 soltools/mkdepend/def.h:132
     inclist i_searched
     1
-starmath/inc/node.hxx:101
+starmath/inc/node.hxx:104
     SmNode mnFlags
     0
-stoc/source/inspect/introspection.cxx:1537
+stoc/source/inspect/introspection.cxx:1533
     (anonymous namespace)::Cache::Data hits
     1
-sw/inc/hints.hxx:196
+sw/inc/hints.hxx:195
     SwAttrSetChg m_bDelSet
     0
 sw/inc/pagepreviewlayout.hxx:49
     SwPagePreviewLayout mnYFree
     568
-sw/source/core/inc/frmtool.hxx:256
+sw/source/core/inc/frmtool.hxx:260
     SwBorderAttrs m_bBorderDist
     1
-sw/source/core/inc/swfont.hxx:157
+sw/source/core/inc/swfont.hxx:158
     SwFont m_nToxCount
     0
-sw/source/core/inc/swfont.hxx:158
+sw/source/core/inc/swfont.hxx:159
     SwFont m_nRefCount
     0
-sw/source/core/inc/swfont.hxx:159
+sw/source/core/inc/swfont.hxx:160
     SwFont m_nMetaCount
     0
-sw/source/core/inc/swfont.hxx:160
+sw/source/core/inc/swfont.hxx:161
     SwFont m_nInputFieldCount
     0
 sw/source/core/inc/UndoSort.hxx:38
@@ -157,11 +151,14 @@ sw/source/filter/html/htmlcss1.cxx:78
 sw/source/filter/html/htmlcss1.cxx:79
     SwCSS1ItemIds nFormatKeep
     109
-sw/source/filter/html/svxcss1.hxx:205
+sw/source/filter/html/svxcss1.hxx:199
     SvxCSS1Parser nMinFixLineSpace
     141
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
+    0
+sw/source/filter/ww8/ww8par2.hxx:58
+    WW8SwFlyPara eAnchor
     0
 sw/source/filter/ww8/ww8par.hxx:650
     WW8FormulaControl mfUnknown
@@ -178,20 +175,17 @@ vcl/inc/salprn.hxx:42
 vcl/inc/salprn.hxx:43
     SalPrinterQueueInfo mpSysData
     0
-vcl/inc/svdata.hxx:253
+vcl/inc/svdata.hxx:267
     ImplSVNWFData mnStatusBarLowerRightOffset
     0
-vcl/inc/svdata.hxx:269
+vcl/inc/svdata.hxx:283
     ImplSVNWFData mbCenteredTabs
     0
-vcl/inc/svdata.hxx:270
+vcl/inc/svdata.hxx:284
     ImplSVNWFData mbNoActiveTabTextRaise
     0
-vcl/inc/svdata.hxx:272
+vcl/inc/svdata.hxx:286
     ImplSVNWFData mbProgressNeedsErase
-    0
-vcl/inc/unx/i18n_cb.hxx:53
-    preedit_text_t nCursorPos
     0
 vcl/source/edit/textdat2.hxx:53
     TETextPortion nWidth
@@ -208,15 +202,15 @@ vcl/source/filter/jpeg/transupp.h:129
 vcl/source/filter/jpeg/transupp.h:131
     (anonymous) crop
     0
-vcl/source/font/font.cxx:540
+vcl/source/font/font.cxx:539
     (anonymous namespace)::WeightSearchEntry weight
     5
-vcl/source/gdi/pdfwriter_impl.hxx:709
+vcl/source/gdi/pdfwriter_impl.hxx:706
     vcl::PDFWriterImpl m_nInheritedPageWidth
     595
-vcl/source/gdi/pdfwriter_impl.hxx:710
+vcl/source/gdi/pdfwriter_impl.hxx:707
     vcl::PDFWriterImpl m_nInheritedPageHeight
     842
-writerfilter/source/dmapper/GraphicImport.cxx:229
+writerfilter/source/dmapper/GraphicImport.cxx:223
     writerfilter::dmapper::GraphicImport_Impl nCurrentBorderLine
     2
