@@ -58,7 +58,8 @@ void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, const std:
         xTableRows->insertByIndex( 0, rvTableRows.size() - 1 );
     std::vector< TableRow >::const_iterator aTableRowIter( rvTableRows.begin() );
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableRows, UNO_QUERY_THROW );
-    for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
+    sal_Int32 nCols = std::min<sal_Int32>(xIndexAccess->getCount(), rvTableRows.size());
+    for (sal_Int32 n = 0; n < nCols; ++n)
     {
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( "Height", Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
@@ -72,7 +73,8 @@ void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const 
         xTableColumns->insertByIndex( 0, rvTableGrid.size() - 1 );
     std::vector< sal_Int32 >::const_iterator aTableGridIter( rvTableGrid.begin() );
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableColumns, UNO_QUERY_THROW );
-    for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
+    sal_Int32 nCols = std::min<sal_Int32>(xIndexAccess->getCount(), rvTableGrid.size());
+    for (sal_Int32 n = 0; n < nCols; ++n)
     {
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( "Width", Any( static_cast< sal_Int32 >( *aTableGridIter++ / 360 ) ) );
