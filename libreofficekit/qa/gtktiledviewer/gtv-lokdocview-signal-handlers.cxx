@@ -301,9 +301,9 @@ void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpoin
     }
 }
 
-void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpointer)
+void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpointer pData)
 {
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(pData);
 
     std::stringstream aStream(pPayload);
     boost::property_tree::ptree aRoot;
@@ -350,9 +350,8 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
             else if (aAction == "close")
                 gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pParent));
         }
-        else // it's the dialog window itself
-        {
-            GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, nWinId);
+        else if (GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, nWinId))
+        { // it's the dialog window itself
             if (aAction == "close")
                 gtk_widget_destroy(GTK_WIDGET(pDialog));
             else if (aAction == "size_changed")

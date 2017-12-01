@@ -1950,7 +1950,7 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
 
 void SfxViewShell::notifyWindow(vcl::LOKWindowId nDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
 {
-    SfxLokHelper::notifyWindow(nDialogId, rAction, rPayload);
+    SfxLokHelper::notifyWindow(this, nDialogId, rAction, rPayload);
 }
 
 uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetClipboardNotifier()
