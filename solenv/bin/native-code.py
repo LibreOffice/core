@@ -269,6 +269,16 @@ edit_constructor_list = [
     "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
     ]
 
+# math
+math_factory_list = [
+    ]
+
+math_constructor_list = [
+# starmath/util/sm.component
+    "Math_XMLOasisMetaExporter_get_implementation",
+    "Math_XMLOasisSettingsExporter_get_implementation",
+    ]
+
 calc_factory_list = [
     ("libsclo.a", "sc_component_getFactory"),
     ("libanalysislo.a", "analysis_component_getFactory"),
@@ -352,6 +362,7 @@ writer_constructor_list = [
 factory_map = {
     'core' : core_factory_list,
     'edit' : edit_factory_list,
+    'math' : math_factory_list,
     'calc' : calc_factory_list,
     'draw' : draw_factory_list,
     'writer' : writer_factory_list,
@@ -360,6 +371,7 @@ factory_map = {
 constructor_map = {
     'core' : core_constructor_list,
     'edit' : edit_constructor_list,
+    'math' : math_constructor_list,
     'calc' : calc_constructor_list,
     'draw' : draw_constructor_list,
     'writer' : writer_constructor_list,
