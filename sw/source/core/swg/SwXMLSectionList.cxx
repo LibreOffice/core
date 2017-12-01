@@ -39,7 +39,7 @@ public:
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
            const OUString& rLocalName,
            const uno::Reference<xml::sax::XAttributeList> & xAttrList) override;
-    virtual ~SvXMLSectionListContext() override;
+    virtual ~SvXMLSectionListContext();
 };
 
 class SwXMLParentContext : public SvXMLImportContext
