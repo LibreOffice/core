@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_798c807f",
+        "filename": "writerperfect/source/writer/EPUBExportFilter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-01T22:11:57Z",
+      "side": 1,
+      "message": "This assumes system DPI \u003d\u003d CSS DPI (96), causes problems on e.g. macOS, I guess.",
+      "revId": "253285e1c7d75020ecc74ff072cfdbde29739435",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
