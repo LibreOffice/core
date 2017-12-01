@@ -605,7 +605,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XFormulaQuery \
     qadevOOo/tests/java/ifc/sheet/_XFunctionDescriptions \
     qadevOOo/tests/java/ifc/sheet/_XRangeSelection \
-    qadevOOo/tests/java/ifc/sheet/_XRecentFunctions \
     qadevOOo/tests/java/ifc/sheet/_XScenario \
     qadevOOo/tests/java/ifc/sheet/_XSheetCellCursor \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
@@ -1070,7 +1069,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScModelObj \
     qadevOOo/tests/java/mod/_sc/ScNamedRangeObj \
     qadevOOo/tests/java/mod/_sc/ScNamedRangesObj \
-    qadevOOo/tests/java/mod/_sc/ScRecentFunctionsObj \
     qadevOOo/tests/java/mod/_sc/ScScenariosObj \
     qadevOOo/tests/java/mod/_sc/ScShapeObj \
     qadevOOo/tests/java/mod/_sc/ScSheetLinkObj \
