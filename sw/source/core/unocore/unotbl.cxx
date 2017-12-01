@@ -711,7 +711,7 @@ void sw_setString( SwXCell &rCell, const OUString &rText,
         pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMULA );
         pBoxFormat->ResetFormatAttr( RES_BOXATR_VALUE );
         if (!bKeepNumberFormat)
-            pBoxFormat->SetFormatAttr( SwTableBoxNumFormat(css::util::NumberFormat::TEXT) );
+            pBoxFormat->SetFormatAttr( SwTableBoxNumFormat(/*default Text*/) );
         pBoxFormat->UnlockModify();
     }
     rCell.SwXText::setString(rText);
@@ -736,10 +736,8 @@ void sw_setValue( SwXCell &rCell, double nVal )
     //!! do we need to set a new number format? Yes, if
     // - there is no current number format
     // - the current number format is not a number format according to the number formatter, but rather a text format
-    // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
     if(SfxItemState::SET != pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
-        ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue())
-        ||  static_cast<sal_Int16>(static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue()) == css::util::NumberFormat::TEXT)
+        ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue()))
     {
         aSet.Put(SwTableBoxNumFormat(0));
     }
