@@ -9,6 +9,8 @@
 
 #include "EPUBExportDialog.hxx"
 
+#include <libepubgen/libepubgen.h>
+
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <sfx2/opengrf.hxx>
@@ -147,6 +149,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, ListBox &, void)
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBLayoutMethod.
     mrFilterData["EPUBLayoutMethod"] <<= m_pLayout->GetSelectedEntryPos();
+    m_pSplit->Enable(m_pLayout->GetSelectedEntryPos() != libepubgen::EPUB_LAYOUT_METHOD_FIXED);
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
