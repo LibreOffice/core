@@ -6467,6 +6467,12 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
     if( nMax )
     {
+        // Check size consistency
+        if(nMax > nFFn)
+        {
+            throw std::out_of_range("WW8 beyond end of buffer");
+        }
+
         // allocate Index Array
         pFontA = new WW8_FFN[ nMax ];
         p = pFontA;

@@ -111,6 +111,10 @@ public:
 
     SvLinkSourceRef CreateObj( SvBaseLink* );
 
+
+    // Automatically ask user about update all links, on first insert
+    void SetAutoAskUpdateAllLinks();
+
     void        UpdateAllLinks( sal_Bool bAskUpdate = sal_True,
                                 sal_Bool bCallErrHdl = sal_True,
                                 sal_Bool bUpdateGrfLinks = sal_False,
@@ -146,9 +150,6 @@ public:
     static sal_Bool GetGraphicFromAny( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
                                 Graphic& rGrf );
-
-    // Automatically ask user about update all links, on first insert
-    void SetAutoAskUpdateAllLinks();
 
 private:
                 LinkManager( const LinkManager& );
