@@ -5856,3 +5856,564 @@ index 02c299a..38573ec 100644
 -- 
 2.13.6
 
+diff --git a/NEWS b/NEWS
+index 912efbc..ad3d4d1 100644
+--- a/NEWS
++++ b/NEWS
+@@ -1,3 +1,13 @@
++- Fix various validation problems, pointed out by epubcheck.
++- Add EPUB3 support.
++- Split on headings: add user-friendly section names.
++- Support writing CSS styles inline in the XHTML streams.
++- Support various image wrap types.
++- Support embedded fonts.
++- Support cover images.
++- Support footnotes.
++- Support EPUB3 fixed layout.
++
+ libepubgen-0.0.1
+ 
+ - Fix escaping of HTML entities.
+diff --git a/inc/libepubgen/EPUBDrawingGenerator.h b/inc/libepubgen/EPUBDrawingGenerator.h
+index 963e3b8..8f14959 100644
+--- a/inc/libepubgen/EPUBDrawingGenerator.h
++++ b/inc/libepubgen/EPUBDrawingGenerator.h
+@@ -36,13 +36,19 @@ public:
+     *
+     * @param[in] version possible values: 20, 30.
+     */
+-  explicit EPUBDrawingGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK, int version = 20);
++  explicit EPUBDrawingGenerator(EPUBPackage *package, int version = 30);
+   EPUBDrawingGenerator(EPUBEmbeddingContact &contact, EPUBPackage *package);
+   ~EPUBDrawingGenerator() override;
+ 
+   void setSplitHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
+ 
++  /** Set an option for the EPUB generator
++   * @param[in] key a value from the EPUBGeneratorOption enumeration
++   * @param[in] value depends on the value of key
++   */
++  void setOption(int key, int value);
++
+   /** Register a handler for embedded images.
+     *
+     * The handler must convert the image to one of the OPS Core Media Types.
+diff --git a/inc/libepubgen/EPUBPresentationGenerator.h b/inc/libepubgen/EPUBPresentationGenerator.h
+index 512c52d..b7ad190 100644
+--- a/inc/libepubgen/EPUBPresentationGenerator.h
++++ b/inc/libepubgen/EPUBPresentationGenerator.h
+@@ -36,13 +36,19 @@ public:
+     *
+     * @param[in] version possible values: 20, 30.
+     */
+-  explicit EPUBPresentationGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK, int version = 20);
++  explicit EPUBPresentationGenerator(EPUBPackage *package, int version = 30);
+   EPUBPresentationGenerator(EPUBEmbeddingContact &contact, EPUBPackage *package);
+   ~EPUBPresentationGenerator() override;
+ 
+   void setSplitHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
+ 
++  /** Set an option for the EPUB generator
++   * @param[in] key a value from the EPUBGeneratorOption enumeration
++   * @param[in] value depends on the value of key
++   */
++  void setOption(int key, int value);
++
+   /** Register a handler for embedded images.
+     *
+     * The handler must convert the image to one of the OPS Core Media Types.
+diff --git a/inc/libepubgen/EPUBTextGenerator.h b/inc/libepubgen/EPUBTextGenerator.h
+index beb05aa..809078a 100644
+--- a/inc/libepubgen/EPUBTextGenerator.h
++++ b/inc/libepubgen/EPUBTextGenerator.h
+@@ -36,14 +36,19 @@ public:
+     *
+     * @param[in] version possible values: 20, 30.
+     */
+-  explicit EPUBTextGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK, int version = 20);
++  explicit EPUBTextGenerator(EPUBPackage *package, int version = 30);
+   EPUBTextGenerator(EPUBEmbeddingContact &contact, EPUBPackage *package);
+   ~EPUBTextGenerator() override;
+ 
+   void setSplitHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
+-  void setStylesMethod(EPUBStylesMethod styles);
+-  void setLayoutMethod(EPUBLayoutMethod layout);
++
++  /** Set an option for the EPUB generator
++   *
++   * @param[in] key a value from the EPUBGeneratorOption enumeration
++   * @param[in] value depends on the value of key
++   */
++  void setOption(int key, int value);
+ 
+   /** Register a handler for embedded images.
+     *
+diff --git a/inc/libepubgen/libepubgen-decls.h b/inc/libepubgen/libepubgen-decls.h
+index 3eb206e..490dbc3 100644
+--- a/inc/libepubgen/libepubgen-decls.h
++++ b/inc/libepubgen/libepubgen-decls.h
+@@ -77,6 +77,15 @@ enum EPUBLayoutMethod
+   EPUB_LAYOUT_METHOD_FIXED, //< Exactly one page per HTML file.
+ };
+ 
++/** The possible options for a generator.
++  */
++enum EPUBGeneratorOption
++{
++  EPUB_GENERATOR_OPTION_SPLIT, //< EPUBSplitMethod.
++  EPUB_GENERATOR_OPTION_STYLES, //< EPUBStylesMethod.
++  EPUB_GENERATOR_OPTION_LAYOUT //< EPUBLayoutMethod.
++};
++
+ }
+ 
+ #endif // INCLUDED_LIBEPUBGEN_LIBEPUBGEN_DECLS_H
+diff --git a/src/lib/EPUBDrawingGenerator.cpp b/src/lib/EPUBDrawingGenerator.cpp
+index bcb4994..aef43ad 100644
+--- a/src/lib/EPUBDrawingGenerator.cpp
++++ b/src/lib/EPUBDrawingGenerator.cpp
+@@ -20,16 +20,16 @@ using librevenge::RVNGString;
+ class EPUBDrawingGenerator::Impl : public EPUBPagedGenerator
+ {
+ public:
+-  Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version);
++  Impl(EPUBPackage *const package, int version);
+ };
+ 
+-EPUBDrawingGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
+-  : EPUBPagedGenerator(package, method, version)
++EPUBDrawingGenerator::Impl::Impl(EPUBPackage *const package, int version)
++  : EPUBPagedGenerator(package, version)
+ {
+ }
+ 
+-EPUBDrawingGenerator::EPUBDrawingGenerator(EPUBPackage *const package, EPUBSplitMethod split, int version)
+-  : m_impl(new Impl(package, split, version))
++EPUBDrawingGenerator::EPUBDrawingGenerator(EPUBPackage *const package, int version)
++  : m_impl(new Impl(package, version))
+ {
+ }
+ 
+@@ -51,6 +51,16 @@ void EPUBDrawingGenerator::setSplitHeadingLevel(const unsigned level)
+   m_impl->setSplitHeadingLevel(level);
+ }
+ 
++void EPUBDrawingGenerator::setOption(int key, int value)
++{
++  switch (key)
++  {
++  case EPUB_GENERATOR_OPTION_SPLIT:
++    m_impl->setSplitMethod(static_cast<EPUBSplitMethod>(value));
++    break;
++  }
++}
++
+ void EPUBDrawingGenerator::setSplitSize(const unsigned size)
+ {
+   m_impl->setSplitSize(size);
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index f608331..83f3f40 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -30,7 +30,7 @@ using librevenge::RVNGPropertyFactory;
+ using librevenge::RVNGPropertyList;
+ using librevenge::RVNGString;
+ 
+-EPUBGenerator::EPUBGenerator(EPUBPackage *const package, const EPUBSplitMethod split, int version)
++EPUBGenerator::EPUBGenerator(EPUBPackage *const package, int version)
+   : m_package(package)
+   , m_manifest()
+   , m_htmlManager(m_manifest)
+@@ -44,7 +44,7 @@ EPUBGenerator::EPUBGenerator(EPUBPackage *const package, const EPUBSplitMethod s
+   , m_documentProps()
+   , m_metadata()
+   , m_currentHtml()
+-  , m_splitGuard(split)
++  , m_splitGuard(EPUB_SPLIT_METHOD_PAGE_BREAK)
+   , m_version(version)
+   , m_stylesMethod(EPUB_STYLES_METHOD_CSS)
+   , m_layoutMethod(EPUB_LAYOUT_METHOD_REFLOWABLE)
+@@ -61,7 +61,7 @@ void EPUBGenerator::startDocument(const RVNGPropertyList &props)
+ 
+   startNewHtmlFile();
+ 
+-  if (m_version == 30)
++  if (m_version >= 30)
+     m_manifest.insert(EPUBPath("OEBPS/toc.xhtml"), "application/xhtml+xml", "toc.xhtml", "nav");
+   m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx", "");
+   m_manifest.insert(m_stylesheetPath, "text/css", "stylesheet.css", "");
+@@ -88,7 +88,7 @@ void EPUBGenerator::setDocumentMetaData(const RVNGPropertyList &props)
+ {
+   m_metadata = props;
+ 
+-  if (m_version == 30)
++  if (m_version >= 30)
+   {
+     const librevenge::RVNGPropertyListVector *coverImages = props.child("librevenge:cover-images");
+     if (coverImages)
+@@ -157,6 +157,11 @@ int EPUBGenerator::getVersion() const
+   return m_version;
+ }
+ 
++void EPUBGenerator::setSplitMethod(EPUBSplitMethod split)
++{
++  m_splitGuard.setSplitMethod(split);
++}
++
+ void EPUBGenerator::setStylesMethod(EPUBStylesMethod styles)
+ {
+   m_stylesMethod = styles;
+@@ -195,7 +200,7 @@ void EPUBGenerator::writeContainer()
+ 
+ void EPUBGenerator::writeNavigation()
+ {
+-  if (m_version == 30)
++  if (m_version >= 30)
+   {
+     EPUBXMLSink sink;
+ 
+@@ -214,7 +219,7 @@ void EPUBGenerator::writeNavigation()
+     sink.openElement("nav", navAttrs);
+ 
+     sink.openElement("ol");
+-    m_htmlManager.writeTocTo(sink, path, m_version);
++    m_htmlManager.writeTocTo(sink, path, m_version, m_layoutMethod);
+     sink.closeElement("ol");
+ 
+     sink.closeElement("nav");
+@@ -248,7 +253,7 @@ void EPUBGenerator::writeNavigation()
+   sink.openElement("navMap");
+   // In case of EPUB3 the (deprecated, but valid) EPUB2 markup is wanted, so
+   // the version is unconditional here.
+-  m_htmlManager.writeTocTo(sink, path, /*version=*/20);
++  m_htmlManager.writeTocTo(sink, path, /*version=*/20, m_layoutMethod);
+   sink.closeElement("navMap");
+ 
+   sink.closeElement("ncx");
+@@ -281,7 +286,7 @@ void EPUBGenerator::writeRoot()
+   packageAttrs.insert("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+   packageAttrs.insert("xmlns:dcterms", "http://purl.org/dc/terms/");
+   packageAttrs.insert("xmlns:opf", "http://www.idpf.org/2007/opf");
+-  if (m_version == 30)
++  if (m_version >= 30)
+     packageAttrs.insert("version", RVNGPropertyFactory::newStringProp("3.0"));
+   else
+     packageAttrs.insert("version", RVNGPropertyFactory::newStringProp("2.0"));
+@@ -326,7 +331,7 @@ void EPUBGenerator::writeRoot()
+   sink.insertCharacters(language);
+   sink.closeElement("dc:language");
+ 
+-  if (m_version == 30)
++  if (m_version >= 30)
+   {
+     RVNGString date;
+     time_t now = 0;
+diff --git a/src/lib/EPUBGenerator.h b/src/lib/EPUBGenerator.h
+index 5a0df86..bcb54c5 100644
+--- a/src/lib/EPUBGenerator.h
++++ b/src/lib/EPUBGenerator.h
+@@ -33,7 +33,7 @@ class EPUBGenerator
+   EPUBGenerator &operator=(const EPUBGenerator &);
+ 
+ public:
+-  EPUBGenerator(EPUBPackage *package, EPUBSplitMethod method, int version);
++  EPUBGenerator(EPUBPackage *package, int version);
+   virtual ~EPUBGenerator();
+ 
+   void startDocument(const librevenge::RVNGPropertyList &props);
+@@ -51,6 +51,8 @@ public:
+   EPUBSplitGuard &getSplitGuard();
+   int getVersion() const;
+ 
++  void setSplitMethod(EPUBSplitMethod splitMethod);
++
+   void setStylesMethod(EPUBStylesMethod stylesMethod);
+ 
+   void setLayoutMethod(EPUBLayoutMethod layoutMethod);
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 7a53ce3..342213e 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -239,7 +239,7 @@ struct TextZoneSink
+       uiLabel = number.cstr();
+     if (!lbl.length())
+       return;
+-    int version = 20;
++    int version = 30;
+     if (m_zone)
+       version = m_zone->getVersion();
+     {
+@@ -248,7 +248,7 @@ struct TextZoneSink
+       if (closeAnchor)
+         output.openElement("sup", supAttrs);
+       RVNGPropertyList aAttrs;
+-      if (version == 30)
++      if (version >= 30)
+         aAttrs.insert("epub:type", "noteref");
+       aAttrs.insert("href", ("#data" + lbl).c_str());
+       output.openElement("a", aAttrs);
+@@ -260,7 +260,7 @@ struct TextZoneSink
+       }
+     }
+     flush();
+-    if (version == 30)
++    if (version >= 30)
+     {
+       RVNGPropertyList asideAttrs;
+       asideAttrs.insert("epub:type", "footnote");
+@@ -598,7 +598,7 @@ void EPUBHTMLGenerator::endDocument()
+   m_impl->m_document.insertEmptyElement("link", linkAttrs);
+   m_impl->m_document.closeElement("head");
+   RVNGPropertyList bodyAttrs;
+-  if (m_impl->m_version == 30)
++  if (m_impl->m_version >= 30)
+     bodyAttrs.insert("xmlns:epub", "http://www.idpf.org/2007/ops");
+   m_impl->m_document.openElement("body", bodyAttrs);
+   m_impl->flushUnsent(m_impl->m_document);
+@@ -889,7 +889,7 @@ void EPUBHTMLGenerator::closeFootnote()
+ {
+   if (m_impl->m_ignore)
+     return;
+-  if (m_impl->m_version == 30)
++  if (m_impl->m_version >= 30)
+     m_impl->output().closeElement("aside");
+   m_impl->pop();
+ }
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 363b33e..5e96d1d 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -22,10 +22,16 @@ namespace
+ {
+ 
+ /// Extracts a title string from a path and provides a fallback if it would be empty.
+-void getPathTitle(std::ostringstream &label, const EPUBPath &path, std::vector<EPUBPath>::size_type index)
++void getPathTitle(std::ostringstream &label, const EPUBPath &path, EPUBLayoutMethod layout, std::vector<EPUBPath>::size_type index)
+ {
+   if (path.getTitle().empty())
+-    label << "Section " << (index + 1);
++  {
++    if (layout == EPUB_LAYOUT_METHOD_FIXED)
++      label << "Page ";
++    else
++      label << "Section ";
++    label << (index + 1);
++  }
+   else
+     label << path.getTitle();
+ }
+@@ -81,9 +87,9 @@ void EPUBHTMLManager::writeSpineTo(EPUBXMLSink &sink)
+   }
+ }
+ 
+-void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int version)
++void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int version, EPUBLayoutMethod layout)
+ {
+-  if (version == 30)
++  if (version >= 30)
+   {
+     for (std::vector<EPUBPath>::size_type i = 0; m_paths.size() != i; ++i)
+     {
+@@ -92,7 +98,7 @@ void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int
+       anchorAttrs.insert("href", m_paths[i].relativeTo(tocPath).str().c_str());
+       sink.openElement("a", anchorAttrs);
+       std::ostringstream label;
+-      getPathTitle(label, m_paths[i], i);
++      getPathTitle(label, m_paths[i], layout, i);
+       sink.insertCharacters(label.str().c_str());
+       sink.closeElement("a");
+       sink.closeElement("li");
+@@ -115,7 +121,7 @@ void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int
+     sink.openElement("navLabel");
+     sink.openElement("text");
+     std::ostringstream label;
+-    getPathTitle(label, m_paths[i], i);
++    getPathTitle(label, m_paths[i], layout, i);
+     sink.insertCharacters(label.str().c_str());
+     sink.closeElement("text");
+     sink.closeElement("navLabel");
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index 31e6dfe..157896b 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -46,7 +46,7 @@ public:
+   void writeTo(EPUBPackage &package);
+ 
+   void writeSpineTo(EPUBXMLSink &sink);
+-  void writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int version);
++  void writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int version, EPUBLayoutMethod layout);
+ 
+   /// Appends text to the title of the current heading.
+   void insertHeadingText(const std::string &text);
+diff --git a/src/lib/EPUBPagedGenerator.cpp b/src/lib/EPUBPagedGenerator.cpp
+index 6a3bff0..b3a06e4 100644
+--- a/src/lib/EPUBPagedGenerator.cpp
++++ b/src/lib/EPUBPagedGenerator.cpp
+@@ -25,7 +25,7 @@ class EPUBPagedGenerator::Impl : public EPUBGenerator
+   Impl &operator=(const Impl &);
+ 
+ public:
+-  Impl(EPUBPackage *const package, EPUBSplitMethod method, int version);
++  Impl(EPUBPackage *const package, int version);
+ 
+ private:
+   void startHtmlFile() override;
+@@ -35,12 +35,17 @@ public:
+   bool m_firstPage;
+ };
+ 
+-EPUBPagedGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
+-  : EPUBGenerator(package, method, version)
++EPUBPagedGenerator::Impl::Impl(EPUBPackage *const package, int version)
++  : EPUBGenerator(package, version)
+   , m_firstPage(true)
+ {
+ }
+ 
++void EPUBPagedGenerator::setSplitMethod(EPUBSplitMethod split)
++{
++  m_impl->setSplitMethod(split);
++}
++
+ void EPUBPagedGenerator::setSplitHeadingLevel(const unsigned level)
+ {
+   m_impl->getSplitGuard().setSplitHeadingLevel(level);
+@@ -59,8 +64,8 @@ void EPUBPagedGenerator::Impl::endHtmlFile()
+ {
+ }
+ 
+-EPUBPagedGenerator::EPUBPagedGenerator(EPUBPackage *const package, const EPUBSplitMethod method, int version)
+-  : m_impl(new Impl(package, method, version))
++EPUBPagedGenerator::EPUBPagedGenerator(EPUBPackage *const package, int version)
++  : m_impl(new Impl(package, version))
+ {
+ }
+ 
+diff --git a/src/lib/EPUBPagedGenerator.h b/src/lib/EPUBPagedGenerator.h
+index 74d70da..4effb65 100644
+--- a/src/lib/EPUBPagedGenerator.h
++++ b/src/lib/EPUBPagedGenerator.h
+@@ -26,8 +26,9 @@ class EPUBPagedGenerator: public librevenge::RVNGPresentationInterface
+   class Impl;
+ 
+ public:
+-  EPUBPagedGenerator(EPUBPackage *package, EPUBSplitMethod method, int version);
++  EPUBPagedGenerator(EPUBPackage *package, int version);
+ 
++  void setSplitMethod(EPUBSplitMethod split);
+   void setSplitHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
+ 
+diff --git a/src/lib/EPUBPresentationGenerator.cpp b/src/lib/EPUBPresentationGenerator.cpp
+index 80b5ac2..3ebca24 100644
+--- a/src/lib/EPUBPresentationGenerator.cpp
++++ b/src/lib/EPUBPresentationGenerator.cpp
+@@ -20,18 +20,17 @@ using librevenge::RVNGString;
+ class EPUBPresentationGenerator::Impl : public EPUBPagedGenerator
+ {
+ public:
+-  Impl(EPUBPackage *const package, EPUBSplitMethod method, int version);
++  Impl(EPUBPackage *const package, int version);
+ };
+ 
+-EPUBPresentationGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
+-  : EPUBPagedGenerator(package, method, version)
++EPUBPresentationGenerator::Impl::Impl(EPUBPackage *const package, int version)
++  : EPUBPagedGenerator(package, version)
+ {
+ }
+ 
+-EPUBPresentationGenerator::EPUBPresentationGenerator(EPUBPackage *const package, EPUBSplitMethod method, int version)
+-  : m_impl(new Impl(package, method, version))
++EPUBPresentationGenerator::EPUBPresentationGenerator(EPUBPackage *const package, int version)
++  : m_impl(new Impl(package, version))
+ {
+-  (void) method;
+ }
+ 
+ EPUBPresentationGenerator::EPUBPresentationGenerator(EPUBEmbeddingContact &contact, EPUBPackage *const package)
+@@ -47,6 +46,16 @@ EPUBPresentationGenerator::~EPUBPresentationGenerator()
+   delete m_impl;
+ }
+ 
++void EPUBPresentationGenerator::setOption(int key, int value)
++{
++  switch (key)
++  {
++  case EPUB_GENERATOR_OPTION_SPLIT:
++    m_impl->setSplitMethod(static_cast<EPUBSplitMethod>(value));
++    break;
++  }
++}
++
+ void EPUBPresentationGenerator::setSplitHeadingLevel(const unsigned level)
+ {
+   m_impl->setSplitHeadingLevel(level);
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 38573ec..78eeaae 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -67,7 +67,7 @@ bool isPageBreak(const librevenge::RVNGProperty *property)
+ 
+ struct EPUBTextGenerator::Impl : public EPUBGenerator
+ {
+-  Impl(EPUBPackage *package, EPUBSplitMethod method, int version);
++  Impl(EPUBPackage *package, int version);
+ 
+ private:
+   void startHtmlFile() override;
+@@ -93,8 +93,8 @@ private:
+   Impl &operator=(const Impl &);
+ };
+ 
+-EPUBTextGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
+-  : EPUBGenerator(package, method, version)
++EPUBTextGenerator::Impl::Impl(EPUBPackage *const package, int version)
++  : EPUBGenerator(package, version)
+   , m_inPageSpan(false)
+   , m_inHeader(false)
+   , m_inFooter(false)
+@@ -123,10 +123,9 @@ void EPUBTextGenerator::Impl::endHtmlFile()
+     m_currentFooter->write(getHtml().get());
+ }
+ 
+-EPUBTextGenerator::EPUBTextGenerator(EPUBPackage *const package, const EPUBSplitMethod method, int version)
+-  : m_impl(new Impl(package, method, version))
++EPUBTextGenerator::EPUBTextGenerator(EPUBPackage *const package, int version)
++  : m_impl(new Impl(package, version))
+ {
+-  (void) method;
+ }
+ 
+ EPUBTextGenerator::EPUBTextGenerator(EPUBEmbeddingContact &contact, EPUBPackage *const package)
+@@ -152,14 +151,20 @@ void EPUBTextGenerator::setSplitSize(const unsigned size)
+   m_impl->getSplitGuard().setSplitSize(size);
+ }
+ 
+-void EPUBTextGenerator::setStylesMethod(EPUBStylesMethod styles)
++void EPUBTextGenerator::setOption(int key, int value)
+ {
+-  m_impl->setStylesMethod(styles);
+-}
+-
+-void EPUBTextGenerator::setLayoutMethod(EPUBLayoutMethod layout)
+-{
+-  m_impl->setLayoutMethod(layout);
++  switch (key)
++  {
++  case EPUB_GENERATOR_OPTION_SPLIT:
++    m_impl->setSplitMethod(static_cast<EPUBSplitMethod>(value));
++    break;
++  case EPUB_GENERATOR_OPTION_STYLES:
++    m_impl->setStylesMethod(static_cast<EPUBStylesMethod>(value));
++    break;
++  case EPUB_GENERATOR_OPTION_LAYOUT:
++    m_impl->setLayoutMethod(static_cast<EPUBLayoutMethod>(value));
++    break;
++  }
+ }
+ 
+ void EPUBTextGenerator::registerEmbeddedImageHandler(const librevenge::RVNGString &mimeType, EPUBEmbeddedImage imageHandler)
