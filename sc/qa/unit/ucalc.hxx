@@ -482,6 +482,7 @@ public:
     void testCondCopyPaste();
     void testCondCopyPasteSingleCell(); //e.g. fdo#82503
     void testCondCopyPasteSingleCellToRange(); //e.g. fdo#82503
+    void testCondCopyPasteSingleCellIntoSameFormatRange(); // e.g., tdf#95295
     void testCondCopyPasteSingleRowToRange(); //e.g. tdf#106242
     void testCondCopyPasteSingleRowToRange2();
     void testCondCopyPasteSheetBetweenDoc();
@@ -780,6 +781,7 @@ public:
     CPPUNIT_TEST(testCondCopyPaste);
     CPPUNIT_TEST(testCondCopyPasteSingleCell);
     CPPUNIT_TEST(testCondCopyPasteSingleCellToRange);
+    CPPUNIT_TEST(testCondCopyPasteSingleCellIntoSameFormatRange);
     CPPUNIT_TEST(testCondCopyPasteSingleRowToRange);
     CPPUNIT_TEST(testCondCopyPasteSingleRowToRange2);
     CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);

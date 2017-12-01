@@ -288,14 +288,19 @@ void Test::testCondCopyPaste()
     ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(7,7,0);
     CPPUNIT_ASSERT(pPastedFormat);
 
-    CPPUNIT_ASSERT_EQUAL(ScRangeList(aTargetRange), pPastedFormat->GetRange());
-    CPPUNIT_ASSERT( nIndex != pPastedFormat->GetKey());
+    // Pasting the same conditional format must modify existing format, making its range
+    // combined of previous range and newly pasted range having the conditional format.
+    // No new conditional formats must be created.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
+    aRangeList.Join(aTargetRange);
+    CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pPastedFormat->GetKey());
     const SfxPoolItem* pItem = m_pDoc->GetAttr( 7, 7, 0, ATTR_CONDITIONAL );
     const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0));
 
     m_pDoc->DeleteTab(0);
 }
@@ -322,14 +327,19 @@ void Test::testCondCopyPasteSingleCell()
     ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4,4,0);
     CPPUNIT_ASSERT(pPastedFormat);
 
-    CPPUNIT_ASSERT_EQUAL(ScRangeList(aTargetRange), pPastedFormat->GetRange());
-    CPPUNIT_ASSERT( nIndex != pPastedFormat->GetKey());
+    // Pasting the same conditional format must modify existing format, making its range
+    // combined of previous range and newly pasted range having the conditional format.
+    // No new conditional formats must be created.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
+    aRangeList.Join(aTargetRange);
+    CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pPastedFormat->GetKey());
     const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, 4, 0, ATTR_CONDITIONAL );
     const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0) );
 
     m_pDoc->DeleteTab(0);
 }
@@ -352,7 +362,11 @@ void Test::testCondCopyPasteSingleCellToRange()
     ScRange aTargetRange(4,4,0,5,8,0);
     pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
-    std::set<sal_uLong> aCondFormatIndices;
+    // Pasting the same conditional format must modify existing format, making its range
+    // combined of previous range and newly pasted range having the conditional format.
+    // No new conditional formats must be created.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
+    aRangeList.Join(aTargetRange);
     for(SCROW nRow = 4; nRow <= 8; ++nRow)
     {
         for (SCCOL nCol = 4; nCol <= 5; ++nCol)
@@ -360,20 +374,54 @@ void Test::testCondCopyPasteSingleCellToRange()
             ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, nRow, 0);
             CPPUNIT_ASSERT(pPastedFormat);
 
-            CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(nCol, nRow, 0)), pPastedFormat->GetRange());
+            CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
             sal_uLong nPastedKey = pPastedFormat->GetKey();
-            CPPUNIT_ASSERT( nIndex != nPastedKey);
+            CPPUNIT_ASSERT_EQUAL(nIndex, nPastedKey);
             const SfxPoolItem* pItem = m_pDoc->GetAttr( nCol, nRow, 0, ATTR_CONDITIONAL );
             const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
             CPPUNIT_ASSERT(pCondFormatItem);
             CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-            CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
-            auto itr = aCondFormatIndices.find(nPastedKey);
-            CPPUNIT_ASSERT(bool(itr == aCondFormatIndices.end()));
-            aCondFormatIndices.insert(nPastedKey);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0) );
         }
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondCopyPasteSingleCellIntoSameFormatRange()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0, 0, 0, 3, 3, 0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, "=B2", "", m_pDoc, ScAddress(0, 0, 0), ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    sal_uLong nIndex = m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(1, 1, 0, 1, 1, 0), &aClipDoc);
+
+    ScRange aTargetRange(2, 2, 0, 2, 2, 0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(2, 2, 0);
+    CPPUNIT_ASSERT(pPastedFormat);
+
+    // Pasting the same conditional format into the same range must not modify existing format,
+    // since it already covers the pasted range. No new conditional formats must be created.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
+    CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pPastedFormat->GetKey());
+    const SfxPoolItem* pItem = m_pDoc->GetAttr(2, 2, 0, ATTR_CONDITIONAL);
+    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+    CPPUNIT_ASSERT(pCondFormatItem);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0));
 
     m_pDoc->DeleteTab(0);
 }
@@ -398,7 +446,7 @@ void Test::testCondCopyPasteSingleRowToRange()
 
     ScConditionalFormat* pNewFormat = m_pDoc->GetCondFormat(0, 4, 0);
     CPPUNIT_ASSERT(pNewFormat);
-    CPPUNIT_ASSERT(pNewFormat->GetKey() != pFormat->GetKey());
+    CPPUNIT_ASSERT_EQUAL(pNewFormat->GetKey(), pFormat->GetKey());
 
     for (SCCOL nCol = 1; nCol <= MAXCOL; ++nCol)
     {
