@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_19445c48",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2017-12-01T21:03:57Z",
+      "side": 1,
+      "message": "If I remember correctly, _DEF names contain the original string that is hardcoded into the template file. Here -- if I\u0027m not mistaken -- you can use a normal en-US string, i.e. without underscores, camel case, and with correct spelling.",
+      "range": {
+        "startLine": 272,
+        "startChar": 75,
+        "endLine": 272,
+        "endChar": 85
+      },
+      "revId": "66fb820763edf18e9175e9e5e7647f693d5a3cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
