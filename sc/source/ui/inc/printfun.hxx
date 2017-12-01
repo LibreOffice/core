@@ -103,7 +103,7 @@ private:
     SCROW                    nStartRow;
     SCROW                    nEndRow;
     size_t                   nPagesX;
-    std::unique_ptr<bool[]>  pHidden;
+    std::vector<bool>        aHidden;
     //!     Cache Number of really visible?
 
 public:
