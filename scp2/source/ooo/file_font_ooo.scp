@@ -75,7 +75,7 @@ File gid_File_FcLocal_Conf
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
     Styles = (FILELIST);
-    Name = "more_fonts_conf.filelist";
+    Name = "postprocess_fontconfig.filelist";
 End
 #endif
 #endif
