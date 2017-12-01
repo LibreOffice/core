@@ -404,9 +404,10 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
         {
             const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rVectorGraphicDataPtr->getReplacement());
         }
-        else if (GetGrfObj().GetGraphic().getPdfData().hasElements())
+        else if (GetGrfObj().GetGraphic().getPdfData().hasElements()
+                 || GetGrfObj().GetGraphic().GetType() == GraphicType::GdiMetafile)
         {
-            // This returns the bitmap, without the pdf data.
+            // Replacement graphic for PDF and metafiles is just the bitmap.
             const_cast<SwGrfNode*>(this)->mpReplacementGraphic = new GraphicObject(GetGrfObj().GetGraphic().GetBitmapEx());
         }
         if (mpReplacementGraphic)
