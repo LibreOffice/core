@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_366da731",
+        "filename": "writerperfect/source/writer/EPUBExportDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-01T17:11:13Z",
+      "side": 1,
+      "message": "This should be guarded with #if LIBEPUBGEN_VERSION_SUPPORT",
+      "revId": "ad652bbfe36c67eba9c4b34e7a8ae592944cad96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
