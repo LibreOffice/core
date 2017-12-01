@@ -224,6 +224,9 @@ public:
                                  const ScPrintOptions* pOptions = nullptr,
                                  ScPageBreakData* pData = nullptr );
 
+                    ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter,
+                                const ScPrintState& rState, const ScPrintOptions* pOptions );
+
                     // ctors for device other than printer - for preview and pdf:
 
                     ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,

@@ -25,6 +25,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
@@ -1781,9 +1782,13 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
     else
     {
-        ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
-                pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
-        aFunc.SetRenderFlag( true );
+        std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
+        if (m_pPrintState)
+            pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), *m_pPrintState, &aStatus.GetOptions()));
+        else
+            pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), nTab,
+                                             pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
+        pPrintFunc->SetRenderFlag( true );
 
         Range aPageRange( nRenderer+1, nRenderer+1 );
         MultiSelection aPage( aPageRange );
@@ -1793,10 +1798,17 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
         long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-        (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, nullptr );
+        (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, false, nullptr );
 
-        bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
-        Size aTwips = aFunc.GetPageSize();
+        bWasCellRange = pPrintFunc->GetLastSourceRange( aCellRange );
+        Size aTwips = pPrintFunc->GetPageSize();
+
+        if (!m_pPrintState)
+        {
+            m_pPrintState.reset(new ScPrintState());
+            pPrintFunc->GetPrintState(*m_pPrintState);
+        }
+
         aPageSize.Width = TwipsToHMM( aTwips.Width());
         aPageSize.Height = TwipsToHMM( aTwips.Height());
     }
@@ -1915,6 +1927,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     //  to increase performance, ScPrintState might be used here for subsequent
     //  pages of the same sheet
+
 
     ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
     aFunc.SetDrawView( aDrawViewKeeper.mpDrawView );
