@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <memory>
 
 #include <ModelImpl.hxx>
 #include "documenteventnotifier.hxx"
@@ -171,7 +172,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ::comphelper::OInterfaceContainerHelper2                                                    m_aCloseListener;
     ::comphelper::OInterfaceContainerHelper2                                                    m_aStorageListeners;
 
-    rtl::Reference<DocumentEvents>                                                              m_pEventContainer;
+    std::unique_ptr<DocumentEvents>                                                             m_pEventContainer;
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;
     DocumentEventNotifier                                                                       m_aEventNotifier;
 
