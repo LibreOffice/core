@@ -63,14 +63,19 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     sal_Int32 nSplitMethod = EPUBExportFilter::GetDefaultSplitMethod();
     sal_Int32 nLayoutMethod = EPUBExportFilter::GetDefaultLayoutMethod();
     uno::Sequence<beans::PropertyValue> aFilterData;
+    OUString aFilterOptions;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
     {
         if (rDescriptor[i].Name == "FilterData")
-        {
             rDescriptor[i].Value >>= aFilterData;
-            break;
-        }
+        else if (rDescriptor[i].Name == "FilterOptions")
+            rDescriptor[i].Value >>= aFilterOptions;
     }
+
+#if LIBEPUBGEN_VERSION_SUPPORT
+    if (aFilterOptions == "layout=fixed")
+        nLayoutMethod = libepubgen::EPUB_LAYOUT_METHOD_FIXED;
+#endif
 
     for (sal_Int32 i = 0; i < aFilterData.getLength(); ++i)
     {
