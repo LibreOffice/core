@@ -31,8 +31,17 @@
 #include <calbck.hxx>
 #include <swtable.hxx>
 
+// The % SV_COUNTRY_LANGUAGE_OFFSET result checks if nFormat is a mere built-in
+// @ Text format of *any* locale and if so uses the default text format. Text
+// is text, the locale doesn't matter for Writer's number formatting purposes.
+// The advantage is that this is the pool's default item value and some places
+// benefit from this special treatment in that they don't have to handle/store
+// attribute specifics, especially when writing a document.
 SwTableBoxNumFormat::SwTableBoxNumFormat( sal_uInt32 nFormat, bool bFlag )
-    : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), m_bAuto( bFlag )
+    : SfxUInt32Item( RES_BOXATR_FORMAT,
+            (((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == getSwDefaultTextFormat()) ?
+             getSwDefaultTextFormat() : nFormat))
+    , m_bAuto( bFlag )
 {
 }
 

@@ -2091,7 +2091,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     const SfxPoolItem* pItem;
 
     Color* pCol = nullptr;
-    if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFormat) )
+    if( getSwDefaultTextFormat() != nFormat )
     {
         // special text format:
         OUString sTmp;
@@ -2175,7 +2175,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
         const SwTableBoxNumFormat *pNewFormat = nullptr;
         const SwTableBoxFormula *pNewFormula = nullptr;
         const SwTableBoxValue *pNewVal = nullptr;
-        sal_uLong nOldFormat = css::util::NumberFormat::TEXT;
+        sal_uLong nOldFormat = getSwDefaultTextFormat();
 
         switch( pNew ? pNew->Which() : 0 )
         {
@@ -2241,15 +2241,15 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                     // is it newer or has the current been removed?
                     if( pNewVal )
                     {
-                        if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nNewFormat) )
+                        if( GetDoc()->GetNumberFormatter()->IsTextFormat(nNewFormat) )
+                            nOldFormat = 0;
+                        else
                         {
                             if( SfxItemState::SET == GetItemState( RES_BOXATR_VALUE, false ))
-                                nOldFormat = css::util::NumberFormat::TEXT;
+                                nOldFormat = getSwDefaultTextFormat();
                             else
-                                nNewFormat = css::util::NumberFormat::TEXT;
+                                nNewFormat = getSwDefaultTextFormat();
                         }
-                        else if( css::util::NumberFormat::TEXT == static_cast<sal_Int16>(nNewFormat) )
-                            nOldFormat = 0;
                     }
 
                     // Logic:
@@ -2263,8 +2263,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                     //          - align left for horizontal alignment, if RIGHT
                     //          - align top for vertical alignment, if BOTTOM is set
                     SvNumberFormatter* pNumFormatr = GetDoc()->GetNumberFormatter();
-                    bool bNewIsTextFormat = pNumFormatr->IsTextFormat( nNewFormat ) ||
-                                        css::util::NumberFormat::TEXT == static_cast<sal_Int16>(nNewFormat);
+                    bool bNewIsTextFormat = pNumFormatr->IsTextFormat( nNewFormat );
 
                     if( (!bNewIsTextFormat && nOldFormat != nNewFormat) || pNewFormula )
                     {

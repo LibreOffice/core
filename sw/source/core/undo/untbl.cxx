@@ -2143,7 +2143,7 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
     : SwUndo(SwUndoId::TBLNUMFMT, rBox.GetFrameFormat()->GetDoc())
     , m_pBoxSet(nullptr)
     , m_pHistory(nullptr)
-    , m_nFormatIdx(css::util::NumberFormat::TEXT)
+    , m_nFormatIdx(getSwDefaultTextFormat())
     , m_nNewFormatIdx(0)
     , m_fNum(0.0)
     , m_fNewNum(0.0)
@@ -2352,7 +2352,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
         RedlineFlagsInternGuard aGuard( rDoc, RedlineFlags::NONE, RedlineFlags::Ignore );
         pBoxFormat->SetFormatAttr( aBoxSet );
     }
-    else if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(m_nFormatIdx) )
+    else if( getSwDefaultTextFormat() != m_nFormatIdx )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
                             svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );

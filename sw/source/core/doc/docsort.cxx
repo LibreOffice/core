@@ -277,7 +277,7 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
     if( pFndBox )
     {
         const SwFormat *pFormat = pFndBox->GetBox()->GetFrameFormat();
-        if (pFormat->GetTableBoxNumFormat().GetValue() & css::util::NumberFormat::TEXT)
+        if (pDoc->GetNumberFormatter()->IsTextFormat( pFormat->GetTableBoxNumFormat().GetValue()))
             nVal = SwSortElement::GetValue( nKey );
         else
             nVal = pFormat->GetTableBoxValue().GetValue();

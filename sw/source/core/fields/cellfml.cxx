@@ -217,11 +217,12 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
             SvNumberFormatter* pNumFormatr = pDoc->GetNumberFormatter();
 
-            if( static_cast<sal_uInt32>(css::util::NumberFormat::TEXT) == nFormatIndex )
+            const sal_Int16 nFormatType = pNumFormatr->GetType( nFormatIndex );
+            if( nFormatType == css::util::NumberFormat::TEXT )
                 nFormatIndex = 0;
             // JP 22.04.98: Bug 49659 - special treatment for percentages
             else if( !sText.isEmpty() &&
-                    css::util::NumberFormat::PERCENT == pNumFormatr->GetType( nFormatIndex ))
+                    css::util::NumberFormat::PERCENT == nFormatType)
             {
                 sal_uInt32 nTmpFormat = 0;
                 if( pDoc->IsNumberFormat( sText, nTmpFormat, aNum ) &&
