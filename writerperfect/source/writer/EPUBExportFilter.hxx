@@ -10,12 +10,15 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTFILTER_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTFILTER_HXX
 
+#include <vector>
+
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <tools/gen.hxx>
 
 namespace writerperfect
 {
@@ -52,6 +55,10 @@ public:
     static sal_Int32 GetDefaultSplitMethod();
     /// Gives the default layout method.
     static sal_Int32 GetDefaultLayoutMethod();
+
+private:
+    /// Create page metafiles in case of fixed layout.
+    void CreateMetafiles(std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &rPageMetafiles);
 };
 
 } // namespace writerperfect
