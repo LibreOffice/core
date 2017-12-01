@@ -60,6 +60,7 @@ public:
     void testEPUB2();
     void testEPUBFixedLayout();
     void testEPUBFixedLayoutOption();
+    void testEPUBFixedLayoutImplicitBreak();
     void testPageBreakSplit();
     void testSpanAutostyle();
     void testParaAutostyleCharProps();
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testEPUB2);
     CPPUNIT_TEST(testEPUBFixedLayout);
     CPPUNIT_TEST(testEPUBFixedLayoutOption);
+    CPPUNIT_TEST(testEPUBFixedLayoutImplicitBreak);
     CPPUNIT_TEST(testPageBreakSplit);
     CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST(testParaAutostyleCharProps);
@@ -325,6 +327,21 @@ void EPUBExportTest::testEPUBFixedLayoutOption()
     // This failed, fixed layout was only working via the FilterData map.
     mpXmlDoc = parseExport("OEBPS/content.opf");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']", "pre-paginated");
+}
+
+void EPUBExportTest::testEPUBFixedLayoutImplicitBreak()
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request fixed layout.
+        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
+    }));
+    createDoc("fxl-2page.fodt", aFilterData);
+
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0001.xhtml"));
+    // This was missing, implicit page break (as calculated by the layout) was lost on export.
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0002.xhtml"));
+    CPPUNIT_ASSERT(!mxZipFile->hasByName("OEBPS/sections/section0003.xhtml"));
 }
 
 void EPUBExportTest::testPageBreakSplit()
