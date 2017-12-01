@@ -479,6 +479,8 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             << fieldDecl->getSourceRange();
     }
 
+// Not in general (dbaccess::DocumentEvents, dbaccess/source/core/dataaccess/databasedocument.hxx):
+#if 0
     if (!firstTemplateParamType.isNull() && containsXInterfaceSubclass(firstTemplateParamType))
     {
         report(
@@ -490,6 +492,7 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             << fieldDecl->getParent()
             << fieldDecl->getSourceRange();
     }
+#endif
 
     checkUnoReference(
         fieldDecl->getType(), fieldDecl,
