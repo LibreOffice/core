@@ -871,6 +871,10 @@ protected:
     int CollectGrfsOfBullets();
     /// Write the numbering picture bullets.
     void BulletDefinitions();
+
+    bool NeedSectionBreak( const SwNode& rNd ) const;
+    bool NeedTextNodeSplit( const SwTextNode& rNd, std::set< sal_Int32 >& pList ) const;
+
     std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
 public:

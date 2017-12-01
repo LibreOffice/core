@@ -2704,7 +2704,14 @@ void MSWordExportBase::WriteText()
 
         // no section breaks exported for Endnotes
         if ( rNd.IsTextNode() && m_nTextTyp != TXT_EDN )
-            SectionBreaksAndFrames( *rNd.GetTextNode() );
+        {
+            SwSoftPageBreakList breakList;
+            // if paragraph need to be split than handle section break somewhere
+            // else.
+            if( !NeedTextNodeSplit( *rNd.GetTextNode(), breakList) )
+                SectionBreaksAndFrames( *rNd.GetTextNode() );
+        }
+
 
         // output the various types of nodes
         if ( rNd.IsContentNode() )
