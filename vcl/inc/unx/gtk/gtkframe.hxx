@@ -265,10 +265,8 @@ class GtkSalFrame : public SalFrame
     static void         signalDragDataGet(GtkWidget* widget, GdkDragContext* context, GtkSelectionData *data, guint info,
                                           guint time, gpointer frame);
 
-#if GTK_CHECK_VERSION(3,14,0)
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
-#endif
 #else
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
     void askForXEmbedFocus( sal_Int32 nTimecode );

@@ -2113,14 +2113,6 @@ GtkStyleContext* GtkSalGraphics::createStyleContext(gtk_widget_path_iter_set_obj
 
 namespace
 {
-    GtkStateFlags CHECKED()
-    {
-#if GTK_CHECK_VERSION(3,14,0)
-        return GTK_STATE_FLAG_CHECKED;
-#endif
-        return GTK_STATE_FLAG_ACTIVE;
-    }
-
     GtkStateFlags ACTIVE_TAB()
     {
 #if GTK_CHECK_VERSION(3,20,0)
@@ -2237,7 +2229,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             nType = ControlType::Checkbox;
             if (nState & ControlState::PRESSED)
             {
-                flags = (GtkStateFlags)(flags | CHECKED());
+                flags = (GtkStateFlags)(flags | GTK_STATE_FLAG_CHECKED);
             }
             break;
         case ControlPart::MenuItemRadioMark:
@@ -2252,7 +2244,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             nType = ControlType::Radiobutton;
             if (nState & ControlState::PRESSED)
             {
-                flags = (GtkStateFlags)(flags | CHECKED());
+                flags = (GtkStateFlags)(flags | GTK_STATE_FLAG_CHECKED);
             }
             break;
         case ControlPart::Separator:
@@ -2300,13 +2292,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case ControlType::Radiobutton:
         flags = (GtkStateFlags)(flags |
-                ( (rValue.getTristateVal() == ButtonValue::On) ? CHECKED() : GTK_STATE_FLAG_NORMAL));
+                ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_CHECKED : GTK_STATE_FLAG_NORMAL));
         context = mpRadioButtonRadioStyle;
         renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::Radio;
         break;
     case ControlType::Checkbox:
         flags = (GtkStateFlags)(flags |
-                ( (rValue.getTristateVal() == ButtonValue::On) ? CHECKED() :
+                ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_CHECKED :
                   (rValue.getTristateVal() == ButtonValue::Mixed) ? GTK_STATE_FLAG_INCONSISTENT :
                   GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonCheckStyle;
@@ -2380,7 +2372,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         context = mpTreeHeaderButtonStyle;
         ButtonValue aButtonValue = rValue.getTristateVal();
         if (aButtonValue == ButtonValue::On)
-            flags = (GtkStateFlags) (flags | CHECKED());
+            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_CHECKED);
         renderType = RenderType::Expander;
         break;
     }
