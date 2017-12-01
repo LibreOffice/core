@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xprintareas.hxx>
 #include <test/sheet/xscenarioenhanced.hxx>
 #include <test/sheet/xscenariossupplier.hxx>
@@ -40,6 +41,7 @@ namespace sc_apitest
 #define NUMBER_OF_TESTS 31
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
+                                               public apitest::XMultipleOperation,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
                                                public apitest::XScenarioEnhanced,
@@ -75,6 +77,16 @@ public:
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
 
+    // XSearchable
+    CPPUNIT_TEST(testFindAll);
+    CPPUNIT_TEST(testFindNext);
+    CPPUNIT_TEST(testFindFirst);
+
+    // XMultipleOperation
+#if 0 // disable, because test never finishes (see i87863)
+    CPPUNIT_TEST(testSetTableOperation);
+#endif
+
     // XPrintAreas
     CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
     CPPUNIT_TEST(testSetAndGetPrintTitleRows);
@@ -88,11 +100,6 @@ public:
 
     // XScenariosSupplier
     CPPUNIT_TEST(testGetScenarios);
-
-    // XSearchable
-    CPPUNIT_TEST(testFindAll);
-    CPPUNIT_TEST(testFindNext);
-    CPPUNIT_TEST(testFindFirst);
 
     // XSheetAnnotationsSupplier
     CPPUNIT_TEST(testGetAnnotations);
@@ -112,7 +119,7 @@ public:
     CPPUNIT_TEST(testFilter);
 
     // XSheetFilterableEx
-#if 0 // temporarily disabled, takes too long
+#if 0 // temporarily disabled, takes too long (see i87876)
     CPPUNIT_TEST(testCreateFilterDescriptorByObject);
 #endif
 
@@ -170,6 +177,10 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
+    xSheet->getCellByPosition(5 ,5)->setValue(15);
+    xSheet->getCellByPosition(2 ,0)->setValue(-5.15);
+    xSheet->getCellByPosition(2 ,0)->setFormula("= B5 + C1");
+
     xSheet->getCellByPosition(6, 6)->setValue(3);
     xSheet->getCellByPosition(7, 6)->setValue(3);
     xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
@@ -197,6 +208,15 @@ uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
     uno::Reference<container::XIndexAccess> xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
+    xSheet->getCellByPosition(5 ,5)->setValue(15);
+    xSheet->getCellByPosition(2 ,0)->setValue(-5.15);
+    xSheet->getCellByPosition(2 ,0)->setFormula("= B5 + C1");
+
+    xSheet->getCellByPosition(6, 6)->setValue(3);
+    xSheet->getCellByPosition(7, 6)->setValue(3);
+    xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
+    xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
+
     uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
     aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
 
@@ -215,9 +235,25 @@ uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
     CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
+    xSheet->getCellByPosition(5 ,5)->setValue(15);
+    xSheet->getCellByPosition(2 ,0)->setValue(-5.15);
+    xSheet->getCellByPosition(2 ,0)->setFormula("= B5 + C1");
+
+    xSheet->getCellByPosition(6, 6)->setValue(3);
+    xSheet->getCellByPosition(7, 6)->setValue(3);
+    xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
+    xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
+
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
+    aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
+    uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
+    xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
+    xSheets->getByName("Scenario");
     return xSheet;
 }
 

@@ -118,7 +118,6 @@
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangeFormula#optional";"setFormulaArray()"
 "ScCellRangeObj";"com::sun::star::util::XIndent";"decrementIndent()"
 "ScCellRangeObj";"com::sun::star::util::XIndent";"incrementIndent()"
-"ScCellRangeObj";"com::sun::star::sheet::XMultipleOperation";"setTableOperation()"
 "ScCellRangeObj";"com::sun::star::table::XAutoFormattable";"autoFormat()"
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangesQuery";"queryVisibleCells()"
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangesQuery";"queryEmptyCells()"
