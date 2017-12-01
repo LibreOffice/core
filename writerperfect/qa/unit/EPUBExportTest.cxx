@@ -57,6 +57,7 @@ public:
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
+    void testEPUBFixedLayout();
     void testPageBreakSplit();
     void testSpanAutostyle();
     void testParaAutostyleCharProps();
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testOutlineLevel);
     CPPUNIT_TEST(testMimetype);
     CPPUNIT_TEST(testEPUB2);
+    CPPUNIT_TEST(testEPUBFixedLayout);
     CPPUNIT_TEST(testPageBreakSplit);
     CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST(testParaAutostyleCharProps);
@@ -290,6 +292,20 @@ void EPUBExportTest::testEPUB2()
     mpXmlDoc = parseExport("OEBPS/content.opf");
     // This was 3.0, EPUBVersion filter option was ignored and we always emitted EPUB3.
     assertXPath(mpXmlDoc, "/opf:package", "version", "2.0");
+}
+
+void EPUBExportTest::testEPUBFixedLayout()
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request fixed layout.
+        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
+    }));
+    createDoc("hello.fodt", aFilterData);
+
+    mpXmlDoc = parseExport("OEBPS/content.opf");
+    // This was missing, EPUBLayoutMethod filter option was ignored and we always emitted reflowable layout.
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']", "pre-paginated");
 }
 
 void EPUBExportTest::testPageBreakSplit()
