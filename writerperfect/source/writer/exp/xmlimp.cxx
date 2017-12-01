@@ -12,9 +12,11 @@
 #include <initializer_list>
 #include <unordered_map>
 
+#include <com/sun/star/svg/XSVGWriter.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <rtl/uri.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -210,7 +212,7 @@ class XMLBodyContext : public XMLImportContext
 public:
     XMLBodyContext(XMLImport &rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/) override;
 };
 
 XMLBodyContext::XMLBodyContext(XMLImport &rImport)
@@ -218,7 +220,7 @@ XMLBodyContext::XMLBodyContext(XMLImport &rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLBodyContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLBodyContext::CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "office:text")
         return new XMLBodyContentContext(mrImport);
@@ -231,7 +233,10 @@ class XMLOfficeDocContext : public XMLImportContext
 public:
     XMLOfficeDocContext(XMLImport &rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/) override;
+
+    // Handles metafile for a single page.
+    void HandleFixedLayoutPage(const uno::Sequence<sal_Int8> &rPage, const Size &rSize, bool bFirst);
 };
 
 XMLOfficeDocContext::XMLOfficeDocContext(XMLImport &rImport)
@@ -239,26 +244,85 @@ XMLOfficeDocContext::XMLOfficeDocContext(XMLImport &rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    if (rName == "office:body")
-        return new XMLBodyContext(mrImport);
-    else if (rName == "office:meta")
+    if (rName == "office:meta")
         return new XMLMetaDocumentContext(mrImport);
-    else if (rName == "office:automatic-styles")
+    if (rName == "office:automatic-styles")
         return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_AUTOMATIC);
-    else if (rName == "office:styles")
+    if (rName == "office:styles")
         return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_NONE);
-    else if (rName == "office:font-face-decls")
+    if (rName == "office:font-face-decls")
         return new XMLFontFaceDeclsContext(mrImport);
-    else if (rName == "office:master-styles")
+    if (rName == "office:master-styles")
         return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_MASTER);
+    if (rName == "office:body")
+    {
+        if (mrImport.GetPageMetafiles().empty())
+            return new XMLBodyContext(mrImport);
+        else
+        {
+            // Ignore text from doc model in the fixed layout case, instead
+            // insert the page metafiles.
+            bool bFirst = true;
+            for (const auto &rPage : mrImport.GetPageMetafiles())
+            {
+                HandleFixedLayoutPage(rPage.first, rPage.second, bFirst);
+                if (bFirst)
+                    bFirst = false;
+            }
+        }
+    }
     return nullptr;
 }
 
-XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor)
+void XMLOfficeDocContext::HandleFixedLayoutPage(const uno::Sequence<sal_Int8> &rPage, const Size &rSize, bool bFirst)
+{
+    uno::Reference<uno::XComponentContext> xCtx = mrImport.GetComponentContext();
+    uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(xCtx);
+    if (!xSaxWriter.is())
+        return;
+
+    uno::Sequence<uno::Any> aArguments;
+    uno::Reference<svg::XSVGWriter> xSVGWriter(xCtx->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.svg.SVGWriter", aArguments, xCtx), uno::UNO_QUERY);
+    if (!xSVGWriter.is())
+        return;
+
+    SvMemoryStream aMemoryStream;
+    xSaxWriter->setOutputStream(new utl::OStreamWrapper(aMemoryStream));
+
+    xSVGWriter->write(xSaxWriter, rPage);
+
+    // Have all the info, invoke libepubgen.
+    librevenge::RVNGPropertyList aPageProperties;
+    // Pixel -> inch.
+    double fWidth = rSize.getWidth();
+    fWidth /= 96;
+    aPageProperties.insert("fo:page-width", fWidth);
+    double fHeight = rSize.getHeight();
+    fHeight /= 96;
+    aPageProperties.insert("fo:page-height", fHeight);
+    mrImport.GetGenerator().openPageSpan(aPageProperties);
+    librevenge::RVNGPropertyList aParagraphProperties;
+    if (!bFirst)
+        // All pages except the first one needs a page break before the page
+        // metafile.
+        aParagraphProperties.insert("fo:break-before", "page");
+    mrImport.GetGenerator().openParagraph(aParagraphProperties);
+    librevenge::RVNGPropertyList aImageProperties;
+    aImageProperties.insert("librevenge:mime-type", "image/svg+xml");
+    librevenge::RVNGBinaryData aBinaryData;
+    aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
+    aImageProperties.insert("office:binary-data", aBinaryData);
+    mrImport.GetGenerator().insertBinaryObject(aImageProperties);
+    mrImport.GetGenerator().closeParagraph();
+    mrImport.GetGenerator().closePageSpan();
+}
+
+XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor, const std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &rPageMetafiles)
     : mrGenerator(rGenerator),
-      mxContext(xContext)
+      mxContext(xContext),
+      mrPageMetafiles(rPageMetafiles)
 {
     uno::Sequence<beans::PropertyValue> aFilterData;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
@@ -351,7 +415,17 @@ bool XMLImport::IsPageSpanOpened() const
     return mbPageSpanOpened;
 }
 
-rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+const std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &XMLImport::GetPageMetafiles() const
+{
+    return mrPageMetafiles;
+}
+
+const uno::Reference<uno::XComponentContext> &XMLImport::GetComponentContext() const
+{
+    return mxContext;
+}
+
+rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "office:document")
         return new XMLOfficeDocContext(*this);
@@ -458,7 +532,7 @@ void XMLImport::endDocument()
     mrGenerator.endDocument();
 }
 
-void XMLImport::startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLImport::startElement(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &xAttribs)
 {
     rtl::Reference<XMLImportContext> xContext;
     if (!maContexts.empty())
@@ -500,7 +574,7 @@ void XMLImport::processingInstruction(const OUString &/*rTarget*/, const OUStrin
 {
 }
 
-void XMLImport::setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &/*xLocator*/)
+void XMLImport::setDocumentLocator(const uno::Reference<xml::sax::XLocator> &/*xLocator*/)
 {
 }
 
