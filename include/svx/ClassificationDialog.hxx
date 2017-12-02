@@ -66,7 +66,6 @@ private:
     DECL_LINK(SelectToolboxHdl, ToolBox*, void);
     DECL_LINK(SelectClassificationHdl, ListBox&, void);
     DECL_LINK(SelectMarkingHdl, ListBox&, void);
-    DECL_LINK(LoseFocusMarkingHdl, Control&, void);
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
     DECL_LINK(SelectRecentlyUsedHdl, ListBox&, void);
     DECL_LINK(SelectIPPartHdl, ListBox&, void);
