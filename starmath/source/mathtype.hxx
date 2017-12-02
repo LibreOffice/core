@@ -29,7 +29,7 @@ class SfxMedium;
 class SmMatrixNode;
 class SmNode;
 class SotStorage;
-class SotStorageStream;
+class SvStream;
 
 class MathTypeFont
 {
@@ -105,7 +105,7 @@ private:
 /*Ver 2 Header*/
     sal_uInt8 nVersion;
 
-    SotStorageStream *pS;
+    SvStream* pS;
 
     void Init();
 
