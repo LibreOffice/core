@@ -54,6 +54,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
@@ -76,11 +77,13 @@
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/langtab.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <unicode/uchar.h>
 #include <unotools/configmgr.hxx>
@@ -91,6 +94,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <app.hxx>
 
@@ -3187,21 +3191,19 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
-    // First: sit down and read all dictionaries: yum.
-    css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
-        css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
-    css::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg;
+    xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
+        comphelper::getProcessComponentContext());
+    xGlobalCfg->getAllKeyEvents();
 
-    css::uno::Reference<linguistic2::XSupportedLocales> xLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
-    uno::Sequence< css::lang::Locale > aLocales = xLocales->getLocales();
-    std::cerr << "Preloading dictionaries: ";
-    for (auto &it : aLocales)
-    {
-        std::cerr << it.Language << "_" << it.Country << " ";
-        css::beans::PropertyValues aNone;
-        xSpellChecker->isValid("forcefed", it, aNone);
-    }
-    std::cerr << "\n";
+    std::cerr << "Preload icons\n";
+    ImageTree &images = ImageTree::get();
+    images.getImageUrl("forcefed.png", "style", "FO_oo");
+
+    std::cerr << "Preload languages\n";
+    // force load language singleton
+    SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
+    LanguageTag::isValidBcp47("foo");
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
