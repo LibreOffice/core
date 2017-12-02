@@ -20,12 +20,29 @@ rem  under the License.
 rem  
 rem *************************************************************
 setlocal
-SET JAVA_HOME=d:\os2\java160
-SET MY_ANT_HOME=d:/os2/java160/apache-ant-1.7.0
+SET JAVA_HOME=e:\os2\java160
+SET MY_ANT_HOME=e:/os2/java160/apache-ant-1.7.0
 SET PATH=%JAVA_HOME%\bin;%PATH%;%MY_ANT_HOME%\bin;
 
 set config_shell=sh
 set perl_sh_dir=%UNIXROOT%/usr/bin
 
-sh ./configure --prefix=/@unixroot/usr --with-system-zlib --with-system-jpeg --without-stlport --with-system-icu --with-system-curl --with-system-python --with-system-openssl --with-system-libxml --with-system-libxslt --disable-werror --disable-mozilla --disable-odk --with-x=no --disable-fontconfig --disable-gnome-vfs --disable-gtk --with-java=yes --disable-gcjaot --without-fonts --with-ant-home=%MY_ANT_HOME% --without-junit --with-system-apr --with-system-apr-util --with-system-serf --with-system-nss --enable-bundled-dictionaries --enable-category-b --with-lang="de es fr it nl ru" | tee configure.log
+SET CFG_OPT=
+SET CFG_OPT=%CFG_OPT% --prefix=/@unixroot/usr --with-system-zlib --with-system-jpeg
+SET CFG_OPT=%CFG_OPT% --without-stlport --with-system-icu --with-system-curl
+SET CFG_OPT=%CFG_OPT% --with-system-python --with-system-openssl --with-system-libxml
+SET CFG_OPT=%CFG_OPT% --with-system-libxslt --disable-werror
+SET CFG_OPT=%CFG_OPT% --disable-odk --with-x=no --disable-fontconfig --disable-gnome-vfs
+SET CFG_OPT=%CFG_OPT% --disable-gtk --with-java=yes --disable-gcjaot --without-fonts
+SET CFG_OPT=%CFG_OPT% --with-ant-home=%MY_ANT_HOME% --without-junit
+SET CFG_OPT=%CFG_OPT% --with-system-apr --with-system-apr-util --with-system-serf
+SET CFG_OPT=%CFG_OPT% --enable-bundled-dictionaries --enable-category-b --with-system-nss
+SET CFG_OPT=%CFG_OPT% --disable-unit-tests
+SET CFG_OPT=%CFG_OPT% --with-lang="de es fr it nl ru"
+
+sh ./configure %CFG_OPT% | tee configure.log
+
+REM auto* breaks PATH for perl, workaround
+perl set_soenv
+
 endlocal
