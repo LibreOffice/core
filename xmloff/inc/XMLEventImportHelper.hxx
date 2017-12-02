@@ -24,7 +24,7 @@
 #include <xmloff/xmlevent.hxx>
 
 #include <map>
-#include <list>
+#include <vector>
 
 
 namespace com { namespace sun { namespace star {
@@ -60,7 +60,7 @@ class XMLEventImportHelper
     NameMap* pEventNameMap;
 
     /// stack of previous aEventNameMap
-    std::list< NameMap* > aEventNameMapList;
+    std::vector< NameMap* > aEventNameMapVector;
 
 public:
     XMLEventImportHelper();

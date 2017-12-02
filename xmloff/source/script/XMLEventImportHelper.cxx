@@ -32,7 +32,7 @@ using ::com::sun::star::uno::Sequence;
 XMLEventImportHelper::XMLEventImportHelper() :
     aFactoryMap(),
     pEventNameMap(new NameMap),
-    aEventNameMapList()
+    aEventNameMapVector()
 {
 }
 
@@ -91,20 +91,20 @@ void XMLEventImportHelper::AddTranslationTable(
 void XMLEventImportHelper::PushTranslationTable()
 {
     // save old map and install new one
-    aEventNameMapList.push_back(pEventNameMap);
+    aEventNameMapVector.push_back(pEventNameMap);
     pEventNameMap = new NameMap;
 }
 
 void XMLEventImportHelper::PopTranslationTable()
 {
-    DBG_ASSERT(aEventNameMapList.size() > 0,
+    DBG_ASSERT(aEventNameMapVector.size() > 0,
                "no translation tables left to pop");
-    if ( !aEventNameMapList.empty() )
+    if ( !aEventNameMapVector.empty() )
     {
         // delete current and install old map
         delete pEventNameMap;
-        pEventNameMap = aEventNameMapList.back();
-        aEventNameMapList.pop_back();
+        pEventNameMap = aEventNameMapVector.back();
+        aEventNameMapVector.pop_back();
     }
 }
 
