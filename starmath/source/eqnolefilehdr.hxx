@@ -44,7 +44,7 @@ public:
     sal_uInt32   nReserved3; // not used
     sal_uInt32   nReserved4; // not used
 
-    void Read(SotStorageStream *pS)
+    void Read(SvStream* pS)
     {
         pS->ReadUInt16( nCBHdr );
         pS->ReadUInt32( nVersion );
@@ -55,7 +55,7 @@ public:
         pS->ReadUInt32( nReserved3 );
         pS->ReadUInt32( nReserved4 );
     }
-    void Write(SotStorageStream *pS)
+    void Write(SvStream* pS)
     {
         pS->WriteUInt16( nCBHdr );
         pS->WriteUInt32( nVersion );
