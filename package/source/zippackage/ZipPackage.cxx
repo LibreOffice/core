@@ -472,8 +472,6 @@ void ZipPackage::parseContentType()
 void ZipPackage::getZipFileContents()
 {
     std::unique_ptr<ZipEnumeration> xEnum = m_pZipFile->entries();
-    ZipPackageStream *pPkgStream;
-    ZipPackageFolder *pPkgFolder, *pCurrent;
     OUString sTemp, sDirName;
     sal_Int32 nOldIndex, nStreamIndex;
     FolderHash::iterator aIter;
@@ -481,7 +479,7 @@ void ZipPackage::getZipFileContents()
     while (xEnum->hasMoreElements())
     {
         nOldIndex = 0;
-        pCurrent = m_xRootFolder.get();
+        ZipPackageFolder* pCurrent = m_xRootFolder.get();
         const ZipEntry & rEntry = *xEnum->nextElement();
         OUString rName = rEntry.sPath;
 
@@ -511,7 +509,7 @@ void ZipPackage::getZipFileContents()
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
-                    pPkgFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
+                    ZipPackageFolder* pPkgFolder = new ZipPackageFolder(m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
                     pPkgFolder->setName( sTemp );
                     pPkgFolder->doSetParent( pCurrent );
                     pCurrent = pPkgFolder;
@@ -532,7 +530,7 @@ void ZipPackage::getZipFileContents()
         {
             nStreamIndex++;
             sTemp = rName.copy( nStreamIndex );
-            pPkgStream = new ZipPackageStream( *this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
+            ZipPackageStream *pPkgStream = new ZipPackageStream(*this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
             pPkgStream->SetPackageMember( true );
             pPkgStream->setZipEntryOnLoading( rEntry );
             pPkgStream->setName( sTemp );
