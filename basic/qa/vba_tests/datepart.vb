@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testDatePart()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -29,39 +29,39 @@ Function verify_testDatePart() As String
     On Error GoTo errorHandler
 
     date2 = 1969
-    date1 = DatePart("yyyy", "12.2.1969")
+    date1 = DatePart("yyyy", "1969-02-12")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 1
-    date1 = DatePart("q", "12.2.1969")
+    date1 = DatePart("q", "1969-02-12")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 43
-    date1 = DatePart("y", "12.2.1969")
+    date1 = DatePart("y", "1969-02-12")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 12
-    date1 = DatePart("d", "12.2.1969")
+    date1 = DatePart("d", "1969-02-12")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 4
-    date1 = DatePart("w", "12.2.1969")
+    date1 = DatePart("w", "1969-02-12")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 7
-    date1 = DatePart("ww", "12.2.1969")
+    date1 = DatePart("ww", "1969-02-12")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 16
-    date1 = DatePart("h", "12.2.1969 16:32:00")
+    date1 = DatePart("h", "1969-02-12 16:32:00")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 32
-    date1 = DatePart("n", "12.2.1969 16:32:00")
+    date1 = DatePart("n", "1969-02-12 16:32:00")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
     date2 = 0
-    date1 = DatePart("s", "12.2.1969 16:32:00")
+    date1 = DatePart("s", "1969-02-12 16:32:00")
     TestLog_ASSERT date1 = date2, "the return DatePart is: " & date1
 
 
