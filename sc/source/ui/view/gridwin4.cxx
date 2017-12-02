@@ -1066,7 +1066,8 @@ namespace {
     {
         long nTmp = 0; // row/col to render for nPosition
         long nLastScrPos = 0, nScrPos = 0;
-        while (nScrPos <= nPosition && nTmp < MAXROW)
+        const long nMaxIndex = bRowNotCol ? MAXROW : MAXCOL;
+        while (nScrPos <= nPosition && nTmp < nMaxIndex)
         {
             long nSize = bRowNotCol ? pDoc->GetRowHeight( nTmp, nTabNo )
                                     : pDoc->GetColWidth( nTmp, nTabNo );
