@@ -2581,9 +2581,9 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
     {
         if (rArray.GetCount(nLevel))
         {
-            // look for a group inside the [nStartRow+1, nEndRow-1] range
+            // look for a group inside the [nStartRow+1, nEndRow] range
             size_t nIndex;
-            bool bFound = rArray.GetEntryIndexInRange(nLevel, nStart + 1, nEnd - 1, nIndex);
+            bool bFound = rArray.GetEntryIndexInRange(nLevel, nStart + 1, nEnd, nIndex);
             if (bFound)
             {
                 if (nIndex > 0)
@@ -2603,8 +2603,8 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
                 bFound = rArray.GetEntryIndex(nLevel, nStart + 1, nIndex);
                 if (!bFound)
                 {
-                    // look for a group which contains nEndRow-1
-                    bFound = rArray.GetEntryIndex(nLevel, nEnd - 1, nIndex);
+                    // look for a group which contains nEndRow
+                    bFound = rArray.GetEntryIndex(nLevel, nEnd, nIndex);
                 }
             }
 
@@ -2620,7 +2620,7 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
                         bFound = true;
                         break;
                     }
-                    if (pEntry && pEntry->GetStart() > nEnd - 1)
+                    if (pEntry && pEntry->GetStart() > nEnd)
                     {
                         break;
                     }
@@ -2656,16 +2656,17 @@ void lcl_createGroupsData(
             {
                 rGroupStartPositions[nLevel] = nTotalTwips - nSizePx * TWIPS_PER_PIXEL;
             }
-            else if (nHeaderIndex > pEntry->GetStart() && (nHeaderIndex < nEnd - 1 && nHeaderIndex < pEntry->GetEnd()))
+            else if (nHeaderIndex > pEntry->GetStart() && (nHeaderIndex < nEnd && nHeaderIndex < pEntry->GetEnd()))
             {
                 // for handling group started before the current view range
                 if (rGroupStartPositions[nLevel] < 0)
                     rGroupStartPositions[nLevel] *= -TWIPS_PER_PIXEL;
                 break;
             }
-            if (nHeaderIndex == pEntry->GetEnd() || (nHeaderIndex == nEnd - 1 && rGroupStartPositions[nLevel] != -1))
+            if (nHeaderIndex == pEntry->GetEnd() || (nHeaderIndex == nEnd && rGroupStartPositions[nLevel] != -1))
             {
-                // nRow is the end row of a group or is the last row and a group started and not yet ended
+                // nHeaderIndex is the end col/row of a group or is the last col/row and a group started and not yet ended
+
                 // append a new group control data
                 if (rGroupsBuffer.endsWith("}"))
                 {
@@ -2842,7 +2843,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     aRowGroupsBuffer += "\"rowGroups\": [\n";
     std::vector<long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
     long nPrevSizePx = -1;
-    for (SCROW nRow = nStartRow + 1; nRow < nEndRow; ++nRow)
+    for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
     {
         // nSize will be 0 for hidden rows.
         const long nSizePx = lcl_GetRowHeightPx(pDoc, nRow, nTab);
@@ -2855,7 +2856,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
                     *pRowArray, aRowGroupIndexes, aRowGroupStartPositions, aRowGroupsBuffer);
         }
 
-        if (nRow < nEndRow - 1 && nSizePx == nPrevSizePx)
+        if (nRow < nEndRow && nSizePx == nPrevSizePx)
             continue;
         nPrevSizePx = nSizePx;
 
@@ -2981,7 +2982,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     aColGroupsBuffer += "\"columnGroups\": [\n";
     std::vector<long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);
     nPrevSizePx = -1;
-    for (SCCOL nCol = nStartCol + 1; nCol < nEndCol; ++nCol)
+    for (SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
     {
         // nSize will be 0 for hidden columns.
         const long nSizePx = lcl_GetColWidthPx(pDoc, nCol, nTab);
@@ -2994,7 +2995,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
                     *pColArray, aColGroupIndexes, aColGroupStartPositions, aColGroupsBuffer);
         }
 
-        if (nCol < nEndCol - 1 && nSizePx == nPrevSizePx)
+        if (nCol < nEndCol && nSizePx == nPrevSizePx)
             continue;
         nPrevSizePx = nSizePx;
 
