@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testday()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -28,7 +28,7 @@ Function verify_testday() As String
     On Error GoTo errorHandler
 
     date2 = 12
-    date1 = Day("12.2.1969") '2/12/1969
+    date1 = Day("1969-02-12") '2/12/1969
     TestLog_ASSERT date1 = date2, "the return day is: " & date1
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
