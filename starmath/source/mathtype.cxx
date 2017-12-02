@@ -564,7 +564,12 @@ bool MathType::Parse(SotStorage *pStor)
         StreamMode::STD_READ);
     if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
         return false;
-    pS = xSrc.get();
+    return Parse(xSrc.get());
+}
+
+bool MathType::Parse(SvStream* pStream)
+{
+    pS = pStream;
     pS->SetEndian( SvStreamEndian::LITTLE );
 
     EQNOLEFILEHDR aHdr;
