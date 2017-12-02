@@ -2426,7 +2426,10 @@ void SmXMLRowContext_Impl::EndElement()
             {
                 aRelationArray2.resize(nRelArrSize);
                 for (int i=0;i < nRelArrSize;i++)
+                {
                     aRelationArray2[i] = aRelationArray[i+nLeft];
+                    aRelationArray[i+nLeft] = nullptr;
+                }
             }
 
             SmToken aDummy;
@@ -2437,6 +2440,10 @@ void SmXMLRowContext_Impl::EndElement()
             pSNode->SetSubNodes(pLeft,pBody,pRight);
             pSNode->SetScaleMode(SmScaleMode::Height);
             rNodeStack.push_front(std::move(pSNode));
+
+            for (auto a : aRelationArray)
+                delete a;
+
             return;
         }
     }
