@@ -2683,9 +2683,9 @@ Label_MaskStateMachine:
         {
             SetError( FormulaError::StringOverflow );
             nLen = MAXSTRLEN-1;
-            if (mnRangeOpPosInSymbol > nLen)
-                mnRangeOpPosInSymbol = -1;
         }
+        if (mnRangeOpPosInSymbol >= nLen)
+            mnRangeOpPosInSymbol = -1;
         lcl_UnicodeStrNCpy( cSymbol, aSymbol.getStr(), nLen );
         pSym = &cSymbol[nLen];
     }
