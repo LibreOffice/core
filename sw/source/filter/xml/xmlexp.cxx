@@ -407,7 +407,7 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
     }
 }
 
-sal_Int32 SwXMLExport::GetDocumentSpecificSettings( std::list< SettingsGroup >& _out_rSettings )
+sal_Int32 SwXMLExport::GetDocumentSpecificSettings( std::vector< SettingsGroup >& _out_rSettings )
 {
     // the only doc-specific settings group we know so far are the XForms settings
     uno::Sequence<beans::PropertyValue> aXFormsSettings;

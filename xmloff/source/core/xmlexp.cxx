@@ -1077,7 +1077,7 @@ void SvXMLExport::ImplExportSettings()
 {
     CheckAttrList();
 
-    ::std::list< SettingsGroup > aSettings;
+    ::std::vector< SettingsGroup > aSettings;
     sal_Int32 nSettingsCount = 0;
 
     // view settings
@@ -1104,17 +1104,14 @@ void SvXMLExport::ImplExportSettings()
         SettingsExportFacade aSettingsExportContext( *this );
         XMLSettingsExportHelper aSettingsExportHelper( aSettingsExportContext );
 
-        for (   ::std::list< SettingsGroup >::const_iterator settings = aSettings.begin();
-                settings != aSettings.end();
-                ++settings
-            )
+        for (auto const& settings : aSettings)
         {
-            if ( !settings->aSettings.getLength() )
+            if ( !settings.aSettings.getLength() )
                 continue;
 
-            const OUString& sSettingsName( GetXMLToken( settings->eGroupName ) );
+            const OUString& sSettingsName( GetXMLToken( settings.eGroupName ) );
             OUString sQName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOO, sSettingsName );
-            aSettingsExportHelper.exportAllSettings( settings->aSettings, sQName );
+            aSettingsExportHelper.exportAllSettings( settings.aSettings, sQName );
         }
     }
 }
@@ -1824,7 +1821,7 @@ void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>&)
 {
 }
 
-sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >& )
+sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::vector< SettingsGroup >& )
 {
     return 0;
 }
