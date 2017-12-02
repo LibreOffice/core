@@ -223,7 +223,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
     ScDocument* pDoc = GetScImport().GetDocument();
 
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
-    ScConditionalFormat* pFormat = mxFormat.release();
+    std::unique_ptr<ScConditionalFormat> pFormat(std::move(mxFormat));
 
     bool bEligibleForCache = true;
     bool bSingleRelativeReference = false;
@@ -337,17 +337,17 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
                 nIndexOfOldest = (&aCacheEntry - &mrParent.maCache.front());
             }
         }
-        mrParent.maCache[nIndexOfOldest].mpFormat = pFormat;
+        mrParent.maCache[nIndexOfOldest].mpFormat = pFormat.get();
         mrParent.maCache[nIndexOfOldest].mbSingleRelativeReference = bSingleRelativeReference;
         mrParent.maCache[nIndexOfOldest].mpTokens.reset(pTokens);
         mrParent.maCache[nIndexOfOldest].mnAge = 0;
     }
 
-    sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
+    sal_uLong nIndex = pDoc->AddCondFormat(pFormat.get(), nTab);
     (void) nIndex; // Avoid 'unused variable' warning when assert() expands to empty
     assert(pFormat->GetKey() == nIndex);
 
-    mrParent.mvCondFormatData.push_back( { pFormat, nTab } );
+    mrParent.mvCondFormatData.push_back( { pFormat.release(), nTab } );
 }
 
 ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()
