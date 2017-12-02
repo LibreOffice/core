@@ -48,7 +48,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/extract.hxx>
 
-#include <list>
+#include <vector>
 #include <typeinfo>
 #include <algorithm>
 
@@ -3237,7 +3237,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     if( xDiagram.is())
         xColorScheme.set( xDiagram->getDefaultColorScheme());
 
-    ::std::list< SchXMLDataPointStruct > aDataPointList;
+    ::std::vector< SchXMLDataPointStruct > aDataPointVector;
 
     sal_Int32 nLastIndex = -1;
     sal_Int32 nCurrIndex = 0;
@@ -3294,7 +3294,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         SchXMLDataPointStruct aPoint;
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
                         maAutoStyleNameQueue.pop();
-                        aDataPointList.push_back( aPoint );
+                        aDataPointVector.push_back( aPoint );
                     }
                     else
                     {
@@ -3303,7 +3303,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 }
             }
         }
-        SAL_WARN_IF( bExportContent && (static_cast<sal_Int32>(aDataPointList.size()) != nSeriesLength), "xmloff.chart", "not enough data points on content export" );
+        SAL_WARN_IF( bExportContent && (static_cast<sal_Int32>(aDataPointVector.size()) != nSeriesLength), "xmloff.chart", "not enough data points on content export" );
     }
     else
     {
@@ -3321,7 +3321,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             {
                 SchXMLDataPointStruct aPoint;
                 aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
-                aDataPointList.push_back( aPoint );
+                aDataPointVector.push_back( aPoint );
             }
 
             uno::Reference< beans::XPropertySet > xPropSet;
@@ -3355,7 +3355,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
                         maAutoStyleNameQueue.pop();
 
-                        aDataPointList.push_back( aPoint );
+                        aDataPointVector.push_back( aPoint );
                         nLastIndex = nCurrIndex;
                     }
                     else
@@ -3368,7 +3368,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
             // if we get here the property states are empty
             SchXMLDataPointStruct aPoint;
-            aDataPointList.push_back( aPoint );
+            aDataPointVector.push_back( aPoint );
 
             nLastIndex = nCurrIndex;
         }
@@ -3378,7 +3378,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         {
             SchXMLDataPointStruct aPoint;
             aPoint.mnRepeat = nRepeat;
-            aDataPointList.push_back( aPoint );
+            aDataPointVector.push_back( aPoint );
         }
     }
 
@@ -3386,7 +3386,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         return;
 
     // write elements (merge equal ones)
-    ::std::list< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
+    ::std::vector< SchXMLDataPointStruct >::iterator aIter = aDataPointVector.begin();
     SchXMLDataPointStruct aPoint;
     SchXMLDataPointStruct aLastPoint;
 
@@ -3394,7 +3394,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // the element is counted in the first iteration
     aLastPoint.mnRepeat = 0;
 
-    for( ; aIter != aDataPointList.end(); ++aIter )
+    for( ; aIter != aDataPointVector.end(); ++aIter )
     {
         aPoint = (*aIter);
 
