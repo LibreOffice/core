@@ -3336,4 +3336,11 @@ void MathType::HandleText(SmNode *pNode)
     }
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportMathType(SvStream &rStream)
+{
+    OUString sText;
+    MathType aEquation(sText);
+    return aEquation.Parse(&rStream);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
