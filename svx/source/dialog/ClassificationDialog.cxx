@@ -180,7 +180,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     get(m_pClassificationListBox, "classificationCB");
     get(m_pInternationalClassificationListBox, "internationalClassificationCB");
     get(m_pMarkingLabel, "markingLabel");
-    get(m_pMarkingListBox, "markingCB");
+    get(m_pMarkingListBox, "markingLB");
     get(m_pIntellectualPropertyPartNumberListBox, "intellectualPropertyPartNumberLB");
     get(m_pIntellectualPropertyPartListBox, "intellectualPropertyPartLB");
     get(m_pIntellectualPropertyPartAddButton, "intellectualPropertyPartAddButton");
@@ -190,7 +190,15 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     m_pSignButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
     m_pSignButton->Show(m_bPerParagraph);
 
-    m_pToolBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectToolboxHdl));
+    // no need for BOLD if we do paragraph classification
+    if (m_bPerParagraph)
+    {
+        m_pToolBox->Show(false);
+    }
+    else
+    {
+        m_pToolBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectToolboxHdl));
+    }
 
     m_pIntellectualPropertyPartAddButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
 
@@ -206,9 +214,9 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
 
     if (!maHelper.GetMarkings().empty())
     {
-        m_pMarkingListBox->setMaxWidthChars(20);
-        m_pMarkingListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectMarkingHdl));
-        m_pMarkingListBox->SetLoseFocusHdl(LINK(this, ClassificationDialog, LoseFocusMarkingHdl));
+        m_pMarkingListBox->setMaxWidthChars(10);
+        m_pMarkingListBox->SetDropDownLineCount(4);
+        m_pMarkingListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectMarkingHdl));
 
         for (const OUString& rName : maHelper.GetMarkings())
             m_pMarkingListBox->InsertEntry(rName);
@@ -220,7 +228,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     }
 
     m_pIntellectualPropertyPartNumberListBox->SetDropDownLineCount(5);
-    m_pIntellectualPropertyPartNumberListBox->setMaxWidthChars(20);
+    m_pIntellectualPropertyPartNumberListBox->setMaxWidthChars(10);
     m_pIntellectualPropertyPartNumberListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyPartNumbers())
         m_pIntellectualPropertyPartNumberListBox->InsertEntry(rName);
@@ -621,22 +629,13 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
     m_nCurrentSelectedCategory = nSelected;
 }
 
-IMPL_LINK_NOARG(ClassificationDialog, LoseFocusMarkingHdl, Control&, void)
-{
-    if (m_nInsertMarkings >= 0)
-    {
-        const OUString aString = maHelper.GetMarkings()[m_nInsertMarkings];
-        insertField(ClassificationType::MARKING, aString, aString);
-        m_nInsertMarkings = -1;
-    }
-}
-
 IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
 {
     sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
-        m_nInsertMarkings = nSelected;
+        const OUString aString = maHelper.GetMarkings()[nSelected];
+        insertField(ClassificationType::MARKING, aString, aString);
     }
 }
 
