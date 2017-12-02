@@ -38,6 +38,7 @@ SET CFG_OPT=%CFG_OPT% --with-ant-home=%MY_ANT_HOME% --without-junit
 SET CFG_OPT=%CFG_OPT% --with-system-apr --with-system-apr-util --with-system-serf
 SET CFG_OPT=%CFG_OPT% --enable-bundled-dictionaries --enable-category-b --with-system-nss
 SET CFG_OPT=%CFG_OPT% --disable-unit-tests
+SET CFG_OPT=%CFG_OPT% --disable-online-update
 SET CFG_OPT=%CFG_OPT% --with-lang="de es fr it nl ru"
 
 sh ./configure %CFG_OPT% | tee configure.log
