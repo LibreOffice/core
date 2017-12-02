@@ -32,7 +32,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <list>
+#include <vector>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -52,8 +52,8 @@ using namespace ::xmloff::token;
 
 class XMLMyList
 {
-    std::list<beans::PropertyValue> aProps;
-    sal_uInt32                      nCount;
+    std::vector<beans::PropertyValue> aProps;
+    sal_uInt32                        nCount;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
@@ -81,12 +81,10 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
         assert(nCount == aProps.size());
         aSeq.realloc(nCount);
         beans::PropertyValue* pProps = aSeq.getArray();
-        std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
-        while (aItr != aProps.end())
+        for (auto const& prop : aProps)
         {
-            *pProps = *aItr;
+            *pProps = prop;
             ++pProps;
-            ++aItr;
         }
     }
     return aSeq;
@@ -95,11 +93,9 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
 uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 {
     uno::Reference<container::XNameContainer> xNameContainer = document::NamedPropertyValues::create(m_xContext);
-    std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
-    while (aItr != aProps.end())
+    for (auto const& prop : aProps)
     {
-        xNameContainer->insertByName(aItr->Name, aItr->Value);
-        ++aItr;
+        xNameContainer->insertByName(prop.Name, prop.Value);
     }
 
     return xNameContainer;
@@ -108,12 +104,10 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer = document::IndexedPropertyValues::create(m_xContext);
-    std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
     sal_uInt32 i(0);
-    while (aItr != aProps.end())
+    for (auto const& prop : aProps)
     {
-        xIndexContainer->insertByIndex(i, aItr->Value);
-        ++aItr;
+        xIndexContainer->insertByIndex(i, prop.Value);
         ++i;
     }
 
@@ -273,7 +267,7 @@ struct XMLDocumentSettingsContext_Data
 {
     css::uno::Any                   aViewProps;
     css::uno::Any                   aConfigProps;
-    ::std::list< SettingsGroup >    aDocSpecificSettings;
+    ::std::vector< SettingsGroup >  aDocSpecificSettings;
 };
 
 XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -335,12 +329,9 @@ SvXMLImportContextRef XMLDocumentSettingsContext::CreateChildContext( sal_uInt16
                 {
                     m_pData->aDocSpecificSettings.emplace_back( aLocalConfigName, uno::Any() );
 
-                    ::std::list< SettingsGroup >::reverse_iterator settingsPos =
-                        m_pData->aDocSpecificSettings.rbegin();
-
                     pContext = new XMLConfigItemSetContext(GetImport(),
                                         p_nPrefix, rLocalName, xAttrList,
-                                        settingsPos->aSettings, nullptr);
+                                        m_pData->aDocSpecificSettings.back().aSettings, nullptr);
                 }
             }
         }
@@ -409,14 +400,11 @@ void XMLDocumentSettingsContext::EndElement()
         GetImport().SetConfigurationSettings( aSeqConfigProps );
     }
 
-    for (   ::std::list< SettingsGroup >::const_iterator settings = m_pData->aDocSpecificSettings.begin();
-            settings != m_pData->aDocSpecificSettings.end();
-            ++settings
-        )
+    for (auto const& settings : m_pData->aDocSpecificSettings)
     {
         uno::Sequence< beans::PropertyValue > aDocSettings;
-        OSL_VERIFY( settings->aSettings >>= aDocSettings );
-        GetImport().SetDocumentSpecificSettings( settings->sGroupName, aDocSettings );
+        OSL_VERIFY( settings.aSettings >>= aDocSettings );
+        GetImport().SetDocumentSpecificSettings( settings.sGroupName, aDocSettings );
     }
 }
 
