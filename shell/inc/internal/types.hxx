@@ -29,8 +29,13 @@
 #include <utility>
 #include <vector>
 #include <stack>
+#ifdef OS2
+#include <zlib.h>
+#include <minizip/ioapi.h>
+#else
 #include <external/zlib/zlib.h>
 #include <external/zlib/ioapi.h>
+#endif
 
 
 typedef std::vector<std::wstring> StringList_t;

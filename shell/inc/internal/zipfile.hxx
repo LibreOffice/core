@@ -29,7 +29,11 @@
 #endif
 
 
+#ifdef OS2
+#include <minizip/unzip.h>
+#else
 #include <external/zlib/unzip.h>
+#endif
 
 
 #include <string>

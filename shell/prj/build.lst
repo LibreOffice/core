@@ -13,7 +13,9 @@ sl    shell\source\unix\sysshell                   nmake   -   u   sl_unix_syssh
 sl    shell\source\tools\lngconvex                 nmake   -   w   sl_win32_lngconv sl_inc NULL
 sl    shell\source\tools\regsvrex                  nmake   -   w   sl_win32_regsvrex  sl_inc NULL
 sl    shell\source\all\zipfile                     nmake   -   w   sl_all_zipfile  sl_inc NULL
+sl    shell\source\all\zipfile                     nmake   -   p   sl_all_zipfile  sl_inc NULL
 sl    shell\source\all\ooofilereader               nmake   -   w   sl_all_ooofilereader sl_all_zipfile.w sl_all sl_inc NULL
+sl    shell\source\all\ooofilereader               nmake   -   p   sl_all_ooofilereader sl_all_zipfile.p sl_all sl_inc NULL
 sl    shell\source\win32\shlxthandler\res          nmake   -   w   sl_win32_shlxthandler_res sl_win32_lngconv.w sl_inc NULL
 sl    shell\source\win32\shlxthandler\util         nmake   -   w   sl_win32_shlxthandler_util  sl_inc NULL
 sl    shell\source\win32\shlxthandler\propsheets   nmake   -   w   sl_win32_shlxthandler_propsheets  sl_inc NULL
