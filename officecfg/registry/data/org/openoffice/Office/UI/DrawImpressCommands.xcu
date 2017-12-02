@@ -500,14 +500,38 @@
           <value xml:lang="en-US">~Page Number</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertSlideField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Slide Number</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:InsertPageField</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertPageTitleField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page Tit~le</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertSlideTitleField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Tit~le</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:InsertPageTitleField</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertPagesField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page ~Count</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertSlidesField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Slide ~Count</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:InsertPagesField</value>
         </prop>
       </node>
       <node oor:name=".uno:ModifyField" oor:op="replace">
@@ -1627,6 +1651,14 @@
       <node oor:name=".uno:InsertPageNumber" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">P~age Number...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertSlideNumber" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">S~lide Number...</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:InsertPageNumber</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertDateAndTime" oor:op="replace">

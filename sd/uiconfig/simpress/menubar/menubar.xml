@@ -241,7 +241,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:InsertPageNumber"/>
+            <menu:menuitem menu:id=".uno:InsertSlideNumber"/>
             <menu:menu menu:id=".uno:FieldMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertDateFieldFix"/>
@@ -250,9 +250,9 @@
                     <menu:menuitem menu:id=".uno:InsertTimeFieldVar"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:InsertAuthorField"/>
-                    <menu:menuitem menu:id=".uno:InsertPageField"/>
-                    <menu:menuitem menu:id=".uno:InsertPageTitleField"/>
-                    <menu:menuitem menu:id=".uno:InsertPagesField"/>
+                    <menu:menuitem menu:id=".uno:InsertSlideField"/>
+                    <menu:menuitem menu:id=".uno:InsertSlideTitleField"/>
+                    <menu:menuitem menu:id=".uno:InsertSlidesField"/>
                     <menu:menuitem menu:id=".uno:InsertFileField"/>
                 </menu:menupopup>
             </menu:menu>
