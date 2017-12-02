@@ -97,7 +97,8 @@ public:
         Init();
     }
 
-    bool Parse( SotStorage* pStor );
+    bool Parse(SotStorage* pStor);
+    bool Parse(SvStream* pStor);
     bool ConvertFromStarMath( SfxMedium& rMedium );
 
 private:
