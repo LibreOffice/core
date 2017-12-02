@@ -530,11 +530,15 @@ void ZipPackage::getZipFileContents()
         {
             nStreamIndex++;
             sTemp = rName.copy( nStreamIndex );
-            ZipPackageStream *pPkgStream = new ZipPackageStream(*this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
-            pPkgStream->SetPackageMember( true );
-            pPkgStream->setZipEntryOnLoading( rEntry );
-            pPkgStream->setName( sTemp );
-            pPkgStream->doSetParent( pCurrent );
+
+            if (!pCurrent->hasByName(sTemp))
+            {
+                ZipPackageStream *pPkgStream = new ZipPackageStream(*this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
+                pPkgStream->SetPackageMember(true);
+                pPkgStream->setZipEntryOnLoading(rEntry);
+                pPkgStream->setName(sTemp);
+                pPkgStream->doSetParent(pCurrent);
+            }
         }
     }
 
