@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2c89d8c9",
+        "filename": "vcl/source/gdi/print2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-03T17:02:55Z",
+      "side": 1,
+      "message": "unnecessary parentheses",
+      "revId": "6d2d3780198545b6f4877d3638315461385d46f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
