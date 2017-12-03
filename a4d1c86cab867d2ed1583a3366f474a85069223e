@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6c8f60cc",
+        "filename": "xmloff/source/style/xmlexppr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-03T17:05:17Z",
+      "side": 1,
+      "message": "this means we should be using a \n  std::map\u003cx, std::unique_ptr\u003cy\u003e\u003e\nhere, but that can go in a separate commit",
+      "revId": "a4d1c86cab867d2ed1583a3366f474a85069223e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
