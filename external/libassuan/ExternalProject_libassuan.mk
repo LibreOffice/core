@@ -20,22 +20,23 @@ $(eval $(call gb_ExternalProject_use_externals,libassuan,\
 ))
 
 ifeq ($(COM),MSC)
+gb_ExternalProject_libassuan_host := $(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32)
+gb_ExternalProject_libassuan_target := $(if $(filter INTEL,$(CPUNAME)),pe-i386,pe-x86-64)
 $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executable_get_target,cpp)
 	$(call gb_ExternalProject_run,build,\
-		autoreconf \
-		&& ./configure \
+	  autoreconf \
+	  && ./configure \
 		--enable-static \
 		--disable-shared \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		CXXFLAGS="$(CXXFLAGS)" \
 		GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
-		--host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+		--host=$(gb_ExternalProject_libgpg-error_host) \
+		RC='windres -O COFF --target=$(gb_ExternalProject_libgpg-error_target) --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\' \
 		MAKE=$(MAKE) \
-		RC='windres --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC) -I$(ATL_INCLUDE)'\' \
 	  && $(MAKE) \
 	)
-
 else
 $(call gb_ExternalProject_get_state_target,libassuan,build):
 	$(call gb_ExternalProject_run,build,\
