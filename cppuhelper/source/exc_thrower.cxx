@@ -192,12 +192,14 @@ void SAL_CALL throwException( Any const & exc )
             "cannot get binary UNO to C++ mapping!" );
     }
 
-    Reference< XExceptionThrower > xThrower;
+    Reference<XInterface> xProxy;
     uno2cpp.mapInterface(
-        reinterpret_cast< void ** >( &xThrower ),
+        reinterpret_cast< void ** >( &xProxy ),
         static_cast< uno_Interface * >( &theExceptionThrower::get() ),
         ExceptionThrower::getCppuType() );
-    OSL_ASSERT( xThrower.is() );
+
+    Reference<XExceptionThrower> xThrower(xProxy, css::uno::UNO_QUERY);
+    assert(xThrower.is());
     xThrower->throwException( exc );
 }
 
