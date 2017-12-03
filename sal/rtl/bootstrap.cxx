@@ -37,7 +37,7 @@
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
 
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <unordered_map>
 
@@ -129,14 +129,14 @@ struct rtl_bootstrap_NameValue
         {}
 };
 
-typedef std::list<rtl_bootstrap_NameValue> NameValueList;
+typedef std::vector<rtl_bootstrap_NameValue> NameValueVector;
 
 bool find(
-    NameValueList const & list, rtl::OUString const & key,
+    NameValueVector const & vector, rtl::OUString const & key,
     rtl::OUString * value)
 {
     OSL_ASSERT(value);
-    for (NameValueList::const_iterator i(list.begin()); i != list.end(); ++i)
+    for (NameValueVector::const_iterator i(vector.begin()); i != vector.end(); ++i)
     {
         if (i->sName == key)
         {
@@ -149,8 +149,8 @@ bool find(
 
 namespace
 {
-    struct rtl_bootstrap_set_list :
-        public rtl::Static< NameValueList, rtl_bootstrap_set_list > {};
+    struct rtl_bootstrap_set_vector :
+        public rtl::Static< NameValueVector, rtl_bootstrap_set_vector > {};
 }
 
 static bool getFromCommandLineArgs(
@@ -158,10 +158,10 @@ static bool getFromCommandLineArgs(
 {
     OSL_ASSERT(value);
 
-    static NameValueList *pNameValueList = nullptr;
-    if (!pNameValueList)
+    static NameValueVector *pNameValueVector = nullptr;
+    if (!pNameValueVector)
     {
-        static NameValueList nameValueList;
+        static NameValueVector nameValueVector;
 
         sal_Int32 nArgCount = osl_getCommandArgCount();
         for(sal_Int32 i = 0; i < nArgCount; ++ i)
@@ -192,18 +192,18 @@ static bool getFromCommandLineArgs(
                         nameValue.sValue = nameValue.sValue.copy(0,nameValue.sValue.getLength()-1);
                     }
 
-                    nameValueList.push_back( nameValue );
+                    nameValueVector.push_back( nameValue );
                 }
             }
             rtl_uString_release( pArg );
         }
-        pNameValueList = &nameValueList;
+        pNameValueVector = &nameValueVector;
     }
 
     bool found = false;
 
-    for(NameValueList::iterator ii = pNameValueList->begin();
-        ii != pNameValueList->end();
+    for(NameValueVector::iterator ii = pNameValueVector->begin();
+        ii != pNameValueVector->end();
         ++ii)
     {
         if ((*ii).sName == key)
@@ -312,7 +312,7 @@ struct Bootstrap_Impl
     sal_Int32 _nRefCount;
     Bootstrap_Impl * _base_ini;
 
-    NameValueList _nameValueList;
+    NameValueVector _nameValueVector;
     OUString      _iniName;
 
     explicit Bootstrap_Impl (OUString const & rIniName);
@@ -377,7 +377,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 
                 SAL_INFO("sal.bootstrap", "pushing: name=" << nameValue.sName << " value=" << nameValue.sValue);
 
-                _nameValueList.push_back(nameValue);
+                _nameValueVector.push_back(nameValue);
             }
         }
         osl_closeFile(handle);
@@ -561,7 +561,7 @@ bool Bootstrap_Impl::getDirectValue(
     ExpandRequestLink const * requestStack) const
 {
     rtl::OUString v;
-    if (find(_nameValueList, key, &v))
+    if (find(_nameValueVector, key, &v))
     {
         expandValue(value, v, mode, this, key, requestStack);
         return true;
@@ -579,7 +579,7 @@ bool Bootstrap_Impl::getAmbienceValue(
 
     {
         osl::MutexGuard g(osl::Mutex::getGlobalMutex());
-        f = find(rtl_bootstrap_set_list::get(), key, &v);
+        f = find(rtl_bootstrap_set_vector::get(), key, &v);
     }
 
     if (f || getFromCommandLineArgs(key, &v) ||
@@ -793,21 +793,19 @@ void SAL_CALL rtl_bootstrap_set (
 
     osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
 
-    NameValueList& r_rtl_bootstrap_set_list = rtl_bootstrap_set_list::get();
-    NameValueList::iterator iPos(r_rtl_bootstrap_set_list.begin());
-    NameValueList::iterator iEnd(r_rtl_bootstrap_set_list.end());
-    for (; iPos != iEnd; ++iPos)
+    NameValueVector& r_rtl_bootstrap_set_vector= rtl_bootstrap_set_vector::get();
+    for (auto & item : r_rtl_bootstrap_set_vector)
     {
-        if (iPos->sName == name)
+        if (item.sName == name)
         {
-            iPos->sValue = value;
+            item.sValue = value;
             return;
         }
     }
 
     SAL_INFO("sal.bootstrap", "explicitly getting: name=" << name << " value=" <<value);
 
-    r_rtl_bootstrap_set_list.push_back(rtl_bootstrap_NameValue(name, value));
+    r_rtl_bootstrap_set_vector.emplace_back(name, value);
 }
 
 void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
