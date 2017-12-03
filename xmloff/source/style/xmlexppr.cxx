@@ -258,10 +258,12 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         // construct sequence
         pApiNames.reset( new Sequence < OUString >( nCount ) );
         OUString *pNames = pApiNames->getArray();
-        FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-        FilterPropertyInfoList_Impl::iterator aEnd = aPropInfos.end();
-        for ( ; aItr != aEnd; ++aItr, ++pNames)
-            *pNames = aItr->GetApiName();
+
+        for (auto const& propInfo : aPropInfos)
+        {
+            *pNames = propInfo.GetApiName();
+            ++pNames;
+        }
     }
 
     return *pApiNames;
@@ -297,11 +299,9 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         aNewProperty.mnIndex = -1;
                         aNewProperty.maValue = pResults->Value;
 
-                        for( std::list<sal_uInt32>::iterator aIndexItr(aPropIter->GetIndexes().begin());
-                            aIndexItr != aPropIter->GetIndexes().end();
-                            ++aIndexItr )
+                        for (auto const& index : aPropIter->GetIndexes())
                         {
-                            aNewProperty.mnIndex = *aIndexItr;
+                            aNewProperty.mnIndex = index;
                             aPropStates.AddPropertyState( aNewProperty );
                         }
                         ++pResults;
@@ -329,11 +329,9 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     aNewProperty.mnIndex = -1;
                     aNewProperty.maValue = pResults->Value;
 
-                    for( std::list<sal_uInt32>::iterator aIndexItr(aPropIter->GetIndexes().begin());
-                        aIndexItr != aPropIter->GetIndexes().end();
-                        ++aIndexItr )
+                    for (auto const& index : aPropIter->GetIndexes())
                     {
-                        aNewProperty.mnIndex = *aIndexItr;
+                        aNewProperty.mnIndex = index;
                         aPropStates.AddPropertyState( aNewProperty );
                     }
                 }
@@ -407,13 +405,9 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         aNewProperty.mnIndex = -1;
                         aNewProperty.maValue = *pValues;
 
-                        const ::std::list< sal_uInt32 >& rIndexes( (*pPropIter)->GetIndexes() );
-                        for (   std::list<sal_uInt32>::const_iterator aIndexItr = rIndexes.begin();
-                                aIndexItr != rIndexes.end();
-                                ++aIndexItr
-                            )
+                        for (auto const& index : (*pPropIter)->GetIndexes())
                         {
-                            aNewProperty.mnIndex = *aIndexItr;
+                            aNewProperty.mnIndex = index;
                             aPropStates.AddPropertyState( aNewProperty );
                         }
 
@@ -434,12 +428,9 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     XMLPropertyState aNewProperty( -1 );
                     aNewProperty.maValue = *pValues;
                     ++pValues;
-                    for( std::list<sal_uInt32>::iterator aIndexItr =
-                            aItr->GetIndexes().begin();
-                        aIndexItr != aItr->GetIndexes().end();
-                        ++aIndexItr )
+                    for (auto const& index : aItr->GetIndexes())
                     {
-                        aNewProperty.mnIndex = *aIndexItr;
+                        aNewProperty.mnIndex = index;
                         aPropStates.AddPropertyState( aNewProperty );
                     }
                     ++aItr;
@@ -458,13 +449,10 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     // The value is stored in the PropertySet itself, add to list.
                     bool bGotValue = false;
                     XMLPropertyState aNewProperty( -1 );
-                    for( std::list<sal_uInt32>::const_iterator aIndexItr =
-                            aItr->GetIndexes().begin();
-                        aIndexItr != aItr->GetIndexes().end();
-                        ++aIndexItr )
+                    for (auto const& index : aItr->GetIndexes())
                     {
                         if( bDirectValue ||
-                            (rPropMapper->GetEntryFlags( *aIndexItr ) &
+                            (rPropMapper->GetEntryFlags(index) &
                                             MID_FLAG_DEFAULT_ITEM_EXPORT) != 0 )
                         {
                             try
@@ -475,7 +463,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                                         rPropSet->getPropertyValue( aItr->GetApiName() );
                                     bGotValue = true;
                                 }
-                                aNewProperty.mnIndex = *aIndexItr;
+                                aNewProperty.mnIndex = index;
                                 aPropStates.AddPropertyState( aNewProperty );
                             }
                             catch( UnknownPropertyException& )
@@ -511,9 +499,8 @@ struct SvXMLExportPropertyMapper::Impl
 
     ~Impl()
     {
-        CacheType::iterator it = maCache.begin(), itEnd = maCache.end();
-        for (; it != itEnd; ++it)
-            delete it->second;
+        for (auto const& itemCache : maCache)
+            delete itemCache.second;
     }
 };
 
