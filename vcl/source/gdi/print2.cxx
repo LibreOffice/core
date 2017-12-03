@@ -1075,29 +1075,23 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         ::std::vector< const ConnectedComponents* > aCCList_MemberMap( rInMtf.GetActionSize() );
 
         // iterate over all aCCList members and their contained metaactions
-        ConnectedComponentsList::iterator       aCurr( aCCList.begin() );
-        const ConnectedComponentsList::iterator aLast( aCCList.end() );
-        for( ; aCurr != aLast; ++aCurr )
+        for (auto const& currentItem : aCCList)
         {
-            ComponentList::iterator       aCurrentAction( aCurr->aComponentList.begin() );
-            const ComponentList::iterator aLastAction( aCurr->aComponentList.end() );
-            for( ; aCurrentAction != aLastAction; ++aCurrentAction )
+            for (auto const& currentAction : currentItem.aComponentList)
             {
                 // set pointer to aCCList element for corresponding index
-                aCCList_MemberMap[ aCurrentAction->second ] = &(*aCurr);
+                aCCList_MemberMap[ currentAction.second ] = &currentItem;
             }
         }
 
         //  STAGE 3.1: Output background mtf actions (if there are any)
 
-        ComponentList::iterator       aCurrAct( aBackgroundComponent.aComponentList.begin() );
-        const ComponentList::iterator aLastAct( aBackgroundComponent.aComponentList.end() );
-        for( ; aCurrAct != aLastAct; ++aCurrAct )
+        for (auto & component : aBackgroundComponent.aComponentList)
         {
             // simply add this action (above, we inserted the actions
             // starting at index 0 up to and including nLastBgAction)
-            aCurrAct->first->Duplicate();
-            rOutMtf.AddAction( aCurrAct->first );
+            component.first->Duplicate();
+            rOutMtf.AddAction( component.first );
         }
 
         //  STAGE 3.2: Generate banded bitmaps for special regions
@@ -1123,11 +1117,11 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         bool bTiling = dynamic_cast<Printer*>(this) != nullptr;
 
         // iterate over all aCCList members and generate bitmaps for the special ones
-        for( aCurr = aCCList.begin(); aCurr != aLast; ++aCurr )
+        for (auto & currentItem : aCCList)
         {
-            if( aCurr->bIsSpecial )
+            if( currentItem.bIsSpecial )
             {
-                tools::Rectangle aBoundRect( aCurr->aBounds );
+                tools::Rectangle aBoundRect( currentItem.aBounds );
                 aBoundRect.Intersection( aOutputRect );
 
                 const double fBmpArea( (double) aBoundRect.GetWidth() * aBoundRect.GetHeight() );
@@ -1139,7 +1133,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     // output normally. Therefore, we simply clear the
                     // special attribute, as everything non-special is
                     // copied to rOutMtf further below.
-                    aCurr->bIsSpecial = false;
+                    currentItem.bIsSpecial = false;
                 }
                 else
                 {
@@ -1192,8 +1186,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                         // enable output only for
                                         // actions that are members of
                                         // the current aCCList element
-                                        // (aCurr)
-                                        if( aCCList_MemberMap[nActionNum] == &(*aCurr) )
+                                        // (currentItem)
+                                        if( aCCList_MemberMap[nActionNum] == &currentItem )
                                             aPaintVDev->EnableOutput();
 
                                         // but process every action
