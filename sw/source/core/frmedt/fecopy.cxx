@@ -727,7 +727,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
     if( pClpDoc->IsColumnSelection() && !IsTableMode() )
     {
         // Creation of the list of insert positions
-        std::list< Insertion > aCopyList;
+        std::vector< Insertion > aCopyVector;
         // The number of text portions of the rectangular selection
         const sal_uInt32 nSelCount = aCpyPam.GetPoint()->nNode.GetIndex()
                        - aCpyPam.GetMark()->nNode.GetIndex();
@@ -786,7 +786,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                 else
                     aInsertion.first->GetPoint()->nContent =
                         aInsertion.first->GetContentNode()->Len();
-                aCopyList.push_back( aInsertion );
+                aCopyVector.push_back( aInsertion );
             }
             // If there are no text portions left but there are some more
             // cursor positions to fill we have to restart with the first
@@ -797,12 +797,10 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                 aIdx = aClpIdx; // Start of clipboard content
             }
         }
-        std::list< Insertion >::const_iterator pCurr = aCopyList.begin();
-        std::list< Insertion >::const_iterator pEnd = aCopyList.end();
-        while( pCurr != pEnd )
+        for (auto const& item : aCopyVector)
         {
-            SwPosition& rInsPos = *pCurr->second;
-            SwPaM& rCopy = *pCurr->first;
+            SwPosition& rInsPos = *item.second;
+            SwPaM& rCopy = *item.first;
             const SwStartNode* pBoxNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
             if( pBoxNd && 2 == pBoxNd->EndOfSectionIndex() - pBoxNd->GetIndex() &&
                 rCopy.GetPoint()->nNode != rCopy.GetMark()->nNode )
@@ -823,7 +821,6 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                 }
             }
             SaveTableBoxContent( &rInsPos );
-            ++pCurr;
         }
     }
     else
