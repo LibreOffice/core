@@ -284,7 +284,7 @@ bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW nCellY, 
     sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( nCellX, nCellY, nTab, nCurrentNumberFormat);
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-    return pNumberFormatter->GetType( nCurrentNumberFormat ) == css::util::NumberFormat::TEXT;
+    return pNumberFormatter->GetType( nCurrentNumberFormat ) == SvNumFormatType::TEXT;
 }
 
 void ScDrawStringsVars::SetPattern(

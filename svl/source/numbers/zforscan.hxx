@@ -168,7 +168,7 @@ public:
     SvNumberFormatter* GetNumberformatter() { return pFormatter; } // Access to formatter (for zformat.cxx)
 
     /// Get type scanned (so far).
-    short GetScannedType() const { return eScannedType; }
+    SvNumFormatType GetScannedType() const { return eScannedType; }
 
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
@@ -186,7 +186,7 @@ private: // Private section
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array of infos
                                                 // External Infos:
     sal_uInt16 nResultStringsCnt;               // Result symbol count
-    short eScannedType;                         // Type according to scan
+    SvNumFormatType eScannedType;               // Type according to scan
     bool bThousand;                             // With thousands marker
     sal_uInt16 nThousand;                       // Counts .... series
     sal_uInt16 nCntPre;                         // Counts digits of integral part

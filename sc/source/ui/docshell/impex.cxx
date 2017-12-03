@@ -955,7 +955,7 @@ static bool lcl_PutString(
         if (pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
         {
             // Set the format of this cell to Text.
-            sal_uInt32 nFormat = pFormatter->GetStandardFormat(css::util::NumberFormat::TEXT);
+            sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TEXT);
             ScPatternAttr aNewAttrs(pDoc->GetPool());
             SfxItemSet& rSet = aNewAttrs.GetItemSet();
             rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
@@ -1177,7 +1177,7 @@ static bool lcl_PutString(
                     pDoc->GetLanguage( eLatin, eCjk, eCtl );
                     LanguageType eDocLang = eLatin;     //! which language for date formats?
 
-                    short nType = (nFound > 3 ? css::util::NumberFormat::DATETIME : css::util::NumberFormat::DATE);
+                    SvNumFormatType nType = (nFound > 3 ? SvNumFormatType::DATETIME : SvNumFormatType::DATE);
                     sal_uLong nFormat = pDocFormatter->GetStandardFormat( nType, eDocLang );
                     // maybe there is a special format including seconds or milliseconds
                     if (nFound > 5)
@@ -1987,7 +1987,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     // get rid of Xcl escape characters
                     aCode = aCode.replaceAll("\x1b", "");
                     sal_Int32 nCheckPos;
-                    short nType;
+                    SvNumFormatType nType;
                     sal_uInt32 nKey;
                     pDoc->GetFormatTable()->PutandConvertEntry( aCode, nCheckPos, nType, nKey,
                                                                 LANGUAGE_ENGLISH_US, ScGlobal::eLnge );

@@ -52,6 +52,7 @@ namespace com { namespace sun { namespace star {
 
 class CharClass;
 enum class FormulaError : sal_uInt16;
+enum class SvNumFormatType : sal_Int16;
 
 namespace formula
 {
@@ -236,7 +237,7 @@ public:
     static sal_Unicode      GetNativeSymbolChar( OpCode eOp );
     static  bool            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
 
-    short GetNumFormatType() const { return nNumFmt; }
+    SvNumFormatType GetNumFormatType() const { return nNumFmt; }
     bool  CompileTokenArray();
 
     void CreateStringFromTokenArray( OUString& rFormula );
@@ -340,7 +341,7 @@ protected:
 
     OpCode              eLastOp;
     short               nRecursion;             // GetToken() recursions
-    short               nNumFmt;                // set during CompileTokenArray()
+    SvNumFormatType     nNumFmt;                // set during CompileTokenArray()
     sal_uInt16          pc;                     // program counter
 
     FormulaGrammar::Grammar meGrammar;          // The grammar used, language plus convention.

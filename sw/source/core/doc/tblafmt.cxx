@@ -877,7 +877,7 @@ void SwTableAutoFormat::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             rChg.GetValueFormat( sFormat, eLng, eSys );
             if( !sFormat.isEmpty() )
             {
-                short nType;
+                SvNumFormatType nType;
                 bool bNew;
                 sal_Int32 nCheckPos;
                 sal_uInt32 nKey = pNFormatr->GetIndexPuttingAndConverting( sFormat, eLng,

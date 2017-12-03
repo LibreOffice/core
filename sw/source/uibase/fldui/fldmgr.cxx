@@ -1823,25 +1823,25 @@ void SwFieldMgr::SetMacroPath(const OUString& rPath)
 
 sal_uInt32 SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter)
 {
-    short  nDefFormat;
+    SvNumFormatType  nDefFormat;
 
     switch (nTypeId)
     {
         case TYP_TIMEFLD:
         case TYP_DATEFLD:
         {
-            nDefFormat = (nTypeId == TYP_DATEFLD) ? css::util::NumberFormat::DATE : css::util::NumberFormat::TIME;
+            nDefFormat = (nTypeId == TYP_DATEFLD) ? SvNumFormatType::DATE : SvNumFormatType::TIME;
         }
         break;
 
         default:
             if (bIsText)
             {
-                nDefFormat = css::util::NumberFormat::TEXT;
+                nDefFormat = SvNumFormatType::TEXT;
             }
             else
             {
-                nDefFormat = css::util::NumberFormat::ALL;
+                nDefFormat = SvNumFormatType::ALL;
             }
             break;
     }

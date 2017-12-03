@@ -3600,7 +3600,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
             {
                 double fVal = pFCell->GetValue();
                 sal_uInt32 nIndex = pFormatter->GetStandardFormat(
-                                    css::util::NumberFormat::NUMBER,
+                                    SvNumFormatType::NUMBER,
                                     ScGlobal::eLnge);
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);
             }
@@ -3612,7 +3612,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
         {
             double fVal = aCell.mfValue;
             sal_uInt32 nIndex = pFormatter->GetStandardFormat(
-                                    css::util::NumberFormat::NUMBER,
+                                    SvNumFormatType::NUMBER,
                                     ScGlobal::eLnge);
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
         }
@@ -3720,7 +3720,7 @@ void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberForma
     maTabs[nTab]->SetNumberFormat(rPos.Col(), rPos.Row(), nNumberFormat);
 }
 
-void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex,
+void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex,
             const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
@@ -3731,7 +3731,7 @@ void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, sal_
     }
     else
     {
-        nType = css::util::NumberFormat::UNDEFINED;
+        nType = SvNumFormatType::UNDEFINED;
         nIndex = 0;
     }
 }
@@ -4792,7 +4792,7 @@ void ScDocument::ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
 }
 
 void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
-        const ScMarkData& rMark, const ScPatternAttr& rPattern, short nNewType )
+        const ScMarkData& rMark, const ScPatternAttr& rPattern, SvNumFormatType nNewType )
 {
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
