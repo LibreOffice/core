@@ -16,6 +16,24 @@
       "revId": "1d44bcf18712d899f9e53676b9bc54ddc88147eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6ca68054",
+        "filename": "sw/inc/fmtautofmt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-12-03T17:58:58Z",
+      "side": 0,
+      "message": "In base class SfxPoolItem the copy assignment operator is deleted. So it\u0027s deleted for all derived classes too, unless you define one.",
+      "parentUuid": "1a430d35_4ce464ab",
+      "revId": "1d44bcf18712d899f9e53676b9bc54ddc88147eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -16,6 +16,24 @@
       "revId": "b053da227984c4ac8d81b6ee6c6fc003d8bd4826",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cc421468",
+        "filename": "sw/inc/paratr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-12-03T17:58:58Z",
+      "side": 1,
+      "message": "SwRegisterItem is derived from SfxBoolItem which has no copy assignment operator, like most classes derived from SfxPoolItem.\nSo default assignment operator would be deleted.",
+      "parentUuid": "1a430d35_6ce1209a",
+      "revId": "b053da227984c4ac8d81b6ee6c6fc003d8bd4826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
