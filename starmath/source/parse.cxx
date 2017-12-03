@@ -20,6 +20,7 @@
 #include <memory>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18nlangtag/lang.h>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <o3tl/make_unique.hxx>
 #include <parse.hxx>
@@ -1235,7 +1236,7 @@ SmBlankNode *SmParser::DoBlank()
 
     // Ignore trailing spaces, if corresponding option is set
     if ( m_aCurToken.eType == TNEWLINE ||
-             (m_aCurToken.eType == TEND && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()) )
+             (m_aCurToken.eType == TEND && !utl::ConfigManager::IsFuzzing() && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()) )
     {
         pBlankNode->Clear();
     }
