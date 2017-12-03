@@ -560,7 +560,11 @@ SwLayNotify::~SwLayNotify()
     const bool bSize = pLay->Frame().SSize() != maFrame.SSize();
 
     if ( bPos && pLay->Lower() && !IsLowersComplete() )
+    {
         pLay->Lower()->InvalidatePos();
+        if(pLay->Lower()->IsFootnoteFrame())
+            static_cast<SwFootnoteFrame*>(pLay->Lower())->Lower()->InvalidatePos();
+    }
 
     if ( bPrtPos )
         pLay->SetCompletePaint();
