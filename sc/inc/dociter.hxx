@@ -46,6 +46,7 @@ struct ScDBQueryParamInternal;
 struct ScDBQueryParamMatrix;
 class ScFormulaCell;
 struct ScInterpreterContext;
+enum class SvNumFormatType : sal_Int16;
 
 class ScValueIterator            // walk through all values in an area
 {
@@ -61,7 +62,7 @@ class ScValueIterator            // walk through all values in an area
     SCTAB           mnTab;
     SCROW           nAttrEndRow;
     SubtotalFlags   mnSubTotalFlags;
-    short           nNumFmtType;
+    SvNumFormatType nNumFmtType;
     bool            bNumValid;
     bool            bCalcAsShown;
     bool            bTextAsZero;
@@ -85,7 +86,7 @@ public:
         ScDocument* pDocument, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
         bool bTextAsZero = false );
 
-    void GetCurNumFmtInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex );
+    void GetCurNumFmtInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex );
 
     /// Does NOT reset rValue if no value found!
     bool GetFirst( double& rValue, FormulaError& rErr );
@@ -148,7 +149,7 @@ private:
         SCROW               nRow;
         SCROW               nAttrEndRow;
         SCTAB               nTab;
-        sal_uInt32          nNumFmtType;
+        SvNumFormatType     nNumFmtType;
         bool                bCalcAsShown;
     };
 

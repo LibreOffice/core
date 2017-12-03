@@ -269,7 +269,7 @@ void Test::testNumberFormat()
     }
 
     sal_Int32 nPos;
-    short nType = css::util::NumberFormat::DEFINED;
+    SvNumFormatType nType = SvNumFormatType::DEFINED;
     sal_uInt32 nKey;
     OUString aCode;
     // Thai date format (implicit locale).
@@ -1081,7 +1081,7 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
     CPPUNIT_ASSERT_MESSAGE( OString("Date not recognized: " +
                 OString(pTimezone) + " " + OString(pIsoDate)).getStr(), bVal);
     CPPUNIT_ASSERT_MESSAGE("Format parsed is not date.",
-            (rFormatter.GetType(nIndex) & css::util::NumberFormat::DATE));
+            (rFormatter.GetType(nIndex) & SvNumFormatType::DATE));
     OUString aOutString;
     Color *pColor;
     rFormatter.GetOutputString( fVal, nIndex, aOutString, &pColor);
@@ -1495,7 +1495,7 @@ void Test::testColorNamesConversion()
     // [FARBE1] -> [COLOR1] can't be tested because we have no color table link
     // set, so the scanner returns nCheckPos error.
     sal_Int32 nCheckPos;
-    short nType;
+    SvNumFormatType nType;
     sal_uInt32 nKey;
     OUString aFormatCode;
 
@@ -1504,7 +1504,7 @@ void Test::testColorNamesConversion()
         aFormatCode = "[" + aGermanKeywords[i] + "]0";
         aFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType, nKey, LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", sal_Int32(0), nCheckPos);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Type should be NUMBER.", css::util::NumberFormat::NUMBER, nType);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Type should be NUMBER.", SvNumFormatType::NUMBER, nType);
         CPPUNIT_ASSERT_EQUAL( OUString("[" + rEnglishKeywords[i] + "]0"), aFormatCode);
     }
 }

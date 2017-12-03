@@ -418,7 +418,7 @@ OUString SvxDateField::GetFormatted( Date const & aDate, SvxDateFormat eFormat, 
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, eLang );
         break;
         default:
-            nFormatKey = rFormatter.GetStandardFormat( css::util::NumberFormat::DATE, eLang );
+            nFormatKey = rFormatter.GetStandardFormat( SvNumFormatType::DATE, eLang );
     }
 
     double fDiffDate = aDate - rFormatter.GetNullDate();
@@ -675,7 +675,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
             // no builtin format available, try to insert or reuse
             OUString aFormatCode( "HH:MM:SS.00 AM/PM" );
             sal_Int32 nCheckPos;
-            short nType;
+            SvNumFormatType nType;
             rFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType,
                                            nFormatKey, LANGUAGE_ENGLISH_US, eLang );
             DBG_ASSERT( nCheckPos == 0, "SvxTimeFormat::HH12_MM_SS_00: could not insert format code" );
@@ -699,7 +699,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
             break;
         case SvxTimeFormat::Standard:
         default:
-            nFormatKey = rFormatter.GetStandardFormat( css::util::NumberFormat::TIME, eLang );
+            nFormatKey = rFormatter.GetStandardFormat( SvNumFormatType::TIME, eLang );
     }
 
     double fFracTime = aTime.GetTimeInDays();

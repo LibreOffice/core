@@ -558,7 +558,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, bool bResetForm
             // get the Office's locale and translate
             LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
             // get the standard numeric format for this language
-            m_nFormatKey = m_pFormatter->GetStandardFormat( css::util::NumberFormat::NUMBER, eSysLanguage );
+            m_nFormatKey = m_pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, eSysLanguage );
         }
         else
             m_nFormatKey = 0;
@@ -577,7 +577,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, bool bResetForm
 
             // convert the old format string into the new language
             sal_Int32 nCheckPos;
-            short nType;
+            SvNumFormatType nType;
             pFormatter->PutandConvertEntry(sOldFormat, nCheckPos, nType, nDestKey, aOldLang, aNewLang);
             m_nFormatKey = nDestKey;
         }
@@ -603,7 +603,7 @@ bool FormattedField::SetFormat(const OUString& rFormatString, LanguageType eLang
     if (nNewKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         sal_Int32 nCheckPos;
-        short nType;
+        SvNumFormatType nType;
         OUString rFormat(rFormatString);
         if (!ImplGetFormatter()->PutEntry(rFormat, nCheckPos, nType, nNewKey, eLang))
             return false;
@@ -648,7 +648,7 @@ void FormattedField::SetThousandsSep(bool _bUseSeparator)
     // ... and introduce it to the formatter
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
-    short nType;
+    SvNumFormatType nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
     // set the new key
@@ -689,7 +689,7 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
     // ... and introduce it to the formatter
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
-    short nType;
+    SvNumFormatType nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
     // set the new key
@@ -911,17 +911,17 @@ bool FormattedField::ImplGetValue(double& dNewVal)
         nFormatKey = 0;
 
     // special treatment for percentage formatting
-    if (ImplGetFormatter()->GetType(m_nFormatKey) == css::util::NumberFormat::PERCENT)
+    if (ImplGetFormatter()->GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
     {
         // the language of our format
         LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
         // the default number format for this language
-        sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(css::util::NumberFormat::NUMBER, eLanguage);
+        sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(SvNumFormatType::NUMBER, eLanguage);
 
         sal_uInt32 nTempFormat = nStandardNumericFormat;
         double dTemp;
         if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
-            css::util::NumberFormat::NUMBER == m_pFormatter->GetType(nTempFormat))
+            SvNumFormatType::NUMBER == m_pFormatter->GetType(nTempFormat))
             // the string is equivalent to a number formatted one (has no % sign) -> append it
             sText += "%";
         // (with this, a input of '3' becomes '3%', which then by the formatter is translated

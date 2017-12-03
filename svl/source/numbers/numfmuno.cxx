@@ -382,8 +382,8 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
     sal_uInt32 nIndex = 0;
     LanguageType eLang = lcl_GetLanguage( nLocale );
     SvNumberFormatTable& rTable = bCreate ?
-                                    pFormatter->ChangeCL( nType, nIndex, eLang ) :
-                                    pFormatter->GetEntryTable( nType, nIndex, eLang );
+                                    pFormatter->ChangeCL( static_cast<SvNumFormatType>(nType), nIndex, eLang ) :
+                                    pFormatter->GetEntryTable( static_cast<SvNumFormatType>(nType), nIndex, eLang );
     sal_uInt32 nCount = rTable.size();
     uno::Sequence<sal_Int32> aSeq(nCount);
     sal_Int32* pAry = aSeq.getArray();
@@ -427,7 +427,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const OUString& aFormat,
     LanguageType eLang = lcl_GetLanguage( nLocale );
     sal_uInt32 nKey = 0;
     sal_Int32 nCheckPos = 0;
-    short nType = 0;
+    SvNumFormatType nType = SvNumFormatType::ALL;
     bool bOk = pFormatter->PutEntry( aFormStr, nCheckPos, nType, nKey, eLang );
     if (bOk)
         nRet = nKey;
@@ -457,7 +457,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
     LanguageType eNewLang = lcl_GetLanguage( nNewLocale );
     sal_uInt32 nKey = 0;
     sal_Int32 nCheckPos = 0;
-    short nType = 0;
+    SvNumFormatType nType = SvNumFormatType::ALL;
     bool bOk = pFormatter->PutandConvertEntry( aFormStr, nCheckPos, nType, nKey, eLang, eNewLang );
     if (bOk || nKey > 0)
         nRet = nKey;
@@ -525,8 +525,9 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const
     LanguageType eLang = lcl_GetLanguage( nLocale );
     // Mask out "defined" bit, so type from an existing number format
     // can directly be used for getStandardFormat
-    nType &= ~css::util::NumberFormat::DEFINED;
-    sal_Int32 nRet = pFormatter->GetStandardFormat(nType, eLang);
+    SvNumFormatType nType2 = static_cast<SvNumFormatType>(nType);
+    nType2 &= ~SvNumFormatType::DEFINED;
+    sal_Int32 nRet = pFormatter->GetStandardFormat(nType2, eLang);
     return nRet;
 }
 
@@ -547,7 +548,7 @@ sal_Bool SAL_CALL SvNumberFormatsObj::isTypeCompatible( sal_Int16 nOldType, sal_
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return SvNumberFormatter::IsCompatible( nOldType, nNewType );
+    return SvNumberFormatter::IsCompatible( static_cast<SvNumFormatType>(nOldType), static_cast<SvNumFormatType>(nNewType) );
 }
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const lang::Locale& nLocale )
@@ -644,7 +645,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
     }
     else if (aPropertyName == PROPERTYNAME_USERDEF)
     {
-        aRet <<= ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
+        aRet <<= bool( pFormat->GetType() & SvNumFormatType::DEFINED );
     }
     else if (aPropertyName == PROPERTYNAME_DECIMALS)
     {
@@ -744,7 +745,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     OUString aComment = pFormat->GetComment();
     bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
     //! Pass through SvNumberformat Member bStandard?
-    bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
+    bool bUserDef( pFormat->GetType() & SvNumFormatType::DEFINED );
     bool bThousand, bRed;
     sal_uInt16 nDecimals, nLeading;
     pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );

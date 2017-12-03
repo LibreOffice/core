@@ -2400,14 +2400,14 @@ public:
             const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
             if (pEntry)
             {
-                short nNumFmtType = pEntry->GetType();
+                SvNumFormatType nNumFmtType = pEntry->GetType();
                 /* NOTE: Omitting the check for absence of
                  * css::util::NumberFormat::TIME would include also date+time formatted
                  * values of the same day. That may be desired in some
                  * cases, querying all time values of a day, but confusing
                  * in other cases. A user can always setup a standard
                  * filter query for x >= date AND x < date+1 */
-                if ((nNumFmtType & css::util::NumberFormat::DATE) && !(nNumFmtType & css::util::NumberFormat::TIME))
+                if ((nNumFmtType & SvNumFormatType::DATE) && !(nNumFmtType & SvNumFormatType::TIME))
                 {
                     // The format is of date type.  Strip off the time
                     // element.
@@ -2936,8 +2936,8 @@ public:
             const SvNumberformat* pEntry = mrDoc.GetFormatTable()->GetEntry(nIndex);
             if (pEntry)
             {
-                short nNumFmtType = pEntry->GetType();
-                if (!((nNumFmtType & css::util::NumberFormat::DATE) && !(nNumFmtType & css::util::NumberFormat::TIME)))
+                SvNumFormatType nNumFmtType = pEntry->GetType();
+                if (!((nNumFmtType & SvNumFormatType::DATE) && !(nNumFmtType & SvNumFormatType::TIME)))
                     rItem.meType = ScQueryEntry::ByValue;    // not a date only
             }
             else

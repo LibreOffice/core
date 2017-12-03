@@ -118,7 +118,7 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                         {
                             OUString aFormatCode = mrModel.maFormatCode;
                             sal_Int32 nCheckPos = 0;
-                            short nType;
+                            SvNumFormatType nType;
                             pNumFrmt->PutEntry( aFormatCode, nCheckPos, nType, nKey );
                             bNoKey = (nCheckPos != 0);
                         }

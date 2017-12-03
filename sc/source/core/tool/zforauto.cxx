@@ -83,7 +83,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uInt32 nFormat,
 
 sal_uInt32 ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
 {
-    short nType;
+    SvNumFormatType nType;
     bool bNewInserted;
     sal_Int32 nCheckPos;
     return rFormatter.GetIndexPuttingAndConverting( sFormatstring, eLanguage,

@@ -6745,7 +6745,7 @@ void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpect
     if ( nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         sal_Int32 nCheckPos = 0;
-        short nType;
+        SvNumFormatType nType;
         pFormatter->PutEntry( rCode, nCheckPos, nType, nFormat );
         CPPUNIT_ASSERT_EQUAL( nCheckPos, sal_Int32(0) );
     }

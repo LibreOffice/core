@@ -703,7 +703,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         if( bSuccess )
         {
             sal_Int32 nCheckPos = 0;
-            short nType;
+            SvNumFormatType nType;
             OUString aFmtStr = *pFmt;
             const VbaFormatInfo* pInfo = getFormatInfo( aFmtStr );
             if( pInfo->meType != VbaFormatType::Null )

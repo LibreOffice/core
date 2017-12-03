@@ -375,7 +375,7 @@ bool isEmptyString( const OUString& rStr )
 
 double ScGlobal::ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
         FormulaError & rError, FormulaError nStringNoValueError,
-        SvNumberFormatter* pFormatter, sal_uInt32 & rCurFmtType )
+        SvNumberFormatter* pFormatter, SvNumFormatType & rCurFmtType )
 {
     // We keep ScCalcConfig::StringConversion::LOCALE default until
     // we provide a friendly way to convert string numbers into numbers in the UI.
@@ -466,7 +466,7 @@ Label_fallback_to_unambiguous:
                     sal_Int32 nUnit[done] = {0,0,0,0,0,0,0};
                     const sal_Int32 nLimit[done] = {0,12,31,0,59,59,0};
                     State eState = (bDate ? month : minute);
-                    rCurFmtType = (bDate ? css::util::NumberFormat::DATE : css::util::NumberFormat::TIME);
+                    rCurFmtType = (bDate ? SvNumFormatType::DATE : SvNumFormatType::TIME);
                     nUnit[eState-1] = rStr.copy( 0, nParseEnd).toInt32();
                     const sal_Unicode* pLastStart = p;
                     // Ensure there's no preceding sign. Negative dates
@@ -481,7 +481,7 @@ Label_fallback_to_unambiguous:
                     while (p < pStop && rError == FormulaError::NONE && eState < blank)
                     {
                         if (eState == minute)
-                            rCurFmtType |= css::util::NumberFormat::TIME;
+                            rCurFmtType |= SvNumFormatType::TIME;
                         if (rtl::isAsciiDigit(*p))
                         {
                             // Maximum 2 digits per unit, except fractions.

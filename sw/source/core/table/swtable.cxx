@@ -2291,14 +2291,14 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
 
                                     // JP 22.04.98: Bug 49659 -
                                     //  Special casing for percent
-                                    if( css::util::NumberFormat::PERCENT ==
+                                    if( SvNumFormatType::PERCENT ==
                                         pNumFormatr->GetType( nNewFormat ))
                                     {
                                         sal_uInt32 nTmpFormat = 0;
                                         if( GetDoc()->IsNumberFormat(
                                                     aText, nTmpFormat, fVal ))
                                         {
-                                            if( css::util::NumberFormat::NUMBER ==
+                                            if( SvNumFormatType::NUMBER ==
                                                 pNumFormatr->GetType( nTmpFormat ))
                                                 aText += "%";
 
@@ -2413,11 +2413,11 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
         {
             rFormatIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
             // Special casing for percent
-            if( !rIsEmptyTextNd && css::util::NumberFormat::PERCENT == pNumFormatr->GetType( rFormatIndex ))
+            if( !rIsEmptyTextNd && SvNumFormatType::PERCENT == pNumFormatr->GetType( rFormatIndex ))
             {
                 sal_uInt32 nTmpFormat = 0;
                 if( GetFrameFormat()->GetDoc()->IsNumberFormat( aText, nTmpFormat, rNum ) &&
-                    css::util::NumberFormat::NUMBER == pNumFormatr->GetType( nTmpFormat ))
+                    SvNumFormatType::NUMBER == pNumFormatr->GetType( nTmpFormat ))
                     aText += "%";
             }
         }

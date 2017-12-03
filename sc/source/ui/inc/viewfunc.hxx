@@ -175,7 +175,7 @@ public:
     void            RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
     void            UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
 
-    void            SetNumberFormat( short nFormatType, sal_uLong nAdd = 0 );
+    void            SetNumberFormat( SvNumFormatType nFormatType, sal_uLong nAdd = 0 );
     void            SetNumFmtByStr( const OUString& rCode );
     void            ChangeNumFmtDecimals( bool bIncrement );
 
@@ -308,7 +308,7 @@ public:
     void            DetectiveMarkPred();
     void            DetectiveMarkSucc();
 
-    void            InsertCurrentTime(short nCellFmt, const OUString& rUndoStr);
+    void            InsertCurrentTime(SvNumFormatType nCellFmt, const OUString& rUndoStr);
 
     void            ShowNote( bool bShow );
     void            EditNote();

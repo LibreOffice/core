@@ -693,7 +693,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
 
         // insert/convert the Excel number format
         sal_Int32 nCheckPos;
-        short nType = css::util::NumberFormat::DEFINED;
+        SvNumFormatType nType = SvNumFormatType::DEFINED;
         sal_uInt32 nKey;
         if( !rNumFmt.maFormat.isEmpty() )
         {

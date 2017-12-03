@@ -1030,7 +1030,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
         }
     }
 
-    short nType = GetCurrentNumberFormatType();
+    SvNumFormatType nType = GetCurrentNumberFormatType();
     SfxItemSet aSet( GetPool(), {{nSlot, nSlot}} );
     switch ( nSlot )
     {
@@ -1039,38 +1039,38 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
             sal_uInt32 nNumberFormat = rAttrSet.Get(ATTR_VALUE_FORMAT).GetValue();
 
-            if ((nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 4)
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            if ((nType & SvNumFormatType::NUMBER) && nNumberFormat == 4)
+                pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER, 4 );
+                pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER, 4 );
             rBindings.Invalidate( nSlot );
             rReq.Done();
         }
         break;
         case SID_NUMBER_SCIENTIFIC:
-            if (nType & css::util::NumberFormat::SCIENTIFIC)
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            if (nType & SvNumFormatType::SCIENTIFIC)
+                pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::SCIENTIFIC );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & css::util::NumberFormat::SCIENTIFIC)) );
+                pTabViewShell->SetNumberFormat( SvNumFormatType::SCIENTIFIC );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::SCIENTIFIC)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_DATE:
-            if (nType & css::util::NumberFormat::DATE)
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            if (nType & SvNumFormatType::DATE)
+                pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::DATE );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & css::util::NumberFormat::DATE)) );
+                pTabViewShell->SetNumberFormat( SvNumFormatType::DATE );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::DATE)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_TIME:
-            if (nType & css::util::NumberFormat::TIME)
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            if (nType & SvNumFormatType::TIME)
+                pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::TIME );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & css::util::NumberFormat::TIME)) );
+                pTabViewShell->SetNumberFormat( SvNumFormatType::TIME );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::TIME)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
@@ -1100,30 +1100,30 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                         pTabViewShell->ApplySelectionPattern( aNewAttrs );
                     }
                     else
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
                 }
             }
             else
             {
-                if ( nType & css::util::NumberFormat::CURRENCY )
-                    pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+                if ( nType & SvNumFormatType::CURRENCY )
+                    pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
                 else
-                    pTabViewShell->SetNumberFormat( css::util::NumberFormat::CURRENCY );
+                    pTabViewShell->SetNumberFormat( SvNumFormatType::CURRENCY );
             }
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_PERCENT:
-            if (nType & css::util::NumberFormat::PERCENT)
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            if (nType & SvNumFormatType::PERCENT)
+                pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::PERCENT );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & css::util::NumberFormat::PERCENT)) );
+                pTabViewShell->SetNumberFormat( SvNumFormatType::PERCENT );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::PERCENT)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_STANDARD:
-            pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             rReq.Done();
             break;
         case SID_NUMBER_INCDEC:
@@ -1174,41 +1174,35 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 ScDocument* pDoc = pViewData->GetDocument();
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                LanguageType eLanguage = ScGlobal::eLnge;
-                sal_Int16 eType = -1;
                 sal_uInt32 nCurrentNumberFormat;
 
                 pDoc->GetNumberFormat(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo(), nCurrentNumberFormat);
                 const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
-                if(pEntry)
-                {
-                    eLanguage = pEntry->GetLanguage();
-                    eType = pEntry->GetType();
-                }
+                if(!pEntry)
+                    break;
+
+                LanguageType eLanguage = pEntry->GetLanguage();
+                SvNumFormatType eType = pEntry->GetType();
 
                 //Just use eType to judge whether the command is fired for NUMBER/PERCENT/CURRENCY/SCIENTIFIC/FRACTION
                 //In sidebar, users can fire SID_NUMBER_FORMAT command by operating the related UI controls before they are disable
-                switch(eType)
-                {
-                case css::util::NumberFormat::ALL:
-                case css::util::NumberFormat::NUMBER:
-                case css::util::NumberFormat::NUMBER| css::util::NumberFormat::DEFINED:
-                case css::util::NumberFormat::PERCENT:
-                case css::util::NumberFormat::PERCENT| css::util::NumberFormat::DEFINED:
-                case css::util::NumberFormat::CURRENCY:
-                case css::util::NumberFormat::CURRENCY|css::util::NumberFormat::DEFINED:
-                case css::util::NumberFormat::SCIENTIFIC:
-                case css::util::NumberFormat::SCIENTIFIC|css::util::NumberFormat::DEFINED:
-                case css::util::NumberFormat::FRACTION:
-                case css::util::NumberFormat::FRACTION|css::util::NumberFormat::DEFINED:
-                    eType = 0;
-                    break;
-                default:
-                    eType =-1;
-                }
+                if(eType == SvNumFormatType::ALL
+                    || eType == SvNumFormatType::NUMBER
+                    || eType == (SvNumFormatType::NUMBER | SvNumFormatType::DEFINED)
+                    || eType == SvNumFormatType::PERCENT
+                    || eType == (SvNumFormatType::PERCENT | SvNumFormatType::DEFINED)
+                    || eType == SvNumFormatType::CURRENCY
+                    || eType == (SvNumFormatType::CURRENCY | SvNumFormatType::DEFINED)
+                    || eType == SvNumFormatType::SCIENTIFIC
+                    || eType == (SvNumFormatType::SCIENTIFIC | SvNumFormatType::DEFINED)
+                    || eType == SvNumFormatType::FRACTION
+                    || eType == (SvNumFormatType::FRACTION | SvNumFormatType::DEFINED))
+                    eType = SvNumFormatType::ALL;
+                else
+                    pEntry = nullptr;
 
-                if(SfxItemState::SET == pReqArgs->GetItemState(nSlot, true, &pItem) && eType != -1)
+                if(SfxItemState::SET == pReqArgs->GetItemState(nSlot, true, &pItem) && pEntry)
                 {
                     OUString aCode = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     sal_uInt16 aLen = aCode.getLength();
@@ -1284,34 +1278,34 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     switch(nFormat)
                     {
                     case 0:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER); //Modify
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER); //Modify
                         break;
                     case 1:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER, 2 ); //Modify
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER, 2 ); //Modify
                         break;
                     case 2:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::PERCENT );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::PERCENT );
                         break;
                     case 3:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::CURRENCY );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::CURRENCY );
                         break;
                     case 4:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::DATE );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::DATE );
                         break;
                     case 5:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::TIME );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::TIME );
                         break;
                     case 6:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::SCIENTIFIC );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::SCIENTIFIC );
                         break;
                     case 7:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::FRACTION );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::FRACTION );
                         break;
                     case 8:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::LOGICAL );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::LOGICAL );
                         break;
                     case 9:
-                        pTabViewShell->SetNumberFormat( css::util::NumberFormat::TEXT );
+                        pTabViewShell->SetNumberFormat( SvNumFormatType::TEXT );
                         break;
                     default:
                         ;
@@ -2520,8 +2514,8 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                                       // selected cells' attribute ranges to
                                       // determine selected types.
                                       // Does *NOT* include the
-                                      // css::util::NumberFormat::DEFINED bit.
-    const short nType               = (eItemState >= SfxItemState::DEFAULT ? pFormatter->GetType( nNumberFormat) :
+                                      // SvNumFormatType::DEFINED bit.
+    const SvNumFormatType nType     = (eItemState >= SfxItemState::DEFAULT ? pFormatter->GetType( nNumberFormat) :
                                        GetCurrentNumberFormatType());
     NfIndexTableOffset nOffset      = pFormatter->GetIndexTableOffset(nNumberFormat);
 
@@ -2537,11 +2531,11 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                     bool bEnable = (SfxItemState::DONTCARE != eItemState);
                     if (bEnable)
                     {
-                        bEnable = ((nType != css::util::NumberFormat::ALL) && (nType &
-                                (css::util::NumberFormat::NUMBER |
-                                 css::util::NumberFormat::PERCENT |
-                                 css::util::NumberFormat::CURRENCY |
-                                 css::util::NumberFormat::FRACTION)));
+                        bEnable = ((nType != SvNumFormatType::ALL) && (nType &
+                                (SvNumFormatType::NUMBER |
+                                 SvNumFormatType::PERCENT |
+                                 SvNumFormatType::CURRENCY |
+                                 SvNumFormatType::FRACTION)));
                         if (bEnable)
                         {
                             bool bThousand( false );
@@ -2571,7 +2565,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         pFormatter->GetFormatSpecialInfo(nNumberFormat,bThousand, bNegRed, nPrecision, nLeadZeroes);
 
                         const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
-                        if (pFormatEntry && (pFormatEntry->GetType() & css::util::NumberFormat::SCIENTIFIC))
+                        if (pFormatEntry && (pFormatEntry->GetType() & SvNumFormatType::SCIENTIFIC))
                         {
                             // if scientific, bThousand is used for engineering notation
                             const sal_uInt16 nIntegerDigits = pFormatEntry->GetFormatIntegerDigits();
@@ -2609,37 +2603,37 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                     {
                         switch(nType)
                         {
-                        case css::util::NumberFormat::NUMBER:
+                        case SvNumFormatType::NUMBER:
                             // Determine if General format.
                             if ((nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                                 nFormatCategory = 0;
                             else
                                 nFormatCategory = 1;
                             break;
-                        case css::util::NumberFormat::PERCENT:
+                        case SvNumFormatType::PERCENT:
                             nFormatCategory = 2;
                             break;
-                        case css::util::NumberFormat::CURRENCY:
+                        case SvNumFormatType::CURRENCY:
                             nFormatCategory = 3;
                             break;
-                        case css::util::NumberFormat::DATE:
+                        case SvNumFormatType::DATE:
                             //Add
-                        case css::util::NumberFormat::DATETIME:
+                        case SvNumFormatType::DATETIME:
                             nFormatCategory = 4;
                             break;
-                        case css::util::NumberFormat::TIME:
+                        case SvNumFormatType::TIME:
                             nFormatCategory = 5;
                             break;
-                        case css::util::NumberFormat::SCIENTIFIC:
+                        case SvNumFormatType::SCIENTIFIC:
                             nFormatCategory = 6;
                             break;
-                        case css::util::NumberFormat::FRACTION:
+                        case SvNumFormatType::FRACTION:
                             nFormatCategory = 7;
                             break;
-                        case css::util::NumberFormat::LOGICAL:
+                        case SvNumFormatType::LOGICAL:
                             nFormatCategory = 8;
                             break;
-                        case css::util::NumberFormat::TEXT:
+                        case SvNumFormatType::TEXT:
                             nFormatCategory = 9;
                             break;
                         default:
@@ -2658,25 +2652,25 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                 }
                 break;
             case SID_NUMBER_CURRENCY:
-                rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::CURRENCY)) );
+                rSet.Put( SfxBoolItem(nWhich, bool(nType & SvNumFormatType::CURRENCY)) );
                 break;
             case SID_NUMBER_SCIENTIFIC:
-                rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::SCIENTIFIC)) );
+                rSet.Put( SfxBoolItem(nWhich, bool(nType & SvNumFormatType::SCIENTIFIC)) );
                 break;
             case SID_NUMBER_DATE:
-                rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::DATE)) );
+                rSet.Put( SfxBoolItem(nWhich, bool(nType & SvNumFormatType::DATE)) );
                 break;
             case SID_NUMBER_PERCENT:
-                rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::PERCENT)) );
+                rSet.Put( SfxBoolItem(nWhich, bool(nType & SvNumFormatType::PERCENT)) );
                 break;
             case SID_NUMBER_TIME:
-                rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::TIME)) );
+                rSet.Put( SfxBoolItem(nWhich, bool(nType & SvNumFormatType::TIME)) );
                 break;
             case SID_NUMBER_TWODEC:
-                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && nOffset == NF_NUMBER_1000DEC2 ) );
+                    rSet.Put( SfxBoolItem(nWhich, (nType & SvNumFormatType::NUMBER) && nOffset == NF_NUMBER_1000DEC2 ) );
                 break;
             case SID_NUMBER_STANDARD:
-                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && (nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) );
+                    rSet.Put( SfxBoolItem(nWhich, (nType & SvNumFormatType::NUMBER) && (nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) );
                 break;
         }
         nWhich = aIter.NextWhich();
@@ -2829,9 +2823,9 @@ void ScFormatShell::StateFormatPaintbrush( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, pViewData->GetView()->HasPaintBrush() ) );
 }
 
-short ScFormatShell::GetCurrentNumberFormatType()
+SvNumFormatType ScFormatShell::GetCurrentNumberFormatType()
 {
-    short nType = css::util::NumberFormat::ALL;
+    SvNumFormatType nType = SvNumFormatType::ALL;
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData aMark(GetViewData()->GetMarkData());
     const SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -2849,7 +2843,7 @@ short ScFormatShell::GetCurrentNumberFormatType()
 
         const ScMultiSel& rMultiSel = aMark.GetMultiSelData();
 
-        short nComboType = css::util::NumberFormat::ALL;
+        SvNumFormatType nComboType = SvNumFormatType::ALL;
         bool bFirstItem = true;
         for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
         {
@@ -2863,7 +2857,7 @@ short ScFormatShell::GetCurrentNumberFormatType()
                 ScRange aColRange(nCol, nRow1, aRange.aStart.Tab());
                 aColRange.aEnd.SetRow(nRow2);
                 sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aColRange);
-                short nThisType = pFormatter->GetType(nNumFmt);
+                SvNumFormatType nThisType = pFormatter->GetType(nNumFmt);
                 if (bFirstItem)
                 {
                     bFirstItem = false;
@@ -2871,7 +2865,7 @@ short ScFormatShell::GetCurrentNumberFormatType()
                 }
                 else if (nComboType != nThisType)
                     // mixed number format type.
-                    return css::util::NumberFormat::ALL;
+                    return SvNumFormatType::ALL;
             }
         }
         nType = nComboType;

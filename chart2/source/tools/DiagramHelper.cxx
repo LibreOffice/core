@@ -1173,7 +1173,7 @@ sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const Reference< util::XN
         SAL_WARN("chart2", "DiagramHelper::getDateTimeInputNumberFormat - no SvNumberFormatter");
     else
     {
-        short nType;
+        SvNumFormatType nType;
         // Obtain best matching date, time or datetime format.
         nRet = pNumFormatter->GuessDateTimeFormat( nType, fNumber, LANGUAGE_SYSTEM);
         // Obtain the corresponding edit format.
@@ -1190,7 +1190,7 @@ sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberF
     SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
     if( pNumFormatter )
     {
-        nRet = pNumFormatter->GetStandardFormat( util::NumberFormat::PERCENT, rLanguageTag.getLanguageType() );
+        nRet = pNumFormatter->GetStandardFormat( SvNumFormatType::PERCENT, rLanguageTag.getLanguageType() );
     }
     else
     {

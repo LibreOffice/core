@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
     sal_uInt16 nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
     sal_Int32 nPos = m_pSelectionLB->GetSelectedEntryPos();
     sal_uInt16 nExtSubType;
-    sal_uInt16 nNewType = 0;
+    SvNumFormatType nNewType = SvNumFormatType::ALL;
 
     if (nSubType != DI_EDIT)
     {
@@ -264,15 +264,15 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
                         const uno::Type& rValueType = aVal.getValueType();
                         if( rValueType == ::cppu::UnoType<util::DateTime>::get())
                         {
-                            nNewType = css::util::NumberFormat::DATETIME;
+                            nNewType = SvNumFormatType::DATETIME;
                         }
                         else if( rValueType == ::cppu::UnoType<util::Date>::get())
                         {
-                            nNewType = css::util::NumberFormat::DATE;
+                            nNewType = SvNumFormatType::DATE;
                         }
                         else if( rValueType == ::cppu::UnoType<util::Time>::get())
                         {
-                            nNewType = css::util::NumberFormat::TIME;
+                            nNewType = SvNumFormatType::TIME;
                         }
                     }
                     catch( const uno::Exception& )
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
     else
         nExtSubType = DI_SUB_TIME;
 
-    sal_uInt16 nOldType = 0;
+    SvNumFormatType nOldType = SvNumFormatType::ALL;
     bool bEnable = false;
     bool bOneArea = false;
 
@@ -303,16 +303,16 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
             break;
 
         case DI_SUB_DATE:
-            nNewType = css::util::NumberFormat::DATE;
+            nNewType = SvNumFormatType::DATE;
             bOneArea = true;
             break;
 
         case DI_SUB_TIME:
-            nNewType = css::util::NumberFormat::TIME;
+            nNewType = SvNumFormatType::TIME;
             bOneArea = true;
             break;
     }
-    if (!nNewType)
+    if (nNewType == SvNumFormatType::ALL)
     {
         m_pFormatLB->Clear();
     }
@@ -340,23 +340,23 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
             nOldSubType &= ~DI_SUB_FIXED;
             if (nOldSubType == nSubType)
             {
-                if (!nFormat && (nNewType == css::util::NumberFormat::DATE || nNewType == css::util::NumberFormat::TIME))
+                if (!nFormat && (nNewType == SvNumFormatType::DATE || nNewType == SvNumFormatType::TIME))
                 {
                     SwWrtShell *pSh = GetWrtShell();
                     if(pSh)
                     {
                         SvNumberFormatter* pFormatter = pSh->GetNumberFormatter();
                         LanguageType eLang = m_pFormatLB->GetCurLanguage();
-                        if (nNewType == css::util::NumberFormat::DATE)
+                        if (nNewType == SvNumFormatType::DATE)
                             nFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang);
-                        else if (nNewType == css::util::NumberFormat::TIME)
+                        else if (nNewType == SvNumFormatType::TIME)
                             nFormat = pFormatter->GetFormatIndex( NF_TIME_HHMM, eLang);
                     }
                 }
                 m_pFormatLB->SetDefFormat(nFormat);
             }
         }
-        else if( (nSubType == DI_CUSTOM)  && (nNewType != 0) )
+        else if( (nSubType == DI_CUSTOM)  && (nNewType != SvNumFormatType::ALL) )
         {
             m_pFormatLB->SetDefFormat(nFormat);
         }

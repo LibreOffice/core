@@ -836,7 +836,7 @@ namespace sw
         {
             // tell the Formatter about the new entry
             sal_Int32 nCheckPos = 0;
-            short  nType = css::util::NumberFormat::DEFINED;
+            SvNumFormatType nType = SvNumFormatType::DEFINED;
             sal_uInt32  nKey = 0;
 
             SwapQuotesInField(rParams);

@@ -332,7 +332,7 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
         nPos = aNumStr.indexOf( ';', nPos + 1 );
         OUString aFormat( aNumStr.copy( nPos + 1 ) );
         sal_Int32 nCheckPos;
-        short nType;
+        SvNumFormatType nType;
         if ( eNumLang != LANGUAGE_SYSTEM )
             rFormatter.PutEntry( aFormat, nCheckPos, nType, nNumForm, eNumLang );
         else

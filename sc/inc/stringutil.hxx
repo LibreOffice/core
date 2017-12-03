@@ -26,6 +26,7 @@
 #include "types.hxx"
 
 class SvNumberFormatter;
+enum class SvNumFormatType : sal_Int16;
 
 /**
  * Store parameters used in the ScDocument::SetString() method.  Various
@@ -115,7 +116,7 @@ struct ScInputStringType
 
     OUString maText;
     double mfValue;
-    short mnFormatType;
+    SvNumFormatType mnFormatType;
 };
 
 class ScStringUtil

@@ -2048,7 +2048,7 @@ void SbRtl_DateValue(StarBASIC *, SbxArray & rPar, bool)
         double fResult;
         OUString aStr( rPar.Get(1)->GetOUString() );
         bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
-        short nType = pFormatter->GetType( nIndex );
+        SvNumFormatType nType = pFormatter->GetType( nIndex );
 
         // DateValue("February 12, 1969") raises error if the system locale is not en_US
         // It seems that both locale number formatter and English number
@@ -2061,9 +2061,9 @@ void SbRtl_DateValue(StarBASIC *, SbxArray & rPar, bool)
             nType = pFormatter->GetType( nIndex );
         }
 
-        if(bSuccess && (nType==css::util::NumberFormat::DATE || nType==css::util::NumberFormat::DATETIME))
+        if(bSuccess && (nType==SvNumFormatType::DATE || nType==SvNumFormatType::DATETIME))
         {
-            if ( nType == css::util::NumberFormat::DATETIME )
+            if ( nType == SvNumFormatType::DATETIME )
             {
                 // cut time
                 if ( fResult  > 0.0 )
@@ -2105,10 +2105,10 @@ void SbRtl_TimeValue(StarBASIC *, SbxArray & rPar, bool)
         double fResult;
         bool bSuccess = pFormatter->IsNumberFormat( rPar.Get(1)->GetOUString(),
                                                    nIndex, fResult );
-        short nType = pFormatter->GetType(nIndex);
-        if(bSuccess && (nType==css::util::NumberFormat::TIME||nType==css::util::NumberFormat::DATETIME))
+        SvNumFormatType nType = pFormatter->GetType(nIndex);
+        if(bSuccess && (nType==SvNumFormatType::TIME||nType==SvNumFormatType::DATETIME))
         {
-            if ( nType == css::util::NumberFormat::DATETIME )
+            if ( nType == SvNumFormatType::DATETIME )
             {
                 // cut days
                 fResult = fmod( fResult, 1 );

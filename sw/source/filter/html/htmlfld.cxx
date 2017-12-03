@@ -380,11 +380,12 @@ void SwHTMLParser::NewField()
             double dValue = GetTableDataOptionsValNum(
                                 nNumFormat, eLang, aNumValue, aNumFormat,
                                 *m_xDoc->GetNumberFormatter() );
-            short nFormatType = pFormatter->GetType( nNumFormat );
+            SvNumFormatType nFormatType = pFormatter->GetType( nNumFormat );
             switch( nFormatType )
             {
-            case css::util::NumberFormat::DATE: nSub = DATEFLD; break;
-            case css::util::NumberFormat::TIME: nSub = TIMEFLD; break;
+            case SvNumFormatType::DATE: nSub = DATEFLD; break;
+            case SvNumFormatType::TIME: nSub = TIMEFLD; break;
+            default: break;
             }
 
             if( nSub )

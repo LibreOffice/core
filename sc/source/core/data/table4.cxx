@@ -262,9 +262,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         double fVal;
         sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(GetAttr(nCol,nRow,ATTR_VALUE_FORMAT))->GetValue();
-        const sal_Int16 nFormatType = pDocument->GetFormatTable()->GetType(nFormat);
-        bool bDate = (nFormatType  == css::util::NumberFormat::DATE );
-        bool bBooleanCell = (!bDate && nFormatType == css::util::NumberFormat::LOGICAL);
+        const SvNumFormatType nFormatType = pDocument->GetFormatTable()->GetType(nFormat);
+        bool bDate = (nFormatType  == SvNumFormatType::DATE );
+        bool bBooleanCell = (!bDate && nFormatType == SvNumFormatType::LOGICAL);
         if (bDate)
         {
             if (nCount > 1)
@@ -370,7 +370,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             bVal = false;
                         else if ((nVal2 == 0.0 || nVal2 == 1.0) &&
                                 (pDocument->GetFormatTable()->GetType(GetNumberFormat(nCol,nRow)) ==
-                                 css::util::NumberFormat::LOGICAL))
+                                 SvNumFormatType::LOGICAL))
                             bVal = false;
                         nVal1 = nVal2;
                     }
@@ -967,7 +967,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                             if (nVal == 0.0 || nVal == 1.0)
                             {
                                 bool bBooleanCell = (pDocument->GetFormatTable()->GetType( nNumFmt) ==
-                                        css::util::NumberFormat::LOGICAL);
+                                        SvNumFormatType::LOGICAL);
                                 if (!bBooleanCell)
                                     nVal += (double) nDelta;
                             }
@@ -1395,14 +1395,14 @@ void ScTable::FillAutoSimple(
                         return;
                     }
                     bBooleanCell = (pDocument->GetFormatTable()->GetType(
-                                aCol[rCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nSource)) == css::util::NumberFormat::LOGICAL);
+                                aCol[rCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nSource)) == SvNumFormatType::LOGICAL);
 
                 }
                 else                // rInner&:=nCol, rOuter&:=nRow
                 {
                     aSrcCell = aCol[nSource].GetCellValue(rRow);
                     bBooleanCell = (pDocument->GetFormatTable()->GetType(
-                                aCol[nSource].GetNumberFormat( pDocument->GetNonThreadedContext(), rRow)) == css::util::NumberFormat::LOGICAL);
+                                aCol[nSource].GetNumberFormat( pDocument->GetNonThreadedContext(), rRow)) == SvNumFormatType::LOGICAL);
                 }
 
                 bGetCell = false;

@@ -5064,7 +5064,7 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
                 m_pBoxAutoFormat->GetValueFormat(sFormat, eLng, eSys);
                 if(!sFormat.isEmpty())
                 {
-                    short nType; bool bNew; sal_Int32 nCheckPos;
+                    SvNumFormatType nType; bool bNew; sal_Int32 nCheckPos;
                     sal_uInt32 nKey = m_pDocShell->GetDoc()->GetNumberFormatter()->GetIndexPuttingAndConverting(sFormat, eLng, eSys, nType, bNew, nCheckPos);
                     aRet <<= nKey;
                 }

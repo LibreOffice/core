@@ -262,7 +262,7 @@ void XclImpChangeTrack::ReadCell(
             {
                 rCell.meType = CELLTYPE_VALUE;
                 rCell.mfValue = fValue;
-                rFormat = GetFormatter().GetStandardFormat( css::util::NumberFormat::LOGICAL, ScGlobal::eLnge );
+                rFormat = GetFormatter().GetStandardFormat( SvNumFormatType::LOGICAL, ScGlobal::eLnge );
             }
         }
         break;

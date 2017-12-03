@@ -1120,7 +1120,7 @@ public:
     SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& ) const;
     void                                      SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
-    void                                      GetNumberFormatInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex, const ScAddress& rPos ) const;
+    void                                      GetNumberFormatInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex, const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScFormulaCell*         GetFormulaCell( const ScAddress& rPos ) const;
     SC_DLLPUBLIC ScFormulaCell*               GetFormulaCell( const ScAddress& rPos );
     SC_DLLPUBLIC void                         GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const;
@@ -1680,7 +1680,7 @@ public:
     SC_DLLPUBLIC void           ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                                                                         const ScMarkData& rMark,
                                                                         const ScPatternAttr& rPattern,
-                                                                        short nNewType );
+                                                                        SvNumFormatType nNewType );
 
     void               ApplyStyle( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                    const ScStyleSheet& rStyle);

@@ -325,14 +325,14 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
     bool bFormat = nSize != 0;
     bool bOneArea = false;
     bool bFixed = false;
-    sal_uInt16 nFormatType = 0;
+    SvNumFormatType nFormatType = SvNumFormatType::ALL;
 
     switch (nTypeId)
     {
         case TYP_DATEFLD:
             bFormat = bNumFormat = bOneArea = bOffset = true;
 
-            nFormatType = css::util::NumberFormat::DATE;
+            nFormatType = SvNumFormatType::DATE;
 
             m_pDateFT->Show();
 
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
         case TYP_TIMEFLD:
             bFormat = bNumFormat = bOneArea = bOffset = true;
 
-            nFormatType = css::util::NumberFormat::TIME;
+            nFormatType = SvNumFormatType::TIME;
 
             m_pTimeFT->Show();
 
@@ -412,11 +412,11 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
         {
             m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
 
-            if (m_pNumFormatLB->GetFormatType() == (css::util::NumberFormat::DATE|css::util::NumberFormat::TIME))
+            if (m_pNumFormatLB->GetFormatType() == (SvNumFormatType::DATE|SvNumFormatType::TIME))
             {
                 // always set Format-Type because otherwise when date/time formats are combined,
                 // both formats would be displayed at the same time
-                m_pNumFormatLB->SetFormatType(0);
+                m_pNumFormatLB->SetFormatType(SvNumFormatType::ALL);
                 m_pNumFormatLB->SetFormatType(nFormatType);
                 // set correct format once again
                 m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());

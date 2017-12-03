@@ -255,7 +255,7 @@ void ScViewFunc::DetectiveMarkSucc()
       - unless cell was empty  =>  current date+time  =>  date+time formatted cell
     - key time on other cell  =>  current time  =>  time formatted cell
  */
-void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
+void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUndoStr)
 {
     ScViewData& rViewData = GetViewData();
 
@@ -268,8 +268,8 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
     const sal_uInt32 nCurNumFormat = rDoc.GetNumberFormat(aCurPos);
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     const SvNumberformat* pCurNumFormatEntry = pFormatter->GetEntry(nCurNumFormat);
-    const short nCurNumFormatType = (pCurNumFormatEntry ?
-            pCurNumFormatEntry->GetMaskedType() : css::util::NumberFormat::UNDEFINED);
+    const SvNumFormatType nCurNumFormatType = (pCurNumFormatEntry ?
+            pCurNumFormatEntry->GetMaskedType() : SvNumFormatType::UNDEFINED);
 
     if (bInputMode)
     {
@@ -277,31 +277,31 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
         sal_uInt32 nFormat = 0;
         switch (nReqFmt)
         {
-            case css::util::NumberFormat::DATE:
+            case SvNumFormatType::DATE:
                 {
                     Date aActDate( Date::SYSTEM );
                     fVal = aActDate - pFormatter->GetNullDate();
-                    if (nCurNumFormatType == css::util::NumberFormat::DATE)
+                    if (nCurNumFormatType == SvNumFormatType::DATE)
                         nFormat = nCurNumFormat;
                 }
                 break;
-            case css::util::NumberFormat::TIME:
+            case SvNumFormatType::TIME:
                 {
                     tools::Time aActTime( tools::Time::SYSTEM );
                     fVal = aActTime.GetTimeInDays();
-                    if (nCurNumFormatType == css::util::NumberFormat::TIME)
+                    if (nCurNumFormatType == SvNumFormatType::TIME)
                         nFormat = nCurNumFormat;
                 }
                 break;
             default:
                 SAL_WARN("sc.ui","unhandled current date/time request");
-                nReqFmt = css::util::NumberFormat::DATETIME;
+                nReqFmt = SvNumFormatType::DATETIME;
                 SAL_FALLTHROUGH;
-            case css::util::NumberFormat::DATETIME:
+            case SvNumFormatType::DATETIME:
                 {
                     DateTime aActDateTime( DateTime::SYSTEM );
                     fVal = aActDateTime - DateTime( pFormatter->GetNullDate());
-                    if (nCurNumFormatType == css::util::NumberFormat::DATETIME)
+                    if (nCurNumFormatType == SvNumFormatType::DATETIME)
                         nFormat = nCurNumFormat;
                 }
                 break;
@@ -335,17 +335,17 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
         // Combine requested date/time stamp with existing cell time/date, if any.
         switch (nReqFmt)
         {
-            case css::util::NumberFormat::DATE:
+            case SvNumFormatType::DATE:
                 switch (nCurNumFormatType)
                 {
-                    case css::util::NumberFormat::TIME:
+                    case SvNumFormatType::TIME:
                         // An empty cell formatted as time (or 00:00 time) shall
                         // not result in the current date with 00:00 time, but only
                         // in current date.
                         if (fCell != 0.0)
-                            nReqFmt = css::util::NumberFormat::DATETIME;
+                            nReqFmt = SvNumFormatType::DATETIME;
                         break;
-                    case css::util::NumberFormat::DATETIME:
+                    case SvNumFormatType::DATETIME:
                         {
                             // Force to only date if the existing date+time is the
                             // current date. This way inserting current date twice
@@ -357,22 +357,23 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                                 bForceReqFmt = true;
                         }
                         break;
+                    default: break;
                 }
                 break;
-            case css::util::NumberFormat::TIME:
+            case SvNumFormatType::TIME:
                 switch (nCurNumFormatType)
                 {
-                    case css::util::NumberFormat::DATE:
+                    case SvNumFormatType::DATE:
                         // An empty cell formatted as date shall not result in the
                         // null date and current time, but only in current time.
                         if (fCell != 0.0)
-                            nReqFmt = css::util::NumberFormat::DATETIME;
+                            nReqFmt = SvNumFormatType::DATETIME;
                         break;
-                    case css::util::NumberFormat::DATETIME:
+                    case SvNumFormatType::DATETIME:
                         // Requesting current time on an empty date+time cell
                         // inserts both current date+time.
                         if (fCell == 0.0)
-                            nReqFmt = css::util::NumberFormat::DATETIME;
+                            nReqFmt = SvNumFormatType::DATETIME;
                         else
                         {
                             // Add current time to an existing date+time where time is
@@ -380,46 +381,47 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                             double fDate = rtl::math::approxFloor( fCell);
                             double fTime = fCell - fDate;
                             if (fTime == 0.0 && fDate == (Date( Date::SYSTEM) - pFormatter->GetNullDate()))
-                                nReqFmt = css::util::NumberFormat::DATETIME;
+                                nReqFmt = SvNumFormatType::DATETIME;
                             else
                                 bForceReqFmt = true;
                         }
                         break;
+                    default: break;
                 }
                 break;
             default:
                 SAL_WARN("sc.ui","unhandled current date/time request");
-                nReqFmt = css::util::NumberFormat::DATETIME;
+                nReqFmt = SvNumFormatType::DATETIME;
                 SAL_FALLTHROUGH;
-            case css::util::NumberFormat::DATETIME:
+            case SvNumFormatType::DATETIME:
                 break;
         }
         double fVal = 0.0;
         switch (nReqFmt)
         {
-            case css::util::NumberFormat::DATE:
+            case SvNumFormatType::DATE:
                 {
                     Date aActDate( Date::SYSTEM );
                     fVal = aActDate - pFormatter->GetNullDate();
                 }
                 break;
-            case css::util::NumberFormat::TIME:
+            case SvNumFormatType::TIME:
                 {
                     tools::Time aActTime( tools::Time::SYSTEM );
                     fVal = aActTime.GetTimeInDays();
                 }
                 break;
-            case css::util::NumberFormat::DATETIME:
+            case SvNumFormatType::DATETIME:
                 switch (nCurNumFormatType)
                 {
-                    case css::util::NumberFormat::DATE:
+                    case SvNumFormatType::DATE:
                         {
                             double fDate = rtl::math::approxFloor( fCell);
                             tools::Time aActTime( tools::Time::SYSTEM );
                             fVal = fDate + aActTime.GetTimeInDays();
                         }
                         break;
-                    case css::util::NumberFormat::TIME:
+                    case SvNumFormatType::TIME:
                         {
                             double fTime = fCell - rtl::math::approxFloor( fCell);
                             Date aActDate( Date::SYSTEM );
@@ -436,6 +438,8 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                         }
                 }
                 break;
+            default: break;
+
         }
 
         ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
@@ -446,7 +450,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
         // Set the new cell format only when it differs from the current cell
         // format type. Preserve a date+time format unless we force a format
         // through.
-        if (bForceReqFmt || (nReqFmt != nCurNumFormatType && nCurNumFormatType != css::util::NumberFormat::DATETIME))
+        if (bForceReqFmt || (nReqFmt != nCurNumFormatType && nCurNumFormatType != SvNumFormatType::DATETIME))
             SetNumberFormat(nReqFmt);
         else
             rViewData.UpdateInputHandler();     // update input bar with new value

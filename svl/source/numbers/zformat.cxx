@@ -269,7 +269,7 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
 ImpSvNumFor::ImpSvNumFor()
 {
     nStringsCnt = 0;
-    aI.eScannedType = css::util::NumberFormat::UNDEFINED;
+    aI.eScannedType = SvNumFormatType::UNDEFINED;
     aI.bThousand = false;
     aI.nThousand = 0;
     aI.nCntPre = 0;
@@ -793,7 +793,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
     fLimit2 = 0.0;
     eOp1 = NUMBERFORMAT_OP_NO;
     eOp2 = NUMBERFORMAT_OP_NO;
-    eType = css::util::NumberFormat::DEFINED;
+    eType = SvNumFormatType::DEFINED;
 
     bool bCancel = false;
     bool bCondition = false;
@@ -840,10 +840,10 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     sal_Int32 nCntChars = ImpGetNumber(sBuff, nPos, sStr);
                     if (nCntChars > 0)
                     {
-                        short F_Type = css::util::NumberFormat::UNDEFINED;
+                        SvNumFormatType F_Type = SvNumFormatType::UNDEFINED;
                         if (!pISc->IsNumberFormat(sStr, F_Type, fNumber, nullptr) ||
-                            ( F_Type != css::util::NumberFormat::NUMBER &&
-                              F_Type != css::util::NumberFormat::SCIENTIFIC) )
+                            ( F_Type != SvNumFormatType::NUMBER &&
+                              F_Type != SvNumFormatType::SCIENTIFIC) )
                         {
                             fNumber = 0.0;
                             nPos = nPos - nCntChars;
@@ -1061,7 +1061,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 if (sStr.isEmpty())
                 {
                     // Empty sub format.
-                    NumFor[nIndex].Info().eScannedType = css::util::NumberFormat::EMPTY;
+                    NumFor[nIndex].Info().eScannedType = SvNumFormatType::EMPTY;
                 }
                 else
                 {
@@ -1117,7 +1117,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             // format the omitted subformats act like they were
                             // not specified and "inherited" the first format,
                             // e.g.  0;@  behaves like  0;-0;0;@
-                            if (pSc->GetScannedType() == css::util::NumberFormat::TEXT)
+                            if (pSc->GetScannedType() == SvNumFormatType::TEXT)
                             {
                                 // Reset conditions, reverting any set above.
                                 if (nIndex == 1)
@@ -1136,11 +1136,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         }
                         else if (nIndex == 3)
                         {   // #77026# Everything recognized IS text
-                            NumFor[nIndex].Info().eScannedType = css::util::NumberFormat::TEXT;
+                            NumFor[nIndex].Info().eScannedType = SvNumFormatType::TEXT;
                         }
                         else if ( NumFor[nIndex].Info().eScannedType != eType)
                         {
-                            eType = css::util::NumberFormat::DEFINED;
+                            eType = SvNumFormatType::DEFINED;
                         }
                     }
                     else
@@ -1190,7 +1190,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 {
                     eOp2 = NUMBERFORMAT_OP_LT;  // undefined condition, default: < 0
                 }
-                NumFor[nIndex+1].Info().eScannedType = css::util::NumberFormat::EMPTY;
+                NumFor[nIndex+1].Info().eScannedType = SvNumFormatType::EMPTY;
                 if (sBuff[nPos-1] != ';')
                     sBuff.insert( nPos++, ';');
             }
@@ -1198,13 +1198,13 @@ SvNumberformat::SvNumberformat(OUString& rString,
             {
                 // #83510# A 4th subformat explicitly specified to be empty
                 // hides any text. Need the type here for HasTextFormat()
-                NumFor[3].Info().eScannedType = css::util::NumberFormat::TEXT;
+                NumFor[3].Info().eScannedType = SvNumFormatType::TEXT;
             }
             bCancel = true;
         }
         if ( NumFor[nIndex].GetNatNum().IsSet() )
         {
-            NumFor[nIndex].SetNatNumDate( (NumFor[nIndex].Info().eScannedType & css::util::NumberFormat::DATE) != 0 );
+            NumFor[nIndex].SetNatNumDate( bool(NumFor[nIndex].Info().eScannedType & SvNumFormatType::DATE) );
         }
     }
 
@@ -1214,12 +1214,12 @@ SvNumberformat::SvNumberformat(OUString& rString,
         // substitute type.
         if (IsSystemTimeFormat())
         {
-            if ((eType & ~css::util::NumberFormat::DEFINED) != css::util::NumberFormat::TIME)
+            if ((eType & ~SvNumFormatType::DEFINED) != SvNumFormatType::TIME)
                 nCheckPos = std::max<sal_Int32>( sBuff.indexOf(']') + 1, 1);
         }
         else if (IsSystemLongDateFormat())
         {
-            if ((eType & ~css::util::NumberFormat::DEFINED) != css::util::NumberFormat::DATE)
+            if ((eType & ~SvNumFormatType::DEFINED) != SvNumFormatType::DATE)
                 nCheckPos = std::max<sal_Int32>( sBuff.indexOf(']') + 1, 1);
         }
         else
@@ -1851,7 +1851,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 {
     sal_Int32 nCheckPos;
     sal_uInt32 nKey;
-    short nType = eType;
+    SvNumFormatType nType = eType;
     OUString aFormatString( sFormatstring );
     rConverter.PutandConvertEntry( aFormatString, nCheckPos, nType,
                                    nKey, eConvertFrom, eConvertTo );
@@ -2005,7 +2005,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
 void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) const
 {
     bool bModified = false;
-    if ( (eType & css::util::NumberFormat::PERCENT) && (fabs(fNumber) < D_MAX_D_BY_100))
+    if ( (eType & SvNumFormatType::PERCENT) && (fabs(fNumber) < D_MAX_D_BY_100))
     {
         if (fNumber == 0.0)
         {
@@ -2027,7 +2027,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) 
                                               rtl_math_DecimalPlaces_Max,
                                               GetFormatter().GetNumDecimalSep()[0], true );
 
-    if ( eType & css::util::NumberFormat::PERCENT && bModified)
+    if ( eType & SvNumFormatType::PERCENT && bModified)
     {
         OutString += "%";
     }
@@ -2088,7 +2088,7 @@ void SvNumberformat::GetOutputString(const OUString& sString,
 {
     OUStringBuffer sOutBuff;
     sal_uInt16 nIx;
-    if (eType & css::util::NumberFormat::TEXT)
+    if (eType & SvNumFormatType::TEXT)
     {
         nIx = 0;
     }
@@ -2103,7 +2103,7 @@ void SvNumberformat::GetOutputString(const OUString& sString,
     }
     *ppColor = NumFor[nIx].GetColor();
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    if (rInfo.eScannedType == css::util::NumberFormat::TEXT)
+    if (rInfo.eScannedType == SvNumFormatType::TEXT)
     {
         const sal_uInt16 nCnt = NumFor[nIx].GetCount();
         for (sal_uInt16 i = 0; i < nCnt; i++)
@@ -2256,7 +2256,7 @@ bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUSt
 {
     using namespace std;
 
-    if (eType != css::util::NumberFormat::NUMBER)
+    if (eType != SvNumFormatType::NUMBER)
     {
         return false;
     }
@@ -2335,7 +2335,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
     OUStringBuffer sBuff;
     OutString.clear();
     *ppColor = nullptr; // No color change
-    if (eType & css::util::NumberFormat::LOGICAL)
+    if (eType & SvNumFormatType::LOGICAL)
     {
         if (fNumber)
         {
@@ -2347,7 +2347,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         return false;
     }
-    if (eType & css::util::NumberFormat::TEXT)
+    if (eType & SvNumFormatType::TEXT)
     {
         ImpGetOutputStandard(fNumber, sBuff);
         OutString = sBuff.makeStringAndClear();
@@ -2363,7 +2363,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         switch (eType)
         {
-        case css::util::NumberFormat::NUMBER: // Standard number format
+        case SvNumFormatType::NUMBER: // Standard number format
             if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
             {
                 if (::rtl::math::isSignBitSet(fNumber))
@@ -2401,18 +2401,19 @@ bool SvNumberformat::GetOutputString(double fNumber,
             ImpGetOutputStandard(fNumber, sBuff);
             bHadStandard = true;
             break;
-        case css::util::NumberFormat::DATE:
+        case SvNumFormatType::DATE:
             bRes |= ImpGetDateOutput(fNumber, 0, sBuff);
             bHadStandard = true;
             break;
-        case css::util::NumberFormat::TIME:
+        case SvNumFormatType::TIME:
             bRes |= ImpGetTimeOutput(fNumber, 0, sBuff);
             bHadStandard = true;
             break;
-        case css::util::NumberFormat::DATETIME:
+        case SvNumFormatType::DATETIME:
             bRes |= ImpGetDateTimeOutput(fNumber, 0, sBuff);
             bHadStandard = true;
             break;
+        default: break;
         }
     }
     if ( !bHadStandard )
@@ -2427,7 +2428,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         *ppColor = NumFor[nIx].GetColor();
         const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
         const sal_uInt16 nCnt = NumFor[nIx].GetCount();
-        if (nCnt == 0 && rInfo.eScannedType == css::util::NumberFormat::EMPTY)
+        if (nCnt == 0 && rInfo.eScannedType == SvNumFormatType::EMPTY)
         {
             return false; // Empty => nothing
         }
@@ -2439,8 +2440,8 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         switch (rInfo.eScannedType)
         {
-        case css::util::NumberFormat::TEXT:
-        case css::util::NumberFormat::DEFINED:
+        case SvNumFormatType::TEXT:
+        case SvNumFormatType::DEFINED:
             for (sal_uInt16 i = 0; i < nCnt; i++)
             {
                 switch (rInfo.nTypeArray[i])
@@ -2470,26 +2471,27 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 }
             }
             break;
-        case css::util::NumberFormat::DATE:
+        case SvNumFormatType::DATE:
             bRes |= ImpGetDateOutput(fNumber, nIx, sBuff);
             break;
-        case css::util::NumberFormat::TIME:
+        case SvNumFormatType::TIME:
             bRes |= ImpGetTimeOutput(fNumber, nIx, sBuff);
                 break;
-        case css::util::NumberFormat::DATETIME:
+        case SvNumFormatType::DATETIME:
             bRes |= ImpGetDateTimeOutput(fNumber, nIx, sBuff);
             break;
-        case css::util::NumberFormat::NUMBER:
-        case css::util::NumberFormat::PERCENT:
-        case css::util::NumberFormat::CURRENCY:
+        case SvNumFormatType::NUMBER:
+        case SvNumFormatType::PERCENT:
+        case SvNumFormatType::CURRENCY:
             bRes |= ImpGetNumberOutput(fNumber, nIx, sBuff);
             break;
-        case css::util::NumberFormat::FRACTION:
+        case SvNumFormatType::FRACTION:
             bRes |= ImpGetFractionOutput(fNumber, nIx, sBuff);
             break;
-        case css::util::NumberFormat::SCIENTIFIC:
+        case SvNumFormatType::SCIENTIFIC:
             bRes |= ImpGetScientificOutput(fNumber, nIx, sBuff);
             break;
+        default: break;
         }
     }
     OutString = sBuff.makeStringAndClear();
@@ -3390,7 +3392,7 @@ void SvNumberformat::ImpAppendEraG( OUStringBuffer& OutString,
 bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor ) const
 {
     bool bIsIso = false;
-    if ((eType & css::util::NumberFormat::DATE) == css::util::NumberFormat::DATE)
+    if (eType & SvNumFormatType::DATE)
     {
         enum State
         {
@@ -4089,7 +4091,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
     }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    if (rInfo.eScannedType == css::util::NumberFormat::PERCENT)
+    if (rInfo.eScannedType == SvNumFormatType::PERCENT)
     {
         if (fNumber < D_MAX_D_BY_100)
         {
@@ -4607,7 +4609,7 @@ void SvNumberformat::GetFormatSpecialInfo(bool& bThousand,
 {
     // as before: take info from nNumFor=0 for whole format (for dialog etc.)
 
-    short nDummyType;
+    SvNumFormatType nDummyType;
     GetNumForInfo( 0, nDummyType, bThousand, nPrecision, nLeadingCnt );
 
     // "negative in red" is only useful for the whole format
@@ -4617,7 +4619,7 @@ void SvNumberformat::GetFormatSpecialInfo(bool& bThousand,
         && (*pColor == ImpSvNumberformatScan::GetRedColor());
 }
 
-void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
+void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, SvNumFormatType& rScannedType,
                     bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt ) const
 {
     // take info from a specified sub-format (for XML export)
@@ -4630,14 +4632,14 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
     rScannedType = rInfo.eScannedType;
     bThousand = rInfo.bThousand;
-    nPrecision = (rInfo.eScannedType == css::util::NumberFormat::FRACTION)
+    nPrecision = (rInfo.eScannedType == SvNumFormatType::FRACTION)
                     ? rInfo.nCntExp  // number of denominator digits for fraction
                     : rInfo.nCntPost;
     sal_Int32 nPosHash = 1;
-    if ( rInfo.eScannedType == css::util::NumberFormat::FRACTION &&
+    if ( rInfo.eScannedType == SvNumFormatType::FRACTION &&
             ( (nPosHash += GetDenominatorString(nNumFor).indexOf('#')) > 0 ) )
         nPrecision -= nPosHash;
-    if (bStandard && rInfo.eScannedType == css::util::NumberFormat::NUMBER)
+    if (bStandard && rInfo.eScannedType == SvNumFormatType::NUMBER)
     {
         // StandardFormat
         nLeadingCnt = 1;
@@ -4781,7 +4783,7 @@ bool SvNumberformat::HasPositiveBracketPlaceholder() const
 
 DateOrder SvNumberformat::GetDateOrder() const
 {
-    if ( (eType & css::util::NumberFormat::DATE) == css::util::NumberFormat::DATE )
+    if ( eType & SvNumFormatType::DATE )
     {
         auto& rTypeArray = NumFor[0].Info().nTypeArray;
         sal_uInt16 nCnt = NumFor[0].GetCount();
@@ -4818,7 +4820,7 @@ DateOrder SvNumberformat::GetDateOrder() const
 sal_uInt32 SvNumberformat::GetExactDateOrder() const
 {
     sal_uInt32 nRet = 0;
-    if ( (eType & css::util::NumberFormat::DATE) != css::util::NumberFormat::DATE )
+    if ( !(eType & SvNumFormatType::DATE) )
     {
         SAL_WARN( "svl.numbers", "SvNumberformat::GetExactDateOrder: no date" );
         return nRet;
@@ -5004,7 +5006,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
     int nSub = 0; // subformats delimited so far
     for ( int n=0; n<4; n++ )
     {
-        if ( n > 0 && NumFor[n].Info().eScannedType != css::util::NumberFormat::UNDEFINED )
+        if ( n > 0 && NumFor[n].Info().eScannedType != SvNumFormatType::UNDEFINED )
         {
             nSem++;
         }

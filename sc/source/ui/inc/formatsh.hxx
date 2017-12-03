@@ -26,6 +26,7 @@
 #include <svx/svdmark.hxx>
 
 class ScViewData;
+enum class SvNumFormatType : sal_Int16;
 
 class ScFormatShell: public SfxShell
 {
@@ -70,7 +71,7 @@ public:
     void        StateFormatPaintbrush( SfxItemSet& rSet );
 
 private:
-    short       GetCurrentNumberFormatType();
+    SvNumFormatType GetCurrentNumberFormatType();
 };
 
 #endif

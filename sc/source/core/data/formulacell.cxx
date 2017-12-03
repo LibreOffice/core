@@ -524,7 +524,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mpTopCell(nullptr),
     mnLength(0),
     mnWeight(0),
-    mnFormatType(css::util::NumberFormat::NUMBER),
+    mnFormatType(SvNumFormatType::NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
     meCalcState(sc::GroupCalcEnabled)
@@ -611,7 +611,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     pPreviousTrack(nullptr),
     pNextTrack(nullptr),
     nSeenInIteration(0),
-    nFormatType(css::util::NumberFormat::NUMBER),
+    nFormatType(SvNumFormatType::NUMBER),
     cMatrixFlag(ScMatrixMode::NONE),
     bDirty(false),
     bChanged(false),
@@ -642,7 +642,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     pPreviousTrack(nullptr),
     pNextTrack(nullptr),
     nSeenInIteration(0),
-    nFormatType ( css::util::NumberFormat::NUMBER ),
+    nFormatType ( SvNumFormatType::NUMBER ),
     cMatrixFlag ( cMatInd ),
     bDirty( true ), // -> Because of the use of the Auto Pilot Function was: cMatInd != 0
     bChanged( false ),
@@ -676,7 +676,7 @@ ScFormulaCell::ScFormulaCell(
     pPreviousTrack(nullptr),
     pNextTrack(nullptr),
     nSeenInIteration(0),
-    nFormatType ( css::util::NumberFormat::NUMBER ),
+    nFormatType ( SvNumFormatType::NUMBER ),
     cMatrixFlag ( cMatInd ),
     bDirty( true ),
     bChanged( false ),
@@ -725,7 +725,7 @@ ScFormulaCell::ScFormulaCell(
     pPreviousTrack(nullptr),
     pNextTrack(nullptr),
     nSeenInIteration(0),
-    nFormatType ( css::util::NumberFormat::NUMBER ),
+    nFormatType ( SvNumFormatType::NUMBER ),
     cMatrixFlag ( cMatInd ),
     bDirty( true ),
     bChanged( false ),
@@ -1896,8 +1896,8 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         if (bForceNumberFormat)
         {
             sal_uInt32 nOldFormatIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
-            const short nRetType = pInterpreter->GetRetFormatType();
-            if (nRetType == css::util::NumberFormat::LOGICAL)
+            const SvNumFormatType nRetType = pInterpreter->GetRetFormatType();
+            if (nRetType == SvNumFormatType::LOGICAL)
             {
                 double fVal;
                 if ((fVal = aNewResult.GetDouble()) != 1.0 && fVal != 0.0)
@@ -1908,20 +1908,21 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     nFormatType = pDocument->GetFormatTable()->GetType( nOldFormatIndex);
                     switch (nFormatType)
                     {
-                        case css::util::NumberFormat::PERCENT:
-                        case css::util::NumberFormat::CURRENCY:
-                        case css::util::NumberFormat::SCIENTIFIC:
-                        case css::util::NumberFormat::FRACTION:
+                        case SvNumFormatType::PERCENT:
+                        case SvNumFormatType::CURRENCY:
+                        case SvNumFormatType::SCIENTIFIC:
+                        case SvNumFormatType::FRACTION:
                             bForceNumberFormat = false;
                         break;
-                        case css::util::NumberFormat::NUMBER:
+                        case SvNumFormatType::NUMBER:
                             if ((nOldFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
                                 bForceNumberFormat = false;
                         break;
+                        default: break;
                     }
                 }
             }
-            else if (nRetType == css::util::NumberFormat::TEXT)
+            else if (nRetType == SvNumFormatType::TEXT)
             {
                 bForceNumberFormat = false;
             }
@@ -1941,16 +1942,16 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         if( mbNeedsNumberFormat || bForceNumberFormat )
         {
             bool bSetFormat = true;
-            const short nOldFormatType = nFormatType;
+            const SvNumFormatType nOldFormatType = nFormatType;
             nFormatType = pInterpreter->GetRetFormatType();
             sal_uInt32 nFormatIndex = pInterpreter->GetRetFormatIndex();
 
-            if (nFormatType == css::util::NumberFormat::TEXT)
+            if (nFormatType == SvNumFormatType::TEXT)
             {
                 // Don't set text format as hard format.
                 bSetFormat = false;
             }
-            else if (nFormatType == css::util::NumberFormat::LOGICAL && cMatrixFlag != ScMatrixMode::NONE)
+            else if (nFormatType == SvNumFormatType::LOGICAL && cMatrixFlag != ScMatrixMode::NONE)
             {
                 // In a matrix range do not set an (inherited) logical format
                 // as hard format if the value does not represent a strict TRUE
@@ -1974,7 +1975,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     else if ((fVal = aNewResult.GetDouble()) != 1.0 && fVal != 0.0)
                     {
                         bSetFormat = false;
-                        nFormatType = css::util::NumberFormat::NUMBER;
+                        nFormatType = SvNumFormatType::NUMBER;
                     }
                 }
             }
@@ -2060,9 +2061,9 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         // Precision as shown?
         if ( aResult.IsValue() && pInterpreter->GetError() == FormulaError::NONE
           && pDocument->GetDocOptions().IsCalcAsShown()
-          && nFormatType != css::util::NumberFormat::DATE
-          && nFormatType != css::util::NumberFormat::TIME
-          && nFormatType != css::util::NumberFormat::DATETIME )
+          && nFormatType != SvNumFormatType::DATE
+          && nFormatType != SvNumFormatType::TIME
+          && nFormatType != SvNumFormatType::DATETIME )
         {
             sal_uInt32 nFormat = pDocument->GetNumberFormat( aPos );
             aResult.SetDouble( pDocument->RoundValueAsShown(
@@ -2528,7 +2529,7 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
     const sal_uInt32 nCellFormat = pDocument->GetNumberFormat( aPos );
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
 
-    const sal_uInt32 nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, css::util::NumberFormat::NUMBER);
+    const sal_uInt32 nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, SvNumFormatType::NUMBER);
 
     if ( IsValue() )
     {

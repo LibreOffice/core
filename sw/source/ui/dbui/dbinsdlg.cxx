@@ -1132,7 +1132,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 aTableSet.ClearItem( RES_BOXATR_VALUE );
                             else
                             {
-                                if(rNumFormatr.GetType(aNumFormat.GetValue()) & css::util::NumberFormat::DATE)
+                                if(rNumFormatr.GetType(aNumFormat.GetValue()) & SvNumFormatType::DATE)
                                 {
                                     ::Date aStandard(1,1,1900);
                                     if (rNumFormatr.GetNullDate() != aStandard)
@@ -1366,7 +1366,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 DBL_MAX != nValue )
                             {
                                 Color* pCol;
-                                if(rNumFormatr.GetType(pDBCol->nFormat) & css::util::NumberFormat::DATE)
+                                if(rNumFormatr.GetType(pDBCol->nFormat) & SvNumFormatType::DATE)
                                 {
                                     ::Date aStandard(1,1,1900);
                                     if (rNumFormatr.GetNullDate() != aStandard)
@@ -1818,7 +1818,7 @@ void SwInsertDBColAutoPilot::Load()
                             if( NUMBERFORMAT_ENTRY_NOT_FOUND == rSet.nUsrNumFormat )
                             {
                                 sal_Int32 nCheckPos;
-                                short nType;
+                                SvNumFormatType nType;
                                 rNFormatr.PutEntry( rGet.sUsrNumFormat, nCheckPos, nType,
                                                 rSet.nUsrNumFormat, rGet.eUsrNumFormatLng );
                             }

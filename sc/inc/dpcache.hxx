@@ -35,6 +35,7 @@ struct ScQueryParam;
 class ScDPObject;
 class ScDPItemData;
 struct ScDPNumGroupInfo;
+enum class SvNumFormatType : sal_Int16;
 
 /**
  * This class represents the cached data part of the datapilot cache table
@@ -98,7 +99,7 @@ public:
         virtual bool first() = 0;
         virtual bool next() = 0;
         virtual void finish() = 0;
-        virtual void getValue(long nCol, ScDPItemData& rData, short& rNumType) const = 0;
+        virtual void getValue(long nCol, ScDPItemData& rData, SvNumFormatType& rNumType) const = 0;
         virtual ~DBConnector() {}
     };
 

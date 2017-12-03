@@ -74,7 +74,7 @@ double convertStringToValue( ScInterpreter* pErrorInterpreter, const OUString& r
     if (pErrorInterpreter)
     {
         FormulaError nError = FormulaError::NONE;
-        sal_uInt32 nCurFmtType = 0;
+        SvNumFormatType nCurFmtType = SvNumFormatType::ALL;
         double fValue = pErrorInterpreter->ConvertStringToValue( rStr, nError, nCurFmtType);
         if (nError != FormulaError::NONE)
         {
@@ -689,7 +689,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
                 return svl::SharedString::getEmptyString();
 
             // result of empty FALSE jump path
-            sal_uInt32 nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::LOGICAL,
+            sal_uInt32 nKey = rFormatter.GetStandardFormat( SvNumFormatType::LOGICAL,
                     ScGlobal::eLnge);
             OUString aStr;
             Color* pColor = nullptr;
@@ -711,7 +711,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
         return svl::SharedString( ScGlobal::GetErrorString( nError));   // string not interned
     }
 
-    sal_uInt32 nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::NUMBER,
+    sal_uInt32 nKey = rFormatter.GetStandardFormat( SvNumFormatType::NUMBER,
             ScGlobal::eLnge);
     OUString aStr;
     rFormatter.GetInputLineString( fVal, nKey, aStr);
@@ -2610,7 +2610,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     xMat1->GetDimensions(nC1, nR1);
     xMat2->GetDimensions(nC2, nR2);
 
-    sal_uInt32 nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::NUMBER,
+    sal_uInt32 nKey = rFormatter.GetStandardFormat( SvNumFormatType::NUMBER,
             ScGlobal::eLnge);
 
     std::vector<OUString> aString(nMaxCol * nMaxRow);

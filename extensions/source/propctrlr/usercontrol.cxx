@@ -118,17 +118,17 @@ namespace pcr
     double OFormatSampleControl::getPreviewValue( const SvNumberformat& i_rEntry )
     {
         double nValue = 1234.56789;
-        switch ( i_rEntry.GetType() & ~css::util::NumberFormat::DEFINED )
+        switch ( i_rEntry.GetType() & ~SvNumFormatType::DEFINED )
         {
-            case css::util::NumberFormat::DATE:
+            case SvNumFormatType::DATE:
                 {
                     Date aCurrentDate( Date::SYSTEM );
                     static css::util::Date STANDARD_DB_DATE(30,12,1899);
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(aCurrentDate.GetDate()),STANDARD_DB_DATE);
                 }
                 break;
-            case css::util::NumberFormat::TIME:
-            case css::util::NumberFormat::DATETIME:
+            case SvNumFormatType::TIME:
+            case SvNumFormatType::DATETIME:
                 {
                     tools::Time aCurrentTime( tools::Time::SYSTEM );
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));

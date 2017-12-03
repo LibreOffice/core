@@ -650,11 +650,11 @@ public:
 
     bool isDateTime(size_t position)
     {
-        short nType = mrDoc.GetFormatTable()->GetType(static_cast<const SfxUInt32Item&>(
+        SvNumFormatType nType = mrDoc.GetFormatTable()->GetType(static_cast<const SfxUInt32Item&>(
                           mrCol.GetAttr(position, ATTR_VALUE_FORMAT)).GetValue());
 
-        return (nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) ||
-               (nType == css::util::NumberFormat::DATETIME);
+        return (nType == SvNumFormatType::DATE) || (nType == SvNumFormatType::TIME) ||
+               (nType == SvNumFormatType::DATETIME);
     }
 
     void endFormulas()
@@ -1670,7 +1670,7 @@ namespace {
 
 void applyTextNumFormat( ScColumn& rCol, SCROW nRow, SvNumberFormatter* pFormatter )
 {
-    sal_uInt32 nFormat = pFormatter->GetStandardFormat(css::util::NumberFormat::TEXT);
+    sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TEXT);
     ScPatternAttr aNewAttrs(rCol.GetDoc().GetPool());
     SfxItemSet& rSet = aNewAttrs.GetItemSet();
     rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
@@ -1702,7 +1702,7 @@ bool ScColumn::ParseString(
 
     nIndex = nOldIndex = GetNumberFormat( pDocument->GetNonThreadedContext(), nRow );
     if ( rString.getLength() > 1
-            && aParam.mpNumFormatter->GetType(nIndex) != css::util::NumberFormat::TEXT )
+            && aParam.mpNumFormatter->GetType(nIndex) != SvNumFormatType::TEXT )
         cFirstChar = rString[0];
     else
         cFirstChar = 0; // Text
@@ -1772,9 +1772,9 @@ bool ScColumn::ParseString(
                     bool bOverwrite = false;
                     if ( pOldFormat )
                     {
-                        short nOldType = pOldFormat->GetMaskedType();
-                        if ( nOldType == css::util::NumberFormat::NUMBER || nOldType == css::util::NumberFormat::DATE ||
-                             nOldType == css::util::NumberFormat::TIME || nOldType == css::util::NumberFormat::LOGICAL )
+                        SvNumFormatType nOldType = pOldFormat->GetMaskedType();
+                        if ( nOldType == SvNumFormatType::NUMBER || nOldType == SvNumFormatType::DATE ||
+                             nOldType == SvNumFormatType::TIME || nOldType == SvNumFormatType::LOGICAL )
                         {
                             if ( nOldIndex == aParam.mpNumFormatter->GetStandardFormat(
                                                 nOldType, pOldFormat->GetLanguage() ) )
@@ -1783,7 +1783,7 @@ bool ScColumn::ParseString(
                             }
                         }
                     }
-                    if ( !bOverwrite && aParam.mpNumFormatter->GetType( nIndex ) == css::util::NumberFormat::LOGICAL )
+                    if ( !bOverwrite && aParam.mpNumFormatter->GetType( nIndex ) == SvNumFormatType::LOGICAL )
                     {
                         bOverwrite = true; // overwrite anything if boolean was detected
                     }
@@ -2102,9 +2102,9 @@ class FilterEntriesHandler
                 ;
         }
 
-        short nType = pFormatter->GetType(nFormat);
+        SvNumFormatType nType = pFormatter->GetType(nFormat);
         bool bDate = false;
-        if ((nType & css::util::NumberFormat::DATE) && !(nType & css::util::NumberFormat::TIME))
+        if ((nType & SvNumFormatType::DATE) && !(nType & SvNumFormatType::TIME))
         {
             // special case for date values.  Disregard the time
             // element if the number format is of date type.

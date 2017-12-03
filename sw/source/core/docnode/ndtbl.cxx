@@ -4052,8 +4052,8 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
                 sal_uLong nOldNumFormat = static_cast<const SwTableBoxNumFormat*>(pNumFormatItem)->GetValue();
                 SvNumberFormatter* pNumFormatr = GetNumberFormatter();
 
-                short nFormatType = pNumFormatr->GetType( nFormatIdx );
-                if( nFormatType == pNumFormatr->GetType( nOldNumFormat ) || css::util::NumberFormat::NUMBER == nFormatType )
+                SvNumFormatType nFormatType = pNumFormatr->GetType( nFormatIdx );
+                if( nFormatType == pNumFormatr->GetType( nOldNumFormat ) || SvNumFormatType::NUMBER == nFormatType )
                 {
                     // Current and specified NumFormat match
                     // -> keep old Format

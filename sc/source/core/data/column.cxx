@@ -522,7 +522,7 @@ void ScColumn::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPattern
 }
 
 void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
-        const ScPatternAttr& rPattern, short nNewType )
+        const ScPatternAttr& rPattern, SvNumFormatType nNewType )
 {
     const SfxItemSet* pSet = &rPattern.GetItemSet();
     SfxItemPoolCache aCache( pDocument->GetPool(), pSet );
@@ -534,7 +534,7 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(
             nRow1, nRow2, nRow );
         sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
-        short nOldType = pFormatter->GetType( nFormat );
+        SvNumFormatType nOldType = pFormatter->GetType( nFormat );
         if ( nOldType == nNewType || SvNumberFormatter::IsCompatible( nOldType, nNewType ) )
             nRow = nRow2;
         else
@@ -1233,8 +1233,8 @@ namespace {
 bool canCopyValue(const ScDocument& rDoc, const ScAddress& rPos, InsertDeleteFlags nFlags)
 {
     sal_uInt32 nNumIndex = static_cast<const SfxUInt32Item*>(rDoc.GetAttr(rPos, ATTR_VALUE_FORMAT))->GetValue();
-    short nType = rDoc.GetFormatTable()->GetType(nNumIndex);
-    if ((nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) || (nType == css::util::NumberFormat::DATETIME))
+    SvNumFormatType nType = rDoc.GetFormatTable()->GetType(nNumIndex);
+    if ((nType == SvNumFormatType::DATE) || (nType == SvNumFormatType::TIME) || (nType == SvNumFormatType::DATETIME))
         return ((nFlags & InsertDeleteFlags::DATETIME) != InsertDeleteFlags::NONE);
 
     return (nFlags & InsertDeleteFlags::VALUE) != InsertDeleteFlags::NONE;

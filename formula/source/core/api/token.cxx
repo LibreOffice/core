@@ -210,13 +210,13 @@ double & FormulaToken::GetDoubleAsReference()
     return fVal;
 }
 
-short FormulaToken::GetDoubleType() const
+sal_Int16 FormulaToken::GetDoubleType() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetDoubleType: virtual dummy called" );
     return 0;
 }
 
-void FormulaToken::SetDoubleType( short )
+void FormulaToken::SetDoubleType( sal_Int16 )
 {
     assert( !"virtual dummy called" );
 }
@@ -1785,7 +1785,7 @@ void FormulaTokenArrayPlainIterator::AfterRemoveToken( sal_uInt16 nOffset, sal_u
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
 
-short FormulaDoubleToken::GetDoubleType() const
+sal_Int16 FormulaDoubleToken::GetDoubleType() const
 {
     // This is a plain double value without type information, don't emit a
     // warning via FormulaToken::GetDoubleType().
@@ -1797,12 +1797,12 @@ bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && fDouble == r.GetDouble();
 }
 
-short FormulaTypedDoubleToken::GetDoubleType() const
+sal_Int16 FormulaTypedDoubleToken::GetDoubleType() const
 {
     return mnType;
 }
 
-void FormulaTypedDoubleToken::SetDoubleType( short nType )
+void FormulaTypedDoubleToken::SetDoubleType( sal_Int16 nType )
 {
     mnType = nType;
 }

@@ -2544,7 +2544,7 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
 }
 
 void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
-        const ScPatternAttr& rPattern, short nNewType )
+        const ScPatternAttr& rPattern, SvNumFormatType nNewType )
 {
     SCCOL nEndCol = rRange.aEnd.Col();
     for ( SCCOL nCol = rRange.aStart.Col(); nCol <= nEndCol; nCol++ )
