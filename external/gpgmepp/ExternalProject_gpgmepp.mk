@@ -21,6 +21,8 @@ $(eval $(call gb_ExternalProject_use_externals,gpgmepp,\
 ))
 
 ifeq ($(COM),MSC)
+gb_ExternalProject_gpgmepp_host := $(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32)
+gb_ExternalProject_gpgmepp_target := $(if $(filter INTEL,$(CPUNAME)),pe-i386,pe-x86-64)
 $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_get_target,cpp)
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
@@ -37,10 +39,10 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
-		   --host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+		   --host=$(gb_ExternalProject_libgpg-error_host) \
+		   RC='windres -O COFF --target=$(gb_ExternalProject_libgpg-error_target) --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\' \
 		   MAKE=$(MAKE) \
-		   RC='windres --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC) -I$(ATL_INCLUDE)'\' \
-	  && $(MAKE) \
+	    && $(MAKE) \
 	)
 else
 $(call gb_ExternalProject_get_state_target,gpgmepp,build):
