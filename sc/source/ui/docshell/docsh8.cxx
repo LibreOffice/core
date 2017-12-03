@@ -270,7 +270,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
         if (nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
             sal_Int32 nErrPos = 0;
-            short nNewType = 0;
+            SvNumFormatType nNewType = SvNumFormatType::ALL;
             bool bOk = pFormatter->PutEntry(
                 aNewPicture, nErrPos, nNewType, nNewFormat, eLang);
 
@@ -599,16 +599,16 @@ void lcl_GetColumnTypes(
                 rDoc.GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
                 switch ( pNumFmt->GetType( nFormat ) )
                 {
-                    case css::util::NumberFormat::LOGICAL :
+                    case SvNumFormatType::LOGICAL :
                         nDbType = sdbc::DataType::BIT;
                         nFieldLen = 1;
                         break;
-                    case css::util::NumberFormat::DATE :
+                    case SvNumFormatType::DATE :
                         nDbType = sdbc::DataType::DATE;
                         nFieldLen = 8;
                         break;
-                    case css::util::NumberFormat::TIME :
-                    case css::util::NumberFormat::DATETIME :
+                    case SvNumFormatType::TIME :
+                    case SvNumFormatType::DATETIME :
                         nDbType = sdbc::DataType::VARCHAR;
                         break;
                     default:

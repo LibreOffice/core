@@ -1130,8 +1130,8 @@ bool DataBrowser::isDateTimeString( const OUString& aInputString, double& fOutDa
     SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
     if( !aInputString.isEmpty() &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateTimeValue ) )
     {
-        short nType = pSvNumberFormatter->GetType( nNumberFormat);
-        return (nType & util::NumberFormat::DATE) || (nType & util::NumberFormat::TIME);
+        SvNumFormatType nType = pSvNumberFormatter->GetType( nNumberFormat);
+        return (nType & SvNumFormatType::DATE) || (nType & SvNumFormatType::TIME);
     }
     return false;
 }

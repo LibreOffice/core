@@ -422,11 +422,11 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     bool bDateAxis = m_nAxisType == chart2::AxisType::DATE;
 
     sal_uInt32 nMinMaxOriginFmt = m_pFmtFldMax->GetFormatKey();
-    if (pNumFormatter->GetType(nMinMaxOriginFmt) == css::util::NumberFormat::TEXT)
+    if (pNumFormatter->GetType(nMinMaxOriginFmt) == SvNumFormatType::TEXT)
         nMinMaxOriginFmt = 0;
     // numberformat_text cause numbers to fail being numbers...  Shouldn't happen, but can.
     sal_uInt32 nStepFmt = m_pFmtFldStepMain->GetFormatKey();
-    if (pNumFormatter->GetType(nStepFmt) == css::util::NumberFormat::TEXT)
+    if (pNumFormatter->GetType(nStepFmt) == SvNumFormatType::TEXT)
         nStepFmt = 0;
 
     Control* pControl = nullptr;
@@ -564,8 +564,8 @@ void ScaleTabPage::SetNumFormat()
 
         if( pNumFormatter )
         {
-            short eType = pNumFormatter->GetType( nFmt );
-            if( eType == css::util::NumberFormat::DATE )
+            SvNumFormatType eType = pNumFormatter->GetType( nFmt );
+            if( eType == SvNumFormatType::DATE )
             {
                 // for intervals use standard format for dates (so you can enter a number of days)
                 const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
@@ -574,23 +574,23 @@ void ScaleTabPage::SetNumFormat()
                 else
                     nFmt = pNumFormatter->GetStandardIndex();
             }
-            else if( eType == css::util::NumberFormat::DATETIME )
+            else if( eType == SvNumFormatType::DATETIME )
             {
                 // for intervals use time format for date times
                 const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
                 if( pFormat )
-                    nFmt = pNumFormatter->GetStandardFormat( css::util::NumberFormat::TIME, pFormat->GetLanguage() );
+                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME, pFormat->GetLanguage() );
                 else
-                    nFmt = pNumFormatter->GetStandardFormat( css::util::NumberFormat::TIME );
+                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME );
             }
 
-            if( m_nAxisType == chart2::AxisType::DATE && ( eType != css::util::NumberFormat::DATE && eType != css::util::NumberFormat::DATETIME) )
+            if( m_nAxisType == chart2::AxisType::DATE && ( eType != SvNumFormatType::DATE && eType != SvNumFormatType::DATETIME) )
             {
                 const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
                 if( pFormat )
-                    nFmt = pNumFormatter->GetStandardFormat( css::util::NumberFormat::DATE, pFormat->GetLanguage() );
+                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::DATE, pFormat->GetLanguage() );
                 else
-                    nFmt = pNumFormatter->GetStandardFormat( css::util::NumberFormat::DATE );
+                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::DATE );
 
                 m_pFmtFldMax->SetFormatKey( nFmt );
                 m_pFmtFldMin->SetFormatKey( nFmt );

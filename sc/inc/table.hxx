@@ -705,7 +705,7 @@ public:
                     }
     void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
-                            const ScPatternAttr& rPattern, short nNewType );
+                            const ScPatternAttr& rPattern, SvNumFormatType nNewType );
     void        AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
     void        RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
 
