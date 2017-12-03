@@ -31,6 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -121,12 +122,12 @@ getLocalizedDatTimeStr(
     Color*      pColor = nullptr;
     const Date&  rNullDate = pNumberFormatter->GetNullDate();
     sal_uInt32  nFormat
-        = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::DATE, eUILang );
+        = pNumberFormatter->GetStandardFormat( SvNumFormatType::DATE, eUILang );
 
     pNumberFormatter->GetOutputString( aDate - rNullDate, nFormat, aTmpStr, &pColor );
     aDateTimeStr = aTmpStr + " ";
 
-    nFormat = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eUILang );
+    nFormat = pNumberFormatter->GetStandardFormat( SvNumFormatType::TIME, eUILang );
     pNumberFormatter->GetOutputString(
         aTime.GetTimeInDays(), nFormat, aTmpStr, &pColor );
     aDateTimeStr += aTmpStr;

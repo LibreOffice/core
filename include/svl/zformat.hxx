@@ -19,7 +19,9 @@
 #ifndef INCLUDED_SVL_ZFORMAT_HXX
 #define INCLUDED_SVL_ZFORMAT_HXX
 
+#include <com/sun/star/util/NumberFormat.hpp>
 #include <svl/svldllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
@@ -46,6 +48,55 @@ enum SvNumberformatLimitOps
     NUMBERFORMAT_OP_GE  = 6             // Operator >=
 };
 
+enum class SvNumFormatType
+{
+    /** selects all number formats.
+      */
+     ALL = css::util::NumberFormat::ALL, // 0
+     /** selects only user-defined number formats.
+      */
+     DEFINED = css::util::NumberFormat::DEFINED,  // 1
+     /** selects date formats.
+      */
+     DATE = css::util::NumberFormat::DATE, // 2
+     /** selects time formats.
+      */
+     TIME = css::util::NumberFormat::TIME, // 4
+     /** selects currency formats.
+      */
+     CURRENCY = css::util::NumberFormat::CURRENCY,  // 8
+     /** selects decimal number formats.
+      */
+     NUMBER = css::util::NumberFormat::NUMBER, // 16
+     /** selects scientific number formats.
+      */
+     SCIENTIFIC = css::util::NumberFormat::SCIENTIFIC, // 32
+     /** selects number formats for fractions.
+      */
+     FRACTION = css::util::NumberFormat::FRACTION, // 64
+     /** selects percentage number formats.
+      */
+     PERCENT = css::util::NumberFormat::PERCENT, // 128
+     /** selects text number formats.
+      */
+     TEXT = css::util::NumberFormat::TEXT, // 256
+     /** selects number formats which contain date and time.
+      */
+     DATETIME = DATE | TIME, // 6
+     /** selects boolean number formats.
+      */
+     LOGICAL = css::util::NumberFormat::LOGICAL, // 1024
+     /** is used as a return value if no format exists.
+      */
+     UNDEFINED = css::util::NumberFormat::UNDEFINED, // 2048
+     /** @internal is used to flag an empty sub format.
+         @since LibreOffice 5.1
+      */
+     EMPTY = css::util::NumberFormat::EMPTY, // 4096
+};
+namespace o3tl {
+    template<> struct typed_flags<SvNumFormatType> : is_typed_flags<SvNumFormatType, 0x00df> {};
+}
 
 struct ImpSvNumberformatInfo            // Struct for FormatInfo
 {
@@ -55,7 +106,7 @@ struct ImpSvNumberformatInfo            // Struct for FormatInfo
     sal_uInt16 nCntPre;                 // Count of digits before decimal point
     sal_uInt16 nCntPost;                // Count of digits after decimal point
     sal_uInt16 nCntExp;                 // Count of exponent digits, or AM/PM
-    short eScannedType;                 // Type determined by scan
+    SvNumFormatType eScannedType;       // Type determined by scan
     bool bThousand;                     // Has group (AKA thousand) separator
 
     void Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nAnz );
@@ -176,12 +227,12 @@ public:
     ~SvNumberformat();
 
     /// Get type of format, may include css::util::NumberFormat::DEFINED bit
-    short GetType() const                       { return eType; }
+    SvNumFormatType GetType() const             { return eType; }
 
     /// Get type of format, does not include css::util::NumberFormat::DEFINED
-    short GetMaskedType() const                 { return eType & ~css::util::NumberFormat::DEFINED; }
+    SvNumFormatType GetMaskedType() const       { return eType & ~SvNumFormatType::DEFINED; }
 
-    void SetType(const short eSetType)          { eType = eSetType; }
+    void SetType(SvNumFormatType eSetType)      { eType = eSetType; }
     // Standard means the I18N defined standard format of this type
     void SetStandard()                          { bStandard = true; }
     bool IsStandard() const                     { return bStandard; }
@@ -233,12 +284,12 @@ public:
     void GetOutputString( const OUString& sString, OUString& OutString, Color** ppColor );
 
     // True if type text
-    bool IsTextFormat() const { return (eType & css::util::NumberFormat::TEXT) != 0; }
+    bool IsTextFormat() const { return bool(eType & SvNumFormatType::TEXT); }
     // True if 4th subformat present
     bool HasTextFormat() const
         {
             return (NumFor[3].GetCount() > 0) ||
-                (NumFor[3].Info().eScannedType == css::util::NumberFormat::TEXT);
+                (NumFor[3].Info().eScannedType == SvNumFormatType::TEXT);
         }
 
     void GetFormatSpecialInfo(bool& bThousand,
@@ -318,9 +369,9 @@ public:
     sal_uInt16 GetNumForNumberElementCount( sal_uInt16 nNumFor ) const;
 
     /** Get the scanned type of the specified subformat. */
-    short GetNumForInfoScannedType( sal_uInt16 nNumFor ) const
+    SvNumFormatType GetNumForInfoScannedType( sal_uInt16 nNumFor ) const
     {
-        return (nNumFor < 4) ? NumFor[nNumFor].Info().eScannedType : css::util::NumberFormat::UNDEFINED;
+        return (nNumFor < 4) ? NumFor[nNumFor].Info().eScannedType : SvNumFormatType::UNDEFINED;
     }
 
     // Whether the second subformat code is really for negative numbers
@@ -427,7 +478,7 @@ public:
     void GetConditions( SvNumberformatLimitOps& rOper1, double& rVal1,
                         SvNumberformatLimitOps& rOper2, double& rVal2 ) const;
     Color* GetColor( sal_uInt16 nNumFor ) const;
-    void GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
+    void GetNumForInfo( sal_uInt16 nNumFor, SvNumFormatType& rScannedType,
                     bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt ) const;
 
     // rAttr.Number not empty if NatNum attributes are to be stored
@@ -488,7 +539,7 @@ private:
     LocaleType maLocale;            // Language/country of the format, numeral shape and calendar type from Excel.
     SvNumberformatLimitOps eOp1;    // Operator for first condition
     SvNumberformatLimitOps eOp2;    // Operator for second condition
-    short eType;                    // Type of format
+    SvNumFormatType eType;          // Type of format
     bool bAdditionalBuiltin;        // If this is an additional built-in format defined by i18n
     bool bStarFlag;                 // Take *n format as ESC n
     bool bStandard;                 // If this is a default standard format

@@ -267,7 +267,7 @@ void Test::testNumberFormat()
     }
 
     sal_Int32 nPos;
-    short nType = css::util::NumberFormat::DEFINED;
+    SvNumFormatType nType = SvNumFormatType::DEFINED;
     sal_uInt32 nKey;
     OUString aCode;
     // Thai date format (implicit locale).
@@ -1079,7 +1079,7 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
     CPPUNIT_ASSERT_MESSAGE( OString("Date not recognized: " +
                 OString(pTimezone) + " " + OString(pIsoDate)).getStr(), bVal);
     CPPUNIT_ASSERT_MESSAGE("Format parsed is not date.",
-            (rFormatter.GetType(nIndex) & css::util::NumberFormat::DATE));
+            (rFormatter.GetType(nIndex) & SvNumFormatType::DATE));
     OUString aOutString;
     Color *pColor;
     rFormatter.GetOutputString( fVal, nIndex, aOutString, &pColor);

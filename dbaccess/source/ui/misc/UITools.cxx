@@ -77,6 +77,7 @@
 #include <svl/itempool.hxx>
 #include <helpids.h>
 #include <svl/itemset.hxx>
+#include <svl/zformat.hxx>
 #include <sbagrid.hrc>
 #include <svl/rngitem.hxx>
 #include <svl/intitem.hxx>
@@ -834,7 +835,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, true));
             if (!_pFormatter->IsTextFormat(_nFormatKey))
                 // text fields can only have text formats
-                _nFormatKey = _pFormatter->GetStandardFormat(css::util::NumberFormat::TEXT,_pParent->GetSettings().GetLanguageTag().getLanguageType());
+                _nFormatKey = _pFormatter->GetStandardFormat(SvNumFormatType::TEXT,_pParent->GetSettings().GetLanguageTag().getLanguageType());
         }
 
         pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, _nFormatKey));

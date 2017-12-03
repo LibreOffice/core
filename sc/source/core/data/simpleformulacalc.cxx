@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <svl/zformat.hxx>
 #include <simpleformulacalc.hxx>
 #include <document.hxx>
 #include <tokenarray.hxx>
@@ -18,7 +19,7 @@
 
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
         const OUString& rFormula, bool bMatrixFormula, formula::FormulaGrammar::Grammar eGram )
-    : mnFormatType(0)
+    : mnFormatType(SvNumFormatType::ALL)
     , mbCalculated(false)
     , maAddr(rAddr)
     , mpDoc(pDoc)

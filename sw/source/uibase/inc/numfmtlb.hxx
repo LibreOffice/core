@@ -27,7 +27,8 @@ class SwView;
 
 class SW_DLLPUBLIC NumFormatListBox : public ListBox
 {
-    short               nCurrFormatType;
+    SvNumFormatType     nCurrFormatType;
+    bool                mbCurrFormatTypeNeedsInit;
     sal_Int32           nStdEntry;
     bool                bOneArea;
     sal_uInt32          nDefFormat;
@@ -38,7 +39,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 
     DECL_DLLPRIVATE_LINK( SelectHdl, ListBox&, void );
 
-    SAL_DLLPRIVATE static double   GetDefValue(const short nFormatType);
+    SAL_DLLPRIVATE static double   GetDefValue(const SvNumFormatType nFormatType);
     SAL_DLLPRIVATE void            Init();
 
 public:
@@ -50,8 +51,8 @@ public:
 
     void     SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
 
-    void            SetFormatType(const short nFormatType);
-    short    GetFormatType() const { return nCurrFormatType; }
+    void            SetFormatType(const SvNumFormatType nFormatType);
+    SvNumFormatType GetFormatType() const { return nCurrFormatType; }
     void            SetDefFormat(const sal_uInt32 nDefFormat);
     sal_uInt32      GetFormat() const;
 

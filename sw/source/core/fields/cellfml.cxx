@@ -40,6 +40,7 @@
 #include <cellatr.hxx>
 #include <ndindex.hxx>
 #include <comphelper/string.hxx>
+#include <svl/zformat.hxx>
 
 namespace
 {
@@ -217,16 +218,16 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
             SvNumberFormatter* pNumFormatr = pDoc->GetNumberFormatter();
 
-            const sal_Int16 nFormatType = pNumFormatr->GetType( nFormatIndex );
-            if( nFormatType == css::util::NumberFormat::TEXT )
+            const SvNumFormatType nFormatType = pNumFormatr->GetType( nFormatIndex );
+            if( nFormatType == SvNumFormatType::TEXT )
                 nFormatIndex = 0;
             // JP 22.04.98: Bug 49659 - special treatment for percentages
             else if( !sText.isEmpty() &&
-                    css::util::NumberFormat::PERCENT == nFormatType)
+                    SvNumFormatType::PERCENT == nFormatType)
             {
                 sal_uInt32 nTmpFormat = 0;
                 if( pDoc->IsNumberFormat( sText, nTmpFormat, aNum ) &&
-                    css::util::NumberFormat::NUMBER == pNumFormatr->GetType( nTmpFormat ))
+                    SvNumFormatType::NUMBER == pNumFormatr->GetType( nTmpFormat ))
                     sText += "%";
             }
 

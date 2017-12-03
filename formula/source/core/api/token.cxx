@@ -33,6 +33,7 @@
 #include <formula/FormulaCompiler.hxx>
 #include <formula/compiler.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <svl/zformat.hxx>
 #include <memory>
 
 namespace formula
@@ -210,13 +211,13 @@ double & FormulaToken::GetDoubleAsReference()
     return fVal;
 }
 
-short FormulaToken::GetDoubleType() const
+SvNumFormatType FormulaToken::GetDoubleType() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetDoubleType: virtual dummy called" );
-    return 0;
+    return SvNumFormatType::ALL;
 }
 
-void FormulaToken::SetDoubleType( short )
+void FormulaToken::SetDoubleType( SvNumFormatType )
 {
     assert( !"virtual dummy called" );
 }
@@ -1785,11 +1786,11 @@ void FormulaTokenArrayPlainIterator::AfterRemoveToken( sal_uInt16 nOffset, sal_u
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
 
-short FormulaDoubleToken::GetDoubleType() const
+SvNumFormatType FormulaDoubleToken::GetDoubleType() const
 {
     // This is a plain double value without type information, don't emit a
     // warning via FormulaToken::GetDoubleType().
-    return 0;
+    return SvNumFormatType::ALL;
 }
 
 bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
@@ -1797,12 +1798,12 @@ bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && fDouble == r.GetDouble();
 }
 
-short FormulaTypedDoubleToken::GetDoubleType() const
+SvNumFormatType FormulaTypedDoubleToken::GetDoubleType() const
 {
     return mnType;
 }
 
-void FormulaTypedDoubleToken::SetDoubleType( short nType )
+void FormulaTypedDoubleToken::SetDoubleType( SvNumFormatType nType )
 {
     mnType = nType;
 }

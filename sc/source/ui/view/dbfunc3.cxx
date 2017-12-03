@@ -24,6 +24,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/app.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -848,8 +849,8 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                     {
                         sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
                                         nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT))->GetValue();
-                        short nType = pDoc->GetFormatTable()->GetType(nIndex);
-                        if ( nType == css::util::NumberFormat::DATE || nType == css::util::NumberFormat::TIME || nType == css::util::NumberFormat::DATETIME )
+                        SvNumFormatType nType = pDoc->GetFormatTable()->GetType(nIndex);
+                        if ( nType == SvNumFormatType::DATE || nType == SvNumFormatType::TIME || nType == SvNumFormatType::DATETIME )
                         {
                             bFound = true;
                             // use currently selected value for automatic limits

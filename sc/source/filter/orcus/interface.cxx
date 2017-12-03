@@ -46,6 +46,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <comphelper/processfactory.hxx>
@@ -932,7 +933,7 @@ void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, const ScDocu
     sal_Int32 nCheckPos;
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     OUString Code = maCode; /* <-- Done because the SvNumberFormatter::PutEntry demands a non const NumFormat Code*/
-    sal_Int16 type = css::util::NumberFormat::ALL;
+    SvNumFormatType type = SvNumFormatType::ALL;
 
     if (pFormatter->PutEntry(Code, nCheckPos, type, nKey, LANGUAGE_ENGLISH_US))
     {

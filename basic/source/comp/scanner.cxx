@@ -25,6 +25,7 @@
 #include <i18nlangtag/lang.h>
 #include <comphelper/processfactory.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
 
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
@@ -575,8 +576,8 @@ bool SbiScanner::NextSym()
             bool bSuccess = pFormatter->IsNumberFormat(aSym, nIndex, nVal);
             if( bSuccess )
             {
-                short nType_ = pFormatter->GetType(nIndex);
-                if( !(nType_ & css::util::NumberFormat::DATE) )
+                SvNumFormatType nType_ = pFormatter->GetType(nIndex);
+                if( !(nType_ & SvNumFormatType::DATE) )
                     bSuccess = false;
             }
 

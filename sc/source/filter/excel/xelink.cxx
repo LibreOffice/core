@@ -25,6 +25,7 @@
 #include <oox/token/relationship.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <scextopt.hxx>
@@ -1371,7 +1372,7 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
                 if( xToken.get() ) switch( xToken->GetType() )
                 {
                     case svDouble:
-                        bValid = (rFormatter.GetType( nScNumFmt ) == css::util::NumberFormat::LOGICAL) ?
+                        bValid = (rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL) ?
                             rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() != 0 ) ) :
                             rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() ) );
                     break;

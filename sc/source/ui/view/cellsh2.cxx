@@ -29,6 +29,7 @@
 #include <basic/sbxcore.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
@@ -844,8 +845,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             sal_uInt32 nNumFmt = 0;
                             if ( eMode == SC_VALID_DATE || eMode == SC_VALID_TIME )
                             {
-                                short nType = ( eMode == SC_VALID_DATE ) ? css::util::NumberFormat::DATE
-                                                                         : css::util::NumberFormat::TIME;
+                                SvNumFormatType nType = ( eMode == SC_VALID_DATE ) ? SvNumFormatType::DATE
+                                                                         : SvNumFormatType::TIME;
                                 nNumFmt = pDoc->GetFormatTable()->GetStandardFormat(
                                                                     nType, ScGlobal::eLnge );
                             }

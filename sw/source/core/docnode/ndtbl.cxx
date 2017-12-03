@@ -25,6 +25,7 @@
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/zformat.hxx>
 #include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -4052,8 +4053,8 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
                 sal_uLong nOldNumFormat = static_cast<const SwTableBoxNumFormat*>(pNumFormatItem)->GetValue();
                 SvNumberFormatter* pNumFormatr = GetNumberFormatter();
 
-                short nFormatType = pNumFormatr->GetType( nFormatIdx );
-                if( nFormatType == pNumFormatr->GetType( nOldNumFormat ) || css::util::NumberFormat::NUMBER == nFormatType )
+                SvNumFormatType nFormatType = pNumFormatr->GetType( nFormatIdx );
+                if( nFormatType == pNumFormatr->GetType( nOldNumFormat ) || SvNumFormatType::NUMBER == nFormatType )
                 {
                     // Current and specified NumFormat match
                     // -> keep old Format
