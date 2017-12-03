@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
-#include <list>
 #include <map>
 #include <utility>
 #include <vector>
@@ -55,8 +54,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-using ::std::list;
-using ::std::map;
 using ::std::pair;
 
 namespace XSLT
