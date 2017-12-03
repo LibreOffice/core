@@ -837,21 +837,21 @@ XclExpFormulaCell::XclExpFormulaCell(
             "TRUE";"FALSE" (language dependent). Don't do it for automatic
             formula formats, because Excel gets them right. */
         /*  #i8640# Don't set text format, if we have string results. */
-        short nFormatType = mrScFmlaCell.GetFormatType();
+        SvNumFormatType nFormatType = mrScFmlaCell.GetFormatType();
         if( ((nScNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0) &&
-                (nFormatType != css::util::NumberFormat::LOGICAL) &&
-                (nFormatType != css::util::NumberFormat::TEXT) )
+                (nFormatType != SvNumFormatType::LOGICAL) &&
+                (nFormatType != SvNumFormatType::TEXT) )
             nAltScNumFmt = nScNumFmt;
         /*  If cell number format is Boolean and automatic formula
             format is Boolean don't write that ugly special format. */
-        else if( (nFormatType == css::util::NumberFormat::LOGICAL) &&
-                (rFormatter.GetType( nScNumFmt ) == css::util::NumberFormat::LOGICAL) )
+        else if( (nFormatType == SvNumFormatType::LOGICAL) &&
+                (rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL) )
             nAltScNumFmt = rNumFmtBfr.GetStandardFormat();
 
         // #i41420# find script type according to result type (always latin for numeric results)
         sal_Int16 nScript = ApiScriptType::LATIN;
         bool bForceLineBreak = false;
-        if( nFormatType == css::util::NumberFormat::TEXT )
+        if( nFormatType == SvNumFormatType::TEXT )
         {
             OUString aResult = mrScFmlaCell.GetString().getString();
             bForceLineBreak = mrScFmlaCell.IsMultilineResult();
@@ -1051,14 +1051,14 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
         // result of the formula
         switch( mrScFmlaCell.GetFormatType() )
         {
-            case css::util::NumberFormat::NUMBER:
+            case SvNumFormatType::NUMBER:
                 {
                     // either value or error code
                     rStrm << mrScFmlaCell.GetValue();
                 }
                 break;
 
-            case css::util::NumberFormat::TEXT:
+            case SvNumFormatType::TEXT:
                 {
                     OUString aResult = mrScFmlaCell.GetString().getString();
                     if( !aResult.isEmpty() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
@@ -1072,7 +1072,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
                 }
                 break;
 
-            case css::util::NumberFormat::LOGICAL:
+            case SvNumFormatType::LOGICAL:
                 {
                     sal_uInt8 nXclValue = (mrScFmlaCell.GetValue() == 0.0) ? 0 : 1;
                     rStrm << EXC_FORMULA_RES_BOOL << sal_uInt8( 0 )
@@ -2538,7 +2538,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
                 {
                     sal_uInt32 nScNumFmt = pPattern->GetItemSet().Get( ATTR_VALUE_FORMAT ).GetValue();
-                    if( rFormatter.GetType( nScNumFmt ) == css::util::NumberFormat::LOGICAL )
+                    if( rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL )
                         xCell.reset( new XclExpBooleanCell(
                             GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 ) );
                 }

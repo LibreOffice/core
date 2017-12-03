@@ -575,8 +575,8 @@ bool SbiScanner::NextSym()
             bool bSuccess = pFormatter->IsNumberFormat(aSym, nIndex, nVal);
             if( bSuccess )
             {
-                short nType_ = pFormatter->GetType(nIndex);
-                if( !(nType_ & css::util::NumberFormat::DATE) )
+                SvNumFormatType nType_ = pFormatter->GetType(nIndex);
+                if( !(nType_ & SvNumFormatType::DATE) )
                     bSuccess = false;
             }
 

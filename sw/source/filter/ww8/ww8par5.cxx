@@ -429,7 +429,7 @@ OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, LanguageTyp
     return sParams;
 }
 
-short SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt32& rFormat,
+SvNumFormatType SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt32& rFormat,
     LanguageType &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
@@ -471,7 +471,7 @@ short SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt32& rForma
             sParams = "[~hijri]" + sParams;
 
         sal_Int32 nCheckPos = 0;
-        short nType = css::util::NumberFormat::DEFINED;
+        SvNumFormatType nType = SvNumFormatType::DEFINED;
         rFormat = 0;
 
         OUString sTemp(sParams);
@@ -479,13 +479,13 @@ short SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt32& rForma
                                        LANGUAGE_ENGLISH_US, rLang);
         sParams = sTemp;
 
-        return bHasTime ? css::util::NumberFormat::DATETIME : css::util::NumberFormat::DATE;
+        return bHasTime ? SvNumFormatType::DATETIME : SvNumFormatType::DATE;
     }
 
     sal_uLong nFormatIdx =
         sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri,
                 GetFib().m_lid);
-    short nNumFormatType = css::util::NumberFormat::UNDEFINED;
+    SvNumFormatType nNumFormatType = SvNumFormatType::UNDEFINED;
     if (nFormatIdx)
         nNumFormatType = pFormatter->GetType(nFormatIdx);
     rFormat = nFormatIdx;
@@ -1676,16 +1676,16 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
     LanguageType nLang(LANGUAGE_SYSTEM);
     if (bDateTime)
     {
-        short nDT = GetTimeDatePara(rStr, nFormat, nLang, pF->nId);
+        SvNumFormatType nDT = GetTimeDatePara(rStr, nFormat, nLang, pF->nId);
         switch (nDT)
         {
-            case css::util::NumberFormat::DATE:
+            case SvNumFormatType::DATE:
                 nReg = DI_SUB_DATE;
                 break;
-            case css::util::NumberFormat::TIME:
+            case SvNumFormatType::TIME:
                 nReg = DI_SUB_TIME;
                 break;
-            case css::util::NumberFormat::DATETIME:
+            case SvNumFormatType::DATETIME:
                 nReg = DI_SUB_DATE;
                 break;
             default:
@@ -1775,32 +1775,32 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, OUString& rStr )
     sal_uInt32 nFormat = 0;
 
     LanguageType nLang(LANGUAGE_SYSTEM);
-    short nDT = GetTimeDatePara(rStr, nFormat, nLang, ww::eDATE, bHijri);
+    SvNumFormatType nDT = GetTimeDatePara(rStr, nFormat, nLang, ww::eDATE, bHijri);
 
-    if( css::util::NumberFormat::UNDEFINED == nDT )             // no D/T-Formatstring
+    if( SvNumFormatType::UNDEFINED == nDT )             // no D/T-Formatstring
     {
         if (32 == pF->nId)
         {
-            nDT     = css::util::NumberFormat::TIME;
+            nDT     = SvNumFormatType::TIME;
             nFormat = m_rDoc.GetNumberFormatter()->GetFormatIndex(
                         NF_TIME_START, LANGUAGE_SYSTEM );
         }
         else
         {
-            nDT     = css::util::NumberFormat::DATE;
+            nDT     = SvNumFormatType::DATE;
             nFormat = m_rDoc.GetNumberFormatter()->GetFormatIndex(
                         NF_DATE_START, LANGUAGE_SYSTEM );
         }
     }
 
-    if (nDT & css::util::NumberFormat::DATE)
+    if (nDT & SvNumFormatType::DATE)
     {
         SwDateTimeField aField(static_cast<SwDateTimeFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime )), DATEFLD, nFormat);
         ForceFieldLanguage(aField, nLang);
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     }
-    else if (nDT == css::util::NumberFormat::TIME)
+    else if (nDT == SvNumFormatType::TIME)
     {
         SwDateTimeField aField(static_cast<SwDateTimeFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime)), TIMEFLD, nFormat);

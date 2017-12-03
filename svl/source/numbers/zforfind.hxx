@@ -27,6 +27,7 @@
 class Date;
 class SvNumberformat;
 class SvNumberFormatter;
+enum class SvNumFormatType : sal_Int16;
 
 #define SV_MAX_COUNT_INPUT_STRINGS  20    // max count of substrings in input scanner
 
@@ -45,7 +46,7 @@ public:
 
     /// convert input string to number
     bool IsNumberFormat( const OUString& rString,            /// input string
-                         short& F_Type,                      /// format type (in + out)
+                         SvNumFormatType& F_Type,                      /// format type (in + out)
                          double& fOutNumber,                 /// value determined (out)
                          const SvNumberformat* pFormat);     /// number format to which compare against
 
@@ -113,8 +114,8 @@ private:
     sal_Int16 mnEra;                            // Era if date, 0 => BCE, 1 => CE (currently only Gregorian)
     sal_uInt16 nThousand;                       // Count of group (AKA thousand) separators
     sal_uInt16 nPosThousandString;              // Position of concatenated 000,000,000 string
-    short  eScannedType;                        // Scanned type
-    short  eSetType;                            // Preset Type
+    SvNumFormatType eScannedType;               // Scanned type
+    SvNumFormatType eSetType;                   // Preset Type
 
     sal_uInt16 nStringScanNumFor;               // Fixed strings recognized in
                                                 // pFormat->NumFor[nNumForStringScan]

@@ -123,7 +123,7 @@ public:
 
     bool isValid() const;
 
-    virtual void getValue(long nCol, ScDPItemData &rData, short& rNumType) const override;
+    virtual void getValue(long nCol, ScDPItemData &rData, SvNumFormatType& rNumType) const override;
     virtual OUString getColumnLabel(long nCol) const override;
     virtual long getColumnCount() const override;
     virtual bool first() override;
@@ -171,9 +171,9 @@ OUString DBConnector::getColumnLabel(long nCol) const
     return mxMetaData->getColumnLabel(nCol+1);
 }
 
-void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) const
+void DBConnector::getValue(long nCol, ScDPItemData &rData, SvNumFormatType& rNumType) const
 {
-    rNumType = css::util::NumberFormat::NUMBER;
+    rNumType = SvNumFormatType::NUMBER;
     sal_Int32 nType = mxMetaData->getColumnType(nCol+1);
 
     try
@@ -184,7 +184,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             case sdbc::DataType::BIT:
             case sdbc::DataType::BOOLEAN:
             {
-                rNumType = css::util::NumberFormat::LOGICAL;
+                rNumType = SvNumFormatType::LOGICAL;
                 fValue  = mxRow->getBoolean(nCol+1) ? 1 : 0;
                 rData.SetValue(fValue);
                 break;
@@ -206,7 +206,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             }
             case sdbc::DataType::DATE:
             {
-                rNumType = css::util::NumberFormat::DATE;
+                rNumType = SvNumFormatType::DATE;
 
                 util::Date aDate = mxRow->getDate(nCol+1);
                 fValue = Date(aDate.Day, aDate.Month, aDate.Year) - maNullDate;
@@ -215,7 +215,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             }
             case sdbc::DataType::TIME:
             {
-                rNumType = css::util::NumberFormat::TIME;
+                rNumType = SvNumFormatType::TIME;
 
                 util::Time aTime = mxRow->getTime(nCol+1);
                 fValue = aTime.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
@@ -227,7 +227,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             }
             case sdbc::DataType::TIMESTAMP:
             {
-                rNumType = css::util::NumberFormat::DATETIME;
+                rNumType = SvNumFormatType::DATETIME;
 
                 util::DateTime aStamp = mxRow->getTimestamp(nCol+1);
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - maNullDate ) +

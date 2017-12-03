@@ -38,6 +38,7 @@ class Color;
 struct ScCalcConfig;
 enum class SvtScriptType;
 enum class FormulaError : sal_uInt16;
+enum class SvNumFormatType : sal_Int16;
 
 #define SC_COLLATOR_IGNORES css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE
 
@@ -575,7 +576,7 @@ public:
                                                 const SfxObjectShell* pShell );
     SC_DLLPUBLIC static OUString            GetDocTabName( const OUString& rFileName,
                                                 const OUString& rTabName );
-    SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( SvNumberFormatter&, sal_uInt32 nFormat, short nType );
+    SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( SvNumberFormatter&, sal_uInt32 nFormat, SvNumFormatType nType );
 
     SC_DLLPUBLIC static sal_uInt16 GetStandardRowHeight();
     SC_DLLPUBLIC static double              nScreenPPTX;
@@ -806,13 +807,13 @@ public:
 
         @param rCurFmtType
             Can be assigned a format type in case a date or time or date+time
-            string was converted, e.g. css::util::NumberFormat::DATE or
-            css::util::NumberFormat::TIME or a combination thereof.
+            string was converted, e.g. SvNumFormatType::DATE or
+            SvNumFormatType::TIME or a combination thereof.
 
      */
     static double ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
             FormulaError & rError, FormulaError nStringNoValueError,
-            SvNumberFormatter* pFormatter, sal_uInt32 & rCurFmtType );
+            SvNumberFormatter* pFormatter, SvNumFormatType & rCurFmtType );
 
 };
 
