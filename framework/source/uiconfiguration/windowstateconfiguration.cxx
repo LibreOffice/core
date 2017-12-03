@@ -930,7 +930,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
     }
 
     aWindowStateInfo.nMask = nMask;
-    ResourceURLToInfoCache::iterator pIter = (m_aResourceURLToInfoCache.emplace( rResourceURL, aWindowStateInfo )).first;
+    ResourceURLToInfoCache::iterator pIter = m_aResourceURLToInfoCache.emplace( rResourceURL, aWindowStateInfo ).first;
     return pIter->second;
 }
 
