@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8fd55e1d",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 10155,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-03T23:52:00Z",
+      "side": 1,
+      "message": "this patch should go to -6-0\n\nafterwards, I\u0027d be inclined to hard-fail on cygwin32 for people building for Windows 64...",
+      "revId": "6610eb2e5c624a93830e181933d37b76923ab4fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
