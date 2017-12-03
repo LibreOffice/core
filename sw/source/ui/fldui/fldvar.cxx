@@ -735,7 +735,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             }
             else if (nTypeId == TYP_GETFLD || nTypeId == TYP_FORMELFLD)
             {
-                m_pNumFormatLB->SetFormatType(css::util::NumberFormat::NUMBER);
+                m_pNumFormatLB->SetFormatType(SvNumFormatType::NUMBER);
             }
         }
         else
@@ -743,7 +743,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             if (nOldNumFormat && nOldNumFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
                 m_pNumFormatLB->SetDefFormat(nOldNumFormat);
             else
-                m_pNumFormatLB->SetFormatType(css::util::NumberFormat::NUMBER);
+                m_pNumFormatLB->SetFormatType(SvNumFormatType::NUMBER);
         }
     }
 

@@ -104,7 +104,7 @@ public:
     struct CellFormat
     {
         bool      mbIsSet;
-        short     mnType;
+        SvNumFormatType mnType;
         sal_uLong mnIndex;
 
         explicit CellFormat();

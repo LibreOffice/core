@@ -187,7 +187,7 @@ private:
     std::vector<sal_uInt32> aDelList;
     std::vector<sal_uInt32> aCurEntryList;
     sal_uInt32              nCurFormatKey;
-    short                   nCurCategory;
+    SvNumFormatType         nCurCategory;
     LanguageType            eCurLanguage;
     std::vector<sal_uInt16> aCurCurrencyList;
     NfCurrencyEntry*        pCurCurrencyEntry;
@@ -214,8 +214,8 @@ private:
 
     SVX_DLLPRIVATE void  GetPreviewString_Impl( OUString& rString,
                                                 Color*& rpColor );
-    SVX_DLLPRIVATE static void PosToCategory_Impl(sal_uInt16 nPos, short& rCategory);
-    SVX_DLLPRIVATE static void CategoryToPos_Impl(short nCategory, sal_uInt16& rPos);
+    SVX_DLLPRIVATE static void PosToCategory_Impl(sal_uInt16 nPos, SvNumFormatType& rCategory);
+    SVX_DLLPRIVATE static void CategoryToPos_Impl(SvNumFormatType nCategory, sal_uInt16& rPos);
 };
 
 #endif

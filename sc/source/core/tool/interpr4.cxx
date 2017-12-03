@@ -172,7 +172,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
     return fValue;
 }
 
-double ScInterpreter::ConvertStringToValue( const OUString& rStr, FormulaError& rError, sal_uInt32& rCurFmtType )
+double ScInterpreter::ConvertStringToValue( const OUString& rStr, FormulaError& rError, SvNumFormatType& rCurFmtType )
 {
     return ScGlobal::ConvertStringToValue( rStr, maCalcConfig, rError, mnStringNoValueError, pFormatter, rCurFmtType);
 }
@@ -690,7 +690,7 @@ void ScInterpreter::PushTokenRef( const formula::FormulaConstTokenRef& x )
 }
 
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
-        const ScAddress & rAddress, sal_uInt32 * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult )
+        const ScAddress & rAddress, SvNumFormatType * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult )
 {
     ScRefCellValue aCell(*pDok, rAddress);
     if (aCell.hasEmptyValue())
@@ -710,7 +710,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     {
         PushError( nErr);
         if (pRetTypeExpr)
-            *pRetTypeExpr = css::util::NumberFormat::UNDEFINED;
+            *pRetTypeExpr = SvNumFormatType::UNDEFINED;
         if (pRetIndexExpr)
             *pRetIndexExpr = 0;
     }
@@ -720,7 +720,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         GetCellString( aRes, aCell);
         PushString( aRes);
         if (pRetTypeExpr)
-            *pRetTypeExpr = css::util::NumberFormat::TEXT;
+            *pRetTypeExpr = SvNumFormatType::TEXT;
         if (pRetIndexExpr)
             *pRetIndexExpr = 0;
     }
@@ -785,7 +785,7 @@ FormulaConstTokenRef ScInterpreter::PopToken()
 
 double ScInterpreter::PopDouble()
 {
-    nCurFmtType = css::util::NumberFormat::NUMBER;
+    nCurFmtType = SvNumFormatType::NUMBER;
     nCurFmtIndex = 0;
     if( sp )
     {
@@ -798,8 +798,8 @@ double ScInterpreter::PopDouble()
                 break;
             case svDouble:
                 {
-                    short nType = p->GetDoubleType();
-                    if (nType && nType != css::util::NumberFormat::UNDEFINED)
+                    SvNumFormatType nType = static_cast<SvNumFormatType>(p->GetDoubleType());
+                    if (nType != SvNumFormatType::ALL && nType != SvNumFormatType::UNDEFINED)
                         nCurFmtType = nType;
                     return p->GetDouble();
                 }
@@ -817,7 +817,7 @@ double ScInterpreter::PopDouble()
 
 svl::SharedString ScInterpreter::PopString()
 {
-    nCurFmtType = css::util::NumberFormat::TEXT;
+    nCurFmtType = SvNumFormatType::TEXT;
     nCurFmtIndex = 0;
     if( sp )
     {
@@ -1675,7 +1675,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
     return aRet;
 }
 
-void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTypeExpr, sal_uInt32& rRetIndexExpr)
+void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, SvNumFormatType& rRetTypeExpr, sal_uInt32& rRetIndexExpr)
 {
     if (xMat)
     {
@@ -1689,7 +1689,7 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTyp
             {   // result of empty FALSE jump path
                 FormulaTokenRef xRes = CreateFormulaDoubleToken( 0.0);
                 PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
-                rRetTypeExpr = css::util::NumberFormat::LOGICAL;
+                rRetTypeExpr = SvNumFormatType::LOGICAL;
             }
             else if ( xMat->IsEmptyResult( 0, 0))
             {   // empty formula result
@@ -1706,7 +1706,7 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTyp
                 svl::SharedString aStr( nMatVal.GetString());
                 FormulaTokenRef xRes = new FormulaStringToken( aStr);
                 PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
-                rRetTypeExpr = css::util::NumberFormat::TEXT;
+                rRetTypeExpr = SvNumFormatType::TEXT;
             }
         }
         else
@@ -1718,8 +1718,8 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTyp
             else
                 xRes = CreateFormulaDoubleToken( nMatVal.fVal);
             PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
-            if ( rRetTypeExpr != css::util::NumberFormat::LOGICAL )
-                rRetTypeExpr = css::util::NumberFormat::NUMBER;
+            if ( rRetTypeExpr != SvNumFormatType::LOGICAL )
+                rRetTypeExpr = SvNumFormatType::NUMBER;
         }
         rRetIndexExpr = 0;
         xMat->SetErrorInterpreter( nullptr);
@@ -1728,7 +1728,7 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTyp
         SetError( FormulaError::UnknownStackVariable);
 }
 
-formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, short nFmt )
+formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, SvNumFormatType nFmt )
 {
     assert( mrContext.maTokens.size() == TOKEN_CACHE_SIZE );
 
@@ -1738,13 +1738,13 @@ formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, sho
         if (p && p->GetRef() == 1)
         {
             p->GetDoubleAsReference() = fVal;
-            p->SetDoubleType( nFmt );
+            p->SetDoubleType( (sal_Int16)nFmt );
             return p;
         }
     }
 
     // Allocate a new token
-    auto p = new FormulaTypedDoubleToken( fVal, nFmt );
+    auto p = new FormulaTypedDoubleToken( fVal, (sal_Int16)nFmt );
     if ( mrContext.maTokens[mrContext.mnTokenCachePos] )
         mrContext.maTokens[mrContext.mnTokenCachePos]->DecRef();
     mrContext.maTokens[mrContext.mnTokenCachePos] = p;
@@ -1756,8 +1756,8 @@ formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, sho
 formula::FormulaToken* ScInterpreter::CreateDoubleOrTypedToken( double fVal )
 {
     // NumberFormat::NUMBER is the default untyped double.
-    if (nFuncFmtType && nFuncFmtType != css::util::NumberFormat::NUMBER &&
-            nFuncFmtType != css::util::NumberFormat::UNDEFINED)
+    if (nFuncFmtType != SvNumFormatType::ALL && nFuncFmtType != SvNumFormatType::NUMBER &&
+            nFuncFmtType != SvNumFormatType::UNDEFINED)
         return CreateFormulaDoubleToken( fVal, nFuncFmtType);
     else
         return CreateFormulaDoubleToken( fVal);
@@ -2509,7 +2509,7 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
 svl::SharedString ScInterpreter::GetStringFromDouble( double fVal )
 {
     sal_uLong nIndex = pFormatter->GetStandardFormat(
-                        css::util::NumberFormat::NUMBER,
+                        SvNumFormatType::NUMBER,
                         ScGlobal::eLnge);
     OUString aStr;
     pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -3443,10 +3443,10 @@ void ScInterpreter::ScMacro()
             switch (eResType)
             {
                 case SbxDATE:
-                    nFuncFmtType = css::util::NumberFormat::DATE;
+                    nFuncFmtType = SvNumFormatType::DATE;
                 break;
                 case SbxBOOL:
-                    nFuncFmtType = css::util::NumberFormat::LOGICAL;
+                    nFuncFmtType = SvNumFormatType::LOGICAL;
                 break;
                 // Do not add SbxCURRENCY, we don't know which currency.
                 default:
@@ -3828,9 +3828,9 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpre
     , nFuncFmtIndex(0)
     , nCurFmtIndex(0)
     , nRetFmtIndex(0)
-    , nFuncFmtType(0)
-    , nCurFmtType(0)
-    , nRetFmtType(0)
+    , nFuncFmtType(SvNumFormatType::ALL)
+    , nCurFmtType(SvNumFormatType::ALL)
+    , nRetFmtType(SvNumFormatType::ALL)
     , mnStringNoValueError(FormulaError::NoValue)
     , mnSubTotalFlags(SubtotalFlags::NONE)
     , cPar(0)
@@ -3955,7 +3955,7 @@ bool IsErrFunc(OpCode oc)
 
 StackVar ScInterpreter::Interpret()
 {
-    sal_uInt32 nRetTypeExpr = css::util::NumberFormat::UNDEFINED;
+    SvNumFormatType nRetTypeExpr = SvNumFormatType::UNDEFINED;
     sal_uInt32 nRetIndexExpr = 0;
     sal_uInt16 nErrorFunction = 0;
     sal_uInt16 nErrorFunctionCount = 0;
@@ -3964,8 +3964,8 @@ StackVar ScInterpreter::Interpret()
 
     nGlobalError = FormulaError::NONE;
     nStackBase = sp = maxsp = 0;
-    nRetFmtType = css::util::NumberFormat::UNDEFINED;
-    nFuncFmtType = css::util::NumberFormat::UNDEFINED;
+    nRetFmtType = SvNumFormatType::UNDEFINED;
+    nFuncFmtType = SvNumFormatType::UNDEFINED;
     nFuncFmtIndex = nCurFmtIndex = nRetFmtIndex = 0;
     xResult = nullptr;
     pJumpMatrix = nullptr;
@@ -3990,7 +3990,7 @@ StackVar ScInterpreter::Interpret()
         {
             // RPN code push without error
             PushWithoutError( *pCur );
-            nCurFmtType = css::util::NumberFormat::UNDEFINED;
+            nCurFmtType = SvNumFormatType::UNDEFINED;
         }
         else if (pTokenMatrixMap &&
                  !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose) &&
@@ -4011,7 +4011,7 @@ StackVar ScInterpreter::Interpret()
             nCurFmtType = nRetTypeExpr;
             nCurFmtIndex = nRetIndexExpr;
             // default function's format, others are set if needed
-            nFuncFmtType = css::util::NumberFormat::NUMBER;
+            nFuncFmtType = SvNumFormatType::NUMBER;
             nFuncFmtIndex = 0;
 
             if ( eOp == ocIf || eOp == ocChoose || eOp == ocIfError || eOp == ocIfNA )
@@ -4459,7 +4459,7 @@ StackVar ScInterpreter::Interpret()
                 case ocBitLshift        : ScBitLshift();                break;
                 case ocTTT              : ScTTT();                      break;
                 case ocDebugVar         : ScDebugVar();                 break;
-                case ocNone : nFuncFmtType = css::util::NumberFormat::UNDEFINED;    break;
+                case ocNone : nFuncFmtType = SvNumFormatType::UNDEFINED;    break;
                 default : PushError( FormulaError::UnknownOpCode);                 break;
             }
 
@@ -4478,16 +4478,16 @@ StackVar ScInterpreter::Interpret()
                 pTokenMatrixMap->emplace(pCur, pStack[sp-1]);
 
             // outer function determines format of an expression
-            if ( nFuncFmtType != css::util::NumberFormat::UNDEFINED )
+            if ( nFuncFmtType != SvNumFormatType::UNDEFINED )
             {
                 nRetTypeExpr = nFuncFmtType;
                 // Inherit the format index for currency, date or time formats.
                 switch (nFuncFmtType)
                 {
-                    case css::util::NumberFormat::CURRENCY:
-                    case css::util::NumberFormat::DATE:
-                    case css::util::NumberFormat::TIME:
-                    case css::util::NumberFormat::DATETIME:
+                    case SvNumFormatType::CURRENCY:
+                    case SvNumFormatType::DATE:
+                    case SvNumFormatType::TIME:
+                    case SvNumFormatType::DATETIME:
                         nRetIndexExpr = nFuncFmtIndex;
                     break;
                     default:
@@ -4565,7 +4565,7 @@ StackVar ScInterpreter::Interpret()
         case ocGetTimeValue:
             // Force final result of DATEVALUE and TIMEVALUE to number type,
             // which so far was date or time for calculations.
-            nRetTypeExpr = nFuncFmtType = css::util::NumberFormat::NUMBER;
+            nRetTypeExpr = nFuncFmtType = SvNumFormatType::NUMBER;
             nRetIndexExpr = nFuncFmtIndex = 0;
             bForcedResultType = true;
         break;
@@ -4600,7 +4600,7 @@ StackVar ScInterpreter::Interpret()
                         // push a plain untyped double so the result token to
                         // be transferred to the formula cell result does not
                         // unnecessarily duplicate the information.
-                        if (pCur->GetDoubleType())
+                        if (pCur->GetDoubleType() != 0)
                         {
                             const double fVal = PopDouble();
                             if (!bForcedResultType)
@@ -4611,15 +4611,15 @@ StackVar ScInterpreter::Interpret()
                             }
                             PushTempToken( CreateFormulaDoubleToken( fVal));
                         }
-                        if ( nFuncFmtType == css::util::NumberFormat::UNDEFINED )
+                        if ( nFuncFmtType == SvNumFormatType::UNDEFINED )
                         {
-                            nRetTypeExpr = css::util::NumberFormat::NUMBER;
+                            nRetTypeExpr = SvNumFormatType::NUMBER;
                             nRetIndexExpr = 0;
                         }
                     }
                 break;
                 case svString :
-                    nRetTypeExpr = css::util::NumberFormat::TEXT;
+                    nRetTypeExpr = SvNumFormatType::TEXT;
                     nRetIndexExpr = 0;
                 break;
                 case svSingleRef :
@@ -4703,18 +4703,18 @@ StackVar ScInterpreter::Interpret()
     else
         SetError( FormulaError::NoCode);
 
-    if (bForcedResultType || nRetTypeExpr != css::util::NumberFormat::UNDEFINED)
+    if (bForcedResultType || nRetTypeExpr != SvNumFormatType::UNDEFINED)
     {
         nRetFmtType = nRetTypeExpr;
         nRetFmtIndex = nRetIndexExpr;
     }
-    else if( nFuncFmtType != css::util::NumberFormat::UNDEFINED )
+    else if( nFuncFmtType != SvNumFormatType::UNDEFINED )
     {
         nRetFmtType = nFuncFmtType;
         nRetFmtIndex = nFuncFmtIndex;
     }
     else
-        nRetFmtType = css::util::NumberFormat::NUMBER;
+        nRetFmtType = SvNumFormatType::NUMBER;
 
     if (nGlobalError != FormulaError::NONE && GetStackType() != svError )
         PushError( nGlobalError);

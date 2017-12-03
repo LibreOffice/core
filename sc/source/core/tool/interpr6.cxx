@@ -401,13 +401,13 @@ public:
 
 void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero,
-    sal_uLong& rCount, sal_uInt32& rFuncFmtType, double& fRes, double& fMem )
+    sal_uLong& rCount, SvNumFormatType& rFuncFmtType, double& fRes, double& fMem )
 {
     if (!pMat)
         return;
 
     // TODO fdo73148 take mnSubTotalFlags into account
-    rFuncFmtType = css::util::NumberFormat::NUMBER;
+    rFuncFmtType = SvNumFormatType::NUMBER;
     switch (eFunc)
     {
         case ifAVERAGE:
@@ -593,7 +593,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     case ifPRODUCT: fRes *= fVal; break;
                     default: ; // nothing
                 }
-                nFuncFmtType = css::util::NumberFormat::NUMBER;
+                nFuncFmtType = SvNumFormatType::NUMBER;
                 break;
             case svExternalSingleRef:
             {
@@ -1003,8 +1003,8 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 
     // A boolean return type makes no sense on sums et al.
     // Counts are always numbers.
-    if( nFuncFmtType == css::util::NumberFormat::LOGICAL || eFunc == ifCOUNT || eFunc == ifCOUNT2 )
-        nFuncFmtType = css::util::NumberFormat::NUMBER;
+    if( nFuncFmtType == SvNumFormatType::LOGICAL || eFunc == ifCOUNT || eFunc == ifCOUNT2 )
+        nFuncFmtType = SvNumFormatType::NUMBER;
 
     if (xResMat)
     {

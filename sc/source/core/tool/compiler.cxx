@@ -2960,23 +2960,23 @@ bool ScCompiler::IsValue( const OUString& rSym )
     if (!mpFormatter->IsNumberFormat(rSym, nIndex, fVal))
         return false;
 
-    sal_uInt16 nType = mpFormatter->GetType(nIndex);
+    SvNumFormatType nType = mpFormatter->GetType(nIndex);
 
     // Don't accept 3:3 as time, it is a reference to entire row 3 instead.
     // Dates should never be entered directly and automatically converted
     // to serial, because the serial would be wrong if null-date changed.
     // Usually it wouldn't be accepted anyway because the date separator
     // clashed with other separators or operators.
-    if (nType & (css::util::NumberFormat::TIME | css::util::NumberFormat::DATE))
+    if (nType & (SvNumFormatType::TIME | SvNumFormatType::DATE))
         return false;
 
-    if (nType == css::util::NumberFormat::LOGICAL)
+    if (nType == SvNumFormatType::LOGICAL)
     {
         if (lcl_ParenthesisFollows( aFormula.getStr() + nSrcPos))
             return false;   // Boolean function instead.
     }
 
-    if( nType == css::util::NumberFormat::TEXT )
+    if( nType == SvNumFormatType::TEXT )
         // HACK: number too big!
         SetError( FormulaError::IllegalArgument );
     maRawToken.SetDouble( fVal );

@@ -116,7 +116,8 @@ double ImpGetDate( const SbxValues* p )
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
-            short nType = 127;
+            SvNumFormatType nType = SvNumFormatType::DEFINED | SvNumFormatType::DATE | SvNumFormatType::TIME | SvNumFormatType::CURRENCY
+                                    | SvNumFormatType::NUMBER | SvNumFormatType::SCIENTIFIC | SvNumFormatType::FRACTION;
 
             // Default templates of the formatter have only two-digit
             // date. Therefore register an own format.
@@ -144,9 +145,9 @@ double ImpGetDate( const SbxValues* p )
             bool bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
             if ( bSuccess )
             {
-                short nType_ = pFormatter->GetType( nIndex );
-                if(!(nType_ & ( css::util::NumberFormat::DATETIME | css::util::NumberFormat::DATE |
-                                css::util::NumberFormat::TIME | css::util::NumberFormat::DEFINED )))
+                SvNumFormatType nType_ = pFormatter->GetType( nIndex );
+                if(!(nType_ & ( SvNumFormatType::DATETIME | SvNumFormatType::DATE |
+                                SvNumFormatType::TIME | SvNumFormatType::DEFINED )))
                 {
                     bSuccess = false;
                 }
@@ -292,7 +293,7 @@ start:
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
-            short nType;
+            SvNumFormatType nType;
 
             SvtSysLocale aSysLocale;
             DateOrder eDate = aSysLocale.GetLocaleData().getDateOrder();

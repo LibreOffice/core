@@ -2113,7 +2113,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                         if (nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
                         {
                             sal_Int32 nErrPos  = 0;
-                            short nDummy;
+                            SvNumFormatType nDummy;
                             bool bValidFmt = GetFormatTable()->PutEntry(aNumFmt, nErrPos, nDummy, nNumberFormat);
                             if (!bValidFmt)
                                 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
