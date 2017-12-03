@@ -32,6 +32,7 @@
 #include <tools/link.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/nfkeytab.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <map>
 #include <memory>
@@ -61,6 +62,55 @@ constexpr sal_uInt32 NF_STANDARD_FORMAT_TEXT = SV_MAX_COUNT_STANDARD_FORMATS;
 
 #define NUMBERFORMAT_ENTRY_NOT_FOUND (sal_uInt32)(0xffffffff)   /// MAX_ULONG
 
+enum class SvNumFormatType : sal_Int16
+{
+    /** selects all number formats.
+      */
+     ALL = css::util::NumberFormat::ALL, // 0
+     /** selects only user-defined number formats.
+      */
+     DEFINED = css::util::NumberFormat::DEFINED,  // 1
+     /** selects date formats.
+      */
+     DATE = css::util::NumberFormat::DATE, // 2
+     /** selects time formats.
+      */
+     TIME = css::util::NumberFormat::TIME, // 4
+     /** selects currency formats.
+      */
+     CURRENCY = css::util::NumberFormat::CURRENCY,  // 8
+     /** selects decimal number formats.
+      */
+     NUMBER = css::util::NumberFormat::NUMBER, // 16
+     /** selects scientific number formats.
+      */
+     SCIENTIFIC = css::util::NumberFormat::SCIENTIFIC, // 32
+     /** selects number formats for fractions.
+      */
+     FRACTION = css::util::NumberFormat::FRACTION, // 64
+     /** selects percentage number formats.
+      */
+     PERCENT = css::util::NumberFormat::PERCENT, // 128
+     /** selects text number formats.
+      */
+     TEXT = css::util::NumberFormat::TEXT, // 256
+     /** selects number formats which contain date and time.
+      */
+     DATETIME = DATE | TIME, // 6
+     /** selects boolean number formats.
+      */
+     LOGICAL = css::util::NumberFormat::LOGICAL, // 1024
+     /** is used as a return value if no format exists.
+      */
+     UNDEFINED = css::util::NumberFormat::UNDEFINED, // 2048
+     /** @internal is used to flag an empty sub format.
+         @since LibreOffice 5.1
+      */
+     EMPTY = css::util::NumberFormat::EMPTY, // 4096
+};
+namespace o3tl {
+    template<> struct typed_flags<SvNumFormatType> : is_typed_flags<SvNumFormatType, 0x1dff> {};
+}
 
 /** enum values for <method>SvNumberFormatter::GetFormatIndex</method>
 
@@ -361,26 +411,26 @@ public:
     LanguageType GetLanguage() const;
 
     // Determine whether two format types are input compatible or not
-    static bool IsCompatible(short eOldType, short eNewType);
+    static bool IsCompatible(SvNumFormatType eOldType, SvNumFormatType eNewType);
 
     /** Get table of formats of a specific type of a locale. A format FIndex is
         tested whether it has the type and locale requested, if it doesn't
         match FIndex returns the default format for the type/locale. If no
         specific format is to be selected FIndex may be initialized to 0. */
-    SvNumberFormatTable& GetEntryTable(short eType,
+    SvNumberFormatTable& GetEntryTable(SvNumFormatType eType,
                                        sal_uInt32& FIndex,
                                        LanguageType eLnge);
 
     /** Get table of formats of a specific type of a language/country.
         FIndex returns the default format of that type.
         If the language/country was never touched before new entries are generated */
-    SvNumberFormatTable& ChangeCL(short eType,
+    SvNumberFormatTable& ChangeCL(SvNumFormatType eType,
                                   sal_uInt32& FIndex,
                                   LanguageType eLnge);
 
     /** Get table of formats of the same type as FIndex; eType and rLnge are
         set accordingly. An unknown format is set to Standard/General */
-    SvNumberFormatTable& GetFirstEntryTable(short& eType,
+    SvNumberFormatTable& GetFirstEntryTable(SvNumFormatType& eType,
                                             sal_uInt32& FIndex,
                                             LanguageType& rLnge);
 
@@ -400,14 +450,14 @@ public:
             nType contains the type of the format.
             nKey contains the index key of the format.
      */
-    bool PutEntry( OUString& rString, sal_Int32& nCheckPos, short& nType, sal_uInt32& nKey,
+    bool PutEntry( OUString& rString, sal_Int32& nCheckPos, SvNumFormatType& nType, sal_uInt32& nKey,
                    LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Same as <method>PutEntry</method> but the format code string is
          considered to be of language/country eLnge and is converted to
         language/country eNewLnge */
     bool PutandConvertEntry( OUString& rString, sal_Int32& nCheckPos,
-                             short& nType, sal_uInt32& nKey,
+                             SvNumFormatType& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge,
                              bool bForExcelExport = false );
 
@@ -416,7 +466,7 @@ public:
         converted to another System language/country eNewLnge. In this case
          the automatic currency is converted too. */
     bool PutandConvertEntrySystem( OUString& rString, sal_Int32& nCheckPos,
-                                   short& nType, sal_uInt32& nKey,
+                                   SvNumFormatType& nType, sal_uInt32& nKey,
                                    LanguageType eLnge, LanguageType eNewLnge );
 
     /** Similar to <method>PutEntry</method> and
@@ -457,7 +507,7 @@ public:
             and/or could not be converted.
      */
     sal_uInt32 GetIndexPuttingAndConverting( OUString & rString, LanguageType eLnge,
-                                             LanguageType eSysLnge, short & rType,
+                                             LanguageType eSysLnge, SvNumFormatType & rType,
                                              bool & rNewInserted, sal_Int32 & rCheckPos );
 
     /** Create a format code string using format nIndex as a template and
@@ -566,17 +616,17 @@ public:
     sal_uInt32 GetStandardIndex(LanguageType eLnge = LANGUAGE_DONTKNOW);
 
     /// Return the format index of the default format of a type for language/country
-    sal_uInt32 GetStandardFormat(short eType, LanguageType eLnge = LANGUAGE_DONTKNOW);
+    sal_uInt32 GetStandardFormat(SvNumFormatType eType, LanguageType eLnge = LANGUAGE_DONTKNOW);
 
     /** Return the format index of the default format of a type for language/country.
         Maybe not the default format but a special builtin format, e.g. for
         NF_TIME_HH_MMSS00, if that format is passed in nFIndex. */
-    sal_uInt32 GetStandardFormat( sal_uInt32 nFIndex, short eType, LanguageType eLnge );
+    sal_uInt32 GetStandardFormat( sal_uInt32 nFIndex, SvNumFormatType eType, LanguageType eLnge );
 
     /** Return the format index of the default format of a type for language/country.
         Maybe not the default format but a special builtin format, e.g. for
         NF_TIME_HH_MMSS00, or NF_TIME_HH_MMSS if fNumber >= 1.0  */
-    sal_uInt32 GetStandardFormat( double fNumber, sal_uInt32 nFIndex, short eType,
+    sal_uInt32 GetStandardFormat( double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
                                   LanguageType eLnge );
 
     /// Whether nFIndex is a special builtin format
@@ -589,10 +639,10 @@ public:
         fNumber is assumed to be a date, time or datetime value, but unknown
         which. Originally introduced for Chart databrowser editor, probably
         should not be used otherwise. */
-    sal_uInt32 GuessDateTimeFormat( short& rType, double fNumber, LanguageType eLnge );
+    sal_uInt32 GuessDateTimeFormat( SvNumFormatType& rType, double fNumber, LanguageType eLnge );
 
     /** Return the corresponding edit format of a format. */
-    sal_uInt32 GetEditFormat( double fNumber, sal_uInt32 nFIndex, short eType,
+    sal_uInt32 GetEditFormat( double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
                               LanguageType eLnge, SvNumberformat const * pFormat );
 
     /// Return the reference date
@@ -603,7 +653,7 @@ public:
     bool GetNoZero() const;
     /** Get the type of a format (or css::util::NumberFormat::UNDEFINED if no entry),
          but with css::util::NumberFormat::DEFINED masked out */
-    short GetType(sal_uInt32 nFIndex) const;
+    SvNumFormatType GetType(sal_uInt32 nFIndex) const;
 
     /// As the name says
     void ClearMergeTable();
@@ -909,7 +959,7 @@ private:
 
     // Return the default format for a given type and current locale.
     // May ONLY be called from within GetStandardFormat().
-    SVL_DLLPRIVATE sal_uInt32   ImpGetDefaultFormat( short nType );
+    SVL_DLLPRIVATE sal_uInt32   ImpGetDefaultFormat( SvNumFormatType nType );
 
     // Return the index in a sequence of format codes matching an enum of
     // NfIndexTableOffset. If not found 0 is returned. If the sequence doesn't

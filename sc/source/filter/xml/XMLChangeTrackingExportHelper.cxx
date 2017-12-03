@@ -220,12 +220,12 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
         double fTempValue = 0.0;
         if (rExport.GetDocument() && rExport.GetDocument()->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
         {
-            sal_uInt16 nType = rExport.GetDocument()->GetFormatTable()->GetType(nIndex);
-            if ((nType & css::util::NumberFormat::DEFINED) == css::util::NumberFormat::DEFINED)
-                nType -= css::util::NumberFormat::DEFINED;
+            SvNumFormatType nType = rExport.GetDocument()->GetFormatTable()->GetType(nIndex);
+            if (nType & SvNumFormatType::DEFINED)
+                nType &= ~SvNumFormatType::DEFINED;
             switch(nType)
             {
-                case css::util::NumberFormat::DATE:
+                case SvNumFormatType::DATE:
                     {
                         if ( rExport.GetMM100UnitConverter().setNullDate(rExport.GetModel()) )
                         {
@@ -237,7 +237,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
                         }
                     }
                     break;
-                case css::util::NumberFormat::TIME:
+                case SvNumFormatType::TIME:
                     {
                         rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TIME);
                         OUStringBuffer sBuffer;
@@ -246,6 +246,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
                         bSetAttributes = true;
                     }
                     break;
+                default: break;
             }
         }
     }

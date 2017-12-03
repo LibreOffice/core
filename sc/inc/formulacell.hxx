@@ -51,6 +51,7 @@ class UpdatedRangeNames;
 class ScFormulaCell;
 class ScProgress;
 class ScTokenArray;
+enum class SvNumFormatType : sal_Int16;
 
 struct SC_DLLPUBLIC ScFormulaCellGroup
 {
@@ -66,7 +67,7 @@ public:
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
     sal_Int32 mnWeight;
-    short mnFormatType;
+    SvNumFormatType mnFormatType;
     bool mbInvariant:1;
     bool mbSubTotal:1;
 
@@ -118,7 +119,7 @@ private:
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
-    short           nFormatType;
+    SvNumFormatType nFormatType;
     ScMatrixMode    cMatrixFlag;
     bool            bDirty         : 1; // Must be (re)calculated
     bool            bChanged       : 1; // Whether something changed regarding display/representation
@@ -221,7 +222,7 @@ public:
     void SetNeedsDirty( bool bVar );
     void SetNeedNumberFormat( bool bVal );
     bool NeedsNumberFormat() const { return mbNeedsNumberFormat;}
-    short GetFormatType() const { return nFormatType; }
+    SvNumFormatType GetFormatType() const { return nFormatType; }
     void            Compile(const OUString& rFormula,
                             bool bNoListening,
                             const formula::FormulaGrammar::Grammar );

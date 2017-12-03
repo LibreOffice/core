@@ -690,7 +690,7 @@ MAKENUMSTR:
             LanguageType eLng, eSys;
             aCurData.GetBoxFormat(sal_uInt8(nNum)).GetValueFormat(sFormat, eLng, eSys);
 
-            short nType;
+            SvNumFormatType nType;
             bool bNew;
             sal_Int32 nCheckPos;
             sal_uInt32 nKey = pNumFormat->GetIndexPuttingAndConverting(sFormat, eLng,

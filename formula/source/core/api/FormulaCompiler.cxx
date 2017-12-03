@@ -52,7 +52,7 @@ class FormulaCompilerRecursionGuard
         ~FormulaCompilerRecursionGuard() { --rRecursion; }
 };
 
-short lcl_GetRetFormat( OpCode eOpCode )
+SvNumFormatType lcl_GetRetFormat( OpCode eOpCode )
 {
     switch (eOpCode)
     {
@@ -81,15 +81,15 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocIsEven:
         case ocIsOdd:
         case ocExact:
-            return css::util::NumberFormat::LOGICAL;
+            return SvNumFormatType::LOGICAL;
         case ocGetActDate:
         case ocGetDate:
         case ocEasterSunday :
-            return css::util::NumberFormat::DATE;
+            return SvNumFormatType::DATE;
         case ocGetActTime:
-            return css::util::NumberFormat::DATETIME;
+            return SvNumFormatType::DATETIME;
         case ocGetTime:
-            return css::util::NumberFormat::TIME;
+            return SvNumFormatType::TIME;
         case ocNPV:
         case ocPV:
         case ocSYD:
@@ -103,7 +103,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocPpmt:
         case ocCumIpmt:
         case ocCumPrinc:
-            return css::util::NumberFormat::CURRENCY;
+            return SvNumFormatType::CURRENCY;
         case ocRate:
         case ocIRR:
         case ocMIRR:
@@ -111,9 +111,9 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocEffect:
         case ocNominal:
         case ocPercentSign:
-            return css::util::NumberFormat::PERCENT;
+            return SvNumFormatType::PERCENT;
         default:
-            return css::util::NumberFormat::NUMBER;
+            return SvNumFormatType::NUMBER;
     }
 }
 
@@ -716,7 +716,7 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         pStack( nullptr ),
         eLastOp( ocPush ),
         nRecursion( 0 ),
-        nNumFmt( css::util::NumberFormat::UNDEFINED ),
+        nNumFmt( SvNumFormatType::UNDEFINED ),
         pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
@@ -738,7 +738,7 @@ FormulaCompiler::FormulaCompiler()
         pStack( nullptr ),
         eLastOp( ocPush ),
         nRecursion(0),
-        nNumFmt( css::util::NumberFormat::UNDEFINED ),
+        nNumFmt( SvNumFormatType::UNDEFINED ),
         pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
@@ -1417,7 +1417,7 @@ void FormulaCompiler::Factor()
     }
     else
     {
-        if( nNumFmt == css::util::NumberFormat::UNDEFINED )
+        if( nNumFmt == SvNumFormatType::UNDEFINED )
             nNumFmt = lcl_GetRetFormat( eOp );
 
         if ( IsOpCodeVolatile( eOp) )
@@ -1556,8 +1556,8 @@ void FormulaCompiler::Factor()
                 // standard handling of ocNot, ocNeg and 1-parameter opcodes
                 pFacToken = mpToken;
                 eOp = NextToken();
-                if( nNumFmt == css::util::NumberFormat::UNDEFINED && eOp == ocNot )
-                    nNumFmt = css::util::NumberFormat::LOGICAL;
+                if( nNumFmt == SvNumFormatType::UNDEFINED && eOp == ocNot )
+                    nNumFmt = SvNumFormatType::LOGICAL;
                 if (eOp == ocOpen)
                 {
                     NextToken();
@@ -2036,8 +2036,8 @@ bool FormulaCompiler::CompileTokenArray()
         if ( bWasForced )
             pArr->SetRecalcModeForced();
     }
-    if( nNumFmt == css::util::NumberFormat::UNDEFINED )
-        nNumFmt = css::util::NumberFormat::NUMBER;
+    if( nNumFmt == SvNumFormatType::UNDEFINED )
+        nNumFmt = SvNumFormatType::NUMBER;
     return glSubTotal;
 }
 

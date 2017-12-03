@@ -79,7 +79,7 @@ XclImpPCItem::XclImpPCItem( XclImpStream& rStrm )
 
 namespace {
 
-void lclSetValue( XclImpRoot& rRoot, const ScAddress& rScPos, double fValue, short nFormatType )
+void lclSetValue( XclImpRoot& rRoot, const ScAddress& rScPos, double fValue, SvNumFormatType nFormatType )
 {
     ScDocumentImport& rDoc = rRoot.GetDocImport();
     rDoc.setNumericCell(rScPos, fValue);
@@ -100,15 +100,15 @@ void XclImpPCItem::WriteToSource( XclImpRoot& rRoot, const ScAddress& rScPos ) c
     else if( const sal_Int16* pnValue = GetInteger() )
         rDoc.setNumericCell(rScPos, *pnValue);
     else if( const bool* pbValue = GetBool() )
-        lclSetValue( rRoot, rScPos, *pbValue ? 1.0 : 0.0, css::util::NumberFormat::LOGICAL );
+        lclSetValue( rRoot, rScPos, *pbValue ? 1.0 : 0.0, SvNumFormatType::LOGICAL );
     else if( const DateTime* pDateTime = GetDateTime() )
     {
         // set number format date, time, or date/time, depending on the value
         double fValue = rRoot.GetDoubleFromDateTime( *pDateTime );
         double fInt = 0.0;
         double fFrac = modf( fValue, &fInt );
-        short nFormatType = ((fFrac == 0.0) && (fInt != 0.0)) ? css::util::NumberFormat::DATE :
-            ((fInt == 0.0) ? css::util::NumberFormat::TIME : css::util::NumberFormat::DATETIME);
+        SvNumFormatType nFormatType = ((fFrac == 0.0) && (fInt != 0.0)) ? SvNumFormatType::DATE :
+            ((fInt == 0.0) ? SvNumFormatType::TIME : SvNumFormatType::DATETIME);
         lclSetValue( rRoot, rScPos, fValue, nFormatType );
     }
     else if( const sal_uInt16* pnError = GetError() )

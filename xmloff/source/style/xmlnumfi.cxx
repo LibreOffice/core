@@ -435,7 +435,7 @@ void SvXMLNumImpData::RemoveVolatileFormats()
         if ( pObj->bRemoveAfterUse )
         {
             const SvNumberformat* pFormat = pFormatter->GetEntry(pObj->nKey);
-            if (pFormat && (pFormat->GetType() & css::util::NumberFormat::DEFINED))
+            if (pFormat && (pFormat->GetType() & SvNumFormatType::DEFINED))
                 pFormatter->DeleteEntry( pObj->nKey );
         }
     }
@@ -1732,7 +1732,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
             sal_Int32  nErrPos = 0;
-            short       l_nType = 0;
+            SvNumFormatType l_nType = SvNumFormatType::ALL;
             bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, l_nType, nIndex, nFormatLang );
             if ( !bOk && nErrPos == 0 && aFormatStr != sFormat )
             {

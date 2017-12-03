@@ -33,8 +33,8 @@ namespace
         {
             //treat dates like text #i25706#
             sal_uInt32 nNumberFormat = pDocument->GetNumberFormat( ScAddress( nCol, nRow, nTab ) );
-            short nType = pDocument->GetFormatTable()->GetType(nNumberFormat);
-            bool bIsDate = (nType & css::util::NumberFormat::DATE);
+            SvNumFormatType nType = pDocument->GetFormatTable()->GetType(nNumberFormat);
+            bool bIsDate(nType & SvNumFormatType::DATE);
             bReturn = !bIsDate;
         }
         return bReturn;

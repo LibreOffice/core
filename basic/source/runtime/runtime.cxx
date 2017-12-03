@@ -408,8 +408,9 @@ std::shared_ptr<SvNumberFormatter> SbiInstance::PrepareNumberFormatter( sal_uInt
     std::shared_ptr<SvNumberFormatter> pNumberFormatter(
             new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
-    sal_Int32 nCheckPos = 0; short nType;
-    rnStdTimeIdx = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eLangType );
+    sal_Int32 nCheckPos = 0;
+    SvNumFormatType nType;
+    rnStdTimeIdx = pNumberFormatter->GetStandardFormat( SvNumFormatType::TIME, eLangType );
 
     // the formatter's standard templates have only got a two-digit date
     // -> registering an own format

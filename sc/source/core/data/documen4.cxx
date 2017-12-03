@@ -656,9 +656,9 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
 double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
 {
     const SvNumberformat* pFormat = GetFormatTable()->GetEntry( nFormat );
-    short nType;
-    if (pFormat && (nType = pFormat->GetMaskedType()) != css::util::NumberFormat::DATE
-            && nType != css::util::NumberFormat::TIME && nType != css::util::NumberFormat::DATETIME )
+    SvNumFormatType nType;
+    if (pFormat && (nType = pFormat->GetMaskedType()) != SvNumFormatType::DATE
+            && nType != SvNumFormatType::TIME && nType != SvNumFormatType::DATETIME )
     {
         short nPrecision;
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
@@ -667,10 +667,10 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
             nPrecision = (short)pFormat->GetFormatPrecision( nIdx );
             switch ( nType )
             {
-                case css::util::NumberFormat::PERCENT:      // 0.41% == 0.0041
+                case SvNumFormatType::PERCENT:      // 0.41% == 0.0041
                     nPrecision += 2;
                     break;
-                case css::util::NumberFormat::SCIENTIFIC:   // 1.23e-3 == 0.00123
+                case SvNumFormatType::SCIENTIFIC:   // 1.23e-3 == 0.00123
                 {
                     short nExp = 0;
                     if ( fVal > 0.0 )
@@ -691,16 +691,17 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                     }
                     break;
                 }
-                case css::util::NumberFormat::FRACTION:     // get value of fraction representation
+                case SvNumFormatType::FRACTION:     // get value of fraction representation
                 {
                     return pFormat->GetRoundFractionValue( fVal );
                 }
-                case css::util::NumberFormat::NUMBER:
-                case css::util::NumberFormat::CURRENCY:
+                case SvNumFormatType::NUMBER:
+                case SvNumFormatType::CURRENCY:
                 {   // tdf#106253 Thousands divisors for format "0,"
                     nPrecision -=  pFormat->GetThousandDivisorPrecision( nIdx );
                     break;
                 }
+                default: break;
             }
         }
         else

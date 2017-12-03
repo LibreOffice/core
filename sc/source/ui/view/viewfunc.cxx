@@ -513,8 +513,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             aPos.SetTab( i );
             const sal_uInt32 nIndex = static_cast<const SfxUInt32Item*>( pDoc->GetAttr(
                         nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
-            const sal_Int16 nType = pFormatter->GetType( nIndex);
-            if (nType == css::util::NumberFormat::TEXT ||
+            const SvNumFormatType nType = pFormatter->GetType( nIndex);
+            if (nType == SvNumFormatType::TEXT ||
                     ((rString[0] == '+' || rString[0] == '-') && nError != FormulaError::NONE && rString == aFormula))
             {
                 if ( pData )
@@ -535,7 +535,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     if(pCell->GetCode()->IsHyperLink())
                         pCell->GetCode()->SetHyperLink(false);
                 }
-                if (nType == css::util::NumberFormat::LOGICAL)
+                if (nType == SvNumFormatType::LOGICAL)
                 {
                     // Reset to General so the actual format can be determined
                     // after the cell has been interpreted. A sticky boolean
@@ -543,7 +543,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     // General of same locale as current number format.
                     const SvNumberformat* pEntry = pFormatter->GetEntry( nIndex);
                     const LanguageType nLang = (pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge);
-                    const sal_uInt32 nFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::NUMBER, nLang);
+                    const sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, nLang);
                     ScPatternAttr aPattern( pDoc->GetPool());
                     aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
                     ScMarkData aMark;
@@ -2571,7 +2571,7 @@ void ScViewFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, 
     GetViewData().GetDocShell()->GetDocFunc().ReplaceNote( rPos, rNoteText, pAuthor, pDate, false );
 }
 
-void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
+void ScViewFunc::SetNumberFormat( SvNumFormatType nFormatType, sal_uLong nAdd )
 {
     // not editable because of matrix only? attribute OK nonetheless
     bool bOnlyNotBecauseOfMatrix;
@@ -2639,7 +2639,7 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
 
         OUString    aFormat = rCode;    // will be changed
         sal_Int32   nErrPos = 0;
-        short       nType   = 0;        //! ???
+        SvNumFormatType nType   = SvNumFormatType::ALL;        //! ???
         bOk = pFormatter->PutEntry( aFormat, nErrPos, nType, nNumberFormat, eLanguage );
     }
 
@@ -2691,9 +2691,9 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
     sal_uInt16 nPrecision, nLeading;
     pOldEntry->GetFormatSpecialInfo( bThousand, bNegRed, nPrecision, nLeading );
 
-    short nOldType = pOldEntry->GetType();
-    if ( 0 == ( nOldType & (
-                css::util::NumberFormat::NUMBER |  css::util::NumberFormat::CURRENCY | css::util::NumberFormat::PERCENT | css::util::NumberFormat::SCIENTIFIC ) ) )
+    SvNumFormatType nOldType = pOldEntry->GetType();
+    if ( SvNumFormatType::ALL == ( nOldType & (
+                SvNumFormatType::NUMBER |  SvNumFormatType::CURRENCY | SvNumFormatType::PERCENT | SvNumFormatType::SCIENTIFIC ) ) )
     {
         //  date, time, fraction, logical, text can not be changed
         bError = true;
@@ -2734,7 +2734,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
     }
     else
     {
-        if ( (nOldType & css::util::NumberFormat::SCIENTIFIC) && !bThousand &&
+        if ( (nOldType & SvNumFormatType::SCIENTIFIC) && !bThousand &&
              (pOldEntry->GetFormatIntegerDigits()%3 == 0) && pOldEntry->GetFormatIntegerDigits() > 0 )
             bThousand =  true;
     }
@@ -2768,7 +2768,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         if ( nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
             sal_Int32 nErrPos = 0;
-            short nNewType = 0;
+            SvNumFormatType nNewType = SvNumFormatType::ALL;
             bool bOk = pFormatter->PutEntry( aNewPicture, nErrPos,
                                                 nNewType, nNewFormat, eLanguage );
             OSL_ENSURE( bOk, "incorrect numberformat generated" );

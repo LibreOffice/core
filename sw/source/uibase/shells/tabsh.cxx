@@ -1473,7 +1473,8 @@ void SwTableShell::ExecNumberFormat(SfxRequest const & rReq)
     LanguageType eLang = rSh.GetCurLang();
     SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
     sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
-    sal_uInt16 nFormatType = 0, nOffset = 0;
+    SvNumFormatType nFormatType = SvNumFormatType::ALL;
+    sal_uInt16 nOffset = 0;
 
     switch ( nSlot )
     {
@@ -1487,22 +1488,22 @@ void SwTableShell::ExecNumberFormat(SfxRequest const & rReq)
             {
                 // Re-enter
                 sal_Int32 nErrPos;
-                short nType;
+                SvNumFormatType nType;
                 if( !pFormatter->PutEntry( aCode, nErrPos, nType,
                                             nNumberFormat, eLang ))
                     nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
             }
         }
         break;
-    case FN_NUMBER_STANDARD:        nFormatType = css::util::NumberFormat::NUMBER; break;
-    case FN_NUMBER_SCIENTIFIC:      nFormatType = css::util::NumberFormat::SCIENTIFIC; break;
-    case FN_NUMBER_DATE:            nFormatType = css::util::NumberFormat::DATE; break;
-    case FN_NUMBER_TIME:            nFormatType = css::util::NumberFormat::TIME; break;
-    case FN_NUMBER_CURRENCY:        nFormatType = css::util::NumberFormat::CURRENCY; break;
-    case FN_NUMBER_PERCENT:         nFormatType = css::util::NumberFormat::PERCENT; break;
+    case FN_NUMBER_STANDARD:        nFormatType = SvNumFormatType::NUMBER; break;
+    case FN_NUMBER_SCIENTIFIC:      nFormatType = SvNumFormatType::SCIENTIFIC; break;
+    case FN_NUMBER_DATE:            nFormatType = SvNumFormatType::DATE; break;
+    case FN_NUMBER_TIME:            nFormatType = SvNumFormatType::TIME; break;
+    case FN_NUMBER_CURRENCY:        nFormatType = SvNumFormatType::CURRENCY; break;
+    case FN_NUMBER_PERCENT:         nFormatType = SvNumFormatType::PERCENT; break;
 
     case FN_NUMBER_TWODEC:          // #.##0,00
-        nFormatType = css::util::NumberFormat::NUMBER;
+        nFormatType = SvNumFormatType::NUMBER;
         nOffset = NF_NUMBER_1000DEC2;
         break;
 
@@ -1511,7 +1512,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest const & rReq)
         return;
     }
 
-    if( nFormatType )
+    if( nFormatType != SvNumFormatType::ALL )
         nNumberFormat = pFormatter->GetStandardFormat( nFormatType, eLang ) + nOffset;
 
     if( NUMBERFORMAT_ENTRY_NOT_FOUND != nNumberFormat )

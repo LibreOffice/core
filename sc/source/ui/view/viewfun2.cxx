@@ -828,7 +828,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
             rMark.GetMarkArea( aRange );
             std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( pDoc->GetPool() ));
             pPattern->GetItemSet().Put( *pItem );
-            short nNewType = pDoc->GetFormatTable()->GetType( pItem->GetValue() );
+            SvNumFormatType nNewType = pDoc->GetFormatTable()->GetType( pItem->GetValue() );
             pDoc->ApplyPatternIfNumberformatIncompatible( aRange, rMark,
                 *pPattern, nNewType );
         }

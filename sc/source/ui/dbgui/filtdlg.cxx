@@ -278,7 +278,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                         {
                             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                             pFormatter->GetInputLineString(rItem.mfVal,
-                                                           pFormatter->GetStandardFormat( css::util::NumberFormat::DATE), aValStr);
+                                                           pFormatter->GetStandardFormat( SvNumFormatType::DATE), aValStr);
                         }
                     }
                     else

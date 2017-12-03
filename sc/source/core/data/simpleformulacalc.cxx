@@ -18,7 +18,7 @@
 
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
         const OUString& rFormula, bool bMatrixFormula, formula::FormulaGrammar::Grammar eGram )
-    : mnFormatType(0)
+    : mnFormatType(SvNumFormatType::ALL)
     , mbCalculated(false)
     , maAddr(rAddr)
     , mpDoc(pDoc)
