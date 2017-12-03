@@ -243,13 +243,14 @@ SwPostItMgr::~SwPostItMgr()
 void SwPostItMgr::CheckForRemovedPostIts()
 {
     bool bRemoved = false;
-    for(auto i = mvPostItFields.begin(); i != mvPostItFields.end(); )
+    auto currentIt = mvPostItFields.begin();
+    while(currentIt != mvPostItFields.end())
     {
-        auto it = i++;
+        auto it = currentIt++;
         if ( !(*it)->UseElement() )
         {
             SwSidebarItem* p = (*it);
-            mvPostItFields.remove(*it);
+            currentIt = mvPostItFields.erase(std::remove(mvPostItFields.begin(), mvPostItFields.end(), *it), mvPostItFields.end());
             if (GetActiveSidebarWin() == p->pPostIt)
                 SetActiveSidebarWin(nullptr);
             p->pPostIt.disposeAndClear();
@@ -573,7 +574,7 @@ bool SwPostItMgr::CalcRects()
         // show notes in right order in navigator
         //prevent Anchors during layout to overlap, e.g. when moving a frame
         if (mvPostItFields.size()>1 )
-            mvPostItFields.sort(comp_pos);
+            std::stable_sort(mvPostItFields.begin(), mvPostItFields.end(), comp_pos);
 
         // sort the items into the right page vector, so layout can be done by page
         for (auto const& pItem : mvPostItFields)
@@ -1385,7 +1386,7 @@ public:
 //Fields more than once.
 class FieldDocWatchingStack : public SfxListener
 {
-    std::list<SwSidebarItem*>& l;
+    std::vector<SwSidebarItem*>& sidebarItemVector;
     std::vector<const SwFormatField*> v;
     SwDocShell& m_rDocShell;
     FilterFunctor& m_rFilter;
@@ -1425,8 +1426,8 @@ class FieldDocWatchingStack : public SfxListener
     }
 
 public:
-    FieldDocWatchingStack(std::list<SwSidebarItem*>& in, SwDocShell &rDocShell, FilterFunctor& rFilter)
-        : l(in)
+    FieldDocWatchingStack(std::vector<SwSidebarItem*>& in, SwDocShell &rDocShell, FilterFunctor& rFilter)
+        : sidebarItemVector(in)
         , m_rDocShell(rDocShell)
         , m_rFilter(rFilter)
     {
@@ -1437,8 +1438,8 @@ public:
     {
         EndListeningToAllFields();
         v.clear();
-        v.reserve(l.size());
-        for (auto const& p : l)
+        v.reserve(sidebarItemVector.size());
+        for (auto const& p : sidebarItemVector)
         {
             const SwFormatField& rField = p->GetFormatField();
             if (!m_rFilter(&rField))
