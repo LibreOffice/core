@@ -24,21 +24,21 @@
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
 
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlineit0.hxx>
-#include "svx/drawitem.hxx"
-#include "cuitabarea.hxx"
-#include "dlgname.hxx"
+#include <svx/drawitem.hxx>
+#include <cuitabarea.hxx>
+#include <dlgname.hxx>
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/tabdlg.hxx>
-#include "sfx2/opengrf.hxx"
+#include <sfx2/opengrf.hxx>
 #include <vcl/layout.hxx>
 
 using namespace com::sun::star;
@@ -177,7 +177,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         m_rXFSet.Put( aFillStyleItem );
     }
 
-    /*switch(eXFS)
+    switch(eXFS)
     {
         default:
         case drawing::FillStyle_NONE:
@@ -199,7 +199,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         }
         case drawing::FillStyle_HATCH:
         {
-            m_rXFSet.Put( static_cast<const XFillHatchItem&>( rSet.Get(XATTR_FILLHATCH) ) );
+            m_rXFSet.Put( rSet.Get(XATTR_FILLHATCH) );
             SelectFillTypeHdl_Impl( m_pBtnHatch );
             break;
         }
@@ -213,7 +213,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 SelectFillTypeHdl_Impl( m_pBtnPattern );
             break;
         }
-    }*/
+    }
 }
 
 template< typename TTabPage >
@@ -406,7 +406,7 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
         static_cast<SvxColorTabPage*>(pTab)->Reset(&m_rXFSet);
         static_cast<SvxColorTabPage*>(pTab)->Show();
     }
-    if(nId == GRADIENT)
+    else if(nId == GRADIENT)
     {
         static_cast<SvxGradientTabPage*>(pTab)->SetColorList( m_pColorList );
         static_cast<SvxGradientTabPage*>(pTab)->SetGradientList( m_pGradientList );
