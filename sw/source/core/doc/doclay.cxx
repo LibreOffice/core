@@ -1530,7 +1530,7 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     {
         // get up by using the Anchor
 #if OSL_DEBUG_LEVEL > 0
-        std::list<const SwFrameFormat*> checkFormats;
+        std::vector<const SwFrameFormat*> checkFormats;
         for( auto pFormat : *GetSpzFrameFormats() )
         {
             const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
@@ -1547,7 +1547,7 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
             if( pIdx && pFlyNd == &pIdx->GetNode() )
             {
 #if OSL_DEBUG_LEVEL > 0
-                std::list<const SwFrameFormat*>::iterator checkPos = std::find(
+                auto checkPos = std::find(
                         checkFormats.begin(), checkFormats.end(), pFormat );
                 assert( checkPos != checkFormats.end());
                 checkFormats.erase( checkPos );

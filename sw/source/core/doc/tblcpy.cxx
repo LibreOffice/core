@@ -44,7 +44,6 @@
 #include <UndoTable.hxx>
 #include <redline.hxx>
 #include <fmtfsize.hxx>
-#include <list>
 #include <deque>
 #include <memory>
 #include <o3tl/make_unique.hxx>
@@ -77,8 +76,8 @@ namespace
         bool mbCovered;
     };
 
-    typedef std::list< SubBox > SubLine;
-    typedef std::list< SubLine > SubTable;
+    typedef std::vector< SubBox > SubLine;
+    typedef std::vector< SubLine > SubTable;
 
     class TableStructure
     {
