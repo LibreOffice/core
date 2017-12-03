@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0c05fc44",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-03T16:59:32Z",
+      "side": 1,
+      "message": "looks like you can use a for range loop here?",
+      "revId": "7221f6b4864a709c1aea8d81cd7248fd6127d8d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2c02b83d",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-03T16:59:32Z",
+      "side": 1,
+      "message": "can use emplace_back here",
+      "revId": "7221f6b4864a709c1aea8d81cd7248fd6127d8d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
