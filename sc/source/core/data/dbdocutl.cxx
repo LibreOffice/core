@@ -21,6 +21,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include <dbdocutl.hxx>
 #include <document.hxx>
@@ -56,7 +57,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::BOOLEAN:
                 //TODO: use language from doc (here, date/time and currency)?
                 nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
-                                    css::util::NumberFormat::LOGICAL, ScGlobal::eLnge );
+                                    SvNumFormatType::LOGICAL, ScGlobal::eLnge );
                 nVal = (xRow->getBoolean(nRowPos) ? 1 : 0);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
                 bValue = true;
@@ -94,7 +95,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                     {
                         SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
                         nFormatIndex = pFormTable->GetStandardFormat(
-                                css::util::NumberFormat::DATE, ScGlobal::eLnge );
+                                SvNumFormatType::DATE, ScGlobal::eLnge );
                         nVal = Date( aDate ) - pFormTable->GetNullDate();
                     }
                     bValue = true;
@@ -105,7 +106,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                 {
                     SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
                     nFormatIndex = pFormTable->GetStandardFormat(
-                                        css::util::NumberFormat::TIME, ScGlobal::eLnge );
+                                        SvNumFormatType::TIME, ScGlobal::eLnge );
 
                     util::Time aTime = xRow->getTime(nRowPos);
                     nVal = aTime.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
@@ -121,7 +122,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                 {
                     SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
                     nFormatIndex = pFormTable->GetStandardFormat(
-                                        css::util::NumberFormat::DATETIME, ScGlobal::eLnge );
+                                        SvNumFormatType::DATETIME, ScGlobal::eLnge );
 
                     util::DateTime aStamp = xRow->getTimestamp(nRowPos);
                     nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
@@ -153,7 +154,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 
     if ( bValue && bCurrency )
         nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
-                            css::util::NumberFormat::CURRENCY, ScGlobal::eLnge );
+                            SvNumFormatType::CURRENCY, ScGlobal::eLnge );
 
     ScAddress aPos(nCol, nRow, nTab);
     if (bEmptyFlag)

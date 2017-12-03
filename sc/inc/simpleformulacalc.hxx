@@ -22,7 +22,7 @@ class ScTokenArray;
 class ScSimpleFormulaCalculator
 {
 private:
-    short mnFormatType;
+    SvNumFormatType mnFormatType;
 
     bool mbCalculated;
     std::unique_ptr<ScTokenArray> mpCode;
@@ -47,7 +47,7 @@ public:
     FormulaError GetErrCode();
     double GetValue();
     svl::SharedString GetString();
-    short GetFormatType() const { return mnFormatType; }
+    SvNumFormatType GetFormatType() const { return mnFormatType; }
 
     bool HasColRowName();
 

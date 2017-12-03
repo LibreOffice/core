@@ -26,6 +26,7 @@
 #include <tools/datetime.hxx>
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"
@@ -69,9 +70,9 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
     {
         sal_uInt32 nFormat(0);
         if (nType == css::util::NumberFormat::DATE)
-            nFormat = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::DATE, ScGlobal::eLnge );
+            nFormat = pDoc->GetFormatTable()->GetStandardFormat( SvNumFormatType::DATE, ScGlobal::eLnge );
         else if (nType == css::util::NumberFormat::TIME)
-            nFormat = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::TIME, ScGlobal::eLnge );
+            nFormat = pDoc->GetFormatTable()->GetStandardFormat( SvNumFormatType::TIME, ScGlobal::eLnge );
         pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
     }
 

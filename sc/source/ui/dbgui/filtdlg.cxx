@@ -38,6 +38,7 @@
 #include <filtdlg.hxx>
 #include <vcl/layout.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <svl/zformat.hxx>
 
 #include <o3tl/make_unique.hxx>
 
@@ -278,7 +279,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                         {
                             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                             pFormatter->GetInputLineString(rItem.mfVal,
-                                                           pFormatter->GetStandardFormat( css::util::NumberFormat::DATE), aValStr);
+                                                           pFormatter->GetStandardFormat( SvNumFormatType::DATE), aValStr);
                         }
                     }
                     else

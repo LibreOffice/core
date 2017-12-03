@@ -341,10 +341,10 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
         if( rDoc.HasValueData( aPos.Col(), aPos.Row(), aPos.Tab() ) )
         {
             double fValue = rDoc.GetValue( aPos );
-            short nFmtType = rFormatter.GetType( rDoc.GetNumberFormat( rDoc.GetNonThreadedContext(), aPos ) );
-            if( nFmtType == css::util::NumberFormat::LOGICAL )
+            SvNumFormatType nFmtType = rFormatter.GetType( rDoc.GetNumberFormat( rDoc.GetNonThreadedContext(), aPos ) );
+            if( nFmtType == SvNumFormatType::LOGICAL )
                 InsertOrigBoolItem( fValue != 0, aText );
-            else if( nFmtType & css::util::NumberFormat::DATETIME )
+            else if( nFmtType & SvNumFormatType::DATETIME )
                 InsertOrigDateTimeItem( GetDateTimeFromDouble( ::std::max( fValue, 0.0 ) ), aText );
             else
                 InsertOrigDoubleItem( fValue, aText );

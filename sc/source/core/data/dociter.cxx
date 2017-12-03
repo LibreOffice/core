@@ -18,6 +18,7 @@
  */
 
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include <scitems.hxx>
 #include <global.hxx>
@@ -107,7 +108,7 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     , mnTab(0)
     , nAttrEndRow(0)
     , mnSubTotalFlags(nSubTotalFlags)
-    , nNumFmtType(css::util::NumberFormat::UNDEFINED)
+    , nNumFmtType(SvNumFormatType::UNDEFINED)
     , bNumValid(false)
     , bCalcAsShown(pDocument->GetDocOptions().IsCalcAsShown())
     , bTextAsZero(bTextZero)
@@ -246,7 +247,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                 {
                     rErr = FormulaError::NONE;
                     rValue = 0.0;
-                    nNumFmtType = css::util::NumberFormat::NUMBER;
+                    nNumFmtType = SvNumFormatType::NUMBER;
                     nNumFmtIndex = 0;
                     bNumValid = true;
                     return true;
@@ -262,7 +263,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
     }
 }
 
-void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, sal_uInt32& nType, sal_uInt32& nIndex )
+void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex )
 {
     if (!bNumValid && mnTab < pDoc->GetTableCount())
     {
@@ -347,7 +348,7 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInte
     , nRow(mpParam->nRow1)
     , nAttrEndRow(0)
     , nTab(mpParam->nTab)
-    , nNumFmtType(0)
+    , nNumFmtType(SvNumFormatType::ALL)
     , bCalcAsShown(pDoc->GetDocOptions().IsCalcAsShown())
 {
     SCSIZE i;
@@ -420,7 +421,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                             nAttrEndRow, pNewAttrArray, nRow, mpDoc );
                         rValue.mfValue = mpDoc->RoundValueAsShown( rValue.mfValue, nNumFormat );
                     }
-                    nNumFmtType = css::util::NumberFormat::NUMBER;
+                    nNumFmtType = SvNumFormatType::NUMBER;
                     nNumFmtIndex = 0;
                     rValue.mnError = FormulaError::NONE;
                     return true; // Found it!

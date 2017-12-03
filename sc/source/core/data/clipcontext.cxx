@@ -18,6 +18,7 @@
 #include <clipparam.hxx>
 
 #include <svl/intitem.hxx>
+#include <svl/zformat.hxx>
 #include <formula/errorcodes.hxx>
 
 namespace sc {
@@ -336,8 +337,8 @@ bool CopyFromClipContext::isCloneNotes() const
 bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
 {
     sal_uLong nNumIndex = static_cast<const SfxUInt32Item&>(rCol.GetAttr(nRow, ATTR_VALUE_FORMAT)).GetValue();
-    short nType = mpClipDoc->GetFormatTable()->GetType(nNumIndex);
-    return (nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) || (nType == css::util::NumberFormat::DATETIME);
+    SvNumFormatType nType = mpClipDoc->GetFormatTable()->GetType(nNumIndex);
+    return (nType == SvNumFormatType::DATE) || (nType == SvNumFormatType::TIME) || (nType == SvNumFormatType::DATETIME);
 }
 
 CopyToClipContext::CopyToClipContext(

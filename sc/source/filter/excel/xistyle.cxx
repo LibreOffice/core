@@ -33,6 +33,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <svl/zformat.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -693,7 +694,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
 
         // insert/convert the Excel number format
         sal_Int32 nCheckPos;
-        short nType = css::util::NumberFormat::DEFINED;
+        SvNumFormatType nType = SvNumFormatType::DEFINED;
         sal_uInt32 nKey;
         if( !rNumFmt.maFormat.isEmpty() )
         {

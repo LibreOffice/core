@@ -35,6 +35,7 @@
 #include <svtools/parhtml.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
@@ -368,8 +369,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     if (rSet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SfxItemState::SET)
                     {
                         sal_uInt32 nNumFmt = static_cast<const SfxUInt32Item*>(pNumFmt)->GetValue();
-                        sal_uInt16 nType = pFormatter->GetType(nNumFmt);
-                        if (nType == css::util::NumberFormat::TEXT)
+                        SvNumFormatType nType = pFormatter->GetType(nNumFmt);
+                        if (nType == SvNumFormatType::TEXT)
                             // Format is set to Text.
                             bTextFormat = true;
                     }

@@ -183,8 +183,8 @@ public:
     virtual void                SetInForceArray( ParamClass c );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual short               GetDoubleType() const;
-    virtual void                SetDoubleType( short nType );
+    virtual sal_Int16           GetDoubleType() const;
+    virtual void                SetDoubleType( sal_Int16 nType );
     virtual svl::SharedString   GetString() const;
     virtual void                SetString( const svl::SharedString& rStr );
     virtual sal_uInt16          GetIndex() const;
@@ -304,7 +304,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new FormulaDoubleToken(*this); }
     virtual double              GetDouble() const override;
     virtual double&             GetDoubleAsReference() override;
-    virtual short               GetDoubleType() const override;     ///< always returns 0 for "not typed"
+    virtual sal_Int16           GetDoubleType() const override;     ///< always returns 0 for "not typed"
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
@@ -313,19 +313,19 @@ public:
 class FORMULA_DLLPUBLIC FormulaTypedDoubleToken : public FormulaDoubleToken
 {
 private:
-            short               mnType;     /**< Can hold, for example, a value
-                                              of css::util::NumberFormat, or by
+            sal_Int16           mnType;     /**< Can hold, for example, a value
+                                              of SvNumFormatType, or by
                                               contract any other
                                               classification. */
 public:
-                                FormulaTypedDoubleToken( double f, short nType ) :
+                                FormulaTypedDoubleToken( double f, sal_Int16 nType ) :
                                     FormulaDoubleToken( f ), mnType( nType ) {}
                                 FormulaTypedDoubleToken( const FormulaTypedDoubleToken& r ) :
                                     FormulaDoubleToken( r ), mnType( r.mnType ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaTypedDoubleToken(*this); }
-    virtual short               GetDoubleType() const override;
-    virtual void                SetDoubleType( short nType ) override;
+    virtual sal_Int16           GetDoubleType() const override;
+    virtual void                SetDoubleType( sal_Int16 nType ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaTypedDoubleToken )

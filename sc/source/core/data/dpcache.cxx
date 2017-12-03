@@ -37,6 +37,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <o3tl/make_unique.hxx>
 
 #if DUMP_PIVOT_TABLE
@@ -652,7 +653,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
             SCROW nRow = 0;
             do
             {
-                short nFormatType = css::util::NumberFormat::UNDEFINED;
+                SvNumFormatType nFormatType = SvNumFormatType::UNDEFINED;
                 aData.SetEmpty();
                 rDB.getValue(nCol, aData, nFormatType);
                 aBuckets.emplace_back(aData, nRow);
@@ -1103,8 +1104,8 @@ bool ScDPCache::IsDateDimension( long nDim ) const
     if (!pFormatter)
         return false;
 
-    short eType = pFormatter->GetType(maFields[nDim]->mnNumFormat);
-    return (eType == css::util::NumberFormat::DATE) || (eType == css::util::NumberFormat::DATETIME);
+    SvNumFormatType eType = pFormatter->GetType(maFields[nDim]->mnNumFormat);
+    return (eType == SvNumFormatType::DATE) || (eType == SvNumFormatType::DATETIME);
 }
 
 long ScDPCache::GetDimMemberCount(long nDim) const
@@ -1202,13 +1203,13 @@ sal_uInt32 ScDPCache::GetLocaleIndependentFormat( SvNumberFormatter& rFormatter,
     // Use en-US locale for all.
     switch (rFormatter.GetType( nNumFormat))
     {
-        case css::util::NumberFormat::DATE:
+        case SvNumFormatType::DATE:
             return rFormatter.GetFormatIndex( NF_DATE_ISO_YYYYMMDD, LANGUAGE_ENGLISH_US);
         break;
-        case css::util::NumberFormat::TIME:
+        case SvNumFormatType::TIME:
             return rFormatter.GetFormatIndex( NF_TIME_HHMMSS, LANGUAGE_ENGLISH_US);
         break;
-        case css::util::NumberFormat::DATETIME:
+        case SvNumFormatType::DATETIME:
             return rFormatter.GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, LANGUAGE_ENGLISH_US);
         break;
         default:

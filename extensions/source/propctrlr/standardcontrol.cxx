@@ -40,6 +40,7 @@
 #include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svl/zformat.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/datetime.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -261,7 +262,7 @@ namespace pcr
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
         SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();
-        sal_uLong nStandardDateTimeFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::DATETIME, eSysLanguage );
+        sal_uLong nStandardDateTimeFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATETIME, eSysLanguage );
 
         getTypedControlWindow()->SetFormatKey( nStandardDateTimeFormat );
     }

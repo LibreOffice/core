@@ -162,7 +162,7 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
 }
 
 sal_uInt32 ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
-        sal_uInt32 nFormat, short nType )
+        sal_uInt32 nFormat, SvNumFormatType nType )
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry( nFormat );
     if ( pFormat )
