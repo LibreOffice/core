@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4ce464ab",
+        "filename": "sw/inc/fmtautofmt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-03T16:56:55Z",
+      "side": 0,
+      "message": "why is removing this OK?",
+      "revId": "1d44bcf18712d899f9e53676b9bc54ddc88147eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

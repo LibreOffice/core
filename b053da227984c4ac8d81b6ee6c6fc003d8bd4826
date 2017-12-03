@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6ce1209a",
+        "filename": "sw/inc/paratr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-03T16:56:55Z",
+      "side": 1,
+      "message": "strange that this cannot be removed?",
+      "revId": "b053da227984c4ac8d81b6ee6c6fc003d8bd4826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
