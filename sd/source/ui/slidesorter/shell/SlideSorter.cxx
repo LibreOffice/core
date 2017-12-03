@@ -24,6 +24,7 @@
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsProperties.hxx>
 #include <controller/SlsAnimator.hxx>
+#include <o3tl/deleter.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsTheme.hxx>
 #include <model/SlideSorterModel.hxx>
@@ -82,7 +83,8 @@ std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
             pContentWindow,
             pHorizontalScrollBar,
             pVerticalScrollBar,
-            pScrollBarBox));
+            pScrollBarBox),
+        o3tl::default_delete<SlideSorter>());
     pSlideSorter->Init();
     return pSlideSorter;
 }
@@ -95,7 +97,8 @@ std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
         new SlideSorter(
             rBase,
             nullptr,
-            rParentWindow));
+            rParentWindow),
+        o3tl::default_delete<SlideSorter>());
     pSlideSorter->Init();
     return pSlideSorter;
 }
