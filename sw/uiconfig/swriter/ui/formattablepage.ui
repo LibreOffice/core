@@ -539,7 +539,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-FrameDirectionListBox" id="comboLB_TEXTDIRECTION">
+                  <object class="svxlo-FrameDirectionListBox" id="textdirection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">liststore1</property>
