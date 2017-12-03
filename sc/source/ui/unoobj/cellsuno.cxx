@@ -1385,7 +1385,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
         {
             //  if the string starts with a "'", add another one because setFormula
             //  strips one (like text input, except for "text" number formats)
-            if ( bEnglish || ( pFormatter->GetType(nNumFmt) != css::util::NumberFormat::TEXT ) )
+            if ( bEnglish || ( pFormatter->GetType(nNumFmt) != SvNumFormatType::TEXT ) )
                 aTempString = "'" + aTempString;
         }
         aVal = aTempString;
@@ -3538,9 +3538,9 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
 
                             sal_uLong nIndex = (sal_uLong)static_cast<const SfxUInt32Item*>(rDoc.GetAttr(
                                         aIter.GetPos(), ATTR_VALUE_FORMAT))->GetValue();
-                            short nTyp = rDoc.GetFormatTable()->GetType(nIndex);
-                            if ((nTyp == css::util::NumberFormat::DATE) || (nTyp == css::util::NumberFormat::TIME) ||
-                                    (nTyp == css::util::NumberFormat::DATETIME))
+                            SvNumFormatType nTyp = rDoc.GetFormatTable()->GetType(nIndex);
+                            if ((nTyp == SvNumFormatType::DATE) || (nTyp == SvNumFormatType::TIME) ||
+                                    (nTyp == SvNumFormatType::DATETIME))
                             {
                                 if ( nContentFlags & sheet::CellFlags::DATETIME )
                                     bAdd = true;
@@ -6107,7 +6107,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
     ScDocument& rDoc = pDocSh->GetDocument();
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     sal_uInt32 nOldFormat = rDoc.GetNumberFormat( aCellPos );
-    if (pFormatter->GetType(nOldFormat) == css::util::NumberFormat::TEXT)
+    if (pFormatter->GetType(nOldFormat) == SvNumFormatType::TEXT)
     {
         SetString_Impl(rText, false, false);      // text cell
         return;
@@ -6120,7 +6120,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
 
     if (aRes.meType != ScInputStringType::Unknown)
     {
-        if ((nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && aRes.mnFormatType)
+        if ((nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && aRes.mnFormatType != SvNumFormatType::ALL)
         {
             // apply a format for the recognized type and the old format's language
             sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat(*pFormatter, nOldFormat, aRes.mnFormatType);

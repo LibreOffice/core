@@ -219,9 +219,9 @@ private:
     sal_uInt32  nFuncFmtIndex;          // NumberFormatIndex of a function
     sal_uInt32  nCurFmtIndex;           // current NumberFormatIndex
     sal_uInt32  nRetFmtIndex;           // NumberFormatIndex of an expression, if any
-    sal_uInt32  nFuncFmtType;           // NumberFormatType of a function
-    sal_uInt32  nCurFmtType;            // current NumberFormatType
-    sal_uInt32  nRetFmtType;            // NumberFormatType of an expression
+    SvNumFormatType nFuncFmtType;       // NumberFormatType of a function
+    SvNumFormatType nCurFmtType;        // current NumberFormatType
+    SvNumFormatType nRetFmtType;        // NumberFormatType of an expression
     FormulaError  mnStringNoValueError; // the error set in ConvertStringToValue() if no value
     SubtotalFlags mnSubTotalFlags;      // flags for subtotal and aggregate functions
     sal_uInt8   cPar;                   // current count of parameters
@@ -253,7 +253,7 @@ private:
     static double ScGetGCD(double fx, double fy);
     /** For matrix back calls into the current interpreter.
         Uses rError instead of nGlobalError and rCurFmtType instead of nCurFmtType. */
-    double ConvertStringToValue( const OUString&, FormulaError& rError, sal_uInt32& rCurFmtType );
+    double ConvertStringToValue( const OUString&, FormulaError& rError, SvNumFormatType& rCurFmtType );
     private:
     double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
     double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
@@ -331,7 +331,7 @@ private:
                 FormulaDoubleToken or a FormulaTypedDoubleToken.
      */
     void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
-            sal_uInt32 * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult = false );
+            SvNumFormatType * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult = false );
 
     formula::FormulaConstTokenRef PopToken();
     void Pop();
@@ -393,9 +393,9 @@ private:
     inline bool MatrixParameterConversion();
     ScMatrixRef PopMatrix();
     sc::RangeMatrix PopRangeMatrix();
-    void QueryMatrixType(const ScMatrixRef& xMat, sal_uInt32& rRetTypeExpr, sal_uInt32& rRetIndexExpr);
+    void QueryMatrixType(const ScMatrixRef& xMat, SvNumFormatType& rRetTypeExpr, sal_uInt32& rRetIndexExpr);
 
-    formula::FormulaToken* CreateFormulaDoubleToken( double fVal, short nFmt = css::util::NumberFormat::NUMBER );
+    formula::FormulaToken* CreateFormulaDoubleToken( double fVal, SvNumFormatType nFmt = SvNumFormatType::NUMBER );
     formula::FormulaToken* CreateDoubleOrTypedToken( double fVal );
 
     void PushDouble(double nVal);
@@ -1009,7 +1009,7 @@ public:
     svl::SharedString GetStringResult() const;
     double                      GetNumResult() const        { return xResult->GetDouble(); }
     const formula::FormulaConstTokenRef& GetResultToken() const { return xResult; }
-    short                       GetRetFormatType() const    { return nRetFmtType; }
+    SvNumFormatType             GetRetFormatType() const    { return nRetFmtType; }
     sal_uLong                   GetRetFormatIndex() const   { return nRetFmtIndex; }
 };
 

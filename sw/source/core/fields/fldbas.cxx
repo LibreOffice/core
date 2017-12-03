@@ -477,7 +477,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
 
     if( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFormatLng )
     {
-        short nType = css::util::NumberFormat::DEFINED;
+        SvNumFormatType nType = SvNumFormatType::DEFINED;
         sal_Int32 nDummy;
 
         const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
@@ -594,7 +594,7 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
         if (nNewFormat == nFormat)
         {
             // probably user-defined format
-            short nType = css::util::NumberFormat::DEFINED;
+            SvNumFormatType nType = SvNumFormatType::DEFINED;
             sal_Int32 nDummy;
 
             OUString sFormat(pEntry->GetFormatstring());
@@ -637,7 +637,7 @@ void SwValueField::SetLanguage( LanguageType nLng )
                 if( nNewFormat == GetFormat() )
                 {
                     // probably user-defined format
-                    short nType = css::util::NumberFormat::DEFINED;
+                    SvNumFormatType nType = SvNumFormatType::DEFINED;
                     sal_Int32 nDummy;
                     OUString sFormat( pEntry->GetFormatstring() );
                     pFormatter->PutandConvertEntry( sFormat, nDummy, nType,

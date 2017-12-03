@@ -104,7 +104,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
 
 void ScInterpreter::ScGetActDate()
 {
-    nFuncFmtType = css::util::NumberFormat::DATE;
+    nFuncFmtType = SvNumFormatType::DATE;
     Date aActDate( Date::SYSTEM );
     long nDiff = aActDate - pFormatter->GetNullDate();
     PushDouble((double) nDiff);
@@ -112,7 +112,7 @@ void ScInterpreter::ScGetActDate()
 
 void ScInterpreter::ScGetActTime()
 {
-    nFuncFmtType = css::util::NumberFormat::DATETIME;
+    nFuncFmtType = SvNumFormatType::DATETIME;
     Date aActDate( Date::SYSTEM );
     long nDiff = aActDate - pFormatter->GetNullDate();
     tools::Time aActTime( tools::Time::SYSTEM );
@@ -175,10 +175,10 @@ void ScInterpreter::ScGetDateValue()
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
     {
-        short eType = pFormatter->GetType(nFIndex);
-        if (eType == css::util::NumberFormat::DATE || eType == css::util::NumberFormat::DATETIME)
+        SvNumFormatType eType = pFormatter->GetType(nFIndex);
+        if (eType == SvNumFormatType::DATE || eType == SvNumFormatType::DATETIME)
         {
-            nFuncFmtType = css::util::NumberFormat::DATE;
+            nFuncFmtType = SvNumFormatType::DATE;
             PushDouble(::rtl::math::approxFloor(fVal));
         }
         else
@@ -309,7 +309,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
 
 void ScInterpreter::ScEasterSunday()
 {
-    nFuncFmtType = css::util::NumberFormat::DATE;
+    nFuncFmtType = SvNumFormatType::DATE;
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         sal_Int16 nDay, nMonth, nYear;
@@ -571,7 +571,7 @@ void ScInterpreter::ScWorkday_MS()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 4 ) )
     {
-        nFuncFmtType = css::util::NumberFormat::DATE;
+        nFuncFmtType = SvNumFormatType::DATE;
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
         const Date& rNullDate = pFormatter->GetNullDate();
@@ -640,7 +640,7 @@ void ScInterpreter::ScWorkday_MS()
 
 void ScInterpreter::ScGetDate()
 {
-    nFuncFmtType = css::util::NumberFormat::DATE;
+    nFuncFmtType = SvNumFormatType::DATE;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         sal_Int16 nDay   = GetInt16();
@@ -659,7 +659,7 @@ void ScInterpreter::ScGetDate()
 
 void ScInterpreter::ScGetTime()
 {
-    nFuncFmtType = css::util::NumberFormat::TIME;
+    nFuncFmtType = SvNumFormatType::TIME;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fSec = GetDouble();
@@ -934,10 +934,10 @@ void ScInterpreter::ScGetTimeValue()
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
     {
-        short eType = pFormatter->GetType(nFIndex);
-        if (eType == css::util::NumberFormat::TIME || eType == css::util::NumberFormat::DATETIME)
+        SvNumFormatType eType = pFormatter->GetType(nFIndex);
+        if (eType == SvNumFormatType::TIME || eType == SvNumFormatType::DATETIME)
         {
-            nFuncFmtType = css::util::NumberFormat::TIME;
+            nFuncFmtType = SvNumFormatType::TIME;
             double fDateVal = rtl::math::approxFloor(fVal);
             double fTimeVal = fVal - fDateVal;
             PushDouble(fTimeVal);
@@ -1288,7 +1288,7 @@ void ScInterpreter::ScLog10()
 
 void ScInterpreter::ScNPV()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 2) )
     {
@@ -1387,7 +1387,7 @@ void ScInterpreter::ScNPV()
 void ScInterpreter::ScIRR()
 {
     double fEstimated;
-    nFuncFmtType = css::util::NumberFormat::PERCENT;
+    nFuncFmtType = SvNumFormatType::PERCENT;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
@@ -1452,7 +1452,7 @@ void ScInterpreter::ScIRR()
 
 void ScInterpreter::ScMIRR()
 {   // range_of_values ; rate_invest ; rate_reinvest
-    nFuncFmtType = css::util::NumberFormat::PERCENT;
+    nFuncFmtType = SvNumFormatType::PERCENT;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fRate1_reinvest = GetDouble() + 1;
@@ -1613,7 +1613,7 @@ double ScInterpreter::ScGetPV(double fRate, double fNper, double fPmt,
 
 void ScInterpreter::ScPV()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     double fPmt, fNper, fRate, fFv = 0;
     bool bPayInAdvance = false;
     sal_uInt8 nParamCount = GetByte();
@@ -1631,7 +1631,7 @@ void ScInterpreter::ScPV()
 
 void ScInterpreter::ScSYD()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
         double fPer = GetDouble();
@@ -1672,7 +1672,7 @@ double ScInterpreter::ScGetDDB(double fCost, double fSalvage, double fLife,
 
 void ScInterpreter::ScDDB()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 4, 5 ) )
     {
@@ -1695,7 +1695,7 @@ void ScInterpreter::ScDDB()
 
 void ScInterpreter::ScDB()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 5 ) )
         return ;
@@ -1790,7 +1790,7 @@ inline double DblMin( double a, double b )
 
 void ScInterpreter::ScVDB()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
     {
@@ -1890,7 +1890,7 @@ void ScInterpreter::ScPDuration()
 
 void ScInterpreter::ScSLN()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fLife = GetDouble();
@@ -1922,7 +1922,7 @@ void ScInterpreter::ScPMT()
 {
     double fRate, fNper, fPv, fFv = 0;
     bool bPayInAdvance = false;
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
@@ -1938,7 +1938,7 @@ void ScInterpreter::ScPMT()
 
 void ScInterpreter::ScRRI()
 {
-    nFuncFmtType = css::util::NumberFormat::PERCENT;
+    nFuncFmtType = SvNumFormatType::PERCENT;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fFutureValue = GetDouble();
@@ -1972,7 +1972,7 @@ void ScInterpreter::ScFV()
 {
     double fRate, fNper, fPmt, fPv = 0;
     bool bPayInAdvance = false;
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
@@ -2120,7 +2120,7 @@ void ScInterpreter::ScRate()
     double fFv = 0, fGuess = 0.1, fOrigGuess = 0.1;
     bool bPayType = false, bValid = true;
     bool bDefaultGuess = true;
-    nFuncFmtType = css::util::NumberFormat::PERCENT;
+    nFuncFmtType = SvNumFormatType::PERCENT;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 6 ) )
         return;
@@ -2178,7 +2178,7 @@ double ScInterpreter::ScGetIpmt(double fRate, double fPer, double fNper, double 
 {
     fPmt = ScGetPMT(fRate, fNper, fPv, fFv, bPayInAdvance);     // for PPMT also if fPer == 1
     double fIpmt;
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     if (fPer == 1.0)
     {
         if (bPayInAdvance)
@@ -2200,7 +2200,7 @@ void ScInterpreter::ScIpmt()
 {
     double fRate, fPer, fNper, fPv, fFv = 0;
     bool bPayInAdvance = false;
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
         return;
@@ -2225,7 +2225,7 @@ void ScInterpreter::ScPpmt()
 {
     double fRate, fPer, fNper, fPv, fFv = 0;
     bool bPayInAdvance = false;
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
         return;
@@ -2249,7 +2249,7 @@ void ScInterpreter::ScPpmt()
 
 void ScInterpreter::ScCumIpmt()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
         double fRate, fNper, fPv, fStart, fEnd;
@@ -2291,7 +2291,7 @@ void ScInterpreter::ScCumIpmt()
 
 void ScInterpreter::ScCumPrinc()
 {
-    nFuncFmtType = css::util::NumberFormat::CURRENCY;
+    nFuncFmtType = SvNumFormatType::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
         double fRate, fNper, fPv, fStart, fEnd;
@@ -2334,7 +2334,7 @@ void ScInterpreter::ScCumPrinc()
 
 void ScInterpreter::ScEffect()
 {
-    nFuncFmtType = css::util::NumberFormat::PERCENT;
+    nFuncFmtType = SvNumFormatType::PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fPeriods = GetDouble();
@@ -2353,7 +2353,7 @@ void ScInterpreter::ScEffect()
 
 void ScInterpreter::ScNominal()
 {
-    nFuncFmtType = css::util::NumberFormat::PERCENT;
+    nFuncFmtType = SvNumFormatType::PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fPeriods = GetDouble();
@@ -3627,7 +3627,7 @@ void ScInterpreter::ScGetPivotData()
                     nNumFormat = nCurFmtIndex;
                 else
                 {
-                    if (nCurFmtType == css::util::NumberFormat::UNDEFINED)
+                    if (nCurFmtType == SvNumFormatType::UNDEFINED)
                         nNumFormat = 0;
                     else
                         nNumFormat = pFormatter->GetStandardFormat( nCurFmtType, ScGlobal::eLnge);
