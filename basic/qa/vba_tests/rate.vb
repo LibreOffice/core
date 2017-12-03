@@ -7,7 +7,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testRATE()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
