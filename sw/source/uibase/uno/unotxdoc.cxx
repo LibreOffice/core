@@ -3266,10 +3266,9 @@ OUString SwXTextDocument::getPostIts()
 {
     SolarMutexGuard aGuard;
     boost::property_tree::ptree aAnnotations;
-    for (std::list<SwSidebarItem*>::const_iterator i = pDocShell->GetView()->GetPostItMgr()->begin();
-         i != pDocShell->GetView()->GetPostItMgr()->end(); ++i )
+    for (auto const& sidebarItem : *pDocShell->GetView()->GetPostItMgr())
     {
-        sw::annotation::SwAnnotationWin* pWin = (*i)->pPostIt.get();
+        sw::annotation::SwAnnotationWin* pWin = sidebarItem->pPostIt.get();
 
         const SwPostItField* pField = pWin->GetPostItField();
         const SwRect& aRect = pWin->GetAnchorRect();

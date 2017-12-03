@@ -148,7 +148,7 @@ class SwPostItMgr: public SfxListener
         SwView*                         mpView;
         SwWrtShell*                     mpWrtShell;
         VclPtr<SwEditWin>               mpEditWin;
-        std::list< SwSidebarItem*>      mvPostItFields;
+        std::vector<SwSidebarItem*>     mvPostItFields;
         std::vector<SwPostItPageItem*>  mPages;
         ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
@@ -196,7 +196,7 @@ class SwPostItMgr: public SfxListener
         SwPostItMgr(SwView* aDoc);
         virtual ~SwPostItMgr() override;
 
-        typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
+        typedef std::vector< SwSidebarItem* >::const_iterator const_iterator;
         const_iterator begin()  const { return mvPostItFields.begin(); }
         const_iterator end()    const { return mvPostItFields.end();  }
 
