@@ -41,7 +41,7 @@ namespace dbaui
         virtual ~OJoinExchObj() override;
 
     public:
-        OJoinExchObj(const OJoinExchangeData& jxdSource,bool _bFirstEntry=false);
+        OJoinExchObj(const OJoinExchangeData& jxdSource, bool _bFirstEntry);
 
 
         // XInterface

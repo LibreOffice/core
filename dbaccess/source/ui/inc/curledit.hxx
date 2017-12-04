@@ -41,7 +41,7 @@ class OConnectionURLEdit : public Edit
     bool            m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 
 public:
-    OConnectionURLEdit(vcl::Window* pParent, WinBits _nBits,bool _bShowPrefix = false);
+    OConnectionURLEdit(vcl::Window* pParent, WinBits _nBits, bool _bShowPrefix);
     virtual ~OConnectionURLEdit() override;
     virtual void dispose() override;
 

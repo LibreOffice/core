@@ -110,7 +110,7 @@ void OApplicationController::convertToView(const OUString& _sName)
         OUString aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
-        ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
+        ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker, SADFlags::NONE );
         if ( aDlg->Execute() == RET_OK )
         {
             OUString sName = aDlg->getName();

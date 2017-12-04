@@ -136,7 +136,7 @@ namespace
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OTablePreviewWindow( vcl::Window* pParent, WinBits nStyle = 0 );
+        OTablePreviewWindow( vcl::Window* pParent, WinBits nStyle );
         virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     };
     OTablePreviewWindow::OTablePreviewWindow(vcl::Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
