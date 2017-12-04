@@ -48,7 +48,12 @@ $(call gb_ExternalProject_get_state_target,libassuan,build):
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 		   $(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		   $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	  && $(MAKE) \
+	  $(if $(filter MACOSX,$(OS)),\
+		  && $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+			  $(EXTERNAL_WORKDIR)/src/.libs/libassuan.0.dylib \
+		) \
 	)
 
 endif
