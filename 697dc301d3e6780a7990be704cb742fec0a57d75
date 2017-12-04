@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ca24b461",
+        "filename": "editeng/source/items/svxfont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-04T12:34:33Z",
+      "side": 1,
+      "message": "Is this a part of your commit?",
+      "range": {
+        "startLine": 518,
+        "startChar": 21,
+        "endLine": 518,
+        "endChar": 38
+      },
+      "revId": "697dc301d3e6780a7990be704cb742fec0a57d75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
