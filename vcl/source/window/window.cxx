@@ -3203,19 +3203,14 @@ vcl::LOKWindowId Window::GetLOKWindowId() const
     return mpWindowImpl->mnLOKWindowId;
 }
 
-vcl::Window* Window::GetParentWithLOKNotifier()
+VclPtr<vcl::Window> Window::GetParentWithLOKNotifier()
 {
-    vcl::Window* pWindow = this;
-    bool found = false;
-    while (pWindow && !found)
-    {
-        if (pWindow->GetLOKNotifier())
-            found = true;
-        else
-            pWindow = pWindow->GetParent();
-    }
+    VclPtr<vcl::Window> pWindow(this);
 
-    return found ? pWindow : nullptr;
+    while (pWindow && !pWindow->GetLOKNotifier())
+        pWindow = pWindow->GetParent();
+
+    return pWindow;
 }
 
 void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)

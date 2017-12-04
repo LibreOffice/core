@@ -421,7 +421,7 @@ void Control::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
     // ignore all of those
     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
     {
-        if (vcl::Window* pParent = GetParentWithLOKNotifier())
+        if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
         {
             // invalidate the complete floating window for now
             if (pParent->ImplIsFloatingWindow())
