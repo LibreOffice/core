@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "workwin.hrc"
@@ -1499,6 +1500,9 @@ bool SfxWorkWindow::IsVisible_Impl()
 
 void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
 {
+    if (comphelper::LibreOfficeKit::isActive() && bHide)
+        return;
+
     for (SfxChildWin_Impl* i : aChildWins)
     {
         SfxChildWindow *pCW = i->pWin;
@@ -1511,7 +1515,8 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
                 pChild->nVisible &= ~SfxChildVisibility::ACTIVE;
                 pCW->Hide();
             }
-            else
+            else if ( !comphelper::LibreOfficeKit::isActive() ||
+                      SfxChildVisibility::ACTIVE != (pChild->nVisible & SfxChildVisibility::ACTIVE) )
             {
                 pChild->nVisible |= SfxChildVisibility::ACTIVE;
                 if ( SfxChildVisibility::VISIBLE == (pChild->nVisible & SfxChildVisibility::VISIBLE) )
