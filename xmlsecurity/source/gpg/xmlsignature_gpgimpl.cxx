@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_gpgme.h>
+
 #include <sal/config.h>
 #include <rtl/uuid.h>
 #include <cppuhelper/supportsservice.hxx>
