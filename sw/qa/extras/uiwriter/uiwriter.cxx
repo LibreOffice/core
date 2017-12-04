@@ -1028,6 +1028,10 @@ void SwUiWriterTest::testWatermarkPosition()
 
         // Check if Watermark is inside a page
         CPPUNIT_ASSERT_MESSAGE(aMessage.str(), nPageHeight >= rRect.Bottom());
+
+        // Check if Watermark is centered
+        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, "HoriOrient"));
+        CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, "VertOrient"));
     }
 }
 
