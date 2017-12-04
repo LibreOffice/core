@@ -226,10 +226,10 @@
                     "dest-filename": "external/tarballs/libmspub-0.1.2.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.12.tar.xz",
-                    "sha256": "7691a6e6e7221d61c40e3f630a8907e3e516b99a587e47d09ec53f8ac60ed1e7",
+                    "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.13.tar.xz",
+                    "sha256": "db55c728448f9c795cd71a0bb6043f6d4744e3e001b955a018a2c634981d5aea",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libmwaw-0.3.12.tar.xz"
+                    "dest-filename": "external/tarballs/libmwaw-0.3.13.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libodfgen-0.1.6.tar.bz2",
@@ -328,10 +328,10 @@
                     "dest-filename": "external/tarballs/openldap-2.4.45.tgz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.12.1.tar.gz",
-                    "sha256": "676b1fedd721f64489650f5e76d7f98b750439914d87cae505b8163d08447908",
+                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.13.1.tar.gz",
+                    "sha256": "d7041ef455bb78db66b4ba7876af1b3d0fa377b9444e3ef72ceaccd2e8400937",
                     "type": "file",
-                    "dest-filename": "external/tarballs/liborcus-0.12.1.tar.gz"
+                    "dest-filename": "external/tarballs/liborcus-0.13.1.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/poppler-0.59.0.tar.xz",
