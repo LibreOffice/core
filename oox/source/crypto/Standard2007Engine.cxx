@@ -124,6 +124,8 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
 {
     mKey.clear();
     mKey.resize(mInfo.header.keyBits / 8, 0);
+    if (mKey.empty())
+        return false;
 
     calculateEncryptionKey(password);
 
