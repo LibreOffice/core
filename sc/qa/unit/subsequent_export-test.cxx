@@ -1312,9 +1312,9 @@ void ScExportTest::testNamedRangeBugfdo62729()
 void ScExportTest::testBuiltinRangesXLSX()
 {
     ScDocShellRef xShell = loadDoc("built-in_ranges.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xShell.is());
+    CPPUNIT_ASSERT(xShell.Is());
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
+    CPPUNIT_ASSERT(xDocSh.Is());
     xShell->DoClose();
 
     xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
