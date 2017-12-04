@@ -1483,10 +1483,12 @@
     <xsl:template match="draw:image | draw:object-ole">
         <xsl:param name="globalData"/>
 
-        <!-- If there is a replacement graphic, we take it.
-             It is a png which browsers are more likely able to render than the original graphic
-             which might have arbitrary formats. -->
-        <xsl:if test="not(following-sibling::draw:image)">
+        <!-- If there is a replacement graphic, we take it (only exception is if the main image is svg).
+             The replacement graphic is a png which browsers are more likely able to render than the
+             original graphic which might have arbitrary formats. -->
+        <xsl:if test="(@loext:mime-type = 'image/svg+xml') or
+                            (not(following-sibling::draw:image) and
+                             not(preceding-sibling::draw:image[1]/@loext:mime-type = 'image/svg+xml'))">
             <xsl:choose>
                 <xsl:when test="ancestor::text:p or parent::text:span or parent::text:h or parent::draw:a or parent::text:a or text:ruby-base">
                     <!-- XHTML does not allow the mapped elements to contain paragraphs -->
