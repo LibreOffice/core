@@ -117,8 +117,6 @@
 #define STR_UNKNOWN_PARA_TYPE                   NC_("STR_UNKNOWN_PARA_TYPE", "The type of parameter at position '$position$' is unknown.")
 #define STR_UNKNOWN_COLUMN_TYPE                 NC_("STR_UNKNOWN_COLUMN_TYPE", "The type of column at position '$position$' is unknown.")
 // KAB
-#define STR_NO_KDE_INST                         NC_("STR_NO_KDE_INST", "No suitable KDE installation was found.")
-#define STR_KDE_VERSION_TOO_OLD                 NC_("STR_KDE_VERSION_TOO_OLD", "KDE version $major$.$minor$ or higher is required to access the KDE Address Book.")
 #define STR_PARA_ONLY_PREPARED                  NC_("STR_PARA_ONLY_PREPARED", "Parameters can appear only in prepared statements.")
 // MACAB
 #define STR_NO_TABLE                            NC_("STR_NO_TABLE", "No such table!")

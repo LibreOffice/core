@@ -98,7 +98,6 @@
 
 #define STR_ERROR_OBJNOCREATE                   NC_("STR_ERROR_OBJNOCREATE", "Object % could not be inserted.")
 #define STR_ERROR_OBJNOCREATE_FROM_FILE         NC_("STR_ERROR_OBJNOCREATE_FROM_FILE", "Object from file % could not be inserted.")
-#define STR_ERROR_OBJNOCREATE_PLUGIN            NC_("STR_ERROR_OBJNOCREATE_PLUGIN", "Plug-in from document % could not be inserted.")
 #define STR_FURTHER_OBJECT                      NC_("STR_FURTHER_OBJECT", "Further objects")
 #define STR_UNKNOWN_SOURCE                      NC_("STR_UNKNOWN_SOURCE", "Unknown source")
 
