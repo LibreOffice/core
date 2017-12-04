@@ -38,6 +38,7 @@ static const struct
 } CtrlIdToResIdTable[] = {
     { CHECKBOX_AUTOEXTENSION,                   STR_FPICKER_AUTO_EXTENSION },
     { CHECKBOX_PASSWORD,                        STR_FPICKER_PASSWORD },
+    { CHECKBOX_GPGENCRYPTION,                   STR_FPICKER_GPGENCRYPT },
     { CHECKBOX_FILTEROPTIONS,                   STR_FPICKER_FILTER_OPTIONS },
     { CHECKBOX_READONLY,                        STR_FPICKER_READONLY },
     { CHECKBOX_LINK,                            STR_FPICKER_INSERT_AS_LINK },
