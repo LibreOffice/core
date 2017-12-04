@@ -588,6 +588,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/config/uinums \
     sw/source/uibase/config/usrpref \
     sw/source/uibase/config/viewopt \
+    sw/source/uibase/dialog/SignatureLineDialog \
     sw/source/uibase/dialog/SwSpellDialogChildWindow \
     sw/source/uibase/dialog/regionsw \
     sw/source/uibase/dialog/swabstdlg \
