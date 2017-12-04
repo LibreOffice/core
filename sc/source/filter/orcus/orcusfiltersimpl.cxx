@@ -25,6 +25,7 @@
 #include <orcus/orcus_csv.hpp>
 #include <orcus/orcus_gnumeric.hpp>
 #include <orcus/orcus_xlsx.hpp>
+#include <orcus/orcus_xls_xml.hpp>
 #include <orcus/orcus_ods.hpp>
 #include <orcus/orcus_import_ods.hpp>
 #include <orcus/global.hpp>
@@ -109,6 +110,38 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) co
     catch (const std::exception& e)
     {
         SAL_WARN("sc", "Unable to load gnumeric file! " << e.what());
+        return false;
+    }
+
+    return true;
+}
+
+bool ScOrcusFiltersImpl::importExcel2003XML(ScDocument& rDoc, SfxMedium& rMedium) const
+{
+    ScOrcusFactory aFactory(rDoc);
+    aFactory.setStatusIndicator(getStatusIndicator(rMedium));
+    SvStream* pStream = rMedium.GetInStream();
+    pStream->Seek(0);
+    static const size_t nReadBuffer = 1024*32;
+    OStringBuffer aBuffer((int(nReadBuffer)));
+    size_t nRead = 0;
+    do
+    {
+        char pData[nReadBuffer];
+        nRead = pStream->ReadBytes(pData, nReadBuffer);
+        aBuffer.append(static_cast<sal_Char*>(pData), nRead);
+    }
+    while (nRead == nReadBuffer);
+
+    try
+    {
+        rDoc.ClearTabs();
+        orcus::orcus_xls_xml filter(&aFactory);
+        filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("sc", "Unable to load Excel 2003 XML file! " << e.what());
         return false;
     }
 

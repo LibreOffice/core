@@ -509,6 +509,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	MS_Excel_95_Vorlage_Template \
 	MS_Excel_97 \
 	MS_Excel_97_Vorlage_Template \
+	MS_Excel_2003_XML_Orcus \
 	Rich_Text_Format__StarCalc_ \
 	SYLK \
 	StarOffice_XML__Calc_ \

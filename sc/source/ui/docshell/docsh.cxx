@@ -1169,6 +1169,14 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             bRet = pOrcus->importGnumeric(aDocument, rMedium);
         }
+        else if (aFltName == "MS Excel 2003 XML Orcus")
+        {
+            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+            if (!pOrcus)
+                return false;
+
+            bRet = pOrcus->importExcel2003XML(aDocument, rMedium);
+        }
         else if (aFltName == pFilterAscii)
         {
             SfxItemSet*  pSet = rMedium.GetItemSet();
