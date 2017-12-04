@@ -58,6 +58,9 @@
 #   define SVP_CAIRO_ALPHA 3
 #endif
 
+// Used to store 24-bit images in 3-byte pixels to conserve memory.
+#define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
+
 struct BitmapBuffer;
 class GlyphCache;
 class FreetypeFont;
