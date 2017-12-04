@@ -40,7 +40,7 @@ namespace dbaxml
         OXMLDataSource( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-                    const UsedFor _eUsedFor = eDataSource );
+                    const UsedFor _eUsedFor );
         virtual ~OXMLDataSource() override;
 
         virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,

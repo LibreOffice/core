@@ -208,7 +208,7 @@ public:
     const TypeIterator& operator++();
 
 protected:
-    TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos = 0);
+    TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos);
 };
 
 

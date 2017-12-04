@@ -38,7 +38,7 @@ class OMarkableTreeListBox : public DBTreeListBox
     Link<void*,void>    m_aCheckButtonHandler;
 
 public:
-    OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
+    OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle );
     virtual ~OMarkableTreeListBox() override;
     virtual void dispose() override;
 
