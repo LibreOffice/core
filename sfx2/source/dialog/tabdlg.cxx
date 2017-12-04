@@ -519,7 +519,7 @@ short SfxTabDialog::Execute()
     Start_Impl();
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
     {
         SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
