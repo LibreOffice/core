@@ -24,6 +24,7 @@
 #include <headless/svpcairotextrender.hxx>
 #include <saldatabasic.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/sysdata.hxx>
 #include <config_cairo_canvas.h>
 #include <basegfx/numeric/ftools.hxx>
@@ -124,25 +125,110 @@ namespace
         }
     }
 
+    BitmapBuffer* FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)
+    {
+        if (pSrc == nullptr)
+            return nullptr;
+
+        assert(pSrc->mnFormat == SVP_24BIT_FORMAT);
+        const long nWidth = pSrc->mnWidth;
+        const long nHeight = pSrc->mnHeight;
+        BitmapBuffer* pDst = new BitmapBuffer;
+        pDst->mnFormat = (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown);
+        pDst->mnWidth = nWidth;
+        pDst->mnHeight = nHeight;
+        pDst->mnBitCount = 32;
+        pDst->maColorMask = pSrc->maColorMask;
+        pDst->maPalette = pSrc->maPalette;
+
+        long nScanlineBase;
+        const bool bFail = o3tl::checked_multiply<long>(pDst->mnBitCount, nWidth, nScanlineBase);
+        if (bFail)
+        {
+            SAL_WARN("vcl.gdi", "checked multiply failed");
+            pDst->mpBits = nullptr;
+            delete pDst;
+            return nullptr;
+        }
+
+        pDst->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
+        if (pDst->mnScanlineSize < nScanlineBase/8)
+        {
+            SAL_WARN("vcl.gdi", "scanline calculation wraparound");
+            pDst->mpBits = nullptr;
+            delete pDst;
+            return nullptr;
+        }
+
+        try
+        {
+            pDst->mpBits = new sal_uInt8[ pDst->mnScanlineSize * nHeight ];
+        }
+        catch (const std::bad_alloc&)
+        {
+            // memory exception, clean up
+            pDst->mpBits = nullptr;
+            delete pDst;
+            return nullptr;
+        }
+
+        for (long y = 0; y < nHeight; ++y)
+        {
+            sal_uInt8* pS = pSrc->mpBits + y * pSrc->mnScanlineSize;
+            sal_uInt8* pD = pDst->mpBits + y * pDst->mnScanlineSize;
+            for (long x = 0; x < nWidth; ++x)
+            {
+#if defined ANDROID
+                static_assert((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcRgba, "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");
+                static_assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N24BitTcRgb, "Expected SVP_24BIT_FORMAT set to N24BitTcRgb");
+                pD[0] = pS[0];
+                pD[1] = pS[1];
+                pD[2] = pS[2];
+                pD[3] = 0xff; // Alpha
+#elif defined OSL_BIGENDIAN
+                static_assert((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcArgb, "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");
+                static_assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N24BitTcRgb, "Expected SVP_24BIT_FORMAT set to N24BitTcRgb");
+                pD[0] = 0xff; // Alpha
+                pD[1] = pS[0];
+                pD[2] = pS[1];
+                pD[3] = pS[2];
+#else
+                static_assert((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcBgra, "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");
+                static_assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N24BitTcBgr, "Expected SVP_24BIT_FORMAT set to N24BitTcBgr");
+                pD[0] = pS[0];
+                pD[1] = pS[1];
+                pD[2] = pS[2];
+                pD[3] = 0xff; // Alpha
+#endif
+
+                pS += 3;
+                pD += 4;
+            }
+        }
+
+        return pDst;
+    }
+
     class SourceHelper
     {
     public:
         explicit SourceHelper(const SalBitmap& rSourceBitmap)
         {
             const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
-
             if (rSrcBmp.GetBitCount() != 32)
             {
                 //big stupid copy here
-                static bool bWarnedOnce;
+                static bool bWarnedOnce = false;
                 SAL_WARN_IF(!bWarnedOnce, "vcl.gdi", "non default depth bitmap, slow convert, upscale the input");
                 bWarnedOnce = true;
 
                 const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
                 const SalTwoRect aTwoRect = { 0, 0, pSrc->mnWidth, pSrc->mnHeight,
                                               0, 0, pSrc->mnWidth, pSrc->mnHeight };
-                aTmpBmp.Create(StretchAndConvert(*pSrc, aTwoRect, SVP_CAIRO_FORMAT));
-
+                BitmapBuffer* pTmp = (pSrc->mnFormat == SVP_24BIT_FORMAT
+                                   ? FastConvert24BitRgbTo32BitCairo(pSrc)
+                                   : StretchAndConvert(*pSrc, aTwoRect, SVP_CAIRO_FORMAT));
+                aTmpBmp.Create(pTmp);
 
                 assert(aTmpBmp.GetBitCount() == 32);
                 source = SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer());
@@ -1351,6 +1437,7 @@ namespace
         if (!pBuffer)
             return false;
 
+        // Cairo doesn't support 24-bit RGB; only ARGB with the alpha ignored.
         if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
             return false;
 
