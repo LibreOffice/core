@@ -290,18 +290,24 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
     {
         //check whether there is more than one text column or row that should be added to the headers
         SCROW nMaxHeaderRow = nAllRowCount;
-        for ( const auto & rCol : rCols )
+        SCCOL nCol = 0;
+        for (auto it = rCols.begin(); it != rCols.end(); ++it, ++nCol)
         {
             // Skip header columns
-            if ( rCol.first < nHeaderColCount )
+            if (nCol < nHeaderColCount)
                 continue;
+
+            const auto& rCol = *it;
 
             bool bFoundValuesInCol = false;
             bool bFoundAnythingInCol = false;
-            for ( const auto & rCell : *rCol.second )
+            SCROW nRow = 0;
+            for (auto it2 = rCol.second->begin(); it2 != rCol.second->end(); ++it2, ++nRow)
             {
+                const auto& rCell = *it2;
+
                 // Skip header rows
-                if (rCell.first < nHeaderRowCount || !rCell.second)
+                if (nRow < nHeaderRowCount || !rCell.second)
                     continue;
 
                 ScRange aRange;
@@ -319,7 +325,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                 {
                     // Found some numeric data
                     bFoundValuesInCol = true;
-                    nMaxHeaderRow = std::min(nMaxHeaderRow, nRow1);
+                    nMaxHeaderRow = std::min(nMaxHeaderRow, nRow);
                     break;
                 }
                 if ( pDoc->HasData( nCol1, nRow1, nTab1 ) )
@@ -330,11 +336,11 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                 else
                 {
                     // If cell is empty, it belongs to data
-                    nMaxHeaderRow = std::min(nMaxHeaderRow, nRow1);
+                    nMaxHeaderRow = std::min(nMaxHeaderRow, nRow);
                 }
             }
 
-            if (nHeaderColCount && !bFoundValuesInCol && bFoundAnythingInCol && rCol.first == nHeaderColCount)
+            if (nHeaderColCount && !bFoundValuesInCol && bFoundAnythingInCol && nCol == nHeaderColCount)
             {
                 // There is no values in row, but some data. And this column is next to header
                 // So lets put it to header
