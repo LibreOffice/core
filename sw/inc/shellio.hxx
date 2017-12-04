@@ -179,6 +179,7 @@ protected:
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName);
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(SvStream &rStream);
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHTML(SvStream &rStream);
 SAL_DLLPUBLIC_EXPORT void FlushFontCache();
 
 class SW_DLLPUBLIC Reader
@@ -186,6 +187,7 @@ class SW_DLLPUBLIC Reader
     friend class SwReader;
     friend bool TestImportDOC(SvStream &rStream, const OUString &rFltName);
     friend bool TestImportRTF(SvStream &rStream);
+    friend bool TestImportHTML(SvStream &rStream);
     rtl::Reference<SwDoc> mxTemplate;
     OUString aTemplateNm;
 
