@@ -263,6 +263,14 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
     rDevice.Pop();
+#else
+    (void)rDevice;
+    (void)nOutputWidth;
+    (void)nOutputHeight;
+    (void)nTilePosX;
+    (void)nTilePosY;
+    (void)nTileWidth;
+    (void)nTileHeight;
 #endif
 }
 
