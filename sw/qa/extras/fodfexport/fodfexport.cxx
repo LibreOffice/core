@@ -40,5 +40,18 @@ DECLARE_FODFEXPORT_TEST(testTdf113696, "tdf113696.odt")
     }
 }
 
+DECLARE_FODFEXPORT_TEST(testTdf113696WriterImage, "tdf113696-writerimage.odt")
+{
+    // Same as testTdf113696, but with a writer image instead of a draw image
+    // (they use different code paths).
+    if (xmlDocPtr pXmlDoc = parseExportedFile())
+    {
+        assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
+                             "draw:image[@loext:mime-type='image/x-vclgraphic']");
+        assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
+                             "draw:image[@loext:mime-type='image/png']");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
