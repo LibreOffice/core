@@ -10,10 +10,17 @@
 /* Configuration for gpgme++.
  */
 
+#ifndef CONFIG_GPGME_H
+#define CONFIG_GPGME_H
+
+#include "config_lgpl.h"
+
 // Defined if gpgme support is available
 #define GPGME_HAVE_GPGME 0
 
 // Defined if gpgme supports exporting minimal key.
 #define GPGME_CAN_EXPORT_MINIMAL_KEY 0
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
