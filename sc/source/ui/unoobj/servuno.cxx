@@ -262,6 +262,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.text.TextField.SheetName",          Type::SHEETFIELD },
     { "com.sun.star.style.CellStyle",                   Type::CELLSTYLE },
     { "com.sun.star.style.PageStyle",                   Type::PAGESTYLE },
+    { "com.sun.star.sheet.FunctionDescriptions",        Type::FUNCTIONDESCRIPTIONS },
     { "com.sun.star.sheet.RecentFunctions",             Type::RECENTFUNCTIONS },
     { "com.sun.star.sheet.TableAutoFormat",             Type::AUTOFORMAT },
     { "com.sun.star.sheet.SheetCellRanges",             Type::CELLRANGES },
@@ -421,6 +422,9 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case Type::AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));
+            break;
+        case Type::FUNCTIONDESCRIPTIONS:
+            xRet.set(static_cast<sheet::XFunctionDescriptions*>(new ScFunctionListObj()));
             break;
         case Type::RECENTFUNCTIONS:
             xRet.set(static_cast<sheet::XRecentFunctions*>(new ScRecentFunctionsObj()));
