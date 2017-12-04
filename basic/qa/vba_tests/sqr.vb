@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testSQR()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -23,8 +23,6 @@ Function verify_testSQR() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1, date2
     testName = "Test SQR function"
     On Error GoTo errorHandler
