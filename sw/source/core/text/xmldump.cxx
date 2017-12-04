@@ -12,6 +12,7 @@
 #include <ftnfrm.hxx>
 #include <sectfrm.hxx>
 #include <tabfrm.hxx>
+#include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <hffrm.hxx>
 #include <rootfrm.hxx>
@@ -301,6 +302,18 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                     pView->dumpAsXml(writer);
                 pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
             }
+            xmlTextWriterEndElement(writer);
+        }
+
+        if (IsPageFrame())
+        {
+            const SwPageFrame* pPageFrame = static_cast<const SwPageFrame*>(this);
+            xmlTextWriterStartElement(writer, BAD_CAST("page_status"));
+            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyLayout()).getStr()));
+            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyContent()).getStr()));
+            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyInCnt"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyInCnt()).getStr()));
+            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidLayout()).getStr()));
+            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidContent()).getStr()));
             xmlTextWriterEndElement(writer);
         }
 
