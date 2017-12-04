@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6a54a020",
+        "filename": "sc/source/ui/unoobj/servuno.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-04T19:11:35Z",
+      "side": 1,
+      "message": "Nitpick: as the RECENTFUNCTIONS enum was added between AUTOFORMAT and CELLRANGES, I\u0027d also add the mapping here between those two.",
+      "revId": "7669f236d78ed1695728577657c0b93a39bf01fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
