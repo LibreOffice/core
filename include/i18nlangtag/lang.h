@@ -735,6 +735,7 @@ namespace o3tl
 #define LANGUAGE_USER_XIBE                  LanguageType(0x069B)
 #define LANGUAGE_USER_KITUBA_DRCONGO        LanguageType(0x069C)
 #define LANGUAGE_USER_FON                   LanguageType(0x069D)
+#define LANGUAGE_USER_PLAUTDIETSCH          LanguageType(0x069E)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
