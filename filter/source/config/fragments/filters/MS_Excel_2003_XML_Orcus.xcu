@@ -1,0 +1,19 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+<node oor:name="MS Excel 2003 XML Orcus" oor:op="replace">
+    <prop oor:name="Flags"><value>IMPORT ALIEN PREFERRED</value></prop>
+    <prop oor:name="UIComponent"/>
+    <prop oor:name="FilterService"/>
+    <prop oor:name="UserData"/>
+    <prop oor:name="Type"><value>calc_MS_Excel_2003_XML</value></prop>
+    <prop oor:name="TemplateName"/>
+    <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Microsoft Excel 2003 XML</value>
+    </prop>
+</node>

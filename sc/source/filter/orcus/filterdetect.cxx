@@ -80,8 +80,16 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
     }
 
     orcus::format_t eFormat = orcus::detect(reinterpret_cast<const unsigned char*>(aContent.getStr()), aContent.getLength());
-    if (eFormat == orcus::format_t::gnumeric)
-        return OUString("Gnumeric XML");
+
+    switch (eFormat)
+    {
+        case orcus::format_t::gnumeric:
+            return OUString("Gnumeric XML");
+        case orcus::format_t::xls_xml:
+            return OUString("calc_MS_Excel_2003_XML");
+        default:
+            ;
+    }
 
     return OUString();
 }
