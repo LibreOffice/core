@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testSTRcomp()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -23,7 +23,6 @@ Function verify_testSTRcomp() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
     Dim TestStr, TestStr1, TestStr2 As String
     Dim date1, date2
     testName = "Test STRcomp function"
