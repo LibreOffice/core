@@ -42,9 +42,11 @@ $(eval $(call gb_Module_add_targets,postprocess, \
 endif
 
 ifeq ($(OS),LINUX)
+ifneq ($(PKGFORMAT),)
 $(eval $(call gb_Module_add_check_targets,postprocess,\
 	CustomTarget_check_dynamic_objects \
 ))
+endif
 endif
 
 $(eval $(call gb_Module_add_check_targets,postprocess,\
