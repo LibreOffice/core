@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4a2e04a6",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2849,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-04T19:40:47Z",
+      "side": 1,
+      "message": "This change is unrelated to the actual refactoring carried out here. Normally such should be done in a separate commit, though I don\u0027t mind this time. Please keep in mind for future changes.",
+      "revId": "0ee61aedb652f37ede262beb59b283cf5654a556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
