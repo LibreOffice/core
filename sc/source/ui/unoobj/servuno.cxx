@@ -264,6 +264,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.style.PageStyle",                   Type::PAGESTYLE },
     { "com.sun.star.sheet.TableAutoFormat",             Type::AUTOFORMAT },
     { "com.sun.star.sheet.SheetCellRanges",             Type::CELLRANGES },
+    { "com.sun.star.sheet.FunctionDescriptions",        Type::FUNCTIONDESCRIPTIONS },
     { "com.sun.star.sheet.RecentFunctions",             Type::RECENTFUNCTIONS },
     { "com.sun.star.drawing.GradientTable",             Type::GRADTAB },
     { "com.sun.star.drawing.HatchTable",                Type::HATCHTAB },
@@ -422,14 +423,17 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case Type::AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));
             break;
-        case Type::RECENTFUNCTIONS:
-            xRet.set(static_cast<sheet::XRecentFunctions*>(new ScRecentFunctionsObj()));
-            break;
         case Type::CELLRANGES:
             //  isn't inserted, rather filled
             //  -> DocShell must be set, but empty ranges
             if (pDocShell)
                 xRet.set(static_cast<sheet::XSheetCellRanges*>(new ScCellRangesObj( pDocShell, ScRangeList() )));
+            break;
+        case Type::FUNCTIONDESCRIPTIONS:
+            xRet.set(static_cast<sheet::XFunctionDescriptions*>(new ScFunctionListObj()));
+            break;
+        case Type::RECENTFUNCTIONS:
+            xRet.set(static_cast<sheet::XRecentFunctions*>(new ScRecentFunctionsObj()));
             break;
         case Type::DOCDEFLTS:
             if (pDocShell)
