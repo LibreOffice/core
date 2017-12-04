@@ -1536,7 +1536,6 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(nColor)));
     xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::makeAny(drawing::FillStyle_SOLID));
     xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(nTransparency));
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
     xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, uno::makeAny(drawing::LineStyle_NONE));
     xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, uno::makeAny(false));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::makeAny(false));
@@ -1544,13 +1543,12 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nFrameHeight));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGH));
+    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
     xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(sFont));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, uno::makeAny(WATERMARK_AUTO_SIZE));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_UPPERDIST, uno::makeAny(sal_Int32(nFrameHeight - nHeight)));
     xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
-    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
 
     uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
     xTextRange->setString(rWatermark.GetText());
@@ -1579,10 +1577,12 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
     xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
 
+    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
+    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
+
     uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
     xNamed->setName(sWatermark);
     xLockable->removeActionLock();
-
 }
 
 void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
