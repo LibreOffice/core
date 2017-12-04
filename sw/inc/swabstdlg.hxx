@@ -400,6 +400,7 @@ public:
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) = 0;
     virtual VclPtr<AbstractSwConvertTableDlg> CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateSignatureLineDialog(vcl::Window* pParent, SwView& rView) = 0;
 
     virtual VclPtr<AbstractSwInsertDBColAutoPilot> CreateSwInsertDBColAutoPilot(SwView& rView,
         css::uno::Reference< css::sdbc::XDataSource> rxSource,
