@@ -3340,7 +3340,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportMathType(SvStream &rStre
 {
     OUString sText;
     MathType aEquation(sText);
-    return aEquation.Parse(&rStream);
+    bool bRet = false;
+    try
+    {
+        bRet = aEquation.Parse(&rStream);
+    }
+    catch (const std::out_of_range&)
+    {
+    }
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
