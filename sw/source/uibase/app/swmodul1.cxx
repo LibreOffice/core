@@ -482,18 +482,18 @@ std::size_t SwModule::InsertRedlineAuthor(const OUString& rAuthor)
 static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
                         const AuthorCharAttr &rAttr )
 {
-    Color aCol( rAttr.nColor );
+    Color aCol( rAttr.m_nColor );
 
-    if( COL_TRANSPARENT == rAttr.nColor )
+    if( COL_TRANSPARENT == rAttr.m_nColor )
         aCol.SetColor(lcl_GetAuthorColor(nAuthor));
 
-    bool bBackGr = COL_NONE_COLOR == rAttr.nColor;
+    bool bBackGr = COL_NONE_COLOR == rAttr.m_nColor;
 
-    switch (rAttr.nItemId)
+    switch (rAttr.m_nItemId)
     {
     case SID_ATTR_CHAR_WEIGHT:
         {
-            SvxWeightItem aW( (FontWeight)rAttr.nAttr, RES_CHRATR_WEIGHT );
+            SvxWeightItem aW( (FontWeight)rAttr.m_nAttr, RES_CHRATR_WEIGHT );
             rSet.Put( aW );
             aW.SetWhich( RES_CHRATR_CJK_WEIGHT );
             rSet.Put( aW );
@@ -504,7 +504,7 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
 
     case SID_ATTR_CHAR_POSTURE:
         {
-            SvxPostureItem aP( (FontItalic)rAttr.nAttr, RES_CHRATR_POSTURE );
+            SvxPostureItem aP( (FontItalic)rAttr.m_nAttr, RES_CHRATR_POSTURE );
             rSet.Put( aP );
             aP.SetWhich( RES_CHRATR_CJK_POSTURE );
             rSet.Put( aP );
@@ -514,17 +514,17 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
         break;
 
     case SID_ATTR_CHAR_UNDERLINE:
-        rSet.Put( SvxUnderlineItem( (FontLineStyle)rAttr.nAttr,
+        rSet.Put( SvxUnderlineItem( (FontLineStyle)rAttr.m_nAttr,
                                     RES_CHRATR_UNDERLINE));
         break;
 
     case SID_ATTR_CHAR_STRIKEOUT:
-        rSet.Put(SvxCrossedOutItem( (FontStrikeout)rAttr.nAttr,
+        rSet.Put(SvxCrossedOutItem( (FontStrikeout)rAttr.m_nAttr,
                                     RES_CHRATR_CROSSEDOUT));
         break;
 
     case SID_ATTR_CHAR_CASEMAP:
-        rSet.Put( SvxCaseMapItem( (SvxCaseMap)rAttr.nAttr,
+        rSet.Put( SvxCaseMapItem( (SvxCaseMap)rAttr.m_nAttr,
                                     RES_CHRATR_CASEMAP));
         break;
 

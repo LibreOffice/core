@@ -248,15 +248,15 @@ SwRevisionConfig::SwRevisionConfig() :
     ConfigItem("Office.Writer/Revision",
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
 {
-    aInsertAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;
-    aInsertAttr.nAttr = LINESTYLE_SINGLE;
-    aInsertAttr.nColor = COL_TRANSPARENT;
-    aDeletedAttr.nItemId = SID_ATTR_CHAR_STRIKEOUT;
-    aDeletedAttr.nAttr = STRIKEOUT_SINGLE;
-    aDeletedAttr.nColor = COL_TRANSPARENT;
-    aFormatAttr.nItemId = SID_ATTR_CHAR_WEIGHT;
-    aFormatAttr.nAttr = WEIGHT_BOLD;
-    aFormatAttr.nColor = COL_BLACK;
+    aInsertAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
+    aInsertAttr.m_nAttr = LINESTYLE_SINGLE;
+    aInsertAttr.m_nColor = COL_TRANSPARENT;
+    aDeletedAttr.m_nItemId = SID_ATTR_CHAR_STRIKEOUT;
+    aDeletedAttr.m_nAttr = STRIKEOUT_SINGLE;
+    aDeletedAttr.m_nColor = COL_TRANSPARENT;
+    aFormatAttr.m_nItemId = SID_ATTR_CHAR_WEIGHT;
+    aFormatAttr.m_nAttr = WEIGHT_BOLD;
+    aFormatAttr.m_nColor = COL_BLACK;
 
     Load();
 }
@@ -268,15 +268,15 @@ SwRevisionConfig::~SwRevisionConfig()
 static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
 {
     sal_Int32 nRet = 0;
-    switch(rAttr.nItemId)
+    switch(rAttr.m_nItemId)
     {
         case  SID_ATTR_CHAR_WEIGHT: nRet = 1; break;
         case  SID_ATTR_CHAR_POSTURE: nRet = 2; break;
-        case  SID_ATTR_CHAR_UNDERLINE: nRet = LINESTYLE_SINGLE == rAttr.nAttr ? 3 : 4; break;
+        case  SID_ATTR_CHAR_UNDERLINE: nRet = LINESTYLE_SINGLE == rAttr.m_nAttr ? 3 : 4; break;
         case  SID_ATTR_CHAR_STRIKEOUT: nRet = 3; break;
         case  SID_ATTR_CHAR_CASEMAP:
         {
-            switch((SvxCaseMap)rAttr.nAttr)
+            switch((SvxCaseMap)rAttr.m_nAttr)
             {
                 case  SvxCaseMap::Uppercase : nRet = 5;break;
                 case  SvxCaseMap::Lowercase : nRet = 6;break;
@@ -305,11 +305,11 @@ void SwRevisionConfig::ImplCommit()
         switch(nProp)
         {
             case 0 : nVal = lcl_ConvertAttrToCfg(aInsertAttr); break;
-            case 1 : nVal = aInsertAttr.nColor  ; break;
+            case 1 : nVal = aInsertAttr.m_nColor  ; break;
             case 2 : nVal = lcl_ConvertAttrToCfg(aDeletedAttr); break;
-            case 3 : nVal = aDeletedAttr.nColor ; break;
+            case 3 : nVal = aDeletedAttr.m_nColor ; break;
             case 4 : nVal = lcl_ConvertAttrToCfg(aFormatAttr); break;
-            case 5 : nVal = aFormatAttr.nColor  ; break;
+            case 5 : nVal = aFormatAttr.m_nColor  ; break;
             case 6 : nVal = nMarkAlign          ; break;
             case 7 : nVal = aMarkColor.GetColor(); break;
         }
@@ -320,28 +320,28 @@ void SwRevisionConfig::ImplCommit()
 
 static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, bool bDelete = false)
 {
-    rAttr.nItemId = rAttr.nAttr = 0;
+    rAttr.m_nItemId = rAttr.m_nAttr = 0;
     switch(nVal)
     {
-        case 1: rAttr.nItemId = SID_ATTR_CHAR_WEIGHT;   rAttr.nAttr = WEIGHT_BOLD              ; break;
-        case 2: rAttr.nItemId = SID_ATTR_CHAR_POSTURE;  rAttr.nAttr = ITALIC_NORMAL            ; break;
+        case 1: rAttr.m_nItemId = SID_ATTR_CHAR_WEIGHT;   rAttr.m_nAttr = WEIGHT_BOLD              ; break;
+        case 2: rAttr.m_nItemId = SID_ATTR_CHAR_POSTURE;  rAttr.m_nAttr = ITALIC_NORMAL            ; break;
         case 3: if(bDelete)
                 {
-                    rAttr.nItemId = SID_ATTR_CHAR_STRIKEOUT;
-                    rAttr.nAttr = STRIKEOUT_SINGLE;
+                    rAttr.m_nItemId = SID_ATTR_CHAR_STRIKEOUT;
+                    rAttr.m_nAttr = STRIKEOUT_SINGLE;
                 }
                 else
                 {
-                    rAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;
-                    rAttr.nAttr = LINESTYLE_SINGLE;
+                    rAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
+                    rAttr.m_nAttr = LINESTYLE_SINGLE;
                 }
         break;
-        case 4: rAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;rAttr.nAttr = LINESTYLE_DOUBLE         ; break;
-        case 5: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::Uppercase; break;
-        case 6: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::Lowercase; break;
-        case 7: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::SmallCaps; break;
-        case 8: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::Capitalize; break;
-        case 9: rAttr.nItemId = SID_ATTR_BRUSH; break;
+        case 4: rAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;rAttr.m_nAttr = LINESTYLE_DOUBLE         ; break;
+        case 5: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::Uppercase; break;
+        case 6: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::Lowercase; break;
+        case 7: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::SmallCaps; break;
+        case 8: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::Capitalize; break;
+        case 9: rAttr.m_nItemId = SID_ATTR_BRUSH; break;
     }
 }
 void SwRevisionConfig::Load()
@@ -359,11 +359,11 @@ void SwRevisionConfig::Load()
             switch (nProp)
             {
                 case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
-                case 1 : aInsertAttr.nColor     = nVal; break;
+                case 1 : aInsertAttr.m_nColor     = nVal; break;
                 case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, true); break;
-                case 3 : aDeletedAttr.nColor    = nVal; break;
+                case 3 : aDeletedAttr.m_nColor    = nVal; break;
                 case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
-                case 5 : aFormatAttr.nColor     = nVal; break;
+                case 5 : aFormatAttr.m_nColor     = nVal; break;
                 case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
                 case 7 : aMarkColor.SetColor(nVal); break;
             }
