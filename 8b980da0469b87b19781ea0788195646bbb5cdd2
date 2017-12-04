@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e5a8c3dd",
+        "filename": "sw/uiconfig/swriter/ui/formattablepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-04T21:16:37Z",
+      "side": 1,
+      "message": "NEVER change widget id without changing corresponding C++ code ever. This results in crash.",
+      "revId": "8b980da0469b87b19781ea0788195646bbb5cdd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
