@@ -256,8 +256,6 @@
 #define ID_VAL_ISPRINTABLE                  (SID_SD_START+232)
 #define ID_VAL_PAGEHEIGHT                   (SID_SD_START+233)
 #define ID_VAL_ZOOM                         (SID_SD_START+234)
-#define ID_VAL_ANCHOR_X                     (SID_SD_START+235)
-#define ID_VAL_ANCHOR_Y                     (SID_SD_START+236)
 #define ID_VAL_RED                          (SID_SD_START+237)
 #define ID_VAL_GREEN                        (SID_SD_START+238)
 #define ID_VAL_BLUE                         (SID_SD_START+239)
