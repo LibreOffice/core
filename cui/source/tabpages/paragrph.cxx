@@ -29,7 +29,7 @@
 #include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <editeng/pgrditem.hxx>
-#include <strings.hrc>
+#include <svx/strings.hrc>
 #include <paragrph.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -1034,9 +1034,10 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     m_pLastLineLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
     m_pTextDirectionLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, TextDirectionHdl_Impl ) );
 
-    m_pTextDirectionLB->InsertEntryValue( CuiResId( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
-    m_pTextDirectionLB->InsertEntryValue( CuiResId( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
-    m_pTextDirectionLB->InsertEntryValue( CuiResId( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    std::locale loc(Translate::Create("svx"));
+    m_pTextDirectionLB->InsertEntryValue( Translate::get( RID_SVXSTR_FRAMEDIR_SUPER, loc ), SvxFrameDirection::Environment );
+    m_pTextDirectionLB->InsertEntryValue( Translate::get( RID_SVXSTR_FRAMEDIR_LTR, loc ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pTextDirectionLB->InsertEntryValue( Translate::get( RID_SVXSTR_FRAMEDIR_RTL, loc ), SvxFrameDirection::Horizontal_RL_TB );
 
     setPreviewsToSamePlace(pParent, this);
 }

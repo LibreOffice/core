@@ -25,6 +25,7 @@
 #include <actctrl.hxx>
 #include <prcntfld.hxx>
 #include <swtypes.hxx>
+#include <svx/frmdirlbox.hxx>
 
 class SwWrtShell;
 class SwTableRep;
@@ -58,7 +59,7 @@ class SwFormatTablePage : public SfxTabPage
     VclPtr<FixedText>      m_pBottomFT;
     VclPtr<MetricField>    m_pBottomMF;
 
-    VclPtr<ListBox>        m_pTextDirectionLB;
+    VclPtr<svx::FrameDirectionListBox>        m_pTextDirectionLB;
 
     SwTableRep*     pTableData;
     SwTwips         nSaveWidth;

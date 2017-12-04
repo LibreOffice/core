@@ -1628,6 +1628,10 @@
 #define RID_SUBSETSTR_SYRIAC_SUPPLEMENT                     NC_("RID_SUBSETMAP", "Syriac Supplement")
 #define RID_SUBSETSTR_ZANABAZAR_SQUARE                      NC_("RID_SUBSETMAP", "Zanabazar Square")
 
+#define RID_SVXSTR_FRAMEDIR_LTR                     NC_("RID_SVXSTR_FRAMEDIR_LTR", "Left-to-right (LTR)")
+#define RID_SVXSTR_FRAMEDIR_RTL                     NC_("RID_SVXSTR_FRAMEDIR_RTL", "Right-to-left (RTL)")
+#define RID_SVXSTR_FRAMEDIR_SUPER                   NC_("RID_SVXSTR_FRAMEDIR_SUPER", "Use superordinate object settings")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
