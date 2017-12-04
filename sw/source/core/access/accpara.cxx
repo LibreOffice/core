@@ -2092,7 +2092,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 break;
             }
         }
-        switch( aChangeAttr.nItemId )
+        switch( aChangeAttr.m_nItemId )
         {
         case SID_ATTR_CHAR_WEIGHT:
             ChangeAttr.Name = UNO_NAME_CHAR_WEIGHT;
@@ -2108,26 +2108,26 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             break;
         case SID_ATTR_CHAR_UNDERLINE:
             ChangeAttr.Name = UNO_NAME_CHAR_UNDERLINE;
-            ChangeAttr.Value <<= aChangeAttr.nAttr; //underline line
+            ChangeAttr.Value <<= aChangeAttr.m_nAttr; //underline line
             break;
         }
-        if( aChangeAttr.nColor != COL_NONE_COLOR )
+        if( aChangeAttr.m_nColor != COL_NONE_COLOR )
         {
-            if( aChangeAttr.nItemId == SID_ATTR_BRUSH )
+            if( aChangeAttr.m_nItemId == SID_ATTR_BRUSH )
             {
                 ChangeAttrColor.Name = UNO_NAME_CHAR_BACK_COLOR;
-                if( aChangeAttr.nColor == COL_TRANSPARENT )//char backcolor
+                if( aChangeAttr.m_nColor == COL_TRANSPARENT )//char backcolor
                     ChangeAttrColor.Value <<= COL_BLUE;
                 else
-                    ChangeAttrColor.Value <<= aChangeAttr.nColor;
+                    ChangeAttrColor.Value <<= aChangeAttr.m_nColor;
             }
             else
             {
                 ChangeAttrColor.Name = UNO_NAME_CHAR_COLOR;
-                if( aChangeAttr.nColor == COL_TRANSPARENT )//char color
+                if( aChangeAttr.m_nColor == COL_TRANSPARENT )//char color
                     ChangeAttrColor.Value <<= COL_BLUE;
                 else
-                    ChangeAttrColor.Value <<= aChangeAttr.nColor;
+                    ChangeAttrColor.Value <<= aChangeAttr.m_nColor;
             }
         }
     }

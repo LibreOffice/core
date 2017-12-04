@@ -27,16 +27,16 @@
 class SW_DLLPUBLIC AuthorCharAttr
 {
 public:
-    sal_uInt16  nItemId;
-    sal_uInt16  nAttr;
-    ColorData nColor;
+    sal_uInt16  m_nItemId;
+    sal_uInt16  m_nAttr;
+    ColorData m_nColor;
 
     AuthorCharAttr();
 
     bool operator == ( const AuthorCharAttr& rAttr ) const
     {
-        return  nItemId == rAttr.nItemId && nAttr == rAttr.nAttr &&
-                nColor == rAttr.nColor;
+        return  m_nItemId == rAttr.m_nItemId && m_nAttr == rAttr.m_nAttr &&
+                m_nColor == rAttr.m_nColor;
     }
 };
 

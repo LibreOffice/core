@@ -322,9 +322,9 @@ void SwViewOption::SetOnlineSpell(bool b)
 }
 
 AuthorCharAttr::AuthorCharAttr() :
-    nItemId (SID_ATTR_CHAR_UNDERLINE),
-    nAttr   (LINESTYLE_SINGLE),
-    nColor  (COL_TRANSPARENT)
+    m_nItemId (SID_ATTR_CHAR_UNDERLINE),
+    m_nAttr   (LINESTYLE_SINGLE),
+    m_nColor  (COL_TRANSPARENT)
 {
 }
 

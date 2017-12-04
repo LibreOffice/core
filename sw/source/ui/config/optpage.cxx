@@ -1720,8 +1720,8 @@ namespace
         {
             CharAttr& rAttr(aRedlineAttr[pAttrMap[i]]);
             rLB.SetEntryData(i, &rAttr);
-            if (rAttr.nItemId == rAttrToSelect.nItemId &&
-                rAttr.nAttr == rAttrToSelect.nAttr)
+            if (rAttr.nItemId == rAttrToSelect.m_nItemId &&
+                rAttr.nAttr == rAttrToSelect.m_nAttr)
                 rLB.SelectEntryPos(i);
         }
     }
@@ -1838,9 +1838,9 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         pAttr = static_cast<CharAttr *>(m_pInsertLB->GetEntryData(nPos));
-        aInsertedAttr.nItemId = pAttr->nItemId;
-        aInsertedAttr.nAttr = pAttr->nAttr;
-        aInsertedAttr.nColor = m_pInsertColorLB->GetSelectEntryColor().GetColor();
+        aInsertedAttr.m_nItemId = pAttr->nItemId;
+        aInsertedAttr.m_nAttr = pAttr->nAttr;
+        aInsertedAttr.m_nColor = m_pInsertColorLB->GetSelectEntryColor().GetColor();
         pOpt->SetInsertAuthorAttr(aInsertedAttr);
     }
 
@@ -1848,9 +1848,9 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         pAttr = static_cast<CharAttr *>(m_pDeletedLB->GetEntryData(nPos));
-        aDeletedAttr.nItemId = pAttr->nItemId;
-        aDeletedAttr.nAttr = pAttr->nAttr;
-        aDeletedAttr.nColor = m_pDeletedColorLB->GetSelectEntryColor().GetColor();
+        aDeletedAttr.m_nItemId = pAttr->nItemId;
+        aDeletedAttr.m_nAttr = pAttr->nAttr;
+        aDeletedAttr.m_nColor = m_pDeletedColorLB->GetSelectEntryColor().GetColor();
         pOpt->SetDeletedAuthorAttr(aDeletedAttr);
     }
 
@@ -1858,9 +1858,9 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         pAttr = static_cast<CharAttr *>(m_pChangedLB->GetEntryData(nPos));
-        aChangedAttr.nItemId = pAttr->nItemId;
-        aChangedAttr.nAttr = pAttr->nAttr;
-        aChangedAttr.nColor = m_pChangedColorLB->GetSelectEntryColor().GetColor();
+        aChangedAttr.m_nItemId = pAttr->nItemId;
+        aChangedAttr.m_nAttr = pAttr->nAttr;
+        aChangedAttr.m_nColor = m_pChangedColorLB->GetSelectEntryColor().GetColor();
         pOpt->SetFormatAuthorAttr(aChangedAttr);
     }
 
@@ -1909,13 +1909,13 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     InitFontStyle(*m_pDeletedPreviewWN);
     InitFontStyle(*m_pChangedPreviewWN);
 
-    ColorData nColor = rInsertAttr.nColor;
+    ColorData nColor = rInsertAttr.m_nColor;
     m_pInsertColorLB->SelectEntry(Color(nColor));
 
-    nColor = rDeletedAttr.nColor;
+    nColor = rDeletedAttr.m_nColor;
     m_pDeletedColorLB->SelectEntry(Color(nColor));
 
-    nColor = rChangedAttr.nColor;
+    nColor = rChangedAttr.m_nColor;
     m_pChangedColorLB->SelectEntry(Color(nColor));
 
     m_pMarkColorLB->SelectEntry(pOpt->GetMarkAlignColor());
