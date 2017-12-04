@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_cfb4c683",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-04T08:27:59Z",
+      "side": 1,
+      "message": "Pro tip: to save some typing, you can declare (in the beginning of the module:\n\nusing namespace css; // or\nusing namespace css:uno; //respectively\n\nso css::uno::Reference will become uno::Reference or just Reference",
+      "revId": "e1538533c158bda67feffaa9b217013db7ee0edc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
