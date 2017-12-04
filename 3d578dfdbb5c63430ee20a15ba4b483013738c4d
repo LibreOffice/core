@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_caae7480",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-04T14:03:18Z",
+      "side": 1,
+      "message": "I mean, xDoc implements css::frame::XModel, that already gives you a getURL(), isn\u0027t that enough for your purposes?",
+      "revId": "3d578dfdbb5c63430ee20a15ba4b483013738c4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
