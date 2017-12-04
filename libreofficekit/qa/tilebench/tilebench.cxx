@@ -13,6 +13,7 @@
 #include <cmath>
 
 #include <vector>
+#include <fstream>
 #include <osl/time.h>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -34,6 +35,48 @@ static double getTimeNow()
     osl_getSystemTime(&aValue);
     return (double)aValue.Seconds +
            (double)aValue.Nanosec / (1000*1000*1000);
+}
+
+/// Dump an array of RGBA or BGRA to an RGB PPM file.
+static void dumpTile(const int nWidth, const int nHeight, const int mode, const char* pBuffer)
+{
+    std::ofstream ofs("/tmp/dump_tile.ppm");
+    ofs << "P6\n"
+        << nWidth << " "
+        << nHeight << "\n"
+        << 255 << "\n" ;
+
+    for (int y = 0; y < nHeight; ++y)
+    {
+        const char* row = pBuffer + y * nWidth * 4;
+        for (int x = 0; x < nWidth; ++x)
+        {
+            const char* pixel = row + x * 4;
+            if (mode == LOK_TILEMODE_RGBA)
+            {
+                ofs.write(pixel, 3); // Skip alpha
+            }
+            else if (mode == LOK_TILEMODE_BGRA)
+            {
+                const int alpha = *(pixel + 3);
+                char buf[3];
+                if (alpha == 0)
+                {
+                    buf[0] = 0;
+                    buf[1] = 0;
+                    buf[2] = 0;
+                }
+                else
+                {
+                    buf[0] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
+                    buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
+                    buf[2] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
+                }
+
+                ofs.write(buf, 3);
+            }
+        }
+    }
 }
 
 int main( int argc, char* argv[] )
@@ -73,34 +116,41 @@ int main( int argc, char* argv[] )
     aTimes.emplace_back();
 
     const int max_parts = (argc > 3 ? atoi(argv[3]) : -1);
-    const int max_tiles = (argc > 4 ? atoi(argv[4]) : -1);
+    int max_tiles = (argc > 4 ? atoi(argv[4]) : -1);
+    const bool dump = true;
 
     if (argv[2] != nullptr)
     {
         aTimes.emplace_back("load document");
         Document *pDocument(pOffice->documentLoad(argv[2]));
         aTimes.emplace_back();
+        const int mode = pDocument->getTileMode();
 
         aTimes.emplace_back("getparts");
-        const int nOriginalPart = pDocument->getPart();
+        const int nOriginalPart = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getPart());
         // Writer really has 1 part (the full doc).
         const int nTotalParts = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getParts());
         const int nParts = (max_parts < 0 ? nTotalParts : std::min(max_parts, nTotalParts));
-        fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
         aTimes.emplace_back();
 
         aTimes.emplace_back("get size of parts");
+        long nWidth = 0;
+        long nHeight = 0;
         for (int n = 0; n < nParts; ++n)
         {
             const int nPart = (nOriginalPart + n) % nTotalParts;
             char* pName = pDocument->getPartName(nPart);
             pDocument->setPart(nPart);
-            long nWidth = 0, nHeight = 0;
             pDocument->getDocumentSize(&nWidth, &nHeight);
             fprintf (stderr, "  '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
             free (pName);
         }
         aTimes.emplace_back();
+
+        // Estimate the maximum tiles based on the number of parts requested, if Writer.
+        if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
+            max_tiles = (int)ceil(max_parts * 16128. / nTilePixelHeight) * ceil((double)nWidth / nTilePixelWidth);
+        fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
 
         std::vector<unsigned char> vBuffer(nTilePixelWidth * nTilePixelHeight * 4);
         unsigned char* pPixels = &vBuffer[0];
@@ -110,25 +160,25 @@ int main( int argc, char* argv[] )
             const int nPart = (nOriginalPart + n) % nTotalParts;
             char* pName = pDocument->getPartName(nPart);
             pDocument->setPart(nPart);
-            long nWidth = 0, nHeight = 0;
             pDocument->getDocumentSize(&nWidth, &nHeight);
             fprintf (stderr, "render '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
             free (pName);
 
-            if (pDocument->getDocumentType() != LOK_DOCTYPE_TEXT)
-            { // whole part; meaningful only for non-writer documents.
+            if (dump || pDocument->getDocumentType() != LOK_DOCTYPE_TEXT)
+            {
+                 // whole part; meaningful only for non-writer documents.
                 aTimes.emplace_back("render whole part");
                 pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
-                                     0, 0, nWidth, nHeight); // not square
+                                     nWidth/2, 2000, 1000, 1000); // not square
                 aTimes.emplace_back();
+                if (dump)
+                    dumpTile(nTilePixelWidth, nTilePixelHeight, mode, reinterpret_cast<char*>(pPixels));
             }
 
             { // 1:1
                 aTimes.emplace_back("render sub-region at 1:1");
                 // Estimate the maximum tiles based on the number of parts requested, if Writer.
                 int nMaxTiles = max_tiles;
-                if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
-                    nMaxTiles = (int)ceil(max_parts * 16128. / nTilePixelHeight) * ceil((double)nWidth / nTilePixelWidth);
                 int nTiles = 0;
                 for (int nY = 0; nY < nHeight - 1; nY += nTilePixelHeight)
                 {
@@ -152,7 +202,6 @@ int main( int argc, char* argv[] )
 
             { // scaled
                 aTimes.emplace_back("render sub-regions at scale");
-                // Estimate the maximum tiles based on the number of parts requested, if Writer.
                 int nMaxTiles = max_tiles;
                 if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
                     nMaxTiles = (int)ceil(max_parts * 16128. / nTileTwipHeight) * ceil((double)nWidth / nTileTwipWidth);
