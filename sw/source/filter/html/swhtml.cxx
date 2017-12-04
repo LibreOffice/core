@@ -107,6 +107,7 @@
 #include <linkenum.hxx>
 #include <breakit.hxx>
 #include <SwAppletImpl.hxx>
+#include <swdll.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
@@ -5497,6 +5498,45 @@ void SwHTMLParser::AddMetaUserDefined( OUString const & i_rMetaName )
     {
         (*pName) = i_rMetaName;
     }
+}
+
+namespace
+{
+    class FontCacheGuard
+    {
+    public:
+        ~FontCacheGuard()
+        {
+            FlushFontCache();
+        }
+    };
+}
+
+bool SAL_CALL TestImportHTML(SvStream &rStream)
+{
+    FontCacheGuard aFontCacheGuard;
+    std::unique_ptr<Reader> xReader(new HTMLReader);
+    xReader->pStrm = &rStream;
+
+    SwGlobals::ensure();
+
+    SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
+    xDocSh->DoInitNew();
+    SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
+
+    SwNodeIndex aIdx(
+        *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
+    if( !aIdx.GetNode().IsTextNode() )
+    {
+        pD->GetNodes().GoNext( &aIdx );
+    }
+    SwPaM aPaM( aIdx );
+    aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
+    pD->SetInReading(true);
+    bool bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
+    pD->SetInReading(false);
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6213,14 +6213,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
     return new WW8Reader;
 }
 
-class FontCacheGuard
+namespace
 {
-public:
-    ~FontCacheGuard()
+    class FontCacheGuard
     {
-        FlushFontCache();
-    }
-};
+    public:
+        ~FontCacheGuard()
+        {
+            FlushFontCache();
+        }
+    };
+}
 
 bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
 {
