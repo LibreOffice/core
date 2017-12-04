@@ -2749,6 +2749,8 @@ void MathType::HandleEmblishments()
     do
     {
         pS->ReadUChar( nEmbel );
+        if (!pS->good())
+            break;
         switch (nEmbel)
         {
         case 0x02:
