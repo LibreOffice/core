@@ -96,14 +96,15 @@ BitmapBuffer* ImplCreateDIB(
             pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
             break;
         }
+        case 24:
+            pDIB->mnFormat = SVP_24BIT_FORMAT;
+            break;
         default:
             nBitCount = 32;
             SAL_FALLTHROUGH;
         case 32:
-        {
             pDIB->mnFormat = SVP_CAIRO_FORMAT;
             break;
-        }
     }
 
     pDIB->mnFormat |= ScanlineFormat::TopDown;
