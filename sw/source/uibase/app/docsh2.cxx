@@ -1030,15 +1030,16 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             OUString sTmpl;
                             aTemplateValue >>= sTmpl;
 
-                            sal_Int32 nColonPos = sTmpl.indexOf( ':' );
-                            OUString sPrefix = sTmpl.copy( 0, nColonPos );
-                            if ( sPrefix == "Style" )
+                            OUString aStyle(SwResId(STR_FDLG_STYLE));
+                            OUString aOutline(SwResId(STR_FDLG_OUTLINE_LEVEL));
+
+                            if ( sTmpl.startsWith(aStyle) )
                             {
-                                aTemplateName = sTmpl.copy( 7 );   //get string behind "Style: "
+                                aTemplateName = sTmpl.copy( aStyle.getLength() );   //get string behind "Style: "
                             }
-                            else if ( sPrefix == "Outline" )
+                            else if ( sTmpl.startsWith(aOutline) )
                             {
-                                nTemplateOutlineLevel = ( sTmpl.copy( 15 )).toInt32(); //get string behind "Outline: Leve  ";
+                                nTemplateOutlineLevel = sTmpl.copy(aOutline.getLength()).toInt32(); //get string behind "Outline: Level  ";
                                 bCreateByOutlineLevel = true;
                             }
 
