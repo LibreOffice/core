@@ -38,19 +38,23 @@
 //which is internal in that case, to swap the rgb components so that
 //cairo then matches the OpenGL GL_RGBA format so we can use it there
 //where we don't have GL_BGRA support.
+// SVP_24BIT_FORMAT is used to store 24-bit images in 3-byte pixels to conserve memory.
 #if defined ANDROID
+#   define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgba | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_BLUE 1
 #   define SVP_CAIRO_GREEN 2
 #   define SVP_CAIRO_RED 0
 #   define SVP_CAIRO_ALPHA 3
 #elif defined OSL_BIGENDIAN
+#   define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_BLUE 3
 #   define SVP_CAIRO_GREEN 2
 #   define SVP_CAIRO_RED 1
 #   define SVP_CAIRO_ALPHA 0
 #else
+#   define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcBgr | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcBgra | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_BLUE 0
 #   define SVP_CAIRO_GREEN 1
