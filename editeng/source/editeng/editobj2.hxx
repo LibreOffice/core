@@ -215,7 +215,7 @@ public:
 
     bool                    IsVertical() const;
     bool                    IsTopToBottom() const;
-    void                    SetVertical( bool bVert, bool bTopToBottom = true);
+    void                    SetVertical( bool bVert, bool bTopToBottom);
 
     SvtScriptType           GetScriptType() const { return nScriptType;}
     void                    SetScriptType( SvtScriptType nType );

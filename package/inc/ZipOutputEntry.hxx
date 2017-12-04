@@ -60,7 +60,7 @@ public:
     ZipOutputEntry(
         const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt = false);
+        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt);
 
     ~ZipOutputEntry();
 
@@ -68,7 +68,7 @@ public:
        data is retrieved via getData */
     ZipOutputEntry(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt = false);
+        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt);
     void createBufferFile();
     void setParallelDeflateException(const ::css::uno::Any &rAny) { m_aParallelDeflateException = rAny; }
     css::uno::Reference< css::io::XInputStream > getData() const;

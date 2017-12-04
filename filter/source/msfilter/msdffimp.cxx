@@ -6266,7 +6266,7 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         if (!bSeeked || rStCtrl.GetError())
             rStCtrl.ResetError();
         else
-            rpShape = ImportObj( rStCtrl, &rData, rData.aParentRect, rData.aParentRect );
+            rpShape = ImportObj( rStCtrl, &rData, rData.aParentRect, rData.aParentRect, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
 
         // restore old FilePos of the stream(s)
         rStCtrl.Seek( nOldPosCtrl );

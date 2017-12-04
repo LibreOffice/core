@@ -772,7 +772,7 @@ public:
     void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
     sal_uInt16      GetDefTab() const           { return nDefTab; }
 
-    void            SetVertical( bool bVertical, bool bTopToBottom = true )
+    void            SetVertical( bool bVertical, bool bTopToBottom )
                     { bIsVertical = bVertical; bIsTopToBottomVert = bVertical && bTopToBottom; }
     bool            IsVertical() const              { return bIsVertical; }
     bool            IsTopToBottom() const           { return bIsTopToBottomVert; }
