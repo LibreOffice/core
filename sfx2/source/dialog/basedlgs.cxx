@@ -173,7 +173,7 @@ void SfxModalDialog::dispose()
 short SfxModalDialog::Execute()
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
     {
         SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
@@ -278,7 +278,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
         }
 
         SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+        if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
         {
             SetLOKNotifier(pViewShell);
             std::vector<vcl::LOKPayloadItem> aItems;
