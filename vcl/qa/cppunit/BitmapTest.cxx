@@ -75,24 +75,12 @@ void BitmapTest::testConvert()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmap.GetBitCount());
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
-#if defined LINUX || defined FREEBSD
-        // 24 bit Bitmap on SVP backend uses 32bit BGRA format
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(32), pReadAccess->GetBitCount());
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
-#else
+        // 24 bit Bitmap on SVP backend can now use 24bit RGB instad of  32bit BGRA format.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
-#if defined(_WIN32)
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
-        {
-            // GDI Scanlines padded to DWORD multiples, it seems
-            CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
-        }
-        else
-#endif
-        {
-            CPPUNIT_ASSERT_EQUAL(sal_uLong(30), pReadAccess->GetScanlineSize());
-        }
-#endif
+
+        // Scanlines padded to DWORD multiples, it seems
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
+
         CPPUNIT_ASSERT(!pReadAccess->HasPalette());
         Color aColor = pReadAccess->GetPixel(0, 0);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(aColor.GetRed()));
