@@ -28,6 +28,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <list>
+#include <vector>
 
 #include <swdllapi.h>
 
@@ -136,13 +137,13 @@ protected:
     virtual void SAL_CALL onTerminated() override;
 
 private:
-    std::list< ::rtl::Reference<IMailDispatcherListener> > cloneListener();
+    std::vector< ::rtl::Reference<IMailDispatcherListener> > cloneListener();
     void sendMailMessageNotifyListener(css::uno::Reference< css::mail::XMailMessage> const & message);
 
 private:
     css::uno::Reference< css::mail::XSmtpService> m_xMailserver;
     std::list< css::uno::Reference< css::mail::XMailMessage > > m_aXMessageList;
-    std::list< ::rtl::Reference<IMailDispatcherListener> > m_aListenerList;
+    std::vector< ::rtl::Reference<IMailDispatcherListener> > m_aListenerVector;
     ::osl::Mutex m_aMessageContainerMutex;
     ::osl::Mutex m_aListenerContainerMutex;
     ::osl::Mutex m_aThreadStatusMutex;
