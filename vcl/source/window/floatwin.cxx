@@ -587,7 +587,7 @@ bool FloatingWindow::EventNotify( NotifyEvent& rNEvt )
 
 void FloatingWindow::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
 {
-    if (vcl::Window* pParent = GetParentWithLOKNotifier())
+    if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
         const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate");
@@ -603,7 +603,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
     SystemWindow::StateChanged( nType );
 
-    if (vcl::Window* pParent = GetParentWithLOKNotifier())
+    if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
         const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
         if (nType == StateChangedType::InitShow && IsVisible())
