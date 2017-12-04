@@ -38,6 +38,8 @@
 #include <sfx2/htmlmode.hxx>
 
 #include <strings.hrc>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -90,6 +92,10 @@ SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSe
     get(m_pBottomFT, "belowft");
     get(m_pBottomMF, "belowmf");
     get(m_pTextDirectionLB, "textdirection");
+
+    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
 
     SetExchangeSupport();
 
