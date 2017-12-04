@@ -332,7 +332,9 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
         rOut( rOutp ), nOldLanguageType( rOutp.GetDigitLanguage() )
 {
     LanguageType eLang = eCurLang;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (utl::ConfigManager::IsFuzzing())
+        eLang = LANGUAGE_ENGLISH_US;
+    else
     {
         const SvtCTLOptions::TextNumerals nTextNumerals = SW_MOD()->GetCTLOptions().GetCTLTextNumerals();
 
