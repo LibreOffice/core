@@ -394,6 +394,7 @@
         "--socket=system-bus",
         "--socket=session-bus",
         "--filesystem=host",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=LIBO_FLATPAK=1"
     ]
 }
