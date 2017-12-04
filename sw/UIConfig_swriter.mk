@@ -245,6 +245,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/selectindexdialog \
 	sw/uiconfig/swriter/ui/selecttabledialog \
 	sw/uiconfig/swriter/ui/sidebarpage \
+	sw/uiconfig/swriter/ui/signatureline \
 	sw/uiconfig/swriter/ui/pageformatpanel \
 	sw/uiconfig/swriter/ui/pagestylespanel \
 	sw/uiconfig/swriter/ui/pageheaderpanel \
