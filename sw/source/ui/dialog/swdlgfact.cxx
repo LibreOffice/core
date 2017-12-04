@@ -83,6 +83,7 @@
 #include <mailconfigpage.hxx>
 #include <uiborder.hxx>
 #include <mmresultdialogs.hxx>
+#include <SignatureLineDialog.hxx>
 
 using namespace ::com::sun::star;
 
@@ -725,6 +726,12 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( 
 {
     VclPtr<Dialog> pDlg = VclPtr<SwCaptionDialog>::Create( pParent, rV );
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(vcl::Window* pParent, SwView& rV)
+{
+    VclPtr<Dialog> pDlg = VclPtr<SignatureLineDialog>::Create(pParent, rV);
+    return VclPtr<VclAbstractDialog_Impl>::Create(pDlg);
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,

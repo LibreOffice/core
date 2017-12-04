@@ -60,6 +60,17 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             }
             break;
         }
+        case FN_INSERT_SIGNATURELINE:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            assert(pFact && "SwAbstractDialogFactory fail!");
+
+            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSignatureLineDialog(pMDI, *this));
+            assert(pDialog && "Dialog creation failed!");
+            if (pDialog)
+                pDialog->Execute();
+            break;
+        }
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
