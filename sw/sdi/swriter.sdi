@@ -3314,6 +3314,23 @@ SfxVoidItem InsertTopicField FN_INSERT_FLD_TOPIC
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem SignatureLineDialog FN_INSERT_SIGNATURELINE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem JumpDownThisLevel FN_NUM_BULLET_NEXT
 ()
 [
