@@ -5134,7 +5134,7 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
     {
         /* 0 (256) */   &SwWW8ImplReader::Read_Footnote,     // FootNote
         /* 1 (257) */   &SwWW8ImplReader::Read_Footnote,     // EndNote
-        /* 2 (258) */   &SwWW8ImplReader::Read_Field,  // Feld
+        /* 2 (258) */   &SwWW8ImplReader::Read_Field,  // Field
         /* 3 (259) */   &SwWW8ImplReader::Read_Book,   // Bookmark
         /* 4 (260) */   &SwWW8ImplReader::Read_And,     // Annotation
         /* 5 (261) */   &SwWW8ImplReader::Read_AtnBook, // Annotationmark
@@ -5162,7 +5162,7 @@ void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
     {
         /* 0 (256) */   &SwWW8ImplReader::End_Footnote,      // FootNote
         /* 1 (257) */   &SwWW8ImplReader::End_Footnote,      // EndNote
-        /* 2 (258) */   &SwWW8ImplReader::End_Field,  // Feld
+        /* 2 (258) */   &SwWW8ImplReader::End_Field,  // Field
         /* 3 (259) */   nullptr,   // Bookmark
         /* 4 (260) */   nullptr     // Annotation
     };
