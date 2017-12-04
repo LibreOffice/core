@@ -154,7 +154,7 @@ PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
 }
 
 
-void SAL_CALL
+void
 PropertySetInfoChangeNotifier::notifyPropertyAdded( const OUString & aPropertyName )
 {
     beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,
@@ -171,7 +171,7 @@ PropertySetInfoChangeNotifier::notifyPropertyAdded( const OUString & aPropertyNa
 }
 
 
-void SAL_CALL
+void
 PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aPropertyName )
 {
     beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,

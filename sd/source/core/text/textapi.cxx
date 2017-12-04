@@ -147,7 +147,7 @@ rtl::Reference< TextApiObject > TextApiObject::create( SdDrawDocument* pDoc )
     return xRet;
 }
 
-void SAL_CALL TextApiObject::dispose()
+void TextApiObject::dispose()
 {
     if( mpSource )
     {

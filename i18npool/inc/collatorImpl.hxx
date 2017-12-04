@@ -81,7 +81,7 @@ private:
         css::uno::Reference < XCollator > xC;
         lookupTableItem(const css::lang::Locale& rLocale, const OUString& _algorithm, const OUString& _service,
                         css::uno::Reference < XCollator > const & _xC) : aLocale(rLocale), algorithm(_algorithm), service(_service), xC(_xC) {}
-        bool SAL_CALL equals(const css::lang::Locale& rLocale, const OUString& _algorithm) {
+        bool equals(const css::lang::Locale& rLocale, const OUString& _algorithm) {
         return aLocale.Language == rLocale.Language &&
             aLocale.Country == rLocale.Country &&
             aLocale.Variant == rLocale.Variant &&
@@ -97,10 +97,10 @@ private:
     css::uno::Reference < css::i18n::XLocaleData5 >     mxLocaleData;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL createCollator(const css::lang::Locale& rLocale, const OUString& serviceName,
+    bool createCollator(const css::lang::Locale& rLocale, const OUString& serviceName,
         const OUString& rSortAlgorithm);
     /// @throws css::uno::RuntimeException
-    void SAL_CALL loadCachedCollator(const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
+    void loadCachedCollator(const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
 };
 
 }

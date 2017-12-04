@@ -52,12 +52,12 @@ private:
 
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     impl_getCurrentRowContent(
         css::uno::Any& rRowContent,
         const css::uno::Reference< css::sdbc::XRow >& xRow );
 
-    sal_Int32 SAL_CALL
+    sal_Int32
     impl_getColumnCount();
 
     /// @throws css::uno::RuntimeException
@@ -79,7 +79,7 @@ private:
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection );
 
 public:

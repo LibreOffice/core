@@ -173,7 +173,7 @@ public:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     OUString getDeployPath( ActivePackages::Data const & data );
-    css::uno::Reference<css::deployment::XPackage> SAL_CALL getDeployedPackage_(
+    css::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
         OUString const & id, OUString const & fileName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     css::uno::Reference<css::deployment::XPackage> getDeployedPackage_(

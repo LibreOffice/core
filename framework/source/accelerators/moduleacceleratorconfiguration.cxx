@@ -84,7 +84,7 @@ public:
     }
 
     /// This has to be called after when the instance is acquire()'d.
-    void SAL_CALL fillCache();
+    void fillCache();
 
 private:
     /** helper to listen for configuration changes without ownership cycle problems */

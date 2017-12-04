@@ -127,20 +127,20 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL SetPropertyValues_Impl(
+    void SetPropertyValues_Impl(
         const css::uno::Sequence< OUString >& aPropertyNames,
         const css::uno::Sequence< css::uno::Any >& aValues );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Any > SAL_CALL GetPropertyValues_Impl(
+    css::uno::Sequence< css::uno::Any > GetPropertyValues_Impl(
         const css::uno::Sequence< OUString >& aPropertyNames );
 
     void GetPropertyValue( css::uno::Any &rVal,
                 const SfxItemPropertySimpleEntry& rEntry, SwUnoCursor *pUnoCursor, std::unique_ptr<SfxItemSet> &pSet );
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> SAL_CALL GetPropertyValuesTolerant_Impl(
+    css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> GetPropertyValuesTolerant_Impl(
         const css::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly );
 
     virtual ~SwXTextPortion() override;

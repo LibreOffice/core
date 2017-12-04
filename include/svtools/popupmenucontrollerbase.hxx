@@ -100,7 +100,7 @@ namespace svt
             void throwIfDisposed();
 
             /** helper method to cause statusChanged is called once for the given command url */
-            void SAL_CALL updateCommand( const OUString& rCommandURL );
+            void updateCommand( const OUString& rCommandURL );
 
             /** this function is called upon disposing the component
             */

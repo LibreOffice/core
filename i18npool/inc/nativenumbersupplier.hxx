@@ -59,11 +59,11 @@ public:
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
         /// @throws css::uno::RuntimeException
-        OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
+        OUString getNativeNumberString( const OUString& aNumberString,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode,
                 css::uno::Sequence< sal_Int32 >& offset  );
         /// @throws css::uno::RuntimeException
-        sal_Unicode SAL_CALL getNativeNumberChar( const sal_Unicode inChar,
+        sal_Unicode getNativeNumberChar( const sal_Unicode inChar,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) ;
 
 private:

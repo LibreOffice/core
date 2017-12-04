@@ -527,7 +527,7 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
     return nRet;
 }
 
-bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName)
+bool BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName)
 {
     // to share service between same Language but different Country code, like zh_CN and zh_TW
     for (lookupTableItem* listItem : lookupTable) {
@@ -567,7 +567,7 @@ bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUStrin
     return false;
 }
 
-Reference < XBreakIterator > SAL_CALL
+Reference < XBreakIterator >
 BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
 {
     if (xBI.is() && rLocale == aLocale)

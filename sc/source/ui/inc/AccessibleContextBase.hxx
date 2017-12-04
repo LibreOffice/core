@@ -78,7 +78,7 @@ protected:
 public:
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL isShowing(  );
+    bool isShowing(  );
 
     /// @throws css::uno::RuntimeException
     virtual bool SAL_CALL isVisible();

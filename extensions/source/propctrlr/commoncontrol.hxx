@@ -75,15 +75,15 @@ namespace pcr
 
         // XPropertyControl
         /// @throws css::uno::RuntimeException
-        ::sal_Int16 SAL_CALL getControlType() { return m_nControlType; }
+        ::sal_Int16 getControlType() { return m_nControlType; }
         /// @throws css::uno::RuntimeException
-        const css::uno::Reference< css::inspection::XPropertyControlContext >& SAL_CALL getControlContext() { return m_xContext; }
+        const css::uno::Reference< css::inspection::XPropertyControlContext >& getControlContext() { return m_xContext; }
         /// @throws css::uno::RuntimeException
-        void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext );
+        void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext );
         /// @throws css::uno::RuntimeException
-        bool SAL_CALL isModified(  ) { return m_bModified; }
+        bool isModified(  ) { return m_bModified; }
         /// @throws css::uno::RuntimeException
-        void SAL_CALL notifyModifiedValue(  );
+        void notifyModifiedValue(  );
 
         /** (fail-safe) wrapper around calling our context's activateNextControl
         */

@@ -90,7 +90,7 @@ public:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    void SAL_CALL Initialize( const css::uno::Sequence< css::uno::Any >& aArguments );
+    void Initialize( const css::uno::Sequence< css::uno::Any >& aArguments );
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument() override;

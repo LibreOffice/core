@@ -231,7 +231,7 @@ void T602ImportFilter::inschr(unsigned char ch)
     inschrdef(ch);
 }
 
-bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     Reset602();
 
@@ -438,7 +438,7 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::Property
     return true;
 }
 
-bool SAL_CALL T602ImportFilter::test()
+bool T602ImportFilter::test()
 {
     Reset602();
     Read602();

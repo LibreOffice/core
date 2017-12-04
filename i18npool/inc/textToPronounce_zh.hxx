@@ -31,7 +31,7 @@ protected:
         oslModule hModule;
 #endif
         sal_uInt16 **idx;
-        const sal_Unicode* SAL_CALL getPronounce(const sal_Unicode ch);
+        const sal_Unicode* getPronounce(const sal_Unicode ch);
 
 public:
 #ifndef DISABLE_DYNLOADING

@@ -101,19 +101,19 @@ public:
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement );
+    void replaceByName( const OUString& aName, const css::uno::Any& aElement );
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any SAL_CALL getByName( const OUString& aName );
+    css::uno::Any getByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > SAL_CALL getElementNames(  );
+    css::uno::Sequence< OUString > getElementNames(  );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL hasByName( const OUString& aName );
+    bool hasByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
     static css::uno::Type SAL_CALL getElementType(  );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL hasElements() const;
+    bool hasElements() const;
     OUString const & GetEventName( GlobalEventId nID ) const;
 };
 
@@ -238,7 +238,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
     }
 }
 
-void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aElement )
+void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aElement )
 {
     Sequence< beans::PropertyValue > props;
     //DF should we prepopulate the hash with a list of valid event Names?
@@ -258,7 +258,7 @@ void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, cons
     SetModified();
 }
 
-Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName )
+Any GlobalEventConfig_Impl::getByName( const OUString& aName )
 {
     Any aRet;
     Sequence< beans::PropertyValue > props(2);
@@ -284,12 +284,12 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName )
     return aRet;
 }
 
-Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  )
+Sequence< OUString > GlobalEventConfig_Impl::getElementNames(  )
 {
     return uno::Sequence< OUString >(m_supportedEvents.data(), SupportedEventsVector::size());
 }
 
-bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName )
+bool GlobalEventConfig_Impl::hasByName( const OUString& aName )
 {
     if ( m_eventBindingHash.find( aName ) != m_eventBindingHash.end() )
         return true;
@@ -306,7 +306,7 @@ Type SAL_CALL GlobalEventConfig_Impl::getElementType(  )
     return cppu::UnoType<Sequence<beans::PropertyValue>>::get();
 }
 
-bool SAL_CALL GlobalEventConfig_Impl::hasElements() const
+bool GlobalEventConfig_Impl::hasElements() const
 {
     return m_eventBindingHash.empty();
 }

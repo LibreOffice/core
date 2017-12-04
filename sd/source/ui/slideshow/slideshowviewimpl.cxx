@@ -252,7 +252,7 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& )
     }
 }
 
-void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e )
+void SlideShowView::paint( const awt::PaintEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 

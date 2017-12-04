@@ -121,14 +121,14 @@ private:
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
 protected:
     /// @throw css::uno::RuntimeException
-    OUString SAL_CALL GetNote();
+    OUString GetNote();
 
     /// @throw css::uno::RuntimeException
-    OUString SAL_CALL GetAllDisplayNote();
+    OUString GetAllDisplayNote();
     /// @throw css::uno::RuntimeException
-    OUString SAL_CALL getShadowAttrs();
+    OUString getShadowAttrs();
     /// @throw css::uno::RuntimeException
-    OUString SAL_CALL getBorderAttrs();
+    OUString getBorderAttrs();
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
 };

@@ -98,7 +98,7 @@ OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool,
     throw RuntimeException();
 }
 
-const OUString& SAL_CALL
+const OUString&
 IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
     const OUString& PhoneticEntry, const lang::Locale& rLocale )
 {

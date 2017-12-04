@@ -76,7 +76,7 @@ namespace svx
 
 
         // call the fireEvent method from the table when it exists.
-        void SAL_CALL fireEvent(
+        void fireEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,
                     const css::uno::Any& _rNewValue
@@ -173,7 +173,7 @@ namespace svx
         virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex ) override;
 
 
-        void SAL_CALL fireEvent(
+        void fireEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,
                     const css::uno::Any& _rNewValue
@@ -256,7 +256,7 @@ namespace svx
         virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
 
-        void SAL_CALL fireEvent(
+        void fireEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,
                     const css::uno::Any& _rNewValue

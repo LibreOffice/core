@@ -35,7 +35,7 @@ sal_Int16 SAL_CALL TextToPronounce_zh::getType()
     return TransliterationType::ONE_TO_ONE| TransliterationType::IGNORE;
 }
 
-const sal_Unicode* SAL_CALL
+const sal_Unicode*
 TextToPronounce_zh::getPronounce(const sal_Unicode ch)
 {
     static const sal_Unicode emptyString[]={0};

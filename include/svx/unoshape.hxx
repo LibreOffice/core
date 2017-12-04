@@ -148,7 +148,7 @@ protected:
 
     css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap ) const;
 
-    bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName );
+    bool SetFillAttribute( sal_Int32 nWID, const OUString& rName );
 
     /** called from the XActionLockable interface methods on initial locking */
     virtual void lock();
@@ -228,34 +228,34 @@ public:
 
     // access methods for master objects
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL _getPropertySetInfo(  );
+    css::uno::Reference< css::beans::XPropertySetInfo > _getPropertySetInfo(  );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue );
+    void _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any SAL_CALL _getPropertyValue( const OUString& PropertyName );
+    css::uno::Any _getPropertyValue( const OUString& PropertyName );
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::beans::PropertyState SAL_CALL _getPropertyState( const OUString& PropertyName );
+    css::beans::PropertyState _getPropertyState( const OUString& PropertyName );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _setPropertyToDefault( const OUString& PropertyName );
+    void _setPropertyToDefault( const OUString& PropertyName );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any SAL_CALL _getPropertyDefault( const OUString& aPropertyName );
+    css::uno::Any _getPropertyDefault( const OUString& aPropertyName );
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
+    css::uno::Sequence< OUString > _getSupportedServiceNames();
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Type > SAL_CALL _getTypes(  );
+    css::uno::Sequence< css::uno::Type > _getTypes(  );
 
     void setMaster( SvxShapeMaster* pMaster );
 

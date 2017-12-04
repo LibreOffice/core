@@ -1890,7 +1890,7 @@ void SAL_CALL OOo2OasisTransformer::startDocument()
     XMLTransformerBase::startDocument();
 }
 
-void SAL_CALL OOo2OasisTransformer::Initialize(
+void OOo2OasisTransformer::Initialize(
                 const Sequence< Any >& rArguments )
 {
     OSL_ENSURE( !GetDocHandler().is(), "duplication initialization" );

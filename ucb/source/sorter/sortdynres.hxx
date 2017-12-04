@@ -136,7 +136,7 @@ public:
 
     // own methods:
 
-    void SAL_CALL impl_OwnerDies();
+    void impl_OwnerDies();
 };
 
 

@@ -265,7 +265,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
     return createDocumentAlive(_frame,false);
 }
 
-uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame,bool _bHidden )
+uno::Reference< frame::XModel > OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame,bool _bHidden )
 {
     uno::Reference< frame::XModel > xModel;
     OUString sOutputName = getNewOutputName(); // starts implicite the report generator

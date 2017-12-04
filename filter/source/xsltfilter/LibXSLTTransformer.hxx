@@ -59,10 +59,10 @@ namespace XSLT
     {
     public:
         Reader(LibXSLTTransformer* transformer);
-        int SAL_CALL read(char * buffer, int len);
-        int SAL_CALL write(const char * buffer, int len);
+        int read(char * buffer, int len);
+        int write(const char * buffer, int len);
         void forceStateStopped();
-        int SAL_CALL closeOutput();
+        int closeOutput();
 
     private:
         virtual ~Reader() override;
@@ -156,19 +156,19 @@ namespace XSLT
         virtual void SAL_CALL
         initialize(const Sequence<Any>& params) override;
 
-        void SAL_CALL
+        void
         done();
 
-        void SAL_CALL
+        void
         error(const OUString& msg);
 
-        const OString& SAL_CALL
+        const OString&
         getStyleSheetURL() { return m_styleSheetURL; }
 
-        const ::std::map<const char*, OString>& SAL_CALL
+        const ::std::map<const char*, OString>&
         getParameters() { return m_parameters; }
 
-        const css::uno::Reference<css::uno::XComponentContext>& SAL_CALL
+        const css::uno::Reference<css::uno::XComponentContext>&
         getComponentContext() {
             return m_xContext;
         }

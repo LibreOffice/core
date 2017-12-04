@@ -55,8 +55,8 @@ class XStream_impl :  public cppu::WeakImplHelper<
          *  Returns an error code as given by filerror.hxx
          */
 
-        sal_Int32 SAL_CALL CtorSuccess() { return m_nErrorCode;}
-        sal_Int32 SAL_CALL getMinorError() { return m_nMinorErrorCode;}
+        sal_Int32 CtorSuccess() { return m_nErrorCode;}
+        sal_Int32 getMinorError() { return m_nMinorErrorCode;}
 
         virtual ~XStream_impl() override;
 
@@ -139,7 +139,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
         /// @throws css::io::NotConnectedException
         /// @throws css::io::IOException
         /// @throws css::uno::RuntimeException
-        void SAL_CALL
+        void
         closeStream();
 
     };

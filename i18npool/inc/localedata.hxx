@@ -90,20 +90,20 @@ public:
     virtual css::uno::Sequence< css::i18n::FormatElement > SAL_CALL getAllFormats( const css::lang::Locale& rLocale ) override;
     virtual css::uno::Sequence< css::i18n::Implementation > SAL_CALL getCollatorImplementations( const css::lang::Locale& rLocale ) override;
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
+    OUString getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
     virtual css::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) override;
     virtual css::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) override ;
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > SAL_CALL getBreakIteratorRules( const css::lang::Locale& rLocale ) ;
+    css::uno::Sequence< OUString > getBreakIteratorRules( const css::lang::Locale& rLocale ) ;
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getAllInstalledLocaleNames() override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSearchOptions( const css::lang::Locale& rLocale ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getCollationOptions( const css::lang::Locale& rLocale ) override;
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const css::lang::Locale& rLocale );
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getContinuousNumberingLevels( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const css::lang::Locale& rLocale );
+    css::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
 
     // XLocaleData4
     virtual css::uno::Sequence< OUString > SAL_CALL getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;
@@ -113,23 +113,23 @@ public:
 
     // following methods are used by indexentry service
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > SAL_CALL getIndexAlgorithm( const css::lang::Locale& rLocale );
+    css::uno::Sequence< OUString > getIndexAlgorithm( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL getDefaultIndexAlgorithm( const css::lang::Locale& rLocale );
+    OUString getDefaultIndexAlgorithm( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL getIndexKeysByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
+    OUString getIndexKeysByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
+    OUString getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::i18n::UnicodeScript > SAL_CALL getUnicodeScripts( const css::lang::Locale& rLocale );
+    css::uno::Sequence< css::i18n::UnicodeScript > getUnicodeScripts( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > SAL_CALL getFollowPageWords( const css::lang::Locale& rLocale );
+    css::uno::Sequence< OUString > getFollowPageWords( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL hasPhonetic( const css::lang::Locale& rLocale );
+    bool hasPhonetic( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL isPhonetic( const css::lang::Locale& rLocale, const OUString& algorithm );
+    bool isPhonetic( const css::lang::Locale& rLocale, const OUString& algorithm );
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL getHangingCharacters( const css::lang::Locale& rLocale );
+    OUString getHangingCharacters( const css::lang::Locale& rLocale );
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -142,9 +142,9 @@ private:
     OUString ref_name;
 
     /// @throws css::uno::RuntimeException
-    oslGenericFunction SAL_CALL getFunctionSymbol( const css::lang::Locale& rLocale, const sal_Char* pFunction );
-    sal_Unicode ** SAL_CALL getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
-    sal_Unicode ** SAL_CALL getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, const OUString& rAlgorithm);
+    oslGenericFunction getFunctionSymbol( const css::lang::Locale& rLocale, const sal_Char* pFunction );
+    sal_Unicode ** getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
+    sal_Unicode ** getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, const OUString& rAlgorithm);
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::i18n::CalendarItem2 > &
         getCalendarItemByName(const OUString& name,

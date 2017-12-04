@@ -202,14 +202,14 @@ public:
     const css::uno::Reference < css::ui::dialogs::XFilePicker3 >& GetFilePicker() const;
 
     // XFilePickerListener methods
-    void SAL_CALL   FileSelectionChanged();
-    void SAL_CALL   DirectoryChanged();
+    void   FileSelectionChanged();
+    void   DirectoryChanged();
     virtual void SAL_CALL   ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
-    void SAL_CALL   DialogSizeChanged();
+    void   DialogSizeChanged();
     static OUString SAL_CALL    HelpRequested( const css::ui::dialogs::FilePickerEvent& aEvent );
 
     // XDialogClosedListener methods
-    void SAL_CALL   DialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent );
+    void   DialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent );
 
     /** sets help ids for the controls in the dialog
         @param _pControlId

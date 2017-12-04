@@ -11,10 +11,11 @@
 
 class Class1
 {
-    void SAL_CALL method1(); // xxexpected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
+    void SAL_CALL method1(); // expected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
 };
-void SAL_CALL Class1::method1() {
-} // xxexpected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
+void SAL_CALL Class1::method1()
+{ // expected-error@-1 {{SAL_CALL unnecessary here [loplugin:salcall]}}
+}
 
 class Class2
 {
@@ -22,12 +23,15 @@ class Class2
 };
 void SAL_CALL Class2::method1() {} // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
 
+// comment this out because it seems to generate a warning in some internal buffer of clang that I can't annotate
+#if 0
 // no warning, this appears to be legal
 class Class3
 {
-    void SAL_CALL method1();
+    void SAL_CALL method1(); // expected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
 };
 void Class3::method1() {}
+#endif
 
 // no warning, normal case for reference
 class Class4

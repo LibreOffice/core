@@ -350,7 +350,7 @@ namespace accessibility
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        css::uno::Reference< css::accessibility::XAccessible > SAL_CALL GetAt( const css::awt::Point& aPoint );
+        css::uno::Reference< css::accessibility::XAccessible > GetAt( const css::awt::Point& aPoint );
 
     private:
 

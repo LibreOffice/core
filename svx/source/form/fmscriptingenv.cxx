@@ -95,7 +95,7 @@ namespace svxform
         virtual void SAL_CALL disposing( const EventObject& Source ) override;
 
         // lifetime control
-        void SAL_CALL dispose();
+        void dispose();
 
     protected:
         virtual ~FormScriptListener() override;
@@ -762,7 +762,7 @@ namespace svxform
     }
 
 
-    void SAL_CALL FormScriptListener::dispose()
+    void FormScriptListener::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_pScriptExecutor = nullptr;

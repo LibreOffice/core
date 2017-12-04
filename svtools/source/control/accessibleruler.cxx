@@ -117,7 +117,7 @@ awt::Size SAL_CALL SvtRulerAccessible::getSize()
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-bool SAL_CALL SvtRulerAccessible::isVisible()
+bool SvtRulerAccessible::isVisible()
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
 

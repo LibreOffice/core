@@ -386,7 +386,7 @@ namespace
     };
 }
 
-bool SAL_CALL Desktop::terminateQuickstarterToo()
+bool Desktop::terminateQuickstarterToo()
 {
     QuickstartSuppressor aQuickstartSuppressor(this, m_xQuickLauncher);
     m_bSession = true;

@@ -106,7 +106,7 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
     return nullptr;
 }
 
-Reference< XExtendedInputSequenceChecker >& SAL_CALL
+Reference< XExtendedInputSequenceChecker >&
 InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char const * rLanguage)
 {
     if (cachedItem && cachedItem->aLanguage == rLanguage) {

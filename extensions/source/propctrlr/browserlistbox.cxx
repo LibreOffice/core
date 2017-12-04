@@ -147,7 +147,7 @@ namespace pcr
             <type scope="css::inspection">XPropertyControlContext</type> methods
             will throw a <type scope="css::lang">DisposedException</type>.
         */
-        void SAL_CALL dispose();
+        void dispose();
 
         /** sets the notification mode, so that notifications received from the controls are
             forwarded to our OBrowserListBox either synchronously or asynchronously
@@ -207,7 +207,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL PropertyControlContext_Impl::dispose()
+    void PropertyControlContext_Impl::dispose()
     {
         SolarMutexGuard aGuard;
         if ( impl_isDisposed_nothrow() )
@@ -918,7 +918,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OBrowserListBox::focusGained( const Reference< XPropertyControl >& _rxControl )
+    void OBrowserListBox::focusGained( const Reference< XPropertyControl >& _rxControl )
     {
         DBG_TESTSOLARMUTEX();
 
@@ -934,7 +934,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OBrowserListBox::valueChanged( const Reference< XPropertyControl >& _rxControl )
+    void OBrowserListBox::valueChanged( const Reference< XPropertyControl >& _rxControl )
     {
         DBG_TESTSOLARMUTEX();
 
@@ -956,7 +956,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OBrowserListBox::activateNextControl( const Reference< XPropertyControl >& _rxCurrentControl )
+    void OBrowserListBox::activateNextControl( const Reference< XPropertyControl >& _rxCurrentControl )
     {
         DBG_TESTSOLARMUTEX();
 

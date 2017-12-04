@@ -466,7 +466,7 @@ Reference< XCloneable > SAL_CALL OGridColumn::createClone(  )
 
 // XPersistObject
 
-void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     // 1. Write the UnoControl
     Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
@@ -514,7 +514,7 @@ void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStr
 }
 
 
-void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
+void OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     // 1. Read the UnoControl
     sal_Int32 nLen = _rxInStream->readLong();

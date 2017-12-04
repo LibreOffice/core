@@ -240,42 +240,42 @@ namespace fileaccess {
 
         // Private Methods
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::ucb::XCommandInfo > SAL_CALL
+        css::uno::Reference< css::ucb::XCommandInfo >
         getCommandInfo();
 
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo();
 
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::sdbc::XRow > SAL_CALL
+        css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,
             const css::uno::Sequence< css::beans::Property >& PropertySet );
 
-        css::uno::Sequence< css::uno::Any > SAL_CALL
+        css::uno::Sequence< css::uno::Any >
         setPropertyValues(
             sal_Int32 nMyCommandIdentifier,
             const css::uno::Sequence< css::beans::PropertyValue >& Values );
 
-        css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
+        css::uno::Reference< css::ucb::XDynamicResultSet >
         open(
             sal_Int32 nMyCommandIdentifier,
             const css::ucb::OpenCommandArgument2& aCommandArgument );
 
-        void SAL_CALL
+        void
         deleteContent( sal_Int32 nMyCommandIdentifier );
 
 
-        void SAL_CALL
+        void
         transfer( sal_Int32 nMyCommandIdentifier,
                   const css::ucb::TransferInfo& aTransferInfo );
 
-        void SAL_CALL
+        void
         insert( sal_Int32 nMyCommandIdentifier,
                 const css::ucb::InsertCommandArgument& aInsertArgument );
 
-        void SAL_CALL endTask( sal_Int32 CommandId );
+        void endTask( sal_Int32 CommandId );
 
         friend class ContentEventNotifier;
     };

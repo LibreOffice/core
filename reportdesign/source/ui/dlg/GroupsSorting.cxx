@@ -114,9 +114,9 @@ public:
 
     // XContainerListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent);
+    void elementInserted(const css::container::ContainerEvent& rEvent);
     /// @throws css::uno::RuntimeException
-    void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent);
+    void elementRemoved(const css::container::ContainerEvent& rEvent);
 
     virtual Size GetOptimalSize() const override;
 
@@ -600,7 +600,7 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
 
 // XContainerListener
 
-void SAL_CALL OFieldExpressionControl::elementInserted(const container::ContainerEvent& evt)
+void OFieldExpressionControl::elementInserted(const container::ContainerEvent& evt)
 {
     if ( m_bIgnoreEvent )
         return;
@@ -640,7 +640,7 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
     }
 }
 
-void SAL_CALL OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt)
+void OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );

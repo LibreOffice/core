@@ -132,21 +132,21 @@ CachedContentResultSet::CCRS_Cache::~CCRS_Cache()
 {
 }
 
-void SAL_CALL CachedContentResultSet::CCRS_Cache
+void CachedContentResultSet::CCRS_Cache
     ::clear()
 {
     m_pResult.reset();
     clearMappedReminder();
 }
 
-void SAL_CALL CachedContentResultSet::CCRS_Cache
+void CachedContentResultSet::CCRS_Cache
     ::loadData( const FetchResult& rResult )
 {
     clear();
     m_pResult.reset( new FetchResult( rResult ) );
 }
 
-bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool CachedContentResultSet::CCRS_Cache
     ::hasRow( sal_Int32 row )
 {
     if( !m_pResult )
@@ -161,7 +161,7 @@ bool SAL_CALL CachedContentResultSet::CCRS_Cache
     return nStart <= row && row <= nEnd;
 }
 
-sal_Int32 SAL_CALL CachedContentResultSet::CCRS_Cache
+sal_Int32 CachedContentResultSet::CCRS_Cache
     ::getMaxRow()
 {
     if( !m_pResult )
@@ -173,7 +173,7 @@ sal_Int32 SAL_CALL CachedContentResultSet::CCRS_Cache
         return nEnd;
 }
 
-bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool CachedContentResultSet::CCRS_Cache
     ::hasKnownLast()
 {
     if( !m_pResult )
@@ -184,7 +184,7 @@ bool SAL_CALL CachedContentResultSet::CCRS_Cache
         && m_pResult->Rows.getLength();
 }
 
-bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool CachedContentResultSet::CCRS_Cache
     ::hasCausedException( sal_Int32 nRow )
 {
     if( !m_pResult )
@@ -199,7 +199,7 @@ bool SAL_CALL CachedContentResultSet::CCRS_Cache
     return nRow == nEnd+1;
 }
 
-Any& SAL_CALL CachedContentResultSet::CCRS_Cache
+Any& CachedContentResultSet::CCRS_Cache
     ::getRowAny( sal_Int32 nRow )
 {
     if( !nRow )
@@ -216,7 +216,7 @@ Any& SAL_CALL CachedContentResultSet::CCRS_Cache
     return (m_pResult->Rows)[nDiff];
 }
 
-void SAL_CALL CachedContentResultSet::CCRS_Cache
+void CachedContentResultSet::CCRS_Cache
     ::remindMapped( sal_Int32 nRow )
 {
     //remind that this row was mapped
@@ -230,7 +230,7 @@ void SAL_CALL CachedContentResultSet::CCRS_Cache
         (*pMappedReminder)[nDiff] = true;
 }
 
-bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool CachedContentResultSet::CCRS_Cache
     ::isRowMapped( sal_Int32 nRow )
 {
     if( !m_pMappedReminder || !m_pResult )
@@ -243,14 +243,14 @@ bool SAL_CALL CachedContentResultSet::CCRS_Cache
     return false;
 }
 
-void SAL_CALL CachedContentResultSet::CCRS_Cache
+void CachedContentResultSet::CCRS_Cache
     ::clearMappedReminder()
 {
     delete m_pMappedReminder;
     m_pMappedReminder = nullptr;
 }
 
-Sequence< sal_Bool >* SAL_CALL CachedContentResultSet::CCRS_Cache
+Sequence< sal_Bool >* CachedContentResultSet::CCRS_Cache
     ::getMappedReminder()
 {
     if( !m_pMappedReminder )
@@ -263,7 +263,7 @@ Sequence< sal_Bool >* SAL_CALL CachedContentResultSet::CCRS_Cache
     return m_pMappedReminder;
 }
 
-const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
+const Any& CachedContentResultSet::CCRS_Cache
     ::getAny( sal_Int32 nRow, sal_Int32 nColumnIndex )
 {
     if( !nColumnIndex )
@@ -289,7 +289,7 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
     return (*rRow)[nColumnIndex-1];
 }
 
-OUString SAL_CALL CachedContentResultSet::CCRS_Cache
+OUString CachedContentResultSet::CCRS_Cache
     ::getContentIdentifierString( sal_Int32 nRow )
 {
     try
@@ -310,7 +310,7 @@ OUString SAL_CALL CachedContentResultSet::CCRS_Cache
     }
 }
 
-Reference< XContentIdentifier > SAL_CALL CachedContentResultSet::CCRS_Cache
+Reference< XContentIdentifier > CachedContentResultSet::CCRS_Cache
     ::getContentIdentifier( sal_Int32 nRow )
 {
     try
@@ -331,7 +331,7 @@ Reference< XContentIdentifier > SAL_CALL CachedContentResultSet::CCRS_Cache
     }
 }
 
-Reference< XContent > SAL_CALL CachedContentResultSet::CCRS_Cache
+Reference< XContent > CachedContentResultSet::CCRS_Cache
     ::getContent( sal_Int32 nRow )
 {
     try
@@ -371,14 +371,14 @@ class CCRS_PropertySetInfo :
     long                    m_nFetchDirectionPropertyHandle;
 
 private:
-    sal_Int32 SAL_CALL
+    sal_Int32
     impl_getRemainedHandle() const;
 
-    bool SAL_CALL
+    bool
     impl_queryProperty(
             const OUString& rName
             , css::beans::Property& rProp ) const;
-    sal_Int32 SAL_CALL
+    sal_Int32
     impl_getPos( const OUString& rName ) const;
 
     static bool SAL_CALL
@@ -553,7 +553,7 @@ sal_Bool SAL_CALL CCRS_PropertySetInfo
 // impl_ methods.
 
 
-sal_Int32 SAL_CALL CCRS_PropertySetInfo
+sal_Int32 CCRS_PropertySetInfo
             ::impl_getPos( const OUString& rName ) const
 {
     for( sal_Int32 nN = m_pProperties->getLength(); nN--; )
@@ -565,7 +565,7 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
     return -1;
 }
 
-bool SAL_CALL CCRS_PropertySetInfo
+bool CCRS_PropertySetInfo
         ::impl_queryProperty( const OUString& rName, Property& rProp ) const
 {
     for( sal_Int32 nN = m_pProperties->getLength(); nN--; )
@@ -594,7 +594,7 @@ bool SAL_CALL CCRS_PropertySetInfo
     || rPropertyName == g_sPropertyNameForFetchDirection );
 }
 
-sal_Int32 SAL_CALL CCRS_PropertySetInfo
+sal_Int32 CCRS_PropertySetInfo
             ::impl_getRemainedHandle( ) const
 {
     sal_Int32 nHandle = 1;
@@ -676,7 +676,7 @@ CachedContentResultSet::~CachedContentResultSet()
 // impl_ methods.
 
 
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::applyPositionToOrigin( sal_Int32 nRow )
 {
     impl_EnsureNotDisposed();
@@ -802,14 +802,14 @@ if( nMax > nCurCount )                                              \
 if( bIsFinalCount && !bCurIsFinalCount )                            \
     impl_changeIsRowCountFinal( bCurIsFinalCount, bIsFinalCount );
 
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::impl_fetchData( sal_Int32 nRow
         , sal_Int32 nFetchSize, sal_Int32 nFetchDirection )
 {
     FETCH_XXX( m_aCache, m_xFetchProvider, fetch );
 }
 
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::impl_changeRowCount( sal_Int32 nOld, sal_Int32 nNew )
 {
     OSL_ENSURE( nNew > nOld, "RowCount only can grow" );
@@ -832,7 +832,7 @@ void SAL_CALL CachedContentResultSet
     impl_notifyPropertyChangeListeners( aEvt );
 }
 
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::impl_changeIsRowCountFinal( bool bOld, bool bNew )
 {
     OSL_ENSURE( !bOld && bNew, "This change is not allowed for IsRowCountFinal" );
@@ -855,14 +855,14 @@ void SAL_CALL CachedContentResultSet
     impl_notifyPropertyChangeListeners( aEvt );
 }
 
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::impl_isKnownValidPosition( sal_Int32 nRow )
 {
     return m_nKnownCount && nRow
             && nRow <= m_nKnownCount;
 }
 
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::impl_isKnownInvalidPosition( sal_Int32 nRow )
 {
     if( !nRow )

@@ -937,7 +937,7 @@ void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInput
     m_nStreamMode = PACKAGE_STREAM_DETECT;
 }
 
-uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
+uno::Reference< io::XInputStream > ZipPackageStream::getRawData()
 {
     try
     {

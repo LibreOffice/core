@@ -51,14 +51,14 @@ namespace frm
     }
 
 
-    void SAL_CALL OErrorBroadcaster::disposing()
+    void OErrorBroadcaster::disposing()
     {
         EventObject aDisposeEvent( static_cast< XSQLErrorBroadcaster* >( this ) );
         m_aErrorListeners.disposeAndClear( aDisposeEvent );
     }
 
 
-    void SAL_CALL OErrorBroadcaster::onError( const SQLException& _rException, const OUString& _rContextDescription )
+    void OErrorBroadcaster::onError( const SQLException& _rException, const OUString& _rContextDescription )
     {
         Any aError;
         if ( !_rContextDescription.isEmpty() )
@@ -70,7 +70,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OErrorBroadcaster::onError( const css::sdb::SQLErrorEvent& _rError )
+    void OErrorBroadcaster::onError( const css::sdb::SQLErrorEvent& _rError )
     {
         if ( m_aErrorListeners.getLength() )
         {

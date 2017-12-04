@@ -71,7 +71,7 @@ namespace unotools
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) override;
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerPoint2D& pos ) override;
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::rendering::XBitmapPalette > SAL_CALL getPalette(  );
+        css::uno::Reference< css::rendering::XBitmapPalette > getPalette(  );
         virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) override;
 
         // XBitmapPalette

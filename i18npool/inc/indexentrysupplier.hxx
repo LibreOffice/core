@@ -77,9 +77,9 @@ private:
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const OUString& name);
+    bool createLocaleSpecificIndexEntrySupplier(const OUString& name);
     /// @throws css::uno::RuntimeException
-    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > const & SAL_CALL getLocaleSpecificIndexEntrySupplier(
+    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > const & getLocaleSpecificIndexEntrySupplier(
         const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
 
     css::lang::Locale aLocale;

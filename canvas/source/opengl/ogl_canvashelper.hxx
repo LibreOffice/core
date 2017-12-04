@@ -137,7 +137,7 @@ namespace oglcanvas
                                           const css::uno::Reference<
                                                 css::geometry::XMapping2D >&       xMapping );
 
-        css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL
+        css::uno::Reference< css::rendering::XCanvasFont >
             createFont( const css::rendering::XCanvas*             pCanvas,
                         const css::rendering::FontRequest&         fontRequest,
                         const css::uno::Sequence<

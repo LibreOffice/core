@@ -77,9 +77,9 @@ private:
     css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     rtl::Reference<TransliterationImpl> translit;
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index );
+    OUString makeNumberingIdentifier( sal_Int16 index );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL isScriptFlagEnabled(const OUString& aName );
+    bool isScriptFlagEnabled(const OUString& aName );
 };
 
 }

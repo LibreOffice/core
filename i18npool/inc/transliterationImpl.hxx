@@ -91,7 +91,7 @@ private:
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL loadModuleByName( const OUString& implName,
+    bool loadModuleByName( const OUString& implName,
         css::uno::Reference<css::i18n::XExtendedTransliteration> & body, const css::lang::Locale& rLocale);
 
     void clear();
@@ -101,7 +101,7 @@ private:
         css::uno::Reference< css::i18n::XExtendedTransliteration >& body );
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > SAL_CALL getRange(
+    css::uno::Sequence< OUString > getRange(
         const css::uno::Sequence< OUString > &inStrs,
         sal_Int32 length, const sal_Int16 _nCascade);
 };

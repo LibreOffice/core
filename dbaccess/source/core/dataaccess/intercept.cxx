@@ -54,7 +54,7 @@ using namespace ::cppu;
 #define DISPATCH_RELOAD     5
 // the OSL_ENSURE in CTOR has to be changed too, when adding new defines
 
-void SAL_CALL OInterceptor::dispose()
+void OInterceptor::dispose()
 {
     EventObject aEvt( *this );
 

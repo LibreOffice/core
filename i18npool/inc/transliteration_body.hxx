@@ -71,7 +71,7 @@ class Transliteration_casemapping : public Transliteration_body
 {
 public:
     Transliteration_casemapping();
-    void SAL_CALL setMappingType(const MappingType rMappingType, const css::lang::Locale& rLocale );
+    void setMappingType(const MappingType rMappingType, const css::lang::Locale& rLocale );
 };
 
 class Transliteration_togglecase : public Transliteration_body

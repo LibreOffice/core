@@ -875,7 +875,7 @@ void SAL_CALL AccessibleControlShape::elementReplaced( const css::container::Con
     // not interested in
 }
 
-AccessibleControlShape* SAL_CALL AccessibleControlShape::GetLabeledByControlShape( )
+AccessibleControlShape* AccessibleControlShape::GetLabeledByControlShape( )
 {
     if(m_xControlModel.is())
     {

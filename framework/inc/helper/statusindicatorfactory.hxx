@@ -216,14 +216,14 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
                            const OUString&                                    sText ,
                                  sal_Int32                                           nRange);
 
-        void SAL_CALL reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+        void reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
 
-        void SAL_CALL end(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+        void end(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
 
-        void SAL_CALL setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                       const OUString&                                    sText );
 
-        void SAL_CALL setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);
 
     // specials

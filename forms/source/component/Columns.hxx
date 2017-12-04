@@ -85,8 +85,8 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
 
     // XPersistObject
-    void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
-    void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
 
     // XPropertySet
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override = 0;

@@ -92,7 +92,7 @@ namespace connectivity
 
             // Added to enable me to use SQLInterpreter which requires an
             // XNameAccess i/f to access tables.
-            css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
+            css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
 
             void throwSQLException( const ErrorDescriptor& _rError, const css::uno::Reference< css::uno::XInterface >& _rxContext );
             void throwSQLException( const char* pErrorResourceId, const css::uno::Reference< css::uno::XInterface >& _rxContext );

@@ -51,7 +51,7 @@ public:
     // Constructors
     Calendar_gregorian();
     Calendar_gregorian(const Era *_eraArray);
-    void SAL_CALL init(const Era *_eraArray);
+    void init(const Era *_eraArray);
 
     /**
     * Destructor

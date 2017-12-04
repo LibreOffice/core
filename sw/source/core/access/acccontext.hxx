@@ -186,7 +186,7 @@ protected:
      bool IsEditableState();
 
     /// @throws css::uno::RuntimeException
-    css::awt::Rectangle SAL_CALL
+    css::awt::Rectangle
         getBoundsImpl(bool bRelative);
 
     // #i85634#
@@ -201,7 +201,7 @@ protected:
     virtual ~SwAccessibleContext() override;
 
     // Return a reference to the parent.
-    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    css::uno::Reference< css::accessibility::XAccessible>
         getAccessibleParentImpl();
 
 public:

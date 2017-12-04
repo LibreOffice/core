@@ -181,7 +181,7 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& ) override;
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL paint( const css::awt::PaintEvent& e );
+    void paint( const css::awt::PaintEvent& e );
 
     // XSlideShowView methods
     virtual css::uno::Reference< css::rendering::XSpriteCanvas > SAL_CALL getCanvas(  ) override;

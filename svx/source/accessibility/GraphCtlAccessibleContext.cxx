@@ -113,7 +113,7 @@ SvxGraphCtrlAccessibleContext::~SvxGraphCtrlAccessibleContext()
 /** returns the XAccessible interface for a given SdrObject.
     Multiple calls for the same SdrObject return the same XAccessible.
 */
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( const SdrObject* pObj )
+Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const SdrObject* pObj )
 {
     Reference<XAccessible> xAccessibleShape;
 

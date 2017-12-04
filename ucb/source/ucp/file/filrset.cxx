@@ -202,7 +202,7 @@ void XResultSet_impl::isFinalChanged()
 }
 
 
-bool SAL_CALL
+bool
 XResultSet_impl::OneMore()
 {
     if( ! m_nIsOpen )

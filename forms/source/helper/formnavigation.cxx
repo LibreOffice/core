@@ -52,7 +52,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OFormNavigationHelper::dispose( )
+    void OFormNavigationHelper::dispose( )
     {
         m_pFeatureInterception->dispose();
         disconnectDispatchers();

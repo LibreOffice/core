@@ -120,7 +120,7 @@ const sal_Unicode* getHanja2HangulData();
 
 #endif
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toHanja)
 {
     sal_Unicode ch;

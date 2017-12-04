@@ -51,13 +51,13 @@ using namespace ::com::sun::star::embed;
 
 namespace XSLT
 {
-    Reference<XStream> SAL_CALL OleHandler::createTempFile() {
+    Reference<XStream> OleHandler::createTempFile() {
         Reference<XStream> tempFile( TempFile::create(m_xContext), UNO_QUERY);
         OSL_ASSERT(tempFile.is());
         return tempFile;
     }
 
-    void SAL_CALL OleHandler::ensureCreateRootStorage()
+    void OleHandler::ensureCreateRootStorage()
     {
         if (m_storage == nullptr || m_rootStream == nullptr)
             {
@@ -72,7 +72,7 @@ namespace XSLT
             }
     }
 
-    void SAL_CALL OleHandler::initRootStorageFromBase64(const OString& content)
+    void OleHandler::initRootStorageFromBase64(const OString& content)
     {
         Sequence<sal_Int8> oleData;
         ::sax::Converter::decodeBase64(oleData, OStringToOUString(
@@ -94,7 +94,7 @@ namespace XSLT
         m_storage = cont;
     }
 
-    OString SAL_CALL
+    OString
     OleHandler::encodeSubStorage(const OUString& streamName)
     {
         if (!m_storage->hasByName(streamName))
@@ -146,7 +146,7 @@ namespace XSLT
         return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
     }
 
-    void SAL_CALL
+    void
     OleHandler::insertByName(const OUString& streamName, const OString& content)
     {
         if ( streamName == "oledata.mso" )
@@ -161,7 +161,7 @@ namespace XSLT
     }
 
     const OString
-    SAL_CALL OleHandler::getByName(const OUString& streamName)
+    OleHandler::getByName(const OUString& streamName)
     {
         if ( streamName == "oledata.mso" )
         {
@@ -181,7 +181,7 @@ namespace XSLT
         return encodeSubStorage(streamName);
     }
 
-    void SAL_CALL
+    void
     OleHandler::insertSubStorage(const OUString& streamName, const OString& content)
     {
         //decode the base64 string

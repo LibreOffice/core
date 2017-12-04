@@ -2317,7 +2317,7 @@ namespace
     }
 }
 
-void SAL_CALL ODbaseTable::renameImpl( const OUString& newName )
+void ODbaseTable::renameImpl( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 

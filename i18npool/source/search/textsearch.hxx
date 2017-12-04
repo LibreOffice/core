@@ -124,7 +124,7 @@ class TextSearch: public cppu::WeakImplHelper
 
     bool checkCTLStart, checkCTLEnd;
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL isCellStart(const OUString& searchStr, sal_Int32 nPos);
+    bool isCellStart(const OUString& searchStr, sal_Int32 nPos);
 
 public:
     explicit TextSearch(

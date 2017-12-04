@@ -118,13 +118,13 @@ namespace pcr
 
             @seealso resumeAutoFire
         */
-        void SAL_CALL suspendAutoFire();
+        void suspendAutoFire();
 
         /** Suspends automatic firing of UI changes
 
             @seealso suspendAutoFire
         */
-        void SAL_CALL resumeAutoFire();
+        void resumeAutoFire();
 
         /** disposes the instance, so it becomes non-functional.
 
@@ -132,7 +132,7 @@ namespace pcr
             the latter will also be disposed, so that if anybody still holds a reference to them
             and tries to operate them will get a DisposedException.
         */
-        void SAL_CALL dispose();
+        void dispose();
 
         /** invokes m_pPropertyCheck to check whether a given property should be handled
         */

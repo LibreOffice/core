@@ -79,7 +79,7 @@ namespace frm
 
         // XComponent
         /// @throws css::uno::RuntimeException
-        void SAL_CALL dispose(  );
+        void dispose(  );
 
         // XDispatchProviderInterception
         virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;

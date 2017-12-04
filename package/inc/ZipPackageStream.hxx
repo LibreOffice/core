@@ -75,7 +75,7 @@ private:
     css::uno::Reference< css::io::XInputStream > const & GetOwnSeekStream();
     /// get raw data using unbuffered stream
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::io::XInputStream > SAL_CALL getRawData();
+    css::uno::Reference< css::io::XInputStream > getRawData();
 
 public:
     bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}

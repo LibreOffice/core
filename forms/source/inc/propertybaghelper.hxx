@@ -76,7 +76,7 @@ namespace frm
         void removeProperty( const OUString& _rName );
 
         // XPropertyAccess equivalent
-        css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues();
+        css::uno::Sequence< css::beans::PropertyValue > getPropertyValues();
         void setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& _rProps );
 
         // forwards to m_aDynamicProperties

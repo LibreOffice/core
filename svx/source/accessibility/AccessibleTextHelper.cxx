@@ -96,15 +96,15 @@ namespace accessibility
         virtual ~AccessibleTextHelper_Impl() override;
 
         // XAccessibleContext child handling methods
-        sal_Int32 SAL_CALL getAccessibleChildCount();
-        uno::Reference< XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i );
+        sal_Int32 getAccessibleChildCount();
+        uno::Reference< XAccessible > getAccessibleChild( sal_Int32 i );
 
         // XAccessibleEventBroadcaster child related methods
-        void SAL_CALL addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener );
-        void SAL_CALL removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener );
+        void addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener );
+        void removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener );
 
         // XAccessibleComponent child related methods
-        uno::Reference< XAccessible > SAL_CALL getAccessibleAtPoint( const awt::Point& aPoint );
+        uno::Reference< XAccessible > getAccessibleAtPoint( const awt::Point& aPoint );
 
         SvxEditSourceAdapter& GetEditSource() const;
 
@@ -1503,12 +1503,12 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL AccessibleTextHelper_Impl::getAccessibleChildCount()
+    sal_Int32 AccessibleTextHelper_Impl::getAccessibleChildCount()
     {
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleChild( sal_Int32 i )
+    uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleChild( sal_Int32 i )
     {
         i -= GetStartIndex();
 
@@ -1526,13 +1526,13 @@ namespace accessibility
             return nullptr;
     }
 
-    void SAL_CALL AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
+    void AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     {
         if( getNotifierClientId() != -1 )
             ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
     }
 
-    void SAL_CALL AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
+    void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     {
         if( getNotifierClientId() != -1 )
         {
@@ -1550,7 +1550,7 @@ namespace accessibility
         }
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleAtPoint( const awt::Point& _aPoint )
+    uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleAtPoint( const awt::Point& _aPoint )
     {
         // make given position relative
         if( !mxFrontEnd.is() )

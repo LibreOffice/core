@@ -54,7 +54,7 @@ ScVbaComment::ScVbaComment(
 
 // private helper functions
 
-uno::Reference< sheet::XSheetAnnotation > SAL_CALL
+uno::Reference< sheet::XSheetAnnotation >
 ScVbaComment::getAnnotation()
 {
     uno::Reference< table::XCell > xCell( mxRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
@@ -62,7 +62,7 @@ ScVbaComment::getAnnotation()
     return uno::Reference< sheet::XSheetAnnotation > ( xAnnoAnchor->getAnnotation(), uno::UNO_QUERY_THROW );
 }
 
-uno::Reference< sheet::XSheetAnnotations > SAL_CALL
+uno::Reference< sheet::XSheetAnnotations >
 ScVbaComment::getAnnotations()
 {
     uno::Reference< sheet::XSheetCellRange > xSheetCellRange(mxRange, ::uno::UNO_QUERY_THROW );
@@ -72,7 +72,7 @@ ScVbaComment::getAnnotations()
     return uno::Reference< sheet::XSheetAnnotations > ( xAnnosSupp->getAnnotations(), uno::UNO_QUERY_THROW );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaComment::getAnnotationIndex()
 {
     uno::Reference< sheet::XSheetAnnotations > xAnnos = getAnnotations();
@@ -97,7 +97,7 @@ ScVbaComment::getAnnotationIndex()
        return aIndex;
 }
 
-uno::Reference< excel::XComment > SAL_CALL
+uno::Reference< excel::XComment >
 ScVbaComment::getCommentByIndex( sal_Int32 Index )
 {
     uno::Reference< container::XIndexAccess > xIndexAccess( getAnnotations(), uno::UNO_QUERY_THROW );

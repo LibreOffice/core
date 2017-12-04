@@ -309,7 +309,7 @@ private:
     }
 
     /// @throws uno::RuntimeException
-    uno::Reference< rendering::XBitmapPalette > SAL_CALL getPalette(  )
+    uno::Reference< rendering::XBitmapPalette > getPalette(  )
     {
         uno::Reference< XBitmapPalette > aRet;
         if( mnBitsPerPixel == 8 )

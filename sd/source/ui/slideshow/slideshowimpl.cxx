@@ -2677,7 +2677,7 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor )
     setUsePen( true ); // enable pen mode, update color
 }
 
-void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk)
+void SlideshowImpl::setEraseAllInk(bool bEraseAllInk)
 {
     if( bEraseAllInk )
     {

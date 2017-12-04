@@ -67,7 +67,7 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent, Ruler& rRepresentation, const ::rtl::OUString& rName );
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL
+    bool
         isVisible();
 
     //=====  XAccessible  =====================================================

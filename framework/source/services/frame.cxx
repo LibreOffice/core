@@ -306,10 +306,10 @@ public:
 
 private:
 
-    void SAL_CALL impl_setPropertyValue(sal_Int32 nHandle,
+    void impl_setPropertyValue(sal_Int32 nHandle,
                                         const css::uno::Any& aValue);
 
-    css::uno::Any SAL_CALL impl_getPropertyValue(sal_Int32 nHandle);
+    css::uno::Any impl_getPropertyValue(sal_Int32 nHandle);
 
     /** set a new owner for this helper.
      *
@@ -331,11 +331,11 @@ private:
      *          The owner of this class has to be sure, that every new property does
      *          not clash with any existing one.
      */
-    void SAL_CALL impl_addPropertyInfo(const css::beans::Property& aProperty);
+    void impl_addPropertyInfo(const css::beans::Property& aProperty);
 
     /** mark the object as "dead".
      */
-    void SAL_CALL impl_disablePropertySet();
+    void impl_disablePropertySet();
 
     bool impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent);
 
@@ -2701,7 +2701,7 @@ sal_Int16 SAL_CALL Frame::resetActionLocks()
     return nCurrentLocks;
 }
 
-void SAL_CALL Frame::impl_setPropertyValue(sal_Int32 nHandle,
+void Frame::impl_setPropertyValue(sal_Int32 nHandle,
                                            const css::uno::Any& aValue)
 
 {
@@ -2758,7 +2758,7 @@ void SAL_CALL Frame::impl_setPropertyValue(sal_Int32 nHandle,
     }
 }
 
-css::uno::Any SAL_CALL Frame::impl_getPropertyValue(sal_Int32 nHandle)
+css::uno::Any Frame::impl_getPropertyValue(sal_Int32 nHandle)
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)
@@ -2809,7 +2809,7 @@ void Frame::impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::un
     m_xBroadcaster = xBroadcaster;
 }
 
-void SAL_CALL Frame::impl_addPropertyInfo(const css::beans::Property& aProperty)
+void Frame::impl_addPropertyInfo(const css::beans::Property& aProperty)
 {
     SolarMutexGuard g;
 
@@ -2820,7 +2820,7 @@ void SAL_CALL Frame::impl_addPropertyInfo(const css::beans::Property& aProperty)
     m_lProps[aProperty.Name] = aProperty;
 }
 
-void SAL_CALL Frame::impl_disablePropertySet()
+void Frame::impl_disablePropertySet()
 {
     SolarMutexGuard g;
 

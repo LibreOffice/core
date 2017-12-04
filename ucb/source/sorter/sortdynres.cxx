@@ -540,7 +540,7 @@ SortedDynamicResultSetListener::notify( const ListEvent& Changes )
 
 // own methods:
 
-void SAL_CALL
+void
 SortedDynamicResultSetListener::impl_OwnerDies()
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );

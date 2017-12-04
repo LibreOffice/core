@@ -59,7 +59,7 @@ SvxShowCharSetVirtualAcc::~SvxShowCharSetVirtualAcc()
 IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetVirtualAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_2 )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetVirtualAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_2 )
 
-void SAL_CALL SvxShowCharSetVirtualAcc::fireEvent(
+void SvxShowCharSetVirtualAcc::fireEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,
                     const css::uno::Any& _rNewValue

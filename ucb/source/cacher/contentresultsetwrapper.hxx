@@ -97,10 +97,10 @@ private:
 
     //methods:
 private:
-    void SAL_CALL
+    void
     impl_getPropertyChangeListenerContainer();
 
-    void SAL_CALL
+    void
     impl_getVetoableChangeListenerContainer();
 
 protected:
@@ -110,14 +110,14 @@ protected:
 
     virtual ~ContentResultSetWrapper() override;
 
-    void SAL_CALL impl_init();
-    void SAL_CALL impl_deinit();
+    void impl_init();
+    void impl_deinit();
 
     //--
 
-    void SAL_CALL impl_init_xRowOrigin();
-    void SAL_CALL impl_init_xContentAccessOrigin();
-    void SAL_CALL impl_init_xPropertySetOrigin();
+    void impl_init_xRowOrigin();
+    void impl_init_xContentAccessOrigin();
+    void impl_init_xPropertySetOrigin();
 
     //--
 
@@ -125,20 +125,20 @@ protected:
 
     /// @throws css::lang::DisposedException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     impl_EnsureNotDisposed();
 
-    void SAL_CALL
+    void
     impl_notifyPropertyChangeListeners(
             const css::beans::PropertyChangeEvent& rEvt );
 
     /// @throws css::beans::PropertyVetoException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     impl_notifyVetoableChangeListeners(
             const css::beans::PropertyChangeEvent& rEvt );
 
-    bool SAL_CALL impl_isForwardOnly();
+    bool impl_isForwardOnly();
 
 public:
 
@@ -376,7 +376,7 @@ public:
 
 
     // own methods:
-    void SAL_CALL impl_OwnerDies();
+    void impl_OwnerDies();
 };
 
 #endif

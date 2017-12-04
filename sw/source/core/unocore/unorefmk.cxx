@@ -949,7 +949,7 @@ SwXMeta::dispose()
     }
 }
 
-void SAL_CALL
+void
 SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
         const sal_uInt16 i_nWhich)
 {

@@ -93,35 +93,35 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     }
 }
 
-void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer )
+void Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer )
 {
     sInBuffer = rBuffer;
     nOffset = 0;
     nLength = rBuffer.getLength();
 }
 
-bool SAL_CALL Deflater::needsInput(  )
+bool Deflater::needsInput(  )
 {
     return nLength <=0;
 }
-void SAL_CALL Deflater::finish(  )
+void Deflater::finish(  )
 {
     bFinish = true;
 }
-sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+sal_Int32 Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
     OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
     return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
 }
-sal_Int64 SAL_CALL Deflater::getTotalIn(  )
+sal_Int64 Deflater::getTotalIn(  )
 {
     return pStream->total_in; // FIXME64: zlib doesn't look 64bit clean here
 }
-sal_Int64 SAL_CALL Deflater::getTotalOut(  )
+sal_Int64 Deflater::getTotalOut(  )
 {
     return pStream->total_out; // FIXME64: zlib doesn't look 64bit clean here
 }
-void SAL_CALL Deflater::reset(  )
+void Deflater::reset(  )
 {
 #if !defined Z_PREFIX
     deflateReset(pStream);
@@ -132,7 +132,7 @@ void SAL_CALL Deflater::reset(  )
     bFinished = false;
     nOffset = nLength = 0;
 }
-void SAL_CALL Deflater::end(  )
+void Deflater::end(  )
 {
     if (pStream != nullptr)
     {

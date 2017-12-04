@@ -69,7 +69,7 @@ private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::i18n::XExtendedInputSequenceChecker >& SAL_CALL getInputSequenceChecker(sal_Char const * rLanguage);
+    css::uno::Reference< css::i18n::XExtendedInputSequenceChecker >& getInputSequenceChecker(sal_Char const * rLanguage);
     static sal_Char* SAL_CALL getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
 

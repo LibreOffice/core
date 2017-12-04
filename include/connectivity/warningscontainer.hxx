@@ -67,8 +67,8 @@ namespace dbtools
         void appendWarning(const css::sdb::SQLContext& _rContext);
 
         // XWarningsSupplier equivalents
-        css::uno::Any SAL_CALL getWarnings(  ) const;
-        void SAL_CALL clearWarnings(  );
+        css::uno::Any getWarnings(  ) const;
+        void clearWarnings(  );
     };
 
 

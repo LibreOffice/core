@@ -96,7 +96,7 @@ FileProvider::~FileProvider()
 }
 
 // XInitialization
-void SAL_CALL FileProvider::init()
+void FileProvider::init()
 {
     if( ! m_pMyShell )
         m_pMyShell.reset( new TaskManager( m_xContext, this, true ) );
@@ -352,7 +352,7 @@ XPropertySetInfoImpl2::hasPropertyByName(
 }
 
 
-void SAL_CALL FileProvider::initProperties()
+void FileProvider::initProperties()
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( ! m_xPropertySetInfo.is() )

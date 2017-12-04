@@ -93,7 +93,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
         getIndexCharacter( rIndexEntry, rLocale, rSortAlgorithm );
 }
 
-bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name)
+bool IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name)
 {
     Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.i18n.IndexEntrySupplier_" + name, m_xContext);
@@ -105,7 +105,7 @@ bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const O
     return false;
 }
 
-Reference < css::i18n::XExtendedIndexEntrySupplier > const & SAL_CALL
+Reference < css::i18n::XExtendedIndexEntrySupplier > const &
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm)
 {
     if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&

@@ -88,20 +88,20 @@ public:
     ~OInterfaceIteratorHelper2();
 
     /** Return true, if there are more elements in the iterator. */
-    bool SAL_CALL hasMoreElements() const
+    bool hasMoreElements() const
         { return nRemain != 0; }
     /** Return the next element of the iterator. Calling this method if
         hasMoreElements() has returned false, is an error. Cast the
         returned pointer to the
      */
-    css::uno::XInterface * SAL_CALL next();
+    css::uno::XInterface * next();
 
     /** Removes the current element (the last one returned by next())
         from the underlying container. Calling this method before
         next() has been called or calling it twice with no next()
         inbetween is an error.
     */
-    void SAL_CALL remove();
+    void remove();
 
 private:
     OInterfaceContainerHelper2 & rCont;
@@ -152,12 +152,12 @@ public:
       Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
      */
-    sal_Int32 SAL_CALL getLength() const;
+    sal_Int32 getLength() const;
 
     /**
       Return all interfaces added to this container.
      **/
-    std::vector< css::uno::Reference< css::uno::XInterface > > SAL_CALL getElements() const;
+    std::vector< css::uno::Reference< css::uno::XInterface > > getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -175,7 +175,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL addInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    sal_Int32 addInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
@@ -183,16 +183,16 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    sal_Int32 removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /**
       Call disposing on all object in the container that
       support XEventListener. Than clear the container.
      */
-    void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
+    void disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Clears the container without calling disposing().
      */
-    void SAL_CALL clear();
+    void clear();
 
     /** Executes a functor for each contained listener of specified type, e.g.
         <code>forEach<awt::XPaintListener>(...</code>.

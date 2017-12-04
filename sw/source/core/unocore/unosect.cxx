@@ -146,13 +146,13 @@ public:
     /// @throws lang::IllegalArgumentException
     /// @throws lang::WrappedTargetException,
     /// @throws uno::RuntimeException
-    void SAL_CALL SetPropertyValues_Impl(
+    void SetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames,
             const uno::Sequence< uno::Any >& aValues);
     /// @throws beans::UnknownPropertyException
     /// @throws lang::WrappedTargetException,
     /// @throws uno::RuntimeException
-    uno::Sequence< uno::Any > SAL_CALL
+    uno::Sequence< uno::Any >
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames);
 protected:

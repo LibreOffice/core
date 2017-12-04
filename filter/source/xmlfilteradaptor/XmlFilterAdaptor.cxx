@@ -59,7 +59,7 @@ using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::task;
 
-bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     OUString udConvertClass    = msUserData[0];
     const OUString sXMLImportService = msUserData[2];
@@ -171,7 +171,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
     return true;
 }
 
-bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
 
     OUString udConvertClass = msUserData[0];

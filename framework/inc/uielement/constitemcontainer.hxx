@@ -87,7 +87,7 @@ class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper<
         virtual css::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
 
     private:
-        ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        ::cppu::IPropertyArrayHelper& getInfoHelper();
         const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector );

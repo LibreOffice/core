@@ -975,7 +975,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
     }
 }
 
-bool SAL_CALL
+bool
 DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName)
 {
     if (! xHierarchicalNameAccess.is()) {

@@ -38,7 +38,7 @@ class ScVbaGlobals : public ScVbaGlobals_BASE
 {
     css::uno::Reference< ov::excel::XApplication > mxApplication;
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< ov::excel::XApplication > const & SAL_CALL getApplication();
+    css::uno::Reference< ov::excel::XApplication > const & getApplication();
 public:
 
     ScVbaGlobals( css::uno::Sequence< css::uno::Any > const& aArgs,

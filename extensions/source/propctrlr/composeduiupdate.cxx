@@ -711,14 +711,14 @@ namespace pcr
     }
 
 
-    void SAL_CALL ComposedPropertyUIUpdate::suspendAutoFire()
+    void ComposedPropertyUIUpdate::suspendAutoFire()
     {
         impl_checkDisposed();
         osl_atomic_increment( &m_nSuspendCounter );
     }
 
 
-    void SAL_CALL ComposedPropertyUIUpdate::resumeAutoFire()
+    void ComposedPropertyUIUpdate::resumeAutoFire()
     {
         impl_checkDisposed();
         if ( 0 == osl_atomic_decrement( &m_nSuspendCounter ) )
@@ -747,7 +747,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ComposedPropertyUIUpdate::dispose()
+    void ComposedPropertyUIUpdate::dispose()
     {
         if ( impl_isDisposed() )
             return;

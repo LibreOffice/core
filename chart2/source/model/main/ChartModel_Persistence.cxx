@@ -637,7 +637,7 @@ void ChartModel::impl_loadGraphics(
 }
 
 // util::XModifiable
-void SAL_CALL ChartModel::impl_notifyModifiedListeners()
+void ChartModel::impl_notifyModifiedListeners()
 {
     {
         MutexGuard aGuard( m_aModelMutex );
@@ -772,7 +772,7 @@ Reference< embed::XStorage > SAL_CALL ChartModel::getDocumentStorage()
     return m_xStorage;
 }
 
-void SAL_CALL ChartModel::impl_notifyStorageChangeListeners()
+void ChartModel::impl_notifyStorageChangeListeners()
 {
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
           .getContainer( cppu::UnoType<document::XStorageChangeListener>::get());
