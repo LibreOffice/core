@@ -3050,7 +3050,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_DRAW, XML_FRAME, false, true);
 
     // replacement graphic for backwards compatibility, but
-    // only for SVG currently
+    // only for SVG and metafiles currently
     OUString sReplacementOrigURL;
     rPropSet->getPropertyValue( sReplacementGraphicURL ) >>= sReplacementOrigURL;
 
@@ -3110,15 +3110,20 @@ void XMLTextParagraphExport::_exportTextGraphic(
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
-
-            // xlink:href for replacement, only written for Svg content
-            SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, false, true);
-
-            // optional office:binary-data
-            GetExport().AddEmbeddedGraphicObjectAsBase64(sReplacementURL);
         }
-    }
 
+        uno::Reference<io::XInputStream> xInputStream(
+            GetExport().GetEmbeddedGraphicObjectStream(sReplacementOrigURL));
+        OUString aMimeType(
+            comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageStream(xInputStream));
+        if (!aMimeType.isEmpty())
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
+
+        SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+
+        // optional office:binary-data
+        GetExport().AddEmbeddedGraphicObjectAsBase64(sReplacementOrigURL);
+    }
 
     // script:events
     Reference<XEventsSupplier> xEventsSupp( rPropSet, UNO_QUERY );
