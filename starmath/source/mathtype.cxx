@@ -2745,10 +2745,10 @@ bool MathType::HandleTemplate(int nLevel, sal_uInt8 &rSelector,
 
 void MathType::HandleEmblishments()
 {
-    sal_uInt8 nEmbel;
     do
     {
-        pS->ReadUChar( nEmbel );
+        sal_uInt8 nEmbel(0)
+        pS->ReadUChar(nEmbel);
         switch (nEmbel)
         {
         case 0x02:
@@ -2818,9 +2818,9 @@ void MathType::HandleEmblishments()
             OSL_ENSURE(nEmbel < 21,"Embel out of range");
             break;
         }
-        if (nVersion < 3)
+        if (nVersion < 3 || !pS->good())
             break;
-    }while (nEmbel);
+    } while (nEmbel);
 }
 
 void MathType::HandleSetSize()
