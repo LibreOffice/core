@@ -416,7 +416,7 @@ namespace DOM
         m_xEntityResolver = xER;
     }
 
-    Reference< XEntityResolver > SAL_CALL CDocumentBuilder::getEntityResolver()
+    Reference< XEntityResolver > CDocumentBuilder::getEntityResolver()
     {
         ::osl::MutexGuard const g(m_Mutex);
 

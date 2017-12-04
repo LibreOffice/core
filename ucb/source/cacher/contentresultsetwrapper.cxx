@@ -63,7 +63,7 @@ ContentResultSetWrapper::ContentResultSetWrapper(
 };
 
 
-void SAL_CALL ContentResultSetWrapper::impl_init_xRowOrigin()
+void ContentResultSetWrapper::impl_init_xRowOrigin()
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -81,7 +81,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xRowOrigin()
     }
 }
 
-void SAL_CALL ContentResultSetWrapper::impl_init_xContentAccessOrigin()
+void ContentResultSetWrapper::impl_init_xContentAccessOrigin()
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -100,7 +100,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xContentAccessOrigin()
 }
 
 
-void SAL_CALL ContentResultSetWrapper::impl_init_xPropertySetOrigin()
+void ContentResultSetWrapper::impl_init_xPropertySetOrigin()
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -118,7 +118,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xPropertySetOrigin()
     }
 }
 
-void SAL_CALL ContentResultSetWrapper::impl_init()
+void ContentResultSetWrapper::impl_init()
 {
     //call this at the end of constructor of derived class
 
@@ -138,7 +138,7 @@ ContentResultSetWrapper::~ContentResultSetWrapper()
     delete m_pVetoableChangeListeners;
 };
 
-void SAL_CALL ContentResultSetWrapper::impl_deinit()
+void ContentResultSetWrapper::impl_deinit()
 {
     //call this at start of destructor of derived class
 
@@ -167,14 +167,14 @@ void SAL_CALL ContentResultSetWrapper::impl_initPropertySetInfo()
     }
 }
 
-void SAL_CALL ContentResultSetWrapper::impl_EnsureNotDisposed()
+void ContentResultSetWrapper::impl_EnsureNotDisposed()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_bDisposed )
         throw DisposedException();
 }
 
-void SAL_CALL ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
+void ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pPropertyChangeListeners )
@@ -182,7 +182,7 @@ void SAL_CALL ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
             new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
 }
 
-void SAL_CALL ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
+void ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pVetoableChangeListeners )
@@ -190,7 +190,7 @@ void SAL_CALL ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
             new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
 }
 
-void SAL_CALL ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const PropertyChangeEvent& rEvt )
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -228,7 +228,7 @@ void SAL_CALL ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const
     }
 }
 
-void SAL_CALL ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const PropertyChangeEvent& rEvt )
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -266,7 +266,7 @@ void SAL_CALL ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const
     }
 }
 
-bool SAL_CALL ContentResultSetWrapper::impl_isForwardOnly()
+bool ContentResultSetWrapper::impl_isForwardOnly()
 {
     //m_nForwardOnly == 2 -> don't know
     //m_nForwardOnly == 1 -> YES
@@ -1284,7 +1284,7 @@ void SAL_CALL ContentResultSetWrapperListener::vetoableChange( const PropertyCha
         m_pOwner->impl_vetoableChange( rEvt );
 }
 
-void SAL_CALL ContentResultSetWrapperListener::impl_OwnerDies()
+void ContentResultSetWrapperListener::impl_OwnerDies()
 {
     m_pOwner = nullptr;
 }

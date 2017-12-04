@@ -140,7 +140,7 @@ CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ )
     return option_int;
 }
 
-bool SAL_CALL
+bool
 CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& serviceName, const OUString& rSortAlgorithm)
 {
     for (size_t l = 0; l < lookupTable.size(); l++) {
@@ -164,7 +164,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
     return false;
 }
 
-void SAL_CALL
+void
 CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
 {
     for (lookupTableItem* i : lookupTable) {

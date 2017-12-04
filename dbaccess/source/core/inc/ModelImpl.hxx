@@ -277,7 +277,7 @@ public:
 
     // XEventListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL disposing( const css::lang::EventObject& Source );
+    void disposing( const css::lang::EventObject& Source );
 
     void setModified( bool bModified );
 
@@ -369,9 +369,9 @@ public:
 
     const ::comphelper::SharedMutex& getSharedMutex() const { return m_aMutex; }
 
-    void SAL_CALL acquire();
+    void acquire();
 
-    void SAL_CALL release();
+    void release();
 
     /// returns a all known data source settings, including their default values
     static const AsciiPropertyValue* getDefaultDataSourceSettings();

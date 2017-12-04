@@ -87,7 +87,7 @@ protected:
     OUString           aAlgorithm;
 
     /// @throws css::uno::RuntimeException
-    const OUString& SAL_CALL getEntry( const OUString& IndexEntry,
+    const OUString& getEntry( const OUString& IndexEntry,
         const OUString& PhoneticEntry, const css::lang::Locale& rLocale );
 };
 

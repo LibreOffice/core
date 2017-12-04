@@ -61,12 +61,12 @@ namespace frm
 
         // XDispatchProviderInterception
         /// @throws css::uno::RuntimeException
-        void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
+        void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
         /// @throws css::uno::RuntimeException
-        void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
+        void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
 
         // XComponent
-        void SAL_CALL dispose();
+        void dispose();
 
         /** queries the interceptor chain for the given dispatch, with a blank target frame and no frame search flags
         */

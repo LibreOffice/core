@@ -300,7 +300,7 @@ bool ScAccessibleCellBase::IsEditable(
     return bEditable;
 }
 
-OUString SAL_CALL ScAccessibleCellBase::GetNote()
+OUString ScAccessibleCellBase::GetNote()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -346,7 +346,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote()
     return sNote;
 }
 
-OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
+OUString ScAccessibleCellBase::getShadowAttrs()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -426,7 +426,7 @@ OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
     return sShadowAttrs;
 }
 
-OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
+OUString ScAccessibleCellBase::getBorderAttrs()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -575,7 +575,7 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
 }
 //end of cell attributes
 
-OUString SAL_CALL ScAccessibleCellBase::GetAllDisplayNote()
+OUString ScAccessibleCellBase::GetAllDisplayNote()
 {
     OUString strNote;
     OUString strTrackText;

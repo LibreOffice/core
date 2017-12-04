@@ -140,7 +140,7 @@ Calendar_gregorian::Calendar_gregorian(const Era *_earArray)
 {
     init(_earArray);
 }
-void SAL_CALL
+void
 Calendar_gregorian::init(const Era *_eraArray)
 {
     cCalendar = "com.sun.star.i18n.Calendar_gregorian";

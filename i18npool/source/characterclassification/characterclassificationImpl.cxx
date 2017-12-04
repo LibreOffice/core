@@ -124,7 +124,7 @@ ParseResult SAL_CALL CharacterClassificationImpl::parsePredefinedToken(
             contCharTokenType, userDefinedCharactersCont);
 }
 
-bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassification(const OUString& serviceName, const Locale& rLocale)
+bool CharacterClassificationImpl::createLocaleSpecificCharacterClassification(const OUString& serviceName, const Locale& rLocale)
 {
     // to share service between same Language but different Country code, like zh_CN and zh_SG
     for (size_t l = 0; l < lookupTable.size(); l++) {
@@ -149,7 +149,7 @@ bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassifi
     return false;
 }
 
-Reference < XCharacterClassification > const & SAL_CALL
+Reference < XCharacterClassification > const &
 CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Locale& rLocale)
 {
     // reuse instance if locale didn't change

@@ -73,7 +73,7 @@ TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTex
     return xTC->interactiveConversion(rLocale, nTextConversionType, nTextConversionOptions);
 }
 
-void SAL_CALL
+void
 TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale)
 {
     if (rLocale != aLocale) {

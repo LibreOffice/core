@@ -98,7 +98,7 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
 
         // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
         /// @throws css::uno::RuntimeException
-        css::uno::Any SAL_CALL executeDispatch(
+        css::uno::Any executeDispatch(
                                         const css::uno::Reference< css::frame::XDispatch >&  xDispatch      ,
                                         const  css::util::URL&                                  aURL        ,
                                         bool                                                    SyncronFlag ,

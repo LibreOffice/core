@@ -77,7 +77,7 @@ const sal_uInt16 *getSTC_WordEntry_S2T();
 
 #endif
 
-OUString SAL_CALL
+OUString
 TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions)
 {
     const sal_Unicode *Data;
@@ -114,7 +114,7 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
     return OUString(newStr, SAL_NO_ACQUIRE); //take ownership
 }
 
-OUString SAL_CALL
+OUString
 TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
 {
     sal_Int32 dictLen = 0;

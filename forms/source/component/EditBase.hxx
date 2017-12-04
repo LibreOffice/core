@@ -84,8 +84,8 @@ public:
 
 protected:
     // new properties common to all edit models should be handled with the following two methods
-    void SAL_CALL readCommonEditProperties(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
-    void SAL_CALL writeCommonEditProperties(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void readCommonEditProperties(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void writeCommonEditProperties(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
     void defaultCommonEditProperties();
 
     virtual sal_uInt16 getPersistenceFlags() const;

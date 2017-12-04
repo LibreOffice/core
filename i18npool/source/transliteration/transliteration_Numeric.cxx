@@ -57,7 +57,7 @@ Sequence< OUString > SAL_CALL
 #define isNumber(c) ((c) >= 0x30 && (c) <= 0x39)
 #define NUMBER_ZERO 0x30
 
-OUString SAL_CALL
+OUString
 transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset )
 {

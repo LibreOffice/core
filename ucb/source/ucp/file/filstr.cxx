@@ -189,7 +189,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 }
 
 
-void SAL_CALL
+void
 XStream_impl::closeStream()
 {
     if( m_nIsOpen )

@@ -398,7 +398,7 @@ TaskManager::~TaskManager()
 }
 
 
-void SAL_CALL
+void
 TaskManager::startTask(
     sal_Int32 CommandId,
     const uno::Reference< XCommandEnvironment >& xCommandEnv )
@@ -413,7 +413,7 @@ TaskManager::startTask(
 }
 
 
-void SAL_CALL
+void
 TaskManager::endTask( sal_Int32 CommandId,
                       const OUString& aUncPath,
                       BaseContent* pContent)
@@ -443,7 +443,7 @@ TaskManager::endTask( sal_Int32 CommandId,
 }
 
 
-void SAL_CALL
+void
 TaskManager::abort( sal_Int32 CommandId )
 {
     if( CommandId )
@@ -458,7 +458,7 @@ TaskManager::abort( sal_Int32 CommandId )
 }
 
 
-void SAL_CALL TaskManager::clearError( sal_Int32 CommandId )
+void TaskManager::clearError( sal_Int32 CommandId )
 {
     osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
@@ -467,7 +467,7 @@ void SAL_CALL TaskManager::clearError( sal_Int32 CommandId )
 }
 
 
-void SAL_CALL TaskManager::retrieveError( sal_Int32 CommandId,
+void TaskManager::retrieveError( sal_Int32 CommandId,
                                           sal_Int32 &ErrorCode,
                                           sal_Int32 &minorCode)
 {
@@ -481,7 +481,7 @@ void SAL_CALL TaskManager::retrieveError( sal_Int32 CommandId,
 }
 
 
-void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
+void TaskManager::installError( sal_Int32 CommandId,
                                          sal_Int32 ErrorCode,
                                          sal_Int32 MinorCode )
 {
@@ -492,7 +492,7 @@ void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 TaskManager::getCommandId()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -500,7 +500,7 @@ TaskManager::getCommandId()
 }
 
 
-void SAL_CALL TaskManager::handleTask(
+void TaskManager::handleTask(
     sal_Int32 CommandId,
     const uno::Reference< task::XInteractionRequest >& request )
 {
@@ -527,7 +527,7 @@ void SAL_CALL TaskManager::handleTask(
 //  to URL aUnqPath
 
 
-void SAL_CALL
+void
 TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -550,7 +550,7 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 }
 
 
-void SAL_CALL
+void
 TaskManager::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -577,7 +577,7 @@ TaskManager::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 //  The default value and the attributes are input
 
 
-void SAL_CALL
+void
 TaskManager::associate( const OUString& aUnqPath,
                   const OUString& PropertyName,
                   const uno::Any& DefaultValue,
@@ -616,7 +616,7 @@ TaskManager::associate( const OUString& aUnqPath,
 }
 
 
-void SAL_CALL
+void
 TaskManager::deassociate( const OUString& aUnqPath,
             const OUString& PropertyName )
 {
@@ -670,7 +670,7 @@ TaskManager::deassociate( const OUString& aUnqPath,
 //  URL aUnqPath into the XOutputStream
 
 
-void SAL_CALL TaskManager::page( sal_Int32 CommandId,
+void TaskManager::page( sal_Int32 CommandId,
                            const OUString& aUnqPath,
                            const uno::Reference< io::XOutputStream >& xOutputStream )
 {
@@ -757,7 +757,7 @@ void SAL_CALL TaskManager::page( sal_Int32 CommandId,
 //  Given a file URL aUnqPath, this methods returns a XInputStream which reads from the open file.
 
 
-uno::Reference< io::XInputStream > SAL_CALL
+uno::Reference< io::XInputStream >
 TaskManager::open( sal_Int32 CommandId,
              const OUString& aUnqPath,
              bool bLock )
@@ -790,7 +790,7 @@ TaskManager::open( sal_Int32 CommandId,
 //  to read and write from/to the file.
 
 
-uno::Reference< io::XStream > SAL_CALL
+uno::Reference< io::XStream >
 TaskManager::open_rw( sal_Int32 CommandId,
                 const OUString& aUnqPath,
                 bool bLock )
@@ -822,7 +822,7 @@ TaskManager::open_rw( sal_Int32 CommandId,
 //  to file URL aUnqPath
 
 
-uno::Reference< XDynamicResultSet > SAL_CALL
+uno::Reference< XDynamicResultSet >
 TaskManager::ls( sal_Int32 CommandId,
            const OUString& aUnqPath,
            const sal_Int32 OpenMode,
@@ -854,7 +854,7 @@ TaskManager::ls( sal_Int32 CommandId,
 /*********************************************************************************/
 // Info for commands
 
-uno::Reference< XCommandInfo > SAL_CALL
+uno::Reference< XCommandInfo >
 TaskManager::info_c()
 {
     XCommandInfo_impl* p = new XCommandInfo_impl( this );
@@ -869,7 +869,7 @@ TaskManager::info_c()
 /*********************************************************************************/
 // Info for the properties
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+uno::Reference< beans::XPropertySetInfo >
 TaskManager::info_p( const OUString& aUnqPath )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -887,7 +887,7 @@ TaskManager::info_p( const OUString& aUnqPath )
 //  Sets the values of the properties belonging to fileURL aUnqPath
 
 
-uno::Sequence< uno::Any > SAL_CALL
+uno::Sequence< uno::Any >
 TaskManager::setv( const OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
 {
@@ -1118,7 +1118,7 @@ TaskManager::setv( const OUString& aUnqPath,
 //  Returns an XRow object containing the values in the requested order.
 
 
-uno::Reference< sdbc::XRow > SAL_CALL
+uno::Reference< sdbc::XRow >
 TaskManager::getv( sal_Int32 CommandId,
              const OUString& aUnqPath,
              const uno::Sequence< beans::Property >& properties )
@@ -1184,7 +1184,7 @@ TaskManager::getv( sal_Int32 CommandId,
 //  Moves the content belonging to fileURL srcUnqPath to fileURL dstUnqPath.
 
 
-void SAL_CALL
+void
 TaskManager::move( sal_Int32 CommandId,
              const OUString& srcUnqPath,
              const OUString& dstUnqPathIn,
@@ -1392,7 +1392,7 @@ bool getType(
 
 }
 
-void SAL_CALL
+void
 TaskManager::copy(
     sal_Int32 CommandId,
     const OUString& srcUnqPath,
@@ -1564,7 +1564,7 @@ TaskManager::copy(
 //  Return: success of operation
 
 
-bool SAL_CALL
+bool
 TaskManager::remove( sal_Int32 CommandId,
                const OUString& aUnqPath,
                FileUrlType IsWhat,
@@ -1726,7 +1726,7 @@ TaskManager::remove( sal_Int32 CommandId,
 //  Return:: success of operation
 
 
-bool SAL_CALL
+bool
 TaskManager::mkdir( sal_Int32 CommandId,
               const OUString& rUnqPath,
               bool OverWrite )
@@ -1786,7 +1786,7 @@ TaskManager::mkdir( sal_Int32 CommandId,
 //  Return:: success of operation
 
 
-bool SAL_CALL
+bool
 TaskManager::mkfil( sal_Int32 CommandId,
               const OUString& aUnqPath,
               bool Overwrite,
@@ -1817,7 +1817,7 @@ TaskManager::mkfil( sal_Int32 CommandId,
 //  Return:: success of operation
 
 
-bool SAL_CALL
+bool
 TaskManager::write( sal_Int32 CommandId,
               const OUString& aUnqPath,
               bool OverWrite,
@@ -1977,7 +1977,7 @@ TaskManager::write( sal_Int32 CommandId,
 /*********************************************************************************/
 
 
-void SAL_CALL TaskManager::insertDefaultProperties( const OUString& aUnqPath )
+void TaskManager::insertDefaultProperties( const OUString& aUnqPath )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -2040,7 +2040,7 @@ bool SAL_CALL TaskManager::getUrlFromUnq( const OUString& Unq,OUString& Url )
 
 // Helper function for public copy
 
-osl::FileBase::RC SAL_CALL
+osl::FileBase::RC
 TaskManager::copy_recursive( const OUString& srcUnqPath,
                        const OUString& dstUnqPath,
                        FileUrlType TypeToCopy,
@@ -2112,7 +2112,7 @@ TaskManager::copy_recursive( const OUString& srcUnqPath,
 // returns success of the operation
 
 
-bool SAL_CALL TaskManager::ensuredir( sal_Int32 CommandId,
+bool TaskManager::ensuredir( sal_Int32 CommandId,
                                     const OUString& rUnqPath,
                                     sal_Int32 errorCode )
 {
@@ -2198,7 +2198,7 @@ bool SAL_CALL TaskManager::ensuredir( sal_Int32 CommandId,
 //  osl::DirectoryItem::getFileStatus fills the required fields.
 
 
-void SAL_CALL
+void
 TaskManager::getMaskFromProperties(
     sal_Int32& n_Mask,
     const uno::Sequence< beans::Property >& seq )
@@ -2241,7 +2241,7 @@ TaskManager::getMaskFromProperties(
 //  The Properties are stored under the url belonging to it->first.
 
 
-void SAL_CALL
+void
 TaskManager::load( const ContentMap::iterator& it, bool create )
 {
     if( ! it->second.properties )
@@ -2299,7 +2299,7 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
 // setting of file properties which properties have changed without filestat
 
 
-void SAL_CALL
+void
 TaskManager::commit( const TaskManager::ContentMap::iterator& it,
                const osl::FileStatus& aFileStatus )
 {
@@ -2519,7 +2519,7 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
 // directoryitem, which is returned by osl::DirectoryItem::getNextItem()
 
 
-bool SAL_CALL
+bool
 TaskManager::getv(
     Notifier* pNotifier,
     const uno::Sequence< beans::Property >& properties,
@@ -2604,7 +2604,7 @@ TaskManager::getv(
 // EventListener
 
 
-std::vector< ContentEventNotifier* >* SAL_CALL
+std::vector< ContentEventNotifier* >*
 TaskManager::getContentEventListeners( const OUString& aName )
 {
     std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
@@ -2627,7 +2627,7 @@ TaskManager::getContentEventListeners( const OUString& aName )
 }
 
 
-std::vector< ContentEventNotifier* >* SAL_CALL
+std::vector< ContentEventNotifier* >*
 TaskManager::getContentDeletedEventListeners( const OUString& aName )
 {
     std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
@@ -2693,7 +2693,7 @@ TaskManager::notifyContentRemoved( std::vector< ContentEventNotifier* >* listene
 }
 
 
-std::vector< PropertySetInfoChangeNotifier* >* SAL_CALL
+std::vector< PropertySetInfoChangeNotifier* >*
 TaskManager::getPropertySetListeners( const OUString& aName )
 {
     std::vector< PropertySetInfoChangeNotifier* >* p = new std::vector< PropertySetInfoChangeNotifier* >;
@@ -2746,7 +2746,7 @@ TaskManager::notifyPropertyRemoved( std::vector< PropertySetInfoChangeNotifier* 
 }
 
 
-std::vector< std::vector< ContentEventNotifier* >* >* SAL_CALL
+std::vector< std::vector< ContentEventNotifier* >* >*
 TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                                           const OUString& aNewPrefix,
                                           bool withChildren )
@@ -2862,7 +2862,7 @@ TaskManager::notifyContentExchanged( std::vector< std::vector< ContentEventNotif
 }
 
 
-std::vector< PropertyChangeNotifier* >* SAL_CALL
+std::vector< PropertyChangeNotifier* >*
 TaskManager::getPropertyChangeNotifier( const OUString& aName )
 {
     std::vector< PropertyChangeNotifier* >* p = new std::vector< PropertyChangeNotifier* >;
@@ -2903,7 +2903,7 @@ void SAL_CALL TaskManager::notifyPropertyChanges( std::vector< PropertyChangeNot
 /*                       remove persistent propertyset                          */
 /********************************************************************************/
 
-void SAL_CALL
+void
 TaskManager::erasePersistentSet( const OUString& aUnqPath,
                            bool withChildren )
 {
@@ -2963,7 +2963,7 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
 /********************************************************************************/
 
 
-void SAL_CALL
+void
 TaskManager::copyPersistentSet( const OUString& srcUnqPath,
                           const OUString& dstUnqPath,
                           bool withChildren )

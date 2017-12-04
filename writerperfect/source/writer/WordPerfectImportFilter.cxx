@@ -85,7 +85,7 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, libr
     return true;
 }
 
-bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyValue > &aDescriptor)
+bool WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyValue > &aDescriptor)
 {
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();

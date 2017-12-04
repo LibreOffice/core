@@ -80,7 +80,7 @@ uno::Any ListPropListener::getValueEvent()
     return aRet;
 }
 
-void SAL_CALL
+void
 ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
 {
     if ( pvargItem.hasValue()  )
@@ -135,7 +135,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
     }
 }
 
-void SAL_CALL
+void
 ListControlHelper::removeItem( const uno::Any& index )
 {
     sal_Int32 nIndex = 0;
@@ -164,7 +164,7 @@ ListControlHelper::removeItem( const uno::Any& index )
     }
 }
 
-void SAL_CALL
+void
 ListControlHelper::Clear(  )
 {
     // urk, setValue doesn't seem to work !!
@@ -172,14 +172,14 @@ ListControlHelper::Clear(  )
     m_xProps->setPropertyValue( "StringItemList", uno::makeAny( uno::Sequence< OUString >() ) );
 }
 
-void SAL_CALL
+void
 ListControlHelper::setRowSource( const OUString& _rowsource )
 {
     if ( _rowsource.isEmpty() )
         Clear();
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ListControlHelper::getListCount()
 {
     uno::Sequence< OUString > sList;
@@ -187,7 +187,7 @@ ListControlHelper::getListCount()
     return sList.getLength();
 }
 
-uno::Any SAL_CALL
+uno::Any
 ListControlHelper::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
 {
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( new ListPropListener( m_xProps, pvargIndex, pvarColumn ) ) ) );

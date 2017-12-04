@@ -102,7 +102,7 @@ public:
         getSize() override;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL
+    bool
         isVisible();
 
     virtual void SAL_CALL

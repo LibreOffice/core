@@ -62,7 +62,7 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
     //call impl_init() at the end of constructor of derived class
 };
 
-void SAL_CALL DynamicResultSetWrapper::impl_init()
+void DynamicResultSetWrapper::impl_init()
 {
     //call this at the end of constructor of derived class
 
@@ -82,14 +82,14 @@ DynamicResultSetWrapper::~DynamicResultSetWrapper()
     //call impl_deinit() at start of destructor of derived class
 };
 
-void SAL_CALL DynamicResultSetWrapper::impl_deinit()
+void DynamicResultSetWrapper::impl_deinit()
 {
     //call this at start of destructor of derived class
 
     m_xMyListenerImpl->impl_OwnerDies();
 }
 
-void SAL_CALL DynamicResultSetWrapper::impl_EnsureNotDisposed()
+void DynamicResultSetWrapper::impl_EnsureNotDisposed()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_bDisposed )
@@ -210,7 +210,7 @@ void SAL_CALL DynamicResultSetWrapper::impl_disposing( const EventObject& )
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
+void DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
 {
     impl_EnsureNotDisposed();
     //@todo
@@ -485,7 +485,7 @@ void SAL_CALL DynamicResultSetWrapperListener::notify( const ListEvent& Changes 
 // own methods:
 
 
-void SAL_CALL DynamicResultSetWrapperListener::impl_OwnerDies()
+void DynamicResultSetWrapperListener::impl_OwnerDies()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 

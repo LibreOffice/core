@@ -353,7 +353,7 @@ void OConnection::disposing()
     m_xCatalog.clear();
 }
 
-Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
+Reference< XTablesSupplier > OConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;

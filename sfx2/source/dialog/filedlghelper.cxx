@@ -2572,12 +2572,12 @@ const uno::Reference < XFilePicker3 >& FileDialogHelper::GetFilePicker() const
 }
 
 // XFilePickerListener Methods
-void SAL_CALL FileDialogHelper::FileSelectionChanged()
+void FileDialogHelper::FileSelectionChanged()
 {
     mpImpl->handleFileSelectionChanged();
 }
 
-void SAL_CALL FileDialogHelper::DirectoryChanged()
+void FileDialogHelper::DirectoryChanged()
 {
     mpImpl->handleDirectoryChanged();
 }
@@ -2592,12 +2592,12 @@ void SAL_CALL FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEve
     mpImpl->handleControlStateChanged( aEvent );
 }
 
-void SAL_CALL FileDialogHelper::DialogSizeChanged()
+void FileDialogHelper::DialogSizeChanged()
 {
     mpImpl->handleDialogSizeChanged();
 }
 
-void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
+void FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 {
     m_nError = ( RET_OK == _rEvent.DialogResult ) ? ERRCODE_NONE : ERRCODE_ABORT;
     m_aDialogClosedLink.Call( this );

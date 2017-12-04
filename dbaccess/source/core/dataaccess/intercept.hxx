@@ -45,7 +45,7 @@ public:
     explicit OInterceptor( ODocumentDefinition* _pContentHolder );
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL dispose();
+    void dispose();
 
     //XDispatch
     virtual void SAL_CALL

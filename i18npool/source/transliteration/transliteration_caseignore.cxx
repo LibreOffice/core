@@ -113,7 +113,7 @@ Transliteration_caseignore::compareString(
     return compare(str1, 0, str1.getLength(), nMatch1, str2, 0, str2.getLength(), nMatch2);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 Transliteration_caseignore::compare(
     const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
     const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)

@@ -299,7 +299,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     FETCH_XXX( impl_getCurrentRowContent, m_xRowOrigin );
 }
 
-sal_Int32 SAL_CALL CachedContentResultSetStub
+sal_Int32 CachedContentResultSetStub
     ::impl_getColumnCount()
 {
     sal_Int32 nCount;
@@ -329,7 +329,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
     return m_nColumnCount;
 }
 
-void SAL_CALL CachedContentResultSetStub
+void CachedContentResultSetStub
     ::impl_getCurrentRowContent( Any& rRowContent
         , const Reference< XRow >& xRow )
 {
@@ -344,7 +344,7 @@ void SAL_CALL CachedContentResultSetStub
     rRowContent <<= aContent;
 }
 
-void SAL_CALL CachedContentResultSetStub
+void CachedContentResultSetStub
     ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
 {
     //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResultSets

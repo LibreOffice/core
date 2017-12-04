@@ -26,8 +26,8 @@ class ZipEnumeration final
     EntryHash       &rEntryHash;
     EntryHash::const_iterator aIterator;
 public:
-    bool SAL_CALL hasMoreElements();
-    const ZipEntry * SAL_CALL nextElement();
+    bool hasMoreElements();
+    const ZipEntry * nextElement();
     ZipEnumeration( EntryHash &rNewEntryHash );
     ~ZipEnumeration();
 };

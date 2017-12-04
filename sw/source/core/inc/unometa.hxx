@@ -72,7 +72,7 @@ protected:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL AttachImpl(
+    void AttachImpl(
             const css::uno::Reference< css::text::XTextRange > & xTextRange,
             const sal_uInt16 nWhich);
 

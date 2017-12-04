@@ -332,7 +332,7 @@ protected:
                             const css::uno::Reference< css::embed::XStorage >& xStorage,
                             bool bComplete );
 
-    void SAL_CALL initializeFromDocument( const css::uno::Reference< css::document::XStorageBasedDocument >& _rxDocument );
+    void initializeFromDocument( const css::uno::Reference< css::document::XStorageBasedDocument >& _rxDocument );
 
     // OEventListenerAdapter
     virtual void _disposing( const css::lang::EventObject& _rSource ) override;

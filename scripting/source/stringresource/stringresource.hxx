@@ -136,7 +136,7 @@ protected:
 
     //=== Impl methods for ...ForLocale methods ===
     /// @throws css::resource::MissingResourceException
-    OUString SAL_CALL implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem );
+    OUString implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem );
     bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
     css::uno::Sequence< OUString > implGetResourceIDs( LocaleItem* pLocaleItem );
     void implSetString( const OUString& ResourceID,
@@ -207,7 +207,7 @@ protected:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    void SAL_CALL implInitializeCommonParameters( const css::uno::Sequence< css::uno::Any >& aArguments );
+    void implInitializeCommonParameters( const css::uno::Sequence< css::uno::Any >& aArguments );
 
     // Scan locale properties files
     virtual void implScanLocales();

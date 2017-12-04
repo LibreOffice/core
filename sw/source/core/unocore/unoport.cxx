@@ -374,7 +374,7 @@ void SwXTextPortion::GetPropertyValue(
     }
 }
 
-uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
+uno::Sequence< uno::Any > SwXTextPortion::GetPropertyValues_Impl(
         const uno::Sequence< OUString >& rPropertyNames )
 {
     sal_Int32 nLength = rPropertyNames.getLength();
@@ -407,7 +407,7 @@ uno::Any SwXTextPortion::getPropertyValue(
     return GetPropertyValues_Impl(aPropertyNames).getConstArray()[0];
 }
 
-void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
+void SwXTextPortion::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
 {
@@ -571,7 +571,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
     return GetPropertyValuesTolerant_Impl( rPropertyNames, true );
 }
 
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPropertyValuesTolerant_Impl(
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         bool bDirectValuesOnly )
 {

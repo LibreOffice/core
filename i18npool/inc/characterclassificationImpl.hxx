@@ -74,7 +74,7 @@ private:
         css::lang::Locale aLocale;
         OUString aName;
         css::uno::Reference < XCharacterClassification > xCI;
-        bool SAL_CALL equals(const css::lang::Locale& rLocale) {
+        bool equals(const css::lang::Locale& rLocale) {
         return aLocale.Language == rLocale.Language &&
             aLocale.Country == rLocale.Country &&
             aLocale.Variant == rLocale.Variant;
@@ -87,8 +87,8 @@ private:
     css::uno::Reference < XCharacterClassification > xUCI;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference < XCharacterClassification > const & SAL_CALL getLocaleSpecificCharacterClassification(const css::lang::Locale& rLocale);
-    bool SAL_CALL createLocaleSpecificCharacterClassification(const OUString& serviceName, const css::lang::Locale& rLocale);
+    css::uno::Reference < XCharacterClassification > const & getLocaleSpecificCharacterClassification(const css::lang::Locale& rLocale);
+    bool createLocaleSpecificCharacterClassification(const OUString& serviceName, const css::lang::Locale& rLocale);
 
 };
 

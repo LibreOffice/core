@@ -29,17 +29,17 @@ class ListControlHelper final
 public:
     explicit ListControlHelper( const css::uno::Reference< css::beans::XPropertySet >& rxControl ) : m_xProps( rxControl ){}
     /// @throws css::uno::RuntimeException
-    void SAL_CALL AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex );
+    void AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex );
     /// @throws css::uno::RuntimeException
-    void SAL_CALL removeItem( const css::uno::Any& index );
+    void removeItem( const css::uno::Any& index );
     /// @throws css::uno::RuntimeException
-        void SAL_CALL setRowSource( const OUString& _rowsource );
+        void setRowSource( const OUString& _rowsource );
     /// @throws css::uno::RuntimeException
-    ::sal_Int32 SAL_CALL getListCount();
+    ::sal_Int32 getListCount();
     /// @throws css::uno::RuntimeException
-    css::uno::Any SAL_CALL List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn );
+    css::uno::Any List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn );
     /// @throws css::uno::RuntimeException
-    void SAL_CALL Clear(  );
+    void Clear(  );
 };
 
 #endif

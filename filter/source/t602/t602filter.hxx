@@ -221,7 +221,7 @@ private:
     void wrtfnt();
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
+    bool importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     public:
         explicit T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
@@ -247,7 +247,7 @@ private:
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-        bool SAL_CALL test();
+        bool test();
 };
 
 /// @throws css::uno::RuntimeException

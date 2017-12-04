@@ -50,7 +50,7 @@ public:
 
 private:
     /// @throws css::uno::RuntimeException
-    sal_Int32 SAL_CALL compare(
+    sal_Int32 compare(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2);
 

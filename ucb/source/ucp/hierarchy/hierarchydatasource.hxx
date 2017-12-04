@@ -88,7 +88,7 @@ public:
 
 private:
     /// @throws css::uno::Exception
-    css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
+    css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const css::uno::Sequence<
                                     css::uno::Any > & Arguments,
                                  bool bCheckArgs );

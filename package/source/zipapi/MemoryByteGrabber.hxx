@@ -44,7 +44,7 @@ public:
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    void skipBytes( sal_Int32 nBytesToSkip )
     {
         mnCurrent += nBytesToSkip;
     }

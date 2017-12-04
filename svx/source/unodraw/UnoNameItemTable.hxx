@@ -48,7 +48,7 @@ private:
 
     ItemPoolVector maItemSetVector;
 
-    void SAL_CALL ImplInsertByName( const OUString& aName, const css::uno::Any& aElement );
+    void ImplInsertByName( const OUString& aName, const css::uno::Any& aElement );
 
 public:
     SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw();

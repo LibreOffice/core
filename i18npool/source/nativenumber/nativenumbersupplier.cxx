@@ -523,7 +523,7 @@ static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
     return -1;
 }
 
-OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
+OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode, Sequence< sal_Int32 >& offset)
 {
     if (!isValidNatNum(rLocale, nNativeNumberMode))
@@ -615,7 +615,7 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
     return getNativeNumberString(aNumberString, rLocale, nNativeNumberMode, offset);
 }
 
-sal_Unicode SAL_CALL NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode )
+sal_Unicode NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode )
 {
     if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
         for (const auto & i : NumberChar)

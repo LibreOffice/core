@@ -61,52 +61,52 @@ class CachedContentResultSet
     private:
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        css::uno::Any& SAL_CALL
+        css::uno::Any&
         getRowAny( sal_Int32 nRow );
 
-        void SAL_CALL clear();
+        void clear();
 
 
-        void SAL_CALL remindMapped( sal_Int32 nRow );
-        bool SAL_CALL isRowMapped( sal_Int32 nRow );
-        void SAL_CALL clearMappedReminder();
-        css::uno::Sequence< sal_Bool >* SAL_CALL getMappedReminder();
+        void remindMapped( sal_Int32 nRow );
+        bool isRowMapped( sal_Int32 nRow );
+        void clearMappedReminder();
+        css::uno::Sequence< sal_Bool >* getMappedReminder();
 
     public:
         CCRS_Cache( const css::uno::Reference<
                 css::ucb::XContentIdentifierMapping > & xMapping );
         ~CCRS_Cache();
 
-        void SAL_CALL loadData(
+        void loadData(
             const css::ucb::FetchResult& rResult );
 
-        bool SAL_CALL
+        bool
         hasRow( sal_Int32 nRow );
 
-        bool SAL_CALL
+        bool
         hasCausedException( sal_Int32 nRow );
 
-        sal_Int32 SAL_CALL
+        sal_Int32
         getMaxRow();
 
-        bool SAL_CALL
+        bool
         hasKnownLast();
 
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        const css::uno::Any& SAL_CALL
+        const css::uno::Any&
         getAny( sal_Int32 nRow, sal_Int32 nColumnIndex );
 
         /// @throws css::uno::RuntimeException
-        OUString SAL_CALL
+        OUString
         getContentIdentifierString( sal_Int32 nRow );
 
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+        css::uno::Reference< css::ucb::XContentIdentifier >
         getContentIdentifier( sal_Int32 nRow );
 
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::ucb::XContent > SAL_CALL
+        css::uno::Reference< css::ucb::XContent >
         getContent( sal_Int32 nRow );
     };
 
@@ -159,24 +159,24 @@ private:
 
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL
+    bool
     applyPositionToOrigin( sal_Int32 nRow );
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     impl_fetchData( sal_Int32 nRow, sal_Int32 nCount
                     , sal_Int32 nFetchDirection );
 
-    bool SAL_CALL
+    bool
     impl_isKnownValidPosition( sal_Int32 nRow );
 
-    bool SAL_CALL
+    bool
     impl_isKnownInvalidPosition( sal_Int32 nRow );
 
-    void SAL_CALL
+    void
     impl_changeRowCount( sal_Int32 nOld, sal_Int32 nNew );
 
-    void SAL_CALL
+    void
     impl_changeIsRowCountFinal( bool bOld, bool bNew );
 
 public:

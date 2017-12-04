@@ -59,7 +59,7 @@ Inflater::~Inflater()
     end();
 }
 
-void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
+void Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
 {
     sInBuffer = rBuffer;
     nOffset = 0;
@@ -67,7 +67,7 @@ void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
 }
 
 
-sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+sal_Int32 Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
     {
@@ -76,7 +76,7 @@ sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sa
     return doInflateBytes(rBuffer, nNewOffset, nNewLength);
 }
 
-void SAL_CALL Inflater::end(  )
+void Inflater::end(  )
 {
     if (pStream != nullptr)
     {

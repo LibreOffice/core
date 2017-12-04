@@ -216,7 +216,7 @@ Transliteration_casemapping::Transliteration_casemapping()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_casemapping";
 }
 
-void SAL_CALL
+void
 Transliteration_casemapping::setMappingType( const MappingType rMappingType, const Locale& rLocale )
 {
     nMappingType = rMappingType;

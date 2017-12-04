@@ -46,7 +46,7 @@ class LotusWordProImportFilter final : public cppu::WeakImplHelper
     css::uno::Reference< css::lang::XComponent > mxDoc;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
+    bool importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
 public:
     explicit LotusWordProImportFilter( const css::uno::Reference< css::uno::XComponentContext > &rxContext)

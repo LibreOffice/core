@@ -107,7 +107,7 @@ protected:
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL applyStyles(
+    void applyStyles(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     // ____ XServiceName ____

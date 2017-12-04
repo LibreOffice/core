@@ -238,7 +238,7 @@ SalGtkPicker::~SalGtkPicker()
     }
 }
 
-void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory )
+void SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory )
 {
     OSL_ASSERT( m_pDialog != nullptr );
 
@@ -256,7 +256,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
         aTxt.getStr() );
 }
 
-OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory()
+OUString SalGtkPicker::implgetDisplayDirectory()
 {
     OSL_ASSERT( m_pDialog != nullptr );
 
@@ -268,7 +268,7 @@ OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory()
     return aCurrentFolderName;
 }
 
-void SAL_CALL SalGtkPicker::implsetTitle( const OUString& aTitle )
+void SalGtkPicker::implsetTitle( const OUString& aTitle )
 {
     OSL_ASSERT( m_pDialog != nullptr );
 

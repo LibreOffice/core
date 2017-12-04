@@ -36,31 +36,31 @@ namespace comphelper
     OCommonAccessibleSelection::~OCommonAccessibleSelection() {}
 
 
-    void SAL_CALL OCommonAccessibleSelection::selectAccessibleChild( sal_Int32 nChildIndex )
+    void OCommonAccessibleSelection::selectAccessibleChild( sal_Int32 nChildIndex )
     {
         implSelect( nChildIndex, true );
     }
 
 
-    bool SAL_CALL OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int32 nChildIndex )
+    bool OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int32 nChildIndex )
     {
         return implIsSelected( nChildIndex );
     }
 
 
-    void SAL_CALL OCommonAccessibleSelection::clearAccessibleSelection(  )
+    void OCommonAccessibleSelection::clearAccessibleSelection(  )
     {
         implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, false );
     }
 
 
-    void SAL_CALL OCommonAccessibleSelection::selectAllAccessibleChildren(  )
+    void OCommonAccessibleSelection::selectAllAccessibleChildren(  )
     {
         implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, true );
     }
 
 
-    sal_Int32 SAL_CALL OCommonAccessibleSelection::getSelectedAccessibleChildCount(  )
+    sal_Int32 OCommonAccessibleSelection::getSelectedAccessibleChildCount(  )
     {
         sal_Int32                       nRet = 0;
         Reference< XAccessibleContext > xParentContext( implGetAccessibleContext() );
@@ -78,7 +78,7 @@ namespace comphelper
     }
 
 
-    Reference< XAccessible > SAL_CALL OCommonAccessibleSelection::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    Reference< XAccessible > OCommonAccessibleSelection::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         Reference< XAccessible >        xRet;
         Reference< XAccessibleContext > xParentContext( implGetAccessibleContext() );
@@ -96,7 +96,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OCommonAccessibleSelection::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
+    void OCommonAccessibleSelection::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         implSelect( nSelectedChildIndex, false );
     }

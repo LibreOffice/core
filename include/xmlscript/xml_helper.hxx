@@ -50,33 +50,33 @@ public:
 
         @param xElem element reference
     */
-    void SAL_CALL addSubElement(
+    void addSubElement(
         css::uno::Reference< css::xml::sax::XAttributeList > const & xElem );
 
     /** Gets sub element of given index.  The index follows order in which sub elements were added.
 
         @param nIndex index of sub element
     */
-    css::uno::Reference< css::xml::sax::XAttributeList > SAL_CALL getSubElement( sal_Int32 nIndex );
+    css::uno::Reference< css::xml::sax::XAttributeList > getSubElement( sal_Int32 nIndex );
 
     /** Adds an attribute to elements.
 
         @param rAttrName qname of attribute
         @param rValue value string of element
     */
-    void SAL_CALL addAttribute( OUString const & rAttrName, OUString const & rValue );
+    void addAttribute( OUString const & rAttrName, OUString const & rValue );
 
     /** Dumps out element (and all sub elements).
 
         @param xOut document handler to be written to
     */
-    void SAL_CALL dump(
+    void dump(
         css::uno::Reference< css::xml::sax::XDocumentHandler > const & xOut );
     /** Dumps out sub elements (and all further sub elements).
 
         @param xOut document handler to be written to
     */
-    void SAL_CALL dumpSubElements(
+    void dumpSubElements(
         css::uno::Reference< css::xml::sax::XDocumentHandler > const & xOut );
 
     // XAttributeList

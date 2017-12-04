@@ -61,7 +61,7 @@ private:
     CURI& operator=(CURI const&) = delete;
 
     /// handle css.rdf.URIs
-    void SAL_CALL initFromConstant(const sal_Int16 i_Constant);
+    void initFromConstant(const sal_Int16 i_Constant);
 
     OUString m_Namespace;
     OUString m_LocalName;
@@ -96,7 +96,7 @@ const char s_nsPkg      [] =
 const char s_nsODF      [] =
     "http://docs.oasis-open.org/ns/office/1.2/meta/odf#";
 
-void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
+void CURI::initFromConstant(const sal_Int16 i_Constant)
 {
     const char *ns(nullptr);
     const char *ln(nullptr);

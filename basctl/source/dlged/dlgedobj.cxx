@@ -441,7 +441,7 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     SetRectFromProps();
 }
 
-void SAL_CALL DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt )
+void DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt )
 {
     // get old name
     OUString aOldName;
@@ -1100,7 +1100,7 @@ void DlgEdObj::EndListening(bool bRemoveListener)
     }
 }
 
-void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
+void DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
 {
     if (isListening())
     {
@@ -1156,7 +1156,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent&
     }
 }
 
-void SAL_CALL DlgEdObj::_elementInserted()
+void DlgEdObj::_elementInserted()
 {
     if (isListening())
     {
@@ -1165,7 +1165,7 @@ void SAL_CALL DlgEdObj::_elementInserted()
     }
 }
 
-void SAL_CALL DlgEdObj::_elementReplaced()
+void DlgEdObj::_elementReplaced()
 {
     if (isListening())
     {
@@ -1174,7 +1174,7 @@ void SAL_CALL DlgEdObj::_elementReplaced()
     }
 }
 
-void SAL_CALL DlgEdObj::_elementRemoved()
+void DlgEdObj::_elementRemoved()
 {
     if (isListening())
     {

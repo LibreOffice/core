@@ -86,8 +86,8 @@ class XResultSet_impl : public Notifier,
             return nullptr;
         }
 
-        sal_Int32 SAL_CALL CtorSuccess() { return m_nErrorCode;}
-        sal_Int32 SAL_CALL getMinorError() { return m_nMinorErrorCode;}
+        sal_Int32 CtorSuccess() { return m_nErrorCode;}
+        sal_Int32 getMinorError() { return m_nMinorErrorCode;}
 
         // XEventListener
         virtual void SAL_CALL
@@ -453,7 +453,7 @@ class XResultSet_impl : public Notifier,
         // Methods
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        bool SAL_CALL OneMore();
+        bool OneMore();
 
         void rowCountChanged();
         void isFinalChanged();

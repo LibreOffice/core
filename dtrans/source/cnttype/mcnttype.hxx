@@ -48,18 +48,18 @@ public:
 
 private:
     /// @throws css::lang::IllegalArgumentException
-    void SAL_CALL init( const OUString& aCntType );
-    void SAL_CALL getSym();
-    void SAL_CALL acceptSym( const OUString& pSymTlb );
-    void SAL_CALL skipSpaces();
-    void SAL_CALL type();
-    void SAL_CALL subtype();
-    void SAL_CALL trailer();
-    OUString SAL_CALL pName( );
-    OUString SAL_CALL pValue( );
-    OUString SAL_CALL quotedPValue( );
-    OUString SAL_CALL nonquotedPValue( );
-    void SAL_CALL comment();
+    void init( const OUString& aCntType );
+    void getSym();
+    void acceptSym( const OUString& pSymTlb );
+    void skipSpaces();
+    void type();
+    void subtype();
+    void trailer();
+    OUString pName( );
+    OUString pValue( );
+    OUString quotedPValue( );
+    OUString nonquotedPValue( );
+    void comment();
     static bool SAL_CALL isInRange( const OUString& aChr, const OUString& aRange );
 
 private:

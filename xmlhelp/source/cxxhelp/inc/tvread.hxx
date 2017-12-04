@@ -55,7 +55,7 @@ namespace treeview {
         OUString locale,system;
         OUString appendix;
 
-        void SAL_CALL replaceName( OUString& oustring ) const;
+        void replaceName( OUString& oustring ) const;
     };
 
     class TVDom;

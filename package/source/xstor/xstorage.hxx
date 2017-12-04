@@ -318,7 +318,7 @@ public:
 
     virtual ~OStorage() override;
 
-    void SAL_CALL InternalDispose( bool bNotifyImpl );
+    void InternalDispose( bool bNotifyImpl );
 
     void ChildIsDisposed( const css::uno::Reference< css::uno::XInterface >& xChild );
 

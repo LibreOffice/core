@@ -34,13 +34,13 @@ public:
     virtual ~TimerManager() override;
 
     /// register timer
-    void SAL_CALL registerTimer(salhelper::Timer* pTimer);
+    void registerTimer(salhelper::Timer* pTimer);
 
     /// unregister timer
-    void SAL_CALL unregisterTimer(salhelper::Timer const * pTimer);
+    void unregisterTimer(salhelper::Timer const * pTimer);
 
     /// lookup timer
-    bool SAL_CALL lookupTimer(const salhelper::Timer* pTimer);
+    bool lookupTimer(const salhelper::Timer* pTimer);
 
     /// retrieves the "Singleton" TimerManager Instance
     static TimerManager* SAL_CALL getTimerManager();
@@ -50,7 +50,7 @@ protected:
     virtual void SAL_CALL run() override;
 
     /// Checking and triggering of a timer event
-    void SAL_CALL checkForTimeout();
+    void checkForTimeout();
 
     /// cleanup Method
     virtual void SAL_CALL onTerminated() override;

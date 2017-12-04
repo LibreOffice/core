@@ -263,7 +263,7 @@ Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
     throw UnknownPropertyException();
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL ConstItemContainer::getInfoHelper()
+::cppu::IPropertyArrayHelper& ConstItemContainer::getInfoHelper()
 {
     // Define static member to give structure of properties to baseclass "OPropertySetHelper".
     // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.

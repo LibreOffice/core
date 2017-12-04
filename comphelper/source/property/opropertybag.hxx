@@ -174,7 +174,7 @@ namespace comphelper
             sal_Bool bVetoable,
             bool bIgnoreRuntimeExceptionsWhileFiring) override;
 
-        void SAL_CALL setModifiedImpl( bool bModified,
+        void setModifiedImpl( bool bModified,
             bool bIgnoreRuntimeExceptionsWhileFiring);
 
         /** finds a free property handle

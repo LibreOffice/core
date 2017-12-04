@@ -59,7 +59,7 @@ static void* nullFunc()
     return nullptr;
 }
 
-oslGenericFunction SAL_CALL
+oslGenericFunction
 TextConversionService::getFunctionBySymbol(const sal_Char* func)
 {
     if (hModule)

@@ -726,7 +726,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
 }
 
 
-uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
+uno::Sequence< uno::Type > SvxShape::_getTypes()
 {
     switch( mpImpl->mnObjId )
     {
@@ -1367,7 +1367,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     }
 }
 
-Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo >
     SvxShape::_getPropertySetInfo()
 {
     return mpPropSet->getPropertySetInfo();
@@ -1400,7 +1400,7 @@ void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Re
 }
 
 
-bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
+bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 {
     SfxItemSet aSet( mpModel->GetItemPool(),    {{(sal_uInt16)nWID, (sal_uInt16)nWID}} );
 
@@ -1591,7 +1591,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
     }
 }
 
-void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
+void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1982,7 +1982,7 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
     }
 }
 
-beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& PropertyName )
+beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
@@ -2956,7 +2956,7 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
     }
 }
 
-void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
+void SvxShape::_setPropertyToDefault( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
@@ -2986,7 +2986,7 @@ uno::Any SAL_CALL SvxShape::getPropertyDefault( const OUString& aPropertyName )
     }
 }
 
-uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
+uno::Any SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 {
     ::SolarMutexGuard aGuard;
 
@@ -3122,7 +3122,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
     }
 }
 
-uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
+uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 {
     ::SolarMutexGuard aGuard;
 

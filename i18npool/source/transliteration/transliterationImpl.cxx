@@ -500,7 +500,7 @@ TransliterationImpl::equals(
 
 #define MaxOutput 2
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
                 const sal_Int32 length, sal_Int16 _numCascade)
 {
@@ -610,7 +610,7 @@ void TransliterationImpl::loadBody( OUString const &implName, Reference<XExtende
     body = lastTransBody.Body;
 }
 
-bool SAL_CALL
+bool
 TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale)
 {

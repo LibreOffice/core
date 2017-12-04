@@ -200,13 +200,13 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
         }
     }
 
-    if (!bDeclIsSalCall)
+    if (!bCanonicalDeclIsSalCall)
         return true;
 
     // @TODO For now, I am ignore free functions, since those are most likely to have their address taken.
-    // I'll do these later. They are harder to verify since MSVC does not verify when assigning to function pointers
+    // I'll do them later. They are harder to verify since MSVC does not verify when assigning to function pointers
     // that the calling convention of the function matches the calling convention of the function pointer!
-    if (!methodDecl || methodDecl->isStatic())
+    if (!methodDecl || methodDecl->isStatic() || methodDecl->isVirtual())
         return true;
 
     // can only check when we have a definition since this is the most likely time
@@ -232,21 +232,6 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
             return true;
     }
 
-    // some base classes are overridden by sub-classes which override both the base-class and an UNO class
-    if (recordDecl)
-    {
-        if (loplugin::DeclCheck(recordDecl)
-                .Class("OProxyAggregation")
-                .Namespace("comphelper")
-                .GlobalNamespace()
-            || loplugin::DeclCheck(recordDecl)
-                   .Class("OComponentProxyAggregationHelper")
-                   .Namespace("comphelper")
-                   .GlobalNamespace()
-            || loplugin::DeclCheck(recordDecl).Class("SvxShapeMaster").GlobalNamespace())
-            return true;
-    }
-
     if (methodDecl)
     {
         for (auto iter = methodDecl->begin_overridden_methods();
@@ -258,7 +243,6 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
         }
     }
 
-    /*
     bool bOK = rewrite(rewriteLoc);
     if (bOK && canonicalDecl != decl)
     {
@@ -267,13 +251,12 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     if (bOK)
         return true;
 
-    //std::cout << "xxx:" << std::string(p1, leftBracket - p1) << std::endl;
     report(DiagnosticsEngine::Warning, "SAL_CALL unnecessary here", rewriteLoc)
         << decl->getSourceRange();
     if (canonicalDecl != decl)
         report(DiagnosticsEngine::Warning, "SAL_CALL unnecessary here", rewriteCanonicalLoc)
             << canonicalDecl->getSourceRange();
-*/
+
     return true;
 }
 
@@ -330,8 +313,12 @@ bool SalCall::rewrite(SourceLocation locBegin)
 {
     if (!rewriter)
         return false;
+    if (!locBegin.isValid())
+        return false;
 
     auto locEnd = locBegin.getLocWithOffset(8);
+    if (!locEnd.isValid())
+        return false;
 
     SourceRange range(locBegin, locEnd);
 
@@ -364,7 +351,7 @@ bool SalCall::checkOverlap(SourceRange range)
     return true;
 }
 
-static loplugin::Plugin::Registration<SalCall> reg("salcall", true);
+static loplugin::Plugin::Registration<SalCall> reg("salcall", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

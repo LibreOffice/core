@@ -332,7 +332,7 @@ HierarchyDataSource::getAvailableServiceNames()
 // Non-interface methods
 
 
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< uno::XInterface >
 HierarchyDataSource::createInstanceWithArguments(
                                 const OUString & ServiceSpecifier,
                                 const uno::Sequence< uno::Any > & Arguments,

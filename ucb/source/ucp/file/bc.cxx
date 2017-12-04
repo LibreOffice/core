@@ -702,7 +702,7 @@ BaseContent::setParent(
 // Private Methods
 
 
-Reference< XCommandInfo > SAL_CALL
+Reference< XCommandInfo >
 BaseContent::getCommandInfo()
 {
     if( m_nState & Deleted )
@@ -712,7 +712,7 @@ BaseContent::getCommandInfo()
 }
 
 
-Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo >
 BaseContent::getPropertySetInfo()
 {
     if( m_nState & Deleted )
@@ -721,7 +721,7 @@ BaseContent::getPropertySetInfo()
     return m_pMyShell->info_p( m_aUncPath );
 }
 
-Reference< sdbc::XRow > SAL_CALL
+Reference< sdbc::XRow >
 BaseContent::getPropertyValues(
     sal_Int32 nMyCommandIdentifier,
     const Sequence< beans::Property >& PropertySet )
@@ -773,7 +773,7 @@ BaseContent::getPropertyValues(
 }
 
 
-Sequence< Any > SAL_CALL
+Sequence< Any >
 BaseContent::setPropertyValues(
     sal_Int32 nMyCommandIdentifier,
     const Sequence< beans::PropertyValue >& Values )
@@ -908,7 +908,7 @@ BaseContent::setPropertyValues(
 }
 
 
-Reference< XDynamicResultSet > SAL_CALL
+Reference< XDynamicResultSet >
 BaseContent::open(
     sal_Int32 nMyCommandIdentifier,
     const OpenCommandArgument2& aCommandArgument )
@@ -984,7 +984,7 @@ BaseContent::open(
 }
 
 
-void SAL_CALL
+void
 BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
 {
     if( m_nState & Deleted )
@@ -998,7 +998,7 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
 }
 
 
-void SAL_CALL
+void
 BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                        const TransferInfo& aTransferInfo )
 {
@@ -1068,7 +1068,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 }
 
 
-void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
+void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                                    const InsertCommandArgument& aInsertArgument )
 {
     if( m_nState & FullFeatured )
@@ -1185,7 +1185,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 }
 
 
-void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
+void BaseContent::endTask( sal_Int32 CommandId )
 {
     // This is the only function allowed to throw an exception
     m_pMyShell->endTask( CommandId,m_aUncPath,this );

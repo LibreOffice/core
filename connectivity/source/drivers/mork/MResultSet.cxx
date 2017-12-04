@@ -1037,7 +1037,7 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
     return 0;
 }
 
-void SAL_CALL OResultSet::executeQuery()
+void OResultSet::executeQuery()
 {
     ResultSetEntryGuard aGuard( *this );
 

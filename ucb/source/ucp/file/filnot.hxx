@@ -72,8 +72,8 @@ namespace fileaccess {
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
-        void SAL_CALL notifyPropertyAdded( const OUString & aPropertyName );
-        void SAL_CALL notifyPropertyRemoved( const OUString & aPropertyName );
+        void notifyPropertyAdded( const OUString & aPropertyName );
+        void notifyPropertyRemoved( const OUString & aPropertyName );
     };
 
 

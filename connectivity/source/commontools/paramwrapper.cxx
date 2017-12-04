@@ -245,7 +245,7 @@ namespace param
     }
 
 
-    void SAL_CALL ParameterWrapper::dispose()
+    void ParameterWrapper::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

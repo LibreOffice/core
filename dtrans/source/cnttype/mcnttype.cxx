@@ -88,7 +88,7 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )
     return m_ParameterMap.find( aName )->second;
 }
 
-void SAL_CALL CMimeContentType::init( const OUString& aCntType )
+void CMimeContentType::init( const OUString& aCntType )
 {
     if ( aCntType.isEmpty( ) )
         throw IllegalArgumentException( );
@@ -99,7 +99,7 @@ void SAL_CALL CMimeContentType::init( const OUString& aCntType )
     type();
 }
 
-void SAL_CALL CMimeContentType::getSym()
+void CMimeContentType::getSym()
 {
     if ( m_nPos < m_ContentType.getLength( ) )
     {
@@ -111,7 +111,7 @@ void SAL_CALL CMimeContentType::getSym()
     m_nxtSym = OUString( );
 }
 
-void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
+void CMimeContentType::acceptSym( const OUString& pSymTlb )
 {
     if ( pSymTlb.indexOf( m_nxtSym ) < 0 )
         throw IllegalArgumentException( );
@@ -119,13 +119,13 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
     getSym();
 }
 
-void SAL_CALL CMimeContentType::skipSpaces()
+void CMimeContentType::skipSpaces()
 {
     while (m_nxtSym == SPACE)
         getSym( );
 }
 
-void SAL_CALL CMimeContentType::type()
+void CMimeContentType::type()
 {
     skipSpaces( );
 
@@ -154,7 +154,7 @@ void SAL_CALL CMimeContentType::type()
     subtype( );
 }
 
-void SAL_CALL CMimeContentType::subtype()
+void CMimeContentType::subtype()
 {
     skipSpaces( );
 
@@ -180,7 +180,7 @@ void SAL_CALL CMimeContentType::subtype()
     trailer();
 }
 
-void SAL_CALL CMimeContentType::trailer()
+void CMimeContentType::trailer()
 {
     OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
@@ -221,7 +221,7 @@ void SAL_CALL CMimeContentType::trailer()
     }
 }
 
-OUString SAL_CALL CMimeContentType::pName( )
+OUString CMimeContentType::pName( )
 {
     OUString pname;
 
@@ -240,7 +240,7 @@ OUString SAL_CALL CMimeContentType::pName( )
     return pname;
 }
 
-OUString SAL_CALL CMimeContentType::pValue( )
+OUString CMimeContentType::pValue( )
 {
     OUString pvalue;
 
@@ -274,7 +274,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
 // '";' (quote sign followed by semicolon) and '" ' (quote sign followed
 // by space)
 
-OUString SAL_CALL CMimeContentType::quotedPValue( )
+OUString CMimeContentType::quotedPValue( )
 {
     OUString pvalue;
     bool bAfterQuoteSign = false;
@@ -301,7 +301,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
     return pvalue;
 }
 
-OUString SAL_CALL CMimeContentType::nonquotedPValue( )
+OUString CMimeContentType::nonquotedPValue( )
 {
     OUString pvalue;
 
@@ -320,7 +320,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     return pvalue;
 }
 
-void SAL_CALL CMimeContentType::comment()
+void CMimeContentType::comment()
 {
     while ( !m_nxtSym.isEmpty( ) )
     {

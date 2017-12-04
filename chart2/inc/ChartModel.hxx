@@ -187,13 +187,13 @@ private:
         impl_getCurrentController();
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
         impl_notifyModifiedListeners();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
         impl_notifyCloseListeners();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
         impl_notifyStorageChangeListeners();
 
     void impl_store(

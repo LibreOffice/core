@@ -119,7 +119,7 @@ protected:
     FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener );
     virtual ~FlushNotificationAdapter() override;
 
-    void SAL_CALL impl_dispose();
+    void impl_dispose();
 
 protected:
     // XFlushListener
@@ -147,7 +147,7 @@ FlushNotificationAdapter::~FlushNotificationAdapter()
 {
 }
 
-void SAL_CALL FlushNotificationAdapter::impl_dispose()
+void FlushNotificationAdapter::impl_dispose()
 {
     Reference< XFlushListener > xKeepAlive( this );
 
@@ -1021,7 +1021,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithComp
     return connectWithCompletion(_rxHandler,true);
 }
 
-Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,bool _bIsolated )
+Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,bool _bIsolated )
 {
     ModelMethodGuard aGuard( *this );
 

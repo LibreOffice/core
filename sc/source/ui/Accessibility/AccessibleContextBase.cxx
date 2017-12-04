@@ -183,7 +183,7 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
     return AWTSize(GetBoundingBox().GetSize());
 }
 
-bool SAL_CALL ScAccessibleContextBase::isShowing(  )
+bool ScAccessibleContextBase::isShowing(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

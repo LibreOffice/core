@@ -261,7 +261,7 @@ uno::Reference< frame::XController > ChartModel::impl_getCurrentController()
     return uno::Reference< frame::XController > ();
 }
 
-void SAL_CALL ChartModel::impl_notifyCloseListeners()
+void ChartModel::impl_notifyCloseListeners()
 {
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
         .getContainer( cppu::UnoType<util::XCloseListener>::get());

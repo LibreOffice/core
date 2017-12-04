@@ -1817,7 +1817,7 @@ OStorage::~OStorage()
     }
 }
 
-void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
+void OStorage::InternalDispose( bool bNotifyImpl )
 {
     if ( !m_pImpl )
     {

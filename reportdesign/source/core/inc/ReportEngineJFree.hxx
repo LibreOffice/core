@@ -121,7 +121,7 @@ namespace reportdesign
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::frame::XModel > SAL_CALL createDocumentAlive( const css::uno::Reference< css::frame::XFrame >& _frame ,bool _bHidden) ;
+        css::uno::Reference< css::frame::XModel > createDocumentAlive( const css::uno::Reference< css::frame::XFrame >& _frame ,bool _bHidden) ;
         virtual css::util::URL SAL_CALL createDocument(  ) override ;
         virtual void SAL_CALL interrupt(  ) override ;
 

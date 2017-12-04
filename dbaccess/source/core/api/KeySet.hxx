@@ -198,7 +198,7 @@ namespace dbaccess
         virtual bool SAL_CALL previous(  ) override;
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void SAL_CALL ensureRowForData(  );
+        void ensureRowForData(  );
         virtual void SAL_CALL refreshRow(  ) override;
         // css::sdbcx::XRowLocate
         virtual css::uno::Any SAL_CALL getBookmark() override;

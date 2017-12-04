@@ -71,7 +71,7 @@ private:
 protected:
 #ifndef DISABLE_DYNLOADING
     oslModule hModule;
-    oslGenericFunction SAL_CALL getFunctionBySymbol(const sal_Char* func);
+    oslGenericFunction getFunctionBySymbol(const sal_Char* func);
 #endif
 };
 
@@ -115,7 +115,7 @@ private:
         css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
         sal_Int32 maxLeftLength;
         sal_Int32 maxRightLength;
-        css::uno::Sequence< OUString > SAL_CALL
+        css::uno::Sequence< OUString >
             getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toHanja);
 };
 
@@ -153,9 +153,9 @@ public:
 private:
         // user defined dictionary list
         css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
-        OUString SAL_CALL getWordConversion(const OUString& aText,
+        OUString getWordConversion(const OUString& aText,
             sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions, css::uno::Sequence <sal_Int32>& offset);
-        rtl:: OUString SAL_CALL getCharConversion(const rtl:: OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions);
+        rtl:: OUString getCharConversion(const rtl:: OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions);
         css::lang::Locale aLocale;
 };
 

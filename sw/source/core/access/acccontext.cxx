@@ -629,7 +629,7 @@ uno::Reference< XAccessible> SAL_CALL
     return xChild;
 }
 
-uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParentImpl()
+uno::Reference< XAccessible> SwAccessibleContext::getAccessibleParentImpl()
 {
     SolarMutexGuard aGuard;
 
@@ -839,7 +839,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
    true: Use relative mode.
    false: Use absolute mode.
 */
-awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
+awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
 {
     SolarMutexGuard aGuard;
 

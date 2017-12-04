@@ -480,7 +480,7 @@ public:
     lcl_LookupTableHelper();
     ~lcl_LookupTableHelper();
 
-    oslGenericFunction SAL_CALL getFunctionSymbolByName(
+    oslGenericFunction getFunctionSymbolByName(
             const OUString& localeName, const sal_Char* pFunction,
             LocaleDataLookupTableItem** pOutCachedItem );
 
@@ -514,7 +514,7 @@ lcl_LookupTableHelper::~lcl_LookupTableHelper()
     maLookupTable.clear();
 }
 
-oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
+oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
         const OUString& localeName, const sal_Char* pFunction,
         LocaleDataLookupTableItem** pOutCachedItem )
 {
@@ -936,7 +936,7 @@ LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale )
 #define COLLATOR_OFFSET_RULE    2
 #define COLLATOR_ELEMENTS       3
 
-OUString SAL_CALL
+OUString
 LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& algorithm )
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
@@ -1013,7 +1013,7 @@ LocaleDataImpl::getSearchOptions( const Locale& rLocale )
     }
 }
 
-sal_Unicode ** SAL_CALL
+sal_Unicode **
 LocaleDataImpl::getIndexArray(const Locale& rLocale, sal_Int16& indexCount)
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getIndexAlgorithm" ));
@@ -1023,7 +1023,7 @@ LocaleDataImpl::getIndexArray(const Locale& rLocale, sal_Int16& indexCount)
     return nullptr;
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getIndexAlgorithm( const Locale& rLocale )
 {
     sal_Int16 indexCount = 0;
@@ -1042,7 +1042,7 @@ LocaleDataImpl::getIndexAlgorithm( const Locale& rLocale )
     }
 }
 
-OUString SAL_CALL
+OUString
 LocaleDataImpl::getDefaultIndexAlgorithm( const Locale& rLocale )
 {
     sal_Int16 indexCount = 0;
@@ -1057,7 +1057,7 @@ LocaleDataImpl::getDefaultIndexAlgorithm( const Locale& rLocale )
     return OUString();
 }
 
-bool SAL_CALL
+bool
 LocaleDataImpl::hasPhonetic( const Locale& rLocale )
 {
     sal_Int16 indexCount = 0;
@@ -1072,7 +1072,7 @@ LocaleDataImpl::hasPhonetic( const Locale& rLocale )
     return false;
 }
 
-sal_Unicode ** SAL_CALL
+sal_Unicode **
 LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString& algorithm)
 {
     sal_Int16 indexCount = 0;
@@ -1086,28 +1086,28 @@ LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString&
     return nullptr;
 }
 
-bool SAL_CALL
+bool
 LocaleDataImpl::isPhonetic( const Locale& rLocale, const OUString& algorithm )
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray && indexArray[4][0];
 }
 
-OUString SAL_CALL
+OUString
 LocaleDataImpl::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm )
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray ? "0-9"+OUString(indexArray[2]) : OUString();
 }
 
-OUString SAL_CALL
+OUString
 LocaleDataImpl::getIndexModuleByAlgorithm( const Locale& rLocale, const OUString& algorithm )
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray ? OUString(indexArray[1]) : OUString();
 }
 
-Sequence< UnicodeScript > SAL_CALL
+Sequence< UnicodeScript >
 LocaleDataImpl::getUnicodeScripts( const Locale& rLocale )
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getUnicodeScripts" ));
@@ -1127,7 +1127,7 @@ LocaleDataImpl::getUnicodeScripts( const Locale& rLocale )
     }
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getFollowPageWords( const Locale& rLocale )
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getFollowPageWords" ));
@@ -1212,7 +1212,7 @@ LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale )
     }
 }
 
-OUString SAL_CALL
+OUString
 LocaleDataImpl::getHangingCharacters( const Locale& rLocale )
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
@@ -1226,7 +1226,7 @@ LocaleDataImpl::getHangingCharacters( const Locale& rLocale )
     return OUString();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  )
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getBreakIteratorRules" ));
@@ -1270,7 +1270,7 @@ LocaleDataImpl::getReservedWord( const Locale& rLocale  )
 }
 
 
-Sequence< Sequence<beans::PropertyValue> > SAL_CALL
+Sequence< Sequence<beans::PropertyValue> >
 LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
 {
     // load symbol
@@ -1376,7 +1376,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 };
 
-Sequence< Reference<container::XIndexAccess> > SAL_CALL
+Sequence< Reference<container::XIndexAccess> >
 LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
 {
     // load symbol
@@ -1448,7 +1448,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
 
 // helper functions
 
-oslGenericFunction SAL_CALL LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, const sal_Char* pFunction )
+oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, const sal_Char* pFunction )
 {
     lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 

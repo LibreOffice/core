@@ -89,7 +89,7 @@ SfxFilterListener::~SfxFilterListener()
 {
 }
 
-void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource )
+void SfxFilterListener::refreshed( const lang::EventObject& aSource )
 {
     SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xContainer( aSource.Source, uno::UNO_QUERY );
@@ -102,7 +102,7 @@ void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource )
     }
 }
 
-void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource )
+void SfxFilterListener::disposing( const lang::EventObject& aSource )
 {
     SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xNotifier( aSource.Source, uno::UNO_QUERY );

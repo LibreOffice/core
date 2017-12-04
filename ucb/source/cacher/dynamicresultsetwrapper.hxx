@@ -81,11 +81,11 @@ protected:
     osl::Condition          m_aListenerSet;
 
 protected:
-    void SAL_CALL impl_init();
-    void SAL_CALL impl_deinit();
+    void impl_init();
+    void impl_deinit();
     /// @throws css::lang::DisposedException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     impl_EnsureNotDisposed();
 
     virtual void SAL_CALL
@@ -146,7 +146,7 @@ public:
     impl_disposing( const css::lang::EventObject& Source );
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     impl_notify( const css::ucb::ListEvent& Changes );
 };
 
@@ -183,7 +183,7 @@ public:
 
 
     // own methods:
-    void SAL_CALL impl_OwnerDies();
+    void impl_OwnerDies();
 };
 
 

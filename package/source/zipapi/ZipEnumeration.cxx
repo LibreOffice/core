@@ -29,12 +29,12 @@ ZipEnumeration::ZipEnumeration( EntryHash & rNewEntryHash)
 ZipEnumeration::~ZipEnumeration()
 {
 }
-bool SAL_CALL ZipEnumeration::hasMoreElements()
+bool ZipEnumeration::hasMoreElements()
 {
     return (aIterator != rEntryHash.end());
 }
 
-const ZipEntry* SAL_CALL ZipEnumeration::nextElement()
+const ZipEntry* ZipEnumeration::nextElement()
 {
     if (aIterator != rEntryHash.end())
         return &((*aIterator++).second);

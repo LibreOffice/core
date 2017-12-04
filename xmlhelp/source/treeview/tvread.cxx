@@ -178,7 +178,7 @@ ConfigData::ConfigData()
     memset(m_vAdd, 0, sizeof(m_vAdd));
 }
 
-void SAL_CALL ConfigData::replaceName( OUString& oustring ) const
+void ConfigData::replaceName( OUString& oustring ) const
 {
     sal_Int32 idx = -1,k = 0,off;
     bool cap = false;

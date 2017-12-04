@@ -74,7 +74,7 @@ namespace dbtools
     }
 
 
-    Any SAL_CALL WarningsContainer::getWarnings(  ) const
+    Any WarningsContainer::getWarnings(  ) const
     {
         Any aAllWarnings;
         if ( m_xExternalWarnings.is() )
@@ -87,7 +87,7 @@ namespace dbtools
     }
 
 
-    void SAL_CALL WarningsContainer::clearWarnings(  )
+    void WarningsContainer::clearWarnings(  )
     {
         if ( m_xExternalWarnings.is() )
             m_xExternalWarnings->clearWarnings();

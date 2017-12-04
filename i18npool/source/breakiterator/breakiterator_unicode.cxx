@@ -77,7 +77,7 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
 };
 
 // loading ICU breakiterator on demand.
-void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocale,
+void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 nWordType, const sal_Char *rule, const OUString& rText)
 {
     bool bNewBreak = false;

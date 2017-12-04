@@ -152,12 +152,12 @@ namespace fileaccess {
 
     private:
         // methods
-        void SAL_CALL init();
+        void init();
 
         // Members
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;
 
-        void SAL_CALL initProperties();
+        void initProperties();
         osl::Mutex   m_aMutex;
         OUString m_HostName;
         OUString m_HomeDirectory;
