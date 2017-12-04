@@ -235,10 +235,9 @@ struct SvXMLStyleIndexCmp_Impl
 
 class SvXMLStylesContext_Impl
 {
-    typedef std::vector<rtl::Reference<SvXMLStyleContext>> StylesType;
     typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> IndicesType;
 
-    StylesType aStyles;
+    std::vector<rtl::Reference<SvXMLStyleContext>> aStyles;
     mutable std::unique_ptr<IndicesType> pIndices;
     bool bAutomaticStyle;
 
