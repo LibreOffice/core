@@ -1207,13 +1207,15 @@ public:
     void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier);
     const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
-    vcl::Window*                        GetParentWithLOKNotifier();
+
+    /// Find the nearest parent with LOK Notifier; can be itself if this Window has LOK notifier set.
+    VclPtr<vcl::Window>                 GetParentWithLOKNotifier();
 
     /// Indicate that LOK is not going to use this dialog any more.
     void                                ReleaseLOKNotifier();
 
     /// Find an existing Window based on the LOKWindowId.
-    static VclPtr<Window>               FindLOKWindow(vcl::LOKWindowId nWindowId);
+    static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
 
     /// Dialog / window tunneling related methods.
     Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
