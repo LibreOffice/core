@@ -162,6 +162,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_xlsxfuzzer \
     Executable_pptxfuzzer \
     Executable_mmlfuzzer \
+    Executable_mtpfuzzer \
 ))
 endif
 
