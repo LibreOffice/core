@@ -126,7 +126,6 @@ void VBATest::testMiscVBAFunctions()
         "string.vb",
         "strreverse.vb",
         "switch.vb",
-        "syd.vb",
         "timeserial.vb",
         "timevalue.vb",
         "trim.vb",
