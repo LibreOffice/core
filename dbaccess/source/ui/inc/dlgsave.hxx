@@ -62,14 +62,14 @@ namespace dbaui
                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
-                    SADFlags _nFlags = SADFlags::NONE);
+                    SADFlags _nFlags);
 
         OSaveAsDlg( vcl::Window* _pParent,
                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const OUString& _rDefault,
                     const OUString& _sLabel,
                     const IObjectNameCheck& _rObjectNameCheck,
-                    SADFlags _nFlags = SADFlags::NONE);
+                    SADFlags _nFlags);
         virtual ~OSaveAsDlg() override;
         virtual void dispose() override;
 

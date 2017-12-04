@@ -357,7 +357,7 @@ namespace
         TTableDataHelper::const_iterator aFind = m_aTableData.find(sSourceName);
         if ( aFind == m_aTableData.end() )
         {
-            aFind = m_aTableData.emplace(sSourceName,std::make_shared<OTableWindowData>(xTableProp,sSourceName, sSourceName)).first;
+            aFind = m_aTableData.emplace(sSourceName,std::make_shared<OTableWindowData>(xTableProp,sSourceName, sSourceName, OUString())).first;
             aFind->second->ShowAll(false);
         }
         TTableWindowData::value_type pReferencingTable = aFind->second;
@@ -390,7 +390,7 @@ namespace
                         if ( m_xTables->hasByName(sReferencedTable) )
                         {
                             Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
-                            aRefFind = m_aTableData.emplace(sReferencedTable,std::make_shared<OTableWindowData>(xReferencedTable,sReferencedTable, sReferencedTable)).first;
+                            aRefFind = m_aTableData.emplace(sReferencedTable,std::make_shared<OTableWindowData>(xReferencedTable,sReferencedTable, sReferencedTable, OUString())).first;
                             aRefFind->second->ShowAll(false);
                         }
                         else

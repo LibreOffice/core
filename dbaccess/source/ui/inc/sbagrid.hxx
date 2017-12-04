@@ -221,7 +221,7 @@ namespace dbaui
         bool                          m_bActivatingForDrop;
 
     public:
-        SbaGridControl(css::uno::Reference< css::uno::XComponentContext > const & _rM, Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
+        SbaGridControl(css::uno::Reference< css::uno::XComponentContext > const & _rM, Window* pParent, FmXGridPeer* _pPeer, WinBits nBits);
         virtual ~SbaGridControl() override;
         virtual void dispose() override;
 

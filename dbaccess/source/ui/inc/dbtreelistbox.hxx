@@ -76,7 +76,7 @@ namespace dbaui
         DECL_LINK( MenuEventListener, VclMenuEvent&, void );
 
     public:
-        DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0);
+        DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle);
         virtual ~DBTreeListBox() override;
         virtual void dispose() override;
 
