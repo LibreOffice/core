@@ -11,22 +11,29 @@
 #include <vcl/FilterConfigItem.hxx>
 #include "commonfuzzer.hxx"
 
-extern "C" bool TestImportMathType(SvStream& rStream);
+#include <config_features.h>
+#include <osl/detail/component-mapping.h>
 
-extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+const lib_to_factory_mapping* lo_get_factory_map(void)
 {
-    TypicalFuzzerInitialize(argc, argv);
-    return 0;
+    static lib_to_factory_mapping map[] = { { 0, 0 } };
+
+    return map;
 }
+
+const lib_to_constructor_mapping* lo_get_constructor_map(void)
+{
+    static lib_to_constructor_mapping map[] = { { 0, 0 } };
+
+    return map;
+}
+
+extern "C" bool TestImportMathType(SvStream& rStream);
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
     (void)TestImportMathType(aStream);
-    //fontconfigs alloc mechanism is too complicated for lsan/valgrind so
-    //force the fontconfig options to be released now, they are demand loaded
-    //so will be recreated if necessary
-    SvpSalGraphics::getPlatformGlyphCache().ClearFontOptions();
     return 0;
 }
 
