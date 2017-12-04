@@ -392,8 +392,10 @@
         "--socket=wayland",
         "--socket=pulseaudio",
         "--filesystem=host",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=LIBO_FLATPAK=1",
         "--own-name=org.libreoffice.LibreOfficeIpc0",
+        "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*"
     ]
 }
