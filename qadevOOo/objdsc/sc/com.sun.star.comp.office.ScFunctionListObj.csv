@@ -5,5 +5,4 @@
 "ScFunctionListObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScFunctionListObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScFunctionListObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScFunctionListObj";"com::sun::star::sheet::XFunctionDescriptions";"getById()"
 "ScFunctionListObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

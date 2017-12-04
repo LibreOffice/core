@@ -143,6 +143,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_labelrangeobj \
 	CppunitTest_sc_headerfootercontentobj \
 	CppunitTest_sc_recentfunctionsobj \
+	CppunitTest_sc_functionlistobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
