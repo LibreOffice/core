@@ -580,7 +580,7 @@ public:
                      sal_uInt32 nOffsDgg,
                      SvStream* pStData,
                      SdrModel* pSdrModel_,
-                     long      nApplicationScale    =  0,
+                     long      nApplicationScale,
                      ColorData mnDefaultColor_      =  COL_DEFAULT,
                      SvStream* pStData2_            =  nullptr,
                      bool bSkipImages               =  false );
@@ -644,22 +644,22 @@ public:
                           void* pData,
                           tools::Rectangle& rClientRect,
                           const tools::Rectangle& rGlobalChildRect,
-                          int nCalledByGroup = 0,
-                          sal_Int32* pShapeId = nullptr);
+                          int nCalledByGroup,
+                          sal_Int32* pShapeId);
     SdrObject* ImportGroup( const DffRecordHeader& rHd,
                             SvStream& rSt,
                             void* pData,
                             tools::Rectangle& rClientRect,
                             const tools::Rectangle& rGlobalChildRect,
                             int nCalledByGroup,
-                            sal_Int32* pShapeId = nullptr );
+                            sal_Int32* pShapeId );
     SdrObject* ImportShape( const DffRecordHeader& rHd,
                             SvStream& rSt,
                             void* pData,
                             tools::Rectangle& rClientRect,
                             const tools::Rectangle& rGlobalChildRect,
                             int nCalledByGroup,
-                            sal_Int32* pShapeId = nullptr);
+                            sal_Int32* pShapeId);
 
     tools::Rectangle GetGlobalChildAnchor( const DffRecordHeader& rHd,
                                     SvStream& rSt,

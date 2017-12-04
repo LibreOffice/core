@@ -3755,7 +3755,7 @@ bool XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecord
         and the returned group object contains them all. ImportObj() calls the
         virtual functions ProcessClientAnchor2() and ProcessObj() and writes
         the pointer to the related draw object data (OBJ record) into pDrawObj. */
-    SdrObjectPtr xSdrObj( ImportObj( rDffStrm, &pDrawObj, aDummy, aDummy ) );
+    SdrObjectPtr xSdrObj( ImportObj( rDffStrm, &pDrawObj, aDummy, aDummy, /*nCalledByGroup*/0, /*pShapeId*/nullptr ) );
     if( pDrawObj && xSdrObj )
         InsertSdrObject( GetConvData().mrSdrPage, *pDrawObj, xSdrObj.release() );
     return rShHeader.SeekToEndOfRecord( rDffStrm );

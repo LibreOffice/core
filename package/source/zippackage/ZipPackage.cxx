@@ -1006,7 +1006,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     // the manifest.xml is never encrypted - so pass an empty reference
     ZipOutputStream::setEntry(pEntry);
     aZipOut.writeLOC(pEntry);
-    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr);
+    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr, /*bEncrypt*/false);
     aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
     aZipOut.rawCloseEntry();
@@ -1059,7 +1059,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     // there is no encryption in this format currently
     ZipOutputStream::setEntry(pEntry);
     aZipOut.writeLOC(pEntry);
-    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr);
+    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr, /*bEncrypt*/false);
     aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
     aZipOut.rawCloseEntry();

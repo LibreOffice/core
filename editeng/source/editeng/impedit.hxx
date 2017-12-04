@@ -740,7 +740,7 @@ public:
     const Size&             GetPaperSize() const                    { return aPaperSize; }
     void                    SetPaperSize( const Size& rSz )         { aPaperSize = rSz; }
 
-    void                    SetVertical( bool bVertical, bool bTopToBottom = true);
+    void                    SetVertical( bool bVertical, bool bTopToBottom);
     bool                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
     bool                    IsTopToBottom() const                   { return GetEditDoc().IsTopToBottom(); }
 
