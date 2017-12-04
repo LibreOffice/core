@@ -567,7 +567,7 @@ static int HashSize = SAL_N_ELEMENTS(HashTable);
 
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 
-#if ! (defined LINUX || defined MACOSX || defined IOS)
+#if ! ((defined LINUX && !defined __FreeBSD_kernel__) || defined MACOSX || defined IOS)
 static oslThreadIdentifier LastIdent = 0;
 #endif
 
