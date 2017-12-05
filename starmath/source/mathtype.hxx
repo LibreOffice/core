@@ -176,7 +176,10 @@ private:
         tmANGLE,tmPAREN,tmBRACE,tmBRACK,tmBAR,tmDBAR,tmFLOOR,tmCEILING,
         tmLBLB,tmRBRB,tmRBLB,tmLBRP,tmLPRB,tmROOT,tmFRACT,tmSCRIPT,tmUBAR,
         tmOBAR,tmLARROW,tmRARROW,tmBARROW,tmSINT,tmDINT,tmTINT,tmSSINT,
-        tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM
+        tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM,tmISUM,tmPROD,tmIPROD,
+        tmCOPROD,tmICOPROD,tmUNION,tmIUNION,tmINTER,tmIINTER,tmLIM,tmLDIV,
+        tmSLFRACT,tmINTOP,tmSUMOP,tmLSCRIPT,tmDIRAC,tmUARROW,tmOARROW,
+        tmOARC
     };
 public:
     static bool LookupChar(sal_Unicode nChar,OUString &rRet,
