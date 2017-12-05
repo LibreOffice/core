@@ -57,7 +57,6 @@
 #include <boost/optional.hpp>
 
 #include <algorithm>
-#include <functional>
 #include <iterator>
 
 namespace frm
@@ -468,11 +467,11 @@ namespace frm
 
         const OUString* pSelectedItemsPos = ::std::find_if(
             _rPropertyNames.begin(), _rPropertyNames.end(),
-             ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_SELECT_SEQ )
+             [](OUString const & s) { return s == PROPERTY_SELECT_SEQ; }
         );
         const OUString* pStringItemListPos = ::std::find_if(
             _rPropertyNames.begin(), _rPropertyNames.end(),
-             ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_STRINGITEMLIST )
+             [](OUString const & s) { return s == PROPERTY_STRINGITEMLIST; }
         );
         if ( ( pSelectedItemsPos != _rPropertyNames.end() ) && ( pStringItemListPos != _rPropertyNames.end() ) )
         {
