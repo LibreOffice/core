@@ -1573,7 +1573,7 @@ void StarBASIC::MakeErrorText( ErrCode nId, const OUString& aMsg )
     const char* pErrorMsg = nullptr;
     for (ErrMsgCode* pItem = RID_BASIC_START; pItem->second; ++pItem)
     {
-        if (ErrCode(nId.GetRest()) == pItem->second)
+        if (nId == pItem->second)
         {
             pErrorMsg = pItem->first;
             break;
