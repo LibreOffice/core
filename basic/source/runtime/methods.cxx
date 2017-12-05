@@ -2461,17 +2461,9 @@ void SbRtl_IsError(StarBASIC *, SbxArray & rPar, bool)
         SbUnoObject* pObj = dynamic_cast<SbUnoObject*>( pVar  );
         if ( !pObj )
         {
-            // GetObject() sets error if the variable was not an object, so
-            // remember and reset if it isn't.
-            ErrCode eOld = SbxBase::GetError();
-            if ( SbxBase* pBaseObj = pVar->GetObject() )
+            if ( SbxBase* pBaseObj = (pVar->IsObject() ? pVar->GetObject() : nullptr) )
             {
                 pObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
-            }
-            else
-            {
-                SbxBase::ResetError();
-                SbxBase::SetError( eOld );
             }
         }
         uno::Reference< script::XErrorQuery > xError;
