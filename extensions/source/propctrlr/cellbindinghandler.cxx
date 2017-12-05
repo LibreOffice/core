@@ -442,7 +442,7 @@ namespace pcr
     }
 
 
-    Sequence< Property > SAL_CALL CellBindingPropertyHandler::doDescribeSupportedProperties() const
+    Sequence< Property > CellBindingPropertyHandler::doDescribeSupportedProperties() const
     {
         std::vector< Property > aProperties;
 

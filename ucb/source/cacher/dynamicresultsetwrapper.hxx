@@ -88,10 +88,10 @@ protected:
     void
     impl_EnsureNotDisposed();
 
-    virtual void SAL_CALL
+    virtual void
     impl_InitResultSetOne( const css::uno::Reference<
                 css::sdbc::XResultSet >& xResultSet );
-    virtual void SAL_CALL
+    virtual void
     impl_InitResultSetTwo( const css::uno::Reference<
                 css::sdbc::XResultSet >& xResultSet );
 
@@ -142,7 +142,7 @@ public:
 
     // own methods:
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL
+    virtual void
     impl_disposing( const css::lang::EventObject& Source );
 
     /// @throws css::uno::RuntimeException

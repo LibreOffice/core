@@ -273,14 +273,14 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleEditObject::createAccessibleDescription()
 {
 //    OSL_FAIL("Should never be called, because is set in the constructor.")
     return OUString();
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleEditObject::createAccessibleName()
 {
     OSL_FAIL("Should never be called, because is set in the constructor.");

@@ -1506,13 +1506,13 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ========================================================
 
-OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription()
+OUString ScAccessibleDocumentPagePreview::createAccessibleDescription()
 {
     OUString sDescription = STR_ACC_PREVIEWDOC_DESCR;
     return sDescription;
 }
 
-OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName()
+OUString ScAccessibleDocumentPagePreview::createAccessibleName()
 {
     OUString sName = ScResId(STR_ACC_PREVIEWDOC_NAME);
     return sName;

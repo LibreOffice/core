@@ -63,10 +63,10 @@ public:
     virtual ~SdFileDialog_Imp() override;
 
     // overwritten from FileDialogHelper, to receive user feedback
-    virtual void SAL_CALL ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+    virtual void ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
 };
 
-void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+void SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
     SolarMutexGuard aGuard;
 

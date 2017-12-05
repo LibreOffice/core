@@ -79,7 +79,7 @@ namespace pcr
 
         // PropertyHandler overridables
         virtual css::uno::Sequence< css::beans::Property >
-                                                    SAL_CALL doDescribeSupportedProperties() const override;
+                                                    doDescribeSupportedProperties() const override;
         virtual void onNewComponent() override;
 
     protected:

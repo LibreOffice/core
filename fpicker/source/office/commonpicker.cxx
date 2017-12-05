@@ -335,7 +335,7 @@ namespace svt
 
     // XExecutableDialog functions
 
-    void SAL_CALL OCommonPicker::setTitle( const OUString& _rTitle )
+    void OCommonPicker::setTitle( const OUString& _rTitle )
     {
         SolarMutexGuard aGuard;
         m_aTitle = _rTitle;

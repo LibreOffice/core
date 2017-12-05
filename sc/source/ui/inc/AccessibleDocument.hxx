@@ -212,11 +212,11 @@ public:
 
 protected:
     /// Return this object's description.
-    virtual OUString SAL_CALL
+    virtual OUString
         createAccessibleDescription() override;
 
     /// Return the object's current name.
-    virtual OUString SAL_CALL
+    virtual OUString
         createAccessibleName() override;
 
     /// Return the object's current bounding box relative to the desktop.

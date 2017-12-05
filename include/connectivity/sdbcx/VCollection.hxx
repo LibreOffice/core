@@ -176,7 +176,7 @@ namespace connectivity
             void renameObject(const OUString& _sOldName, const OUString& _sNewName);
 
             // only the name is identical to ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing();
+            virtual void disposing();
             // dispatch the refcounting to the parent
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;

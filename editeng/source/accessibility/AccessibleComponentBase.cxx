@@ -140,7 +140,7 @@ OUString SAL_CALL AccessibleComponentBase::getToolTipText()
 
 // XTypeProvider
 
-uno::Sequence<uno::Type> SAL_CALL
+uno::Sequence<uno::Type>
     AccessibleComponentBase::getTypes()
 {
     // Get list of types from the context base implementation...

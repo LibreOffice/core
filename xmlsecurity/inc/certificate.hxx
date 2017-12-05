@@ -25,7 +25,7 @@ public:
     /// Returns the SHA-256 thumbprint.
     ///
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getSHA256Thumbprint() = 0;
+    virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() = 0;
 
 protected:
     ~Certificate() noexcept = default;

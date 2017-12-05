@@ -232,7 +232,7 @@ namespace pcr
         virtual void SAL_CALL disposing() override;
 
         // PropertyHandler overridables
-        virtual Sequence< Property >        SAL_CALL doDescribeSupportedProperties() const override;
+        virtual Sequence< Property >        doDescribeSupportedProperties() const override;
 
     protected:
         virtual void onNewComponent() override;
@@ -537,7 +537,7 @@ namespace pcr
     }
 
 
-    Sequence< Property > SAL_CALL FormGeometryHandler::doDescribeSupportedProperties() const
+    Sequence< Property > FormGeometryHandler::doDescribeSupportedProperties() const
     {
         if ( !m_xAssociatedShape.is() )
             return Sequence< Property >();

@@ -106,7 +106,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
 }
 
 // This method should be overwritten by derived language specific class.
-void SAL_CALL BreakIterator_CTL::makeIndex(const OUString& /*text*/, sal_Int32 /*pos*/)
+void BreakIterator_CTL::makeIndex(const OUString& /*text*/, sal_Int32 /*pos*/)
 {
     throw RuntimeException();
 }

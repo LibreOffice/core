@@ -37,9 +37,9 @@ class CachedDynamicResultSet
                             m_xContentIdentifierMapping;
 
 protected:
-    virtual void SAL_CALL
+    virtual void
     impl_InitResultSetOne( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
-    virtual void SAL_CALL
+    virtual void
     impl_InitResultSetTwo( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
 
 public:
@@ -69,7 +69,7 @@ public:
 
     // own methods ( inherited )
 
-    virtual void SAL_CALL
+    virtual void
     impl_disposing( const css::lang::EventObject& Source ) override;
 };
 

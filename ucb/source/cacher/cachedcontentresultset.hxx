@@ -155,7 +155,7 @@ class CachedContentResultSet
 private:
 
     //helping XPropertySet methods.
-    virtual void SAL_CALL impl_initPropertySetInfo() override;
+    virtual void impl_initPropertySetInfo() override;
 
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
@@ -218,13 +218,13 @@ public:
 
     // own inherited
 
-    virtual void SAL_CALL
+    virtual void
     impl_disposing( const css::lang::EventObject& Source ) override;
 
-    virtual void SAL_CALL
+    virtual void
     impl_propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
-    virtual void SAL_CALL
+    virtual void
     impl_vetoableChange( const css::beans::PropertyChangeEvent& aEvent ) override;
 
 

@@ -104,7 +104,7 @@ static sal_Int32 SAL_CALL getACell(const sal_Unicode *text, sal_Int32 pos, sal_I
 
 #define is_Thai(c)  (0x0e00 <= c && c <= 0x0e7f) // Unicode definition for Thai
 
-void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos)
+void BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos)
 {
     if (Text != cachedText) {
         cachedText = Text;

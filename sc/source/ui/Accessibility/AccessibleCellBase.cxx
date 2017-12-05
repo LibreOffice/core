@@ -75,7 +75,7 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 
     //=====  XAccessibleComponent  ============================================
 
-bool SAL_CALL ScAccessibleCellBase::isVisible()
+bool ScAccessibleCellBase::isVisible()
 {
      SolarMutexGuard aGuard;
     IsObjectValid();
@@ -204,7 +204,7 @@ sal_Int32
     return mnIndex;
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleCellBase::createAccessibleDescription()
 {
     OUString sDescription = STR_ACC_CELL_DESCR;
@@ -212,7 +212,7 @@ OUString SAL_CALL
     return sDescription;
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleCellBase::createAccessibleName()
 {
     // Document not needed, because only the cell address, but not the tablename is needed
