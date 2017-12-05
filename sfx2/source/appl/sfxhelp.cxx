@@ -626,7 +626,27 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     if ( !impl_hasHelpInstalled() )
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),"onlinehelpmanual","sfx/ui/helpmanual.ui");
+        OUString aLocaleStr;
+        rtl_Locale * pLocale;
+
+        osl_getProcessLocale( &pLocale );
+
+        if ( pLocale && pLocale->Language )
+        {
+            if (pLocale->Country && rtl_uString_getLength( pLocale->Country) > 0)
+                aLocaleStr = OUString(pLocale->Language) + "_" + OUString(pLocale->Country);
+            else
+                aLocaleStr = OUString(pLocale->Language);
+
+            if (pLocale->Variant && rtl_uString_getLength( pLocale->Variant) > 0)
+                aLocaleStr += OUString(pLocale->Variant);
+        }
+        ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),
+                                                    "onlinehelpmanual", "sfx/ui/helpmanual.ui");
+
+        OUString sPrimTex = aQueryBox->get_primary_text();
+        sPrimTex.replaceAll("%UILOCALE", aLocaleStr);
+        aQueryBox->set_primary_text(sPrimTex);
         short OnlineHelpBox = aQueryBox->Execute();
 
         if(OnlineHelpBox == RET_OK)
