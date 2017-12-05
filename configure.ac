@@ -6431,10 +6431,10 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         AC_LANG_PUSH([C++])
         save_CPPFLAGS=$CPPFLAGS
         save_CXX=$CXX
-        # compiler plugins must be built with "native" bitness of clang
-        # because they link against clang libraries
-        CXX=${COMPILER_PLUGINS_CXX-$(echo $CXX | sed -e s/-m64// -e s/-m32//)}
-        CPPFLAGS="$CPPFLAGS $CXXFLAGS_CXX11 -I$CLANGDIR/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
+        # compiler plugins must be built with "native" compiler that was used to build Clang itself:
+        : "${COMPILER_PLUGINS_CXX=g++}"
+        CXX=$COMPILER_PLUGINS_CXX
+        CPPFLAGS="$CPPFLAGS -I$CLANGDIR/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
         AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
             [COMPILER_PLUGINS=TRUE],
             [
