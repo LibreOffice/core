@@ -5980,6 +5980,18 @@ fi
 AC_SUBST(GPERF)
 
 dnl ===================================================================
+dnl Check for system libcmis
+dnl ===================================================================
+# libcmis requires curl and we can't build curl for iOS
+if test $_os != iOS; then
+    libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.0])
+    ENABLE_LIBCMIS=TRUE
+else
+    ENABLE_LIBCMIS=
+fi
+AC_SUBST(ENABLE_LIBCMIS)
+
+dnl ===================================================================
 dnl C++11
 dnl ===================================================================
 
@@ -6007,6 +6019,9 @@ elif test "$GCC" = "yes"; then
     for flag in $my_flags; do
         save_CXXFLAGS=$CXXFLAGS
         CXXFLAGS="$CXXFLAGS $flag -Werror"
+        if test "$SYSTEM_LIBCMIS" = TRUE; then
+            CXXFLAGS="$CXXFLAGS -DSYSTEM_LIBCMIS $LIBCMIS_CFLAGS"
+        fi
         AC_LANG_PUSH([C++])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
             #include <algorithm>
@@ -6021,6 +6036,19 @@ elif test "$GCC" = "yes"; then
                 // make Clang with -std < C++17 not even warn about register
             #include "conftest.inc"
             #pragma GCC diagnostic pop
+
+            #if defined SYSTEM_LIBCMIS
+            // See ucb/source/ucp/cmis/auth_provider.hxx:
+            #if __GNUC__ >= 7
+            #pragma GCC diagnostic push
+            #pragma GCC diagnostic ignored "-Wdeprecated"
+            #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
+            #endif
+            #include <libcmis/libcmis.hxx>
+            #if __GNUC__ >= 7
+            #pragma GCC diagnostic pop
+            #endif
+            #endif
 
             void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                 std::sort(v.begin(), v.end(), fn);
@@ -7741,18 +7769,6 @@ libo_CHECK_SYSTEM_MODULE([libzmf],[ZMF],[libzmf-0.0])
 
 libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
 libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.4])
-
-dnl ===================================================================
-dnl Check for system libcmis
-dnl ===================================================================
-# libcmis requires curl and we can't build curl for iOS
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.0])
-    ENABLE_LIBCMIS=TRUE
-else
-    ENABLE_LIBCMIS=
-fi
-AC_SUBST(ENABLE_LIBCMIS)
 
 dnl ===================================================================
 dnl Check for system lcms2
