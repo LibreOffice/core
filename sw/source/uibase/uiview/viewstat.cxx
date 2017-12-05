@@ -77,31 +77,31 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
-        case FN_NAV_ELEMENT:
-            // used to update all instances of this control
-            rSet.InvalidateItem( nWhich );
-        break;
-        case FN_EDIT_LINK_DLG:
-            if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
-                rSet.DisableItem(nWhich);
-            else if( m_pWrtShell->IsSelFrameMode() &&
-                m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE)
-            {
-                rSet.DisableItem(nWhich);
-            }
+            case FN_NAV_ELEMENT:
+                // used to update all instances of this control
+                rSet.InvalidateItem( nWhich );
             break;
+            case FN_EDIT_LINK_DLG:
+                if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
+                    rSet.DisableItem(nWhich);
+                else if( m_pWrtShell->IsSelFrameMode() &&
+                    m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE)
+                {
+                    rSet.DisableItem(nWhich);
+                }
+                break;
 
-        case SID_DRAWTBX_LINES:
-            if ( bWeb )
-                rSet.DisableItem(nWhich);
-            break;
+            case SID_DRAWTBX_LINES:
+                if ( bWeb )
+                    rSet.DisableItem(nWhich);
+                break;
 
-        case SID_INSERT_GRAPHIC:
-            if( m_pWrtShell->CursorInsideInputField() )
-            {
-                rSet.DisableItem(nWhich);
-            }
-            break;
+            case SID_INSERT_GRAPHIC:
+                if( m_pWrtShell->CursorInsideInputField() )
+                {
+                    rSet.DisableItem(nWhich);
+                }
+                break;
 
             case FN_INSERT_CAPTION:
                 {
