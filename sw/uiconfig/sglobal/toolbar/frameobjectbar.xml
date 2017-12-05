@@ -29,13 +29,13 @@
  <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapThrough"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignUp"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignMiddle"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignDown"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectForwardOne"/>
