@@ -53,6 +53,10 @@ public:
                     const css::uno::Sequence< css::frame::DispatchInformation >& xCommands,
                     const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
                     const OUString& filterTerm = OUString() );
+    /*
+     * Returns empty string if the command doesn't belong to the current module.
+     * And returns the uno command as fall back in case of exceptions.
+     */
     OUString    MapCommand2UIName(const OUString& sCommand);
 
     /**

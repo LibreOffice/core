@@ -210,9 +210,11 @@ void CommandCategoryListBox::FillFunctionsList(
         sal_Int32 aStartPos = 0;
         sal_Int32 aEndPos   = sUIName.getLength();
 
-        // Apply the search filter
-        if (!filterTerm.isEmpty()
-            && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+        // Apply the search filter, and skip if the command doesn't have a name
+        // which implies it is not applicable to the current module
+        if ( sUIName.isEmpty() ||
+             ( !filterTerm.isEmpty()
+               && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) ) )
         {
             continue;
         }
@@ -234,7 +236,7 @@ OUString CommandCategoryListBox::MapCommand2UIName(const OUString& sCommand)
     {
         css::uno::Reference< css::container::XNameAccess > xModuleConf;
         m_xUICmdDescription->getByName(m_sModuleLongName) >>= xModuleConf;
-        if (xModuleConf.is())
+        if (xModuleConf.is() && xModuleConf->hasByName(sCommand))
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
             sUIName = lProps.getUnpackedValueOrDefault("Name", OUString());
@@ -242,12 +244,13 @@ OUString CommandCategoryListBox::MapCommand2UIName(const OUString& sCommand)
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(css::uno::Exception&)
-        { sUIName.clear(); }
-
-    // fallback for missing UINames !?
-    if (sUIName.isEmpty())
+    catch(css::uno::Exception& e)
     {
+        SAL_INFO("cui.customize",
+                 "An exception caught while getting UI name of a uno command: "
+                 << sCommand << "\nException: " << e.Message);
+        // The command belongs to the current module, but something went wrong while getting its name.
+        // So fall back to the uno command string as the name to be displayed.
         sUIName = sCommand;
     }
 
