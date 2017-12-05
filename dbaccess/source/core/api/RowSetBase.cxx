@@ -776,8 +776,8 @@ void SAL_CALL ORowSetBase::afterLast(  )
     SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
 }
 
-bool SAL_CALL ORowSetBase::move(    std::mem_fun_t<bool,ORowSetBase> const & _aCheckFunctor,
-                                    std::mem_fun_t<bool,ORowSetCache> const & _aMovementFunctor)
+bool SAL_CALL ORowSetBase::move(std::function<bool(ORowSetBase *)> const & _aCheckFunctor,
+                                std::function<bool(ORowSetCache *)> const & _aMovementFunctor)
 {
     SAL_INFO("dbaccess", "ORowSetBase::move() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -826,16 +826,16 @@ bool SAL_CALL ORowSetBase::move(    std::mem_fun_t<bool,ORowSetBase> const & _aC
 sal_Bool SAL_CALL ORowSetBase::first(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::first() Clone = " << m_bClone);
-    std::mem_fun_t<bool,ORowSetBase> ioF_tmp(&ORowSetBase::isOnFirst);
-    std::mem_fun_t<bool,ORowSetCache> F_tmp(&ORowSetCache::first);
+    auto ioF_tmp = std::mem_fn(&ORowSetBase::isOnFirst);
+    auto F_tmp = std::mem_fn(&ORowSetCache::first);
     return move(ioF_tmp,F_tmp);
 }
 
 sal_Bool SAL_CALL ORowSetBase::last(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::last() Clone = " << m_bClone);
-    std::mem_fun_t<bool,ORowSetBase> ioL_tmp(&ORowSetBase::isOnLast);
-    std::mem_fun_t<bool,ORowSetCache> L_tmp(&ORowSetCache::last);
+    auto ioL_tmp = std::mem_fn(&ORowSetBase::isOnLast);
+    auto L_tmp = std::mem_fn(&ORowSetCache::last);
     return move(ioL_tmp,L_tmp);
 }
 

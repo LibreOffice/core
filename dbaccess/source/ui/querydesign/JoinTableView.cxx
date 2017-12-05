@@ -1158,7 +1158,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
                 if (rSelConnection)
                 {
                     const std::vector<OConnectionLine*>& rLines = rSelConnection->GetConnLineList();
-                    std::vector<OConnectionLine*>::const_iterator aIter = std::find_if(rLines.begin(), rLines.end(),std::mem_fun(&OConnectionLine::IsValid));
+                    std::vector<OConnectionLine*>::const_iterator aIter = std::find_if(rLines.begin(), rLines.end(),std::mem_fn(&OConnectionLine::IsValid));
                     if( aIter != rLines.end() )
                         executePopup((*aIter)->getMidPoint(), rSelConnection);
                 }
