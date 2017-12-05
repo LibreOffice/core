@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <o3tl/deleter.hxx>
 #include <vcl/svapp.hxx>
 
 namespace comphelper
@@ -25,7 +26,7 @@ namespace comphelper
 template<class T> class unique_disposing_ptr
 {
 private:
-    std::unique_ptr<T> m_xItem;
+    std::unique_ptr<T, o3tl::default_delete<T>> m_xItem;
     css::uno::Reference< css::frame::XTerminateListener> m_xTerminateListener;
 
     unique_disposing_ptr(const unique_disposing_ptr&) = delete;
