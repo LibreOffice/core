@@ -292,7 +292,7 @@ protected:
             ListenerType _eType
         );
 
-    SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
+    operator css::uno::Reference< css::uno::XInterface > () const
     {
         return const_cast< XContainer* >( static_cast< const XContainer* >( this ) );
     }

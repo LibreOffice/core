@@ -9,14 +9,33 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
-#include <cassert>
+
+#include <algorithm>
+#include <set>
 #include <string>
-#include <iostream>
-#include <fstream>
+#include <utility>
+#include <vector>
 
 // The SAL_CALL function annotation is only necessary on our outward
 // facing C++ ABI, anywhere else it is just cargo-cult.
 //
+
+//TODO: To find inconsistencies like
+//
+//  template<typename> struct S { void f(); }; // #1
+//  template<typename T> void S<T>::f() {} // #2
+//  template void SAL_CALL S<void>::f();
+//
+// VisitFunctionDecl would need to also visit explicit instantiations, by letting
+// shouldVisitTemplateInstantiations return true and returning from VisitFunctionDecl early iff
+// decl->getTemplateSpecializationKind() == TSK_ImplicitInstantiation.  However, an instantiatied
+// FunctionDecl is created in TemplateDeclInstantiator::VisitCXXMethodDecl by copying information
+// (including source locations) from the declaration at #1, and later modified in
+// Sema::InstantiateFunctionDefinition with some source location information from the definition at
+// #2.  That means that the source scanning in isSalCallFunction below would be thoroughly confused
+// and break.  (This happens for both explicit and implicit template instantiations, which is the
+// reason why calls to isSalCallFunction make sure to not call it with any FunctionDecls
+// representing such template instantiations.)
 
 namespace
 {
@@ -24,6 +43,12 @@ namespace
 //{
 //    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
 //}
+
+CXXMethodDecl const* getTemplateInstantiationPattern(CXXMethodDecl const* decl)
+{
+    auto const p = decl->getTemplateInstantiationPattern();
+    return p == nullptr ? decl : cast<CXXMethodDecl>(p);
+}
 
 class SalCall final : public RecursiveASTVisitor<SalCall>, public loplugin::RewritePlugin
 {
@@ -189,7 +214,8 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
         for (auto iter = methodDecl->begin_overridden_methods();
              iter != methodDecl->end_overridden_methods(); ++iter)
         {
-            const CXXMethodDecl* overriddenMethod = (*iter)->getCanonicalDecl();
+            const CXXMethodDecl* overriddenMethod
+                = getTemplateInstantiationPattern(*iter)->getCanonicalDecl();
             if (bCanonicalDeclIsSalCall != isSalCallFunction(overriddenMethod))
             {
                 report(DiagnosticsEngine::Warning, "SAL_CALL inconsistency",
@@ -277,7 +303,8 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
         for (auto iter = methodDecl->begin_overridden_methods();
              iter != methodDecl->end_overridden_methods(); ++iter)
         {
-            const CXXMethodDecl* overriddenMethod = (*iter)->getCanonicalDecl();
+            const CXXMethodDecl* overriddenMethod
+                = getTemplateInstantiationPattern(*iter)->getCanonicalDecl();
             if (isSalCallFunction(overriddenMethod))
                 return true;
         }
@@ -319,49 +346,195 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
 
 bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation* pLoc)
 {
-    // In certain situations, in header files, clang will return bogus range data
-    // from decl->getSourceRange().
-    // Specifically, for the
-    //     LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass const *);
-    // declaration in
-    //     include/linguistic/misc.hxx
-    // it looks like it is returning data from definition of the LNG_DLLPUBLIC macro.
-    // I suspect something inside clang is calling getSpellingLoc() once too often.
-    //
-    // So I use getReturnTypeSourceRange() for the start of the range
-    // instead, and search for the "(" in the function decl.
+    assert(!functionDecl->isTemplateInstantiation());
 
-    SourceRange range = functionDecl->getSourceRange();
+    //TODO:  It appears that FunctionDecls representing explicit template specializations have the
+    // same issue as those representing (implicit or explicit) instantiations, namely that their
+    // data (including relevant source locations) is an incoherent combination of data from the
+    // original template declaration and the later specialization definition.  For example, for the
+    // OValueLimitedType<double>::registerProperties specialization at
+    // forms/source/xforms/datatyperepository.cxx:241, the FunctionDecl (which is even considered
+    // canonic) representing the base-class function overridden by ODecimalType::registerProperties
+    // (forms/source/xforms/datatypes.hxx:299) is dumped as
+    //
+    //  CXXMethodDecl <forms/source/xforms/datatypes.hxx:217:9, col:54>
+    //   forms/source/xforms/datatyperepository.cxx:242:37 registerProperties 'void (void)' virtual
+    //
+    // mixing the source range ("datatypes.hxx:217:9, col:54") from the original declaration with
+    // the name location ("datatyperepository.cxx:242:37") from the explicit specialization.  Just
+    // give up for now and assume no "SAL_CALL" is present:
+    if (functionDecl->getTemplateSpecializationKind() == TSK_ExplicitSpecialization)
+    {
+        return false;
+    }
+
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = functionDecl->getReturnTypeSourceRange().getBegin();
-    SourceLocation endLoc = range.getEnd();
-    if (!startLoc.isValid() || !endLoc.isValid())
+
+    // Stop searching for "SAL_CALL" at the start of the function declaration's name (for qualified
+    // names this will point after the qualifiers, but needlessly including those in the search
+    // should be harmless):
+    SourceLocation endLoc = functionDecl->getNameInfo().getLocStart();
+    while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc))
+    {
+        endLoc = SM.getImmediateMacroCallerLoc(endLoc);
+    }
+    endLoc = SM.getSpellingLoc(endLoc);
+
+    SourceLocation startLoc;
+    bool noReturnType = isa<CXXConstructorDecl>(functionDecl)
+                        || isa<CXXDestructorDecl>(functionDecl)
+                        || isa<CXXConversionDecl>(functionDecl);
+    bool startAfterReturnType = !noReturnType;
+    if (startAfterReturnType)
+    {
+        // For functions that do have a return type, start searching for "SAL_CALL" after the return
+        // type (which for SAL_CALL functions on Windows will be an AttributedTypeLoc, which the
+        // implementation of FunctionDecl::getReturnTypeSourceRange does not take into account, so
+        // do that here explicitly):
+        auto const TSI = functionDecl->getTypeSourceInfo();
+        if (TSI == nullptr)
+        {
+            return false;
+        }
+        auto TL = TSI->getTypeLoc().IgnoreParens();
+        if (auto ATL = TL.getAs<AttributedTypeLoc>())
+        {
+            TL = ATL.getModifiedLoc();
+        }
+        auto const FTL = TL.getAs<FunctionTypeLoc>();
+        if (!FTL)
+        {
+            // Happens when a function declaration uses a typedef for the function type, as in
+            //
+            //  SAL_JNI_EXPORT javaunohelper::detail::Func_bootstrap
+            //  Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap;
+            //
+            // in javaunohelper/source/juhx-export-functions.hxx.
+            //TODO: check the typedef for mention of "SAL_CALL" (and also check for usage of such
+            // typedefs in the !startAfterReturnType case below)
+            return false;
+        }
+        startLoc = FTL.getReturnLoc().getEndLoc();
+        auto const slEnd = Lexer::getLocForEndOfToken(startLoc, 0, SM, compiler.getLangOpts());
+        if (slEnd.isValid()) // i.e., startLoc either non-macro, or at end of macro
+        {
+            startLoc = slEnd;
+        }
+        else // otherwise, resolve into macro text
+        {
+            startLoc = Lexer::getLocForEndOfToken(SM.getSpellingLoc(startLoc), 0, SM,
+                                                  compiler.getLangOpts());
+        }
+        while (startLoc.isMacroID() && SM.isAtEndOfImmediateMacroExpansion(startLoc, &startLoc))
+        {
+        }
+        startLoc = SM.getSpellingLoc(startLoc);
+
+        if (startLoc.isValid() && endLoc.isValid() && startLoc != endLoc
+            && !SM.isBeforeInTranslationUnit(startLoc, endLoc))
+        {
+            // Happens for uses of trailing return type (in which case starting instead at the start
+            // of the function declaration should be fine), but also for cases like
+            //
+            //  void (*f())();
+            //
+            // where the function name is within the function type (TODO: in which case starting at
+            // the start can erroneously pick up the "SAL_CALL" from the returned pointer-to-
+            // function type in cases like
+            //
+            //  void SAL_CALL (*f())();
+            //
+            // that are hopefully rare):
+            startAfterReturnType = false;
+        }
+    }
+    if (!startAfterReturnType)
+    {
+        // Ctors/dtors/conversion functions don't have a return type, start searching for "SAL_CALL"
+        // at the start of the function declaration:
+        startLoc = functionDecl->getSourceRange().getBegin();
+        while (startLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(startLoc))
+        {
+            startLoc = SM.getImmediateMacroCallerLoc(startLoc);
+        }
+        startLoc = SM.getSpellingLoc(startLoc);
+#if !defined _WIN32
+        // When the SAL_CALL macro expands to nothing, it may even precede the function
+        // declaration's source range, so go back one token (unless the declaration is known to
+        // start with a token that must precede a possible "SAL_CALL", like "virtual" or
+        // "explicit"):
+        //TODO: this will produce false positives if the declaration is immediately preceded by a
+        // macro definition whose replacement text ends in "SAL_CALL"
+        if (noReturnType
+            && !(functionDecl->isVirtualAsWritten()
+                 || (isa<CXXConstructorDecl>(functionDecl)
+                     && cast<CXXConstructorDecl>(functionDecl)->isExplicitSpecified())
+                 || (isa<CXXConversionDecl>(functionDecl)
+                     && cast<CXXConversionDecl>(functionDecl)->isExplicitSpecified())))
+        {
+            for (;;)
+            {
+                startLoc = Lexer::GetBeginningOfToken(startLoc.getLocWithOffset(-1), SM,
+                                                      compiler.getLangOpts());
+                auto const s
+                    = StringRef(SM.getCharacterData(startLoc),
+                                Lexer::MeasureTokenLength(startLoc, SM, compiler.getLangOpts()));
+                // When looking backward at least through a function-like macro replacement like
+                //
+                // | foo\         |
+                // |    barbaz##X    |
+                //
+                // starting at "barbaz" in the secod line, the next token reported will start at "\"
+                // in the first line and include the intervening spaces and (part of? looks like an
+                // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
+                // when looking backwards here, without even trying to look at their content:
+                if (!(s.empty() || s.startswith("/*") || s.startswith("//")
+                      || s.startswith("\\\n")))
+                {
+                    break;
+                }
+            }
+        }
+#endif
+    }
+
+    if (startLoc.isInvalid() || endLoc.isInvalid())
+        //TODO: should probably not happen
         return false;
-    char const* p1 = SM.getCharacterData(startLoc);
-    char const* p2 = SM.getCharacterData(endLoc);
 
-    //    if (functionDecl->getIdentifier() && functionDecl->getName() == "capitalType")
-    //    {
-    //        std::cout << "xxxx " << (long)p1 << " " << (long)p2 << " " << (int)(p2-p1) << std::endl;
-    //        std::cout << "  " << std::string(p1, 80) << std::endl;
-    //        report(DiagnosticsEngine::Warning, "jhjkahdashdkash", functionDecl->getLocation())
-    //            << functionDecl->getSourceRange();
-    //    }
-    //
-    static const char* SAL_CALL = "SAL_CALL";
+    SourceLocation found;
 
-    char const* leftBracket = static_cast<char const*>(memchr(p1, '(', p2 - p1));
-    if (!leftBracket)
-        return false;
+    while (SM.isBeforeInTranslationUnit(startLoc, endLoc))
+    {
+        unsigned n = Lexer::MeasureTokenLength(startLoc, SM, compiler.getLangOpts());
+        auto s = StringRef(compiler.getSourceManager().getCharacterData(startLoc), n);
+        while (s.startswith("\\\n"))
+        {
+            s = s.drop_front(2);
+            while (!s.empty()
+                   && (s.front() == ' ' || s.front() == '\t' || s.front() == '\n'
+                       || s.front() == '\v' || s.front() == '\f'))
+            {
+                s = s.drop_front(1);
+            }
+        }
+        if (s == "SAL_CALL")
+        {
+            found = startLoc;
+            break;
+        }
+        if (startLoc == endLoc)
+        {
+            break;
+        }
+        startLoc = startLoc.getLocWithOffset(std::max<unsigned>(n, 1));
+    }
 
-    char const* found = std::search(p1, leftBracket, SAL_CALL, SAL_CALL + strlen(SAL_CALL));
-
-    if (found >= leftBracket)
+    if (found.isInvalid())
         return false;
 
     if (pLoc)
-        // the -1 is to remove the space before the SAL_CALL
-        *pLoc = startLoc.getLocWithOffset(found - p1 - 1);
+        *pLoc = found;
 
     return true;
 }
