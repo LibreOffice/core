@@ -51,8 +51,8 @@ namespace connectivity
         public:
             ONDXKey();
             ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec);
-            ONDXKey(const OUString& aStr, sal_uInt32 nRec = 0);
-            ONDXKey(double aVal, sal_uInt32 nRec = 0);
+            ONDXKey(const OUString& aStr, sal_uInt32 nRec);
+            ONDXKey(double aVal, sal_uInt32 nRec);
 
             inline ONDXKey(const ONDXKey& rKey);
 
@@ -177,7 +177,7 @@ namespace connectivity
             void   SearchAndReplace(const ONDXKey& rSearch, ONDXKey const & rReplace);
 
         protected:
-            ONDXPage(ODbaseIndex& rIndex, sal_uInt32 nPos, ONDXPage* = nullptr);
+            ONDXPage(ODbaseIndex& rIndex, sal_uInt32 nPos, ONDXPage*);
             ~ONDXPage();
 
             void ReleaseRef();

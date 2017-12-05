@@ -63,6 +63,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
                     aName,
                     xRow->getString(4),
                     xRow->getString(5),
+                    "",
                     "");
                     xRet = pRet;
         }

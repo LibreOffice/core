@@ -58,9 +58,9 @@ namespace connectivity
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                     const OUString& Name,
                     const OUString& Type,
-                    const OUString& Description = OUString(),
-                    const OUString& SchemaName = OUString(),
-                    const OUString& CatalogName = OUString()
+                    const OUString& Description,
+                    const OUString& SchemaName,
+                    const OUString& CatalogName
                 );
 
             //XInterface

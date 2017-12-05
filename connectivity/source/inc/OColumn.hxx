@@ -71,12 +71,11 @@ namespace connectivity
 
         OColumn(const OUString &_aTableName,
                 const OUString &_aColumnName,
-
-                sal_Int32       _aNullable=0,
-                sal_Int32       _aColumnDisplaySize=0,
-                sal_Int32       _aPrecision=0,
-                sal_Int32       _aScale=0,
-                sal_Int32       _aColumnType=0)
+                sal_Int32       _aNullable,
+                sal_Int32       _aColumnDisplaySize,
+                sal_Int32       _aPrecision,
+                sal_Int32       _aScale,
+                sal_Int32       _aColumnType)
         :   m_TableName(_aTableName),
             m_ColumnName(_aColumnName),
             m_ColumnLabel(),

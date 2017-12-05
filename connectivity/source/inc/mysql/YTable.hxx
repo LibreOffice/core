@@ -84,10 +84,10 @@ namespace connectivity
                             const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                             const OUString& Name,
                             const OUString& Type,
-                            const OUString& Description = OUString(),
-                            const OUString& SchemaName = OUString(),
-                            const OUString& CatalogName = OUString(),
-                            sal_Int32 _nPrivileges = 0
+                            const OUString& Description,
+                            const OUString& SchemaName,
+                            const OUString& CatalogName,
+                            sal_Int32 _nPrivileges
                 );
 
             // ODescriptor
