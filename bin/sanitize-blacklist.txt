@@ -5,3 +5,4 @@ src:*/scaddins/source/analysis/analysis.cxx
 src:*/scaddins/source/analysis/financial.cxx
 [vptr]
 fun:_ZN4cppu14throwExceptionERKN3com3sun4star3uno3AnyE
+src:*/include/com/sun/star/uno/Reference.hxx
