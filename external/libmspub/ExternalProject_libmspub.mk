@@ -22,6 +22,10 @@ $(eval $(call gb_ExternalProject_use_externals,libmspub,\
 	zlib \
 ))
 
+# -D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR is needed when building against libc++ in C++17 mode, as
+# libmspub configure checking for boost/ptr_container/ptr_vector.hpp can (indirectly) include
+# Boost 1.65.1 workdir/UnpackedTarball/boost/boost/ptr_container/detail/reversible_ptr_container.hpp
+# which mentions std::auto_ptr:
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
@@ -37,7 +41,8 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			CPPFLAGS="$(CPPFLAGS) $(ICU_UCHAR_TYPE) $(BOOST_CPPFLAGS) \
-				-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED" \
+				-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED \
+				-D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
