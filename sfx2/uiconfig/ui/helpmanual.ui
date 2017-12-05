@@ -9,7 +9,7 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
-    <property name="text" translatable="yes" context="helpmanual|onlinehelpmanual">The %PRODUCTNAME built-in help is not installed on your computer.</property>
+    <property name="text" translatable="yes" context="helpmanual|onlinehelpmanual">The %PRODUCTNAME built-in help for current UI language ($UILOCALE) is not installed on your computer.</property>
     <property name="secondary_text" translatable="yes" context="helpmanual|onlinehelpmanual">You may either install it from our website or your system’s repositories, or read an online version.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="internal_box">
