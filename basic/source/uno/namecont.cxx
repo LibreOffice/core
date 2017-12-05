@@ -359,12 +359,11 @@ bool VBAScriptListenerContainer::implTypedNotify( const Reference< vba::XVBAScri
 
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer()
-    : SfxLibraryContainer_BASE( maMutex )
-
-    , maVBAScriptListeners( maMutex )
+    : SfxLibraryContainer_BASE( m_aMutex )
+    , maVBAScriptListeners( m_aMutex )
     , mnRunningVBAScripts( 0 )
     , mbVBACompat( false )
-    , maModifiable( *this, maMutex )
+    , maModifiable( *this, m_aMutex )
     , maNameContainer( new NameContainer(cppu::UnoType<XNameAccess>::get()) )
     , mbOldInfoFormat( false )
     , mbOasis2OOoFormat( false )

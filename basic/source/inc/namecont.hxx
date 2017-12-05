@@ -190,7 +190,10 @@ typedef ::cppu::WeakComponentImplHelper<
     css::script::vba::XVBACompatibility,
     css::lang::XServiceInfo > SfxLibraryContainer_BASE;
 
-class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEventListenerAdapter
+class SfxLibraryContainer
+    : public ::cppu::BaseMutex
+    , public SfxLibraryContainer_BASE
+    , public ::utl::OEventListenerAdapter
 {
     VBAScriptListenerContainer maVBAScriptListeners;
     sal_Int32 mnRunningVBAScripts;
@@ -202,7 +205,6 @@ protected:
     css::uno::Reference< css::util::XStringSubstitution >    mxStringSubstitution;
     css::uno::WeakReference< css::frame::XModel >            mxOwnerDocument;
 
-    ::osl::Mutex        maMutex;
     ModifiableHelper    maModifiable;
 
     rtl::Reference<NameContainer> maNameContainer;
