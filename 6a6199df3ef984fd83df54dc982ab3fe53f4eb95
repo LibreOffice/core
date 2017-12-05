@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a5f5db57",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-05T09:02:56Z",
+      "side": 1,
+      "message": "Uh oh ... this is not ideal\n\nCan you find some other way how to make the strings available where they are needed? Since this is _Svx_FrameDirectionListbox, what about moving the strings to include/svx/string.hrc ?\n\nFailing that (in case not all modules using SvxFrameDirectionListbox can/would link against svx), I would implement some InsertItems method in SvxFrameDirectionListbox class that inserts all 3 items at once ... they are the same everywhere, no?",
+      "revId": "6a6199df3ef984fd83df54dc982ab3fe53f4eb95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
