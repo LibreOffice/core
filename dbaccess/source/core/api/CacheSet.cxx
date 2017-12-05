@@ -148,7 +148,7 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)
     }
 }
 
-void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable )
+void OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -271,7 +271,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     }
 }
 
-void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  )
+void OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -315,7 +315,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
      m_bUpdated = xPrep->executeUpdate() > 0;
 }
 
-void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  )
+void OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -494,58 +494,58 @@ Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex )
 }
 
 // XResultSet
-bool SAL_CALL OCacheSet::next()
+bool OCacheSet::next()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->next();
 }
 
-bool SAL_CALL OCacheSet::isBeforeFirst(  )
+bool OCacheSet::isBeforeFirst(  )
 {
     return m_xDriverSet->isBeforeFirst();
 }
 
-bool SAL_CALL OCacheSet::isAfterLast(  )
+bool OCacheSet::isAfterLast(  )
 {
     return m_xDriverSet->isAfterLast();
 }
 
-void SAL_CALL OCacheSet::beforeFirst(  )
+void OCacheSet::beforeFirst(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_xDriverSet->beforeFirst();
 }
 
-void SAL_CALL OCacheSet::afterLast(  )
+void OCacheSet::afterLast(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_xDriverSet->afterLast();
 }
 
-bool SAL_CALL OCacheSet::first()
+bool OCacheSet::first()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->first();
 }
 
-bool SAL_CALL OCacheSet::last()
+bool OCacheSet::last()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->last();
 }
 
-sal_Int32 SAL_CALL OCacheSet::getRow(  )
+sal_Int32 OCacheSet::getRow(  )
 {
     return m_xDriverSet->getRow();
 }
 
-bool SAL_CALL OCacheSet::absolute( sal_Int32 row )
+bool OCacheSet::absolute( sal_Int32 row )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->absolute(row);
 }
 
-bool SAL_CALL OCacheSet::previous(  )
+bool OCacheSet::previous(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->previous();
@@ -566,22 +566,22 @@ bool OCacheSet::absolute_checked( sal_Int32 row,bool /*i_bFetchRow*/ )
     return absolute(row);
 }
 
-void SAL_CALL OCacheSet::refreshRow(  )
+void OCacheSet::refreshRow(  )
 {
     m_xDriverSet->refreshRow();
 }
 
-bool SAL_CALL OCacheSet::rowUpdated(  )
+bool OCacheSet::rowUpdated(  )
 {
     return m_xDriverSet->rowUpdated();
 }
 
-bool SAL_CALL OCacheSet::rowInserted(  )
+bool OCacheSet::rowInserted(  )
 {
     return m_xDriverSet->rowInserted();
 }
 
-bool SAL_CALL OCacheSet::rowDeleted(  )
+bool OCacheSet::rowDeleted(  )
 {
     return m_xDriverSet->rowDeleted();
 }

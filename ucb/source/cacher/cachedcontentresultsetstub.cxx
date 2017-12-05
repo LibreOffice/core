@@ -90,7 +90,7 @@ Any SAL_CALL CachedContentResultSetStub
 
 
 //virtual
-void SAL_CALL CachedContentResultSetStub
+void CachedContentResultSetStub
     ::impl_propertyChange( const PropertyChangeEvent& rEvt )
 {
     impl_EnsureNotDisposed();
@@ -110,7 +110,7 @@ void SAL_CALL CachedContentResultSetStub
 
 
 //virtual
-void SAL_CALL CachedContentResultSetStub
+void CachedContentResultSetStub
     ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
 {
     impl_EnsureNotDisposed();

@@ -481,19 +481,19 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL AccessibleStaticTextBase::getAccessibleChildCount()
+    sal_Int32 AccessibleStaticTextBase::getAccessibleChildCount()
     {
         // no children at all
         return 0;
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleChild( sal_Int32 /*i*/ )
+    uno::Reference< XAccessible > AccessibleStaticTextBase::getAccessibleChild( sal_Int32 /*i*/ )
     {
         // no children at all
         return uno::Reference< XAccessible >();
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleAtPoint( const awt::Point& /*_aPoint*/ )
+    uno::Reference< XAccessible > AccessibleStaticTextBase::getAccessibleAtPoint( const awt::Point& /*_aPoint*/ )
     {
         // no children at all
         return uno::Reference< XAccessible >();

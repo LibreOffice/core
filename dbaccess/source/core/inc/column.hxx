@@ -227,7 +227,7 @@ namespace dbaccess
         void append(const OUString& rName, OColumn*);
         void clearColumns();
         // only the name is identical to ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     private:
         using OColumns_BASE::setParent;

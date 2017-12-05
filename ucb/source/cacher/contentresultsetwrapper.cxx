@@ -146,7 +146,7 @@ void ContentResultSetWrapper::impl_deinit()
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::impl_initPropertySetInfo()
+void ContentResultSetWrapper::impl_initPropertySetInfo()
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -737,7 +737,7 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
 
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::impl_disposing( const EventObject& )
+void ContentResultSetWrapper::impl_disposing( const EventObject& )
 {
     impl_EnsureNotDisposed();
 
@@ -760,7 +760,7 @@ void SAL_CALL ContentResultSetWrapper::impl_disposing( const EventObject& )
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::impl_propertyChange( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapper::impl_propertyChange( const PropertyChangeEvent& rEvt )
 {
     impl_EnsureNotDisposed();
 
@@ -771,7 +771,7 @@ void SAL_CALL ContentResultSetWrapper::impl_propertyChange( const PropertyChange
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::impl_vetoableChange( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapper::impl_vetoableChange( const PropertyChangeEvent& rEvt )
 {
     impl_EnsureNotDisposed();
 

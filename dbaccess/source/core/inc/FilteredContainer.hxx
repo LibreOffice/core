@@ -68,7 +68,7 @@ namespace dbaccess
         /** tell the container to free all elements and all additional resources.<BR>
             After using this method the object may be reconstructed by calling one of the <code>construct</code> methods.
         */
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         class EnsureReset
         {

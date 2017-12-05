@@ -109,7 +109,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( 
     return nullptr;
 }
 
-bool SAL_CALL ScAccessibleCsvControl::isVisible()
+bool ScAccessibleCsvControl::isVisible()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -739,12 +739,12 @@ void ScAccessibleCsvRuler::SendCaretEvent()
 
 // helpers --------------------------------------------------------------------
 
-OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleName()
+OUString ScAccessibleCsvRuler::createAccessibleName()
 {
     return ScResId( STR_ACC_CSVRULER_NAME );
 }
 
-OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleDescription()
+OUString ScAccessibleCsvRuler::createAccessibleDescription()
 {
     return ScResId( STR_ACC_CSVRULER_DESCR );
 }
@@ -1267,12 +1267,12 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
 
 // helpers --------------------------------------------------------------------
 
-OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleName()
+OUString ScAccessibleCsvGrid::createAccessibleName()
 {
     return ScResId( STR_ACC_CSVGRID_NAME );
 }
 
-OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleDescription()
+OUString ScAccessibleCsvGrid::createAccessibleDescription()
 {
     return ScResId( STR_ACC_CSVGRID_DESCR );
 }
@@ -1482,12 +1482,12 @@ tools::Rectangle ScAccessibleCsvCell::GetBoundingBox() const
     return implGetBoundingBox();
 }
 
-OUString SAL_CALL ScAccessibleCsvCell::createAccessibleName()
+OUString ScAccessibleCsvCell::createAccessibleName()
 {
     return maCellText;
 }
 
-OUString SAL_CALL ScAccessibleCsvCell::createAccessibleDescription()
+OUString ScAccessibleCsvCell::createAccessibleDescription()
 {
     return OUString();
 }

@@ -63,10 +63,10 @@ using com::sun::star::uno::Reference;
 
 // Implementation class SfxDialogLibraryContainer
 
-const sal_Char* SAL_CALL SfxDialogLibraryContainer::getInfoFileName() const { return "dialog"; }
-const sal_Char* SAL_CALL SfxDialogLibraryContainer::getOldInfoFileName() const { return "dialogs"; }
-const sal_Char* SAL_CALL SfxDialogLibraryContainer::getLibElementFileExtension() const { return "xdl"; }
-const sal_Char* SAL_CALL SfxDialogLibraryContainer::getLibrariesDir() const { return "Dialogs"; }
+const sal_Char* SfxDialogLibraryContainer::getInfoFileName() const { return "dialog"; }
+const sal_Char* SfxDialogLibraryContainer::getOldInfoFileName() const { return "dialogs"; }
+const sal_Char* SfxDialogLibraryContainer::getLibElementFileExtension() const { return "xdl"; }
+const sal_Char* SfxDialogLibraryContainer::getLibrariesDir() const { return "Dialogs"; }
 
 // Ctor for service
 SfxDialogLibraryContainer::SfxDialogLibraryContainer()
@@ -96,7 +96,7 @@ SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
     return pRet;
 }
 
-Any SAL_CALL SfxDialogLibraryContainer::createEmptyLibraryElement()
+Any SfxDialogLibraryContainer::createEmptyLibraryElement()
 {
     Reference< XInputStreamProvider > xISP;
     Any aRetAny;
@@ -104,7 +104,7 @@ Any SAL_CALL SfxDialogLibraryContainer::createEmptyLibraryElement()
     return aRetAny;
 }
 
-bool SAL_CALL SfxDialogLibraryContainer::isLibraryElementValid(const Any& rElement) const
+bool SfxDialogLibraryContainer::isLibraryElementValid(const Any& rElement) const
 {
     return SfxDialogLibrary::containsValidDialog(rElement);
 }
@@ -144,7 +144,7 @@ bool writeOasis2OOoLibraryElement(
     return true;
 }
 
-void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
+void SfxDialogLibraryContainer::writeLibraryElement
 (
     const Reference < XNameContainer >& xLib,
     const OUString& aElementName,
@@ -258,7 +258,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
 }
 
 
-Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
+Any SfxDialogLibraryContainer::importLibraryElement
     ( const Reference < XNameContainer >& /*xLib*/,
       const OUString& /*aElementName */, const OUString& aFile,
       const uno::Reference< io::XInputStream >& xElementStream )
@@ -332,7 +332,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     return aRetAny;
 }
 
-void SAL_CALL SfxDialogLibraryContainer::importFromOldStorage( const OUString& )
+void SfxDialogLibraryContainer::importFromOldStorage( const OUString& )
 {
     // Nothing to do here, old dialogs cannot be imported
 }
@@ -567,7 +567,7 @@ bool SfxDialogLibrary::containsValidDialog( const css::uno::Any& aElement )
     return xISP.is();
 }
 
-bool SAL_CALL SfxDialogLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
+bool SfxDialogLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
 {
     return SfxDialogLibrary::containsValidDialog(rElement);
 }

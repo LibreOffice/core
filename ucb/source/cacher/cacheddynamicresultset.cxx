@@ -46,7 +46,7 @@ CachedDynamicResultSet::~CachedDynamicResultSet()
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSet
+void CachedDynamicResultSet
     ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetOne( xResultSet );
@@ -60,7 +60,7 @@ void SAL_CALL CachedDynamicResultSet
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSet
+void CachedDynamicResultSet
     ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetTwo( xResultSet );
@@ -136,7 +136,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSet::getSupportedServ
 // own methods. ( inherited )
 
 //virtual
-void SAL_CALL CachedDynamicResultSet
+void CachedDynamicResultSet
     ::impl_disposing( const EventObject& Source )
 {
     DynamicResultSetWrapper::impl_disposing( Source );

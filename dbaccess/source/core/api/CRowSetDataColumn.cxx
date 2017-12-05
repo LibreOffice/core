@@ -219,7 +219,7 @@ sdbcx::ObjectType ORowSetDataColumns::createObject(const OUString& _rName)
     return xNamed;
 }
 
-void SAL_CALL ORowSetDataColumns::disposing()
+void ORowSetDataColumns::disposing()
 {
     ORowSetDataColumns_BASE::disposing();
     m_aColumns = nullptr;

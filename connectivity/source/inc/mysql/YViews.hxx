@@ -44,7 +44,7 @@ namespace connectivity
             {}
 
             // only the name is identical to ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing() override;
+            virtual void disposing() override;
 
             void dropByNameImpl(const OUString& elementName);
         };

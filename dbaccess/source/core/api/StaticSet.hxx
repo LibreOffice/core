@@ -45,30 +45,30 @@ namespace dbaccess
 
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition) override;
         // css::sdbcx::XRowLocate
-        virtual css::uno::Any SAL_CALL getBookmark() override;
-        virtual bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
-        virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
-        virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
-        virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
+        virtual css::uno::Any getBookmark() override;
+        virtual bool moveToBookmark( const css::uno::Any& bookmark ) override;
+        virtual sal_Int32 compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
+        virtual bool hasOrderedBookmarks(  ) override;
+        virtual sal_Int32 hashBookmark( const css::uno::Any& bookmark ) override;
 
         // css::sdbc::XResultSet
-        virtual bool SAL_CALL next() override;
-        virtual bool SAL_CALL isBeforeFirst(  ) override;
-        virtual bool SAL_CALL isAfterLast(  ) override;
-        virtual void SAL_CALL beforeFirst(  ) override;
-        virtual void SAL_CALL afterLast(  ) override;
-        virtual bool SAL_CALL first() override;
-        virtual bool SAL_CALL last() override;
-        virtual sal_Int32 SAL_CALL getRow(  ) override;
-        virtual bool SAL_CALL absolute( sal_Int32 row ) override;
-        virtual bool SAL_CALL previous(  ) override;
-        virtual void SAL_CALL refreshRow(  ) override;
-        virtual bool SAL_CALL rowUpdated(  ) override;
-        virtual bool SAL_CALL rowInserted(  ) override;
-        virtual bool SAL_CALL rowDeleted(  ) override;
+        virtual bool next() override;
+        virtual bool isBeforeFirst(  ) override;
+        virtual bool isAfterLast(  ) override;
+        virtual void beforeFirst(  ) override;
+        virtual void afterLast(  ) override;
+        virtual bool first() override;
+        virtual bool last() override;
+        virtual sal_Int32 getRow(  ) override;
+        virtual bool absolute( sal_Int32 row ) override;
+        virtual bool previous(  ) override;
+        virtual void refreshRow(  ) override;
+        virtual bool rowUpdated(  ) override;
+        virtual bool rowInserted(  ) override;
+        virtual bool rowDeleted(  ) override;
         // css::sdbc::XResultSetUpdate
-        virtual void SAL_CALL insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) override;
-        virtual void SAL_CALL deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable  ) override;
+        virtual void insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) override;
+        virtual void deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable  ) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_STATICSET_HXX

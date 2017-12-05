@@ -345,13 +345,13 @@ tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
     return tools::Rectangle();
 }
 
-OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription()
+OUString ScAccessiblePreviewHeaderCell::createAccessibleDescription()
 {
     OUString sDescription = STR_ACC_HEADERCELL_DESCR;
     return sDescription;
 }
 
-OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName()
+OUString ScAccessiblePreviewHeaderCell::createAccessibleName()
 {
     OUString sName = STR_ACC_HEADERCELL_NAME;
 

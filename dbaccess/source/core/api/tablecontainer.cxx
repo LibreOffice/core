@@ -421,7 +421,7 @@ void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event )
     renameObject(sOldComposedName,sNewComposedName);
 }
 
-void SAL_CALL OTableContainer::disposing()
+void OTableContainer::disposing()
 {
     OFilteredContainer::disposing();
     // say goodbye to our listeners

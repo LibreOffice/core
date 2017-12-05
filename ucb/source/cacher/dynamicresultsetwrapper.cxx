@@ -97,7 +97,7 @@ void DynamicResultSetWrapper::impl_EnsureNotDisposed()
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
+void DynamicResultSetWrapper::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     OSL_ENSURE( !m_xSourceResultOne.is(), "Source ResultSet One is set already" );
@@ -106,7 +106,7 @@ void SAL_CALL DynamicResultSetWrapper::impl_InitResultSetOne( const Reference< X
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
+void DynamicResultSetWrapper::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     OSL_ENSURE( !m_xSourceResultTwo.is(), "Source ResultSet Two is set already" );
@@ -192,7 +192,7 @@ void SAL_CALL DynamicResultSetWrapper::removeEventListener( const Reference< XEv
 
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper::impl_disposing( const EventObject& )
+void DynamicResultSetWrapper::impl_disposing( const EventObject& )
 {
     impl_EnsureNotDisposed();
 

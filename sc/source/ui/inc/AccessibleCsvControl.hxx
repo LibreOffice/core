@@ -54,7 +54,7 @@ public:
     virtual void SAL_CALL       disposing() override;
 
     /** Returns true, if the control is visible. */
-    virtual bool SAL_CALL isVisible() override;
+    virtual bool isVisible() override;
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -224,9 +224,9 @@ public:
     // helpers ----------------------------------------------------------------
 private:
     /** Returns this object's name. */
-    virtual OUString SAL_CALL createAccessibleName() override;
+    virtual OUString createAccessibleName() override;
     /** Returns this object's description. */
-    virtual OUString SAL_CALL createAccessibleDescription() override;
+    virtual OUString createAccessibleDescription() override;
 
     /** @throws css::lang::IndexOutOfBoundsException if the specified character position is invalid (outside 0..len-1). */
     void ensureValidIndex( sal_Int32 nIndex ) const;
@@ -421,9 +421,9 @@ public:
     // helpers ----------------------------------------------------------------
 private:
     /** Returns this object's name. */
-    virtual OUString SAL_CALL createAccessibleName() override;
+    virtual OUString createAccessibleName() override;
     /** Returns this object's description. */
-    virtual OUString SAL_CALL createAccessibleDescription() override;
+    virtual OUString createAccessibleDescription() override;
 
     /** @throws css::lang::IndexOutOfBoundsException if nIndex is not a valid child index. */
     void ensureValidIndex( sal_Int32 nIndex ) const;
@@ -534,9 +534,9 @@ protected:
 
 private:
     /** Returns this object's name. */
-    virtual OUString SAL_CALL createAccessibleName() override;
+    virtual OUString createAccessibleName() override;
     /** Returns this object's description. */
-    virtual OUString SAL_CALL createAccessibleDescription() override;
+    virtual OUString createAccessibleDescription() override;
 
     /** Returns the VCL grid control. Assumes a living object. */
     ScCsvGrid& implGetGrid() const;

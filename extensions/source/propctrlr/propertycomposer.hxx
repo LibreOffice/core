@@ -110,7 +110,7 @@ namespace pcr
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // IPropertyExistenceCheck
-        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) override;
+        virtual bool hasPropertyByName( const OUString& _rName ) override;
 
     private:
         /** ensures that m_pUIRequestComposer exists

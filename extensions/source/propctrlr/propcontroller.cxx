@@ -1319,7 +1319,7 @@ namespace pcr
     }
 
 
-    bool SAL_CALL OPropertyBrowserController::hasPropertyByName( const OUString& _rName )
+    bool OPropertyBrowserController::hasPropertyByName( const OUString& _rName )
     {
         for (   OrderedPropertyMap::const_iterator search = m_aProperties.begin();
                 search != m_aProperties.end();

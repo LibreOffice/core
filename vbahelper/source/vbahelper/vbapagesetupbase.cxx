@@ -196,7 +196,7 @@ void SAL_CALL VbaPageSetupBase::setLeftMargin( double margin )
     }
 }
 
-double SAL_CALL VbaPageSetupBase::getHeaderMargin()
+double VbaPageSetupBase::getHeaderMargin()
 {
     sal_Int32 headerMargin = 0;
     try
@@ -211,7 +211,7 @@ double SAL_CALL VbaPageSetupBase::getHeaderMargin()
     return Millimeter::getInPoints( headerMargin );
 }
 
-void SAL_CALL VbaPageSetupBase::setHeaderMargin( double margin )
+void VbaPageSetupBase::setHeaderMargin( double margin )
 {
     sal_Int32 headerMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
@@ -223,7 +223,7 @@ void SAL_CALL VbaPageSetupBase::setHeaderMargin( double margin )
     }
 }
 
-double SAL_CALL VbaPageSetupBase::getFooterMargin()
+double VbaPageSetupBase::getFooterMargin()
 {
     sal_Int32 footerMargin = 0;
     try
@@ -238,7 +238,7 @@ double SAL_CALL VbaPageSetupBase::getFooterMargin()
     return Millimeter::getInPoints( footerMargin );
 }
 
-void SAL_CALL VbaPageSetupBase::setFooterMargin( double margin )
+void VbaPageSetupBase::setFooterMargin( double margin )
 {
     sal_Int32 footerMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try

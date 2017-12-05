@@ -44,18 +44,18 @@ void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 /*_nPosition*/)
 }
 
 // css::sdbcx::XRowLocate
-Any SAL_CALL OStaticSet::getBookmark()
+Any OStaticSet::getBookmark()
 {
     return makeAny(getRow());
 }
 
-bool SAL_CALL OStaticSet::moveToBookmark( const Any& bookmark )
+bool OStaticSet::moveToBookmark( const Any& bookmark )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return absolute(::comphelper::getINT32(bookmark));
 }
 
-sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _second )
+sal_Int32 OStaticSet::compareBookmarks( const Any& _first, const Any& _second )
 {
     sal_Int32 nFirst = 0, nSecond = 0;
     _first >>= nFirst;
@@ -63,12 +63,12 @@ sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _
     return (nFirst < nSecond) ? CompareBookmark::LESS : ((nFirst > nSecond) ? CompareBookmark::GREATER : CompareBookmark::EQUAL);
 }
 
-bool SAL_CALL OStaticSet::hasOrderedBookmarks(  )
+bool OStaticSet::hasOrderedBookmarks(  )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL OStaticSet::hashBookmark( const Any& bookmark )
+sal_Int32 OStaticSet::hashBookmark( const Any& bookmark )
 {
     return ::comphelper::getINT32(bookmark);
 }
@@ -108,7 +108,7 @@ void OStaticSet::fillAllRows()
 }
 
 // XResultSet
-bool SAL_CALL OStaticSet::next()
+bool OStaticSet::next()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
 
@@ -125,30 +125,30 @@ bool SAL_CALL OStaticSet::next()
     return !isAfterLast();
 }
 
-bool SAL_CALL OStaticSet::isBeforeFirst(  )
+bool OStaticSet::isBeforeFirst(  )
 {
     return m_aSetIter == m_aSet.begin();
 }
 
-bool SAL_CALL OStaticSet::isAfterLast(  )
+bool OStaticSet::isAfterLast(  )
 {
     return m_aSetIter == m_aSet.end() && m_bEnd;
 }
 
-void SAL_CALL OStaticSet::beforeFirst(  )
+void OStaticSet::beforeFirst(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aSetIter = m_aSet.begin();
 }
 
-void SAL_CALL OStaticSet::afterLast(  )
+void OStaticSet::afterLast(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();
     m_aSetIter = m_aSet.end();
 }
 
-bool SAL_CALL OStaticSet::first()
+bool OStaticSet::first()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aSetIter = m_aSet.begin()+1;
@@ -158,7 +158,7 @@ bool SAL_CALL OStaticSet::first()
     return m_aSetIter != m_aSet.end();
 }
 
-bool SAL_CALL OStaticSet::last()
+bool OStaticSet::last()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();
@@ -167,7 +167,7 @@ bool SAL_CALL OStaticSet::last()
     return !isBeforeFirst() && !isAfterLast();
 }
 
-sal_Int32 SAL_CALL OStaticSet::getRow(  )
+sal_Int32 OStaticSet::getRow(  )
 {
     OSL_ENSURE(!isAfterLast(),"getRow is not allowed when afterlast record!");
     OSL_ENSURE(!isBeforeFirst(),"getRow is not allowed when beforefirst record!");
@@ -177,7 +177,7 @@ sal_Int32 SAL_CALL OStaticSet::getRow(  )
     return nPos;
 }
 
-bool SAL_CALL OStaticSet::absolute( sal_Int32 row )
+bool OStaticSet::absolute( sal_Int32 row )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     OSL_ENSURE(row,"OStaticSet::absolute: INVALID row number!");
@@ -217,7 +217,7 @@ bool SAL_CALL OStaticSet::absolute( sal_Int32 row )
     return m_aSetIter != m_aSet.end() && m_aSetIter != m_aSet.begin();
 }
 
-bool SAL_CALL OStaticSet::previous(  )
+bool OStaticSet::previous(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
 
@@ -227,26 +227,26 @@ bool SAL_CALL OStaticSet::previous(  )
     return m_aSetIter != m_aSet.begin();
 }
 
-void SAL_CALL OStaticSet::refreshRow(  )
+void OStaticSet::refreshRow(  )
 {
 }
 
-bool SAL_CALL OStaticSet::rowUpdated(  )
+bool OStaticSet::rowUpdated(  )
 {
     return m_bUpdated;
 }
 
-bool SAL_CALL OStaticSet::rowInserted(  )
+bool OStaticSet::rowInserted(  )
 {
     return m_bInserted;
 }
 
-bool SAL_CALL OStaticSet::rowDeleted(  )
+bool OStaticSet::rowDeleted(  )
 {
     return m_bDeleted;
 }
 
-void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable )
+void OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable )
 {
     OCacheSet::insertRow( _rInsertRow,_xTable);
     if(m_bInserted)
@@ -258,7 +258,7 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
     }
 }
 
-void SAL_CALL OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  )
+void OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  )
 {
     OCacheSet::deleteRow(_rDeleteRow,_xTable);
     if(m_bDeleted)

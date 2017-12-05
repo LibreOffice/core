@@ -278,7 +278,7 @@ namespace pcr
     }
 
 
-    Sequence< Property > SAL_CALL EFormsPropertyHandler::doDescribeSupportedProperties() const
+    Sequence< Property > EFormsPropertyHandler::doDescribeSupportedProperties() const
     {
         std::vector< Property > aProperties;
 

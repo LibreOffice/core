@@ -75,9 +75,9 @@ namespace pcr
 
         // IPropertyEnumRepresentation implementqation
         virtual std::vector< OUString >
-                                    SAL_CALL getDescriptions() const override;
-        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
-        virtual OUString            SAL_CALL getDescriptionForValue( const css::uno::Any& _rEnumValue ) const override;
+                                    getDescriptions() const override;
+        virtual void                getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
+        virtual OUString            getDescriptionForValue( const css::uno::Any& _rEnumValue ) const override;
 
     private:
         void            impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const;

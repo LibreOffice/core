@@ -259,7 +259,7 @@ namespace pcr
     }
 
 
-    Sequence< Property > SAL_CALL SubmissionPropertyHandler::doDescribeSupportedProperties() const
+    Sequence< Property > SubmissionPropertyHandler::doDescribeSupportedProperties() const
     {
         std::vector< Property > aProperties;
         if ( m_pHelper.get() )

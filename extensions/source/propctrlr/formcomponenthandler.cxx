@@ -810,7 +810,7 @@ namespace pcr
         FormComponentPropertyHandler_Base::removePropertyChangeListener( _rxListener );
     }
 
-    Sequence< Property > SAL_CALL FormComponentPropertyHandler::doDescribeSupportedProperties() const
+    Sequence< Property > FormComponentPropertyHandler::doDescribeSupportedProperties() const
     {
         if ( !m_xComponentPropertyInfo.is() )
             return Sequence< Property >();

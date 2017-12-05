@@ -64,7 +64,7 @@ namespace dbaccess
         virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         virtual void SAL_CALL acquire() throw() override { OFilteredContainer::acquire();}
         virtual void SAL_CALL release() throw() override { OFilteredContainer::release();}
