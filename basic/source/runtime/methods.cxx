@@ -3608,8 +3608,8 @@ OUString getObjectTypeName( SbxVariable* pVar )
     OUString sRet( "Object" );
     if ( pVar )
     {
-        SbxBase* pObj = pVar->GetObject();
-        if( !pObj )
+        SbxBase* pBaseObj = pVar->GetObject();
+        if( !pBaseObj )
         {
            sRet = "Nothing";
         }
@@ -3618,10 +3618,7 @@ OUString getObjectTypeName( SbxVariable* pVar )
             SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pVar  );
             if ( !pUnoObj )
             {
-                if ( SbxBase* pBaseObj = pVar->GetObject() )
-                {
-                    pUnoObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
-                }
+                pUnoObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
             }
             if ( pUnoObj )
             {
