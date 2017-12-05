@@ -16,6 +16,24 @@
       "revId": "8026c02a6fff9f2db3eac2dbd84e79b191b25ce3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5b47b44a",
+        "filename": "sc/source/core/data/cellvalue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-12-05T20:22:55Z",
+      "side": 1,
+      "message": "I set r.meType to CELLTYPE_NONE in order for that not to happen",
+      "parentUuid": "1a430d35_40050512",
+      "revId": "8026c02a6fff9f2db3eac2dbd84e79b191b25ce3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
