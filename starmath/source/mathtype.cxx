@@ -1348,7 +1348,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     sMainTerm = rRet;
                                     rRet.clear();
                                 }
-                                else
+                                else if (nPart == 1)
                                 {
                                     sPush += rRet;
                                     rRet = sPush;
