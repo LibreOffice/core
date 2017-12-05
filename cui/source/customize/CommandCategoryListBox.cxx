@@ -166,6 +166,9 @@ void CommandCategoryListBox::Init(
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
+        // Separate regular commands from styles and macros
+        SetSeparatorPos(nEntryPos);
+
         // Add macros category
         OUString sMacros( CuiResId(RID_SVXSTR_MACROS) );
         nEntryPos = InsertEntry( sMacros );
