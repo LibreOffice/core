@@ -1819,8 +1819,6 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         // UpdateShow before SetCursor, so that UpdateAutoFillMark finds the correct
         // window  (is called from SetCursor)
         UpdateShow();
-        aViewData.ResetOldCursor();
-        SetCursor( aViewData.GetCurX(), aViewData.GetCurY(), true );
 
         SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
@@ -1876,6 +1874,9 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         UpdateVisibleRange();
 
         aViewData.GetViewShell()->WindowChanged();          // if the active window has changed
+        aViewData.ResetOldCursor();
+        SetCursor( aViewData.GetCurX(), aViewData.GetCurY(), true );
+
         if ( !bUnoRefDialog )
             aViewData.GetViewShell()->DisconnectAllClients();   // important for floating frames
         else
