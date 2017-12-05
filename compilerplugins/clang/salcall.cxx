@@ -9,10 +9,12 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
-#include <cassert>
+
+#include <algorithm>
+#include <set>
 #include <string>
-#include <iostream>
-#include <fstream>
+#include <utility>
+#include <vector>
 
 // The SAL_CALL function annotation is only necessary on our outward
 // facing C++ ABI, anywhere else it is just cargo-cult.
@@ -262,49 +264,64 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
 
 bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation* pLoc)
 {
-    // In certain situations, in header files, clang will return bogus range data
-    // from decl->getSourceRange().
-    // Specifically, for the
-    //     LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass const *);
-    // declaration in
-    //     include/linguistic/misc.hxx
-    // it looks like it is returning data from definition of the LNG_DLLPUBLIC macro.
-    // I suspect something inside clang is calling getSpellingLoc() once too often.
-    //
-    // So I use getReturnTypeSourceRange() for the start of the range
-    // instead, and search for the "(" in the function decl.
-
-    SourceRange range = functionDecl->getSourceRange();
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = functionDecl->getReturnTypeSourceRange().getBegin();
-    SourceLocation endLoc = range.getEnd();
-    if (!startLoc.isValid() || !endLoc.isValid())
+    SourceLocation startLoc;
+    if (isa<CXXConstructorDecl>(functionDecl) || isa<CXXDestructorDecl>(functionDecl)
+        || isa<CXXConversionDecl>(functionDecl))
+    {
+        startLoc = functionDecl->getSourceRange().getBegin();
+        while (startLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(startLoc)) {
+            startLoc = SM.getImmediateMacroCallerLoc(startLoc);
+        }
+#if !defined _WIN32 // i.e., SAL_CALL expands to nothing
+        startLoc = Lexer::GetBeginningOfToken(
+            startLoc.getLocWithOffset(-1), SM, compiler.getLangOpts());
+#endif
+    } else {
+        auto const TSI = functionDecl->getTypeSourceInfo();
+        if (TSI == nullptr) {
+            return false;
+        }
+        auto TL = TSI->getTypeLoc().IgnoreParens();
+        if (auto ATL = TL.getAs<AttributedTypeLoc>()) {
+            TL = ATL.getModifiedLoc();
+        }
+        auto const FTL = TL.getAs<FunctionTypeLoc>();
+        if (!FTL) {
+            return false;
+        }
+        startLoc = FTL.getReturnLoc().getEndLoc();
+        while (startLoc.isMacroID() && SM.isAtEndOfImmediateMacroExpansion(startLoc)) {
+            startLoc = SM.getImmediateMacroCallerLoc(startLoc);
+        }
+        startLoc = Lexer::getLocForEndOfToken(startLoc, 0, SM, compiler.getLangOpts());
+    }
+    SourceLocation endLoc = functionDecl->getNameInfo().getLocStart();
+    while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc)) {
+        endLoc = SM.getImmediateMacroCallerLoc(endLoc);
+    }
+    if (!(startLoc.isValid() && endLoc.isValid() && SM.isBeforeInTranslationUnit(startLoc, endLoc)))
         return false;
-    char const* p1 = SM.getCharacterData(startLoc);
-    char const* p2 = SM.getCharacterData(endLoc);
 
-    //    if (functionDecl->getIdentifier() && functionDecl->getName() == "capitalType")
-    //    {
-    //        std::cout << "xxxx " << (long)p1 << " " << (long)p2 << " " << (int)(p2-p1) << std::endl;
-    //        std::cout << "  " << std::string(p1, 80) << std::endl;
-    //        report(DiagnosticsEngine::Warning, "jhjkahdashdkash", functionDecl->getLocation())
-    //            << functionDecl->getSourceRange();
-    //    }
-    //
-    static const char* SAL_CALL = "SAL_CALL";
+    SourceLocation found;
+    for (;;) {
+        unsigned n = Lexer::MeasureTokenLength(startLoc, SM, compiler.getLangOpts());
+        auto const s = StringRef(compiler.getSourceManager().getCharacterData(startLoc), n);
+        if (s == "SAL_CALL") {
+            found = startLoc;
+            break;
+        }
+        if (startLoc == endLoc) {
+            break;
+        }
+        startLoc = startLoc.getLocWithOffset(std::max<unsigned>(n, 1));
+    }
 
-    char const* leftBracket = static_cast<char const*>(memchr(p1, '(', p2 - p1));
-    if (!leftBracket)
-        return false;
-
-    char const* found = std::search(p1, leftBracket, SAL_CALL, SAL_CALL + strlen(SAL_CALL));
-
-    if (found >= leftBracket)
+    if (found.isInvalid())
         return false;
 
     if (pLoc)
-        // the -1 is to remove the space before the SAL_CALL
-        *pLoc = startLoc.getLocWithOffset(found - p1 - 1);
+        *pLoc = found;
 
     return true;
 }
