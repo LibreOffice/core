@@ -82,7 +82,7 @@ struct TRemoveEventListenerFunctor
     OConnectionPool* m_pConnectionPool;
     bool m_bDispose;
 
-    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool,bool _bDispose = false)
+    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool, bool _bDispose)
         : m_pConnectionPool(_pConnectionPool)
         ,m_bDispose(_bDispose)
     {

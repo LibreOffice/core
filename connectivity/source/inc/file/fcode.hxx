@@ -245,7 +245,7 @@ namespace connectivity
             const sal_Unicode cEscape;
 
         public:
-            OOp_LIKE(const sal_Unicode cEsc = L'\0'):cEscape(cEsc){};
+            OOp_LIKE(const sal_Unicode cEsc):cEscape(cEsc){};
 
             virtual bool operate(const OOperand*, const OOperand*) const override;
         };
@@ -254,7 +254,7 @@ namespace connectivity
         {
         public:
         public:
-            OOp_NOTLIKE(const sal_Unicode cEsc = L'\0'):OOp_LIKE(cEsc){};
+            OOp_NOTLIKE(const sal_Unicode cEsc):OOp_LIKE(cEsc){};
 
             virtual bool operate(const OOperand*, const OOperand*) const override;
         };

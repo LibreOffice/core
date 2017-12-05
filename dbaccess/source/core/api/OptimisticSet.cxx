@@ -460,7 +460,7 @@ void OptimisticSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVecto
     {
         io_aRow[aJoinIter->second] = io_aRow[i_nColumnIndex];
         io_aInsertRow[aJoinIter->second] = io_aInsertRow[i_nColumnIndex];
-        io_aRow[aJoinIter->second].setModified();
+        io_aRow[aJoinIter->second].setModified(true);
         o_aChangedColumns.push_back(aJoinIter->second);
     }
 }
@@ -496,7 +496,7 @@ bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCac
                     if ( aCol.second.sTableName == sTableName )
                     {
                         io_aRow[aCol.second.nPosition] = io_aCachedRow[aCol.second.nPosition];
-                        io_aRow[aCol.second.nPosition].setModified();
+                        io_aRow[aCol.second.nPosition].setModified(true);
                     }
                 }
             }
@@ -537,7 +537,7 @@ bool OptimisticSet::columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow
                     if ( aCol2.second.sTableName == sTableName )
                     {
                         o_aCachedRow[aCol2.second.nPosition] = i_aRow[aCol2.second.nPosition];
-                        o_aCachedRow[aCol2.second.nPosition].setModified();
+                        o_aCachedRow[aCol2.second.nPosition].setModified(true);
                     }
                 }
                 fillMissingValues(o_aCachedRow);
@@ -609,7 +609,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
                             if ( aColIter->second.sTableName == aSqlIter->first )
                             {
                                 io_aRow[aColIter->second.nPosition].fill(i++, aColIter->second.nType, xRow);
-                                io_aRow[aColIter->second.nPosition].setModified();
+                                io_aRow[aColIter->second.nPosition].setModified(true);
                             }
                         }
                     }

@@ -38,9 +38,9 @@ namespace connectivity
                     OEvoabConnection* _pConnection,
                     const OUString& Name,
                     const OUString& Type,
-                    const OUString& Description = OUString(),
-                    const OUString& SchemaName = OUString(),
-                    const OUString& CatalogName = OUString()
+                    const OUString& Description,
+                    const OUString& SchemaName,
+                    const OUString& CatalogName
                 );
 
             OEvoabConnection* getConnection() { return m_pConnection;}
