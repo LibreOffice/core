@@ -340,13 +340,13 @@ uno::Reference< XAccessible > SAL_CALL
     return getAccessibleCellAt(nRow, nColumn);
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleTableBase::createAccessibleDescription()
 {
     return OUString(STR_ACC_TABLE_DESCR);
 }
 
-OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
+OUString ScAccessibleTableBase::createAccessibleName()
 {
     OUString sName(ScResId(STR_ACC_TABLE_NAME));
     OUString sCoreName;

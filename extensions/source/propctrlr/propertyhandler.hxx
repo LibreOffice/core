@@ -121,7 +121,7 @@ namespace pcr
 
         // own overridables
         virtual css::uno::Sequence< css::beans::Property >
-                    SAL_CALL doDescribeSupportedProperties() const = 0;
+                    doDescribeSupportedProperties() const = 0;
 
         /// called when XPropertyHandler::inspect has been called, and we thus have a new component to inspect
         virtual void onNewComponent();

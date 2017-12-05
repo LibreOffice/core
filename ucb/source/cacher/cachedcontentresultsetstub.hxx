@@ -97,10 +97,10 @@ public:
 
     // own inherited
 
-    virtual void SAL_CALL
+    virtual void
     impl_propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
-    virtual void SAL_CALL
+    virtual void
     impl_vetoableChange( const css::beans::PropertyChangeEvent& aEvent ) override;
 
     // XTypeProvider

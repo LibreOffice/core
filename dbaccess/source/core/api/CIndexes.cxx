@@ -82,7 +82,7 @@ void OIndexes::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         OIndexesHelper::dropObject(_nPos,_sElementName);
 }
 
-void SAL_CALL OIndexes::disposing()
+void OIndexes::disposing()
 {
     if ( m_xIndexes.is() )
         clear_NoDispose();

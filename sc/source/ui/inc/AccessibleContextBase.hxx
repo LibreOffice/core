@@ -81,7 +81,7 @@ public:
     bool isShowing(  );
 
     /// @throws css::uno::RuntimeException
-    virtual bool SAL_CALL isVisible();
+    virtual bool isVisible();
 
     ///=====  SfxListener  =====================================================
 
@@ -224,13 +224,13 @@ protected:
     /// Return this object's description.
     ///
     /// @throws css::uno::RuntimeException
-    virtual OUString SAL_CALL
+    virtual OUString
         createAccessibleDescription();
 
     /// Return the object's current name.
     ///
     /// @throws css::uno::RuntimeException
-    virtual OUString SAL_CALL
+    virtual OUString
         createAccessibleName();
 
     /// Return the object's current bounding box relative to the desktop.

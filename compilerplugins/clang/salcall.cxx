@@ -206,7 +206,7 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     // @TODO For now, I am ignore free functions, since those are most likely to have their address taken.
     // I'll do them later. They are harder to verify since MSVC does not verify when assigning to function pointers
     // that the calling convention of the function matches the calling convention of the function pointer!
-    if (!methodDecl || methodDecl->isStatic() || methodDecl->isVirtual())
+    if (!methodDecl || methodDecl->isStatic())
         return true;
 
     // can only check when we have a definition since this is the most likely time
@@ -229,6 +229,42 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
                 .GlobalNamespace())
             return true;
         if (loplugin::TypeCheck(decl->getReturnType()).Pointer().Void())
+            return true;
+    }
+
+    // some base classes are overridden by sub-classes which override both the base-class and an UNO class
+    if (recordDecl)
+    {
+        auto dc = loplugin::DeclCheck(recordDecl);
+        if (dc.Class("OProxyAggregation").Namespace("comphelper").GlobalNamespace()
+            || dc.Class("OComponentProxyAggregationHelper")
+                   .Namespace("comphelper")
+                   .GlobalNamespace()
+            || dc.Class("SvxShapeMaster").GlobalNamespace()
+            || dc.Class("ListBoxAccessibleBase").Namespace("accessibility").GlobalNamespace()
+            || dc.Class("AsyncEventNotifierBase").Namespace("comphelper").GlobalNamespace()
+            || dc.Class("ODescriptor")
+                   .Namespace("sdbcx")
+                   .Namespace("connectivity")
+                   .GlobalNamespace()
+            || dc.Class("IController").Namespace("dbaui").GlobalNamespace()
+            || dc.Class("ORowSetBase").Namespace("dbaccess").GlobalNamespace()
+            || dc.Class("OComponentAdapterBase").Namespace("bib").GlobalNamespace()
+            || dc.Class("IEventProcessor").Namespace("comphelper").GlobalNamespace()
+            || dc.Class("SvxUnoTextBase").GlobalNamespace()
+            || dc.Class("OInterfaceContainer").Namespace("frm").GlobalNamespace()
+            || dc.Class("AccessibleComponentBase").Namespace("accessibility").GlobalNamespace()
+            || dc.Class("ContextHandler2Helper")
+                   .Namespace("core")
+                   .Namespace("oox")
+                   .GlobalNamespace()
+            || dc.Class("AccessibleStaticTextBase").Namespace("accessibility").GlobalNamespace()
+            || dc.Class("OCommonPicker").Namespace("svt").GlobalNamespace()
+            || dc.Class("VbaDocumentBase").GlobalNamespace()
+            || dc.Class("VbaPageSetupBase").GlobalNamespace()
+            || dc.Class("ScVbaControl").GlobalNamespace()
+
+        )
             return true;
     }
 
@@ -351,7 +387,7 @@ bool SalCall::checkOverlap(SourceRange range)
     return true;
 }
 
-static loplugin::Plugin::Registration<SalCall> reg("salcall", false);
+static loplugin::Plugin::Registration<SalCall> reg("salcall", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

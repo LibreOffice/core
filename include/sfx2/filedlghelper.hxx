@@ -204,7 +204,7 @@ public:
     // XFilePickerListener methods
     void   FileSelectionChanged();
     void   DirectoryChanged();
-    virtual void SAL_CALL   ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+    virtual void   ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
     void   DialogSizeChanged();
     static OUString SAL_CALL    HelpRequested( const css::ui::dialogs::FilePickerEvent& aEvent );
 

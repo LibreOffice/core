@@ -210,7 +210,7 @@ namespace pcr
     }
 
 
-    Sequence< Property > SAL_CALL EditPropertyHandler::doDescribeSupportedProperties() const
+    Sequence< Property > EditPropertyHandler::doDescribeSupportedProperties() const
     {
         std::vector< Property > aProperties;
 

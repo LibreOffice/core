@@ -2109,14 +2109,14 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
     return pRelationSet;
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleDocument::createAccessibleDescription()
 {
     OUString sDescription = STR_ACC_DOC_DESCR;
     return sDescription;
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleDocument::createAccessibleName()
 {
     SolarMutexGuard aGuard;

@@ -32,7 +32,7 @@ public:
     virtual ~BreakIterator_th() override;
 
 protected:
-    void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) override;
+    void makeIndex(const OUString& text, sal_Int32 pos) override;
 };
 
 }

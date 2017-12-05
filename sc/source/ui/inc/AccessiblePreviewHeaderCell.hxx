@@ -106,8 +106,8 @@ public:
         getImplementationId() override;
 
 protected:
-    virtual OUString SAL_CALL createAccessibleDescription() override;
-    virtual OUString SAL_CALL createAccessibleName() override;
+    virtual OUString createAccessibleDescription() override;
+    virtual OUString createAccessibleName() override;
 
     virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
     virtual tools::Rectangle GetBoundingBox() const override;

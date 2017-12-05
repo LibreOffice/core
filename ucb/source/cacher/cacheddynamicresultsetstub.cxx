@@ -47,7 +47,7 @@ CachedDynamicResultSetStub::~CachedDynamicResultSetStub()
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSetStub
+void CachedDynamicResultSetStub
     ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetOne( xResultSet );
@@ -61,7 +61,7 @@ void SAL_CALL CachedDynamicResultSetStub
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSetStub
+void CachedDynamicResultSetStub
     ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetTwo( xResultSet );

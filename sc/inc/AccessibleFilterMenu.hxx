@@ -52,7 +52,7 @@ public:
             ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos);
     virtual ~ScAccessibleFilterMenu() override;
 
-    virtual bool SAL_CALL isVisible() override;
+    virtual bool isVisible() override;
 
     /// XAccessibleComponent
 
