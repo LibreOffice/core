@@ -196,7 +196,7 @@ public class SwXParagraph extends TestCase {
 
         portP = UnoRuntime.queryInterface(XPropertySet.class, port);
         paraP = UnoRuntime.queryInterface(XPropertySet.class, para);
-        paraP.setPropertyValue("NumberingStyleName","Numbering 4");
+        paraP.setPropertyValue("NumberingStyleName","Numbering IVX");
         nRules = paraP.getPropertyValue("NumberingRules");
 
 
