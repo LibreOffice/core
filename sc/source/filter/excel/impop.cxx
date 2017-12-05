@@ -851,7 +851,11 @@ void ImportExcel::Shrfmla()
     pFormConv->Reset(aPos);
     pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
 
-    OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray is NULL!" );
+    if (!pErgebnis)
+    {
+        SAL_WARN("sc", "+ImportExcel::Shrfmla(): ScTokenArray is NULL!");
+        return;
+    }
 
     pExcRoot->pShrfmlaBuff->Store(aPos, *pErgebnis);
 
