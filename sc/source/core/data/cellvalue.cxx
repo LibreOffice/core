@@ -244,6 +244,27 @@ ScCellValue::ScCellValue( const ScCellValue& r ) : meType(r.meType), mfValue(r.m
     }
 }
 
+ScCellValue::ScCellValue(ScCellValue&& r)
+    : meType(r.meType)
+    , mfValue(r.mfValue)
+{
+    switch (r.meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = r.mpString;
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = r.mpEditText;
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = r.mpFormula;
+        break;
+        default:
+            ;
+    }
+    r.meType = CELLTYPE_NONE;
+}
+
 ScCellValue::~ScCellValue()
 {
     clear();
@@ -489,6 +510,33 @@ ScCellValue& ScCellValue::operator= ( const ScCellValue& r )
 {
     ScCellValue aTmp(r);
     swap(aTmp);
+    return *this;
+}
+
+ScCellValue& ScCellValue::operator=(ScCellValue&& rCell)
+{
+    clear();
+
+    meType = rCell.meType;
+    mfValue = rCell.mfValue;
+    switch (rCell.meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = rCell.mpString;
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = rCell.mpEditText;
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = rCell.mpFormula;
+        break;
+        default:
+            ;
+    }
+    //we don't need to reset mpString/mpEditText/mpFormula if we
+    //set meType to NONE as the ScCellValue dtor keys off the meType
+    rCell.meType = CELLTYPE_NONE;
+
     return *this;
 }
 
