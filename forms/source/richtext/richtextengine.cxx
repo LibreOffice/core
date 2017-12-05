@@ -33,7 +33,6 @@
 #include <svl/undo.hxx>
 
 #include <algorithm>
-#include <functional>
 #include <memory>
 
 namespace frm
@@ -119,7 +118,7 @@ namespace frm
         ::std::vector< IEngineStatusListener* >::iterator aPos = ::std::find_if(
             m_aStatusListeners.begin(),
             m_aStatusListeners.end(),
-            ::std::bind2nd( ::std::equal_to< IEngineStatusListener* >( ), _pListener )
+            [_pListener](IEngineStatusListener * p) { return p == _pListener; }
         );
         OSL_ENSURE( aPos != m_aStatusListeners.end(), "RichTextEngine::revokeEngineStatusListener: listener not registered!" );
         if ( aPos != m_aStatusListeners.end() )
