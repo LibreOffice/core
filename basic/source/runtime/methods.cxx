@@ -2461,7 +2461,7 @@ void SbRtl_IsError(StarBASIC *, SbxArray & rPar, bool)
         SbUnoObject* pObj = dynamic_cast<SbUnoObject*>( pVar  );
         if ( !pObj )
         {
-            if ( SbxBase* pBaseObj = pVar->GetObject() )
+            if ( SbxBase* pBaseObj = (pVar->IsObject() ? pVar->GetObject() : nullptr) )
             {
                 pObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
             }
