@@ -2371,20 +2371,13 @@ void SbRtl_IsObject(StarBASIC *, SbxArray & rPar, bool)
     else
     {
         SbxVariable* pVar = rPar.Get(1);
-        SbxBase* pObj = pVar->GetObject();
-
-        // #100385: GetObject can result in an error, so reset it
-        SbxBase::ResetError();
+        bool bObject = pVar->IsObject();
+        SbxBase* pObj = (bObject ? pVar->GetObject() : nullptr);
 
         SbUnoClass* pUnoClass;
-        bool bObject;
         if( pObj &&  ( pUnoClass=dynamic_cast<SbUnoClass*>( pObj) ) != nullptr  )
         {
             bObject = pUnoClass->getUnoClass().is();
-        }
-        else
-        {
-            bObject = pVar->IsObject();
         }
         rPar.Get( 0 )->PutBool( bObject );
     }
