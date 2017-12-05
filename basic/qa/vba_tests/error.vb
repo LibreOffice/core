@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testError()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -27,9 +27,9 @@ Function verify_testError() As String
     testName = "Test Error function"
     On Error GoTo errorHandler
 
-    date2 = Error(62)   'https://help.libreoffice.org/3.3/Basic/Error_Function_Runtime
-    date1 = "Input past end of file"
-    TestLog_ASSERT date1 = date2, "the return Error is: " & date1
+    date2 = Error(11)   'https://help.libreoffice.org/Basic/Error_Function_Runtime
+    date1 = "Division by zero."
+    TestLog_ASSERT date1 = date2, "the return Error is: " & date2
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testError = result
