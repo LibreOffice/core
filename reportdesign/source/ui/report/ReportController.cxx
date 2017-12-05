@@ -1022,13 +1022,13 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         }
         break;
         case SID_CUT:
-            executeMethodWithUndo(RID_STR_UNDO_REMOVE_SELECTION,::std::mem_fun(&ODesignView::Cut));
+            executeMethodWithUndo(RID_STR_UNDO_REMOVE_SELECTION,::std::mem_fn(&ODesignView::Cut));
             break;
         case SID_COPY:
             getDesignView()->Copy();
             break;
         case SID_PASTE:
-            executeMethodWithUndo(RID_STR_UNDO_PASTE,::std::mem_fun(&ODesignView::Paste));
+            executeMethodWithUndo(RID_STR_UNDO_PASTE,::std::mem_fn(&ODesignView::Paste));
             break;
 
         case SID_FRAME_TO_TOP:
@@ -1161,7 +1161,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 }
             }
             else
-                executeMethodWithUndo(RID_STR_UNDO_REMOVE_SELECTION,::std::mem_fun(&ODesignView::Delete));
+                executeMethodWithUndo(RID_STR_UNDO_REMOVE_SELECTION,::std::mem_fn(&ODesignView::Delete));
             break;
         case SID_GRID_USE:
             getDesignView()->setGridSnap(m_bGridUse = !m_bGridUse);
@@ -2235,7 +2235,7 @@ void SAL_CALL OReportController::disposing( const lang::EventObject& Source )
 
 static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
-                          ,::std::mem_fun_t<bool,OGroupHelper> const & _pGroupMemberFunction)
+                          ,::std::function<bool(OGroupHelper *)> const & _pGroupMemberFunction)
 {
     uno::Reference< report::XGroup> xGroup;
     sal_uInt16 nNonVisibleGroups = 0;
@@ -2253,8 +2253,8 @@ static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XG
 
 void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,const OUString& _sPropName,sal_Int32 _nGroupPos,bool _bShow)
 {
-    ::std::mem_fun_t<bool,OGroupHelper> pMemFun = ::std::mem_fun(&OGroupHelper::getHeaderOn);
-    ::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
+    ::std::function<bool(OGroupHelper *)> pMemFun = ::std::mem_fn(&OGroupHelper::getHeaderOn);
+    ::std::function<uno::Reference<report::XSection>(OGroupHelper *)> pMemFunSection = ::std::mem_fn(&OGroupHelper::getHeader);
     OUString sColor(DBGROUPHEADER);
     sal_uInt16 nPosition = 0;
     bool bHandle = false;
@@ -2266,8 +2266,8 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
     }
     else if ( _sPropName == PROPERTY_FOOTERON )
     {
-        pMemFun = ::std::mem_fun(&OGroupHelper::getFooterOn);
-        pMemFunSection = ::std::mem_fun(&OGroupHelper::getFooter);
+        pMemFun = ::std::mem_fn(&OGroupHelper::getFooterOn);
+        pMemFunSection = ::std::mem_fn(&OGroupHelper::getFooter);
         nPosition = getDesignView()->getSectionCount();
 
         if ( m_xReportDefinition->getPageFooterOn() )
@@ -2574,7 +2574,7 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
     }
 }
 
-void OReportController::executeMethodWithUndo(const char* pUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
+void OReportController::executeMethodWithUndo(const char* pUndoStrId,const ::std::function<void(ODesignView *)>& _pMemfun)
 {
     const OUString sUndoAction = RptResId(pUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
@@ -3745,13 +3745,13 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
             addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
-                                                            ,::std::mem_fun(&OReportHelper::getReportHeader)
+                                                            ,::std::mem_fn(&OReportHelper::getReportHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
 
             addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
-                                                            ,::std::mem_fun(&OReportHelper::getReportFooter)
+                                                            ,::std::mem_fn(&OReportHelper::getReportFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
@@ -3793,14 +3793,14 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
 
             addUndoAction(new OReportSectionUndo(*m_aReportModel
                                                             ,SID_PAGEHEADER_WITHOUT_UNDO
-                                                            ,::std::mem_fun(&OReportHelper::getPageHeader)
+                                                            ,::std::mem_fn(&OReportHelper::getPageHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
 
             addUndoAction(new OReportSectionUndo(*m_aReportModel
                                                             ,SID_PAGEFOOTER_WITHOUT_UNDO
-                                                            ,::std::mem_fun(&OReportHelper::getPageFooter)
+                                                            ,::std::mem_fn(&OReportHelper::getPageFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
@@ -3881,7 +3881,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
             if ( _bUndo )
                 addUndoAction(new OGroupSectionUndo(*m_aReportModel
                                                                 ,_bHeader ? SID_GROUPHEADER_WITHOUT_UNDO : SID_GROUPFOOTER_WITHOUT_UNDO
-                                                                ,_bHeader ? ::std::mem_fun(&OGroupHelper::getHeader) : ::std::mem_fun(&OGroupHelper::getFooter)
+                                                                ,_bHeader ? ::std::mem_fn(&OGroupHelper::getHeader) : ::std::mem_fn(&OGroupHelper::getFooter)
                                                                 ,xGroup
                                                                 ,bSwitchOn ? Inserted : Removed
                                                                 , ( _bHeader ?

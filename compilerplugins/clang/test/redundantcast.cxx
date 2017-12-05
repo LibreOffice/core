@@ -340,6 +340,40 @@ void testDynamicCast() {
     (void) dynamic_cast<S3 *>(s2);
 }
 
+void overload(int);
+void overload(long);
+void nonOverload();
+
+struct Overload {
+    int overload();
+    long overload() const;
+    void nonOverload();
+};
+
+void testOverloadResolution() {
+    (void) static_cast<void (*)(long)>(overload);
+    (void) static_cast<void (*)(long)>((overload));
+    (void) static_cast<void (*)(long)>(&overload);
+    (void) static_cast<void (*)(long)>((&overload));
+    (void) static_cast<void (*)(long)>(&((overload)));
+    (void) static_cast<void (*)()>(nonOverload); // expected-error {{static_cast from 'void (*)()' prvalue to 'void (*)()' prvalue is redundant [loplugin:redundantcast]}}
+    (void) static_cast<void (*)()>((nonOverload)); // expected-error {{static_cast from 'void (*)()' prvalue to 'void (*)()' prvalue is redundant [loplugin:redundantcast]}}
+    (void) static_cast<void (*)()>(&nonOverload); // expected-error {{static_cast from 'void (*)()' prvalue to 'void (*)()' prvalue is redundant [loplugin:redundantcast]}}
+    (void) static_cast<void (*)()>((&nonOverload)); // expected-error {{static_cast from 'void (*)()' prvalue to 'void (*)()' prvalue is redundant [loplugin:redundantcast]}}
+    (void) static_cast<void (*)()>(&((nonOverload))); // expected-error {{static_cast from 'void (*)()' prvalue to 'void (*)()' prvalue is redundant [loplugin:redundantcast]}}
+    (void) static_cast<long (Overload::*)() const>(&Overload::overload);
+    (void) static_cast<void (Overload::*)()>(&Overload::nonOverload); // expected-error {{static_cast from 'void (Overload::*)()' prvalue to 'void (Overload::*)()' prvalue is redundant [loplugin:redundantcast]}}
+
+    using OverloadFn = void (*)(long);
+    (void) OverloadFn(overload);
+    using NonOverloadFn = void (*)();
+    (void) NonOverloadFn(nonOverload); // expected-error {{redundant functional cast from 'void (*)()' to 'NonOverloadFn' (aka 'void (*)()') [loplugin:redundantcast]}}
+    using OverloadMemFn = long (Overload::*)() const;
+    (void) OverloadMemFn(&Overload::overload);
+    using NonOverloadMemFn = void (Overload::*)();
+    (void) NonOverloadMemFn(&Overload::nonOverload); // expected-error {{redundant functional cast from 'void (Overload::*)()' to 'NonOverloadMemFn' (aka 'void (Overload::*)()') [loplugin:redundantcast]}}
+};
+
 int main() {
     testConstCast();
     testStaticCast();

@@ -199,7 +199,7 @@ namespace rptui
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
 
-        void executeMethodWithUndo(const char* pUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
+        void executeMethodWithUndo(const char* pUndoStrId,const ::std::function<void(ODesignView *)>& _pMemfun);
         void alignControlsWithUndo(const char* pUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection = false);
 
         css::uno::Reference< css::frame::XFrame > getXFrame();

@@ -66,8 +66,7 @@ namespace rptui
     class OReportSectionUndo : public OSectionUndo
     {
         OReportHelper                               m_aReportHelper;
-        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
-                                    ,OReportHelper> m_pMemberFunction;
+        ::std::function<css::uno::Reference< css::report::XSection >(OReportHelper *)> m_pMemberFunction;
 
         void    implReInsert( ) override;
         void    implReRemove( ) override;
@@ -77,8 +76,7 @@ namespace rptui
         //OReportSectionUndo(    const css::uno::Reference< css::report::XSection >& _xSection
         OReportSectionUndo( OReportModel& rMod
                             ,sal_uInt16 _nSlot
-                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
-                                ,OReportHelper> _pMemberFunction
+                            ,::std::function<css::uno::Reference< css::report::XSection >(OReportHelper *)> _pMemberFunction
                             ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
                             ,Action _eAction);
         virtual ~OReportSectionUndo() override;
@@ -89,8 +87,7 @@ namespace rptui
     class OGroupSectionUndo : public OSectionUndo
     {
         OGroupHelper                                m_aGroupHelper;
-        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
-                                    ,OGroupHelper> m_pMemberFunction;
+        ::std::function<css::uno::Reference< css::report::XSection >(OGroupHelper *)> m_pMemberFunction;
 
         mutable OUString                     m_sName;
 
@@ -102,8 +99,7 @@ namespace rptui
         //OGroupSectionUndo(     const css::uno::Reference< css::report::XSection >& _xSection
         OGroupSectionUndo(  OReportModel& rMod
                             ,sal_uInt16 _nSlot
-                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
-                                            ,OGroupHelper> _pMemberFunction
+                            ,::std::function<css::uno::Reference< css::report::XSection >(OGroupHelper *)> _pMemberFunction
                             ,const css::uno::Reference< css::report::XGroup >& _xGroup
                             ,Action _eAction
                             ,const char* pCommentID);

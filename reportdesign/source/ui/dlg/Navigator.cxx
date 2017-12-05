@@ -823,12 +823,12 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
         {
             sal_Int32 nPos = 1;
             uno::Reference< report::XGroup> xGroup(_rEvent.Source,uno::UNO_QUERY);
-            ::std::mem_fun_t< bool,OGroupHelper> pIsOn = ::std::mem_fun(&OGroupHelper::getHeaderOn);
-            ::std::mem_fun_t< uno::Reference<report::XSection> ,OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
+            ::std::function<bool(OGroupHelper *)> pIsOn = ::std::mem_fn(&OGroupHelper::getHeaderOn);
+            ::std::function<uno::Reference<report::XSection>(OGroupHelper *)> pMemFunSection = ::std::mem_fn(&OGroupHelper::getHeader);
             if ( bFooterOn )
             {
-                pIsOn = ::std::mem_fun(&OGroupHelper::getFooterOn);
-                pMemFunSection = ::std::mem_fun(&OGroupHelper::getFooter);
+                pIsOn = ::std::mem_fn(&OGroupHelper::getFooterOn);
+                pMemFunSection = ::std::mem_fn(&OGroupHelper::getFooter);
                 nPos = m_pTree->GetChildCount(pEntry) - 1;
             }
 
