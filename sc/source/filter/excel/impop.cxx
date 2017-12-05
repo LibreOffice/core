@@ -533,7 +533,7 @@ void ImportExcel::Array25()
         nFormLen = aIn.ReaduInt16();
     }
 
-    const ScTokenArray* pErgebnis = nullptr;
+    const ScTokenArray* pResult = nullptr;
 
     if (ValidColRow(nLastCol, nLastRow))
     {
@@ -541,16 +541,16 @@ void ImportExcel::Array25()
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert(pErgebnis, maStrm, nFormLen, true);
+        pFormConv->Convert(pResult, maStrm, nFormLen, true);
 
-        SAL_WARN_IF(!pErgebnis, "sc", "*ImportExcel::Array25(): ScTokenArray is NULL!");
+        SAL_WARN_IF(!pResult, "sc", "*ImportExcel::Array25(): ScTokenArray is NULL!");
     }
 
-    if (pErgebnis)
+    if (pResult)
     {
         ScDocumentImport& rDoc = GetDocImport();
         ScRange aArrayRange(nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab());
-        rDoc.setMatrixCells(aArrayRange, *pErgebnis, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+        rDoc.setMatrixCells(aArrayRange, *pResult, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
     }
 }
 
@@ -840,7 +840,7 @@ void ImportExcel::Shrfmla()
 
     // read mark is now on the formula
 
-    const ScTokenArray* pErgebnis;
+    const ScTokenArray* pResult;
 
     // The shared range in this record is erroneous more than half the time.
     // Don't ever rely on it. Use the one from the formula cell above.
@@ -849,21 +849,21 @@ void ImportExcel::Shrfmla()
 
     ScAddress aPos(nCol1, nRow1, GetCurrScTab());
     pFormConv->Reset(aPos);
-    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
+    pFormConv->Convert( pResult, maStrm, nLenExpr, true, FT_SharedFormula );
 
-    if (!pErgebnis)
+    if (!pResult)
     {
         SAL_WARN("sc", "+ImportExcel::Shrfmla(): ScTokenArray is NULL!");
         return;
     }
 
-    pExcRoot->pShrfmlaBuff->Store(aPos, *pErgebnis);
+    pExcRoot->pShrfmlaBuff->Store(aPos, *pResult);
 
     // Create formula cell for the last formula record.
 
     ScDocumentImport& rDoc = GetDocImport();
 
-    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, *pErgebnis);
+    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, *pResult);
     pCell->GetCode()->WrapReference(aPos, EXC_MAXCOL8, EXC_MAXROW8);
     rDoc.getDoc().EnsureTable(aPos.Tab());
     rDoc.setFormulaCell(aPos, pCell);
@@ -1030,7 +1030,7 @@ void ImportExcel::Array34()
     aIn.Ignore( (GetBiff() >= EXC_BIFF5) ? 6 : 2 );
     nFormLen = aIn.ReaduInt16();
 
-    const ScTokenArray* pErgebnis = nullptr;
+    const ScTokenArray* pResult = nullptr;
 
     if( ValidColRow( nLastCol, nLastRow ) )
     {
@@ -1038,16 +1038,16 @@ void ImportExcel::Array34()
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true );
+        pFormConv->Convert( pResult, maStrm, nFormLen, true );
 
-        SAL_WARN_IF(!pErgebnis, "sc", "+ImportExcel::Array34(): ScTokenArray is NULL!");
+        SAL_WARN_IF(!pResult, "sc", "+ImportExcel::Array34(): ScTokenArray is NULL!");
     }
 
-    if (pErgebnis)
+    if (pResult)
     {
         ScDocumentImport& rDoc = GetDocImport();
         ScRange aArrayRange(nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab());
-        rDoc.setMatrixCells(aArrayRange, *pErgebnis, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+        rDoc.setMatrixCells(aArrayRange, *pResult, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
     }
 }
 

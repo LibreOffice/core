@@ -193,17 +193,17 @@ ExcelToSc::~ExcelToSc()
 {
 }
 
-void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
+void ExcelToSc::GetDummy( const ScTokenArray*& pResult )
 {
     aPool.Store( OUString("Dummy()") );
     aPool >> aStack;
-    pErgebnis = aPool[ aStack.Get() ];
+    pResult = aPool[ aStack.Get() ];
 }
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte after the additional content (eg
 // inline arrays) following <nFormulaLen>
-ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     sal_uInt8           nOp, nLen;
@@ -229,7 +229,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     {
         aPool.Store( OUString("-/-") );
         aPool >> aStack;
-        pErgebnis = aPool[ aStack.Get() ];
+        pResult = aPool[ aStack.Get() ];
         return ConvErr::OK;
     }
 
@@ -867,24 +867,24 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     {
         aPool << ocBad;
         aPool >> aStack;
-        pErgebnis = aPool[ aStack.Get() ];
+        pResult = aPool[ aStack.Get() ];
         eRet = ConvErr::Ni;
     }
     else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        pErgebnis = aPool[ aStack.Get() ];
+        pResult = aPool[ aStack.Get() ];
         eRet = ConvErr::Count;
     }
     else if( bArrayFormula )
     {
-        pErgebnis = nullptr;
+        pResult = nullptr;
         eRet = ConvErr::OK;
     }
     else
     {
-        pErgebnis = aPool[ aStack.Get() ];
+        pResult = aPool[ aStack.Get() ];
         eRet = ConvErr::OK;
     }
 
@@ -1706,13 +1706,13 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 
     aPool >> aStack;
 
-    const ScTokenArray*     pErgebnis = aPool[ aStack.Get() ];
+    const ScTokenArray*     pResult = aPool[ aStack.Get() ];
     if( nError != FormulaError::NONE )
-        const_cast<ScTokenArray*>(pErgebnis)->SetCodeError( nError );
+        const_cast<ScTokenArray*>(pResult)->SetCodeError( nError );
 
-    const_cast<ScTokenArray*>(pErgebnis)->SetExclusiveRecalcModeNormal();
+    const_cast<ScTokenArray*>(pResult)->SetExclusiveRecalcModeNormal();
 
-    return pErgebnis;
+    return pResult;
 }
 
 bool ExcelToSc::ReadSharedFormulaPosition( XclImpStream& rStrm, SCCOL& rCol, SCROW& rRow )
