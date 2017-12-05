@@ -2647,7 +2647,7 @@ void SmXMLTableContext_Impl::EndElement()
 
     for (auto i=nRows;i > 0;i--)
     {
-        SmStructureNode* pArray = static_cast<SmStructureNode *>(rNodeStack.front().release());
+        SmNode* pArray = rNodeStack.front().release();
         rNodeStack.pop_front();
         if (pArray->GetNumSubNodes() == 0)
         {
@@ -2663,13 +2663,14 @@ void SmXMLTableContext_Impl::EndElement()
             aRelationArray.resize(1);
             aRelationArray[0] = pArray;
             SmToken aDummy;
-            pArray = new SmExpressionNode(aDummy);
-            pArray->SetSubNodes(aRelationArray);
+            SmExpressionNode* pExprNode = new SmExpressionNode(aDummy);
+            pExprNode->SetSubNodes(aRelationArray);
+            pArray = pExprNode;
         }
 
         if (pArray->GetNumSubNodes() > nCols)
             nCols = pArray->GetNumSubNodes();
-        aReverseStack.push_front(std::unique_ptr<SmStructureNode>(pArray));
+        aReverseStack.push_front(std::unique_ptr<SmNode>(pArray));
     }
     aExpressionArray.resize(nCols*nRows);
     size_t j=0;
