@@ -44,6 +44,7 @@ struct SC_DLLPUBLIC ScCellValue
     ScCellValue( double fValue );
     ScCellValue( const svl::SharedString& rString );
     ScCellValue( const ScCellValue& r );
+    ScCellValue( ScCellValue&& r );
     ~ScCellValue();
 
     void clear();
@@ -84,6 +85,7 @@ struct SC_DLLPUBLIC ScCellValue
     bool equalsWithoutFormat( const ScCellValue& r ) const;
 
     ScCellValue& operator= ( const ScCellValue& r );
+    ScCellValue& operator= ( ScCellValue&& r );
     ScCellValue& operator= ( const ScRefCellValue& r );
 
     void swap( ScCellValue& r );
