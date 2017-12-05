@@ -44,6 +44,9 @@ class Class5_1
 {
     virtual void method1(); // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
     virtual ~Class5_1();
+
+    SAL_CALL Class5_1(); //TODO
+    SAL_CALL operator int(); //TODO
 };
 class Class5_2
 {
