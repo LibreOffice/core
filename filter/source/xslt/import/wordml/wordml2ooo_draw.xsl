@@ -1977,7 +1977,7 @@
             </xsl:if>
         </xsl:element>
     </xsl:template>
-    <!--this template map word's points to svg:viewbox's point they are quite differect because word's use pt but svg's use 0.001cm as a unit-->
+    <!--this template map word's points to svg:viewbox's point they are quite different because word's use pt but svg's use 0.001cm as a unit-->
     <xsl:template name="wordpoints2oopoints">
         <xsl:param name="input_points"/>
         <xsl:param name="input_x"/>
