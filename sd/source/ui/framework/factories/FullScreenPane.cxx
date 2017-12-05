@@ -58,7 +58,7 @@ FullScreenPane::FullScreenPane (
     if (mpWorkWindow.get() == nullptr)
         return;
 
-    // Create a new top-leve window that is displayed full screen.
+    // Create a new top-level window that is displayed full screen.
     mpWorkWindow->ShowFullScreenMode(true, nScreenNumber);
     // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
     mpWorkWindow->SetMenuBarMode(MenuBarMode::Hide);
