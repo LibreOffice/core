@@ -18,12 +18,6 @@ CLANG_DL_EXT = .so
 CLANG_EXE_EXT =
 endif
 
-ifeq ($(COMPILER_PLUGINS_CXX),)
-CLANGCXX=$(filter-out -m32 -m64 -fsanitize%,$(CXX))
-else
-CLANGCXX=$(COMPILER_PLUGINS_CXX)
-endif
-
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin); you
 # may occasionally want to override these:
 ifeq ($(OS),WNT)
@@ -113,8 +107,8 @@ ifeq ($(OS),WNT)
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
-	$(QUIET)$(CLANGCXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
-        $(CLANGINCLUDES) /I$(BUILDDIR)/config_host $(2) $(CXXFLAGS_CXX11) /MD \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
+        $(CLANGINCLUDES) /I$(BUILDDIR)/config_host $(2) /MD \
         /c /Fo: $(3)
 
 -include $(CLANGOUTDIR)/$(1).d #TODO
@@ -128,7 +122,7 @@ else
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
-	$(QUIET)$(CLANGCXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC $(CXXFLAGS_CXX11) -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
 
@@ -143,10 +137,10 @@ $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(s
 $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(CLANGOBJS)
 	@echo [build LNK] $(subst $(BUILDDIR)/,,$@)
 ifeq ($(OS),WNT)
-	$(QUIET)$(CLANGCXX) /LD $(CLANGOBJS) /Fe: $@ $(CLANGLIBDIR)/clang.lib \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) /LD $(CLANGOBJS) /Fe: $@ $(CLANGLIBDIR)/clang.lib \
         mincore.lib version.lib /link $(COMPILER_PLUGINS_CXX_LINKFLAGS)
 else
-	$(QUIET)$(CLANGCXX) -shared $(CLANGOBJS) -o $@ \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) -shared $(CLANGOBJS) -o $@ \
 		$(if $(filter MACOSX,$(OS)),-Wl$(CLANG_COMMA)-flat_namespace \
 			-Wl$(CLANG_COMMA)-undefined -Wl$(CLANG_COMMA)suppress)
 endif
