@@ -39,7 +39,6 @@ private:
 
 public:
     ScAreaLinkSaver( const ScAreaLink& rSource );
-    ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
 
     bool        IsEqual( const ScAreaLink& rCompare ) const;
     bool        IsEqualSource( const ScAreaLink& rCompare ) const;
@@ -54,7 +53,6 @@ class ScAreaLinkSaveCollection
     DataType maData;
 public:
     ScAreaLinkSaveCollection();
-    ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& r );
     ~ScAreaLinkSaveCollection();
 
     bool        IsEqual( const ScDocument* pDoc ) const;

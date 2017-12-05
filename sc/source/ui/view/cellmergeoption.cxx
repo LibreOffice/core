@@ -32,16 +32,6 @@ ScCellMergeOption::ScCellMergeOption(SCCOL nStartCol, SCROW nStartRow, SCCOL nEn
 {
 }
 
-ScCellMergeOption::ScCellMergeOption(const ScCellMergeOption& r) :
-    maTabs(r.maTabs),
-    mnStartCol(r.mnStartCol),
-    mnStartRow(r.mnStartRow),
-    mnEndCol(r.mnEndCol),
-    mnEndRow(r.mnEndRow),
-    mbCenter(r.mbCenter)
-{
-}
-
 ScRange ScCellMergeOption::getSingleRange(SCTAB nTab) const
 {
     return ScRange(mnStartCol, mnStartRow, nTab, mnEndCol, mnEndRow, nTab);

@@ -34,16 +34,6 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
 {
 }
 
-ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
-    aFileName   ( rCopy.aFileName ),
-    aFilterName ( rCopy.aFilterName ),
-    aOptions    ( rCopy.aOptions ),
-    aSourceArea ( rCopy.aSourceArea ),
-    aDestArea   ( rCopy.aDestArea ),
-    nRefresh    ( rCopy.nRefresh )
-{
-}
-
 bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
     return ( aFileName == rCompare.GetFile() &&
@@ -85,9 +75,6 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
 }
 
 ScAreaLinkSaveCollection::ScAreaLinkSaveCollection() {}
-
-ScAreaLinkSaveCollection::ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& r ) :
-    maData(r.maData) {}
 
 ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection() {}
 

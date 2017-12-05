@@ -39,22 +39,6 @@ ScAsciiOptions::ScAsciiOptions() :
 {
 }
 
-ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
-    bFixedLen       ( rOpt.bFixedLen ),
-    aFieldSeps      ( rOpt.aFieldSeps ),
-    bMergeFieldSeps ( rOpt.bMergeFieldSeps ),
-    bQuotedFieldAsText(rOpt.bQuotedFieldAsText),
-    bDetectSpecialNumber(rOpt.bDetectSpecialNumber),
-    cTextSep        ( rOpt.cTextSep ),
-    eCharSet        ( rOpt.eCharSet ),
-    eLang           ( rOpt.eLang ),
-    bCharSetSystem  ( rOpt.bCharSetSystem ),
-    nStartRow       ( rOpt.nStartRow ),
-    mvColStart      ( rOpt.mvColStart ),
-    mvColFormat     ( rOpt.mvColFormat )
-{
-}
-
 ScAsciiOptions::~ScAsciiOptions()
 {
 }

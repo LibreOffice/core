@@ -843,15 +843,6 @@ public:
     {
     }
 
-    Tokens2RangeString(const Tokens2RangeString& r) :
-        mpRangeStr(r.mpRangeStr),
-        mpDoc(r.mpDoc),
-        meGrammar(r.meGrammar),
-        mcRangeSep(r.mcRangeSep),
-        mbFirst(r.mbFirst)
-    {
-    }
-
     void operator() (const ScTokenRef& rToken)
     {
         ScCompiler aCompiler(mpDoc, ScAddress(0,0,0), meGrammar);
@@ -892,13 +883,6 @@ public:
         mpRangeStr(new OUStringBuffer),
         mpDoc(pDoc),
         mbFirst(true)
-    {
-    }
-
-    Tokens2RangeStringXML(const Tokens2RangeStringXML& r) :
-        mpRangeStr(r.mpRangeStr),
-        mpDoc(r.mpDoc),
-        mbFirst(r.mbFirst)
     {
     }
 
@@ -1609,11 +1593,6 @@ class InsertTabNumber
 public:
     InsertTabNumber() :
         mpTabNumVector(new vector<SCTAB>)
-    {
-    }
-
-    InsertTabNumber(const InsertTabNumber& r) :
-        mpTabNumVector(r.mpTabNumVector)
     {
     }
 
@@ -3035,9 +3014,6 @@ public:
     AccumulateRangeSize() :
         mnCols(0), mnRows(0) {}
 
-    AccumulateRangeSize(const AccumulateRangeSize& r) :
-        mnCols(r.mnCols), mnRows(r.mnRows) {}
-
     void operator() (const ScTokenRef& pToken)
     {
         ScRange r;
@@ -3067,12 +3043,6 @@ public:
         meOrigin(eOrigin),
         mnCount(0),
         mbColumn(bColumn) {}
-
-    GenerateLabelStrings(const GenerateLabelStrings& r) :
-        mpLabels(r.mpLabels),
-        meOrigin(r.meOrigin),
-        mnCount(r.mnCount),
-        mbColumn(r.mbColumn) {}
 
     void operator() (const ScTokenRef& pToken)
     {

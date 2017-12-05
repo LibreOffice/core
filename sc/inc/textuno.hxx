@@ -220,7 +220,6 @@ class ScCellTextCursor : public SvxUnoTextCursor
     rtl::Reference<ScCellObj> mxTextObj;
 
 public:
-                            ScCellTextCursor(const ScCellTextCursor& rOther);
                             ScCellTextCursor(ScCellObj& rText);
         virtual             ~ScCellTextCursor() throw() override;
 
@@ -271,7 +270,6 @@ private:
     css::uno::Reference< css::text::XText > xParentText;
 
 public:
-                            ScDrawTextCursor(const ScDrawTextCursor& rOther);
                             ScDrawTextCursor( const css::uno::Reference< css::text::XText >& xParent,
                                             const SvxUnoTextBase& rText );
     virtual                  ~ScDrawTextCursor() throw() override;
