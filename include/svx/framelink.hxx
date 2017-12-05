@@ -275,6 +275,41 @@ public:
     const std::vector< StyleVectorCombination >& getEntries() const{ return maEntries; }
 };
 
+/**
+ *  Helper method to create the correct drawinglayer::primitive2d::BorderLinePrimitive2D
+ *  for the given data, especially the correct drawinglayer::primitive2d::BorderLine entries
+ *  including the correctly solved/created LineStartEnd extends
+ *
+ *  rTarget : Here the evtl. created BorderLinePrimitive2D will be appended
+ *  rOrigin : StartPoint of the Borderline
+ *  rX      : Vector of the Borderline
+ *  rBorder : svx::frame::Style of the of the Borderline
+ *  rStartStyleVectorTable : All other Borderlines which have to be taken into account because
+ *      they have the same StartPoint as the current Borderline. These will be used to calculate
+ *      the correct LineStartEnd extends tor the BorderLinePrimitive2D. The definition should be
+ *      built up using svx::frame::StyleVectorTable and StyleVectorTable::add and includes:
+ *          rStyle      : the svx::frame::Style of one other BorderLine
+ *          rMyVector   : the Vector of the *new* to-be-defined BorderLine, identical to rX
+ *          rOtherVector: the Vector of one other BorderLine (may be, but does not need to be normalized),
+ *                        always *pointing away* from the common StartPoint rOrigin
+ *          bMirrored   : define if rStyle of one other BorderLine shall be mirrored (e.g. bottom-right edges)
+ *      With multiple BorderLines the definitions have to be CounterClockWise. This will be
+ *      ensured by StyleVectorTable sorting the entries, but knowing this may allow more efficcient
+ *      data creation.
+ *  rEndStyleVectorTable: All other BorderLines that have the same EndPoint. There are differences to
+ *      the Start definitions:
+ *          - do not forget to consequently use -rX for rMyVector
+ *          - definitions have to be ClockWise for the EndBorderLines, will be ensured by sorting
+ *
+ *  If you take all this into account, you will gett correctly extended BorderLinePrimitive2D
+ *  reprsentations for the new to be defined BorderLine. That extensions will overlap nicely
+ *  with the corresponding BordreLines and take all multiple line definitions in the ::Style into
+ *  account.
+ *  The internal solver is *not limitied* to ::Style(s) with three parts (Left/Gap/Right), this is
+ *  just due to svx::frame::Style's definitions. A new solver based on this one can be created
+ *  anytime using more mulötiple borders based on the more flexible
+ *  std::vector< drawinglayer::primitive2d::BorderLine > if needed.
+ */
 SVX_DLLPUBLIC void CreateBorderPrimitives(
     drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
     const basegfx::B2DPoint&    rOrigin,                /// start point of borderline
