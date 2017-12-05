@@ -10187,8 +10187,9 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
             [AC_MSG_ERROR([gpgme headers not found, install gpgme development package])], [])
     else
         AC_MSG_RESULT([internal])
-        AC_DEFINE([GPGME_CAN_EXPORT_MINIMAL_KEY])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
+        AC_DEFINE([GPGME_CAN_EXPORT_MINIMAL_KEY])
+
         GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
         LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
         if test "$_os" != "WINNT"; then

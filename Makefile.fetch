@@ -128,7 +128,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
 		$(call fetch_Optional,EPOXY,EPOXY_TARBALL) \
 		$(call fetch_Optional,GLM,GLM_TARBALL) \
-		$(call fetch_Optional,GLIB2,GLIB2_TARBALL) \
 		$(call fetch_Optional,GPGMEPP,GPGME_TARBALL) \
 		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
 		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
