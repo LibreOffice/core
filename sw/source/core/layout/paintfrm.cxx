@@ -62,6 +62,8 @@
 #include <bodyfrm.hxx>
 #include <hffrm.hxx>
 #include <colfrm.hxx>
+#include <sw_primitivetypes2d.hxx>
+
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -232,7 +234,6 @@ public:
 };
 
 // Default zoom factor
-const static double aMinDistScale = 0.73;
 const static double aEdgeScale = 0.5;
 
 //To optimize the expensive RetouchColor determination
@@ -1180,42 +1181,6 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
 }
 
 /**
- * Helper for twip adjustments on pixel base
- *
- * This method compares the x- or y-pixel position of two twip-points.
- * If the x-/y-pixel positions are the same, the x-/y-pixel position of
- * the second twip point is adjusted by a given amount of pixels
-*/
-static void lcl_CompPxPosAndAdjustPos( const vcl::RenderContext&  _rOut,
-                                const Point&         _rRefPt,
-                                Point&               _rCompPt,
-                                const bool          _bChkXPos,
-                                const sal_Int8       _nPxAdjustment )
-{
-    const Point aRefPxPt = _rOut.LogicToPixel( _rRefPt );
-    Point aCompPxPt = _rOut.LogicToPixel( _rCompPt );
-
-    if ( _bChkXPos )
-    {
-        if ( aCompPxPt.X() == aRefPxPt.X() )
-        {
-            aCompPxPt.X() += _nPxAdjustment ;
-            const Point aAdjustedCompPt = _rOut.PixelToLogic( aCompPxPt );
-            _rCompPt.X() = aAdjustedCompPt.X();
-        }
-    }
-    else
-    {
-        if ( aCompPxPt.Y() == aRefPxPt.Y() )
-        {
-            aCompPxPt.Y() += _nPxAdjustment ;
-            const Point aAdjustedCompPt = _rOut.PixelToLogic( aCompPxPt );
-            _rCompPt.Y() = aAdjustedCompPt.Y();
-        }
-    }
-}
-
-/**
  * Method to pixel-align rectangle for drawing graphic object
  *
  * Because we are drawing graphics from the left-top-corner in conjunction
@@ -1259,13 +1224,6 @@ static long lcl_AlignHeight( const long nHeight, SwPaintProperties const & prope
             return std::max(1L, nHeight - properties.nSHalfPixelSzH);
     }
     return nHeight;
-}
-
-static long lcl_MinHeightDist( const long nDist, SwPaintProperties const & properties )
-{
-    if ( properties.aSScaleX < aMinDistScale || properties.aSScaleY < aMinDistScale )
-        return nDist;
-    return ::lcl_AlignHeight( std::max( nDist, properties.nSMinDistPixelH ), properties);
 }
 
 /**
@@ -4490,298 +4448,254 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
         gProp.pSLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol, gProp );
 }
 
-/**
- * @note Only all lines once or all lines twice!
- *
- * OD 29.04.2003 #107169# - method called for left and right border rectangles.
- * For a printer output device perform adjustment for non-overlapping top and
- * bottom border rectangles. Thus, add parameter <_bPrtOutputDev> to indicate
- * printer output device.
- * NOTE: For printer output device left/right border rectangle <_iorRect>
- *        has to be already non-overlapping the outer top/bottom border rectangle.
- */
-static void lcl_SubTopBottom( SwRect&              _iorRect,
-                                   const SvxBoxItem&    _rBox,
-                                   const SwBorderAttrs& _rAttrs,
-                                   const SwFrame&         _rFrame,
-                                   const SwRectFn&      _rRectFn,
-                                   const bool       _bPrtOutputDev,
-                                   SwPaintProperties const & properties )
+namespace drawinglayer
 {
-    const bool bCnt = _rFrame.IsContentFrame();
-    if ( _rBox.GetTop() && _rBox.GetTop()->GetInWidth() &&
-         ( !bCnt || _rAttrs.GetTopLine( _rFrame ) )
-       )
+    namespace primitive2d
     {
-        // subtract distance between outer and inner line.
-        SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetTop()->GetDistance(), properties );
-        // OD 19.05.2003 #109667# - non-overlapping border rectangles:
-        // adjust x-/y-position, if inner top line is a hair line (width = 1)
-        bool bIsInnerTopLineHairline = false;
-        if ( !_bPrtOutputDev )
+        class SW_DLLPUBLIC SwBorderRectanglePrimitive2D : public BufferedDecompositionPrimitive2D
         {
-            // additionally subtract width of top outer line
-            // --> left/right inner/outer line doesn't overlap top outer line.
-            nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetOutWidth(), properties );
-        }
-        else
+        private:
+            /// the transformation defining the geometry of this BorderRectangle
+            basegfx::B2DHomMatrix       maB2DHomMatrix;
+
+            /// the four styles to be used
+            svx::frame::Style           maStyleTop;
+            svx::frame::Style           maStyleRight;
+            svx::frame::Style           maStyleBottom;
+            svx::frame::Style           maStyleLeft;
+
+        protected:
+            /// local decomposition.
+            virtual void create2DDecomposition(
+                Primitive2DContainer& rContainer,
+                const geometry::ViewInformation2D& rViewInformation) const override;
+
+        public:
+            /// constructor
+            SwBorderRectanglePrimitive2D(
+                const basegfx::B2DHomMatrix& rB2DHomMatrix,
+                const svx::frame::Style& rStyleTop,
+                const svx::frame::Style& rStyleRight,
+                const svx::frame::Style& rStyleBottom,
+                const svx::frame::Style& rStyleLeft);
+
+            /// data read access
+            const basegfx::B2DHomMatrix& getB2DHomMatrix() const { return maB2DHomMatrix; }
+            const svx::frame::Style& getStyleTop() const { return maStyleTop; }
+            const svx::frame::Style& getStyleRight() const { return maStyleRight; }
+            const svx::frame::Style& getStyleBottom() const { return maStyleBottom; }
+            const svx::frame::Style& getStyleLeft() const { return maStyleLeft; }
+
+            /// compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+            /// get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+            /// provide unique ID
+            DeclPrimitive2DIDBlock()
+        };
+
+        void SwBorderRectanglePrimitive2D::create2DDecomposition(
+            Primitive2DContainer& rContainer,
+            const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // OD 29.04.2003 #107169# - additionally subtract width of top inner line
-            // --> left/right inner/outer line doesn't overlap top inner line.
-            nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetInWidth(), properties );
-            bIsInnerTopLineHairline = _rBox.GetTop()->GetInWidth() == 1;
-        }
-        (_iorRect.*_rRectFn->fnSubTop)( -nDist );
-        // OD 19.05.2003 #109667# - adjust calculated border top, if inner top line
-        // is a hair line
-        if ( bIsInnerTopLineHairline )
-        {
-            if ( _rFrame.IsVertical() )
+            basegfx::B2DPoint aTopLeft(getB2DHomMatrix() * basegfx::B2DPoint(0.0, 0.0));
+            basegfx::B2DPoint aTopRight(getB2DHomMatrix() * basegfx::B2DPoint(1.0, 0.0));
+            basegfx::B2DPoint aBottomLeft(getB2DHomMatrix() * basegfx::B2DPoint(0.0, 1.0));
+            basegfx::B2DPoint aBottomRight(getB2DHomMatrix() * basegfx::B2DPoint(1.0, 1.0));
+
+            if(getStyleTop().IsUsed())
             {
-                // right of border rectangle has to be checked and adjusted
-                Point aCompPt( _iorRect.Right(), 0 );
-                Point aRefPt( aCompPt.X() + 1, aCompPt.Y() );
-                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
-                                          aRefPt, aCompPt,
-                                          true, -1 );
-                _iorRect.Right( aCompPt.X() );
-            }
-            else
-            {
-                // top of border rectangle has to be checked and adjusted
-                Point aCompPt( 0, _iorRect.Top() );
-                Point aRefPt( aCompPt.X(), aCompPt.Y() - 1 );
-                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
-                                          aRefPt, aCompPt,
-                                          false, +1 );
-                _iorRect.Top( aCompPt.Y() );
-            }
-        }
-    }
-
-    if ( _rBox.GetBottom() && _rBox.GetBottom()->GetInWidth() &&
-         ( !bCnt || _rAttrs.GetBottomLine( _rFrame ) )
-       )
-    {
-        // subtract distance between outer and inner line.
-        SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetBottom()->GetDistance(), properties );
-        // OD 19.05.2003 #109667# - non-overlapping border rectangles:
-        // adjust x-/y-position, if inner bottom line is a hair line (width = 1)
-        bool bIsInnerBottomLineHairline = false;
-        if ( !_bPrtOutputDev )
-        {
-            // additionally subtract width of bottom outer line
-            // --> left/right inner/outer line doesn't overlap bottom outer line.
-            nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetOutWidth(), properties );
-        }
-        else
-        {
-            // OD 29.04.2003 #107169# - additionally subtract width of bottom inner line
-            // --> left/right inner/outer line doesn't overlap bottom inner line.
-            nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetInWidth(), properties );
-            bIsInnerBottomLineHairline = _rBox.GetBottom()->GetInWidth() == 1;
-        }
-        (_iorRect.*_rRectFn->fnAddBottom)( -nDist );
-        // OD 19.05.2003 #109667# - adjust calculated border bottom, if inner
-        // bottom line is a hair line.
-        if ( bIsInnerBottomLineHairline )
-        {
-            if ( _rFrame.IsVertical() )
-            {
-                // left of border rectangle has to be checked and adjusted
-                Point aCompPt( _iorRect.Left(), 0 );
-                Point aRefPt( aCompPt.X() - 1, aCompPt.Y() );
-                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
-                                          aRefPt, aCompPt,
-                                          true, +1 );
-                _iorRect.Left( aCompPt.X() );
-            }
-            else
-            {
-                // bottom of border rectangle has to be checked and adjusted
-                Point aCompPt( 0, _iorRect.Bottom() );
-                Point aRefPt( aCompPt.X(), aCompPt.Y() + 1 );
-                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
-                                          aRefPt, aCompPt,
-                                          false, -1 );
-                _iorRect.Bottom( aCompPt.Y() );
-            }
-        }
-    }
-}
-
-static sal_uInt16 lcl_GetLineWidth( const SvxBorderLine* pLine )
-{
-    if ( pLine != nullptr )
-        return pLine->GetScaledWidth();
-
-    return 0;
-}
-
-static double lcl_GetExtent( const SvxBorderLine* pSideLine, const SvxBorderLine* pOppositeLine )
-{
-    double nExtent = 0.0;
-
-    if ( pSideLine && !pSideLine->isEmpty() )
-        nExtent = -lcl_GetLineWidth( pSideLine ) / 2.0;
-    else if ( pOppositeLine )
-        nExtent = lcl_GetLineWidth( pOppositeLine ) / 2.0;
-
-    return nExtent;
-}
-
-namespace
-{
-    void CreateBorderLinePrimitivesForRectangle(
-        drawinglayer::primitive2d::Primitive2DContainer& rBorderLineTarget,
-        const svx::frame::Style& rStyleTop,
-        const svx::frame::Style& rStyleRight,
-        const svx::frame::Style& rStyleBottom,
-        const svx::frame::Style& rStyleLeft,
-        basegfx::B2DPoint aTopLeft,
-        basegfx::B2DPoint aTopRight,
-        basegfx::B2DPoint aBottomLeft,
-        basegfx::B2DPoint aBottomRight)
-    {
-        if(rStyleTop.IsUsed())
-        {
-            // move top left/right inwards half border width
-            aTopLeft.setY(aTopLeft.getY() + (rStyleTop.GetWidth() * 0.5));
-            aTopRight.setY(aTopRight.getY() + (rStyleTop.GetWidth() * 0.5));
-        }
-
-        if(rStyleBottom.IsUsed())
-        {
-            // move bottom left/right inwards half border width
-            aBottomLeft.setY(aBottomLeft.getY() - (rStyleBottom.GetWidth() * 0.5));
-            aBottomRight.setY(aBottomRight.getY() - (rStyleBottom.GetWidth() * 0.5));
-        }
-
-        if(rStyleLeft.IsUsed())
-        {
-            // move left top/bottom inwards half border width
-            aTopLeft.setX(aTopLeft.getX() + (rStyleLeft.GetWidth() * 0.5));
-            aBottomLeft.setX(aBottomLeft.getX() + (rStyleLeft.GetWidth() * 0.5));
-        }
-
-        if(rStyleRight.IsUsed())
-        {
-            // move right top/bottom inwards half border width
-            aTopRight.setX(aTopRight.getX() - (rStyleRight.GetWidth() * 0.5));
-            aBottomRight.setX(aBottomRight.getX() - (rStyleRight.GetWidth() * 0.5));
-        }
-
-        // go round-robin, from TopLeft to TopRight, down, left and back up. That
-        // way, the borders will not need to be mirrored in any way
-        if(rStyleTop.IsUsed())
-        {
-            // create BorderPrimitive(s) for top border
-            const basegfx::B2DVector aVector(aTopRight - aTopLeft);
-            svx::frame::StyleVectorTable aStartStyleVectorTable;
-            svx::frame::StyleVectorTable aEndStyleVectorTable;
-
-            if(rStyleLeft.IsUsed())
-            {
-                aStartStyleVectorTable.add(rStyleLeft, aVector, basegfx::B2DVector(aBottomLeft - aTopLeft), false);
+                // move top left/right inwards half border width
+                basegfx::B2DVector aDown(getB2DHomMatrix() * basegfx::B2DVector(0.0, 1.0));
+                aDown.setLength(getStyleTop().GetWidth() * 0.5);
+                aTopLeft += aDown;
+                aTopRight += aDown;
             }
 
-            if(rStyleRight.IsUsed())
+            if(getStyleBottom().IsUsed())
             {
-                aEndStyleVectorTable.add(rStyleRight, -aVector, basegfx::B2DVector(aBottomRight - aTopRight), false);
+                // move bottom left/right inwards half border width
+                basegfx::B2DVector aUp(getB2DHomMatrix() * basegfx::B2DVector(0.0, -1.0));
+                aUp.setLength(getStyleBottom().GetWidth() * 0.5);
+                aBottomLeft += aUp;
+                aBottomRight += aUp;
             }
 
-            CreateBorderPrimitives(
-                rBorderLineTarget,
-                aTopLeft,
-                aVector,
-                rStyleTop,
-                aStartStyleVectorTable,
-                aEndStyleVectorTable,
-                nullptr);
+            if(getStyleLeft().IsUsed())
+            {
+                // move left top/bottom inwards half border width
+                basegfx::B2DVector aRight(getB2DHomMatrix() * basegfx::B2DVector(1.0, 0.0));
+                aRight.setLength(getStyleLeft().GetWidth() * 0.5);
+                aTopLeft += aRight;
+                aBottomLeft += aRight;
+            }
+
+            if(getStyleRight().IsUsed())
+            {
+                // move right top/bottom inwards half border width
+                basegfx::B2DVector aLeft(getB2DHomMatrix() * basegfx::B2DVector(-1.0, 0.0));
+                aLeft.setLength(getStyleRight().GetWidth() * 0.5);
+                aTopRight += aLeft;
+                aBottomRight += aLeft;
+            }
+
+            // go round-robin, from TopLeft to TopRight, down, left and back up. That
+            // way, the borders will not need to be mirrored in any way
+            if(getStyleTop().IsUsed())
+            {
+                // create BorderPrimitive(s) for top border
+                const basegfx::B2DVector aVector(aTopRight - aTopLeft);
+                svx::frame::StyleVectorTable aStartStyleVectorTable;
+                svx::frame::StyleVectorTable aEndStyleVectorTable;
+
+                if(getStyleLeft().IsUsed())
+                {
+                    aStartStyleVectorTable.add(getStyleLeft(), aVector, basegfx::B2DVector(aBottomLeft - aTopLeft), false);
+                }
+
+                if(getStyleRight().IsUsed())
+                {
+                    aEndStyleVectorTable.add(getStyleRight(), -aVector, basegfx::B2DVector(aBottomRight - aTopRight), false);
+                }
+
+                CreateBorderPrimitives(
+                    rContainer,
+                    aTopLeft,
+                    aVector,
+                    getStyleTop(),
+                    aStartStyleVectorTable,
+                    aEndStyleVectorTable,
+                    nullptr);
+            }
+
+            if(getStyleRight().IsUsed())
+            {
+                // create BorderPrimitive(s) for right border
+                const basegfx::B2DVector aVector(aBottomRight - aTopRight);
+                svx::frame::StyleVectorTable aStartStyleVectorTable;
+                svx::frame::StyleVectorTable aEndStyleVectorTable;
+
+                if(getStyleTop().IsUsed())
+                {
+                    aStartStyleVectorTable.add(getStyleTop(), aVector, basegfx::B2DVector(aTopLeft - aTopRight), false);
+                }
+
+                if(getStyleBottom().IsUsed())
+                {
+                    aEndStyleVectorTable.add(getStyleBottom(), -aVector, basegfx::B2DVector(aBottomLeft - aBottomRight), false);
+                }
+
+                CreateBorderPrimitives(
+                    rContainer,
+                    aTopRight,
+                    aVector,
+                    getStyleRight(),
+                    aStartStyleVectorTable,
+                    aEndStyleVectorTable,
+                    nullptr);
+            }
+
+            if(getStyleBottom().IsUsed())
+            {
+                // create BorderPrimitive(s) for bottom border
+                const basegfx::B2DVector aVector(aBottomLeft - aBottomRight);
+                svx::frame::StyleVectorTable aStartStyleVectorTable;
+                svx::frame::StyleVectorTable aEndStyleVectorTable;
+
+                if(getStyleRight().IsUsed())
+                {
+                    aStartStyleVectorTable.add(getStyleRight(), aVector, basegfx::B2DVector(aTopRight - aBottomRight), false);
+                }
+
+                if(getStyleLeft().IsUsed())
+                {
+                    aEndStyleVectorTable.add(getStyleLeft(), -aVector, basegfx::B2DVector(aTopLeft - aBottomLeft), false);
+                }
+
+                CreateBorderPrimitives(
+                    rContainer,
+                    aBottomRight,
+                    aVector,
+                    getStyleBottom(),
+                    aStartStyleVectorTable,
+                    aEndStyleVectorTable,
+                    nullptr);
+            }
+
+            if(getStyleLeft().IsUsed())
+            {
+                // create BorderPrimitive(s) for left border
+                const basegfx::B2DVector aVector(aTopLeft - aBottomLeft);
+                svx::frame::StyleVectorTable aStartStyleVectorTable;
+                svx::frame::StyleVectorTable aEndStyleVectorTable;
+
+                if(getStyleBottom().IsUsed())
+                {
+                    aStartStyleVectorTable.add(getStyleBottom(), aVector, basegfx::B2DVector(aBottomRight - aBottomLeft), false);
+                }
+
+                if(getStyleTop().IsUsed())
+                {
+                    aEndStyleVectorTable.add(getStyleTop(), -aVector, basegfx::B2DVector(aTopRight - aTopLeft), false);
+                }
+
+                CreateBorderPrimitives(
+                    rContainer,
+                    aBottomLeft,
+                    aVector,
+                    getStyleLeft(),
+                    aStartStyleVectorTable,
+                    aEndStyleVectorTable,
+                    nullptr);
+            }
         }
 
-        if(rStyleRight.IsUsed())
+        SwBorderRectanglePrimitive2D::SwBorderRectanglePrimitive2D(
+            const basegfx::B2DHomMatrix& rB2DHomMatrix,
+            const svx::frame::Style& rStyleTop,
+            const svx::frame::Style& rStyleRight,
+            const svx::frame::Style& rStyleBottom,
+            const svx::frame::Style& rStyleLeft)
+        :   BufferedDecompositionPrimitive2D(),
+            maB2DHomMatrix(rB2DHomMatrix),
+            maStyleTop(rStyleTop),
+            maStyleRight(rStyleRight),
+            maStyleBottom(rStyleBottom),
+            maStyleLeft(rStyleLeft)
         {
-            // create BorderPrimitive(s) for right border
-            const basegfx::B2DVector aVector(aBottomRight - aTopRight);
-            svx::frame::StyleVectorTable aStartStyleVectorTable;
-            svx::frame::StyleVectorTable aEndStyleVectorTable;
-
-            if(rStyleTop.IsUsed())
-            {
-                aStartStyleVectorTable.add(rStyleTop, aVector, basegfx::B2DVector(aTopLeft - aTopRight), false);
-            }
-
-            if(rStyleBottom.IsUsed())
-            {
-                aEndStyleVectorTable.add(rStyleBottom, -aVector, basegfx::B2DVector(aBottomLeft - aBottomRight), false);
-            }
-
-            CreateBorderPrimitives(
-                rBorderLineTarget,
-                aTopRight,
-                aVector,
-                rStyleRight,
-                aStartStyleVectorTable,
-                aEndStyleVectorTable,
-                nullptr);
         }
 
-        if(rStyleBottom.IsUsed())
+        bool SwBorderRectanglePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            // create BorderPrimitive(s) for bottom border
-            const basegfx::B2DVector aVector(aBottomLeft - aBottomRight);
-            svx::frame::StyleVectorTable aStartStyleVectorTable;
-            svx::frame::StyleVectorTable aEndStyleVectorTable;
-
-            if(rStyleRight.IsUsed())
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
-                aStartStyleVectorTable.add(rStyleRight, aVector, basegfx::B2DVector(aTopRight - aBottomRight), false);
+                const SwBorderRectanglePrimitive2D& rCompare = static_cast<const SwBorderRectanglePrimitive2D&>(rPrimitive);
+
+                return (getB2DHomMatrix() == rCompare.getB2DHomMatrix() &&
+                    getStyleTop() == rCompare.getStyleTop() &&
+                    getStyleRight() == rCompare.getStyleRight() &&
+                    getStyleBottom() == rCompare.getStyleBottom() &&
+                    getStyleLeft() == rCompare.getStyleLeft());
             }
 
-            if(rStyleLeft.IsUsed())
-            {
-                aEndStyleVectorTable.add(rStyleLeft, -aVector, basegfx::B2DVector(aTopLeft - aBottomLeft), false);
-            }
-
-            CreateBorderPrimitives(
-                rBorderLineTarget,
-                aBottomRight,
-                aVector,
-                rStyleBottom,
-                aStartStyleVectorTable,
-                aEndStyleVectorTable,
-                nullptr);
+            return false;
         }
 
-        if(rStyleLeft.IsUsed())
+        basegfx::B2DRange SwBorderRectanglePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // create BorderPrimitive(s) for left border
-            const basegfx::B2DVector aVector(aTopLeft - aBottomLeft);
-            svx::frame::StyleVectorTable aStartStyleVectorTable;
-            svx::frame::StyleVectorTable aEndStyleVectorTable;
+            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
 
-            if(rStyleBottom.IsUsed())
-            {
-                aStartStyleVectorTable.add(rStyleBottom, aVector, basegfx::B2DVector(aBottomRight - aBottomLeft), false);
-            }
-
-            if(rStyleTop.IsUsed())
-            {
-                aEndStyleVectorTable.add(rStyleTop, -aVector, basegfx::B2DVector(aTopRight - aTopLeft), false);
-            }
-
-            CreateBorderPrimitives(
-                rBorderLineTarget,
-                aBottomLeft,
-                aVector,
-                rStyleLeft,
-                aStartStyleVectorTable,
-                aEndStyleVectorTable,
-                nullptr);
+            aRetval.transform(getB2DHomMatrix());
+            return aRetval;
         }
-    }
-} // end of anonymous namespace
+
+        // provide unique ID
+        ImplPrimitive2DIDBlock(SwBorderRectanglePrimitive2D, PRIMITIVE2D_ID_SWBORDERRECTANGLERIMITIVE)
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
 
 void PaintCharacterBorder(
     const SwFont& rFont,
@@ -4831,20 +4745,24 @@ void PaintCharacterBorder(
         }
     }
 
+    const basegfx::B2DHomMatrix aBorderTransform(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
+            aAlignedRect.Width(), aAlignedRect.Height(),
+            aAlignedRect.Left(), aAlignedRect.Top()));
+    const svx::frame::Style aStyleTop(bTop ? rFont.GetAbsTopBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
+    const svx::frame::Style aStyleRight(bRight ? rFont.GetAbsRightBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
+    const svx::frame::Style aStyleBottom(bBottom ? rFont.GetAbsBottomBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
+    const svx::frame::Style aStyleLeft(bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
     drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
-    CreateBorderLinePrimitivesForRectangle(
-        aBorderLineTarget,
-        svx::frame::Style(bTop ? rFont.GetAbsTopBorder(bVerticalLayout).get_ptr() : nullptr, 1.0),
-        svx::frame::Style(bRight ? rFont.GetAbsRightBorder(bVerticalLayout).get_ptr() : nullptr, 1.0),
-        svx::frame::Style(bBottom ? rFont.GetAbsBottomBorder(bVerticalLayout).get_ptr() : nullptr, 1.0),
-        svx::frame::Style(bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout).get_ptr() : nullptr, 1.0),
-        basegfx::B2DPoint(aAlignedRect.Left(), aAlignedRect.Top()),
-        basegfx::B2DPoint(aAlignedRect.Right(), aAlignedRect.Top()),
-        basegfx::B2DPoint(aAlignedRect.Left(), aAlignedRect.Bottom()),
-        basegfx::B2DPoint(aAlignedRect.Right(), aAlignedRect.Bottom()));
 
-    // no need to use AddBorderLine and try to merge BorderLinePrimitives, in this combination
-    // tis cannot happen
+    aBorderLineTarget.append(
+        drawinglayer::primitive2d::Primitive2DReference(
+            new drawinglayer::primitive2d::SwBorderRectanglePrimitive2D(
+                aBorderTransform,
+                aStyleTop,
+                aStyleRight,
+                aStyleBottom,
+                aStyleLeft)));
     gProp.pBLines->AddBorderLines(aBorderLineTarget);
 }
 
@@ -5199,21 +5117,24 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         if(nullptr != pLeftBorder || nullptr != pRightBorder || nullptr != pTopBorder || nullptr != pBottomBorder)
         {
             // now we have all SvxBorderLine(s) sorted out, create geometry
+            const basegfx::B2DHomMatrix aBorderTransform(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    aRect.Width(), aRect.Height(),
+                    aRect.Left(), aRect.Top()));
+            const svx::frame::Style aStyleTop(pTopBorder, 1.0);
+            const svx::frame::Style aStyleRight(pRightBorder, 1.0);
+            const svx::frame::Style aStyleBottom(pBottomBorder, 1.0);
+            const svx::frame::Style aStyleLeft(pLeftBorder, 1.0);
             drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
 
-            CreateBorderLinePrimitivesForRectangle(
-                aBorderLineTarget,
-                svx::frame::Style(pTopBorder, 1.0),
-                svx::frame::Style(pRightBorder, 1.0),
-                svx::frame::Style(pBottomBorder, 1.0),
-                svx::frame::Style(pLeftBorder, 1.0),
-                basegfx::B2DPoint(aRect.Left(), aRect.Top()),       // TopLeft
-                basegfx::B2DPoint(aRect.Right(), aRect.Top()),      // TopRight
-                basegfx::B2DPoint(aRect.Left(), aRect.Bottom()),    // BottomLeft
-                basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));  // BottomRight
-
-            // no need to use AddBorderLine and try to merge BorderLinePrimitives, in this combination
-            // tis cannot happen
+            aBorderLineTarget.append(
+                drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::SwBorderRectanglePrimitive2D(
+                        aBorderTransform,
+                        aStyleTop,
+                        aStyleRight,
+                        aStyleBottom,
+                        aStyleLeft)));
             gProp.pBLines->AddBorderLines(aBorderLineTarget);
         }
     }
