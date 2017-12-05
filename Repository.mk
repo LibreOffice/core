@@ -907,7 +907,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(filter $(OS),MACOSX),vcl_osxres) \
 	xmloff_dtd \
 	xmlscript_dtd \
-	xmlhelp_helpxsl \
+	$(if $(ENABLE_HTMLHELP),,xmlhelp_helpxsl) \
 	$(if $(ENABLE_JAVA),\
 		scripting_java \
 		scripting_java_jars \

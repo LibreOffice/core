@@ -1863,8 +1863,9 @@ AC_ARG_WITH(help,
          can be used to bundle only the common part, .e.g help-specific icons.
          This is useful when you build the helpcontent separately.])
     [
-                          Usage:     --with-help    build the entire local help
+                          Usage:     --with-help    build the old local help
                                  --without-help     no local help (default)
+                                 --with-help=html   build the new HTML local help
                                  --with-help=common bundle common files for the local
                                                     help but do not build the whole help
     ],
@@ -4594,16 +4595,24 @@ HELP_COMMON_ONLY=FALSE
 if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE HELP"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
-    if test "$with_help" = "common" ; then
+    case "$with_help" in
+    "common")
         HELP_COMMON_ONLY=TRUE
         AC_MSG_RESULT([common only])
-    else
+        ;;
+    "html")
+        ENABLE_HTMLHELP=TRUE
+        AC_MSG_RESULT([HTML])
+        ;;
+    *)
         SCPDEFS="$SCPDEFS -DWITH_HELP"
         AC_MSG_RESULT([yes])
-    fi
+        ;;
+    esac
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST([ENABLE_HTMLHELP])
 AC_SUBST(HELP_COMMON_ONLY)
 
 dnl Test whether to include MySpell dictionaries
