@@ -202,8 +202,8 @@ namespace dbaccess
             @return
                 <TRUE/> if movement was successful.
         */
-        bool SAL_CALL move( std::mem_fun_t<bool,ORowSetBase> const & _aCheckFunctor,
-                            std::mem_fun_t<bool,ORowSetCache> const & _aMovementFunctor);
+        bool SAL_CALL move( std::function<bool(ORowSetBase *)> const & _aCheckFunctor,
+                            std::function<bool(ORowSetCache *)> const & _aMovementFunctor);
 
         /** same meaning as isFirst. Only need by mem_fun
             @return

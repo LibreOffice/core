@@ -74,7 +74,7 @@ namespace dbaccess
             OrderColumns        = 2,
             ParameterColumns    = 3
         };
-        typedef std::const_mem_fun_t< const ::connectivity::OSQLParseNode*, ::connectivity::OSQLParseTreeIterator >
+        typedef std::function<const ::connectivity::OSQLParseNode*(::connectivity::OSQLParseTreeIterator *)>
                                                 TGetParseNode;
         ::svxform::OSystemParseContext          m_aParseContext;
         ::connectivity::OSQLParser              m_aSqlParser;
@@ -132,7 +132,7 @@ namespace dbaccess
 
         void setConditionByColumn( const css::uno::Reference< css::beans::XPropertySet >& column
                                 , bool andCriteria
-                                ,std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& > const & _aSetFunctor
+                                , std::function<bool(OSingleSelectQueryComposer *, const OUString&)> const & _aSetFunctor
                                 ,sal_Int32 filterOperator);
 
         /** getStructuredCondition returns the structured condition for the where or having clause
