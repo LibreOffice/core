@@ -44,7 +44,7 @@ sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction *pUN)
         if (cD < u'0' || u'9' < cD)
             break;
     }
-    if (nIdx == 0 || (nIdx == 1 && nDecimalPoint == 0))
+    if (nIdx == 0 || ((nIdx == 1 || nIdx == 11) && nDecimalPoint == 0))
         return -1;
     if (nDecimalPoint == -1)
     {
