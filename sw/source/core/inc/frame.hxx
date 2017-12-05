@@ -384,9 +384,11 @@ public:
     // #i28701# - change purpose of method and adjust its name
     void InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs = true );
 
-    virtual void PaintSwFrameShadowAndBorder( const SwRect&, const SwPageFrame *pPage,
-                              const SwBorderAttrs & ) const;
-    void PaintBaBo( const SwRect&, const SwPageFrame *pPage = nullptr,
+    virtual void PaintSwFrameShadowAndBorder(
+        const SwRect&,
+        const SwPageFrame* pPage,
+        const SwBorderAttrs&) const;
+    void PaintBaBo( const SwRect&, const SwPageFrame *pPage,
                     const bool bOnlyTextBackground = false) const;
     void PaintSwFrameBackground( const SwRect&, const SwPageFrame *pPage,
                           const SwBorderAttrs &,
