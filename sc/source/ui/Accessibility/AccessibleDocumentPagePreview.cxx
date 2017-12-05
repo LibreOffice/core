@@ -559,19 +559,11 @@ struct ScShapeChild
         : mnRangeId(0)
     {
     }
-    ScShapeChild(const ScShapeChild& rOld);
     ~ScShapeChild();
     mutable rtl::Reference< ::accessibility::AccessibleShape > mpAccShape;
     css::uno::Reference< css::drawing::XShape > mxShape;
     sal_Int32 mnRangeId;
 };
-
-ScShapeChild::ScShapeChild(const ScShapeChild& rOld)
-:
-mpAccShape(rOld.mpAccShape),
-mxShape(rOld.mxShape),
-mnRangeId(rOld.mnRangeId)
-{}
 
 ScShapeChild::~ScShapeChild()
 {

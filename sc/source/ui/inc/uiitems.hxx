@@ -134,8 +134,6 @@ public:
                                         const ScSortParam*  pSortData );
                             ScSortItem( sal_uInt16              nWhich,
                                         const ScSortParam*  pSortData );
-                            ScSortItem( const ScSortItem& rItem );
-                            virtual ~ScSortItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -184,8 +182,6 @@ public:
                                 const ScSubTotalParam*  pSubTotalData );
                 ScSubTotalItem( sal_uInt16                  nWhich,
                                 const ScSubTotalParam*  pSubTotalData );
-                ScSubTotalItem( const ScSubTotalItem&   rItem );
-                virtual ~ScSubTotalItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -221,8 +217,6 @@ class ScConsolidateItem : public SfxPoolItem
 public:
                 ScConsolidateItem( sal_uInt16                    nWhich,
                                    const ScConsolidateParam* pParam );
-                ScConsolidateItem( const ScConsolidateItem& rItem );
-                virtual ~ScConsolidateItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -259,8 +253,6 @@ class ScSolveItem : public SfxPoolItem
 public:
                 ScSolveItem( sal_uInt16              nWhich,
                              const ScSolveParam* pParam );
-                ScSolveItem( const ScSolveItem& rItem );
-                virtual ~ScSolveItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -276,8 +268,6 @@ class ScTabOpItem : public SfxPoolItem
 public:
                 ScTabOpItem( sal_uInt16              nWhich,
                              const ScTabOpParam* pParam );
-                ScTabOpItem( const ScTabOpItem& rItem );
-                virtual ~ScTabOpItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

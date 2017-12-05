@@ -567,12 +567,6 @@ sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements()
     return mxUnoText->hasElements();
 }
 
-ScCellTextCursor::ScCellTextCursor(const ScCellTextCursor& rOther) :
-    SvxUnoTextCursor( rOther ),
-    mxTextObj( rOther.mxTextObj )
-{
-}
-
 ScCellTextCursor::ScCellTextCursor(ScCellObj& rText) :
     SvxUnoTextCursor( rText.GetUnoText() ),
     mxTextObj( &rText )
@@ -738,12 +732,6 @@ ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
     if (xUT.is())
         pRet = reinterpret_cast<ScHeaderFooterTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
-}
-
-ScDrawTextCursor::ScDrawTextCursor(const ScDrawTextCursor& rOther) :
-    SvxUnoTextCursor( rOther ),
-    xParentText( rOther.xParentText )
-{
 }
 
 ScDrawTextCursor::ScDrawTextCursor( const uno::Reference<text::XText>& xParent,

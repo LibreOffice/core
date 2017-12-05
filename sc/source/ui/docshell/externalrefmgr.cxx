@@ -117,9 +117,6 @@ public:
     NotifyLinkListener(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) :
         mnFileId(nFileId), meType(eType) {}
 
-    NotifyLinkListener(const NotifyLinkListener& r) :
-        mnFileId(r.mnFileId), meType(r.meType) {}
-
     void operator() (ScExternalRefManager::LinkListener* p) const
     {
         p->notify(mnFileId, meType);

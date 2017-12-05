@@ -137,17 +137,6 @@ ScSortItem::ScSortItem( sal_uInt16              nWhichP,
     if ( pSortData ) theSortData = *pSortData;
 }
 
-ScSortItem::ScSortItem( const ScSortItem& rItem ) :
-        SfxPoolItem ( rItem ),
-        pViewData   ( rItem.pViewData ),
-        theSortData ( rItem.theSortData )
-{
-}
-
-ScSortItem::~ScSortItem()
-{
-}
-
 bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -272,17 +261,6 @@ ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
     if ( pSubTotalData ) theSubTotalData = *pSubTotalData;
 }
 
-ScSubTotalItem::ScSubTotalItem( const ScSubTotalItem& rItem ) :
-        SfxPoolItem     ( rItem ),
-        pViewData       ( rItem.pViewData ),
-        theSubTotalData ( rItem.theSubTotalData )
-{
-}
-
-ScSubTotalItem::~ScSubTotalItem()
-{
-}
-
 bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -361,16 +339,6 @@ ScConsolidateItem::ScConsolidateItem(
     if ( pConsolidateData ) theConsData = *pConsolidateData;
 }
 
-ScConsolidateItem::ScConsolidateItem( const ScConsolidateItem& rItem ) :
-        SfxPoolItem ( rItem ),
-        theConsData ( rItem.theConsData )
-{
-}
-
-ScConsolidateItem::~ScConsolidateItem()
-{
-}
-
 bool ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -440,16 +408,6 @@ ScSolveItem::ScSolveItem( sal_uInt16                nWhichP,
     if ( pSolveData ) theSolveData = *pSolveData;
 }
 
-ScSolveItem::ScSolveItem( const ScSolveItem& rItem )
-    :   SfxPoolItem     ( rItem ),
-        theSolveData    ( rItem.theSolveData )
-{
-}
-
-ScSolveItem::~ScSolveItem()
-{
-}
-
 bool ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -472,16 +430,6 @@ ScTabOpItem::ScTabOpItem( sal_uInt16                nWhichP,
     :   SfxPoolItem ( nWhichP )
 {
     if ( pTabOpData ) theTabOpData = *pTabOpData;
-}
-
-ScTabOpItem::ScTabOpItem( const ScTabOpItem& rItem )
-    :   SfxPoolItem     ( rItem ),
-        theTabOpData    ( rItem.theTabOpData )
-{
-}
-
-ScTabOpItem::~ScTabOpItem()
-{
 }
 
 bool ScTabOpItem::operator==( const SfxPoolItem& rItem ) const

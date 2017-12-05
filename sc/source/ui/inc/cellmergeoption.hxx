@@ -29,7 +29,6 @@ struct ScCellMergeOption
     explicit ScCellMergeOption(SCCOL nStartCol, SCROW nStartRow,
                                SCCOL nEndCol, SCROW nEndRow,
                                bool bCenter = false);
-    explicit ScCellMergeOption(const ScCellMergeOption& r);
 
     ScRange getSingleRange(SCTAB nTab) const;
     ScRange getFirstSingleRange() const;
