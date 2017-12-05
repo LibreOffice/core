@@ -9,9 +9,21 @@
 
 #include <sal/types.h>
 
+#define VOID void
+
 class Class1
 {
+    SAL_CALL Class1() {} // expected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
+    SAL_CALL ~Class1() {} // expected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
+    SAL_CALL operator int() // expected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
+    {
+        return 0;
+    }
+
     void SAL_CALL method1(); // expected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
+    VOID method2() {}
+    // no SAL_CALL for above method2, even though "SAL_CALL" appears between definition of VOID and
+    // the declaration's name, "method2"
 };
 void SAL_CALL Class1::method1()
 { // expected-error@-1 {{SAL_CALL unnecessary here [loplugin:salcall]}}
@@ -104,5 +116,22 @@ class Class8_3 : public Class8_1, public Class8_2
     virtual void method2() override; // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
     virtual ~Class8_3();
 };
+
+#if 0 //TODO
+template<typename> struct S {
+    virtual ~S();
+    virtual void f();
+};
+template<typename T> S<T>::~S() {}
+template<typename T> void S<T>::f() {}
+struct S2: S<int> {
+    ~S2();
+    void f() {}
+};
+int main() {
+    S2 s2;
+    s2->f();
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
