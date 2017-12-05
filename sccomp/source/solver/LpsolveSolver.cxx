@@ -52,6 +52,8 @@
 #endif
 #undef LANGUAGE_NONE
 
+#include <memory>
+
 #include "SolverComponent.hxx"
 #include "solver.hrc"
 

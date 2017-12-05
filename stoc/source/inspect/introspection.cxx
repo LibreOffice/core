@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <limits>
 #include <map>
+#include <memory>
 #include <set>
 
 #include <o3tl/any.hxx>
