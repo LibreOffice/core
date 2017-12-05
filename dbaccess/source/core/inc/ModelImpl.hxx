@@ -172,8 +172,6 @@ private:
     css::uno::WeakReference< css::sdbc::XDataSource >                 m_xDataSource;
 
     rtl::Reference<DocumentStorageAccess>                             m_pStorageAccess;
-    ::comphelper::SharedMutex                                         m_aMutex;
-    VosMutexFacade                                                    m_aMutexFacade;
     std::vector< TContentPtr >                                      m_aContainer;   // one for each ObjectType
     ::sfx2::DocumentMacroMode                                         m_aMacroMode;
     sal_Int16                                                         m_nImposedMacroExecMode;
@@ -367,8 +365,6 @@ public:
     css::uno::Reference< css::document::XDocumentSubStorageSupplier >
             getDocumentSubStorageSupplier();
 
-    const ::comphelper::SharedMutex& getSharedMutex() const { return m_aMutex; }
-
     void acquire();
 
     void release();
@@ -496,7 +492,7 @@ class ModelDependentComponent
 {
 protected:
     ::rtl::Reference< ODatabaseModelImpl >  m_pImpl;
-    mutable ::comphelper::SharedMutex       m_aMutex;
+    ::osl::Mutex m_aMutex; // only use this to init WeakComponentImplHelper
 
 protected:
     explicit ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model );
@@ -506,25 +502,12 @@ protected:
     */
     virtual css::uno::Reference< css::uno::XInterface > getThis() const = 0;
 
-    ::osl::Mutex& getMutex() const
+    ::osl::Mutex& getMutex()
     {
         return m_aMutex;
     }
 
 public:
-    struct GuardAccess { friend class ModelMethodGuard; private: GuardAccess() { } };
-
-    /** returns the mutex used for thread safety
-
-        @throws css::lang::DisposedException
-            if m_pImpl is <NULL/>. Usually, you will set this member in your derived
-            component's <code>dispose</code> method to <NULL/>.
-    */
-    ::osl::Mutex& getMutex( GuardAccess ) const
-    {
-        return getMutex();
-    }
-
     /// checks whether the component is already disposed, throws a DisposedException if so
     void checkDisposed() const
     {
@@ -569,11 +552,8 @@ private:
 class ModelMethodGuard
 {
 private:
-    // to avoid deadlocks, lock SolarMutex too, and before the own osl::Mutex
+    // to avoid deadlocks, lock SolarMutex
     SolarMutexResettableGuard m_SolarGuard;
-    ::osl::ResettableMutexGuard m_OslGuard;
-
-    typedef ::osl::ResettableMutexGuard             BaseMutexGuard;
 
 public:
     /** constructs the guard
@@ -585,22 +565,19 @@ public:
             If the given component is already disposed
     */
     explicit ModelMethodGuard( const ModelDependentComponent& _component )
-        : m_OslGuard(_component.getMutex(ModelDependentComponent::GuardAccess()))
     {
         _component.checkDisposed();
     }
 
     void clear()
     {
-        m_OslGuard.clear();
         // note: this only releases *once* so may still be locked
-        m_SolarGuard.clear(); // SolarMutex last
+        m_SolarGuard.clear();
     }
 
     void reset()
     {
-        m_SolarGuard.reset(); // SolarMutex first
-        m_OslGuard.reset();
+        m_SolarGuard.reset();
     }
 };
 

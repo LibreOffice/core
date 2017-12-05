@@ -493,7 +493,7 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
 {
     ODatabaseSource& rModelImpl = dynamic_cast< ODatabaseSource& >( *_rxDocument.get() );
 
-    ::osl::MutexGuard aGuard( rModelImpl.m_aMutex );
+    SolarMutexGuard g;
     if ( rModelImpl.m_pImpl.is() )
         rModelImpl.m_pImpl->m_sName = _rNewName;
 }
@@ -1065,8 +1065,6 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
         // handle the request
         try
         {
-            MutexRelease aRelease( getMutex() );
-                // release the mutex when calling the handler, it may need to lock the SolarMutex
             _rxHandler->handle(xRequest);
         }
         catch(Exception&)

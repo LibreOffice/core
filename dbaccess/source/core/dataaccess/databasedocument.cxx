@@ -1504,13 +1504,13 @@ void SAL_CALL ODatabaseDocument::close(sal_Bool bDeliverOwnership)
     }
     catch ( const Exception& )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
         m_bClosing = false;
         throw;
     }
 
     // SYNCHRONIZED ->
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard g;
     m_bClosing = false;
     // <- SYNCHRONIZED
 }
@@ -1789,7 +1789,7 @@ void ODatabaseDocument::disposing()
     std::vector< Reference< XInterface > > aKeepAlive;
 
     // SYNCHRONIZED ->
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    SolarMutexClearableGuard aGuard;
 
     OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     // normally, nobody should explicitly dispose, but only XCloseable::close
