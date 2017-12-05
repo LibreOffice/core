@@ -54,7 +54,7 @@ namespace connectivity
             std::pair<bool,sal_Int32>         m_MaxTablesInSelect;
             std::pair<bool,bool>              m_storesMixedCaseQuotedIdentifiers;
 
-            template <typename T> T callImplMethod(std::pair<bool,T>& _rCache,const std::mem_fun_t<T,ODatabaseMetaDataBase>& _pImplMethod)
+            template <typename T> T callImplMethod(std::pair<bool,T>& _rCache,const std::function<T(ODatabaseMetaDataBase *)>& _pImplMethod)
             {
                 ::osl::MutexGuard aGuard( m_aMutex );
                 if ( !_rCache.first )
