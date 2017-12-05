@@ -70,6 +70,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/frame.hxx>
 #include <rtl/string.hxx>
+#include <svtools/langtab.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -650,7 +651,13 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     if ( !impl_hasHelpInstalled() )
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),"onlinehelpmanual","sfx/ui/helpmanual.ui");
+        ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),
+            "onlinehelpmanual", "sfx/ui/helpmanual.ui");
+
+        LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
+        OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
+        OUString sPrimTex = aQueryBox->get_primary_text();
+        aQueryBox->set_primary_text(sPrimTex.replaceAll("$UILOCALE", sLocaleString));
         short OnlineHelpBox = aQueryBox->Execute();
 
         if(OnlineHelpBox == RET_OK)
