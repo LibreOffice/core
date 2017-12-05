@@ -2081,15 +2081,36 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     if (!m_pWindow)
         return;
 
-    GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
+#if GTK_CHECK_VERSION(3, 20, 0)
+    if (gtk_check_version(3, 20, 0) == nullptr)
+    {
+        GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
+        if (bGrab)
+        {
+            gdk_seat_grab(pSeat, widget_get_window(getMouseEventWidget()), GDK_SEAT_CAPABILITY_ALL_POINTING,
+                          bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
+        }
+        else
+        {
+            gdk_seat_ungrab(pSeat);
+        }
+        return;
+    }
+#endif
+
+    //else older gtk3
+    const int nMask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
+
+    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
+    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
     if (bGrab)
     {
-        gdk_seat_grab(pSeat, widget_get_window(getMouseEventWidget()), GDK_SEAT_CAPABILITY_ALL_POINTING,
-                      bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
+        gdk_device_grab(pPointer, widget_get_window(getMouseEventWidget()), GDK_OWNERSHIP_NONE,
+                        bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, gtk_get_current_event_time());
     }
     else
     {
-        gdk_seat_ungrab(pSeat);
+        gdk_device_ungrab(pPointer, gtk_get_current_event_time());
     }
 }
 

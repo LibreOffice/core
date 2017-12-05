@@ -630,7 +630,12 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
       "min-width: 18px;"
       "min-height: 18px;"
       "}";
-    gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
+    const gchar olddata[] = "* { "
+      "padding: 0;"
+      "margin-left: 8px;"
+      "margin-right: 8px;"
+      "}";
+    gtk_css_provider_load_from_data(pProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
     gtk_style_context_add_provider(pButtonContext,
                                    GTK_STYLE_PROVIDER(pProvider),
                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
