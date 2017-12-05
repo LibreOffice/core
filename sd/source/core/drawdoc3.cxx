@@ -1444,9 +1444,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
         else
         {
-            OUStringBuffer aBuf(rLayoutName);
-            aBuf.append(SD_LT_SEPARATOR).append(STR_LAYOUT_OUTLINE);
-            OUString aSearchFor(aBuf.makeStringAndClear());
+            OUString aSearchFor = rLayoutName;
+            aSearchFor += SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
 
             for (sal_uInt16 nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); ++nMP)
             {
