@@ -29,7 +29,8 @@ Columns::Columns(Table& rTable,
     OColumnsHelper(rTable,
                    true, // TODO: is this case sensitivity?
                    rMutex,
-                   rVector)
+                   rVector,
+                   /*bUseHardRef*/true)
 {
     OColumnsHelper::setParent(&rTable);
 }

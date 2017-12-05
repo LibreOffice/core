@@ -704,9 +704,9 @@ namespace dbtools
                                 const OUString& _rName,
                                 bool _bCase,
                                 bool _bQueryForInfo,
-                                bool _bIsAutoIncrement = false,
-                                bool _bIsCurrency = false,
-                                sal_Int32 _nDataType = css::sdbc::DataType::OTHER);
+                                bool _bIsAutoIncrement,
+                                bool _bIsCurrency,
+                                sal_Int32 _nDataType);
 
     /** tries to locate the corresponding DataDefinitionSupplier for the given url and connection
         @param  _rsUrl
@@ -803,7 +803,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
             const css::uno::Reference< css::container::XNameAccess > &_xColumns,
             const OUString &_sName,
-            bool whenNotFound = false
+            bool whenNotFound
         );
 
     /** is this column an aggregate?
