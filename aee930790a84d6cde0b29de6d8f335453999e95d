@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bb1ed85c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-05T20:02:41Z",
+      "side": 1,
+      "message": "tdf#114204 - to allow our bot to properly attribute the patch to bug",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "aee930790a84d6cde0b29de6d8f335453999e95d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_db23a4a5",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-05T20:02:41Z",
+      "side": 1,
+      "message": "Let the second line to have usual indent 4 chars.",
+      "range": {
+        "startLine": 632,
+        "startChar": 11,
+        "endLine": 632,
+        "endChar": 52
+      },
+      "revId": "aee930790a84d6cde0b29de6d8f335453999e95d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
