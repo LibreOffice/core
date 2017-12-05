@@ -959,14 +959,14 @@ std::vector<VclPtr<OTableConnection> >::const_iterator OJoinTableView::getTableC
 {
     return std::find_if(  m_vTableConnection.begin(),
                             m_vTableConnection.end(),
-                            std::bind2nd(std::mem_fun(&OTableConnection::isTableConnection),_pFromWin));
+                            [_pFromWin](OTableConnection * p) { return p->isTableConnection(_pFromWin); });
 }
 
 sal_Int32 OJoinTableView::getConnectionCount(const OTableWindow* _pFromWin) const
 {
     return std::count_if( m_vTableConnection.begin(),
                             m_vTableConnection.end(),
-                            std::bind2nd(std::mem_fun(&OTableConnection::isTableConnection),_pFromWin));
+                            [_pFromWin](OTableConnection * p) { return p->isTableConnection(_pFromWin); });
 }
 
 bool OJoinTableView::ExistsAConn(const OTableWindow* pFrom) const

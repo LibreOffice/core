@@ -28,7 +28,6 @@
 #include <vcl/msgbox.hxx>
 #include <stringconstants.hxx>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <functional>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -102,7 +101,7 @@ bool ORowSetImportExport::Read()
 {
     // check if there is any column to copy
     if(std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
-                        std::bind2nd(std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
+                        [](sal_Int32 n) { return n > 0; }) == m_aColumnMapping.end())
         return false;
     bool bContinue = true;
     if(m_aSelection.getLength())
