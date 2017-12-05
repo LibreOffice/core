@@ -22,6 +22,7 @@
 
 #include <sdmod.hxx>
 #include <memory>
+#include <o3tl/deleter.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
 namespace sd {
@@ -83,7 +84,7 @@ public:
 
 private:
     friend class SdGlobalResourceContainerInstance;
-    friend struct ::std::default_delete<SdGlobalResourceContainer>;
+    friend struct o3tl::default_delete<SdGlobalResourceContainer>;
 
     class Implementation;
     ::std::unique_ptr<Implementation> mpImpl;
