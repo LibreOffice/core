@@ -32,7 +32,6 @@ fuzzer_externals = \
     libxml2 \
     libjpeg \
     libpng \
-    clew \
     openssl \
     expat \
     mythes \
@@ -90,7 +89,6 @@ fuzzer_core_libraries = \
     utl \
     uui \
     vcl \
-    opencl \
     xmlscript \
     xo \
     xstor \

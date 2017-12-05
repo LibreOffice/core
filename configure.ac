@@ -10030,7 +10030,7 @@ AC_SUBST(ENABLE_VLC)
 
 ENABLE_OPENGL_TRANSITIONS=
 ENABLE_OPENGL_CANVAS=
-if test $_os = iOS -o $_os = Android; then
+if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE"; then
    : # disable
 elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
@@ -10057,7 +10057,7 @@ dnl =================================================
 dnl Check whether to build with OpenCL support.
 dnl =================================================
 
-if test $_os != iOS -a $_os != Android; then
+if test $_os != iOS -a $_os != Android -a "$ENABLE_FUZZERS" != "TRUE"; then
     # OPENCL in BUILD_TYPE and HAVE_FEATURE_OPENCL tell that OpenCL is potentially available on the
     # platform (optional at run-time, used through clew).
     BUILD_TYPE="$BUILD_TYPE OPENCL"
