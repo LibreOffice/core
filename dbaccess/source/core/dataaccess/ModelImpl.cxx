@@ -402,8 +402,6 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
             :m_xModel()
             ,m_xDataSource()
-            ,m_aMutex()
-            ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
@@ -436,8 +434,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(
                     )
             :m_xModel()
             ,m_xDataSource()
-            ,m_aMutex()
-            ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
@@ -1207,13 +1203,13 @@ namespace
 Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Reference< XStorage >& _rxNewRootStorage )
 {
     // stop listening for modifications at the old storage
-    lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, m_aMutexFacade, false );
+    lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, Application::GetSolarMutex(), false );
 
     // set new storage
     m_xDocumentStorage.reset( _rxNewRootStorage, SharedStorage::TakeOwnership );
 
     // start listening for modifications
-    lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, m_aMutexFacade, true );
+    lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, Application::GetSolarMutex(), true );
 
     // forward new storage to Basic and Dialog library containers
     lcl_rebaseScriptStorage_throw( m_xBasicLibraries, m_xDocumentStorage.getTyped() );
@@ -1345,7 +1341,6 @@ void ODatabaseModelImpl::storageIsModified()
 
 ModelDependentComponent::ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model )
     :m_pImpl( _model )
-    ,m_aMutex( _model->getSharedMutex() )
 {
 }
 
