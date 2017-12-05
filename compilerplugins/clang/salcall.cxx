@@ -57,10 +57,8 @@ public:
 
 private:
     void checkForFunctionDecl(Expr const*, bool bCheckOnly = false);
-#if 0
     bool rewrite(SourceLocation);
     bool checkOverlap(SourceRange);
-#endif
     bool isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation* pLoc = nullptr);
 
     std::set<FunctionDecl const*> m_addressOfSet;
@@ -311,7 +309,6 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
     return true;
 }
 
-#if 0
 bool SalCall::rewrite(SourceLocation locBegin)
 {
     if (!rewriter)
@@ -353,7 +350,6 @@ bool SalCall::checkOverlap(SourceRange range)
     mvModifiedRanges.emplace_back(p1, p2);
     return true;
 }
-#endif
 
 static loplugin::Plugin::Registration<SalCall> reg("salcall", false);
 }
