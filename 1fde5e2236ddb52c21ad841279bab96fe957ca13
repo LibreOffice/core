@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_db7f2464",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-05T21:03:43Z",
+      "side": 1,
+      "message": "This indirection and assembling the slot string is unnecessary. Instead, create a number format code with the details obtained above through GetFormatSpecialInfo(), set/unset the bThousand and then call pFormatter-\u003eGenerateFormat() and pTabViewShell-\u003eSetNumFmtByStr() like below in the SID_NUMBER_FORMAT case.",
+      "revId": "1fde5e2236ddb52c21ad841279bab96fe957ca13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
