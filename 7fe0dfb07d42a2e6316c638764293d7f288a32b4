@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a5195bd9",
+        "filename": "fpicker/source/win32/filepicker/VistaFilePickerImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1001622
+      },
+      "writtenOn": "2017-12-05T08:21:37Z",
+      "side": 1,
+      "message": "I think lItems could be removed since you now use attribute gItems",
+      "revId": "7fe0dfb07d42a2e6316c638764293d7f288a32b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
