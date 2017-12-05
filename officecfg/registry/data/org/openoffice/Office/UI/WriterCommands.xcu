@@ -3121,7 +3121,7 @@
           <value>11</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Number List</value>
         </prop>
@@ -3134,13 +3134,13 @@
           <value xml:lang="en-US">Number List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
-          <value>.uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles</value>
+          <value>.uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>11</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Roman List</value>
         </prop>
@@ -3153,7 +3153,7 @@
           <value xml:lang="en-US">Roman List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
-          <value>.uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles</value>
+          <value>.uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>11</value>

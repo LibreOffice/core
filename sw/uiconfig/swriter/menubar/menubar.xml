@@ -548,8 +548,8 @@
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditStyle"/>
       <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>
