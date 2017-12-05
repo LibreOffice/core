@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_452ef7a5",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-05T10:15:17Z",
+      "side": 1,
+      "message": "Sorry, but.. this is completely wrong. SetNumFmtByStr() expects a number format code string as can be entered in the number formatter dialog, but this passes some concatenated string of numbers (where does this idea stem from?)\n\nInstead, modify the existing format through SvNumberFormatter::GenerateFormat(), but that can only be done for Number, Percent, Currency, Scientific and Fraction formats; not Date, Time, Boolean, Text, so that needs to be checked first.",
+      "revId": "8820b4e8d570fe32995d08770131139c15894800",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
