@@ -1477,7 +1477,8 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
                 pChild->nVisible &= ~SfxChildVisibility::ACTIVE;
                 pCW->Hide();
             }
-            else if ( SfxChildVisibility::VISIBLE != (pChild->nVisible & SfxChildVisibility::VISIBLE) )
+            else if ( !comphelper::LibreOfficeKit::isActive() ||
+                      SfxChildVisibility::ACTIVE != (pChild->nVisible & SfxChildVisibility::ACTIVE) )
             {
                 pChild->nVisible |= SfxChildVisibility::ACTIVE;
                 if ( SfxChildVisibility::VISIBLE == (pChild->nVisible & SfxChildVisibility::VISIBLE) )
