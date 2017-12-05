@@ -359,7 +359,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         fprintf(stderr, "input method creation failed\n");
     #endif
 
-    maDestroyCallback.callback    = static_cast<XIMProc>(IM_IMDestroyCallback);
+    maDestroyCallback.callback    = IM_IMDestroyCallback;
     maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
     if (mbUseable && maMethod != nullptr)
         XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, nullptr);

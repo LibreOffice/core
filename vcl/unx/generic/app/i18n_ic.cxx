@@ -349,7 +349,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
     if ( maContext != nullptr)
     {
-        maDestroyCallback.callback    = static_cast<XIMProc>(IC_IMDestroyCallback);
+        maDestroyCallback.callback    = IC_IMDestroyCallback;
         maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
         XSetICValues( maContext,
                       XNDestroyCallback,      &maDestroyCallback,
