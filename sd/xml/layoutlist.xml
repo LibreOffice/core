@@ -56,8 +56,8 @@
     <layout type="AUTOLAYOUT_TITLE_2CONTENT_CONTENT">
         <presobj kind="PRESOBJ_TITLE" relative-height="1" relative-width="1" relative-posX="0" relative-posY="0"/>
         <presobj kind="PRESOBJ_OUTLINE1" relative-height="0.477" relative-width="0.488" relative-posX="0" relative-posY="0"/>
-        <presobj kind="PRESOBJ_OUTLINE2" relative-height="0.477" relative-width="0.488" relative-posX="0" relative-posY="1.095"/>
-        <presobj kind="PRESOBJ_OUTLINE3" relative-height="1" relative-width="0.488" relative-posX="1.05" relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" relative-height="1" relative-width="0.488" relative-posX="1.05" relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE3" relative-height="0.477" relative-width="0.488" relative-posX="0" relative-posY="1.095"/>
     </layout>
     <layout type="AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT">
         <presobj kind="PRESOBJ_TITLE" relative-height="1" relative-width="1" relative-posX="0" relative-posY="0"/>
