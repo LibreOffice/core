@@ -488,7 +488,7 @@ namespace pcr
     }
 
 
-    bool SAL_CALL PropertyComposer::hasPropertyByName( const OUString& _rName )
+    bool PropertyComposer::hasPropertyByName( const OUString& _rName )
     {
         return impl_isSupportedProperty_nothrow( _rName );
     }

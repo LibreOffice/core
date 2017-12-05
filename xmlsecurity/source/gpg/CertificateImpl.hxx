@@ -85,7 +85,7 @@ public:
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getSHA256Thumbprint() override;
+    virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
     virtual css::security::CertificateKind SAL_CALL getCertificateKind() override;
 
     // Helper methods

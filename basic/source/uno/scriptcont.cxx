@@ -76,10 +76,10 @@ using namespace osl;
 
 // Implementation class SfxScriptLibraryContainer
 
-const sal_Char* SAL_CALL SfxScriptLibraryContainer::getInfoFileName() const { return "script"; }
-const sal_Char* SAL_CALL SfxScriptLibraryContainer::getOldInfoFileName() const { return "script"; }
-const sal_Char* SAL_CALL SfxScriptLibraryContainer::getLibElementFileExtension() const { return "xba"; }
-const sal_Char* SAL_CALL SfxScriptLibraryContainer::getLibrariesDir() const { return "Basic"; }
+const sal_Char* SfxScriptLibraryContainer::getInfoFileName() const { return "script"; }
+const sal_Char* SfxScriptLibraryContainer::getOldInfoFileName() const { return "script"; }
+const sal_Char* SfxScriptLibraryContainer::getLibElementFileExtension() const { return "xba"; }
+const sal_Char* SfxScriptLibraryContainer::getLibrariesDir() const { return "Basic"; }
 
 // OldBasicPassword interface
 void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword )
@@ -133,19 +133,19 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString&,
     return pRet;
 }
 
-Any SAL_CALL SfxScriptLibraryContainer::createEmptyLibraryElement()
+Any SfxScriptLibraryContainer::createEmptyLibraryElement()
 {
     Any aRetAny;
     aRetAny <<= OUString();
     return aRetAny;
 }
 
-bool SAL_CALL SfxScriptLibraryContainer::isLibraryElementValid(const Any& rElement) const
+bool SfxScriptLibraryContainer::isLibraryElementValid(const Any& rElement) const
 {
     return SfxScriptLibrary::containsValidModule(rElement);
 }
 
-void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement( const Reference < XNameContainer >& xLib,
+void SfxScriptLibraryContainer::writeLibraryElement( const Reference < XNameContainer >& xLib,
                                                               const OUString& aElementName,
                                                               const Reference< XOutputStream >& xOutput)
 {
@@ -194,7 +194,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement( const Reference < 
 }
 
 
-Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
+Any SfxScriptLibraryContainer::importLibraryElement
     ( const Reference < XNameContainer >& xLib,
       const OUString& aElementName, const OUString& aFile,
       const uno::Reference< io::XInputStream >& xInStream )
@@ -330,7 +330,7 @@ SfxLibraryContainer* SfxScriptLibraryContainer::createInstanceImpl()
     return new SfxScriptLibraryContainer();
 }
 
-void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
+void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 {
     // TODO: move loading from old storage to binary filters?
     auto xStorage = tools::make_ref<SotStorage>( false, aFile );
@@ -1189,7 +1189,7 @@ bool SfxScriptLibrary::containsValidModule(const Any& rElement)
     return ( !sModuleText.isEmpty() );
 }
 
-bool SAL_CALL SfxScriptLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
+bool SfxScriptLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
 {
     return SfxScriptLibrary::containsValidModule(rElement);
 }

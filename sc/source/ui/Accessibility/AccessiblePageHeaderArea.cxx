@@ -202,7 +202,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 }
 
 //===== internal ==============================================================
-OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription()
+OUString ScAccessiblePageHeaderArea::createAccessibleDescription()
 {
     OUString sDesc;
     switch (meAdjust)
@@ -223,7 +223,7 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription()
     return sDesc;
 }
 
-OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName()
+OUString ScAccessiblePageHeaderArea::createAccessibleName()
 {
     OUString sName;
     switch (meAdjust)

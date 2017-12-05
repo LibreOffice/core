@@ -596,13 +596,13 @@ namespace pcr
     }
 
 
-    std::vector< OUString > SAL_CALL DefaultEnumRepresentation::getDescriptions() const
+    std::vector< OUString > DefaultEnumRepresentation::getDescriptions() const
     {
         return m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
     }
 
 
-    void SAL_CALL DefaultEnumRepresentation::getValueFromDescription( const OUString& _rDescription, Any& _out_rValue ) const
+    void DefaultEnumRepresentation::getValueFromDescription( const OUString& _rDescription, Any& _out_rValue ) const
     {
         sal_uInt32  nPropertyUIFlags = m_rMetaData.getPropertyUIFlags( m_nPropertyId );
         std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
@@ -645,7 +645,7 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL DefaultEnumRepresentation::getDescriptionForValue( const Any& _rEnumValue ) const
+    OUString DefaultEnumRepresentation::getDescriptionForValue( const Any& _rEnumValue ) const
     {
         OUString sReturn;
         sal_Int32 nIntValue = -1;

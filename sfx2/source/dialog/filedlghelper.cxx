@@ -2587,7 +2587,7 @@ OUString SAL_CALL FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent
     return sfx2::FileDialogHelper_Impl::handleHelpRequested( aEvent );
 }
 
-void SAL_CALL FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )
+void FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )
 {
     mpImpl->handleControlStateChanged( aEvent );
 }

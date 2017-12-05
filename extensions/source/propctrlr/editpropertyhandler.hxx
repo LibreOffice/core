@@ -58,7 +58,7 @@ namespace pcr
 
         // PropertyHandler overridables
         virtual css::uno::Sequence< css::beans::Property >
-                                                SAL_CALL doDescribeSupportedProperties() const override;
+                                                doDescribeSupportedProperties() const override;
     private:
         bool    implHaveBothScrollBarProperties() const;
         bool    implHaveTextTypeProperty() const;

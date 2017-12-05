@@ -874,7 +874,7 @@ bool CachedContentResultSet
 
 
 //virtual
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::impl_initPropertySetInfo()
 {
     ContentResultSetWrapper::impl_initPropertySetInfo();
@@ -1122,7 +1122,7 @@ Any SAL_CALL CachedContentResultSet
 
 
 //virtual
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::impl_disposing( const EventObject& rEventObject )
 {
     {
@@ -1136,7 +1136,7 @@ void SAL_CALL CachedContentResultSet
 }
 
 //virtual
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::impl_propertyChange( const PropertyChangeEvent& rEvt )
 {
     impl_EnsureNotDisposed();
@@ -1189,7 +1189,7 @@ void SAL_CALL CachedContentResultSet
 
 
 //virtual
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
 {
     impl_EnsureNotDisposed();

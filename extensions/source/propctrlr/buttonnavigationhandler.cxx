@@ -173,7 +173,7 @@ namespace pcr
     }
 
 
-    Sequence< Property > SAL_CALL ButtonNavigationHandler::doDescribeSupportedProperties() const
+    Sequence< Property > ButtonNavigationHandler::doDescribeSupportedProperties() const
     {
         std::vector< Property > aProperties;
 

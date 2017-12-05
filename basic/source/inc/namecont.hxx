@@ -258,27 +258,27 @@ protected:
     void implImportLibDescriptor( SfxLibrary* pLib, ::xmlscript::LibDescriptor const & rLib );
 
     // Methods to distinguish between different library types
-    virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) = 0;
-    virtual SfxLibrary* SAL_CALL implCreateLibraryLink
+    virtual SfxLibrary* implCreateLibrary( const OUString& aName ) = 0;
+    virtual SfxLibrary* implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) = 0;
-    virtual css::uno::Any SAL_CALL createEmptyLibraryElement() = 0;
-    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const = 0;
+    virtual css::uno::Any createEmptyLibraryElement() = 0;
+    virtual bool isLibraryElementValid(const css::uno::Any& rElement) const = 0;
     /// @throws css::uno::Exception
-    virtual void SAL_CALL writeLibraryElement
+    virtual void writeLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const css::uno::Reference< css::io::XOutputStream >& xOutput
     ) = 0;
 
-    virtual css::uno::Any SAL_CALL importLibraryElement
+    virtual css::uno::Any importLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
         const css::uno::Reference< css::io::XInputStream >& xElementStream ) = 0;
-    virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) = 0;
+    virtual void importFromOldStorage( const OUString& aFile ) = 0;
 
     // Password encryption
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
@@ -310,10 +310,10 @@ protected:
     void init( const OUString& rInitialDocumentURL,
                const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );
 
-    virtual const sal_Char* SAL_CALL    getInfoFileName() const = 0;
-    virtual const sal_Char* SAL_CALL    getOldInfoFileName() const = 0;
-    virtual const sal_Char* SAL_CALL    getLibElementFileExtension() const = 0;
-    virtual const sal_Char* SAL_CALL    getLibrariesDir() const = 0;
+    virtual const sal_Char*    getInfoFileName() const = 0;
+    virtual const sal_Char*    getOldInfoFileName() const = 0;
+    virtual const sal_Char*    getLibElementFileExtension() const = 0;
+    virtual const sal_Char*    getLibrariesDir() const = 0;
 
     // Handle maLibInfoFileURL and maStorageURL correctly
     void checkStorageURL
@@ -587,7 +587,7 @@ public:
 protected:
     virtual bool isLoadedStorable();
 
-    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const = 0;
+    virtual bool isLibraryElementValid(const css::uno::Any& rElement) const = 0;
 };
 
 

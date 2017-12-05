@@ -201,7 +201,7 @@ bool ScAccessibleContextBase::isShowing(  )
     return bShowing;
 }
 
-bool SAL_CALL ScAccessibleContextBase::isVisible()
+bool ScAccessibleContextBase::isVisible()
 {
     return true;
 }
@@ -452,14 +452,14 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ============================================================
 
-OUString SAL_CALL
+OUString
     ScAccessibleContextBase::createAccessibleDescription()
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return OUString();
 }
 
-OUString SAL_CALL ScAccessibleContextBase::createAccessibleName()
+OUString ScAccessibleContextBase::createAccessibleName()
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return OUString();

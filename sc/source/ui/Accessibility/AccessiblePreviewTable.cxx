@@ -559,12 +559,12 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
 //====  internal  =========================================================
 
-OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription()
+OUString ScAccessiblePreviewTable::createAccessibleDescription()
 {
     return OUString(STR_ACC_TABLE_DESCR);
 }
 
-OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName()
+OUString ScAccessiblePreviewTable::createAccessibleName()
 {
     OUString sName(ScResId(STR_ACC_TABLE_NAME));
 

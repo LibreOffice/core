@@ -50,7 +50,7 @@ namespace dbaccess
                 if the name or the object are invalid, or not eligible for insertion
                 into the container
         */
-        virtual void SAL_CALL   approveElement(
+        virtual void   approveElement(
             const OUString& _rName,
             const css::uno::Reference< css::uno::XInterface >& _rxElement
         ) = 0;

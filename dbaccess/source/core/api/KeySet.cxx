@@ -413,14 +413,14 @@ void OKeySet::invalidateRow()
     ::comphelper::disposeComponent(m_xSet);
 }
 
-Any SAL_CALL OKeySet::getBookmark()
+Any OKeySet::getBookmark()
 {
     OSL_ENSURE(m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin(),
         "getBookmark is only possible when we stand on a valid row!");
     return makeAny(m_aKeyIter->first);
 }
 
-bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark )
+bool OKeySet::moveToBookmark( const Any& bookmark )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
@@ -428,7 +428,7 @@ bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark )
     return m_aKeyIter != m_aKeyMap.end();
 }
 
-sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second )
+sal_Int32 OKeySet::compareBookmarks( const Any& _first, const Any& _second )
 {
     sal_Int32 nFirst = 0, nSecond = 0;
     _first >>= nFirst;
@@ -437,18 +437,18 @@ sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _sec
     return (nFirst != nSecond) ? CompareBookmark::NOT_EQUAL : CompareBookmark::EQUAL;
 }
 
-bool SAL_CALL OKeySet::hasOrderedBookmarks(  )
+bool OKeySet::hasOrderedBookmarks(  )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark )
+sal_Int32 OKeySet::hashBookmark( const Any& bookmark )
 {
     return ::comphelper::getINT32(bookmark);
 }
 
 
-void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  )
+void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -617,7 +617,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     }
 }
 
-void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable )
+void OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -861,7 +861,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rK
     }
 }
 
-void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& _xTable   )
+void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& _xTable   )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -1003,7 +1003,7 @@ Reference<XNameAccess> OKeySet::getKeyColumns() const
     return xKeyColumns;
 }
 
-bool SAL_CALL OKeySet::next()
+bool OKeySet::next()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
 
@@ -1031,24 +1031,24 @@ bool SAL_CALL OKeySet::next()
     return !isAfterLast();
 }
 
-bool SAL_CALL OKeySet::isBeforeFirst(  )
+bool OKeySet::isBeforeFirst(  )
 {
     return m_aKeyIter == m_aKeyMap.begin();
 }
 
-bool SAL_CALL OKeySet::isAfterLast(  )
+bool OKeySet::isAfterLast(  )
 {
     return  m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end();
 }
 
-void SAL_CALL OKeySet::beforeFirst(  )
+void OKeySet::beforeFirst(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.begin();
     invalidateRow();
 }
 
-void SAL_CALL OKeySet::afterLast(  )
+void OKeySet::afterLast(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();
@@ -1056,7 +1056,7 @@ void SAL_CALL OKeySet::afterLast(  )
     invalidateRow();
 }
 
-bool SAL_CALL OKeySet::first()
+bool OKeySet::first()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.begin();
@@ -1074,7 +1074,7 @@ bool SAL_CALL OKeySet::first()
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-bool SAL_CALL OKeySet::last(  )
+bool OKeySet::last(  )
 {
     return last_checked(true);
 }
@@ -1093,7 +1093,7 @@ bool OKeySet::last_checked( bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-sal_Int32 SAL_CALL OKeySet::getRow(  )
+sal_Int32 OKeySet::getRow(  )
 {
     OSL_ENSURE(!isAfterLast(),"getRow is not allowed when afterlast record!");
     OSL_ENSURE(!isBeforeFirst(),"getRow is not allowed when beforefirst record!");
@@ -1101,7 +1101,7 @@ sal_Int32 SAL_CALL OKeySet::getRow(  )
     return std::distance(m_aKeyMap.begin(),m_aKeyIter);
 }
 
-bool SAL_CALL OKeySet::absolute( sal_Int32 row )
+bool OKeySet::absolute( sal_Int32 row )
 {
     return absolute_checked(row,true);
 }
@@ -1176,7 +1176,7 @@ bool OKeySet::previous_checked( bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.begin();
 }
 
-bool SAL_CALL OKeySet::previous(  )
+bool OKeySet::previous(  )
 {
     return previous_checked(true);
 }
@@ -1225,7 +1225,7 @@ bool OKeySet::doTryRefetch_throw()
     return m_xSet->next();
 }
 
-void SAL_CALL OKeySet::refreshRow()
+void OKeySet::refreshRow()
 {
     invalidateRow();
 
@@ -1466,17 +1466,17 @@ Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex )
     return m_xRow->getArray(columnIndex);
 }
 
-bool SAL_CALL OKeySet::rowUpdated(  )
+bool OKeySet::rowUpdated(  )
 {
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 2;
 }
 
-bool SAL_CALL OKeySet::rowInserted(  )
+bool OKeySet::rowInserted(  )
 {
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 1;
 }
 
-bool SAL_CALL OKeySet::rowDeleted(  )
+bool OKeySet::rowDeleted(  )
 {
     bool bDeleted = m_bDeleted;
     m_bDeleted = false;

@@ -205,7 +205,7 @@ namespace pcr
         virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
 
         // IPropertyExistenceCheck
-        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) override;
+        virtual bool hasPropertyByName( const OUString& _rName ) override;
 
         // XObjectInspectorUI
         virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) override;
