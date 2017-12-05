@@ -88,7 +88,7 @@
 
 #define RID_SVXSTR_ERR_TEXTNOTFOUND                 NC_("RID_SVXSTR_ERR_TEXTNOTFOUND", "No alternatives found.")
 #define RID_SVXSTR_SELECT_FILE_IFRAME               NC_("RID_SVXSTR_SELECT_FILE_IFRAME", "Select File for Floating Frame")
-#define RID_SVXSTR_ALLFUNCTIONS                     NC_("RID_SVXSTR_ALLFUNCTIONS", "All categories")
+#define RID_SVXSTR_ALLFUNCTIONS                     NC_("RID_SVXSTR_ALLFUNCTIONS", "All commands")
 #define RID_SVXSTR_MACROS                           NC_("RID_SVXSTR_MACROS", "Macros")
 #define RID_SVXSTR_MYMACROS                         NC_("RID_SVXSTR_MYMACROS", "My Macros")
 #define RID_SVXSTR_PRODMACROS                       NC_("RID_SVXSTR_PRODMACROS", "%PRODUCTNAME Macros")
