@@ -273,7 +273,7 @@ namespace pcr
     }
 
 
-    void OPropertyEditor::Update(const std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction)
+    void OPropertyEditor::Update(const std::function<void(OBrowserListBox *)>& _aUpdateFunction)
     {
         // forward this to all our pages
         sal_uInt16 nCount = m_aTabControl->GetPageCount();
@@ -288,12 +288,12 @@ namespace pcr
 
     void OPropertyEditor::EnableUpdate()
     {
-        Update(std::mem_fun(&OBrowserListBox::EnableUpdate));
+        Update(std::mem_fn(&OBrowserListBox::EnableUpdate));
     }
 
     void OPropertyEditor::DisableUpdate()
     {
-        Update(std::mem_fun(&OBrowserListBox::DisableUpdate));
+        Update(std::mem_fn(&OBrowserListBox::DisableUpdate));
     }
 
 
