@@ -1333,6 +1333,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     // 4) Direct paragraph formatting: that will came later.
                     // So no situation where keeping indentation at this point would make sense -> erase.
                     rContext->Erase(PROP_PARA_FIRST_LINE_INDENT);
+                    rContext->Erase(PROP_PARA_LEFT_MARGIN);
                 }
             }
             else
