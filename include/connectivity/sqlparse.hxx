@@ -207,7 +207,7 @@ namespace connectivity
         // RuleId with enum, far more efficient
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
         // compares the _sFunctionName with all known function names and return the DataType of the return value
-        static sal_Int32 getFunctionReturnType(const OUString& _sFunctionName, const IParseContext* pContext = nullptr);
+        static sal_Int32 getFunctionReturnType(const OUString& _sFunctionName, const IParseContext* pContext);
 
         // returns the type for a parameter in a given function name
         static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);

@@ -562,7 +562,7 @@ void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& 
     {
         rInsert[columnIndex].setBound(true);
         rInsert[columnIndex].setNull();
-        rInsert[columnIndex].setModified();
+        rInsert[columnIndex].setModified(true);
         io_aRow[columnIndex].setNull();
 
         m_xCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
@@ -582,7 +582,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
     {
         rInsert[columnIndex].setBound(true);
         rInsert[columnIndex] = x;
-        rInsert[columnIndex].setModified();
+        rInsert[columnIndex].setModified(true);
         io_aRow[columnIndex] = rInsert[columnIndex];
 
         m_xCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
@@ -604,7 +604,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
     ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
     rInsert[columnIndex].setBound(true);
     rInsert[columnIndex] = aSeq;
-    rInsert[columnIndex].setModified();
+    rInsert[columnIndex].setModified(true);
     io_aRow[columnIndex] = makeAny(x);
 
     m_xCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
@@ -625,7 +625,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
     {
         rInsert[columnIndex].setBound(true);
         rInsert[columnIndex] = aTemp;
-        rInsert[columnIndex].setModified();
+        rInsert[columnIndex].setModified(true);
         io_aRow[columnIndex] = rInsert[columnIndex];
 
         m_xCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
@@ -647,7 +647,7 @@ void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x
     {
         rInsert[columnIndex].setBound(true);
         rInsert[columnIndex] = aTemp;
-        rInsert[columnIndex].setModified();
+        rInsert[columnIndex].setModified(true);
         io_aRow[columnIndex] = rInsert[columnIndex];
 
         m_xCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);

@@ -48,7 +48,7 @@ namespace connectivity
                         ,bool _bCase
                         ,::osl::Mutex& _rMutex
                         ,const TStringVector &_rVector
-                        ,bool _bUseHardRef = true
+                        ,bool _bUseHardRef
                     );
         virtual ~OColumnsHelper() override;
 

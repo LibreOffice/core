@@ -381,10 +381,10 @@ namespace connectivity
         void        setBound(bool _bBound)              { m_bBound = _bBound; }
 
         bool        isModified() const                  { return m_bModified;   }
-        void        setModified(bool _bMod=true)        { m_bModified = _bMod;  }
+        void        setModified(bool _bMod)             { m_bModified = _bMod;  }
 
         bool        isSigned() const                    { return m_bSigned; }
-        void        setSigned(bool _bSig=true);
+        void        setSigned(bool _bSig);
 
         sal_Int32   getTypeKind() const                 { return m_eTypeKind;   }
         void        setTypeKind(sal_Int32 _eType);

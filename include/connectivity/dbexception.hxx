@@ -309,7 +309,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const OUString& _rMessage,
         const OUString& _rSQLState,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
-        const sal_Int32 _nErrorCode = 0
+        const sal_Int32 _nErrorCode
     );
 
 
