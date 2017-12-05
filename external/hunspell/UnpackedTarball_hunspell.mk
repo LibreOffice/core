@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0001-fix-compound-handling-for-new-Hungarian-orthography.patch \
 	external/hunspell/0001-fix-compound-word-part-pa.patch \
 	external/hunspell/0001-add-SPELLML-support-for-run-time-dictionary-extensio.patch \
+	external/hunspell/0001-Recent-Hunspell-fixes-and-improvements.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
