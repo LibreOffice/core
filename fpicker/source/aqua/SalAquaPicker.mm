@@ -65,7 +65,7 @@ SalAquaPicker::~SalAquaPicker()
     [pool release];
 }
 
-void SAL_CALL SalAquaPicker::implInitialize()
+void SalAquaPicker::implInitialize()
 {
     SolarMutexGuard aGuard;
 
@@ -188,7 +188,7 @@ int SalAquaPicker::runandwaitforresult()
     return status;
 }
 
-void SAL_CALL SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory )
+void SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory )
 {
     SolarMutexGuard aGuard;
 
@@ -197,12 +197,12 @@ void SAL_CALL SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDire
     }
 }
 
-rtl::OUString const & SAL_CALL SalAquaPicker::implgetDisplayDirectory()
+rtl::OUString const & SalAquaPicker::implgetDisplayDirectory()
 {
     return m_sDisplayDirectory;
 }
 
-void SAL_CALL SalAquaPicker::implsetTitle( const rtl::OUString& aTitle )
+void SalAquaPicker::implsetTitle( const rtl::OUString& aTitle )
 {
     SolarMutexGuard aGuard;
 
