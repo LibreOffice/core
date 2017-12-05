@@ -216,8 +216,7 @@ void OSectionUndo::Redo()
 
 
 OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
-                                       ,::std::mem_fun_t< uno::Reference< report::XSection >
-                                            ,OReportHelper> _pMemberFunction
+                                       ,::std::function<uno::Reference< report::XSection >(OReportHelper *)> _pMemberFunction
                                        ,const uno::Reference< report::XReportDefinition >& _xReport
                                        ,Action _eAction)
 : OSectionUndo(_rMod,_nSlot,_eAction,nullptr)
@@ -253,8 +252,7 @@ void OReportSectionUndo::implReRemove( )
 
 
 OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
-                                       ,::std::mem_fun_t< uno::Reference< report::XSection >
-                                            ,OGroupHelper> _pMemberFunction
+                                       ,::std::function<uno::Reference< report::XSection >(OGroupHelper *)> _pMemberFunction
                                        ,const uno::Reference< report::XGroup >& _xGroup
                                        ,Action _eAction
                                        ,const char* pCommentID)

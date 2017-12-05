@@ -141,10 +141,10 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         else if ( _rEvent.PropertyName == PROPERTY_NAME && !xSection->getGroup().is() )
         {
             uno::Reference< report::XReportDefinition > xReport = xSection->getReportDefinition();
-            if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fun(&OReportHelper::getReportHeader),::std::mem_fun(&OReportHelper::getReportHeaderOn))
-                ||  setReportSectionTitle(xReport,RID_STR_REPORT_FOOTER,::std::mem_fun(&OReportHelper::getReportFooter),::std::mem_fun(&OReportHelper::getReportFooterOn))
-                ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fun(&OReportHelper::getPageHeader),::std::mem_fun(&OReportHelper::getPageHeaderOn))
-                ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fun(&OReportHelper::getPageFooter),::std::mem_fun(&OReportHelper::getPageFooterOn)) )
+            if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fn(&OReportHelper::getReportHeader),::std::mem_fn(&OReportHelper::getReportHeaderOn))
+                ||  setReportSectionTitle(xReport,RID_STR_REPORT_FOOTER,::std::mem_fn(&OReportHelper::getReportFooter),::std::mem_fn(&OReportHelper::getReportFooterOn))
+                ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fn(&OReportHelper::getPageHeader),::std::mem_fn(&OReportHelper::getPageHeaderOn))
+                ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fn(&OReportHelper::getPageFooter),::std::mem_fn(&OReportHelper::getPageFooterOn)) )
             {
                 m_aStartMarker->Invalidate(InvalidateFlags::NoErase);
             }
@@ -159,14 +159,14 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     else if ( _rEvent.PropertyName == PROPERTY_EXPRESSION )
     {
         uno::Reference< report::XGroup > xGroup(_rEvent.Source,uno::UNO_QUERY);
-        if ( xGroup.is() && !setGroupSectionTitle(xGroup,RID_STR_HEADER,::std::mem_fun(&OGroupHelper::getHeader),::std::mem_fun(&OGroupHelper::getHeaderOn)))
+        if ( xGroup.is() && !setGroupSectionTitle(xGroup,RID_STR_HEADER,::std::mem_fn(&OGroupHelper::getHeader),::std::mem_fn(&OGroupHelper::getHeaderOn)))
         {
-            setGroupSectionTitle(xGroup,RID_STR_FOOTER,::std::mem_fun(&OGroupHelper::getFooter),::std::mem_fun(&OGroupHelper::getFooterOn));
+            setGroupSectionTitle(xGroup,RID_STR_FOOTER,::std::mem_fn(&OGroupHelper::getFooter),::std::mem_fn(&OGroupHelper::getFooterOn));
         }
     }
 }
 
-bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,const char* pResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool,OReportHelper>& _pIsSectionOn)
+bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,const char* pResId,::std::function<uno::Reference<report::XSection>(OReportHelper *)> _pGetSection, const ::std::function<bool(OReportHelper *)>& _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
     const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection->getSection();
@@ -179,7 +179,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
     return bRet;
 }
 
-bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,const char* pResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool,OGroupHelper>& _pIsSectionOn)
+bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,const char* pResId,::std::function<uno::Reference<report::XSection>(OGroupHelper *)> _pGetSection, const ::std::function<bool(OGroupHelper *)>& _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection->getSection() ;

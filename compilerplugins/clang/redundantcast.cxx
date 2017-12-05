@@ -161,6 +161,7 @@ public:
 private:
     bool visitBinOp(BinaryOperator const * expr);
     bool isOkToRemoveArithmeticCast(QualType t1, QualType t2, const Expr* subExpr);
+    bool isOverloadedFunction(FunctionDecl const * decl);
 };
 
 bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
@@ -362,9 +363,10 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    auto const sub = compat::getSubExprAsWritten(expr);
-    auto const t1 = sub->getType();
     auto const t2 = expr->getTypeAsWritten();
+    bool const fnptr = t2->isFunctionPointerType() || t2->isMemberFunctionPointerType();
+    auto const sub = fnptr ? expr->getSubExpr() : compat::getSubExprAsWritten(expr);
+    auto const t1 = sub->getType();
     auto const nonClassObjectType = t2->isObjectType()
         && !(t2->isRecordType() || t2->isArrayType());
     if (nonClassObjectType && t2.hasLocalQualifiers()) {
@@ -444,6 +446,23 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
         || (k3 == VK_LValue && k1 == VK_XValue))
     {
         return true;
+    }
+    // Don't warn if a static_cast on a pointer to function or member function is used to
+    // disambiguate an overloaded function:
+    if (fnptr) {
+        auto e = sub->IgnoreParenImpCasts();
+        if (auto const e1 = dyn_cast<UnaryOperator>(e)) {
+            if (e1->getOpcode() == UO_AddrOf) {
+                e = e1->getSubExpr()->IgnoreParenImpCasts();
+            }
+        }
+        if (auto const e1 = dyn_cast<DeclRefExpr>(e)) {
+            if (auto const fdecl = dyn_cast<FunctionDecl>(e1->getDecl())) {
+                if (isOverloadedFunction(fdecl)) {
+                    return true;
+                }
+            }
+        }
     }
     // Suppress warnings from static_cast<bool> in C++ definition of assert in
     // <https://sourceware.org/git/?p=glibc.git;a=commit;
@@ -625,7 +644,9 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     // ), and only to cases where the sub-expression already is a prvalue of
     // non-class type (and thus the cast is unlikely to be meant to create a
     // temporary):
-    auto const sub = compat::getSubExprAsWritten(expr);
+    auto const t1 = expr->getTypeAsWritten();
+    bool const fnptr = t1->isFunctionPointerType() || t1->isMemberFunctionPointerType();
+    auto const sub = fnptr ? expr->getSubExpr() : compat::getSubExprAsWritten(expr);
     if (sub->getValueKind() != VK_RValue || expr->getType()->isRecordType()
         || isa<InitListExpr>(sub) || isa<CXXStdInitializerListExpr>(sub))
     {
@@ -640,6 +661,24 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
             eloc, compiler.getSourceManager(), compiler.getLangOpts());
         if (name == "CPPUNIT_ASSERT" || name == "CPPUNIT_ASSERT_MESSAGE") {
             return true;
+        }
+    }
+
+    // Don't warn if a functional cast on a pointer to function or member function is used to
+    // disambiguate an overloaded function:
+    if (fnptr) {
+        auto e = sub->IgnoreParenImpCasts();
+        if (auto const e1 = dyn_cast<UnaryOperator>(e)) {
+            if (e1->getOpcode() == UO_AddrOf) {
+                e = e1->getSubExpr()->IgnoreParenImpCasts();
+            }
+        }
+        if (auto const e1 = dyn_cast<DeclRefExpr>(e)) {
+            if (auto const fdecl = dyn_cast<FunctionDecl>(e1->getDecl())) {
+                if (isOverloadedFunction(fdecl)) {
+                    return true;
+                }
+            }
         }
     }
 
@@ -666,7 +705,6 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
         }
     }
 
-    auto const t1 = expr->getTypeAsWritten();
     auto const t2 = sub->getType();
     if (t1.getCanonicalType() != t2.getCanonicalType())
         return true;
@@ -764,6 +802,23 @@ bool RedundantCast::visitBinOp(BinaryOperator const * expr) {
         }
     }
     return true;
+}
+
+bool RedundantCast::isOverloadedFunction(FunctionDecl const * decl) {
+    auto const ctx = decl->getDeclContext();
+    if (!compat::isLookupContext(*ctx)) {
+        return false;
+    }
+    auto const canon = decl->getCanonicalDecl();
+    auto const res = ctx->lookup(decl->getDeclName());
+    for (auto d = res.begin(); d != res.end(); ++d) {
+        if (auto const f = dyn_cast<FunctionDecl>(*d)) {
+            if (f->getCanonicalDecl() != canon) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 loplugin::Plugin::Registration<RedundantCast> X("redundantcast", true);
