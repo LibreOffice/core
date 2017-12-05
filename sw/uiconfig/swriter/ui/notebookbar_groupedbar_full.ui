@@ -3305,14 +3305,14 @@
       <object class="GtkMenuItem" id="numbering1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="numbering4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles</property>
       </object>
     </child>
     <child>
