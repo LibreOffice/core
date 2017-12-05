@@ -310,8 +310,11 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
     if (isa<ExprWithCleanups>(expr)) {
         return true;
     }
-    if (const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(expr)) {
-        if (constructExpr->getNumArgs()==1) {
+    if (const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(expr))
+    {
+        if (constructExpr->getNumArgs()==1
+            && constructExpr->getConstructor()->isCopyOrMoveConstructor())
+        {
             expr = constructExpr->getArg(0)->IgnoreParenCasts();
         }
     }

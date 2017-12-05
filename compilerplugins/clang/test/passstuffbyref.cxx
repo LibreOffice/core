@@ -26,6 +26,13 @@ void f()
     s = new S(v1, v2);
 }
 
+struct S2 { S2(int); };
+
+S2 f2() {
+    static int n;
+    return n;
+}
+
 // expected-no-diagnostics
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
