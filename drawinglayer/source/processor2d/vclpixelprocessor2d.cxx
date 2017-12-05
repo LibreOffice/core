@@ -41,6 +41,7 @@
 #include "helperwrongspellrenderer.hxx"
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/hatch.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -139,7 +140,7 @@ namespace drawinglayer
             }
 
             //Resolves: tdf#105998 if we are a hairline along the very right/bottom edge
-            //of the canvas then destroy the polygon inwards one pixel right/bottom so that
+            //of the canvas then distort the polygon inwards one pixel right/bottom so that
             //the hairline falls inside the paintable area and becomes visible
             Size aSize = mpOutputDevice->GetOutputSize();
             basegfx::B2DRange aRange = aLocalPolygon.getB2DRange();
@@ -210,10 +211,6 @@ namespace drawinglayer
                 maBColorModifierStack.getModifiedColor(
                     rSource.getLineAttribute().getColor()));
 
-            mpOutputDevice->SetFillColor();
-            mpOutputDevice->SetLineColor(Color(aLineColor));
-            aHairLinePolyPolygon.transform(maCurrentTransformation);
-
             double fLineWidth(rSource.getLineAttribute().getWidth());
 
             if(basegfx::fTools::more(fLineWidth, 0.0))
@@ -233,6 +230,24 @@ namespace drawinglayer
                 // draw simple hairline
                 fLineWidth = 0.0;
             }
+
+            //Related: tdf#105998 cut and paste as bitmap of shape from draw to
+            //writer.  If we are a hairline along the very right/bottom edge of
+            //the canvas then fallback to defaults which can distort the
+            //hairline inside the paintable area
+            if (fLineWidth == 0.0)
+            {
+                Size aSize = mpOutputDevice->GetOutputSize();
+                basegfx::B2DRange aRange = aHairLinePolyPolygon.getB2DRange();
+                basegfx::B2DRange aOutputRange = aRange;
+                aOutputRange.transform(maCurrentTransformation);
+                if (std::round(aOutputRange.getMaxX()) == aSize.Width() || std::round(aOutputRange.getMaxY()) == aSize.Height())
+                    return false;
+            }
+
+            mpOutputDevice->SetFillColor();
+            mpOutputDevice->SetLineColor(Color(aLineColor));
+            aHairLinePolyPolygon.transform(maCurrentTransformation);
 
             bool bHasPoints(false);
             bool bTryWorked(false);
