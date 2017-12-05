@@ -36,7 +36,7 @@ $(call gb_MoTarget_get_clean_target,%) :
 $(call gb_MoTarget_get_target,%) : \
 		$(gb_Helper_MISCDUMMY) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
-	$(call gb_Output_announce,$*,$(true),MO,2)
+	$(call gb_Output_announce,$*,$(true),MO ,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		if test -e $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po; then \

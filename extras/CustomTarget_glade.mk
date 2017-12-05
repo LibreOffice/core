@@ -17,7 +17,7 @@ $(call gb_CustomTarget_get_workdir,extras/source/glade)/libreoffice-catalog.xml 
         $(SRCDIR)/extras/source/glade/libreoffice-catalog.xml.in \
         $(SRCDIR)/extras/source/glade/makewidgetgroup.xslt \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSLT,4)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,4)
 	$(call gb_Helper_abbreviate_dirs, \
 	mkdir -p $(dir $@) && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
