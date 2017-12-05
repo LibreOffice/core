@@ -426,10 +426,10 @@ namespace slideshow
                                     str_p( "$"      )[ ValueTFunctor(                                                              self.getContext()) ]
                               |     str_p( "pi"     )[ ConstantFunctor(M_PI,                                                       self.getContext()) ]
                               |     str_p( "e"      )[ ConstantFunctor(M_E,                                                        self.getContext()) ]
-                              |     str_p( "x"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterX),self.getContext()) ]
-                              |     str_p( "y"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterY),self.getContext()) ]
-                              |     str_p( "width"  )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getWidth),  self.getContext()) ]
-                              |     str_p( "height" )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getHeight), self.getContext()) ]
+                              |     str_p( "x"      )[ makeShapeBoundsFunctor(::std::mem_fn(&::basegfx::B2DRange::getCenterX),self.getContext()) ]
+                              |     str_p( "y"      )[ makeShapeBoundsFunctor(::std::mem_fn(&::basegfx::B2DRange::getCenterY),self.getContext()) ]
+                              |     str_p( "width"  )[ makeShapeBoundsFunctor(::std::mem_fn(&::basegfx::B2DRange::getWidth),  self.getContext()) ]
+                              |     str_p( "height" )[ makeShapeBoundsFunctor(::std::mem_fn(&::basegfx::B2DRange::getHeight), self.getContext()) ]
                               ;
 
                         unaryFunction =
