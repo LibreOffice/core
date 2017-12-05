@@ -263,6 +263,8 @@ Style& Style::MirrorSelf()
     if (pTarget->mfSecn)
     {
         std::swap( pTarget->mfPrim, pTarget->mfSecn );
+        // also need to swap colors
+        std::swap( pTarget->maColorPrim, pTarget->maColorSecn );
     }
 
     if( pTarget->meRefMode != RefMode::Centered )
