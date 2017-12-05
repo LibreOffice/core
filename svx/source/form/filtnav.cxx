@@ -1702,9 +1702,9 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         if ( !getSelectedFilterItems( aItemList ) )
             break;
 
-        ::std::mem_fun1_t<SvTreeListEntry*,FmFilterNavigator,SvTreeListEntry*> getter = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
+        ::std::function<SvTreeListEntry*(FmFilterNavigator *, SvTreeListEntry*)> getter = ::std::mem_fn(&FmFilterNavigator::getNextEntry);
         if ( rKeyCode.GetCode() == KEY_UP )
-            getter = ::std::mem_fun(&FmFilterNavigator::getPrevEntry);
+            getter = ::std::mem_fn(&FmFilterNavigator::getPrevEntry);
 
         SvTreeListEntry* pTarget = getter( this, nullptr );
         if ( !pTarget )
