@@ -148,12 +148,13 @@ int ToolBox::ImplGetDragWidth() const
 ButtonType determineButtonType( ImplToolItem const * pItem, ButtonType defaultType )
 {
     ButtonType tmpButtonType = defaultType;
-    if ( pItem->mnBits & (ToolBoxItemBits::TEXT_ONLY | ToolBoxItemBits::ICON_ONLY) ) // item has custom setting
+    ToolBoxItemBits nBits = pItem->mnBits & ( ToolBoxItemBits::TEXT_ONLY | ToolBoxItemBits::ICON_ONLY );
+    if ( nBits != ToolBoxItemBits::NONE ) // item has custom setting
     {
         tmpButtonType = ButtonType::SYMBOLTEXT;
-        if ( pItem->mnBits & ToolBoxItemBits::TEXT_ONLY )
+        if ( nBits == ToolBoxItemBits::TEXT_ONLY )
             tmpButtonType = ButtonType::TEXT;
-        else if ( pItem->mnBits & ToolBoxItemBits::ICON_ONLY )
+        else if ( nBits == ToolBoxItemBits::ICON_ONLY )
             tmpButtonType = ButtonType::SYMBOLONLY;
     }
     return tmpButtonType;
