@@ -132,7 +132,7 @@ void CommandCategoryListBox::Init(
         css::uno::Sequence< sal_Int16 > lGroups = xProvider->getSupportedCommandGroups();
 
         sal_Int32 nGroupsLength = lGroups.getLength();
-        sal_Int32 nEntryPos;
+        sal_Int32 nEntryPos = 0;
 
         if ( nGroupsLength > 0 )
         {
@@ -165,6 +165,10 @@ void CommandCategoryListBox::Init(
               o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
+
+        // Separate regular commands from styles and macros
+        if (nEntryPos)
+            SetSeparatorPos(nEntryPos);
 
         // Add macros category
         OUString sMacros( CuiResId(RID_SVXSTR_MACROS) );
