@@ -69,6 +69,7 @@ void ReservedId::run() {
                 && id != "_ATL_STATIC_REGISTRY"
                     // extensions/source/activex/StdAfx2.h
                 && id != "_GLIBCXX_CDTOR_CALLABI"
+                && id != "_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR" // unotools/source/i18n/resmgr.cxx
                 && id != "_MAX_PATH" // Windows
                 && id != "_POSIX_SOURCE"
                 && id != "_USE_MATH_DEFINES" // include/sal/config.h, Windows

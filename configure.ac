@@ -5947,6 +5947,7 @@ foo bar
 ]])],
     [CPP_LIBRARY=LIBCPP
      cpp_library_name="LLVM libc++"
+     AC_DEFINE([HAVE_LIBCXX])
     ],
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <utility>
@@ -12487,6 +12488,7 @@ AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_gpgme.h])
 AC_CONFIG_HEADERS([config_host/config_java.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
+AC_CONFIG_HEADERS([config_host/config_libcxx.h])
 AC_CONFIG_HEADERS([config_host/config_libepubgen.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
