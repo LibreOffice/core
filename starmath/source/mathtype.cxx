@@ -717,66 +717,66 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                     {
                         switch (nSelector)
                         {
-                        case 0x0:
+                        case tmANGLE:
                             if (nVariation==0)
                                 rRet += " langle ";
                             else if (nVariation==1)
                                 rRet += " \\langle ";
                             break;
-                        case 0x1:
+                        case tmPAREN:
                             if (nVariation==0)
                                 rRet += " left (";
                             else if (nVariation==1)
                                 rRet += "\\(";
                             break;
-                        case 0x2:
+                        case tmBRACE:
                             if ((nVariation==0) || (nVariation==1))
                                 rRet += " left lbrace ";
                             else
                                 rRet += " left none ";
                             break;
-                        case 0x3:
+                        case tmBRACK:
                             if (nVariation==0)
                                 rRet += " left [";
                             else if (nVariation==1)
                                 rRet += "\\[";
                             break;
-                        case 0x8:
-                        case 0xb:
+                        case tmLBLB:
+                        case tmLBRP:
                             rRet += " \\[";
                             break;
-                        case 0x4:
+                        case tmBAR:
                             if (nVariation==0)
                                 rRet += " lline ";
                             else if (nVariation==1)
                                 rRet += " \\lline ";
                             break;
-                        case 0x5:
+                        case tmDBAR:
                             if (nVariation==0)
                                 rRet += " ldline ";
                             else if (nVariation==1)
                                 rRet += " \\ldline ";
                             break;
-                        case 0x6:
+                        case tmFLOOR:
                             if (nVariation == 0 || nVariation == 1)
                                 rRet += " left lfloor ";
                             else if (nVariation==1)
                                 rRet += " left none ";
                             break;
-                        case 0x7:
+                        case tmCEILING:
                             if (nVariation==0)
                                 rRet += " lceil ";
                             else if (nVariation==1)
                                 rRet += " \\lceil ";
                             break;
-                        case 0x9:
-                        case 0xa:
+                        case tmRBRB:
+                        case tmRBLB:
                             rRet += " \\]";
                             break;
-                        case 0xc:
+                        case tmLPRB:
                             rRet += " \\(";
                             break;
-                        case 0xd:
+                        case tmROOT:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
@@ -790,7 +790,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             rRet += " {";
                             break;
-                        case 0xe:
+                        case tmFRACT:
                             if (nPart == 0)
                                 rRet += " { ";
 
@@ -799,7 +799,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " over ";
                             rRet += " {";
                             break;
-                        case 0xf:
+                        case tmSCRIPT:
                             nSubSupStartPos = rRet.getLength();
                             if ((nVariation == 0) ||
                                     ((nVariation == 2) && (nPart==1)))
@@ -815,21 +815,21 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             rRet += " {";
                             break;
-                        case 0x10:
+                        case tmUBAR:
                             if (nVariation == 0)
                                 rRet += " {underline ";
                             else if (nVariation == 1)
                                 rRet += " {underline underline ";
                             rRet += " {";
                             break;
-                        case 0x11:
+                        case tmOBAR:
                             if (nVariation == 0)
                                 rRet += " {overline ";
                             else if (nVariation == 1)
                                 rRet += " {overline overline ";
                             rRet += " {";
                             break;
-                        case 0x12:
+                        case tmLARROW:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
@@ -839,7 +839,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " {";
                             }
                             break;
-                        case 0x13:
+                        case tmRARROW:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
@@ -849,7 +849,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " {";
                             }
                             break;
-                        case 0x14:
+                        case tmBARROW:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
@@ -859,7 +859,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " {";
                             }
                             break;
-                        case 0x15:
+                        case tmSINT:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 3) || (nVariation == 4))
@@ -881,7 +881,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x16:
+                        case tmDINT:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 2) || (nVariation == 3))
@@ -899,7 +899,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x17:
+                        case tmTINT:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 2) || (nVariation == 3))
@@ -917,7 +917,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x18:
+                        case tmSSINT:
                             if (nPart == 0)
                             {
                                 if (nVariation == 2)
@@ -936,7 +936,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x19:
+                        case tmDSINT:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
@@ -950,7 +950,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x1a:
+                        case tmTSINT:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
@@ -964,11 +964,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x1b:
-                        case 0x1c:
+                        case tmUHBRACE:
+                        case tmLHBRACE:
                             rRet += " {";
                             break;
-                        case 0x1d:
+                        case tmSUM:
                             if (nPart == 0)
                             {
                                 rRet += " Sum";
@@ -986,7 +986,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x1e:
+                        case tmISUM:
                             if (nPart == 0)
                             {
                                 rRet += " Sum";
@@ -1001,7 +1001,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x1f:
+                        case tmPROD:
                             if (nPart == 0)
                             {
                                 rRet += " Prod";
@@ -1019,7 +1019,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x20:
+                        case tmIPROD:
                             if (nPart == 0)
                             {
                                 rRet += " Prod";
@@ -1034,7 +1034,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x21:
+                        case tmCOPROD:
                             if (nPart == 0)
                             {
                                 rRet += " coProd";
@@ -1052,7 +1052,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x22:
+                        case tmICOPROD:
                             if (nPart == 0)
                             {
                                 rRet += " coProd";
@@ -1067,7 +1067,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x23:
+                        case tmUNION:
                             if (nPart == 0)
                             {
                                 rRet += " union"; //union
@@ -1085,7 +1085,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x24:
+                        case tmIUNION:
                             if (nPart == 0)
                             {
                                 rRet += " union"; //union
@@ -1100,7 +1100,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x25:
+                        case tmINTER:
                             if (nPart == 0)
                             {
                                 rRet += " intersect"; //intersect
@@ -1118,7 +1118,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x26:
+                        case tmIINTER:
                             if (nPart == 0)
                             {
                                 rRet += " intersect"; //intersect
@@ -1133,7 +1133,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x27:
+                        case tmLIM:
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
@@ -1144,7 +1144,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSup";
                             rRet += " {";
                             break;
-                        case 0x28:
+                        case tmLDIV:
                             if (nVariation == 0)
                             {
                                 if (nPart == 0)
@@ -1164,10 +1164,10 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             if (nVariation == 1)
                                 rRet += "overline ";
                             break;
-                        case 0x29:
+                        case tmSLFRACT:
                             rRet += " {";
                             break;
-                        case 0x2a:
+                        case tmINTOP:
                             if (nPart == 0)
                             {
                                 sPush = rRet;
@@ -1183,7 +1183,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " rSub";
                             rRet += " {";
                             break;
-                        case 0x2b:
+                        case tmSUMOP:
                             if (nPart == 0)
                             {
                                 sPush = rRet;
@@ -1199,7 +1199,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " cSub";
                             rRet += " {";
                             break;
-                        case 0x2c:
+                        case tmLSCRIPT:
                             if (nPart == 0)
                                 rRet += "\"\"";
                             if ((nVariation == 0)
@@ -1210,7 +1210,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " lSub";
                             rRet += " {";
                             break;
-                        case 0x2d:
+                        case tmDIRAC:
                             if (nVariation==0)
                             {
                                 if (nPart == 0)
@@ -1227,7 +1227,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 newline--;
                             }
                             break;
-                        case 0x2e:
+                        case tmUARROW:
                             if (nVariation == 0)
                                 rRet += " widevec ";//left below
                             else if (nVariation == 1)
@@ -1236,7 +1236,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += " widevec ";//double headed below
                             rRet += " {";
                             break;
-                        case 0x2f:
+                        case tmOARROW:
                             if (nVariation == 0)
                                 rRet += " widevec ";//left above
                             else if (nVariation == 1)
@@ -1282,63 +1282,63 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
 
                         switch (nSelector)
                         {
-                        case 0x0:
+                        case tmANGLE:
                             if (nVariation==0)
                                 rRet += " rangle ";
                             else if (nVariation==2)
                                 rRet += " \\rangle ";
                             break;
-                        case 0x1:
+                        case tmPAREN:
                             if (nVariation==0)
                                 rRet += " right )";
                             else if (nVariation==2)
                                 rRet += "\\)";
                             break;
-                        case 0x2:
+                        case tmBRACE:
                             if ((nVariation==0) || (nVariation==2))
                                 rRet += " right rbrace ";
                             else
                                 rRet += " right none ";
                             break;
-                        case 0x3:
+                        case tmBRACK:
                             if (nVariation==0)
                                 rRet += " right ]";
                             else if (nVariation==2)
                                 rRet += "\\]";
                             break;
-                        case 0x4:
+                        case tmBAR:
                             if (nVariation==0)
                                 rRet += " rline ";
                             else if (nVariation==2)
                                 rRet += " \\rline ";
                             break;
-                        case 0x5:
+                        case tmDBAR:
                             if (nVariation==0)
                                 rRet += " rdline ";
                             else if (nVariation==2)
                                 rRet += " \\rdline ";
                             break;
-                        case 0x6:
+                        case tmFLOOR:
                             if (nVariation == 0 || nVariation == 2)
                                 rRet += " right rfloor ";
                             else if (nVariation==2)
                                 rRet += " right none ";
                             break;
-                        case 0x7:
+                        case tmCEILING:
                             if (nVariation==0)
                                 rRet += " rceil ";
                             else if (nVariation==2)
                                 rRet += " \\rceil ";
                             break;
-                        case 0x8:
-                        case 0xa:
+                        case tmLBLB:
+                        case tmRBLB:
                             rRet += "\\[";
                             break;
-                        case 0x9:
-                        case 0xc:
+                        case tmRBRB:
+                        case tmLPRB:
                             rRet += "\\]";
                             break;
-                        case 0xd:
+                        case tmROOT:
                             rRet += "} ";
                             if (nVariation == 1)
                             {
@@ -1362,10 +1362,10 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0xb:
+                        case tmLBRP:
                             rRet += "\\)";
                             break;
-                        case 0xe:
+                        case tmFRACT:
                             rRet += "} ";
                             if (nPart == 0)
                                 newline--;
@@ -1373,7 +1373,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet += "} ";
                             nPart++;
                             break;
-                        case 0xf:
+                        case tmSCRIPT:
                             {
                             if ((nPart == 0) &&
                                     ((nVariation == 2) || (nVariation == 1)))
@@ -1400,24 +1400,24 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             nPart++;
                             }
                             break;
-                        case 0x2c:
+                        case tmLSCRIPT:
                             if ((nPart == 0) &&
                                     ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
                             rRet += "} ";
                             nPart++;
                             break;
-                        case 0x2e:
-                        case 0x2f:
+                        case tmUARROW:
+                        case tmOARROW:
                             rRet += "} ";
                             break;
-                        case 0x10:
-                        case 0x11:
+                        case tmUBAR:
+                        case tmOBAR:
                             rRet += "}} ";
                             break;
-                        case 0x12:
-                        case 0x13:
-                        case 0x14:
+                        case tmLARROW:
+                        case tmRARROW:
+                        case tmBARROW:
                             if (nPart == 0)
                             {
                                 newline--;
@@ -1425,7 +1425,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x1b:
+                        case tmUHBRACE:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1434,7 +1434,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x1c:
+                        case tmLHBRACE:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1443,7 +1443,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x27:
+                        case tmLIM:
                             if (nPart==0)
                                 newline--;
                             else if ((nPart==1) &&
@@ -1452,7 +1452,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             rRet += "} ";
                             nPart++;
                             break;
-                        case 0x28:
+                        case tmLDIV:
                             rRet += "} ";
                             if (nVariation == 0)
                             {
@@ -1473,7 +1473,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 newline--;
                             nPart++;
                             break;
-                        case 0x29:
+                        case tmSLFRACT:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1490,16 +1490,16 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x1d:
-                        case 0x1e:
-                        case 0x1f:
-                        case 0x20:
-                        case 0x21:
-                        case 0x22:
-                        case 0x23:
-                        case 0x24:
-                        case 0x25:
-                        case 0x26:
+                        case tmSUM:
+                        case tmISUM:
+                        case tmPROD:
+                        case tmIPROD:
+                        case tmCOPROD:
+                        case tmICOPROD:
+                        case tmUNION:
+                        case tmIUNION:
+                        case tmINTER:
+                        case tmIINTER:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1528,7 +1528,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x15:
+                        case tmSINT:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1558,8 +1558,8 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x16:
-                        case 0x17:
+                        case tmDINT:
+                        case tmTINT:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1580,7 +1580,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x18:
+                        case tmSSINT:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1607,8 +1607,8 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x19:
-                        case 0x1a:
+                        case tmDSINT:
+                        case tmTSINT:
                             rRet += "} ";
                             if (nPart == 0)
                             {
@@ -1625,8 +1625,8 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x2a:
-                        case 0x2b:
+                        case tmINTOP:
+                        case tmSUMOP:
                             rRet += "} ";
 
                             if ((nPart == 0) &&
@@ -1654,7 +1654,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             nPart++;
                             break;
-                        case 0x2d:
+                        case tmDIRAC:
                             if (nVariation==0)
                             {
                                 if (nPart == 0)
