@@ -1431,7 +1431,7 @@ sal_Int32 SbaXFormAdapter::implGetPos(const OUString& rName)
 {
     std::vector< OUString>::const_iterator aIter = std::find_if(   m_aChildNames.begin(),
                                                                 m_aChildNames.end(),
-                                                                std::bind2nd(std::equal_to< OUString>(),rName));
+                                                                [&rName](OUString const & s) { return s == rName; });
 
     if(aIter != m_aChildNames.end())
         return aIter - m_aChildNames.begin();
@@ -1634,7 +1634,7 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const css::beans::PropertyChangeEv
     {
         std::vector<  css::uno::Reference< css::form::XFormComponent > >::const_iterator aIter = std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
-                                                                std::bind2nd(std::equal_to< css::uno::Reference< css::uno::XInterface > >(),evt.Source));
+                                                                [&evt](css::uno::Reference< css::uno::XInterface > const & x) { return x == evt.Source; });
 
         if(aIter != m_aChildren.end())
         {
@@ -1654,7 +1654,7 @@ void SAL_CALL SbaXFormAdapter::disposing(const css::lang::EventObject& Source)
 
     std::vector<  css::uno::Reference< css::form::XFormComponent > >::const_iterator aIter = std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
-                                                                std::bind2nd(std::equal_to< css::uno::Reference< css::uno::XInterface > >(),Source.Source));
+                                                                [&Source](css::uno::Reference< css::uno::XInterface > const & x) { return x == Source.Source; });
     if(aIter != m_aChildren.end())
             removeByIndex(aIter - m_aChildren.begin());
 }
