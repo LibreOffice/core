@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_40050512",
+        "filename": "sc/source/core/data/cellvalue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-05T19:18:17Z",
+      "side": 1,
+      "message": "given that the destructor for ScCellValue deletes these pointers, surely you should be clearing the pointers in the source object?\n\notherwise it will free the memory pointed to by r and we will have dangling pointers here",
+      "revId": "8026c02a6fff9f2db3eac2dbd84e79b191b25ce3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
