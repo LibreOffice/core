@@ -1190,7 +1190,7 @@ void OResultSet::executeQuery()
                     }
                     // Now remove any keys marked with a 0
                     m_pKeySet->get().erase(std::remove_if(m_pKeySet->get().begin(),m_pKeySet->get().end()
-                                    ,std::bind2nd(std::equal_to<sal_Int32>(),0))
+                                    ,[](sal_Int32 n) { return n == 0; })
                                      ,m_pKeySet->get().end());
 
                 }
