@@ -43,8 +43,10 @@ public:
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual void    Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
-    virtual void    PaintSwFrameShadowAndBorder( const SwRect &, const SwPageFrame *pPage,
-                                 const SwBorderAttrs & ) const override;
+    virtual void    PaintSwFrameShadowAndBorder(
+        const SwRect&,
+        const SwPageFrame* pPage,
+        const SwBorderAttrs&) const override;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
             void    PaintLine( const SwRect &, const SwPageFrame * ) const;
 };
