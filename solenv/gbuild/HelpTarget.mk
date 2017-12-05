@@ -542,7 +542,7 @@ $(if $(call gb_HelpTarget__is_default_lang,$(1)) \
 endef
 
 define gb_HelpTarget__command
-$(call gb_Output_announce,$(2),$(true),HLP,4)
+$(if $(ENABLE_HTMLHELP),,$(call gb_Output_announce,$(2),$(true),HLP,4))
 touch $@
 endef
 
@@ -567,7 +567,9 @@ $(call gb_HelpTarget_get_target,%) :
 
 .PHONY : $(call gb_HelpTarget_get_clean_target,%)
 $(call gb_HelpTarget_get_clean_target,%) :
+ifeq ($(ENABLE_HTMLHELP),)
 	$(call gb_Output_announce,$*,$(false),HLP,4)
+endif
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf \
 			$(call gb_HelpTarget_get_linked_target,$*) \
@@ -597,22 +599,29 @@ endef
 # gb_HelpTarget__HelpTarget_impl target module lang workdir package
 define gb_HelpTarget__HelpTarget_impl
 $(if $(call gb_HelpTarget__test_default_lang,$(3)),,$(call gb_HelpTarget__HelpTarget_impl_lang,$(1),$(2),$(3),$(4)))
+
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_HelpLinkTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpIndexTarget_HelpIndexTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
 $(call gb_Package_Package_internal,$(5),$(4))
+endif
 
 $(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_Package_get_preparation_target,$(5)) : $(call gb_HelpTarget_get_target,$(1))
+endif
 
 $(call gb_HelpTarget_get_linked_target,$(1)) :| $(dir $(call gb_HelpTarget_get_linked_target,$(1))).dir
 $(call gb_HelpTarget_get_target,$(1)) :| $(dir $(call gb_HelpTarget_get_target,$(1))).dir
 $(call gb_HelpTarget_get_translation_target,$(1)) :| $(dir $(call gb_HelpTarget_get_translation_target,$(1))).dir
 
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpLinkTarget_get_clean_target,$(1))
+endif
 
 endef
 
@@ -656,7 +665,9 @@ endef
 
 # gb_HelpTarget__add_file target file
 define gb_HelpTarget__add_file
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_Package_add_file,$(call gb_HelpTarget_get_packagename,$(1)),$(LIBO_SHARE_HELP_FOLDER)/$(call gb_HelpTarget__get_lang,$(1))/$(2),$(2))
+endif
 
 endef
 
@@ -666,14 +677,18 @@ endef
 #
 # gb_HelpTarget_set_configfile target configfile
 define gb_HelpTarget_set_configfile
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_set_configfile,$(1),$(SRCDIR)/$(2).cfg)
 $(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).cfg)
+endif
 
 endef
 
 # gb_HelpTarget_set_helpdir target helpdir
 define gb_HelpTarget_set_helpdir
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_set_sourcedir,$(1),$(call gb_HelpTarget__get_helpdir,$(1),$(2)))
+endif
 
 endef
 
@@ -683,8 +698,10 @@ $(if $(call gb_HelpTarget__is_default_lang,$(1)),,\
 	$(call gb_HelpTreeTarget_set_treefile,$(1),$(2)) \
 	$(call gb_HelpTreeTarget_set_helptextdir,$(1),$(call gb_HelpTarget__get_helpdir,$(1),$(3))) \
 )
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_set_treefile,$(1),$(call gb_HelpTarget__get_treefile,$(1),$(2)))
 $(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).tree)
+endif
 
 endef
 
@@ -692,26 +709,32 @@ endef
 #
 # gb_HelpTarget_set_indexed target
 define gb_HelpTarget_set_indexed
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_set_indexed,$(1),$(call gb_HelpTarget__get_index_files,$(1)))
 $(foreach file,$(call gb_HelpTarget__get_index_files,$(1)),$(call gb_HelpTarget__add_file,$(1),$(file)))
 
 $(call gb_HelpIndexTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpIndexTarget_get_target,$(1))
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpIndexTarget_get_clean_target,$(1))
+endif
 
 endef
 
 # gb_HelpTarget__add_jar target
 define gb_HelpTarget__add_jar
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).jar)
 $(call gb_HelpJarTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpJarTarget_get_target,$(1))
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpJarTarget_get_clean_target,$(1))
+endif
 
 endef
 
 define gb_HelpTarget__add_helpfile_impl
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_add_helpfile,$(1),$(2))
+endif
 
 $(call gb_HelpTarget_get_translation_target,$(1)) : HELP_FILES += $(2)
 
@@ -727,7 +750,9 @@ endef
 define gb_HelpTarget_add_helpfile
 $(call gb_HelpTranslateTarget_add_file,$(1),$(2))
 $(call gb_HelpTarget__add_helpfile,$(1),$(2))
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpTarget__add_jar,$(1))
+endif
 
 endef
 
@@ -735,14 +760,18 @@ endef
 define gb_HelpTarget_add_helpfiles
 $(call gb_HelpTranslateTarget_add_files,$(1),$(2))
 $(foreach helpfile,$(2),$(call gb_HelpTarget__add_helpfile,$(1),$(helpfile)))
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpTarget__add_jar,$(1))
+endif
 
 endef
 
 # gb_HelpTarget_add_file target file
 define gb_HelpTarget_add_file
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_add_file,$(1),$(SRCDIR)/$(2))
 $(call gb_HelpTarget__add_file,$(1),$(notdir $(2)))
+endif
 
 endef
 
@@ -758,8 +787,10 @@ endef
 #
 # gb_HelpTarget_add_helpdir_file target filename file
 define gb_HelpTarget_add_helpdir_file
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_add_renamed_file,$(1),$(2),$(call gb_HelpTarget__get_helpfile,$(1),$(3)))
 $(call gb_HelpTarget__add_file,$(1),$(2))
+endif
 
 endef
 
@@ -777,8 +808,10 @@ endef
 
 # gb_HelpTarget_use_linked_module target module
 define gb_HelpTarget_use_linked_module
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_use_linked_module,$(1),$(2))
 $(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(2))
+endif
 
 endef
 

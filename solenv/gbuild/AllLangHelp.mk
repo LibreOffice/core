@@ -25,11 +25,15 @@ $(dir $(call gb_AllLangHelp_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_AllLangHelp_get_target,%) :
+ifeq ($(ENABLE_HTMLHELP),)
 	$(call gb_Output_announce,$*,$(true),ALH,5)
+endif
 	touch $@
 
 $(call gb_AllLangHelp_get_clean_target,%) :
+ifeq ($(ENABLE_HTMLHELP),)
 	$(call gb_Output_announce,$*,$(false),ALH,5)
+endif
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_AllLangHelp_get_target,$*) \
 	)
@@ -40,9 +44,13 @@ $(call gb_HelpTarget_HelpTarget,$(3),$(1),$(2))
 $(call gb_HelpTarget_set_helpdir,$(3),$(gb_AllLangHelp_HELPDIR))
 
 $(call gb_AllLangHelp_get_target,$(1)) : $(call gb_HelpTarget_get_target,$(3))
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_AllLangHelp_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_HelpTarget_get_packagename,$(3)))
+endif
 $(call gb_AllLangHelp_get_clean_target,$(1)) : $(call gb_HelpTarget_get_clean_target,$(3))
+ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_AllLangHelp_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_HelpTarget_get_packagename,$(3)))
+endif
 
 endef
 
