@@ -1362,6 +1362,15 @@ DECLARE_RTFIMPORT_TEST(testWatermark, "watermark.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf104016, "tdf104016.rtf")
+{
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    // This was beans::PropertyState_DIRECT_VALUE, leading to lack of
+    // interitance from numbering.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xParagraph->getPropertyState("ParaLeftMargin"));
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
