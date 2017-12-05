@@ -1346,7 +1346,7 @@ bool OResultSet::OpenImpl()
                         }
 
                         m_pFileSet->get().erase(std::remove_if(m_pFileSet->get().begin(),m_pFileSet->get().end(),
-                                                            std::bind2nd(std::equal_to<sal_Int32>(),0))
+                                                            [](sal_Int32 n) { return n == 0; })
                                           ,m_pFileSet->get().end());
                     }
                 }
