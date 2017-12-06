@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_df50ef34",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-06T19:42:29Z",
+      "side": 1,
+      "message": "Это нужно вернуть взад - раз мы это не трогаем, не будем засорять историю",
+      "range": {
+        "startLine": 55,
+        "startChar": 76,
+        "endLine": 57,
+        "endChar": 77
+      },
+      "revId": "7da04c67805d7ba0343aebf673233d2fff98f8f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5f5ddf45",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-06T19:42:29Z",
+      "side": 1,
+      "message": "x-\u003ea : x используется для объектов-интерфейсов (т.е. объектов, у которых есть (через которые доступны) методы, объявленные в css::foo::XBar). Ну, и всё же давай и у объекта добавим Guard, чтобы никого не вводить в заблуждение.",
+      "range": {
+        "startLine": 444,
+        "startChar": 25,
+        "endLine": 444,
+        "endChar": 26
+      },
+      "revId": "7da04c67805d7ba0343aebf673233d2fff98f8f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
