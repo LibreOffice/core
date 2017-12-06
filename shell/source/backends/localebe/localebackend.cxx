@@ -28,6 +28,8 @@
 #include <osl/time.h>
 #include <rtl/character.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <stdio.h>
 
@@ -184,16 +186,19 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
 
     const char *cp;
     const char *uscore = nullptr;
+    const char *end = nullptr;
 
     // locale string have the format lang[_ctry][.encoding][@modifier]
-    // we are only interested in the first two items, so we handle
-    // '.' and '@' as string end.
+    // Let LanguageTag handle all conversion, but do a sanity and length check
+    // first.
+    // For the fallback we are only interested in the first two items, so we
+    // handle '.' and '@' as string end for that.
     for (cp = locale; *cp; cp++)
     {
-        if (*cp == '_')
+        if (*cp == '_' && !uscore)
             uscore = cp;
-        if (*cp == '.' || *cp == '@')
-            break;
+        if ((*cp == '.' || *cp == '@') && !end)
+            end = cp;
         if (!rtl::isAscii(static_cast<unsigned char>(*cp))) {
             SAL_INFO("shell", "locale env var with non-ASCII content");
             return {false, {}};
@@ -205,16 +210,31 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
         return {false, {}};
     }
 
+    // This is a tad awkward.. but the easiest way to obtain what we're
+    // actually interested in. For example this also converts
+    // "ca_ES.UTF-8@valencia" to "ca-ES-valencia".
+    const OString aLocaleStr(locale);
+    const LanguageType nLang = MsLangId::convertUnxByteStringToLanguage( aLocaleStr);
+    if (nLang != LANGUAGE_DONTKNOW)
+    {
+        const OUString aLangTagStr( LanguageTag::convertToBcp47( nLang));
+        return {true, css::uno::Any(aLangTagStr)};
+    }
+
+    // As a fallback, strip encoding and modifier and return just a
+    // language-country combination and let the caller handle unknowns.
     OUStringBuffer aLocaleBuffer;
+    if (!end)
+        end = cp;
     if( uscore != nullptr )
     {
         aLocaleBuffer.appendAscii(locale, uscore++ - locale);
         aLocaleBuffer.append("-");
-        aLocaleBuffer.appendAscii(uscore, cp - uscore);
+        aLocaleBuffer.appendAscii(uscore, end - uscore);
     }
     else
     {
-        aLocaleBuffer.appendAscii(locale, cp - locale);
+        aLocaleBuffer.appendAscii(locale, end - locale);
     }
 
     return {true, css::uno::Any(aLocaleBuffer.makeStringAndClear())};
