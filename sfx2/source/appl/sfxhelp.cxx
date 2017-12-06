@@ -102,7 +102,7 @@ static OUString const & HelpLocaleString()
     if (aLocaleStr.isEmpty())
     {
         const OUString aEnglish( "en"  );
-        // detect installed locale
+        // obtain selected UI language (/org.openoffice.Setup/L10N/ooLocale)
         aLocaleStr = utl::ConfigManager::getLocale();
         bool bOk = !aLocaleStr.isEmpty();
         if ( !bOk )
@@ -113,21 +113,19 @@ static OUString const & HelpLocaleString()
             utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
             static const char szHelpPath[] = "/help/";
 
-            OUString sHelpPath = aBaseInstallPath + szHelpPath + aLocaleStr;
-            osl::DirectoryItem aDirItem;
-
-            if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
+            // Use a fallback chain starting from full tag, which here usually
+            // is only the language hence only one value, but can also be en-US
+            // or ca-valencia or include script tags.
+            std::vector< OUString > aFallbacks( LanguageTag( aLocaleStr).getFallbackStrings( true));
+            for (auto const& rTag : aFallbacks)
             {
-                bOk = false;
-                OUString sLang(aLocaleStr);
-                sal_Int32 nSepPos = sLang.indexOf( '-' );
-                if (nSepPos != -1)
+                OUString sHelpPath( aBaseInstallPath + szHelpPath + rTag);
+                osl::DirectoryItem aDirItem;
+                if (osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
                 {
+                    aLocaleStr = rTag;
                     bOk = true;
-                    sLang = sLang.copy( 0, nSepPos );
-                    sHelpPath = aBaseInstallPath + szHelpPath + sLang;
-                    if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
-                        bOk = false;
+                    break;
                 }
             }
         }
