@@ -70,12 +70,12 @@ uno::Reference< XSingleServiceFactory > SEInitializerGpg::impl_createFactory( co
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SEInitializerGpg::impl_getImplementationName()
+OUString SEInitializerGpg::impl_getImplementationName()
 {
     return OUString("com.sun.star.xml.security.SEInitializer_Gpg");
 }
 
-uno::Sequence< OUString > SAL_CALL SEInitializerGpg::impl_getSupportedServiceNames()
+uno::Sequence< OUString > SEInitializerGpg::impl_getSupportedServiceNames()
 {
     return {"com.sun.star.xml.crypto.GPGSEInitializer"};
 }
