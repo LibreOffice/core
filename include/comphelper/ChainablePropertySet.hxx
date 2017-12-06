@@ -107,7 +107,7 @@ namespace comphelper
         virtual void _postGetValues () = 0;
 
     public:
-        ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, SolarMutex* pMutex = nullptr )
+        ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, SolarMutex* pMutex )
             throw();
         virtual ~ChainablePropertySet()
             throw() override;
