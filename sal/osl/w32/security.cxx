@@ -786,8 +786,8 @@ static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName
                 sal_Unicode  UserName[128];
                 sal_Unicode  DomainName[128];
                 sal_Unicode  Name[257];
-                DWORD nUserName   = sizeof(UserName);
-                DWORD nDomainName = sizeof(DomainName);
+                DWORD nUserName   = SAL_N_ELEMENTS(UserName);
+                DWORD nDomainName = SAL_N_ELEMENTS(DomainName);
                 SID_NAME_USE sUse;
 
                 if (LookupAccountSidW(nullptr, reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid,
