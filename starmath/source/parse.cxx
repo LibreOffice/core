@@ -940,6 +940,10 @@ void SmParser::NextToken()
 
 SmTableNode *SmParser::DoTable()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     SmNodeArray aLineArray;
     aLineArray.push_back(DoLine());
     while (m_aCurToken.eType == TNEWLINE)
@@ -956,6 +960,10 @@ SmTableNode *SmParser::DoTable()
 SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
     // parse alignment info (if any), then go on with rest of expression
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     std::unique_ptr<SmStructureNode> pSNode;
 
     if (TokenInGroup(TG::Align))
@@ -982,6 +990,10 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
 // Postcondition: m_aCurToken.eType == TEND || m_aCurToken.eType == TNEWLINE
 SmLineNode *SmParser::DoLine()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     SmNodeArray  ExpressionArray;
 
     // start with single expression that may have an alignment statement
@@ -1010,6 +1022,10 @@ SmLineNode *SmParser::DoLine()
 
 SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     SmNodeArray  RelationArray;
     RelationArray.push_back(DoRelation());
     while (m_aCurToken.nLevel >= 4)
@@ -1031,6 +1047,10 @@ SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
 
 SmNode *SmParser::DoRelation()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     SmNode *pFirst = DoSum();
     while (TokenInGroup(TG::Relation))
     {
@@ -1045,6 +1065,10 @@ SmNode *SmParser::DoRelation()
 
 SmNode *SmParser::DoSum()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     SmNode *pFirst = DoProduct();
     while (TokenInGroup(TG::Sum))
     {
@@ -1059,6 +1083,10 @@ SmNode *SmParser::DoSum()
 
 SmNode *SmParser::DoProduct()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     SmNode *pFirst = DoPower();
 
     while (TokenInGroup(TG::Product))
@@ -1132,6 +1160,10 @@ SmNode *SmParser::DoProduct()
 
 SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(nActiveGroup == TG::Power || nActiveGroup == TG::Limit);
     assert(m_aCurToken.nGroup == nActiveGroup);
 
@@ -1202,6 +1234,10 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
 
 SmNode *SmParser::DoOpSubSup()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     // get operator symbol
     auto pNode = o3tl::make_unique<SmMathSymbolNode>(m_aCurToken);
     // skip operator token
@@ -1214,6 +1250,10 @@ SmNode *SmParser::DoOpSubSup()
 
 SmNode *SmParser::DoPower()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     // get body for sub- supscripts on top of stack
     SmNode *pNode = DoTerm(false);
 
@@ -1224,6 +1264,10 @@ SmNode *SmParser::DoPower()
 
 SmBlankNode *SmParser::DoBlank()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(TokenInGroup(TG::Blank));
     std::unique_ptr<SmBlankNode> pBlankNode(new SmBlankNode(m_aCurToken));
 
@@ -1245,6 +1289,10 @@ SmBlankNode *SmParser::DoBlank()
 
 SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     switch (m_aCurToken.eType)
     {
         case TESCAPE :
@@ -1454,6 +1502,10 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
 
 SmNode *SmParser::DoEscape()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     NextToken();
 
     switch (m_aCurToken.eType)
@@ -1490,6 +1542,10 @@ SmNode *SmParser::DoEscape()
 
 SmOperNode *SmParser::DoOperator()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(TokenInGroup(TG::Oper));
 
     auto pSNode = o3tl::make_unique<SmOperNode>(m_aCurToken);
@@ -1510,6 +1566,10 @@ SmOperNode *SmParser::DoOperator()
 
 SmNode *SmParser::DoOper()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     SmTokenType  eType (m_aCurToken.eType);
     std::unique_ptr<SmNode> pNode;
 
@@ -1564,6 +1624,10 @@ SmNode *SmParser::DoOper()
 
 SmStructureNode *SmParser::DoUnOper()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(TokenInGroup(TG::UnOper));
 
     SmToken      aNodeToken = m_aCurToken;
@@ -1649,6 +1713,10 @@ SmStructureNode *SmParser::DoUnOper()
 
 SmAttributNode *SmParser::DoAttribut()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(TokenInGroup(TG::Attribute));
 
     auto pSNode = o3tl::make_unique<SmAttributNode>(m_aCurToken);
@@ -1682,9 +1750,12 @@ SmAttributNode *SmParser::DoAttribut()
     return pSNode.release();
 }
 
-
 SmStructureNode *SmParser::DoFontAttribut()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(TokenInGroup(TG::FontAttr));
 
     switch (m_aCurToken.eType)
@@ -1717,6 +1788,10 @@ SmStructureNode *SmParser::DoFontAttribut()
 
 SmStructureNode *SmParser::DoColor()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(m_aCurToken.eType == TCOLOR);
 
     // last color rules, get that one
@@ -1737,6 +1812,10 @@ SmStructureNode *SmParser::DoColor()
 
 SmStructureNode *SmParser::DoFont()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(m_aCurToken.eType == TFONT);
 
     // last font rules, get that one
@@ -1780,6 +1859,10 @@ static bool lcl_IsNumber(const OUString& rText)
 
 SmStructureNode *SmParser::DoFontSize()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(m_aCurToken.eType == TSIZE);
 
     FontSizeType   Type;
@@ -1842,6 +1925,10 @@ SmStructureNode *SmParser::DoFontSize()
 
 SmStructureNode *SmParser::DoBrace()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     assert(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TG::LBrace));
 
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(m_aCurToken));
@@ -1926,6 +2013,10 @@ SmStructureNode *SmParser::DoBrace()
 
 SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     auto pBody = o3tl::make_unique<SmBracebodyNode>(m_aCurToken);
     SmNodeArray aNodes;
     // get body if any
@@ -1971,6 +2062,10 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
 
 SmTextNode *SmParser::DoFunction()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     switch (m_aCurToken.eType)
     {
         case TFUNC:
@@ -2010,6 +2105,10 @@ SmTextNode *SmParser::DoFunction()
 
 SmTableNode *SmParser::DoBinom()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     auto pSNode = o3tl::make_unique<SmTableNode>(m_aCurToken);
 
     NextToken();
@@ -2022,6 +2121,10 @@ SmTableNode *SmParser::DoBinom()
 
 SmStructureNode *SmParser::DoStack()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
     NextToken();
     if (m_aCurToken.eType != TLGROUP)
@@ -2045,6 +2148,10 @@ SmStructureNode *SmParser::DoStack()
 
 SmStructureNode *SmParser::DoMatrix()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     std::unique_ptr<SmMatrixNode> pMNode(new SmMatrixNode(m_aCurToken));
     NextToken();
     if (m_aCurToken.eType != TLGROUP)
@@ -2101,6 +2208,10 @@ SmStructureNode *SmParser::DoMatrix()
 
 SmSpecialNode *SmParser::DoSpecial()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     bool bReplace = false;
     OUString &rName = m_aCurToken.aText;
     OUString aNewName;
@@ -2143,6 +2254,10 @@ SmSpecialNode *SmParser::DoSpecial()
 
 SmGlyphSpecialNode *SmParser::DoGlyphSpecial()
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     auto pNode = o3tl::make_unique<SmGlyphSpecialNode>(m_aCurToken);
     NextToken();
     return pNode.release();
@@ -2150,6 +2265,10 @@ SmGlyphSpecialNode *SmParser::DoGlyphSpecial()
 
 SmExpressionNode *SmParser::DoError(SmParseError eError)
 {
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
     auto pSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
     SmErrorNode     *pErr   = new SmErrorNode(m_aCurToken);
     pSNode->SetSubNodes(pErr, nullptr);
@@ -2172,6 +2291,7 @@ SmParser::SmParser()
     , m_nColOff( 0 )
     , m_bImportSymNames( false )
     , m_bExportSymNames( false )
+    , m_nParseDepth(0)
     , m_aNumCC( LanguageTag( LANGUAGE_ENGLISH_US ) )
     , m_pSysCC( SM_MOD()->GetSysLocale().GetCharClassPtr() )
 {

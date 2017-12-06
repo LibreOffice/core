@@ -297,11 +297,11 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
         if ( pFilter && pFilter->GetSuccess() )
             nError = ERRCODE_NONE;
     }
-    catch( xml::sax::SAXParseException& r )
+    catch (const xml::sax::SAXParseException& r)
     {
         // sax parser sends wrapped exceptions,
         // try to find the original one
-        xml::sax::SAXException aSaxEx = *static_cast<xml::sax::SAXException*>(&r);
+        xml::sax::SAXException aSaxEx = *static_cast<const xml::sax::SAXException*>(&r);
         bool bTryChild = true;
 
         while( bTryChild )
@@ -320,7 +320,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
         if ( bEncrypted )
             nError = ERRCODE_SFX_WRONGPASSWORD;
     }
-    catch( const xml::sax::SAXException& r )
+    catch (const xml::sax::SAXException& r)
     {
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
@@ -329,11 +329,14 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
         if ( bEncrypted )
             nError = ERRCODE_SFX_WRONGPASSWORD;
     }
-    catch( packages::zip::ZipIOException& )
+    catch (const packages::zip::ZipIOException&)
     {
         nError = ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( io::IOException& )
+    catch (const io::IOException&)
+    {
+    }
+    catch (const std::range_error&)
     {
     }
 
@@ -3131,7 +3134,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportMML(SvStream &rStream)
     //to update the properties, which throws cause the properties are uninitialized
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
 
-    auto nRet = SmXMLImportWrapper::ReadThroughComponent(xStream, xModel, xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false);
+    ErrCode nRet = ERRCODE_SFX_DOLOADFAILED;
+
+    nRet = SmXMLImportWrapper::ReadThroughComponent(xStream, xModel, xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false);
 
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
