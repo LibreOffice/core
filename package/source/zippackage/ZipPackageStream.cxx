@@ -665,8 +665,7 @@ bool ZipPackageStream::saveChild(
 
             // last property is digest, which is inserted later if we didn't have
             // a magic header
-            static bool bGpgEncrypt = true;
-            aPropSet.realloc(bGpgEncrypt ? PKG_SIZE_ENCR_MNFST : PKG_SIZE_GPG_ENCR_MNFST);
+            aPropSet.realloc(PKG_SIZE_GPG_ENCR_MNFST);
 
             aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
             aPropSet[PKG_MNFST_INIVECTOR].Value <<= m_xBaseEncryptionData->m_aInitVector;
@@ -674,15 +673,6 @@ bool ZipPackageStream::saveChild(
             aPropSet[PKG_MNFST_SALT].Value <<= m_xBaseEncryptionData->m_aSalt;
             aPropSet[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
             aPropSet[PKG_MNFST_ITERATION].Value <<= m_xBaseEncryptionData->m_nIterationCount;
-            if( bGpgEncrypt )
-            {
-                aPropSet[PKG_MNFST_KEYID].Name = sPgpKeyIDProperty;
-                aPropSet[PKG_MNFST_KEYID].Value <<= m_xBaseEncryptionData->m_aSalt;
-                aPropSet[PKG_MNFST_KEYPACKET].Name = sPgpKeyPacketProperty;
-                aPropSet[PKG_MNFST_KEYPACKET].Value <<= m_xBaseEncryptionData->m_aSalt;
-                aPropSet[PKG_MNFST_CIPHERVAL].Name = sCipherValueProperty;
-                aPropSet[PKG_MNFST_CIPHERVAL].Value <<= m_xBaseEncryptionData->m_aSalt;
-            }
 
             // Need to store the uncompressed size in the manifest
             OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!" );
