@@ -37,10 +37,10 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
         SfxItemPool& rItemPool,
-        const css::awt::Size* pRefSize = nullptr,
-        bool bDataSeries = false,
-        sal_Int32 nNumberFormat = 0,
-        sal_Int32 nPercentNumberFormat = 0 );
+        const css::awt::Size* pRefSize,
+        bool bDataSeries,
+        sal_Int32 nNumberFormat,
+        sal_Int32 nPercentNumberFormat );
 
     virtual ~TextLabelItemConverter() override;
 

@@ -46,7 +46,7 @@ public:
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        GraphicObjectType eObjectType = GraphicObjectType::FilledDataPoint );
+        GraphicObjectType eObjectType );
     virtual ~GraphicPropertyItemConverter() override;
 
 protected:

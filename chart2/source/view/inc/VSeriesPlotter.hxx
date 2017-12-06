@@ -124,7 +124,7 @@ public:
 
     virtual ~VSeriesPlotter() override;
 
-    /*
+    /**
     * A new series can be positioned relative to other series in a chart.
     * This positioning has two dimensions. First a series can be placed
     * next to each other on the category axis. This position is indicated by xSlot.
@@ -139,7 +139,7 @@ public:
     * ySlot == already occupied     : insert at given y and x position
     * ySlot > occupied              : stack on top at given x position
     */
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
+    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot );
 
     /** a value <= 0 for a directions means that this direction can be stretched arbitrary
     */

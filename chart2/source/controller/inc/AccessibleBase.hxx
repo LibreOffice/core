@@ -101,7 +101,7 @@ public:
 
     AccessibleBase( const AccessibleElementInfo & rAccInfo,
                     bool bMayHaveChildren,
-                    bool bAlwaysTransparent = false );
+                    bool bAlwaysTransparent );
     virtual ~AccessibleBase() override;
 
 protected:

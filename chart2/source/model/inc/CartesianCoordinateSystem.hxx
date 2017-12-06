@@ -29,7 +29,7 @@ class CartesianCoordinateSystem : public BaseCoordinateSystem
 public:
     explicit CartesianCoordinateSystem(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        sal_Int32 nDimensionCount = 2 );
+        sal_Int32 nDimensionCount );
     explicit CartesianCoordinateSystem( const CartesianCoordinateSystem & rSource );
     virtual ~CartesianCoordinateSystem() override;
 
