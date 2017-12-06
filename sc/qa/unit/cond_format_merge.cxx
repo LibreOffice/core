@@ -82,7 +82,7 @@ void ScCondFormatMergeTest::testCondFormatMerge()
         CPPUNIT_ASSERT(xCellRanges.is());
 
         uno::Sequence<table::CellRangeAddress> aRanges = xCellRanges->getRangeAddresses();
-        CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(1), aRanges.getLength());
+        CPPUNIT_ASSERT(aRanges.getLength() >= sal_Int32(1));
 
         table::CellRangeAddress aRange0 = aRanges[0];
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aRange0.Sheet);
