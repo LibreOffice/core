@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7f49bb5f",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-12-06T12:08:22Z",
+      "side": 1,
+      "message": "These two lines can be reduced to one line, one assignment. Just add the values on the second line to the end of the first line with a + instead of +\u003d.",
+      "range": {
+        "startLine": 1447,
+        "startChar": 12,
+        "endLine": 1448,
+        "endChar": 61
+      },
+      "revId": "8494c295facc5592278ae2b6e3d8e12c8340cc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
