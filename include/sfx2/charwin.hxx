@@ -30,6 +30,7 @@ public:
 
     void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) override;
+    void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 
     void            createContextMenu();
@@ -55,6 +56,7 @@ private:
     long            mnY;
     Point           maPosition;
     vcl::Font       maFont;
+    bool            maHasInsert;
 
     Link<SvxCharView*, void> maMouseClickHdl;
     Link<SvxCharView*, void> maClearClickHdl;

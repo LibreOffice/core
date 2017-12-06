@@ -519,10 +519,12 @@ void SvxCharacterMap::init()
 
     for(int i = 0; i < 16; i++)
     {
+        m_pRecentCharView[i]->SetHasInsert(m_bHasInsert);
         m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
         m_pRecentCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
         m_pRecentCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
         m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
+        m_pFavCharView[i]->SetHasInsert(m_bHasInsert);
         m_pFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
         m_pFavCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
         m_pFavCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));

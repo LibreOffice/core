@@ -34,6 +34,7 @@ SvxCharView::SvxCharView(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , mnY(0)
     , maPosition(0,0)
+    , maHasInsert(true)
 {
 }
 
@@ -45,7 +46,7 @@ void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() )
     {
-        if ( !(rMEvt.GetClicks() % 2) )
+        if ( !(rMEvt.GetClicks() % 2) && maHasInsert )
         {
             InsertCharToDoc();
         }
@@ -259,4 +260,9 @@ void SvxCharView::SetText( const OUString& rText )
 {
     Control::SetText( rText );
     Invalidate();
+}
+
+void SvxCharView::SetHasInsert( bool bInsert )
+{
+    maHasInsert = bInsert;
 }
