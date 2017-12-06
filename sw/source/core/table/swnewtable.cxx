@@ -1269,9 +1269,7 @@ static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
             if( pCurr->first == aLnOfs.first )
             {   // These boxes can be removed because the last insertion
                 // of rows will expand their row span above the needed value
-                std::list< SwLineOffset >::iterator pDel = pCurr;
-                ++pCurr;
-                aBoxes.erase( pDel );
+                pCurr = aBoxes.erase(pCurr);
             }
             else
             {
@@ -1286,9 +1284,7 @@ static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
                     if( pCurr->second >= nCnt )
                     {   // if the row span is bigger than the split factor
                         // this box is done
-                        std::list< SwLineOffset >::iterator pDel = pCurr;
-                        ++pCurr;
-                        aBoxes.erase( pDel );
+                        pCurr = aBoxes.erase(pCurr);
                     }
                     else
                         ++pCurr;
@@ -2146,9 +2142,7 @@ void SwTable::CheckConsistency() const
                             "Wrong row span value" );
                     if( nRowSp == -1 )
                     {
-                        std::list< RowSpanCheck >::iterator aEraseIter = aIter;
-                        ++aIter;
-                        aRowSpanCells.erase( aEraseIter );
+                        aIter = aRowSpanCells.erase(aIter);
                     }
                     else
                         ++aIter;
