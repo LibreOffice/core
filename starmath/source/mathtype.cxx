@@ -1350,9 +1350,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 }
                                 else if (nPart == 1)
                                 {
-                                    sPush += rRet;
-                                    rRet = sPush;
-                                    rRet += sMainTerm;
+                                    rRet = sPush + rRet + sMainTerm;
+                                    sPush.clear();
+                                    sMainTerm.clear();
                                 }
                             }
                             else
@@ -1463,10 +1463,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 }
                                 else if (nPart == 1)
                                 {
-                                    sPush += rRet;
-                                    rRet = sPush;
-                                    rRet += " over ";
-                                    rRet += sMainTerm;
+                                    rRet = sPush + rRet + " over " + sMainTerm;
+                                    sPush.clear();
+                                    sMainTerm.clear();
                                 }
                             }
                             if (nPart == 0)
@@ -1512,18 +1511,18 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             else if ((nPart == 1) && (nVariation == 0))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             else if ((nPart == 1) && (nVariation == 1))
                                 newline--;
                             else if ((nPart == 2) && (nVariation == 1))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             nPart++;
@@ -1542,18 +1541,18 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             else if ((nPart == 1) &&
                                     ((nVariation == 1) || (nVariation==4)))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             else if ((nPart == 1) && (nVariation == 2))
                                 newline--;
                             else if ((nPart == 2) && (nVariation == 2))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             nPart++;
@@ -1573,9 +1572,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             else if ((nPart == 1) &&
                                     ((nVariation == 1) || (nVariation==3)))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             nPart++;
@@ -1591,18 +1590,18 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             else if ((nPart == 1) &&
                                     ((nVariation == 1) || (nVariation==2)))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             else if ((nPart == 1) && (nVariation == 0))
                                 newline--;
                             else if ((nPart == 2) && (nVariation == 0))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             nPart++;
@@ -1618,9 +1617,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             }
                             else if (nPart == 1)
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                                 newline--;
                             }
                             nPart++;
@@ -1647,9 +1646,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             else if ((nPart == 2) || ((nPart == 1) &&
                                     (nVariation == 0 || nVariation == 1)))
                             {
-                                sPush+=rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                rRet = sPush + rRet + sMainTerm;
+                                sPush.clear();
+                                sMainTerm.clear();
                             }
                             nPart++;
                             break;
