@@ -22,6 +22,7 @@ $(eval $(call gb_Library_use_libraries,localebe1,\
 	cppu \
 	cppuhelper \
 	sal \
+	i18nlangtag \
 ))
 
 $(eval $(call gb_Library_set_componentfile,localebe1,shell/source/backends/localebe/localebe1))
