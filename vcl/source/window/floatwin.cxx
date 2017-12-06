@@ -608,13 +608,11 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
     SystemWindow::StateChanged( nType );
 
-    if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+    if (pParent)
     {
-        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-        if (nType == StateChangedType::InitShow && IsVisible())
+        if (nType == StateChangedType::InitShow)
         {
-            SetLOKNotifier(pNotifier);
-
             std::vector<vcl::LOKPayloadItem> aItems;
             if (pParent == this)
             {
@@ -625,16 +623,18 @@ void FloatingWindow::StateChanged( StateChangedType nType )
             }
             else
             {
+                SetLOKNotifier(pParent->GetLOKNotifier());
                 aItems.emplace_back(std::make_pair("type", "child"));
                 aItems.emplace_back(std::make_pair("parentId", OString::number(pParent->GetLOKWindowId())));
             }
             aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
             aItems.emplace_back(std::make_pair("position", mpImplData->maPos.toString()));
-            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
-        else if (!IsVisible())
+        else if (!IsVisible() && nType == StateChangedType::Visible)
         {
-            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            assert(GetLOKNotifier());
+            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "close");
             ReleaseLOKNotifier();
         }
     }
