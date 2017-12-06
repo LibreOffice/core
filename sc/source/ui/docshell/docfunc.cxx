@@ -1226,7 +1226,8 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if (rDoc.IsStreamValid(rPos.Tab()))
         rDoc.SetStreamValid(rPos.Tab(), false);
 
-    ScDocShell::GetViewData()->GetScDrawView()->SyncForGrid(pNote->GetCaption());
+    if (ScDocShell::GetViewData())
+        ScDocShell::GetViewData()->GetScDrawView()->SyncForGrid(pNote->GetCaption());
     rDocShell.SetDocumentModified();
 
     return true;
