@@ -3371,8 +3371,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 case TYP_AUTHORITY :
                                     pVFrame->GetBindings().Execute(FN_EDIT_AUTH_ENTRY_DLG);
                                 break;
-                                default:
+                                case TYP_INPUTFLD:
+                                case TYP_DROPDOWN:
                                     pVFrame->GetBindings().Execute(FN_UPDATE_INPUTFIELDS);
+                                    break;
+                                default:
+                                    pVFrame->GetBindings().Execute(FN_EDIT_FIELD);
                                 }
                             }
                             return;
