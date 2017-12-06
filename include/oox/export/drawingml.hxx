@@ -222,6 +222,8 @@ public:
     void WriteFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    sal_Int32 CalculateDist(const double dX, const double dY){return static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360);};
+    sal_Int32 CalculateDir(const double dX, const double dY){return (static_cast< sal_Int32 >(atan2(dY,dX) * 180 * 60000 / M_PI) + 21600000) % 21600000;};
     void WriteShapeEffect( const OUString& sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
     void WriteShape3DEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
