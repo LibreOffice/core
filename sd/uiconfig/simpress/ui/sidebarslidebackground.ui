@@ -194,7 +194,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes" context="sidebarslidebackground|label4">Orientation: </property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|label4">Orientation:</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -209,7 +209,7 @@
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkButton" id="masterslidebutton">
-                <property name="label" translatable="yes" context="sidebarslidebackground|masterslidebutton">Master Slide</property>
+                <property name="label" translatable="yes" context="sidebarslidebackground|masterslidebutton">Master View</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -264,7 +264,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes" context="sidebarslidebackground|labelmargin">Margin: </property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|labelmargin">Margin:</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
