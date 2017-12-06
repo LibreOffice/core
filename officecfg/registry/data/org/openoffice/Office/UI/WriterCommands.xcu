@@ -2685,7 +2685,7 @@
       </node>
       <node oor:name=".uno:WordCountDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Word Count</value>
+          <value xml:lang="en-US">~Word Count...</value>
         </prop>
       </node>
       <node oor:name=".uno:StylesMenu" oor:op="replace">
