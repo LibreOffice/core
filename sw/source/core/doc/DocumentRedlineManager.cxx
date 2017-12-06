@@ -1224,8 +1224,6 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         case POS_INSIDE:
                             if( bCallDelete )
                             {
-                              meRedlineMode = (RedlineMode_t)(meRedlineMode | nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES);
-
                                 // DeleteAndJoin does not yield the
                                 // desired result if there is no paragraph to
                                 // join with, i.e. at the end of the document.
