@@ -432,6 +432,18 @@ const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameTableMap = nullptr;
 const sal_Char* aLevelStylePropNameTableMap[] =
     { nullptr, "ParaStyleLevel1", nullptr };
 
+const bool aIllustrationAllowedTokenTypesTable[] =
+{
+    true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
+    true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
+    true,       // XML_TOK_INDEX_TYPE_TEXT,
+    true,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
+    true,       // XML_TOK_INDEX_TYPE_CHAPTER,
+    true,       // XML_TOK_INDEX_TYPE_LINK_START,
+    true,       // XML_TOK_INDEX_TYPE_LINK_END,
+    false       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
+};
+
 const bool aAllowedTokenTypesTable[] =
 {
     true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =

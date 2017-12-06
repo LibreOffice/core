@@ -63,7 +63,7 @@ SvXMLImportContext* XMLIndexIllustrationSourceContext::CreateChildContext(
                                            aLevelNameTableMap,
                                            XML_TOKEN_INVALID, // no outline-level attr
                                            aLevelStylePropNameTableMap,
-                                           aAllowedTokenTypesTable);
+                                           aIllustrationAllowedTokenTypesTable);
     }
     else
     {
