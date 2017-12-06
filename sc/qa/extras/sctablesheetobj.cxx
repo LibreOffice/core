@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xdatapilottablessupplier.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xprintareas.hxx>
 #include <test/sheet/xscenarioenhanced.hxx>
@@ -38,9 +39,10 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 31
+#define NUMBER_OF_TESTS 32
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
+                                               public apitest::XDataPilotTablesSupplier,
                                                public apitest::XMultipleOperation,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
@@ -76,6 +78,9 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XDataPilotTablesSupplier
+    CPPUNIT_TEST(testGetDataPilotTables);
 
     // XSearchable
     CPPUNIT_TEST(testFindAll);
