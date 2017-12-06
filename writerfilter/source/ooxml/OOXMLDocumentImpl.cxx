@@ -52,7 +52,9 @@ namespace writerfilter {
 namespace ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream,
+    const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
+    bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
@@ -417,8 +419,30 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
      }
 }
 
+namespace {
+// Ensures that the indicator is reset after exiting OOXMLDocumentImpl::resolve
+class StatusIndicatorGuard{
+public:
+    explicit StatusIndicatorGuard(css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator)
+        :mxStatusIndicator(xStatusIndicator)
+    {
+    }
+
+    ~StatusIndicatorGuard()
+    {
+        if (mxStatusIndicator.is())
+                mxStatusIndicator->end();
+    }
+
+private:
+    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+};
+}
+
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
+    StatusIndicatorGuard xStatusIndicator(mxStatusIndicator);
+
     if (utl::MediaDescriptor(maMediaDescriptor).getUnpackedValueOrDefault("ReadGlossaries", false))
     {
         resolveFastSubStream(rStream, OOXMLStream::GLOSSARY);
@@ -515,9 +539,6 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
                 "OOXMLDocumentImpl::resolve(): non-UNO exception");
         }
     }
-
-    if (mxStatusIndicator.is())
-        mxStatusIndicator->end();
 }
 
 void OOXMLDocumentImpl::incrementProgress()
