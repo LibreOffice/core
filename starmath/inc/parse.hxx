@@ -41,6 +41,24 @@ class SmParser
                     m_nColOff; // 0-based
     bool            m_bImportSymNames,
                     m_bExportSymNames;
+    sal_Int32       m_nParseDepth;
+
+    class DepthProtect
+    {
+    private:
+        sal_Int32& m_rParseDepth;
+    public:
+        DepthProtect(sal_Int32& rParseDepth)
+            : m_rParseDepth(rParseDepth)
+        {
+            ++m_rParseDepth;
+        }
+        bool TooDeep() const { return m_rParseDepth > 2048; }
+        ~DepthProtect()
+        {
+            --m_rParseDepth;
+        }
+    };
 
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
     std::set< OUString >   m_aUsedSymbols;
