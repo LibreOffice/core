@@ -98,7 +98,7 @@ namespace basegfx
             TrDeEdgeEntry(
                 const B2DPoint* pStart,
                 const B2DPoint* pEnd,
-                sal_uInt32 nSortValue = 0)
+                sal_uInt32 nSortValue)
             :   TrDeSimpleEdge(pStart, pEnd),
                 mnSortValue(nSortValue)
             {

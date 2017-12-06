@@ -175,7 +175,7 @@ protected:
 public:
     SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
         SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr ); // parsing Ctor
-    SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
+    SbiExpression( SbiParser*, double, SbxDataType );
     SbiExpression( SbiParser*, const SbiSymDef&, SbiExprListPtr = nullptr );
    ~SbiExpression();
     OUString& GetName()             { return aArgName;            }
