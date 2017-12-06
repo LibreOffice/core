@@ -1757,7 +1757,13 @@ static void doc_iniUnoCommands ()
         OUString(".uno:NextTrackedChange"),
         OUString(".uno:PreviousTrackedChange"),
         OUString(".uno:AcceptAllTrackedChanges"),
-        OUString(".uno:RejectAllTrackedChanges")
+        OUString(".uno:RejectAllTrackedChanges"),
+        OUString(".uno:TableDialog"),
+        OUString(".uno:FormatCellDialog"),
+        OUString(".uno:FontDialog"),
+        OUString(".uno:ParagraphDialog"),
+        OUString(".uno:OutlineBullet"),
+        OUString(".uno:InsertIndexesEntry")
     };
 
     util::URL aCommandURL;
