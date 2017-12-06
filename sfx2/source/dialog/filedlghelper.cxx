@@ -2582,7 +2582,7 @@ void FileDialogHelper::DirectoryChanged()
     mpImpl->handleDirectoryChanged();
 }
 
-OUString SAL_CALL FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent )
+OUString FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent )
 {
     return sfx2::FileDialogHelper_Impl::handleHelpRequested( aEvent );
 }

@@ -333,7 +333,7 @@ void CMimeContentType::comment()
     }
 }
 
-bool SAL_CALL CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
+bool CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
 {
     return ( aRange.indexOf( aChr ) > -1 );
 }

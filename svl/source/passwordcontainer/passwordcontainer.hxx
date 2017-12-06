@@ -315,7 +315,7 @@ public:
     static css::uno::Sequence< OUString > SAL_CALL
                     impl_getStaticSupportedServiceNames(  );
     /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
                     impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& ServiceManager );
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > SAL_CALL

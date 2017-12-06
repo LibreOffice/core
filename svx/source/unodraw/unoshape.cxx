@@ -1418,7 +1418,7 @@ bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 }
 
 
-bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel )
+bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel )
 {
     // check if an item with the given name and which id is inside the models
     // pool or the stylesheet pool, if found it's put in the itemset
@@ -1530,7 +1530,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
 }
 
 
-bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
+bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
 {
     OUString aName = SvxUnogetInternalNameForItem((sal_Int16)nWID, rName);
 

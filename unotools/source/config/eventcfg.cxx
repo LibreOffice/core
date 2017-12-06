@@ -111,7 +111,7 @@ public:
     /// @throws css::uno::RuntimeException
     bool hasByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
-    static css::uno::Type SAL_CALL getElementType(  );
+    static css::uno::Type getElementType(  );
     /// @throws css::uno::RuntimeException
     bool hasElements() const;
     OUString const & GetEventName( GlobalEventId nID ) const;
@@ -300,7 +300,7 @@ bool GlobalEventConfig_Impl::hasByName( const OUString& aName )
     return pos != m_supportedEvents.end();
 }
 
-Type SAL_CALL GlobalEventConfig_Impl::getElementType(  )
+Type GlobalEventConfig_Impl::getElementType(  )
 {
     //DF definitely not sure about this??
     return cppu::UnoType<Sequence<beans::PropertyValue>>::get();

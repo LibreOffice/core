@@ -2007,7 +2007,7 @@ void TaskManager::insertDefaultProperties( const OUString& aUnqPath )
 /******************************************************************************/
 
 
-bool SAL_CALL TaskManager::getUnqFromUrl( const OUString& Url, OUString& Unq )
+bool TaskManager::getUnqFromUrl( const OUString& Url, OUString& Unq )
 {
     if ( Url == "file:///" || Url == "file://localhost/" || Url == "file://127.0.0.1/" )
     {
@@ -2028,7 +2028,7 @@ bool SAL_CALL TaskManager::getUnqFromUrl( const OUString& Url, OUString& Unq )
 }
 
 
-bool SAL_CALL TaskManager::getUrlFromUnq( const OUString& Unq,OUString& Url )
+bool TaskManager::getUrlFromUnq( const OUString& Unq,OUString& Url )
 {
     bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
 
@@ -2650,7 +2650,7 @@ TaskManager::getContentDeletedEventListeners( const OUString& aName )
 }
 
 
-void SAL_CALL
+void
 TaskManager::notifyInsert( std::vector< ContentEventNotifier* >* listeners,const OUString& aChildName )
 {
     std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
@@ -2664,7 +2664,7 @@ TaskManager::notifyInsert( std::vector< ContentEventNotifier* >* listeners,const
 }
 
 
-void SAL_CALL
+void
 TaskManager::notifyContentDeleted( std::vector< ContentEventNotifier* >* listeners )
 {
     std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
@@ -2678,7 +2678,7 @@ TaskManager::notifyContentDeleted( std::vector< ContentEventNotifier* >* listene
 }
 
 
-void SAL_CALL
+void
 TaskManager::notifyContentRemoved( std::vector< ContentEventNotifier* >* listeners,
                              const OUString& aChildName )
 {
@@ -2716,7 +2716,7 @@ TaskManager::getPropertySetListeners( const OUString& aName )
 }
 
 
-void SAL_CALL
+void
 TaskManager::notifyPropertyAdded( std::vector< PropertySetInfoChangeNotifier* >* listeners,
                             const OUString& aPropertyName )
 {
@@ -2731,7 +2731,7 @@ TaskManager::notifyPropertyAdded( std::vector< PropertySetInfoChangeNotifier* >*
 }
 
 
-void SAL_CALL
+void
 TaskManager::notifyPropertyRemoved( std::vector< PropertySetInfoChangeNotifier* >* listeners,
                               const OUString& aPropertyName )
 {
@@ -2844,7 +2844,7 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 }
 
 
-void SAL_CALL
+void
 TaskManager::notifyContentExchanged( std::vector< std::vector< ContentEventNotifier* >* >* listeners_vec )
 {
     for( std::vector< ContentEventNotifier* >* listeners : *listeners_vec)
@@ -2885,7 +2885,7 @@ TaskManager::getPropertyChangeNotifier( const OUString& aName )
 }
 
 
-void SAL_CALL TaskManager::notifyPropertyChanges( std::vector< PropertyChangeNotifier* >* listeners,
+void TaskManager::notifyPropertyChanges( std::vector< PropertyChangeNotifier* >* listeners,
                                             const uno::Sequence< beans::PropertyChangeEvent >& seqChanged )
 {
     std::vector< PropertyChangeNotifier* >::iterator it = listeners->begin();
@@ -3061,7 +3061,7 @@ uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
 /*                                                                             */
 /*******************************************************************************/
 
-void SAL_CALL
+void
 TaskManager::getScheme( OUString& Scheme )
 {
   Scheme = "file";

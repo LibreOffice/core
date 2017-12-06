@@ -3705,7 +3705,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-css::awt::Size SAL_CALL VCLXScrollBar::implGetMinimumSize( vcl::Window const * p )
+css::awt::Size VCLXScrollBar::implGetMinimumSize( vcl::Window const * p )
 {
     long n = p->GetSettings().GetStyleSettings().GetScrollBarSize();
     return css::awt::Size( n, n );

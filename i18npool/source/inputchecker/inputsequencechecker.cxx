@@ -88,7 +88,7 @@ static ScriptTypeList typeList[] = {
     { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   (sal_Int16)UnicodeScript_kScriptCount }    // 88
 };
 
-sal_Char* SAL_CALL
+sal_Char*
 InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar)
 {
     css::i18n::UnicodeScript type = (css::i18n::UnicodeScript)unicode::getUnicodeScriptType( cChar, typeList, (sal_Int16)UnicodeScript_kScriptCount );

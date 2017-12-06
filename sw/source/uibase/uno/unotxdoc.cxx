@@ -3638,12 +3638,12 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
-void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
+void * SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);
 }
 
-void SAL_CALL SwXTextDocument::operator delete( void * p) throw()
+void SwXTextDocument::operator delete( void * p) throw()
 {
     SwXTextDocumentBaseClass::operator delete(p);
 }

@@ -136,7 +136,7 @@ FileProvider::getSupportedServiceNames()
     return fileaccess::TaskManager::getSupportedServiceNames_static();
 }
 
-Reference< XSingleServiceFactory > SAL_CALL
+Reference< XSingleServiceFactory >
 FileProvider::createServiceFactory(
                    const Reference< XMultiServiceFactory >& rxServiceMgr )
 {

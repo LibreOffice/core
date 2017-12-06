@@ -73,7 +73,7 @@ class TVFactory: public cppu::WeakImplHelper <
 
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
 
-        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
+        static css::uno::Reference< css::lang::XSingleServiceFactory >
         createServiceFactory(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
 

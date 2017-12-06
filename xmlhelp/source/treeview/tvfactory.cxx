@@ -138,7 +138,7 @@ TVFactory::getSupportedServiceNames_static()
     return seq;
 }
 
-Reference< XSingleServiceFactory > SAL_CALL
+Reference< XSingleServiceFactory >
 TVFactory::createServiceFactory(
     const Reference< XMultiServiceFactory >& rxServiceMgr )
 {

@@ -549,21 +549,21 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
     }
 }
 
-OUString SAL_CALL Thesaurus::makeLowerCase(const OUString& aTerm, CharClass const * pCC)
+OUString Thesaurus::makeLowerCase(const OUString& aTerm, CharClass const * pCC)
 {
     if (pCC)
         return pCC->lowercase(aTerm);
     return aTerm;
 }
 
-OUString SAL_CALL Thesaurus::makeUpperCase(const OUString& aTerm, CharClass const * pCC)
+OUString Thesaurus::makeUpperCase(const OUString& aTerm, CharClass const * pCC)
 {
     if (pCC)
         return pCC->uppercase(aTerm);
     return aTerm;
 }
 
-OUString SAL_CALL Thesaurus::makeInitCap(const OUString& aTerm, CharClass const * pCC)
+OUString Thesaurus::makeInitCap(const OUString& aTerm, CharClass const * pCC)
 {
     sal_Int32 tlen = aTerm.getLength();
     if (pCC && tlen)

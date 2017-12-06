@@ -1339,7 +1339,7 @@ Reference< XInterface > SAL_CALL PasswordContainer::impl_createInstance( const R
     return Reference< XInterface >( *new PasswordContainer( xServiceManager ) );
 }
 
-Reference< XSingleServiceFactory > SAL_CALL PasswordContainer::impl_createFactory( const Reference< XMultiServiceFactory >& ServiceManager )
+Reference< XSingleServiceFactory > PasswordContainer::impl_createFactory( const Reference< XMultiServiceFactory >& ServiceManager )
 {
     Reference< XSingleServiceFactory > xReturn( ::cppu::createOneInstanceFactory( ServiceManager,
                                                         PasswordContainer::impl_getStaticImplementationName(),

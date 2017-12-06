@@ -97,8 +97,8 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) override;
 
     // Resolve ambiguity: both OWeakObject and OObject have these memory operators
-    void * SAL_CALL operator new( size_t size ) throw() { return osl::Thread::operator new(size); }
-    void SAL_CALL operator delete( void * p ) throw() { osl::Thread::operator delete(p); }
+    void * operator new( size_t size ) throw() { return osl::Thread::operator new(size); }
+    void operator delete( void * p ) throw() { osl::Thread::operator delete(p); }
 
 private:
     void    impl_clearEventQueue();

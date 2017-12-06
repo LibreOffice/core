@@ -145,7 +145,7 @@ cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) {
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 increment) {
     using namespace ::com::sun::star::i18n::KCharacterType;
 
