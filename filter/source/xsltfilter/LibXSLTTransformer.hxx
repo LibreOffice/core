@@ -77,7 +77,7 @@ namespace XSLT
         xsltTransformContextPtr m_tcontext;
 
         virtual void execute() override;
-        static void SAL_CALL registerExtensionModule();
+        static void registerExtensionModule();
     };
 
     /*

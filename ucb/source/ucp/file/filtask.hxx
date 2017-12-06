@@ -499,9 +499,9 @@ namespace fileaccess
         /*                                                                            */
         /******************************************************************************/
 
-        static bool SAL_CALL getUnqFromUrl( const OUString& Url, OUString& Unq );
+        static bool getUnqFromUrl( const OUString& Url, OUString& Unq );
 
-        static bool SAL_CALL getUrlFromUnq( const OUString& Unq, OUString& Url );
+        static bool getUrlFromUnq( const OUString& Unq, OUString& Url );
 
 
         bool m_bWithConfig;
@@ -537,28 +537,28 @@ namespace fileaccess
         /*                              notify eventListeners                           */
         /********************************************************************************/
 
-        static void SAL_CALL notifyPropertyChanges(
+        static void notifyPropertyChanges(
             std::vector< PropertyChangeNotifier* >* listeners,
             const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged );
 
-        static void SAL_CALL notifyContentExchanged(
+        static void notifyContentExchanged(
             std::vector< std::vector< ContentEventNotifier* >* >* listeners_vec );
 
-        static void SAL_CALL notifyInsert(
+        static void notifyInsert(
             std::vector< ContentEventNotifier* >* listeners,const OUString& aChildName );
 
-        static void SAL_CALL notifyContentDeleted(
+        static void notifyContentDeleted(
             std::vector< ContentEventNotifier* >* listeners );
 
-        static void SAL_CALL notifyContentRemoved(
+        static void notifyContentRemoved(
             std::vector< ContentEventNotifier* >* listeners,
             const OUString& aChildName );
 
-        static void SAL_CALL notifyPropertyAdded(
+        static void notifyPropertyAdded(
             std::vector< PropertySetInfoChangeNotifier* >* listeners,
             const OUString& aPropertyName );
 
-        static void SAL_CALL notifyPropertyRemoved(
+        static void notifyPropertyRemoved(
             std::vector< PropertySetInfoChangeNotifier* >* listeners,
             const OUString& aPropertyName );
 
@@ -680,7 +680,7 @@ namespace fileaccess
         // Miscellaneous:
         // Methods for "writeComponentInfo" and "createComponentFactory"
 
-        static void SAL_CALL getScheme( OUString& Scheme );
+        static void getScheme( OUString& Scheme );
 
         static OUString SAL_CALL getImplementationName_static();
 

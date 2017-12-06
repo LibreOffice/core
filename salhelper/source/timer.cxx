@@ -43,7 +43,7 @@ public:
     bool lookupTimer(const salhelper::Timer* pTimer);
 
     /// retrieves the "Singleton" TimerManager Instance
-    static TimerManager* SAL_CALL getTimerManager();
+    static TimerManager* getTimerManager();
 
 protected:
     /// worker-function of thread

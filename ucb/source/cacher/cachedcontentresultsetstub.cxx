@@ -432,21 +432,21 @@ void CachedContentResultSetStub
 // XFetchProviderForContentAccess methods.
 
 
-void SAL_CALL CachedContentResultSetStub
+void CachedContentResultSetStub
     ::impl_getCurrentContentIdentifierString( Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
 {
      rAny <<= xContentAccess->queryContentIdentifierString();
 }
 
-void SAL_CALL CachedContentResultSetStub
+void CachedContentResultSetStub
     ::impl_getCurrentContentIdentifier( Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
 {
      rAny <<= xContentAccess->queryContentIdentifier();
 }
 
-void SAL_CALL CachedContentResultSetStub
+void CachedContentResultSetStub
     ::impl_getCurrentContent( Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
 {

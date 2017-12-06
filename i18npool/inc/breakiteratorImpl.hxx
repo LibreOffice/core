@@ -105,7 +105,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static sal_Int16 SAL_CALL getScriptClass(sal_uInt32 currentChar);
+    static sal_Int16 getScriptClass(sal_uInt32 currentChar);
 protected:
     css::i18n::Boundary result; // for word break iterator
 

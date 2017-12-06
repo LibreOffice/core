@@ -89,7 +89,7 @@ private:
 
 struct Base1: public css::uno::XInterface {
     virtual ~Base1() = delete;
-    static ::css::uno::Type const & SAL_CALL static_type(void * = nullptr) // loplugin:refcounting
+    static ::css::uno::Type const & static_type(void * = nullptr) // loplugin:refcounting
     { return ::cppu::UnoType<Base1>::get(); }
 };
 struct Base2: public Base1 {

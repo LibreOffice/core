@@ -42,6 +42,9 @@ public:
         // ignore this one. I can't get accurate source code from getCharacterData() for it.
         if (fn == SRCDIR "/sal/rtl/string.cxx")
             return;
+        // clang returns completely bogus source range for something in this file
+        if (fn == SRCDIR "/sd/source/ui/unoidl/unomodel.cxx")
+            return;
         m_phase = PluginPhase::FindAddressOf;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         m_phase = PluginPhase::Warning;
@@ -206,7 +209,7 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     // @TODO For now, I am ignore free functions, since those are most likely to have their address taken.
     // I'll do them later. They are harder to verify since MSVC does not verify when assigning to function pointers
     // that the calling convention of the function matches the calling convention of the function pointer!
-    if (!methodDecl || methodDecl->isStatic())
+    if (!methodDecl)
         return true;
 
     // can only check when we have a definition since this is the most likely time
@@ -268,6 +271,7 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
             return true;
     }
 
+    // if any of the overridden methods are SAL_CALL, we should be too
     if (methodDecl)
     {
         for (auto iter = methodDecl->begin_overridden_methods();
@@ -277,6 +281,23 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
             if (isSalCallFunction(overriddenMethod))
                 return true;
         }
+    }
+
+    // these often have their address taken
+    if (methodDecl && methodDecl->getIdentifier())
+    {
+        auto name = methodDecl->getName();
+        if (name == "getImplementationName_static" || name == "getSupportedServiceNames_static"
+            || name == "getSupportedServiceNames_Static" || name == "Create" || name == "create"
+            || name == "CreateInstance" || name == "getImplementationName_Static"
+            || name == "getSingletonName_static" || name == "getLdapUserProfileBeName"
+            || name == "getLdapUserProfileBeServiceNames" || name == "impl_staticCreateSelfInstance"
+            || name == "impl_createInstance" || name == "impl_staticGetImplementationName"
+            || name == "impl_staticGetSupportedServiceNames"
+            || name == "impl_getStaticSupportedServiceNames"
+            || name == "impl_getStaticImplementationName" || name == "getBackendName"
+            || name == "getBackendServiceNames")
+            return true;
     }
 
     bool bOK = rewrite(rewriteLoc);

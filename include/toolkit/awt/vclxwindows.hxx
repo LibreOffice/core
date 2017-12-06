@@ -670,7 +670,7 @@ public:
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize() override;
     /// @throws css::uno::RuntimeException
-    static css::awt::Size SAL_CALL implGetMinimumSize( vcl::Window const * p );
+    static css::awt::Size implGetMinimumSize( vcl::Window const * p );
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

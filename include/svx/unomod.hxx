@@ -41,7 +41,7 @@ public:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL createTextField( const OUString& aServiceSpecifier );
+    static css::uno::Reference< css::uno::XInterface > createTextField( const OUString& aServiceSpecifier );
     // internal
     static css::uno::Sequence< OUString >
         concatServiceNames( css::uno::Sequence< OUString >& rServices1,
