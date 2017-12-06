@@ -533,6 +533,9 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_PASSWORD:
             resId = STR_FPICKER_PASSWORD;
             break;
+        case CHECKBOX_GPGENCRYPTION:
+            resId = STR_FPICKER_GPGENCRYPT;
+            break;
         case CHECKBOX_FILTEROPTIONS:
             resId = STR_FPICKER_FILTER_OPTIONS;
             break;
@@ -571,6 +574,7 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
     {
         case CHECKBOX_AUTOEXTENSION:
         case CHECKBOX_PASSWORD:
+        case CHECKBOX_GPGENCRYPTION:
         case CHECKBOX_FILTEROPTIONS:
         case CHECKBOX_READONLY:
         case CHECKBOX_LINK:
@@ -657,6 +661,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
         {
             operationMode = KFileDialog::Saving;
             addCustomControl( CHECKBOX_PASSWORD );
+            addCustomControl( CHECKBOX_GPGENCRYPTION );
             break;
         }
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
@@ -664,6 +669,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
             operationMode = KFileDialog::Saving;
             addCustomControl( CHECKBOX_AUTOEXTENSION );
             addCustomControl( CHECKBOX_PASSWORD );
+            addCustomControl( CHECKBOX_GPGENCRYPTION );
             addCustomControl( CHECKBOX_FILTEROPTIONS );
             break;
         }
