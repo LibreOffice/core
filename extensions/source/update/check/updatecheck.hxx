@@ -41,7 +41,7 @@ class UpdateCheck;
 class UpdateCheckInitData {
 
 public:
-    inline rtl::Reference< UpdateCheck > SAL_CALL operator() () const;
+    inline rtl::Reference< UpdateCheck > operator() () const;
 };
 
 class WorkerThread : public osl::Thread
@@ -169,7 +169,7 @@ private:
     friend class UpdateCheckInitData;
 };
 
-inline rtl::Reference< UpdateCheck > SAL_CALL
+inline rtl::Reference< UpdateCheck >
 UpdateCheckInitData::operator() () const
 {
     return rtl::Reference< UpdateCheck > (new UpdateCheck());
