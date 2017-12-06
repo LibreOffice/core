@@ -1189,9 +1189,26 @@ void DrawingML::WritePattFill( const Reference< XPropertySet >& rXPropSet )
         WriteColor(aHatch.Color);
         mpFS->endElementNS( XML_a , XML_fgClr );
 
-        // In Writer hatching has no background so use white as a default value.
+        sal_uInt32 aColor = COL_WHITE;
+        sal_Int32 aAlpha  = 0;
+        bool isBackgroundFilled = false;
+
+        if ( GetProperty( rXPropSet, "FillBackground" ) )
+        {
+            mAny >>= isBackgroundFilled;
+            if( isBackgroundFilled )
+            {
+                aAlpha = MAX_PERCENT;
+
+                if( GetProperty( rXPropSet, "FillColor" ) )
+                {
+                    mAny >>= aColor;
+                }
+            }
+        }
+
         mpFS->startElementNS( XML_a , XML_bgClr, FSEND );
-        WriteColor(COL_WHITE);
+        WriteColor(aColor, aAlpha);
         mpFS->endElementNS( XML_a , XML_bgClr );
 
         mpFS->endElementNS( XML_a , XML_pattFill );
