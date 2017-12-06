@@ -311,7 +311,7 @@ css::uno::Sequence<sal_Int8> Binding::getUnoTunnelID()
     return aImplementationId.getImplementationId();
 }
 
-Binding* SAL_CALL Binding::getBinding( const Reference<XPropertySet>& xPropertySet )
+Binding* Binding::getBinding( const Reference<XPropertySet>& xPropertySet )
 {
     Reference<XUnoTunnel> xTunnel( xPropertySet, UNO_QUERY );
     return xTunnel.is()

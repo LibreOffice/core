@@ -381,7 +381,7 @@ private:
     sal_Int32
     impl_getPos( const OUString& rName ) const;
 
-    static bool SAL_CALL
+    static bool
     impl_isMyPropertyName( const OUString& rName );
 
 public:
@@ -585,7 +585,7 @@ bool CCRS_PropertySetInfo
 }
 
 //static
-bool SAL_CALL CCRS_PropertySetInfo
+bool CCRS_PropertySetInfo
         ::impl_isMyPropertyName( const OUString& rPropertyName )
 {
     return ( rPropertyName == g_sPropertyNameForCount

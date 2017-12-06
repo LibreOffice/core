@@ -88,7 +88,7 @@ transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos
     return folding( inStr, startPos, nCount, offset);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2,
         XTransliteration& t1, XTransliteration& t2 )
 {

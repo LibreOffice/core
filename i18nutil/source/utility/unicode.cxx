@@ -50,22 +50,22 @@ T getScriptType( const sal_Unicode ch, const L* typeList, T unknownType ) {
             typeList[i].value : unknownType;
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 unicode::getUnicodeScriptType( const sal_Unicode ch, const ScriptTypeList* typeList, sal_Int16 unknownType ) {
     return getScriptType(ch, typeList, unknownType);
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 unicode::getUnicodeScriptStart( UnicodeScript type) {
     return UnicodeScriptType[(int)type][UnicodeScriptTypeFrom];
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 unicode::getUnicodeScriptEnd( UnicodeScript type) {
     return UnicodeScriptType[(int)type][UnicodeScriptTypeTo];
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 unicode::getUnicodeType( const sal_Unicode ch ) {
     static sal_Unicode c = 0x00;
     static sal_Int16 r = 0x00;
@@ -78,7 +78,7 @@ unicode::getUnicodeType( const sal_Unicode ch ) {
         UnicodeTypeValue[((address - UnicodeTypeNumberBlock) << 8) + (ch & 0xff)]);
 }
 
-sal_uInt8 SAL_CALL
+sal_uInt8
 unicode::getUnicodeDirection( const sal_Unicode ch ) {
     static sal_Unicode c = 0x00;
     static sal_uInt8 r = 0x00;
@@ -125,11 +125,11 @@ IsType(unicode::isSpace, SPACEMASK)
 #define CONTROLSPACE    bit(0x09)|bit(0x0a)|bit(0x0b)|bit(0x0c)|bit(0x0d)|\
             bit(0x1c)|bit(0x1d)|bit(0x1e)|bit(0x1f)
 
-bool SAL_CALL unicode::isWhiteSpace( const sal_Unicode ch) {
+bool unicode::isWhiteSpace( const sal_Unicode ch) {
     return (ch != 0xa0 && isSpace(ch)) || (ch <= 0x1F && (bit(ch) & (CONTROLSPACE)));
 }
 
-sal_Int16 SAL_CALL unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
+sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
 {
     //See unicode/uscript.h
     static const sal_Int16 scriptTypes[] =
@@ -186,7 +186,7 @@ sal_Int16 SAL_CALL unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
     return nRet;
 }
 
-OString SAL_CALL unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
+OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
 {
     OString sRet;
     switch (eScript)
@@ -733,7 +733,7 @@ OString SAL_CALL unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
 
 //Format a number as a percentage according to the rules of the given
 //language, e.g. 100 -> "100%" for en-US vs "100 %" for de-DE
-OUString SAL_CALL unicode::formatPercent(double dNumber,
+OUString unicode::formatPercent(double dNumber,
     const LanguageTag &rLangTag)
 {
     // get a currency formatter for this locale ID

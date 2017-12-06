@@ -210,14 +210,14 @@ public:
         @throw RuntimeException in case the thread is not attached or the runtime
                                 has not been initialized.
     */
-    static void SAL_CALL initialize(
+    static void initialize(
         const css::uno::Reference< css::uno::XComponentContext > & ctx );
 
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
 
         @throws css::uno::RuntimeException
      */
-    static bool SAL_CALL isInitialized();
+    static bool isInitialized();
 
     /** converts something contained in an UNO Any to a Python object
 

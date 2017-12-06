@@ -206,7 +206,7 @@ public:
     void   DirectoryChanged();
     virtual void   ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
     void   DialogSizeChanged();
-    static OUString SAL_CALL    HelpRequested( const css::ui::dialogs::FilePickerEvent& aEvent );
+    static OUString    HelpRequested( const css::ui::dialogs::FilePickerEvent& aEvent );
 
     // XDialogClosedListener methods
     void   DialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent );

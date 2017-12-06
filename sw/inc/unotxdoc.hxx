@@ -447,8 +447,8 @@ public:
 
     SwDocShell*                 GetDocShell() {return pDocShell;}
 
-    void * SAL_CALL operator new( size_t ) throw();
-    void SAL_CALL operator delete( void * ) throw();
+    void * operator new( size_t ) throw();
+    void operator delete( void * ) throw();
 
 };
 

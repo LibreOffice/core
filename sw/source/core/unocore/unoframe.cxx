@@ -3351,12 +3351,12 @@ uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames()
     return aRet;
 }
 
-void * SAL_CALL SwXTextFrame::operator new( size_t t) throw()
+void * SwXTextFrame::operator new( size_t t) throw()
 {
     return SwXTextFrameBaseClass::operator new( t);
 }
 
-void SAL_CALL SwXTextFrame::operator delete( void * p) throw()
+void SwXTextFrame::operator delete( void * p) throw()
 {
     SwXTextFrameBaseClass::operator delete(p);
 }
@@ -3432,12 +3432,12 @@ uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames()
     return aRet;
 }
 
-void * SAL_CALL SwXTextGraphicObject::operator new( size_t t) throw()
+void * SwXTextGraphicObject::operator new( size_t t) throw()
 {
     return SwXTextGraphicObjectBaseClass::operator new(t);
 }
 
-void SAL_CALL SwXTextGraphicObject::operator delete( void * p) throw()
+void SwXTextGraphicObject::operator delete( void * p) throw()
 {
     SwXTextGraphicObjectBaseClass::operator delete(p);
 }
@@ -3581,12 +3581,12 @@ uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames()
     return aRet;
 }
 
-void * SAL_CALL SwXTextEmbeddedObject::operator new( size_t t) throw()
+void * SwXTextEmbeddedObject::operator new( size_t t) throw()
 {
     return SwXTextEmbeddedObjectBaseClass::operator new(t);
 }
 
-void SAL_CALL SwXTextEmbeddedObject::operator delete( void * p) throw()
+void SwXTextEmbeddedObject::operator delete( void * p) throw()
 {
     SwXTextEmbeddedObjectBaseClass::operator delete(p);
 }

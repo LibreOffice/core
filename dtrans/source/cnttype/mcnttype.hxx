@@ -60,7 +60,7 @@ private:
     OUString quotedPValue( );
     OUString nonquotedPValue( );
     void comment();
-    static bool SAL_CALL isInRange( const OUString& aChr, const OUString& aRange );
+    static bool isInRange( const OUString& aChr, const OUString& aRange );
 
 private:
     ::osl::Mutex                             m_aMutex;

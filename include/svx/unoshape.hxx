@@ -216,8 +216,8 @@ public:
     sal_uInt32 getShapeKind() const;
 
     // styles need this
-    static bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel );
-    static bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet );
+    static bool SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel );
+    static bool SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet );
 
     /** same as SetFillAttribute but for property names instead of which ids,
         and the property found is returned instead of set at the object

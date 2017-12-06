@@ -53,7 +53,7 @@ public:
         transliterateChar2Char( sal_Unicode inChar) override;
 
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > SAL_CALL
+        static css::uno::Sequence< OUString >
         transliterateRange( const OUString& str1, const OUString& str2, XTransliteration& t1, XTransliteration& t2 );
 
         struct Mapping {

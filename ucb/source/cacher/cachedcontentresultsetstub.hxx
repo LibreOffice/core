@@ -61,19 +61,19 @@ private:
     impl_getColumnCount();
 
     /// @throws css::uno::RuntimeException
-    static void SAL_CALL
+    static void
     impl_getCurrentContentIdentifierString(
             css::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws css::uno::RuntimeException
-    static void SAL_CALL
+    static void
     impl_getCurrentContentIdentifier(
             css::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws css::uno::RuntimeException
-    static void SAL_CALL
+    static void
     impl_getCurrentContent(
             css::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
