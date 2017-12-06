@@ -1245,7 +1245,7 @@ void SvxFontNameBox_Impl::Select()
 }
 
 SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
-                               std::shared_ptr<PaletteManager>& rPaletteManager,
+                               std::shared_ptr<PaletteManager> const & rPaletteManager,
                                BorderColorStatus&         rBorderColorStatus,
                                sal_uInt16                 nSlotId,
                                const Reference< XFrame >& rFrame,

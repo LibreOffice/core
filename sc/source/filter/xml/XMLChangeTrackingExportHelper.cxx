@@ -388,7 +388,7 @@ void ScChangeTrackingExportHelper::WriteCell(const ScCellValue& rCell, const OUS
     }
 }
 
-void ScChangeTrackingExportHelper::WriteContentChange(ScChangeAction* pAction)
+void ScChangeTrackingExportHelper::WriteContentChange(const ScChangeAction* pAction)
 {
     SvXMLElementExport aElemChange(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_CHANGE, true, true);
     const ScChangeAction* pConstAction = pAction;
@@ -396,13 +396,13 @@ void ScChangeTrackingExportHelper::WriteContentChange(ScChangeAction* pAction)
     WriteChangeInfo(pAction);
     WriteDependings(pAction);
     {
-        ScChangeActionContent* pPrevAction = static_cast<ScChangeActionContent*>(pAction)->GetPrevContent();
+        const ScChangeActionContent* pPrevAction = static_cast<const ScChangeActionContent*>(pAction)->GetPrevContent();
         if (pPrevAction)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pPrevAction->GetActionNumber()));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_PREVIOUS, true, true);
         OUString sValue;
-        static_cast<ScChangeActionContent*>(pAction)->GetOldString(sValue, rExport.GetDocument());
-        WriteCell(static_cast<ScChangeActionContent*>(pAction)->GetOldCell(), sValue);
+        static_cast<const ScChangeActionContent*>(pAction)->GetOldString(sValue, rExport.GetDocument());
+        WriteCell(static_cast<const ScChangeActionContent*>(pAction)->GetOldCell(), sValue);
     }
 }
 
@@ -583,9 +583,9 @@ void ScChangeTrackingExportHelper::WriteDeletion(ScChangeAction* pAction)
     WriteCutOffs(pDelAction);
 }
 
-void ScChangeTrackingExportHelper::WriteMovement(ScChangeAction* pAction)
+void ScChangeTrackingExportHelper::WriteMovement(const ScChangeAction* pAction)
 {
-    const ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*> (pAction);
+    const ScChangeActionMove* pMoveAction = static_cast<const ScChangeActionMove*> (pAction);
     SvXMLElementExport aElemChange(rExport, XML_NAMESPACE_TABLE, XML_MOVEMENT, true, true);
     WriteBigRange(pMoveAction->GetFromRange(), XML_SOURCE_RANGE_ADDRESS);
     WriteBigRange(pMoveAction->GetBigRange(), XML_TARGET_RANGE_ADDRESS);

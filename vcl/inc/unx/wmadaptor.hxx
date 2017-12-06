@@ -293,7 +293,7 @@ public:
      *  _NET_ACTIVE_WINDOW message to the frame. The frame
      *  has to be mapped
      */
-    void activateWindow( X11SalFrame *pFrame, Time nTimestamp );
+    void activateWindow( X11SalFrame const *pFrame, Time nTimestamp );
 };
 
 } // namespace

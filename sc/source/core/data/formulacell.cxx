@@ -3445,7 +3445,7 @@ bool ScFormulaCell::UpdateReference(
     return false;
 }
 
-void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
+void ScFormulaCell::UpdateInsertTab( const sc::RefUpdateInsertTabContext& rCxt )
 {
     // Adjust tokens only when it's not grouped or grouped top cell.
     bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
@@ -3475,7 +3475,7 @@ void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     // no StartListeningTo because the new sheets have not been inserted yet.
 }
 
-void ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+void ScFormulaCell::UpdateDeleteTab( const sc::RefUpdateDeleteTabContext& rCxt )
 {
     // Adjust tokens only when it's not grouped or grouped top cell.
     bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
@@ -4376,7 +4376,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             SCROW mnLength;
 
         public:
-            Executor(std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
+            Executor(const std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
                      unsigned nThisThread,
                      unsigned nThreadsTotal,
                      ScDocument* pDocument2,

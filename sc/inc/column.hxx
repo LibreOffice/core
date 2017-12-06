@@ -323,7 +323,7 @@ public:
 
     bool SetString(
         SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
-        ScSetStringParam* pParam = nullptr );
+        const ScSetStringParam* pParam = nullptr );
 
     void SetEditText( SCROW nRow, EditTextObject* pEditText );
     void SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, EditTextObject* pEditText );

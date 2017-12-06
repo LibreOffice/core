@@ -81,7 +81,7 @@ void XMultipleOperation::testSetTableOperation()
                                  xSheet->getCellByPosition(3, 3)->getValue());
 }
 
-void XMultipleOperation::fillCells(uno::Reference<sheet::XSpreadsheet>& xSheet)
+void XMultipleOperation::fillCells(uno::Reference<sheet::XSpreadsheet> const& xSheet)
 {
     for (unsigned int i = 1; i < 5; i++)
     {

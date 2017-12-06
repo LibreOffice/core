@@ -80,7 +80,7 @@ private:
 
 public:
     SvxColorWindow(const OUString& rCommand,
-                   std::shared_ptr<PaletteManager>& rPaletteManager,
+                   std::shared_ptr<PaletteManager> const & rPaletteManager,
                    BorderColorStatus& rBorderColorStatus,
                    sal_uInt16 nSlotId,
                    const css::uno::Reference< css::frame::XFrame >& rFrame,

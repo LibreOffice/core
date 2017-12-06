@@ -520,7 +520,7 @@ private:
 
     ScDPResultMember*        FindMember(   SCROW  iData ) const;
     ScDPResultMember*        AddMember( const ScDPParentDimData& aData );
-    ScDPResultMember*        InsertMember( ScDPParentDimData* pMemberData );
+    ScDPResultMember*        InsertMember( const ScDPParentDimData* pMemberData );
     void                                  InitWithMembers( LateInitParams& rParams,
                                                             const ::std::vector< SCROW >& pItemData,
                                                             size_t  nPos,

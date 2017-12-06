@@ -282,7 +282,7 @@ inline bool isInteger(double fValue)
 
 void fillDateGroupDimension(
     ScDPCache& rCache, ScDPNumGroupInfo& rDateInfo, long nSourceDim, long nGroupDim,
-    sal_Int32 nDatePart, SvNumberFormatter* pFormatter)
+    sal_Int32 nDatePart, const SvNumberFormatter* pFormatter)
 {
     // Auto min/max is only used for "Years" part, but the loop is always
     // needed.

@@ -293,7 +293,7 @@ OUString ScDPUtil::getNumGroupName(
 
 sal_Int32 ScDPUtil::getDatePartValue(
     double fValue, const ScDPNumGroupInfo* pInfo, sal_Int32 nDatePart,
-    SvNumberFormatter* pFormatter)
+    const SvNumberFormatter* pFormatter)
 {
     // Start and end are inclusive
     // (End date without a time value is included, with a time value it's not)

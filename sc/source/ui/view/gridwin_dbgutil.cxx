@@ -27,7 +27,7 @@ std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
     return rStrm;
 }
 
-void dumpScDrawObjData(const ScGridWindow& rWindow, ScDrawObjData& rData, MapUnit eMapUnit)
+void dumpScDrawObjData(const ScGridWindow& rWindow, const ScDrawObjData& rData, MapUnit eMapUnit)
 {
     const Point& rStartOffset = rData.maStartOffset;
     Point aStartOffsetPixel = rWindow.LogicToPixel(rStartOffset, MapMode(eMapUnit));

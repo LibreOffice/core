@@ -102,7 +102,7 @@ private:
 class XMLFontFaceUriContext : public XMLImportContext
 {
 public:
-    XMLFontFaceUriContext(XMLImport &rImport, XMLFontFaceContext &rFontFace);
+    XMLFontFaceUriContext(XMLImport &rImport, XMLFontFaceContext const &rFontFace);
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
 
@@ -145,7 +145,7 @@ void XMLFontFaceFormatContext::startElement(const OUString &/*rName*/, const css
     }
 }
 
-XMLFontFaceUriContext::XMLFontFaceUriContext(XMLImport &rImport, XMLFontFaceContext &rFontFace)
+XMLFontFaceUriContext::XMLFontFaceUriContext(XMLImport &rImport, XMLFontFaceContext const &rFontFace)
     : XMLImportContext(rImport)
 {
     OString aNameU8 = OUStringToOString(rFontFace.maName, RTL_TEXTENCODING_UTF8);

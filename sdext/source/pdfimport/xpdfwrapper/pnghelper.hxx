@@ -59,8 +59,8 @@ namespace pdfi
                                Stream*           str,
                                int               width,
                                int               height,
-                               GfxRGB&           zeroColor,
-                               GfxRGB&           oneColor,
+                               GfxRGB const &    zeroColor,
+                               GfxRGB const &    oneColor,
                                bool              bIsMask
                                );
         static void createPng( OutputBuffer& o_rOutputBuf,

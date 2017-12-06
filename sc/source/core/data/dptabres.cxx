@@ -3981,7 +3981,7 @@ ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData 
     return pMember;
 }
 
-ScDPResultMember* ScDPResultDimension::InsertMember(ScDPParentDimData *pMemberData)
+ScDPResultMember* ScDPResultDimension::InsertMember(const ScDPParentDimData *pMemberData)
 {
     SCROW  nInsert = 0;
     if ( !lcl_SearchMember( maMemberArray, pMemberData->mnOrder , nInsert ) )

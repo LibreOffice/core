@@ -241,7 +241,7 @@ void ScColorScaleEntry::UpdateReference( const sc::RefUpdateContext& rCxt )
     SetRepaintCallback(mpFormat);
 }
 
-void ScColorScaleEntry::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
+void ScColorScaleEntry::UpdateInsertTab( const sc::RefUpdateInsertTabContext& rCxt )
 {
     if (!mpCell)
         return;
@@ -251,7 +251,7 @@ void ScColorScaleEntry::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     SetRepaintCallback(mpFormat);
 }
 
-void ScColorScaleEntry::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+void ScColorScaleEntry::UpdateDeleteTab( const sc::RefUpdateDeleteTabContext& rCxt )
 {
     if (!mpCell)
         return;

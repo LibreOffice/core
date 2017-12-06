@@ -294,7 +294,7 @@ const ScHTMLTable* ScHTMLLayoutParser::GetGlobalTable() const
     return nullptr;
 }
 
-void ScHTMLLayoutParser::NewActEntry( ScEEParseEntry* pE )
+void ScHTMLLayoutParser::NewActEntry( const ScEEParseEntry* pE )
 {
     ScEEParser::NewActEntry( pE );
     if ( pE )
@@ -617,7 +617,7 @@ void ScHTMLLayoutParser::Adjust()
     }
 }
 
-sal_uInt16 ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
+sal_uInt16 ScHTMLLayoutParser::GetWidth( const ScEEParseEntry* pE )
 {
     if ( pE->nWidth )
         return pE->nWidth;

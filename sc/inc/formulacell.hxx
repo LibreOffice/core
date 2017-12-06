@@ -283,9 +283,9 @@ public:
 
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void            UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
+    void            UpdateInsertTab( const sc::RefUpdateInsertTabContext& rCxt );
     void            UpdateInsertTabAbs(SCTAB nTable);
-    void            UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    void            UpdateDeleteTab( const sc::RefUpdateDeleteTabContext& rCxt );
     void            UpdateMoveTab( const sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse );
