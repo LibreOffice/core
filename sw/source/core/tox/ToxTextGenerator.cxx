@@ -303,8 +303,8 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
     if( source.aTOXSources.empty() )
         return result;
 
-    const SwTextNode* pSrc = source.aTOXSources.at(0).pNd->GetTextNode();
-    if (!pSrc->HasHints()) {
+    const SwTextNode* pSrc = source.aTOXSources.front().pNd->GetTextNode();
+    if (!pSrc || !pSrc->HasHints()) {
         return result;
     }
     const SwpHints& hints = pSrc->GetSwpHints();
