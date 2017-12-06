@@ -55,7 +55,7 @@ public:
 
             SvxTransformTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                             const SdrView* pView,
-                            SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE);
+                            SvxAnchorIds nAnchorTypes);
 
             //link for the Writer to validate positions
             void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );

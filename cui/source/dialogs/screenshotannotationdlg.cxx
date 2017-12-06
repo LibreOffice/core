@@ -150,7 +150,7 @@ private:
         const ControlDataEntry& rEntry,
         const Color& rColor,
         double fLineWidth,
-        double fTransparency = 0.0);
+        double fTransparency);
     void RepaintToBuffer(
         bool bUseDimmed = false,
         bool bPaintHilight = false);

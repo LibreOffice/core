@@ -55,7 +55,7 @@ class SvxNumberingPreview : public vcl::Window
         virtual void        Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
 
     public:
-        SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits = WB_BORDER);
+        SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits);
 
         void    SetNumRule(const SvxNumRule* pNum)
                     {pActNum = pNum; Invalidate();};

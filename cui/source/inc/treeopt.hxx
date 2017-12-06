@@ -176,7 +176,7 @@ private:
 public:
     OfaTreeOptionsDialog( vcl::Window* pParent,
         const css::uno::Reference< css::frame::XFrame >& _xFrame,
-        bool bActivateLastSelection = true );
+        bool bActivateLastSelection );
     OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
     virtual ~OfaTreeOptionsDialog() override;
     virtual void dispose() override;

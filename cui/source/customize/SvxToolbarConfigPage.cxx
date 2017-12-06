@@ -381,7 +381,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, AddToolbarHdl, Button *, void )
         }
 
         SvxConfigEntry* pToolbar =
-            new SvxConfigEntry( aNewName, aNewURL, true );
+            new SvxConfigEntry( aNewName, aNewURL, true, /*bParentData*/false );
 
         pToolbar->SetUserDefined();
         pToolbar->SetMain();

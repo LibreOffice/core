@@ -199,8 +199,8 @@ class SvxScriptSelectorDialog : public ModalDialog
 public:
 
     SvxScriptSelectorDialog (
-        vcl::Window* pParent = nullptr,
-        bool bShowSlots = false,
+        vcl::Window* pParent,
+        bool bShowSlots,
         const css::uno::Reference< css::frame::XFrame >& xFrame = nullptr
     );
     virtual ~SvxScriptSelectorDialog() override;

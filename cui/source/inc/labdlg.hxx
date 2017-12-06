@@ -113,7 +113,7 @@ private:
 
 public:
     SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pView,
-                            SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE);
+                            SvxAnchorIds nAnchorTypes);
 
     /// link for the Writer to validate positions
     void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );

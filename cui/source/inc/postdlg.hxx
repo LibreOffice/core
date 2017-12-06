@@ -43,7 +43,7 @@ class SvxPostItDialog : public SfxModalDialog
 {
 public:
     SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet,
-                     bool bPrevNext = false);
+                     bool bPrevNext);
     virtual ~SvxPostItDialog() override;
     virtual void dispose() override;
 

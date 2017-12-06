@@ -69,7 +69,7 @@ struct UserData
         , aLineage(0)
     {}
 
-    explicit UserData( Reference<XNameAccess> const & rXNameAccess, int rIndex = 0 )
+    explicit UserData( Reference<XNameAccess> const & rXNameAccess, int rIndex )
         : bIsPropertyPath( false )
         , aLineage(rIndex)
         , aXNameAccess( rXNameAccess )
