@@ -3184,7 +3184,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             break;
         }
     }
-    if( aEffects.getLength() == 0 )
+    if( aEffects.getLength() != 0 )
     {
         bool bHasShadow = false;
         rXPropSet->getPropertyValue( "Shadow" ) >>= bHasShadow;
