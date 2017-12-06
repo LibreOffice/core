@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_fb2780c7",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-06T11:24:33Z",
+      "side": 1,
+      "message": "for the final patch: translatable string here",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1b252cc0",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-06T11:24:33Z",
+      "side": 1,
+      "message": "Also this doesn\u0027t compile for me, dunno why ...",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5b2b3494",
+        "filename": "chart2/source/controller/main/ControllerCommandDispatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-06T11:24:33Z",
+      "side": 1,
+      "message": "For the final patch: the pivot chart part of condition has to stay -- pivot charts\u0027 data range must not be editable",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_db156449",
+        "filename": "chart2/source/model/main/ChartModel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-06T11:24:33Z",
+      "side": 1,
+      "message": "Wouldn\u0027t killing only the internal data provider be sufficient here? I thought that was the purpose of this exercise: remove internal data table and allow user to replace it with their own data rane\n\nBut :shrug:",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
