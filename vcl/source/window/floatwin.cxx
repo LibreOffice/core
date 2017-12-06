@@ -608,15 +608,23 @@ void FloatingWindow::StateChanged( StateChangedType nType )
     {
         if (IsVisible())
         {
-            const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-            SetLOKNotifier(pNotifier);
-
             std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back(std::make_pair("type", "child"));
-            aItems.emplace_back(std::make_pair("parentId", OString::number(pParent->GetLOKWindowId())));
+            if (pParent == this)
+            {
+                // we are a toplevel window, let's so far pretend to be a
+                // dialog - but maybe we'll need a separate type for this
+                // later
+                aItems.emplace_back(std::make_pair("type", "dialog"));
+            }
+            else
+            {
+                SetLOKNotifier(pParent->GetLOKNotifier());
+                aItems.emplace_back(std::make_pair("type", "child"));
+                aItems.emplace_back(std::make_pair("parentId", OString::number(pParent->GetLOKWindowId())));
+            }
             aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
             aItems.emplace_back(std::make_pair("position", mpImplData->maPos.toString()));
-            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
         else if (!IsVisible())
         {
