@@ -1132,7 +1132,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
             if ( !aLangText.isEmpty() )
             {
-                LanguageType eLang, eLatin, eCjk, eCtl;
+                LanguageType eLang = LANGUAGE_NONE, eLatin, eCjk, eCtl;
                 const OUString aDocLangPrefix("Default_");
                 const OUString aNoLang("LANGUAGE_NONE");
                 const OUString aResetLang("RESET_LANGUAGES");
