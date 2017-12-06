@@ -631,7 +631,7 @@
   <menu:menu menu:id=".uno:FormatFormMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
-      <menu:menuitem menu:id=".uno:OpenReadOnly"/>
+      <menu:menuitem menu:id=".uno:UseWizards"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Label"/>
       <menu:menuitem menu:id=".uno:Edit"/>
@@ -644,20 +644,20 @@
       <menu:menuitem menu:id=".uno:Imagebutton"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FormattedField"/>
-      <menu:menuitem menu:id=".uno:DateField"/>
-      <menu:menuitem menu:id=".uno:NumericField"/>
       <menu:menu menu:id=".uno:FormMoreFieldsMenu">
         <menu:menupopup>
+          <menu:menuitem menu:id=".uno:DateField"/>
           <menu:menuitem menu:id=".uno:TimeField"/>
-          <menu:menuitem menu:id=".uno:PatternField"/>
+          <menu:menuitem menu:id=".uno:NumericField"/>
           <menu:menuitem menu:id=".uno:CurrencyField"/>
+          <menu:menuitem menu:id=".uno:PatternField"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:GroupBox"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ImageControl"/>
       <menu:menuitem menu:id=".uno:FileControl"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:GroupBox"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Grid"/>
       <menu:menuitem menu:id=".uno:NavigationBar"/>
@@ -668,8 +668,8 @@
       <menu:menuitem menu:id=".uno:ShowFmExplorer"/>
       <menu:menuitem menu:id=".uno:TabDialog"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:OpenReadOnly"/>
       <menu:menuitem menu:id=".uno:AutoControlFocus"/>
-      <menu:menuitem menu:id=".uno:UseWizards"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
