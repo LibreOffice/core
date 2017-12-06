@@ -92,7 +92,7 @@ double SAL_CALL VLCPlayer::getDuration()
     return static_cast<double>( mMedia.getDuration() ) / MS_IN_SEC;
 }
 
-void SAL_CALL VLCPlayer::setScale( float factor )
+void VLCPlayer::setScale( float factor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlayer.setScale( factor );
@@ -201,7 +201,7 @@ namespace
     }
 }
 
-void SAL_CALL VLCPlayer::setWindowID( const intptr_t windowID )
+void VLCPlayer::setWindowID( const intptr_t windowID )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     mPlayer.stop();

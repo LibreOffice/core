@@ -58,8 +58,8 @@ public:
     unsigned getWidth() const;
     unsigned getHeight() const;
 
-    void SAL_CALL setScale( float factor );
-    void SAL_CALL setWindowID( const intptr_t windowID );
+    void setScale( float factor );
+    void setWindowID( const intptr_t windowID );
 
     void SAL_CALL start() override;
     void SAL_CALL stop() override;
