@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_dfd62f4e",
+        "filename": "sw/source/core/layout/flylay.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-06T12:40:08Z",
+      "side": 1,
+      "message": "Do you still need the bBrowse case, now that you have a compat flag? The point of the flag was to avoid changing behavior when the flag is not set.",
+      "revId": "45532453cd5992ed320b0bf2d9f345177ca9b644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
