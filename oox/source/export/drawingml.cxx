@@ -3181,18 +3181,36 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
     }
 }
 
+sal_Int32 lcl_CalculateDist(const double dX, const double dY)
+{
+    return static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360);
+}
+
+sal_Int32 lcl_CalculateDir(const double dX, const double dY)
+{
+    return (static_cast< sal_Int32 >(atan2(dY,dX) * 180 * 60000 / M_PI) + 21600000) % 21600000;
+}
+
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 {
     if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
         return;
 
-    Sequence< PropertyValue > aGrabBag, aEffects;
+    Sequence< PropertyValue > aGrabBag, aEffects, aOuterShdwProps;
     mAny >>= aGrabBag;
     for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
     {
         if( aGrabBag[i].Name == "EffectProperties" )
         {
             aGrabBag[i].Value >>= aEffects;
+            for( sal_Int32 j=0; j < aEffects.getLength(); ++j )
+            {
+                if( aEffects[j].Name == "outerShdw" )
+                {
+                    aEffects[j].Value >>= aOuterShdwProps;
+                    break;
+                }
+            }
             break;
         }
     }
@@ -3210,9 +3228,9 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
 
             aShadowAttribsGrabBag[0].Name = "dist";
-            aShadowAttribsGrabBag[0].Value <<= static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360);
+            aShadowAttribsGrabBag[0].Value <<= lcl_CalculateDist(dX, dY);
             aShadowAttribsGrabBag[1].Name = "dir";
-            aShadowAttribsGrabBag[1].Value <<= (static_cast< sal_Int32 >(atan2(dY,dX) * 180 * 60000 / M_PI) + 21600000) % 21600000;
+            aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);;
 
             aShadowGrabBag[0].Name = "Attribs";
             aShadowGrabBag[0].Value <<= aShadowAttribsGrabBag;
@@ -3225,19 +3243,60 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             WriteShapeEffect( "outerShdw", aShadowGrabBag );
             mpFS->endElementNS(XML_a, XML_effectLst);
         }
-        return;
     }
-
-    mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
-
-    for( sal_Int32 i=0; i < aEffects.getLength(); ++i )
+    else
     {
-        Sequence< PropertyValue > aEffectProps;
-        aEffects[i].Value >>= aEffectProps;
-        WriteShapeEffect( aEffects[i].Name, aEffectProps );
-    }
+        for( sal_Int32 i=0; i < aOuterShdwProps.getLength(); ++i )
+        {
+            if( aOuterShdwProps[i].Name == "Attribs" )
+            {
+                Sequence< PropertyValue > aAttribsProps;
+                aOuterShdwProps[i].Value >>= aAttribsProps;
 
-    mpFS->endElementNS(XML_a, XML_effectLst);
+                double dX = +0.0, dY = +0.0;
+                rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
+                rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
+
+                for( sal_Int32 j=0; j < aAttribsProps.getLength(); ++j )
+                {
+                    if( aAttribsProps[j].Name == "dist" )
+                    {
+                        aAttribsProps[j].Value <<= lcl_CalculateDist(dX, dY);
+                    }
+                    else if( aAttribsProps[j].Name == "dir" )
+                    {
+                        aAttribsProps[j].Value <<= lcl_CalculateDir(dX, dY);
+                    }
+                }
+
+                aOuterShdwProps[i].Value <<= aAttribsProps;
+            }
+            else if( aOuterShdwProps[i].Name == "RgbClr" )
+            {
+                aOuterShdwProps[i].Value = rXPropSet->getPropertyValue( "ShadowColor" );
+            }
+            else if( aOuterShdwProps[i].Name == "RgbClrTransparency" )
+            {
+                aOuterShdwProps[i].Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
+            }
+        }
+
+        mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
+        for( sal_Int32 i=0; i < aEffects.getLength(); ++i )
+        {
+            if( aEffects[i].Name == "outerShdw" )
+            {
+                WriteShapeEffect( aEffects[i].Name, aOuterShdwProps );
+            }
+            else
+            {
+                Sequence< PropertyValue > aEffectProps;
+                aEffects[i].Value >>= aEffectProps;
+                WriteShapeEffect( aEffects[i].Name, aEffectProps );
+            }
+        }
+        mpFS->endElementNS(XML_a, XML_effectLst);
+    }
 }
 
 void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
