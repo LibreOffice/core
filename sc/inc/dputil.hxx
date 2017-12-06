@@ -47,7 +47,7 @@ public:
 
     static sal_Int32 getDatePartValue(
         double fValue, const ScDPNumGroupInfo* pInfo, sal_Int32 nDatePart,
-        SvNumberFormatter* pFormatter);
+        const SvNumberFormatter* pFormatter);
 
     static OUString getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc);
 

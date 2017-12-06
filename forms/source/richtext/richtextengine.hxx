@@ -53,7 +53,7 @@ namespace frm
 
         // for multiplexing the StatusChanged events of the edit engine
         void registerEngineStatusListener( IEngineStatusListener* _pListener );
-        void revokeEngineStatusListener( IEngineStatusListener* _pListener );
+        void revokeEngineStatusListener( IEngineStatusListener const * _pListener );
 
         SfxItemPool* getPool() { return m_pEnginePool; }
 

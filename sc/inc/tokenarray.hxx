@@ -207,9 +207,9 @@ public:
      *
      * @return true if at least one reference has changed its sheet reference.
      */
-    sc::RefUpdateResult AdjustReferenceOnDeletedTab( sc::RefUpdateDeleteTabContext& rCxt, const ScAddress& rOldPos );
+    sc::RefUpdateResult AdjustReferenceOnDeletedTab( const sc::RefUpdateDeleteTabContext& rCxt, const ScAddress& rOldPos );
 
-    sc::RefUpdateResult AdjustReferenceOnInsertedTab( sc::RefUpdateInsertTabContext& rCxt, const ScAddress& rOldPos );
+    sc::RefUpdateResult AdjustReferenceOnInsertedTab( const sc::RefUpdateInsertTabContext& rCxt, const ScAddress& rOldPos );
 
     sc::RefUpdateResult AdjustReferenceOnMovedTab( const sc::RefUpdateMoveTabContext& rCxt, const ScAddress& rOldPos );
 

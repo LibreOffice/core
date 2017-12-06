@@ -30,7 +30,7 @@ protected:
     ~XMultipleOperation() {}
 
 private:
-    void fillCells(css::uno::Reference<css::sheet::XSpreadsheet>&);
+    void fillCells(css::uno::Reference<css::sheet::XSpreadsheet> const&);
 };
 }
 

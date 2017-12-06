@@ -78,7 +78,7 @@ namespace
     Class::Class( vcl::Window*               pParentP,                   \
                     sal_uInt16              nId,                        \
                     SfxBindings*        p,                          \
-                    SfxChildWinInfo*    pInfo )                     \
+                    SfxChildWinInfo*  pInfo )                     \
         : SfxChildWindow(pParentP, nId)                             \
     {                                                               \
         /************************************************************************************/\

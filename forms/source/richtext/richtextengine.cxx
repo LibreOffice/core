@@ -113,7 +113,7 @@ namespace frm
     }
 
 
-    void RichTextEngine::revokeEngineStatusListener( IEngineStatusListener* _pListener )
+    void RichTextEngine::revokeEngineStatusListener( IEngineStatusListener const * _pListener )
     {
         ::std::vector< IEngineStatusListener* >::iterator aPos = ::std::find_if(
             m_aStatusListeners.begin(),

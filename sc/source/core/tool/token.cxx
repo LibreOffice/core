@@ -4162,7 +4162,7 @@ bool adjustDoubleRefOnDeleteTab(ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSh
 
 }
 
-sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDeleteTabContext& rCxt, const ScAddress& rOldPos )
+sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpdateDeleteTabContext& rCxt, const ScAddress& rOldPos )
 {
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
@@ -4235,7 +4235,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
     return aRes;
 }
 
-sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateInsertTabContext& rCxt, const ScAddress& rOldPos )
+sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( const sc::RefUpdateInsertTabContext& rCxt, const ScAddress& rOldPos )
 {
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;

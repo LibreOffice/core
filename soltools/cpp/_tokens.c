@@ -67,7 +67,7 @@ static unsigned char toLatin1[256] =
 #define MASK    "\\x%x"
 
 int
-    memcpy_EBCDIC( char * pwbuf, uchar *p, int len )
+    memcpy_EBCDIC( char * pwbuf, uchar const *p, int len )
 {
     int currpos = 0;
     int processedchars = 0;
@@ -266,7 +266,7 @@ void
  * make sure there is WS before trp->tp, if tokens might merge in the output
  */
 void
-    makespace(Tokenrow * trp, Token * ntp)
+    makespace(Tokenrow * trp, Token const * ntp)
 {
     uchar *tt;
     Token *tp = trp->tp;

@@ -2057,7 +2057,7 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( const SdrObject* pObj )
     return static_cast<ScIMapInfo*>(GetFirstUserDataOfType(pObj, SC_UD_IMAPDATA));
 }
 
-IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
+IMapObject* ScDrawLayer::GetHitIMapObject( const SdrObject* pObj,
                                           const Point& rWinPoint, const vcl::Window& rCmpWnd )
 {
     const MapMode       aMap100( MapUnit::Map100thMM );

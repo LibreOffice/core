@@ -201,7 +201,7 @@ public:
     // Image-Map
     static ScIMapInfo* GetIMapInfo( const SdrObject* pObj );
 
-    static IMapObject* GetHitIMapObject( SdrObject* pObject,
+    static IMapObject* GetHitIMapObject( const SdrObject* pObject,
                             const Point& rWinPoint, const vcl::Window& rCmpWnd );
 
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );

@@ -203,7 +203,7 @@ void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool b
     }
 }
 
-const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
+const SfxItemSet* FuPage::ExecuteDialog( vcl::Window const * pParent )
 {
     if (!mpDrawViewShell)
         return nullptr;

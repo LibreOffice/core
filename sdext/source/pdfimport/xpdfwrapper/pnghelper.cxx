@@ -177,8 +177,8 @@ void PngHelper::createPng( OutputBuffer&     o_rOutputBuf,
                            Stream*           str,
                            int               width,
                            int               height,
-                           GfxRGB&           zeroColor,
-                           GfxRGB&           oneColor,
+                           GfxRGB const &    zeroColor,
+                           GfxRGB const &    oneColor,
                            bool              bIsMask
                            )
 {

@@ -185,7 +185,7 @@ namespace {
  * fSerialDateTime - a number representing the number of days since 1900-Jan-0 (integer portion of the number),
  * plus a fractional portion of a 24 hour day (fractional portion of the number).
  */
-OUString GetExcelFormattedDate( double fSerialDateTime, SvNumberFormatter& rFormatter )
+OUString GetExcelFormattedDate( double fSerialDateTime, const SvNumberFormatter& rFormatter )
 {
     //::sax::Converter::convertDateTime(sBuf, (DateTime(rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime(), 0, true);
     css::util::DateTime aUDateTime = (DateTime(rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime();

@@ -210,7 +210,7 @@ private:
 
     bool            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
                                     SCCOL& rOverX, SCROW& rOverY, bool bVisRowChanged );
-    bool IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
+    bool IsEmptyCellText( const RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
     void GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScRefCellValue& rCell );
 
     bool IsAvailable( SCCOL nX, SCROW nY );

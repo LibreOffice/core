@@ -185,11 +185,11 @@ class ScXMLChangeTrackingImportHelper
 
 private:
     void ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime);
-    ScChangeAction* CreateInsertAction(ScMyInsAction* pAction);
-    ScChangeAction* CreateDeleteAction(ScMyDelAction* pAction);
-    ScChangeAction* CreateMoveAction(ScMyMoveAction* pAction);
-    ScChangeAction* CreateRejectionAction(ScMyRejAction* pAction);
-    ScChangeAction* CreateContentAction(ScMyContentAction* pAction);
+    ScChangeAction* CreateInsertAction(const ScMyInsAction* pAction);
+    ScChangeAction* CreateDeleteAction(const ScMyDelAction* pAction);
+    ScChangeAction* CreateMoveAction(const ScMyMoveAction* pAction);
+    ScChangeAction* CreateRejectionAction(const ScMyRejAction* pAction);
+    ScChangeAction* CreateContentAction(const ScMyContentAction* pAction);
 
     void CreateGeneratedActions(ScMyGeneratedList& rList);
 
@@ -223,10 +223,10 @@ public:
 
     void SetDeletionDependencies(ScMyDelAction* pAction, ScChangeActionDel* pDelAct);
     void SetMovementDependencies(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct);
-    void SetContentDependencies(ScMyContentAction* pAction, ScChangeActionContent* pActContent);
+    void SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent);
     void SetDependencies(ScMyBaseAction* pAction);
 
-    void SetNewCell(ScMyContentAction* pAction);
+    void SetNewCell(const ScMyContentAction* pAction);
 
     void CreateChangeTrack(ScDocument* pDoc);
 };

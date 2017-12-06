@@ -218,7 +218,7 @@ void genline(void);
 void genimport(char const *, int, char const *, int);
 void genwrap(int);
 void setempty(Tokenrow *);
-void makespace(Tokenrow *, Token *);
+void makespace(Tokenrow *, Token const *);
 char *outnum(char *, int);
 int digit(int);
 uchar *newstring(uchar const *, size_t, size_t);

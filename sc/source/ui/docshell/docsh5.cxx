@@ -470,7 +470,7 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
     }
 }
 
-static OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
+static OUString lcl_GetAreaName( ScDocument* pDoc, const ScArea* pArea )
 {
     ScDBData* pData = pDoc->GetDBAtArea( pArea->nTab, pArea->nColStart, pArea->nRowStart,
                                                         pArea->nColEnd, pArea->nRowEnd );

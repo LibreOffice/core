@@ -334,7 +334,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     class Executor : public comphelper::ThreadTask
     {
     public:
-        Executor(std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
+        Executor(const std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
                  ScTokenArray& rCode2,
                  ScAddress aBatchTopPos,
                  const ScAddress& rTopPos2,

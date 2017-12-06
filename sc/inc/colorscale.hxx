@@ -66,8 +66,8 @@ public:
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 
     void UpdateReference( const sc::RefUpdateContext& rCxt );
-    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
-    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    void UpdateInsertTab( const sc::RefUpdateInsertTabContext& rCxt );
+    void UpdateDeleteTab( const sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( const sc::RefUpdateMoveTabContext& rCxt );
 
     const ScTokenArray* GetFormula() const;

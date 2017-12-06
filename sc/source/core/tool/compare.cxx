@@ -222,7 +222,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
     return fRes;
 }
 
-double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions )
+double CompareFunc( const Compare::Cell& rCell1, double fCell2, const CompareOptions* pOptions )
 {
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized

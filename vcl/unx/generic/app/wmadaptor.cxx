@@ -2276,7 +2276,7 @@ void WMAdaptor::answerPing( X11SalFrame const * i_pFrame, XClientMessageEvent co
     }
 }
 
-void WMAdaptor::activateWindow( X11SalFrame *pFrame, Time nTimestamp )
+void WMAdaptor::activateWindow( X11SalFrame const *pFrame, Time nTimestamp )
 {
     if (!pFrame->bMapped_)
         return;
