@@ -3220,25 +3220,25 @@ sal_Int32 lcl_CalculateDir(const double dX, const double dY)
 
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 {
+    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
+        return;
+
     Sequence< PropertyValue > aGrabBag, aEffects, aOuterShdwProps;
-    if( GetProperty( rXPropSet, "InteropGrabBag" ) )
+    mAny >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
     {
-        mAny >>= aGrabBag;
-        for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+        if( aGrabBag[i].Name == "EffectProperties" )
         {
-            if( aGrabBag[i].Name == "EffectProperties" )
+            aGrabBag[i].Value >>= aEffects;
+            for( sal_Int32 j=0; j < aEffects.getLength(); ++j )
             {
-                aGrabBag[i].Value >>= aEffects;
-                for( sal_Int32 j=0; j < aEffects.getLength(); ++j )
+                if( aEffects[j].Name == "outerShdw" )
                 {
-                    if( aEffects[j].Name == "outerShdw" )
-                    {
-                        aEffects[j].Value >>= aOuterShdwProps;
-                        break;
-                    }
+                    aEffects[j].Value >>= aOuterShdwProps;
+                    break;
                 }
-                break;
             }
+            break;
         }
     }
 
