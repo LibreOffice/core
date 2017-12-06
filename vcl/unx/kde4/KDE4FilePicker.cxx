@@ -739,7 +739,7 @@ void SAL_CALL KDE4FilePicker::cancel()
 
 }
 
-void SAL_CALL KDE4FilePicker::disposing( const lang::EventObject &rEvent )
+void KDE4FilePicker::disposing( const lang::EventObject &rEvent )
 {
     uno::Reference<XFilePickerListener> xFilePickerListener( rEvent.Source, uno::UNO_QUERY );
 
