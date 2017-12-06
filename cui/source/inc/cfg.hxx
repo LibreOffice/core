@@ -274,8 +274,8 @@ public:
 
     SvxConfigEntry( const OUString& rDisplayName,
                     const OUString& rCommandURL,
-                    bool bPopup = false,
-                    bool bParentData = false );
+                    bool bPopup,
+                    bool bParentData );
 
     SvxConfigEntry()
         :
@@ -512,7 +512,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 public:
     SvxMainMenuOrganizerDialog (
         vcl::Window*, SvxEntries*,
-        SvxConfigEntry const *, bool bCreateMenu = false );
+        SvxConfigEntry const *, bool bCreateMenu );
     virtual ~SvxMainMenuOrganizerDialog() override;
     virtual void dispose() override;
 

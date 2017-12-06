@@ -86,7 +86,7 @@ private:
     VclPtr<CuiCustomMultilineEdit> m_pEDValue;
 
 public:
-    CuiAboutConfigValueDialog( vcl::Window* pWindow, const OUString& rValue , int limit = 0);
+    CuiAboutConfigValueDialog( vcl::Window* pWindow, const OUString& rValue , int limit);
     virtual ~CuiAboutConfigValueDialog() override;
     virtual void dispose() override;
 

@@ -63,8 +63,8 @@ class SvxLineTabDialog final : public SfxTabDialog
 
 public:
     SvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-                      SdrModel* pModel, const SdrObject* pObj = nullptr,
-                      bool bHasObj = true );
+                      SdrModel* pModel, const SdrObject* pObj,
+                      bool bHasObj );
 
     void                SetNewDashList( XDashListRef const & pInLst)
                         { pNewDashList = pInLst; }

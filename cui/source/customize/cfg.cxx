@@ -429,7 +429,7 @@ MenuSaveInData::GetEntries()
 {
     if ( pRootEntry == nullptr )
     {
-        pRootEntry.reset( new SvxConfigEntry( "MainMenus", OUString(), true) );
+        pRootEntry.reset( new SvxConfigEntry( "MainMenus", OUString(), true, /*bParentData*/false) );
 
         if ( m_xMenuSettings.is() )
         {
@@ -528,7 +528,7 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
                 }
 
                 SvxConfigEntry* pEntry = new SvxConfigEntry(
-                    aLabel, aCommandURL, xSubMenu.is() );
+                    aLabel, aCommandURL, xSubMenu.is(), /*bParentData*/false );
 
                 pEntry->SetUserDefined( bIsUserDefined );
                 if ( !bUseDefaultLabel )
@@ -769,7 +769,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
         typedef std::unordered_map< OUString, bool > MenuInfo;
         MenuInfo aMenuInfo;
 
-        m_pRootEntry.reset( new SvxConfigEntry( "ContextMenus", OUString(), true ) );
+        m_pRootEntry.reset( new SvxConfigEntry( "ContextMenus", OUString(), true, /*bParentData*/false ) );
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aElementsInfo;
         try
         {
@@ -808,7 +808,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                     // Menus without UI name aren't supposed to be customized.
                     continue;
 
-                SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true );
+                SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true, /*bParentData*/false );
                 pEntry->SetMain();
                 m_pRootEntry->GetEntries()->push_back( pEntry );
                 LoadSubMenus( xPopupMenu, aUIMenuName, pEntry, true );
@@ -1643,7 +1643,7 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
         aDisplayName = vcl::CommandInfoProvider::GetLabelForCommand( aURL, aModuleId );
 
     SvxConfigEntry* pNewEntryData =
-        new SvxConfigEntry( aDisplayName, aURL, false );
+        new SvxConfigEntry( aDisplayName, aURL, false, /*bParentData*/false );
     pNewEntryData->SetUserDefined();
 
     if ( aDisplayName.isEmpty() )
@@ -1949,7 +1949,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         OUString newurl = SvxConfigPageHelper::generateCustomMenuURL( mpEntries );
 
         SvxConfigEntry* pNewEntryData =
-            new SvxConfigEntry( newname, newurl, true );
+            new SvxConfigEntry( newname, newurl, true, /*bParentData*/false );
         pNewEntryData->SetName( newname );
         pNewEntryData->SetUserDefined();
         pNewEntryData->SetMain();
@@ -2258,7 +2258,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
     if ( pRootEntry == nullptr )
     {
 
-        pRootEntry.reset( new SvxConfigEntry( "MainToolbars", OUString(), true) );
+        pRootEntry.reset( new SvxConfigEntry( "MainToolbars", OUString(), true, /*bParentData*/false) );
 
         uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(
@@ -2302,7 +2302,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 }
 
                 SvxConfigEntry* pEntry = new SvxConfigEntry(
-                    uiname, url, true );
+                    uiname, url, true, /*bParentData*/false );
 
                 pEntry->SetMain();
                 pEntry->SetStyle( GetSystemStyle( url ) );
@@ -2791,7 +2791,7 @@ void ToolbarSaveInData::LoadToolbar(
                 }
 
                 SvxConfigEntry* pEntry = new SvxConfigEntry(
-                    aLabel, aCommandURL, false );
+                    aLabel, aCommandURL, false, /*bParentData*/false );
 
                 pEntry->SetUserDefined( bIsUserDefined );
                 pEntry->SetVisible( bIsVisible );

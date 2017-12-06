@@ -30,8 +30,8 @@ class SvxBorderBackgroundDlg: public SfxTabDialog
 public:
     SvxBorderBackgroundDlg(vcl::Window *pParent,
         const SfxItemSet& rCoreSet,
-        bool bEnableSelector = false,
-        bool bEnableDrawingLayerFillStyles = false);
+        bool bEnableSelector,
+        bool bEnableDrawingLayerFillStyles);
 protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
 

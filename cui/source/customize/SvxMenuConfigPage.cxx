@@ -378,7 +378,7 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
             pNameDialog->GetName(aNewName);
 
             SvxConfigEntry* pNewEntryData =
-                new SvxConfigEntry( aNewName, aNewName, true );
+                new SvxConfigEntry( aNewName, aNewName, true, /*bParentData*/false );
             pNewEntryData->SetName( aNewName );
             pNewEntryData->SetUserDefined();
 

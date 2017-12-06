@@ -52,7 +52,7 @@ public:
     void        FillFunctionsList(
                     const css::uno::Sequence< css::frame::DispatchInformation >& xCommands,
                     const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
-                    const OUString& filterTerm = OUString() );
+                    const OUString& filterTerm );
     OUString    MapCommand2UIName(const OUString& sCommand);
 
     /**
