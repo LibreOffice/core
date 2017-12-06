@@ -67,7 +67,7 @@ namespace __cxxabiv1 {
         std::type_info *exceptionType;
         void (*exceptionDestructor)(void *);
 
-        std::unexpected_handler unexpectedHandler;
+        void (*unexpectedHandler)(); // std::unexpected_handler dropped from C++17
         std::terminate_handler terminateHandler;
 
         __cxa_exception *nextException;
