@@ -49,7 +49,7 @@ namespace utl
 {
     class UcbLockBytesHandler;
 
-    class UNOTOOLS_DLLPUBLIC UcbStreamHelper : public SvStream
+    class UNOTOOLS_DLLPUBLIC UcbStreamHelper
     {
     public:
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode );
