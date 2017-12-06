@@ -98,7 +98,7 @@ namespace comphelper
         virtual void _postGetValues () = 0;
 
     public:
-        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, SolarMutex* pMutex = nullptr )
+        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, SolarMutex* pMutex )
             throw();
         virtual ~MasterPropertySet()
             throw();

@@ -242,7 +242,7 @@ public:
         ComponentInstantiation pCreateFunction_,
         ComponentFactoryFunc fptr,
         const Sequence< OUString > * pServiceNames_,
-        bool bOneInstance_ = false )
+        bool bOneInstance_ )
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_, pCreateFunction_, fptr, pServiceNames_ )
         , bOneInstance( bOneInstance_ )
@@ -438,7 +438,7 @@ public:
         const Reference<XMultiServiceFactory > & rServiceManager,
         const OUString & rImplementationName_,
         const Reference<XRegistryKey > & xImplementationKey_,
-        bool bOneInstance_ = false )
+        bool bOneInstance_ )
             : OFactoryComponentHelper(
                 rServiceManager, rImplementationName_, nullptr, nullptr, nullptr, bOneInstance_ ),
               OPropertySetHelper( OComponentHelper::rBHelper ),
