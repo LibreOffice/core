@@ -1219,8 +1219,6 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         case POS_INSIDE:
                             if( bCallDelete )
                             {
-                                meRedlineFlags |= RedlineFlags::IgnoreDeleteRedlines;
-
                                 // DeleteAndJoin does not yield the
                                 // desired result if there is no paragraph to
                                 // join with, i.e. at the end of the document.
@@ -1242,8 +1240,6 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             delete pNewRedl;
                             pNewRedl = nullptr;
-                            if (eCmpPos == POS_INSIDE)
-                                MaybeNotifyRedlineModification(pRedl, &m_rDoc);
                             break;
 
                         case POS_OUTSIDE:
