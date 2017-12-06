@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1b028c3d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-12-06T10:25:57Z",
+      "side": 1,
+      "message": "Creating two OUString variables is unnecessary here. Just rename aBuf to aSearchFor, and work on that.",
+      "range": {
+        "startLine": 1447,
+        "startChar": 12,
+        "endLine": 1449,
+        "endChar": 38
+      },
+      "revId": "90a8f74faeebeb5376b21fa2da97ecaf9de068eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
