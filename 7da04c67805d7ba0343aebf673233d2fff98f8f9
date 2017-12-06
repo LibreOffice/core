@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_bf32430e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-06T19:44:50Z",
+      "side": 1,
+      "message": "Здесь следует описывать не ошибку, которую исправляем, а сам патч. Типа Use guard to reset status indicator",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "7da04c67805d7ba0343aebf673233d2fff98f8f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_df50ef34",
         "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.cxx",
         "patchSetId": 1
