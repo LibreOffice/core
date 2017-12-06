@@ -65,7 +65,7 @@ namespace basegfx
             const B3DPolygon& rCandidate,
             const ::std::vector<double>& rDotDashArray,
             B3DPolyPolygon* pLineTarget,
-            double fFullDashDotLen = 0.0);
+            double fFullDashDotLen);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.
             rCandidate: the 3d geometry to change
@@ -82,14 +82,14 @@ namespace basegfx
             If bChangeX, x texture coordinate will be recalculated.
             If bChangeY, y texture coordinate will be recalculated.
          */
-        BASEGFX_DLLPUBLIC B3DPolygon applyDefaultTextureCoordinatesParallel( const B3DPolygon& rCandidate, const B3DRange& rRange, bool bChangeX, bool bChangeY = true);
+        BASEGFX_DLLPUBLIC B3DPolygon applyDefaultTextureCoordinatesParallel( const B3DPolygon& rCandidate, const B3DRange& rRange, bool bChangeX, bool bChangeY);
 
         /** Create/replace texture coordinates for given 3d geometry with spherical one
             rCenter: the centre of the used 3d geometry
             If bChangeX, x texture coordinate will be recalculated.
             If bChangeY, y texture coordinate will be recalculated.
          */
-        BASEGFX_DLLPUBLIC B3DPolygon applyDefaultTextureCoordinatesSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX, bool bChangeY = true);
+        BASEGFX_DLLPUBLIC B3DPolygon applyDefaultTextureCoordinatesSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX, bool bChangeY);
 
         // isInside tests for B3DPoint. On border is not inside as long as not true is given in bWithBorder flag.
         BASEGFX_DLLPUBLIC bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder);

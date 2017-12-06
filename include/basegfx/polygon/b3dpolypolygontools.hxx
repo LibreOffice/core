@@ -64,7 +64,7 @@ namespace basegfx
             With VerStart, VerStop and hor range in cartesian may be specified to create a partial sphere only.
          */
         BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitSpherePolyPolygon(
-            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg = 0,
+            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             double fVerStart = F_PI2, double fVerStop = -F_PI2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
 
@@ -74,7 +74,7 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC B3DPolyPolygon createSpherePolyPolygonFromB3DRange(
             const B3DRange& rRange,
-            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg = 0,
+            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             double fVerStart = F_PI2, double fVerStop = -F_PI2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
 
@@ -82,7 +82,7 @@ namespace basegfx
             There is one extra, the bool bNormals defines if normals will be set, default is false
          */
         BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitSphereFillPolyPolygon(
-            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg = 0,
+            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             bool bNormals = false,
             double fVerStart = F_PI2, double fVerStop = -F_PI2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
@@ -92,7 +92,7 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC B3DPolyPolygon createSphereFillPolyPolygonFromB3DRange(
             const B3DRange& rRange,
-            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg = 0,
+            sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             bool bNormals = false,
             double fVerStart = F_PI2, double fVerStop = -F_PI2,
             double fHorStart = 0.0, double fHorStop = F_2PI);

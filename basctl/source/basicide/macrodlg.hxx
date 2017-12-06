@@ -90,7 +90,7 @@ private:
     void                RestoreMacroDescription();
 
 public:
-                        MacroChooser( vcl::Window* pParent, const ::css::uno::Reference< ::css::frame::XFrame >& xDocFrame, bool bCreateEntries = true );
+                        MacroChooser( vcl::Window* pParent, const ::css::uno::Reference< ::css::frame::XFrame >& xDocFrame, bool bCreateEntries );
                         virtual ~MacroChooser() override;
     virtual void        dispose() override;
 
