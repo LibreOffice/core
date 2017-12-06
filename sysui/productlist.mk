@@ -11,7 +11,7 @@ PRODUCTLIST := libreoffice libreofficedev
 PKGVERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)
 PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
 PRODUCTNAME.libreoffice := LibreOffice
-PRODUCTNAME.libreofficeodev := LibreOfficeDev
+PRODUCTNAME.libreofficedev := LibreOfficeDev
 UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
 UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
 
