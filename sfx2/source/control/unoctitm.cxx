@@ -1085,7 +1085,13 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "SortAscending" ||
              aEvent.FeatureURL.Path == "SortDescending" ||
              aEvent.FeatureURL.Path == "AcceptAllTrackedChanges" ||
-             aEvent.FeatureURL.Path == "RejectAllTrackedChanges")
+             aEvent.FeatureURL.Path == "RejectAllTrackedChanges" ||
+             aEvent.FeatureURL.Path == "TableDialog" ||
+             aEvent.FeatureURL.Path == "FormatCellDialog" ||
+             aEvent.FeatureURL.Path == "FontDialog" ||
+             aEvent.FeatureURL.Path == "ParagraphDialog" ||
+             aEvent.FeatureURL.Path == "OutlineBullet" ||
+             aEvent.FeatureURL.Path == "InsertIndexesEntry")
 
     {
         aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
