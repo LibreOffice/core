@@ -1224,8 +1224,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         case SwComparePosition::Inside:
                             if( bCallDelete )
                             {
-                                meRedlineFlags |= RedlineFlags::IgnoreDeleteRedlines;
-
                                 // DeleteAndJoin does not yield the
                                 // desired result if there is no paragraph to
                                 // join with, i.e. at the end of the document.
@@ -1247,8 +1245,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             }
                             delete pNewRedl;
                             pNewRedl = nullptr;
-                            if (eCmpPos == SwComparePosition::Inside)
-                                MaybeNotifyRedlineModification(pRedl, &m_rDoc);
                             break;
 
                         case SwComparePosition::Outside:
