@@ -548,7 +548,8 @@ void OOXMLDocumentImpl::incrementProgress()
     if (mnProgressEndPos && mnProgressCurrentPos > (mnProgressLastPos + mnPercentSize) && mnProgressLastPos < mnProgressEndPos)
     {
         mnProgressLastPos = mnProgressCurrentPos;
-        mxStatusIndicator->setValue(mnProgressLastPos);
+        if (mxStatusIndicator.is())
+            mxStatusIndicator->setValue(mnProgressLastPos);
     }
 }
 
