@@ -1644,9 +1644,8 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.clear();
                                 newline--;
                             }
-                            else if ((nPart == 2) ||
-                                     ((nPart == 1) && (nVariation == 0)) ||
-                                     (nVariation == 1))
+                            else if ((nPart == 2) || ((nPart == 1) &&
+                                    (nVariation == 0 || nVariation == 1)))
                             {
                                 sPush+=rRet;
                                 rRet = sPush;
