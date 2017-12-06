@@ -8,6 +8,7 @@
  */
 
 #include <config_features.h>
+#include <config_gpgme.h>
 
 #include <sal/config.h>
 
@@ -102,7 +103,18 @@ public:
     void testXAdESGood();
     /// Test importing of signature line images
     void testSignatureLineImages();
-
+#ifdef LINUX
+# if GPGME_HAVE_GPGME
+    /// Test a typical ODF where all streams are GPG-signed.
+    void testODFGoodGPG();
+    /// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
+    void testODFUntrustedGoodGPG();
+    /// Test a typical broken ODF signature where one stream is corrupted.
+    void testODFBrokenStreamGPG();
+    /// Test a typical broken ODF signature where the XML dsig hash is corrupted.
+    void testODFBrokenDsigGPG();
+# endif
+#endif
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
     CPPUNIT_TEST(testODFGood);
@@ -125,6 +137,14 @@ public:
     CPPUNIT_TEST(testXAdES);
     CPPUNIT_TEST(testXAdESGood);
     CPPUNIT_TEST(testSignatureLineImages);
+#ifdef LINUX
+# if GPGME_HAVE_GPGME
+    CPPUNIT_TEST(testODFGoodGPG);
+    CPPUNIT_TEST(testODFUntrustedGoodGPG);
+    CPPUNIT_TEST(testODFBrokenStreamGPG);
+    CPPUNIT_TEST(testODFBrokenDsigGPG);
+# endif
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -156,6 +176,16 @@ void SigningTest::setUp()
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
+#endif
+#ifdef LINUX
+# if GPGME_HAVE_GPGME
+    // Make gpg use our own defined setup below data dir
+    OUString aHomePath;
+    osl::FileBase::getSystemPathFromFileURL(
+        m_directories.getURLFromSrc(DATA_DIRECTORY),
+        aHomePath);
+    setenv("GNUPGHOME", aHomePath.toUtf8().getStr(), 1);
+# endif
 #endif
 }
 
@@ -656,6 +686,65 @@ void SigningTest::testSignatureLineImages()
     CPPUNIT_ASSERT(xSignatureInfo[0].ValidSignatureLineImage.is());
     CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
 }
+
+#ifdef LINUX
+# if GPGME_HAVE_GPGME
+void SigningTest::testODFGoodGPG()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "goodGPG.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // Our local gpg config fully trusts the signing cert, so in
+    // contrast to the X509 test we can fail on NOTVALIDATED here
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        (OString::number(
+             static_cast<std::underlying_type<SignatureState>::type>(nActual))
+         .getStr()),
+        nActual, SignatureState::OK);
+}
+
+void SigningTest::testODFUntrustedGoodGPG()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "untrustedGoodGPG.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // Our local gpg config does _not_ trust the signing cert, so in
+    // contrast to the X509 test we can fail everything but
+    // NOTVALIDATED here
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        (OString::number(
+             static_cast<std::underlying_type<SignatureState>::type>(nActual))
+         .getStr()),
+        nActual, SignatureState::NOTVALIDATED);
+}
+
+void SigningTest::testODFBrokenStreamGPG()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "badStreamGPG.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
+}
+
+void SigningTest::testODFBrokenDsigGPG()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "badDsigGPG.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
+}
+# endif
+#endif
 
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
