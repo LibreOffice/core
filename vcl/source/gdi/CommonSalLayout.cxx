@@ -869,7 +869,7 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 
         // Id this glyph is Kashida-justifiable, then mark this as a Kashida
         // position. Since this must be a RTL glyph, we mark the last glyph in
-        // the cluster not the fisrt as this would be the base glyph.
+        // the cluster not the first as this would be the base glyph.
         // nDiff > 1 to ignore rounding errors.
         if (bKashidaJustify && m_GlyphItems[i].AllowKashida() && nDiff > 1)
         {
