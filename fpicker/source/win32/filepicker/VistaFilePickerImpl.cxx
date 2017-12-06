@@ -1063,12 +1063,10 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
 
                     case css::ui::dialogs::ControlActions::ADD_ITEMS :
                         {
-                            css::uno::Sequence< OUString > lItems;
-                            aValue >>= lItems;
-                            aValue >>= gItems;
-                            for (::sal_Int32 i=0; i<lItems.getLength(); ++i)
+                            aValue >>= m_lItems;
+                            for (::sal_Int32 i=0; i<m_lItems.getLength(); ++i)
                             {
-                                const OUString& sItem = lItems[i];
+                                const OUString& sItem = m_lItems[i];
                                 hResult = iCustom->AddControlItem(nId, i, o3tl::toW(sItem.getStr()));
                             }
                         }
@@ -1129,7 +1127,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
                 HRESULT hResult = iCustom->GetSelectedControlItem(nId, &bValue);
                 if ( SUCCEEDED(hResult) )
                 {
-                    const OUString& sItem = gItems[bValue];
+                    const OUString& sItem = m_lItems[bValue];
                     aValue = css::uno::makeAny(OUString(sItem.getStr()));
                 }
             }
