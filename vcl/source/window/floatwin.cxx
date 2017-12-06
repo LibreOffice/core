@@ -608,11 +608,12 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
     SystemWindow::StateChanged( nType );
 
-    if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+    if (pParent && nType == StateChangedType::Visible)
     {
-        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-        if (nType == StateChangedType::InitShow && IsVisible())
+        if (IsVisible())
         {
+            const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
             SetLOKNotifier(pNotifier);
 
             std::vector<vcl::LOKPayloadItem> aItems;
@@ -634,7 +635,8 @@ void FloatingWindow::StateChanged( StateChangedType nType )
         }
         else if (!IsVisible())
         {
-            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            assert(GetLOKNotifier());
+            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "close");
             ReleaseLOKNotifier();
         }
     }
