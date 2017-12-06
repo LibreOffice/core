@@ -18,23 +18,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SpinButton"/>
- <toolbar:toolbaritem xlink:href=".uno:ScrollBar"/>
- <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Imagebutton"/>
- <toolbar:toolbaritem xlink:href=".uno:ImageControl"/>
- <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:FileControl"/>
- <toolbar:toolbaritem xlink:href=".uno:DateField"/>
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:TimeField"/>
- <toolbar:toolbaritem xlink:href=".uno:NumericField"/>
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:CurrencyField"/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:PatternField"/>
- <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GroupBox"/>
- <toolbar:toolbaritem xlink:href=".uno:Grid"/>
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:NavigationBar"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageControl"/>
+ <toolbar:toolbaritem xlink:href=".uno:FileControl"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:SpinButton" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ScrollBar" toolbar:visible="false"/>
 </toolbar:toolbar>
