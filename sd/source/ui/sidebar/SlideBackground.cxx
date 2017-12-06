@@ -239,7 +239,7 @@ void SlideBackground::HandleContextChange(
 
     if ( IsImpress() )
     {
-        mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
+        mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_LABEL));
         mpMarginSelectBox->Hide();
 
         if ( maContext == maImpressMasterContext )
@@ -294,7 +294,7 @@ void SlideBackground::HandleContextChange(
     }
     else if ( IsDraw() )
     {
-        mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_NAME));
+        mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_LABEL));
     }
 }
 
@@ -558,7 +558,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 }
                 else if ( maContext == maImpressNotesContext )
                 {
-                    mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
+                    mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_LABEL));
                     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
 
                     if (pMainViewShell)
