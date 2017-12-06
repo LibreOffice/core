@@ -44,7 +44,7 @@ const std::pair<const char*, int> RID_PARAGRAPHSTYLEFAMILY[] =
 
 const std::pair<const char*, int> RID_CHARACTERSTYLEFAMILY[] =
 {
-    { NC_("RID_CHARACTERSTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_CHARACTERSTYLEFAMILY", "All Styles")      , SFXSTYLEBIT_ALL_VISIBLE },
     { NC_("RID_CHARACTERSTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
     { NC_("RID_CHARACTERSTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
     { NC_("RID_CHARACTERSTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
@@ -53,7 +53,7 @@ const std::pair<const char*, int> RID_CHARACTERSTYLEFAMILY[] =
 
 const std::pair<const char*, int> RID_FRAMESTYLEFAMILY[] =
 {
-    { NC_("RID_FRAMESTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_FRAMESTYLEFAMILY", "All Styles")      , SFXSTYLEBIT_ALL_VISIBLE },
     { NC_("RID_FRAMESTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
     { NC_("RID_FRAMESTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
     { NC_("RID_FRAMESTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
@@ -62,7 +62,7 @@ const std::pair<const char*, int> RID_FRAMESTYLEFAMILY[] =
 
 const std::pair<const char*, int> RID_PAGESTYLEFAMILY[] =
 {
-    { NC_("RID_PAGESTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_PAGESTYLEFAMILY", "All Styles")      , SFXSTYLEBIT_ALL_VISIBLE },
     { NC_("RID_PAGESTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
     { NC_("RID_PAGESTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
     { NC_("RID_PAGESTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
@@ -71,7 +71,7 @@ const std::pair<const char*, int> RID_PAGESTYLEFAMILY[] =
 
 const std::pair<const char*, int> RID_LISTSTYLEFAMILY[] =
 {
-    { NC_("RID_LISTSTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_LISTSTYLEFAMILY", "All Styles")      , SFXSTYLEBIT_ALL_VISIBLE },
     { NC_("RID_LISTSTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
     { NC_("RID_LISTSTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
     { NC_("RID_LISTSTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
@@ -80,7 +80,7 @@ const std::pair<const char*, int> RID_LISTSTYLEFAMILY[] =
 
 const std::pair<const char*, int> RID_TABLESTYLEFAMILY[] =
 {
-    { NC_("RID_TABLESTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_TABLESTYLEFAMILY", "All Styles")      , SFXSTYLEBIT_ALL_VISIBLE },
     { NC_("RID_TABLESTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
     { NC_("RID_TABLESTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
     { NC_("RID_TABLESTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
