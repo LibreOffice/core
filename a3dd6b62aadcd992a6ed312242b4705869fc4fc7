@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2271dca8",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-06T22:11:53Z",
+      "side": 1,
+      "message": "impl_hasHelpInstalled does this: utl::ConfigManager::getLocale()\n\nto find out what locale is active and search for corresponding help, so I wonder if using it here would not deliver the same results in a more simple way.",
+      "revId": "a3dd6b62aadcd992a6ed312242b4705869fc4fc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
