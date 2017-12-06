@@ -39,7 +39,7 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         css::chart2::PieChartOffsetMode eMode,
-        bool bRings = false,
+        bool bRings,
         sal_Int32 nDim = 2 );
     virtual ~PieChartTypeTemplate() override;
 

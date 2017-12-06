@@ -41,7 +41,7 @@ class VDiagram final
 public: //methods
     VDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram,
               const css::drawing::Direction3D& rPreferredAspectRatio,
-              sal_Int32 nDimension = 3 );
+              sal_Int32 nDimension );
     ~VDiagram();
 
     void init(

@@ -159,7 +159,7 @@ class RenderAnimationThread : public RenderThread
 {
 public:
     RenderAnimationThread(GL3DBarChart* pChart, const glm::vec3& rStartPos, const glm::vec3& rEndPos,
-            const sal_Int32 nSteps = STEPS):
+            const sal_Int32 nSteps):
         RenderThread(pChart),
         maStartPos(rStartPos),
         maEndPos(rEndPos),

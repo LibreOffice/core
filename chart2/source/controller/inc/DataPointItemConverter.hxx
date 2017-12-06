@@ -44,7 +44,7 @@ public:
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
-        GraphicObjectType eMapTo = GraphicObjectType::FilledDataPoint,
+        GraphicObjectType eMapTo,
         const css::awt::Size* pRefSize = nullptr,
         bool bDataSeries = false,
         bool bUseSpecialFillColor = false,
