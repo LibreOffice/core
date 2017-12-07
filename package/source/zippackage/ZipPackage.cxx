@@ -1197,7 +1197,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         {
             bool bIsGpgEncrypt = m_aGpgProps.hasElements();
             uno::Sequence < PropertyValue > aPropSeq(
-                bIsGpgEncrypt ? PKG_SIZE_ENCR_MNFST : PKG_SIZE_GPG_ENCR_MNFST );
+                bIsGpgEncrypt ? PKG_SIZE_NOENCR_MNFST+1 : PKG_SIZE_NOENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
             aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_xRootFolder->GetMediaType();
             aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
@@ -1207,11 +1207,8 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
             if( bIsGpgEncrypt )
             {
-                for ( sal_Int32 nInd = 0; nInd < m_aGpgProps.getLength(); nInd++ )
-                {
-                    aPropSeq[PKG_MNFST_KEYID+nInd].Name = m_aGpgProps[nInd].Name;
-                    aPropSeq[PKG_MNFST_KEYID+nInd].Value = m_aGpgProps[nInd].Value;
-                }
+                aPropSeq[PKG_SIZE_NOENCR_MNFST].Name = "KeyInfo";
+                aPropSeq[PKG_SIZE_NOENCR_MNFST].Value <<= m_aGpgProps;
             }
             aManList.push_back( aPropSeq );
         }

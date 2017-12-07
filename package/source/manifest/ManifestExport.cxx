@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "ManifestDefines.hxx"
@@ -240,24 +241,24 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             xHandler->startElement( sManifestKeyInfoElement, nullptr );
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            uno::Sequence< uno::Sequence < beans::PropertyValue > > aKeyInfoSequence;
+            uno::Sequence< uno::Sequence < beans::NamedValue > > aKeyInfoSequence;
             *pKeyInfoProperty >>= aKeyInfoSequence;
-            const uno::Sequence < beans::PropertyValue > *pKeyInfoSequence = aKeyInfoSequence.getConstArray();
+            const uno::Sequence < beans::NamedValue > *pKeyInfoSequence = aKeyInfoSequence.getConstArray();
             const sal_uInt32 nKeyInfoLength = aKeyInfoSequence.getLength();
             for (sal_uInt32 nInd = 0; nInd < nKeyInfoLength ; nInd++ )
             {
                 uno::Sequence < sal_Int8 > aPgpKeyID;
                 uno::Sequence < sal_Int8 > aPgpKeyPacket;
                 uno::Sequence < sal_Int8 > aCipherValue;
-                pValue = pKeyInfoSequence[nInd].getConstArray();
-                for (sal_uInt32 j = 0, nNum = pKeyInfoSequence[nInd].getLength(); j < nNum; j++, pValue++)
+                const beans::NamedValue *pNValue = pKeyInfoSequence[nInd].getConstArray();
+                for (sal_uInt32 j = 0, nNum = pKeyInfoSequence[nInd].getLength(); j < nNum; j++, pNValue++)
                 {
-                    if (pValue->Name == sPgpKeyIDProperty )
-                        pValue->Value >>= aPgpKeyID;
-                    else if (pValue->Name == sPgpKeyPacketProperty )
-                        pValue->Value >>= aPgpKeyPacket;
-                    else if (pValue->Name == sCipherValueProperty )
-                        pValue->Value >>= aCipherValue;
+                    if (pNValue->Name == sPgpKeyIDProperty )
+                        pNValue->Value >>= aPgpKeyID;
+                    else if (pNValue->Name == sPgpKeyPacketProperty )
+                        pNValue->Value >>= aPgpKeyPacket;
+                    else if (pNValue->Name == sCipherValueProperty )
+                        pNValue->Value >>= aCipherValue;
                 }
 
                 if (!aPgpKeyID.hasElements() && !aPgpKeyPacket.hasElements() && !aCipherValue.hasElements() )

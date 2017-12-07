@@ -665,7 +665,7 @@ bool ZipPackageStream::saveChild(
 
             // last property is digest, which is inserted later if we didn't have
             // a magic header
-            aPropSet.realloc(PKG_SIZE_GPG_ENCR_MNFST);
+            aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
 
             aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
             aPropSet[PKG_MNFST_INIVECTOR].Value <<= m_xBaseEncryptionData->m_aInitVector;
