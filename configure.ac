@@ -133,9 +133,16 @@ dnl path location is git, so make sure we have it
     if test -n "$mac_git_path" -a -x "$mac_git_path" -a "$mac_git_path" != "/usr/bin/git" ; then
         mac_path="$mac_path:`dirname $mac_git_path`"
     fi
+dnl a not so common but nevertheless quite helpful thing that may be in a fancy
+dnl path location is gpg, so make sure we find it
+    mac_gpg_path=`which gpg 2>/dev/null`
+    if test -n "$mac_gpg_path" -a -x "$mac_gpg_path" -a "$mac_gpg_path" != "/usr/bin/gpg" ; then
+        mac_path="$mac_path:`dirname $mac_gpg_path`"
+    fi
     PATH="$mac_path"
     unset mac_path
-    unset git_mac_path
+    unset mac_git_path
+    unset mac_gpg_path
 }
 
 echo "********************************************************************"
@@ -10225,6 +10232,14 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     fi
     ENABLE_GPGMEPP=TRUE
     AC_DEFINE([HAVE_FEATURE_GPGME])
+    AC_PATH_PROG(GPG, gpg)
+    # TODO: Windows's cygwin gpg does not seem to work with our gpgme,
+    # so let's exclude that manually for the moment
+    if test -n "$GPG" -a "$_os" != "WINNT"; then
+        # make sure we not only have a working gpgme, but a full working
+        # gpg installation to run OpenPGP signature verification
+        AC_DEFINE([HAVE_FEATURE_GPGVERIFY])
+    fi
 fi
 AC_SUBST(ENABLE_GPGMEPP)
 AC_SUBST(SYSTEM_GPGMEPP)
