@@ -112,6 +112,14 @@ struct rtl_arena_st
  */
 extern rtl_arena_type * gp_default_arena;
 
+extern "C" {
+
+typedef void (*ArenaForeachFn)(void *addr, sal_Size size, void *user_data);
+void rtl_arena_foreach(rtl_arena_type *arena, ArenaForeachFn fn, void *user_data) SAL_THROW_EXTERN_C();
+void rtl_cache_foreach(rtl_cache_type *arena, ArenaForeachFn foreachFn, void *user_data) SAL_THROW_EXTERN_C();
+
+}
+
 #endif // INCLUDED_SAL_RTL_ALLOC_ARENA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
