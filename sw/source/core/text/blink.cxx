@@ -26,9 +26,9 @@
 #include "porlay.hxx"
 
 // Visible time
-#define BLINK_ON_TIME       2400L
+#define BLINK_ON_TIME       2400
 // Invisible time
-#define BLINK_OFF_TIME      800L
+#define BLINK_OFF_TIME      800
 
 /**
  * pBlink points to the instance where blinking portions need to register.

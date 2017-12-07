@@ -118,7 +118,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
         }
         else if(SvxZoomType::WHOLEPAGE == eZoomType || SvxZoomType::PAGEWIDTH == eZoomType )
         {
-            const long nOf = DOCUMENTBORDER * 2L;
+            const long nOf = DOCUMENTBORDER * 2;
             long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
             nTmpWidth += nOf;
             aPageSize.Height() += nOf;

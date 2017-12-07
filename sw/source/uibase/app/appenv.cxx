@@ -421,8 +421,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         // Overwrite defaults!
         aMgr.GetAttrSet().Put( SvxBoxItem(RES_BOX) );
-        aMgr.SetULSpace( 0L, 0L );
-        aMgr.SetLRSpace( 0L, 0L );
+        aMgr.SetULSpace( 0, 0 );
+        aMgr.SetLRSpace( 0, 0 );
 
         // Sender
         if (rItem.m_bSend)

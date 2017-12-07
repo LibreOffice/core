@@ -587,8 +587,9 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
     }
     using namespace sw::types;
     // set xExt & yExt
-    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width() * 254L / 144));
-    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height() * 254L / 144));
+    const double mm100perTwip = 254 / 144.0;
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width() * mm100perTwip));
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height() * mm100perTwip));
     pArr += 16;
     // skip hMF & rcWinMF
     // set dxaGoal & dyaGoal
@@ -712,7 +713,8 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
 
     Set_UInt16( pArr, mm );                         // set mm
 
-    if ( (aGrTwipSz.Width() * 254L / 144 > USHRT_MAX) || (aGrTwipSz.Height()  * 254L / 144 > USHRT_MAX)
+    const double mm100perTwip = 254 / 144.0;
+    if ( (aGrTwipSz.Width() * mm100perTwip > USHRT_MAX) || (aGrTwipSz.Height()  * mm100perTwip > USHRT_MAX)
         || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
     {
         aGrTwipSz.Width() = nWidth;
@@ -720,8 +722,8 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     }
     using namespace sw::types;
     // set xExt & yExt
-    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width() * 254L / 144));
-    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height() * 254L / 144));
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width() * mm100perTwip));
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height() * mm100perTwip));
     pArr += 16;
     // skip hMF & rcWinMF
     // set dxaGoal & dyaGoal

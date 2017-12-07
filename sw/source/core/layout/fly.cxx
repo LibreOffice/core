@@ -1765,7 +1765,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
             nDist = LONG_MAX - nSize;
 
         if ( nDist <= 0 )
-            return 0L;
+            return 0;
 
         if ( Lower()->IsColumnFrame() )
         {   // If it's a Column Frame, the Format takes control of the
@@ -1777,7 +1777,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
                 InvalidatePos_();
                 InvalidateSize();
             }
-            return 0L;
+            return 0;
         }
 
         if ( !bTst )
@@ -1832,7 +1832,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
         }
         return nDist;
     }
-    return 0L;
+    return 0;
 }
 
 SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
@@ -1854,7 +1854,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
         }
 
         if ( nVal <= 0 )
-            return 0L;
+            return 0;
 
         if ( Lower()->IsColumnFrame() )
         {   // If it's a Column Frame, the Format takes control of the
@@ -1888,7 +1888,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
                 if ( GetAnchorFrame()->IsInFly() )
                     AnchorFrame()->FindFlyFrame()->Shrink( nDist, bTst );
             }
-            return 0L;
+            return 0;
         }
 
         if ( !bTst )
@@ -1944,7 +1944,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
         }
         return nVal;
     }
-    return 0L;
+    return 0;
 }
 
 Size SwFlyFrame::ChgSize( const Size& aNewSize )
