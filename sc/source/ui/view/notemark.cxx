@@ -101,7 +101,8 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
             mxObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( mxObject )
             {
-                pDrawView->SyncForGrid(mxObject.get());
+                if (pDrawView)
+                    pDrawView->SyncForGrid(mxObject.get());
                 aRect = mxObject->GetCurrentBoundRect();
 
                 // Need to include grid offset: GetCurrentBoundRect is removing it
