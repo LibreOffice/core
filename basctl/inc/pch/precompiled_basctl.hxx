@@ -562,7 +562,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/svborder.hxx>
 #include <tools/time.hxx>
