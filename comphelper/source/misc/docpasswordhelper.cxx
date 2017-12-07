@@ -248,10 +248,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 {
     uno::Sequence< sal_Int8 > aResult( nLength );
 
-    TimeValue aTime;
-    osl_getSystemTime( &aTime );
     rtlRandomPool aRandomPool = rtl_random_createPool ();
-    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
     rtl_random_getBytes ( aRandomPool, aResult.getArray(), nLength );
     rtl_random_destroyPool ( aRandomPool );
 

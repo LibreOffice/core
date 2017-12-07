@@ -436,11 +436,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     // generate session key
     // --------------------
 
-    // Get a random number generator and seed it with current timestamp
-    TimeValue aTime;
-    osl_getSystemTime( &aTime );
     rtlRandomPool aRandomPool = rtl_random_createPool();
-    rtl_random_addBytes(aRandomPool, &aTime, 8);
 
     // get 16 random chars out of it
     uno::Sequence < sal_Int8 > aVector(16);
