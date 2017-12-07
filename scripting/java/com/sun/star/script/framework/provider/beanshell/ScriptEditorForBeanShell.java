@@ -184,8 +184,8 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
      */
     public void edit(final XScriptContext context, ScriptMetaData entry) {
         if (entry != null) {
+            URLClassLoader cl = null;
             try {
-                URLClassLoader cl = null;
 
                 try {
                     cl = ClassLoaderFactory.getURLClassLoader(entry);
@@ -214,6 +214,12 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
                 });
             } catch (IOException ioe) {
                 showErrorMessage("Error loading file: " + ioe.getMessage());
+                if (cl != null) {
+                    try {
+                      cl.close();
+                    } catch (IOException e) {
+                    }
+                }
             }
         }
     }
