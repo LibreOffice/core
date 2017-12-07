@@ -228,15 +228,33 @@ void CertificateChooser::ImplInitialize()
 }
 
 
-uno::Reference< css::security::XCertificate > CertificateChooser::GetSelectedCertificate()
+uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser::GetSelectedCertificates()
 {
+    std::vector< uno::Reference< css::security::XCertificate > > aRet;
     SvTreeListEntry* pSel = m_pCertLB->FirstSelected();
-    if( !pSel )
-        return uno::Reference< css::security::XCertificate >();
 
-    UserData* userData = static_cast<UserData*>(pSel->GetUserData());
-    uno::Reference<security::XCertificate> xCert = userData->xCertificate;
-    return xCert;
+    if (meAction == UserAction::Encrypt)
+    {
+        // for encryption, multiselection is enabled
+        while(pSel)
+        {
+            UserData* userData = static_cast<UserData*>(pSel->GetUserData());
+            aRet.push_back( userData->xCertificate );
+            pSel = m_pCertLB->NextSelected(pSel);
+        }
+    }
+    else
+    {
+        uno::Reference< css::security::XCertificate > xCert;
+        if( pSel )
+        {
+            UserData* userData = static_cast<UserData*>(pSel->GetUserData());
+            xCert = userData->xCertificate;
+        }
+        aRet.push_back( xCert );
+    }
+
+    return comphelper::containerToSequence(aRet);
 }
 
 uno::Reference<xml::crypto::XXMLSecurityContext> CertificateChooser::GetSelectedSecurityContext()
@@ -257,13 +275,15 @@ OUString CertificateChooser::GetDescription()
 
 OUString CertificateChooser::GetUsageText()
 {
-    uno::Reference<css::security::XCertificate> xCert = GetSelectedCertificate();
-    return xCert.is() ? UsageInClearText(xCert->getCertificateUsage()) : OUString();
+    uno::Sequence< uno::Reference<css::security::XCertificate> > xCerts =
+        GetSelectedCertificates();
+    return (xCerts.hasElements() && xCerts[0].is()) ?
+        UsageInClearText(xCerts[0]->getCertificateUsage()) : OUString();
 }
 
 IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl, SvTreeListBox*, void)
 {
-    bool bEnable = GetSelectedCertificate().is();
+    bool bEnable = m_pCertLB->GetSelectionCount() > 0;
     m_pViewBtn->Enable( bEnable );
     m_pOKBtn->Enable( bEnable );
     m_pDescriptionED->Enable(bEnable);
