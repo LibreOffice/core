@@ -740,6 +740,11 @@ PRIVATE_1.4 { # LibreOffice 6.0
         _ZN3sal19backtrace_to_stringEPNS_14BacktraceStateE;
 } PRIVATE_1.3;
 
+PRIVATE_1.5 { # LibreOffice 6.1
+    global:
+        rtl_alloc_preInit;
+} PRIVATE_1.4;
+
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicode*;
