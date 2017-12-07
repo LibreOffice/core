@@ -108,6 +108,8 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
                 // Need to include grid offset: GetCurrentBoundRect is removing it
                 // but we need to know actual rect position
                 aRect += mxObject->GetGridOffset();
+
+                assert(pDrawView && "this ended up with a wrong rectangle");
             }
 
             // Insert page so that the model recognise it and also deleted
