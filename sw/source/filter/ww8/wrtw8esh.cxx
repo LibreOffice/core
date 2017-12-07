@@ -688,16 +688,6 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 if (pObj)
                 {
                     aRect = pObj->GetLogicRect();
-
-                    // We have to export Watermark original size with padding
-                    if (pObj->GetName().match("PowerPlusWaterMarkObject"))
-                    {
-                        const SfxItemSet& rSet = pObj->GetMergedItemSet();
-                        long nHeight = aRect.GetHeight();
-                        if (const SdrMetricItem* pItem = rSet.GetItem(SDRATTR_TEXT_UPPERDIST))
-                            nHeight += pItem->GetValue();
-                        aRect.SetSize(Size(aRect.GetWidth(), nHeight));
-                    }
                 }
             }
 
