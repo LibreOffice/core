@@ -2103,7 +2103,11 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         bool bToxIsAuthorities = TOX_AUTHORITIES == aCurType.eType;
         bool bToxIsIndex =       TOX_INDEX == aCurType.eType;
         bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
-        bool bToxIsSequence =    TOX_ILLUSTRATIONS == aCurType.eType;
+        bool bToxSupportsLinks = TOX_CONTENT == aCurType.eType ||
+                                 TOX_ILLUSTRATIONS == aCurType.eType ||
+                                 TOX_TABLES == aCurType.eType ||
+                                 TOX_OBJECTS == aCurType.eType ||
+                                 TOX_USER == aCurType.eType;
 
         m_pLevelLB->Clear();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
@@ -2173,7 +2177,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 
         //show or hide controls
         m_pEntryNoPB->Show(bToxIsContent);
-        m_pHyperLinkPB->Show(bToxIsContent || bToxIsSequence);
+        m_pHyperLinkPB->Show(bToxSupportsLinks);
         m_pRelToStyleCB->Show(!bToxIsAuthorities);
         m_pChapterInfoPB->Show(!bToxIsContent && !bToxIsAuthorities);
         m_pEntryPB->Show(!bToxIsAuthorities);
