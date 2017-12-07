@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_62af642a",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-07T11:49:39Z",
+      "side": 1,
+      "message": "ScDocShell::GetViewData() is not the cheapest, so rather remember the obtained pointer. Also the ScDrawView isn\u0027t guaranteed to exist, so check that as well.\n\nActually that static ScDocShell::GetViewData() obtains the \"best current view\" whatever that may be.. if the document is in the background of another one it\u0027s not what one expected. So all this looks a tad fragile though most times it will work, but sometimes it may not.",
+      "range": {
+        "startLine": 1220,
+        "startChar": 8,
+        "endLine": 1220,
+        "endChar": 31
+      },
+      "revId": "3809655e6d554dbc6c74b11597c540c4a62d4c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
