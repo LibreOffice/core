@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_gpgme.h>
+
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
@@ -459,6 +461,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
         xSigner->chooseEncryptionCertificate();
 
+    if (!xSignCertificates.hasElements())
+        return uno::Sequence< beans::NamedValue >(); // user cancelled
+
     // generate one encrypted key entry for each recipient
     // ---------------------------------------------------
 
@@ -478,13 +483,13 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     {
         uno::Sequence < sal_Int8 > aKeyID;
         if (pCerts->is())
-            aKeyID = (*pCerts)->getSHA256Thumbprint();
+            aKeyID = (*pCerts)->getSHA1Thumbprint();
 
         std::vector<GpgME::Key> keys;
         keys.push_back(
             ctx->key(
                 reinterpret_cast<const char*>(aKeyID.getConstArray()),
-                err, true));
+                err, false));
 
         // ctx is setup now, let's encrypt the lot!
         GpgME::Data plain(
@@ -504,7 +509,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
             len += curr;
 
         if(crypt_res.error() || !len)
-            throw uno::RuntimeException("The GpgME library failed to encrypt.");
+            throw lang::IllegalArgumentException(
+                "Not a suitable key, or failed to encrypt.",
+                css::uno::Reference<css::uno::XInterface>(), i);
 
         uno::Sequence < sal_Int8 > aCipherValue(len);
         result = cipher.seek(0,SEEK_SET);

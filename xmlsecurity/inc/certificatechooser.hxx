@@ -92,7 +92,7 @@ public:
 
     short Execute() override;
 
-    css::uno::Reference< css::security::XCertificate > GetSelectedCertificate();
+    css::uno::Sequence<css::uno::Reference< css::security::XCertificate > > GetSelectedCertificates();
     css::uno::Reference< css::xml::crypto::XXMLSecurityContext > GetSelectedSecurityContext();
     /// Gets the description string provided when selecting the certificate.
     OUString GetDescription();

@@ -456,7 +456,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     return bFound;
 }
 
-Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction)
+uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction)
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
@@ -468,17 +468,17 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 
     ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecContexts, eAction);
 
-    if (aChooser->Execute() != RET_OK)
-        return Reference< css::security::XCertificate >(nullptr);
+    uno::Sequence< Reference< css::security::XCertificate > > xCerts(1);
+    xCerts[0] = Reference< css::security::XCertificate >(nullptr);
 
-    Reference< css::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
+    if (aChooser->Execute() != RET_OK)
+        return xCerts;
+
+    xCerts = aChooser->GetSelectedCertificates();
     rProperties["Description"] = aChooser->GetDescription();
     rProperties["Usage"] = aChooser->GetUsageText();
 
-    if ( !xCert.is() )
-        return Reference< css::security::XCertificate >(nullptr);
-
-    return xCert;
+    return xCerts;
 }
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
@@ -489,23 +489,27 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSigningCertificate(OUString& rDescription)
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificateImpl( aProperties, UserAction::Sign );
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
 
-Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseEncryptionCertificate(OUString& rDescription)
+css::uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSignatures::chooseEncryptionCertificate()
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificateImpl( aProperties, UserAction::Encrypt );
-    rDescription = aProperties["Description"];
-    return xCert;
+    uno::Sequence< Reference< css::security::XCertificate > > aCerts=
+        chooseCertificatesImpl( aProperties, UserAction::Encrypt );
+    if (aCerts.getLength() == 1 && !aCerts[0].is())
+        // our error case contract is: empty sequence, so map that!
+        return uno::Sequence< Reference< css::security::XCertificate > >();
+    else
+        return aCerts;
 }
 
 css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<::com::sun::star::beans::PropertyValue>& rProperties)
 {
     std::map<OUString, OUString> aProperties;
-    auto xCert = chooseCertificateImpl( aProperties, UserAction::Sign );
+    auto xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
 
     std::vector<css::beans::PropertyValue> vec;
     for (const auto& pair : aProperties)

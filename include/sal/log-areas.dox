@@ -94,6 +94,7 @@ certain functionality.
 @li @c comphelper
 @li @c comphelper.backupfilehelper
 @li @c comphelper.container - EmbeddedObjectContainer
+@li @c comphelper.crypto
 
 @section cppu
 
