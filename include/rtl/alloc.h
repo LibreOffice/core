@@ -286,6 +286,43 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 ) SAL_THROW_EXTERN_C();
 
 
+#ifdef LIBO_INTERNAL_ONLY
+
+/** @cond INTERNAL */
+/** rtl_alloc_preInit
+ *
+ * This function, is called at the beginning and again
+ * at the end of LibreOfficeKit pre-initialization to enable
+ * various optimizations.
+ *
+ * Its function is to annotate a section @start = true to
+ * end (@start = false) via. two calls. Inside this section
+ * string allocators are replaced with ones which cause the
+ * strings to be staticized at the end of the section.
+ *
+ * This brings a number of constraints - in particular no
+ * string allocated outside the section should be freed
+ * inside it, practically this means starting the section
+ * as early as possible. No string allocated inside the
+ * section will be freed subsequently as they are
+ * staticized.
+ *
+ * This method is not thread-safe, nor intended for use in
+ * a threaded context, cf. previous constraints.
+ *
+ * It is almost certainly not the method that you want,
+ * use with extraordinary care referring to the
+ * implementation.
+ *
+ * @since LibreOffice 6.1
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
+    sal_Bool start
+) SAL_THROW_EXTERN_C();
+/** @endcond */
+
+#endif
+
 #ifdef __cplusplus
 }
 #endif
