@@ -203,10 +203,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
 
         if ( nPaddingSize > 1 )
         {
-            TimeValue aTime;
-            osl_getSystemTime( &aTime );
             rtlRandomPool aRandomPool = rtl_random_createPool();
-            rtl_random_addBytes( aRandomPool, &aTime, 8 );
             rtl_random_getBytes( aRandomPool, m_aLastBlock.getArray() + nOldLastBlockLen, nPaddingSize - 1 );
             rtl_random_destroyPool ( aRandomPool );
         }
