@@ -37,7 +37,7 @@
 
 ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                             ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
-                            const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView *pDrawView) :
+                            const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView *pDrawViewP) :
     pWindow( pWin ),
     pRightWin( pRight ),
     pBottomWin( pBottom ),
@@ -48,7 +48,7 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     aMapMode( rMap ),
     bLeft( bLeftEdge ),
     bByKeyboard( bKeyboard ),
-    aDrawView ( pDrawView ),
+    pDrawView ( pDrawViewP ),
     pModel( nullptr ),
     bVisible( false )
 {
@@ -101,7 +101,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
             mxObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( mxObject )
             {
-                aDrawView->SyncForGrid(mxObject.get());
+                pDrawView->SyncForGrid(mxObject.get());
                 aRect = mxObject->GetCurrentBoundRect();
 
                 // Need to include grid offset: GetCurrentBoundRect is removing it

@@ -46,7 +46,7 @@ private:
     bool        bByKeyboard;
 
     tools::Rectangle       aRect;
-    ScDrawView*     aDrawView;
+    ScDrawView*     pDrawView;
     SdrModel*       pModel;
     ScCaptionPtr    mxObject;
     bool            bVisible;
