@@ -36,13 +36,14 @@
 #define ATTRIBUTE_VERSION "manifest:version"
 #define ATTRIBUTE_MEDIA_TYPE "manifest:media-type"
 #define ATTRIBUTE_SIZE "manifest:size"
-#define ELEMENT_KEYINFO "loext:KeyInfo"
-#define ELEMENT_ENCRYPTEDKEY "loext:EncryptedKey"
-#define ELEMENT_ENCRYPTIONMETHOD "loext:EncryptionMethod"
+#define ELEMENT_MANIFEST_KEYINFO "loext:keyinfo"
+#define ELEMENT_ENCRYPTED_KEYINFO "loext:KeyInfo"
+#define ELEMENT_ENCRYPTEDKEY "loext:encrypted-key"
+#define ELEMENT_ENCRYPTIONMETHOD "loext:encryption-method"
 #define ELEMENT_PGPDATA "loext:PGPData"
 #define ELEMENT_PGPKEYID "loext:PGPKeyID"
 #define ELEMENT_PGPKEYPACKET "loext:PGPKeyPacket"
-#define ATTRIBUTE_ALGORITHM "loext:Algorithm"
+#define ATTRIBUTE_ALGORITHM "loext:PGPAlgorithm"
 #define ELEMENT_CIPHERDATA "loext:CipherData"
 #define ELEMENT_CIPHERVALUE "loext:CipherValue"
 
@@ -80,6 +81,7 @@
 #define AES256_URL "http://www.w3.org/2001/04/xmlenc#aes256-cbc"
 
 #define PBKDF2_NAME "PBKDF2"
+#define PGP_NAME "PGP"
 #define PBKDF2_URL "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#pbkdf2"
 
 #endif

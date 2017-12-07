@@ -66,7 +66,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     const OUString sChecksumTypeAttribute    ( ATTRIBUTE_CHECKSUM_TYPE );
     const OUString sChecksumAttribute    ( ATTRIBUTE_CHECKSUM);
 
-    const OUString sKeyInfoElement              ( ELEMENT_KEYINFO );
+    const OUString sKeyInfoElement              ( ELEMENT_ENCRYPTED_KEYINFO );
+    const OUString sManifestKeyInfoElement      ( ELEMENT_MANIFEST_KEYINFO );
     const OUString sEncryptedKeyElement         ( ELEMENT_ENCRYPTEDKEY );
     const OUString sEncryptionMethodElement     ( ELEMENT_ENCRYPTIONMETHOD );
     const OUString sPgpDataElement              ( ELEMENT_PGPDATA );
@@ -75,6 +76,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     const OUString sAlgorithmAttribute          ( ATTRIBUTE_ALGORITHM );
     const OUString sCipherDataElement           ( ELEMENT_CIPHERDATA );
     const OUString sCipherValueElement          ( ELEMENT_CIPHERVALUE );
+    const OUString sKeyInfo                     ( "KeyInfo" );
     const OUString sPgpKeyIDProperty            ( "KeyId" );
     const OUString sPgpKeyPacketProperty        ( "KeyPacket" );
     const OUString sCipherValueProperty         ( "CipherValue" );
@@ -104,6 +106,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     const OUString  sAES256_URL          ( AES256_URL );
 
     const OUString  sPBKDF2_Name         ( PBKDF2_NAME );
+    const OUString  sPGP_Name            ( PGP_NAME );
 
     ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
     const uno::Sequence < beans::PropertyValue > *pSequence = rManList.getConstArray();
@@ -112,6 +115,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     // find the mediatype of the document if any
     OUString aDocMediaType;
     OUString aDocVersion;
+    sal_Int32 nRootFolderPropIndex=-1;
     for (sal_uInt32 nInd = 0; nInd < nManLength ; nInd++ )
     {
         OUString aMediaType;
@@ -142,6 +146,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         {
             aDocMediaType = aMediaType;
             aDocVersion = aVersion;
+            nRootFolderPropIndex = nInd;
             break;
         }
     }
@@ -209,93 +214,112 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     }
     xHandler->startElement( sManifestElement, xRootAttrList );
 
-    if (nManLength > 0)
+    const uno::Any *pKeyInfoProperty = nullptr;
+    if ( nRootFolderPropIndex >= 0 )
     {
-        const beans::PropertyValue *pValue = pSequence[0].getConstArray();
-        OUString aString;
-        const uno::Any *pPgpKeyIDProperty = nullptr, *pPgpKeyPacketProperty = nullptr,
-            *pCipherValueProperty = nullptr;
-        for (sal_uInt32 j = 0, nNum = pSequence[0].getLength(); j < nNum; j++, pValue++)
+        // do we have package-wide encryption info?
+        const beans::PropertyValue *pValue =
+            pSequence[nRootFolderPropIndex].getConstArray();
+        for (sal_uInt32 j = 0, nNum = pSequence[nRootFolderPropIndex].getLength(); j < nNum; j++, pValue++)
         {
-            if (pValue->Name == sPgpKeyIDProperty )
-                pPgpKeyIDProperty = &pValue->Value;
-            else if (pValue->Name == sPgpKeyPacketProperty )
-                pPgpKeyPacketProperty = &pValue->Value;
-            else if (pValue->Name == sCipherValueProperty )
-                pCipherValueProperty = &pValue->Value;
+            if (pValue->Name == sKeyInfo )
+                pKeyInfoProperty = &pValue->Value;
         }
 
-        if ( pPgpKeyIDProperty && pPgpKeyPacketProperty && pCipherValueProperty )
+        if ( pKeyInfoProperty )
         {
-            // TODO make this work for multiple recipients
-            // ==== OpenPGP - encryped session data
+            // yeah, so that goes directly below the manifest:manifest
+            // element
             ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
             uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
             OUStringBuffer aBuffer;
-            uno::Sequence < sal_Int8 > aSequence;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            // ==== KeyInfo & children
-            xHandler->startElement( sKeyInfoElement, nullptr );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->startElement( sEncryptedKeyElement, nullptr );
+            // ==== manifest:keyinfo & children
+            xHandler->startElement( sManifestKeyInfoElement, nullptr );
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            // TODO this should rather be configurable
-            pNewAttrList->AddAttribute ( sAlgorithmAttribute, sCdataAttribute,
-                                         "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
-            xHandler->startElement( sEncryptionMethodElement, xNewAttrList );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->endElement( sEncryptionMethodElement );
+            uno::Sequence< uno::Sequence < beans::PropertyValue > > aKeyInfoSequence;
+            *pKeyInfoProperty >>= aKeyInfoSequence;
+            const uno::Sequence < beans::PropertyValue > *pKeyInfoSequence = aKeyInfoSequence.getConstArray();
+            const sal_uInt32 nKeyInfoLength = aKeyInfoSequence.getLength();
+            for (sal_uInt32 nInd = 0; nInd < nKeyInfoLength ; nInd++ )
+            {
+                uno::Sequence < sal_Int8 > aPgpKeyID;
+                uno::Sequence < sal_Int8 > aPgpKeyPacket;
+                uno::Sequence < sal_Int8 > aCipherValue;
+                pValue = pKeyInfoSequence[nInd].getConstArray();
+                for (sal_uInt32 j = 0, nNum = pKeyInfoSequence[nInd].getLength(); j < nNum; j++, pValue++)
+                {
+                    if (pValue->Name == sPgpKeyIDProperty )
+                        pValue->Value >>= aPgpKeyID;
+                    else if (pValue->Name == sPgpKeyPacketProperty )
+                        pValue->Value >>= aPgpKeyPacket;
+                    else if (pValue->Name == sCipherValueProperty )
+                        pValue->Value >>= aCipherValue;
+                }
 
-            xHandler->startElement( sKeyInfoElement, nullptr );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                if (!aPgpKeyID.hasElements() && !aPgpKeyPacket.hasElements() && !aCipherValue.hasElements() )
+                {
+                    // ==== manifest:encrypted-key & children - one for each recipient
+                    xHandler->startElement( sEncryptedKeyElement, nullptr );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->startElement( sPgpDataElement, nullptr );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    // TODO: this should rather be configurable
+                    pNewAttrList->AddAttribute ( sAlgorithmAttribute, sCdataAttribute,
+                                                 "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
+                    xHandler->startElement( sEncryptionMethodElement, xNewAttrList );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->endElement( sEncryptionMethodElement );
 
-            xHandler->startElement( sPgpKeyIDElement, nullptr );
-            *pPgpKeyIDProperty >>= aSequence;
-            ::sax::Converter::encodeBase64(aBuffer, aSequence);
-            xHandler->characters( aBuffer.makeStringAndClear() );
-            xHandler->endElement( sPgpKeyIDElement );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->startElement( sKeyInfoElement, nullptr );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->startElement( sPGPKeyPacketElement, nullptr );
-            *pPgpKeyPacketProperty >>= aSequence;
-            ::sax::Converter::encodeBase64(aBuffer, aSequence);
-            xHandler->characters( aBuffer.makeStringAndClear() );
-            xHandler->endElement( sPGPKeyPacketElement );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->startElement( sPgpDataElement, nullptr );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->endElement( sPgpDataElement );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->startElement( sPgpKeyIDElement, nullptr );
+                    ::sax::Converter::encodeBase64(aBuffer, aPgpKeyID);
+                    xHandler->characters( aBuffer.makeStringAndClear() );
+                    xHandler->endElement( sPgpKeyIDElement );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->endElement( sKeyInfoElement );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->startElement( sPGPKeyPacketElement, nullptr );
+                    ::sax::Converter::encodeBase64(aBuffer, aPgpKeyPacket);
+                    xHandler->characters( aBuffer.makeStringAndClear() );
+                    xHandler->endElement( sPGPKeyPacketElement );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->startElement( sCipherDataElement, nullptr );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->endElement( sPgpDataElement );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->startElement( sCipherValueElement, nullptr );
-            *pCipherValueProperty >>= aSequence;
-            ::sax::Converter::encodeBase64(aBuffer, aSequence);
-            xHandler->characters( aBuffer.makeStringAndClear() );
-            xHandler->endElement( sCipherValueElement );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->endElement( sKeyInfoElement );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->endElement( sCipherDataElement );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->startElement( sCipherDataElement, nullptr );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->endElement( sEncryptedKeyElement );
-            xHandler->ignorableWhitespace ( sWhiteSpace );
+                    xHandler->startElement( sCipherValueElement, nullptr );
+                    ::sax::Converter::encodeBase64(aBuffer, aCipherValue);
+                    xHandler->characters( aBuffer.makeStringAndClear() );
+                    xHandler->endElement( sCipherValueElement );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            xHandler->endElement( sKeyInfoElement );
+                    xHandler->endElement( sCipherDataElement );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
+
+                    xHandler->endElement( sEncryptedKeyElement );
+                    xHandler->ignorableWhitespace ( sWhiteSpace );
+                }
+            }
+
+            xHandler->endElement( sManifestKeyInfoElement );
             xHandler->ignorableWhitespace ( sWhiteSpace );
         }
     }
 
+    // now write individual file entries
     for (sal_uInt32 i = 0 ; i < nManLength ; i++)
     {
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
@@ -418,22 +442,33 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
-            pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2_Name );
-
-            if ( bStoreStartKeyGeneration )
+            if ( pKeyInfoProperty )
             {
-                aBuffer.append( nDerivedKeySize );
-                pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+                pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute,
+                                             sCdataAttribute,
+                                             sPGP_Name );
             }
+            else
+            {
+                pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute,
+                                             sCdataAttribute,
+                                             sPBKDF2_Name );
 
-            sal_Int32 nCount = 0;
-            *pIterationCount >>= nCount;
-            aBuffer.append (nCount);
-            pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+                if ( bStoreStartKeyGeneration )
+                {
+                    aBuffer.append( nDerivedKeySize );
+                    pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+                }
 
-            *pSalt >>= aSequence;
-            ::sax::Converter::encodeBase64(aBuffer, aSequence);
-            pNewAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+                sal_Int32 nCount = 0;
+                *pIterationCount >>= nCount;
+                aBuffer.append (nCount);
+                pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+
+                *pSalt >>= aSequence;
+                ::sax::Converter::encodeBase64(aBuffer, aSequence);
+                pNewAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            }
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sKeyDerivationElement , xNewAttrList);
