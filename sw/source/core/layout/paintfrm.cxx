@@ -1182,42 +1182,6 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
 }
 
 /**
- * Helper for twip adjustments on pixel base
- *
- * This method compares the x- or y-pixel position of two twip-points.
- * If the x-/y-pixel positions are the same, the x-/y-pixel position of
- * the second twip point is adjusted by a given amount of pixels
-*/
-static void lcl_CompPxPosAndAdjustPos( const vcl::RenderContext&  _rOut,
-                                const Point&         _rRefPt,
-                                Point&               _rCompPt,
-                                const bool          _bChkXPos,
-                                const sal_Int8       _nPxAdjustment )
-{
-    const Point aRefPxPt = _rOut.LogicToPixel( _rRefPt );
-    Point aCompPxPt = _rOut.LogicToPixel( _rCompPt );
-
-    if ( _bChkXPos )
-    {
-        if ( aCompPxPt.X() == aRefPxPt.X() )
-        {
-            aCompPxPt.X() += _nPxAdjustment ;
-            const Point aAdjustedCompPt = _rOut.PixelToLogic( aCompPxPt );
-            _rCompPt.X() = aAdjustedCompPt.X();
-        }
-    }
-    else
-    {
-        if ( aCompPxPt.Y() == aRefPxPt.Y() )
-        {
-            aCompPxPt.Y() += _nPxAdjustment ;
-            const Point aAdjustedCompPt = _rOut.PixelToLogic( aCompPxPt );
-            _rCompPt.Y() = aAdjustedCompPt.Y();
-        }
-    }
-}
-
-/**
  * Method to pixel-align rectangle for drawing graphic object
  *
  * Because we are drawing graphics from the left-top-corner in conjunction
@@ -1261,13 +1225,6 @@ static long lcl_AlignHeight( const long nHeight, SwPaintProperties const & prope
             return std::max(1L, nHeight - properties.nSHalfPixelSzH);
     }
     return nHeight;
-}
-
-static long lcl_MinHeightDist( const long nDist, SwPaintProperties const & properties )
-{
-    if ( properties.aSScaleX < aMinDistScale || properties.aSScaleY < aMinDistScale )
-        return nDist;
-    return ::lcl_AlignHeight( std::max( nDist, properties.nSMinDistPixelH ), properties);
 }
 
 /**
