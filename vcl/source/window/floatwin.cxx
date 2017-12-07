@@ -604,9 +604,9 @@ void FloatingWindow::StateChanged( StateChangedType nType )
     SystemWindow::StateChanged( nType );
 
     VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
-    if (pParent && nType == StateChangedType::Visible)
+    if (pParent)
     {
-        if (IsVisible())
+        if (nType == StateChangedType::InitShow)
         {
             std::vector<vcl::LOKPayloadItem> aItems;
             if (pParent == this)
@@ -626,7 +626,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
             aItems.emplace_back(std::make_pair("position", mpImplData->maPos.toString()));
             GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
-        else if (!IsVisible())
+        else if (!IsVisible() && nType == StateChangedType::Visible)
         {
             assert(GetLOKNotifier());
             GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "close");
