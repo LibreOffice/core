@@ -144,7 +144,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_headerfootercontentobj \
 	CppunitTest_sc_recentfunctionsobj \
 	CppunitTest_sc_functionlistobj \
-	CppunitTest_sc_chart2dataprovider \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
