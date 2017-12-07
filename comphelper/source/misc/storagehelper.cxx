@@ -494,7 +494,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         // ctx is setup now, let's encrypt the lot!
         GpgME::Data plain(
             reinterpret_cast<const char*>(aVector.getConstArray()),
-            aVector.getLength(), false);
+            size_t(aVector.getLength()), false);
         GpgME::Data cipher;
 
         GpgME::EncryptionResult crypt_res = ctx->encrypt(
