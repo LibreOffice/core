@@ -363,14 +363,6 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
         }
     }
 
-    // if we still have dialogs open, temporary suppress termination
-    if (bTerminateApp && Dialog::AreDialogsOpen())
-    {
-        Application::SetShutdownDelayed();
-        bCloseFrame = true;
-        bTerminateApp = false;
-    }
-
     // Do it now ...
     bool bSuccess = false;
     if (bCloseFrame)

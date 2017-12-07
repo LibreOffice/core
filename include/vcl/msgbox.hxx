@@ -47,8 +47,7 @@ protected:
 
 public:
                         MessBox( vcl::Window* pParent, WinBits nStyle,
-                                 const OUString& rTitle, const OUString& rMessage,
-                            Dialog::InitFlag eInitFlag = Dialog::InitFlag::NoParentCentered);
+                                 const OUString& rTitle, const OUString& rMessage);
     virtual             ~MessBox();
     virtual void        dispose() override;
 
