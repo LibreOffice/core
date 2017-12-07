@@ -36,6 +36,19 @@ DECLARE_WW8IMPORT_TEST(testFloatingTableSectionMargins, "floating-table-section-
     CPPUNIT_ASSERT( abs(( pageLeft + pageWidth / 2 ) - ( tableLeft + tableWidth / 2 )) < 20 );
 }
 
+// Input document contains only one IF-field,
+// and it should be imported as com.sun.star.text.TextField.ConditionalText in any case,
+// instead of insertion of the the pair of two field-marks: <field:fieldmark-start> + <field:fieldmark-end>.
+DECLARE_WW8IMPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // at least one field should be detected
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+}
+
 DECLARE_WW8IMPORT_TEST(testN816593, "n816593.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);

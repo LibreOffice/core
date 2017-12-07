@@ -114,6 +114,19 @@ DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(" size 12{2+2=4} {}"), formula2);
 }
 
+// Input document contains only one IF-field,
+// and it should be imported as com.sun.star.text.TextField.ConditionalText in any case,
+// instead of insertion of the the pair of two field-marks: <field:fieldmark-start> + <field:fieldmark-end>.
+DECLARE_ODFEXPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // at least one field should be detected
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 {
     uno::Reference<drawing::XShape> const xShape(getShape(1));

@@ -589,6 +589,29 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 //Move outside the section associated with this type of field
                 *m_pPaM->GetPoint() = m_aFieldStack.back().maStartPos;
                 break;
+            case 7: // IF-field
+            {
+                // conditional field parameters, TODO:
+                OUString param1("A1");
+                OUString param2("B2");
+                OUString param3("C3");
+
+                // create new field
+                SwFieldType* pFieldType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenText);
+                SwHiddenTextField *const pHTField = new SwHiddenTextField(
+                    static_cast<SwHiddenTextFieldType*>(pFieldType),
+                    param1,
+                    param2,
+                    param3,
+                    static_cast<sal_uInt16>(TYP_CONDTXTFLD));
+
+                // TODO:
+                pHTField->SetValue(false);
+
+                // insert new field into document
+                m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( *pHTField ) );
+                break;
+            }
             default:
                 OUString aCode = m_aFieldStack.back().GetBookmarkCode();
                 if ( !aCode.isEmpty() )
