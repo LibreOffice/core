@@ -1,0 +1,35 @@
+Style enforcing code.
+
+== How to reproduce the binaries at <https://dev-www.libreoffice.org/bin/> ==
+
+- Linux:
+
+  - Built from source on openSUSE Leap 42.3
+  - get <http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz>
+  - get <http://releases.llvm.org/5.0.0/cfe-5.0.0.src.tar.xz>  and extract this as tools/clang/ in the LLVM source code
+  - mkdir workdir; cd workdir; cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=$PWD/../instdir -DCMAKE_BUILD_TYPE=Release ..; make -j8 clang-format
+  - this produces a binary that is dynamically linked, but all LLVM/clang libs are linked in statically
+
+- macOS:
+
+  - <http://releases.llvm.org/5.0.0/clang+llvm-5.0.0-x86_64-apple-darwin.tar.xz> provides a portable binary already
+
+- Windows:
+
+  - <http://releases.llvm.org/5.0.0/LLVM-5.0.0-win32.exe> provides a portable binary already
+
+== Directory contents ==
+
+- blacklist: list of existing files not to be formatted:
+
+  - if you rename a file mentioned in this list, please update the entry (and
+    keep the file sorted)
+
+- check-last-commit: this is used during gerrit / jenkins verification
+
+- ClangFormat.pm: shared code between the git hook and these scripts
+
+- generate-style-blacklist: was used to generate `blacklist`
+
+- reformat-formatted-files: run this script in case the style config changes or
+  clang-format version is updated
