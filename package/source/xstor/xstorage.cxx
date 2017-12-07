@@ -4205,7 +4205,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
     }
 }
 
-void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< beans::NamedValue >& aProps )
+void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< beans::NamedValue > >& aProps )
 {
     ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 

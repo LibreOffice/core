@@ -1750,10 +1750,9 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     }
     else if ( aPropertyName == ENCRYPTION_GPG_PROPERTIES )
     {
-        uno::Sequence< beans::NamedValue > aGpgProps;
+        uno::Sequence< uno::Sequence< beans::NamedValue > > aGpgProps;
         if ( m_pZipFile || !( aValue >>= aGpgProps ) || aGpgProps.getLength() == 0 )
         {
-            // the algorithms can not be changed if the file has a persistence based on the algorithms ( m_pZipFile )
             throw IllegalArgumentException(THROW_WHERE "unexpected Gpg properties are provided.", uno::Reference< uno::XInterface >(), 2 );
         }
 

@@ -210,7 +210,7 @@ void OStorageHelper::SetCommonStorageEncryptionData(
          aEncryptionData[1].Name == "EncryptionKey" )
     {
         xEncrSet->setGpgProperties(
-            aEncryptionData[0].Value.get< uno::Sequence< beans::NamedValue > >() );
+            aEncryptionData[0].Value.get< uno::Sequence< uno::Sequence< beans::NamedValue > > >() );
         xEncrSet->setEncryptionData(
             aEncryptionData[1].Value.get< uno::Sequence< beans::NamedValue > >() );
     }
