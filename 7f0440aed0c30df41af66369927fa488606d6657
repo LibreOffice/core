@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_454d123d",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-12-07T17:23:48Z",
+      "side": 1,
+      "message": "This whole block looks horribly wrong. You are changing the model from the rendering code.",
+      "revId": "7f0440aed0c30df41af66369927fa488606d6657",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
