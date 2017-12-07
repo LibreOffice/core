@@ -169,6 +169,7 @@
 #define RID_SVXSTR_GRFILTER_FILTERERROR         NC_("RID_SVXSTR_GRFILTER_FILTERERROR", "Image filter not found")
 #define RID_SVXSTR_END_REDLINING_WARNING        NC_("RID_SVXSTR_END_REDLINING_WARNING", "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n")
 #define RID_SVXSTR_INCORRECT_PASSWORD           NC_("RID_SVXSTR_INCORRECT_PASSWORD", "Incorrect password")
+#define RID_SVXSTR_GPG_ENCRYPT_FAILURE          NC_("RID_SVXSTR_GPG_ENCRYPT_FAILURE", "OpenPGP key not trusted, damaged, or encryption failure. Please try again.")
 
 #define STR_PASSWD_MIN_LEN                      NC_("STR_PASSWD_MIN_LEN", "(Minimum $(MINLEN) characters)")
 #define STR_PASSWD_MIN_LEN1                     NC_("STR_PASSWD_MIN_LEN1", "(Minimum 1 character)")

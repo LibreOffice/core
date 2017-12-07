@@ -1534,7 +1534,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                         {
                             ScopedVclPtrInstance< MessageDialog > aBox(
                                 mpPreferredParentWindow,
-                                SfxResId(RID_SVXSTR_INCORRECT_PASSWORD));
+                                SfxResId(RID_SVXSTR_GPG_ENCRYPT_FAILURE));
                             aBox->Execute();
                         }
                     }
