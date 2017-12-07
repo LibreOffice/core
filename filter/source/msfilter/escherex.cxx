@@ -3475,7 +3475,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         }
 
                         // Use gtextFStretch for Watermark like MSO does
-                        nTextPathFlags |= use_gtextFStretch | gtextFStretch;
+                        nTextPathFlags |= use_gtextFBestFit | gtextFBestFit
+                                        | use_gtextFStretch | gtextFStretch
+                                        | use_gtextFShrinkFit | gtextFShrinkFit;
 
                         if ( nTextPathFlags != nTextPathFlagsOrg )
                             AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );

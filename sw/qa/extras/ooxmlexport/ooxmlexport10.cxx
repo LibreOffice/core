@@ -1752,14 +1752,25 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
-    sal_Int32 nTotalHeight = 0;
-    xPropertySet->getPropertyValue(UNO_NAME_TEXT_UPPERDIST) >>= nTotalHeight;
-    nTotalHeight += xShape->getSize().Height;
+    sal_Int32 nHeight = xShape->getSize().Height;
 
     // Rounding errors
-    sal_Int32 nDifference = 5198 - nTotalHeight;
+    sal_Int32 nDifference = 5150 - nHeight;
     std::stringstream ss;
-    ss << "Difference: " << nDifference << " TotalHeight: " << nTotalHeight;
+    ss << "Difference: " << nDifference << " TotalHeight: " << nHeight;
+    CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference <= 4);
+    CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
+{
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+
+    // Rounding errors
+    sal_Int32 nHeight = xShape->getSize().Height;
+    sal_Int32 nDifference = 8729 - nHeight;
+    std::stringstream ss;
+    ss << "Difference: " << nDifference << " TotalHeight: " << nHeight;
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference <= 4);
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
 }
