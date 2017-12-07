@@ -59,6 +59,11 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
+		   CXXFLAGS='$(CXXFLAGS) \
+				$(if $(ENABLE_OPTIMIZED), \
+					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
+				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CXXFLAGS) -D_GLIBCXX_DEBUG) \
+				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
 		   $(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
