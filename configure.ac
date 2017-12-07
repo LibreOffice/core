@@ -10218,6 +10218,12 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     fi
     ENABLE_GPGMEPP=TRUE
     AC_DEFINE([HAVE_FEATURE_GPGME])
+    AC_PATH_PROG(GPG, gpg)
+    if test -n "$GPG"; then
+        # make sure we not only have a working gpgme, but a full working
+        # installation to run OpenPGP signature verification
+        AC_DEFINE([HAVE_FEATURE_GPGVERIFY])
+    fi
 fi
 AC_SUBST(ENABLE_GPGMEPP)
 AC_SUBST(SYSTEM_GPGMEPP)

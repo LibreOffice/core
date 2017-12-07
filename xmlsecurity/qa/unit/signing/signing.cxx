@@ -103,8 +103,7 @@ public:
     void testXAdESGood();
     /// Test importing of signature line images
     void testSignatureLineImages();
-#ifdef LINUX
-# if HAVE_FEATURE_GPGME
+#if HAVE_FEATURE_GPGVERIFY
     /// Test a typical ODF where all streams are GPG-signed.
     void testODFGoodGPG();
     /// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
@@ -113,7 +112,6 @@ public:
     void testODFBrokenStreamGPG();
     /// Test a typical broken ODF signature where the XML dsig hash is corrupted.
     void testODFBrokenDsigGPG();
-# endif
 #endif
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -137,13 +135,11 @@ public:
     CPPUNIT_TEST(testXAdES);
     CPPUNIT_TEST(testXAdESGood);
     CPPUNIT_TEST(testSignatureLineImages);
-#ifdef LINUX
-# if HAVE_FEATURE_GPGME
+#if HAVE_FEATURE_GPGVERIFY
     CPPUNIT_TEST(testODFGoodGPG);
     CPPUNIT_TEST(testODFUntrustedGoodGPG);
     CPPUNIT_TEST(testODFBrokenStreamGPG);
     CPPUNIT_TEST(testODFBrokenDsigGPG);
-# endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -177,15 +173,13 @@ void SigningTest::setUp()
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
 #endif
-#ifdef LINUX
-# if HAVE_FEATURE_GPGME
+#if HAVE_FEATURE_GPGVERIFY
     // Make gpg use our own defined setup below data dir
     OUString aHomePath;
     osl::FileBase::getSystemPathFromFileURL(
         m_directories.getURLFromSrc(DATA_DIRECTORY),
         aHomePath);
     setenv("GNUPGHOME", aHomePath.toUtf8().getStr(), 1);
-# endif
 #endif
 }
 
@@ -687,8 +681,7 @@ void SigningTest::testSignatureLineImages()
     CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
 }
 
-#ifdef LINUX
-# if HAVE_FEATURE_GPGME
+#if HAVE_FEATURE_GPGVERIFY
 void SigningTest::testODFGoodGPG()
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "goodGPG.odt");
@@ -743,7 +736,6 @@ void SigningTest::testODFBrokenDsigGPG()
     CPPUNIT_ASSERT(pObjectShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
-# endif
 #endif
 
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
