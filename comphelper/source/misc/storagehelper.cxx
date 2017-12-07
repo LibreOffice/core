@@ -56,7 +56,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
 # include <gpgme.h>
 # include <context.h>
 # include <encryptionresult.h>
@@ -432,7 +432,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 
 uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData()
 {
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
     // generate session key
     // --------------------
 
