@@ -848,8 +848,10 @@ enum MSO_SYSCOLORINDEX {
 
 enum MSO_TextGeometryProperties {
     use_gtextFBestFit   = 0x00000100,
+    use_gtextFShrinkFit = 0x00000200,
     use_gtextFStretch   = 0x00000400,
     gtextFBestFit       = 0x01000000,
+    gtextFShrinkFit     = 0x02000000,
     gtextFStretch       = 0x04000000
 };
 
