@@ -16,6 +16,24 @@
       "revId": "45532453cd5992ed320b0bf2d9f345177ca9b644",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a2f78c57",
+        "filename": "sw/source/core/layout/flylay.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2017-12-07T10:49:29Z",
+      "side": 1,
+      "message": "Generally, yes, I need both boolean statements. But I think I twisted the meaning of the compat flag. In the current situation it is enabled for legacy documents and disabled for the \"new\" behavior. I can change this, off course. Then I will rename the flag to \"DisableOffPagePositioning\" to make the meaning more clear.",
+      "parentUuid": "1a430d35_dfd62f4e",
+      "revId": "45532453cd5992ed320b0bf2d9f345177ca9b644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
