@@ -242,7 +242,7 @@ vector<ScTokenRef> TokenTable::getAllRanges() const
 }
 
 typedef std::map<SCROW, FormulaToken*> FormulaTokenMap;
-typedef std::map<SCCOL, FormulaTokenMap*> FormulaTokenMapMap;
+typedef std::map<sal_uInt32, FormulaTokenMap*> FormulaTokenMapMap;
 
 class Chart2PositionMap
 {
@@ -805,7 +805,7 @@ void Chart2Positioner::createPositionMap()
             FormulaTokenMap* pFirstCol = pCols->begin()->second;
             for (FormulaTokenMap::const_iterator it1 = pFirstCol->begin(); it1 != pFirstCol->end(); ++it1)
             {
-                sal_uInt32 nKey = it1->first;
+                SCROW nKey = it1->first;
                 for (FormulaTokenMapMap::const_iterator it2 = pCols->begin(); it2 != pCols->end(); ++it2)
                 {
                     pCol = it2->second;
