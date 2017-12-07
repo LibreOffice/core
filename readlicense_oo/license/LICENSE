@@ -481,6 +481,14 @@ fontconfig
    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
    PERFORMANCE OF THIS SOFTWARE.
 
+GpgME
+
+   License (software): LGPLv2.1+
+   License (manual+tools): GPLv3+
+
+   See GNU Lesser General Public License Version 2.1 below
+   See GNU General Public License Version 3 below
+
 Graphite2
 
    The following software may be included in this product: Graphite2. Use
@@ -914,6 +922,14 @@ JDOM
    <brett_AT_jdom_DOT_org>. For more information on the JDOM Project,
    please see http://www.jdom.org/.
 
+libassuan
+
+   License (library): LGPLv2.1+
+   License (manual): GPLv3+
+
+   See GNU Lesser General Public License Version 2.1 below
+   See GNU General Public License Version 3 below
+
 libatomic-ops
 
    The following software may be included in this product: libatomic-ops.
@@ -1044,6 +1060,14 @@ libfreehand
    below:
 
    See MPL Version 2 below
+
+libgpg-error
+
+   License (library): LGPLv2.1+
+   License (manual+tools): GPLv2+ with exception
+
+   See GNU Lesser General Public License Version 2.1 below
+   See GNU General Public License Version 2 below
 
 liblangtag
 
