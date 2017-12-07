@@ -481,15 +481,14 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
 
     // We only allow these border line types.
-    std::vector<sal_Int32> aBorderStyles;
-    aBorderStyles.reserve(5);
-    aBorderStyles.push_back(table::BorderLineStyle::SOLID);
-    aBorderStyles.push_back(table::BorderLineStyle::DOTTED);
-    aBorderStyles.push_back(table::BorderLineStyle::DASHED);
-    aBorderStyles.push_back(table::BorderLineStyle::FINE_DASHED);
-    aBorderStyles.push_back(table::BorderLineStyle::DASH_DOT);
-    aBorderStyles.push_back(table::BorderLineStyle::DASH_DOT_DOT);
-    aBorderStyles.push_back(table::BorderLineStyle::DOUBLE_THIN);
+    const std::vector<sal_Int32> aBorderStyles{
+        table::BorderLineStyle::SOLID,
+        table::BorderLineStyle::DOTTED,
+        table::BorderLineStyle::DASHED,
+        table::BorderLineStyle::FINE_DASHED,
+        table::BorderLineStyle::DASH_DOT,
+        table::BorderLineStyle::DASH_DOT_DOT,
+        table::BorderLineStyle::DOUBLE_THIN };
 
     SfxIntegerListItem aBorderStylesItem(SID_ATTR_BORDER_STYLES, aBorderStyles);
     pOldSet->Put(aBorderStylesItem);
