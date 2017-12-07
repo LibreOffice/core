@@ -4312,7 +4312,7 @@ void WW8PLCFx_Book::advance()
         else
         {
             const void * p = pBook[0]->GetData(pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr)? 0L : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
+            long nPairFor = (p == nullptr) ? 0 : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
             if (nPairFor == pBook[1]->GetIdx())
                 nIsEnd = 0;
             else
@@ -4555,7 +4555,7 @@ void WW8PLCFx_AtnBook::advance()
         else
         {
             const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr)? 0L : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
+            long nPairFor = (p == nullptr) ? 0 : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
             if (nPairFor == m_pBook[1]->GetIdx())
                 m_bIsEnd = false;
             else
@@ -4687,7 +4687,7 @@ void WW8PLCFx_FactoidBook::advance()
         else
         {
             const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr)? 0L : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
+            long nPairFor = (p == nullptr) ? 0 : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
             if (nPairFor == m_pBook[1]->GetIdx())
                 m_bIsEnd = false;
             else

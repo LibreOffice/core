@@ -4458,7 +4458,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     if( HasFixSize() )
     {
         AdjustCells( aRectFnSet.GetHeight(getFramePrintArea()), true );
-        return 0L;
+        return 0;
     }
 
     // bInfo may be set to true by SwRowFrame::Format; we need to handle this

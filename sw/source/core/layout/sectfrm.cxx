@@ -2021,7 +2021,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
             nDist = LONG_MAX - nFrameHeight;
 
         if ( nDist <= 0 )
-            return 0L;
+            return 0;
 
         bool bInCalcContent = GetUpper() && IsInFly() && FindFlyFrame()->IsLocked();
         // OD 2004-03-15 #116561# - allow grow in online layout
@@ -2134,7 +2134,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                 InvalidateSize();
         }
     }
-    return 0L;
+    return 0;
 }
 
 SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
@@ -2224,7 +2224,7 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
             }
         }
     }
-    return 0L;
+    return 0;
 }
 
 /*

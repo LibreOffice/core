@@ -306,7 +306,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             nDist = std::min( nDist, pBoss->GetMaxFootnoteHeight()
                          - aRectFnSet.GetHeight(getFrameArea()) );
             if ( nDist <= 0 )
-                return 0L;
+                return 0;
         }
         // FootnoteBoss also influences the max value
         if( !IsInSct() )
@@ -315,7 +315,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             if ( nDist > nMax )
                 nDist = nMax;
             if ( nDist <= 0 )
-                return 0L;
+                return 0;
         }
     }
     else if( nDist > aRectFnSet.GetHeight(GetPrev()->getFrameArea()) )

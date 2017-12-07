@@ -146,7 +146,7 @@ const SwRect* SwAnchoredObjectPosition::ToCharRect() const
 // #i22341#
 SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
 {
-    return 0L;
+    return 0;
 }
 
 /** helper method to determine top of a frame for the vertical

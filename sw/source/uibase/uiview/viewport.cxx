@@ -1168,7 +1168,7 @@ bool SwView::UpdateScrollbars()
         }
 
         Size aTmpSz( m_aDocSz );
-        const long lOfst = bBorder ? 0 : DOCUMENTBORDER * 2L;
+        const long lOfst = bBorder ? 0 : DOCUMENTBORDER * 2;
         aTmpSz.Width() += lOfst; aTmpSz.Height() += lOfst;
 
         {
