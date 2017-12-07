@@ -81,7 +81,6 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingIsProtected(false)
     , m_bGettingMarginsValue(false)
     , m_bGettingExtMarginsValue(false)
-    , m_bGettingUsePrinterSettings(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -1406,27 +1405,19 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
 */
 bool LwpMiddleLayout::GetUsePrinterSettings()
 {
-    if (m_bGettingUsePrinterSettings)
-        throw std::runtime_error("recursion in layout");
-    m_bGettingUsePrinterSettings = true;
-
-    bool bRet = false;
-
     if(m_nOverrideFlag & OVER_SIZE)
     {
-        bRet = (m_nAttributes3 & STYLE3_USEPRINTERSETTINGS) != 0;
+        return (m_nAttributes3 & STYLE3_USEPRINTERSETTINGS) != 0;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xBase.get()))
         {
-            bRet = pLay->GetUsePrinterSettings();
+            return pLay->GetUsePrinterSettings();
         }
     }
-
-    m_bGettingMarginsValue = false;
-    return bRet;
+    return false;
 }
 
 //Check whether there are contents in the layout
