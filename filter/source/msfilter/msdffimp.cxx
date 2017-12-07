@@ -4441,13 +4441,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
 
                             if ( nPaddingY > 0 )
-                            {
-                                // Remember that value because original size have to be exported
-                                aSet.Put( SdrMetricItem( SDRATTR_TEXT_UPPERDIST, nPaddingY ) );
                                 aObjData.aBoundRect.setHeight( nNewHeight );
-                            }
-                            else
-                                aSet.Put( SdrMetricItem( SDRATTR_TEXT_UPPERDIST, 0 ) );
                         }
                     }
                     pRet->SetMergedItemSet( aSet );

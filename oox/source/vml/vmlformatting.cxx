@@ -20,6 +20,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -36,6 +37,7 @@
 #include <oox/token/tokens.hxx>
 #include <svx/svdtrans.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <vcl/virdev.hxx>
 
 namespace oox {
 namespace vml {
@@ -897,6 +899,8 @@ beans::PropertyValue lcl_createTextpathProps()
 
 void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Reference<drawing::XShape>& xShape, const GraphicHelper& rGraphicHelper) const
 {
+    OUString sFont = "";
+
     if (moString.has())
     {
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
@@ -940,6 +944,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
                     xPropertySet->setPropertyValue("CharFontName", uno::makeAny(aValue));
+                    sFont = aValue;
                 }
                 else if (aName == "font-size")
                 {
@@ -950,6 +955,26 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                     xPropertySet->setPropertyValue("CharHeight", uno::makeAny(nSize));
                 }
             }
+        }
+    }
+    if (!moTrim.has() || !moTrim.get())
+    {
+        OUString sText = moString.get();
+        double fRatio = 0;
+        VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+        vcl::Font aFont = pDevice->GetFont();
+        aFont.SetFamilyName(sFont);
+        aFont.SetFontSize(Size(0, 96));
+        pDevice->SetFont(aFont);
+
+        auto nTextWidth = pDevice->GetTextWidth(sText);
+        if (nTextWidth)
+        {
+            fRatio = pDevice->GetTextHeight();
+            fRatio /= nTextWidth;
+
+            sal_Int32 nNewHeight = fRatio * xShape->getSize().Width;
+            xShape->setSize(awt::Size(xShape->getSize().Width, nNewHeight));
         }
     }
 }
