@@ -1879,6 +1879,7 @@ AC_ARG_WITH(help,
                           Usage:     --with-help    build the old local help
                                  --without-help     no local help (default)
                                  --with-help=html   build the new HTML local help
+                                 --with-help=online build the new HTML online help
                                  --with-help=common bundle common files for the local
                                                     help but do not build the whole help
     ],
@@ -4617,6 +4618,11 @@ if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Androi
         ENABLE_HTMLHELP=TRUE
         AC_MSG_RESULT([HTML])
         ;;
+    "online")
+        ENABLE_HTMLHELP=TRUE
+        HELP_ONLINE=TRUE
+        AC_MSG_RESULT([HTML])
+        ;;
     *)
         SCPDEFS="$SCPDEFS -DWITH_HELP"
         AC_MSG_RESULT([yes])
@@ -4627,6 +4633,7 @@ else
 fi
 AC_SUBST([ENABLE_HTMLHELP])
 AC_SUBST(HELP_COMMON_ONLY)
+AC_SUBST([HELP_ONLINE])
 
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
