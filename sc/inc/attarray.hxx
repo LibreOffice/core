@@ -83,7 +83,7 @@ class ScAttrArray
 private:
     SCCOL           nCol;
     SCTAB           nTab;
-    ScDocument*     pDocument;
+    ScDocument* const     pDocument;
 
     SCSIZE          nCount;
     SCSIZE          nLimit;
@@ -109,6 +109,7 @@ public:
             ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pNextColAttrArray = nullptr, bool bCreateEmpty = false );
             ~ScAttrArray();
 
+    ScDocument* GetDoc() { return pDocument; }
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
 #if DEBUG_SC_TESTATTRARRAY

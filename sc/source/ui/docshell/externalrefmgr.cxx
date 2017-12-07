@@ -2855,7 +2855,7 @@ public:
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
                 {
-                    OUString aStr = aCell.getString(&mpCurCol->GetDoc());
+                    OUString aStr = aCell.getString(mpCurCol->GetDoc());
                     svl::SharedString aSS = mrStrPool.intern(aStr);
                     pTok.reset(new formula::FormulaStringToken(aSS));
                 }
