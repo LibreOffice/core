@@ -112,6 +112,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
         return;
 
     // Translate the clip column spans into the destination column, and repeat as needed.
+    ScDocument* pDocument = GetDoc();
     std::vector<sc::RowSpan> aDestSpans;
     SCROW nDestOffset = aRange.mnRow1 - nClipRow1;
     bool bContinue = true;
@@ -197,6 +198,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     if (!pBlockPos)
         return;
 
+    ScDocument* pDocument = GetDoc();
     bool bSameDocPool = (rCxt.getClipDoc()->GetPool() == pDocument->GetPool());
 
     ScCellValue& rSrcCell = rCxt.getSingleCell(nColOffset);
@@ -549,6 +551,7 @@ void ScColumn::CloneFormulaCell(
                 "ScColumn::CloneFormulaCell - cloning array/matrix with not exactly one column or row as single cell");
     }
 
+    ScDocument* pDocument = GetDoc();
     std::vector<ScFormulaCell*> aFormulas;
     std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
     for (; itSpan != itSpanEnd; ++itSpan)
@@ -913,7 +916,7 @@ void ScColumn::PreprocessRangeNameUpdate(
     aOps.insert(ocBad);
     aOps.insert(ocColRowName);
     aOps.insert(ocName);
-    RecompileByOpcodeHandler aFunc(pDocument, aOps, rEndListenCxt, rCompileCxt);
+    RecompileByOpcodeHandler aFunc(GetDoc(), aOps, rEndListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
@@ -928,7 +931,7 @@ void ScColumn::PreprocessDBDataUpdate(
     aOps.insert(ocColRowName);
     aOps.insert(ocDBArea);
     aOps.insert(ocTableRef);
-    RecompileByOpcodeHandler aFunc(pDocument, aOps, rEndListenCxt, rCompileCxt);
+    RecompileByOpcodeHandler aFunc(GetDoc(), aOps, rEndListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
@@ -938,7 +941,7 @@ void ScColumn::CompileHybridFormula(
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    CompileHybridFormulaHandler aFunc(pDocument, rStartListenCxt, rCompileCxt);
+    CompileHybridFormulaHandler aFunc(GetDoc(), rStartListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
@@ -980,15 +983,15 @@ private:
             const ScCondFormatItem& rItem =
                 static_cast<const ScCondFormatItem&>(pPat->GetItem(ATTR_CONDITIONAL));
             const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
-            pCondSet = mrCol.GetDoc().GetCondResult(rCell, maPos, *mpCFList, rData);
+            pCondSet = mrCol.GetDoc()->GetCondResult(rCell, maPos, *mpCFList, rData);
         }
 
         OUString aStr;
         Color* pColor;
         sal_uLong nFormat = pPat->GetNumberFormat(mpFormatter, pCondSet);
-        ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *mpFormatter, &mrCol.GetDoc());
+        ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *mpFormatter, mrCol.GetDoc());
 
-        rAttr.mnScriptType = mrCol.GetDoc().GetStringScriptType(aStr);
+        rAttr.mnScriptType = mrCol.GetDoc()->GetStringScriptType(aStr);
         mbUpdated = true;
     }
 
@@ -997,8 +1000,8 @@ public:
         mrCol(rCol),
         mrTextAttrs(rCol.GetCellAttrStore()),
         miPosAttr(mrTextAttrs.begin()),
-        mpCFList(rCol.GetDoc().GetCondFormList(rCol.GetTab())),
-        mpFormatter(rCol.GetDoc().GetFormatTable()),
+        mpCFList(rCol.GetDoc()->GetCondFormList(rCol.GetTab())),
+        mpFormatter(rCol.GetDoc()->GetFormatTable()),
         maPos(rCol.GetCol(), 0, rCol.GetTab()),
         mbUpdated(false)
     {}
