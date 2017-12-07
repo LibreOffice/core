@@ -1468,7 +1468,7 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
             return nReal;
         }
     }
-    return 0L;
+    return 0;
 }
 
 SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
@@ -1509,7 +1509,7 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
             return nReal;
         }
     }
-    return 0L;
+    return 0;
 }
 
 /** Adjust surrounding neighbourhood after insertion
@@ -1537,7 +1537,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     PROTOCOL_ENTER( this, PROT::AdjustN, DbgAction::NONE, &nDiff );
 
     if ( !nDiff || !GetUpper()->IsFootnoteBossFrame() ) // only inside pages/columns
-        return 0L;
+        return 0;
 
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -1547,7 +1547,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     if ( IsPageBodyFrame() && (!bBrowse ||
           (static_cast<SwLayoutFrame*>(this)->Lower() &&
            static_cast<SwLayoutFrame*>(this)->Lower()->IsColumnFrame())) )
-        return 0L;
+        return 0;
 
     //In BrowseView mode the PageFrame can handle some of the requests.
     long nBrowseAdd = 0;

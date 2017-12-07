@@ -85,7 +85,7 @@ const SwTwips lMinBorder = 1134;
 // Margin left and above document.
 // Half of it is gap between the pages.
 //TODO: Replace with SwViewOption::defDocumentBorder
-#define DOCUMENTBORDER  284L
+#define DOCUMENTBORDER  284
 
 // Constant strings.
 SW_DLLPUBLIC extern OUString aEmptyOUStr;  // remove once aEmptyOUStr can be changed to OUString

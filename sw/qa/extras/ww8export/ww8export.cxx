@@ -50,8 +50,6 @@
 
 #include <bordertest.hxx>
 
-#define convertTwipToMm100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36)/72L) : (((TWIP)*127L-36)/72L))
-
 class Test : public SwModelTestBase
 {
 public:

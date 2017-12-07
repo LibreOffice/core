@@ -678,10 +678,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             // Distance of Textbox to its surrounding Autoshape
-            sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
-            sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
-            sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
-            sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
+            sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440);
+            sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440 );
+            sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720 );
+            sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720 );
 
             ScaleEmu( nTextLeft );
             ScaleEmu( nTextRight );
@@ -976,13 +976,13 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         }
 
         pImpRec->nDxWrapDistLeft = GetPropertyValue(
-                                    DFF_Prop_dxWrapDistLeft, 114935L ) / 635L;
+                                    DFF_Prop_dxWrapDistLeft, 114935 ) / 635;
         pImpRec->nDyWrapDistTop = GetPropertyValue(
-                                    DFF_Prop_dyWrapDistTop, 0 ) / 635L;
+                                    DFF_Prop_dyWrapDistTop, 0 ) / 635;
         pImpRec->nDxWrapDistRight = GetPropertyValue(
-                                    DFF_Prop_dxWrapDistRight, 114935L ) / 635L;
+                                    DFF_Prop_dxWrapDistRight, 114935 ) / 635;
         pImpRec->nDyWrapDistBottom = GetPropertyValue(
-                                    DFF_Prop_dyWrapDistBottom, 0 ) / 635L;
+                                    DFF_Prop_dyWrapDistBottom, 0 ) / 635;
         // 16.16 fraction times total image width or height, as appropriate.
 
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))

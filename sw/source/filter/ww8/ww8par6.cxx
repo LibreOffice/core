@@ -4754,9 +4754,9 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
                 sal_uInt32 nRed = aForeColor.GetRed() * nWW8BrushStyle;
                 sal_uInt32 nGreen = aForeColor.GetGreen() * nWW8BrushStyle;
                 sal_uInt32 nBlue = aForeColor.GetBlue() * nWW8BrushStyle;
-                nRed += aBackColor.GetRed()  * (1000L - nWW8BrushStyle);
-                nGreen += aBackColor.GetGreen()* (1000L - nWW8BrushStyle);
-                nBlue += aBackColor.GetBlue() * (1000L - nWW8BrushStyle);
+                nRed += aBackColor.GetRed()  * (1000 - nWW8BrushStyle);
+                nGreen += aBackColor.GetGreen()* (1000 - nWW8BrushStyle);
+                nBlue += aBackColor.GetBlue() * (1000 - nWW8BrushStyle);
 
                 aColor.SetColor( RGB_COLORDATA( nRed/1000, nGreen/1000,
                     nBlue/1000 ) );

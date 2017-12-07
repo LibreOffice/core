@@ -73,7 +73,7 @@ OUString SwDateTimeField::Expand() const
         fVal = GetValue();
 
     if (nOffset)
-        fVal += (double)(nOffset * 60L) / 86400.0;
+        fVal += nOffset * ( 60 / 86400.0 );
 
     return ExpandValue(fVal, GetFormat(), GetLanguage());
 }

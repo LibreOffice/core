@@ -2344,8 +2344,8 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
      *                      100%                       Escapement
      */
 
-    m_aStyles.append((sal_Int32)((long(nEsc) * nH) + 500) / 1000L);
-    // 500L to round !!
+    m_aStyles.append((sal_Int32)((long(nEsc) * nH) + 500) / 1000);
+    // 500 to round !!
 }
 
 void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
