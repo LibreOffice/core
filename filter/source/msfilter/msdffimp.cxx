@@ -6202,7 +6202,10 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         else
         {
             if (!checkSeek(rSt, rSt.Tell() + nLength))
-                return false;
+            {
+                SAL_WARN("filter.ms", "remaining record longer than available data, ppt or parser is wrong");
+                break;
+            }
             nReadSpCont += nLength;
         }
     }
