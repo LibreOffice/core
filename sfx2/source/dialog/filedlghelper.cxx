@@ -1521,8 +1521,26 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 bool bGpg = false;
                 if ( ( aValue >>= bGpg ) && bGpg )
                 {
-                    // ask for a key
-                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData() ) ) );
+                    uno::Sequence< beans::NamedValue > aEncryptionData;
+                    while(true)
+                    {
+                        try
+                        {
+                            // ask for keys
+                            aEncryptionData = ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData();
+                            break; // user cancelled or we've some keys now
+                        }
+                        catch( const IllegalArgumentException& )
+                        {
+                            ScopedVclPtrInstance< MessageDialog > aBox(
+                                mpPreferredParentWindow,
+                                SfxResId(RID_SVXSTR_INCORRECT_PASSWORD));
+                            aBox->Execute();
+                        }
+                    }
+
+                    if ( aEncryptionData.hasElements() )
+                        rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData) ) );
                 }
             }
             catch( const IllegalArgumentException& ){}

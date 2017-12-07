@@ -497,7 +497,13 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSignin
 css::uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSignatures::chooseEncryptionCertificate()
 {
     std::map<OUString, OUString> aProperties;
-    return chooseCertificatesImpl( aProperties, UserAction::Encrypt );
+    uno::Sequence< Reference< css::security::XCertificate > > aCerts=
+        chooseCertificatesImpl( aProperties, UserAction::Encrypt );
+    if (aCerts.getLength() == 1 && !aCerts[0].is())
+        // our error case contract is: empty sequence, so map that!
+        return uno::Sequence< Reference< css::security::XCertificate > >();
+    else
+        return aCerts;
 }
 
 css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<::com::sun::star::beans::PropertyValue>& rProperties)
