@@ -314,11 +314,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUS
 
     if ( !aPass.isEmpty() && aPass.getLength() < 16 )
     {
-        TimeValue aTime;
-        osl_getSystemTime( &aTime );
         rtlRandomPool aRandomPool = rtl_random_createPool ();
-        rtl_random_addBytes ( aRandomPool, &aTime, 8 );
-
         sal_uInt8 pnDocId[16];
         rtl_random_getBytes( aRandomPool, pnDocId, 16 );
 

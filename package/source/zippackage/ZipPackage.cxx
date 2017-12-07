@@ -1100,11 +1100,7 @@ namespace
     public:
         RandomPool()
         {
-            // Get a random number generator and seed it with current timestamp
-            TimeValue aTime;
-            osl_getSystemTime( &aTime );
             m_aRandomPool = rtl_random_createPool ();
-            rtl_random_addBytes (m_aRandomPool, &aTime, 8);
         }
         rtlRandomPool get()
         {

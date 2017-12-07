@@ -30,10 +30,7 @@ namespace
 
 void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 {
-    TimeValue aTime;
-    osl_getSystemTime(&aTime);
     rtlRandomPool aRandomPool = rtl_random_createPool();
-    rtl_random_addBytes(aRandomPool, &aTime, 8);
     rtl_random_getBytes(aRandomPool, aArray, aSize);
     rtl_random_destroyPool(aRandomPool);
 }

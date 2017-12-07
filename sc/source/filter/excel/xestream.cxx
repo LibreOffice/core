@@ -547,10 +547,7 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
         maCodec.GetDocId( mpnDocId );
 
         // generate the salt here
-        TimeValue aTime;
-        osl_getSystemTime( &aTime );
         rtlRandomPool aRandomPool = rtl_random_createPool ();
-        rtl_random_addBytes( aRandomPool, &aTime, 8 );
         rtl_random_getBytes( aRandomPool, mpnSalt, 16 );
         rtl_random_destroyPool( aRandomPool );
 

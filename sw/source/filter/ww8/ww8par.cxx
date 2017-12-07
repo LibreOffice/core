@@ -5589,12 +5589,7 @@ namespace
                 // in the MediaDescriptor
                 ::msfilter::MSCodec_Std97 aCodec97;
 
-                // Generate random number with a seed of time as salt.
-                TimeValue aTime;
-                osl_getSystemTime( &aTime );
                 rtlRandomPool aRandomPool = rtl_random_createPool();
-                rtl_random_addBytes ( aRandomPool, &aTime, 8 );
-
                 sal_uInt8 pDocId[ 16 ];
                 rtl_random_getBytes( aRandomPool, pDocId, 16 );
 
