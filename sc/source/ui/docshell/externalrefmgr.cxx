@@ -2851,7 +2851,7 @@ public:
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
                 {
-                    OUString aStr = aCell.getString(&mpCurCol->GetDoc());
+                    OUString aStr = aCell.getString(mpCurCol->GetDoc());
                     svl::SharedString aSS = mrStrPool.intern(aStr);
                     pTok.reset(new formula::FormulaStringToken(aSS));
                 }
@@ -2888,7 +2888,7 @@ public:
             if (pTok)
             {
                 // Cache this cell.
-                mpRefTab->setCell(mpCurCol->GetCol(), nRow, pTok, mpCurCol->GetNumberFormat(mpCurCol->GetDoc().GetNonThreadedContext(), nRow));
+                mpRefTab->setCell(mpCurCol->GetCol(), nRow, pTok, mpCurCol->GetNumberFormat(mpCurCol->GetDoc()->GetNonThreadedContext(), nRow));
                 mpRefTab->setCachedCell(mpCurCol->GetCol(), nRow);
             }
         }
