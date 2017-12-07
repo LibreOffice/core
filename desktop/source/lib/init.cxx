@@ -2582,10 +2582,15 @@ static char* getLanguages(const char* pCommand)
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
     boost::property_tree::ptree aValues;
+    boost::property_tree::ptree aChild;
+    OUString sLanguage;
     for ( sal_Int32 itLocale = 0; itLocale < aLocales.getLength(); itLocale++ )
     {
-        boost::property_tree::ptree aChild;
-        aChild.put("", SvtLanguageTable::GetLanguageString(LanguageTag::convertToLanguageType(aLocales[itLocale])).toUtf8());
+        sLanguage = SvtLanguageTable::GetLanguageString(LanguageTag::convertToLanguageType(aLocales[itLocale]));
+        if (sLanguage.startsWith("{") && sLanguage.endsWith("}"))
+            continue;
+
+        aChild.put("", sLanguage.toUtf8());
         aValues.push_back(std::make_pair("", aChild));
     }
     aTree.add_child("commandValues", aValues);
