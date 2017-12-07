@@ -518,9 +518,6 @@ bool ZipPackageStream::saveChild(
     const OUString sStartKeyAlgProperty  ("StartKeyAlgorithm");
     const OUString sDigestAlgProperty    ("DigestAlgorithm");
     const OUString sDerivedKeySizeProperty  ("DerivedKeySize");
-    const OUString sPgpKeyIDProperty        ( "KeyId" );
-    const OUString sPgpKeyPacketProperty    ( "KeyPacket" );
-    const OUString sCipherValueProperty     ( "CipherValue" );
 
     uno::Sequence < beans::PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
 
