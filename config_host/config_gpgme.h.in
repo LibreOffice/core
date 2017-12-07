@@ -16,6 +16,9 @@
 // Defined if gpgme support is available
 #define HAVE_FEATURE_GPGME 0
 
+// Defined if gpg and gpgme signature verification is available
+#define HAVE_FEATURE_GPGVERIFY 0
+
 #if HAVE_FEATURE_GPGME
 # include "config_lgpl.h"
 #endif
