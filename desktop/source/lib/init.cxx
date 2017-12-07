@@ -3538,6 +3538,9 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (bInitialized)
         return 1;
 
+    if (eStage == PRE_INIT)
+        rtl_alloc_preInit(true);
+
     if (eStage != SECOND_INIT)
         comphelper::LibreOfficeKit::setActive();
 
@@ -3689,6 +3692,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         fprintf(stderr, "Bootstrapping exception '%s'\n",
                  OUStringToOString(exception.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
+
+    if (eStage == PRE_INIT)
+        rtl_alloc_preInit(false);
+
     return bInitialized;
 }
 

@@ -274,7 +274,7 @@ bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
                                                    &nInfo, &nSrcChars );
             if (bCheckErrors && (nInfo & RTL_UNICODETOTEXT_INFO_ERROR) != 0)
             {
-                rtl_freeMemory(pTemp);
+                rtl_freeString(pTemp);
                 rtl_destroyUnicodeToTextConverter(hConverter);
                 return false;
             }
@@ -283,7 +283,7 @@ bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
                 break;
 
             /* Buffer not big enough, try again with enough space */
-            rtl_freeMemory( pTemp );
+            rtl_freeString( pTemp );
 
             /* Try with the max. count of characters with
                additional overhead for replacing functionality */
@@ -298,7 +298,7 @@ bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
             rtl_String* pTemp2 = rtl_string_ImplAlloc( nDestBytes );
             OSL_ASSERT(pTemp2 != nullptr);
             rtl_str_ImplCopy( pTemp2->buffer, pTemp->buffer, nDestBytes );
-            rtl_freeMemory( pTemp );
+            rtl_freeString( pTemp );
             pTemp = pTemp2;
         }
         else

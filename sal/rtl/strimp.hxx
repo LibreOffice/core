@@ -49,6 +49,16 @@ sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
 
 bool rtl_ImplIsWhitespace( sal_Unicode c );
 
+extern "C" {
+
+typedef void *(*rtl_allocateStringFn)(sal_Size size);
+typedef void  (*rtl_freeStringFn)(void *);
+
+}
+
+extern rtl_allocateStringFn rtl_allocateString;
+extern rtl_freeStringFn rtl_freeString;
+
 // string lifetime instrumentation / diagnostics
 #if USE_SDT_PROBES
 #  define PROBE_SNAME(n,b) n ## _ ## b

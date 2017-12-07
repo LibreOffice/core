@@ -18,10 +18,13 @@
  */
 
 #include <rtl/alloc.h>
+#include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+
+#include <sal/rtl/strimp.hxx>
 
 #include <memory.h>
 
@@ -132,8 +135,75 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
+class TestPreinit : public CppUnit::TestFixture
+{
+public:
+    TestPreinit()
+    {
+    }
+
+    // initialise your test code values here.
+    void setUp() override
+    {
+    }
+
+    void tearDown() override
+    {
+    }
+
+    // insert your test code here.
+
+    void test()
+    {
+        const char *sample = "Hello World";
+        std::vector<OUString> aStrings;
+
+        rtl_alloc_preInit(true);
+
+        OUString aFoo("foo");
+
+        // fill some cache bits
+        for (int iter = 0; iter < 4; iter++)
+        {
+            for (int i = 1; i < 4096; i += 8)
+            {
+                OUStringBuffer aBuf(i);
+                aBuf.appendAscii(sample, (i/8) % (sizeof(sample)-1));
+                OUString aStr = aBuf.makeStringAndClear();
+                aStrings.push_back(aStr);
+            }
+            // free some pieces to make holes
+            for (size_t i = iter; i < aStrings.size(); i += 17)
+                aStrings[i] = aFoo;
+        }
+
+        for (size_t i = 0; i < aStrings.size(); ++i)
+        {
+            CPPUNIT_ASSERT_MESSAGE( "not static before.", !(aStrings[i].pData->refCount & SAL_STRING_STATIC_FLAG) );
+        }
+
+        // should static-ize all the strings.
+        rtl_alloc_preInit(false);
+
+        for (size_t i = 0; i < aStrings.size(); ++i)
+            CPPUNIT_ASSERT_MESSAGE( "static after.", (aStrings[i].pData->refCount & SAL_STRING_STATIC_FLAG) );
+    }
+
+    void test2()
+    {
+        // should never happen but lets try it again.
+        test();
+    }
+
+    CPPUNIT_TEST_SUITE(TestPreinit);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST(test2);
+    CPPUNIT_TEST_SUITE_END();
+};
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::Memory);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::TestZeroMemory);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::TestPreinit);
 } // namespace rtl_alloc
 
 CPPUNIT_PLUGIN_IMPLEMENT();

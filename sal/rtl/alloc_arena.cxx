@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include "alloc_arena.hxx"
 
 #include "alloc_impl.hxx"
@@ -986,6 +988,32 @@ void SAL_CALL rtl_arena_free (
             assert(arena->m_qcache_ptr[index]);
 
             rtl_cache_free (arena->m_qcache_ptr[index], addr);
+        }
+    }
+}
+
+void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn, void *user_data)
+{
+    // quantum caches
+    if ((arena->m_qcache_max > 0) && (arena->m_qcache_ptr != nullptr))
+    {
+        int i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
+        for (i = 1; i <= n; i++)
+        {
+            if (arena->m_qcache_ptr[i - 1] != nullptr)
+                rtl_cache_foreach (arena->m_qcache_ptr[i - 1],
+                                   foreachFn, user_data);
+        }
+    }
+
+    /* used segments */
+    for (int i = 0, n = arena->m_hash_size; i < n; i++)
+    {
+        for (rtl_arena_segment_type *segment = arena->m_hash_table[i];
+             segment != nullptr; segment = segment->m_fnext)
+        {
+            foreachFn(reinterpret_cast<void *>(segment->m_addr),
+                      segment->m_size, user_data);
         }
     }
 }
