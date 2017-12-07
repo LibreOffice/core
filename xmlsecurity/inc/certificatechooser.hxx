@@ -68,7 +68,8 @@ private:
     VclPtr<SvSimpleTable>   m_pCertLB;
     VclPtr<PushButton>      m_pViewBtn;
     VclPtr<OKButton>        m_pOKBtn;
-    VclPtr<Edit> m_pDescriptionED;
+    VclPtr<FixedText>       m_pFTDescription;
+    VclPtr<Edit>            m_pDescriptionED;
 
     bool                    mbInitialized;
     UserAction              meAction;
