@@ -349,7 +349,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                     rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
                 }
             }
-            else // GPG
+            else if (xGpgSecEnv.is()) // GPG
             {
                 // TODO not ideal to retrieve cert by keyID, might
                 // collide, or PGPKeyID format might change - can't we
