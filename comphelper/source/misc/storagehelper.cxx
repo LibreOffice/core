@@ -54,11 +54,13 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <gpgme.h>
-#include <context.h>
-#include <encryptionresult.h>
-#include <key.h>
-#include <data.h>
+#if GPGME_HAVE_GPGME
+# include <gpgme.h>
+# include <context.h>
+# include <encryptionresult.h>
+# include <key.h>
+# include <data.h>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -428,6 +430,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 
 uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData()
 {
+#if GPGME_HAVE_GPGME
     // generate session key
     // --------------------
 
@@ -468,7 +471,6 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     if (ctx == nullptr)
         throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
     ctx->setArmor(false);
-    ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
 
     // TODO: add self-encryption key from user config
     const uno::Reference< security::XCertificate >* pCerts=xSignCertificates.getConstArray();
@@ -476,7 +478,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     {
         uno::Sequence < sal_Int8 > aKeyID;
         if (pCerts->is())
-            aKeyID = (*pCerts)->getSHA1Thumbprint();
+            aKeyID = (*pCerts)->getSHA256Thumbprint();
 
         std::vector<GpgME::Key> keys;
         keys.push_back(
@@ -490,8 +492,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
             aVector.getLength(), false);
         GpgME::Data cipher;
 
-        GpgME::EncryptionResult crypt_res = ctx->encrypt(keys, plain,
-                                               cipher, GpgME::Context::NoCompress);
+        GpgME::EncryptionResult crypt_res = ctx->encrypt(
+            keys, plain,
+            cipher, GpgME::Context::NoCompress);
 
         off_t result = cipher.seek(0,SEEK_SET);
         (void) result;
@@ -530,6 +533,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     aContainer[1].Value <<= aEncryptionData;
 
     return aContainer;
+#else
+    return uno::Sequence< beans::NamedValue >();
+#endif
 }
 
 bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
