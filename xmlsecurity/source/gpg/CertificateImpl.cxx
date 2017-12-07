@@ -158,7 +158,7 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSHA1Thumbprint()
     // This is mapped to the fingerprint for gpg
     const char* keyId = m_pKey.primaryFingerprint();
     return comphelper::arrayToSequence<sal_Int8>(
-        keyId, strlen(keyId));
+        keyId, strlen(keyId)+1);
 }
 
 Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()
@@ -167,7 +167,7 @@ Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()
     // SHA1 actually)
     const char* keyId = m_pKey.primaryFingerprint();
     return comphelper::arrayToSequence<sal_Int8>(
-        keyId, strlen(keyId));
+        keyId, strlen(keyId)+1);
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()
@@ -175,7 +175,7 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()
     // This is mapped to the shorter keyID for gpg
     const char* keyId = m_pKey.keyID();
     return comphelper::arrayToSequence<sal_Int8>(
-        keyId, strlen(keyId));
+        keyId, strlen(keyId)+1);
 }
 
 CertificateKind SAL_CALL CertificateImpl::getCertificateKind()
