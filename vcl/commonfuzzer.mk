@@ -22,6 +22,9 @@ fuzzer_externals = \
     cairo \
     fontconfig \
     freetype \
+    gpgmepp \
+    libassuan \
+    libgpg-error \
     icui18n \
     icuuc \
     icudata \
@@ -44,7 +47,6 @@ fuzzer_core_libraries = \
     avmedia \
     basegfx \
     canvastools \
-    comphelper \
     configmgr \
     cppcanvas \
     dbtools \
