@@ -525,10 +525,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     aEncryptionData[0].Value <<= aVector;
 
     aContainer[0].Name = "GpgInfos";
-    aContainer[0].Value = makeAny(comphelper::containerToSequence(
-                                      aGpgEncryptions));
+    aContainer[0].Value <<= comphelper::containerToSequence(aGpgEncryptions);
     aContainer[1].Name = "EncryptionKey";
-    aContainer[1].Value = makeAny(aEncryptionData);
+    aContainer[1].Value <<= aEncryptionData;
 
     return aContainer;
 }
