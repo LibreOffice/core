@@ -924,6 +924,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             OUString aSize = OUString::number(nSizeF);
                             aStyle += ";font-size:" + aSize + "pt";
                         }
+                        if (IsWaterMarkShape(m_pSdrObject->GetName()))
+                            pAttrList->add(XML_trim, "t");
+
                         if (!aStyle.isEmpty())
                             pAttrList->add(XML_style, OUStringToOString(aStyle, RTL_TEXTENCODING_UTF8));
                         m_pSerializer->singleElementNS(XML_v, XML_textpath, XFastAttributeListRef(pAttrList));

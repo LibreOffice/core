@@ -254,6 +254,7 @@ struct OOX_DLLPUBLIC TextpathModel
 {
     OptValue<OUString> moString;                  ///< Specifies the string of the textpath.
     OptValue<OUString> moStyle;                   ///< Specifies the style of the textpath.
+    OptValue<bool>     moTrim;                    ///< Specifies whether extra space is removed above and below the text
 
     TextpathModel();
 
