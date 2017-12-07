@@ -46,7 +46,6 @@ $(eval $(call gb_Library_use_libraries,fwe,\
     svl \
     svt \
     tl \
-    tk \
     utl \
     vcl \
 	$(gb_UWINAPI) \

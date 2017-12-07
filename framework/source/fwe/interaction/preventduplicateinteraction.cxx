@@ -19,7 +19,6 @@
 
 #include <framework/preventduplicateinteraction.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -54,9 +53,7 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
     aLock.clear();
     // <- SAFE
 
-    m_xWarningDialogsParent.reset(new WarningDialogsParentScope(m_xContext));
-    css::uno::Reference<css::task::XInteractionHandler> xHandler(css::task::InteractionHandler::createWithParent(
-        m_xContext, m_xWarningDialogsParent->GetDialogParent()), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::task::XInteractionHandler > xHandler( css::task::InteractionHandler::createWithParent( m_xContext, nullptr ), css::uno::UNO_QUERY_THROW );
 
     // SAFE ->
     aLock.reset();
@@ -237,11 +234,6 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
     // <- SAFE
 
     return false;
-}
-
-IMPL_STATIC_LINK_NOARG_TYPED(WarningDialogsParent, TerminateDesktop, void*, void)
-{
-    css::frame::Desktop::create(comphelper::getProcessComponentContext())->terminate();
 }
 
 } // namespace framework
