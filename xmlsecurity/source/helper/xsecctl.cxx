@@ -23,7 +23,7 @@
 #include <documentsignaturehelper.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
 # include <gpg/xmlsignature_gpgimpl.hxx>
 #endif
 
@@ -161,7 +161,7 @@ void XSecController::createXSecComponent( )
 
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xSecurityContext, cssu::UNO_QUERY );
     if (xServiceInfo->getImplementationName() == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
         m_xXMLSignature.set(new XMLSignature_GpgImpl());

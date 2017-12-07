@@ -20,9 +20,9 @@
 #include <comphelper/string.hxx>
 
 #include <config_gpgme.h>
-#if GPGME_HAVE_GPGME
-#include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#if HAVE_FEATURE_GPGME
+# include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
+# include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #endif
 
 #include <i18nlangtag/mslangid.hxx>
@@ -214,7 +214,7 @@ SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCo
     InitControls();
     SetExchangeSupport(); // this page needs ExchangeSupport
     SetLinks();
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
     // unused yet, I just wanted to see if this delivers the desired results
     uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     try

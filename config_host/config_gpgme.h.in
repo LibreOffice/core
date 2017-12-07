@@ -14,9 +14,10 @@
 #define CONFIG_GPGME_H
 
 // Defined if gpgme support is available
-#define GPGME_HAVE_GPGME 0
-#if GPGME_HAVE_GPGME
-#include "config_lgpl.h"
+#define HAVE_FEATURE_GPGME 0
+
+#if HAVE_FEATURE_GPGME
+# include "config_lgpl.h"
 #endif
 
 // Defined if gpgme supports exporting minimal key.

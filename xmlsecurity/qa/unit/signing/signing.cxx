@@ -104,7 +104,7 @@ public:
     /// Test importing of signature line images
     void testSignatureLineImages();
 #ifdef LINUX
-# if GPGME_HAVE_GPGME
+# if HAVE_FEATURE_GPGME
     /// Test a typical ODF where all streams are GPG-signed.
     void testODFGoodGPG();
     /// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
@@ -138,7 +138,7 @@ public:
     CPPUNIT_TEST(testXAdESGood);
     CPPUNIT_TEST(testSignatureLineImages);
 #ifdef LINUX
-# if GPGME_HAVE_GPGME
+# if HAVE_FEATURE_GPGME
     CPPUNIT_TEST(testODFGoodGPG);
     CPPUNIT_TEST(testODFUntrustedGoodGPG);
     CPPUNIT_TEST(testODFBrokenStreamGPG);
@@ -178,7 +178,7 @@ void SigningTest::setUp()
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
 #endif
 #ifdef LINUX
-# if GPGME_HAVE_GPGME
+# if HAVE_FEATURE_GPGME
     // Make gpg use our own defined setup below data dir
     OUString aHomePath;
     osl::FileBase::getSystemPathFromFileURL(
@@ -688,7 +688,7 @@ void SigningTest::testSignatureLineImages()
 }
 
 #ifdef LINUX
-# if GPGME_HAVE_GPGME
+# if HAVE_FEATURE_GPGME
 void SigningTest::testODFGoodGPG()
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "goodGPG.odt");
