@@ -1415,18 +1415,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             LanguageType nLang = rSh.GetCurLang();
             LanguageTag aLanguageTag( nLang);
             lang::Locale aLocale( aLanguageTag.getLocale());
-            OUString aLangText( aLanguageTag.getBcp47() );
-
-            // set word and locale to look up as status value
-            OUString aStatusVal = aText + "#" + aLangText;
-
-            rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
             // disable "Thesaurus" context menu entry if there is nothing to look up
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
             if (aText.isEmpty() ||
                 !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
                 rSet.DisableItem( SID_THES );
+            else
+            {
+                // set word and locale to look up as status value
+                OUString aStatusVal = aText + "#" + aLanguageTag.getBcp47();
+                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+            }
         }
         break;
 
