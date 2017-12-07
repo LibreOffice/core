@@ -56,7 +56,6 @@ extern const bool aAllowedTokenTypesBibliography[];
 // table, illustration and object tables:
 extern const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameTableMap; // NULL: no outline-level
 extern const sal_Char* aLevelStylePropNameTableMap[];
-extern const bool aIllustrationAllowedTokenTypesTable[];
 extern const bool aAllowedTokenTypesTable[];
 
 
