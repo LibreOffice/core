@@ -261,13 +261,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                         pNValue->Value >>= aCipherValue;
                 }
 
-                if (!aPgpKeyID.hasElements() && !aPgpKeyPacket.hasElements() && !aCipherValue.hasElements() )
+                if (aPgpKeyID.hasElements() && aCipherValue.hasElements() )
                 {
                     // ==== manifest:encrypted-key & children - one for each recipient
                     xHandler->startElement( sEncryptedKeyElement, nullptr );
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    // TODO: this should rather be configurable
+                    // TODO: the algorithm should rather be configurable
                     pNewAttrList->AddAttribute ( sAlgorithmAttribute, sCdataAttribute,
                                                  "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
                     xHandler->startElement( sEncryptionMethodElement, xNewAttrList );
@@ -286,11 +286,15 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     xHandler->endElement( sPgpKeyIDElement );
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement( sPGPKeyPacketElement, nullptr );
-                    ::sax::Converter::encodeBase64(aBuffer, aPgpKeyPacket);
-                    xHandler->characters( aBuffer.makeStringAndClear() );
-                    xHandler->endElement( sPGPKeyPacketElement );
-                    xHandler->ignorableWhitespace ( sWhiteSpace );
+                    // key packet is optional
+                    if (aPgpKeyPacket.hasElements())
+                    {
+                        xHandler->startElement( sPGPKeyPacketElement, nullptr );
+                        ::sax::Converter::encodeBase64(aBuffer, aPgpKeyPacket);
+                        xHandler->characters( aBuffer.makeStringAndClear() );
+                        xHandler->endElement( sPGPKeyPacketElement );
+                        xHandler->ignorableWhitespace ( sWhiteSpace );
+                    }
 
                     xHandler->endElement( sPgpDataElement );
                     xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -448,6 +452,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute,
                                              sCdataAttribute,
                                              sPGP_Name );
+                // no start-key-generation needed, our session key has
+                // max size already
+                bStoreStartKeyGeneration = false;
             }
             else
             {
