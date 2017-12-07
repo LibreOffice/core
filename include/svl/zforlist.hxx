@@ -34,6 +34,7 @@
 #include <svl/nfkeytab.hxx>
 
 #include <map>
+#include <memory>
 #include <set>
 
 class Date;
@@ -804,7 +805,7 @@ public:
 private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     LanguageTag maLanguageTag;
-    SvNumberFormatTable aFTable;            // Table of format keys to format entries
+    std::map<sal_uInt32, std::unique_ptr<SvNumberformat>> aFTable;            // Table of format keys to format entries
     typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
     DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
     SvNumberFormatTable* pFormatTable;      // For the UI dialog
