@@ -1396,7 +1396,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         const Size& rEditSize = GetEditWin().GetOutputSizePixel();
                         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
-                        const long nOf = pVOpt->GetDocumentBorder() * 2L;
+                        const long nOf = pVOpt->GetDocumentBorder() * 2;
                         long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
                         nTmpWidth += nOf;
                         aPageSize.Height() += nOf;

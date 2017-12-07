@@ -82,8 +82,8 @@ struct StringIdPair_Impl
     SvxSwFramePosString::StringId eVert;
 };
 
-#define MAX_PERCENT_WIDTH   254L
-#define MAX_PERCENT_HEIGHT  254L
+#define MAX_PERCENT_WIDTH   254
+#define MAX_PERCENT_HEIGHT  254
 
 enum class LB {
     NONE                = 0x00000000L,
@@ -2698,8 +2698,8 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     if (!aGrfSize.Width() && !aGrfSize.Height())
         aGrfSize = rRenderContext.PixelToLogic(aBmp.GetSizePixel());
 
-    long nRelGrf = aGrfSize.Width() * 100L / aGrfSize.Height();
-    long nRelWin = aPntSz.Width() * 100L / aPntSz.Height();
+    long nRelGrf = aGrfSize.Width() * 100 / aGrfSize.Height();
+    long nRelWin = aPntSz.Width() * 100 / aPntSz.Height();
     if (nRelGrf < nRelWin)
     {
         const long nWidth = aPntSz.Width();

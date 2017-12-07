@@ -4618,7 +4618,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
             }
             else // Proportional
             {
-                nSpace = (short)( ( 240L * rSpacing.GetPropLineSpace() ) / 100L );
+                nSpace = (short)( rSpacing.GetPropLineSpace() * ( 240 / 100.0) );
                 nMulti = 1;
                 break;
             }

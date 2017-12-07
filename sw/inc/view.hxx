@@ -643,12 +643,12 @@ public:
 
 inline long SwView::GetXScroll() const
 {
-    return m_aVisArea.GetWidth() * nScrollX / 100L;
+    return (m_aVisArea.GetWidth() * nScrollX) / 100;
 }
 
 inline long SwView::GetYScroll() const
 {
-    return m_aVisArea.GetHeight() * nScrollY / 100L;
+    return (m_aVisArea.GetHeight() * nScrollY) / 100;
 }
 
 inline const SwDocShell *SwView::GetDocShell() const
