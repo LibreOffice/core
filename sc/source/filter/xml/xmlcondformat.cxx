@@ -324,7 +324,16 @@ void ScXMLConditionalFormatContext::EndElement()
                 }
             }
         }
+    }
 
+    sal_uLong nIndex = pDoc->AddCondFormat(pFormat.release(), nTab);
+    ScConditionalFormat* pInsertedFormat = pDoc->GetCondFormList(nTab)->GetFormat(nIndex);
+    assert(pInsertedFormat && pInsertedFormat->GetKey() == nIndex);
+
+    mrParent.mvCondFormatData.push_back( { pInsertedFormat, nTab } );
+
+    if (bEligibleForCache)
+    {
         // Not found in cache, replace oldest cache entry
         sal_Int64 nOldestAge = -1;
         size_t nIndexOfOldest = 0;
@@ -336,17 +345,11 @@ void ScXMLConditionalFormatContext::EndElement()
                 nIndexOfOldest = (&aCacheEntry - &mrParent.maCache.front());
             }
         }
-        mrParent.maCache[nIndexOfOldest].mpFormat = pFormat.get();
+        mrParent.maCache[nIndexOfOldest].mpFormat = pInsertedFormat;
         mrParent.maCache[nIndexOfOldest].mbSingleRelativeReference = bSingleRelativeReference;
         mrParent.maCache[nIndexOfOldest].mpTokens.reset(pTokens);
         mrParent.maCache[nIndexOfOldest].mnAge = 0;
     }
-
-    sal_uLong nIndex = pDoc->AddCondFormat(pFormat.get(), nTab);
-    (void) nIndex; // Avoid 'unused variable' warning when assert() expands to empty
-    assert(pFormat->GetKey() == nIndex);
-
-    mrParent.mvCondFormatData.push_back( { pFormat.release(), nTab } );
 }
 
 ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()
