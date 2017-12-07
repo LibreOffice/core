@@ -46,6 +46,7 @@ CertificateChooser::CertificateChooser(vcl::Window* _pParent,
     get(m_pFTEncrypt, "encrypt");
     get(m_pOKBtn, "ok");
     get(m_pViewBtn, "viewcert");
+    get(m_pFTDescription, "description-label");
     get(m_pDescriptionED, "description");
 
     Size aControlSize(475, 122);
@@ -85,6 +86,7 @@ void CertificateChooser::dispose()
     m_pCertLB.disposeAndClear();
     m_pViewBtn.clear();
     m_pOKBtn.clear();
+    m_pFTDescription.clear();
     m_pDescriptionED.clear();
     mvUserData.clear();
     ModalDialog::dispose();
@@ -166,6 +168,9 @@ void CertificateChooser::ImplInitialize()
 
         case UserAction::Encrypt:
             m_pFTEncrypt->Show();
+            m_pFTDescription->Hide();
+            m_pDescriptionED->Hide();
+            m_pCertLB->SetSelectionMode( SelectionMode::Multiple );
             m_pOKBtn->SetText( get<FixedText>("str_encrypt")->GetText() );
             break;
 
