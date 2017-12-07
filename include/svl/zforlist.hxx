@@ -320,6 +320,7 @@ class NfCurrencyTable;
 
 class SVL_DLLPUBLIC SvNumberFormatter
 {
+    friend class SvNumberFormatterRegistry_Impl;
 public:
     /**
      * We can't technically have an "infinite" value, so we use an arbitrary
@@ -803,6 +804,7 @@ public:
     static bool IsLocaleInstalled( LanguageType eLang );
 
 private:
+    mutable ::osl::Mutex m_aMutex;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     LanguageTag maLanguageTag;
     std::map<sal_uInt32, std::unique_ptr<SvNumberformat>> aFTable;            // Table of format keys to format entries
@@ -831,7 +833,7 @@ private:
     OUString aThousandSep;
     OUString aDateSep;
 
-    SVL_DLLPRIVATE static bool          bCurrencyTableInitialized;
+    SVL_DLLPRIVATE static volatile bool         bCurrencyTableInitialized;
     SVL_DLLPRIVATE static sal_uInt16            nSystemCurrencyPosition;
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;
 
@@ -914,10 +916,11 @@ private:
     // Substitute a format during GetFormatEntry(), i.e. system formats.
     SvNumberformat* ImpSubstituteEntry( SvNumberformat* pFormat, sal_uInt32 * o_pRealKey = nullptr );
 
-public:
+    // own mutex, may also be used by internal class SvNumberFormatterRegistry_Impl
+    static ::osl::Mutex& GetGlobalMutex();
+    ::osl::Mutex& GetInstanceMutex() const { return m_aMutex; }
 
-    // own static mutex, may also be used by internal class SvNumberFormatterRegistry_Impl
-    static ::osl::Mutex& GetMutex();
+public:
 
     // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
     void ResetDefaultSystemCurrency();

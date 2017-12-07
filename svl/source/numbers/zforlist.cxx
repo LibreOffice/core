@@ -212,7 +212,7 @@ void SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter const * pThis )
 void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*,
                                                            ConfigurationHints nHint)
 {
-    ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
+    ::osl::MutexGuard aGuard( SvNumberFormatter::GetGlobalMutex() );
 
     if ( nHint & ConfigurationHints::Locale )
     {
@@ -234,7 +234,7 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
 
 
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
-bool SvNumberFormatter::bCurrencyTableInitialized = false;
+volatile bool SvNumberFormatter::bCurrencyTableInitialized = false;
 namespace
 {
     struct theCurrencyTable :
@@ -268,7 +268,7 @@ SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxCo
 SvNumberFormatter::~SvNumberFormatter()
 {
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        ::osl::MutexGuard aGuard( GetGlobalMutex() );
         pFormatterRegistry->Remove( this );
         if ( !pFormatterRegistry->Count() )
         {
@@ -320,14 +320,14 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pMergeTable = nullptr;
     bNoZero = false;
 
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetGlobalMutex() );
     GetFormatterRegistry().Insert( this );
 }
 
 
 void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (ActLnge != eLnge)
     {
         ActLnge = eLnge;
@@ -352,7 +352,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 
 
 // static
-::osl::Mutex& SvNumberFormatter::GetMutex()
+::osl::Mutex& SvNumberFormatter::GetGlobalMutex()
 {
     // #i77768# Due to a static reference in the toolkit lib
     // we need a mutex that lives longer than the svl library.
@@ -366,7 +366,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 // static
 SvNumberFormatterRegistry_Impl& SvNumberFormatter::GetFormatterRegistry()
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetGlobalMutex() );
     if ( !pFormatterRegistry )
     {
         pFormatterRegistry = new SvNumberFormatterRegistry_Impl;
@@ -376,13 +376,13 @@ SvNumberFormatterRegistry_Impl& SvNumberFormatter::GetFormatterRegistry()
 
 void SvNumberFormatter::SetColorLink( const Link<sal_uInt16,Color*>& rColorTableCallBack )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     aColorLink = rColorTableCallBack;
 }
 
 Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if( aColorLink.IsSet() )
     {
         return aColorLink.Call(nIndex);
@@ -397,38 +397,38 @@ void SvNumberFormatter::ChangeNullDate(sal_uInt16 nDay,
                                        sal_uInt16 nMonth,
                                        sal_Int16 nYear)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     pFormatScanner->ChangeNullDate(nDay, nMonth, nYear);
     pStringScanner->ChangeNullDate(nDay, nMonth, nYear);
 }
 
 const Date& SvNumberFormatter::GetNullDate() const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return pFormatScanner->GetNullDate();
 }
 
 void SvNumberFormatter::ChangeStandardPrec(short nPrec)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     pFormatScanner->ChangeStandardPrec(nPrec);
 }
 
 void SvNumberFormatter::SetNoZero(bool bNZ)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     bNoZero = bNZ;
 }
 
 sal_uInt16 SvNumberFormatter::GetStandardPrec() const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return pFormatScanner->GetStandardPrec();
 }
 
 bool SvNumberFormatter::GetNoZero() const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return bNoZero;
 }
 
@@ -555,7 +555,7 @@ bool SvNumberFormatter::IsDecimalSep( const OUString& rStr ) const
 
 bool SvNumberFormatter::IsTextFormat(sal_uInt32 F_Index) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const SvNumberformat* pFormat = GetFormatEntry(F_Index);
 
     return pFormat && pFormat->IsTextFormat();
@@ -567,7 +567,7 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
                                  sal_uInt32& nKey,      // format key
                                  LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     nKey = 0;
     if (rString.isEmpty())                             // empty string
     {
@@ -635,7 +635,7 @@ bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
                                            LanguageType eNewLnge,
                                            bool bForExcelExport )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     bool bRes;
     if (eNewLnge == LANGUAGE_DONTKNOW)
     {
@@ -654,7 +654,7 @@ bool SvNumberFormatter::PutandConvertEntrySystem(OUString& rString,
                                                  LanguageType eLnge,
                                                  LanguageType eNewLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     bool bRes;
     if (eNewLnge == LANGUAGE_DONTKNOW)
     {
@@ -670,7 +670,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( OUString & rString, 
                                                             LanguageType eSysLnge, short & rType,
                                                             bool & rNewInserted, sal_Int32 & rCheckPos )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     sal_uInt32 nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
     rNewInserted = false;
     rCheckPos = 0;
@@ -744,13 +744,13 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( OUString & rString, 
 
 void SvNumberFormatter::DeleteEntry(sal_uInt32 nKey)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     aFTable.erase(nKey);
 }
 
 void SvNumberFormatter::GetUsedLanguages( std::vector<LanguageType>& rList )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     rList.clear();
 
     sal_uInt32 nOffset = 0;
@@ -769,7 +769,7 @@ void SvNumberFormatter::GetUsedLanguages( std::vector<LanguageType>& rList )
 void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
                                           LanguageType eLang )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     ChangeIntl( eLang );
     const NfKeywordTable & rTable = pFormatScanner->GetKeywords();
     for ( sal_uInt16 i = 0; i < NF_KEYWORD_ENTRIES_COUNT; ++i )
@@ -781,7 +781,7 @@ void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
 
 void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     FillKeywordTable( rKeywords, LANGUAGE_ENGLISH_US );
 
     // Replace upper case "GENERAL" with proper case "General".
@@ -799,7 +799,7 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
 OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKeywordTable& rKeywords,
         SvNumberFormatter& rTempFormatter ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     OUString aFormatStr;
     if (const SvNumberformat* pEntry = GetEntry( nKey))
     {
@@ -855,7 +855,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
 
 OUString SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     ChangeIntl(eLnge);
     const NfKeywordTable & rTable = pFormatScanner->GetKeywords();
     if ( nIndex < NF_KEYWORD_ENTRIES_COUNT )
@@ -869,7 +869,7 @@ OUString SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
 
 OUString SvNumberFormatter::GetStandardName( LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     ChangeIntl( eLnge );
     return pFormatScanner->GetStandardName();
 }
@@ -917,7 +917,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
                                                       sal_uInt32& FIndex,
                                                       LanguageType& rLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     short eTypetmp = eType;
     if (eType == css::util::NumberFormat::ALL)                  // empty cell or don't care
     {
@@ -1020,7 +1020,7 @@ SvNumberFormatTable& SvNumberFormatter::ChangeCL(short eType,
                                                  sal_uInt32& FIndex,
                                                  LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     ImpGenerateCL(eLnge);
     return GetEntryTable(eType, FIndex, ActLnge);
 }
@@ -1030,7 +1030,7 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
                                                     sal_uInt32& FIndex,
                                                     LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( pFormatTable )
     {
         pFormatTable->clear();
@@ -1081,7 +1081,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
                                        sal_uInt32& F_Index,
                                        double& fOutNumber)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
 
     short FType;
     const SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry(F_Index));
@@ -1156,7 +1156,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
 
 LanguageType SvNumberFormatter::GetLanguage() const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return IniLnge;
 }
 
@@ -1300,7 +1300,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
 
 sal_uInt32 SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -1334,7 +1334,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge
 bool SvNumberFormatter::IsSpecialStandardFormat( sal_uInt32 nFIndex,
                                                  LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return
         nFIndex == GetFormatIndex( NF_TIME_MMSS00, eLnge ) ||
         nFIndex == GetFormatIndex( NF_TIME_HH_MMSS00, eLnge ) ||
@@ -1345,7 +1345,7 @@ bool SvNumberFormatter::IsSpecialStandardFormat( sal_uInt32 nFIndex,
 sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, short eType,
                                                  LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
     else
@@ -1354,7 +1354,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, short eType
 
 sal_uInt32 SvNumberFormatter::GetTimeFormat( double fNumber, LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     bool bSign;
     if ( fNumber < 0.0 )
     {
@@ -1383,7 +1383,7 @@ sal_uInt32 SvNumberFormatter::GetTimeFormat( double fNumber, LanguageType eLnge 
 sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIndex,
                                                  short eType, LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
 
@@ -1398,7 +1398,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
 
 sal_uInt32 SvNumberFormatter::GuessDateTimeFormat( short& rType, double fNumber, LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     // Categorize the format according to the implementation of
     // SvNumberFormatter::GetEditFormat(), making assumptions about what
     // would be time only.
@@ -1434,7 +1434,7 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
                                              short eType, LanguageType eLang,
                                              SvNumberformat const * pFormat )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
     {
@@ -1498,7 +1498,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            sal_uInt32 nFIndex,
                                            OUString& sOutString)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     Color* pColor;
     sal_uInt32 nRealKey = nFIndex;
     SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry( nFIndex ), &nRealKey);
@@ -1562,7 +1562,7 @@ void SvNumberFormatter::GetOutputString(const OUString& sString,
                                         Color** ppColor,
                                         bool bUseStarFormat )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     // ImpSubstituteEntry() is unnecessary here because so far only numeric
     // (time and date) are substituted.
@@ -1596,7 +1596,7 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
                                         Color** ppColor,
                                         bool bUseStarFormat )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (bNoZero && fOutNumber == 0.0)
     {
         sOutString.clear();
@@ -1620,7 +1620,7 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
                                          LanguageType eLnge,
                                          bool bUseStarFormat )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (sFormatString.isEmpty())                       // no empty string
     {
         return false;
@@ -1673,7 +1673,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                                                Color** ppColor,
                                                LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (sFormatString.isEmpty())                       // no empty string
     {
         return false;
@@ -1774,7 +1774,7 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
                                           Color** ppColor,
                                           LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (sFormatString.isEmpty())               // no empty string
     {
         return false;
@@ -1828,7 +1828,7 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
 sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
                                             LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (sFormatString.isEmpty())                       // no empty string
     {
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -1986,7 +1986,7 @@ void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
                                              sal_uInt16& nLeadingCnt)
 
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     SvNumberformat* pFormat = GetFormatEntry( nFormat );
     if (pFormat)
         pFormat->GetFormatSpecialInfo(bThousand, IsRed,
@@ -2002,7 +2002,7 @@ void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
 
 sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const SvNumberformat* pFormat = GetFormatEntry( nFormat );
     if ( pFormat )
         return pFormat->GetFormatPrecision();
@@ -2012,7 +2012,7 @@ sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
 
 sal_uInt16 SvNumberFormatter::GetFormatIntegerDigits( sal_uInt32 nFormat ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const SvNumberformat* pFormat = GetFormatEntry( nFormat );
     if ( pFormat )
         return pFormat->GetFormatIntegerDigits();
@@ -2022,7 +2022,7 @@ sal_uInt16 SvNumberFormatter::GetFormatIntegerDigits( sal_uInt32 nFormat ) const
 
 OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( !pFormat || pFormat->GetLanguage() == ActLnge )
     {
@@ -2050,7 +2050,7 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
                                                     sal_uInt16& nLeadingCnt, LanguageType eLnge )
 
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -2248,7 +2248,7 @@ const SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey ) const
 
 const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     auto it = aFTable.find( nKey);
     if (it != aFTable.end())
         return it->second.get();
@@ -2257,7 +2257,7 @@ const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
 
 const SvNumberformat* SvNumberFormatter::GetSubstitutedEntry( sal_uInt32 nKey, sal_uInt32 & o_rNewKey ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     // A tad ugly, but GetStandardFormat() and GetFormatIndex() in
     // ImpSubstituteEntry() may have to add the LANGUAGE_SYSTEM formats if not
     // already present (which in practice most times they are).
@@ -2846,7 +2846,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
                                            sal_uInt16 nPrecision,
                                            sal_uInt16 nLeadingZeros)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -3042,7 +3042,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
 bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
                                       LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -3062,7 +3062,7 @@ bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
 sal_uInt32 SvNumberFormatter::GetEntryKey(const OUString& sStr,
                                           LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -3073,7 +3073,7 @@ sal_uInt32 SvNumberFormatter::GetEntryKey(const OUString& sStr,
 
 sal_uInt32 SvNumberFormatter::GetStandardIndex(LanguageType eLnge)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -3083,7 +3083,7 @@ sal_uInt32 SvNumberFormatter::GetStandardIndex(LanguageType eLnge)
 
 short SvNumberFormatter::GetType(sal_uInt32 nFIndex) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     short eType;
     const SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
@@ -3103,7 +3103,7 @@ short SvNumberFormatter::GetType(sal_uInt32 nFIndex) const
 
 void SvNumberFormatter::ClearMergeTable()
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( pMergeTable )
     {
         pMergeTable->clear();
@@ -3112,7 +3112,7 @@ void SvNumberFormatter::ClearMergeTable()
 
 SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter& rTable)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( pMergeTable )
     {
         ClearMergeTable();
@@ -3189,7 +3189,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
 
 SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (!HasMergeFormatTable())
     {
         return SvNumberFormatterMergeMap();
@@ -3208,7 +3208,7 @@ SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
 sal_uInt32 SvNumberFormatter::GetFormatForLanguageIfBuiltIn( sal_uInt32 nFormat,
                                                              LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( eLnge == LANGUAGE_DONTKNOW )
     {
         eLnge = IniLnge;
@@ -3230,7 +3230,7 @@ sal_uInt32 SvNumberFormatter::GetFormatForLanguageIfBuiltIn( sal_uInt32 nFormat,
 sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
                                               LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (nTabOff >= NF_INDEX_TABLE_ENTRIES)
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
 
@@ -3248,7 +3248,7 @@ sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
 
 NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     sal_uInt32 nOffset = nFormat % SV_COUNTRY_LANGUAGE_OFFSET;      // relative index
     if ( nOffset > SV_MAX_COUNT_STANDARD_FORMATS )
     {
@@ -3265,26 +3265,26 @@ NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) 
 
 void SvNumberFormatter::SetEvalDateFormat( NfEvalDateFormat eEDF )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     eEvalDateFormat = eEDF;
 }
 
 NfEvalDateFormat SvNumberFormatter::GetEvalDateFormat() const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return eEvalDateFormat;
 }
 
 void SvNumberFormatter::SetYear2000( sal_uInt16 nVal )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     pStringScanner->SetYear2000( nVal );
 }
 
 
 sal_uInt16 SvNumberFormatter::GetYear2000() const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return pStringScanner->GetYear2000();
 }
 
@@ -3310,7 +3310,6 @@ sal_uInt16 SvNumberFormatter::GetYear2000Default()
 // static
 const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
     while ( !bCurrencyTableInitialized )
         ImpInitCurrencyTable();
     return theCurrencyTable::get();
@@ -3371,10 +3370,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(const OUString& rAbbr
 const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUString& rSymbol,
                                                                       const OUString& rAbbrev )
 {
-    if (!bCurrencyTableInitialized)
-    {
-        GetTheCurrencyTable();      // just for initialization
-    }
+    GetTheCurrencyTable();      // just for initialization
     const NfCurrencyTable& rTable = theLegacyOnlyCurrencyTable::get();
     sal_uInt16 nCount = rTable.size();
     for ( sal_uInt16 j = 0; j < nCount; j++ )
@@ -3392,7 +3388,6 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUSt
 // static
 IMPL_STATIC_LINK_NOARG( SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
     OUString aAbbrev;
     LanguageType eLang = LANGUAGE_SYSTEM;
     SvtSysLocaleOptions().GetCurrencyAbbrevAndLanguage( aAbbrev, eLang );
@@ -3403,7 +3398,7 @@ IMPL_STATIC_LINK_NOARG( SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, v
 // static
 void SvNumberFormatter::SetDefaultSystemCurrency( const OUString& rAbbrev, LanguageType eLang )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetGlobalMutex() );
     if ( eLang == LANGUAGE_SYSTEM )
     {
         eLang = SvtSysLocale().GetLanguageTag().getLanguageType();
@@ -3580,7 +3575,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
                                                     const NfCurrencyEntry** ppEntry /* = NULL */,
                                                     bool* pBank /* = NULL */ ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( ppEntry )
         *ppEntry = nullptr;
     if ( pBank )
@@ -3644,7 +3639,6 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
                                                             LanguageType eFormatLanguage,
                                                             bool bOnlyStringLanguage )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
     sal_Int32 nExtLen = rExtension.getLength();
     LanguageType eExtLang;
     if ( nExtLen )
@@ -3730,7 +3724,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
 
 void SvNumberFormatter::GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     css::uno::Sequence< css::i18n::Currency2 >
         xCurrencies( xLocaleData->getAllCurrencies() );
 
@@ -3985,7 +3979,7 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
                                                         const NfCurrencyEntry& rCurr,
                                                         bool bBank ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     OUString aRed = "["
                   + pFormatScanner->GetRedString()
                   + "]";
@@ -4073,7 +4067,7 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
 
 sal_uInt32 SvNumberFormatter::GetMergeFormatIndex( sal_uInt32 nOldFmt ) const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (pMergeTable)
     {
         SvNumberFormatterIndexTable::const_iterator it = pMergeTable->find(nOldFmt);
@@ -4087,7 +4081,7 @@ sal_uInt32 SvNumberFormatter::GetMergeFormatIndex( sal_uInt32 nOldFmt ) const
 
 bool SvNumberFormatter::HasMergeFormatTable() const
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     return pMergeTable && !pMergeTable->empty();
 }
 
