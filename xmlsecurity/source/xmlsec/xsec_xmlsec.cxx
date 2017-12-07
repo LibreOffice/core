@@ -28,9 +28,9 @@
 #include "xsec_xmlsec.hxx"
 
 #include <config_gpgme.h>
-#if GPGME_HAVE_GPGME
-#include <gpg/xmlsignature_gpgimpl.hxx>
-#include <gpg/SEInitializer.hxx>
+#if HAVE_FEATURE_GPGME
+# include <gpg/xmlsignature_gpgimpl.hxx>
+# include <gpg/SEInitializer.hxx>
 #endif
 
 using namespace ::cppu;
@@ -46,7 +46,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
     Reference< XInterface > xFactory ;
 
     if( pImplName != nullptr ) {
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
         if( XMLSignature_GpgImpl::impl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = XMLSignature_GpgImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;

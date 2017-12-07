@@ -66,14 +66,14 @@ bool DocumentSignatureManager::init()
     initXmlSec();
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
     mxGpgSEInitializer.set(new SEInitializerGpg());
 #endif
 
     if (mxSEInitializer.is())
         mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
     if (mxGpgSEInitializer.is())
         mxGpgSecurityContext = mxGpgSEInitializer->createSecurityContext(OUString());
 
