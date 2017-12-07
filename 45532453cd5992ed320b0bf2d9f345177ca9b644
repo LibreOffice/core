@@ -34,6 +34,24 @@
       "revId": "45532453cd5992ed320b0bf2d9f345177ca9b644",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c54e626e",
+        "filename": "sw/source/core/layout/flylay.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-07T14:14:06Z",
+      "side": 1,
+      "message": "Hm, so in the bBrowse case you still modify layout behavior unconditionally as far as I see, that is a concern.\n\nThe point of the compat flag is that its default value (when opening existing ODT files) means the same behavior as it was before your change. And then of couse you would enable this compat flag for docx files -- and depending on if the old behavior was or was not sane perhaps also for new documents.\n\nJust to be sure, you didn\u0027t mean \"bBrowse \u0026\u0026 bOffPagePositinong\", right? Since that would address the compatibility concern.",
+      "parentUuid": "1a430d35_a2f78c57",
+      "revId": "45532453cd5992ed320b0bf2d9f345177ca9b644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
