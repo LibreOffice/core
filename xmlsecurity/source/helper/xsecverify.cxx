@@ -120,7 +120,7 @@ void XSecController::addSignature()
 
 void XSecController::switchGpgSignature()
 {
-#if GPGME_HAVE_GPGME
+#if HAVE_FEATURE_GPGME
     // swap signature verifier for the Gpg one
     m_xXMLSignature.set(new XMLSignature_GpgImpl());
     if (!m_vInternalSignatureInformations.empty())

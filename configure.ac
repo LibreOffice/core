@@ -10217,7 +10217,7 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
         fi
     fi
     ENABLE_GPGMEPP=TRUE
-    AC_DEFINE([GPGME_HAVE_GPGME])
+    AC_DEFINE([HAVE_FEATURE_GPGME])
 fi
 AC_SUBST(ENABLE_GPGMEPP)
 AC_SUBST(SYSTEM_GPGMEPP)
