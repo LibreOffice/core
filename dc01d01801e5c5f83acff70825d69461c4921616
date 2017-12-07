@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e588be73",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2526,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-07T16:40:06Z",
+      "side": 1,
+      "message": "Similar to SID_NUMBER_FORMAT below, the slot should be disabled if ATTR_VALUE_FORMAT has SfxItemState::DONTCARE, otherwise different formats would be forced to the result of modifying one (key 0 \u003d\u003d General of system locale) format.",
+      "revId": "dc01d01801e5c5f83acff70825d69461c4921616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
