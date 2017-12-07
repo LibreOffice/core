@@ -8292,8 +8292,6 @@ io/test/stm/testfactreg.cxx
 io/test/stm/testfactreg.hxx
 io/test/testcomponent.cxx
 io/test/testconnection.cxx
-ios/LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.c
-ios/LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.h
 ios/LibreOfficeLight/LibreOfficeLight/dummyLOkit.c
 ios/LibreOfficeLight/LibreOfficeLight/lokit-Bridging-Header.h
 ios/source/LibreOfficeKit.c
