@@ -52,12 +52,12 @@ using ::com::sun::star::lang::XComponent;
 
 namespace oox { namespace ppt {
 
-OUString SAL_CALL PowerPointImport_getImplementationName()
+OUString PowerPointImport_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.ppt.PowerPointImport" );
 }
 
-uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames()
+uno::Sequence< OUString > PowerPointImport_getSupportedServiceNames()
 {
     Sequence< OUString > aSeq( 2 );
     aSeq[ 0 ] = "com.sun.star.document.ImportFilter";
@@ -65,7 +65,7 @@ uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames()
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( const Reference< XComponentContext >& rxContext )
+uno::Reference< uno::XInterface > PowerPointImport_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast< ::cppu::OWeakObject* >( new PowerPointImport( rxContext ) );
 }

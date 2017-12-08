@@ -26,12 +26,12 @@
 
 extern "C" {
 
-void SAL_CALL createRegistryInfo_DBContentLoader2();
-void SAL_CALL createRegistryInfo_DBTypeDetection();
-void SAL_CALL createRegistryInfo_ODBFilter();
-void SAL_CALL createRegistryInfo_ODBFilterExport();
-void SAL_CALL createRegistryInfo_OFullExport();
-void SAL_CALL createRegistryInfo_OSettingsExport();
+void createRegistryInfo_DBContentLoader2();
+void createRegistryInfo_DBTypeDetection();
+void createRegistryInfo_ODBFilter();
+void createRegistryInfo_ODBFilterExport();
+void createRegistryInfo_OFullExport();
+void createRegistryInfo_OSettingsExport();
 
 }
 

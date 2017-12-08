@@ -72,7 +72,7 @@
 #include <iterator>
 #include <o3tl/functional.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_EventHandler()
+extern "C" void createRegistryInfo_EventHandler()
 {
     ::pcr::OAutoRegistration< ::pcr::EventHandler > aAutoRegistration;
 }

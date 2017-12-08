@@ -25,7 +25,7 @@
 using namespace com::sun::star;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucppkg1_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * ucppkg1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;

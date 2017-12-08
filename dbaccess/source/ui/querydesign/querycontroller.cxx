@@ -85,7 +85,7 @@
 #include <memory>
 #include <vector>
 
-extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
+extern "C" void createRegistryInfo_OQueryControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OQueryController > aAutoRegistration;
 }
@@ -131,7 +131,7 @@ namespace dbaui
     };
 }
 
-extern "C" void SAL_CALL createRegistryInfo_OViewControl()
+extern "C" void createRegistryInfo_OViewControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OViewController > aAutoRegistration;
 }

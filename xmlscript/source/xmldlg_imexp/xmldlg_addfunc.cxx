@@ -53,7 +53,7 @@ uno::Reference< io::XInputStream > InputStreamProvider::createInputStream()
     return ::xmlscript::createInputStream( _bytes );
 }
 
-uno::Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
+uno::Reference< io::XInputStreamProvider > exportDialogModel(
     uno::Reference< container::XNameContainer > const & xDialogModel,
     uno::Reference< uno::XComponentContext > const & xContext,
     uno::Reference< XModel > const & xDocument )
@@ -69,7 +69,7 @@ uno::Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     return new InputStreamProvider( aBytes );
 }
 
-void SAL_CALL importDialogModel(
+void importDialogModel(
     uno::Reference< io::XInputStream > const & xInput,
     uno::Reference< container::XNameContainer > const & xDialogModel,
     uno::Reference< uno::XComponentContext > const & xContext,

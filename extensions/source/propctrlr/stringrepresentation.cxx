@@ -51,9 +51,9 @@ namespace comp_StringRepresentation {
 using namespace ::com::sun::star;
 
 // component and service helper functions:
-OUString SAL_CALL _getImplementationName();
-uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
-uno::Reference< uno::XInterface > SAL_CALL _create( uno::Reference< uno::XComponentContext > const & context );
+OUString _getImplementationName();
+uno::Sequence< OUString > _getSupportedServiceNames();
+uno::Reference< uno::XInterface > _create( uno::Reference< uno::XComponentContext > const & context );
 
 } // closing component helper namespace
 
@@ -611,18 +611,18 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 // component helper namespace
 namespace comp_StringRepresentation {
 
-OUString SAL_CALL _getImplementationName() {
+OUString _getImplementationName() {
     return OUString(
         "StringRepresentation");
 }
 
-uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+uno::Sequence< OUString > _getSupportedServiceNames()
 {
     uno::Sequence< OUString > s { "com.sun.star.inspection.StringRepresentation" };
     return s;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL _create(
+uno::Reference< uno::XInterface > _create(
     const uno::Reference< uno::XComponentContext > & context)
 {
     return static_cast< ::cppu::OWeakObject * >(new pcr::StringRepresentation(context));
@@ -631,7 +631,7 @@ uno::Reference< uno::XInterface > SAL_CALL _create(
 } // closing component helper namespace
 
 
-extern "C" void SAL_CALL createRegistryInfo_StringRepresentation()
+extern "C" void createRegistryInfo_StringRepresentation()
 {
     ::pcr::PcrModule::getInstance().registerImplementation(
             comp_StringRepresentation::_getImplementationName(),

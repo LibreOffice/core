@@ -103,7 +103,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static()
     return { "com.sun.star.script.BasicIDE" };
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
+uno::Reference< uno::XInterface > SIDEModel_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & )
 {
     SolarMutexGuard aGuard;

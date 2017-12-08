@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )(SvStream&, Reference< XModel > const &, Reference< XStatusIndicator > const &);
+typedef sal_uInt32 ( *ImportCGMPointer )(SvStream&, Reference< XModel > const &, Reference< XStatusIndicator > const &);
 
 #ifdef DISABLE_DYNLOADING
 
@@ -124,7 +124,7 @@ bool SdCGMFilter::Export()
     return false;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCGM(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCGM(SvStream &rStream)
 {
     SdDLL::Init();
 

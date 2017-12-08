@@ -68,14 +68,14 @@ OUString PDFInteractionHandler_getImplementationName ()
 }
 
 
-Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
+Sequence< OUString > PDFInteractionHandler_getSupportedServiceNames(  )
 {
     Sequence<OUString> aRet { "com.sun.star.filter.pdfexport.PDFExportInteractionHandler" };
     return aRet;
 }
 
 
-Reference< XInterface > SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & )
+Reference< XInterface > PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & )
 {
     return static_cast<cppu::OWeakObject*>(new PDFInteractionHandler);
 }

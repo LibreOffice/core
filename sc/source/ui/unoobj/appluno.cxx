@@ -95,7 +95,7 @@ SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "stardiv.StarCalc.ScSpreadsheetSe
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL sc_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * sc_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     if (!pServiceManager)
@@ -181,7 +181,7 @@ ScSpreadsheetSettings::~ScSpreadsheetSettings()
 {
 }
 
-uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
+uno::Reference<uno::XInterface> ScSpreadsheetSettings_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
     SolarMutexGuard aGuard;
@@ -455,7 +455,7 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScRecentFunctionsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
@@ -512,7 +512,7 @@ ScFunctionListObj::~ScFunctionListObj()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScFunctionListObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;

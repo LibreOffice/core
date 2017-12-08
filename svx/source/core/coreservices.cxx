@@ -32,7 +32,7 @@ using namespace com::sun::star::registry;
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
+SAL_DLLPUBLIC_EXPORT void * svxcore_component_getFactory (
     const sal_Char * pImplName, void * pServiceManager, void *  )
 {
     void * pRet = nullptr;

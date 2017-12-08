@@ -222,32 +222,13 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     if (!bCanonicalDeclIsSalCall)
         return true;
 
-    // @TODO For now, I am ignore free functions, since those are most likely to have their address taken.
-    // I'll do them later. They are harder to verify since MSVC does not verify when assigning to function pointers
-    // that the calling convention of the function matches the calling convention of the function pointer!
-    if (!methodDecl)
+    if (!decl->isThisDeclarationADefinition() && !(methodDecl && methodDecl->isPure()))
         return true;
-
     // can only check when we have a definition since this is the most likely time
     // when the address of the method will be taken
-    if (!(methodDecl && methodDecl->isPure()) && !decl->isThisDeclarationADefinition())
-        return true;
-    if (m_addressOfSet.find(decl->getCanonicalDecl()) != m_addressOfSet.end())
-        return true;
-
-    // ignore extern "C" UNO factory constructor functions
-    if (decl->isExternC())
+    if (methodDecl)
     {
-        if (loplugin::TypeCheck(decl->getReturnType())
-                .Pointer()
-                .Class("XInterface")
-                .Namespace("uno")
-                .Namespace("star")
-                .Namespace("sun")
-                .Namespace("com")
-                .GlobalNamespace())
-            return true;
-        if (loplugin::TypeCheck(decl->getReturnType()).Pointer().Void())
+        if (m_addressOfSet.find(decl->getCanonicalDecl()) != m_addressOfSet.end())
             return true;
     }
 

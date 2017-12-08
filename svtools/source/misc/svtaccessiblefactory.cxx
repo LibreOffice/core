@@ -202,7 +202,7 @@ namespace svt
 
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
-    extern "C" { static void SAL_CALL thisModule() {} }
+    extern "C" { static void thisModule() {} }
 #else
     extern "C" void* getSvtAccessibilityComponentFactory();
 #endif

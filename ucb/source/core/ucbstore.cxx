@@ -156,7 +156,7 @@ UcbStore::~UcbStore()
 XSERVICEINFO_COMMOM_IMPL( UcbStore,
                           OUString( "com.sun.star.comp.ucb.UcbStore" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 UcbStore_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =

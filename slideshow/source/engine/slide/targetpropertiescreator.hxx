@@ -35,7 +35,7 @@ namespace slideshow
         namespace TargetPropertiesCreator
         {
             /// Generate shape property list - set bInitial to true for initial slide state
-            uno::Sequence< animations::TargetProperties > SAL_CALL createTargetProperties(
+            uno::Sequence< animations::TargetProperties > createTargetProperties(
                 const uno::Reference< animations::XAnimationNode >& rootNode,
                 bool bInitial );
         }

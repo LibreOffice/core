@@ -222,7 +222,7 @@ Reference< XOutputStream > OTextOutputStream::getOutputStream()
 }
 
 
-Reference< XInterface > SAL_CALL TextOutputStream_CreateInstance(
+Reference< XInterface > TextOutputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference< XComponentContext > &)
 {
     return Reference < XInterface >( static_cast<OWeakObject *>(new OTextOutputStream()) );

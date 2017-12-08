@@ -752,7 +752,7 @@ bool PSDReader::ImplReadBody()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 ipdGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PSDReader aPSDReader(rStream);

@@ -57,7 +57,7 @@ typedef opengl::OpenglShapeFactory* (*getOpenglShapeFactory_)(void);
 
 #ifndef DISABLE_DYNLOADING
 
-void SAL_CALL thisModule() {}
+void thisModule() {}
 
 osl::Module* getOpenGLModule()
 {

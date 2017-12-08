@@ -73,7 +73,7 @@ namespace
 
 namespace
 {
-    typedef Reference< XInterface > (SAL_CALL * ComponentFactory)( const Reference< XComponentContext >& );
+    typedef Reference< XInterface > (* ComponentFactory)( const Reference< XComponentContext >& );
 
     struct ComponentDescription
     {
@@ -109,7 +109,7 @@ namespace
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL pdfimport_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* pdfimport_component_getFactory(
     const sal_Char* pImplementationName,
     SAL_UNUSED_PARAMETER void* /*pServiceManager*/,
     SAL_UNUSED_PARAMETER void* /*pRegistryKey*/ )

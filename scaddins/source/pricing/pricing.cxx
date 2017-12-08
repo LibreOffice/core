@@ -90,7 +90,7 @@ void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 }
 
 // entry points for service registration / instantiation
-uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
+uno::Reference< uno::XInterface > ScaPricingAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
     return static_cast<cppu::OWeakObject*>(new ScaPricingAddIn());
@@ -98,7 +98,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * pricing_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void* pRet = nullptr;

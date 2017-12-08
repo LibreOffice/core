@@ -290,7 +290,7 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *
 lo_writer_MMCurrentEntryController_get_implementation(
     uno::XComponentContext *context,
     uno::Sequence<uno::Any> const &)
@@ -298,7 +298,7 @@ lo_writer_MMCurrentEntryController_get_implementation(
     return cppu::acquire(new MMCurrentEntryController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *
 lo_writer_MMExcludeEntryController_get_implementation(
     uno::XComponentContext *context,
     uno::Sequence<uno::Any> const &)

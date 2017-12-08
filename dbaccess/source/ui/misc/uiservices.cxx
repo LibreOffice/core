@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-extern "C" void SAL_CALL createRegistryInfo_DBU()
+extern "C" void createRegistryInfo_DBU()
 {
     static bool bInit = false;
     if (!bInit)
@@ -59,7 +59,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
     }
 }
 
-extern "C"  SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbu_component_getFactory(
+extern "C"  SAL_DLLPUBLIC_EXPORT void* dbu_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)

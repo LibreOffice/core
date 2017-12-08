@@ -72,7 +72,7 @@ static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SH
 
 static rtl_arena_type * gp_alloc_arena = nullptr;
 
-void * SAL_CALL rtl_allocateMemory_CUSTOM(sal_Size n) SAL_THROW_EXTERN_C()
+void * rtl_allocateMemory_CUSTOM(sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = nullptr;
     if (n > 0)
@@ -111,7 +111,7 @@ try_alloc:
     return p;
 }
 
-void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
+void rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
 {
     if (p)
     {
@@ -125,7 +125,7 @@ void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
     }
 }
 
-void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void * rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     if (n > 0)
     {
@@ -226,17 +226,17 @@ void rtl_memory_fini()
 #endif
 }
 
-void * SAL_CALL rtl_allocateMemory_SYSTEM(sal_Size n)
+void * rtl_allocateMemory_SYSTEM(sal_Size n)
 {
     return malloc (n);
 }
 
-void SAL_CALL rtl_freeMemory_SYSTEM(void * p)
+void rtl_freeMemory_SYSTEM(void * p)
 {
     free (p);
 }
 
-void * SAL_CALL rtl_reallocateMemory_SYSTEM(void * p, sal_Size n)
+void * rtl_reallocateMemory_SYSTEM(void * p, sal_Size n)
 {
     return realloc (p, n);
 }

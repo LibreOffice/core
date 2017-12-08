@@ -25,7 +25,7 @@
 
 using namespace dbaui;
 
-extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog()
+extern "C" void createRegistryInfo_OUserSettingsDialog()
 {
     static OMultiInstanceAutoRegistration< OUserSettingsDialog > aAutoRegistration;
 }

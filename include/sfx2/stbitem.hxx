@@ -30,7 +30,7 @@ class SfxModule;
 class SfxStatusBarControl;
 class SfxBindings;
 
-svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
+svt::StatusbarController* SfxStatusBarControllerFactory(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,

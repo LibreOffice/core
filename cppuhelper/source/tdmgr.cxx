@@ -564,7 +564,7 @@ static typelib_TypeDescription * createCTD(
 
 extern "C"
 {
-static void SAL_CALL typelib_callback(
+static void typelib_callback(
     void * pContext, typelib_TypeDescription ** ppRet, rtl_uString * pTypeName )
 {
     OSL_ENSURE( pContext && ppRet && pTypeName, "### null ptr!" );

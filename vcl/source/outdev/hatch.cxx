@@ -35,7 +35,7 @@
 
 #define HATCH_MAXPOINTS             1024
 
-extern "C" int SAL_CALL HatchCmpFnc( const void* p1, const void* p2 )
+extern "C" int HatchCmpFnc( const void* p1, const void* p2 )
 {
     const long nX1 = static_cast<Point const *>(p1)->X();
     const long nX2 = static_cast<Point const *>(p2)->X();

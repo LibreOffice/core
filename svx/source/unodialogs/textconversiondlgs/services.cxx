@@ -37,7 +37,7 @@ static const struct ::cppu::ImplementationEntry g_entries_unodialogs_chinesetran
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL textconversiondlgs_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * textconversiondlgs_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(

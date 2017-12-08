@@ -125,7 +125,7 @@ UcbCommandEnvironment::getProgressHandler()
 // Service factory implementation.
 
 /// @throws uno::Exception
-static uno::Reference< uno::XInterface > SAL_CALL
+static uno::Reference< uno::XInterface >
 UcbCommandEnvironment_CreateInstance(
     const uno::Reference< lang::XMultiServiceFactory> & /*rSMgr*/ )
 {

@@ -50,7 +50,7 @@ static ::cppu::ImplementationEntry const entries[] = {
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL unordf_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * unordf_component_getFactory(
     const char * implName, void * serviceManager, void * registryKey)
 {
     return ::cppu::component_getFactoryHelper(

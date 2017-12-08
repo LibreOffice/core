@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* pRegistryKey )
 {
     void* pRet = nullptr;
     Reference< XInterface > xFactory ;

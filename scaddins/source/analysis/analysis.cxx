@@ -41,7 +41,7 @@ using namespace                 ::com::sun::star;
 using namespace sca::analysis;
 using namespace std;
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* analysis_component_getFactory(
     const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
@@ -163,7 +163,7 @@ uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
     return aRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance(
+uno::Reference< uno::XInterface > AnalysisAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& xServiceFact )
 {
     return static_cast<cppu::OWeakObject*>(new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) ));

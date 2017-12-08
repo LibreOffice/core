@@ -895,7 +895,7 @@ void BubbleWindow::RecalcTextRects()
 } // anonymous namespace
 
 
-static uno::Reference<uno::XInterface> SAL_CALL
+static uno::Reference<uno::XInterface>
 createInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
     SolarMutexGuard aGuard;
@@ -917,7 +917,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL updchkui_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * updchkui_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pszImplementationName,

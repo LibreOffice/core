@@ -30,18 +30,18 @@
 
 using namespace ::com::sun::star;
 
-OUString SAL_CALL ScDocument_getImplementationName() throw()
+OUString ScDocument_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 }
 
-uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
+uno::Sequence< OUString > ScDocument_getSupportedServiceNames() throw()
 {
     uno::Sequence<OUString> aSeq { "com.sun.star.sheet.SpreadsheetDocument" };
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
+uno::Reference< uno::XInterface > ScDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & /* rSMgr */, SfxModelFlags _nCreationFlags )
 {
     SolarMutexGuard aGuard;

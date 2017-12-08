@@ -25,7 +25,7 @@
 
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 
-extern "C" void SAL_CALL createRegistryInfo_ButtonNavigationHandler()
+extern "C" void createRegistryInfo_ButtonNavigationHandler()
 {
     ::pcr::ButtonNavigationHandler::registerImplementation();
 }

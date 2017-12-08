@@ -15,7 +15,7 @@
 
 namespace sdecl = ::comphelper::service_decl;
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL utl_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* utl_component_getFactory(
     sal_Char const* pImplName, void*, void*)
 {
     return sdecl::component_getFactoryHelper( pImplName,

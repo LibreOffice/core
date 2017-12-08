@@ -40,7 +40,7 @@
 #include <UITools.hxx>
 #include <comphelper/processfactory.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler()
+extern "C" void createRegistryInfo_OInteractionHandler()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SQLExceptionInteractionHandler > aSQLExceptionInteractionHandler_AutoRegistration;
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::LegacyInteractionHandler > aLegacyInteractionHandler_AutoRegistration;

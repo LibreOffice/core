@@ -429,7 +429,7 @@ void TmpRepositoryCommandEnv::pop()
 // component operations
 
 
-Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
+Reference< XInterface > OO3ExtensionMigration_create(
     Reference< XComponentContext > const & ctx )
 {
     return static_cast< lang::XTypeProvider * >( new OO3ExtensionMigration(

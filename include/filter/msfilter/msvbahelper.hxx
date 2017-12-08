@@ -110,13 +110,13 @@ private:
     OUString            maProjectName;
 };
 
-OUString SAL_CALL VBAMacroResolver_getImplementationName();
+OUString VBAMacroResolver_getImplementationName();
 
-css::uno::Sequence<OUString> SAL_CALL
+css::uno::Sequence<OUString>
 VBAMacroResolver_getSupportedServiceNames();
 
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 VBAMacroResolver_createInstance(
     css::uno::Reference<css::uno::XComponentContext > const & rxContext);
 

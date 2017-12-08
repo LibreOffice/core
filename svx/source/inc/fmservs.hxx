@@ -82,28 +82,28 @@ namespace svxform
 {
     SVX_DLLPUBLIC void ImplSmartRegisterUnoServices();
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL
+    css::uno::Reference<css::uno::XInterface>
     OAddConditionDialog_Create(
         css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
-    OUString SAL_CALL OAddConditionDialog_GetImplementationName();
+    OUString OAddConditionDialog_GetImplementationName();
 
-    css::uno::Sequence<OUString> SAL_CALL
+    css::uno::Sequence<OUString>
     OAddConditionDialog_GetSupportedServiceNames();
 }
 
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 FmXGridControl_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 FormController_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 LegacyFormController_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 

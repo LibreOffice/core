@@ -151,7 +151,7 @@ namespace
 }
 
 extern "C" {
-    typedef UnoWrapperBase* (SAL_CALL *FN_TkCreateUnoWrapper)();
+    typedef UnoWrapperBase* (*FN_TkCreateUnoWrapper)();
 }
 
 struct ImplPostEventData
@@ -1422,7 +1422,7 @@ extern "C" { UnoWrapperBase* CreateUnoWrapper(); }
 
 #else
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #endif
 

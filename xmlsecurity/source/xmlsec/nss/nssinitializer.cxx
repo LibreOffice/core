@@ -469,13 +469,13 @@ OUString ONSSInitializer_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
+cssu::Sequence< OUString > ONSSInitializer_getSupportedServiceNames(  )
 {
     cssu::Sequence<OUString> aRet { NSS_SERVICE_NAME };
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL ONSSInitializer_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
+cssu::Reference< cssu::XInterface > ONSSInitializer_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new ONSSInitializer( comphelper::getComponentContext(rSMgr) ));
 }

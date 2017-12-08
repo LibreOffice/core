@@ -129,7 +129,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     return xRet;
 }
 
-static Reference< XInterface > SAL_CALL ResolverImpl_create( const Reference< XComponentContext > & xCtx )
+static Reference< XInterface > ResolverImpl_create( const Reference< XComponentContext > & xCtx )
 {
     return Reference< XInterface >( *new ResolverImpl( xCtx ) );
 }
@@ -148,7 +148,7 @@ static const struct ImplementationEntry g_entries[] =
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uuresolver_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * uuresolver_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );

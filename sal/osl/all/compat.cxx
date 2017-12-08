@@ -71,7 +71,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe, oslSocket)
 }
 
 namespace {
-typedef void (SAL_CALL * pfunc_osl_printDebugMessage)(char const *);
+typedef void (* pfunc_osl_printDebugMessage)(char const *);
 }
 SAL_DLLPUBLIC_EXPORT pfunc_osl_printDebugMessage SAL_CALL
 osl_setDebugMessageFunc(pfunc_osl_printDebugMessage) {
@@ -79,7 +79,7 @@ osl_setDebugMessageFunc(pfunc_osl_printDebugMessage) {
 }
 
 namespace {
-typedef void (SAL_CALL * pfunc_osl_printDetailedDebugMessage)(
+typedef void (* pfunc_osl_printDetailedDebugMessage)(
     char const *, sal_Int32, char const *);
 }
 SAL_DLLPUBLIC_EXPORT pfunc_osl_printDetailedDebugMessage SAL_CALL

@@ -105,7 +105,7 @@ Sequence< OUString > SAL_CALL StarOfficeWriterImportFilter::getSupportedServiceN
 }
 
 extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_libreoffice_comp_Writer_StarOfficeWriterImportFilter_get_implementation(
     css::uno::XComponentContext *const context,
     const css::uno::Sequence<css::uno::Any> &)

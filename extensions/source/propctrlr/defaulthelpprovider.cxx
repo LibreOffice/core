@@ -31,7 +31,7 @@
 #include <tools/diagnose_ex.h>
 
 
-extern "C" void SAL_CALL createRegistryInfo_DefaultHelpProvider()
+extern "C" void createRegistryInfo_DefaultHelpProvider()
 {
     ::pcr::OAutoRegistration< ::pcr::DefaultHelpProvider > aAutoRegistration;
 }

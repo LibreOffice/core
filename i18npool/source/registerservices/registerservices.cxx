@@ -86,7 +86,7 @@ using namespace i18npool;
 }
 
 typedef uno::Reference<
-        uno::XInterface > (SAL_CALL *FN_CreateInstance)(
+        uno::XInterface > (*FN_CreateInstance)(
             const uno::Reference<
                 lang::XMultiServiceFactory >& );
 
@@ -560,7 +560,7 @@ static const struct InstancesArray {
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* i18npool_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
 {
     void* pRet = nullptr;
 

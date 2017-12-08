@@ -72,7 +72,7 @@ public:
 
 };
 
-extern "C" void SAL_CALL Proxy_free(uno_ExtEnvironment * pEnv, void * pProxy) SAL_THROW_EXTERN_C();
+extern "C" void Proxy_free(uno_ExtEnvironment * pEnv, void * pProxy) SAL_THROW_EXTERN_C();
 
 #endif
 

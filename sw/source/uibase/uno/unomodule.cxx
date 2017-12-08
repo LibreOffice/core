@@ -32,18 +32,18 @@
 
 using namespace css;
 
-OUString SAL_CALL SwUnoModule_getImplementationName() throw()
+OUString SwUnoModule_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Writer.WriterModule" );
 }
 
-uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SwUnoModule_getSupportedServiceNames() throw()
 {
     uno::Sequence<OUString> aSeq { "com.sun.star.text.ModuleDispatcher" };
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance(
+uno::Reference< uno::XInterface > SwUnoModule_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > &  )
 {
     SolarMutexGuard aGuard;

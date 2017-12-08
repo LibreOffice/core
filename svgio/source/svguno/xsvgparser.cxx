@@ -79,7 +79,7 @@ namespace svgio
             return OUString( "svgio::svgreader::XSvgParser" );
         }
 
-        uno::Reference< uno::XInterface > SAL_CALL XSvgParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
+        uno::Reference< uno::XInterface > XSvgParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
         {
             return static_cast< ::cppu::OWeakObject* >(new XSvgParser(context));
         }

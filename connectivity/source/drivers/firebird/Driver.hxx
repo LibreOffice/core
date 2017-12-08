@@ -39,7 +39,7 @@ namespace connectivity
         static const int FIREBIRD_SQL_DIALECT = 3;
 
         /// @throws css::uno::Exception
-        css::uno::Reference< css::uno::XInterface > SAL_CALL FirebirdDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+        css::uno::Reference< css::uno::XInterface > FirebirdDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
                                                    css::sdbcx::XDataDefinitionSupplier,

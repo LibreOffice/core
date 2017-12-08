@@ -127,7 +127,7 @@ Collator_Unicode::compareString( const OUString& str1, const OUString& str2)
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #endif
 

@@ -64,11 +64,11 @@ public:
 OUString ONSSInitializer_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames();
+css::uno::Sequence< OUString > ONSSInitializer_getSupportedServiceNames();
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
-SAL_CALL ONSSInitializer_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
+ONSSInitializer_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
 #endif
 

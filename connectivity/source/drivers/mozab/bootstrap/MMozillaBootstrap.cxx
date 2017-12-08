@@ -36,7 +36,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 static MozillaBootstrap *pMozillaBootstrap=nullptr;
 static Reference<XMozillaBootstrap> xMozillaBootstrap;
-extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& )
+extern "C" SAL_DLLPUBLIC_EXPORT void* OMozillaBootstrap_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& )
 {
     if (!pMozillaBootstrap)
     {
@@ -144,13 +144,13 @@ OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProd
     return -1;
 }
 
-static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
+static Reference< XInterface > createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
 {
         MozillaBootstrap * pBootstrap = static_cast<MozillaBootstrap*>(OMozillaBootstrap_CreateInstance(rServiceManager));
         return *pBootstrap;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozbootstrap_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* mozbootstrap_component_getFactory(
                                         const sal_Char* pImplementationName,
                                         void* pServiceManager,
                                         void* /*pRegistryKey*/)

@@ -24,34 +24,34 @@
 #include <sfx2/sfxmodelfactory.hxx>
 
 //Math document
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
         SmDocument_getSupportedServiceNames() throw();
-OUString SAL_CALL
+OUString
         SmDocument_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >SAL_CALL
+css::uno::Reference< css::uno::XInterface >
         SmDocument_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, SfxModelFlags _nCreationFlags);
 
 //MathML import
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
         SmXMLImport_getSupportedServiceNames() throw();
-OUString SAL_CALL
+OUString
         SmXMLImport_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
         SmXMLImport_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
         SmXMLImportMeta_getSupportedServiceNames() throw();
-OUString SAL_CALL
+OUString
         SmXMLImportMeta_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
         SmXMLImportMeta_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
         SmXMLImportSettings_getSupportedServiceNames() throw();
-OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw();
+OUString SmXMLImportSettings_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
         SmXMLImportSettings_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 #endif

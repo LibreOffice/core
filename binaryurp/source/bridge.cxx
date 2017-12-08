@@ -86,7 +86,7 @@ OUString toString(css::uno::TypeDescription const & type) {
     return OUString(d->pTypeName);
 }
 
-extern "C" void SAL_CALL freeProxyCallback(
+extern "C" void freeProxyCallback(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pProxy)
 {
     assert(pProxy != nullptr);

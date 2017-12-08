@@ -20,7 +20,7 @@
 #include <osl/file.h>
 #include <rtl/ustring.h>
 
-static sal_uInt32 SAL_CALL osl_defCalcTextWidth( rtl_uString *ustrText )
+static sal_uInt32 osl_defCalcTextWidth( rtl_uString *ustrText )
 {
     return ustrText ? ustrText->length : 0;
 }

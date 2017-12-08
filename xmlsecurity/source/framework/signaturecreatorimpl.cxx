@@ -180,7 +180,7 @@ OUString SignatureCreatorImpl_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-cssu::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureCreator" };
     return aRet;

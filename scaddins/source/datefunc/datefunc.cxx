@@ -87,7 +87,7 @@ void InitScaFuncDataList(ScaFuncDataList& rList)
 }
 
 //  entry points for service registration / instantiation
-uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
+uno::Reference< uno::XInterface > ScaDateAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
     return static_cast<cppu::OWeakObject*>(new ScaDateAddIn());
@@ -95,7 +95,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * date_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void* pRet = nullptr;

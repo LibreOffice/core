@@ -94,7 +94,7 @@ static const struct ImplementationEntry g_entries[] =
     {nullptr, nullptr, nullptr, nullptr, nullptr, 0}
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL io_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * io_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );

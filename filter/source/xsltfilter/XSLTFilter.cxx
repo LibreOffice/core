@@ -539,13 +539,13 @@ namespace XSLT
 #define TRANSFORMER_SERVICE_NAME "com.sun.star.xml.xslt.XSLTTransformer"
 #define TRANSFORMER_IMPL_NAME "com.sun.star.comp.documentconversion.LibXSLTTransformer"
 
-    static css::uno::Reference<XInterface> SAL_CALL
+    static css::uno::Reference<XInterface>
     CreateTransformerInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
         return css::uno::Reference<XInterface> (static_cast<OWeakObject *>(new LibXSLTTransformer( comphelper::getComponentContext(r) )));
     }
 
-    static css::uno::Reference<XInterface> SAL_CALL
+    static css::uno::Reference<XInterface>
     CreateFilterInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
         return css::uno::Reference<XInterface> (static_cast<OWeakObject *>(new XSLTFilter( comphelper::getComponentContext(r) )));
@@ -557,7 +557,7 @@ using namespace XSLT;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsltfilter_component_getFactory(const sal_Char * pImplName,
+    SAL_DLLPUBLIC_EXPORT void * xsltfilter_component_getFactory(const sal_Char * pImplName,
             void * pServiceManager, void * /* pRegistryKey */)
     {
         void * pRet = nullptr;

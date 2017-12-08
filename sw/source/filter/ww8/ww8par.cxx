@@ -6203,7 +6203,7 @@ ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
     return nErrRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
+extern "C" SAL_DLLPUBLIC_EXPORT Reader* ImportDOC()
 {
     return new WW8Reader;
 }
@@ -6220,7 +6220,7 @@ namespace
     };
 }
 
-bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
+bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
 {
     FontCacheGuard aFontCacheGuard;
     std::unique_ptr<Reader> xReader(ImportDOC());
@@ -6264,17 +6264,17 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
     return bRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW8(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW8(SvStream &rStream)
 {
     return TestImportDOC(rStream, "CWW8");
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW6(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW6(SvStream &rStream)
 {
     return TestImportDOC(rStream, "CWW6");
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW2(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW2(SvStream &rStream)
 {
     return TestImportDOC(rStream, "WW6");
 }

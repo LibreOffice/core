@@ -118,7 +118,7 @@ css::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_chart2_Chart2ToolboxController(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const & rProperties)
 {
     return cppu::acquire(new ::chart::ChartToolbarController(rProperties));

@@ -874,7 +874,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
     namespace connectivity
     {
         /// @throws Exception
-        Reference< XInterface >  SAL_CALL ODatabaseMetaDataResultSet_CreateInstance(const Reference< XComponentContext >& )
+        Reference< XInterface > ODatabaseMetaDataResultSet_CreateInstance(const Reference< XComponentContext >& )
         {
             return *(new ODatabaseMetaDataResultSet());
         }
@@ -896,7 +896,7 @@ extern "C"
 {
 
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbtools_component_getFactory(const sal_Char* implName, void* serviceManager, void* registryKey)
+SAL_DLLPUBLIC_EXPORT void* dbtools_component_getFactory(const sal_Char* implName, void* serviceManager, void* registryKey)
 {
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }

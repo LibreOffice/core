@@ -271,7 +271,7 @@ EscherProperties EscherPropertyContainer::GetOpts() const
     return aVector;
 }
 
-extern "C" int SAL_CALL EscherPropSortFunc( const void* p1, const void* p2 )
+extern "C" int EscherPropSortFunc( const void* p1, const void* p2 )
 {
     sal_Int16   nID1 = static_cast<EscherPropSortStruct const *>(p1)->nPropId &~0xc000;
     sal_Int16   nID2 = static_cast<EscherPropSortStruct const *>(p2)->nPropId &~0xc000;

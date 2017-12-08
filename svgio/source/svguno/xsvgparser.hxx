@@ -35,12 +35,12 @@ namespace com { namespace sun { namespace star {
 
 namespace svgio { namespace svgreader {
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
 XSvgParser_createInstance( css::uno::Reference< css::uno::XComponentContext > const &);
 
-OUString SAL_CALL XSvgParser_getImplementationName();
+OUString XSvgParser_getImplementationName();
 
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
 XSvgParser_getSupportedServiceNames();
 
 } }

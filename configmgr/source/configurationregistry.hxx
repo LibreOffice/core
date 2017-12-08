@@ -35,14 +35,14 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr { namespace configuration_registry {
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
 create(
     css::uno::Reference< css::uno::XComponentContext >
         const & context);
 
-OUString SAL_CALL getImplementationName();
+OUString getImplementationName();
 
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
 getSupportedServiceNames();
 
 } }

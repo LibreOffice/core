@@ -177,9 +177,9 @@ protected:
 #define SW_STREAM_READER    1
 #define SW_STORAGE_READER   2
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName);
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(SvStream &rStream);
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHTML(SvStream &rStream);
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOC(SvStream &rStream, const OUString &rFltName);
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream &rStream);
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHTML(SvStream &rStream);
 SAL_DLLPUBLIC_EXPORT void FlushFontCache();
 
 class SW_DLLPUBLIC Reader

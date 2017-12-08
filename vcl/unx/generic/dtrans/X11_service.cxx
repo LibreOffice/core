@@ -35,19 +35,19 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
 
-Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
+Sequence< OUString > x11::X11Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
     return aRet;
 }
 
-Sequence< OUString > SAL_CALL x11::Xdnd_getSupportedServiceNames()
+Sequence< OUString > x11::Xdnd_getSupportedServiceNames()
 {
     Sequence< OUString > aRet { "com.sun.star.datatransfer.dnd.X11DragSource" };
     return aRet;
 }
 
-Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
+Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
     Sequence< OUString > aRet { "com.sun.star.datatransfer.dnd.X11DropTarget" };
     return aRet;

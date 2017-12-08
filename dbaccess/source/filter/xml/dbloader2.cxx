@@ -215,7 +215,7 @@ Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static() throw(  
 
 } // namespace dbaxml
 
-extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection()
+extern "C" void createRegistryInfo_DBTypeDetection()
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::DBTypeDetection > aAutoRegistration;
 }
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard, void*, void )
 
 }
 
-extern "C" void SAL_CALL createRegistryInfo_DBContentLoader2()
+extern "C" void createRegistryInfo_DBContentLoader2()
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::DBContentLoader > aAutoRegistration;
 }

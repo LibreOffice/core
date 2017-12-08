@@ -32,7 +32,7 @@ using namespace ::swf;
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL flash_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * flash_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = nullptr;

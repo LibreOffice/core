@@ -368,7 +368,7 @@ Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames()
 * external binding
 *
 *------------------------*/
-Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance(
+Reference< XInterface > OMarkableOutputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
 {
     OMarkableOutputStream *p = new OMarkableOutputStream( );
@@ -778,7 +778,7 @@ Sequence< OUString > OMarkableInputStream::getSupportedServiceNames()
 * external binding
 *
 *------------------------*/
-Reference < XInterface > SAL_CALL OMarkableInputStream_CreateInstance(
+Reference < XInterface > OMarkableInputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
 {
     OMarkableInputStream *p = new OMarkableInputStream( );

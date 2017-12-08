@@ -24,11 +24,11 @@
 #include <osl/module.hxx>
 #include <rtl/ustrbuf.hxx>
 
-typedef ScAbstractDialogFactory* (SAL_CALL *ScFuncPtrCreateDialogFactory)();
+typedef ScAbstractDialogFactory* (*ScFuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #else
 

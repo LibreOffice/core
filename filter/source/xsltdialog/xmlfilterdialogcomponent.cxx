@@ -170,14 +170,14 @@ OUString XMLFilterDialogComponent_getImplementationName()
 }
 
 /// @throws RuntimeException
-Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames()
+Sequence< OUString > XMLFilterDialogComponent_getSupportedServiceNames()
 {
     Sequence< OUString > aSupported { "com.sun.star.ui.dialogs.XSLTFilterDialog" };
     return aSupported;
 }
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > XMLFilterDialogComponent_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<OWeakObject*>(new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) ));
 }
@@ -324,7 +324,7 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsltdlg_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * xsltdlg_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = nullptr;

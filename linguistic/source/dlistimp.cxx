@@ -359,7 +359,7 @@ sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
 }
 
 /// @throws Exception
-uno::Reference< XInterface > SAL_CALL
+uno::Reference< XInterface >
     DicList_CreateInstance( const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     uno::Reference< XInterface > xService = static_cast<cppu::OWeakObject *>(new DicList);
@@ -703,7 +703,7 @@ uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
     return aSNS;
 }
 
-void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
+void * DicList_getFactory( const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;

@@ -49,12 +49,12 @@ namespace connectivity
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::Sequence;
         /// @throws Exception
-        Reference< css::uno::XInterface > SAL_CALL MysqlCDriver_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+        Reference< css::uno::XInterface > MysqlCDriver_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
         typedef ::cppu::WeakComponentImplHelper2<   css::sdbc::XDriver,
                                                     css::lang::XServiceInfo > ODriver_BASE;
 
-        typedef void* (SAL_CALL * OMysqlCConnection_CreateInstanceFunction)(void* _pDriver);
+        typedef void* (* OMysqlCConnection_CreateInstanceFunction)(void* _pDriver);
 
         class MysqlCDriver : public ODriver_BASE
         {

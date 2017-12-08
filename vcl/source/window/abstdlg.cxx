@@ -24,10 +24,10 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/bitmap.hxx>
 
-typedef VclAbstractDialogFactory* (SAL_CALL *FuncPtrCreateDialogFactory)();
+typedef VclAbstractDialogFactory* (*FuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 #else
 extern "C" VclAbstractDialogFactory* CreateDialogFactory();
 #endif

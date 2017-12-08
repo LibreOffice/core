@@ -137,7 +137,7 @@ Sequence< OUString > SAL_CALL MSWorksImportFilter::getSupportedServiceNames()
 }
 
 extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_Writer_MSWorksImportFilter_get_implementation(
     css::uno::XComponentContext *const context,
     const css::uno::Sequence<css::uno::Any> &)

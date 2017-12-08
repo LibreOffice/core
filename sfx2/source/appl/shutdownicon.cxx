@@ -80,7 +80,7 @@ using namespace ::sfx2;
 
 #ifdef ENABLE_QUICKSTART_APPLET
 # if !defined(_WIN32) && !defined(MACOSX)
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 # endif
 #endif
 
@@ -848,7 +848,7 @@ struct Singleton:
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_desktop_QuickstartWrapper_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)

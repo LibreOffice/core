@@ -2749,7 +2749,7 @@ css::uno::Sequence< OUString > SvxFontNameToolBoxControl::getSupportedServiceNam
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
     css::uno::XComponentContext*,
     css::uno::Sequence<css::uno::Any> const & )
@@ -2998,7 +2998,7 @@ css::uno::Sequence<OUString> SvxColorToolBoxControl::getSupportedServiceNames()
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
     css::uno::Sequence<css::uno::Any> const & )
@@ -3057,7 +3057,7 @@ css::uno::Sequence< OUString > SvxFrameToolBoxControl::getSupportedServiceNames(
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_FrameToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
     css::uno::Sequence<css::uno::Any> const & )
@@ -3162,7 +3162,7 @@ css::uno::Sequence<OUString> SvxCurrencyToolBoxControl::getSupportedServiceNames
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_CurrencyToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
     css::uno::Sequence<css::uno::Any> const & )

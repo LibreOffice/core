@@ -1604,7 +1604,7 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges()
  * Function to create a new component instance; is needed by factory helper implementation.
  * @param xMgr service manager to if the components needs other component instances
  */
-uno::Reference < XInterface >SAL_CALL ZipPackage_createInstance(
+uno::Reference < XInterface > ZipPackage_createInstance(
     const uno::Reference< XMultiServiceFactory > & xMgr )
 {
     return uno::Reference< XInterface >( *new ZipPackage( comphelper::getComponentContext(xMgr) ) );

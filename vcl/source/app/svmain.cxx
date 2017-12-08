@@ -111,7 +111,7 @@ static bool g_bIsLeanException;
 
 static bool isInitVCL();
 
-oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
+oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
     static volatile bool bIn = false;
 
@@ -655,7 +655,7 @@ static unsigned __stdcall threadmain( void *pArgs )
 static oslThread hThreadID = nullptr;
 extern "C"
 {
-static void SAL_CALL MainWorkerFunction( void* pArgs )
+static void MainWorkerFunction( void* pArgs )
 {
     static_cast<WorkerThreadData*>(pArgs)->pWorker( static_cast<WorkerThreadData*>(pArgs)->pThreadData );
     delete static_cast<WorkerThreadData*>(pArgs);

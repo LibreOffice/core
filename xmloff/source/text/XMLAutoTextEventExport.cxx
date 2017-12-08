@@ -202,19 +202,19 @@ void XMLAutoTextEventExport::ExportContent_() {}
 
 // methods to support the component registration
 
-Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames()
+Sequence< OUString > XMLAutoTextEventExport_getSupportedServiceNames()
     throw()
 {
     Sequence<OUString> aSeq { XMLAutoTextEventExport_getImplementationName() };
     return aSeq;
 }
 
-OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw()
+OUString XMLAutoTextEventExport_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"  );
 }
 
-Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
+Reference< XInterface > XMLAutoTextEventExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExport_getImplementationName(), SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS));
@@ -222,19 +222,19 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
 
 // methods to support the component registration
 
-Sequence< OUString > SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames()
+Sequence< OUString > XMLAutoTextEventExportOOO_getSupportedServiceNames()
     throw()
 {
     Sequence<OUString> aSeq { XMLAutoTextEventExportOOO_getImplementationName() };
     return aSeq;
 }
 
-OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName() throw()
+OUString XMLAutoTextEventExportOOO_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Writer.XMLAutotextEventsExporter"  );
 }
 
-Reference< XInterface > SAL_CALL XMLAutoTextEventExportOOO_createInstance(
+Reference< XInterface > XMLAutoTextEventExportOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExportOOO_getImplementationName(), SvXMLExportFlags::ALL));

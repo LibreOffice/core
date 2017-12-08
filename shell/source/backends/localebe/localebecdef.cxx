@@ -26,7 +26,7 @@
 namespace uno = com::sun::star::uno ;
 
 
-static uno::Reference<uno::XInterface> SAL_CALL createLocaleBackend(
+static uno::Reference<uno::XInterface> createLocaleBackend(
     SAL_UNUSED_PARAMETER const uno::Reference<uno::XComponentContext>&){
 
     return * LocaleBackend::createInstance();
@@ -47,7 +47,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL localebe1_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * localebe1_component_getFactory(
     const sal_Char *aImplementationName,
     void *aServiceManager,
     void *aRegistryKey) {

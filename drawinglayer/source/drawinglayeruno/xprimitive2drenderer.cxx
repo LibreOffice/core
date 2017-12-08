@@ -91,7 +91,7 @@ namespace drawinglayer
             return OUString( "drawinglayer::unorenderer::XPrimitive2DRenderer" );
         }
 
-        uno::Reference< uno::XInterface > SAL_CALL XPrimitive2DRenderer_createInstance(const uno::Reference< lang::XMultiServiceFactory >&)
+        uno::Reference< uno::XInterface > XPrimitive2DRenderer_createInstance(const uno::Reference< lang::XMultiServiceFactory >&)
         {
             return static_cast< ::cppu::OWeakObject* >(new XPrimitive2DRenderer);
         }

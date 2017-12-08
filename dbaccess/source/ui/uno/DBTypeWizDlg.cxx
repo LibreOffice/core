@@ -25,7 +25,7 @@
 
 using namespace dbaui;
 
-extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog()
+extern "C" void createRegistryInfo_ODBTypeWizDialog()
 {
     static OMultiInstanceAutoRegistration< ODBTypeWizDialog > aAutoRegistration;
 }

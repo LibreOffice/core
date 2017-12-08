@@ -32,7 +32,7 @@ namespace filter{
     namespace config{
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT void*
     filterconfig1_component_getFactory( const sal_Char* pImplementationName,
                                         void* pServiceManager,
                                         void* /* pRegistryKey */ )

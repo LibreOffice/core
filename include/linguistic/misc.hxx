@@ -137,7 +137,7 @@ css::uno::Reference< css::linguistic2::XHyphenatedWord >
 LNG_DLLPUBLIC bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage );
 
 inline bool        IsUpper( const OUString &rText, LanguageType nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
-LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass const *);
+LNG_DLLPUBLIC CapType capitalType(const OUString&, CharClass const *);
 
 OUString      ToLower( const OUString &rText, LanguageType nLanguage );
 LNG_DLLPUBLIC bool      HasDigits( const OUString &rText );

@@ -398,7 +398,7 @@ namespace sdecl = comphelper::service_decl;
      "com.sun.star.svg.SVGWriter" );
 
 // The C shared lib entry points
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL svgfilter_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* svgfilter_component_getFactory(
     sal_Char const* pImplName, void*, void*)
 {
     if ( rtl_str_compare (pImplName, SVG_FILTER_IMPL_NAME) == 0 )

@@ -29,7 +29,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
+typedef Reference< XSingleServiceFactory > (*createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
             const OUString & rComponentName,
@@ -77,7 +77,7 @@ struct ProviderRequest
 };
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL firebird_sdbc_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* firebird_sdbc_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void*)

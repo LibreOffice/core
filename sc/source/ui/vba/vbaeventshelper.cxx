@@ -903,7 +903,7 @@ uno::Any ScVbaEventsHelper::createWindow( const uno::Sequence< uno::Any >& rArgs
     return uno::Any( xWindow );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 ScVbaEventsHelper_get_implementation(
     css::uno::XComponentContext * /*context*/,
     css::uno::Sequence<css::uno::Any> const &arguments)

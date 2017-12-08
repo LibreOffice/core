@@ -1180,9 +1180,9 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 #ifndef DISABLE_DYNLOADING
 
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, void*, sal_Bool);
+typedef rtl_uString* (*basicide_choose_macro)(void*, void*, sal_Bool);
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #else
 

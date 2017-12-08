@@ -472,7 +472,7 @@ const Reference< XMultiServiceFactory >& xServiceManager )
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL protocolhandler_component_getFactory( const sal_Char * pImplementationName ,
+    SAL_DLLPUBLIC_EXPORT void* protocolhandler_component_getFactory( const sal_Char * pImplementationName ,
                                          void * pServiceManager ,
                                          void * )
     {

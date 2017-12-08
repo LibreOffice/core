@@ -551,17 +551,17 @@ void AdapterImpl::invoke(
 extern "C"
 {
 
-static void SAL_CALL adapter_acquire( uno_Interface * pUnoI )
+static void adapter_acquire( uno_Interface * pUnoI )
 {
     static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->acquire();
 }
 
-static void SAL_CALL adapter_release( uno_Interface * pUnoI )
+static void adapter_release( uno_Interface * pUnoI )
 {
     static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->release();
 }
 
-static void SAL_CALL adapter_dispatch(
+static void adapter_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
@@ -882,7 +882,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 }
 
 /// @throws Exception
-static Reference< XInterface > SAL_CALL FactoryImpl_create(
+static Reference< XInterface > FactoryImpl_create(
     const Reference< XComponentContext > & xContext )
 {
     return static_cast<cppu::OWeakObject *>(new FactoryImpl( xContext ));
@@ -903,7 +903,7 @@ static const struct ::cppu::ImplementationEntry g_entries[] =
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL invocadapt_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * invocadapt_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(

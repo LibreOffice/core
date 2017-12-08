@@ -255,7 +255,7 @@ namespace dbaui
 
 } // namespace dbaui
 
-extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog()
+extern "C" void createRegistryInfo_OTextConnectionSettingsDialog()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OTextConnectionSettingsDialog > aAutoRegistration;
 }

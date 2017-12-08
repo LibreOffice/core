@@ -327,7 +327,7 @@ namespace internal
         };
     }
 
-    uno::Sequence< animations::TargetProperties > SAL_CALL TargetPropertiesCreator::createTargetProperties
+    uno::Sequence< animations::TargetProperties > TargetPropertiesCreator::createTargetProperties
         (
             const uno::Reference< animations::XAnimationNode >& xRootNode,
             bool bInitial

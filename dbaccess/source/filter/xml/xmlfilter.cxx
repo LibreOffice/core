@@ -65,7 +65,7 @@
 
 using namespace ::com::sun::star;
 
-extern "C" void SAL_CALL createRegistryInfo_ODBFilter( )
+extern "C" void createRegistryInfo_ODBFilter( )
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBFilter > aAutoRegistration;
 }

@@ -336,7 +336,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames_Static(  )
  * Function to create a new component instance; is needed by factory helper implementation.
  * @param xMgr service manager to if the components needs other component instances
  */
-Reference< XInterface > SAL_CALL LangGuess_Impl_create(
+Reference< XInterface > LangGuess_Impl_create(
     Reference< XComponentContext > const & )
 {
     return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl );
@@ -357,7 +357,7 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL guesslang_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * guesslang_component_getFactory(
     sal_Char const * implName, void * xMgr,
     void * xRegistry )
 {

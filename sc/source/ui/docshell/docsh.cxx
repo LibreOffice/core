@@ -3241,7 +3241,7 @@ void ScDocShell::SetIsInUcalc()
     mbUcalcTest = true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportSLK(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSLK(SvStream &rStream)
 {
     ScDLL::Init();
     ScDocument aDocument;

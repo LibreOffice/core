@@ -412,7 +412,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
 /**
  * Create a hatchtable
  */
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoMarkerTable_createInstance( SdrModel* pModel )
+uno::Reference< uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoMarkerTable(pModel);
 }

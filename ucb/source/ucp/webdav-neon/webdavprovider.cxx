@@ -96,7 +96,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 XSERVICEINFO_COMMOM_IMPL( ContentProvider,
                           OUString( "com.sun.star.comp.WebDAVContentProvider" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =

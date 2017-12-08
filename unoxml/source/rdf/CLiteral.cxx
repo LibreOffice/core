@@ -170,16 +170,16 @@ css::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype()
 // component helper namespace
 namespace comp_CLiteral {
 
-OUString SAL_CALL _getImplementationName() {
+OUString _getImplementationName() {
     return OUString( "CLiteral");
 }
 
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+css::uno::Sequence< OUString > _getSupportedServiceNames()
 {
     return { "com.sun.star.rdf.Literal" };
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
+css::uno::Reference< css::uno::XInterface > _create(
     const css::uno::Reference< css::uno::XComponentContext > & )
 {
     return static_cast< ::cppu::OWeakObject * >(new CLiteral);

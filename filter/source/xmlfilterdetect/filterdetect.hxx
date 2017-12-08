@@ -56,11 +56,11 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-OUString SAL_CALL FilterDetect_getImplementationName();
+OUString FilterDetect_getImplementationName();
 
-css::uno::Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames();
+css::uno::Sequence< OUString > FilterDetect_getSupportedServiceNames();
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
     FilterDetect_createInstance(
         css::uno::Reference<
             css::uno::XComponentContext > const & context);

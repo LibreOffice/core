@@ -85,18 +85,18 @@ namespace dbaxml
     };
 }
 
-extern "C" void SAL_CALL createRegistryInfo_ODBFilterExport( )
+extern "C" void createRegistryInfo_ODBFilterExport( )
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBExport > aAutoRegistration;
 }
 
-extern "C" void SAL_CALL createRegistryInfo_OSettingsExport( )
+extern "C" void createRegistryInfo_OSettingsExport( )
 
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBExportHelper > aAutoRegistration;
 }
 
-extern "C" void SAL_CALL createRegistryInfo_OFullExport( )
+extern "C" void createRegistryInfo_OFullExport( )
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBFullExportHelper > aAutoRegistration;
 }

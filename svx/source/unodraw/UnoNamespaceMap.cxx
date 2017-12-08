@@ -68,19 +68,19 @@ namespace svx
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
     };
 
-    Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
+    Reference< XInterface > NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
     {
         return static_cast<XWeak*>(new NamespaceMap( pWhichIds, pPool ));
     }
 
-    Sequence< OUString > SAL_CALL NamespaceMap_getSupportedServiceNames()
+    Sequence< OUString > NamespaceMap_getSupportedServiceNames()
         throw()
     {
         Sequence<OUString> aSupportedServiceNames { "com.sun.star.xml.NamespaceMap" };
         return aSupportedServiceNames;
     }
 
-    OUString SAL_CALL NamespaceMap_getImplementationName()
+    OUString NamespaceMap_getImplementationName()
         throw()
     {
         return OUString( "com.sun.star.comp.Svx.NamespaceMap" );

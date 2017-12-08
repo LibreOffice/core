@@ -483,7 +483,7 @@ namespace basprov
     // component operations
 
 
-    static Reference< XInterface > SAL_CALL create_BasicProviderImpl(
+    static Reference< XInterface > create_BasicProviderImpl(
         Reference< XComponentContext > const & xContext )
     {
         return static_cast< lang::XTypeProvider * >( new BasicProviderImpl( xContext ) );
@@ -509,7 +509,7 @@ namespace basprov
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL basprov_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * basprov_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager,
         void * pRegistryKey )
     {

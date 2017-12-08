@@ -226,7 +226,7 @@ extern "C"
 {
 
 
-static void SAL_CALL defenv_registerInterface(
+static void defenv_registerInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
@@ -273,7 +273,7 @@ static void SAL_CALL defenv_registerInterface(
 }
 
 
-static void SAL_CALL defenv_registerProxyInterface(
+static void defenv_registerProxyInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface, uno_freeProxyFunc freeProxy,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
@@ -331,7 +331,7 @@ static void SAL_CALL defenv_registerProxyInterface(
 }
 
 
-static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
+static void s_stub_defenv_revokeInterface(va_list * pParam)
 {
     uno_ExtEnvironment * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
     void               * pInterface = va_arg(*pParam, void *);
@@ -418,13 +418,13 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
     }
 }
 
-static void SAL_CALL defenv_revokeInterface(uno_ExtEnvironment * pEnv, void * pInterface)
+static void defenv_revokeInterface(uno_ExtEnvironment * pEnv, void * pInterface)
 {
     uno_Environment_invoke(&pEnv->aBase, s_stub_defenv_revokeInterface, pEnv, pInterface);
 }
 
 
-static void SAL_CALL defenv_getObjectIdentifier(
+static void defenv_getObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
 {
     OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
@@ -454,7 +454,7 @@ static void SAL_CALL defenv_getObjectIdentifier(
 }
 
 
-static void SAL_CALL defenv_getRegisteredInterface(
+static void defenv_getRegisteredInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
@@ -484,7 +484,7 @@ static void SAL_CALL defenv_getRegisteredInterface(
 }
 
 
-static void SAL_CALL defenv_getRegisteredInterfaces(
+static void defenv_getRegisteredInterfaces(
     uno_ExtEnvironment * pEnv, void *** pppInterfaces, sal_Int32 * pnLen,
     uno_memAlloc memAlloc )
 {
@@ -510,7 +510,7 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
 }
 
 
-static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
+static void defenv_acquire( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     osl_atomic_increment( &that->nWeakRef );
@@ -518,7 +518,7 @@ static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
 }
 
 
-static void SAL_CALL defenv_release( uno_Environment * pEnv )
+static void defenv_release( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     if (! osl_atomic_decrement( &that->nRef ))
@@ -539,14 +539,14 @@ static void SAL_CALL defenv_release( uno_Environment * pEnv )
 }
 
 
-static void SAL_CALL defenv_acquireWeak( uno_Environment * pEnv )
+static void defenv_acquireWeak( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     osl_atomic_increment( &that->nWeakRef );
 }
 
 
-static void SAL_CALL defenv_releaseWeak( uno_Environment * pEnv )
+static void defenv_releaseWeak( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     if (! osl_atomic_decrement( &that->nWeakRef ))
@@ -556,7 +556,7 @@ static void SAL_CALL defenv_releaseWeak( uno_Environment * pEnv )
 }
 
 
-static void SAL_CALL defenv_harden(
+static void defenv_harden(
     uno_Environment ** ppHardEnv, uno_Environment * pEnv )
 {
     if (*ppHardEnv)
@@ -584,7 +584,7 @@ static void SAL_CALL defenv_harden(
 }
 
 
-static void SAL_CALL defenv_dispose( SAL_UNUSED_PARAMETER uno_Environment * )
+static void defenv_dispose( SAL_UNUSED_PARAMETER uno_Environment * )
 {
 }
 }
@@ -837,7 +837,7 @@ extern "C"
 {
 
 
-static void SAL_CALL unoenv_computeObjectIdentifier(
+static void unoenv_computeObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
 {
     assert(pEnv && ppOId && pInterface && "### null ptr!");
@@ -872,7 +872,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
 }
 
 
-static void SAL_CALL unoenv_acquireInterface(
+static void unoenv_acquireInterface(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {
     uno_Interface * pUnoI = static_cast< uno_Interface * >(pUnoI_);
@@ -880,7 +880,7 @@ static void SAL_CALL unoenv_acquireInterface(
 }
 
 
-static void SAL_CALL unoenv_releaseInterface(
+static void unoenv_releaseInterface(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {
     uno_Interface * pUnoI = static_cast< uno_Interface * >(pUnoI_);

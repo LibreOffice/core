@@ -64,7 +64,7 @@ using bridges::cpp_uno::shared::VtableFactory;
 
 namespace {
 
-extern "C" void * SAL_CALL allocExec(
+extern "C" void * allocExec(
     SAL_UNUSED_PARAMETER rtl_arena_type *, sal_Size * size)
 {
     std::size_t pagesize;
@@ -104,7 +104,7 @@ extern "C" void * SAL_CALL allocExec(
     return p;
 }
 
-extern "C" void SAL_CALL freeExec(
+extern "C" void freeExec(
     SAL_UNUSED_PARAMETER rtl_arena_type *, void * address, sal_Size size)
 {
 #if defined SAL_UNX

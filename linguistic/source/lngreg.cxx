@@ -31,7 +31,7 @@ using namespace com::sun::star::registry;
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL lng_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * lng_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet =

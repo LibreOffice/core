@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler()
+extern "C" void createRegistryInfo_CellBindingPropertyHandler()
 {
     ::pcr::CellBindingPropertyHandler::registerImplementation();
 }

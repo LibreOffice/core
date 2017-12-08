@@ -37,7 +37,7 @@ typedef void* storeHandle;
     @param  Handle [in] the Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
+STORE_DLLPUBLIC storeError store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
@@ -46,7 +46,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_releaseHandle (
+STORE_DLLPUBLIC storeError store_releaseHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
@@ -60,7 +60,7 @@ typedef void* storeFileHandle;
     @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
+STORE_DLLPUBLIC storeError store_createMemoryFile (
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C();
@@ -77,7 +77,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
     @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
+STORE_DLLPUBLIC storeError store_openFile (
     rtl_uString     *pFilename,
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize,
@@ -89,7 +89,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
     @return store_E_None upon     success,
             store_E_InvalidHandle otherwise.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
+STORE_DLLPUBLIC storeError store_closeFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
@@ -97,7 +97,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
     @param  hFile [in] the File Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_flushFile (
+STORE_DLLPUBLIC storeError store_flushFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
@@ -115,7 +115,7 @@ typedef void* storeDirectoryHandle;
     @param  phDirectory [out] the Directory Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
+STORE_DLLPUBLIC storeError store_openDirectory (
     storeFileHandle       hFile,
     rtl_uString const    *pPath,
     rtl_uString const    *pName,
@@ -129,7 +129,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
     @return store_E_None       upon success,
             store_E_NoMoreFile upon end of iteration.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_findFirst (
+STORE_DLLPUBLIC storeError store_findFirst (
     storeDirectoryHandle  hDirectory,
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C();
@@ -140,7 +140,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_findFirst (
     @return store_E_None       upon success,
             store_E_NoMoreFile upon end of iteration.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_findNext (
+STORE_DLLPUBLIC storeError store_findNext (
     storeDirectoryHandle  hDirectory,
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C();
@@ -159,7 +159,7 @@ typedef void* storeStreamHandle;
     @param  phStrm [out] the Stream Handle.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
+STORE_DLLPUBLIC storeError store_openStream (
     storeFileHandle    hFile,
     rtl_uString const *pPath,
     rtl_uString const *pName,
@@ -175,7 +175,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
     @param  pnDone [out] the number of bytes actually read.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_readStream (
+STORE_DLLPUBLIC storeError store_readStream (
     storeStreamHandle  hStrm,
     sal_uInt32         nOffset,
     void              *pBuffer,
@@ -191,7 +191,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_readStream (
     @param  pnDone [out] the number of bytes actually written.
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
+STORE_DLLPUBLIC storeError store_writeStream (
     storeStreamHandle  hStrm,
     sal_uInt32         nOffset,
     const void        *pBuffer,
@@ -205,7 +205,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
     @param  pName [in] the entry name
     @return store_E_None upon success
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_remove (
+STORE_DLLPUBLIC storeError store_remove (
     storeFileHandle hFile,
     rtl_uString const *pPath,
     rtl_uString const *pName

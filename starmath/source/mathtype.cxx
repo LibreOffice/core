@@ -3340,7 +3340,7 @@ void MathType::HandleText(SmNode *pNode)
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportMathType(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMathType(SvStream &rStream)
 {
     OUString sText;
     MathType aEquation(sText);

@@ -39,14 +39,14 @@ OUString PDFDialog_getImplementationName ()
 }
 
 
-Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
+Sequence< OUString > PDFDialog_getSupportedServiceNames()
 {
     Sequence<OUString> aRet { SERVICE_NAME };
     return aRet;
 }
 
 
-Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new PDFDialog( comphelper::getComponentContext(rSMgr) ));
 }

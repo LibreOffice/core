@@ -43,19 +43,19 @@ using namespace ::oox::drawingml;
 
 namespace oox { namespace ppt {
 
-OUString SAL_CALL QuickDiagrammingLayout_getImplementationName()
+OUString QuickDiagrammingLayout_getImplementationName()
 {
     return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingLayout" );
 }
 
-uno::Sequence< OUString > SAL_CALL QuickDiagrammingLayout_getSupportedServiceNames()
+uno::Sequence< OUString > QuickDiagrammingLayout_getSupportedServiceNames()
 {
     const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.layout";
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL QuickDiagrammingLayout_createInstance( const Reference< XComponentContext >& rxContext )
+uno::Reference< uno::XInterface > QuickDiagrammingLayout_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast<cppu::OWeakObject*>(new QuickDiagrammingLayout( rxContext ));
 }

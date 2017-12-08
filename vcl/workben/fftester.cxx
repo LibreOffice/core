@@ -54,7 +54,7 @@ using namespace ::com::sun::star::lang;
 using namespace cppu;
 
 #ifndef DISABLE_DYNLOADING
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 #endif
 
 typedef bool (*FFilterCall)(SvStream &rStream);

@@ -1985,19 +1985,19 @@ Sequence< css::uno::Type > SAL_CALL
 
 // Service registration
 
-OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw()
+OUString OOo2OasisTransformer_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.OOo2OasisTransformer" );
 }
 
-Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() throw()
+Sequence< OUString > OOo2OasisTransformer_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( OOo2OasisTransformer_getImplementationName() );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
+Reference< XInterface > OOo2OasisTransformer_createInstance(
         const Reference< XMultiServiceFactory > & )
 {
     return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer());

@@ -41,11 +41,11 @@ namespace swf {
 OUString FlashExportFilter_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence<OUString> SAL_CALL
+css::uno::Sequence<OUString>
 FlashExportFilter_getSupportedServiceNames();
 
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 FlashExportFilter_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
@@ -55,10 +55,10 @@ FlashExportFilter_createInstance(
 OUString SWFDialog_getImplementationName ();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence<OUString> SAL_CALL SWFDialog_getSupportedServiceNames();
+css::uno::Sequence<OUString> SWFDialog_getSupportedServiceNames();
 
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL SWFDialog_createInstance(
+css::uno::Reference<css::uno::XInterface> SWFDialog_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 #endif

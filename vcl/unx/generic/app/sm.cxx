@@ -112,7 +112,7 @@ extern "C" void ICEWatchProc(
     IceConn ice_conn, IcePointer client_data, Bool opening,
     IcePointer * watch_data);
 
-extern "C" void SAL_CALL ICEConnectionWorker(void * data);
+extern "C" void ICEConnectionWorker(void * data);
 
 class ICEConnectionObserver
 {

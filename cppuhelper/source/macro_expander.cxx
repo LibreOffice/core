@@ -167,7 +167,7 @@ OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
 }
 
 
-Reference< XInterface > SAL_CALL service_create(
+Reference< XInterface > service_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
 {
     return static_cast< ::cppu::OWeakObject * >( new Bootstrap_MacroExpander );

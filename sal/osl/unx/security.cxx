@@ -47,9 +47,9 @@
 #define getpwuid_r(uid, pwd, buf, buflen, result) (*(result) = getpwuid(uid), (*(result) ? (memcpy (buf, *(result), sizeof (struct passwd)), 0) : errno))
 #endif
 
-static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax);
-static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
-static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
+static bool osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax);
+static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
+static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
 static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
 #if defined _SC_GETPW_R_SIZE_MAX
@@ -169,7 +169,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     return bRet;
 }
 
-bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
+bool osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
 {
     sal_Char  buffer[32];
     sal_Int32 nChr;
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **ustrN
     return osl_getUserName(Security, ustrName); // No domain name on unix
 }
 
-static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
+static bool osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
 {
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
@@ -239,7 +239,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     return bRet;
 }
 
-static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
@@ -351,7 +351,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
 #define DOT_CONFIG "/.config"
 
-static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 

@@ -2785,7 +2785,7 @@ OUString PowerPointExport::getImplementationName()
 }
 
 // UNO component
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 css_comp_Impress_oox_PowerPointExport(uno::XComponentContext* rxCtxt,
                                       uno::Sequence<css::uno::Any> const& rArguments)
 {

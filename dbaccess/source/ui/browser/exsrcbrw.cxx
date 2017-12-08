@@ -45,7 +45,7 @@ using namespace ::com::sun::star::frame;
 using namespace dbaui;
 
 // SbaExternalSourceBrowser
-extern "C" void SAL_CALL createRegistryInfo_OFormGridView()
+extern "C" void createRegistryInfo_OFormGridView()
 {
     static OMultiInstanceAutoRegistration< SbaExternalSourceBrowser > aAutoRegistration;
 }
