@@ -1102,7 +1102,13 @@ AC_ARG_WITH(valgrind,
 libo_FUZZ_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
         [Enable compiler plugins that will perform additional checks during
-         building. Enabled automatically by --enable-dbgutil.]))
+         building. Enabled automatically by --enable-dbgutil.
+         Use --enable-compiler-plugins=debug to also enable debug code in the plugins.]))
+COMPILER_PLUGINS_DEBUG=
+if test "$enable_compiler_plugins" = debug; then
+    enable_compiler_plugins=yes
+    COMPILER_PLUGINS_DEBUG=TRUE
+fi
 
 libo_FUZZ_ARG_ENABLE(ooenv,
     AS_HELP_STRING([--disable-ooenv],
@@ -6474,6 +6480,7 @@ fi
 AC_SUBST(COMPILER_PLUGINS)
 AC_SUBST(COMPILER_PLUGINS_CXX)
 AC_SUBST(COMPILER_PLUGINS_CXX_LINKFLAGS)
+AC_SUBST(COMPILER_PLUGINS_DEBUG)
 AC_SUBST(CLANGDIR)
 AC_SUBST(CLANGLIBDIR)
 

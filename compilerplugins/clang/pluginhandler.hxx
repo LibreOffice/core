@@ -55,6 +55,7 @@ public:
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
     bool ignoreLocation(SourceLocation loc);
     bool addRemoval( SourceLocation loc );
+    bool isDebugMode() const { return debugMode; }
     static bool isUnitTestMode();
 private:
     void handleOption( const std::string& option );
@@ -69,6 +70,7 @@ private:
     std::string scope;
     std::string warningsOnly;
     bool warningsAsErrors;
+    bool debugMode = false;
 };
 
 /**
