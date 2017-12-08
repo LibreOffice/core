@@ -261,6 +261,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_nNestedCells(0)
     , m_nTopLevelCells(0)
     , m_nInheritingCells(0)
+    , m_nNestedTRLeft(0)
+    , m_nTopLevelTRLeft(0)
     , m_nNestedCurrentCellX(0)
     , m_nTopLevelCurrentCellX(0)
     , m_nBackupTopLevelCurrentCellX(0)
@@ -1670,9 +1672,15 @@ void RTFDocumentImpl::resetTableRowProperties()
                                        std::make_shared<RTFValue>(-1), RTFOverwrite::NO_APPEND);
     m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
     if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination)
+    {
+        m_nNestedTRLeft = 0;
         m_nNestedCurrentCellX = 0;
+    }
     else
+    {
+        m_nTopLevelTRLeft = 0;
         m_nTopLevelCurrentCellX = 0;
+    }
 }
 
 RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
