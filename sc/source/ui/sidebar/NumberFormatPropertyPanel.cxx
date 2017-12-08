@@ -107,13 +107,10 @@ void NumberFormatPropertyPanel::Initialize()
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, void )
 {
     const sal_Int32 nVal = rBox.GetSelectedEntryPos();
-    if( nVal != mnCategorySelected )
-    {
-        SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );
-        GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_TYPE_FORMAT,
-                SfxCallMode::RECORD, { &aItem });
-        mnCategorySelected = nVal;
-    }
+    SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );
+    GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_TYPE_FORMAT,
+        SfxCallMode::RECORD, { &aItem });
+    mnCategorySelected = nVal;
 }
 
 IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueClickHdl, Button*, void )
@@ -211,8 +208,10 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     bool bIsFraction ( nVal == 7 );  // For fraction, Decimal places is replaced by Denominator places
                     mpBtnThousand->Show(!bIsScientific);
                     mpBtnThousand->Enable(!bIsScientific);
+                    mpBtnThousand->Check(false);
                     mpBtnEngineering->Show(bIsScientific);
                     mpBtnEngineering->Enable(bIsScientific);
+                    mpBtnEngineering->Check(false);
                     mpBtnNegRed->Enable();
                     mpFtDenominator->Show(bIsFraction);
                     mpEdDenominator->Show(bIsFraction);
