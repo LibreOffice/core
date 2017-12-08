@@ -597,7 +597,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XConsolidationDescriptor \
     qadevOOo/tests/java/ifc/sheet/_XDatabaseRanges \
     qadevOOo/tests/java/ifc/sheet/_XDataPilotField \
-    qadevOOo/tests/java/ifc/sheet/_XDataPilotTables \
     qadevOOo/tests/java/ifc/sheet/_XDDELink \
     qadevOOo/tests/java/ifc/sheet/_XDocumentAuditing \
     qadevOOo/tests/java/ifc/sheet/_XEnhancedMouseClickBroadcaster \
