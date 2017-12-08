@@ -383,6 +383,12 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         auto const TSI = functionDecl->getTypeSourceInfo();
         if (TSI == nullptr)
         {
+            if (isDebugMode())
+            {
+                report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #1, needs investigation",
+                       functionDecl->getLocation())
+                    << functionDecl->getSourceRange();
+            }
             return false;
         }
         auto TL = TSI->getTypeLoc().IgnoreParens();
@@ -488,8 +494,21 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
     }
 
     if (startLoc.isInvalid() || endLoc.isInvalid())
-        //TODO: should probably not happen
+    {
+        if (isDebugMode())
+        {
+            report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #2, needs investigation",
+                   functionDecl->getLocation())
+                << functionDecl->getSourceRange();
+        }
         return false;
+    }
+    if (isDebugMode() && startLoc != endLoc && !SM.isBeforeInTranslationUnit(startLoc, endLoc))
+    {
+        report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #3, needs investigation",
+               functionDecl->getLocation())
+            << functionDecl->getSourceRange();
+    }
 
     SourceLocation found;
 
