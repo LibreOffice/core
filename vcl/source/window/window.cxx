@@ -3252,7 +3252,7 @@ void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (dynamic_cast<FloatingWindow*>(this) != nullptr)
+    if (ImplIsFloatingWindow())
         ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
     else
         ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
@@ -3263,7 +3263,7 @@ void Window::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (dynamic_cast<FloatingWindow*>(this) != nullptr)
+    if (ImplIsFloatingWindow())
         ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
     else
         ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
@@ -3274,7 +3274,7 @@ void Window::LogicMouseMove(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (dynamic_cast<FloatingWindow*>(this) != nullptr)
+    if (ImplIsFloatingWindow())
         ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
     else
         ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
