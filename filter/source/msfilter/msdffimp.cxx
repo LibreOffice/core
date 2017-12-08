@@ -4424,23 +4424,34 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                         aSet.Put(makeSdrTextAutoGrowWidthItem(false));
 
-                        VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
-                        vcl::Font aFont = pDevice->GetFont();
-                        aFont.SetFamilyName( aFontName );
-                        aFont.SetFontSize( Size( 0, 96 ) );
-                        pDevice->SetFont( aFont );
+                        bool bWithPadding = !( ngtextFStrikethrough & use_gtextFBestFit
+                                            && ngtextFStrikethrough & use_gtextFShrinkFit
+                                            && ngtextFStrikethrough & use_gtextFStretch
+                                            && ngtextFStrikethrough & gtextFBestFit
+                                            && ngtextFStrikethrough & gtextFShrinkFit
+                                            && ngtextFStrikethrough & gtextFStretch );
 
-                        auto nTextWidth = pDevice->GetTextWidth( aObjectText );
-                        OUString aObjName = GetPropertyString( DFF_Prop_wzName, rSt );
-                        if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText
-                            && aObjName.match( "PowerPlusWaterMarkObject" ) )
+                        if ( bWithPadding )
                         {
-                            double fRatio = (double)pDevice->GetTextHeight() / nTextWidth;
-                            sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
-                            sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
+                            // trim, remove additional space
+                            VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+                            vcl::Font aFont = pDevice->GetFont();
+                            aFont.SetFamilyName( aFontName );
+                            aFont.SetFontSize( Size( 0, 96 ) );
+                            pDevice->SetFont( aFont );
 
-                            if ( nPaddingY > 0 )
-                                aObjData.aBoundRect.setHeight( nNewHeight );
+                            auto nTextWidth = pDevice->GetTextWidth( aObjectText );
+                            OUString aObjName = GetPropertyString( DFF_Prop_wzName, rSt );
+                            if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText
+                                && aObjName.match( "PowerPlusWaterMarkObject" ) )
+                            {
+                                double fRatio = (double)pDevice->GetTextHeight() / nTextWidth;
+                                sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
+                                sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
+
+                                if ( nPaddingY > 0 )
+                                    aObjData.aBoundRect.setHeight( nNewHeight );
+                            }
                         }
                     }
                     pRet->SetMergedItemSet( aSet );
