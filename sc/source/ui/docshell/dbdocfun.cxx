@@ -168,7 +168,6 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
         {
-            delete pNewData;
             rDoc.SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
         }
 
