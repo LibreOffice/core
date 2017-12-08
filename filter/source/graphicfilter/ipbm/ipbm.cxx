@@ -265,7 +265,6 @@ bool PBMReader::ImplReadHeader()
 
 bool PBMReader::ImplReadBody()
 {
-    bool    bPara, bFinished = false;
     sal_uInt8   nDat = 0, nCount;
     sal_uLong   nGrey, nRGB[3];
     sal_Int32 nWidth = 0;
@@ -340,8 +339,13 @@ bool PBMReader::ImplReadBody()
                 break;
         }
     }
-    else switch  ( mnMode )
+    else
     {
+        bool bPara = false;
+        bool bFinished = false;
+
+        switch  ( mnMode )
+        {
         // PBM
         case 0 :
             while ( !bFinished )
@@ -524,6 +528,7 @@ bool PBMReader::ImplReadBody()
                     return false;
             }
             break;
+        }
     }
     return mbStatus;
 }

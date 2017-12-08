@@ -579,10 +579,9 @@ bool TIFFReader::ReadMap()
 
         aCCIDecom.StartDecompression( *pTIFF );
 
-        bool bDifferentToPrev;
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
-            bDifferentToPrev = ny == 0;
+            bool bDifferentToPrev = ny == 0;
             for (sal_uInt32 np = 0; np < nPlanes; ++np)
             {
                 if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )

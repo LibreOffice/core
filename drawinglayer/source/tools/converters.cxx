@@ -42,9 +42,6 @@ namespace drawinglayer
         sal_uInt32 nMaxQuadratPixels)
     {
         BitmapEx aRetval;
-#ifdef DBG_UTIL
-        static bool bDoSaveForVisualControl(false);
-#endif
 
         if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
         {
@@ -89,6 +86,9 @@ namespace drawinglayer
 
             if(pContentProcessor)
             {
+#ifdef DBG_UTIL
+                static bool bDoSaveForVisualControl(false);
+#endif
                 // render content
                 pContentProcessor->process(aSequence);
 

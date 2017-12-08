@@ -2287,7 +2287,6 @@ void EscherPropertyContainer::CreateShadowProperties(
 {
     css::uno::Any aAny;
 
-    bool    bHasShadow = false; // shadow is possible only if at least a fillcolor, linecolor or graphic is set
     sal_uInt32  nLineFlags = 0;         // default : shape has no line
     sal_uInt32  nFillFlags = 0x10;      //           shape is filled
 
@@ -2302,6 +2301,7 @@ void EscherPropertyContainer::CreateShadowProperties(
     {
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "Shadow", true ) )
         {
+            bool bHasShadow = false; // shadow is possible only if at least a fillcolor, linecolor or graphic is set
             if ( aAny >>= bHasShadow )
             {
                 if ( bHasShadow )

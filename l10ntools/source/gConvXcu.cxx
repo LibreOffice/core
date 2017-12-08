@@ -47,14 +47,13 @@ void convert_xcu::doExecute()
 void convert_xcu::pushKey(char *syyText)
 {
     string sKey, sTag = copySource(syyText);
-    int    nL, nE;
 
     // find key in tag
-    nL = sTag.find("oor:name=\"");
+    int nL = sTag.find("oor:name=\"");
     if (nL != (int)string::npos) {
         // find end of key
         nL += 10;
-        nE  = sTag.find("\"", nL);
+        int nE  = sTag.find("\"", nL);
         if (nE != (int)string::npos)
             sKey = sTag.substr(nL, nE - nL);
     }

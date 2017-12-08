@@ -684,7 +684,6 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
 
 void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
-    bool bCheckLanguage = false;
     ContentNode* pNode = aEditDoc.GetObject( nPara );
 
     if ( !pNode )
@@ -706,7 +705,7 @@ void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
             }
         }
 
-        bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
+        bool bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
                          ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SfxItemState::SET ) ||
                          ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SfxItemState::SET );
 

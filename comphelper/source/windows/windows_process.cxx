@@ -21,7 +21,6 @@
  */
 static int ArgStrLen(const wchar_t *s)
 {
-    int backslashes = 0;
     int i = wcslen(s);
     BOOL hasDoubleQuote = wcschr(s, L'"') != nullptr;
     // Only add doublequotes if the string contains a space or a tab
@@ -34,6 +33,7 @@ static int ArgStrLen(const wchar_t *s)
 
     if (hasDoubleQuote)
     {
+        int backslashes = 0;
         while (*s)
         {
             if (*s == '\\')
@@ -69,7 +69,6 @@ static int ArgStrLen(const wchar_t *s)
  */
 static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
 {
-    int backslashes = 0;
     BOOL hasDoubleQuote = wcschr(s, L'"') != nullptr;
     // Only add doublequotes if the string contains a space or a tab
     BOOL addDoubleQuotes = wcspbrk(s, L" \t") != nullptr;
@@ -82,7 +81,7 @@ static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
 
     if (hasDoubleQuote)
     {
-        int i;
+        int backslashes = 0;
         while (*s)
         {
             if (*s == '\\')
@@ -94,7 +93,7 @@ static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
                 if (*s == '"')
                 {
                     // Escape the doublequote and all backslashes preceding the doublequote
-                    for (i = 0; i <= backslashes; ++i)
+                    for (int i = 0; i <= backslashes; ++i)
                     {
                         *d = '\\';
                         ++d;
