@@ -1303,8 +1303,33 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
                   _pLayoutFrame->IsInDocBody() ||
                   _pLayoutFrame->IsInFootnote() )
         {
+            /*
+            https://bugs.documentfoundation.org/show_bug.cgi?id=114306
+            This method is mostly used like:
+
+            if (<other conditions> && IsMoveable())
+            {
+                ...
+                SwFlowFrame::MoveFwd()
+            }
+
+            or
+
+            if (<other conditions> && IsMoveable())
+            {
+                ...
+                SwFlowFrame::MoveBwd()
+            }
+
+            If IsMovable() is called before a MoveFwd() the method may return false if there is no NextCellLeaf.
+            If IsMovable() is called before a MoveBwd() the method may return false if there is no PrevCellLeaf.
+
+            The patch should make IsMoveable() more symmetric.
+            */
             if ( _pLayoutFrame->IsInTab() && !IsTabFrame() &&
-                 ( !IsContentFrame() || !const_cast<SwFrame*>(this)->GetNextCellLeaf() ) )
+                 ( !IsContentFrame() || (!const_cast<SwFrame*>(this)->GetNextCellLeaf()
+                                      && !const_cast<SwFrame*>(this)->GetPrevCellLeaf()) )
+                )
             {
                 bRetVal = false;
             }
