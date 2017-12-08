@@ -82,6 +82,9 @@ void Qt5Widget::resizeEvent(QResizeEvent*)
         m_pFrame->m_pQImage.reset(pImage);
     }
 
+    m_pFrame->maGeometry.nWidth = size().width();
+    m_pFrame->maGeometry.nHeight = size().height();
+
     m_pFrame->CallCallback(SalEvent::Resize, nullptr);
 }
 

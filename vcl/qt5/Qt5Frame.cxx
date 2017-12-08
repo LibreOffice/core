@@ -99,6 +99,20 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         if (pParentWindow != pChildWindow)
             pChildWindow->setTransientParent(pParentWindow);
     }
+
+    // fake an initial geometry, gets updated via configure event or SetPosSize
+    if (m_bDefaultPos || m_bDefaultSize)
+    {
+        Size aDefSize = CalcDefaultSize();
+        maGeometry.nX = -1;
+        maGeometry.nY = -1;
+        maGeometry.nWidth = aDefSize.Width();
+        maGeometry.nHeight = aDefSize.Height();
+        maGeometry.nTopDecoration = 0;
+        maGeometry.nBottomDecoration = 0;
+        maGeometry.nLeftDecoration = 0;
+        maGeometry.nRightDecoration = 0;
+    }
 }
 
 Qt5Frame::~Qt5Frame()
@@ -292,6 +306,9 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
             nY += aRect.y();
         }
 
+        maGeometry.nX = nX;
+        maGeometry.nY = nY;
+
         m_bDefaultPos = false;
         m_pQWidget->move(nX, nY);
     }
@@ -434,7 +451,15 @@ bool Qt5Frame::MapUnicodeToKeyCode(sal_Unicode aUnicode, LanguageType aLangType,
 
 LanguageType Qt5Frame::GetInputLanguage() { return LANGUAGE_DONTKNOW; }
 
-void Qt5Frame::UpdateSettings(AllSettings& rSettings) {}
+void Qt5Frame::UpdateSettings(AllSettings& rSettings)
+{
+    StyleSettings style(rSettings.GetStyleSettings());
+
+    const int flash_time = QApplication::cursorFlashTime();
+    style.SetCursorBlinkTime(flash_time != 0 ? flash_time / 2 : STYLE_CURSOR_NOBLINKTIME);
+
+    rSettings.SetStyleSettings(style);
+}
 
 void Qt5Frame::Beep() {}
 
