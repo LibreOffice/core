@@ -13,7 +13,6 @@
 #include <oox/crypto/CryptTools.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
-#include <osl/time.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>
 

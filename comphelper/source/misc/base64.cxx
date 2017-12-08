@@ -19,27 +19,16 @@
 
 #include <comphelper/base64.hxx>
 
-#include <com/sun/star/i18n/UnicodeType.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTimeWithTimezone.hpp>
-#include <com/sun/star/util/DateWithTimezone.hpp>
-#include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <osl/time.h>
 #include <osl/diagnose.h>
 
 #include <algorithm>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::util;
-using namespace ::com::sun::star::i18n;
 
 namespace comphelper {
 

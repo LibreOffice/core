@@ -120,7 +120,6 @@
 #include <rtl/ustring.hxx>
 
 #include <osl/conditn.hxx>
-#include <osl/time.h>
 #include <o3tl/make_unique.hxx>
 
 #include <memory>

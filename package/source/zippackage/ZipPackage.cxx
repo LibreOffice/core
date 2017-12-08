@@ -63,7 +63,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
-#include <osl/time.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 

@@ -44,7 +44,6 @@
 
 #include <rtl/digest.h>
 #include <rtl/random.h>
-#include <osl/time.h>
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 

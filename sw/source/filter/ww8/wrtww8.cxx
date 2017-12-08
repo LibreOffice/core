@@ -109,7 +109,6 @@
 #include <unotools/tempfile.hxx>
 #include <filter/msfilter/mscodec.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
-#include <osl/time.h>
 #include <rtl/random.h>
 #include <vcl/svapp.hxx>
 #include "WW8Sttbf.hxx"
