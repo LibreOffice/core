@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xcellseries \
 	test/source/sheet/xgoalseek \
 	test/source/sheet/xdatabaserange \
+	test/source/sheet/xdatabaseranges \
 	test/source/sheet/xdatapilotdescriptor \
 	test/source/sheet/xdatapilotfield \
 	test/source/sheet/xdatapilotfieldgrouping \
