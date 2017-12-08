@@ -95,6 +95,7 @@ public:
                         { return !(Cursor::operator==( rCursor )); }
 
 private:
+    void LOKNotify( vcl::Window* pWindow, const OUString& rAction );
     void ImplRestore();
     void ImplDoShow( bool bDrawDirect, bool bRestore );
     bool ImplDoHide( bool bStop );
