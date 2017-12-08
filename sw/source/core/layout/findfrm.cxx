@@ -1304,7 +1304,8 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
                   _pLayoutFrame->IsInFootnote() )
         {
             if ( _pLayoutFrame->IsInTab() && !IsTabFrame() &&
-                 ( !IsContentFrame() || !const_cast<SwFrame*>(this)->GetNextCellLeaf() ) )
+                 ( !IsContentFrame() || (!const_cast<SwFrame*>(this)->GetNextCellLeaf() && !const_cast<SwFrame*>(this)->GetPrevCellLeaf()) )
+                )
             {
                 bRetVal = false;
             }
