@@ -3,8 +3,6 @@
 "ScDatabaseRangesObj";"com::sun::star::container::XNameAccess";"hasByName()"
 "ScDatabaseRangesObj";"com::sun::star::container::XIndexAccess";"getCount()"
 "ScDatabaseRangesObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"ScDatabaseRangesObj";"com::sun::star::sheet::XDatabaseRanges";"addNewByName()"
-"ScDatabaseRangesObj";"com::sun::star::sheet::XDatabaseRanges";"removeByName()"
 "ScDatabaseRangesObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScDatabaseRangesObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScDatabaseRangesObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
