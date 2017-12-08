@@ -289,6 +289,7 @@ public:
     void testTdf99689TableOfTables();
     void testTdf113790();
     void testTdf108048();
+    void testTdf114306();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -458,6 +459,7 @@ public:
     CPPUNIT_TEST(testTdf99689TableOfTables);
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf108048);
+    CPPUNIT_TEST(testTdf114306);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5241,6 +5243,19 @@ void SwUiWriterTest::testTdf112025()
 
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
+}
+
+void SwUiWriterTest::testTdf114306()
+{
+    load(DATA_DIRECTORY, "fdo114306.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // There are 2 long paragraphs in cell A1.
+    // A part of paragraph 2 should flow over to the second page but
+    // *not* the whole paragraph. There should be 2 paragraphs on
+    // page 1 and 1 paragraph on page 2.
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt", 1);
 }
 
 void SwUiWriterTest::testTdf108524()
