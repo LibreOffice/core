@@ -2519,6 +2519,8 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                                       // don't have to iterate over all
                                       // selected cells' attribute ranges to
                                       // determine selected types.
+                                      // Does *NOT* include the
+                                      // css::util::NumberFormat::DEFINED bit.
     const short nType               = (eItemState >= SfxItemState::DEFAULT ? pFormatter->GetType( nNumberFormat) :
                                        GetCurrentNumberFormatType());
     NfIndexTableOffset nOffset      = pFormatter->GetIndexTableOffset(nNumberFormat);
@@ -2608,7 +2610,6 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         switch(nType)
                         {
                         case css::util::NumberFormat::NUMBER:
-                        case css::util::NumberFormat::NUMBER| css::util::NumberFormat::DEFINED:
                             // Determine if General format.
                             if ((nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                                 aFormatCode = 0;
@@ -2616,38 +2617,29 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                                 aFormatCode = 1;
                             break;
                         case css::util::NumberFormat::PERCENT:
-                        case css::util::NumberFormat::PERCENT| css::util::NumberFormat::DEFINED:
                             aFormatCode = 2;
                             break;
                         case css::util::NumberFormat::CURRENCY:
-                        case css::util::NumberFormat::CURRENCY| css::util::NumberFormat::DEFINED:
                             aFormatCode = 3;
                             break;
                         case css::util::NumberFormat::DATE:
-                        case css::util::NumberFormat::DATE| css::util::NumberFormat::DEFINED:
                             //Add
                         case css::util::NumberFormat::DATETIME:
-                        case css::util::NumberFormat::DATETIME | css::util::NumberFormat::DEFINED:
                             aFormatCode = 4;
                             break;
                         case css::util::NumberFormat::TIME:
-                        case css::util::NumberFormat::TIME| css::util::NumberFormat::DEFINED:
                             aFormatCode = 5;
                             break;
                         case css::util::NumberFormat::SCIENTIFIC:
-                        case css::util::NumberFormat::SCIENTIFIC| css::util::NumberFormat::DEFINED:
                             aFormatCode = 6;
                             break;
                         case css::util::NumberFormat::FRACTION:
-                        case css::util::NumberFormat::FRACTION| css::util::NumberFormat::DEFINED:
                             aFormatCode = 7;
                             break;
                         case css::util::NumberFormat::LOGICAL:
-                        case css::util::NumberFormat::LOGICAL| css::util::NumberFormat::DEFINED:
                             aFormatCode = 8;
                             break;
                         case css::util::NumberFormat::TEXT:
-                        case css::util::NumberFormat::TEXT| css::util::NumberFormat::DEFINED:
                             aFormatCode = 9;
                             break;
                         default:
