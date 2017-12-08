@@ -1148,7 +1148,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             pDoc->GetNumberFormat(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo(), nCurrentNumberFormat);
             const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
-            if(pEntry)
+            if (pEntry)
                 eLanguage = pEntry->GetLanguage();
 
             pFormatter->GetFormatSpecialInfo(nCurrentNumberFormat, bThousand, bNegRed, nPrecision, nLeadZeroes);
@@ -1164,6 +1164,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 
             aSet.Put(SfxBoolItem(nSlot, bThousand));
             rBindings.Invalidate(nSlot);
+            rReq.Done();
         }
         break;
         case SID_NUMBER_FORMAT:
@@ -2524,23 +2525,28 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
         {
             case SID_NUMBER_THOUSANDS:
                 {
-                    const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
-                    if ( SfxItemState::DONTCARE != rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) &&
-                        pFormatEntry && ( pFormatEntry->GetType() &
-                            ( css::util::NumberFormat::NUMBER |
-                              css::util::NumberFormat::PERCENT |
-                              css::util::NumberFormat::CURRENCY |
-                              css::util::NumberFormat::FRACTION ) ) )
+                    bool bEnable = (SfxItemState::DONTCARE != rAttrSet.GetItemState( ATTR_VALUE_FORMAT ));
+                    if (bEnable)
                     {
-                        bool bThousand( false );
-                        bool bNegRed( false );
-                        sal_uInt16 nPrecision( 0 );
-                        sal_uInt16 nLeadZeroes( 0 );
-                        pFormatter->GetFormatSpecialInfo( nNumberFormat, bThousand, bNegRed, nPrecision, nLeadZeroes );
-                        rSet.Put( SfxBoolItem( nWhich, bThousand ) );
+                        bEnable = ((nType != css::util::NumberFormat::ALL) && (nType &
+                                (css::util::NumberFormat::NUMBER |
+                                 css::util::NumberFormat::PERCENT |
+                                 css::util::NumberFormat::CURRENCY |
+                                 css::util::NumberFormat::FRACTION)));
+                        if (bEnable)
+                        {
+                            bool bThousand( false );
+                            bool bNegRed( false );
+                            sal_uInt16 nPrecision( 0 );
+                            sal_uInt16 nLeadZeroes( 0 );
+                            pFormatter->GetFormatSpecialInfo( nNumberFormat, bThousand, bNegRed, nPrecision, nLeadZeroes);
+                            rSet.Put( SfxBoolItem( nWhich, bThousand));
+                        }
                     }
-                    else
+                    if (!bEnable)
+                    {
                         rSet.DisableItem( nWhich );
+                    }
                 }
                 break;
             case SID_NUMBER_FORMAT:
