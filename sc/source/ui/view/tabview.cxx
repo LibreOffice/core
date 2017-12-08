@@ -2719,6 +2719,8 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     if (rRectangle.IsEmpty())
         return OUString();
 
+    bool bRangeHeaderSupport = comphelper::LibreOfficeKit::isRangeHeaders();
+
     rtl::OUStringBuffer aBuffer(256);
     aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
 
@@ -2776,7 +2778,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     const ScOutlineArray* pRowArray = pTable ? &(pTable->GetRowArray()) : nullptr;
     size_t nRowGroupDepth = 0;
     std::vector<size_t> aRowGroupIndexes;
-    if (pTable)
+    if (bRangeHeaderSupport && pTable)
     {
         nRowGroupDepth = pRowArray->GetDepth();
         lcl_getGroupIndexes(*pRowArray, nStartRow, nEndRow, aRowGroupIndexes);
@@ -2850,13 +2852,13 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         nTotalPixels += nSizePx;
         const long nTotalTwips = nTotalPixels * TWIPS_PER_PIXEL;
 
-        if (nRowGroupDepth > 0)
+        if (bRangeHeaderSupport && nRowGroupDepth > 0)
         {
             lcl_createGroupsData(nRow, nEndRow, nSizePx, nTotalTwips,
                     *pRowArray, aRowGroupIndexes, aRowGroupStartPositions, aRowGroupsBuffer);
         }
 
-        if (nRow < nEndRow && nSizePx == nPrevSizePx)
+        if (bRangeHeaderSupport && nRow < nEndRow && nSizePx == nPrevSizePx)
             continue;
         nPrevSizePx = nSizePx;
 
@@ -2917,7 +2919,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     const ScOutlineArray* pColArray = pTable ? &(pTable->GetColArray()) : nullptr;
     size_t nColGroupDepth = 0;
     std::vector<size_t> aColGroupIndexes;
-    if (pTable)
+    if (bRangeHeaderSupport && pTable)
     {
         nColGroupDepth = pColArray->GetDepth();
         lcl_getGroupIndexes(*pColArray, nStartCol, nEndCol, aColGroupIndexes);
@@ -2989,17 +2991,19 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         nTotalPixels += nSizePx;
         const long nTotalTwips = nTotalPixels * TWIPS_PER_PIXEL;
 
-        if (nColGroupDepth > 0)
+        if (bRangeHeaderSupport && nColGroupDepth > 0)
         {
             lcl_createGroupsData(nCol, nEndCol, nSizePx, nTotalTwips,
                     *pColArray, aColGroupIndexes, aColGroupStartPositions, aColGroupsBuffer);
         }
 
-        if (nCol < nEndCol && nSizePx == nPrevSizePx)
+        if (bRangeHeaderSupport && nCol < nEndCol && nSizePx == nPrevSizePx)
             continue;
         nPrevSizePx = nSizePx;
 
-        OUString aText = OUString::number(nCol + 1);
+        OUString aText = bRangeHeaderSupport ?
+                OUString::number(nCol + 1) : pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
+
         aBuffer.append(", ");
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
         aBuffer.append("\"size\": \"").append(OUString::number(nTotalTwips)).append("\" }");
