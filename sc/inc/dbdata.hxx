@@ -256,8 +256,13 @@ public:
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByUpperName(const OUString& rName);
         iterator findByUpperName2(const OUString& rName);
-        // Takes ownership of p iff it returns true:
+
+        /** Takes ownership of p and attempts to insert it into the collection.
+            Deletes p if it could not be inserted, i.e. duplicate name.
+            @return <TRUE/> if inserted, else <FALSE/>.
+         */
         SAL_WARN_UNUSED_RESULT bool insert(ScDBData* p);
+
         void erase(const iterator& itr);
         bool empty() const;
         size_t size() const;
