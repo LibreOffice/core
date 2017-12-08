@@ -2281,7 +2281,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     do
     {
         sal_Int32 nAktPos = *aBreakIt;
-        ++aBreakIt;
+
+        if( softBreakList.size() > 1 ) // not for empty paragpraph
+            ++aBreakIt;
 
         AttrOutput().StartParagraph( pTextNodeInfo );
 
