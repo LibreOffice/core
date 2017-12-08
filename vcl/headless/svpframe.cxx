@@ -417,6 +417,8 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
 
     Color aBackgroundColor( 0xec, 0xec, 0xec );
     aStyleSettings.BatchSetBackgrounds( aBackgroundColor, false );
+    aStyleSettings.SetMenuColor( aBackgroundColor );
+    aStyleSettings.SetMenuBarColor( aBackgroundColor );
 
     if (comphelper::LibreOfficeKit::isActive()) // TODO: remove this.
     {
