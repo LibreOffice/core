@@ -217,7 +217,7 @@ SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if (XML_NAMESPACE_TEXT == nPrefix)
+    if (XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
     {
         TemplateTokenType nToken;
         if (SvXMLUnitConverter::convertEnum(nToken, rLocalName,
