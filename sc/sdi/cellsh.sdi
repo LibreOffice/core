@@ -193,7 +193,11 @@ interface CellSelection
     SID_CHARMAP_CONTROL [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
 
     SID_INSERT_POSTIT   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
-    SID_EDIT_POSTIT   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
+    SID_EDIT_POSTIT
+    [
+        ExecMethod = ExecuteEdit; StateMethod = GetCellState;
+        ToolBoxConfig, MenuConfig , AccelConfig;
+    ]
 
     SID_TABOP               [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CONSOLIDATE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
