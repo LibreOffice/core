@@ -629,9 +629,9 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         aArgs[1].Name = "FontName";
         aArgs[1].Value <<= aFont.GetFamilyName();
         comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
-    }
 
-    updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
+        updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
+    }
 }
 
 
