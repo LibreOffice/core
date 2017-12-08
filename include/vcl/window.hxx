@@ -1226,7 +1226,6 @@ public:
 
     void LOKKeyInput(const KeyEvent& rKeyEvent);
     void LOKKeyUp(const KeyEvent& rKeyEvent);
-    void LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload);
 
     /** @name Accessibility
      */

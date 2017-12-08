@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+
+#include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
@@ -187,6 +189,9 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
                 mpData->mbCurVisible = false;
                 mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
                 mpData->maTimer.SetDebugName( "vcl ImplCursorData maTimer" );
+
+                // tell about "initial" coordinates
+                LOKNotify( pWindow, "cursor_invalidate" );
             }
 
             mpData->mpWindow    = pWindow;
@@ -201,8 +206,40 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
                     mpData->maTimer.Start();
                 else if ( !mpData->mbCurVisible )
                     ImplDraw();
+                LOKNotify( pWindow, "cursor_visible" );
             }
         }
+    }
+}
+
+void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
+{
+    if (VclPtr<vcl::Window> pParent = pWindow->GetParentWithLOKNotifier())
+    {
+        assert(pWindow && "Cannot notify without a window");
+        assert(mpData && "Require ImplCursorData");
+        assert(comphelper::LibreOfficeKit::isActive());
+
+        if (comphelper::LibreOfficeKit::isDialogPainting())
+            return;
+
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        std::vector<vcl::LOKPayloadItem> aItems;
+        if (rAction == "cursor_visible")
+            aItems.emplace_back("visible", mpData->mbCurVisible ? "true" : "false");
+        else if (rAction == "cursor_invalidate")
+        {
+            const long nX = pWindow->GetOutOffXPixel() + pWindow->LogicToPixel(GetPos()).X();
+            const long nY = pWindow->GetOutOffYPixel() + pWindow->LogicToPixel(GetPos()).Y();
+            Size aSize = pWindow->LogicToPixel(GetSize());
+            if (!aSize.Width())
+                aSize.Width() = pWindow->GetSettings().GetStyleSettings().GetCursorSize();
+
+            const Rectangle aRect(Point(nX, nY), aSize);
+            aItems.emplace_back("rectangle", aRect.toString());
+        }
+
+        pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
     }
 }
 
@@ -217,6 +254,7 @@ bool vcl::Cursor::ImplDoHide( bool bSuspend )
 
         if ( !bSuspend )
         {
+            LOKNotify( mpData->mpWindow, "cursor_visible" );
             mpData->maTimer.Stop();
             mpData->mpWindow = nullptr;
         }
@@ -254,6 +292,7 @@ void vcl::Cursor::ImplNew()
         ImplDraw();
         if ( !mpWindow )
         {
+            LOKNotify( mpData->mpWindow, "cursor_invalidate" );
             if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
                 mpData->maTimer.Start();
         }

@@ -3277,17 +3277,6 @@ void Window::LOKKeyUp(const KeyEvent& rKeyEvent)
     ImplWindowFrameProc(this, SalEvent::ExternalKeyUp, &rKeyEvent);
 }
 
-void Window::LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    if (comphelper::LibreOfficeKit::isDialogPainting())
-        return;
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        pNotifier->notifyWindow(GetLOKWindowId(), rAction, rPayload);
-}
-
 void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
 {
     // no deactivation if the newly activated window is my child
