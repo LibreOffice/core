@@ -96,21 +96,9 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
-    OString aSysPath = toSystemPath(rMedium.GetName());
-    const char* path = aSysPath.getStr();
 
-    try
-    {
-        orcus::orcus_csv filter(&aFactory);
-        filter.read_file(path);
-    }
-    catch (const std::exception&)
-    {
-        rDoc.InsertTab(SC_TAB_APPEND, "Foo");
-        rDoc.SetString(0, 0, 0, "Failed to load!!!");
-        return false;
-    }
-    return true;
+    orcus::orcus_csv filter(&aFactory);
+    return loadFileContent(rDoc, rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const
@@ -135,42 +123,18 @@ bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
-    OString aSysPath = toSystemPath(rMedium.GetName());
-    const char* path = aSysPath.getStr();
 
-    try
-    {
-        orcus::orcus_xlsx filter(&aFactory);
-        filter.read_file(path);
-    }
-    catch (const std::exception& e)
-    {
-        SAL_WARN("sc", "Unable to load xlsx file! " << e.what());
-        return false;
-    }
-
-    return true;
+    orcus::orcus_xlsx filter(&aFactory);
+    return loadFileContent(rDoc, rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
-    OString aSysPath = toSystemPath(rMedium.GetName());
-    const char* path = aSysPath.getStr();
 
-    try
-    {
-        orcus::orcus_ods filter(&aFactory);
-        filter.read_file(path);
-    }
-    catch (const std::exception& e)
-    {
-        SAL_WARN("sc", "Unable to load ods file! " << e.what());
-        return false;
-    }
-
-    return true;
+    orcus::orcus_ods filter(&aFactory);
+    return loadFileContent(rDoc, rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) const
