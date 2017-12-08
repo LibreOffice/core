@@ -917,6 +917,14 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_TblWidth_dxa));
             putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd,
                                NS_ooxml::LN_CT_TblWidth_w, std::make_shared<RTFValue>(nParam));
+            auto const aDestination = m_aStates.top().eDestination;
+            int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
+                                    ? m_nNestedTRLeft
+                                    : m_nTopLevelTRLeft);
+            int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == aDestination)
+                                   ? m_nNestedCurrentCellX
+                                   : m_nTopLevelCurrentCellX);
+            rCurrentTRLeft = rCurrentCellX = nParam;
         }
         break;
         case RTF_COLS:

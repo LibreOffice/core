@@ -724,23 +724,7 @@ void RtfAttributeOutput::TableDefinition(
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()];
     SwTwips nSz = 0;
-    Point aPt;
-    SwRect aRect(pFormat->FindLayoutRect(false, &aPt));
-    SwTwips nPageSize = aRect.Width();
 
-    // Handle the page size when not rendered
-    if (0 == nPageSize)
-    {
-        const SwNode* pNode = pTableTextNodeInfoInner->getNode();
-        const SwFrameFormat* pFrameFormat
-            = GetExport().m_pParentFrame
-                  ? &GetExport().m_pParentFrame->GetFrameFormat()
-                  : GetExport().m_pDoc->GetPageDesc(0).GetPageFormatOfNode(*pNode, false);
-
-        const SvxLRSpaceItem& rLR = pFrameFormat->GetLRSpace();
-        nPageSize = pFrameFormat->GetFrameSize().GetWidth() - rLR.GetLeft() - rLR.GetRight();
-    }
-    SwTwips nTableSz = pFormat->GetFrameSize().GetWidth();
     // Not using m_nTableDepth, which is not yet incremented here.
     sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
     m_aCells[nCurrentDepth] = pRow->GetCells().size();
@@ -756,10 +740,7 @@ void RtfAttributeOutput::TableDefinition(
         // value of nSz is needed.
         nSz += pCellFormat->GetFrameSize().GetWidth();
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CELLX);
-        SwTwips nCalc = nSz;
-        nCalc *= nPageSize;
-        nCalc /= nTableSz;
-        m_aRowDefs.append((sal_Int32)(pFormat->GetLRSpace().GetLeft() + nCalc));
+        m_aRowDefs.append((sal_Int32)(pFormat->GetLRSpace().GetLeft() + nSz));
     }
 }
 
