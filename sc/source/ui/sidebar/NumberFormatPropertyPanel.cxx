@@ -211,6 +211,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     bool bIsFraction ( nVal == 7 );  // For fraction, Decimal places is replaced by Denominator places
                     mpBtnThousand->Show(!bIsScientific);
                     mpBtnThousand->Enable(!bIsScientific);
+                    mpBtnThousand->Check(false);
                     mpBtnEngineering->Show(bIsScientific);
                     mpBtnEngineering->Enable(bIsScientific);
                     mpBtnNegRed->Enable();
