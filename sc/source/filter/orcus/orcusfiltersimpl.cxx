@@ -55,7 +55,7 @@ uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedi
     return xStatusIndicator;
 }
 
-bool loadFileContent(ScDocument& rDoc, SfxMedium& rMedium, orcus::iface::import_filter& filter)
+bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
 {
     SvStream* pStream = rMedium.GetInStream();
     pStream->Seek(0);
@@ -72,7 +72,6 @@ bool loadFileContent(ScDocument& rDoc, SfxMedium& rMedium, orcus::iface::import_
 
     try
     {
-        rDoc.ClearTabs();
         filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
     }
     catch (const std::exception& e)
@@ -98,7 +97,7 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, SfxMedium& rMedium) const
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
 
     orcus::orcus_csv filter(&aFactory);
-    return loadFileContent(rDoc, rMedium, filter);
+    return loadFileContent(rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const
@@ -107,7 +106,7 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) co
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
 
     orcus::orcus_gnumeric filter(&aFactory);
-    return loadFileContent(rDoc, rMedium, filter);
+    return loadFileContent(rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importExcel2003XML(ScDocument& rDoc, SfxMedium& rMedium) const
@@ -116,7 +115,7 @@ bool ScOrcusFiltersImpl::importExcel2003XML(ScDocument& rDoc, SfxMedium& rMedium
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
 
     orcus::orcus_xls_xml filter(&aFactory);
-    return loadFileContent(rDoc, rMedium, filter);
+    return loadFileContent(rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const
@@ -125,7 +124,7 @@ bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
 
     orcus::orcus_xlsx filter(&aFactory);
-    return loadFileContent(rDoc, rMedium, filter);
+    return loadFileContent(rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, SfxMedium& rMedium) const
@@ -134,7 +133,7 @@ bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, SfxMedium& rMedium) const
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
 
     orcus::orcus_ods filter(&aFactory);
-    return loadFileContent(rDoc, rMedium, filter);
+    return loadFileContent(rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) const

@@ -167,6 +167,11 @@ bool ScDocumentImport::appendSheet(const OUString& rName)
     return true;
 }
 
+void ScDocumentImport::setSheetName(SCTAB nTab, const OUString& rName)
+{
+    mpImpl->mrDoc.SetTabNameOnLoad(nTab, rName);
+}
+
 void ScDocumentImport::setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uInt16 nDay)
 {
     if (!mpImpl->mrDoc.pDocOptions)

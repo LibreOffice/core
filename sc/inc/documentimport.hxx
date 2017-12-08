@@ -87,6 +87,7 @@ public:
     SCTAB getSheetIndex(const OUString& rName) const;
     SCTAB getSheetCount() const;
     bool appendSheet(const OUString& rName);
+    void setSheetName(SCTAB nTab, const OUString& rName);
 
     void setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uInt16 nDay);
 
