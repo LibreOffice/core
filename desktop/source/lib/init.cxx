@@ -3366,6 +3366,8 @@ static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long con
         comphelper::LibreOfficeKit::setPartInInvalidation(true);
     if (features & LOK_FEATURE_NO_TILED_ANNOTATIONS)
         comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    if (features & LOK_FEATURE_RANGE_HEADERS)
+        comphelper::LibreOfficeKit::setRangeHeaders(true);
 }
 
 static void lo_setDocumentPassword(LibreOfficeKit* pThis,
