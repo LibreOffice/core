@@ -2440,7 +2440,7 @@ bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
     return bHandled;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeAutoCompleteMultiListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeAutoCompleteMultiListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 

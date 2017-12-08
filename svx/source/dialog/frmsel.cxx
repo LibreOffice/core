@@ -830,7 +830,7 @@ FrameSelector::~FrameSelector()
     disposeOnce();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxFrameSelector(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxFrameSelector(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<FrameSelector>::Create(pParent);
 }

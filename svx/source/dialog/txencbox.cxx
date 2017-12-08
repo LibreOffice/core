@@ -40,7 +40,7 @@ SvxTextEncodingBox::SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxTextEncodingBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxTextEncodingBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     bool bDropdown = BuilderUtils::extractDropdown(rMap);

@@ -929,7 +929,7 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeScRefButtonEx(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeScRefButtonEx(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<ScTPValidationValue::ScRefButtonEx>::Create(pParent, 0);
 }

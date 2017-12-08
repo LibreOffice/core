@@ -408,7 +408,7 @@ RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits 
     aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeRefEdit(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeRefEdit(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<RefEdit>::Create(pParent, nullptr, WB_BORDER);
 }

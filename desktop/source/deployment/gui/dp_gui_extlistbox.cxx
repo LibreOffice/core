@@ -755,7 +755,7 @@ Size ExtensionBox_Impl::GetOptimalSize() const
     return LogicToPixel(Size(250, 150), MapMode(MapUnit::MapAppFont));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeExtensionBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeExtensionBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<ExtensionBox_Impl>::Create(pParent);
 }
