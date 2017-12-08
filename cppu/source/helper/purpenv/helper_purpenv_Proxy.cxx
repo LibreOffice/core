@@ -98,7 +98,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
     return false;
 }
 
-extern "C" { static void SAL_CALL s_Proxy_dispatch(
+extern "C" { static void s_Proxy_dispatch(
     uno_Interface                 * pUnoI,
     typelib_TypeDescription const * pMemberType,
     void                          * pReturn,
@@ -158,20 +158,20 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
                      ppException );
 }}
 
-extern "C" void SAL_CALL Proxy_free(SAL_UNUSED_PARAMETER uno_ExtEnvironment * /*pEnv*/, void * pProxy) SAL_THROW_EXTERN_C()
+extern "C" void Proxy_free(SAL_UNUSED_PARAMETER uno_ExtEnvironment * /*pEnv*/, void * pProxy) SAL_THROW_EXTERN_C()
 {
     Proxy * pThis = static_cast<Proxy * >(static_cast<uno_Interface *>(pProxy));
     delete pThis;
 }
 
 extern "C" {
-static void SAL_CALL s_Proxy_acquire(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
+static void s_Proxy_acquire(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
 {
     Proxy * pProxy = static_cast<Proxy *>(pUnoI);
     pProxy->acquire();
 }
 
-static void SAL_CALL s_Proxy_release(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
+static void s_Proxy_release(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
 {
     Proxy * pProxy = static_cast<Proxy *>(pUnoI);
     pProxy->release();

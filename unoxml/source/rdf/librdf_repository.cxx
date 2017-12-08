@@ -2310,17 +2310,17 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 // component helper namespace
 namespace comp_librdf_Repository {
 
-OUString SAL_CALL _getImplementationName() {
+OUString _getImplementationName() {
     return OUString("librdf_Repository");
 }
 
-uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+uno::Sequence< OUString > _getSupportedServiceNames()
 {
     uno::Sequence< OUString > s { "com.sun.star.rdf.Repository" };
     return s;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL _create(
+uno::Reference< uno::XInterface > _create(
     const uno::Reference< uno::XComponentContext > & context)
 {
     return static_cast< ::cppu::OWeakObject * >(new librdf_Repository(context));

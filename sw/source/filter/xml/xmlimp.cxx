@@ -1507,7 +1507,7 @@ const SwDoc* SwXMLImport::getDoc() const
     return const_cast< SwXMLImport* >( this )->getDoc();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1516,7 +1516,7 @@ com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(css::uno::XComponen
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1526,7 +1526,7 @@ com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(css::uno::XCo
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1535,7 +1535,7 @@ com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(css::uno::XC
                 SvXMLImportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1544,7 +1544,7 @@ com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(css::uno::XComp
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1552,7 +1552,7 @@ com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(css::uno::X
                 SvXMLImportFlags::SETTINGS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
 {
     SwGlobals::ensure();
 
@@ -1601,7 +1601,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream)
     return ret;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOCX(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream)
 {
     SwGlobals::ensure();
 

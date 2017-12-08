@@ -226,7 +226,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 XSERVICEINFO_COMMOM_IMPL( HierarchyDataSource,
                           OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 HierarchyDataSource_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =

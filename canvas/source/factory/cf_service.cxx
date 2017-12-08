@@ -475,7 +475,7 @@ Reference<XInterface> CanvasFactory::createInstanceWithArguments(
 } // anon namespace
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_CanvasFactory_get_implementation(css::uno::XComponentContext* context,
                                                              css::uno::Sequence<css::uno::Any> const &)
 {

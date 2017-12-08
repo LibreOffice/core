@@ -712,7 +712,7 @@ OUString Hyphenator::makeInitCap(const OUString& aTerm, CharClass const * pCC)
 }
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL Hyphenator_CreateInstance(
+Reference< XInterface > Hyphenator_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new Hyphenator);
@@ -837,7 +837,7 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL hyphen_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * hyphen_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;

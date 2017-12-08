@@ -26,9 +26,9 @@
 
 extern "C" {
 
-void SAL_CALL createRegistryInfo_OGridWizard();
-void SAL_CALL createRegistryInfo_OGroupBoxWizard();
-void SAL_CALL createRegistryInfo_OListComboWizard();
+void createRegistryInfo_OGridWizard();
+void createRegistryInfo_OGroupBoxWizard();
+void createRegistryInfo_OListComboWizard();
 
 }
 

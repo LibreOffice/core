@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
 
 namespace dp_registry {
 
-css::uno::Reference<css::deployment::XPackageRegistry> SAL_CALL create(
+css::uno::Reference<css::deployment::XPackageRegistry> create(
     OUString const & context, OUString const & cachePath,
     css::uno::Reference<css::uno::XComponentContext> const & xComponentContext);
 

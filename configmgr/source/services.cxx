@@ -38,7 +38,7 @@
 
 namespace {
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL dummy(
+css::uno::Reference< css::uno::XInterface > dummy(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
 {
@@ -74,7 +74,7 @@ static cppu::ImplementationEntry const services[] = {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL configmgr_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * configmgr_component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper(

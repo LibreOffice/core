@@ -64,7 +64,7 @@ void throwOutOfMemory(JNIEnv * env) {
 
 extern "C" {
 
-static void SAL_CALL executeRequest(void * data) {
+static void executeRequest(void * data) {
     Job * job = static_cast< Job * >(data);
     try {
         jvmaccess::VirtualMachine::AttachGuard guard(job->pool->virtualMachine);

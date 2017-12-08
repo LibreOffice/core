@@ -103,7 +103,7 @@ void ExpandContentProviderImpl::disposing()
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL create(
+uno::Reference< uno::XInterface > create(
     uno::Reference< uno::XComponentContext > const & xComponentContext )
 {
     return static_cast< ::cppu::OWeakObject * >(
@@ -111,13 +111,13 @@ uno::Reference< uno::XInterface > SAL_CALL create(
 }
 
 
-OUString SAL_CALL implName()
+OUString implName()
 {
     return OUString("com.sun.star.comp.ucb.ExpandContentProvider");
 }
 
 
-uno::Sequence< OUString > SAL_CALL supportedServices()
+uno::Sequence< OUString > supportedServices()
 {
     return uno::Sequence< OUString > {
         OUString("com.sun.star.ucb.ExpandContentProvider"),
@@ -222,7 +222,7 @@ static const ::cppu::ImplementationEntry s_entries [] =
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpexpand1_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * ucpexpand1_component_getFactory(
     const sal_Char * pImplName,
     void * pServiceManager,
     void * pRegistryKey )

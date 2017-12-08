@@ -522,7 +522,7 @@ Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  )
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_MutableTreeDataModel_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

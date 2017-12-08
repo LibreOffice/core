@@ -27,7 +27,7 @@ namespace i18npool {
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #endif
 

@@ -28,9 +28,9 @@
 namespace comp_librdf_Repository {
 
 // component and service helper functions:
-OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
-css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
+OUString _getImplementationName();
+css::uno::Sequence< OUString > _getSupportedServiceNames();
+css::uno::Reference< css::uno::XInterface > _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
 } // closing component helper namespace
 

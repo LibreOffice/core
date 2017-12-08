@@ -44,18 +44,18 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-OUString SAL_CALL DocumentPropertiesImport_getImplementationName()
+OUString DocumentPropertiesImport_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter" );
 }
 
-Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames()
+Sequence< OUString > DocumentPropertiesImport_getSupportedServiceNames()
 {
     Sequence<OUString> aServices { "com.sun.star.document.OOXMLDocumentPropertiesImporter" };
     return aServices;
 }
 
-Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const Reference< XComponentContext >& rxContext )
+Reference< XInterface > DocumentPropertiesImport_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast< ::cppu::OWeakObject* >( new DocumentPropertiesImport( rxContext ) );
 }

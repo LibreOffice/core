@@ -26,7 +26,7 @@
 #include <dbu_reghelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_OColumnControl()
+extern "C" void createRegistryInfo_OColumnControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OColumnControl> aAutoRegistration;
 }

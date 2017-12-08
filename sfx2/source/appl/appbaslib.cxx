@@ -165,7 +165,7 @@ bool SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( std::vector< OUStrin
 }
 
 // Service for application library container
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
@@ -177,7 +177,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
 }
 
 // Service for application library container
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

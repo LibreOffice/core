@@ -639,7 +639,7 @@ void ScRangeData::InitCode()
 }
 
 extern "C"
-int SAL_CALL ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
+int ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 {
     return (int) ScGlobal::GetCollator()->compareString(
             (*static_cast<const ScRangeData* const *>(p1))->GetName(),

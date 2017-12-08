@@ -111,7 +111,7 @@ public:
 };
 
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
+css::uno::Reference< css::uno::XInterface > DocumentDigitalSignatures_CreateInstance(
     const css::uno::Reference< css::uno::XComponentContext >& rCtx);
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_COMPONENT_DOCUMENTDIGITALSIGNATURES_HXX

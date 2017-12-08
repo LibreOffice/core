@@ -30,7 +30,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
-extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs()
+extern "C" void createRegistryInfo_ComposerDialogs()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::RowsetOrderDialog > aOrderDialogRegistration;
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::RowsetFilterDialog > aFilterDialogRegistration;

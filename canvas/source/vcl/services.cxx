@@ -74,7 +74,7 @@ namespace vclcanvas
 
 // The C shared lib entry points
 extern "C"
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL vclcanvas_component_getFactory( sal_Char const* pImplName,
+SAL_DLLPUBLIC_EXPORT void* vclcanvas_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
     return sdecl::component_getFactoryHelper( pImplName, {&vclcanvas::vclCanvasDecl, &vclcanvas::vclSpriteCanvasDecl} );

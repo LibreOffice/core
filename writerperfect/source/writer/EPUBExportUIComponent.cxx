@@ -83,7 +83,7 @@ sal_Int16 EPUBExportUIComponent::execute()
     return ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *SAL_CALL com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(uno::XComponentContext *pCtx, uno::Sequence<uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface * com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(uno::XComponentContext *pCtx, uno::Sequence<uno::Any> const &)
 {
     return cppu::acquire(new EPUBExportUIComponent(pCtx));
 }

@@ -155,7 +155,7 @@ using namespace ::comphelper;
 using namespace ::svx;
 
 // SbaTableQueryBrowser
-extern "C" void SAL_CALL createRegistryInfo_OBrowser()
+extern "C" void createRegistryInfo_OBrowser()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SbaTableQueryBrowser > aAutoRegistration;
 }

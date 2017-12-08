@@ -176,13 +176,13 @@ void XMLMetaExportComponent::ExportAutoStyles_() {}
 void XMLMetaExportComponent::ExportMasterStyles_() {}
 void XMLMetaExportComponent::ExportContent_() {}
 
-uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
+uno::Sequence< OUString > XMLMetaExportOOO_getSupportedServiceNames()
     throw()
 {
     return uno::Sequence< OUString > { "com.sun.star.document.XMLMetaExporter" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -190,12 +190,12 @@ XMLMetaExportComponent_get_implementation(
     return cppu::acquire(new XMLMetaExportComponent(context, "XMLMetaExportComponent", SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
-OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
+OUString XMLMetaExportOOO_getImplementationName() throw()
 {
     return OUString( "XMLMetaExportOOo" );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
+uno::Reference< uno::XInterface > XMLMetaExportOOO_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportOOO_getImplementationName(), SvXMLExportFlags::META));

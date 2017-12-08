@@ -59,7 +59,7 @@ OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName )
 }
 
 #ifndef DISABLE_DYNLOADING
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 ::osl::Module* SdFilter::OpenLibrary( const OUString& rLibraryName )
 {

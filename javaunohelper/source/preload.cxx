@@ -43,7 +43,7 @@ static javaunohelper::detail::Func_getFactory * s_getFactory;
 static javaunohelper::detail::Func_bootstrap * s_bootstrap;
 static bool s_inited = false;
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 
 static bool inited_juhx( JNIEnv * jni_env )

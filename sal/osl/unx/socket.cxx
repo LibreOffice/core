@@ -251,34 +251,34 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 
 #define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
 
-oslSocketAddr SAL_CALL osl_psz_createInetSocketAddr (
+oslSocketAddr osl_psz_createInetSocketAddr (
     const sal_Char* pszDottedAddr, sal_Int32 Port);
 
-oslHostAddr SAL_CALL osl_psz_createHostAddr (
+oslHostAddr osl_psz_createHostAddr (
     const sal_Char *pszHostname, const oslSocketAddr Addr);
 
-oslHostAddr SAL_CALL osl_psz_createHostAddrByName (
+oslHostAddr osl_psz_createHostAddrByName (
     const sal_Char *pszHostname);
 
-const sal_Char* SAL_CALL osl_psz_getHostnameOfHostAddr (
+const sal_Char* osl_psz_getHostnameOfHostAddr (
     const oslHostAddr Addr);
 
-oslSocketResult SAL_CALL osl_psz_getLocalHostname (
+oslSocketResult osl_psz_getLocalHostname (
     sal_Char *pBuffer, sal_uInt32 nBufLen);
 
-oslSocketAddr SAL_CALL osl_psz_resolveHostname (
+oslSocketAddr osl_psz_resolveHostname (
     const sal_Char* pszHostname);
 
-sal_Int32 SAL_CALL osl_psz_getServicePort (
+sal_Int32 osl_psz_getServicePort (
     const sal_Char* pszServicename, const sal_Char* pszProtocol);
 
-oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr (
+oslSocketResult osl_psz_getHostnameOfSocketAddr (
     oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
 
-oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr (
+oslSocketResult osl_psz_getDottedInetAddrOfSocketAddr (
     oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
 
-void SAL_CALL osl_psz_getLastSocketErrorDescription (
+void osl_psz_getLastSocketErrorDescription (
     oslSocket Socket, sal_Char* pBuffer, sal_uInt32 BufferSize);
 
 static oslSocket createSocketImpl(int Socket)
@@ -498,7 +498,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     return Addr;
 }
 
-oslSocketAddr SAL_CALL osl_psz_createInetSocketAddr (
+oslSocketAddr osl_psz_createInetSocketAddr (
     const sal_Char* pszDottedAddr,
     sal_Int32       Port)
 {
@@ -706,7 +706,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
     return HostAddr;
 }
 
-oslHostAddr SAL_CALL osl_psz_createHostAddr (
+oslHostAddr osl_psz_createHostAddr (
     const sal_Char     *pszHostname,
     const oslSocketAddr pAddr)
 {
@@ -763,7 +763,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
     return HostAddr;
 }
 
-oslHostAddr SAL_CALL osl_psz_createHostAddrByName (const sal_Char *pszHostname)
+oslHostAddr osl_psz_createHostAddrByName (const sal_Char *pszHostname)
 {
     struct      hostent  aHe;
     struct      hostent *pHe;
@@ -850,7 +850,7 @@ void SAL_CALL osl_getHostnameOfHostAddr (
     rtl_uString_newFromAscii (ustrHostname, pHostname);
 }
 
-const sal_Char* SAL_CALL osl_psz_getHostnameOfHostAddr (const oslHostAddr pAddr)
+const sal_Char* osl_psz_getHostnameOfHostAddr (const oslHostAddr pAddr)
 {
     if (pAddr)
         return pAddr->pHostName;
@@ -892,7 +892,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
     return Result;
 }
 
-oslSocketResult SAL_CALL osl_psz_getLocalHostname (
+oslSocketResult osl_psz_getLocalHostname (
     sal_Char *pBuffer, sal_uInt32 nBufLen)
 {
     static sal_Char LocalHostname[256] = "";
@@ -971,7 +971,7 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
     return Addr;
 }
 
-oslSocketAddr SAL_CALL osl_psz_resolveHostname(const sal_Char* pszHostname)
+oslSocketAddr osl_psz_resolveHostname(const sal_Char* pszHostname)
 {
     struct oslHostAddrImpl *pAddr = osl_psz_createHostAddrByName(pszHostname);
 
@@ -1030,7 +1030,7 @@ sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString 
     return nPort;
 }
 
-sal_Int32 SAL_CALL osl_psz_getServicePort(const sal_Char* pszServicename,
+sal_Int32 osl_psz_getServicePort(const sal_Char* pszServicename,
                         const sal_Char* pszProtocol)
 {
     struct servent* ps;
@@ -1105,7 +1105,7 @@ oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uSt
     return Result;
 }
 
-oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
+oslSocketResult osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
                                             sal_Char *pBuffer, sal_uInt32 BufferSize)
 {
     oslHostAddr pHostAddr= osl_createHostAddrByAddr(pAddr);
@@ -1138,7 +1138,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, r
 
 }
 
-oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAddr,
+oslSocketResult osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAddr,
                                                   sal_Char *pBuffer, sal_uInt32 BufferSize)
 {
     SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
@@ -2146,7 +2146,7 @@ void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **
     rtl_uString_newFromAscii(ustrError,pszError);
 }
 
-void SAL_CALL osl_psz_getLastSocketErrorDescription(oslSocket pSocket, sal_Char* pBuffer, sal_uInt32 BufferSize)
+void osl_psz_getLastSocketErrorDescription(oslSocket pSocket, sal_Char* pBuffer, sal_uInt32 BufferSize)
 {
     /* make sure pBuffer will be a zero-terminated string even when strncpy has to cut */
     pBuffer[BufferSize-1]= '\0';

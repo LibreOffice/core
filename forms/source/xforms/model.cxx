@@ -632,7 +632,7 @@ css::uno::Sequence<OUString> Model::getSupportedServiceNames()
     return css::uno::Sequence<OUString>{"com.sun.star.xforms.Model"};
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_Model_get_implementation(css::uno::XComponentContext*,
                                             css::uno::Sequence<css::uno::Any> const &)
 {

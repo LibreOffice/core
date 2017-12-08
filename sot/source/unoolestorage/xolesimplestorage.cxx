@@ -698,7 +698,7 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
     return { "com.sun.star.embed.OLESimpleStorage" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_OLESimpleStorage(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &arguments)

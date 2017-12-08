@@ -46,7 +46,7 @@ static cppu::ImplementationEntry const services[] = {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL spl_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * spl_component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper(

@@ -1566,7 +1566,7 @@ TextSearch::getSupportedServiceNames()
 }
 
 css::uno::Reference< css::uno::XInterface >
-SAL_CALL TextSearch_CreateInstance(
+TextSearch_CreateInstance(
         const css::uno::Reference<
         css::lang::XMultiServiceFactory >& rxMSF )
 {
@@ -1578,7 +1578,7 @@ SAL_CALL TextSearch_CreateInstance(
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL
+SAL_DLLPUBLIC_EXPORT void*
 i18nsearch_component_getFactory( const sal_Char* sImplementationName,
                                  void* _pServiceManager,
                                  SAL_UNUSED_PARAMETER void* )

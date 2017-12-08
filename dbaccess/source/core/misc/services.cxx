@@ -48,7 +48,7 @@ namespace dba{
     };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dba_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* dba_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* pRegistryKey)

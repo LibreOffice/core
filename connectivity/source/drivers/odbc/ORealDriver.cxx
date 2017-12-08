@@ -258,7 +258,7 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) 
 }
 
 
-css::uno::Reference< css::uno::XInterface >  SAL_CALL ODBCDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
+css::uno::Reference< css::uno::XInterface > ODBCDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new ORealObdcDriver(_rxFactory));
 }

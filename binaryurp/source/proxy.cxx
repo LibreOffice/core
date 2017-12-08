@@ -42,17 +42,17 @@ namespace binaryurp {
 
 namespace {
 
-extern "C" void SAL_CALL proxy_acquireInterface(uno_Interface * pInterface) {
+extern "C" void proxy_acquireInterface(uno_Interface * pInterface) {
     assert(pInterface != nullptr);
     static_cast< Proxy * >(pInterface)->do_acquire();
 }
 
-extern "C" void SAL_CALL proxy_releaseInterface(uno_Interface * pInterface) {
+extern "C" void proxy_releaseInterface(uno_Interface * pInterface) {
     assert(pInterface != nullptr);
     static_cast< Proxy * >(pInterface)->do_release();
 }
 
-extern "C" void SAL_CALL proxy_dispatchInterface(
+extern "C" void proxy_dispatchInterface(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void ** pArgs, uno_Any ** ppException)
 {

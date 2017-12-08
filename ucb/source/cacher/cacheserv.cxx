@@ -30,7 +30,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * cached1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = nullptr;

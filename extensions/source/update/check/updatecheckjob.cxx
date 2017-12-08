@@ -297,7 +297,7 @@ void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
 
 } // anonymous namespace
 
-static uno::Reference<uno::XInterface> SAL_CALL
+static uno::Reference<uno::XInterface>
 createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
     css::uno::Reference<css::frame::XDesktop2> desktop(
@@ -308,7 +308,7 @@ createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 }
 
 
-static uno::Reference<uno::XInterface> SAL_CALL
+static uno::Reference<uno::XInterface>
 createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
     return *UpdateCheckConfig::get(xContext, *UpdateCheck::get());
@@ -337,7 +337,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL updchk_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * updchk_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pszImplementationName,

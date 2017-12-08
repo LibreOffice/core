@@ -793,18 +793,18 @@ OUString SAL_CALL CURI::getLocalName()
 // component helper namespace
 namespace comp_CURI {
 
-OUString SAL_CALL _getImplementationName() {
+OUString _getImplementationName() {
     return OUString(
         "CURI");
 }
 
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+css::uno::Sequence< OUString > _getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > s { "com.sun.star.rdf.URI" };
     return s;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
+css::uno::Reference< css::uno::XInterface > _create(
     const css::uno::Reference< css::uno::XComponentContext > & )
 {
     return static_cast< ::cppu::OWeakObject * >(new CURI);

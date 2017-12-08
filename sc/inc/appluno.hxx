@@ -33,7 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
     ScSpreadsheetSettings_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
 css::uno::Reference<css::uno::XInterface> SAL_CALL
@@ -44,37 +44,37 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL
         const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
 
 // Calc document
-css::uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw();
-OUString SAL_CALL ScDocument_getImplementationName() throw();
+css::uno::Sequence< OUString > ScDocument_getSupportedServiceNames() throw();
+OUString ScDocument_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScDocument_createInstance(
+css::uno::Reference< css::uno::XInterface > ScDocument_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, SfxModelFlags _nCreationFlags );
 
 // Calc XML import
-css::uno::Sequence< OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLImport_getImplementationName() throw();
+css::uno::Sequence< OUString > ScXMLImport_getSupportedServiceNames() throw();
+OUString ScXMLImport_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_createInstance(
+css::uno::Reference< css::uno::XInterface > ScXMLImport_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw();
+css::uno::Sequence< OUString > ScXMLImport_Meta_getSupportedServiceNames() throw();
+OUString ScXMLImport_Meta_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
+css::uno::Reference< css::uno::XInterface > ScXMLImport_Meta_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw();
+css::uno::Sequence< OUString > ScXMLImport_Styles_getSupportedServiceNames() throw();
+OUString ScXMLImport_Styles_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
+css::uno::Reference< css::uno::XInterface > ScXMLImport_Styles_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw();
+css::uno::Sequence< OUString > ScXMLImport_Content_getSupportedServiceNames() throw();
+OUString ScXMLImport_Content_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
+css::uno::Reference< css::uno::XInterface > ScXMLImport_Content_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw();
+css::uno::Sequence< OUString > ScXMLImport_Settings_getSupportedServiceNames() throw();
+OUString ScXMLImport_Settings_getImplementationName() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
+css::uno::Reference< css::uno::XInterface > ScXMLImport_Settings_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
 class ScSpreadsheetSettings : public cppu::WeakImplHelper<

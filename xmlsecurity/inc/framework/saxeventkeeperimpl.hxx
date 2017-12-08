@@ -286,7 +286,7 @@ public:
 OUString SAXEventKeeperImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  );
+css::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  );
 
 #endif
 

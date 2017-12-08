@@ -222,7 +222,7 @@ ErrCode ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument
     return eRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportQPW(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
 {
     ScDLL::Init();
     ScDocument aDocument;
@@ -234,7 +234,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportQPW(SvStream &rStream)
     return ScFormatFilter::Get().ScImportQuattroPro(&rStream, &aDocument) == ERRCODE_NONE;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCalcRTF(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcRTF(SvStream &rStream)
 {
     ScDLL::Init();
     ScDocument aDocument;
@@ -247,7 +247,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCalcRTF(SvStream &rStrea
     return ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(SvStream& rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
 {
     ScDLL::Init();
     SfxMedium aMedium;
@@ -281,7 +281,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(SvStream& rStream)
     return bRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWKS(SvStream& rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
 {
     ScDLL::Init();
     SfxMedium aMedium;
@@ -296,7 +296,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWKS(SvStream& rStream)
     return ScFormatFilter::Get().ScImportLotus123(aMedium, &aDocument, RTL_TEXTENCODING_ASCII_US) == ERRCODE_NONE;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDIF(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDIF(SvStream &rStream)
 {
     ScDLL::Init();
     ScDocument aDocument;

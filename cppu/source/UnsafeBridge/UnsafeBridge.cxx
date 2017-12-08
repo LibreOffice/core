@@ -124,13 +124,13 @@ bool UnsafeBridge::v_isValid(rtl::OUString * pReason)
     return result;
 }
 
-extern "C" void SAL_DLLPUBLIC_EXPORT SAL_CALL uno_initEnvironment(uno_Environment * pEnv)
+extern "C" void SAL_DLLPUBLIC_EXPORT uno_initEnvironment(uno_Environment * pEnv)
     SAL_THROW_EXTERN_C()
 {
     cppu::helper::purpenv::Environment_initWithEnterable(pEnv, new UnsafeBridge());
 }
 
-extern "C" void SAL_DLLPUBLIC_EXPORT SAL_CALL uno_ext_getMapping(uno_Mapping     ** ppMapping,
+extern "C" void SAL_DLLPUBLIC_EXPORT uno_ext_getMapping(uno_Mapping     ** ppMapping,
                                    uno_Environment  * pFrom,
                                    uno_Environment  * pTo )
 {

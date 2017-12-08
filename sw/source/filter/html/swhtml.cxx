@@ -5512,7 +5512,7 @@ namespace
     };
 }
 
-bool SAL_CALL TestImportHTML(SvStream &rStream)
+bool TestImportHTML(SvStream &rStream)
 {
     FontCacheGuard aFontCacheGuard;
     std::unique_ptr<Reader> xReader(new HTMLReader);

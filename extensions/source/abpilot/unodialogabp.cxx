@@ -145,7 +145,7 @@ namespace abp
 
 }   // namespace abp
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_abp_OAddressBookSourcePilot(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)

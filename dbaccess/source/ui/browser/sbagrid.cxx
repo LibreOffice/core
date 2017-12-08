@@ -105,7 +105,7 @@ using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::svt;
 
-extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
+extern "C" void createRegistryInfo_SbaXGridControl()
 {
     static OMultiInstanceAutoRegistration< SbaXGridControl > aAutoRegistration;
 }

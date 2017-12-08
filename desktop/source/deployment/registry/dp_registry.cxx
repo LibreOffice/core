@@ -528,7 +528,7 @@ PackageRegistryImpl::getSupportedPackageTypes()
 } // anon namespace
 
 
-Reference<deployment::XPackageRegistry> SAL_CALL create(
+Reference<deployment::XPackageRegistry> create(
     OUString const & context,
     OUString const & cachePath,
     Reference<XComponentContext> const & xComponentContext )

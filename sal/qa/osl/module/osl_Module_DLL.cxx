@@ -27,7 +27,7 @@
 // But we instantiate a test plugin to fake the build process.
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL firstfunc( sal_Bool )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool firstfunc( sal_Bool )
 {
    return true;
 }

@@ -45,7 +45,7 @@ namespace bridges { namespace cpp_uno { namespace shared {
 
 class Bridge;
 
-extern "C" void SAL_CALL freeCppInterfaceProxy(
+extern "C" void freeCppInterfaceProxy(
     uno_ExtEnvironment * pEnv, void * pInterface);
 
 /**
@@ -97,7 +97,7 @@ private:
 
     VtableFactory::Slot * vtables[1];
 
-    friend void SAL_CALL freeCppInterfaceProxy(
+    friend void freeCppInterfaceProxy(
         uno_ExtEnvironment * pEnv, void * pInterface);
 };
 

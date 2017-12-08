@@ -108,13 +108,13 @@ OUString DocxExportFilter::getImplementationName()
     return DocxExport_getImplementationName();
 }
 
-uno::Sequence< OUString > SAL_CALL DocxExport_getSupportedServiceNames() throw()
+uno::Sequence< OUString > DocxExport_getSupportedServiceNames() throw()
 {
     return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
 }
 
 /// @throws uno::Exception
-uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx )
+uno::Reference< uno::XInterface > DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx )
 {
     return static_cast<cppu::OWeakObject*>(new DocxExportFilter( xCtx ));
 }
@@ -137,7 +137,7 @@ extern "C"
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL msword_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void* msword_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
 }

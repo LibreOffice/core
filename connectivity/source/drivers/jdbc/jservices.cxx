@@ -26,7 +26,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
+typedef Reference< XSingleServiceFactory > (*createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
             const OUString & rComponentName,
@@ -74,7 +74,7 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL jdbc_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* jdbc_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)

@@ -440,7 +440,7 @@ void OLockListener::Init()
     m_bInitialized = true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_InstanceLocker(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

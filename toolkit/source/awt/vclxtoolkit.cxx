@@ -135,7 +135,7 @@
 
 namespace {
 
-extern "C" typedef vcl::Window* (SAL_CALL *FN_SvtCreateWindow)(
+extern "C" typedef vcl::Window* (*FN_SvtCreateWindow)(
         VCLXWindow** ppNewComp,
         const css::awt::WindowDescriptor* pDescriptor,
         vcl::Window* pParent,
@@ -508,7 +508,7 @@ static ComponentInfo aComponentInfos [] =
 
 extern "C"
 {
-static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecond)
+static int ComponentInfoCompare( const void* pFirst, const void* pSecond)
 {
     return strcmp( static_cast<ComponentInfo const *>(pFirst)->pName,
                    static_cast<ComponentInfo const *>(pSecond)->pName );
@@ -621,7 +621,7 @@ osl::Condition & getInitCondition()
 
 extern "C"
 {
-static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
+static void ToolkitWorkerFunction( void* pArgs )
 {
     osl_setThreadName("VCLXToolkit VCL main thread");
 
@@ -1206,7 +1206,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #else
 
@@ -1997,7 +1997,7 @@ void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXToolkit_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

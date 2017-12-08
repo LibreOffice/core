@@ -1122,14 +1122,14 @@ static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceName
 }
 
 /// @throws uno::Exception
-static uno::Reference< uno::XInterface > SAL_CALL GrammarCheckingIterator_createInstance(
+static uno::Reference< uno::XInterface > GrammarCheckingIterator_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & /*rxSMgr*/ )
 {
     return static_cast< ::cppu::OWeakObject * >(new GrammarCheckingIterator());
 }
 
 
-void * SAL_CALL GrammarCheckingIterator_getFactory(
+void * GrammarCheckingIterator_getFactory(
     const sal_Char *pImplName,
     lang::XMultiServiceFactory *pServiceManager )
 {

@@ -76,7 +76,7 @@ bool LotusWordProImportFilter::importImpl( const Sequence< css::beans::PropertyV
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportLWP(SvStream &rStream)
 {
     uno::Reference< XDocumentHandler > xHandler;
     return ReadWordproFile(rStream, xHandler) == 0;
@@ -162,7 +162,7 @@ Sequence<OUString> SAL_CALL LotusWordProImportFilter::getSupportedServiceNames()
     return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 LotusWordProImportFilter_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)

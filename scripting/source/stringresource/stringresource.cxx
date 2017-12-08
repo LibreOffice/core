@@ -90,7 +90,7 @@ static OUString getImplementationName_StringResourceImpl()
     return OUString( "com.sun.star.comp.scripting.StringResource" );
 }
 
-static Reference< XInterface > SAL_CALL create_StringResourceImpl(
+static Reference< XInterface > create_StringResourceImpl(
     Reference< XComponentContext > const & xContext )
 {
     return static_cast< ::cppu::OWeakObject * >( new StringResourcePersistenceImpl( xContext ) );
@@ -2128,7 +2128,7 @@ static OUString getImplementationName_StringResourceWithStorageImpl()
     return OUString( "com.sun.star.comp.scripting.StringResourceWithStorage" );
 }
 
-static Reference< XInterface > SAL_CALL create_StringResourceWithStorageImpl(
+static Reference< XInterface > create_StringResourceWithStorageImpl(
     Reference< XComponentContext > const & xContext )
 {
     return static_cast< ::cppu::OWeakObject * >( new StringResourceWithStorageImpl( xContext ) );
@@ -2415,7 +2415,7 @@ static OUString getImplementationName_StringResourceWithLocationImpl()
     return OUString( "com.sun.star.comp.scripting.StringResourceWithLocation" );
 }
 
-static Reference< XInterface > SAL_CALL create_StringResourceWithLocationImpl(
+static Reference< XInterface > create_StringResourceWithLocationImpl(
     Reference< XComponentContext > const & xContext )
 {
     return static_cast< ::cppu::OWeakObject * >( new StringResourceWithLocationImpl( xContext ) );
@@ -2758,7 +2758,7 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL stringresource_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * stringresource_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager,
         void * pRegistryKey )
     {

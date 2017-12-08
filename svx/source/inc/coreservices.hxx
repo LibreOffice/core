@@ -35,41 +35,41 @@ namespace com { namespace sun { namespace star {
 
 namespace svx
 {
-OUString SAL_CALL ExtrusionDepthController_getImplementationName();
+OUString ExtrusionDepthController_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > SAL_CALL ExtrusionDepthController_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
+css::uno::Reference< css::uno::XInterface > ExtrusionDepthController_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames();
+css::uno::Sequence< OUString > ExtrusionDepthController_getSupportedServiceNames();
 
-OUString SAL_CALL ExtrusionDirectionControl_getImplementationName();
+OUString ExtrusionDirectionControl_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > SAL_CALL ExtrusionDirectionControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
+css::uno::Reference< css::uno::XInterface > ExtrusionDirectionControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames();
+css::uno::Sequence< OUString > ExtrusionDirectionControl_getSupportedServiceNames();
 
-OUString SAL_CALL ExtrusionLightingControl_getImplementationName();
+OUString ExtrusionLightingControl_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > SAL_CALL ExtrusionLightingControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
+css::uno::Reference< css::uno::XInterface > ExtrusionLightingControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames();
+css::uno::Sequence< OUString > ExtrusionLightingControl_getSupportedServiceNames();
 
-OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName();
+OUString ExtrusionSurfaceControl_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > SAL_CALL ExtrusionSurfaceControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
+css::uno::Reference< css::uno::XInterface > ExtrusionSurfaceControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames();
+css::uno::Sequence< OUString > ExtrusionSurfaceControl_getSupportedServiceNames();
 
-OUString SAL_CALL FontworkAlignmentControl_getImplementationName();
+OUString FontworkAlignmentControl_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > SAL_CALL FontworkAlignmentControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
+css::uno::Reference< css::uno::XInterface > FontworkAlignmentControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames();
+css::uno::Sequence< OUString > FontworkAlignmentControl_getSupportedServiceNames();
 
-OUString SAL_CALL FontworkCharacterSpacingControl_getImplementationName();
+OUString FontworkCharacterSpacingControl_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > SAL_CALL FontworkCharacterSpacingControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
+css::uno::Reference< css::uno::XInterface > FontworkCharacterSpacingControl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > &);
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames();
+css::uno::Sequence< OUString > FontworkCharacterSpacingControl_getSupportedServiceNames();
 }
 
 #endif

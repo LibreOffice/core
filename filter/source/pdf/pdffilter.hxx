@@ -85,11 +85,11 @@ public:
 OUString PDFFilter_getImplementationName ();
 
 /// @throws RuntimeException
-Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  );
+Sequence< OUString > PDFFilter_getSupportedServiceNames(  );
 
 /// @throws Exception
 Reference< XInterface >
-SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
+PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
 
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
 

@@ -99,7 +99,7 @@ struct ImplColorSet
     bool        mbSet;
 };
 
-extern "C" int SAL_CALL ImplColorSetCmpFnc( const void* p1, const void* p2 )
+extern "C" int ImplColorSetCmpFnc( const void* p1, const void* p2 )
 {
     ImplColorSet const * pSet1 = static_cast<ImplColorSet const *>(p1);
     ImplColorSet const * pSet2 = static_cast<ImplColorSet const *>(p2);

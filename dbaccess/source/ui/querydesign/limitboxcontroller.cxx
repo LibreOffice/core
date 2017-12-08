@@ -218,7 +218,7 @@ void LimitBoxController::dispatchCommand(
 
 } ///dbaui namespace
 
-extern "C" void SAL_CALL createRegistryInfo_LimitBoxController()
+extern "C" void createRegistryInfo_LimitBoxController()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::LimitBoxController > aAutoRegistration;
 }

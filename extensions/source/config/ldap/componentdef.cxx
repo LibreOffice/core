@@ -24,7 +24,7 @@
 using namespace extensions::config::ldap ;
 
 
-static uno::Reference<uno::XInterface> SAL_CALL createLdapUserProfileBe(
+static uno::Reference<uno::XInterface> createLdapUserProfileBe(
                    const uno::Reference<uno::XComponentContext>& aContext) {
     return * new LdapUserProfileBe(aContext) ;
 }
@@ -44,7 +44,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ldapbe2_component_getFactory(const sal_Char *aImplementationName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * ldapbe2_component_getFactory(const sal_Char *aImplementationName,
                                       void *aServiceManager,
                                       void *aRegistryKey) {
     return cppu::component_getFactoryHelper(aImplementationName,

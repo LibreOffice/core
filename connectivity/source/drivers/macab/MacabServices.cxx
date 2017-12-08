@@ -27,7 +27,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
+typedef Reference< XSingleServiceFactory > (*createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
             const OUString & rComponentName,

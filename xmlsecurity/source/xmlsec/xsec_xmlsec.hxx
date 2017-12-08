@@ -24,7 +24,7 @@
 
 extern "C" {
 
-void* SAL_CALL nss_component_getFactory( const sal_Char*, void*, void* );
+void* nss_component_getFactory( const sal_Char*, void*, void* );
 
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )
 void* mscrypt_component_getFactory( const sal_Char*, void*, void* );

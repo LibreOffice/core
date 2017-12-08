@@ -37,7 +37,7 @@ namespace
     // @param rServiceManager - service manager, useful if the component needs other uno services
     // so we should give it to every UNO-Implementation component
 
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >&  )
+    Reference< XInterface > createInstance( const Reference< XMultiServiceFactory >&  )
     {
         return Reference< XInterface >( static_cast< XMimeContentTypeFactory* >( new CMimeContentTypeFactory() ) );
     }
@@ -49,7 +49,7 @@ extern "C"
 // component_getFactory
 // returns a factory to create XFilePicker-Services
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL mcnttype_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* mcnttype_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
 

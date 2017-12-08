@@ -1169,7 +1169,7 @@ OUString SAXEventKeeperImpl_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-cssu::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  )
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SAXEventKeeper" };
     return aRet;

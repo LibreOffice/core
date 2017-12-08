@@ -38,10 +38,10 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
-typedef sal_Unicode**   (SAL_CALL * MyFunc_Type)( sal_Int16&);
-typedef sal_Unicode const *** (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
-typedef sal_Unicode const **** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
-typedef sal_Unicode const * const * (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
+typedef sal_Unicode**   (* MyFunc_Type)( sal_Int16&);
+typedef sal_Unicode const *** (* MyFunc_Type2)( sal_Int16&, sal_Int16& );
+typedef sal_Unicode const **** (* MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
+typedef sal_Unicode const * const * (* MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
 #ifndef DISABLE_DYNLOADING
 
@@ -466,7 +466,7 @@ LocaleDataImpl::getLocaleItem2( const Locale& rLocale )
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #endif
 
@@ -1641,7 +1641,7 @@ OUString LocaleDataImpl::getFirstLocaleServiceName( const css::lang::Locale & rL
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_LocaleDataImpl_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

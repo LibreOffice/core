@@ -101,7 +101,7 @@ DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContex
 
 }
 
-extern "C" void SAL_CALL createRegistryInfo_DBContentLoader()
+extern "C" void createRegistryInfo_DBContentLoader()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< DBContentLoader > aAutoRegistration;
 }

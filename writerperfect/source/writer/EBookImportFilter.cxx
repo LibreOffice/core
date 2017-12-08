@@ -109,7 +109,7 @@ Sequence< OUString > SAL_CALL EBookImportFilter::getSupportedServiceNames()
 }
 
 extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_libreoffice_comp_Writer_EBookImportFilter_get_implementation(
     css::uno::XComponentContext *const context,
     const css::uno::Sequence<css::uno::Any> &)

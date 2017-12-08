@@ -42,7 +42,7 @@ namespace {
 static OUString * s_pStaticOidPart = nullptr;
 #endif
 
-const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart()
+const OUString & cppu_cppenv_getStaticOIdPart()
 {
 #if ! (defined(__GNUC__) && defined(__APPLE__))
     static OUString * s_pStaticOidPart = nullptr;
@@ -128,7 +128,7 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
     }
 }
 
-static void SAL_CALL computeObjectIdentifier(
+static void computeObjectIdentifier(
     uno_ExtEnvironment * pExtEnv, rtl_uString ** ppOId, void * pInterface )
 {
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_computeObjectIdentifier, pExtEnv, ppOId, pInterface);
@@ -142,7 +142,7 @@ static void s_stub_acquireInterface(va_list * pParam)
     static_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
 }
 
-static void SAL_CALL acquireInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
+static void acquireInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
 {
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_acquireInterface, pExtEnv, pCppI);
 }
@@ -155,12 +155,12 @@ static void s_stub_releaseInterface(va_list * pParam)
     static_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
 
-static void SAL_CALL releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
+static void releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
 {
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_releaseInterface, pExtEnv, pCppI);
 }
 
-static void SAL_CALL environmentDisposing(
+static void environmentDisposing(
     SAL_UNUSED_PARAMETER uno_Environment * )
 {
 }
@@ -169,7 +169,7 @@ static void SAL_CALL environmentDisposing(
 #define uno_initEnvironment CPPU_ENV_uno_initEnvironment
 #endif
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
+SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment * pCppEnv)
     SAL_THROW_EXTERN_C()
 {
     assert(pCppEnv->pExtEnv);
@@ -189,7 +189,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv
 #define uno_ext_getMapping CPPU_ENV_uno_ext_getMapping
 #endif
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo)
     SAL_THROW_EXTERN_C()
 {

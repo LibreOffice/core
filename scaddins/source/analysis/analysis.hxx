@@ -41,7 +41,7 @@ namespace sca { namespace analysis {
     class ConvertDataList;
 } }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
+css::uno::Reference< css::uno::XInterface > AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
 
 class AnalysisAddIn : public cppu::WeakImplHelper<

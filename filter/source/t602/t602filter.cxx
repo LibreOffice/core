@@ -871,7 +871,7 @@ OUString T602ImportFilter_getImplementationName ()
     return OUString ( "com.sun.star.comp.Writer.T602ImportFilter" );
 }
 
-Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > T602ImportFilter_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -880,7 +880,7 @@ Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > T602ImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new T602ImportFilter( rSMgr ));
 }
@@ -1141,20 +1141,20 @@ OUString T602ImportFilterDialog_getImplementationName ()
     return OUString ( "com.sun.star.comp.Writer.T602ImportFilterDialog" );
 }
 
-Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )
+Sequence< OUString > T602ImportFilterDialog_getSupportedServiceNames(  )
 {
     Sequence<OUString> aRet { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL T602ImportFilterDialog_createInstance( const Reference< XMultiServiceFactory > & )
+Reference< XInterface > T602ImportFilterDialog_createInstance( const Reference< XMultiServiceFactory > & )
 {
     return static_cast<cppu::OWeakObject*>(new T602ImportFilterDialog);
 }
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImport602(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImport602(SvStream &rStream)
 {
     css::uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
     rtl::Reference<T602ImportFilter::T602ImportFilter> aImport(

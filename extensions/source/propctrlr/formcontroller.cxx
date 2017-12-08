@@ -30,7 +30,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_FormController()
+extern "C" void createRegistryInfo_FormController()
 {
     ::pcr::OAutoRegistration< ::pcr::FormController > aFormControllerRegistration;
     ::pcr::OAutoRegistration< ::pcr::DialogController > aDialogControllerRegistration;

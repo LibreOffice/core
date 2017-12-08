@@ -247,7 +247,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw()
+uno::Reference< uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw()
 {
     return static_cast<OWeakObject*>(new SvxUnoXColorTable( pList ));
 }
@@ -305,7 +305,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
 {
     return static_cast<OWeakObject*>(new SvxUnoXLineEndTable( pTable ));
 }
@@ -372,7 +372,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
 {
     return static_cast<OWeakObject*>(new SvxUnoXDashTable( pTable ));
 }
@@ -449,7 +449,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
 {
     return static_cast<OWeakObject*>(new SvxUnoXHatchTable( pTable ));
 }
@@ -521,7 +521,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
 {
     return static_cast<OWeakObject*>(new SvxUnoXGradientTable( pTable ));
 }
@@ -605,7 +605,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
 {
     return static_cast<OWeakObject*>(new SvxUnoXBitmapTable( pTable ));
 }

@@ -49,7 +49,7 @@
 #include <limits>
 
 
-extern "C" void SAL_CALL createRegistryInfo_XSDValidationPropertyHandler()
+extern "C" void createRegistryInfo_XSDValidationPropertyHandler()
 {
     ::pcr::XSDValidationPropertyHandler::registerImplementation();
 }

@@ -57,7 +57,7 @@
 
 
 // !!! outside the namespace !!!
-extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController()
+extern "C" void createRegistryInfo_OPropertyBrowserController()
 {
     ::pcr::OAutoRegistration< ::pcr::OPropertyBrowserController > aAutoRegistration;
 }

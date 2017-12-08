@@ -31,7 +31,7 @@
 #include <sal/macros.h>
 
 
-extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel()
+extern "C" void createRegistryInfo_DefaultFormComponentInspectorModel()
 {
     ::pcr::OAutoRegistration< ::pcr::DefaultFormComponentInspectorModel > aAutoRegistration;
 }

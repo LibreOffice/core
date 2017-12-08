@@ -315,7 +315,7 @@ sdecl::ServiceDecl const updateDecl(
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL deploymentgui_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * deploymentgui_component_getFactory(
     sal_Char const * pImplName, void *, void *)
 {
     return sdecl::component_getFactoryHelper(

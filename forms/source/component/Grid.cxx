@@ -990,7 +990,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT XInterface*
 com_sun_star_form_OGridControlModel_get_implementation(XComponentContext* component,
         Sequence<Any> const &)
 {

@@ -572,7 +572,7 @@ void TIFFWriter::EndCompression()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     TIFFWriter aWriter(rStream);

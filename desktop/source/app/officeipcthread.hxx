@@ -39,7 +39,7 @@
 namespace desktop
 {
 
-oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo);
+oslSignalAction SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo);
 
 // A request for the current office
 // that was given by command line or by IPC pipe communication.

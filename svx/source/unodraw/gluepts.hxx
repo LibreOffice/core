@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 } } } }
 class SdrObject;
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 SvxUnoGluePointAccess_createInstance(SdrObject * pObject);
 
 #endif

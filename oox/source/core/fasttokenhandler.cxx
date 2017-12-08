@@ -31,18 +31,18 @@ namespace core {
 
 using namespace ::com::sun::star::uno;
 
-OUString SAL_CALL FastTokenHandler_getImplementationName()
+OUString FastTokenHandler_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.core.FastTokenHandler" );
 }
 
-Sequence< OUString > SAL_CALL FastTokenHandler_getSupportedServiceNames()
+Sequence< OUString > FastTokenHandler_getSupportedServiceNames()
 {
     Sequence<OUString> aServiceNames { "com.sun.star.xml.sax.FastTokenHandler" };
     return aServiceNames;
 }
 
-Reference< XInterface > SAL_CALL FastTokenHandler_createInstance( const Reference< XComponentContext >& /*rxContext*/ )
+Reference< XInterface > FastTokenHandler_createInstance( const Reference< XComponentContext >& /*rxContext*/ )
 {
     return static_cast< ::cppu::OWeakObject* >( new FastTokenHandler );
 }

@@ -128,7 +128,7 @@ Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  )
     return aSeq;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 AnyCompareFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)

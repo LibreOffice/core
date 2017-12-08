@@ -1010,7 +1010,7 @@ bool SdXMLFilter::Export()
     return bDocRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODP(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
 {
     SdDLL::Init();
 
@@ -1059,7 +1059,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODP(SvStream &rStream)
     return ret;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPTX(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
 {
     SdDLL::Init();
 

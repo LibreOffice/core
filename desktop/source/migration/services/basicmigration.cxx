@@ -208,7 +208,7 @@ namespace migration
     // component operations
 
 
-    Reference< XInterface > SAL_CALL BasicMigration_create(
+    Reference< XInterface > BasicMigration_create(
         Reference< XComponentContext > const & )
     {
         return static_cast< lang::XTypeProvider * >( new BasicMigration() );

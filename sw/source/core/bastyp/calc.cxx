@@ -145,7 +145,7 @@ const sal_Int32 coContFlags =
         & ~i18n::KParseTokens::IGNORE_LEADING_WS;
 
 extern "C" {
-static int SAL_CALL OperatorCompare( const void *pFirst, const void *pSecond)
+static int OperatorCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( CALC_NAME == static_cast<const CalcOp*>(pFirst)->eOp )

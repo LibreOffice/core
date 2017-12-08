@@ -96,7 +96,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 XSERVICEINFO_COMMOM_IMPL( ContentProvider,
                           OUString( "com.sun.star.comp.GIOContentProvider" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =
@@ -115,7 +115,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgio1_component_getFactory( const sal_Char *pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * ucpgio1_component_getFactory( const sal_Char *pImplName,
     void *pServiceManager, void * )
 {
     void * pRet = nullptr;

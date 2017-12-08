@@ -39,7 +39,7 @@ namespace connectivity
     namespace hsqldb
     {
         /// @throws css::uno::Exception
-        css::uno::Reference< css::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+        css::uno::Reference< css::uno::XInterface > ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
                                                  , css::sdbcx::XDataDefinitionSupplier

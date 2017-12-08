@@ -197,7 +197,7 @@ uno::Sequence<OUString> EPUBExportFilter::getSupportedServiceNames()
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *SAL_CALL com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(uno::XComponentContext *pContext, uno::Sequence<uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface * com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(uno::XComponentContext *pContext, uno::Sequence<uno::Any> const &)
 {
     return cppu::acquire(new EPUBExportFilter(pContext));
 }

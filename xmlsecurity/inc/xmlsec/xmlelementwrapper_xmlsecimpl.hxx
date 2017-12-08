@@ -86,11 +86,11 @@ public:
 OUString XMLElementWrapper_XmlSecImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  );
+css::uno::Sequence< OUString > XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
-SAL_CALL XMLElementWrapper_XmlSecImpl_createInstance(
+XMLElementWrapper_XmlSecImpl_createInstance(
     const css::uno::Reference< css::uno::XComponentContext > &);
 
 #endif

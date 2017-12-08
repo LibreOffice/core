@@ -191,7 +191,7 @@ extern "C"
 {
 
 
-static void SAL_CALL binuno_proxy_free(
+static void binuno_proxy_free(
     uno_ExtEnvironment * pEnv, void * pProxy )
 {
     binuno_Proxy * proxy = static_cast< binuno_Proxy * >(
@@ -201,7 +201,7 @@ static void SAL_CALL binuno_proxy_free(
 }
 
 
-static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
+static void binuno_proxy_acquire( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
     if (osl_atomic_increment( &that->m_nRefCount ) == 1)
@@ -220,7 +220,7 @@ static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
 }
 
 
-static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
+static void binuno_proxy_release( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
     if (osl_atomic_decrement( &that->m_nRefCount ) == 0)
@@ -233,7 +233,7 @@ static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
 }
 
 
-static void SAL_CALL binuno_proxy_dispatch(
+static void binuno_proxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )
 {
@@ -428,7 +428,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 }
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL proxyfac_create(
+Reference< XInterface > proxyfac_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
 {
     Reference< XInterface > xRet;
@@ -459,7 +459,7 @@ static const ::cppu::ImplementationEntry g_entries [] =
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL proxyfac_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * proxyfac_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(

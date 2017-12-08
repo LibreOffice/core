@@ -242,7 +242,7 @@ bool IsUserWordbook( const OUString& rFile )
     // component operations
 
 
-    Reference< XInterface > SAL_CALL WordbookMigration_create(
+    Reference< XInterface > WordbookMigration_create(
         Reference< XComponentContext > const & )
     {
         return static_cast< lang::XTypeProvider * >( new WordbookMigration() );

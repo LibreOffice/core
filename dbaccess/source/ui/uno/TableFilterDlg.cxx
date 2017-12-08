@@ -25,7 +25,7 @@
 
 using namespace dbaui;
 
-extern "C" void SAL_CALL createRegistryInfo_OTableFilterDialog()
+extern "C" void createRegistryInfo_OTableFilterDialog()
 {
     static OMultiInstanceAutoRegistration< OTableFilterDialog > aAutoRegistration;
 }

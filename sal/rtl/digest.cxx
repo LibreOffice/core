@@ -40,15 +40,15 @@
      *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
      *((c)++) = (sal_uInt8)(((l) >> 24) & 0xff))
 
-typedef rtlDigestError (SAL_CALL Digest_init_t) (
+typedef rtlDigestError (Digest_init_t) (
     void *ctx, const sal_uInt8 *Data, sal_uInt32 DatLen);
 
-typedef void (SAL_CALL Digest_delete_t) (void *ctx);
+typedef void (Digest_delete_t) (void *ctx);
 
-typedef rtlDigestError (SAL_CALL Digest_update_t) (
+typedef rtlDigestError (Digest_update_t) (
     void *ctx, const void *Data, sal_uInt32 DatLen);
 
-typedef rtlDigestError (SAL_CALL Digest_get_t) (
+typedef rtlDigestError (Digest_get_t) (
     void *ctx, sal_uInt8 *Buffer, sal_uInt32 BufLen);
 
 struct Digest_Impl

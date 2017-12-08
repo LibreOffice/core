@@ -442,7 +442,7 @@ OUString SaveAsMenuController::getImplementationName()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ResourceMenuController_get_implementation(
     css::uno::XComponentContext* context,
     css::uno::Sequence< css::uno::Any > const & args )
@@ -450,7 +450,7 @@ com_sun_star_comp_framework_ResourceMenuController_get_implementation(
     return cppu::acquire( new ResourceMenuController( context, args, false ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
     css::uno::XComponentContext* context,
     css::uno::Sequence< css::uno::Any > const & args )
@@ -458,7 +458,7 @@ com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
     return cppu::acquire( new ResourceMenuController( context, args, true ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SaveAsMenuController_get_implementation(
     css::uno::XComponentContext* context,
     css::uno::Sequence< css::uno::Any > const & args )

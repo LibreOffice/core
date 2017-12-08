@@ -54,19 +54,19 @@ public:
 };
 
 extern "C" {
-static void SAL_CALL s_acquire(uno_Mapping * mapping)
+static void s_acquire(uno_Mapping * mapping)
 {
     MediatorMapping * pMediatorMapping = static_cast<MediatorMapping *>(mapping);
     pMediatorMapping->acquire();
 }
 
-static void SAL_CALL s_release(uno_Mapping * mapping)
+static void s_release(uno_Mapping * mapping)
 {
     MediatorMapping * pMediatorMapping = static_cast<MediatorMapping *>(mapping);
     pMediatorMapping->release();
 }
 
-static void SAL_CALL s_mapInterface(
+static void s_mapInterface(
     uno_Mapping                      * mapping,
     void                            ** ppOut,
     void                             * pInterface,
@@ -144,7 +144,7 @@ void MediatorMapping::mapInterface(
     *ppOut = ret;
 }
 
-extern "C" { static void SAL_CALL s_MediatorMapping_free(uno_Mapping * pMapping)
+extern "C" { static void s_MediatorMapping_free(uno_Mapping * pMapping)
     SAL_THROW_EXTERN_C()
 {
     delete static_cast<MediatorMapping *>(pMapping);

@@ -628,7 +628,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
 }   // namespace xmlscript
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_xmlscript_XMLBasicImporter(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -636,7 +636,7 @@ com_sun_star_comp_xmlscript_XMLBasicImporter(
     return cppu::acquire(new xmlscript::XMLBasicImporter(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_xmlscript_XMLOasisBasicImporter(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)

@@ -60,9 +60,9 @@
 
 extern "C" LO_DLLPUBLIC_PYUNO
 #if PY_MAJOR_VERSION >= 3
-    PyObject* SAL_CALL PyInit_pyuno();
+    PyObject* PyInit_pyuno();
 #else
-   void SAL_CALL initpyuno();
+   void initpyuno();
 #endif
 
 namespace pyuno

@@ -532,7 +532,7 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
                           OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =

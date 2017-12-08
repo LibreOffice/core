@@ -1463,7 +1463,7 @@ void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FindTextToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1471,7 +1471,7 @@ com_sun_star_svx_FindTextToolboxController_get_implementation(
     return cppu::acquire(new FindTextToolbarController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1479,7 +1479,7 @@ com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
     return cppu::acquire(new ExitSearchToolboxController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_UpSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1487,7 +1487,7 @@ com_sun_star_svx_UpSearchToolboxController_get_implementation(
     return cppu::acquire(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::UP));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_DownSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1495,7 +1495,7 @@ com_sun_star_svx_DownSearchToolboxController_get_implementation(
     return cppu::acquire(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::DOWN));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_MatchCaseToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1503,7 +1503,7 @@ com_sun_star_svx_MatchCaseToolboxController_get_implementation(
     return cppu::acquire(new MatchCaseToolboxController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_SearchFormattedToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1511,7 +1511,7 @@ com_sun_star_svx_SearchFormattedToolboxController_get_implementation(
     return cppu::acquire(new SearchFormattedToolboxController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FindAllToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1519,7 +1519,7 @@ com_sun_star_svx_FindAllToolboxController_get_implementation(
     return cppu::acquire(new FindAllToolboxController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_SearchLabelToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -1527,7 +1527,7 @@ com_sun_star_svx_SearchLabelToolboxController_get_implementation(
     return cppu::acquire(new SearchLabelToolboxController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_Impl_FindbarDispatcher_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

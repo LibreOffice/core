@@ -100,7 +100,7 @@ Sequence< rtl::OUString > SAL_CALL MysqlCDriver::getSupportedServiceNames()
 }
 
 #ifndef SYSTEM_MYSQL_CPPCONN
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 #endif
 
 void MysqlCDriver::impl_initCppConn_lck_throw()
@@ -256,7 +256,7 @@ namespace connectivity
 namespace mysqlc
 {
 
-Reference< XInterface >  SAL_CALL MysqlCDriver_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > MysqlCDriver_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return(*(new MysqlCDriver(_rxFactory)));
 }

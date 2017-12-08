@@ -34,7 +34,7 @@ using namespace dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 
-extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog()
+extern "C" void createRegistryInfo_OSQLMessageDialog()
 {
     static OMultiInstanceAutoRegistration< OSQLMessageDialog > aAutoRegistration;
 }

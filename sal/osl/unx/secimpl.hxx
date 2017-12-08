@@ -27,7 +27,7 @@ struct oslSecurityImpl {
     char m_buffer[1]; /* should be a C99 flexible array member */
 };
 
-bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
+bool osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 
 #endif
 

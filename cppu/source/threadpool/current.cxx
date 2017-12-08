@@ -134,7 +134,7 @@ public:
     }
 };
 
-extern "C" void SAL_CALL delete_IdContainer( void * p )
+extern "C" void delete_IdContainer( void * p )
 {
     if (p)
     {

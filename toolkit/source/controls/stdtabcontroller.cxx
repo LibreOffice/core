@@ -403,7 +403,7 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
     return Reference< XControl > ();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_StdTabController_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

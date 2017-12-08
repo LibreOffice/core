@@ -1353,7 +1353,7 @@ struct ScRangePairNameSort
 };
 
 extern "C"
-int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
+int ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 {
     const ScRangePairNameSort* ps1 = static_cast<const ScRangePairNameSort*>(p1);
     const ScRangePairNameSort* ps2 = static_cast<const ScRangePairNameSort*>(p2);

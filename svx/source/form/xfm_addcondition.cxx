@@ -45,19 +45,19 @@ namespace svxform
     //= OAddConditionDialog
 
 
-    Reference< XInterface > SAL_CALL OAddConditionDialog_Create( const Reference< XMultiServiceFactory > & _rxORB )
+    Reference< XInterface > OAddConditionDialog_Create( const Reference< XMultiServiceFactory > & _rxORB )
     {
         return OAddConditionDialog::Create( _rxORB );
     }
 
 
-    Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames()
+    Sequence< OUString > OAddConditionDialog_GetSupportedServiceNames()
     {
         return { "com.sun.star.xforms.ui.dialogs.AddCondition" };
     }
 
 
-    OUString SAL_CALL OAddConditionDialog_GetImplementationName()
+    OUString OAddConditionDialog_GetImplementationName()
     {
         return OUString("org.openoffice.comp.svx.OAddConditionDialog");
     }

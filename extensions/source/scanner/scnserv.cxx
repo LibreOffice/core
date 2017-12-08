@@ -26,7 +26,7 @@
 using namespace com::sun::star::registry;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL scn_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* scn_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     Reference< css::lang::XSingleServiceFactory > xFactory;
     void*                                         pRet = nullptr;

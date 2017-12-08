@@ -106,7 +106,7 @@
 
 #define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
-extern "C" void SAL_CALL createRegistryInfo_FormComponentPropertyHandler()
+extern "C" void createRegistryInfo_FormComponentPropertyHandler()
 {
     ::pcr::FormComponentPropertyHandler::registerImplementation();
 }

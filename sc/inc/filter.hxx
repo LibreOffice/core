@@ -92,7 +92,7 @@ protected:
 
 // scfilt plugin symbol
 extern "C" {
-  SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate();
+  SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * ScFilterCreate();
 }
 
 class ScFormatFilter {

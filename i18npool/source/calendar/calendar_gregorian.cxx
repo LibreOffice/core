@@ -612,7 +612,7 @@ Calendar_gregorian::isValid()
 // NatNum3              NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3
 // NatNum4                                                              NatNum9/9/11/11
 
-static sal_Int16 SAL_CALL NatNumForCalendar(const css::lang::Locale& aLocale,
+static sal_Int16 NatNumForCalendar(const css::lang::Locale& aLocale,
         sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
 {
     bool isShort = ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
@@ -645,7 +645,7 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const css::lang::Locale& aLocale,
     return nNativeNumberMode;
 }
 
-static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
+static sal_Int32 DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
 {
     switch( nCalendarDisplayCode ) {
         case CalendarDisplayCode::SHORT_DAY:

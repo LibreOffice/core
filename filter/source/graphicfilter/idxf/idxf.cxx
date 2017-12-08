@@ -29,7 +29,7 @@ class FilterConfigItem;
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 idxGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     DXFRepresentation aDXF;

@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace xml_security { namespace serial_number_adapter {
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL create(
+css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const &);
 
 /// @throws css::uno::RuntimeException

@@ -92,7 +92,7 @@ public:
 OUString SignatureCreatorImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  );
+css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  );
 
 #endif
 

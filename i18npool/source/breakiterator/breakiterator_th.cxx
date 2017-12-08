@@ -79,7 +79,7 @@ static const sal_Int16 thaiCompRel[MAX_CT][MAX_CT] = {
 
 const sal_uInt32 is_ST_COM = (1<<CT_CTRL)|(1<<CT_NON)|(1<<CT_CONS)|(1<<CT_TONE);
 
-static sal_uInt16 SAL_CALL getCombState(const sal_Unicode *text, sal_Int32 pos)
+static sal_uInt16 getCombState(const sal_Unicode *text, sal_Int32 pos)
 {
     sal_uInt16 ch1 = getCharType(text[pos]);
     sal_uInt16 ch2 = getCharType(text[pos+1]);
@@ -95,7 +95,7 @@ static sal_uInt16 SAL_CALL getCombState(const sal_Unicode *text, sal_Int32 pos)
 }
 
 
-static sal_Int32 SAL_CALL getACell(const sal_Unicode *text, sal_Int32 pos, sal_Int32 len)
+static sal_Int32 getACell(const sal_Unicode *text, sal_Int32 pos, sal_Int32 len)
 {
     sal_uInt32 curr = 1;
     for (; pos + 1 < len && getCombState(text, pos) == ST_COM; curr++, pos++) {}

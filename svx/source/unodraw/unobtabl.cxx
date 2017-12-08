@@ -97,7 +97,7 @@ uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
 /**
  * Create a bitmaptable
  */
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoBitmapTable_createInstance( SdrModel* pModel )
+uno::Reference< uno::XInterface > SvxUnoBitmapTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoBitmapTable(pModel);
 }

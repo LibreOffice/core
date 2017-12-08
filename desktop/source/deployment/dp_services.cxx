@@ -27,7 +27,7 @@ namespace sdecl = comphelper::service_decl;
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL deployment_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * deployment_component_getFactory(
     sal_Char const * pImplName, void *, void *)
 {
     return sdecl::component_getFactoryHelper(

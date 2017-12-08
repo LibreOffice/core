@@ -32,7 +32,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_ODirectSQLDialog()
+extern "C" void createRegistryInfo_ODirectSQLDialog()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::ODirectSQLDialog > aAutoRegistration;
 }

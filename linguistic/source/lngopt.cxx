@@ -209,7 +209,7 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
 }
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL LinguProps_CreateInstance(
+Reference< XInterface > LinguProps_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new LinguProps);
@@ -449,7 +449,7 @@ Locale LinguProps::getPropertyLocale(const OUString& aPropertyName)
    return b;
 }
 
-void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
+void * LinguProps_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory *pServiceManager )
 {
     void * pRet = nullptr;

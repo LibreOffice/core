@@ -89,12 +89,12 @@ using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XInitialization;
 
-Sequence< OUString > SAL_CALL AnimationsImport_getSupportedServiceNames() throw()
+Sequence< OUString > AnimationsImport_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Xmloff.AnimationsImport" };
 }
 
-OUString SAL_CALL AnimationsImport_getImplementationName() throw()
+OUString AnimationsImport_getImplementationName() throw()
 {
     return OUString( "xmloff::AnimationsImport" );
 }
@@ -1409,7 +1409,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
 
 } // namespace xmloff
 
-Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) ));
 }

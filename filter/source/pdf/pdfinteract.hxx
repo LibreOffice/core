@@ -56,11 +56,11 @@ public:
 OUString PDFInteractionHandler_getImplementationName ();
 
 /// @throws RuntimeException
-Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  );
+Sequence< OUString > PDFInteractionHandler_getSupportedServiceNames(  );
 
 /// @throws Exception
 Reference< XInterface >
-SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
+PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
 
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
 

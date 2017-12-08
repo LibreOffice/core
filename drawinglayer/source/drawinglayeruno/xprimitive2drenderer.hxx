@@ -34,12 +34,12 @@ namespace com { namespace sun { namespace star {
 
 namespace drawinglayer { namespace unorenderer {
 
-css::uno::Sequence<OUString> SAL_CALL
+css::uno::Sequence<OUString>
 XPrimitive2DRenderer_getSupportedServiceNames();
 
-OUString SAL_CALL XPrimitive2DRenderer_getImplementationName();
+OUString XPrimitive2DRenderer_getImplementationName();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<css::uno::XInterface>
 XPrimitive2DRenderer_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 

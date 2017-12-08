@@ -29,7 +29,7 @@
 
 namespace cppu_threadpool
 {
-    extern "C" typedef void (SAL_CALL RequestFun)(void *);
+    extern "C" typedef void (RequestFun)(void *);
 
     struct Job
     {
