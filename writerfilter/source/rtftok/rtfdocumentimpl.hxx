@@ -552,6 +552,10 @@ private:
     std::deque<RTFSprms> m_aTableInheritingCellsSprms;
     std::deque<RTFSprms> m_aTableInheritingCellsAttributes;
 
+    // Left row margin (for nested and top-level rows)
+    int m_nNestedTRLeft;
+    int m_nTopLevelTRLeft;
+
     /// Current cellx value (nested table)
     int m_nNestedCurrentCellX;
     /// Current cellx value (top-level table)
