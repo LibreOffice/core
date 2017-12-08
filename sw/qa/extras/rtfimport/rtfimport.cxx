@@ -444,7 +444,7 @@ DECLARE_RTFIMPORT_TEST(testFdo55525, "fdo55525.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1877), getProperty<sal_Int32>(xTable, "LeftMargin"));
     // Cell width of A1 was 3332 (e.g. not set, 30% percent of total width)
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(896), getProperty<uno::Sequence<text::TableColumnSeparator>>(
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(897), getProperty<uno::Sequence<text::TableColumnSeparator>>(
                                              xTableRows->getByIndex(0), "TableColumnSeparators")[0]
                                              .Position);
 }
