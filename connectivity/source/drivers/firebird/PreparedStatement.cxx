@@ -587,25 +587,25 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 
     if(sqlType == DataType::DECIMAL || sqlType == DataType::NUMERIC)
     {
-        double myDouble=0.0;
-        OUString myString;
-        if( x >>= myDouble )
+        double dbValue =0.0;
+        OUString sValue;
+        if( x >>= dbValue )
         {
-            myString = OUString::number( myDouble );
+            sValue = OUString::number( dbValue );
         }
         else
         {
-            x >>= myString;
+            x >>= sValue;
         }
 
         // fill in the number with nulls in fractional part.
         // We need this because  e.g. 0.450 != 0.045 despite
         // their scale is equal
         OUStringBuffer sBuffer(15);
-        sBuffer.append(myString);
-        if(myString.indexOf('.') != -1) // there is a dot
+        sBuffer.append(sValue);
+        if(sValue.indexOf('.') != -1) // there is a dot
         {
-            for(sal_Int32 i=myString.copy(myString.indexOf('.')+1).getLength(); i<scale;i++)
+            for(sal_Int32 i=sValue.copy(sValue.indexOf('.')+1).getLength(); i<scale;i++)
             {
                 sBuffer.append('0');
             }
@@ -617,30 +617,24 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
                 sBuffer.append('0');
             }
         }
-        myString = sBuffer.makeStringAndClear();
-        // set value depending on type
-        sal_Int16 n16Value = 0;
-        sal_Int32 n32Value = 0;
-        sal_Int64 n64Value = 0;
+
+        sValue = sBuffer.makeStringAndClear();
         switch(dType)
         {
             case SQL_SHORT:
-                n16Value = (sal_Int16) toNumericWithoutDecimalPlace(myString);
                 setValue< sal_Int16 >(parameterIndex,
-                        n16Value,
+                        static_cast<sal_Int16>( toNumericWithoutDecimalPlace(sValue) ),
                         dType);
                 break;
             case SQL_LONG:
-            case SQL_DOUBLE: // TODO FIXME 32 bits
-                n32Value = (sal_Int32) toNumericWithoutDecimalPlace(myString);
+            case SQL_DOUBLE:
                 setValue< sal_Int32 >(parameterIndex,
-                        n32Value,
+                        static_cast<sal_Int32>( toNumericWithoutDecimalPlace(sValue) ),
                         dType);
                 break;
             case SQL_INT64:
-                n64Value = toNumericWithoutDecimalPlace(myString);
                 setValue< sal_Int64 >(parameterIndex,
-                        n64Value,
+                        toNumericWithoutDecimalPlace(sValue),
                         dType);
                 break;
             default:
