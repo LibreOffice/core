@@ -26,6 +26,7 @@ SdrUndoManager::SdrUndoManager()
     , maEndTextEditHdl()
     , mpLastUndoActionBeforeTextEdit(nullptr)
     , mbEndTextEditTriggeredFromUndo(false)
+    , m_pDocSh(nullptr)
 {
 }
 
