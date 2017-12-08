@@ -2871,11 +2871,7 @@ short ScFormatShell::GetCurrentNumberFormatType()
                 ScRange aColRange(nCol, nRow1, aRange.aStart.Tab());
                 aColRange.aEnd.SetRow(nRow2);
                 sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aColRange);
-                const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
-                if (!pEntry)
-                    return 0;
-
-                short nThisType = pEntry->GetType();
+                short nThisType = pFormatter->GetType(nNumFmt);
                 if (bFirstItem)
                 {
                     bFirstItem = false;
@@ -2893,8 +2889,7 @@ short ScFormatShell::GetCurrentNumberFormatType()
         sal_uInt32 nNumFmt;
         pDoc->GetNumberFormat( pViewData->GetCurX(), pViewData->GetCurY(),
                                pViewData->GetTabNo(), nNumFmt );
-        const SvNumberformat* pEntry = pFormatter->GetEntry( nNumFmt );
-        nType = pEntry ? pEntry->GetType() : 0;
+        nType = pFormatter->GetType( nNumFmt );
     }
     return nType;
 }
