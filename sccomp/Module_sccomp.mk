@@ -29,7 +29,7 @@ $(eval $(call gb_Module_add_l10n_targets,sccomp,\
 
 $(eval $(call gb_Module_add_check_targets,sccomp,\
 	CppunitTest_sccomp_solver \
-	CppunitTest_sccomp_swarmsolvertest \
+	$(if $(and $(filter INTEL,$(CPUNAME)),$(filter -fsanitize=%,$(gb_CXX))),,CppunitTest_sccomp_swarmsolvertest) \
 ))
 
 # vim: set noet sw=4 ts=4:
