@@ -1256,6 +1256,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
     // convert type to token (and check validity) ...
     XMLTokenEnum eElement(XML_TOKEN_INVALID);
+    sal_uInt16 nNamespace(XML_NAMESPACE_TEXT);
     switch(nTokenType)
     {
         case TOK_TTYPE_ENTRY_TEXT:
@@ -1299,6 +1300,27 @@ void XMLSectionExport::ExportIndexTemplateElement(
         default:
             ; // unknown/unimplemented template
             break;
+    }
+
+    if (eType != TEXT_SECTION_TYPE_TOC)
+    {
+        switch (nTokenType)
+        {
+            case TOK_TTYPE_HYPERLINK_START:
+            case TOK_TTYPE_HYPERLINK_END:
+                if (SvtSaveOptions::ODFVER_012 < aODFVersion)
+                {
+                    assert(eType == TEXT_SECTION_TYPE_ILLUSTRATION);
+                    nNamespace = XML_NAMESPACE_LO_EXT;
+                }
+                else
+                {
+                    eElement = XML_TOKEN_INVALID; // not allowed in ODF <= 1.2
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     //--->i90246
@@ -1455,7 +1477,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
                                      OUString::number(nLevel));
         }
         // export template
-        SvXMLElementExport aTemplateElement(GetExport(), XML_NAMESPACE_TEXT,
+        SvXMLElementExport aTemplateElement(GetExport(), nNamespace,
                                             GetXMLToken(eElement),
                                             true, false)
             ;
