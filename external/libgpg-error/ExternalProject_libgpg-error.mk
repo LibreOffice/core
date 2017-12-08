@@ -45,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 			$(if $(filter MSC,$(COM)),--force_use_syscfg=true) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+	                $(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 	  && $(MAKE) \
 	)
 

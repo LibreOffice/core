@@ -3555,6 +3555,9 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,gpgmepp)/lang/cpp/src/.libs/ -lgpgmepp \
+	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-L$(call gb_UnpackedTarball_get_dir,gpgmepp)/src/.libs/ -lgpgme) \
+	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),$$(GPG_ERROR_LIBS)) \
+	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),$$(LIBASSUAN_LIBS)) \
 )
 
 endef
