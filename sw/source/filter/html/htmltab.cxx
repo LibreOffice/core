@@ -2975,7 +2975,7 @@ public:
                      bool bReadOpt );
 
     void AddContents( HTMLTableCnts *pNewCnts );
-    HTMLTableCnts *GetFirstContents() { return m_pCnts; }
+    bool HasFirstContents() const { return m_pCnts != nullptr; }
 
     void ClearIsInSection() { m_pCurrCnts = nullptr; }
     bool IsInSection() const { return m_pCurrCnts!=nullptr; }
@@ -3910,10 +3910,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     // We also create an empty content if the cell ended with a table and had no
     // COL tags. Otherwise, it was probably exported by us and we don't
     // want to have an additional paragraph
-    if( !pSaveStruct->GetFirstContents() ||
+    if( !pSaveStruct->HasFirstContents() ||
         (!pSaveStruct->IsInSection() && !pCurTable->HasColTags()) )
     {
-        OSL_ENSURE( pSaveStruct->GetFirstContents() ||
+        OSL_ENSURE( pSaveStruct->HasFirstContents() ||
                 !pSaveStruct->IsInSection(),
                 "Section or not, that is the question here" );
         const SwStartNode *pStNd =
