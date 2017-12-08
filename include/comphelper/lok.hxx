@@ -60,6 +60,10 @@ COMPHELPER_DLLPUBLIC void setDialogPainting(bool bDialogPainting);
 COMPHELPER_DLLPUBLIC void setTiledAnnotations(bool bTiledAnnotations);
 /// Check if annotations rendering is turned off
 COMPHELPER_DLLPUBLIC bool isTiledAnnotations();
+/// Set if we want range based header data
+COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bTiledAnnotations);
+/// Check if range based header data is enabled
+COMPHELPER_DLLPUBLIC bool isRangeHeaders();
 
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of
