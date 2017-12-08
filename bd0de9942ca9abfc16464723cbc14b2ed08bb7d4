@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c8a2f7ad",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-12-08T10:08:26Z",
+      "side": 1,
+      "message": "Please don\u0027t set this property if you don\u0027t plan to add an icon.",
+      "revId": "bd0de9942ca9abfc16464723cbc14b2ed08bb7d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
