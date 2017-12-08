@@ -25,6 +25,8 @@ static bool g_bDialogPainting(false);
 
 static bool g_bTiledAnnotations(true);
 
+static bool g_bRangeHeaders(false);
+
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -73,6 +75,16 @@ void setTiledAnnotations(bool bTiledAnnotations)
 bool isTiledAnnotations()
 {
     return g_bTiledAnnotations;
+}
+
+void setRangeHeaders(bool bRangeHeaders)
+{
+    g_bRangeHeaders = bRangeHeaders;
+}
+
+bool isRangeHeaders()
+{
+    return g_bRangeHeaders;
 }
 
 static bool g_bLocalRendering(false);

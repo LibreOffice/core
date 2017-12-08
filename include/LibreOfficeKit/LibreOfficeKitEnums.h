@@ -79,7 +79,12 @@ typedef enum
     /**
      * Turn off tile rendering for annotations
      */
-    LOK_FEATURE_NO_TILED_ANNOTATIONS = (1ULL << 3)
+    LOK_FEATURE_NO_TILED_ANNOTATIONS = (1ULL << 3),
+
+    /**
+     * Enable range based header data
+     */
+    LOK_FEATURE_RANGE_HEADERS = (1ULL << 4)
 }
 LibreOfficeKitOptionalFeatures;
 
