@@ -153,13 +153,13 @@ public:
     // If the number of selected objects exceeds the value set here,
     // NoDragPolys is (temporarily) activated implicitly.
     // PolyPolygons etc. are regarded as multiple objects respectively.
-    size_t GetDragXorPolyLimit() const { return eDragXorPolyLimit; }
+    static size_t GetDragXorPolyLimit() { return eDragXorPolyLimit; }
 
     // Like DragXorPolyLimit, but in respect to the total number of
     // all polygons.
     // NoDragPolys is (temporarily) activated, if one of the limits
     // is exceeded.
-    size_t GetDragXorPointLimit() const { return eDragXorPointLimit; }
+    static size_t GetDragXorPointLimit() { return eDragXorPointLimit; }
 
     void SetSolidDragging(bool bOn);
     bool IsSolidDragging() const;
