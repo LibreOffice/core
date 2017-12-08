@@ -870,7 +870,6 @@ public:
                                             bool bNamesValid = false );
     SC_DLLPUBLIC bool           DeleteTabs( SCTAB nTab, SCTAB nSheets );
     SC_DLLPUBLIC bool           DeleteTab( SCTAB nTab );
-    SC_DLLPUBLIC void           ClearTabs();
     SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const OUString& rName,
                                            bool bExternalDocument = false );
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = nullptr );
