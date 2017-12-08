@@ -41,7 +41,7 @@ ScDoubleField::ScDoubleField( vcl::Window* pParent, WinBits nStyle ) :
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeScDoubleField(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeScDoubleField(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     BuilderUtils::ensureDefaultWidthChars(rMap);
     rRet = VclPtr<ScDoubleField>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

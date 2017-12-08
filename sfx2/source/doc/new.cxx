@@ -116,7 +116,7 @@ void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::
     ImpPaint(rRenderContext, xMetaFile.get());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSfxPreviewWin(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSfxPreviewWin(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<SfxPreviewWin_Impl>::Create(pParent, 0);
 }

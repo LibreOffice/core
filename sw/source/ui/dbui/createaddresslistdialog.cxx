@@ -111,7 +111,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits
     m_pScrollBar->EnableDrag();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSwAddressControlImpl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSwAddressControlImpl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<SwAddressControl_Impl>::Create(pParent, WB_BORDER | WB_DIALOGCONTROL);
 }

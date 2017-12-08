@@ -58,7 +58,7 @@ bool SwNumberingTypeListBox::set_property(const OString &rKey, const OUString &r
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSwNumberingTypeListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeSwNumberingTypeListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     VclPtrInstance<SwNumberingTypeListBox> pListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
     pListBox->EnableAutoSize(true);

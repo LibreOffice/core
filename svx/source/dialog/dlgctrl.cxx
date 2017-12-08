@@ -1031,7 +1031,7 @@ HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeHatchingLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeHatchingLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
@@ -1050,7 +1050,7 @@ GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeGradientLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeGradientLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
@@ -1069,7 +1069,7 @@ BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeBitmapLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeBitmapLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
@@ -1102,7 +1102,7 @@ LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeLineLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1200,7 +1200,7 @@ LineEndLB::LineEndLB( vcl::Window* pParent, WinBits aWB )
     // No EdgeBlending for LineEnds SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineEndLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeLineEndLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;

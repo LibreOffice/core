@@ -31,7 +31,7 @@ namespace svt
         DisableHistory();
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeOFileURLControl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT void makeOFileURLControl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
     {
         WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                            WB_DROPDOWN|WB_AUTOHSCROLL;
