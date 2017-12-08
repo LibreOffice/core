@@ -58,6 +58,7 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* 
     , m_eVOri( 0 )
     , m_eHRel( 0 )
     , m_eVRel( 0 )
+    , m_bInline( false )
     , m_pNdTopLeft( nullptr )
     , m_pSdrObject( nullptr )
     , m_pShapeAttrList( nullptr )
@@ -65,6 +66,8 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* 
     , m_nShapeFlags(0)
     , m_pShapeStyle( new OStringBuffer( 200 ) )
     , m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] )
+    , m_bSkipwzName( false )
+    , m_bUseHashMarkForType( false )
 {
     mnGroupLevel = 1;
     memset( m_pShapeTypeWritten, 0, ESCHER_ShpInst_COUNT * sizeof( bool ) );
@@ -187,17 +190,20 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uIn
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
+
+    m_sShapeId = ShapeIdString( nShapeId );
     // If shape is a watermark object - should keep the original shape's name
     // because Microsoft detects if it is a watermark by the actual name
     if (!IsWaterMarkShape(m_pSdrObject->GetName()))
     {
         // Not a watermark object
-        m_pShapeAttrList->add( XML_id, ShapeIdString( nShapeId ) );
+        m_pShapeAttrList->add( XML_id, m_sShapeId );
     }
     else
     {
         // A watermark object - store the optional shape ID also ('o:spid')
         m_pShapeAttrList->add( XML_id, OUStringToOString(m_pSdrObject->GetName(), RTL_TEXTENCODING_UTF8) );
+        m_pShapeAttrList->addNS( XML_o, XML_spid, m_sShapeId );
     }
 }
 
@@ -924,7 +930,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     aStream.Seek(0);
                     OUString idStr = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
                     aStream.Seek(0);
-                    if (!IsWaterMarkShape(m_pSdrObject->GetName()))
+                    if (!IsWaterMarkShape(m_pSdrObject->GetName()) && !m_bSkipwzName)
                          m_pShapeAttrList->add(XML_ID, OUStringToOString(idStr, RTL_TEXTENCODING_UTF8).getStr());
 
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
@@ -1014,13 +1020,18 @@ void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle&
     if ( !rBuffer.isEmpty() )
         rBuffer.append( ";" );
 
-    if (rbAbsolutePos)
+    if (rbAbsolutePos && !m_bInline)
     {
         rBuffer.append( "position:absolute;" );
     }
 
-    if ( mnGroupLevel == 1 )
+    if(m_bInline)
     {
+        rBuffer.append( "width:" ).append( double( rRectangle.Right() - rRectangle.Left() ) / 20 )
+            .append( "pt;height:" ).append( double( rRectangle.Bottom() - rRectangle.Top() ) / 20 )
+            .append( "pt" );
+    }
+    else if ( mnGroupLevel == 1 )    {
         rBuffer.append( "margin-left:" ).append( double( rRectangle.Left() ) / 20 )
             .append( "pt;margin-top:" ).append( double( rRectangle.Top() ) / 20 )
             .append( "pt;width:" ).append( double( rRectangle.Right() - rRectangle.Left() ) / 20 )
@@ -1106,6 +1117,62 @@ sal_Int32 VMLExport::StartShape()
         case ESCHER_ShpInst_Ellipse:        nShapeElement = XML_oval;      break;
         case ESCHER_ShpInst_Arc:            nShapeElement = XML_arc;       break;
         case ESCHER_ShpInst_Line:           nShapeElement = XML_line;      break;
+        case ESCHER_ShpInst_HostControl:
+        {
+            // We don't have a shape definition for host control in presetShapeDefinitions.xml
+            // So use a definition copied from DOCX file created with MSO
+            bReferToShapeType = true;
+            nShapeElement = XML_shape;
+            if ( !m_pShapeTypeWritten[ m_nShapeType ] )
+            {
+                OStringBuffer sShapeType;
+                sShapeType.append("<v:shapetype id=\"shapetype_").append(OString::number(m_nShapeType)).
+                    append("\" coordsize=\"21600,21600\" o:spt=\"").append(OString::number(m_nShapeType)).
+                    append("\" path=\"m,l,21600l21600,21600l21600,xe\">\n").
+                    append("<v:stroke joinstyle=\"miter\"/>\n"
+                        "<v:path shadowok=\"f\" o:extrusionok=\"f\" strokeok=\"f\" fillok=\"f\" o:connecttype=\"rect\"/>\n"
+                        "<o:lock v:ext=\"edit\" shapetype=\"t\"/>\n"
+                        "</v:shapetype>");
+                m_pSerializer->write(sShapeType.makeStringAndClear().getStr());
+                m_pShapeTypeWritten[ m_nShapeType ] = true;
+            }
+            break;
+        }
+        case ESCHER_ShpInst_PictureFrame:
+        {
+            // We don't have a shape definition for picture frame in presetShapeDefinitions.xml
+            // So use a definition copied from DOCX file created with MSO
+            bReferToShapeType = true;
+            nShapeElement = XML_shape;
+            if ( !m_pShapeTypeWritten[ m_nShapeType ] )
+            {
+                OStringBuffer sShapeType;
+                sShapeType.append("<v:shapetype id=\"shapetype_").append(OString::number(m_nShapeType)).
+                    append("\" coordsize=\"21600,21600\" o:spt=\"").append(OString::number(m_nShapeType)).
+                    append("\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">\n").
+                    append("<v:stroke joinstyle=\"miter\"/>\n"
+                        "<v:formulas>\n"
+                            "<v:f eqn=\"if lineDrawn pixelLineWidth 0\"/>\n"
+                            "<v:f eqn=\"sum @0 1 0\"/>\n"
+                            "<v:f eqn=\"sum 0 0 @1\"/>\n"
+                            "<v:f eqn=\"prod @2 1 2\"/>\n"
+                            "<v:f eqn=\"prod @3 21600 pixelWidth\"/>\n"
+                            "<v:f eqn=\"prod @3 21600 pixelHeight\"/>\n"
+                            "<v:f eqn=\"sum @0 0 1\"/>\n"
+                            "<v:f eqn=\"prod @6 1 2\"/>\n"
+                            "<v:f eqn=\"prod @7 21600 pixelWidth\"/>\n"
+                            "<v:f eqn=\"sum @8 21600 0\"/>\n"
+                            "<v:f eqn=\"prod @7 21600 pixelHeight\"/>\n"
+                            "<v:f eqn=\"sum @10 21600 0\"/>\n"
+                        "</v:formulas>\n"
+                        "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>\n"
+                        "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>\n"
+                        "</v:shapetype>");
+                m_pSerializer->write(sShapeType.makeStringAndClear().getStr());
+                m_pShapeTypeWritten[ m_nShapeType ] = true;
+            }
+            break;
+        }
         default:
             if ( m_nShapeType < ESCHER_ShpInst_COUNT )
             {
@@ -1212,7 +1279,10 @@ sal_Int32 VMLExport::StartShape()
 
     if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) && bReferToShapeType )
     {
-        m_pShapeAttrList->add( XML_type, OStringBuffer( 20 )
+        OStringBuffer sTypeBuffer( 20 );
+        if (m_bUseHashMarkForType)
+            sTypeBuffer.append("#");
+        m_pShapeAttrList->add( XML_type, sTypeBuffer
                 .append( "shapetype_" ).append( sal_Int32( m_nShapeType ) )
                 .makeStringAndClear() );
     }
@@ -1285,7 +1355,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-void VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft, const bool bOOxmlExport )
+OString VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft, const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
@@ -1294,6 +1364,15 @@ void VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 
     m_eVRel = eVRel;
     m_pNdTopLeft = pNdTopLeft;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
+    return m_sShapeId;
+}
+
+OString VMLExport::AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport )
+{
+    m_pSdrObject = &rObj;
+    m_bInline = true;
+    EscherEx::AddSdrObject(rObj, bOOxmlExport);
+    return m_sShapeId;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
