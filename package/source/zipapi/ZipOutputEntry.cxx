@@ -25,7 +25,6 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <comphelper/storagehelper.hxx>
 
-#include <osl/time.h>
 #include <osl/diagnose.h>
 
 #include <PackageConstants.hxx>

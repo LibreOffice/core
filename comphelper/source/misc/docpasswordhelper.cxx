@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include <osl/time.h>
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>

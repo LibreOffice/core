@@ -30,7 +30,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
-#include <osl/time.h>
 #include <rtl/digest.h>
 #include "ContentInfo.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>

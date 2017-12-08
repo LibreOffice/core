@@ -31,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <osl/time.h>
 #include <osl/diagnose.h>
 #include <comphelper/base64.hxx>
 

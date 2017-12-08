@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <osl/time.h>
-
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
