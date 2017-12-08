@@ -43,3 +43,4 @@ cp $SRC/xml.dict $OUT/fodsfuzzer.dict
 cp $SRC/xml.dict $OUT/fodpfuzzer.dict
 cp $SRC/xml.dict $OUT/fodgfuzzer.dict
 cp $SRC/xml.dict $OUT/mmlfuzzer.dict
+cp $SRC/html_tags.dict $OUT/htmlfuzzer.dict
