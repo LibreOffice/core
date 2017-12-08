@@ -174,10 +174,8 @@ public:
         return nullptr;
     }
 
-    // Get Which-value of the item at position nPos
     sal_uInt16                  GetWhichByPos(sal_uInt16 nPos) const;
 
-    // Get item-status
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
                                                 bool bSrchInParent = true,
                                                 const SfxPoolItem **ppItem = nullptr ) const;
