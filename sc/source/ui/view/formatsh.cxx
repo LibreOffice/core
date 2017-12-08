@@ -2512,6 +2512,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
     ScDocument* pDoc                = pViewData->GetDocument();
     short nType                     = GetCurrentNumberFormatType();
     const SfxItemSet& rAttrSet      = pTabViewShell->GetSelectionPattern()->GetItemSet();
+    const SfxItemState eItemState   = rAttrSet.GetItemState( ATTR_VALUE_FORMAT );
     sal_uInt32 nNumberFormat        = rAttrSet.Get(ATTR_VALUE_FORMAT).GetValue();
     SvNumberFormatter* pFormatter   = pDoc->GetFormatTable();
     NfIndexTableOffset nOffset      = pFormatter->GetIndexTableOffset(nNumberFormat);
@@ -2525,7 +2526,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
         {
             case SID_NUMBER_THOUSANDS:
                 {
-                    bool bEnable = (SfxItemState::DONTCARE != rAttrSet.GetItemState( ATTR_VALUE_FORMAT ));
+                    bool bEnable = (SfxItemState::DONTCARE != eItemState);
                     if (bEnable)
                     {
                         bEnable = ((nType != css::util::NumberFormat::ALL) && (nType &
@@ -2552,7 +2553,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
             case SID_NUMBER_FORMAT:
                 // symphony version with format interpretation
                 {
-                    if(SfxItemState::DONTCARE != rAttrSet.GetItemState(ATTR_VALUE_FORMAT))
+                    if(SfxItemState::DONTCARE != eItemState)
                     {
                         bool bThousand(false);
                         bool bNegRed(false);
@@ -2596,7 +2597,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
             case SID_NUMBER_TYPE_FORMAT:
                 {
                     sal_Int16 aFormatCode = -1;
-                    if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) >= SfxItemState::DEFAULT ) //Modify for more robust
+                    if ( eItemState >= SfxItemState::DEFAULT ) //Modify for more robust
                     {
                         const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
                         bool bStandard = false;
