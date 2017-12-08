@@ -27,7 +27,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <typelib/typedescription.hxx>
 #include <unordered_map>
 #include "share.hxx"

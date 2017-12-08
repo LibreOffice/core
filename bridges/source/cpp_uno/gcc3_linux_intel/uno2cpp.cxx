@@ -21,13 +21,13 @@
 #include <sal/alloca.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
 
-#include "bridge.hxx"
-#include "types.hxx"
-#include "unointerfaceproxy.hxx"
-#include "vtables.hxx"
+#include <bridge.hxx>
+#include <types.hxx>
+#include <unointerfaceproxy.hxx>
+#include <vtables.hxx>
 
 #include "callvirtualmethod.hxx"
 #include "share.hxx"

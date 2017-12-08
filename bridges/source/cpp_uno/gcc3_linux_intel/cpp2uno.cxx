@@ -19,15 +19,15 @@
 
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/log.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 
-#include "bridge.hxx"
-#include "cppinterfaceproxy.hxx"
-#include "types.hxx"
-#include "vtablefactory.hxx"
+#include <bridge.hxx>
+#include <cppinterfaceproxy.hxx>
+#include <types.hxx>
+#include <vtablefactory.hxx>
 
 #include "call.hxx"
 #include "share.hxx"
