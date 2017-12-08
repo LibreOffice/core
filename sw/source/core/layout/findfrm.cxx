@@ -1303,8 +1303,14 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
                   _pLayoutFrame->IsInDocBody() ||
                   _pLayoutFrame->IsInFootnote() )
         {
+            // If IsMovable() is called before a MoveFwd() the method
+            // may return false if there is no NextCellLeaf. If
+            // IsMovable() is called before a MoveBwd() the method may
+            // return false if there is no PrevCellLeaf.
             if ( _pLayoutFrame->IsInTab() && !IsTabFrame() &&
-                 ( !IsContentFrame() || !const_cast<SwFrame*>(this)->GetNextCellLeaf() ) )
+                 ( !IsContentFrame() || (!const_cast<SwFrame*>(this)->GetNextCellLeaf()
+                                      && !const_cast<SwFrame*>(this)->GetPrevCellLeaf()) )
+                )
             {
                 bRetVal = false;
             }
