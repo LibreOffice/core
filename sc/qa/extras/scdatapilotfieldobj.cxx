@@ -8,8 +8,10 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-#include <test/sheet/xdatapilotfieldgrouping.hxx>
+
 #include <test/sheet/datapilotfield.hxx>
+#include <test/sheet/xdatapilotfield.hxx>
+#include <test/sheet/xdatapilotfieldgrouping.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -22,10 +24,11 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 6
+#define NUMBER_OF_TESTS 7
 
-class ScDataPilotFieldObj : public CalcUnoApiTest, public apitest::XDataPilotFieldGrouping,
-                                public apitest::DataPilotField
+class ScDataPilotFieldObj : public CalcUnoApiTest, public apitest::DataPilotField,
+                                                   public apitest::XDataPilotField,
+                                                   public apitest::XDataPilotFieldGrouping
 {
 public:
     virtual void setUp() override;
@@ -35,15 +38,24 @@ public:
     ScDataPilotFieldObj();
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldObj);
+
+    // DataPilotField
     CPPUNIT_TEST(testSortInfo);
     CPPUNIT_TEST(testLayoutInfo);
     CPPUNIT_TEST(testAutoShowInfo);
     CPPUNIT_TEST(testReference);
     CPPUNIT_TEST(testIsGroupField);
+
+    // XDataPilotField
+    CPPUNIT_TEST(testGetItems);
+
+    // XDataPilotFieldGrouping
     CPPUNIT_TEST(testCreateNameGroup);
     // see fdo#
     //CPPUNIT_TEST(testCreateDateGroup);
+
     CPPUNIT_TEST_SUITE_END();
+
 private:
     static sal_Int32 nTest;
     static uno::Reference< lang::XComponent > mxComponent;
