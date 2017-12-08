@@ -199,7 +199,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 new TableRowBuffer(m_aTableBufferStack.back(), m_aNestedTableCellsSprms,
                                    m_aNestedTableCellsAttributes, m_nNestedCells));
             prepareProperties(m_aStates.top(), pBuffer->pParaProperties, pBuffer->pFrameProperties,
-                              pBuffer->pRowProperties, m_nNestedCells, m_nNestedCurrentCellX);
+                              pBuffer->pRowProperties, m_nNestedCells,
+                              m_nNestedCurrentCellX - m_nNestedTRLeft);
 
             if (m_aTableBufferStack.size() == 1 || !m_aStates.top().pCurrentBuffer)
             {
@@ -309,7 +310,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             writerfilter::Reference<Properties>::Pointer_t frameProperties;
             writerfilter::Reference<Properties>::Pointer_t rowProperties;
             prepareProperties(m_aStates.top(), paraProperties, frameProperties, rowProperties,
-                              m_nTopLevelCells, m_nTopLevelCurrentCellX);
+                              m_nTopLevelCells, m_nTopLevelCurrentCellX - m_nTopLevelTRLeft);
             sendProperties(paraProperties, frameProperties, rowProperties);
 
             m_bNeedPap = true;
