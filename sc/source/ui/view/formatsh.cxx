@@ -2604,7 +2604,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 
             case SID_NUMBER_TYPE_FORMAT:
                 {
-                    sal_Int16 aFormatCode = -1;
+                    sal_Int16 nFormatCategory = -1;
                     if ( eItemState >= SfxItemState::DEFAULT ) //Modify for more robust
                     {
                         switch(nType)
@@ -2612,43 +2612,43 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         case css::util::NumberFormat::NUMBER:
                             // Determine if General format.
                             if ((nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
-                                aFormatCode = 0;
+                                nFormatCategory = 0;
                             else
-                                aFormatCode = 1;
+                                nFormatCategory = 1;
                             break;
                         case css::util::NumberFormat::PERCENT:
-                            aFormatCode = 2;
+                            nFormatCategory = 2;
                             break;
                         case css::util::NumberFormat::CURRENCY:
-                            aFormatCode = 3;
+                            nFormatCategory = 3;
                             break;
                         case css::util::NumberFormat::DATE:
                             //Add
                         case css::util::NumberFormat::DATETIME:
-                            aFormatCode = 4;
+                            nFormatCategory = 4;
                             break;
                         case css::util::NumberFormat::TIME:
-                            aFormatCode = 5;
+                            nFormatCategory = 5;
                             break;
                         case css::util::NumberFormat::SCIENTIFIC:
-                            aFormatCode = 6;
+                            nFormatCategory = 6;
                             break;
                         case css::util::NumberFormat::FRACTION:
-                            aFormatCode = 7;
+                            nFormatCategory = 7;
                             break;
                         case css::util::NumberFormat::LOGICAL:
-                            aFormatCode = 8;
+                            nFormatCategory = 8;
                             break;
                         case css::util::NumberFormat::TEXT:
-                            aFormatCode = 9;
+                            nFormatCategory = 9;
                             break;
                         default:
-                            aFormatCode = -1;   //for more robust
+                            nFormatCategory = -1;   //for more robust
                         }
-                        if( aFormatCode == -1 )
+                        if( nFormatCategory == -1 )
                             rSet.InvalidateItem( nWhich );
                         else
-                            rSet.Put( SfxInt16Item( nWhich, aFormatCode ) );
+                            rSet.Put( SfxInt16Item( nWhich, nFormatCategory ) );
                     }
                     else
                     {
