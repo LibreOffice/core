@@ -78,39 +78,25 @@ public:
 SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
                                           SwHTMLTableLayout* pTab,
                                           bool bNoBrTag,
-                                          SwHTMLTableLayoutCnts* pNxt ) :
-    pNext( pNxt ), pBox( nullptr ), pTable( pTab ), pStartNode( pSttNd ),
+                                          std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt ) :
+    xNext( rNxt ), pBox( nullptr ), xTable( pTab ), pStartNode( pSttNd ),
     nPass1Done( 0 ), nWidthSet( 0 ), bNoBreakTag( bNoBrTag )
 {}
-
-SwHTMLTableLayoutCnts::~SwHTMLTableLayoutCnts()
-{
-    delete pNext;
-    delete pTable;
-}
 
 const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
 {
     return pBox ? pBox->GetSttNd() : pStartNode;
 }
 
-SwHTMLTableLayoutCell::SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
+SwHTMLTableLayoutCell::SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts,
                                           sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                                           sal_uInt16 nWidth, bool bPrcWidth,
                                           bool bNWrapOpt ) :
-    pContents( pCnts ),
+    xContents(rCnts),
     nRowSpan( nRSpan ), nColSpan( nCSpan ),
     nWidthOption( nWidth ), bPrcWidthOption( bPrcWidth ),
     bNoWrapOption( bNWrapOpt )
 {}
-
-SwHTMLTableLayoutCell::~SwHTMLTableLayoutCell()
-{
-    if( nRowSpan==1 && nColSpan==1 )
-    {
-        delete pContents;
-    }
-}
 
 SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
                                                   bool bRelWidth,
@@ -471,7 +457,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
         for( sal_uInt16 j=0; j<m_nRows; j++ )
         {
             SwHTMLTableLayoutCell *pCell = GetCell(j,i);
-            SwHTMLTableLayoutCnts *pCnts = pCell->GetContents();
+            SwHTMLTableLayoutCnts *pCnts = pCell->GetContents().get();
 
             // We need to examine all rows in order to
             // get the column that should be calculated next.
@@ -589,7 +575,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                             nAbsMinTableCell = nAbsMinTableCnts;
                     }
                     pCnts->SetPass1Done( m_nPass1Done );
-                    pCnts = pCnts->GetNext();
+                    pCnts = pCnts->GetNext().get();
                 }
 
 // This code previously came after AddBorderWidth
@@ -1598,7 +1584,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
         {
             SwHTMLTableLayoutCell *pCell = GetCell( i, j );
 
-            SwHTMLTableLayoutCnts* pContents = pCell->GetContents();
+            SwHTMLTableLayoutCnts* pContents = pCell->GetContents().get();
             while( pContents && !pContents->IsWidthSet(m_nWidthSet) )
             {
                 SwTableBox *pBox = pContents->GetTableBox();
@@ -1624,7 +1610,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
                 }
 
                 pContents->SetWidthSet( m_nWidthSet );
-                pContents = pContents->GetNext();
+                pContents = pContents->GetNext().get();
             }
         }
     }

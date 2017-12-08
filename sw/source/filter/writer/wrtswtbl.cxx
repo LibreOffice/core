@@ -817,13 +817,13 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
                 pLayoutInfo->GetCell( nRow, nCol );
 
             const SwHTMLTableLayoutCnts *pLayoutCnts =
-                pLayoutCell->GetContents();
+                pLayoutCell->GetContents().get();
 
             // The cell begins actually a row above or further forward?
             if( ( nRow>0 && pLayoutCnts == pLayoutInfo->GetCell(nRow-1,nCol)
-                                                      ->GetContents() ) ||
+                                                      ->GetContents().get() ) ||
                 ( nCol>0 && pLayoutCnts == pLayoutInfo->GetCell(nRow,nCol-1)
-                                                      ->GetContents() ) )
+                                                      ->GetContents().get() ) )
             {
                 continue;
             }

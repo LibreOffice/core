@@ -167,7 +167,7 @@ class HTMLTableCnts
     const SwStartNode *m_pStartNode;      // a paragraph
     HTMLTable *m_pTable;                  // a table
 
-    SwHTMLTableLayoutCnts* m_pLayoutInfo;
+    std::shared_ptr<SwHTMLTableLayoutCnts> m_xLayoutInfo;
 
     bool m_bNoBreak;
 
@@ -196,7 +196,7 @@ public:
 
     void SetNoBreak() { m_bNoBreak = true; }
 
-    SwHTMLTableLayoutCnts *CreateLayoutInfo();
+    const std::shared_ptr<SwHTMLTableLayoutCnts>& CreateLayoutInfo();
 };
 
 // Cell of a HTML table
@@ -616,8 +616,7 @@ public:
 void HTMLTableCnts::InitCtor()
 {
     m_pNext = nullptr;
-    m_pLayoutInfo = nullptr;
-
+    m_xLayoutInfo.reset();
     m_bNoBreak = false;
 }
 
@@ -651,23 +650,24 @@ void HTMLTableCnts::Add( HTMLTableCnts* pNewCnts )
 
 inline void HTMLTableCnts::SetTableBox( SwTableBox *pBox )
 {
-    OSL_ENSURE( m_pLayoutInfo, "There is no layout info" );
-    if( m_pLayoutInfo )
-        m_pLayoutInfo->SetTableBox( pBox );
+    OSL_ENSURE(m_xLayoutInfo.get(), "There is no layout info");
+    if (m_xLayoutInfo)
+        m_xLayoutInfo->SetTableBox(pBox);
 }
 
-SwHTMLTableLayoutCnts *HTMLTableCnts::CreateLayoutInfo()
+const std::shared_ptr<SwHTMLTableLayoutCnts>& HTMLTableCnts::CreateLayoutInfo()
 {
-    if( !m_pLayoutInfo )
+    if (!m_xLayoutInfo)
     {
-        SwHTMLTableLayoutCnts *pNextInfo = m_pNext ? m_pNext->CreateLayoutInfo() : nullptr;
+        std::shared_ptr<SwHTMLTableLayoutCnts> xNextInfo;
+        if (m_pNext)
+            xNextInfo = m_pNext->CreateLayoutInfo();
         SwHTMLTableLayout *pTableInfo = m_pTable ? m_pTable->CreateLayoutInfo() : nullptr;
 
-        m_pLayoutInfo = new SwHTMLTableLayoutCnts( m_pStartNode, pTableInfo,
-                                                 m_bNoBreak, pNextInfo );
+        m_xLayoutInfo.reset(new SwHTMLTableLayoutCnts(m_pStartNode, pTableInfo, m_bNoBreak, xNextInfo));
     }
 
-    return m_pLayoutInfo;
+    return m_xLayoutInfo;
 }
 
 HTMLTableCell::HTMLTableCell():
@@ -744,10 +744,11 @@ inline bool HTMLTableCell::GetValue( double& rValue ) const
 
 std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
 {
-    SwHTMLTableLayoutCnts *pCntInfo = m_xContents ? m_xContents->CreateLayoutInfo() : nullptr;
-
-    return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell( pCntInfo, nRowSpan, nColSpan, nWidth,
-                                      bRelWidth, bNoWrap ));
+    std::shared_ptr<SwHTMLTableLayoutCnts> xCntInfo;
+    if (m_xContents)
+        xCntInfo = m_xContents->CreateLayoutInfo();
+    return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell(xCntInfo, nRowSpan, nColSpan, nWidth,
+                                      bRelWidth, bNoWrap));
 }
 
 HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
@@ -1097,11 +1098,10 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
 
             if( bExportable )
             {
-                SwHTMLTableLayoutCnts *pLayoutCnts =
+                const std::shared_ptr<SwHTMLTableLayoutCnts>& rLayoutCnts =
                     pLayoutCell->GetContents();
-                bExportable = !pLayoutCnts ||
-                              ( pLayoutCnts->GetStartNode() &&
-                                !pLayoutCnts->GetNext() );
+                bExportable = !rLayoutCnts ||
+                              (rLayoutCnts->GetStartNode() && !rLayoutCnts->GetNext());
             }
         }
     }
@@ -1625,12 +1625,12 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                             GetPrevBoxStartNode( nTopRow, nStartCol );
                         std::shared_ptr<HTMLTableCnts> xCnts(new HTMLTableCnts(
                             m_pParser->InsertTableSection(pPrevStartNd)));
-                        SwHTMLTableLayoutCnts *pCntsLayoutInfo =
+                        const std::shared_ptr<SwHTMLTableLayoutCnts> xCntsLayoutInfo =
                             xCnts->CreateLayoutInfo();
 
                         pCell2->SetContents(xCnts);
                         SwHTMLTableLayoutCell *pCurrCell = m_pLayoutInfo->GetCell( nTopRow, nStartCol );
-                        pCurrCell->SetContents( pCntsLayoutInfo );
+                        pCurrCell->SetContents(xCntsLayoutInfo);
                         if( nBoxRowSpan < 0 )
                             pCurrCell->SetRowSpan( 0 );
 
@@ -1639,7 +1639,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                         {
                             GetCell(nTopRow,j)->SetContents(xCnts);
                             m_pLayoutInfo->GetCell( nTopRow, j )
-                                       ->SetContents( pCntsLayoutInfo );
+                                       ->SetContents(xCntsLayoutInfo);
                         }
                     }
 
