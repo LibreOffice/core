@@ -85,9 +85,19 @@ ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
     mnProgress(0) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
-    orcus::spreadsheet::sheet_t /*sheet_index*/, const char* sheet_name, size_t sheet_name_length)
+    orcus::spreadsheet::sheet_t sheet_index, const char* sheet_name, size_t sheet_name_length)
 {
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
+
+    if (sheet_index == 0)
+    {
+        // The calc document initializes with one sheet already present.
+        assert(maDoc.getSheetCount() == 1);
+        maDoc.setSheetName(0, aTabName);
+        maSheets.push_back(o3tl::make_unique<ScOrcusSheet>(maDoc, 0, *this));
+        return maSheets.back().get();
+    }
+
     if (!maDoc.appendSheet(aTabName))
         return nullptr;
 
