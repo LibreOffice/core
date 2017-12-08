@@ -547,8 +547,11 @@ SwLayNotify::~SwLayNotify()
     if ( bPos && pLay->Lower() && !IsLowersComplete() )
     {
         pLay->Lower()->InvalidatePos();
-        if(pLay->Lower()->IsFootnoteFrame())
-            static_cast<SwFootnoteFrame*>(pLay->Lower())->Lower()->InvalidatePos();
+        SwFootnoteFrame* pFtnFrame = pLay->Lower()->IsFootnoteFrame() ?
+            static_cast<SwFootnoteFrame*>(pLay->Lower()) : nullptr;
+        SwFrame* pFtnLower = pFtnFrame ? pFtnFrame->Lower() : nullptr;
+        if (pFtnLower)
+            pFtnLower->InvalidatePos();
     }
 
     if ( bPrtPos )
