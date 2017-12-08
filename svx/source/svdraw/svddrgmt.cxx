@@ -418,7 +418,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 {
     const size_t nMarkCount(getSdrDragView().GetMarkedObjectCount());
-    bool bNoPolygons(getSdrDragView().IsNoDragXorPolys() || nMarkCount > getSdrDragView().GetDragXorPolyLimit());
+    bool bNoPolygons(getSdrDragView().IsNoDragXorPolys() || nMarkCount > SdrDragView::GetDragXorPolyLimit());
     basegfx::B2DPolyPolygon aResult;
     sal_uInt32 nPointCount(0);
 
@@ -435,7 +435,7 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
                 nPointCount += aNewPolyPolygon.getB2DPolygon(b).count();
             }
 
-            if(nPointCount > getSdrDragView().GetDragXorPointLimit())
+            if(nPointCount > SdrDragView::GetDragXorPointLimit())
             {
                 bNoPolygons = true;
             }
