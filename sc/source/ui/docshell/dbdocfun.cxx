@@ -96,7 +96,6 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
 
     if (!bOk)
     {
-        delete pNew;
         delete pUndoColl;
         return false;
     }
