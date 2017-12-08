@@ -762,7 +762,15 @@ SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::e
         return SotClipboardFormatId::NONE;
 
     OUString aMediaType;
-    xProps->getPropertyValue("MediaType") >>= aMediaType;
+    try
+    {
+        xProps->getPropertyValue("MediaType") >>= aMediaType;
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_INFO("sot", "SotStorage::GetFormatID: exception: " << e);
+    }
+
     if ( !aMediaType.isEmpty() )
     {
         css::datatransfer::DataFlavor aDataFlavor;
