@@ -2510,11 +2510,17 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScDocument* pDoc                = pViewData->GetDocument();
-    short nType                     = GetCurrentNumberFormatType();
     const SfxItemSet& rAttrSet      = pTabViewShell->GetSelectionPattern()->GetItemSet();
     const SfxItemState eItemState   = rAttrSet.GetItemState( ATTR_VALUE_FORMAT );
     sal_uInt32 nNumberFormat        = rAttrSet.Get(ATTR_VALUE_FORMAT).GetValue();
     SvNumberFormatter* pFormatter   = pDoc->GetFormatTable();
+                                      // If item state is default or set it
+                                      // indicates one number format so we
+                                      // don't have to iterate over all
+                                      // selected cells' attribute ranges to
+                                      // determine selected types.
+    const short nType               = (eItemState >= SfxItemState::DEFAULT ? pFormatter->GetType( nNumberFormat) :
+                                       GetCurrentNumberFormatType());
     NfIndexTableOffset nOffset      = pFormatter->GetIndexTableOffset(nNumberFormat);
 
     SfxWhichIter aIter(rSet);
