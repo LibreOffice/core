@@ -370,6 +370,17 @@ Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
     if (structurallyIdentical(argument1, argument2)) {
         return IdenticalDefaultArgumentsResult::Yes;
     }
+    if (isDebugMode()) {
+        report(
+            DiagnosticsEngine::Fatal, "TODO: Unexpected 'IdenticalDefaultArgumentsResult::Maybe'",
+            argument1->getExprLoc())
+            << argument1->getSourceRange();
+        report(
+            DiagnosticsEngine::Note, "TODO: second argument is here", argument2->getExprLoc())
+            << argument2->getSourceRange();
+        argument1->dump();
+        argument2->dump();
+    }
     return IdenticalDefaultArgumentsResult::Maybe;
 }
 

@@ -316,6 +316,9 @@ ifneq ($(UPDATE_FILES),)
 gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --scope=$(UPDATE_FILES)
 endif
 endif
+ifeq ($(COMPILER_PLUGINS_DEBUG),TRUE)
+gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --debug
+endif
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
     -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
 else

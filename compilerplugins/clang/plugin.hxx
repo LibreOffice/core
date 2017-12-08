@@ -78,6 +78,8 @@ protected:
     bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
     bool isInUnoIncludeFile(const FunctionDecl*) const;
 
+    bool isDebugMode() const { return handler.isDebugMode(); }
+
     static bool isUnitTestMode();
 
     bool containsPreprocessingConditionalInclusion(SourceRange range);

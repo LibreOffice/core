@@ -113,6 +113,8 @@ void PluginHandler::handleOption( const std::string& option )
         warningsAsErrors = true;
     else if( option == "unit-test-mode" )
         unitTestMode = true;
+    else if (option == "debug")
+        debugMode = true;
     else
         report( DiagnosticsEngine::Fatal, "unknown option %0" ) << option;
 }
