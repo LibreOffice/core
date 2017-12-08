@@ -70,7 +70,7 @@ cppu::ImplementationEntry entries[] = {
 };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL rptxml_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * rptxml_component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)
 {
     return cppu::component_getFactoryHelper(

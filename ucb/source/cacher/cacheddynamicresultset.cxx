@@ -195,7 +195,7 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
 XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetFactory,
                          OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 CachedDynamicResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =

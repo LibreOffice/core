@@ -207,7 +207,7 @@ void X11SalInstance::AfterAppInit()
     pSalDisplay->SetupInput();
 }
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
 {

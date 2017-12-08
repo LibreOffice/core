@@ -113,7 +113,7 @@ OUString SEInitializer_NssImpl_getImplementationName ()
     return OUString ("com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl" );
 }
 
-uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
+uno::Sequence< OUString > SEInitializer_NssImpl_getSupportedServiceNames(  )
 {
     uno::Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -122,7 +122,7 @@ uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceName
     return aRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SEInitializer_NssImpl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
+uno::Reference< uno::XInterface > SEInitializer_NssImpl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
 {
     return static_cast<cppu::OWeakObject*>(new SEInitializer_NssImpl(comphelper::getComponentContext(rxMSF)));
 }

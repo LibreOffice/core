@@ -58,12 +58,12 @@ typedef struct {
 
 namespace i18npool {
 
-OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
+OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
 
-OUString SAL_CALL getCyrillicNativeNumberString(const OUString& aNumberString);
+OUString getCyrillicNativeNumberString(const OUString& aNumberString);
 
 /// @throws RuntimeException
-OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, sal_Int16 number )
 {
     const sal_Unicode *src = inStr.getStr() + startPos;
@@ -91,7 +91,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
+bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
         sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 startPos,
  const Number *number, const sal_Unicode* numberChar)
 {
@@ -163,7 +163,7 @@ bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin,
 }
 
 /// @throws RuntimeException
-OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, const Number* number )
 {
     OUString aRet;
@@ -250,7 +250,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
     }
     return aRet;
 }
-static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode *str,
+static void NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode *str,
         sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >& offset, bool useOffset,
         OUString& numberChar, OUString& multiplierChar)
 {
@@ -300,7 +300,7 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
 }
 
 /// @throws RuntimeException
-static OUString SAL_CALL NativeToAscii(const OUString& inStr,
+static OUString NativeToAscii(const OUString& inStr,
         sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     OUString aRet;
@@ -511,7 +511,7 @@ static const sal_Int16 natnum2[] = {
 };
 static const sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 
-static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
+static sal_Int16 getLanguageNumber( const Locale& rLocale)
 {
     // return zh_TW for TW, HK and MO, return zh_CN for other zh locales.
     if (rLocale.Language == "zh") return MsLangId::isTraditionalChinese(rLocale) ? 1 : 0;
@@ -881,7 +881,7 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool
     }
 }
 
-OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh)
+OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh)
 {
     sal_Int64 value = 0;
     sal_Int32 i, count = 0, len = aNumberString.getLength();
@@ -1000,7 +1000,7 @@ void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool addTitlo)
     }
 }
 
-OUString SAL_CALL getCyrillicNativeNumberString(const OUString& aNumberString)
+OUString getCyrillicNativeNumberString(const OUString& aNumberString)
 {
     sal_Int64 value = 0;
     sal_Int32 i, count = 0, len = aNumberString.getLength();
@@ -1054,7 +1054,7 @@ NativeNumberSupplierService::getSupportedServiceNames()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_NativeNumberSupplier_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

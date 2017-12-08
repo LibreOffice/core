@@ -95,7 +95,7 @@ namespace emfio
             return OUString( "emfio::emfreader::XEmfParser" );
         }
 
-        uno::Reference< uno::XInterface > SAL_CALL XEmfParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
+        uno::Reference< uno::XInterface > XEmfParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
         {
             return static_cast< ::cppu::OWeakObject* >(new XEmfParser(context));
         }

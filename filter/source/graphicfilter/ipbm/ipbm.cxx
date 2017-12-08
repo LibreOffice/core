@@ -535,7 +535,7 @@ bool PBMReader::ImplReadBody()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 ipbGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PBMReader aPBMReader(rStream);

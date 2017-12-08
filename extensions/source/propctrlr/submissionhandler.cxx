@@ -35,7 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler()
+extern "C" void createRegistryInfo_SubmissionPropertyHandler()
 {
     ::pcr::SubmissionPropertyHandler::registerImplementation();
 }

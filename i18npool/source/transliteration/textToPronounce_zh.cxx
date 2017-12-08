@@ -154,7 +154,7 @@ TextToChuyin_zh_TW::TextToChuyin_zh_TW() :
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
 {

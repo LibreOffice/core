@@ -27,7 +27,7 @@ namespace cppunittester
 {
     // The type of CppUnit::Protector factory functions that can be plugged into
     // cppunittester:
-    extern "C" typedef CppUnit::Protector * SAL_CALL ProtectorFactory();
+    extern "C" typedef CppUnit::Protector * ProtectorFactory();
 }
 
 #ifdef DISABLE_DYNLOADING

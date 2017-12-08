@@ -62,7 +62,7 @@ MasterScriptProviderFactory::getActiveMSPList() const
     return m_MSPList;
 }
 
-Sequence< OUString > SAL_CALL mspf_getSupportedServiceNames( )
+Sequence< OUString > mspf_getSupportedServiceNames( )
 {
     OUString str_name(
         "com.sun.star.script.provider.MasterScriptProviderFactory");
@@ -70,13 +70,13 @@ Sequence< OUString > SAL_CALL mspf_getSupportedServiceNames( )
     return Sequence< OUString >( &str_name, 1 );
 }
 
-OUString SAL_CALL mspf_getImplementationName( )
+OUString mspf_getImplementationName( )
 {
     return OUString(
         "com.sun.star.script.provider.MasterScriptProviderFactory");
 }
 
-Reference< XInterface > SAL_CALL
+Reference< XInterface >
 mspf_create( Reference< XComponentContext > const & xComponentContext )
 {
     return static_cast< ::cppu::OWeakObject * >(

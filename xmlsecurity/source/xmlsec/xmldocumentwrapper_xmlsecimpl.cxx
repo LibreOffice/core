@@ -898,13 +898,13 @@ OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-cssu::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  )
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.wrapper.XMLDocumentWrapper" };
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
+cssu::Reference< cssu::XInterface > XMLDocumentWrapper_XmlSecImpl_createInstance(
     const cssu::Reference< cssu::XComponentContext > &)
 {
     return static_cast<cppu::OWeakObject*>(new XMLDocumentWrapper_XmlSecImpl( ));

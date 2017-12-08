@@ -59,7 +59,7 @@ std::shared_ptr<FactoryMap> const & GetFactoryMap()
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * sd_component_getFactory(
     const sal_Char * pImplName,
     void           * pServiceManager,
     void           *  )

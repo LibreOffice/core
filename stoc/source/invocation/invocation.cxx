@@ -1114,7 +1114,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
 }
 
 /// @throws RuntimeException
-Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
+Reference<XInterface> InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
 {
     Reference<XInterface> xService( *new InvocationService( xCtx ) );
     return xService;
@@ -1133,7 +1133,7 @@ static const struct ImplementationEntry g_entries[] =
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL invocation_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * invocation_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );

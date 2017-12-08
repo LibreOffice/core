@@ -134,7 +134,7 @@ OUString SignatureVerifierImpl_getImplementationName ()
     return OUString( IMPLEMENTATION_NAME );
 }
 
-cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  )
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureVerifier" };
     return aRet;

@@ -30,7 +30,7 @@
 #define TEXTTYPE_RICHTEXT       2
 
 
-extern "C" void SAL_CALL createRegistryInfo_EditPropertyHandler()
+extern "C" void createRegistryInfo_EditPropertyHandler()
 {
     ::pcr::EditPropertyHandler::registerImplementation();
 }

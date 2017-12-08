@@ -771,7 +771,7 @@ UpdateInformationProvider::supportsService( OUString const & serviceName )
 } // anonymous namespace
 
 
-static uno::Reference<uno::XInterface> SAL_CALL
+static uno::Reference<uno::XInterface>
 createInstance(uno::Reference<uno::XComponentContext> const & xContext)
 {
     return UpdateInformationProvider::createInstance(xContext);
@@ -792,7 +792,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL updatefeed_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * updatefeed_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pszImplementationName,

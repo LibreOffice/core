@@ -3151,7 +3151,7 @@ static CSS1PropEntry aCSS1PropFnTab[] =
 
 extern "C"
 {
-static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
+static int CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
 {
     int nRet;
     if( static_cast<const CSS1PropEntry*>(pFirst)->pFunc )

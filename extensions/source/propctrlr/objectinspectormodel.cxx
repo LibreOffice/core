@@ -220,7 +220,7 @@ namespace pcr
 } // namespace pcr
 
 
-extern "C" void SAL_CALL createRegistryInfo_ObjectInspectorModel()
+extern "C" void createRegistryInfo_ObjectInspectorModel()
 {
     ::pcr::OAutoRegistration< ::pcr::ObjectInspectorModel > aObjectInspectorModelRegistration;
 }

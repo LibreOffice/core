@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 #define IMPL_NAME    "com.sun.star.comp.media.Manager_VLC"
 #define SERVICE_NAME "com.sun.star.comp.avmedia.Manager_VLC"
 
-static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
+static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
 {
     SAL_INFO("avmedia", "create VLC Media player !");
 
@@ -42,7 +42,7 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
     return manager;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* avmediavlc_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = nullptr;

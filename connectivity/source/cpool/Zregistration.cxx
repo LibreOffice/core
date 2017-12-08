@@ -31,7 +31,7 @@ extern "C"
 {
 
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbpool2_component_getFactory(const sal_Char* _pImplName, void * _pServiceManager, void* /*_pRegistryKey*/)
+SAL_DLLPUBLIC_EXPORT void* dbpool2_component_getFactory(const sal_Char* _pImplName, void * _pServiceManager, void* /*_pRegistryKey*/)
 {
     void* pRet = nullptr;
 

@@ -1557,7 +1557,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT bool
 itiGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     TIFFReader aTIFFReader;

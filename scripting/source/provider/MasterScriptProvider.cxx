@@ -708,7 +708,7 @@ Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
 namespace scripting_runtimemgr
 {
 
-Reference< XInterface > SAL_CALL sp_create(
+Reference< XInterface > sp_create(
     const Reference< XComponentContext > & xCompC )
 {
     return static_cast<cppu::OWeakObject *>(new ::func_provider::MasterScriptProvider( xCompC ));
@@ -733,7 +733,7 @@ OUString sp_getImplementationName( )
 }
 
 // ***** registration or ScriptingFrameworkURIHelper
-Reference< XInterface > SAL_CALL urihelper_create(
+Reference< XInterface > urihelper_create(
     const Reference< XComponentContext > & xCompC )
 {
     return static_cast<cppu::OWeakObject *>(
@@ -801,7 +801,7 @@ extern "C"
      *                        data
      * @return a component factory
      */
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL scriptframe_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * scriptframe_component_getFactory(
         const sal_Char * pImplName,
         void * pServiceManager,
         void * pRegistryKey )

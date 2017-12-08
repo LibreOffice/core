@@ -1696,7 +1696,7 @@ namespace osl_Thread
 } // namespace osl_Thread
 
 // destroy function when the binding thread terminate
-void SAL_CALL destroyCallback(void * data)
+void destroyCallback(void * data)
 {
     delete[] static_cast<char *>(data);
 }

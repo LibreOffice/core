@@ -722,7 +722,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
 
 }; // namespace end
 
-Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
+Reference< XInterface > FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
 {
     return Reference < XInterface >( static_cast<cppu::OWeakObject *>(new OFileAccess( comphelper::getComponentContext(xSMgr) )) );
 }

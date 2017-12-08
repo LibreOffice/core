@@ -197,12 +197,12 @@ struct uno_Mediate_Mapping : public uno_Mapping
 extern "C"
 {
 
-static void SAL_CALL mediate_free( uno_Mapping * pMapping )
+static void mediate_free( uno_Mapping * pMapping )
 {
     delete static_cast< uno_Mediate_Mapping * >( pMapping );
 }
 
-static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
+static void mediate_acquire( uno_Mapping * pMapping )
 {
     if (1 == osl_atomic_increment(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
@@ -215,7 +215,7 @@ static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
     }
 }
 
-static void SAL_CALL mediate_release( uno_Mapping * pMapping )
+static void mediate_release( uno_Mapping * pMapping )
 {
     if (! osl_atomic_decrement(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
@@ -224,7 +224,7 @@ static void SAL_CALL mediate_release( uno_Mapping * pMapping )
     }
 }
 
-static void SAL_CALL mediate_mapInterface(
+static void mediate_mapInterface(
     uno_Mapping * pMapping,
     void ** ppOut, void * pInterface,
     typelib_InterfaceTypeDescription * pInterfaceTypeDescr )

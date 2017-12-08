@@ -1759,7 +1759,7 @@ Reference< xml::input::XElement > DialogImport::getStyle(
     return nullptr;
 }
 
-Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
+Reference< xml::sax::XDocumentHandler > importDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< XComponentContext > const & xContext,
     Reference< XModel > const & xDocument )

@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <o3tl/functional.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_GenericPropertyHandler()
+extern "C" void createRegistryInfo_GenericPropertyHandler()
 {
     ::pcr::OAutoRegistration< ::pcr::GenericPropertyHandler > aAutoRegistration;
 }

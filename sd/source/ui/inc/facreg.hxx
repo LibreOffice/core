@@ -28,17 +28,17 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
+css::uno::Reference< css::uno::XInterface > SdDrawingDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
 /// @throws css::uno::RuntimeException
-OUString SAL_CALL SdDrawingDocument_getImplementationName();
+OUString SdDrawingDocument_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames();
+css::uno::Sequence< OUString >SdDrawingDocument_getSupportedServiceNames();
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL SdPresentationDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
+css::uno::Reference< css::uno::XInterface > SdPresentationDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
 /// @throws css::uno::RuntimeException
-OUString SAL_CALL SdPresentationDocument_getImplementationName();
+OUString SdPresentationDocument_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames();
+css::uno::Sequence< OUString > SdPresentationDocument_getSupportedServiceNames();
 
 #endif
 

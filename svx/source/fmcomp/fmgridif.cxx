@@ -327,7 +327,7 @@ void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _even
 //= FmXGridControl
 
 
-Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference< XMultiServiceFactory>& _rxFactory)
+Reference< XInterface > FmXGridControl_NewInstance_Impl(const Reference< XMultiServiceFactory>& _rxFactory)
 {
     return *(new FmXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }

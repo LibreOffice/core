@@ -43,7 +43,7 @@ TextConversion_zh::TextConversion_zh( const Reference < XComponentContext >& xCo
     xCDL = ConversionDictionaryList::create(xContext);
 }
 
-sal_Unicode SAL_CALL getOneCharConversion(sal_Unicode ch, const sal_Unicode* Data, const sal_uInt16* Index)
+sal_Unicode getOneCharConversion(sal_Unicode ch, const sal_Unicode* Data, const sal_uInt16* Index)
 {
     if (Data && Index) {
         sal_Unicode address = Index[ch>>8];

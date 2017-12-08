@@ -21,7 +21,7 @@
 #error "don't include this file directly! use dbu_reghelper.hxx instead!"
 #endif
 
-typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
+typedef css::uno::Reference< css::lang::XSingleServiceFactory > (*FactoryInstantiation)
         (
             const css::uno::Reference< css::lang::XMultiServiceFactory >& _rServiceManager,
             const OUString & _rComponentName,

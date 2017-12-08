@@ -952,7 +952,7 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 
 } // namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

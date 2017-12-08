@@ -629,7 +629,7 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
 // Namespace global methods for setting up BrowseNodeFactory service
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 bnf_getSupportedServiceNames( )
 {
     OUString str_name(
@@ -638,14 +638,14 @@ bnf_getSupportedServiceNames( )
     return Sequence< OUString >( &str_name, 1 );
 }
 
-OUString SAL_CALL
+OUString
 bnf_getImplementationName( )
 {
     return OUString(
         "com.sun.star.script.browse.BrowseNodeFactory" );
 }
 
-Reference< XInterface > SAL_CALL
+Reference< XInterface >
 bnf_create( Reference< XComponentContext > const & xComponentContext )
 {
     return static_cast< ::cppu::OWeakObject * >(

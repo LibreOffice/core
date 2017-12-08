@@ -34,7 +34,7 @@ namespace uno { class XInterface; }
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.ucb.SimpleFileAccess"
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL FileAccess_CreateInstance(
+css::uno::Reference<css::uno::XInterface> FileAccess_CreateInstance(
 css::uno::Reference<css::lang::XMultiServiceFactory> const & xSMgr);
 
 css::uno::Sequence<OUString> FileAccess_getSupportedServiceNames();

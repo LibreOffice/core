@@ -35,7 +35,7 @@
 #include <functional>
 
 
-extern "C" void SAL_CALL createRegistryInfo_EFormsPropertyHandler()
+extern "C" void createRegistryInfo_EFormsPropertyHandler()
 {
     ::pcr::EFormsPropertyHandler::registerImplementation();
 }

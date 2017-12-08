@@ -275,7 +275,7 @@ Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface*
 com_sun_star_comp_sd_DisplayModeController_get_implementation( css::uno::XComponentContext* context,
                                                                css::uno::Sequence<css::uno::Any> const &)
 {

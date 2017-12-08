@@ -204,7 +204,7 @@ css::uno::Sequence< OUString > serviceGetSupportedServiceNames()
     return css::uno::Sequence< OUString > { "com.sun.star.java.JavaVirtualMachine" };
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL serviceCreateInstance(
+css::uno::Reference< css::uno::XInterface > serviceCreateInstance(
     css::uno::Reference< css::uno::XComponentContext > const & rContext)
 {
     // Only one single instance of this service is ever constructed, and is
@@ -587,7 +587,7 @@ private:
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL javavm_component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * javavm_component_getFactory(sal_Char const * pImplName,
                                                 void * pServiceManager,
                                                 void * pRegistryKey)
 {

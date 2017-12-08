@@ -410,7 +410,7 @@ Sequence< OUString > ODataInputStream::getSupportedServiceNames()
 *
 ****/
 
-Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance(
+Reference< XInterface > ODataInputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
 {
     ODataInputStream *p = new ODataInputStream;
@@ -726,7 +726,7 @@ Sequence< OUString > ODataOutputStream::getSupportedServiceNames()
     return ODataOutputStream_getSupportedServiceNames();
 }
 
-Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance(
+Reference< XInterface > ODataOutputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
 {
     ODataOutputStream *p = new ODataOutputStream;
@@ -976,7 +976,7 @@ sal_Int32 OObjectOutputStream::offsetToMark(sal_Int32 nMark)
 }
 
 
-Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance(
+Reference< XInterface > OObjectOutputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
 {
     OObjectOutputStream *p = new OObjectOutputStream;
@@ -1259,7 +1259,7 @@ Sequence< OUString > OObjectInputStream::getSupportedServiceNames()
     return OObjectInputStream_getSupportedServiceNames();
 }
 
-Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference < XComponentContext > & rCtx )
+Reference< XInterface > OObjectInputStream_CreateInstance( const Reference < XComponentContext > & rCtx )
 {
     OObjectInputStream *p = new OObjectInputStream( rCtx );
     return Reference< XInterface> ( static_cast< OWeakObject * >(p) );

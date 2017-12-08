@@ -152,8 +152,8 @@ namespace dlgprov
 namespace comp_DialogModelProvider {
 
 // component and service helper functions:
-OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
+OUString _getImplementationName();
+css::uno::Sequence< OUString > _getSupportedServiceNames();
 
 } // namespace comp_DialogModelProvider
 

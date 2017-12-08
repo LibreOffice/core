@@ -69,7 +69,7 @@
 #include <algorithm>
 #include <functional>
 
-extern "C" void SAL_CALL createRegistryInfo_OTableControl()
+extern "C" void createRegistryInfo_OTableControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OTableController > aAutoRegistration;
 }

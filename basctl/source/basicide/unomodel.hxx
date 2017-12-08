@@ -60,7 +60,7 @@ public:
 };
 
 /// @throws com::sun::star::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL SIDEModel_createInstance(
+css::uno::Reference< css::uno::XInterface > SIDEModel_createInstance(
                 const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
 } // namespace basctl

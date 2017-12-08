@@ -125,7 +125,7 @@
 
 #include <functional>
 
-extern "C" void SAL_CALL createRegistryInfo_ODBApplication()
+extern "C" void createRegistryInfo_ODBApplication()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OApplicationController > aAutoRegistration;
 }

@@ -540,7 +540,7 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
 }
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
+Reference< XInterface > SpellChecker_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
 
@@ -666,7 +666,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL spell_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * spell_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;

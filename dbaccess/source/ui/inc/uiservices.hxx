@@ -26,30 +26,30 @@
 
 extern "C" {
 
-void SAL_CALL createRegistryInfo_ComposerDialogs();
-void SAL_CALL createRegistryInfo_CopyTableWizard();
-void SAL_CALL createRegistryInfo_DBContentLoader();
-void SAL_CALL createRegistryInfo_LimitBoxController();
-void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
-void SAL_CALL createRegistryInfo_OBrowser();
-void SAL_CALL createRegistryInfo_OColumnControl();
-void SAL_CALL createRegistryInfo_OColumnControlModel();
-void SAL_CALL createRegistryInfo_ODBApplication();
-void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
-void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup();
-void SAL_CALL createRegistryInfo_ODataSourcePropertyDialog();
-void SAL_CALL createRegistryInfo_ODirectSQLDialog();
-void SAL_CALL createRegistryInfo_OFormGridView();
-void SAL_CALL createRegistryInfo_OInteractionHandler();
-void SAL_CALL createRegistryInfo_OQueryControl();
-void SAL_CALL createRegistryInfo_ORelationControl();
-void SAL_CALL createRegistryInfo_OSQLMessageDialog();
-void SAL_CALL createRegistryInfo_OTableControl();
-void SAL_CALL createRegistryInfo_OTableFilterDialog();
-void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog();
-void SAL_CALL createRegistryInfo_OUserSettingsDialog();
-void SAL_CALL createRegistryInfo_OViewControl();
-void SAL_CALL createRegistryInfo_SbaXGridControl();
+void createRegistryInfo_ComposerDialogs();
+void createRegistryInfo_CopyTableWizard();
+void createRegistryInfo_DBContentLoader();
+void createRegistryInfo_LimitBoxController();
+void createRegistryInfo_OAdvancedSettingsDialog();
+void createRegistryInfo_OBrowser();
+void createRegistryInfo_OColumnControl();
+void createRegistryInfo_OColumnControlModel();
+void createRegistryInfo_ODBApplication();
+void createRegistryInfo_ODBTypeWizDialog();
+void createRegistryInfo_ODBTypeWizDialogSetup();
+void createRegistryInfo_ODataSourcePropertyDialog();
+void createRegistryInfo_ODirectSQLDialog();
+void createRegistryInfo_OFormGridView();
+void createRegistryInfo_OInteractionHandler();
+void createRegistryInfo_OQueryControl();
+void createRegistryInfo_ORelationControl();
+void createRegistryInfo_OSQLMessageDialog();
+void createRegistryInfo_OTableControl();
+void createRegistryInfo_OTableFilterDialog();
+void createRegistryInfo_OTextConnectionSettingsDialog();
+void createRegistryInfo_OUserSettingsDialog();
+void createRegistryInfo_OViewControl();
+void createRegistryInfo_SbaXGridControl();
 
 }
 

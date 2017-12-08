@@ -162,7 +162,7 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
 extern "C"
 {
 
-static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
+static int HTMLKeyCompare( const void *pFirst, const void *pSecond)
 {
     HTML_TokenEntry const * pFirstEntry = static_cast<HTML_TokenEntry const *>(pFirst);
     HTML_TokenEntry const * pSecondEntry = static_cast<HTML_TokenEntry const *>(pSecond);
@@ -499,7 +499,7 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
 extern "C"
 {
 
-static int SAL_CALL HTMLCharNameCompare( const void *pFirst, const void *pSecond)
+static int HTMLCharNameCompare( const void *pFirst, const void *pSecond)
 {
     HTML_CharEntry const * pFirstEntry = static_cast<HTML_CharEntry const *>(pFirst);
     HTML_CharEntry const * pSecondEntry = static_cast<HTML_CharEntry const *>(pSecond);
@@ -908,7 +908,7 @@ static HTML_ColorEntry aHTMLColorNameTab[] = {
 extern "C"
 {
 
-static int SAL_CALL HTMLColorNameCompare( const void *pFirst, const void *pSecond)
+static int HTMLColorNameCompare( const void *pFirst, const void *pSecond)
 {
     HTML_ColorEntry const * pFirstEntry = static_cast<HTML_ColorEntry const *>(pFirst);
     HTML_ColorEntry const * pSecondEntry = static_cast<HTML_ColorEntry const *>(pSecond);

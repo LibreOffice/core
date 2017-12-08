@@ -82,7 +82,7 @@ public:
 };
 
 
-static Reference<XInterface> SAL_CALL NamingService_Impl_create(
+static Reference<XInterface> NamingService_Impl_create(
     SAL_UNUSED_PARAMETER const Reference<XComponentContext> & )
 {
     return *new NamingService_Impl();
@@ -147,7 +147,7 @@ static const struct ImplementationEntry g_entries[] =
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL namingservice_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * namingservice_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );

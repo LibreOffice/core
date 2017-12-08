@@ -34,12 +34,12 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace xmlscript {
 
-css::uno::Sequence<OUString> SAL_CALL
+css::uno::Sequence<OUString>
 getSupportedServiceNames_DocumentHandlerImpl();
 
-OUString SAL_CALL getImplementationName_DocumentHandlerImpl();
+OUString getImplementationName_DocumentHandlerImpl();
 
-css::uno::Reference<css::uno::XInterface> SAL_CALL create_DocumentHandlerImpl(
+css::uno::Reference<css::uno::XInterface> create_DocumentHandlerImpl(
     css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 }

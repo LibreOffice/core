@@ -29,7 +29,7 @@ const comphelper::service_decl::ServiceDecl graphicExportFilter(
     "com.sun.star.document.ExportFilter" );
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL graphicfilter_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* graphicfilter_component_getFactory(
     sal_Char const* pImplementationName, void*, void*)
 {
     if ( rtl_str_compare (pImplementationName, GRAPHIC_EXPORT_FILTER_SERVICE) == 0 )

@@ -115,7 +115,7 @@ css::uno::Sequence< OUString > SAL_CALL FTPContentProvider::getSupportedServiceN
 }
 
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 FTPContentProvider_CreateInstance( const css::uno::Reference<
                                    css::lang::XMultiServiceFactory> & rSMgr )
 {

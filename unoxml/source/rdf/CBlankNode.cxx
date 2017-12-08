@@ -112,17 +112,17 @@ OUString SAL_CALL CBlankNode::getStringValue()
 // component helper namespace
 namespace comp_CBlankNode {
 
-OUString SAL_CALL _getImplementationName() {
+OUString _getImplementationName() {
     return OUString( "CBlankNode");
 }
 
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+css::uno::Sequence< OUString > _getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > s { "com.sun.star.rdf.BlankNode" };
     return s;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
+css::uno::Reference< css::uno::XInterface > _create(
     const css::uno::Reference< css::uno::XComponentContext > & )
 {
     return static_cast< ::cppu::OWeakObject * >(new CBlankNode);

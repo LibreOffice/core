@@ -66,13 +66,13 @@ OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.wrapper.XMLElementWrapper" };
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL
+cssu::Reference< cssu::XInterface >
     XMLElementWrapper_XmlSecImpl_createInstance(
         const cssu::Reference< cssu::XComponentContext > &)
 {

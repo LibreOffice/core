@@ -64,7 +64,7 @@ namespace svt
         <em>once</em>. The caller is responsible for holding this reference as long as it needs the
         factory, and release it afterwards.
     */
-    typedef void* (SAL_CALL * GetSvtAccessibilityComponentFactory)( );
+    typedef void* (* GetSvtAccessibilityComponentFactory)( );
 
 
     //= IAccessibleFactory

@@ -352,7 +352,7 @@ Sequence< OUString > OPipeImpl::getSupportedServiceNames()
 */
 
 
-Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
+Reference < XInterface > OPipeImpl_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
 {
     OPipeImpl *p = new OPipeImpl;

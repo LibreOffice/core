@@ -156,7 +156,7 @@ css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupport
     return aSeq;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 NamedPropertyValuesContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

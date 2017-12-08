@@ -53,12 +53,12 @@
 
 namespace {
 
-OUString SAL_CALL getDefaultImplementationName() {
+OUString getDefaultImplementationName() {
     return OUString(
             "com.sun.star.comp.configuration.backend.DesktopBackend");
 }
 
-css::uno::Sequence< OUString > SAL_CALL getDefaultSupportedServiceNames() {
+css::uno::Sequence< OUString > getDefaultSupportedServiceNames() {
     OUString name(
             "com.sun.star.configuration.backend.DesktopBackend");
     return css::uno::Sequence< OUString >(&name, 1);
@@ -287,7 +287,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
     }
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
+css::uno::Reference< css::uno::XInterface > createInstance(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     OUString desktop;
@@ -321,7 +321,7 @@ static cppu::ImplementationEntry const services[] = {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL desktopbe1_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * desktopbe1_component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper(

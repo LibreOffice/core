@@ -25,7 +25,7 @@
 #include "pcrcommon.hxx"
 #include "pcrservices.hxx"
 
-extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog()
+extern "C" void createRegistryInfo_OControlFontDialog()
 {
     ::pcr::OAutoRegistration< ::pcr::OControlFontDialog > aAutoRegistration;
 }

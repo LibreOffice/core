@@ -142,7 +142,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 } } // end of namespace sd::sidebar
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(css::uno::XComponentContext* /*context*/,
                                                                    css::uno::Sequence<css::uno::Any> const &)
 {

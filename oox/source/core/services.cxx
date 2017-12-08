@@ -49,7 +49,7 @@ static ::cppu::ImplementationEntry const spServices[] =
 
 } // namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL oox_component_getFactory( const char* pImplName, void* pServiceManager, void* pRegistryKey )
+extern "C" SAL_DLLPUBLIC_EXPORT void* oox_component_getFactory( const char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, spServices );
 }

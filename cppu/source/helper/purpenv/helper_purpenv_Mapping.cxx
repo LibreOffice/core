@@ -55,7 +55,7 @@ public:
     void release();
 };
 
-static void SAL_CALL s_mapInterface(
+static void s_mapInterface(
     uno_Mapping                       * puno_Mapping,
     void                             ** ppOut,
     void                              * pUnoI,
@@ -69,14 +69,14 @@ static void SAL_CALL s_mapInterface(
 }
 
 extern "C" {
-static void SAL_CALL s_acquire(uno_Mapping * puno_Mapping)
+static void s_acquire(uno_Mapping * puno_Mapping)
     SAL_THROW_EXTERN_C()
 {
     Mapping * pMapping = static_cast<Mapping *>(puno_Mapping);
     pMapping->acquire();
 }
 
-static void SAL_CALL s_release(uno_Mapping * puno_Mapping)
+static void s_release(uno_Mapping * puno_Mapping)
     SAL_THROW_EXTERN_C()
 {
     Mapping * pMapping = static_cast<Mapping * >(puno_Mapping);
@@ -93,7 +93,7 @@ static void s_getIdentifier_v(va_list * pParam)
     pEnv->getObjectIdentifier(pEnv, ppOid, pUnoI);
 }
 
-static void SAL_CALL s_free(uno_Mapping * puno_Mapping)
+static void s_free(uno_Mapping * puno_Mapping)
     SAL_THROW_EXTERN_C()
 {
     Mapping * pMapping = static_cast<Mapping *>(puno_Mapping);

@@ -43,7 +43,7 @@
 
 using namespace css;
 
-extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOCX()
+extern "C" SAL_DLLPUBLIC_EXPORT Reader* ImportDOCX()
 {
     return new SwDOCXReader;
 }

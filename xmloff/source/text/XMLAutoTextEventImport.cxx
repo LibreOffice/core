@@ -103,7 +103,7 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateDocumentContext(
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
     XMLAutoTextEventImport_getSupportedServiceNames()
         throw()
 {
@@ -111,12 +111,12 @@ Sequence< OUString > SAL_CALL
     return aSeq;
 }
 
-OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw()
+OUString XMLAutoTextEventImport_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" );
 }
 
-Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
+Reference< XInterface > XMLAutoTextEventImport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new XMLAutoTextEventImport( comphelper::getComponentContext(rSMgr) ));

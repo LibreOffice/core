@@ -334,7 +334,7 @@ static Mutex & getInitMutex()
 }
 
 /// @throws Exception
-css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx)
+css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx)
 {
     css::uno::Reference<XInterface> xRet;
 
@@ -380,7 +380,7 @@ static const struct ImplementationEntry g_entries[] =
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL javaloader_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * javaloader_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );

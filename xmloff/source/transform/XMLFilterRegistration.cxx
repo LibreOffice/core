@@ -31,9 +31,9 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    typedef OUString (SAL_CALL * GetImplementationName)();
-    typedef uno::Sequence< OUString > (SAL_CALL * GetSupportedServiceNames)();
-    typedef uno::Reference< ::uno::XInterface > (SAL_CALL * CreateInstance)(
+    typedef OUString (* GetImplementationName)();
+    typedef uno::Sequence< OUString > (* GetSupportedServiceNames)();
+    typedef uno::Reference< ::uno::XInterface > (* CreateInstance)(
         const uno::Reference< lang::XMultiServiceFactory >& );
 
     struct ServiceDescriptor
@@ -86,7 +86,7 @@ namespace
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL xof_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* xof_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
     if( pServiceManager )

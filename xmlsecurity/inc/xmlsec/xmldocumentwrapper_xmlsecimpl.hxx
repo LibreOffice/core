@@ -215,12 +215,12 @@ public:
 OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString >
     XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
-SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
+XMLDocumentWrapper_XmlSecImpl_createInstance(
     const css::uno::Reference< css::uno::XComponentContext > &);
 
 #endif

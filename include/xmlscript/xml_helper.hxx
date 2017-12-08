@@ -105,15 +105,15 @@ private:
 ##################################################################################################*/
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
-SAL_CALL createInputStream(
+createInputStream(
     std::vector<sal_Int8> const & rInData );
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
-SAL_CALL createInputStream(
+createInputStream(
     const sal_Int8* pData, int len );
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XOutputStream >
-SAL_CALL createOutputStream(
+createOutputStream(
     std::vector<sal_Int8> * pOutData );
 
 }

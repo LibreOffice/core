@@ -451,7 +451,7 @@ Reference< XAccessible > AccessibleFactory::createEditBrowseBoxTableCellAccess(
 */
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL getStandardAccessibleFactory()
+    SAL_DLLPUBLIC_EXPORT void* getStandardAccessibleFactory()
     {
         ::toolkit::IAccessibleFactory* pFactory = new AccessibleFactory;
         pFactory->acquire();
@@ -467,7 +467,7 @@ extern "C"
 */
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL getSvtAccessibilityComponentFactory()
+    SAL_DLLPUBLIC_EXPORT void* getSvtAccessibilityComponentFactory()
     {
         ::svt::IAccessibleFactory* pFactory = new AccessibleFactory;
         pFactory->acquire();

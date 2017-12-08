@@ -39,19 +39,19 @@ extern "C"
 {
 
 
-void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
+void UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     SAL_THROW_EXTERN_C();
 
 
-void SAL_CALL UNO_proxy_acquire( uno_Interface * pUnoI )
+void UNO_proxy_acquire( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C();
 
 
-void SAL_CALL UNO_proxy_release( uno_Interface * pUnoI )
+void UNO_proxy_release( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C();
 
 
-void SAL_CALL UNO_proxy_dispatch(
+void UNO_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
     void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
     SAL_THROW_EXTERN_C();
@@ -502,7 +502,7 @@ extern "C"
 {
 
 
-void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
+void UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     SAL_THROW_EXTERN_C()
 {
     UNO_proxy * that = static_cast< UNO_proxy * >( proxy );
@@ -540,7 +540,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
 }
 
 
-void SAL_CALL UNO_proxy_acquire( uno_Interface * pUnoI )
+void UNO_proxy_acquire( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C()
 {
     UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
@@ -548,7 +548,7 @@ void SAL_CALL UNO_proxy_acquire( uno_Interface * pUnoI )
 }
 
 
-void SAL_CALL UNO_proxy_release( uno_Interface * pUnoI )
+void UNO_proxy_release( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C()
 {
     UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
@@ -556,7 +556,7 @@ void SAL_CALL UNO_proxy_release( uno_Interface * pUnoI )
 }
 
 
-void SAL_CALL UNO_proxy_dispatch(
+void UNO_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
     void * uno_ret, void * uno_args [], uno_Any ** uno_exc )
     SAL_THROW_EXTERN_C()

@@ -49,7 +49,7 @@ OUString SAL_CALL ODriver::getImplementationName(  )
 // service names from file::OFileDriver
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
     connectivity::calc::ODriver_CreateInstance(const css::uno::Reference<
         css::lang::XMultiServiceFactory >& _rxFactory)
 {

@@ -152,7 +152,7 @@ private:
 typedef tools::SvRef<ScRangePairList> ScRangePairListRef;
 
 extern "C"
-int SAL_CALL ScRangePairList_QsortNameCompare( const void*, const void* );
+int ScRangePairList_QsortNameCompare( const void*, const void* );
 
 #endif
 

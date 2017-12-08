@@ -382,7 +382,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
 }   // namespace xmlscript
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_xmlscript_XMLBasicExporter(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
@@ -390,7 +390,7 @@ com_sun_star_comp_xmlscript_XMLBasicExporter(
     return cppu::acquire(new xmlscript::XMLBasicExporter());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_xmlscript_XMLOasisBasicExporter(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

@@ -725,8 +725,8 @@ Reader* GetDOCXReader()
 #endif
 }
 
-typedef sal_uInt32 ( SAL_CALL *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
-typedef sal_uInt32 ( SAL_CALL *GetSaveWarning )( SfxObjectShell& );
+typedef sal_uInt32 ( *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
+typedef sal_uInt32 ( *GetSaveWarning )( SfxObjectShell& );
 
 ErrCode SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, bool bSaveInto, const OUString& rStorageName )
 {

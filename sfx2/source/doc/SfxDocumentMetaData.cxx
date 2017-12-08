@@ -420,7 +420,7 @@ bool isValidDateTime(const css::util::DateTime & i_rDateTime)
     return i_rDateTime.Month > 0;
 }
 
-std::pair< OUString, OUString > SAL_CALL
+std::pair< OUString, OUString >
 getQualifier(const char* i_name) {
     OUString nm = OUString::createFromAscii(i_name);
     sal_Int32 ix = nm.indexOf(u':');
@@ -433,7 +433,7 @@ getQualifier(const char* i_name) {
 
 // get namespace for standard qualified names
 // NB: only call this with statically known strings!
-OUString SAL_CALL getNameSpace(const char* i_qname) throw ()
+OUString getNameSpace(const char* i_qname) throw ()
 {
     assert(i_qname);
     const char * ns = "";
@@ -446,7 +446,7 @@ OUString SAL_CALL getNameSpace(const char* i_qname) throw ()
     return OUString::createFromAscii(ns);
 }
 
-bool SAL_CALL
+bool
 textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
         bool & o_rIsDateTime, boost::optional<sal_Int16> & o_rTimeZone,
         const OUString& i_text) throw ()
@@ -461,7 +461,7 @@ textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
 }
 
 // convert string to date/time
-bool SAL_CALL
+bool
 textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
 {
     if (::sax::Converter::parseDateTime(io_rdt, i_text)) {
@@ -473,7 +473,7 @@ textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
 }
 
 // convert string to date/time with default return value
-css::util::DateTime SAL_CALL
+css::util::DateTime
 textToDateTimeDefault(const OUString& i_text) throw ()
 {
     css::util::DateTime dt;
@@ -483,7 +483,7 @@ textToDateTimeDefault(const OUString& i_text) throw ()
 }
 
 // convert date to string
-OUString SAL_CALL
+OUString
 dateToText(css::util::Date const& i_rd,
            sal_Int16 const*const pTimeZone) throw ()
 {
@@ -498,7 +498,7 @@ dateToText(css::util::Date const& i_rd,
 
 
 // convert date/time to string
-OUString SAL_CALL
+OUString
 dateTimeToText(css::util::DateTime const& i_rdt,
                sal_Int16 const*const pTimeZone = nullptr) throw ()
 {
@@ -546,7 +546,7 @@ OUString durationToText(css::util::Duration const& i_rDur) throw ()
 }
 
 // convert duration to string
-OUString SAL_CALL durationToText(sal_Int32 i_value) throw ()
+OUString durationToText(sal_Int32 i_value) throw ()
 {
     css::util::Duration ud;
     ud.Days    = static_cast<sal_Int16>(i_value / (24 * 3600));
@@ -597,7 +597,7 @@ SfxDocumentMetaData::getURLProperties(
 // return the text of the (hopefully unique, i.e., normalize first!) text
 // node _below_ the given node
 /// @throws css::uno::RuntimeException
-OUString SAL_CALL
+OUString
 getNodeText(const css::uno::Reference<css::xml::dom::XNode>& i_xNode)
 {
     if (!i_xNode.is())
@@ -816,7 +816,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
 }
 
 // convert property list to string list and attribute list
-std::pair<css::uno::Sequence< OUString>, AttrVector> SAL_CALL
+std::pair<css::uno::Sequence< OUString>, AttrVector>
 propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 {
     ::std::vector< OUString > values;
@@ -2130,7 +2130,7 @@ void SfxDocumentMetaData::createUserDefined()
 
 } // closing anonymous implementation namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 CompatWriterDocPropsImpl_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -2138,7 +2138,7 @@ CompatWriterDocPropsImpl_get_implementation(
     return cppu::acquire(new CompatWriterDocPropsImpl(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 SfxDocumentMetaData_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)

@@ -85,7 +85,7 @@ public:
 OUString SignatureVerifierImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNames(  );
+css::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  );
 
 #endif
 

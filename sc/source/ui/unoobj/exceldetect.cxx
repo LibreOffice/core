@@ -192,7 +192,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
     return aType;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation(css::uno::XComponentContext* /*context*/,
                                                                   css::uno::Sequence<css::uno::Any> const &)
 {

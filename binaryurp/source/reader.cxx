@@ -78,7 +78,7 @@ css::uno::Sequence< sal_Int8 > read(
     return buf;
 }
 
-extern "C" void SAL_CALL request(void * pThreadSpecificData) {
+extern "C" void request(void * pThreadSpecificData) {
     assert(pThreadSpecificData != nullptr);
     std::unique_ptr< IncomingRequest >(
         static_cast< IncomingRequest * >(pThreadSpecificData))->

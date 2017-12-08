@@ -22,7 +22,7 @@
 
 using namespace com::sun::star;
 
-typedef uno::Reference< lang::XSingleServiceFactory > (SAL_CALL* createFactoryFunc)
+typedef uno::Reference< lang::XSingleServiceFactory > (* createFactoryFunc)
 (
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
     const OUString& rComponentName,
@@ -74,7 +74,7 @@ struct ProviderRequest
 };
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL connectivity_writer_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* connectivity_writer_component_getFactory(
     const sal_Char* pImplementationName,
     void* pServiceManager,
     void* /*pRegistryKey*/)

@@ -22,16 +22,16 @@
 
 #include <sal/config.h>
 
-OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw();
-css::uno::Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() throw();
+OUString OOo2OasisTransformer_getImplementationName() throw();
+css::uno::Sequence< OUString > OOo2OasisTransformer_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
+css::uno::Reference< css::uno::XInterface > OOo2OasisTransformer_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
-OUString SAL_CALL Oasis2OOoTransformer_getImplementationName() throw();
-css::uno::Sequence< OUString > SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames() throw();
+OUString Oasis2OOoTransformer_getImplementationName() throw();
+css::uno::Sequence< OUString > Oasis2OOoTransformer_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
+css::uno::Reference< css::uno::XInterface > Oasis2OOoTransformer_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
 OUString SAL_CALL XMLAutoTextEventImportOOO_getImplementationName() throw();

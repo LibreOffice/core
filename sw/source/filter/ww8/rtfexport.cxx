@@ -1437,8 +1437,8 @@ ErrCode SwRTFWriter::WriteStream()
     return ERRCODE_NONE;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF(const OUString& rFltName,
-                                                        const OUString& rBaseURL, WriterRef& xRet)
+extern "C" SAL_DLLPUBLIC_EXPORT void ExportRTF(const OUString& rFltName, const OUString& rBaseURL,
+                                               WriterRef& xRet)
 {
     xRet = new SwRTFWriter(rFltName, rBaseURL);
 }

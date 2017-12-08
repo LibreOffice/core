@@ -37,9 +37,9 @@ namespace migration
 {
 
 
-    OUString SAL_CALL BasicMigration_getImplementationName();
-    css::uno::Sequence< OUString > SAL_CALL BasicMigration_getSupportedServiceNames();
-    css::uno::Reference< css::uno::XInterface > SAL_CALL BasicMigration_create(
+    OUString BasicMigration_getImplementationName();
+    css::uno::Sequence< OUString > BasicMigration_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > BasicMigration_create(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 

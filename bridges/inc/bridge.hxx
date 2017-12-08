@@ -33,20 +33,20 @@
 namespace bridges { namespace cpp_uno { namespace shared {
 
 // private:
-extern "C" void SAL_CALL freeMapping(uno_Mapping *);
+extern "C" void freeMapping(uno_Mapping *);
 
 // private:
-extern "C" void SAL_CALL acquireMapping(uno_Mapping *);
+extern "C" void acquireMapping(uno_Mapping *);
 
 // private:
-extern "C" void SAL_CALL releaseMapping(uno_Mapping *);
+extern "C" void releaseMapping(uno_Mapping *);
 
 // private:
-extern "C" void SAL_CALL cpp2unoMapping(
+extern "C" void cpp2unoMapping(
     uno_Mapping *, void **, void *, typelib_InterfaceTypeDescription *);
 
 // private:
-extern "C" void SAL_CALL uno2cppMapping(
+extern "C" void uno2cppMapping(
     uno_Mapping *, void **, void *, typelib_InterfaceTypeDescription *);
 
 /**
@@ -97,17 +97,17 @@ private:
 
     bool bExportCpp2Uno;
 
-    friend void SAL_CALL freeMapping(uno_Mapping * pMapping);
+    friend void freeMapping(uno_Mapping * pMapping);
 
-    friend void SAL_CALL acquireMapping(uno_Mapping * pMapping);
+    friend void acquireMapping(uno_Mapping * pMapping);
 
-    friend void SAL_CALL releaseMapping(uno_Mapping * pMapping);
+    friend void releaseMapping(uno_Mapping * pMapping);
 
-    friend void SAL_CALL cpp2unoMapping(
+    friend void cpp2unoMapping(
         uno_Mapping * pMapping, void ** ppUnoI, void * pCppI,
         typelib_InterfaceTypeDescription * pTypeDescr);
 
-    friend void SAL_CALL uno2cppMapping(
+    friend void uno2cppMapping(
         uno_Mapping * pMapping, void ** ppCppI, void * pUnoI,
         typelib_InterfaceTypeDescription * pTypeDescr);
 };

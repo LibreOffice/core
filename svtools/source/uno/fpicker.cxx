@@ -99,7 +99,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
     return xResult;
 }
 
-OUString SAL_CALL FilePicker_getImplementationName()
+OUString FilePicker_getImplementationName()
 {
     return OUString("com.sun.star.comp.svt.FilePicker");
 }
@@ -168,7 +168,7 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
     return xResult;
 }
 
-OUString SAL_CALL FolderPicker_getImplementationName()
+OUString FolderPicker_getImplementationName()
 {
     return OUString("com.sun.star.comp.svt.FolderPicker");
 }

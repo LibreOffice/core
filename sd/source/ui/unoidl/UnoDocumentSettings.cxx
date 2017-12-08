@@ -122,7 +122,7 @@ namespace sd
         rtl::Reference<SdXImpressDocument> mxModel;
     };
 
-    Reference< XInterface > SAL_CALL DocumentSettings_createInstance( SdXImpressDocument* pModel )
+    Reference< XInterface > DocumentSettings_createInstance( SdXImpressDocument* pModel )
         throw ()
     {
         DBG_ASSERT( pModel, "I need a model for the DocumentSettings!" );

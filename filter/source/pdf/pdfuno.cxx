@@ -33,7 +33,7 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL pdffilter_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    SAL_DLLPUBLIC_EXPORT void* pdffilter_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );
         void*       pRet = nullptr;

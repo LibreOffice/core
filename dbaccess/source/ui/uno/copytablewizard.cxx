@@ -1549,7 +1549,7 @@ void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
 
 } // namespace dbaui
 
-extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard()
+extern "C" void createRegistryInfo_CopyTableWizard()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::CopyTableWizard > aAutoRegistration;
 }

@@ -325,7 +325,7 @@ OUString XmlFilterAdaptor_getImplementationName ()
     return OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
 }
 
-Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
+Sequence< OUString > XmlFilterAdaptor_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -334,7 +334,7 @@ Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new XmlFilterAdaptor( comphelper::getComponentContext(rSMgr) ));
 }

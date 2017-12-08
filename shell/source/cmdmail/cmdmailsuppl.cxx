@@ -55,7 +55,7 @@ using namespace com::sun::star::configuration;
 
 namespace
 {
-    Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
+    Sequence< OUString > Component_getSupportedServiceNames()
     {
         Sequence< OUString > aRet { "com.sun.star.system.SimpleCommandMail" };
         return aRet;

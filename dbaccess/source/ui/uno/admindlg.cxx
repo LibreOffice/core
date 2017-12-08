@@ -25,7 +25,7 @@
 
 using namespace dbaui;
 
-extern "C" void SAL_CALL createRegistryInfo_ODataSourcePropertyDialog()
+extern "C" void createRegistryInfo_ODataSourcePropertyDialog()
 {
     static OMultiInstanceAutoRegistration< ODataSourcePropertyDialog > aAutoRegistration;
 }

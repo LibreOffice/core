@@ -74,11 +74,11 @@ public:
 OUString SVGDialog_getImplementationName ();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames(  );
+css::uno::Sequence< OUString > SVGDialog_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
-    SAL_CALL SVGDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
+    SVGDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_SVGDIALOG_HXX
 

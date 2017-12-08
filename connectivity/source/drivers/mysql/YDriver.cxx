@@ -42,7 +42,7 @@ namespace connectivity
 
     namespace mysql
     {
-        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac)
+        Reference< XInterface > ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac)
         {
             return *(new ODriverDelegator( comphelper::getComponentContext(_rxFac) ));
         }

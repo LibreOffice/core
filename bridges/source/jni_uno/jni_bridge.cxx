@@ -39,7 +39,7 @@ extern "C"
 {
 
 
-void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
+void Mapping_acquire( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
     Mapping const * that = static_cast< Mapping const * >( mapping );
@@ -47,7 +47,7 @@ void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
 }
 
 
-void SAL_CALL Mapping_release( uno_Mapping * mapping )
+void Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
     Mapping const * that = static_cast< Mapping const * >( mapping );
@@ -55,7 +55,7 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
 }
 
 
-void SAL_CALL Mapping_map_to_uno(
+void Mapping_map_to_uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
     SAL_THROW_EXTERN_C()
@@ -114,7 +114,7 @@ void SAL_CALL Mapping_map_to_uno(
 }
 
 
-void SAL_CALL Mapping_map_to_java(
+void Mapping_map_to_java(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
     SAL_THROW_EXTERN_C()
@@ -177,7 +177,7 @@ void SAL_CALL Mapping_map_to_java(
 }
 
 
-void SAL_CALL Bridge_free( uno_Mapping * mapping )
+void Bridge_free( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
     Mapping * that = static_cast< Mapping * >( mapping );
@@ -421,7 +421,7 @@ using namespace ::jni_uno;
 
 extern "C" {
 
-void SAL_CALL java_env_dispose(uno_Environment * env) {
+void java_env_dispose(uno_Environment * env) {
     auto * envData
         = static_cast<jni_uno::JniUnoEnvironmentData *>(env->pContext);
     if (envData != nullptr) {
@@ -455,7 +455,7 @@ void SAL_CALL java_env_dispose(uno_Environment * env) {
     }
 }
 
-void SAL_CALL java_env_disposing(uno_Environment * env) {
+void java_env_disposing(uno_Environment * env) {
     java_env_dispose(env);
     delete static_cast<jni_uno::JniUnoEnvironmentData *>(env->pContext);
 }
@@ -465,7 +465,7 @@ void SAL_CALL java_env_disposing(uno_Environment * env) {
 #endif
 
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
+SAL_DLLPUBLIC_EXPORT void uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
     try {
@@ -510,7 +510,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
 #endif
 
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {

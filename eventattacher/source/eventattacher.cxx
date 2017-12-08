@@ -275,7 +275,7 @@ EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxCo
 }
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr )
+Reference< XInterface > EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     XEventAttacher *pEventAttacher = static_cast<XEventAttacher*>(new EventAttacherImpl( comphelper::getComponentContext(rSMgr) ));
 
@@ -855,7 +855,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL evtatt_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * evtatt_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = nullptr;

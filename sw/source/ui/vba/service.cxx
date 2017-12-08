@@ -25,7 +25,7 @@
 
 namespace sdecl = comphelper::service_decl;
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaswobj_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * vbaswobj_component_getFactory(
     const sal_Char * pImplName, void *, void *)
 {
     void* pRet = sdecl::component_getFactoryHelper(pImplName,

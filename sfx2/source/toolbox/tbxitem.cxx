@@ -118,7 +118,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
     return nullptr;
 }
 
-svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
+svt::ToolboxController* SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
 {
     SolarMutexGuard aGuard;
 

@@ -96,7 +96,7 @@ static oslMutex        ChildListMutex;
 
 } //Anonymous namespace
 
-oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
+oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
                                                 oslProcessOption Options,
                                                 oslSecurity Security,
@@ -565,7 +565,7 @@ oslProcessError SAL_CALL osl_executeProcess(
         );
 }
 
-oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
+oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
                                                 oslProcessOption Options,
                                                 oslSecurity Security,

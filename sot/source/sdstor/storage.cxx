@@ -849,7 +849,7 @@ namespace
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportOLE2(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportOLE2(SvStream &rStream)
 {
     try
     {

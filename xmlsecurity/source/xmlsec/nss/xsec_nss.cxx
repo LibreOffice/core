@@ -38,7 +38,7 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
 
-void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
+void* nss_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
     Reference< XSingleServiceFactory > xFactory ;

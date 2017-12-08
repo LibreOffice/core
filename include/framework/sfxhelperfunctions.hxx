@@ -54,31 +54,31 @@ typedef bool ( *pfunc_isDockingWindowVisible)(
 
 namespace framework
 {
-FWE_DLLPUBLIC pfunc_setToolBoxControllerCreator SAL_CALL SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
-FWE_DLLPUBLIC svt::ToolboxController* SAL_CALL CreateToolBoxController(
+FWE_DLLPUBLIC pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
+FWE_DLLPUBLIC svt::ToolboxController* CreateToolBoxController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     unsigned short nID,
     const OUString& aCommandURL );
 
-FWE_DLLPUBLIC pfunc_setStatusBarControllerCreator SAL_CALL SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );
-FWE_DLLPUBLIC svt::StatusbarController* SAL_CALL CreateStatusBarController(
+FWE_DLLPUBLIC pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );
+FWE_DLLPUBLIC svt::StatusbarController* CreateStatusBarController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
      const OUString& aCommandURL );
 
-FWE_DLLPUBLIC pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
-FWE_DLLPUBLIC void SAL_CALL RefreshToolbars(
+FWE_DLLPUBLIC pfunc_getRefreshToolbars SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
+FWE_DLLPUBLIC void RefreshToolbars(
      css::uno::Reference< css::frame::XFrame > const & rFrame );
 
-FWE_DLLPUBLIC pfunc_createDockingWindow SAL_CALL SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
-FWE_DLLPUBLIC void SAL_CALL CreateDockingWindow(
+FWE_DLLPUBLIC pfunc_createDockingWindow SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
+FWE_DLLPUBLIC void CreateDockingWindow(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
 
-FWE_DLLPUBLIC pfunc_isDockingWindowVisible SAL_CALL SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
-FWE_DLLPUBLIC bool SAL_CALL IsDockingWindowVisible(
+FWE_DLLPUBLIC pfunc_isDockingWindowVisible SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
+FWE_DLLPUBLIC bool IsDockingWindowVisible(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
 }

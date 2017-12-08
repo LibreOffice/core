@@ -157,7 +157,7 @@ OUString FontIdentificator_getImplementationName()
     return OUString( "vcl::FontIdentificator" );
 }
 
-Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory >&  )
+Reference< XInterface > FontIdentificator_createInstance( const Reference< XMultiServiceFactory >&  )
 {
     return static_cast< ::cppu::OWeakObject * >( new FontIdentificator );
 }

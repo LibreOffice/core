@@ -49,7 +49,7 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 XSERVICEINFO_COMMOM_IMPL( UcbContentProviderProxyFactory,
                           OUString( "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 UcbContentProviderProxyFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =

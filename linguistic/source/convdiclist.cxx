@@ -558,13 +558,13 @@ uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
 }
 
 /// @throws css::uno::Exception
-uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
+uno::Reference< uno::XInterface > ConvDicList_CreateInstance(
         const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     return StaticConvDicList::get();
 }
 
-void * SAL_CALL ConvDicList_getFactory(
+void * ConvDicList_getFactory(
         const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager  )
 {

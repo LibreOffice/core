@@ -41,7 +41,7 @@ namespace o3tl
 
 namespace sfx2
 {
-    typedef css::uno::Reference< css::uno::XInterface > ( SAL_CALL * SfxModelFactoryFunc ) (
+    typedef css::uno::Reference< css::uno::XInterface > ( * SfxModelFactoryFunc ) (
         const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory,
         SfxModelFlags _nCreationFlags
     );

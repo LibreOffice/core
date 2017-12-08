@@ -423,54 +423,54 @@ const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
     return theSmXMLImportUnoTunnelId::get().getSeq();
 }
 
-OUString SAL_CALL SmXMLImport_getImplementationName() throw()
+OUString SmXMLImport_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Math.XMLImporter" );
 }
 
-uno::Sequence< OUString > SAL_CALL SmXMLImport_getSupportedServiceNames()
+uno::Sequence< OUString > SmXMLImport_getSupportedServiceNames()
         throw()
 {
     return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
+uno::Reference< uno::XInterface > SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), SvXMLImportFlags::ALL));
 }
 
 
-OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
+OUString SmXMLImportMeta_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Math.XMLOasisMetaImporter" );
 }
 
-uno::Sequence< OUString > SAL_CALL SmXMLImportMeta_getSupportedServiceNames()
+uno::Sequence< OUString > SmXMLImportMeta_getSupportedServiceNames()
 throw()
 {
     return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
+uno::Reference< uno::XInterface > SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), SvXMLImportFlags::META ));
 }
 
 
-OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
+OUString SmXMLImportSettings_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Math.XMLOasisSettingsImporter" );
 }
 
-uno::Sequence< OUString > SAL_CALL SmXMLImportSettings_getSupportedServiceNames()
+uno::Sequence< OUString > SmXMLImportSettings_getSupportedServiceNames()
         throw()
 {
     return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
+uno::Reference< uno::XInterface > SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), SvXMLImportFlags::SETTINGS ));
@@ -3115,7 +3115,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportMML(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream &rStream)
 {
     SmGlobals::ensure();
 

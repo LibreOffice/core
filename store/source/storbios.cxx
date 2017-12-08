@@ -460,7 +460,7 @@ protected:
  * OStorePageBIOS::AceCache implementation.
  *
  *======================================================================*/
-extern "C"  typedef  int (SAL_CALL * ace_constructor_type)(void*,void*);
+extern "C"  typedef  int (* ace_constructor_type)(void*,void*);
 
 OStorePageBIOS::AceCache &
 OStorePageBIOS::AceCache::get()

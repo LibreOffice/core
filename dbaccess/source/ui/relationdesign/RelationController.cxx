@@ -72,7 +72,7 @@
 
 #define MAX_THREADS 10
 
-extern "C" void SAL_CALL createRegistryInfo_ORelationControl()
+extern "C" void createRegistryInfo_ORelationControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::ORelationController > aAutoRegistration;
 }

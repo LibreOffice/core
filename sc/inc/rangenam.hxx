@@ -189,7 +189,7 @@ inline bool ScRangeData::HasType( Type nType ) const
     return ( ( eType & nType ) == nType );
 }
 
-extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* );
+extern "C" int ScRangeData_QsortNameCompare( const void*, const void* );
 
 class ScRangeName
 {

@@ -24,7 +24,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-extern "C" void SAL_CALL dbp_initializeModule()
+extern "C" void dbp_initializeModule()
 {
     static bool s_bInit = false;
     if (!s_bInit)
@@ -37,7 +37,7 @@ extern "C" void SAL_CALL dbp_initializeModule()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbp_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* dbp_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)

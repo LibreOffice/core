@@ -23,11 +23,11 @@
 
 #include <osl/module.hxx>
 
-typedef SwAbstractDialogFactory* (SAL_CALL *SwFuncPtrCreateDialogFactory)();
+typedef SwAbstractDialogFactory* (*SwFuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #else
 

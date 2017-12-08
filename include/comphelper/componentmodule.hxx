@@ -39,7 +39,7 @@ namespace comphelper
 
     /** factory factory declaration
     */
-    typedef css::uno::Reference< css::lang::XSingleComponentFactory > (SAL_CALL *FactoryInstantiation)
+    typedef css::uno::Reference< css::lang::XSingleComponentFactory > (*FactoryInstantiation)
     (
         ::cppu::ComponentFactoryFunc          _pFactoryFunc,
         OUString const&                       _rComponentName,

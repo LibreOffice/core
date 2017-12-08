@@ -1628,7 +1628,7 @@ void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
     GetBindings()->InvalidateAll(true);
 }
 
-extern "C" int SAL_CALL SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
+extern "C" int SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
 {
     return ( (long) *static_cast<sal_uInt16 const *>(pSmaller) ) - ( (long) *static_cast<sal_uInt16 const *>(pBigger) );
 }

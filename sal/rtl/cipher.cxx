@@ -82,18 +82,18 @@
     } \
 }
 
-typedef rtlCipherError(SAL_CALL cipher_init_t) (
+typedef rtlCipherError(cipher_init_t) (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
     const sal_uInt8 *pArgData, sal_Size nArgLen);
 
-typedef rtlCipherError(SAL_CALL cipher_update_t) (
+typedef rtlCipherError(cipher_update_t) (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen);
 
-typedef void (SAL_CALL cipher_delete_t) (rtlCipher Cipher);
+typedef void (cipher_delete_t) (rtlCipher Cipher);
 
 struct Cipher_Impl
 {

@@ -58,12 +58,12 @@ rtl_arena_type * gp_default_arena = nullptr;
 namespace
 {
 
-void * SAL_CALL rtl_machdep_alloc(
+void * rtl_machdep_alloc(
     rtl_arena_type * pArena,
     sal_Size *       pSize
 );
 
-void SAL_CALL rtl_machdep_free(
+void rtl_machdep_free(
     rtl_arena_type * pArena,
     void *           pAddr,
     sal_Size         nSize
@@ -999,7 +999,7 @@ void SAL_CALL rtl_arena_free (
 namespace
 {
 
-void * SAL_CALL rtl_machdep_alloc(
+void * rtl_machdep_alloc(
     rtl_arena_type * pArena,
     sal_Size *       pSize
 )
@@ -1049,7 +1049,7 @@ void * SAL_CALL rtl_machdep_alloc(
     return nullptr;
 }
 
-void SAL_CALL rtl_machdep_free(
+void rtl_machdep_free(
     rtl_arena_type * pArena,
     void *           pAddr,
     sal_Size         nSize

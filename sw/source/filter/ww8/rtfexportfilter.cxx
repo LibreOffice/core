@@ -99,13 +99,13 @@ void RtfExportFilter::setSourceDocument(const uno::Reference<lang::XComponent>& 
 
 OUString RtfExport_getImplementationName() { return OUString(IMPL_NAME_RTFEXPORT); }
 
-uno::Sequence<OUString> SAL_CALL RtfExport_getSupportedServiceNames() noexcept
+uno::Sequence<OUString> RtfExport_getSupportedServiceNames() noexcept
 {
     return uno::Sequence<OUString>{ "com.sun.star.document.ExportFilter" };
 }
 
 uno::Reference<uno::XInterface>
-    SAL_CALL RtfExport_createInstance(const uno::Reference<uno::XComponentContext>& xCtx)
+RtfExport_createInstance(const uno::Reference<uno::XComponentContext>& xCtx)
 {
     return static_cast<cppu::OWeakObject*>(new RtfExportFilter(xCtx));
 }

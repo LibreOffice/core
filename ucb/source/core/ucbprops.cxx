@@ -197,7 +197,7 @@ UcbPropertiesManager::~UcbPropertiesManager()
 XSERVICEINFO_COMMOM_IMPL( UcbPropertiesManager,
                           OUString( "com.sun.star.comp.ucb.UcbPropertiesManager" ) )
 /// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface > SAL_CALL
+static css::uno::Reference< css::uno::XInterface >
 UcbPropertiesManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & /*rSMgr*/ )
 {
     css::lang::XServiceInfo* pX =

@@ -128,7 +128,7 @@ public:
     static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static() throw(  );
 
     /// @throws Exception
-    friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr );
+    friend  Reference< XInterface > BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr );
 
     // XLoader
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
@@ -152,7 +152,7 @@ BibliographyLoader::~BibliographyLoader()
 }
 
 
-Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & /*rSMgr*/ )
+Reference< XInterface > BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & /*rSMgr*/ )
 {
     return *(new BibliographyLoader);
 }
@@ -190,7 +190,7 @@ Sequence< OUString > BibliographyLoader::getSupportedServiceNames_Static() throw
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL bib_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * bib_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         void * pRet = nullptr;

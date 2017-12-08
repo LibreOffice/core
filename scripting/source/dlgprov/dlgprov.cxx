@@ -65,18 +65,18 @@ using namespace ::sf_misc;
 namespace comp_DialogModelProvider
 {
 
-    OUString SAL_CALL _getImplementationName()
+    OUString _getImplementationName()
     {
         return OUString("com.sun.star.comp.scripting.DialogModelProvider");
     }
 
-    uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+    uno::Sequence< OUString > _getSupportedServiceNames()
     {
         uno::Sequence< OUString > s { "com.sun.star.awt.UnoControlDialogModelProvider" };
         return s;
     }
 
-    uno::Reference< uno::XInterface > SAL_CALL _create(const uno::Reference< uno::XComponentContext > & context)
+    uno::Reference< uno::XInterface > _create(const uno::Reference< uno::XComponentContext > & context)
     {
         return static_cast< ::cppu::OWeakObject * >(new dlgprov::DialogModelProvider(context));
     }
@@ -736,7 +736,7 @@ namespace dlgprov
     // component operations
 
 
-    static Reference< XInterface > SAL_CALL create_DialogProviderImpl(
+    static Reference< XInterface > create_DialogProviderImpl(
         Reference< XComponentContext > const & xContext )
     {
         return static_cast< lang::XTypeProvider * >( new DialogProviderImpl( xContext ) );
@@ -759,7 +759,7 @@ namespace dlgprov
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL dlgprov_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * dlgprov_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager,
         void * pRegistryKey )
     {

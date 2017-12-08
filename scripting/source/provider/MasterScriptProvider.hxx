@@ -127,17 +127,17 @@ private:
     OUString m_sCtxString;
 };
 
-OUString SAL_CALL mspf_getImplementationName() ;
-css::uno::Reference< css::uno::XInterface > SAL_CALL mspf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
-css::uno::Sequence< OUString > SAL_CALL mspf_getSupportedServiceNames();
+OUString mspf_getImplementationName() ;
+css::uno::Reference< css::uno::XInterface > mspf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
+css::uno::Sequence< OUString > mspf_getSupportedServiceNames();
 
 }
 
 namespace browsenodefactory
 {
-OUString SAL_CALL bnf_getImplementationName() ;
-css::uno::Reference< css::uno::XInterface > SAL_CALL bnf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
-css::uno::Sequence< OUString > SAL_CALL bnf_getSupportedServiceNames();
+OUString bnf_getImplementationName() ;
+css::uno::Reference< css::uno::XInterface > bnf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
+css::uno::Sequence< OUString > bnf_getSupportedServiceNames();
 }
 
 #endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX

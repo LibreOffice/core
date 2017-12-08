@@ -153,7 +153,7 @@ typedef bool ( *PFunc_getSpecialCharsForEdit)( vcl::Window* i_pParent, const vcl
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 #else
 

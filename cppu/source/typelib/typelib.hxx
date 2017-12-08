@@ -20,20 +20,20 @@
 #ifndef INCLUDED_CPPU_SOURCE_TYPELIB_HXX
 #define INCLUDED_CPPU_SOURCE_TYPELIB_HXX
 
-extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
+extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset,
     sal_Int32 & rMaxIntegralTypeSize )
     SAL_THROW_EXTERN_C();
 
 
-extern "C" void SAL_CALL typelib_typedescription_newEmpty(
+extern "C" void typelib_typedescription_newEmpty(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass,
     rtl_uString * pTypeName )
     SAL_THROW_EXTERN_C();
 
-extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
+extern "C" void typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet,
     rtl_uString const * pName )
     SAL_THROW_EXTERN_C();

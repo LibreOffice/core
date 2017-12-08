@@ -374,7 +374,7 @@ extern "C" {
 
 typedef ImplTextEncodingData const * TextEncodingFunction(rtl_TextEncoding);
 
-void SAL_CALL thisModule() {}
+void thisModule() {}
 
 };
 

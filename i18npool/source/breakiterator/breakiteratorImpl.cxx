@@ -122,7 +122,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
     return result;
 }
 
-static inline bool SAL_CALL isCJK( const Locale& rLocale ) {
+static inline bool isCJK( const Locale& rLocale ) {
         return rLocale.Language == "zh" || rLocale.Language == "ja" || rLocale.Language == "ko";
 }
 
@@ -252,7 +252,7 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_I
 /** Increments/decrements position first, then obtains character.
     @return current position, may be -1 or text length if string was consumed.
  */
-static sal_Int32 SAL_CALL iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, sal_Int32 inc, sal_uInt32& ch) {
+static sal_Int32 iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, sal_Int32 inc, sal_uInt32& ch) {
         sal_Int32 nLen = Text.getLength();
         if (nStartPos + inc < 0 || nStartPos + inc >= nLen) {
             ch = 0;
@@ -634,7 +634,7 @@ BreakIteratorImpl::getSupportedServiceNames()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_BreakIterator_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)

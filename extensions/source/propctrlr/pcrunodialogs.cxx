@@ -28,7 +28,7 @@
 #include "taborder.hxx"
 #include "pcrcommon.hxx"
 
-extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog()
+extern "C" void createRegistryInfo_OTabOrderDialog()
 {
     ::pcr::OAutoRegistration< ::pcr::OTabOrderDialog > aAutoRegistration;
 }

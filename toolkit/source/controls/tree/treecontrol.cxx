@@ -506,7 +506,7 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNod
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_TreeControlModel_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
@@ -514,7 +514,7 @@ stardiv_Toolkit_TreeControlModel_get_implementation(
     return cppu::acquire(new toolkit::UnoTreeModel(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_TreeControl_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)

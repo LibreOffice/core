@@ -21,7 +21,7 @@
  #include "formlinkdialog.hxx"
 #include "pcrservices.hxx"
 
- extern "C" void SAL_CALL createRegistryInfo_MasterDetailLinkDialog()
+ extern "C" void createRegistryInfo_MasterDetailLinkDialog()
 {
     ::pcr::OAutoRegistration< ::pcr::MasterDetailLinkDialog > aAutoRegistration;
 }
