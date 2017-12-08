@@ -12,7 +12,6 @@
 
 #include <algorithm>
 #include <set>
-#include <string>
 #include <utility>
 #include <vector>
 
@@ -60,16 +59,6 @@ public:
 
     virtual void run() override
     {
-        std::string fn(compiler.getSourceManager()
-                           .getFileEntryForID(compiler.getSourceManager().getMainFileID())
-                           ->getName());
-        loplugin::normalizeDotDotInFilePath(fn);
-        // ignore this one. I can't get accurate source code from getCharacterData() for it.
-        if (fn == SRCDIR "/sal/rtl/string.cxx")
-            return;
-        // clang returns completely bogus source range for something in this file
-        if (fn == SRCDIR "/sd/source/ui/unoidl/unomodel.cxx")
-            return;
         m_phase = PluginPhase::FindAddressOf;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         m_phase = PluginPhase::Warning;
