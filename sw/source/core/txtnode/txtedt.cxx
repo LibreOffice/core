@@ -703,12 +703,6 @@ OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
     const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
     sal_Int16 nWordType = WordType::DICTIONARY_WORD;
     lang::Locale aLocale( g_pBreakIt->GetLocale( GetLang( nPos ) ) );
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bBegin = rxBreak->isBeginWord( m_Text, nPos, aLocale, nWordType );
-    sal_Bool bEnd   = rxBreak->isEndWord  ( m_Text, nPos, aLocale, nWordType );
-    (void)bBegin;
-    (void)bEnd;
-#endif
     Boundary aBndry =
         rxBreak->getWordBoundary( m_Text, nPos, aLocale, nWordType, true );
 
@@ -1263,11 +1257,6 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
 SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos )
 {
     SwRect aRect;
-#if OSL_DEBUG_LEVEL > 1
-    static bool bStop = false;
-    if ( bStop )
-        return aRect;
-#endif
     SwTextNode *pNode = GetTextNode();
     if( pNode != pActNode || !nActPos )
         nActPos = COMPLETE_STRING;
@@ -1552,10 +1541,6 @@ SwRect SwTextFrame::SmartTagScan()
             pNode->SetSmartTags( nullptr );
 
         // Calculate repaint area:
-#if OSL_DEBUG_LEVEL > 1
-        const sal_uInt16 nNumberOfEntriesAfterRecognize2 = pSmartTagList->Count();
-        (void) nNumberOfEntriesAfterRecognize2;
-#endif
         if ( nBegin < nEnd && ( 0 != nNumberOfRemovedEntries ||
                                 0 != nNumberOfInsertedEntries ) )
         {
