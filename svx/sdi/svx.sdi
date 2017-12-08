@@ -4491,9 +4491,9 @@ SfxVoidItem EditAnnotation SID_EDIT_POSTIT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Edit;
 ]
 
@@ -6166,7 +6166,7 @@ SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Format;
 ]
 

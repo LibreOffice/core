@@ -2228,7 +2228,7 @@ SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = TRUE,
+    AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Options;
