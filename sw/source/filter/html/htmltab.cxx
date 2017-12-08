@@ -434,7 +434,7 @@ class HTMLTable
 
     SwHTMLParser *m_pParser;          // the current parser
     HTMLTable *m_pTopTable;           // the table on the Top-Level
-    HTMLTableCnts *m_pParentContents;
+    std::unique_ptr<HTMLTableCnts> m_xParentContents;
 
     HTMLTableContext *m_pContext;    // the context of the table
 
@@ -582,8 +582,8 @@ public:
     void SetHasParentSection( bool bSet ) { m_bHasParentSection = bSet; }
     bool HasParentSection() const { return m_bHasParentSection; }
 
-    void SetParentContents( HTMLTableCnts *pCnts ) { m_pParentContents = pCnts; }
-    HTMLTableCnts *GetParentContents() const { return m_pParentContents; }
+    void SetParentContents(HTMLTableCnts *pCnts) { m_xParentContents.reset(pCnts); }
+    std::unique_ptr<HTMLTableCnts>& GetParentContents() { return m_xParentContents; }
 
     void MakeParentContents();
 
@@ -1027,7 +1027,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
                     pOptions->aBGImage, aEmptyOUStr, aEmptyOUStr, aEmptyOUStr );
 
     m_pContext = nullptr;
-    m_pParentContents = nullptr;
+    m_xParentContents.reset();
 
     m_aId = pOptions->aId;
     m_aClass = pOptions->aClass;
@@ -3791,15 +3791,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                 pSubTable->GetTableAdjust(false)!= SvxAdjust::Right,
                                 "left or right aligned tables belong in frames" );
 
-                        HTMLTableCnts *pParentContents =
-                            pSubTable->GetParentContents();
-                        if( pParentContents )
+                        auto& rParentContents = pSubTable->GetParentContents();
+                        if (rParentContents)
                         {
                             OSL_ENSURE( !pSaveStruct->IsInSection(),
                                     "Where is the section" );
 
                             // If there's no table coming, we have a section
-                            pSaveStruct->AddContents( pParentContents );
+                            pSaveStruct->AddContents(rParentContents.release());
                         }
 
                         const SwStartNode *pCapStNd =
