@@ -235,7 +235,7 @@ void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
             if (!aSize.Width())
                 aSize.Width() = pWindow->GetSettings().GetStyleSettings().GetCursorSize();
 
-            const Rectangle aRect(Point(nX, nY), aSize);
+            const tools::Rectangle aRect(Point(nX, nY), aSize);
             aItems.emplace_back("rectangle", aRect.toString());
         }
 
