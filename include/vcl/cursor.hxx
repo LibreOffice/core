@@ -24,6 +24,7 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
+#include <rtl/ustring.hxx>
 
 class Timer;
 struct ImplCursorData;
