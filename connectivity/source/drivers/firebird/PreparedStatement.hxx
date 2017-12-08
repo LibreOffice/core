@@ -64,7 +64,7 @@ namespace connectivity
              * @throws css::sdbc::SQLException
              * @throws css::uno::RuntimeException
              */
-            template <typename T> void setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType);
+            template <typename T> void setValue(sal_Int32 nIndex, const T& nValue, ISC_SHORT nType);
             void setParameterNull(sal_Int32 nParameterIndex, bool bSetNull = true);
 
             /// @throws css::sdbc::SQLException
