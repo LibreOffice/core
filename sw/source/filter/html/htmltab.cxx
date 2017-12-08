@@ -202,12 +202,9 @@ public:
 // Cell of a HTML table
 class HTMLTableCell
 {
-    // !!!ATTENTION!!!!! For each new pointer the SetProtected
-    // method (and the dtor) has to be executed.
-    HTMLTableCnts *pContents;       // cell content
-    SvxBrushItem *pBGBrush;         // cell background
-    // !!!ATTENTION!!!!!
-    std::shared_ptr<SvxBoxItem> m_pBoxItem;
+    std::shared_ptr<HTMLTableCnts> m_xContents;       // cell content
+    std::shared_ptr<SvxBrushItem> m_xBGBrush;         // cell background
+    std::shared_ptr<SvxBoxItem> m_xBoxItem;
 
     sal_uInt32 nNumFormat;
     sal_uInt16 nRowSpan;                // cell ROWSPAN
@@ -226,11 +223,9 @@ public:
 
     HTMLTableCell();                // new cells always empty
 
-    ~HTMLTableCell();               // only allowed in ~HTMLTableRow
-
     // Fill a not empty cell
-    void Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
-              sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
+    void Set( std::shared_ptr<HTMLTableCnts> const& rCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
+              sal_Int16 eVertOri, std::shared_ptr<SvxBrushItem> const& rBGBrush,
               std::shared_ptr<SvxBoxItem> const& rBoxItem,
               bool bHasNumFormat, sal_uInt32 nNumFormat,
               bool bHasValue, double nValue, bool bNoWrap, bool bCovered );
@@ -239,8 +234,8 @@ public:
     void SetProtected();
 
     // Set/Get cell content
-    void SetContents( HTMLTableCnts *pCnts ) { pContents = pCnts; }
-    HTMLTableCnts *GetContents() { return pContents; }
+    void SetContents(std::shared_ptr<HTMLTableCnts> const& rCnts) { m_xContents = rCnts; }
+    const std::shared_ptr<HTMLTableCnts>& GetContents() const { return m_xContents; }
 
     // Set/Get cell ROWSPAN/COLSPAN
     void SetRowSpan( sal_uInt16 nRSpan ) { nRowSpan = nRSpan; }
@@ -251,8 +246,8 @@ public:
 
     inline void SetWidth( sal_uInt16 nWidth, bool bRelWidth );
 
-    const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
-    const std::shared_ptr<SvxBoxItem>& GetBoxItem() const { return m_pBoxItem; }
+    const std::shared_ptr<SvxBrushItem>& GetBGBrush() const { return m_xBGBrush; }
+    const std::shared_ptr<SvxBoxItem>& GetBoxItem() const { return m_xBoxItem; }
 
     inline bool GetNumFormat( sal_uInt32& rNumFormat ) const;
     inline bool GetValue( double& rValue ) const;
@@ -260,7 +255,7 @@ public:
     sal_Int16 GetVertOri() const { return eVertOri; }
 
     // Is the cell filled or protected ?
-    bool IsUsed() const { return pContents!=nullptr || bProtected; }
+    bool IsUsed() const { return m_xContents || bProtected; }
 
     std::unique_ptr<SwHTMLTableLayoutCell> CreateLayoutInfo();
 
@@ -546,9 +541,9 @@ public:
     sal_Int16 GetInheritedVertOri() const;
 
     // Insert a cell on the current position
-    void InsertCell( HTMLTableCnts *pCnts, sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
+    void InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts, sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                      sal_uInt16 nWidth, bool bRelWidth, sal_uInt16 nHeight,
-                     sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
+                     sal_Int16 eVertOri, std::shared_ptr<SvxBrushItem> const& rBGBrushItem,
                      std::shared_ptr<SvxBoxItem> const& rBoxItem,
                      bool bHasNumFormat, sal_uInt32 nNumFormat,
                      bool bHasValue, double nValue, bool bNoWrap );
@@ -676,8 +671,6 @@ SwHTMLTableLayoutCnts *HTMLTableCnts::CreateLayoutInfo()
 }
 
 HTMLTableCell::HTMLTableCell():
-    pContents(nullptr),
-    pBGBrush(nullptr),
     nNumFormat(0),
     nRowSpan(1),
     nColSpan(1),
@@ -692,29 +685,19 @@ HTMLTableCell::HTMLTableCell():
     mbCovered(false)
 {}
 
-HTMLTableCell::~HTMLTableCell()
-{
-    // the content is in multiple cells but mustn't be deleted more than once
-    if( 1==nRowSpan && 1==nColSpan )
-    {
-        delete pContents;
-        delete pBGBrush;
-    }
-}
-
-void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
-                         sal_Int16 eVert, SvxBrushItem *pBrush,
+void HTMLTableCell::Set( std::shared_ptr<HTMLTableCnts> const& rCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
+                         sal_Int16 eVert, std::shared_ptr<SvxBrushItem> const& rBrush,
                          std::shared_ptr<SvxBoxItem> const& rBoxItem,
                          bool bHasNF, sal_uInt32 nNF, bool bHasV, double nVal,
                          bool bNWrap, bool bCovered )
 {
-    pContents = pCnts;
+    m_xContents = rCnts;
     nRowSpan = nRSpan;
     nColSpan = nCSpan;
     bProtected = false;
     eVertOri = eVert;
-    pBGBrush = pBrush;
-    m_pBoxItem = rBoxItem;
+    m_xBGBrush = rBrush;
+    m_xBoxItem = rBoxItem;
 
     bHasNumFormat = bHasNF;
     bHasValue = bHasV;
@@ -736,11 +719,11 @@ void HTMLTableCell::SetProtected()
     // The content of this cell doesn't have to be anchored anywhere else,
     // since they're not gonna be deleted
 
-    pContents = nullptr;
+    m_xContents.reset();
 
     // Copy background color
-    if( pBGBrush )
-        pBGBrush = new SvxBrushItem( *pBGBrush );
+    if (m_xBGBrush)
+        m_xBGBrush.reset(new SvxBrushItem(*m_xBGBrush));
 
     nRowSpan = 1;
     nColSpan = 1;
@@ -761,7 +744,7 @@ inline bool HTMLTableCell::GetValue( double& rValue ) const
 
 std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
 {
-    SwHTMLTableLayoutCnts *pCntInfo = pContents ? pContents->CreateLayoutInfo() : nullptr;
+    SwHTMLTableLayoutCnts *pCntInfo = m_xContents ? m_xContents->CreateLayoutInfo() : nullptr;
 
     return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell( pCntInfo, nRowSpan, nColSpan, nWidth,
                                       bRelWidth, bNoWrap ));
@@ -1142,7 +1125,7 @@ void HTMLTable::FixRowSpan( sal_uInt16 nRow, sal_uInt16 nCol,
 {
     sal_uInt16 nRowSpan=1;
     HTMLTableCell *pCell;
-    while( pCell=GetCell(nRow,nCol), pCell->GetContents()==pCnts )
+    while (pCell=GetCell(nRow,nCol), pCell->GetContents().get() == pCnts)
     {
         pCell->SetRowSpan( nRowSpan );
         if( m_pLayoutInfo )
@@ -1172,13 +1155,13 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
     {
         // always the predecessor cell
         if( nCol>0 )
-            pPrevCnts = GetCell( 0, nCol-1 )->GetContents();
+            pPrevCnts = GetCell( 0, nCol-1 )->GetContents().get();
         else
             return m_pPrevStartNode;
     }
     else if( USHRT_MAX==nRow && USHRT_MAX==nCol )
         // contents of preceding cell
-        pPrevCnts = GetCell( m_nRows-1, m_nCols-1 )->GetContents();
+        pPrevCnts = GetCell( m_nRows-1, m_nCols-1 )->GetContents().get();
     else
     {
         sal_uInt16 i;
@@ -1191,7 +1174,7 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
             i--;
             if( 1 == pPrevRow->GetCell(i)->GetRowSpan() )
             {
-                pPrevCnts = GetCell(nRow,i)->GetContents();
+                pPrevCnts = GetCell(nRow,i)->GetContents().get();
                 break;
             }
         }
@@ -1203,14 +1186,14 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
             while( !pPrevCnts && i )
             {
                 i--;
-                pPrevCnts = pPrevRow->GetCell(i)->GetContents();
+                pPrevCnts = pPrevRow->GetCell(i)->GetContents().get();
             }
         }
     }
     OSL_ENSURE( pPrevCnts, "No previous filled cell found" );
     if( !pPrevCnts )
     {
-        pPrevCnts = GetCell(0,0)->GetContents();
+        pPrevCnts = GetCell(0,0)->GetContents().get();
         if( !pPrevCnts )
             return m_pPrevStartNode;
     }
@@ -1285,7 +1268,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         // Determine background color/graphic
         const HTMLTableCell *pCell = GetCell( nRow, nCol );
         pBoxItem = pCell->GetBoxItem();
-        pBGBrushItem = pCell->GetBGBrush();
+        pBGBrushItem = pCell->GetBGBrush().get();
         if( !pBGBrushItem )
         {
             // If a cell spans multiple rows, a background to that row should be copied to the cell.
@@ -1640,12 +1623,12 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
 
                         const SwStartNode* pPrevStartNd =
                             GetPrevBoxStartNode( nTopRow, nStartCol );
-                        HTMLTableCnts *pCnts = new HTMLTableCnts(
-                            m_pParser->InsertTableSection(pPrevStartNd) );
+                        std::shared_ptr<HTMLTableCnts> xCnts(new HTMLTableCnts(
+                            m_pParser->InsertTableSection(pPrevStartNd)));
                         SwHTMLTableLayoutCnts *pCntsLayoutInfo =
-                            pCnts->CreateLayoutInfo();
+                            xCnts->CreateLayoutInfo();
 
-                        pCell2->SetContents( pCnts );
+                        pCell2->SetContents(xCnts);
                         SwHTMLTableLayoutCell *pCurrCell = m_pLayoutInfo->GetCell( nTopRow, nStartCol );
                         pCurrCell->SetContents( pCntsLayoutInfo );
                         if( nBoxRowSpan < 0 )
@@ -1654,13 +1637,13 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                         // check COLSPAN if needed
                         for( sal_uInt16 j=nStartCol+1; j<nSplitCol; j++ )
                         {
-                            GetCell(nTopRow,j)->SetContents( pCnts );
+                            GetCell(nTopRow,j)->SetContents(xCnts);
                             m_pLayoutInfo->GetCell( nTopRow, j )
                                        ->SetContents( pCntsLayoutInfo );
                         }
                     }
 
-                    pBox = MakeTableBox( pLine, pCell2->GetContents(),
+                    pBox = MakeTableBox( pLine, pCell2->GetContents().get(),
                                          nTopRow, nStartCol,
                                          nBottomRow, nSplitCol );
 
@@ -1809,7 +1792,7 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
                  (0==nRow || !((*pParent->m_pRows)[nRow-1])->bBottomBorder)) );
 
     // The child table has to inherit the color of the cell it's contained in, if it doesn't have one
-    const SvxBrushItem *pInhBG = pParent->GetCell(nRow,nCol)->GetBGBrush();
+    const SvxBrushItem *pInhBG = pParent->GetCell(nRow,nCol)->GetBGBrush().get();
     if( !pInhBG && pParent != m_pTopTable &&
         pParent->GetCell(nRow,nCol)->GetRowSpan() == pParent->m_nRows )
     {
@@ -1903,7 +1886,7 @@ void HTMLTable::SetBorders()
             HTMLTableCell *pCell = pRow->GetCell(j);
             if( pCell->GetContents()  )
             {
-                HTMLTableCnts *pCnts = pCell->GetContents();
+                HTMLTableCnts *pCnts = pCell->GetContents().get();
                 bool bFirstPara = true;
                 while( pCnts )
                 {
@@ -1971,10 +1954,10 @@ sal_Int16 HTMLTable::GetInheritedVertOri() const
     return eVOri;
 }
 
-void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
+void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                             sal_uInt16 nCellWidth, bool bRelWidth, sal_uInt16 nCellHeight,
-                            sal_Int16 eVertOrient, SvxBrushItem *pBGBrushItem,
+                            sal_Int16 eVertOrient, std::shared_ptr<SvxBrushItem> const& rBGBrushItem,
                             std::shared_ptr<SvxBoxItem> const& rBoxItem,
                             bool bHasNumFormat, sal_uInt32 nNumFormat,
                             bool bHasValue, double nValue, bool bNoWrap )
@@ -2026,7 +2009,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
                 // Content and colors are coming from that cell and can be overwritten
                 // or deleted (content) or copied (color) by ProtectRowSpan
                 nSpanedCols = i + pCell->GetColSpan();
-                FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents() );
+                FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents().get() );
                 if( pCell->GetRowSpan() > nRowSpan )
                     ProtectRowSpan( nRowsReq, i,
                                     pCell->GetRowSpan()-nRowSpan );
@@ -2036,7 +2019,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         {
             // These contents are anchored in the row above in any case
             HTMLTableCell *pCell = pCurRow->GetCell(i);
-            FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents() );
+            FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents().get() );
             ProtectRowSpan( m_nCurrentRow, i, pCell->GetRowSpan() );
         }
     }
@@ -2048,7 +2031,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         {
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( pCnts, j, i, eVertOrient, pBGBrushItem, rBoxItem,
+                ->Set( rCnts, j, i, eVertOrient, rBGBrushItem, rBoxItem,
                        bHasNumFormat, nNumFormat, bHasValue, nValue, bNoWrap, bCovered );
         }
     }
@@ -2225,7 +2208,7 @@ void HTMLTable::CloseTable()
             pCell = pPrevRow->GetCell(i);
             if( pCell->GetRowSpan() > 1 )
             {
-                FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents() );
+                FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents().get() );
                 ProtectRowSpan(m_nCurrentRow, i, (*m_pRows)[m_nCurrentRow]->GetCell(i)->GetRowSpan());
             }
         }
@@ -2945,11 +2928,11 @@ class CellSaveStruct : public SectionSaveStruct
     OUString m_aStyle, m_aId, m_aClass, m_aLang, m_aDir;
     OUString m_aBGImage;
     Color m_aBGColor;
-    std::shared_ptr<SvxBoxItem> m_pBoxItem;
+    std::shared_ptr<SvxBoxItem> m_xBoxItem;
 
-    HTMLTableCnts* m_pCnts;           // List of all contents
-    HTMLTableCnts* m_pCurrCnts;   // current content or 0
-    std::unique_ptr<SwNodeIndex> m_pNoBreakEndNodeIndex;// Paragraph index of a <NOBR>
+    std::shared_ptr<HTMLTableCnts> m_xCnts;              // List of all contents
+    HTMLTableCnts* m_pCurrCnts;                          // current content or 0
+    std::unique_ptr<SwNodeIndex> m_pNoBreakEndNodeIndex; // Paragraph index of a <NOBR>
 
     double m_nValue;
 
@@ -2975,7 +2958,7 @@ public:
                      bool bReadOpt );
 
     void AddContents( HTMLTableCnts *pNewCnts );
-    bool HasFirstContents() const { return m_pCnts != nullptr; }
+    bool HasFirstContents() const { return m_xCnts.get(); }
 
     void ClearIsInSection() { m_pCurrCnts = nullptr; }
     bool IsInSection() const { return m_pCurrCnts!=nullptr; }
@@ -2992,7 +2975,6 @@ public:
 CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTable,
                                   bool bHd, bool bReadOpt ) :
     SectionSaveStruct( rParser ),
-    m_pCnts( nullptr ),
     m_pCurrCnts( nullptr ),
     m_pNoBreakEndNodeIndex( nullptr ),
     m_nValue( 0.0 ),
@@ -3130,7 +3112,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
             SfxPoolItem const* pItem;
             if (SfxItemState::SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
             {   // fdo#41796: steal box item to set it in FixFrameFormat later!
-                m_pBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
+                m_xBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
                 aItemSet.ClearItem(RES_BOX);
             }
             rParser.InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -3144,10 +3126,10 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
 
 void CellSaveStruct::AddContents( HTMLTableCnts *pNewCnts )
 {
-    if( m_pCnts )
-        m_pCnts->Add( pNewCnts );
+    if (m_xCnts)
+        m_xCnts->Add( pNewCnts );
     else
-        m_pCnts = pNewCnts;
+        m_xCnts.reset(pNewCnts);
 
     m_pCurrCnts = pNewCnts;
 }
@@ -3182,11 +3164,11 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 #endif
 
     // we need to add the cell on the current position
-    SvxBrushItem *pBrushItem =
-        rParser.CreateBrushItem( m_bBGColor ? &m_aBGColor : nullptr, m_aBGImage,
-                                 m_aStyle, m_aId, m_aClass );
-    pCurTable->InsertCell( m_pCnts, m_nRowSpan, m_nColSpan, m_nWidth,
-                           m_bPrcWidth, m_nHeight, m_eVertOri, pBrushItem, m_pBoxItem,
+    std::shared_ptr<SvxBrushItem> xBrushItem(
+        rParser.CreateBrushItem(m_bBGColor ? &m_aBGColor : nullptr, m_aBGImage,
+                                m_aStyle, m_aId, m_aClass));
+    pCurTable->InsertCell( m_xCnts, m_nRowSpan, m_nColSpan, m_nWidth,
+                           m_bPrcWidth, m_nHeight, m_eVertOri, xBrushItem, m_xBoxItem,
                            m_bHasNumFormat, m_nNumFormat, m_bHasValue, m_nValue,
                            m_bNoWrap );
     Restore( rParser );
@@ -3194,10 +3176,10 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 
 void CellSaveStruct::StartNoBreak( const SwPosition& rPos )
 {
-    if( !m_pCnts ||
-        (!rPos.nContent.GetIndex() && m_pCurrCnts==m_pCnts &&
-         m_pCnts->GetStartNode() &&
-         m_pCnts->GetStartNode()->GetIndex() + 1 ==
+    if( !m_xCnts ||
+        (!rPos.nContent.GetIndex() && m_pCurrCnts == m_xCnts.get() &&
+         m_xCnts->GetStartNode() &&
+         m_xCnts->GetStartNode()->GetIndex() + 1 ==
             rPos.nNode.GetIndex()) )
     {
         m_bNoBreak = true;
@@ -3216,12 +3198,12 @@ void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
 
 void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
 {
-    if( m_pCnts && m_pCurrCnts==m_pCnts )
+    if (m_xCnts && m_pCurrCnts == m_xCnts.get())
     {
         if( m_bNoBreak )
         {
             // <NOBR> wasn't closed
-            m_pCnts->SetNoBreak();
+            m_xCnts->SetNoBreak();
         }
         else if( m_pNoBreakEndNodeIndex &&
                  m_pNoBreakEndNodeIndex->GetIndex() == rPos.nNode.GetIndex() )
@@ -3229,7 +3211,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
             if( m_nNoBreakEndContentPos == rPos.nContent.GetIndex() )
             {
                 // <NOBR> was closed immediately before the cell end
-                m_pCnts->SetNoBreak();
+                m_xCnts->SetNoBreak();
             }
             else if( m_nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
             {
@@ -3241,7 +3223,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
                     if( ' '==cLast || '\x0a'==cLast )
                     {
                         // There's just a blank or a newline between the <NOBR> and the cell end
-                        m_pCnts->SetNoBreak();
+                        m_xCnts->SetNoBreak();
                     }
                 }
             }
