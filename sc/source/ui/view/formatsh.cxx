@@ -2606,20 +2606,18 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                     if ( eItemState >= SfxItemState::DEFAULT ) //Modify for more robust
                     {
                         const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
-                        bool bStandard = false;
 
                         if ( pFormatEntry )
                         {
                             aFormatCode = pFormatEntry->GetType();
-                            bStandard = pFormatEntry->IsStandard();
                         }
 
                         switch(aFormatCode)
                         {
                         case css::util::NumberFormat::NUMBER:
                         case css::util::NumberFormat::NUMBER| css::util::NumberFormat::DEFINED:
-                            //use format code and standard format code to judge whether it is General,
-                            if (bStandard)
+                            // Determine if General format.
+                            if ((nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                                 aFormatCode = 0;
                             else
                                 aFormatCode = 1;
