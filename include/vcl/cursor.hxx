@@ -29,6 +29,7 @@
 class Timer;
 struct ImplCursorData;
 namespace vcl { class Window; }
+namespace rtl { class OUString; }
 
 // Cursor styles
 #define CURSOR_SHADOW                   ((sal_uInt16)0x0001)
