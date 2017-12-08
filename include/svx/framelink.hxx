@@ -294,7 +294,7 @@ public:
  *                        always *pointing away* from the common StartPoint rOrigin
  *          bMirrored   : define if rStyle of one other BorderLine shall be mirrored (e.g. bottom-right edges)
  *      With multiple BorderLines the definitions have to be CounterClockWise. This will be
- *      ensured by StyleVectorTable sorting the entries, but knowing this may allow more efficcient
+ *      ensured by StyleVectorTable sorting the entries, but knowing this may allow more efficient
  *      data creation.
  *  rEndStyleVectorTable: All other BorderLines that have the same EndPoint. There are differences to
  *      the Start definitions:
@@ -302,10 +302,10 @@ public:
  *          - definitions have to be ClockWise for the EndBorderLines, will be ensured by sorting
  *
  *  If you take all this into account, you will gett correctly extended BorderLinePrimitive2D
- *  reprsentations for the new to be defined BorderLine. That extensions will overlap nicely
- *  with the corresponding BordreLines and take all multiple line definitions in the ::Style into
+ *  representations for the new to be defined BorderLine. That extensions will overlap nicely
+ *  with the corresponding BorderLines and take all multiple line definitions in the ::Style into
  *  account.
- *  The internal solver is *not limitied* to ::Style(s) with three parts (Left/Gap/Right), this is
+ *  The internal solver is *not limited* to ::Style(s) with three parts (Left/Gap/Right), this is
  *  just due to svx::frame::Style's definitions. A new solver based on this one can be created
  *  anytime using more mulötiple borders based on the more flexible
  *  std::vector< drawinglayer::primitive2d::BorderLine > if needed.

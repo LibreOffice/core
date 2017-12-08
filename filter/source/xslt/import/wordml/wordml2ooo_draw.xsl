@@ -1900,7 +1900,7 @@
                     <xsl:value-of select="concat( $value1 , '+' , $value2 , '*pi/180',' - ' ,$value3 , '*pi/180' )"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>Find a unsupported formule:<xsl:value-of select="$v-formula"/>
+                    <xsl:message>Find an unsupported formulas:<xsl:value-of select="$v-formula"/>
                     </xsl:message>
                     <!--<xsl:value-of select="'0'"/><-for release use-->
                     <xsl:value-of select="concat('not found this:', $v-formula)"/>
