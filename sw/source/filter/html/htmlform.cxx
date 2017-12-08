@@ -60,6 +60,7 @@
 #include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -1299,8 +1300,14 @@ void SwHTMLParser::NewForm( bool bAppend )
     if( !rSrvcMgr.is() )
         return;
 
-    uno::Reference< XInterface > xInt = rSrvcMgr->createInstance(
-        "com.sun.star.form.component.Form" );
+    uno::Reference< XInterface > xInt;
+    try
+    {
+        xInt = rSrvcMgr->createInstance("com.sun.star.form.component.Form");
+    }
+    catch (const css::lang::ServiceNotRegisteredException&)
+    {
+    }
     if( !xInt.is() )
         return;
 
