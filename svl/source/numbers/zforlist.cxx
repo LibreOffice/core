@@ -3077,11 +3077,11 @@ sal_uInt32 SvNumberFormatter::GetStandardIndex(LanguageType eLnge)
     return GetStandardFormat(css::util::NumberFormat::NUMBER, eLnge);
 }
 
-short SvNumberFormatter::GetType(sal_uInt32 nFIndex)
+short SvNumberFormatter::GetType(sal_uInt32 nFIndex) const
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     short eType;
-    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    const SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
     {
         eType = css::util::NumberFormat::UNDEFINED;

@@ -602,7 +602,7 @@ public:
     bool GetNoZero() const;
     /** Get the type of a format (or css::util::NumberFormat::UNDEFINED if no entry),
          but with css::util::NumberFormat::DEFINED masked out */
-    short GetType(sal_uInt32 nFIndex);
+    short GetType(sal_uInt32 nFIndex) const;
 
     /// As the name says
     void ClearMergeTable();
