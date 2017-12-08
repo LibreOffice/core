@@ -169,8 +169,10 @@ bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rSer
 }
 
 /// Search for a frame with WATERMARK_NAME in name of type rServiceName in xText. Returns found name in rShapeName.
-uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XText>& xText, const OUString& rServiceName, OUString& rShapeName)
+uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XText>& xText,
+    const OUString& rServiceName, OUString& rShapeName, bool& bSuccess)
 {
+    bSuccess = false;
     uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
     while (xParagraphs->hasMoreElements())
@@ -178,6 +180,8 @@ uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XTex
         uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
         if (!xTextPortionEnumerationAccess.is())
             continue;
+
+        bSuccess = true;
 
         uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
         while (xTextPortions->hasMoreElements())
@@ -1382,7 +1386,8 @@ SfxWatermarkItem SwEditShell::GetWatermark()
 
         OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
         OUString sWatermark = "";
-        uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark);
+        bool bSuccess = false;
+        uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark, bSuccess);
 
         if (xWatermark.is())
         {
@@ -1416,10 +1421,14 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
                             const uno::Reference<beans::XPropertySet>& xPageStyle,
                             const uno::Reference<text::XText>& xHeaderText)
 {
+    if (!xHeaderText.is())
+        return;
+
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
     OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
     OUString sWatermark = WATERMARK_NAME;
-    uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark);
+    bool bSuccess = false;
+    uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark, bSuccess);
 
     bool bDeleteWatermark = rWatermark.GetText().isEmpty();
     if (xWatermark.is())
@@ -1453,7 +1462,7 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         }
     }
 
-    if (xWatermark.is() || bDeleteWatermark)
+    if (!bSuccess || xWatermark.is() || bDeleteWatermark)
         return;
 
     OUString sFont = rWatermark.GetFont();
