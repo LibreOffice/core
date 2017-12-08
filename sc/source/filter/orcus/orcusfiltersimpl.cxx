@@ -55,6 +55,35 @@ uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedi
     return xStatusIndicator;
 }
 
+bool loadFileContent(ScDocument& rDoc, SfxMedium& rMedium, orcus::iface::import_filter& filter)
+{
+    SvStream* pStream = rMedium.GetInStream();
+    pStream->Seek(0);
+    static const size_t nReadBuffer = 1024*32;
+    OStringBuffer aBuffer((int(nReadBuffer)));
+    size_t nRead = 0;
+    do
+    {
+        char pData[nReadBuffer];
+        nRead = pStream->ReadBytes(pData, nReadBuffer);
+        aBuffer.append(static_cast<sal_Char*>(pData), nRead);
+    }
+    while (nRead == nReadBuffer);
+
+    try
+    {
+        rDoc.ClearTabs();
+        filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("sc", "Unable to load file via orcus filter! " << e.what());
+        return false;
+    }
+
+    return true;
+}
+
 }
 
 OString ScOrcusFiltersImpl::toSystemPath(const OUString& rPath)
@@ -88,64 +117,18 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) co
 {
     ScOrcusFactory aFactory(rDoc);
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
-    SvStream* pStream = rMedium.GetInStream();
-    pStream->Seek(0);
-    static const size_t nReadBuffer = 1024*32;
-    OStringBuffer aBuffer((int(nReadBuffer)));
-    size_t nRead = 0;
-    do
-    {
-        char pData[nReadBuffer];
-        nRead = pStream->ReadBytes(pData, nReadBuffer);
-        aBuffer.append(static_cast<sal_Char*>(pData), nRead);
-    }
-    while (nRead == nReadBuffer);
 
-    try
-    {
-        rDoc.ClearTabs();
-        orcus::orcus_gnumeric filter(&aFactory);
-        filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
-    }
-    catch (const std::exception& e)
-    {
-        SAL_WARN("sc", "Unable to load gnumeric file! " << e.what());
-        return false;
-    }
-
-    return true;
+    orcus::orcus_gnumeric filter(&aFactory);
+    return loadFileContent(rDoc, rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importExcel2003XML(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
-    SvStream* pStream = rMedium.GetInStream();
-    pStream->Seek(0);
-    static const size_t nReadBuffer = 1024*32;
-    OStringBuffer aBuffer((int(nReadBuffer)));
-    size_t nRead = 0;
-    do
-    {
-        char pData[nReadBuffer];
-        nRead = pStream->ReadBytes(pData, nReadBuffer);
-        aBuffer.append(static_cast<sal_Char*>(pData), nRead);
-    }
-    while (nRead == nReadBuffer);
 
-    try
-    {
-        rDoc.ClearTabs();
-        orcus::orcus_xls_xml filter(&aFactory);
-        filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
-    }
-    catch (const std::exception& e)
-    {
-        SAL_WARN("sc", "Unable to load Excel 2003 XML file! " << e.what());
-        return false;
-    }
-
-    return true;
+    orcus::orcus_xls_xml filter(&aFactory);
+    return loadFileContent(rDoc, rMedium, filter);
 }
 
 bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const
