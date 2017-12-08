@@ -783,15 +783,6 @@ bool ScDocument::DeleteTab( SCTAB nTab )
     return bValid;
 }
 
-void ScDocument::ClearTabs()
-{
-    for (auto& it: maTabs)
-    {
-        delete it;
-    }
-    maTabs.clear();
-}
-
 bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 {
     bool bValid = false;
