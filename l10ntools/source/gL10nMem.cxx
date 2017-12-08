@@ -441,9 +441,9 @@ void l10nMem::convertToInetString(string& sText)
     static const int   replacingLen[] = { 1, 1, 1, 1, 1, 0 };
     static const char *newStr[] = { "&amp;", "&apos;", "&gt;", "&lt;", "&quot;", nullptr };
     static const int   newLen[] = { 5, 6, 4, 4, 6, 0 };
-    int i, pos;
+    int pos;
 
-    for (i = 0; replacingStr[i]; i++) {
+    for (int i = 0; replacingStr[i]; i++) {
         pos = 0;
         while ((pos = sText.find(replacingStr[i], pos)) != (int)string::npos) {
             sText.replace(pos, replacingLen[i], newStr[i]);

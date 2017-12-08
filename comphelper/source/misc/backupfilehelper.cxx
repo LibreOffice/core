@@ -1620,8 +1620,6 @@ namespace
 
         bool tryPop(oslFileHandle& rHandle)
         {
-            bool bRetval(false);
-
             if (!maPackedFileEntryVector.empty())
             {
                 // already backups there, check if different from last entry
@@ -1630,7 +1628,7 @@ namespace
                 // here the uncompress flag has to be determined, true
                 // means to add the file compressed, false means to add it
                 // uncompressed
-                bRetval = aLastEntry.copy_content(rHandle, true);
+                bool bRetval = aLastEntry.copy_content(rHandle, true);
 
                 if (bRetval)
                 {

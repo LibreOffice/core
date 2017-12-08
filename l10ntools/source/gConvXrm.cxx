@@ -49,12 +49,10 @@ void convert_xrm::doExecute()
 void convert_xrm::setId(char *yytext)
 {
     string& sText = copySource(yytext, mbNoCollectingData);
-    int          nL, nE;
-
 
     if (mbIsTag) {
-        nL = sText.find("\"");
-        nE = sText.find("\"", nL+1);
+        int nL = sText.find("\"");
+        int nE = sText.find("\"", nL+1);
         if (nL == (int)string::npos || nE == (int)string::npos)
             return;
 
@@ -67,17 +65,14 @@ void convert_xrm::setId(char *yytext)
 void convert_xrm::setLang(char *yytext)
 {
     string& sText = copySource(yytext, mbNoCollectingData);
-    string  sLang;
-    int     nL, nE;
-
 
     if (mbIsTag) {
-        nL = sText.find("\"");
-        nE = sText.find("\"", nL+1);
+        int nL = sText.find("\"");
+        int nE = sText.find("\"", nL+1);
         if (nL == (int)string::npos || nE == (int)string::npos)
             return;
 
-        sLang = sText.substr(nL+1, nE - nL -1);
+        string sLang = sText.substr(nL+1, nE - nL -1);
         if (sLang == "en-US")
             mbIsLang = true;
         else

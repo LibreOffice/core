@@ -2570,7 +2570,6 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& )
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::windowShown( const css::lang::EventObject& )
 {
-    static bool bFirstVisibleTask = true;
     static osl::Mutex aFirstVisibleLock;
 
     /* SAFE { */
@@ -2584,6 +2583,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& )
 
     if (xDesktopCheck.is())
     {
+        static bool bFirstVisibleTask = true;
         osl::ClearableMutexGuard aGuard(aFirstVisibleLock);
         bool bMustBeTriggered = bFirstVisibleTask;
         bFirstVisibleTask = false;

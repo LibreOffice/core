@@ -57,10 +57,10 @@ namespace PictReaderShape {
     bool horiz = dir[1] == 0;
     if (!horiz && !vertic && dir[0]*dir[0]+dir[1]*dir[1] > 25) return false;
 
-    long X[2]={ orig.X(), dest.X() }, Y[2] = { orig.Y(), dest.Y() };
     using namespace basegfx;
     B2DPolygon poly;
     if (horiz || vertic) {
+      long X[2]={ orig.X(), dest.X() }, Y[2] = { orig.Y(), dest.Y() };
       if (horiz) {
     if (X[0] < X[1]) X[1]+=pSize.Width();
     else X[0]+=pSize.Width();

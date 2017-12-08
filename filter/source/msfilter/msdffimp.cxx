@@ -4424,7 +4424,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                         aSet.Put(makeSdrTextAutoGrowWidthItem(false));
 
-                        double fRatio = 0;
                         VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
                         vcl::Font aFont = pDevice->GetFont();
                         aFont.SetFamilyName( aFontName );
@@ -4436,7 +4435,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText
                             && aObjName.match( "PowerPlusWaterMarkObject" ) )
                         {
-                            fRatio = (double)pDevice->GetTextHeight() / nTextWidth;
+                            double fRatio = (double)pDevice->GetTextHeight() / nTextWidth;
                             sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
                             sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
 
