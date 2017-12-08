@@ -26,6 +26,8 @@ module com { module sun { module star { module xml { module crypto {
 
 /**
  * Service of GPGSEInitializer
+ *
+ * @since LibreOffice 6.0
  */
 service GPGSEInitializer : XSEInitializer;
 
