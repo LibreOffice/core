@@ -26,7 +26,6 @@ $(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/libgpgme.11
 else ifeq ($(OS),WNT)
 
 $(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/gpgme-w32spawn.exe,src/gpgme-w32spawn.exe))
-$(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(gb_Executable_BINDIR_FOR_BUILD)/gpgme-w32spawn.exe,src/gpgme-w32spawn.exe))
 
 endif
 
