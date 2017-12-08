@@ -2605,14 +2605,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                     sal_Int16 aFormatCode = -1;
                     if ( eItemState >= SfxItemState::DEFAULT ) //Modify for more robust
                     {
-                        const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
-
-                        if ( pFormatEntry )
-                        {
-                            aFormatCode = pFormatEntry->GetType();
-                        }
-
-                        switch(aFormatCode)
+                        switch(nType)
                         {
                         case css::util::NumberFormat::NUMBER:
                         case css::util::NumberFormat::NUMBER| css::util::NumberFormat::DEFINED:
