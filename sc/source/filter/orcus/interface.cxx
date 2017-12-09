@@ -307,8 +307,9 @@ void ScOrcusSheetProperties::set_row_hidden(os::row_t row, bool hidden)
         mrDoc.getDoc().SetRowHidden(row, row, mnTab, hidden);
 }
 
-void ScOrcusSheetProperties::set_merge_cell_range(const orcus::spreadsheet::range_t& /*range*/)
+void ScOrcusSheetProperties::set_merge_cell_range(const orcus::spreadsheet::range_t& range)
 {
+    mrDoc.setMergedCells(mnTab, range.first.column, range.first.row, range.last.column, range.last.row);
 }
 
 ScOrcusConditionalFormat::ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc):
