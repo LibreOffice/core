@@ -58,20 +58,103 @@ using namespace com::sun::star;
 
 namespace os = orcus::spreadsheet;
 
-ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocumentImport& rDoc) : mrDoc(rDoc) {}
+namespace {
+
+formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t grammar )
+{
+    formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
+    switch(grammar)
+    {
+        case orcus::spreadsheet::formula_grammar_t::ods:
+            eGrammar = formula::FormulaGrammar::GRAM_ODFF;
+            break;
+        case orcus::spreadsheet::formula_grammar_t::xlsx_2007:
+        case orcus::spreadsheet::formula_grammar_t::xlsx_2010:
+            eGrammar = formula::FormulaGrammar::GRAM_OOXML;
+            break;
+        case orcus::spreadsheet::formula_grammar_t::gnumeric:
+            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
+            break;
+        case orcus::spreadsheet::formula_grammar_t::xls_xml:
+            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
+            break;
+        case orcus::spreadsheet::formula_grammar_t::unknown:
+            break;
+    }
+
+    return eGrammar;
+}
+
+}
+
+ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocumentImport& rDoc) :
+    mrDoc(rDoc), meOrcusGrammar(os::formula_grammar_t::unknown) {}
 
 void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
 {
     mrDoc.setOriginDate(year, month, day);
 }
 
-void ScOrcusGlobalSettings::set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t /*grammar*/)
+void ScOrcusGlobalSettings::set_default_formula_grammar(os::formula_grammar_t grammar)
 {
+    meCalcGrammar = getCalcGrammarFromOrcus(grammar);
+    meOrcusGrammar = grammar;
 }
 
 orcus::spreadsheet::formula_grammar_t ScOrcusGlobalSettings::get_default_formula_grammar() const
 {
-    return orcus::spreadsheet::formula_grammar_t::unknown;
+    return meOrcusGrammar;
+}
+
+ScOrcusRefResolver::ScOrcusRefResolver( const ScOrcusGlobalSettings& rGS ) :
+    mrGlobalSettings(rGS) {}
+
+os::address_t ScOrcusRefResolver::resolve_address(const char* p, size_t n)
+{
+    OUString aStr(p, n, RTL_TEXTENCODING_UTF8);
+
+    ScAddress aAddr;
+    aAddr.Parse(aStr, nullptr,
+        formula::FormulaGrammar::extractRefConvention(
+            mrGlobalSettings.getCalcGrammar()));
+
+    os::address_t ret;
+    ret.column = 0;
+    ret.row = 0;
+
+    if (aAddr.IsValid())
+    {
+        ret.column = aAddr.Col();
+        ret.row = aAddr.Row();
+    }
+
+    return ret;
+}
+
+os::range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
+{
+    OUString aStr(p, n, RTL_TEXTENCODING_UTF8);
+
+    ScRange aRange;
+    aRange.Parse(aStr, nullptr,
+        formula::FormulaGrammar::extractRefConvention(
+            mrGlobalSettings.getCalcGrammar()));
+
+    os::range_t ret;
+    ret.first.column = 0;
+    ret.first.row = 0;
+    ret.last.column = 0;
+    ret.last.row = 0;
+
+    if (aRange.IsValid())
+    {
+        ret.first.column = aRange.aStart.Col();
+        ret.first.row    = aRange.aStart.Row();
+        ret.last.column  = aRange.aEnd.Col();
+        ret.last.row     = aRange.aEnd.Row();
+    }
+
+    return ret;
 }
 
 ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
@@ -80,6 +163,7 @@ ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t n
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
     maDoc(rDoc),
     maGlobalSettings(maDoc),
+    maRefResolver(maGlobalSettings),
     maSharedStrings(*this),
     maStyles(rDoc),
     mnProgress(0) {}
@@ -487,6 +571,11 @@ void ScOrcusSheet::cellInserted()
     }
 }
 
+os::iface::import_auto_filter* ScOrcusSheet::get_auto_filter()
+{
+    return &maAutoFilter;
+}
+
 os::iface::import_table* ScOrcusSheet::get_table()
 {
     return nullptr;
@@ -567,35 +656,6 @@ void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start,
     ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
     mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
     mrDoc.getDoc().ApplyPatternAreaTab(col_start, row_start, col_end, row_end, mnTab, aPattern);
-}
-
-namespace {
-
-formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t grammar )
-{
-    formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
-    switch(grammar)
-    {
-        case orcus::spreadsheet::formula_grammar_t::ods:
-            eGrammar = formula::FormulaGrammar::GRAM_ODFF;
-            break;
-        case orcus::spreadsheet::formula_grammar_t::xlsx_2007:
-        case orcus::spreadsheet::formula_grammar_t::xlsx_2010:
-            eGrammar = formula::FormulaGrammar::GRAM_OOXML;
-            break;
-        case orcus::spreadsheet::formula_grammar_t::gnumeric:
-            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
-            break;
-        case orcus::spreadsheet::formula_grammar_t::xls_xml:
-            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
-            break;
-        case orcus::spreadsheet::formula_grammar_t::unknown:
-            break;
-    }
-
-    return eGrammar;
-}
-
 }
 
 void ScOrcusSheet::set_formula(
