@@ -1,0 +1,1374 @@
+# avmedia
+# ==============================================
+avmedia/res/av02048.svg cmd/sc_avmediaplayer.svg
+avmedia/res/av02049.svg cmd/sc_runbasic.svg
+avmedia/res/av02050.svg cmd/sc_mediapause.svg
+avmedia/res/av02051.svg cmd/sc_basicstop.svg
+avmedia/res/av02052.svg cmd/sc_mediarepeat.svg
+avmedia/res/av02053.svg cmd/sc_ok.svg
+avmedia/res/av02054.svg cmd/sc_mediamute.svg
+avmedia/res/avl02048.svg cmd/lc_avmediaplayer.svg
+avmedia/res/avl02049.svg cmd/lc_runbasic.svg
+avmedia/res/avl02050.svg cmd/lc_mediapause.svg
+avmedia/res/avl02051.svg cmd/lc_basicstop.svg
+avmedia/res/avl02052.svg cmd/lc_mediarepeat.svg
+avmedia/res/avl02053.svg cmd/lc_ok.svg
+avmedia/res/avl02054.svg cmd/lc_mediamute.svg
+
+# chart2
+# ==============================================
+chart2/res/dataeditor_icon01.svg cmd/sc_insertrowsafter.svg
+chart2/res/dataeditor_icon02.svg cmd/sc_insertcolumnsafter.svg
+chart2/res/dataeditor_icon03.svg cmd/sc_deleterows.svg
+chart2/res/dataeditor_icon04.svg cmd/sc_deletecolumns.svg
+chart2/res/dataeditor_icon05.svg cmd/sc_insertcellsright.svg
+chart2/res/dataeditor_icon06.svg cmd/sc_insertcellsdown.svg
+chart2/res/dataeditor_icon07.svg cmd/sc_insertcolumnsafter.svg
+chart2/res/selectrange.svg formula/res/refinp1.svg
+
+# cmd
+# ==============================================
+
+# Add
+cmd/lc_adddatefield.svg cmd/lc_datefield.svg
+cmd/lc_addons.svg cmd/lc_insertplugin.svg
+cmd/lc_addprintarea.svg cmd/lc_inserttable.svg
+cmd/lc_addtable.svg cmd/lc_inserttable.svg
+cmd/sc_adddatefield.svg cmd/sc_datefield.svg
+cmd/sc_addons.svg cmd/sc_insertplugin.svg
+cmd/sc_addprintarea.svg cmd/sc_inserttable.svg
+cmd/sc_addtable.svg cmd/sc_inserttable.svg
+
+# Insert
+cmd/lc_insobjctrl.svg cmd/lc_newdoc.svg
+cmd/lc_insert.svg cmd/lc_togglesheetgrid.svg
+cmd/lc_insertavmedia.svg cmd/lc_avmediaplayer.svg
+cmd/lc_insertcurrencyfield.svg cmd/lc_formattedfield.svg
+cmd/lc_insertdatefield.svg cmd/lc_datefield.svg
+cmd/lc_insertcolumnsbefore.svg cmd/lc_insertcolumns.svg
+cmd/lc_insert.svg cmd/lc_togglesheetgrid.svg
+cmd/lc_insertauthorfield.svg cmd/lc_dbviewaliases.svg
+cmd/lc_insertedit.svg cmd/lc_edit.svg
+cmd/lc_insertfield.svg cmd/lc_addfield.svg
+cmd/lc_insertctrl.svg cmd/lc_inserttable.svg
+cmd/lc_insertfilecontrol.svg cmd/lc_open.svg
+cmd/lc_insertformattedfield.svg cmd/lc_formattedfield.svg
+cmd/lc_insertformcheck.svg cmd/lc_checkbox.svg
+cmd/lc_insertformcombo.svg cmd/lc_combobox.svg
+cmd/lc_insertformlist.svg cmd/lc_listbox.svg
+cmd/lc_insertformradio.svg cmd/lc_radiobutton.svg
+cmd/lc_insertformula.svg cmd/lc_dbviewfunctions.svg
+cmd/lc_insertformvscroll.svg cmd/lc_scrollbar.svg
+cmd/lc_insertframeinteract.svg cmd/lc_insertframe.svg
+cmd/lc_insertframeinteractnocolumns.svg cmd/lc_insertframe.svg
+cmd/lc_insertobjectchart.svg cmd/lc_drawchart.svg
+cmd/lc_insertnumericfield.svg cmd/lc_numberformatstandard.svg
+cmd/lc_numericfield.svg cmd/lc_numberformatstandard.svg
+cmd/lc_insertlistbox.svg cmd/lc_listbox.svg
+cmd/lc_inserttextframe.svg cmd/lc_insertframe.svg
+cmd/lc_insertobjectstarmath.svg cmd/lc_insertmath.svg
+cmd/lc_insertpatternfield.svg cmd/lc_patternfield.svg
+cmd/lc_insertpushbutton.svg cmd/lc_pushbutton.svg
+cmd/lc_insertrowbreak.svg cmd/lc_insertpagebreak.svg
+cmd/lc_insertrowsbefore.svg cmd/lc_insertrows.svg
+cmd/lc_insertspreadsheet.svg cmd/lc_togglesheetgrid.svg
+cmd/lc_inserttimefield.svg cmd/lc_timefield.svg
+
+cmd/sc_insobjctrl.svg cmd/sc_newdoc.svg
+cmd/sc_insert.svg cmd/sc_togglesheetgrid.svg
+cmd/sc_insertavmedia.svg cmd/sc_avmediaplayer.svg
+cmd/sc_insertcurrencyfield.svg cmd/sc_formattedfield.svg
+cmd/sc_insertdatefield.svg cmd/sc_datefield.svg
+cmd/sc_insertcolumnsbefore.svg cmd/sc_insertcolumns.svg
+cmd/sc_insertauthorfield.svg cmd/sc_dbviewaliases.svg
+cmd/sc_insertedit.svg cmd/sc_text.svg
+cmd/sc_insertfield.svg cmd/sc_addfield.svg
+cmd/sc_insertctrl.svg cmd/sc_inserttable.svg
+cmd/sc_insertfilecontrol.svg cmd/sc_open.svg
+cmd/sc_insertformattedfield.svg cmd/sc_formattedfield.svg
+cmd/sc_insertformcheck.svg cmd/sc_checkbox.svg
+cmd/sc_insertformcombo.svg cmd/sc_combobox.svg
+cmd/sc_insertformlist.svg cmd/sc_listbox.svg
+cmd/sc_insertformradio.svg cmd/sc_radiobutton.svg
+cmd/sc_insertformspin.svg cmd/sc_spinbutton.svg
+cmd/sc_insertformula.svg cmd/sc_dbviewfunctions.svg
+cmd/sc_insertformvscroll.svg cmd/sc_scrollbar.svg
+cmd/sc_insertframeinteract.svg cmd/sc_insertframe.svg
+cmd/sc_insertframeinteractnocolumns.svg cmd/sc_insertframe.svg
+cmd/sc_insertgraphic.svg cmd/sc_gallery.svg
+cmd/sc_insertimagecontrol.svg cmd/sc_drawchart.svg
+cmd/sc_insertobjectchart.svg cmd/sc_drawchart.svg
+cmd/sc_insertnumericfield.svg cmd/sc_numberformatstandard.svg
+cmd/sc_numericfield.svg cmd/sc_numberformatstandard.svg
+cmd/sc_insertlistbox.svg cmd/sc_listbox.svg
+cmd/sc_inserttextframe.svg cmd/sc_insertframe.svg
+cmd/sc_insertobjectstarmath.svg cmd/sc_insertmath.svg
+cmd/sc_insertpatternfield.svg cmd/sc_patternfield.svg
+cmd/sc_insertpushbutton.svg cmd/sc_pushbutton.svg
+cmd/sc_insertrowbreak.svg cmd/sc_insertpagebreak.svg
+cmd/sc_insertrowsbefore.svg cmd/sc_insertrows.svg
+cmd/sc_insertspreadsheet.svg cmd/sc_togglesheetgrid.svg
+cmd/sc_inserttimefield.svg cmd/sc_timefield.svg
+cmd/sc_showtrackedchanges.svg cmd/sc_addwatch.svg
+cmd/lc_showtrackedchanges.svg cmd/lc_addwatch.svg
+cmd/sc_tracechangemode.svg cmd/sc_trackchanges.svg
+cmd/lc_tracechangemode.svg cmd/lc_trackchanges.svg
+
+# Zoom
+cmd/lc_previewzoom.svg cmd/lc_zoomprevious.svg
+cmd/lc_zoomminus.svg cmd/lc_zoomout.svg
+cmd/lc_zoomtoolbox.svg cmd/lc_zoomoptimal.svg
+cmd/lc_zoom.svg cmd/lc_zoomoptimal.svg
+cmd/lc_zoomplus.svg cmd/lc_zoomin.svg
+cmd/lc_zoommode.svg cmd/lc_zoomoptimal.svg
+cmd/lc_adjust.svg cmd/lc_zoomoptimal.svg
+cmd/lc_zoom100percent.svg cmd/lc_view100.svg
+cmd/sc_previewzoom.svg cmd/sc_zoomprevious.svg
+cmd/sc_zoomminus.svg cmd/sc_zoomout.svg
+cmd/sc_zoomtoolbox.svg cmd/sc_zoomoptimal.svg
+cmd/sc_zoom.svg cmd/sc_zoomoptimal.svg
+cmd/sc_zoomplus.svg cmd/sc_zoomin.svg
+cmd/sc_zoommode.svg cmd/sc_zoomoptimal.svg
+cmd/sc_adjust.svg cmd/sc_zoomoptimal.svg
+cmd/sc_zoom100percent.svg cmd/sc_view100.svg
+
+# Save
+cmd/lc_savebasicas.svg cmd/lc_saveas.svg
+cmd/lc_savegraphic.svg cmd/lc_save.svg
+cmd/lc_recsave.svg cmd/lc_save.svg
+cmd/sc_savebasicas.svg cmd/sc_saveas.svg
+cmd/sc_savegraphic.svg cmd/sc_save.svg
+cmd/sc_recsave.svg cmd/sc_save.svg
+
+# Text
+cmd/lc_textfittosizetool.svg cmd/lc_text_marquee.svg
+cmd/lc_texttoolbox.svg cmd/lc_text.svg
+cmd/lc_drawtext.svg cmd/lc_text.svg
+cmd/lc_doubleclicktextedit.svg cmd/lc_pickthrough.svg
+cmd/lc_fontworkcharacterspacingfloater.svg cmd/lc_spacing.svg
+cmd/lc_fontheight.svg cmd/lc_scaletext.svg
+cmd/sc_textfittosizetool.svg cmd/sc_text_marquee.svg
+cmd/sc_texttoolbox.svg cmd/sc_text.svg
+cmd/sc_drawtext.svg cmd/sc_text.svg
+cmd/sc_edit.svg cmd/sc_text.svg
+cmd/sc_doubleclicktextedit.svg cmd/sc_pickthrough.svg
+cmd/sc_fontworkcharacterspacingfloater.svg cmd/sc_spacing.svg
+cmd/sc_fontheight.svg cmd/sc_scaletext.svg
+
+# Object
+cmd/lc_objectcatalog.svg cmd/lc_dbnewform.svg
+cmd/sc_objectcatalog.svg cmd/sc_dbnewform.svg
+
+# 3d
+cmd/lc_view3d.svg cmd/lc_cube.svg
+cmd/lc_objects3dtoolbox.svg cmd/lc_cube.svg
+cmd/lc_convertinto3dlathefast.svg cmd/lc_convertinto3dlathe.svg
+cmd/sc_view3d.svg cmd/sc_cube.svg
+cmd/sc_objects3dtoolbox.svg cmd/sc_cube.svg
+cmd/sc_convertinto3dlathefast.svg cmd/sc_convertinto3dlathe.svg
+
+# Control
+cmd/lc_choosecontrols.svg cmd/lc_controlproperties.svg
+cmd/sc_choosecontrols.svg cmd/sc_controlproperties.svg
+cmd/lc_optionstreedialog.svg cmd/lc_controlproperties.svg
+cmd/sc_optionstreedialog.svg cmd/sc_controlproperties.svg
+
+# Formatmenu
+cmd/lc_anchormenu.svg cmd/lc_toggleanchortype.svg
+cmd/lc_conditionalformatmenu.svg cmd/lc_conditionalformatdialog.svg
+cmd/sc_conditionalformatmenu.svg cmd/sc_conditionalformatdialog.svg
+
+# Url
+cmd/lc_webhtml.svg cmd/lc_browseview.svg
+cmd/lc_openurl.svg cmd/lc_browseview.svg
+cmd/sc_webhtml.svg cmd/sc_browseview.svg
+cmd/sc_openurl.svg cmd/sc_browseview.svg
+
+# Formula
+cmd/lc_vscrollbar.svg cmd/lc_scrollbar.svg
+cmd/sc_vscrollbar.svg cmd/sc_scrollbar.svg
+cmd/lc_hscrollbar.svg cmd/lc_insertformhscroll.svg
+cmd/sc_hscrollbar.svg cmd/sc_insertformhscroll.svg
+
+# Annotations
+cmd/sc_insertannotation.svg cmd/sc_showannotations.svg
+cmd/lc_insertannotation.svg cmd/lc_showannotations.svg
+
+# Template Menu
+cmd/sc_templatemenu.svg cmd/sc_adddirect.svg
+
+# Animation
+cmd/lc_customanimation.svg cmd/lc_animationobjects.svg
+cmd/sc_customanimation.svg cmd/sc_animationobjects.svg
+
+# Media
+cmd/lc_datastreamsplay.svg cmd/lc_runbasic.svg
+cmd/sc_datastreamsplay.svg cmd/sc_runbasic.svg
+cmd/lc_datastreamsstop.svg cmd/lc_basicstop.svg
+cmd/sc_datastreamsstop.svg cmd/sc_basicstop.svg
+
+# Alignment
+cmd/lc_sectionalignright.svg cmd/lc_objectalignright.svg
+cmd/lc_sectionalignleft.svg cmd/lc_objectalignleft.svg
+cmd/lc_objectalign.svg cmd/lc_objectalignleft.svg
+cmd/lc_alignvcenter.svg cmd/lc_alignverticalcenter.svg
+cmd/lc_sectionaligntop.svg cmd/lc_alignup.svg
+cmd/lc_sectionalignbottom.svg cmd/lc_aligndown.svg
+
+cmd/sc_sectionalignright.svg cmd/sc_objectalignright.svg
+cmd/sc_sectionalignleft.svg cmd/sc_objectalignleft.svg
+cmd/sc_objectalign.svg cmd/sc_objectalignleft.svg
+cmd/sc_alignvcenter.svg cmd/sc_alignverticalcenter.svg
+cmd/sc_sectionaligntop.svg cmd/sc_alignup.svg
+cmd/sc_sectionalignbottom.svg cmd/sc_aligndown.svg
+cmd/sc_alignframemenu.svg cmd/sc_alignleft.svg
+cmd/sc_alignhorizontalceter.svg cmd/sc_alignhorizontalcenter.svg
+
+# Graphic
+cmd/lc_grafgamma.svg cmd/lc_graphicfilterinvert.svg
+cmd/lc_colorsettings.svg cmd/lc_graphicfiltersmooth.svg
+cmd/lc_graphicfilterposter.svg cmd/lc_graphicdialog.svg
+cmd/lc_grafmode.svg cmd/lc_graphicdialog.svg
+cmd/lc_grafinvert.svg cmd/lc_graphicfilterinvert.svg
+cmd/lc_colorview.svg cmd/lc_graphicfilterinvert.svg
+cmd/sc_grafgamma.svg cmd/sc_graphicfilterinvert.svg
+cmd/sc_colorsettings.svg cmd/sc_graphicfiltersmooth.svg
+cmd/sc_graphicfilterposter.svg cmd/sc_graphicdialog.svg
+cmd/sc_grafmode.svg cmd/sc_graphicdialog.svg
+cmd/sc_grafinvert.svg cmd/sc_graphicfilterinvert.svg
+cmd/sc_colorview.svg cmd/sc_graphicfilterinvert.svg
+cmd/sc_imagebutton.svg cmd/sc_gallery.svg
+cmd/lc_imagebutton.svg cmd/lc_gallery.svg
+
+# shapes
+cmd/lc_fontworkshapetype.fontwork-circle-pour.svg cmd/lc_basicshapes.ring.svg
+cmd/lc_flowchartshapes.flowchart-connector.svg cmd/lc_circle.svg
+cmd/lc_basicshapes.circle.svg cmd/lc_circle.svg
+cmd/lc_symbolshapes.smiley.svg cmd/lc_symbolshapes.svg
+cmd/lc_basicshapes.round-rectangle.svg cmd/lc_rect_rounded.svg
+cmd/lc_flowchartshapes.flowchart-punched-tape.svg cmd/lc_fontworkshapetype.fontwork-wave.svg
+cmd/lc_basicshapes.parallelogram.svg cmd/lc_flowchartshapes.flowchart-data.svg
+cmd/lc_calloutshapes.round-rectangular-callout.svg cmd/lc_calloutshapes.svg
+cmd/lc_flowchartshapes.flowchart-manual-operation.svg cmd/lc_basicshapes.trapezoid.svg
+cmd/lc_flowchartshapes.flowchart-alternate-process.svg cmd/lc_basicshapes.round-quadrat.svg
+cmd/lc_arrowshapes.left-right-arrow.svg cmd/lc_arrowshapes.svg
+cmd/lc_flowchartshapes.flowchart-extract.svg cmd/lc_basicshapes.isosceles-triangle.svg
+cmd/lc_fontworkshapetype.fontwork-triangle-up.svg cmd/lc_basicshapes.isosceles-triangle.svg
+cmd/lc_basicshapes.circle-pie.svg cmd/lc_pie.svg
+cmd/lc_flowchartshapes.flowchart-merge.svg cmd/lc_fontworkshapetype.fontwork-triangle-down.svg
+cmd/lc_fontworkshapetype.fontwork-fade-down.svg cmd/lc_basicshapes.trapezoid.svg
+cmd/lc_flowchartshapes.flowchart-magnetic-disk.svg cmd/lc_basicshapes.can.svg
+
+cmd/sc_fontworkshapetype.fontwork-circle-pour.svg cmd/sc_basicshapes.ring.svg
+cmd/sc_basicshapes.circle.svg cmd/sc_circle.svg
+cmd/sc_flowchartshapes.flowchart-connector.svg cmd/sc_circle.svg
+cmd/sc_symbolshapes.smiley.svg cmd/sc_symbolshapes.svg
+cmd/sc_basicshapes.round-rectangle.svg cmd/sc_rect_rounded.svg
+cmd/sc_flowchartshapes.flowchart-punched-tape.svg cmd/sc_fontworkshapetype.fontwork-wave.svg
+cmd/sc_basicshapes.parallelogram.svg cmd/sc_flowchartshapes.flowchart-data.svg
+cmd/sc_calloutshapes.round-rectangular-callout.svg cmd/sc_calloutshapes.svg
+cmd/sc_flowchartshapes.flowchart-manual-operation.svg cmd/sc_basicshapes.trapezoid.svg
+cmd/sc_flowchartshapes.flowchart-alternate-process.svg cmd/sc_basicshapes.round-quadrat.svg
+cmd/sc_arrowshapes.left-right-arrow.svg cmd/sc_arrowshapes.svg
+cmd/sc_flowchartshapes.flowchart-extract.svg cmd/sc_basicshapes.isosceles-triangle.svg
+cmd/sc_fontworkshapetype.fontwork-triangle-up.svg cmd/sc_basicshapes.isosceles-triangle.svg
+cmd/sc_basicshapes.circle-pie.svg cmd/sc_pie.svg
+cmd/sc_flowchartshapes.flowchart-merge.svg cmd/sc_fontworkshapetype.fontwork-triangle-down.svg
+cmd/sc_fontworkshapetype.fontwork-fade-down.svg cmd/sc_basicshapes.trapezoid.svg
+cmd/sc_flowchartshapes.flowchart-magnetic-disk.svg cmd/sc_basicshapes.can.svg
+
+# Open
+cmd/lc_openfromwriter.svg cmd/lc_open.svg
+cmd/lc_openfromcalc.svg cmd/lc_open.svg
+cmd/lc_filecontrol.svg cmd/lc_open.svg
+cmd/sc_openfromwriter.svg cmd/sc_open.svg
+cmd/sc_openfromcalc.svg cmd/sc_open.svg
+cmd/sc_filecontrol.svg cmd/sc_open.svg
+
+# Merge
+cmd/lc_mergedocument.svg cmd/lc_mergedocuments.svg
+cmd/sc_mergedocument.svg cmd/sc_mergedocuments.svg
+
+# Print
+cmd/lc_printpagepreview.svg cmd/lc_printpreview.svg
+cmd/lc_printlayout.svg cmd/lc_printpreview.svg
+cmd/lc_previewprintoptions.svg cmd/lc_printpreview.svg
+cmd/lc_sendfax.svg cmd/lc_print.svg
+cmd/lc_editprintarea.svg cmd/lc_editdoc.svg
+cmd/sc_printpagepreview.svg cmd/sc_printpreview.svg
+cmd/sc_printlayout.svg cmd/sc_printpreview.svg
+cmd/sc_previewprintoptions.svg cmd/sc_printpreview.svg
+cmd/sc_defineprintarea.svg cmd/sc_printpreview.svg
+cmd/sc_sendfax.svg cmd/sc_print.svg
+cmd/sc_editprintarea.svg cmd/sc_editdoc.svg
+
+# Delete
+cmd/lc_deleteprintarea.svg cmd/lc_delete.svg
+cmd/lc_deleteprintarea.svg cmd/lc_delete.svg
+cmd/lc_deleterecord.svg cmd/lc_delete.svg
+cmd/lc_dbtabledelete.svg cmd/lc_delete.svg
+cmd/lc_dbreportdelete.svg cmd/lc_delete.svg
+cmd/lc_dbquerydelete.svg cmd/lc_delete.svg
+cmd/lc_dbformdelete.svg cmd/lc_delete.svg
+cmd/lc_dbclearquery.svg cmd/lc_delete.svg
+cmd/sc_deleteprintarea.svg cmd/sc_delete.svg
+cmd/sc_deleterecord.svg cmd/sc_delete.svg
+cmd/sc_dbtabledelete.svg cmd/sc_delete.svg
+cmd/sc_dbreportdelete.svg cmd/sc_delete.svg
+cmd/sc_dbquerydelete.svg cmd/sc_delete.svg
+cmd/sc_dbformdelete.svg cmd/sc_delete.svg
+cmd/sc_dbclearquery.svg cmd/sc_delete.svg
+
+# Folder
+cmd/lc_dbtableopen.svg cmd/lc_open.svg
+cmd/lc_dbreportopen.svg cmd/lc_open.svg
+cmd/lc_dbqueryopen.svg cmd/lc_open.svg
+cmd/lc_dbformopen.svg cmd/lc_open.svg
+cmd/lc_insertdoc.svg cmd/lc_open.svg
+cmd/lc_newrecord.svg cmd/lc_open.svg
+cmd/sc_dbtableopen.svg cmd/sc_open.svg
+cmd/sc_dbreportopen.svg cmd/sc_open.svg
+cmd/sc_dbqueryopen.svg cmd/sc_open.svg
+cmd/sc_dbformopen.svg cmd/sc_open.svg
+cmd/sc_insertdoc.svg cmd/sc_open.svg
+cmd/sc_open_h.svg cmd/sc_open.svg
+cmd/sc_newrecord.svg cmd/sc_open.svg
+
+# Import
+cmd/lc_importfromfile.svg cmd/lc_dataimport.svg
+cmd/sc_importfromfile.svg cmd/sc_dataimport.svg
+
+# Wizard
+cmd/lc_dbnewqueryautopilot.svg cmd/lc_autoformat.svg
+cmd/lc_usewizards.svg cmd/lc_autoformat.svg
+cmd/lc_graphicfiltertoolbox.svg cmd/lc_autoformat.svg
+cmd/lc_dbnewtableautopilot.svg cmd/lc_autoformat.svg
+cmd/lc_dbnewreportautopilot.svg cmd/lc_autoformat.svg
+cmd/lc_dbnewformautopilot.svg cmd/lc_autoformat.svg
+cmd/lc_commontaskbarvisible.svg cmd/lc_autoformat.svg
+cmd/lc_autopilotmenu.svg cmd/lc_autoformat.svg
+cmd/lc_newarrangement.svg cmd/lc_autoformat.svg
+cmd/sc_dbnewqueryautopilot.svg cmd/sc_autoformat.svg
+cmd/sc_usewizards.svg cmd/sc_autoformat.svg
+cmd/sc_graphicfiltertoolbox.svg cmd/sc_autoformat.svg
+cmd/sc_dbnewtableautopilot.svg cmd/sc_autoformat.svg
+cmd/sc_dbnewreportautopilot.svg cmd/sc_autoformat.svg
+cmd/sc_dbnewformautopilot.svg cmd/sc_autoformat.svg
+cmd/sc_commontaskbarvisible.svg cmd/sc_autoformat.svg
+cmd/sc_autopilotmenu.svg cmd/sc_autoformat.svg
+cmd/sc_newarrangement.svg cmd/sc_autoformat.svg
+
+# Filter
+cmd/lc_formfilterexecute.svg cmd/lc_datafilterstandardfilter.svg
+cmd/lc_filtercrit.svg cmd/lc_datafilterstandardfilter.svg
+cmd/lc_formfilter.svg cmd/lc_datafilterspecialfilter.svg
+cmd/lc_autofilter.svg cmd/lc_datafilterautofilter.svg
+cmd/lc_removefilter.svg cmd/lc_removefiltersort.svg
+cmd/sc_formfilterexecute.svg cmd/sc_datafilterstandardfilter.svg
+cmd/sc_filtercrit.svg cmd/sc_datafilterstandardfilter.svg
+cmd/sc_formfilter.svg cmd/sc_datafilterspecialfilter.svg
+cmd/sc_autofilter.svg cmd/sc_datafilterautofilter.svg
+cmd/sc_removefilter.svg cmd/sc_removefiltersort.svg
+
+# Bullets
+cmd/lc_bulletliststyle.svg cmd/lc_defaultbullet.svg
+cmd/sc_bulletliststyle.svg cmd/sc_defaultbullet.svg
+cmd/lc_romanliststyle.svg cmd/lc_defaultnumbering.svg
+cmd/sc_romanliststyle.svg cmd/sc_defaultnumbering.svg
+cmd/lc_defaultparastyle.svg cmd/lc_controlcodes.svg
+cmd/sc_defaultparastyle.svg cmd/sc_controlcodes.svg
+
+# Group
+cmd/lc_leaveallgroups.svg cmd/lc_leavegroup.svg
+cmd/sc_leaveallgroups.svg cmd/sc_leavegroup.svg
+cmd/sc_formatungroup.svg cmd/sc_ungroup.svg
+
+# Undo
+cmd/lc_recundo.svg cmd/lc_undo.svg
+cmd/sc_recundo.svg cmd/sc_undo.svg
+
+# Bezier
+cmd/lc_bezieredge.svg cmd/lc_bezierappend.svg
+cmd/sc_bezieredge.svg cmd/sc_bezierappend.svg
+
+# Frame
+cmd/lc_setborderstyle.svg cmd/lc_diagramarea.svg
+cmd/sc_setborderstyle.svg cmd/sc_diagramarea.svg
+
+# Label
+cmd/lc_definename.svg cmd/lc_label.svg
+cmd/sc_definename.svg cmd/sc_label.svg
+
+# Rotate
+cmd/lc_clickchangerotation.svg cmd/lc_toggleobjectrotatemode.svg
+cmd/sc_clickchangerotation.svg cmd/sc_toggleobjectrotatemode.svg
+
+# AddField
+cmd/lc_fieldnames.svg cmd/lc_addfield.svg
+cmd/lc_dbtablerename.svg cmd/lc_addfield.svg
+cmd/lc_dbreportrename.svg cmd/lc_addfield.svg
+cmd/lc_dbqueryrename.svg cmd/lc_addfield.svg
+cmd/lc_dbformrename.svg cmd/lc_addfield.svg
+cmd/sc_fieldnames.svg cmd/sc_addfield.svg
+cmd/sc_dbtablerename.svg cmd/sc_addfield.svg
+cmd/sc_dbreportrename.svg cmd/sc_addfield.svg
+cmd/sc_dbqueryrename.svg cmd/sc_addfield.svg
+cmd/sc_dbformrename.svg cmd/sc_addfield.svg
+
+# Edit
+cmd/lc_switchcontroldesignmode.svg cmd/lc_editdoc.svg
+cmd/lc_quickedit.svg cmd/lc_editdoc.svg
+cmd/lc_renamemasterpage.svg cmd/lc_slidemasterpage.svg
+cmd/lc_dsbeditdoc.svg cmd/lc_editdoc.svg
+cmd/sc_switchcontroldesignmode.svg cmd/sc_editdoc.svg
+cmd/sc_solidcreate.svg cmd/sc_editdoc.svg
+cmd/sc_renamemasterpage.svg cmd/sc_slidemasterpage.svg
+cmd/sc_quickedit.svg cmd/sc_editdoc.svg
+cmd/sc_dsbeditdoc.svg cmd/sc_editdoc.svg
+
+# Quit
+cmd/lc_closemasterview.svg cmd/lc_quit.svg
+cmd/lc_closewin.svg cmd/lc_quit.svg
+cmd/lc_closepreview.svg cmd/lc_quit.svg
+cmd/sc_closemasterview.svg cmd/sc_quit.svg
+cmd/sc_closewin.svg cmd/sc_quit.svg
+cmd/sc_closepreview.svg cmd/sc_quit.svg
+
+# Close
+cmd/lc_closedocs.svg cmd/lc_closedoc.svg
+cmd/lc_exitsearch.svg cmd/lc_closedoc.svg
+cmd/sc_closedocs.svg cmd/sc_closedoc.svg
+cmd/sc_exitsearch.svg cmd/sc_closedoc.svg
+
+# arc
+cmd/lc_basicshapes.block-arc.svg cmd/lc_arc.svg
+cmd/sc_basicshapes.block-arc.svg cmd/sc_arc.svg
+
+# Cancel
+cmd/lc_no.svg cmd/lc_cancel.svg
+cmd/sc_no.svg cmd/sc_cancel.svg
+cmd/sc_removetableof.svg cmd/sc_cancel.svg
+
+# Protect
+cmd/lc_protecttracechangemode.svg cmd/lc_protect.svg
+cmd/sc_protecttracechangemode.svg cmd/sc_protect.svg
+
+# Page
+cmd/lc_modifypage.svg cmd/lc_pagedialog.svg
+cmd/sc_modifypage.svg cmd/sc_pagedialog.svg
+cmd/lc_insertobjctrl.svg cmd/lc_drawchart.svg
+cmd/sc_insertobjctrl.svg cmd/sc_drawchart.svg
+
+# Link
+cmd/lc_edithyperlink.svg cmd/lc_inserthyperlink.svg
+cmd/sc_edithyperlink.svg cmd/sc_inserthyperlink.svg
+
+# Outline
+cmd/lc_outlineup.svg cmd/lc_moveup.svg
+cmd/lc_outlinedown.svg cmd/lc_movedown.svg
+cmd/sc_outlineup.svg cmd/sc_moveup.svg
+cmd/sc_outlinedown.svg cmd/sc_movedown.svg
+
+# Line
+cmd/lc_xlinestyle.svg cmd/lc_linestyle.svg
+cmd/lc_hfixedline.svg cmd/lc_line.svg
+cmd/sc_xlinestyle.svg cmd/sc_linestyle.svg
+cmd/sc_hfixedline.svg cmd/sc_line.svg
+
+# Mail merge
+cmd/lc_mailmergefirstentry.svg cmd/lc_firstrecord.svg
+cmd/sc_mailmergefirstentry.svg cmd/sc_firstrecord.svg
+cmd/lc_mailmergelastentry.svg cmd/lc_lastrecord.svg
+cmd/sc_mailmergelastentry.svg cmd/sc_lastrecord.svg
+cmd/lc_mailmergenextentry.svg cmd/lc_nextrecord.svg
+cmd/sc_mailmergenextentry.svg cmd/sc_nextrecord.svg
+cmd/lc_mailmergepreventry.svg cmd/lc_prevrecord.svg
+cmd/sc_mailmergepreventry.svg cmd/sc_prevrecord.svg
+
+# Arrows
+cmd/lc_arrowstoolbox.svg cmd/lc_linearrowend.svg
+cmd/sc_arrowstoolbox.svg cmd/sc_linearrowend.svg
+# <
+cmd/lc_previoustrackedchange.svg cmd/lc_prevrecord.svg
+cmd/lc_pageup.svg cmd/lc_prevrecord.svg
+cmd/lc_previouspage.svg cmd/lc_prevrecord.svg
+cmd/lc_navigateback.svg cmd/lc_prevrecord.svg
+cmd/lc_browsebackward.svg cmd/lc_prevrecord.svg
+cmd/sc_previoustrackedchange.svg cmd/sc_prevrecord.svg
+cmd/sc_pageup.svg cmd/sc_prevrecord.svg
+cmd/sc_previouspage.svg cmd/sc_prevrecord.svg
+cmd/sc_navigateback.svg cmd/sc_prevrecord.svg
+cmd/sc_browsebackward.svg cmd/sc_prevrecord.svg
+# >
+cmd/lc_nexttrackedchange.svg cmd/lc_nextrecord.svg
+cmd/lc_nextpage.svg cmd/lc_nextrecord.svg
+cmd/lc_navigateforward.svg cmd/lc_nextrecord.svg
+cmd/lc_pagedown.svg cmd/lc_nextrecord.svg
+cmd/sc_nexttrackedchange.svg cmd/sc_nextrecord.svg
+cmd/sc_nextpage.svg cmd/sc_nextrecord.svg
+cmd/sc_navigateforward.svg cmd/sc_nextrecord.svg
+cmd/sc_pagedown.svg cmd/sc_nextrecord.svg
+# >|
+cmd/lc_lastpage.svg cmd/lc_lastrecord.svg
+cmd/lc_gotoendofdoc.svg cmd/lc_lastrecord.svg
+cmd/lc_gotoend.svg cmd/lc_lastrecord.svg
+cmd/sc_lastpage.svg cmd/sc_lastrecord.svg
+cmd/sc_gotoendofdoc.svg cmd/sc_lastrecord.svg
+cmd/sc_gotoend.svg cmd/sc_lastrecord.svg
+# |<
+cmd/lc_gotostartofdoc.svg cmd/lc_firstrecord.svg
+cmd/sc_gotostartofdoc.svg cmd/sc_firstrecord.svg
+cmd/lc_gotostartoftable.svg cmd/lc_firstrecord.svg
+cmd/sc_gotostartoftable.svg cmd/sc_firstrecord.svg
+
+# Hyperlink
+cmd/lc_hyperlinkdialog.svg cmd/lc_inserthyperlink.svg
+cmd/sc_hyperlinkdialog.svg cmd/sc_inserthyperlink.svg
+
+# Spellcheck
+cmd/lc_spellingandgrammardialog.svg cmd/lc_spelling.svg
+cmd/lc_spelldialog.svg cmd/lc_spelling.svg
+cmd/sc_spellingandgrammardialog.svg cmd/sc_spelling.svg
+cmd/sc_spelldialog.svg cmd/sc_spelling.svg
+
+# Color
+cmd/lc_fontcolor.svg cmd/lc_color.svg
+cmd/sc_fontcolor.svg cmd/sc_color.svg
+cmd/sc_characterbackgroundpattern.svg cmd/sc_backcolor.svg
+cmd/lc_characterbackgroundpattern.svg cmd/lc_backcolor.svg
+cmd/lc_backgroundpatterncontroller.svg cmd/lc_backgroundcolor.svg
+
+# Paragraph Alignment
+cmd/lc_leftpara.svg cmd/lc_alignleft.svg
+cmd/lc_centerpara.svg cmd/lc_alignhorizontalcenter.svg
+cmd/lc_fontworkalignmentfloater.svg cmd/lc_alignhorizontalcenter.svg
+cmd/lc_rightpara.svg cmd/lc_alignright.svg
+cmd/lc_justifypara.svg cmd/lc_alignblock.svg
+cmd/sc_leftpara.svg cmd/sc_alignleft.svg
+cmd/sc_centerpara.svg cmd/sc_alignhorizontalcenter.svg
+cmd/sc_fontworkalignmentfloater.svg cmd/sc_alignhorizontalcenter.svg
+cmd/sc_rightpara.svg cmd/sc_alignright.svg
+cmd/sc_justifypara.svg cmd/sc_alignblock.svg
+
+# Vertical Text Alignment
+cmd/lc_cellverttop.svg cmd/lc_aligntop.svg
+cmd/lc_cellvertcenter.svg cmd/lc_alignverticalcenter.svg
+cmd/lc_cellvertbottom.svg cmd/lc_alignbottom.svg
+cmd/sc_cellverttop.svg cmd/sc_aligntop.svg
+cmd/sc_cellvertcenter.svg cmd/sc_alignverticalcenter.svg
+cmd/sc_cellvertbottom.svg cmd/sc_alignbottom.svg
+
+# paragraph line spacing drop down
+cmd/lc_linespacing.svg cmd/lc_spacepara15.svg
+cmd/sc_linespacing.svg cmd/sc_spacepara15.svg
+
+# calc menu entries
+cmd/lc_functionbox.svg cmd/lc_dbviewfunctions.svg
+cmd/sc_datapilotmenu.svg cmd/sc_datadatapilotrun.svg
+cmd/sc_insertrowsmenu.svg cmd/sc_insertrows.svg
+cmd/sc_insertcolumnsmenu.svg cmd/sc_insertcolumns.svg
+cmd/sc_functiondialog.svg cmd/sc_dbviewfunctions.svg
+cmd/lc_functiondialog.svg cmd/lc_dbviewfunctions.svg
+cmd/sc_functionbox.svg cmd/sc_dbviewfunctions.svg
+cmd/sc_sheetcommentmenu.svg cmd/sc_showannotations.svg
+
+# Shapes
+cmd/lc_basicshapes.svg cmd/lc_basicshapes.diamond.svg
+cmd/lc_basicshapes.ellipse.svg cmd/lc_ellipse.svg
+cmd/lc_basicshapes.rectangle.svg cmd/lc_rect.svg
+cmd/lc_rectangletoolbox.svg cmd/lc_rect.svg
+cmd/lc_linetoolbox.svg cmd/lc_freeline.svg
+cmd/lc_ellipsetoolbox.svg cmd/lc_ellipse.svg
+cmd/sc_basicshapes.svg cmd/sc_basicshapes.diamond.svg
+cmd/sc_basicshapes.ellipse.svg cmd/sc_ellipse.svg
+cmd/sc_basicshapes.rectangle.svg cmd/sc_rect.svg
+cmd/sc_rectangletoolbox.svg cmd/sc_rect.svg
+cmd/sc_linetoolbox.svg cmd/sc_freeline.svg
+cmd/sc_ellipsetoolbox.svg cmd/sc_ellipse.svg
+
+# Format
+cmd/lc_styleapply.svg cmd/lc_formatarea.svg
+cmd/lc_fillstyle.svg cmd/lc_formatarea.svg
+cmd/lc_fillcolor.svg cmd/lc_formatarea.svg
+cmd/sc_stylewatercanmode.svg cmd/sc_formatarea.svg
+cmd/sc_styleapply.svg cmd/sc_formatarea.svg
+cmd/sc_fillstyle.svg cmd/sc_formatarea.svg
+cmd/sc_fillcolor.svg cmd/sc_formatarea.svg
+
+# Ok
+cmd/lc_yes.svg cmd/lc_ok.svg
+cmd/lc_apply.svg cmd/lc_ok.svg
+cmd/lc_accepttrackedchange.svg cmd/lc_ok.svg
+cmd/sc_yes.svg cmd/sc_ok.svg
+cmd/sc_apply.svg cmd/sc_ok.svg
+cmd/sc_accepttrackedchange.svg cmd/sc_ok.svg
+
+# up and down
+cmd/lc_movepageup.svg cmd/lc_upsearch.svg
+cmd/sc_movepageup.svg cmd/sc_upsearch.svg
+cmd/lc_movepagedown.svg cmd/lc_downsearch.svg
+cmd/sc_movepagedown.svg cmd/sc_downsearch.svg
+
+# Find Toolbar
+cmd/lc_scrolltonext.svg cmd/lc_downsearch.svg
+cmd/sc_scrolltonext.svg cmd/sc_downsearch.svg
+cmd/lc_scrolltoprevious.svg cmd/lc_upsearch.svg
+cmd/sc_scrolltoprevious.svg cmd/sc_upsearch.svg
+cmd/lc_findbar.svg cmd/lc_recsearch.svg
+cmd/sc_findbar.svg cmd/sc_recsearch.svg
+
+# File Menu
+cmd/lc_exporttopdf.svg cmd/lc_exportdirecttopdf.svg
+cmd/sc_exporttopdf.svg cmd/sc_exportdirecttopdf.svg
+cmd/lc_exporttoepub.svg cmd/lc_exportdirecttoepub.svg
+cmd/sc_exporttoepub.svg cmd/sc_exportdirecttoepub.svg
+
+# Square
+cmd/lc_basicshapes.quadrat.svg cmd/lc_square.svg
+cmd/lc_flowchartshapes.flowchart-process.svg cmd/lc_square.svg
+cmd/lc_basicshapes.frame.svg cmd/lc_rect_unfilled.svg
+cmd/sc_basicshapes.quadrat.svg cmd/sc_square.svg
+cmd/sc_flowchartshapes.flowchart-process.svg cmd/sc_square.svg
+cmd/sc_basicshapes.frame.svg cmd/sc_rect_unfilled.svg
+
+# Sort
+cmd/lc_sortdown.svg cmd/lc_sortdescending.svg
+cmd/lc_sortup.svg cmd/lc_sortascending.svg
+cmd/lc_tablesort.svg cmd/lc_sortascending.svg
+cmd/lc_ordercrit.svg cmd/lc_sortascending.svg
+cmd/sc_sortdown.svg cmd/sc_sortdescending.svg
+cmd/sc_sortup.svg cmd/sc_sortascending.svg
+cmd/sc_tablesort.svg cmd/sc_sortascending.svg
+cmd/sc_ordercrit.svg cmd/sc_sortascending.svg
+cmd/sc_reverseorder.svg cmd/sc_tabdialog.svg
+
+# Code
+cmd/lc_sourceview.svg cmd/lc_symbolshapes.brace-pair.svg
+cmd/sc_sourceview.svg cmd/sc_symbolshapes.brace-pair.svg
+
+# Contour
+cmd/lc_contourdialog.svg cmd/lc_imagemapdialog.svg
+cmd/sc_contourdialog.svg cmd/sc_imagemapdialog.svg
+
+# Config
+cmd/lc_formatselection.svg cmd/lc_formproperties.svg
+cmd/sc_formatselection.svg cmd/sc_formproperties.svg
+
+# Hyphenation
+cmd/lc_hyphenation.svg cmd/lc_hyphenate.svg
+cmd/sc_hyphenation.svg cmd/sc_hyphenate.svg
+
+# Currency
+cmd/lc_currencyfield.svg cmd/lc_formattedfield.svg
+cmd/sc_currencyfield.svg cmd/sc_formattedfield.svg
+cmd/lc_numberformatcurrency.svg cmd/lc_formattedfield.svg
+cmd/sc_numberformatcurrency.svg cmd/sc_formattedfield.svg
+cmd/lc_numberformatcurrencysimple.svg cmd/lc_formattedfield.svg
+cmd/sc_numberformatcurrencysimple.svg cmd/sc_formattedfield.svg
+
+# Fontwork
+cmd/lc_fontworkshapetype.svg cmd/lc_fontwork.svg
+cmd/sc_fontworkshapetype.svg cmd/sc_fontwork.svg
+
+# Axis
+cmd/lc_toggleaxisdescr.svg cmd/lc_helplinesvisible.svg
+cmd/sc_toggleaxisdescr.svg cmd/sc_helplinesvisible.svg
+
+# Grid
+cmd/lc_gridvisible.svg cmd/lc_grid.svg
+cmd/sc_gridvisible.svg cmd/sc_grid.svg
+
+# Crop
+cmd/lc_grafattrcrop.svg cmd/lc_crop.svg
+cmd/sc_transformdialog.svg cmd/sc_crop.svg
+cmd/sc_grafattrcrop.svg cmd/sc_crop.svg
+
+# Group
+cmd/sc_formatgroup.svg cmd/sc_group.svg
+
+# Extrusion Rotat
+cmd/lc_rulerrowsvertical.svg cmd/lc_extrusiontiltright.svg
+cmd/lc_rulerrows.svg cmd/lc_extrusiontiltleft.svg
+cmd/sc_rulerrowsvertical.svg cmd/sc_extrusiontiltright.svg
+cmd/sc_rulerrows.svg cmd/sc_extrusiontiltleft.svg
+
+# Presentation
+cmd/lc_diaauto.svg cmd/lc_dia.svg
+cmd/sc_diaauto.svg cmd/sc_dia.svg
+cmd/lc_presentation.svg cmd/lc_dia.svg
+cmd/sc_presentation.svg cmd/sc_dia.svg
+
+# Style
+cmd/lc_editstyled.svg cmd/lc_editstyle.svg
+cmd/sc_editstyled.svg cmd/sc_editstyle.svg
+
+# Outline
+cmd/lc_outlineright.svg cmd/lc_decrementlevel.svg
+cmd/lc_outlineleft.svg cmd/lc_decrementindent.svg
+cmd/lc_incrementlevel.svg cmd/lc_decrementindent.svg
+cmd/lc_incrementindent.svg cmd/lc_decrementlevel.svg
+cmd/sc_outlineright.svg cmd/sc_decrementlevel.svg
+cmd/sc_outlineleft.svg cmd/sc_decrementindent.svg
+cmd/sc_incrementlevel.svg cmd/sc_decrementindent.svg
+cmd/sc_incrementindent.svg cmd/sc_decrementlevel.svg
+
+# Mirror
+cmd/lc_fliphorizontal.svg cmd/lc_mirror.svg
+cmd/sc_fliphorizontal.svg cmd/sc_mirror.svg
+cmd/lc_flipvertical.svg cmd/lc_mirrorvert.svg
+cmd/sc_flipvertical.svg cmd/sc_mirrorvert.svg
+cmd/sc_mirrorhorz.svg cmd/sc_mirror.svg
+
+# Connector
+cmd/lc_connectortoolbox.svg cmd/lc_connector.svg
+cmd/lc_connectorlinescircles.svg cmd/lc_connector.svg
+cmd/lc_connectorcircles.svg cmd/lc_connector.svg
+cmd/sc_connectortoolbox.svg cmd/sc_connector.svg
+cmd/sc_connectorlinescircles.svg cmd/sc_connector.svg
+cmd/sc_connectorcircles.svg cmd/sc_connector.svg
+
+cmd/lc_connectorlinecircles.svg cmd/lc_connectorline.svg
+cmd/sc_connectorlinecircles.svg cmd/sc_connectorline.svg
+cmd/lc_connectorcurvecircles.svg cmd/lc_connectorcurve.svg
+cmd/sc_connectorcurvecircles.svg cmd/sc_connectorcurve.svg
+
+# Time
+cmd/lc_rehearsetimings.svg cmd/lc_timefield.svg
+cmd/sc_rehearsetimings.svg cmd/sc_timefield.svg
+cmd/sc_numberformattime.svg cmd/sc_timefield.svg
+
+# Arrange
+cmd/lc_setobjecttoforeground.svg cmd/lc_bringtofront.svg
+cmd/sc_setobjecttoforeground.svg cmd/sc_bringtofront.svg
+cmd/sc_arrangemenu.svg cmd/sc_bringtofront.svg
+cmd/sc_arrangeframemenu.svg cmd/sc_bringtofront.svg
+cmd/lc_setobjecttobackground.svg cmd/lc_sendtoback.svg
+cmd/sc_setobjecttobackground.svg cmd/sc_sendtoback.svg
+
+# Bibliography
+cmd/lc_insertauthoritiesentry.svg cmd/lc_bibliographycomponent.svg
+cmd/sc_insertauthoritiesentry.svg cmd/sc_bibliographycomponent.svg
+
+# Reload
+cmd/lc_refresh.svg cmd/lc_reload.svg
+cmd/lc_refreshformcontrol.svg cmd/lc_reload.svg
+cmd/lc_draw.svg cmd/lc_reload.svg
+cmd/lc_updateallindexes.svg cmd/lc_reload.svg
+cmd/lc_updateall.svg cmd/lc_reload.svg
+cmd/sc_refresh.svg cmd/sc_reload.svg
+cmd/sc_refreshformcontrol.svg cmd/sc_reload.svg
+cmd/sc_styleupdatebyexample.svg cmd/sc_reload.svg
+cmd/sc_draw.svg cmd/sc_reload.svg
+cmd/sc_updatecurindex.svg cmd/sc_reload.svg
+cmd/sc_updateallindexes.svg cmd/sc_reload.svg
+cmd/sc_updateall.svg cmd/sc_reload.svg
+
+# Select
+cmd/lc_selectmode.svg cmd/lc_selectobject.svg
+cmd/lc_drawselect.svg cmd/lc_selectobject.svg
+cmd/sc_selectmode.svg cmd/sc_selectobject.svg
+cmd/sc_drawselect.svg cmd/sc_selectobject.svg
+
+# Navigator
+cmd/lc_reportnavigator.svg cmd/lc_navigator.svg
+cmd/lc_navigationbar.svg cmd/lc_navigator.svg
+cmd/sc_reportnavigator.svg cmd/sc_navigator.svg
+cmd/sc_navigationbar.svg cmd/sc_navigator.svg
+
+# Database
+cmd/sc_diagramdata.svg cmd/sc_viewdatasourcebrowser.svg
+cmd/lc_dbnewquerysql.svg cmd/lc_sbanativesql.svg
+cmd/sc_dbnewquerysql.svg cmd/sc_sbanativesql.svg
+cmd/lc_dbtableedit.svg cmd/lc_tabledialog.svg
+cmd/sc_dbtableedit.svg cmd/sc_tabledialog.svg
+cmd/lc_dataincolumns.svg cmd/lc_dbviewtablenames.svg
+cmd/sc_dataincolumns.svg cmd/sc_dbviewtablenames.svg
+cmd/lc_dbdtableedit.svg cmd/lc_tabledialog.svg
+cmd/sc_dbdtableedit.svg cmd/sc_tabledialog.svg
+cmd/lc_dbquerypropertiesdialog.svg cmd/lc_dbqueryedit.svg
+cmd/sc_dbquerypropertiesdialog.svg cmd/sc_dbqueryedit.svg
+cmd/lc_dbnewview.svg cmd/lc_dbchangedesignmode.svg
+cmd/sc_dbnewview.svg cmd/sc_dbchangedesignmode.svg
+
+# Browse
+cmd/lc_browsebackward cmd/lc_prevrecord.svg
+cmd/lc_browseforward.svg cmd/lc_nextrecord.svg
+cmd/sc_browsebackward cmd/lc_prevrecord.svg
+cmd/sc_browseforward.svg cmd/sc_nextrecord.svg
+
+# Math
+cmd/lc_symbolcatalogue.svg cmd/lc_insertsymbol.svg
+cmd/sc_symbolcatalogue.svg cmd/sc_insertsymbol.svg
+
+# Plugin
+cmd/lc_pluginsactive.svg cmd/lc_insertplugin.svg
+cmd/sc_pluginsactive.svg cmd/sc_insertplugin.svg
+
+# Table
+cmd/lc_dbnewtable.svg cmd/lc_inserttable.svg
+cmd/sc_dbnewtable.svg cmd/sc_inserttable.svg
+cmd/lc_inscellsctrl.svg cmd/lc_inserttable.svg
+cmd/sc_inscellsctrl.svg cmd/sc_inserttable.svg
+cmd/lc_setoptimalcolumnwidthdirect.svg cmd/lc_setoptimalcolumnwidth.svg
+cmd/sc_setoptimalcolumnwidthdirect.svg cmd/sc_setoptimalcolumnwidth.svg
+cmd/lc_starchartdialog.svg cmd/lc_insertobjectdialog.svg
+cmd/sc_starchartdialog.svg cmd/sc_insertobjectdialog.svg
+
+# Help
+cmd/lc_absoluterecord.svg cmd/lc_helpindex.svg
+cmd/sc_absoluterecord.svg cmd/sc_helpindex.svg
+
+# language support for rtl
+# doesn't work for all other languages
+#cmd/lc_redo.svg cmd/ar/lc_undo.svg
+#cmd/lc_undo.svg cmd/ar/lc_redo.svg
+#cmd/sc_redo.svg cmd/ar/sc_undo.svg
+#cmd/sc_undo.svg cmd/ar/sc_redo.svg
+
+#cmd/lc_redo.svg cmd/fa/lc_undo.svg
+#cmd/lc_undo.svg cmd/fa/lc_redo.svg
+#cmd/sc_redo.svg cmd/fa/sc_undo.svg
+#cmd/sc_undo.svg cmd/fa/sc_redo.svg
+
+#cmd/lc_redo.svg cmd/he/lc_undo.svg
+#cmd/lc_undo.svg cmd/he/lc_redo.svg
+#cmd/sc_redo.svg cmd/he/sc_undo.svg
+#cmd/sc_undo.svg cmd/he/sc_redo.svg
+
+# text background colour Impress/Draw
+cmd/sc_charbackcolor.svg cmd/sc_backcolor.svg
+cmd/lc_charbackcolor.svg cmd/lc_backcolor.svg
+cmd/lc_setdefault.svg cmd/lc_resetattributes.svg
+cmd/sc_setdefault.svg cmd/sc_resetattributes.svg
+
+# Impress
+cmd/sc_slidechangewindow.svg sfx2/res/symphony/sidebar-transition-small.svg
+cmd/lc_slidechangewindow.svg sfx2/res/symphony/sidebar-transition-large.svg
+
+# Toggle graphics visibility in Writer
+cmd/sc_showgraphics.svg cmd/sc_graphic.svg
+
+# navigator
+cmd/lc_dsbrowserexplorer.svg cmd/lc_showfmexplorer.svg
+cmd/sc_dsbrowserexplorer.svg cmd/sc_showfmexplorer.svg
+
+cmd/lc_savesimple.svg cmd/lc_save.svg
+cmd/sc_savesimple.svg cmd/sc_save.svg
+cmd/lc_underlinesimple.svg cmd/lc_underline.svg
+cmd/sc_underlinesimple.svg cmd/sc_underline.svg
+
+# Slide command aliases
+cmd/lc_insertslide.svg cmd/lc_insertpage.svg
+cmd/lc_duplicateslide.svg cmd/lc_duplicatepage.svg
+cmd/lc_deleteslide.svg cmd/lc_deletepage.svg
+cmd/lc_moveslidefirst.svg cmd/lc_movepagefirst.svg
+cmd/lc_moveslidelast.svg cmd/lc_movepagelast.svg
+cmd/lc_moveslideup.svg cmd/lc_upsearch.svg
+cmd/lc_moveslidedown.svg cmd/lc_downsearch.svg
+cmd/lc_firstslide.svg cmd/lc_firstpage.svg
+cmd/lc_lastslide.svg cmd/lc_lastrecord.svg
+cmd/lc_previousslide.svg cmd/lc_prevrecord.svg
+cmd/lc_nextslide.svg cmd/lc_nextrecord.svg
+cmd/lc_slidesetup.svg cmd/lc_pagesetup.svg
+
+cmd/sc_insertslide.svg cmd/sc_insertpage.svg
+cmd/sc_duplicateslide.svg cmd/sc_duplicatepage.svg
+cmd/sc_deleteslide.svg cmd/sc_deletepage.svg
+cmd/sc_moveslidefirst.svg cmd/sc_movepagefirst.svg
+cmd/sc_moveslidelast.svg cmd/sc_movepagelast.svg
+cmd/sc_moveslideup.svg cmd/sc_upsearch.svg
+cmd/sc_moveslidedown.svg cmd/sc_downsearch.svg
+cmd/sc_firstslide.svg cmd/sc_firstpage.svg
+cmd/sc_lastslide.svg cmd/sc_lastrecord.svg
+cmd/sc_previousslide.svg cmd/sc_prevrecord.svg
+cmd/sc_nextslide.svg cmd/sc_nextrecord.svg
+cmd/sc_slidesetup.svg cmd/sc_pagesetup.svg
+
+# dbaccess
+# ==============================================
+dbaccess/res/linked_text_table.svg cmd/sc_dataimport.svg
+
+dbaccess/res/all_left.svg cmd/sc_firstrecord.svg
+dbaccess/res/all_right.svg cmd/sc_lastrecord.svg
+dbaccess/res/db.svg cmd/sc_viewdatasourcebrowser.svg
+dbaccess/res/exerror.svg cmd/sc_cancel.svg
+dbaccess/res/exinfo.svg cmd/sc_helpindex.svg
+
+dbaccess/res/form_16.svg cmd/sc_dbformedit.svg
+dbaccess/res/forms_16.svg cmd/sc_dbformedit.svg
+dbaccess/res/forms_32.svg res/forms_32.svg
+
+dbaccess/res/lc036.svg cmd/lc_dbnewreport.svg
+dbaccess/res/lc037.svg cmd/lc_delete.svg
+dbaccess/res/lc038.svg cmd/lc_editdoc.svg
+dbaccess/res/lc039.svg cmd/lc_save.svg
+dbaccess/res/lc040.svg cmd/lc_reload.svg
+
+dbaccess/res/nu07.svg cmd/sc_ok.svg
+dbaccess/res/nu08.svg cmd/sc_cancel.svg
+
+dbaccess/res/one_left.svg cmd/sc_prevrecord.svg
+dbaccess/res/one_right.svg cmd/sc_nextrecord.svg
+dbaccess/res/jo01.svg dbaccess/res/pkey.svg
+dbaccess/res/queries_32.svg res/queries_32.svg
+
+dbaccess/res/report_16.svg cmd/sc_executereport.svg
+dbaccess/res/reports_16.svg cmd/sc_executereport.svg
+dbaccess/res/reports_32.svg res/reports_32.svg
+
+dbaccess/res/sc036.svg cmd/sc_executereport.svg
+dbaccess/res/sc037.svg cmd/sc_delete.svg
+dbaccess/res/sc038.svg cmd/sc_editdoc.svg
+dbaccess/res/sc039.svg cmd/sc_save.svg
+dbaccess/res/sc040.svg cmd/sc_reload.svg
+
+dbaccess/res/sortdown.svg cmd/sc_sortascending.svg
+dbaccess/res/sortup.svg cmd/sc_sortdescending.svg
+dbaccess/res/tables_32.svg res/tables_32.svg
+
+# desktop
+# ==============================================
+desktop/res/caution_16.svg dbaccess/res/exwarning.svg
+desktop/res/info_16.svg cmd/sc_helpindex.svg
+desktop/res/lock_16.svg cmd/sc_protect.svg
+
+# extensions
+# ==============================================
+extensions/res/arrow.svg cmd/sc_nextrecord.svg
+extensions/res/buttonminus.svg extensions/source/scanner/minus.svg
+extensions/res/buttonplus.svg extensions/source/scanner/plus.svg
+
+# formula
+# ==============================================
+formula/res/fapclose.svg cmd/sc_open.svg
+formula/res/faperror.svg cmd/sc_cancel.svg
+formula/res/fapok.svg cmd/sc_ok.svg
+formula/res/fapopen.svg cmd/sc_open.svg
+formula/res/fx.svg cmd/sc_dbviewfunctions.svg
+
+# fpicker
+# ==============================================
+fpicker/res/fp011.svg cmd/sc_firstpage.svg
+fpicker/res/fp011.svg cmd/sc_open.svg
+fpicker/res/fp011.svg cmd/sc_starshapes.svg
+fpicker/res/fp011.svg desktop/res/shared_16.svg
+
+# reportdesign
+# ==============================================
+reportdesign/res/report_16.svg cmd/sc_executereport.svg
+reportdesign/res/sc30770.svg cmd/sc_cancel.svg
+reportdesign/res/sx11047.svg cmd/sc_basicshapes.diamond.svg
+reportdesign/res/sx12454.svg cmd/sc_alignright.svg
+reportdesign/res/sx12464.svg cmd/sc_executereport.svg
+reportdesign/res/sx12594.svg cmd/sc_dbviewfunctions.svg
+
+# res
+# ==============================================
+res/adrbook.svg cmd/sc_viewdatasourcebrowser.svg
+res/browse.svg cmd/sc_browseview.svg
+res/baswatr.svg cmd/lc_addwatch.svg
+res/dir-clos.svg cmd/sc_open.svg
+res/dir-open.svg cmd/sc_open.svg
+res/fileopen.svg cmd/sc_open.svg
+res/foldercl.svg cmd/sc_open.svg
+res/folderop.svg cmd/sc_open.svg
+res/fp010.svg cmd/sc_open.svg
+res/info.svg cmd/lc_helpindex.svg
+res/info_16.svg cmd/sc_helpindex.svg
+
+res/lc05504.svg cmd/lc_print.svg
+res/lc05509.svg cmd/lc_print.svg
+res/lc05711.svg cmd/lc_copy.svg
+res/lc05961.svg cmd/lc_recsearch.svg
+res/lc06300.svg cmd/lc_nextrecord.svg
+res/lc06301.svg cmd/lc_prevrecord.svg
+
+res/lc06303.svg cmd/lc_firstpage.svg
+res/lc10711.svg cmd/lc_removefiltersort.svg
+res/lc10715.svg cmd/lc_datafilterstandardfilter.svg
+res/lc10716.svg cmd/lc_datafilterautofilter.svg
+res/lc10853.svg cmd/lc_recsearch.svg
+
+res/lx03165.svg cmd/lc_save.svg
+res/lx03189.svg cmd/lc_open.svg
+res/sc05501.svg cmd/sc_open.svg
+res/lx03256.svg cmd/lc_insertplugin.svg
+
+res/mainapp_16.svg cmd/sc_showsinglepage.svg
+res/mainapp_16.svg cmd/sc_showsinglepage.svg
+res/mainapp_16.svg cmd/sc_showsinglepage.svg
+res/mainapp_16_8.svg cmd/sc_showsinglepage.svg
+
+res/mainapp.svg res/newdoc.svg
+res/mainapp_32.svg res/newdoc.svg
+res/printeradmin_16_8.svg res/printeradmin_16.svg
+res/printeradmin_32_8.svg res/printeradmin_32.svg
+res/reload.svg cmd/sc_reload.svg
+res/library_16.svg cmd/lc_viewdatasourcebrowser.svg
+
+res/sc05508.svg cmd/sc_reload.svg
+res/sc05556.svg cmd/sc_reload.svg
+res/sc05502.svg cmd/sc_saveas.svg
+res/sc05504.svg cmd/sc_print.svg
+res/sc05509.svg cmd/sc_print.svg
+
+res/sc05554.svg cmd/sc_formatarea.svg
+res/sc05711.svg cmd/sc_copy.svg
+res/sc05961.svg cmd/sc_recsearch.svg
+res/sc06300.svg cmd/sc_nextrecord.svg
+res/sc06301.svg cmd/sc_prevrecord.svg
+res/sc06303.svg cmd/sc_firstrecord.svg
+
+res/sc10350.svg cmd/sc_bmpmask.svg
+res/sc10711.svg cmd/sc_removefiltersort.svg
+res/sc10712.svg cmd/sc_sortascending.svg
+res/sc10713.svg cmd/sc_sortdescending.svg
+res/sc10715.svg cmd/sc_datafilterstandardfilter.svg
+res/sc10716.svg cmd/sc_datafilterautofilter.svg
+
+res/sc10853.svg cmd/sc_recsearch.svg
+res/sc10863.svg cmd/sc_grafluminance.svg
+res/sc10864.svg cmd/sc_grafcontrast.svg
+res/sc10865.svg cmd/sc_grafred.svg
+res/sc10866.svg cmd/sc_grafgreen.svg
+res/sc10867.svg cmd/sc_grafblue.svg
+res/sc10868.svg cmd/sc_graphicfilterinvert.svg
+res/sc10869.svg cmd/sc_graftransparence.svg
+
+res/sc_helperdialog.svg cmd/sc_helpindex.svg
+
+res/sx03189.svg cmd/sc_open.svg
+res/sx03202.svg cmd/sc_viewdatasourcebrowser.svg
+res/sx03256.svg cmd/sc_insertplugin.svg
+res/sx10594.svg cmd/sc_pushbutton.svg
+res/sx10595.svg cmd/sc_radiobutton.svg
+res/sx10596.svg cmd/sc_checkbox.svg
+res/sx10599.svg cmd/sc_text.svg
+res/sx10600.svg cmd/lc_listbox.svg
+res/sx10601.svg cmd/sc_combobox.svg
+res/sx10603.svg cmd/sc_grid.svg
+
+res/sx10605.svg cmd/sc_open.svg
+res/sx10704.svg cmd/sc_datefield.svg
+res/sx10705.svg cmd/sc_timefield.svg
+res/sx10706.svg cmd/sc_text.svg
+res/sx10707.svg cmd/sc_formattedfield.svg
+res/sx10710.svg cmd/sc_imagecontrol.svg
+res/sx10715.svg cmd/sc_datafilterstandardfilter.svg
+res/sx10728.svg cmd/sc_formattedfield.svg
+res/sx10757.svg cmd/sc_timefield.svg
+
+res/sx10768.svg cmd/sc_scrollbar.svg
+res/sx10769.svg cmd/sc_scrollbar.svg
+res/sx18002.svg res/plus.svg
+res/sx18003.svg res/minus.svg
+
+# sc
+# ==============================================
+sc/res/lc26047.svg cmd/lc_dbviewfunctions.svg
+sc/res/lc26048.svg cmd/lc_autosum.svg
+sc/res/lc26050.svg cmd/lc_cancel.svg
+sc/res/lc26051.svg cmd/lc_ok.svg
+sc/res/na010.svg cmd/sc_selectobject.svg
+sc/res/na011.svg cmd/lc_ok.svg
+sc/res/nc03.svg cmd/sc_viewdatasourcebrowser.svg
+sc/res/nc04.svg cmd/sc_gallery.svg
+sc/res/nc05.svg cmd/sc_insertobject.svg
+sc/res/nc06.svg cmd/sc_addwatch.svg
+sc/res/nc07.svg sc/res/droplink.svg
+sc/res/nc08.svg cmd/sc_gallery.svg
+sc/res/sc26047.svg cmd/sc_dbviewfunctions.svg
+sc/res/sc26048.svg cmd/sc_autosum.svg
+sc/res/sc26050.svg cmd/sc_cancel.svg
+sc/res/sc26051.svg cmd/sc_ok.svg
+
+sc/res/date.svg cmd/sc_datefield.svg
+sc/res/dropcopy.svg cmd/sc_copy.svg
+sc/res/file.svg cmd/sc_open.svg
+sc/res/fx.svg cmd/sc_dbviewfunctions.svg
+sc/res/page.svg cmd/sc_insertpagenumberfield.svg
+sc/res/pages.svg cmd/sc_insertpagecountfield.svg
+sc/res/paste_values_formats.svg cmd/lc_formatpaintbrush.svg
+sc/res/paste_values_only.svg cmd/lc_numberformatstandard.svg
+sc/res/sf01.svg cmd/sc_tabledesign.svg
+sc/res/table.svg cmd/sc_inserttable.svg
+sc/res/text.svg cmd/sc_text.svg
+sc/res/time.svg cmd/sc_timefield.svg
+
+# sd
+# ==============================================
+sd/res/nv02.svg cmd/sc_freeline_unfilled.svg
+sd/res/nv03.svg cmd/sc_firstrecord.svg
+sd/res/nv04.svg cmd/sc_prevrecord.svg
+sd/res/nv05.svg cmd/sc_nextrecord.svg
+sd/res/nv06.svg cmd/sc_lastrecord.svg
+sd/res/nv08.svg cmd/sc_copy.svg
+sd/res/nv09.svg sc/res/droplink.svg
+sd/res/nv010.svg cmd/sc_inserthyperlink.svg
+sd/res/sf01.svg cmd/sc_showfmexplorer.svg
+sd/res/sf02.svg cmd/sc_dia.svg
+
+sd/res/breakplayingblue_16.svg cmd/sc_mediapause.svg
+sd/res/comments_indicator.svg cmd/sc_showannotations.svg
+sd/res/get1obj.svg cmd/sc_selectobject.svg
+sd/res/getallob.svg cmd/sc_selectall.svg
+sd/res/group.svg cmd/sc_group.svg
+sd/res/ole.svg cmd/lc_insertobject.svg
+sd/res/page.svg cmd/lc_adddirect.svg
+sd/res/pipette.svg cmd/lc_bmpmask.svg
+sd/res/playblue_16.svg cmd/sc_runbasic.svg
+sd/res/stopplayingblue_16.svg cmd/sc_basicstop.svg
+sd/res/time_16.svg cmd/sc_timefield.svg
+sd/res/waiticon.svg cmd/sc_mediapause.svg
+
+# sfx2
+# ==============================================
+sfx2/res/actionaction012.svg cmd/lc_recsearch.svg
+sfx2/res/actionaction013.svg cmd/lc_controlproperties.svg
+sfx2/res/actiontemplates015.svg cmd/lc_ok.svg
+sfx2/res/actiontemplates016.svg cmd/lc_formproperties.svg
+sfx2/res/actiontemplates018.svg cmd/lc_delete.svg
+sfx2/res/actiontemplates019.svg cmd/lc_editdoc.svg
+sfx2/res/actiontemplates020.svg cmd/lc_exportto.svg
+sfx2/res/actionview010.svg cmd/lc_starshapes.svg
+sfx2/res/actionview025.svg cmd/lc_delete.svg
+sfx2/res/actionview028.svg cmd/lc_save.svg
+sfx2/res/actionview030.svg cmd/lc_open.svg
+
+sfx2/res/closedoc.svg vcl/res/closedoc.svg
+sfx2/res/deleterow.svg cmd/sc_cancel.svg
+sfx2/res/favourite.svg cmd/sc_insertbookmark.svg
+sfx2/res/favourite_big.svg cmd/lc_insertbookmark.svg
+sfx2/res/hlpdoc.svg cmd/sc_helpindex.svg
+sfx2/res/indexon_small.svg cmd/sc_defaultnumbering.svg
+sfx2/res/indexon_big.svg cmd/lc_defaultnumbering.svg
+sfx2/res/sortascending.svg cmd/lc_sortascending.svg
+sfx2/res/styfam1.svg cmd/sc_charfontname.svg
+sfx2/res/styfam2.svg cmd/sc_controlcodes.svg
+sfx2/res/styfam3.svg cmd/sc_linestyle.svg
+sfx2/res/styfam4.svg cmd/sc_showsinglepage.svg
+sfx2/res/minus.svg res/minus.svg
+sfx2/res/newex.svg res/plus.svg
+sfx2/res/plus.svg res/plus.svg
+
+sfx2/res/symphony/open_more.svg cmd/lc_controlproperties.svg
+sfx2/res/symphony/sidebar-3d-large.svg cmd/lc_cube.svg
+sfx2/res/symphony/sidebar-3d-small.svg cmd/sc_cube.svg
+sfx2/res/symphony/sidebar-animation-large.svg cmd/lc_animationobjects.svg
+sfx2/res/symphony/sidebar-animation-small.svg cmd/sc_animationobjects.svg
+sfx2/res/symphony/sidebar-colors-large.svg cmd/lc_bmpmask.svg
+sfx2/res/symphony/sidebar-colors-small.svg cmd/sc_bmpmask.svg
+sfx2/res/symphony/sidebar-functions-large.svg cmd/lc_dbviewfunctions.svg
+sfx2/res/symphony/sidebar-functions-small.svg cmd/sc_dbviewfunctions.svg
+sfx2/res/symphony/sidebar-gallery-large.svg cmd/lc_gallery.svg
+sfx2/res/symphony/sidebar-gallery-small.svg cmd/sc_gallery.svg
+sfx2/res/symphony/sidebar-navigator-large.svg cmd/lc_navigator.svg
+sfx2/res/symphony/sidebar-navigator-small.svg cmd/sc_navigator.svg
+sfx2/res/symphony/sidebar-property-large.svg cmd/lc_formproperties.svg
+sfx2/res/symphony/sidebar-property-small.svg cmd/sc_formproperties.svg
+sfx2/res/symphony/sidebar-style-large.svg cmd/lc_formdesigntools.svg
+sfx2/res/symphony/sidebar-style-small.svg cmd/sc_formdesigntools.svg
+sfx2/res/symphony/sidebar-template-large.svg cmd/lc_slidemasterpage.svg
+sfx2/res/symphony/sidebar-template-small.svg cmd/sc_slidemasterpage.svg
+
+# startmath
+# ==============================================
+startmath/res/at21717.svg cmd/lc_bold.svg
+startmath/res/at21718.svg cmd/lc_italic.svg
+startmath/res/at21719.svg cmd/lc_scaletext.svg
+startmath/res/at21720.svg cmd/lc_charfontname.svg
+startmath/res/im21108.svg cmd/lc_outlineformat.svg
+
+# svtools
+# ==============================================
+# FolderTree expanded icon
+svtools/res/back_small.svg cmd/sc_prevrecord.svg
+svtools/res/back_large.svg cmd/lc_prevrecord.svg
+svtools/res/ed06.svg dbaccess/res/pkey.svg
+svtools/res/folder.svg cmd/sc_open.svg
+svtools/res/folderop.svg cmd/sc_open.svg
+
+# svx
+# ==============================================
+svx/res/apply.svg cmd/sc_ok.svg
+svx/res/caution_11x16.svg dbaccess/res/exwarning.svg
+
+svx/res/cd01.svg cmd/sc_ok.svg
+svx/res/cd02.svg cmd/sc_crop.svg
+svx/res/cd05.svg cmd/sc_selectobject.svg
+svx/res/cd06.svg cmd/sc_rect.svg
+svx/res/cd07.svg cmd/sc_ellipse.svg
+svx/res/cd08.svg cmd/sc_polygon.svg
+svx/res/cd015.svg cmd/sc_toggleobjectbeziermode.svg
+svx/res/cd016.svg cmd/sc_beziermove.svg
+svx/res/cd017.svg cmd/sc_bezierinsert.svg
+svx/res/cd018.svg cmd/sc_bezierdelete.svg
+svx/res/cd020.svg cmd/sc_undo.svg
+svx/res/cd021.svg cmd/sc_redo.svg
+svx/res/cd025.svg cmd/sc_autoformat.svg
+svx/res/cd026.svg cmd/sc_bmpmask.svg
+
+svx/res/color.svg cmd/sc_bmpmask.svg
+svx/res/colordlg.svg cmd/sc_graphicfiltersmooth.svg
+svx/res/convrt3d.svg cmd/sc_convertinto3d.svg
+svx/res/filter3d.svg cmd/sc_datafilterstandardfilter.svg
+svx/res/fontworkaligncentered_16.svg cmd/sc_alignhorizontalcenter.svg
+svx/res/fontworkalignjustified_16.svg cmd/sc_alignblock.svg
+svx/res/fontworkalignjustified_26.svg cmd/lc_alignblock.svg
+svx/res/fontworkalignleft_16.svg cmd/sc_alignleft.svg
+svx/res/fontworkalignright_16.svg cmd/sc_alignright.svg
+svx/res/fontworkalignstretch_16.svg cmd/sc_text_marquee.svg
+
+svx/res/fw07.svg cmd/sc_alignleft.svg
+svx/res/fw08.svg cmd/sc_alignhorizontalcenter.svg
+svx/res/fw09.svg cmd/sc_alignright.svg
+svx/res/graphic.svg cmd/lc_graphic.svg
+
+svx/res/id01.svg cmd/sc_ok.svg
+svx/res/id02.svg cmd/sc_open.svg
+svx/res/id03.svg cmd/sc_save.svg
+svx/res/id04.svg cmd/sc_selectobject.svg
+svx/res/id05.svg cmd/sc_rect.svg
+svx/res/id06.svg cmd/sc_ellipse.svg
+svx/res/id07.svg cmd/sc_polygon.svg
+svx/res/id018.svg cmd/sc_controlproperties.svg
+svx/res/id030.svg cmd/sc_toggleobjectbeziermode.svg
+svx/res/id031.svg cmd/sc_beziermove.svg
+svx/res/id032.svg cmd/sc_bezierinsert.svg
+svx/res/id033.svg cmd/sc_bezierdelete.svg
+svx/res/id040.svg cmd/sc_undo.svg
+svx/res/id041.svg cmd/sc_redo.svg
+
+svx/res/lngcheck.svg cmd/sc_spelling.svg
+svx/res/luminanc.svg cmd/sc_graphicfilterinvert.svg
+svx/res/modula3d.svg cmd/sc_sphere.svg
+svx/res/notcertificate_16.svg xmlsecurity/res/notcertificate_16.svg
+
+svx/res/nu01.svg cmd/sc_ok.svg
+svx/res/nu02.svg cmd/sc_cancel.svg
+svx/res/nu03.svg cmd/sc_addwatch.svg
+
+svx/res/ole.svg cmd/sc_insertobject.svg
+svx/res/persp3d.svg cmd/lc_extrusiondirectionfloater.svg
+svx/res/parallel_16.svg cmd/sc_extrusiondepthfloater.svg
+svx/res/perspective_16.svg cmd/lc_extrusiondirectionfloater.svg
+svx/res/reloads.svg cmd/sc_reload.svg
+svx/res/rotate3d.svg cmd/sc_convertinto3dlathe.svg
+svx/res/signet_11x16.svg xmlsecurity/res/certificate_16.svg
+svx/res/sphere3d.svg cmd/sc_sphere.svg
+svx/res/wireframe_16.svg cmd/sc_window3d.svg
+svx/res/zoom_page_statusbar.svg cmd/sc_zoompanning.svg
+svx/res/reloads.svg cmd/sc_reload.svg
+
+svx/res/symphony/AdjustColorBlue_16x16.svg cmd/sc_grafblue.svg
+svx/res/symphony/AdjustColorGamma_16x16.svg cmd/sc_graphicfilterinvert.svg
+svx/res/symphony/AdjustColorGreen_16x16.svg cmd/sc_grafgreen.svg
+svx/res/symphony/AdjustColorRed_16x16.svg cmd/sc_grafred.svg
+svx/res/symphony/fill_color.svg cmd/sc_backgroundpatterncontroller.svg
+svx/res/symphony/last_custom_common.svg sw/res/sidebar/pageproppanel/last_custom_common.svg
+svx/res/symphony/last_custom_common_grey.svg sw/res/sidebar/pageproppanel/last_custom_common_grey.svg
+svx/res/symphony/rotate_left.svg cmd/sc_rotateleft.svg
+svx/res/symphony/rotate_right.svg cmd/sc_rotateright.svg
+svx/res/symphony/sch_backgroundcolor.svg cmd/sc_backgroundcolor.svg
+svx/res/symphony/spacing3.svg cmd/sc_spacepara1.svg
+
+# sw
+# ==============================================
+# res
+sw/res/lc20556.svg cmd/lc_dbviewfunctions.svg
+sw/res/lc20557.svg cmd/lc_cancel.svg
+sw/res/lc20558.svg cmd/lc_ok.svg
+sw/res/nc20001.svg cmd/sc_inserttable.svg
+sw/res/nc20002.svg cmd/sc_diagramarea.svg
+sw/res/nc20003.svg cmd/sc_gallery.svg
+sw/res/nc20004.svg cmd/sc_insertobject.svg
+sw/res/nc20005.svg cmd/sc_insertbookmark.svg
+sw/res/nc20007.svg cmd/sc_inserthyperlink.svg
+sw/res/nc20008.svg cmd/sc_insertreferencefield.svg
+sw/res/nc20009.svg cmd/sc_insertindexesentry.svg
+sw/res/nc20010.svg cmd/sc_addwatch.svg
+sw/res/nc20011.svg cmd/sc_toggleobjectbeziermode.svg
+
+sw/res/re01.svg cmd/lc_unsetcellsreadonly.svg
+sw/res/re02.svg cmd/lc_unsetcellsreadonly.svg
+sw/res/re03.svg cmd/sc_protect.svg
+sw/res/re04.svg cmd/sc_protect.svg
+
+sw/res/sc20171.svg cmd/sc_downsearch.svg
+sw/res/sc20172.svg cmd/sc_prevrecord.svg
+sw/res/sc20173.svg cmd/sc_nextrecord.svg
+sw/res/sc20174.svg cmd/sc_upsearch.svg
+sw/res/sc20175.svg cmd/sc_nextrecord.svg
+sw/res/sc20182.svg cmd/sc_anchormenu.svg
+sw/res/sc20186.svg cmd/sc_prevrecord.svg
+sw/res/sc20233.svg cmd/sc_ok.svg
+sw/res/sc20235.svg cmd/sc_editdoc.svg
+sw/res/sc20238.svg sc/res/droplink.svg
+sw/res/sc20239.svg cmd/sc_copy.svg
+sw/res/sc20245.svg cmd/sc_editdoc.svg
+sw/res/sc20246.svg sc/res/droplink.svg
+sw/res/sc20248.svg cmd/sc_save.svg
+sw/res/sc20249.svg cmd/sc_navigator.svg
+sw/res/sc20556.svg cmd/sc_dbviewfunctions.svg
+sw/res/sc20557.svg cmd/sc_cancel.svg
+sw/res/sc20558.svg cmd/sc_ok.svg
+
+sw/res/sc_datainrows.svg cmd/sc_datainrows.svg
+
+sw/res/sf01.svg cmd/sc_controlcodes.svg
+sw/res/sf02.svg cmd/sc_charfontname.svg
+sw/res/sf03.svg cmd/sc_insertobjectfloatingframe.svg
+sw/res/sf04.svg cmd/sc_showsinglepage.svg
+sw/res/sf05.svg cmd/sc_defaultbullet.svg
+sw/res/sf06.svg cmd/sc_inserttable.svg
+
+sw/res/sr20000.svg cmd/sc_downsearch.svg
+sw/res/sr20001.svg cmd/sc_upsearch.svg
+sw/res/sr20002.svg cmd/sc_inserttable.svg
+sw/res/sr20003.svg cmd/sc_insertframe.svg
+sw/res/sr20004.svg cmd/sc_showsinglepage.svg
+sw/res/sr20005.svg cmd/sc_editdoc.svg
+sw/res/sr20007.svg sw/res/nc20006.svg
+sw/res/sr20008.svg cmd/sc_insertbookmark.svg
+sw/res/sr20009.svg cmd/sc_toggleobjectbeziermode.svg
+sw/res/sr20010.svg cmd/sc_drawchart.svg
+sw/res/sr20011.svg sw/res/nc20000.svg
+sw/res/sr20012.svg cmd/sc_insertreferencefield.svg
+sw/res/sr20013.svg cmd/sc_insertfootnote.svg
+sw/res/sr20014.svg dbaccess/res/exwarning.svg
+sw/res/sr20015.svg cmd/sc_insertbookmark.svg
+sw/res/sr20016.svg cmd/sc_recsearch.svg
+sw/res/sr20017.svg cmd/sc_insertindexesentry.svg
+sw/res/sr20018.svg cmd/sc_inserttable.svg
+sw/res/sr20019.svg cmd/sc_remove.svg
+
+sw/res/sx03.svg cmd/sc_dbqueryedit.svg
+
+# res
+sw/res/all_left.svg cmd/sc_firstrecord.svg
+sw/res/all_right.svg cmd/sc_lastrecord.svg
+sw/res/one_left.svg cmd/sc_prevrecord.svg
+sw/res/one_right.svg cmd/sc_nextrecord.svg
+sw/res/page_break.svg cmd/lc_insertpagebreak.svg
+sw/res/styfamnu.svg cmd/sc_defaultbullet.svg
+
+# split cells duplicates
+sw/res/zetlhor2.svg svx/res/zetlhor2.svg
+sw/res/zetlver2.svg svx/res/zetlver2.svg
+
+# vcl
+# ==============================================
+vcl/res/index.svg cmd/sc_insertmultiindex.svg
+
+# xmlsecurity
+# ==============================================
+xmlsecurity/res/key_12.svg dbaccess/res/pkey.svg
+xmlsecurity/res/signet_11x16.svg xmlsecurity/res/notcertificate_16.svg
+
+cmd/lc_columnoperations.svg cmd/lc_entirecolumn.svg
+cmd/sc_columnoperations.svg cmd/sc_entirecolumn.svg
+cmd/lc_rowoperations.svg cmd/lc_entirerow.svg
+cmd/sc_rowoperations.svg cmd/sc_entirerow.svg
+
+cmd/sc_cellprotection.svg cmd/sc_protect.svg
+cmd/lc_cellprotection.svg cmd/lc_protect.svg
