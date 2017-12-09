@@ -1327,6 +1327,7 @@ sw/res/sf02.png cmd/sc_charfontname.png
 sw/res/sf03.png cmd/sc_diagramarea.png
 sw/res/sf04.png cmd/sc_showsinglepage.png
 sw/res/sf05.png cmd/sc_defaultbullet.png
+sw/res/sf06.png cmd/sc_inserttable.png
 
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
@@ -1372,8 +1373,8 @@ xmlsecurity/res/key_12.png dbaccess/res/pkey.png
 xmlsecurity/res/signet_11x16.png xmlsecurity/res/notcertificate_16.png
 
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
-cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
-cmd/lc_rowoperations.png cmd/lc_entirerow.png 
+cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
+cmd/lc_rowoperations.png cmd/lc_entirerow.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
