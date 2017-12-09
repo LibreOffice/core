@@ -159,7 +159,7 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm ) const
 
     for ( size_t i = 0; i < nCount; i++ )
     {
-        IMapObject* pObj = maList[ i ];
+        IMapObject* pObj = maList[ i ].get();
 
         switch( pObj->GetType() )
         {
@@ -187,7 +187,7 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm  ) const
 
     for ( size_t i = 0; i < nCount; i++ )
     {
-        IMapObject* pObj = maList[ i ];
+        IMapObject* pObj = maList[ i ].get();
 
         switch( pObj->GetType() )
         {
@@ -273,8 +273,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine  )
         const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
         const tools::Rectangle aRect( aTopLeft, aBottomRight );
 
-        IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
-        maList.push_back( pObj );
+        maList.emplace_back( new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
     else if ( ( aToken == "circle" ) || ( aToken == "circ" ) )
     {
@@ -282,8 +281,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine  )
         const long      nRadius = ImpReadCERNRadius( &pStr );
         const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
 
-        IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
-        maList.push_back( pObj );
+        maList.emplace_back( new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
     else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
     {
@@ -296,8 +294,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine  )
 
         aURL = ImpReadCERNURL( &pStr, "" );
 
-        IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
-        maList.push_back( pObj );
+        maList.emplace_back( new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
 }
 
@@ -414,8 +411,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
         const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
         const tools::Rectangle aRect( aTopLeft, aBottomRight );
 
-        IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
-        maList.push_back( pObj );
+        maList.emplace_back( new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
     else if ( aToken == "circle" )
     {
@@ -425,8 +421,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
         long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
                                                (double) aDX.Y() * aDX.Y() );
 
-        IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
-        maList.push_back( pObj );
+        maList.emplace_back( new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
     else if ( aToken == "poly" )
     {
@@ -438,8 +433,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
         for ( sal_uInt16 i = 0; i < nCount; i++ )
             aPoly[ i ] = ImpReadNCSACoords( &pStr );
 
-        IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
-        maList.push_back( pObj );
+        maList.emplace_back( new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
 }
 
