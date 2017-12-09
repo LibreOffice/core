@@ -1,0 +1,21 @@
+This theme is based on the Human icon theme for LibreOffice and uses resources 
+from the elementary icon theme as well as original work from Shimmer Project.
+A summary of attributions are below, with further details available at 
+https://github.com/shimmerproject/libreoffice-style-elementary/commits
+
+Elementary theme for LibreOffice
+ * libreoffice-style-elementary: Available under the terms of the GPL
+   - Copyright 2015 by Simon Steinbeiss <simon@xfce.org>,
+     Pasi Lallinaho <pasi@shimmerproject.org>
+ * elementary(-xfce): Available under the terms of the GPL
+   - Copyright 2008-2015 by Daniel Foré <Daniel.p.Fore@gmail.com>
+   - Copyright 2010-2015 by Simon Steinbeiss <simon@xfce.org>
+
+Human theme for LibreOffice (2015-05-31)
+ * libreoffice-style-human: Available under the terms of the LGPL
+   - Copyright 2006-2007 by Gabriel Hurley
+ * humanity-icon-theme: Available under the terms of the GPL
+   - Copyright 2009 by Daniel Foré <Daniel.p.Fore@gmail.com>,
+     Jonian Guveli <jonian.guveli@gmail.com>,
+     K.Vishnoo Charan Reddy <vish@ubuntu.com>
+   - Copyright 2006, 2009 by Gabriel Hurley
