@@ -435,6 +435,10 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     connectPercentField(m_aDistEd1, "spacing1mf");
     connectPercentField(m_aDistEd2, "spacing2mf");
 
+    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
+
     SetExchangeSupport();
 
     m_pDefaultVS->SetColCount( 5 );

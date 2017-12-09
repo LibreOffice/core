@@ -32,6 +32,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/frmdirlbox.hxx>
 #include <fmtclbl.hxx>
 #include "colex.hxx"
 #include "prcntfld.hxx"
@@ -114,7 +115,7 @@ class SwColumnPage : public SfxTabPage
     VclPtr<ListBox>        m_pLinePosDLB;
 
     VclPtr<FixedText>      m_pTextDirectionFT;
-    VclPtr<ListBox>        m_pTextDirectionLB;
+    VclPtr<svx::FrameDirectionListBox>        m_pTextDirectionLB;
 
     // Example
     VclPtr<SwColExample>   m_pPgeExampleWN;
