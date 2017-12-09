@@ -863,7 +863,7 @@ ScOrcusStyles::border::border():
 }
 
 ScOrcusStyles::border::border_line::border_line():
-    mestyle(SvxBorderLineStyle::SOLID),
+    meStyle(SvxBorderLineStyle::SOLID),
     maColor(COL_WHITE),
     mnWidth(0)
 {
@@ -907,17 +907,17 @@ void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
 
         if (current_border_line.first == orcus::spreadsheet::border_direction_t::diagonal_tl_br)
         {
-            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
+            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.meStyle);
             aDiagonal_TLBR.SetLine(&aLine);
         }
         else if (current_border_line.first == orcus::spreadsheet::border_direction_t::diagonal_bl_tr)
         {
-            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
+            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.meStyle);
             aDiagonal_BLTR.SetLine(&aLine);
         }
         else
         {
-            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
+            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.meStyle);
             aBoxItem.SetLine(&aLine, eDir);
         }
     }
@@ -1305,32 +1305,32 @@ void ScOrcusStyles::set_border_style(
         case orcus::spreadsheet::border_style_t::medium:
         case orcus::spreadsheet::border_style_t::thick:
         case orcus::spreadsheet::border_style_t::thin:
-            current_line.mestyle = SvxBorderLineStyle::SOLID;
+            current_line.meStyle = SvxBorderLineStyle::SOLID;
             break;
         case orcus::spreadsheet::border_style_t::dash_dot:
-            current_line.mestyle = SvxBorderLineStyle::DASH_DOT;
+            current_line.meStyle = SvxBorderLineStyle::DASH_DOT;
             break;
         case orcus::spreadsheet::border_style_t::dash_dot_dot:
-            current_line.mestyle = SvxBorderLineStyle::DASH_DOT_DOT;
+            current_line.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
             break;
         case orcus::spreadsheet::border_style_t::dashed:
-            current_line.mestyle = SvxBorderLineStyle::DASHED;
+            current_line.meStyle = SvxBorderLineStyle::DASHED;
             break;
         case orcus::spreadsheet::border_style_t::dotted:
-            current_line.mestyle = SvxBorderLineStyle::DOTTED;
+            current_line.meStyle = SvxBorderLineStyle::DOTTED;
             break;
         case orcus::spreadsheet::border_style_t::double_border:
-            current_line.mestyle = SvxBorderLineStyle::DOUBLE;
+            current_line.meStyle = SvxBorderLineStyle::DOUBLE;
             break;
         case orcus::spreadsheet::border_style_t::medium_dash_dot:
         case orcus::spreadsheet::border_style_t::slant_dash_dot:
-            current_line.mestyle = SvxBorderLineStyle::DASH_DOT;
+            current_line.meStyle = SvxBorderLineStyle::DASH_DOT;
             break;
         case orcus::spreadsheet::border_style_t::medium_dash_dot_dot:
-            current_line.mestyle = SvxBorderLineStyle::DASH_DOT_DOT;
+            current_line.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
             break;
         case orcus::spreadsheet::border_style_t::medium_dashed:
-            current_line.mestyle = SvxBorderLineStyle::DASHED;
+            current_line.meStyle = SvxBorderLineStyle::DASHED;
             break;
         default:
             ;
