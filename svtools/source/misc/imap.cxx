@@ -570,15 +570,15 @@ ImageMap::ImageMap( const ImageMap& rImageMap )
         switch( pCopyObj->GetType() )
         {
             case IMAP_OBJ_RECTANGLE:
-                maList.push_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>( pCopyObj ) ) );
+                maList.emplace_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>( pCopyObj ) ) );
             break;
 
             case IMAP_OBJ_CIRCLE:
-                maList.push_back( new IMapCircleObject( *static_cast<IMapCircleObject*>( pCopyObj ) ) );
+                maList.emplace_back( new IMapCircleObject( *static_cast<IMapCircleObject*>( pCopyObj ) ) );
             break;
 
             case IMAP_OBJ_POLYGON:
-                maList.push_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>( pCopyObj ) ) );
+                maList.emplace_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>( pCopyObj ) ) );
             break;
 
             default:
@@ -598,8 +598,6 @@ ImageMap::ImageMap( const ImageMap& rImageMap )
 
 ImageMap::~ImageMap()
 {
-
-    ClearImageMap();
 }
 
 
@@ -611,8 +609,6 @@ ImageMap::~ImageMap()
 
 void ImageMap::ClearImageMap()
 {
-    for(IMapObject* i : maList)
-        delete i;
     maList.clear();
 
     aName.clear();
@@ -638,15 +634,15 @@ ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
         switch( pCopyObj->GetType() )
         {
             case IMAP_OBJ_RECTANGLE:
-                maList.push_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>(pCopyObj) ) );
+                maList.emplace_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>(pCopyObj) ) );
             break;
 
             case IMAP_OBJ_CIRCLE:
-                maList.push_back( new IMapCircleObject( *static_cast<IMapCircleObject*>(pCopyObj) ) );
+                maList.emplace_back( new IMapCircleObject( *static_cast<IMapCircleObject*>(pCopyObj) ) );
             break;
 
             case IMAP_OBJ_POLYGON:
-                maList.push_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>(pCopyObj) ) );
+                maList.emplace_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>(pCopyObj) ) );
             break;
 
             default:
@@ -678,7 +674,7 @@ bool ImageMap::operator==( const ImageMap& rImageMap )
 
         for ( size_t i = 0; ( i < nCount ) && !bDifferent; i++ )
         {
-            IMapObject* pObj = maList[ i ];
+            IMapObject* pObj = maList[ i ].get();
             IMapObject* pEqObj = rImageMap.GetIMapObject( i );
 
             if ( pObj->GetType() == pEqObj->GetType() )
@@ -745,15 +741,15 @@ void ImageMap::InsertIMapObject( const IMapObject& rIMapObject )
     switch( rIMapObject.GetType() )
     {
         case IMAP_OBJ_RECTANGLE:
-            maList.push_back( new IMapRectangleObject( static_cast<const IMapRectangleObject&>( rIMapObject ) ) );
+            maList.emplace_back( new IMapRectangleObject( static_cast<const IMapRectangleObject&>( rIMapObject ) ) );
         break;
 
         case IMAP_OBJ_CIRCLE:
-            maList.push_back( new IMapCircleObject( static_cast<const IMapCircleObject&>( rIMapObject ) ) );
+            maList.emplace_back( new IMapCircleObject( static_cast<const IMapCircleObject&>( rIMapObject ) ) );
         break;
 
         case IMAP_OBJ_POLYGON:
-            maList.push_back( new IMapPolygonObject( static_cast<const IMapPolygonObject&>( rIMapObject ) ) );
+            maList.emplace_back( new IMapPolygonObject( static_cast<const IMapPolygonObject&>( rIMapObject ) ) );
         break;
 
         default:
@@ -788,9 +784,9 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
 
     // walk over all objects and execute HitTest
     IMapObject* pObj = nullptr;
-    for(IMapObject* i : maList) {
+    for(auto& i : maList) {
         if ( i->IsHit( aRelPoint ) ) {
-            pObj = i;
+            pObj = i.get();
             break;
         }
     }
@@ -804,7 +800,7 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 
     for ( size_t i = 0; i < nCount; i++ )
     {
-        IMapObject* pObj = maList[ i ];
+        IMapObject* pObj = maList[ i ].get();
 
         switch( pObj->GetType() )
         {
@@ -839,7 +835,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm ) const
 
     for ( size_t i = 0; i < nCount; i++ )
     {
-        IMapObject* pObj = maList[ i ];
+        auto& pObj = maList[ i ];
         pObj->Write( rOStm );
     }
 }
@@ -877,7 +873,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
             {
                 IMapRectangleObject* pObj = new IMapRectangleObject;
                 pObj->Read( rIStm );
-                maList.push_back( pObj );
+                maList.emplace_back( pObj );
             }
             break;
 
@@ -885,7 +881,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
             {
                 IMapCircleObject* pObj = new IMapCircleObject;
                 pObj->Read( rIStm );
-                maList.push_back( pObj );
+                maList.emplace_back( pObj );
             }
             break;
 
@@ -893,7 +889,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
             {
                 IMapPolygonObject* pObj = new IMapPolygonObject;
                 pObj->Read( rIStm );
-                maList.push_back( pObj );
+                maList.emplace_back( pObj );
             }
             break;
 

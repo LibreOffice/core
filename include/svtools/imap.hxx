@@ -23,6 +23,7 @@
 #include <svtools/imapobj.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/stream.hxx>
+#include <memory>
 #include <vector>
 
 class Point;
@@ -35,7 +36,7 @@ class SVT_DLLPUBLIC ImageMap final
 {
 private:
 
-    ::std::vector< IMapObject* > maList;
+    std::vector<std::unique_ptr<IMapObject>> maList;
     OUString                     aName;
 
     // binary saving/loading
@@ -81,7 +82,7 @@ public:
     // not be destroyed from outside
     IMapObject*         GetIMapObject( size_t nPos ) const
                         {
-                            return ( nPos < maList.size() ) ? maList[ nPos ] : nullptr;
+                            return ( nPos < maList.size() ) ? maList[ nPos ].get() : nullptr;
                         }
 
     // returns the object which was hit first or NULL;
