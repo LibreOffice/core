@@ -644,9 +644,13 @@ void ScOrcusSheet::set_date_time(
     cellInserted();
 }
 
-void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/, size_t xf_index)
+void ScOrcusSheet::set_format(os::row_t row, os::col_t col, size_t xf_index)
 {
     SAL_INFO("sc.orcus.style", "set format: " << xf_index);
+
+    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
+    mrDoc.getDoc().ApplyPattern(col, row, mnTab, aPattern);
 }
 
 void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start,
