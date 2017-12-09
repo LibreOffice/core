@@ -298,7 +298,7 @@ private:
     {
         struct border_line
         {
-            SvxBorderLineStyle mestyle;
+            SvxBorderLineStyle meStyle;
             Color maColor;
             double mnWidth;
 
