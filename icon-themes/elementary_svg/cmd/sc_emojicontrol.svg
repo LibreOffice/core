@@ -1,0 +1,5 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-.088047" x2="15.896289" y1=".089992" y2="16.149706"><stop offset="0" stop-color="#fff"/><stop offset=".51153916" stop-color="#fff" stop-opacity=".235294"/><stop offset=".58522105" stop-color="#fff" stop-opacity=".156863"/><stop offset="1" stop-color="#fff" stop-opacity=".392157"/></linearGradient>
+
+
+     /&gt;
+ <path d="m8 .5c-4.1421375 0-7.5 3.3578625-7.5 7.5 0 4.142138 3.3578625 7.5 7.5 7.5 4.142138 0 7.5-3.357862 7.5-7.5 0-4.1421375-3.357862-7.5-7.5-7.5zm-2.5 3.75c.69035 0 1.25.55965 1.25 1.25s-.55965 1.25-1.25 1.25-1.25-.55965-1.25-1.25.55965-1.25 1.25-1.25zm5 0c .69035 0 1.25.55965 1.25 1.25s-.55965 1.25-1.25 1.25-1.25-.55965-1.25-1.25.55965-1.25 1.25-1.25zm-6.25 5h7.5c0 2.071063-1.678937 3.75-3.75 3.75-2.0710625 0-3.75-1.678937-3.75-3.75z" fill="#fbd25e" stroke="#cc8a00"/><circle cx="8" cy="8" fill="none" r="6.5" stroke="url(#a)" stroke-linejoin="round" stroke-width=".875"/></svg>
