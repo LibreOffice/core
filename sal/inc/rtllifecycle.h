@@ -26,10 +26,6 @@ void rtl_cache_fini(void);
 
 void ensureCacheSingleton(void);
 
-void rtl_memory_init(void);
-
-void rtl_memory_fini(void);
-
 void ensureMemorySingleton(void);
 
 void rtl_locale_init(void);
