@@ -58,10 +58,10 @@ bool Qt5VirtualDevice::SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* p
     if (nNewDY == 0)
         nNewDY = 1;
 
-    if (m_pImage && m_aFrameSize.getX() != nNewDX && m_aFrameSize.getY() != nNewDY)
+    if (m_pImage && m_aFrameSize.width() == nNewDX && m_aFrameSize.height() == nNewDY)
         return true;
 
-    m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
+    m_aFrameSize = QSize(nNewDX, nNewDY);
 
     nNewDX *= m_fScale;
     nNewDY *= m_fScale;
@@ -87,8 +87,8 @@ bool Qt5VirtualDevice::SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* p
     return true;
 }
 
-long Qt5VirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.getX() : 0; }
+long Qt5VirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.width() : 0; }
 
-long Qt5VirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.getY() : 0; }
+long Qt5VirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.height() : 0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,10 +20,11 @@
 #pragma once
 
 #include <salvd.hxx>
-#include <basegfx/vector/b2ivector.hxx>
 
 #include <memory>
 #include <list>
+
+#include <QtCore/QSize>
 
 class Qt5Graphics;
 class QImage;
@@ -34,7 +35,7 @@ class Qt5VirtualDevice : public SalVirtualDevice
     std::list<Qt5Graphics*> m_aGraphics;
     std::unique_ptr<QImage> m_pImage;
     DeviceFormat m_eFormat;
-    basegfx::B2IVector m_aFrameSize;
+    QSize m_aFrameSize;
     double m_fScale;
 
 public:

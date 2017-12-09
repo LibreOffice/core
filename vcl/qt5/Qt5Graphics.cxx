@@ -41,6 +41,7 @@ Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     , m_pTextStyle{ nullptr, }
     , m_aTextColor( MAKE_SALCOLOR(0x00, 0x00, 0x00) )
 {
+    ResetClipRegion();
 }
 
 Qt5Graphics::~Qt5Graphics()
