@@ -512,6 +512,25 @@ void ScDocumentImport::setRowsVisible(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd
     }
 }
 
+void ScDocumentImport::setMergedCells(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    ScMergeAttr aAttr(nCol2-nCol1+1, nRow2-nRow1+1);
+    pTab->ApplyAttr(nCol1, nRow1, aAttr);
+
+    if (nCol1 < nCol2)
+        pTab->ApplyFlags(nCol1+1, nRow1, nCol2, nRow2, ScMF::Hor);
+
+    if (nRow1 < nRow2)
+        pTab->ApplyFlags(nCol1, nRow1+1, nCol1, nRow2, ScMF::Ver);
+
+    if (nCol1 < nCol2 && nRow1 < nRow2)
+        pTab->ApplyFlags(nCol1+1, nRow1+1, nCol2, nRow2, ScMF::Hor | ScMF::Ver);
+}
+
 namespace {
 
 class CellStoreInitializer
