@@ -412,7 +412,7 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertSvxC
 css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertToolbarEntry(
     const SvxConfigEntry* pEntry )
 {
-    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 4 );
+    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 5 );
 
     aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aPropSeq[0].Value <<= pEntry->GetCommand();
@@ -435,6 +435,9 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertTool
 
     aPropSeq[3].Name = ITEM_DESCRIPTOR_ISVISIBLE;
     aPropSeq[3].Value <<= pEntry->IsVisible();
+
+    aPropSeq[4].Name = ITEM_DESCRIPTOR_STYLE;
+    aPropSeq[4].Value <<= static_cast<sal_Int16>(pEntry->GetStyle());
 
     return aPropSeq;
 }

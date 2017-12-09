@@ -330,7 +330,7 @@ public:
     const css::uno::Reference< css::graphic::XGraphic >& GetBackupGraphic()
                 { return xBackupGraphic; }
 
-    sal_Int32   GetStyle() { return nStyle; }
+    sal_Int32   GetStyle() const { return nStyle; }
     void        SetStyle( sal_Int32 style ) { nStyle = style; }
 };
 
