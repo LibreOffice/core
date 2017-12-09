@@ -23,9 +23,6 @@
 #include <cppunit/Asserter.h>
 #include <cppunit/AdditionalMessage.h>
 
-#if defined(_WIN32)
-#define __ORCUS_STATIC_LIB
-#endif
 #include <orcus/csv_parser.hpp>
 
 #include <fstream>

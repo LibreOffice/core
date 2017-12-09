@@ -11,11 +11,6 @@
 #include <datatransformation.hxx>
 #include <stringutil.hxx>
 
-#if defined(_WIN32)
-#if !defined __ORCUS_STATIC_LIB // avoid -Werror,-Wunused-macros
-#define __ORCUS_STATIC_LIB
-#endif
-#endif
 #include <orcus/csv_parser.hpp>
 
 namespace {
