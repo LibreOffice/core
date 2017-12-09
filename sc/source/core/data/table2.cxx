@@ -2023,6 +2023,21 @@ bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
     return bFound;
 }
 
+void ScTable::SetMergedCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    ScMergeAttr aAttr(nCol2-nCol1+1, nRow2-nRow1+1);
+    ApplyAttr(nCol1, nRow1, aAttr);
+
+    if (nCol1 < nCol2)
+        ApplyFlags(nCol1+1, nRow1, nCol2, nRow2, ScMF::Hor);
+
+    if (nRow1 < nRow2)
+        ApplyFlags(nCol1, nRow1+1, nCol1, nRow2, ScMF::Ver);
+
+    if (nCol1 < nCol2 && nRow1 < nRow2)
+        ApplyFlags(nCol1+1, nRow1+1, nCol2, nRow2, ScMF::Hor | ScMF::Ver);
+}
+
 bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes ) const
 {
     if (!(ValidCol(nCol1) && ValidCol(nCol2)))
