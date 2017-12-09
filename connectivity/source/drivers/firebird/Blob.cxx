@@ -74,7 +74,7 @@ void Blob::ensureBlobIsOpened()
     };
     char aResultBuffer[20];
 
-    isc_blob_info(m_statusVector,
+    aErr = isc_blob_info(m_statusVector,
                   &m_blobHandle,
                   sizeof(aBlobItems),
                   aBlobItems,
