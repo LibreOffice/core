@@ -31,14 +31,14 @@ void XDatabaseRanges::testAddRemoveDbRanges()
     CPPUNIT_ASSERT_MESSAGE("Unable to add new db range", xDbRanges->hasByName("addNewRange"));
 
     CPPUNIT_ASSERT_THROW_MESSAGE(
-        "No execption thrown, when adding range with existing name",
+        "No exception thrown, when adding range with existing name",
         xDbRanges->addNewByName("addNewRange", table::CellRangeAddress(0, 1, 2, 3, 4)),
         css::uno::RuntimeException);
 
     xDbRanges->removeByName("addNewRange");
     CPPUNIT_ASSERT_MESSAGE("Unable to remove db range", !xDbRanges->hasByName("addNewRange"));
 
-    CPPUNIT_ASSERT_THROW_MESSAGE("No execption, when removing none-existing range",
+    CPPUNIT_ASSERT_THROW_MESSAGE("No exception, when removing none-existing range",
                                  xDbRanges->removeByName("addNewRange"),
                                  css::uno::RuntimeException);
 }

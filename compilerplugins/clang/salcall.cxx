@@ -479,7 +479,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
                 // | foo\         |
                 // |    barbaz##X    |
                 //
-                // starting at "barbaz" in the secod line, the next token reported will start at "\"
+                // starting at "barbaz" in the second line, the next token reported will start at "\"
                 // in the first line and include the intervening spaces and (part of? looks like an
                 // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
                 // when looking backwards here, without even trying to look at their content:
