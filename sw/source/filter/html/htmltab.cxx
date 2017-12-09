@@ -2712,9 +2712,8 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
         m_pTable->m_bFirstCell = false;
         pStNd = pNd->FindTableBoxStartNode();
     }
-    else
+    else if (SwTableNode *pTableNd = pNd->FindTableNode())
     {
-        SwTableNode *pTableNd = pNd->FindTableNode();
         if( pTableNd->GetTable().GetHTMLTableLayout() )
         { // if there is already a HTMTableLayout, this table is already finished
           // and we have to look for the right table in the environment
