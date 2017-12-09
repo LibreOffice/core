@@ -34,7 +34,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <sfx2/dispatch.hxx>
 #include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <vcl/scheduler.hxx>
