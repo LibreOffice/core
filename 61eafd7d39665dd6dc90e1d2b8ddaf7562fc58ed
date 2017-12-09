@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_73af342a",
+        "filename": "filter/source/xslt/import/wordml/wordml2ooo_draw.xsl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1903,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-12-09T06:35:51Z",
+      "side": 1,
+      "message": "“an unsupported formulas”, tho??",
+      "range": {
+        "startLine": 1903,
+        "startChar": 38,
+        "endLine": 1903,
+        "endChar": 61
+      },
+      "revId": "61eafd7d39665dd6dc90e1d2b8ddaf7562fc58ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
