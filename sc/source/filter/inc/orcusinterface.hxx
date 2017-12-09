@@ -47,6 +47,8 @@ class XStatusIndicator;
 class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_settings
 {
     ScDocumentImport& mrDoc;
+    formula::FormulaGrammar::Grammar meCalcGrammar;
+    orcus::spreadsheet::formula_grammar_t meOrcusGrammar;
 
 public:
     ScOrcusGlobalSettings(ScDocumentImport& rDoc);
@@ -55,6 +57,22 @@ public:
 
     virtual void set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t grammar) override;
     virtual orcus::spreadsheet::formula_grammar_t get_default_formula_grammar() const override;
+
+    formula::FormulaGrammar::Grammar getCalcGrammar() const
+    {
+        return meCalcGrammar;
+    }
+};
+
+class ScOrcusRefResolver : public orcus::spreadsheet::iface::import_reference_resolver
+{
+    const ScOrcusGlobalSettings& mrGlobalSettings;
+
+public:
+    ScOrcusRefResolver( const ScOrcusGlobalSettings& rGS );
+
+    orcus::spreadsheet::address_t resolve_address(const char* p, size_t n) override;
+    orcus::spreadsheet::range_t resolve_range(const char* p, size_t n) override;
 };
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
@@ -202,7 +220,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 public:
     ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
-    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() override { return &maAutoFilter; }
+    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() override;
     virtual orcus::spreadsheet::iface::import_table* get_table() override;
     virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() override;
     virtual orcus::spreadsheet::iface::import_conditional_format* get_conditional_format() override;
@@ -497,6 +515,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 
     StringCellCaches maStringCells;
     ScOrcusGlobalSettings maGlobalSettings;
+    ScOrcusRefResolver maRefResolver;
     ScOrcusSharedStrings maSharedStrings;
     std::vector< std::unique_ptr<ScOrcusSheet> > maSheets;
     ScOrcusStyles maStyles;
