@@ -60,7 +60,6 @@ else
 		$(if $(gb_UITest_use_config), \
 		    cp $(gb_UITest_use_config) $(dir $(call gb_UITest_get_target,$*))user/. && ) \
 		($(gb_UITest_PRECOMMAND) \
-		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(DEFS) \
 		SAL_LOG_FILE="$(dir $(call gb_UITest_get_target,$*))/soffice.out.log" \

@@ -122,7 +122,6 @@ for arg in "$@" $EXTRAOPT ; do
                 checks="c$checks"
                 case "$VALGRIND" in
                 helgrind|memcheck|massif|exp-dhat)
-                    export G_SLICE=always-malloc
                     export GLIBCXX_FORCE_NEW=1
                     ;;
                 esac
