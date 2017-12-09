@@ -24,7 +24,6 @@
 #include <rtl/strbuf.hxx>
 #include <editeng/borderline.hxx>
 
-#define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
 
 #include <memory>
@@ -181,7 +180,6 @@ public:
     virtual void set_row_height(orcus::spreadsheet::row_t row, double height, orcus::length_unit_t unit) override;
 
     virtual void set_row_hidden(orcus::spreadsheet::row_t row, bool hidden) override;
-
 
     virtual void set_merge_cell_range(const orcus::spreadsheet::range_t& range) override;
 };
