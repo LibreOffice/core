@@ -151,7 +151,10 @@ bool Qt5Graphics::setClipRegion(const vcl::Region& rRegion)
 
 void Qt5Graphics::ResetClipRegion()
 {
-    m_aClipRegion = QRegion(m_pQImage->rect());
+    if (m_pQImage)
+        m_aClipRegion = QRegion(m_pQImage->rect());
+    else
+        m_aClipRegion = QRegion();
     if (!m_aClipPath.isEmpty())
     {
         QPainterPath aPath;
@@ -490,7 +493,7 @@ static bool getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlph
                 if (x && !(x % 8))
                     ++alpha_line;
                 if (0 == (*alpha_line & (1 << (x % 8))))
-                    image_line[0] = 0;
+                    image_line[3] = 0;
             }
         }
     }
@@ -509,6 +512,7 @@ bool Qt5Graphics::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rS
     aPainter.drawImage(
         QPoint(rPosAry.mnDestX, rPosAry.mnDestY), aImage,
         QRect(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
+    aPainter.update(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     return true;
 }
 
