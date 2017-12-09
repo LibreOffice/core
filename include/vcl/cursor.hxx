@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_CURSOR_HXX
 #define INCLUDED_VCL_CURSOR_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
