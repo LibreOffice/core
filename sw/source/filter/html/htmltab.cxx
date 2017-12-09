@@ -2715,6 +2715,8 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
     else
     {
         SwTableNode *pTableNd = pNd->FindTableNode();
+        if (!pTableNd)
+            throw std::runtime_error("missing table");
         if( pTableNd->GetTable().GetHTMLTableLayout() )
         { // if there is already a HTMTableLayout, this table is already finished
           // and we have to look for the right table in the environment

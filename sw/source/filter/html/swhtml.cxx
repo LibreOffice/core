@@ -5533,7 +5533,14 @@ bool TestImportHTML(SvStream &rStream)
     SwPaM aPaM( aIdx );
     aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
     pD->SetInReading(true);
-    bool bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
+    bool bRet = false;
+    try
+    {
+        bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
+    }
+    catch (const std::runtime_error&)
+    {
+    }
     pD->SetInReading(false);
 
     return bRet;
