@@ -29,15 +29,7 @@
 #include <rtllifecycle.h>
 #include <oslmemory.h>
 
-AllocMode alloc_mode = AllocMode::UNSET;
-
 #if !defined(FORCE_SYSALLOC)
-static void determine_alloc_mode()
-{
-    assert(alloc_mode == AllocMode::UNSET);
-    alloc_mode = AllocMode::SYSTEM;
-}
-
 static const sal_Size g_alloc_sizes[] =
 {
     /* powers of 2**(1/4) */
@@ -246,22 +238,8 @@ void* SAL_CALL rtl_allocateMemory(sal_Size n) SAL_THROW_EXTERN_C()
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
-#if !defined(FORCE_SYSALLOC)
-    while (true)
-    {
-        if (alloc_mode == AllocMode::CUSTOM)
-        {
-            return rtl_allocateMemory_CUSTOM(n);
-        }
-        if (alloc_mode == AllocMode::SYSTEM)
-        {
-            return rtl_allocateMemory_SYSTEM(n);
-        }
-        determine_alloc_mode();
-    }
-#else
+
     return rtl_allocateMemory_SYSTEM(n);
-#endif
 }
 
 void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
@@ -269,44 +247,13 @@ void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
-#if !defined(FORCE_SYSALLOC)
-    while (true)
-    {
-        if (alloc_mode == AllocMode::CUSTOM)
-        {
-            return rtl_reallocateMemory_CUSTOM(p,n);
-        }
-        if (alloc_mode == AllocMode::SYSTEM)
-        {
-            return rtl_reallocateMemory_SYSTEM(p,n);
-        }
-        determine_alloc_mode();
-    }
-#else
+
     return rtl_reallocateMemory_SYSTEM(p,n);
-#endif
 }
 
 void SAL_CALL rtl_freeMemory(void * p) SAL_THROW_EXTERN_C()
 {
-#if !defined(FORCE_SYSALLOC)
-    while (true)
-    {
-        if (alloc_mode == AllocMode::CUSTOM)
-        {
-            rtl_freeMemory_CUSTOM(p);
-            return;
-        }
-        if (alloc_mode == AllocMode::SYSTEM)
-        {
-            rtl_freeMemory_SYSTEM(p);
-            return;
-        }
-        determine_alloc_mode();
-    }
-#else
     rtl_freeMemory_SYSTEM(p);
-#endif
 }
 
 void * SAL_CALL rtl_allocateZeroMemory(sal_Size n) SAL_THROW_EXTERN_C()
