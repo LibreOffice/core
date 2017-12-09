@@ -518,17 +518,7 @@ void ScDocumentImport::setMergedCells(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     if (!pTab)
         return;
 
-    ScMergeAttr aAttr(nCol2-nCol1+1, nRow2-nRow1+1);
-    pTab->ApplyAttr(nCol1, nRow1, aAttr);
-
-    if (nCol1 < nCol2)
-        pTab->ApplyFlags(nCol1+1, nRow1, nCol2, nRow2, ScMF::Hor);
-
-    if (nRow1 < nRow2)
-        pTab->ApplyFlags(nCol1, nRow1+1, nCol1, nRow2, ScMF::Ver);
-
-    if (nCol1 < nCol2 && nRow1 < nRow2)
-        pTab->ApplyFlags(nCol1+1, nRow1+1, nCol2, nRow2, ScMF::Hor | ScMF::Ver);
+    pTab->SetMergedCells(nCol1, nRow1, nCol2, nRow2);
 }
 
 namespace {

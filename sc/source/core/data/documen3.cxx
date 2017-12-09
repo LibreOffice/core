@@ -2020,15 +2020,11 @@ void ScDocument::DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions )
 {
-    ScMergeAttr aAttr( nEndCol-nStartCol+1, nEndRow-nStartRow+1 );
-    ApplyAttr( nStartCol, nStartRow, nTab, aAttr );
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
 
-    if ( nEndCol > nStartCol )
-        ApplyFlagsTab( nStartCol+1, nStartRow, nEndCol, nStartRow, nTab, ScMF::Hor );
-    if ( nEndRow > nStartRow )
-        ApplyFlagsTab( nStartCol, nStartRow+1, nStartCol, nEndRow, nTab, ScMF::Ver );
-    if ( nEndCol > nStartCol && nEndRow > nStartRow )
-        ApplyFlagsTab( nStartCol+1, nStartRow+1, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
+    pTab->SetMergedCells(nStartCol, nStartRow, nEndCol, nEndRow);
 
     // Remove all covered notes (removed captions are collected by drawing undo if active)
     InsertDeleteFlags nDelFlag = InsertDeleteFlags::NOTE | (bDeleteCaptions ? InsertDeleteFlags::NONE : InsertDeleteFlags::NOCAPTIONS);
