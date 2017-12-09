@@ -29,15 +29,7 @@
 #include <rtllifecycle.h>
 #include <oslmemory.h>
 
-AllocMode alloc_mode = AllocMode::UNSET;
-
 #if !defined(FORCE_SYSALLOC)
-static void determine_alloc_mode()
-{
-    assert(alloc_mode == AllocMode::UNSET);
-    alloc_mode = AllocMode::SYSTEM;
-}
-
 static const sal_Size g_alloc_sizes[] =
 {
     /* powers of 2**(1/4) */
@@ -71,88 +63,6 @@ static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SH
 };
 
 static rtl_arena_type * gp_alloc_arena = nullptr;
-
-void * SAL_CALL rtl_allocateMemory_CUSTOM(sal_Size n) SAL_THROW_EXTERN_C()
-{
-    void * p = nullptr;
-    if (n > 0)
-    {
-        char *     addr;
-        sal_Size   size = RTL_MEMORY_ALIGN(n + RTL_MEMALIGN, RTL_MEMALIGN);
-
-        assert(RTL_MEMALIGN >= sizeof(sal_Size));
-        if (n >= SAL_MAX_SIZE - (RTL_MEMALIGN + RTL_MEMALIGN - 1))
-        {
-            /* requested size too large for roundup alignment */
-            return nullptr;
-        }
-
-try_alloc:
-        if (size <= RTL_MEMORY_CACHED_LIMIT)
-            addr = static_cast<char*>(rtl_cache_alloc(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT]));
-        else
-            addr = static_cast<char*>(rtl_arena_alloc (gp_alloc_arena, &size));
-
-        if (addr)
-        {
-            reinterpret_cast<sal_Size*>(addr)[0] = size;
-            p = addr + RTL_MEMALIGN;
-        }
-        else if (!gp_alloc_arena)
-        {
-            ensureMemorySingleton();
-            if (gp_alloc_arena)
-            {
-                /* try again */
-                goto try_alloc;
-            }
-        }
-    }
-    return p;
-}
-
-void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
-{
-    if (p)
-    {
-        char *   addr = static_cast<char*>(p) - RTL_MEMALIGN;
-        sal_Size size = reinterpret_cast<sal_Size*>(addr)[0];
-
-        if (size <= RTL_MEMORY_CACHED_LIMIT)
-            rtl_cache_free(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT], addr);
-        else
-            rtl_arena_free (gp_alloc_arena, addr, size);
-    }
-}
-
-void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
-{
-    if (n > 0)
-    {
-        if (p)
-        {
-            void *   p_old = p;
-            sal_Size n_old = reinterpret_cast<sal_Size*>( static_cast<char*>(p) - RTL_MEMALIGN  )[0] - RTL_MEMALIGN;
-
-            p = rtl_allocateMemory (n);
-            if (p)
-            {
-                memcpy (p, p_old, (n < n_old) ? n : n_old);
-                rtl_freeMemory (p_old);
-            }
-        }
-        else
-        {
-            p = rtl_allocateMemory (n);
-        }
-    }
-    else if (p)
-    {
-        rtl_freeMemory (p);
-        p = nullptr;
-    }
-    return p;
-}
 
 #endif
 
@@ -226,42 +136,13 @@ void rtl_memory_fini()
 #endif
 }
 
-void * SAL_CALL rtl_allocateMemory_SYSTEM(sal_Size n)
-{
-    return malloc (n);
-}
-
-void SAL_CALL rtl_freeMemory_SYSTEM(void * p)
-{
-    free (p);
-}
-
-void * SAL_CALL rtl_reallocateMemory_SYSTEM(void * p, sal_Size n)
-{
-    return realloc (p, n);
-}
-
 void* SAL_CALL rtl_allocateMemory(sal_Size n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
-#if !defined(FORCE_SYSALLOC)
-    while (true)
-    {
-        if (alloc_mode == AllocMode::CUSTOM)
-        {
-            return rtl_allocateMemory_CUSTOM(n);
-        }
-        if (alloc_mode == AllocMode::SYSTEM)
-        {
-            return rtl_allocateMemory_SYSTEM(n);
-        }
-        determine_alloc_mode();
-    }
-#else
-    return rtl_allocateMemory_SYSTEM(n);
-#endif
+
+    return malloc(n);
 }
 
 void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
@@ -269,44 +150,13 @@ void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
-#if !defined(FORCE_SYSALLOC)
-    while (true)
-    {
-        if (alloc_mode == AllocMode::CUSTOM)
-        {
-            return rtl_reallocateMemory_CUSTOM(p,n);
-        }
-        if (alloc_mode == AllocMode::SYSTEM)
-        {
-            return rtl_reallocateMemory_SYSTEM(p,n);
-        }
-        determine_alloc_mode();
-    }
-#else
-    return rtl_reallocateMemory_SYSTEM(p,n);
-#endif
+
+    return realloc(p,n);
 }
 
 void SAL_CALL rtl_freeMemory(void * p) SAL_THROW_EXTERN_C()
 {
-#if !defined(FORCE_SYSALLOC)
-    while (true)
-    {
-        if (alloc_mode == AllocMode::CUSTOM)
-        {
-            rtl_freeMemory_CUSTOM(p);
-            return;
-        }
-        if (alloc_mode == AllocMode::SYSTEM)
-        {
-            rtl_freeMemory_SYSTEM(p);
-            return;
-        }
-        determine_alloc_mode();
-    }
-#else
-    rtl_freeMemory_SYSTEM(p);
-#endif
+    free(p);
 }
 
 void * SAL_CALL rtl_allocateZeroMemory(sal_Size n) SAL_THROW_EXTERN_C()
