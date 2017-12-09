@@ -239,6 +239,7 @@ cmd/sc_grafmode.png cmd/sc_graphicdialog.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_imagebutton.png cmd/sc_gallery.png
+cmd/lc_imagebutton.png cmd/lc_gallery.png
 
 # shapes
 cmd/lc_fontworkshapetype.fontwork-circle-pour.png cmd/lc_basicshapes.ring.png
@@ -258,9 +259,6 @@ cmd/lc_basicshapes.circle-pie.png cmd/lc_pie.png
 cmd/lc_flowchartshapes.flowchart-merge.png cmd/lc_fontworkshapetype.fontwork-triangle-down.png
 cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
-
-cmd/lc_emojicontrol.png cmd/lc_symbolshapes.png
-cmd/sc_emojicontrol.png cmd/sc_symbolshapes.png
 
 cmd/sc_fontworkshapetype.fontwork-circle-pour.png cmd/sc_basicshapes.ring.png
 cmd/sc_basicshapes.circle.png cmd/sc_circle.png
@@ -1320,9 +1318,10 @@ sw/res/sc_datainrows.png cmd/sc_datainrows.png
 
 sw/res/sf01.png cmd/sc_controlcodes.png
 sw/res/sf02.png cmd/sc_charfontname.png
-sw/res/sf03.png cmd/sc_diagramarea.png
+sw/res/sf03.png cmd/sc_insertobjectfloatingframe.png
 sw/res/sf04.png cmd/sc_showsinglepage.png
 sw/res/sf05.png cmd/sc_defaultbullet.png
+sw/res/sf06.png cmd/sc_inserttable.png
 
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
