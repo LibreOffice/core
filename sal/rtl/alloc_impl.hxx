@@ -230,10 +230,6 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #define RTL_CACHE_FLAG_NOMAGAZINE   (1 << 13) /* w/o magazine layer */
 #define RTL_CACHE_FLAG_QUANTUMCACHE (2 << 13) /* used as arena quantum cache */
 
-enum class AllocMode { CUSTOM, SYSTEM, UNSET };
-
-extern AllocMode alloc_mode;
-
 #endif // INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
