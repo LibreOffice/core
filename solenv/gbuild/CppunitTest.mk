@@ -48,7 +48,6 @@ ifneq ($(strip $(VALGRIND_GDB)),)
 gb_CppunitTest_VALGRINDTOOL += --vgdb=yes --vgdb-error=0
 endif
 ifeq ($(strip $(VALGRIND)),memcheck)
-G_SLICE := always-malloc
 GLIBCXX_FORCE_NEW := 1
 endif
 endif
@@ -126,7 +125,6 @@ else
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
 		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
 		$(if $(filter gdb,$(gb_CppunitTest_GDBTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
-		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(gb_CppunitTest_malloc_check) \
 		$(if $(strip $(PYTHON_URE)),\

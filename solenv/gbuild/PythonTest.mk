@@ -43,7 +43,6 @@ else
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
 		($(gb_PythonTest_PRECOMMAND) \
-		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(DEFS) \
 		TEST_LIB=$(call gb_Library_get_target,test) \
