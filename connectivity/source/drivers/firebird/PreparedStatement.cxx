@@ -250,6 +250,21 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     if (m_xResultSet.is()) // Checks whether we have already run the statement.
     {
         disposeResultSet();
+        // Closes the cursor from the last run.
+        // This doesn't actually free the statement -- using DSQL_close closes
+        // the cursor and keeps the statement, using DSQL_drop frees the statement
+        // (and associated cursors).
+        aErr = isc_dsql_free_statement(m_statusVector,
+                                       &m_aStatementHandle,
+                                       DSQL_close);
+        if (aErr)
+        {
+            // Do not throw error. Trying to close a closed cursor is not a
+            // critical mistake.
+            OUString sErrMsg  = StatusVectorToString(m_statusVector,
+                    "isc_dsql_free_statement: close cursor");
+            SAL_WARN("connectivity.firebird", sErrMsg);
+        }
     }
 
     aErr = isc_dsql_execute(m_statusVector,
