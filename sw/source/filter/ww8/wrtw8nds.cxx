@@ -2282,7 +2282,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     {
         sal_Int32 nAktPos = *aBreakIt;
 
-        if( softBreakList.size() > 1 ) // not for empty paragpraph
+        if( softBreakList.size() > 1 ) // not for empty paragraph
             ++aBreakIt;
 
         AttrOutput().StartParagraph( pTextNodeInfo );
@@ -2495,7 +2495,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
                 nLen -= ofs;
 
-                // if paragraph needs to be split, write only until split postition
+                // if paragraph needs to be split, write only until split position
                 if( bNeedParaSplit && nAktPos + ofs + nLen > *aBreakIt)
                     nLen = *aBreakIt - nAktPos - ofs;
 

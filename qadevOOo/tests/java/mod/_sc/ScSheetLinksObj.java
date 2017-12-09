@@ -103,7 +103,7 @@ public class ScSheetLinksObj extends TestCase {
 
         XSheetLinkable SL = UnoRuntime.queryInterface(XSheetLinkable.class, oSheet);
 
-        // creating link. Doesn't matter that it refers to unexistant object.
+        // creating link. Doesn't matter that it refers to unexistent object.
         // this is for proper work of X*Access tests.
         String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
         SL.link(aSourceArea, "Sheet1", "", "",
