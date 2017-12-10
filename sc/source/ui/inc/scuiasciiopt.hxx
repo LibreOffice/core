@@ -63,6 +63,7 @@ class ScImportAsciiDlg : public ModalDialog
     VclPtr<CheckBox>                   pCkbTab;
     VclPtr<CheckBox>                   pCkbSemicolon;
     VclPtr<CheckBox>                   pCkbComma;
+    VclPtr<CheckBox>                   pCkbRemoveSpace;
     VclPtr<CheckBox>                   pCkbSpace;
     VclPtr<CheckBox>                   pCkbOther;
     VclPtr<Edit>                       pEdOther;

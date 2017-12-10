@@ -31,9 +31,12 @@ private:
     bool        bFixedLen;
     OUString    aFieldSeps;
     bool        bMergeFieldSeps;
+    bool        bRemoveSpace;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
     bool        bSkipEmptyCells;
+    bool        bSaveAsShown;
+    bool        bSaveFormulas;
     sal_Unicode cTextSep;
     rtl_TextEncoding eCharSet;
     LanguageType eLang;
@@ -56,6 +59,7 @@ public:
     rtl_TextEncoding    GetCharSet() const      { return eCharSet; }
     const OUString&     GetFieldSeps() const    { return aFieldSeps; }
     bool                IsMergeSeps() const     { return bMergeFieldSeps; }
+    bool                IsRemoveSpace() const   { return bRemoveSpace; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
     bool                IsSkipEmptyCells() const      { return bSkipEmptyCells; }
@@ -72,6 +76,7 @@ public:
     void    SetFixedLen( bool bSet )            { bFixedLen = bSet; }
     void    SetFieldSeps( const OUString& rStr )  { aFieldSeps = rStr; }
     void    SetMergeSeps( bool bSet )           { bMergeFieldSeps = bSet; }
+    void    SetRemoveSpace( bool bSet )         { bRemoveSpace = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
     void    SetSkipEmptyCells(bool bSet)        { bSkipEmptyCells = bSet; }

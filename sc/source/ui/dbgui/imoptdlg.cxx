@@ -42,6 +42,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     bSaveAsShown = true;    // "true" if not in string (after CSV import)
     bQuoteAllText = false;
     bSaveFormulas = false;
+    bRemoveSpace = false;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount >= 3 )
     {
@@ -70,6 +71,8 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
                 bSaveAsShown = rStr.getToken(8, ',') == "true";
             if ( nTokenCount >= 10 )
                 bSaveFormulas = rStr.getToken(9, ',') == "true";
+            if ( nTokenCount >= 11 )
+                bRemoveSpace = rStr.getToken(10, ',') == "true";
         }
     }
 }
@@ -89,7 +92,9 @@ OUString ScImportOptions::BuildString() const
             ",true," +                           // "detect special numbers"
             OUString::boolean( bSaveAsShown ) +  // "save as shown": not in ScAsciiOptions
             "," +
-            OUString::boolean( bSaveFormulas );  // "save formulas": not in ScAsciiOptions
+            OUString::boolean( bSaveFormulas ) +  // "save formulas": not in ScAsciiOptions
+            "," +
+            OUString::boolean( bRemoveSpace );    // same as "Remove space" in ScAsciiOptions
 
     return aResult;
 }

@@ -734,7 +734,7 @@ void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
 
 void ScCsvGrid::ImplSetTextLineSep(
         sal_Int32 nLine, const OUString& rTextLine,
-        const OUString& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
+        const OUString& rSepChars, sal_Unicode cTextSep, bool bMergeSep, bool bRemoveSpace )
 {
     if( nLine < GetFirstVisLine() ) return;
 
@@ -756,7 +756,7 @@ void ScCsvGrid::ImplSetTextLineSep(
         bool bIsQuoted = false;
         bool bOverflowCell = false;
         pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText,
-                cTextSep, pSepChars, bMergeSep, bIsQuoted, bOverflowCell );
+                cTextSep, pSepChars, bMergeSep, bIsQuoted, bOverflowCell, bRemoveSpace );
         /* TODO: signal overflow somewhere in UI */
 
         // update column width
