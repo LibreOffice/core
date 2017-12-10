@@ -266,6 +266,7 @@ public:
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 };
 
+extern bool bpostionprotect,bsizeprotect;
 
 #endif // INCLUDED_CUI_SOURCE_INC_TRANSFRM_HXX
 

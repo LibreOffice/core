@@ -80,6 +80,9 @@ const sal_uInt16 SvxSlantTabPage::pSlantRanges[] =
     0
 };
 
+bool bpostionprotect = 0;
+bool bsizeprotect    = 0;
+
 /*************************************************************************
 |*
 |* constructor of the tab dialog: adds the pages to the dialog
@@ -329,6 +332,16 @@ VclPtr<SfxTabPage> SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemS
 
 void SvxAngleTabPage::ActivatePage(const SfxItemSet& /*rSet*/)
 {
+    if(bpostionprotect==1)
+    { 
+        m_pFlPosition->Disable();
+        m_pFlAngle->Disable();
+    }
+    else
+    {
+        m_pFlPosition->Enable();
+        m_pFlAngle->Enable();
+    }
 }
 
 
@@ -697,6 +710,15 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         const ::tools::Rectangle aTempRect(pRectItem->GetValue());
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+    }
+
+    if(bpostionprotect == 1 || bsizeprotect == 1)
+    { 
+        m_pFlAngle->Disable();
+    }
+    else
+    {
+        m_pFlAngle->Enable();
     }
 }
 
@@ -1213,7 +1235,8 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 
     m_pCtlSize->Invalidate();
     m_pCtlPos->Invalidate();
-
+    bpostionprotect  =bPosProtect;
+    bsizeprotect     =bSizeProtect;
 }
 
 
