@@ -93,7 +93,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     bool    m_bPositioningDisabled;
     bool    m_bIsMultiSelection;
     bool    m_bIsInRightToLeft;
-
+    TriState    m_nProtectSizeState;
 
     DECL_LINK(RangeModifyHdl, Control&, void);
     DECL_LINK(RangeModifyClickHdl, Button*, void);
