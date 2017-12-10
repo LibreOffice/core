@@ -28,6 +28,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executabl
 	  && ./configure \
 		--enable-static \
 		--disable-shared \
+		--disable-doc \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		CXXFLAGS="$(CXXFLAGS)" \
 		GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
@@ -42,6 +43,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
+		   --disable-doc \
 		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		   $(if $(filter LINUX,$(OS)), \
