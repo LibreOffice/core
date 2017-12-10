@@ -704,7 +704,7 @@ ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
 
         wcex.cbSize         = sizeof(wcex);
         wcex.style          = 0;
-        wcex.lpfnWndProc    = static_cast< WNDPROC >( CMtaFolderPicker::StaWndProc );
+        wcex.lpfnWndProc    = CMtaFolderPicker::StaWndProc;
         wcex.cbClsExtra     = 0;
         wcex.cbWndExtra     = 0;
         wcex.hInstance      = m_hInstance;
