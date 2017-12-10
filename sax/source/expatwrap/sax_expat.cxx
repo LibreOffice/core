@@ -384,6 +384,28 @@ SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments
     }
 }
 
+namespace
+{
+    class ParserCleanup
+    {
+    private:
+        SaxExpatParser_Impl& m_rParser;
+        Entity& m_rEntity;
+    public:
+        ParserCleanup(SaxExpatParser_Impl& rParser, Entity& rEntity)
+            : m_rParser(rParser)
+            , m_rEntity(rEntity)
+        {
+        }
+        ~ParserCleanup()
+        {
+            m_rParser.popEntity();
+            //XML_ParserFree accepts a null arg
+            XML_ParserFree(m_rEntity.pParser);
+        }
+    };
+}
+
 /***************
 *
 * parseStream does Parser-startup initializations. The SaxExpatParser_Impl::parse() method does
@@ -451,50 +473,21 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
 
     m_pImpl->exception = SAXParseException();
     m_pImpl->pushEntity( entity );
-    try
-    {
-        // start the document
-        if( m_pImpl->rDocumentHandler.is() ) {
-            m_pImpl->rDocumentHandler->setDocumentLocator( m_pImpl->rDocumentLocator );
-            m_pImpl->rDocumentHandler->startDocument();
-        }
 
-        m_pImpl->parse();
+    ParserCleanup aEnsureFree(*m_pImpl, entity);
 
-        // finish document
-        if( m_pImpl->rDocumentHandler.is() ) {
-            m_pImpl->rDocumentHandler->endDocument();
-        }
-    }
-//      catch( SAXParseException &e )
-//  {
-//      m_pImpl->popEntity();
-//          XML_ParserFree( entity.pParser );
-//        css::uno::Any aAny;
-//        aAny <<= e;
-//          throw SAXException( e.Message, e.Context, aAny );
-//      }
-    catch( SAXException & )
-    {
-        m_pImpl->popEntity();
-        XML_ParserFree( entity.pParser );
-          throw;
-    }
-    catch( IOException & )
-    {
-        m_pImpl->popEntity();
-        XML_ParserFree( entity.pParser );
-        throw;
-    }
-    catch( css::uno::RuntimeException & )
-    {
-        m_pImpl->popEntity();
-        XML_ParserFree( entity.pParser );
-        throw;
+    // start the document
+    if( m_pImpl->rDocumentHandler.is() ) {
+        m_pImpl->rDocumentHandler->setDocumentLocator( m_pImpl->rDocumentLocator );
+        m_pImpl->rDocumentHandler->startDocument();
     }
 
-    m_pImpl->popEntity();
-    XML_ParserFree( entity.pParser );
+    m_pImpl->parse();
+
+    // finish document
+    if( m_pImpl->rDocumentHandler.is() ) {
+        m_pImpl->rDocumentHandler->endDocument();
+    }
 }
 
 void SaxExpatParser::setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler)
