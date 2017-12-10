@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_d9d1e758",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-12-10T15:01:28Z",
+      "side": 1,
+      "message": "@Maxim, please check patch set 4, hope to understand what you mean. ıt checks SID_READONLYDOC too and that macro can disable SID_READONLYDOC too.",
+      "parentUuid": "1a430d35_33f86349",
+      "revId": "f7ffd70adb2a37614ae9a4f159adb02214a255c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_5397afeb",
         "filename": "sfx2/source/view/viewfrm.cxx",
         "patchSetId": 3
