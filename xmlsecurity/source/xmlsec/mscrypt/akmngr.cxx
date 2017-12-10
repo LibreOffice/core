@@ -138,7 +138,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
                     "xmlSecKeysMngrGetDataStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
-        return (-1) ;
+        return -1 ;
     }
 
     if (xmlSecMSCryptoX509StoreAdoptKeyStore(x509Store, keyStore) < 0)
@@ -148,7 +148,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
                     "xmlSecMSCryptoX509StoreAdoptKeyStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
-        return (-1) ;
+        return -1 ;
     }
 
     return 0 ;
@@ -173,7 +173,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore(
                     "xmlSecKeysMngrGetDataStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
-        return (-1) ;
+        return -1 ;
     }
 
     if (xmlSecMSCryptoX509StoreAdoptTrustedStore(x509Store, trustedStore) < 0)
@@ -183,7 +183,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore(
                     "xmlSecMSCryptoX509StoreAdoptKeyStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
-        return (-1) ;
+        return -1 ;
     }
 
     return 0 ;
@@ -208,7 +208,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore(
                     "xmlSecKeysMngrGetDataStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
-        return (-1) ;
+        return -1 ;
     }
 
     if (xmlSecMSCryptoX509StoreAdoptUntrustedStore(x509Store, untrustedStore) < 0)
@@ -218,7 +218,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore(
                     "xmlSecMSCryptoX509StoreAdoptKeyStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
-        return (-1) ;
+        return -1 ;
     }
 
     return 0 ;
