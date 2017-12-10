@@ -191,11 +191,11 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
         else if (bDeclIsSalCall)
         {
             // not fine
-            report(DiagnosticsEngine::Warning, "SAL_CALL inconsistency",
+            report(DiagnosticsEngine::Warning, "SAL_CALL inconsistency", decl->getLocation())
+                << decl->getSourceRange();
+            report(DiagnosticsEngine::Note, "SAL_CALL inconsistency",
                    canonicalDecl->getLocation())
                 << canonicalDecl->getSourceRange();
-            report(DiagnosticsEngine::Note, "SAL_CALL inconsistency", decl->getLocation())
-                << decl->getSourceRange();
             return true;
         }
     }
