@@ -200,7 +200,7 @@ void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
 
 void ScCsvTableBox::SetUniStrings(
         const OUString* pTextLines, const OUString& rSepChars,
-        sal_Unicode cTextSep, bool bMergeSep )
+        sal_Unicode cTextSep, bool bMergeSep, bool bRemoveSpace )
 {
     // assuming that pTextLines is a string array with size CSV_PREVIEW_LINES
     // -> will be dynamic sometime
@@ -212,7 +212,7 @@ void ScCsvTableBox::SetUniStrings(
         if( mbFixedMode )
             maGrid->ImplSetTextLineFix( nLine, *pString );
         else
-            maGrid->ImplSetTextLineSep( nLine, *pString, rSepChars, cTextSep, bMergeSep );
+            maGrid->ImplSetTextLineSep( nLine, *pString, rSepChars, cTextSep, bMergeSep, bRemoveSpace );
     }
     EnableRepaint();
 }
