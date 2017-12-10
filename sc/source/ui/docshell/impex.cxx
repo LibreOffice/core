@@ -1283,6 +1283,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     const OUString& rSeps       = pExtOptions->GetFieldSeps();
     const sal_Unicode* pSeps    = rSeps.getStr();
     bool    bMerge              = pExtOptions->IsMergeSeps();
+    bool    bRemoveSpace        = pExtOptions->IsRemoveSpace();
     sal_uInt16  nInfoCount      = pExtOptions->GetInfoCount();
     const sal_Int32* pColStart  = pExtOptions->GetColStart();
     const sal_uInt8* pColFormat = pExtOptions->GetColFormat();
@@ -1403,6 +1404,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             cStr, pSeps, bMerge, bIsQuoted, bOverflowCell );
 
                     sal_uInt8 nFmt = SC_COL_STANDARD;
+                    if ( bRemoveSpace )
+                        aCell = aCell.trim();
                     for ( i=nInfoStart; i<nInfoCount; i++ )
                     {
                         if ( pColStart[i] == nSourceCol + 1 )       // pColStart is 1-based
