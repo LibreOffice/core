@@ -679,7 +679,7 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
 
     wcex.cbSize         = sizeof(wcex);
     wcex.style          = 0;
-    wcex.lpfnWndProc    = static_cast< WNDPROC >( CMtaOleClipboard::mtaOleReqWndProc );
+    wcex.lpfnWndProc    = CMtaOleClipboard::mtaOleReqWndProc;
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInst;
