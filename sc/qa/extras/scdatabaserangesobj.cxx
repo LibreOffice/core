@@ -61,11 +61,11 @@ uno::Reference<uno::XInterface> ScDatabaseRangesObj::init()
     // create a calc document
     if (!mxComponent.is())
         mxComponent = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xPropSet(xDoc, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
+    uno::Reference<beans::XPropertySet> xPropSet(xDoc, UNO_QUERY_THROW);
     uno::Reference<sheet::XDatabaseRanges> xDbRanges(xPropSet->getPropertyValue("DatabaseRanges"),
                                                      UNO_QUERY_THROW);
 

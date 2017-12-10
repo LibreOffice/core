@@ -90,7 +90,8 @@ uno::Reference< uno::XInterface > ScTableSheetsObj::init()
     createFileURL("rangenamessrc.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
+
     xDocument.set(mxComponent, UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xReturn( xDocument->getSheets(), UNO_QUERY_THROW);
 
