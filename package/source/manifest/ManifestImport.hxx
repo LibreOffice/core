@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <vector>
 
 #include <HashMaps.hxx>
@@ -50,9 +51,13 @@ typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 
 class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
+    std::vector< css::beans::NamedValue > aKeyInfoSequence;
+    std::vector< css::uno::Sequence< css::beans::NamedValue > > aKeys;
     std::vector< css::beans::PropertyValue > aSequence;
+    OUString aCurrentCharacters;
     ManifestStack aStack;
     bool bIgnoreEncryptData;
+    bool bPgpEncryption;
     sal_Int32 nDerivedKeySize;
     ::std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rManVector;
 
@@ -75,6 +80,17 @@ class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocum
     const OUString sKeyDerivationNameAttribute;
     const OUString sChecksumAttribute;
     const OUString sChecksumTypeAttribute;
+
+    const OUString sKeyInfoElement;
+    const OUString sManifestKeyInfoElement;
+    const OUString sEncryptedKeyElement;
+    const OUString sEncryptionMethodElement;
+    const OUString sPgpDataElement;
+    const OUString sPgpKeyIDElement;
+    const OUString sPGPKeyPacketElement;
+    const OUString sAlgorithmAttribute;
+    const OUString sCipherDataElement;
+    const OUString sCipherValueElement;
 
     const OUString sFullPathProperty;
     const OUString sMediaTypeProperty;
@@ -136,6 +152,15 @@ private:
     void doKeyDerivation(StringHashMap &rConvertedAttribs);
     /// @throws css::uno::RuntimeException
     void doStartKeyAlg(StringHashMap &rConvertedAttribs);
+    void doKeyInfoEntry(StringHashMap &);
+    void doEncryptedKey(StringHashMap &);
+    void doEncryptionMethod(StringHashMap &);
+    void doEncryptedKeyInfo(StringHashMap &);
+    void doEncryptedCipherData(StringHashMap &);
+    void doEncryptedPgpData(StringHashMap &);
+    void doEncryptedCipherValue();
+    void doEncryptedKeyId();
+    void doEncryptedKeyPacket();
 };
 #endif
 
