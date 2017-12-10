@@ -31,9 +31,9 @@ void SAL_CALL Class1::method1()
 
 class Class2
 {
-    void method1(); // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
+    void method1(); // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
 };
-void SAL_CALL Class2::method1() {} // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
+void SAL_CALL Class2::method1() {} // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
 
 // comment this out because it seems to generate a warning in some internal buffer of clang that I can't annotate
 #if 0
@@ -120,12 +120,12 @@ class Class8_3 : public Class8_1, public Class8_2
 #define M1(m) void m
 class Class9
 {
-    M1(method1)(); // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
-    void method2(); // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
+    M1(method1)(); // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
+    void method2(); // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
 };
-void SAL_CALL Class9::method1() {} // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
+void SAL_CALL Class9::method1() {} // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
 #define M2(T) T SAL_CALL
-M2(void) Class9::method2() {} // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
+M2(void) Class9::method2() {} // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
 
 #if 0 // see TODO in SalCall::isSalCallFunction
 class Class10
