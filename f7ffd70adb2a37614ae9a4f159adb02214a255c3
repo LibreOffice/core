@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_19c8cfa7",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-12-10T15:16:59Z",
+      "side": 1,
+      "message": "I meant to check SID_EDITDOC *only* like it was before this patch. Everything else can stay as it was in patch set 3.",
+      "parentUuid": "1a430d35_d9d1e758",
+      "revId": "f7ffd70adb2a37614ae9a4f159adb02214a255c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_5397afeb",
         "filename": "sfx2/source/view/viewfrm.cxx",
         "patchSetId": 3
