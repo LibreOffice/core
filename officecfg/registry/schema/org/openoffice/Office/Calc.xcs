@@ -1088,6 +1088,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="RemoveSpace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, leading and trailing white spaces are trimmed off.</desc>
+            <label>RemoveSpace</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>If true, quoted field is always imported as text with no exception.</desc>
@@ -1160,6 +1167,13 @@
           <info>
             <desc>Merge Delimiter check box status</desc>
             <label>MergeDelimiters</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveSpace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, leading and trailing white spaces are trimmed off.</desc>
+            <label>RemoveSpace</label>
           </info>
           <value>false</value>
         </prop>
@@ -1242,6 +1256,13 @@
           <info>
             <desc>Merge Delimiter check box status</desc>
             <label>MergeDelimiters</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveSpace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, leading and trailing white spaces are trimmed off.</desc>
+            <label>RemoveSpace</label>
           </info>
           <value>false</value>
         </prop>
