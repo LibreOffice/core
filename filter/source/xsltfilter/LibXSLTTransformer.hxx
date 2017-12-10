@@ -40,7 +40,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-using ::std::list;
 using ::std::map;
 
 #define EXT_MODULE_OLE_URI "http://libreoffice.org/2011/xslt/ole"
