@@ -525,6 +525,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     , m_bPositioningDisabled(false)
     , m_bIsMultiSelection(false)
     , m_bIsInRightToLeft(false)
+    , m_nProtectSizeState(TRISTATE_FALSE)
 {
     get(m_pWidthMF, "width");
     get(m_pHeightMF, "height");
@@ -1087,7 +1088,13 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
 DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
+    {
+        _pSet->Put(SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
+                m_pPositionCB->GetState() == TRISTATE_TRUE ));
+        _pSet->Put(SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
+                m_pSizeCB->GetState() == TRISTATE_TRUE ));
         FillItemSet( _pSet );
+    }
     return DeactivateRC::LeavePage;
 }
 
@@ -1393,6 +1400,12 @@ IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
 
 IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
 {
+    if( m_pSizeCB->IsEnabled() )
+    {
+        m_nProtectSizeState = m_pSizeCB->GetState();
+    }
+
+    m_pSizeCB->SetState( m_pPositionCB->GetState() == TRISTATE_TRUE ?  TRISTATE_TRUE : m_nProtectSizeState );
     m_pSizeCB->Enable(m_pPositionCB->IsEnabled() && !m_pPositionCB->IsChecked());
 }
 

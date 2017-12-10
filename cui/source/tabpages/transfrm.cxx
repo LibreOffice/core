@@ -327,8 +327,14 @@ VclPtr<SfxTabPage> SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemS
 }
 
 
-void SvxAngleTabPage::ActivatePage(const SfxItemSet& /*rSet*/)
+void SvxAngleTabPage::ActivatePage(const SfxItemSet& rSet)
 {
+    SfxBoolItem const * bPosProtect = nullptr;
+    if(SfxItemState::SET == rSet.GetItemState( GetWhich(SID_ATTR_TRANSFORM_PROTECT_POS  ) , false, reinterpret_cast<SfxPoolItem const **>(&bPosProtect) ))
+    {
+        m_pFlPosition->Enable(!bPosProtect->GetValue());
+        m_pFlAngle->Enable(!bPosProtect->GetValue());
+    }
 }
 
 
@@ -698,6 +704,18 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
         const ::tools::Rectangle aTempRect(pRectItem->GetValue());
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
+
+    SfxBoolItem const * bPosProtect = nullptr;
+    if(SfxItemState::SET == rSet.GetItemState( GetWhich(SID_ATTR_TRANSFORM_PROTECT_POS  ) , false, reinterpret_cast<SfxPoolItem const **>(&bPosProtect) ))
+    {
+        m_pFlAngle->Enable(!bPosProtect->GetValue());
+    }
+    SfxBoolItem const * bSizeProtect = nullptr;
+    if(SfxItemState::SET == rSet.GetItemState( GetWhich(SID_ATTR_TRANSFORM_PROTECT_SIZE ) , false, reinterpret_cast<SfxPoolItem const **>(&bSizeProtect) ))
+    {
+        m_pFlAngle->Enable(!bSizeProtect->GetValue());
+    }
+
 }
 
 
@@ -1168,7 +1186,10 @@ DeactivateRC SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
             basegfx::fround(fX), basegfx::fround(fY),
             basegfx::fround(fX + maRange.getWidth()), basegfx::fround(fY + maRange.getHeight()));
         _pSet->Put(SfxRectangleItem(SID_ATTR_TRANSFORM_INTERN, aOutRectangle));
-
+        _pSet->Put(SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
+            m_pTsbPosProtect->GetState() == TRISTATE_TRUE ));
+        _pSet->Put(SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
+            m_pTsbSizeProtect->GetState() == TRISTATE_TRUE ));
         FillItemSet(_pSet);
     }
 
