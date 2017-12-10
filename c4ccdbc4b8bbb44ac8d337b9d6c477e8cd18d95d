@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9932fff0",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-10T11:34:15Z",
+      "side": 1,
+      "message": "why not just go\n   mpPointAry \u003d new Point[nInitSize];\n?",
+      "revId": "c4ccdbc4b8bbb44ac8d337b9d6c477e8cd18d95d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
