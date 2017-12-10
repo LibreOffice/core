@@ -696,10 +696,9 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
 
     if( bDeep )
     {
-        for( std::list< Element* >::iterator it = pEle->Children.begin();
-             it != pEle->Children.end(); ++it )
+        for (auto const& child : pEle->Children)
         {
-            sortElements( *it, bDeep );
+            sortElements( child, bDeep );
         }
     }
     // HACK: the stable sort member on std::list that takes a
@@ -716,9 +715,8 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
         pEle->Children.pop_front();
     }
     std::stable_sort( aChildren.begin(), aChildren.end(), lr_tb_sort );
-    int nChildren = aChildren.size();
-    for( int i = 0; i < nChildren; i++ )
-        pEle->Children.push_back( aChildren[i] );
+    for (auto const& child : aChildren)
+        pEle->Children.push_back(child);
 }
 
 // helper method: get a mirrored string
