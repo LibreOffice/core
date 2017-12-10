@@ -53,40 +53,40 @@ protected:
     CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* theWinClipboard );
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents(  );
+    css::uno::Reference< css::datatransfer::XTransferable > getContents(  );
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL setContents(
+    void setContents(
         const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
         const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner );
 
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL getName(  );
+    OUString getName(  );
 
     // XClipboardEx
 
     /// @throws css::uno::RuntimeException
-    static sal_Int8 SAL_CALL getRenderingCapabilities(  );
+    static sal_Int8 getRenderingCapabilities(  );
 
     // XFlushableClipboard
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL flushClipboard( );
+    void flushClipboard( );
 
     // XComponent
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL dispose( );
+    void dispose( );
 
     // member functions
 
-    void SAL_CALL registerClipboardViewer( );
-    void SAL_CALL unregisterClipboardViewer( );
+    void registerClipboardViewer( );
+    void unregisterClipboardViewer( );
 
     static void WINAPI onClipboardContentChanged();
 
 private:
-    void SAL_CALL onReleaseDataObject( CXNotifyingDataObject* theCaller );
+    void onReleaseDataObject( CXNotifyingDataObject* theCaller );
 
 private:
     OUString                m_itsName;

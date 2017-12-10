@@ -51,9 +51,9 @@ public:
     SourceContext &operator= (const SourceContext&) = delete;
 
     /// @throws RuntimeException
-    virtual void SAL_CALL addDragSourceListener( const Reference<XDragSourceListener >& dsl );
+    virtual void addDragSourceListener( const Reference<XDragSourceListener >& dsl );
     /// @throws RuntimeException
-    virtual void SAL_CALL removeDragSourceListener( const Reference<XDragSourceListener >& dsl );
+    virtual void removeDragSourceListener( const Reference<XDragSourceListener >& dsl );
     virtual sal_Int32 SAL_CALL getCurrentCursor(  ) override;
     virtual void SAL_CALL setCursor( sal_Int32 cursorId ) override;
     virtual void SAL_CALL setImage( sal_Int32 imageId ) override;

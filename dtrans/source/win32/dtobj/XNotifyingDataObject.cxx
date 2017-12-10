@@ -132,7 +132,7 @@ CXNotifyingDataObject::operator IDataObject*( )
     return static_cast< IDataObject* >( this );
 }
 
-void SAL_CALL CXNotifyingDataObject::lostOwnership( )
+void CXNotifyingDataObject::lostOwnership( )
 {
     try
     {

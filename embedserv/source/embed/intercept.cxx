@@ -42,7 +42,7 @@ public:
 };
 
 
-void SAL_CALL
+void
 Interceptor::addEventListener(
     const uno::Reference<lang::XEventListener >& Listener )
 {
@@ -56,7 +56,7 @@ Interceptor::addEventListener(
 }
 
 
-void SAL_CALL
+void
 Interceptor::removeEventListener(
     const uno::Reference< lang::XEventListener >& Listener )
 {
@@ -67,7 +67,7 @@ Interceptor::removeEventListener(
 }
 
 
-void SAL_CALL Interceptor::dispose()
+void Interceptor::dispose()
 {
     lang::EventObject aEvt;
     aEvt.Source = static_cast< frame::XDispatch* >( this );

@@ -86,7 +86,7 @@ public:
     // by base class dispose function
 
 
-    virtual void SAL_CALL disposing();
+    virtual void disposing();
 
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory >  m_xServiceMgr;

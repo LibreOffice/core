@@ -76,7 +76,7 @@ CWinClipbImpl::~CWinClipbImpl( )
     unregisterClipboardViewer( );
 }
 
-Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( )
+Reference< XTransferable > CWinClipbImpl::getContents( )
 {
     // use the shortcut or create a transferable from
     // system clipboard
@@ -110,7 +110,7 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( )
     return rClipContent;
 }
 
-void SAL_CALL CWinClipbImpl::setContents(
+void CWinClipbImpl::setContents(
     const Reference< XTransferable >& xTransferable,
     const Reference< XClipboardOwner >& xClipboardOwner )
 {
@@ -134,17 +134,17 @@ void SAL_CALL CWinClipbImpl::setContents(
     m_MtaOleClipboard.setClipboard(pIDataObj.get());
 }
 
-OUString SAL_CALL CWinClipbImpl::getName(  )
+OUString CWinClipbImpl::getName(  )
 {
     return m_itsName;
 }
 
-sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  )
+sal_Int8 CWinClipbImpl::getRenderingCapabilities(  )
 {
     return ( Delayed | Persistant );
 }
 
-void SAL_CALL CWinClipbImpl::flushClipboard( )
+void CWinClipbImpl::flushClipboard( )
 {
     // actually it should be ClearableMutexGuard aGuard( m_ClipContentMutex );
     // but it does not work since FlushClipboard does a callback and frees DataObject
@@ -160,17 +160,17 @@ void SAL_CALL CWinClipbImpl::flushClipboard( )
         m_MtaOleClipboard.flushClipboard( );
 }
 
-void SAL_CALL CWinClipbImpl::registerClipboardViewer( )
+void CWinClipbImpl::registerClipboardViewer( )
 {
     m_MtaOleClipboard.registerClipViewer( CWinClipbImpl::onClipboardContentChanged );
 }
 
-void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
+void CWinClipbImpl::unregisterClipboardViewer( )
 {
     m_MtaOleClipboard.registerClipViewer( nullptr );
 }
 
-void SAL_CALL CWinClipbImpl::dispose()
+void CWinClipbImpl::dispose()
 {
     OSL_ENSURE( !m_pCurrentClipContent, "Clipboard was not flushed before shutdown!" );
 }
@@ -184,7 +184,7 @@ void WINAPI CWinClipbImpl::onClipboardContentChanged()
         s_pCWinClipbImpl->m_pWinClipboard->notifyAllClipboardListener( );
 }
 
-void SAL_CALL CWinClipbImpl::onReleaseDataObject( CXNotifyingDataObject* theCaller )
+void CWinClipbImpl::onReleaseDataObject( CXNotifyingDataObject* theCaller )
 {
     OSL_ASSERT( nullptr != theCaller );
 

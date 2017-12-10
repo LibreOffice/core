@@ -981,14 +981,14 @@ public:
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos() override;
     virtual OUString SAL_CALL getSelectedItem() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSelectedItems() override;
-    virtual void SAL_CALL SAL_CALL selectItemPos(sal_Int16 nPos, sal_Bool bSelect) override;
-    virtual void SAL_CALL SAL_CALL selectItemsPos(const css::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect) override;
-    virtual void SAL_CALL SAL_CALL selectItem(const OUString& aItem, sal_Bool bSelect) override;
+    virtual void SAL_CALL selectItemPos(sal_Int16 nPos, sal_Bool bSelect) override;
+    virtual void SAL_CALL selectItemsPos(const css::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect) override;
+    virtual void SAL_CALL selectItem(const OUString& aItem, sal_Bool bSelect) override;
     virtual sal_Bool SAL_CALL isMutipleMode() override;
-    virtual void SAL_CALL SAL_CALL setMultipleMode(sal_Bool bMulti) override;
+    virtual void SAL_CALL setMultipleMode(sal_Bool bMulti) override;
     virtual sal_Int16 SAL_CALL getDropDownLineCount() override;
-    virtual void SAL_CALL SAL_CALL setDropDownLineCount(sal_Int16 nLines) override;
-    virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) override;
+    virtual void SAL_CALL setDropDownLineCount(sal_Int16 nLines) override;
+    virtual void SAL_CALL makeVisible(sal_Int16 nEntry) override;
 
 private:
     virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;

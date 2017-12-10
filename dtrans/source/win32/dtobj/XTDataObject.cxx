@@ -297,7 +297,7 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 }
 
 //inline
-void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
+void CXTDataObject::renderLocaleAndSetupStgMedium(
     FORMATETC const & fetc, STGMEDIUM& stgmedium )
 {
     if ( !m_FormatRegistrar.hasSynthesizedLocale( ) )
@@ -311,7 +311,7 @@ void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
         stgmedium );
 }
 
-void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
+void CXTDataObject::renderUnicodeAndSetupStgMedium(
     FORMATETC const & fetc, STGMEDIUM& stgmedium )
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
@@ -343,7 +343,7 @@ void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
         stgmedium );
 }
 
-void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
+void CXTDataObject::renderAnyDataAndSetupStgMedium(
     FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
@@ -412,7 +412,7 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
             stgmedium );
 }
 
-HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+HRESULT CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     HRESULT hr = S_OK;
 
@@ -450,7 +450,7 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
 
 // the transferable must have only text, so we will synthesize unicode text
 
-void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium )
+void CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium )
 {
     OSL_ASSERT( CF_UNICODETEXT == fetc.cfFormat );
 
@@ -481,7 +481,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATET
 
 // the transferable must have only unicode text so we will synthesize text
 
-void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+void CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     OSL_ASSERT( CDataFormatTranslator::isOemOrAnsiTextFormat( fetc.cfFormat ) );
 
@@ -513,7 +513,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
     setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
 
-void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+void CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     OSL_ASSERT( CDataFormatTranslator::isHTMLFormat( fetc.cfFormat ) );
 
@@ -641,7 +641,7 @@ CXTDataObject::operator IDataObject*( )
 }
 
 inline
-DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const
+DataFlavor CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const
 {
     DataFlavor aFlavor;
 
@@ -657,7 +657,7 @@ DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aForm
     return aFlavor;
 }
 
-inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
+inline void CXTDataObject::InitializeFormatEtcContainer( )
 {
     if ( !m_bFormatEtcContainerInitialized )
     {

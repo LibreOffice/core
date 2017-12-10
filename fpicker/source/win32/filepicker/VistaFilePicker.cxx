@@ -95,7 +95,7 @@ void SAL_CALL VistaFilePicker::removeFilePickerListener(const css::uno::Referenc
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
 }
 
-void SAL_CALL VistaFilePicker::disposing(const css::lang::EventObject& /*aEvent*/)
+void VistaFilePicker::disposing(const css::lang::EventObject& /*aEvent*/)
 {
 }
 

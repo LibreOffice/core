@@ -46,7 +46,7 @@ CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
 // If the specified path is well formed but invalid for the underlying
 // OS the FolderPicker starts in the root of the file system hierarchy
 
-void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory )
+void CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory )
 {
     OUString sysDir;
 
@@ -91,7 +91,7 @@ OUString CWinFolderPickerImpl::getDisplayDirectory( )
     return displayDirectoryURL;
 }
 
-OUString SAL_CALL CWinFolderPickerImpl::getDirectory( )
+OUString CWinFolderPickerImpl::getDirectory( )
 {
     OUString sysDir = CMtaFolderPicker::getDirectory( );
     OUString dirURL;
@@ -102,7 +102,7 @@ OUString SAL_CALL CWinFolderPickerImpl::getDirectory( )
     return dirURL;
 }
 
-sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( )
+sal_Int16 CWinFolderPickerImpl::execute( )
 {
     return m_nLastDlgResult = CMtaFolderPicker::browseForFolder( ) ?
         css::ui::dialogs::ExecutableDialogResults::OK :

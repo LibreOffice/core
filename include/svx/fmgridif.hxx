@@ -404,7 +404,7 @@ public:
     virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
 
 // css::beans::XPropertyChangeListener
-    virtual void SAL_CALL SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
+    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
 // css::form::XLoadListener
     virtual void SAL_CALL loaded(const css::lang::EventObject& rEvent) override;
@@ -450,7 +450,7 @@ public:
     virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener >& l) override;
 
 // UnoControl
-    virtual void SAL_CALL SAL_CALL setDesignMode(sal_Bool bOn) override;
+    virtual void SAL_CALL setDesignMode(sal_Bool bOn) override;
     virtual sal_Bool SAL_CALL isDesignMode() override;
 
 // css::view::XSelectionChangeListener

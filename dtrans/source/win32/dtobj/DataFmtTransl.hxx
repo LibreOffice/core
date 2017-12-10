@@ -51,18 +51,18 @@ public:
     css::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
         const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
 
-    static CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf );
-    static CFormatEtc SAL_CALL getFormatEtcForClipformatName( const OUString& aClipFmtName );
-    static OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat );
+    static CFormatEtc getFormatEtcForClipformat( CLIPFORMAT cf );
+    static CFormatEtc getFormatEtcForClipformatName( const OUString& aClipFmtName );
+    static OUString getClipboardFormatName( CLIPFORMAT aClipformat );
 
-    static bool SAL_CALL isHTMLFormat( CLIPFORMAT cf );
-    static bool SAL_CALL isTextHtmlFormat( CLIPFORMAT cf );
-    static bool SAL_CALL isOemOrAnsiTextFormat( CLIPFORMAT cf );
-    static bool SAL_CALL isUnicodeTextFormat( CLIPFORMAT cf );
-    static bool SAL_CALL isTextFormat( CLIPFORMAT cf );
+    static bool isHTMLFormat( CLIPFORMAT cf );
+    static bool isTextHtmlFormat( CLIPFORMAT cf );
+    static bool isOemOrAnsiTextFormat( CLIPFORMAT cf );
+    static bool isUnicodeTextFormat( CLIPFORMAT cf );
+    static bool isTextFormat( CLIPFORMAT cf );
 
 private:
-    static OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat );
+    static OUString getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat );
 
 private:
     css::uno::Reference< css::datatransfer::XDataFormatTranslator >   m_XDataFormatTranslator;

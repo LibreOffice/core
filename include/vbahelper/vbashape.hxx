@@ -118,8 +118,8 @@ public:
     virtual void SAL_CALL setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL SAL_CALL TextFrame(  ) override;
-    virtual css::uno::Any SAL_CALL SAL_CALL WrapFormat(  ) override;
+    virtual css::uno::Any SAL_CALL TextFrame(  ) override;
+    virtual css::uno::Any SAL_CALL WrapFormat(  ) override;
     virtual void SAL_CALL Delete() override;
     virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) override;
     virtual void SAL_CALL IncrementRotation( double Increment ) override;

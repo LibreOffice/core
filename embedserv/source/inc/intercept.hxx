@@ -59,16 +59,16 @@ public:
 
     // XComponent
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL
+    virtual void
     addEventListener(
         const css::uno::Reference< css::lang::XEventListener >& xListener );
 
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener );
 
     /// @throws css::uno::RuntimeException
-    void SAL_CALL
+    void
     dispose();
 
 

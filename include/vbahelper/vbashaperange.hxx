@@ -90,8 +90,8 @@ public:
     virtual void SAL_CALL setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition ) override;
     virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() override;
     virtual void SAL_CALL setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) override;
-    virtual css::uno::Any SAL_CALL SAL_CALL TextFrame(  ) override;
-    virtual css::uno::Any SAL_CALL SAL_CALL WrapFormat(  ) override;
+    virtual css::uno::Any SAL_CALL TextFrame(  ) override;
+    virtual css::uno::Any SAL_CALL WrapFormat(  ) override;
     virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) override;
     //XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

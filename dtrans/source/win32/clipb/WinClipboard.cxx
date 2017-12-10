@@ -160,7 +160,7 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
     rBHelper.aLC.removeInterface( cppu::UnoType<decltype(listener)>::get(), listener );
 }
 
-void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
+void CWinClipboard::notifyAllClipboardListener( )
 {
     if ( !rBHelper.bDisposed )
     {

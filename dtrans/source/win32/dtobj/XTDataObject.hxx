@@ -90,18 +90,18 @@ public:
     operator IDataObject*( );
 
 private:
-    css::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
+    css::datatransfer::DataFlavor formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
 
-    void SAL_CALL renderLocaleAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium );
-    void SAL_CALL renderUnicodeAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium );
-    void SAL_CALL renderAnyDataAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void renderLocaleAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium );
+    void renderUnicodeAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium );
+    void renderAnyDataAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
 
-    HRESULT SAL_CALL renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
-    void    SAL_CALL renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium );
-    void    SAL_CALL renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
-    void    SAL_CALL renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    HRESULT renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void    renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium );
+    void    renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void    renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
 
-    inline void SAL_CALL InitializeFormatEtcContainer( );
+    inline void InitializeFormatEtcContainer( );
 
 private:
     LONG m_nRefCnt;

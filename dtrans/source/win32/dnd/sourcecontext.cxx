@@ -40,12 +40,12 @@ SourceContext::~SourceContext()
 {
 }
 
-void SAL_CALL SourceContext::addDragSourceListener(
+void SourceContext::addDragSourceListener(
     const Reference<XDragSourceListener >& )
 {
 }
 
-void SAL_CALL SourceContext::removeDragSourceListener(
+void SourceContext::removeDragSourceListener(
      const Reference<XDragSourceListener >& )
 {
 }
