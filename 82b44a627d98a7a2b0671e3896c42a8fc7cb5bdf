@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_996aff7f",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-10T16:16:20Z",
+      "side": 1,
+      "message": "Linux dll layout is a bit different; you\u0027ll need an extra SW_DLLPUBLIC at docufld.hxx\u0027s class SwHiddenTextField defn.",
+      "revId": "82b44a627d98a7a2b0671e3896c42a8fc7cb5bdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
