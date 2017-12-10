@@ -50,7 +50,7 @@ uno::Reference< uno::XInterface > ScModelObj::init()
     createFileURL("ScModelObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no componet loaded", mxComponent.is());
 
     return mxComponent;
 }

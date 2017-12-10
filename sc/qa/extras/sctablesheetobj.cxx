@@ -175,9 +175,11 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     createFileURL("ScTableSheetObj.ods", maFileURL);
     if (!mxComponent.is())
         mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
@@ -205,11 +207,12 @@ uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
     createFileURL("ScTableSheetObj.ods", maFileURL);
     if (!mxComponent.is())
         mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
@@ -237,11 +240,12 @@ uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
     createFileURL("ScTableSheetObj.ods", maFileURL);
     if (!mxComponent.is())
         mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc document", mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
