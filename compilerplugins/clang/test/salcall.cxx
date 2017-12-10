@@ -117,6 +117,25 @@ class Class8_3 : public Class8_1, public Class8_2
     virtual ~Class8_3();
 };
 
+#define M1(m) void m
+class Class9
+{
+    M1(method1)(); // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
+    void method2(); // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
+};
+void SAL_CALL Class9::method1() {} // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
+#define M2(T) T SAL_CALL
+M2(void) Class9::method2() {} // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
+
+#if 0 // see TODO in SalCall::isSalCallFunction
+class Class10
+{
+    void method1();
+};
+#define M3(T, SAL_CALL) T SAL_CALL::
+M3(void, Class10) method1() {} // false "SAL_CALL inconsistency"
+#endif
+
 #if 0 //TODO
 template<typename> struct S {
     virtual ~S();
