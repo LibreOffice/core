@@ -34,17 +34,14 @@ namespace pdfi
 
 Element::~Element()
 {
-    while( !Children.empty() )
-    {
-        Element* pCurr( Children.front() );
-        delete pCurr;
-        Children.pop_front();
-    }
+    for (auto const& child : Children)
+        delete child;
+    Children.clear();
 }
 
 void Element::applyToChildren( ElementTreeVisitor& rVisitor )
 {
-    for( std::list< Element* >::iterator it = Children.begin(); it != Children.end(); ++it )
+    for( auto it = Children.begin(); it != Children.end(); ++it )
         (*it)->visitedBy( rVisitor, it );
 }
 
@@ -92,8 +89,8 @@ void Element::emitStructure( int nLevel)
 {
     SAL_INFO( "sdext", std::string(nLevel, ' ') << "<" << typeid( *this ).name() << " " << this << "> ("
                 << std::setprecision(1) << x << "," << y << ")+(" << w << "x" << h << ")" );
-    for( std::list< Element* >::iterator it = Children.begin(); it != Children.end(); ++it )
-        (*it)->emitStructure(nLevel+1 );
+    for (auto const& child : Children)
+        child->emitStructure(nLevel+1);
     SAL_INFO( "sdext", std::string(nLevel, ' ') << "</" << typeid( *this ).name() << ">"  );
 }
 #endif
@@ -179,8 +176,8 @@ void PolyPolyElement::emitStructure( int nLevel)
         }
         SAL_WARN( "sdext", "    " << buff.makeStringAndClear() );
     }
-    for( std::list< Element* >::iterator it = Children.begin(); it != Children.end(); ++it )
-        (*it)->emitStructure( nLevel+1 );
+    for (auto const& child : Children)
+        child->emitStructure( nLevel+1 );
     SAL_WARN( "sdext", std::string(nLevel, ' ') << "</" << typeid( *this ).name() << ">");
 }
 #endif
