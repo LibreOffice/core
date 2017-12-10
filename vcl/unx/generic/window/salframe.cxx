@@ -1348,11 +1348,10 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
             && ! IsFloatGrabWindow()
             )
         {
-            for( std::list< X11SalFrame* >::const_iterator it = maChildren.begin();
-                 it != maChildren.end(); ++it )
+            for (auto const& child : maChildren)
             {
-                if( (*it)->mbTransientForRoot )
-                    GetDisplay()->getWMAdaptor()->changeReferenceFrame( *it, this );
+                if( child->mbTransientForRoot )
+                    GetDisplay()->getWMAdaptor()->changeReferenceFrame( child, this );
             }
         }
         /*
@@ -2140,9 +2139,8 @@ void X11SalFrame::SetApplicationID( const OUString &rWMClass )
     {
         m_sWMClass = rWMClass;
         updateWMClass();
-        std::list< X11SalFrame* >::const_iterator it;
-        for( it = maChildren.begin(); it != maChildren.end(); ++it )
-            (*it)->SetApplicationID(rWMClass);
+        for (auto const& child : maChildren)
+            child->SetApplicationID(rWMClass);
     }
 }
 
@@ -2515,8 +2513,8 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
         Show( true );
 
     std::list< X11SalFrame* > aChildren = maChildren;
-    for( std::list< X11SalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
-        (*it)->createNewWindow( None, m_nXScreen );
+    for (auto const& child : aChildren)
+        child->createNewWindow( None, m_nXScreen );
 
     // FIXME: SalObjects
 }
@@ -3448,32 +3446,29 @@ void X11SalFrame::RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWind
         if( nWindow < 0 )
             return;
 
-        std::list< X11SalFrame* >::const_iterator it;
-        for( it = maChildren.begin(); it != maChildren.end(); ++it )
+        for (auto const& child : maChildren)
         {
-            X11SalFrame* pData = *it;
-            if( pData->bMapped_ )
+            if( child->bMapped_ )
             {
                 int nChild = nWindow;
                 while( nChild-- )
                 {
-                    if( pTopLevelWindows[nChild] == pData->GetStackingWindow() )
+                    if( pTopLevelWindows[nChild] == child->GetStackingWindow() )
                     {
                         // if a child is behind its parent, place it above the
                         // parent (for insane WMs like Dtwm and olwm)
                         XWindowChanges aCfg;
                         aCfg.sibling    = GetStackingWindow();
                         aCfg.stack_mode = Above;
-                        XConfigureWindow( GetXDisplay(), pData->GetStackingWindow(), CWSibling|CWStackMode, &aCfg );
+                        XConfigureWindow( GetXDisplay(), child->GetStackingWindow(), CWSibling|CWStackMode, &aCfg );
                         break;
                     }
                 }
             }
         }
-        for( it = maChildren.begin(); it != maChildren.end(); ++it )
+        for (auto const& child : maChildren)
         {
-            X11SalFrame* pData = *it;
-            pData->RestackChildren( pTopLevelWindows, nTopLevelWindows );
+            child->RestackChildren( pTopLevelWindows, nTopLevelWindows );
         }
     }
 }
@@ -3994,11 +3989,10 @@ bool X11SalFrame::Dispatch( XEvent *pEvent )
                         && ! IsFloatGrabWindow()
                         )
                     {
-                        for( std::list< X11SalFrame* >::const_iterator it = maChildren.begin();
-                             it != maChildren.end(); ++it )
+                        for (auto const& child : maChildren)
                         {
-                            if( (*it)->mbTransientForRoot )
-                                pDisplay_->getWMAdaptor()->changeReferenceFrame( *it, this );
+                            if( child->mbTransientForRoot )
+                                pDisplay_->getWMAdaptor()->changeReferenceFrame( child, this );
                         }
                     }
 

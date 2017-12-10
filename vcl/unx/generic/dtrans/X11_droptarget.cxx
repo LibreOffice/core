@@ -116,9 +116,9 @@ void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
     std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for (auto const& listener : aListeners)
     {
-        (*it)->drop( dtde );
+        listener->drop(dtde);
     }
 }
 
@@ -128,9 +128,9 @@ void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
     std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for (auto const& listener : aListeners)
     {
-        (*it)->dragEnter( dtde );
+        listener->dragEnter(dtde);
     }
 }
 
@@ -140,9 +140,9 @@ void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
     std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for (auto const& listener : aListeners)
     {
-        (*it)->dragExit( dte );
+        listener->dragExit(dte);
     }
 }
 
@@ -152,9 +152,9 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
     std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for (auto const& listener : aListeners)
     {
-        (*it)->dragOver( dtde );
+        listener->dragOver(dtde);
     }
 }
 
