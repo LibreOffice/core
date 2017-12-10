@@ -53,12 +53,12 @@ diff -ru libassuan.orig/src/assuan-handler.c libassuan/src/assuan-handler.c
 diff -ru libassuan.orig/Makefile.am libassuan/Makefile.am
 --- libassuan.orig/Makefile.am	2016-07-14 10:09:22.000000000 +0200
 +++ libassuan/Makefile.am	2017-09-25 21:20:19.928317500 +0200
-@@ -28,7 +28,7 @@
-              tests/ChangeLog-2011 contrib/ChangeLog-2011     		\
-              build-aux/git-log-footer build-aux/git-log-fix
+@@ -35,7 +35,7 @@
+ doc =
+ endif
  
--SUBDIRS = m4 src doc tests
-+SUBDIRS = m4 src doc
+-SUBDIRS = m4 src $(doc) tests
++SUBDIRS = m4 src $(doc)
  
  
  dist-hook: gen-ChangeLog
