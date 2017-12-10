@@ -474,7 +474,7 @@ IMPL_STATIC_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void)
     // FIXME: perhaps poke GpgME for uiserver, and hope it returns something useful?
     const OUString aGUIServers[] = { OUString("kleopatra.exe"), OUString("launch-gpa.exe"), OUString("gpa.exe"),
                                      OUString("bin\\kleopatra.exe"), OUString("bin\\launch-gpa.exe"), OUString("bin\\gpa.exe") };
-    const char* cPath = "C:\\Program Files (x86)\\GNU\\GnuPG";
+    const char* const cPath = "C:\\Program Files (x86)\\GNU\\GnuPG";
 #else
     const OUString aGUIServers[] = { OUString("kleopatra"), OUString("seahorse"),  OUString("gpa"), OUString("kgpg") };
     const char* cPath = getenv("PATH");
