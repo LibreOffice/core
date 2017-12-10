@@ -32,6 +32,7 @@
 #include "prcntfld.hxx"
 #include <globals.hrc>
 #include <svx/dialcontrol.hxx>
+#include <svx/frmdirlbox.hxx>
 
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
@@ -300,7 +301,7 @@ class SwFrameAddPage : public SfxTabPage
     VclPtr<CheckBox>     m_pEditInReadonlyCB;
     VclPtr<CheckBox>     m_pPrintFrameCB;
     VclPtr<FixedText>    m_pTextFlowFT;
-    VclPtr<ListBox>      m_pTextFlowLB;
+    VclPtr<svx::FrameDirectionListBox>      m_pTextFlowLB;
 
     SwWrtShell*   m_pWrtSh;
 
