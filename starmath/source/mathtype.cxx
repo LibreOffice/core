@@ -646,6 +646,10 @@ void MathType::HandleNudge()
 bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
     sal_uInt8 nVariation, int nMatrixRows, int nMatrixCols)
 {
+    //depth-protect
+    if (nLevel > 2048)
+        return false;
+
     sal_uInt8 nTag,nRecord;
     sal_uInt8 nTabType,nTabStops;
     sal_uInt16 nTabOffset;
