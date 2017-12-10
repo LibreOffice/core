@@ -26,7 +26,6 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-
 #include <global.hxx>
 #include <scresid.hxx>
 #include <impex.hxx>
@@ -39,7 +38,6 @@
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
 #include <editutil.hxx>
-
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -55,6 +53,7 @@ using namespace com::sun::star::uno;
 enum CSVImportOptionsIndex
 {
     CSVIO_MergeDelimiters = 0,
+    CSVIO_RemoveSpace,
     CSVIO_Separators,
     CSVIO_TextSeparators,
     CSVIO_FixedWidth,
@@ -70,6 +69,7 @@ enum CSVImportOptionsIndex
 const ::std::vector<OUString> CSVImportOptionNames =
 {
     "MergeDelimiters",
+    "RemoveSpace",
     "Separators",
     "TextSeparators",
     "FixedWidth",
@@ -144,16 +144,16 @@ void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& rNames,
     {
         case SC_IMPORTFILE:
             rSepPath = aSep_Path;
-            nProperties = 9;
+            nProperties = 10;
             break;
         case SC_PASTETEXT:
             rSepPath = aSep_Path_Clpbrd;
-            nProperties = 10;
+            nProperties = 11;
             break;
         case SC_TEXTTOCOLUMNS:
         default:
             rSepPath = aSep_Path_Text2Col;
-            nProperties = 5;
+            nProperties = 6;
             break;
     }
     rNames.realloc( nProperties );
@@ -162,6 +162,7 @@ void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& rNames,
     pNames[ CSVIO_Separators ] =        CSVImportOptionNames[ CSVIO_Separators ];
     pNames[ CSVIO_TextSeparators ] =    CSVImportOptionNames[ CSVIO_TextSeparators ];
     pNames[ CSVIO_FixedWidth ] =        CSVImportOptionNames[ CSVIO_FixedWidth ];
+    pNames[ CSVIO_RemoveSpace ] =       CSVImportOptionNames[ CSVIO_RemoveSpace ];
     if (eCall != SC_TEXTTOCOLUMNS)
     {
         pNames[ CSVIO_FromRow ] =       CSVImportOptionNames[ CSVIO_FromRow ];
@@ -181,7 +182,7 @@ void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& rNames,
 static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSeparators,
                              bool& rMergeDelimiters, bool& rQuotedAsText, bool& rDetectSpecialNum,
                              bool& rFixedWidth, sal_Int32& rFromRow, sal_Int32& rCharSet,
-                             sal_Int32& rLanguage, bool& rSkipEmptyCells, ScImportAsciiCall eCall )
+                             sal_Int32& rLanguage, bool& rSkipEmptyCells, bool& rRemoveSpace, ScImportAsciiCall eCall )
 {
     Sequence<Any>aValues;
     const Any *pProperties;
@@ -194,6 +195,9 @@ static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSepar
 
     if( pProperties[ CSVIO_MergeDelimiters ].hasValue() )
         rMergeDelimiters = ScUnoHelpFunctions::GetBoolFromAny( pProperties[ CSVIO_MergeDelimiters ] );
+
+    if( pProperties[ CSVIO_RemoveSpace ].hasValue() )
+        rRemoveSpace = ScUnoHelpFunctions::GetBoolFromAny( pProperties[ CSVIO_RemoveSpace ] );
 
     if( pProperties[ CSVIO_Separators ].hasValue() )
         pProperties[ CSVIO_Separators ] >>= rFieldSeparators;
@@ -233,7 +237,7 @@ static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSepar
 static void lcl_SaveSeparators(
     const OUString& rSeparators, const OUString& rTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
     bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
-    sal_Int32 nCharSet, sal_Int32 nLanguage, bool bSkipEmptyCells, ScImportAsciiCall eCall )
+    sal_Int32 nCharSet, sal_Int32 nLanguage, bool bSkipEmptyCells, bool bRemoveSpace, ScImportAsciiCall eCall )
 {
     OUString sFieldSeparators = rSeparators;
     OUString sTextSeparators = rTxtSep;
@@ -247,6 +251,7 @@ static void lcl_SaveSeparators(
     pProperties = aValues.getArray();
 
     pProperties[ CSVIO_MergeDelimiters ] <<= bMergeDelimiters;
+    pProperties[ CSVIO_RemoveSpace ] <<= bRemoveSpace;
     pProperties[ CSVIO_Separators ] <<= sFieldSeparators;
     pProperties[ CSVIO_TextSeparators ] <<= sTextSeparators;
     pProperties[ CSVIO_FixedWidth ] <<= bFixedWidth;
@@ -298,6 +303,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     get(pCkbSemicolon, "semicolon");
     get(pCkbComma, "comma");
     get(pCkbSpace, "space");
+    get(pCkbRemoveSpace, "removespace");
     get(pCkbOther, "other");
     get(pEdOther, "inputother");
     get(pCkbAsOnce, "mergedelimiters");
@@ -335,12 +341,13 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     bool bQuotedFieldAsText = false;
     bool bDetectSpecialNum = true;
     bool bSkipEmptyCells = true;
+    bool bRemoveSpace = false;
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;
     sal_Int32 nLanguage = 0;
     lcl_LoadSeparators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow,
-                         nCharSet, nLanguage, bSkipEmptyCells, meCall);
+                         nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, meCall);
     // load from saved settings
     maFieldSeparators = sFieldSeparators;
 
@@ -348,6 +355,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
         pCkbAsOnce->Check();
     if (bQuotedFieldAsText)
         pCkbQuotedAsText->Check();
+    if (bRemoveSpace)
+        pCkbRemoveSpace->Check();
     if (bDetectSpecialNum)
         pCkbDetectNumber->Check();
     if (bSkipEmptyCells)
@@ -427,6 +436,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pCkbDetectNumber->SetClickHdl( aSeparatorClickHdl );
     pCkbSkipEmptyCells->SetClickHdl( aSeparatorClickHdl );
     pCkbSpace->SetClickHdl( aSeparatorClickHdl );
+    pCkbRemoveSpace->SetClickHdl( aSeparatorClickHdl );
     pCkbOther->SetClickHdl( aSeparatorClickHdl );
     pEdOther->SetModifyHdl( aSeparatorHdl );
 
@@ -532,6 +542,7 @@ void ScImportAsciiDlg::dispose()
     pCkbSemicolon.clear();
     pCkbComma.clear();
     pCkbSpace.clear();
+    pCkbRemoveSpace.clear();
     pCkbOther.clear();
     pEdOther.clear();
     pCkbAsOnce.clear();
@@ -622,6 +633,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     {
         rOpt.SetFieldSeps( GetSeparators() );
         rOpt.SetMergeSeps( pCkbAsOnce->IsChecked() );
+        rOpt.SetRemoveSpace( pCkbRemoveSpace->IsChecked() );
         rOpt.SetTextSep( lcl_CharFromCombo( *pCbTextSep, aTextSepList ) );
     }
 
@@ -638,7 +650,7 @@ void ScImportAsciiDlg::SaveParameters()
                      static_cast<sal_Int32>(pNfRow->GetValue()),
                      pLbCharSet->GetSelectedEntryPos(),
                      static_cast<sal_uInt16>(pLbCustomLang->GetSelectLanguage()),
-                     pCkbSkipEmptyCells->IsChecked(), meCall );
+                     pCkbSkipEmptyCells->IsChecked(), pCkbRemoveSpace->IsChecked(), meCall );
 }
 
 void ScImportAsciiDlg::SetSeparators()
@@ -693,6 +705,7 @@ void ScImportAsciiDlg::SetupSeparatorCtrls()
     pCkbSemicolon->Enable( bEnable );
     pCkbComma->Enable( bEnable );
     pCkbSpace->Enable( bEnable );
+    pCkbRemoveSpace->Enable( bEnable );
     pCkbOther->Enable( bEnable );
     pEdOther->Enable( bEnable );
     pCkbAsOnce->Enable( bEnable );
@@ -811,7 +824,8 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
 
     mpTableBox->Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
     bool bMergeSep = pCkbAsOnce->IsChecked();
-    mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
+    bool bRemoveSpace = pCkbRemoveSpace->IsChecked();
+    mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep, bRemoveSpace );
 }
 
 IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
