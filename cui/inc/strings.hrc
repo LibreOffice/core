@@ -315,15 +315,6 @@
 
 #define RID_SVXSTR_OPT_PROXYPORTS                   NC_("RID_SVXSTR_OPT_PROXYPORTS", "Invalid value!\n\nThe maximum value for a port number is 65535.")
 
-#define RID_SVXSTR_FRAMEDIR_LTR                     NC_("RID_SVXSTR_FRAMEDIR_LTR", "Left-to-right (LTR)")
-#define RID_SVXSTR_FRAMEDIR_RTL                     NC_("RID_SVXSTR_FRAMEDIR_RTL", "Right-to-left (RTL)")
-#define RID_SVXSTR_FRAMEDIR_SUPER                   NC_("RID_SVXSTR_FRAMEDIR_SUPER", "Use superordinate object settings")
-// page direction
-#define RID_SVXSTR_PAGEDIR_LTR_HORI                 NC_("RID_SVXSTR_PAGEDIR_LTR_HORI", "Left-to-right (horizontal)")
-#define RID_SVXSTR_PAGEDIR_RTL_HORI                 NC_("RID_SVXSTR_PAGEDIR_RTL_HORI", "Right-to-left (horizontal)")
-#define RID_SVXSTR_PAGEDIR_RTL_VERT                 NC_("RID_SVXSTR_PAGEDIR_RTL_VERT", "Right-to-left (vertical)")
-#define RID_SVXSTR_PAGEDIR_LTR_VERT                 NC_("RID_SVXSTR_PAGEDIR_LTR_VERT", "Left-to-right (vertical)")
-
 #define RID_SVXSTR_DESC_GRADIENT                    NC_("RID_SVXSTR_DESC_GRADIENT", "Please enter a name for the gradient:")
 #define RID_SVXSTR_DESC_NEW_BITMAP                  NC_("RID_SVXSTR_DESC_NEW_BITMAP", "Please enter a name for the bitmap:")
 #define RID_SVXSTR_DESC_EXT_BITMAP                  NC_("RID_SVXSTR_DESC_EXT_BITMAP", "Please enter a name for the external bitmap:")

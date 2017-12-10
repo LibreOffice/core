@@ -62,6 +62,8 @@
 #include <sal/macros.h>
 
 #include <strings.hrc>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -2923,6 +2925,12 @@ SwFrameAddPage::SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet)
     get(m_pPrintFrameCB,"printframe");
     get(m_pTextFlowFT,"textflow_label");
     get(m_pTextFlowLB,"textflow");
+
+    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_PAGEDIR_RTL_VERT ), SvxFrameDirection::Vertical_RL_TB );
+    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_PAGEDIR_LTR_VERT ), SvxFrameDirection::Vertical_LR_TB );
+    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
 
     m_pDescriptionED->set_height_request(m_pDescriptionED->get_preferred_size().Height());
 }
