@@ -1283,6 +1283,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     const OUString& rSeps       = pExtOptions->GetFieldSeps();
     const sal_Unicode* pSeps    = rSeps.getStr();
     bool    bMerge              = pExtOptions->IsMergeSeps();
+    bool    bRemoveSpace        = pExtOptions->IsRemoveSpace();
     sal_uInt16  nInfoCount      = pExtOptions->GetInfoCount();
     const sal_Int32* pColStart  = pExtOptions->GetColStart();
     const sal_uInt8* pColFormat = pExtOptions->GetColFormat();
@@ -1400,7 +1401,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 {
                     bool bIsQuoted = false;
                     p = ScImportExport::ScanNextFieldFromString( p, aCell,
-                            cStr, pSeps, bMerge, bIsQuoted, bOverflowCell );
+                            cStr, pSeps, bMerge, bIsQuoted, bOverflowCell, bRemoveSpace );
 
                     sal_uInt8 nFmt = SC_COL_STANDARD;
                     for ( i=nInfoStart; i<nInfoCount; i++ )
@@ -1508,7 +1509,7 @@ void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
 
 const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p,
         OUString& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted,
-        bool& rbOverflowCell )
+        bool& rbOverflowCell, bool bRemoveSpace )
 {
     rbIsQuoted = false;
     rField.clear();
@@ -1546,7 +1547,16 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         const sal_Unicode* p0 = p;
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
-        if (!lcl_appendLineData( rField, p0, p))
+        const sal_Unicode* ptrim_i = p0;
+        const sal_Unicode* ptrim_f = p;
+        if ( bRemoveSpace )
+        {
+            while(*ptrim_i == cBlank)
+                ++ptrim_i;
+            while(*(ptrim_f - 1) == cBlank)
+                --ptrim_f;
+        }
+        if (!lcl_appendLineData( rField, ptrim_i, ptrim_f))
             rbOverflowCell = true;
         if( *p )
             p++;
