@@ -277,6 +277,9 @@ public:
                             const ::std::vector< OUString >* pDefaultPasswords = nullptr,
                             bool* pbIsDefaultPassword = nullptr );
 
+    static css::uno::Sequence< css::beans::NamedValue > decryptGpgSession(
+        const css::uno::Sequence< css::uno::Sequence< css::beans::NamedValue > >& rGpgProperties);
+
 private:
                         ~DocPasswordHelper();
 };
