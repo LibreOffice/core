@@ -195,9 +195,12 @@ ErrCode CheckPasswd_Impl
             if ( xStorageProps.is() )
             {
                 bool bIsEncrypted = false;
+                uno::Sequence< uno::Sequence< beans::NamedValue > > aGpgProperties;
                 try {
                     xStorageProps->getPropertyValue("HasEncryptedEntries")
                         >>= bIsEncrypted;
+                    xStorageProps->getPropertyValue("EncryptionGpGProperties")
+                        >>= aGpgProperties;
                 } catch( uno::Exception& )
                 {
                     // TODO/LATER:
@@ -229,6 +232,12 @@ ErrCode CheckPasswd_Impl
                             const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_ENCRYPTIONDATA, false);
                             if ( pEncryptionDataItem )
                                 pEncryptionDataItem->GetValue() >>= aEncryptionData;
+
+                            // try if one of the public key entries is
+                            // decryptable, then extract session key
+                            // from it
+                            if ( !aEncryptionData.hasElements() && aGpgProperties.hasElements() )
+                                aEncryptionData = ::comphelper::DocPasswordHelper::decryptGpgSession(aGpgProperties);
 
                             SfxDocPasswordVerifier aVerifier( xStorage );
                             aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(

@@ -198,12 +198,14 @@ void ZipPackage::parseManifest()
                         const OUString sPropDigestAlgorithm ("DigestAlgorithm");
                         const OUString sPropEncryptionAlgorithm ("EncryptionAlgorithm");
                         const OUString sPropStartKeyAlgorithm ("StartKeyAlgorithm");
+                        const OUString sKeyInfo ("KeyInfo");
 
                         uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                         sal_Int32 nLength = aManifestSequence.getLength();
                         const uno::Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
                         ZipPackageStream *pStream = nullptr;
                         ZipPackageFolder *pFolder = nullptr;
+                        const Any *pKeyInfo = nullptr;
 
                         for ( sal_Int32 i = 0; i < nLength ; i++, pSequence++ )
                         {
@@ -236,6 +238,8 @@ void ZipPackage::parseManifest()
                                     pStartKeyAlg = &( pValue[j].Value );
                                 else if ( pValue[j].Name == sPropDerivedKeySize )
                                     pDerivedKeySize = &( pValue[j].Value );
+                                else if ( pValue[j].Name == sKeyInfo )
+                                    pKeyInfo = &( pValue[j].Value );
                             }
 
                             if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
@@ -256,7 +260,51 @@ void ZipPackage::parseManifest()
                                     pStream->SetMediaType ( sMediaType );
                                     pStream->SetFromManifest( true );
 
-                                    if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
+                                    if ( pKeyInfo && pVector && pSize && pDigest && pDigestAlg && pEncryptionAlg )
+                                    {
+                                        uno::Sequence < sal_Int8 > aSequence;
+                                        sal_Int64 nSize = 0;
+                                        sal_Int32 nDigestAlg = 0, nEncryptionAlg = 0;
+
+                                        pStream->SetToBeEncrypted ( true );
+
+                                        *pVector >>= aSequence;
+                                        pStream->setInitialisationVector ( aSequence );
+
+                                        *pSize >>= nSize;
+                                        pStream->setSize ( nSize );
+
+                                        *pDigest >>= aSequence;
+                                        pStream->setDigest ( aSequence );
+
+                                        *pDigestAlg >>= nDigestAlg;
+                                        pStream->SetImportedChecksumAlgorithm( nDigestAlg );
+
+                                        *pEncryptionAlg >>= nEncryptionAlg;
+                                        pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
+
+                                        *pKeyInfo >>= m_aGpgProps;
+
+                                        pStream->SetToBeCompressed ( true );
+                                        pStream->SetToBeEncrypted ( true );
+                                        pStream->SetIsEncrypted ( true );
+                                        pStream->setIterationCount(0);
+
+                                        // clamp to default SHA256 start key magic value,
+                                        // c.f. ZipPackageStream::GetEncryptionKey()
+                                        // trying to get key value from properties
+                                        const sal_Int32 nStartKeyAlg = xml::crypto::DigestID::SHA256;
+                                        pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
+
+                                        if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
+                                        {
+                                            m_bHasEncryptedEntries = true;
+                                            m_nChecksumDigestID = nDigestAlg;
+                                            m_nCommonEncryptionID = nEncryptionAlg;
+                                            m_nStartKeyGenerationID = nStartKeyAlg;
+                                        }
+                                    }
+                                    else if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
                                     {
                                         uno::Sequence < sal_Int8 > aSequence;
                                         sal_Int64 nSize = 0;
@@ -1203,10 +1251,10 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         const OUString sMediaType ("MediaType");
         const OUString sVersion ("Version");
         const OUString sFullPath ("FullPath");
+        const bool bIsGpgEncrypt = m_aGpgProps.hasElements();
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
-            bool bIsGpgEncrypt = m_aGpgProps.hasElements();
             uno::Sequence < PropertyValue > aPropSeq(
                 bIsGpgEncrypt ? PKG_SIZE_NOENCR_MNFST+1 : PKG_SIZE_NOENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
@@ -1229,8 +1277,10 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // for encrypted streams
             RandomPool aRandomPool;
 
+            sal_Int32 const nPBKDF2IterationCount = 100000;
+
             // call saveContents ( it will recursively save sub-directories
-            m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), aRandomPool.get());
+            m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), bIsGpgEncrypt ? 0 : nPBKDF2IterationCount, aRandomPool.get());
         }
 
         if( m_nFormat == embed::StorageFormats::PACKAGE )
@@ -1759,7 +1809,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     else if ( aPropertyName == ENCRYPTION_GPG_PROPERTIES )
     {
         uno::Sequence< uno::Sequence< beans::NamedValue > > aGpgProps;
-        if ( m_pZipFile || !( aValue >>= aGpgProps ) || aGpgProps.getLength() == 0 )
+        if ( !( aValue >>= aGpgProps ) || aGpgProps.getLength() == 0 )
         {
             throw IllegalArgumentException(THROW_WHERE "unexpected Gpg properties are provided.", uno::Reference< uno::XInterface >(), 2 );
         }
@@ -1801,6 +1851,10 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     else if ( PropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY )
     {
         return Any(m_bHasEncryptedEntries);
+    }
+    else if ( PropertyName == ENCRYPTION_GPG_PROPERTIES )
+    {
+        return Any(m_aGpgProps);
     }
     else if ( PropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY )
     {

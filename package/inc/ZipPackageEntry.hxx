@@ -69,6 +69,7 @@ public:
                             std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
                             ZipOutputStream & rZipOut,
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
+                            sal_Int32 nPBKDF2IterationCount,
                             const rtlRandomPool &rRandomPool ) = 0;
 
     void clearParent()
