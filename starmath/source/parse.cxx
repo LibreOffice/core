@@ -1636,9 +1636,9 @@ SmStructureNode *SmParser::DoUnOper()
     bool         bIsPostfix = eType == TFACT;
 
     std::unique_ptr<SmStructureNode> pSNode;
-    SmNode *pOper   = nullptr,
-           *pExtra  = nullptr,
-           *pArg;
+    std::unique_ptr<SmNode> xOper;
+    std::unique_ptr<SmNode> xExtra;
+    std::unique_ptr<SmNode> xArg;
 
     switch (eType)
     {
@@ -1649,7 +1649,7 @@ SmStructureNode *SmParser::DoUnOper()
 
         case TNROOT :
             NextToken();
-            pExtra = DoPower();
+            xExtra.reset(DoPower());
             break;
 
         case TUOPER :
@@ -1657,7 +1657,7 @@ SmStructureNode *SmParser::DoUnOper()
             //Let the glyph know what it is...
             m_aCurToken.eType = TUOPER;
             m_aCurToken.nGroup = TG::UnOper;
-            pOper = DoGlyphSpecial();
+            xOper.reset(DoGlyphSpecial());
             break;
 
         case TPLUS :
@@ -1666,7 +1666,7 @@ SmStructureNode *SmParser::DoUnOper()
         case TMINUSPLUS :
         case TNEG :
         case TFACT :
-            pOper = DoOpSubSup();
+            xOper.reset(DoOpSubSup());
             break;
 
         default :
@@ -1674,7 +1674,7 @@ SmStructureNode *SmParser::DoUnOper()
     }
 
     // get argument
-    pArg = DoPower();
+    xArg.reset(DoPower());
 
     if (eType == TABS)
     {
@@ -1687,27 +1687,27 @@ SmStructureNode *SmParser::DoUnOper()
         aNodeToken.eType = TABS;
 
         aNodeToken.cMathChar = MS_VERTLINE;
-        SmNode* pLeft = new SmMathSymbolNode(aNodeToken);
+        std::unique_ptr<SmNode> xLeft(new SmMathSymbolNode(aNodeToken));
 
         aNodeToken.cMathChar = MS_VERTLINE;
-        SmNode* pRight = new SmMathSymbolNode(aNodeToken);
+        std::unique_ptr<SmNode> xRight(new SmMathSymbolNode(aNodeToken));
 
-        pSNode->SetSubNodes(pLeft, pArg, pRight);
+        pSNode->SetSubNodes(xLeft.release(), xArg.release(), xRight.release());
     }
     else if (eType == TSQRT  ||  eType == TNROOT)
     {
         pSNode.reset(new SmRootNode(aNodeToken));
-        pOper = new SmRootSymbolNode(aNodeToken);
-        pSNode->SetSubNodes(pExtra, pOper, pArg);
+        xOper.reset(new SmRootSymbolNode(aNodeToken));
+        pSNode->SetSubNodes(xExtra.release(), xOper.release(), xArg.release());
     }
     else
     {
         pSNode.reset(new SmUnHorNode(aNodeToken));
         if (bIsPostfix)
-            pSNode->SetSubNodes(pArg, pOper);
+            pSNode->SetSubNodes(xArg.release(), xOper.release());
         else
             // prefix operator
-            pSNode->SetSubNodes(pOper, pArg);
+            pSNode->SetSubNodes(xOper.release(), xArg.release());
     }
     return pSNode.release();
 }
