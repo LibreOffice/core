@@ -298,6 +298,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     get(pCkbSemicolon, "semicolon");
     get(pCkbComma, "comma");
     get(pCkbSpace, "space");
+    get(pCkbRemoveSpace, "removespace");
     get(pCkbOther, "other");
     get(pEdOther, "inputother");
     get(pCkbAsOnce, "mergedelimiters");
@@ -427,6 +428,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pCkbDetectNumber->SetClickHdl( aSeparatorClickHdl );
     pCkbSkipEmptyCells->SetClickHdl( aSeparatorClickHdl );
     pCkbSpace->SetClickHdl( aSeparatorClickHdl );
+    pCkbRemoveSpace->SetClickHdl( aSeparatorClickHdl );
     pCkbOther->SetClickHdl( aSeparatorClickHdl );
     pEdOther->SetModifyHdl( aSeparatorHdl );
 
@@ -532,6 +534,7 @@ void ScImportAsciiDlg::dispose()
     pCkbSemicolon.clear();
     pCkbComma.clear();
     pCkbSpace.clear();
+    pCkbRemoveSpace.clear();
     pCkbOther.clear();
     pEdOther.clear();
     pCkbAsOnce.clear();
@@ -622,6 +625,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     {
         rOpt.SetFieldSeps( GetSeparators() );
         rOpt.SetMergeSeps( pCkbAsOnce->IsChecked() );
+        rOpt.SetRemoveSpace( pCkbRemoveSpace->IsChecked() );
         rOpt.SetTextSep( lcl_CharFromCombo( *pCbTextSep, aTextSepList ) );
     }
 
@@ -693,6 +697,7 @@ void ScImportAsciiDlg::SetupSeparatorCtrls()
     pCkbSemicolon->Enable( bEnable );
     pCkbComma->Enable( bEnable );
     pCkbSpace->Enable( bEnable );
+    pCkbRemoveSpace->Enable( bEnable );
     pCkbOther->Enable( bEnable );
     pEdOther->Enable( bEnable );
     pCkbAsOnce->Enable( bEnable );
@@ -811,7 +816,8 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
 
     mpTableBox->Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
     bool bMergeSep = pCkbAsOnce->IsChecked();
-    mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
+    bool bRemoveSpace = pCkbRemoveSpace->IsChecked();
+    mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep, bRemoveSpace );
 }
 
 IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
