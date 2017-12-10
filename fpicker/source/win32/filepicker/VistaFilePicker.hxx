@@ -175,7 +175,7 @@ public:
     // XEventListener
 
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent );
+    virtual void disposing( const css::lang::EventObject& aEvent );
 
 
     // XServiceInfo

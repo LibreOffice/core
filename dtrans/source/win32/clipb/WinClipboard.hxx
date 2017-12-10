@@ -109,7 +109,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-    void SAL_CALL notifyAllClipboardListener( );
+    void notifyAllClipboardListener( );
 
 private:
     std::unique_ptr< CWinClipbImpl >                  m_pImpl;

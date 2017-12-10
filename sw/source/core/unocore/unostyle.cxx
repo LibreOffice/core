@@ -205,9 +205,9 @@ namespace sw
         virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
         //XElementAccess
-        virtual uno::Type SAL_CALL SAL_CALL getElementType(  ) override
+        virtual uno::Type SAL_CALL getElementType(  ) override
             { return cppu::UnoType<style::XStyle>::get(); };
-        virtual sal_Bool SAL_CALL SAL_CALL hasElements(  ) override
+        virtual sal_Bool SAL_CALL hasElements(  ) override
         {
             if(!m_pBasePool)
                 throw uno::RuntimeException();

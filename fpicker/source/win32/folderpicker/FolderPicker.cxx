@@ -127,7 +127,7 @@ void SAL_CALL CFolderPicker::cancel( )
 // overwrite base class method, which is called
 // by base class dispose function
 
-void SAL_CALL CFolderPicker::disposing()
+void CFolderPicker::disposing()
 {
 }
 

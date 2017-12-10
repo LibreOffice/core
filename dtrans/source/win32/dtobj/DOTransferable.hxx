@@ -62,17 +62,17 @@ private:
 
     // some helper functions
 
-    void SAL_CALL initFlavorList( );
+    void initFlavorList( );
 
-    void SAL_CALL addSupportedFlavor( const css::datatransfer::DataFlavor& aFlavor );
-    css::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
+    void addSupportedFlavor( const css::datatransfer::DataFlavor& aFlavor );
+    css::datatransfer::DataFlavor formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
 
-    ByteSequence_t SAL_CALL getClipboardData( CFormatEtc& aFormatEtc );
-    OUString  SAL_CALL synthesizeUnicodeText( );
+    ByteSequence_t getClipboardData( CFormatEtc& aFormatEtc );
+    OUString synthesizeUnicodeText( );
 
-    LCID SAL_CALL getLocaleFromClipboard( );
+    LCID getLocaleFromClipboard( );
 
-    bool SAL_CALL compareDataFlavors( const css::datatransfer::DataFlavor& lhs,
+    bool compareDataFlavors( const css::datatransfer::DataFlavor& lhs,
                                           const css::datatransfer::DataFlavor& rhs );
 
 private:

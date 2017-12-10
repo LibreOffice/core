@@ -45,7 +45,7 @@ CFilterContainer::CFilterContainer( sal_Int32 initSize ) :
 
 // add a name/filter pair
 
-bool SAL_CALL CFilterContainer::addFilter(
+bool CFilterContainer::addFilter(
     const OUString& aName, const OUString& aFilter, bool bAllowDuplicates )
 {
     // check if the filter is already in the container
@@ -73,7 +73,7 @@ bool SAL_CALL CFilterContainer::addFilter(
 // Precondition: the container is not empty
 //               there is a filter identified by the given name
 
-bool SAL_CALL CFilterContainer::delFilter( const OUString& aName )
+bool CFilterContainer::delFilter( const OUString& aName )
 {
     OSL_ASSERT( !m_vFilters.empty() );
 
@@ -89,14 +89,14 @@ bool SAL_CALL CFilterContainer::delFilter( const OUString& aName )
 
 // return the number of filters currently in the container
 
-sal_Int32 SAL_CALL CFilterContainer::numFilter( )
+sal_Int32 CFilterContainer::numFilter( )
 {
     return m_vFilters.size( );
 }
 
 // clear all entries
 
-void SAL_CALL CFilterContainer::empty()
+void CFilterContainer::empty()
 {
     m_vFilters.clear( );
 }
@@ -105,7 +105,7 @@ void SAL_CALL CFilterContainer::empty()
 // Precondition: the container is not empty
 //               there is a filter identified by the name
 
-bool SAL_CALL CFilterContainer::getFilter( const OUString& aName, OUString& theFilter ) const
+bool CFilterContainer::getFilter( const OUString& aName, OUString& theFilter ) const
 {
     OSL_PRECOND( !m_vFilters.empty() , "Empty filter container" );
 
@@ -125,7 +125,7 @@ bool SAL_CALL CFilterContainer::getFilter( const OUString& aName, OUString& theF
     return pos > -1;
 }
 
-bool SAL_CALL CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFilter ) const
+bool CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFilter ) const
 {
     bool bRet = true;
 
@@ -142,14 +142,14 @@ bool SAL_CALL CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFilter
     return bRet;
 }
 
-sal_Int32 SAL_CALL CFilterContainer::getFilterPos( const OUString& aName ) const
+sal_Int32 CFilterContainer::getFilterPos( const OUString& aName ) const
 {
     return getFilterTagPos( aName );
 }
 
 // returns the index of the filter identified by name
 
-sal_Int32 SAL_CALL CFilterContainer::getFilterTagPos( const OUString& aName ) const
+sal_Int32 CFilterContainer::getFilterTagPos( const OUString& aName ) const
 {
     if ( !m_vFilters.empty() )
     {
@@ -167,7 +167,7 @@ sal_Int32 SAL_CALL CFilterContainer::getFilterTagPos( const OUString& aName ) co
 
 // starts enumerating the filter in the container
 
-void SAL_CALL CFilterContainer::beginEnumFilter( )
+void CFilterContainer::beginEnumFilter( )
 {
     m_iter = m_vFilters.begin( );
     m_bIterInitialized = true;
@@ -175,7 +175,7 @@ void SAL_CALL CFilterContainer::beginEnumFilter( )
 
 // returns true if another filter has been retrieved
 
-bool SAL_CALL CFilterContainer::getNextFilter( FILTER_ENTRY_T& nextFilterEntry )
+bool CFilterContainer::getNextFilter( FILTER_ENTRY_T& nextFilterEntry )
 {
     OSL_ASSERT( m_bIterInitialized );
 
@@ -189,12 +189,12 @@ bool SAL_CALL CFilterContainer::getNextFilter( FILTER_ENTRY_T& nextFilterEntry )
     return bRet;
 }
 
-void SAL_CALL CFilterContainer::setCurrentFilter( const OUString& aName )
+void CFilterContainer::setCurrentFilter( const OUString& aName )
 {
     m_sCurrentFilter = aName;
 }
 
-OUString SAL_CALL CFilterContainer::getCurrentFilter() const
+OUString CFilterContainer::getCurrentFilter() const
 {
     return m_sCurrentFilter;
 }

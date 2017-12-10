@@ -55,51 +55,51 @@ public:
     virtual ~CMtaFolderPicker( );
 
     // shell functions
-    bool SAL_CALL browseForFolder( );
+    bool browseForFolder( );
 
-    virtual void  SAL_CALL setDisplayDirectory( const OUString& aDirectory );
-    virtual OUString  SAL_CALL getDisplayDirectory( );
-    virtual OUString SAL_CALL getDirectory( );
+    virtual void setDisplayDirectory( const OUString& aDirectory );
+    virtual OUString getDisplayDirectory( );
+    virtual OUString getDirectory( );
 
-    virtual void SAL_CALL setDescription( const OUString& aDescription );
+    virtual void setDescription( const OUString& aDescription );
 
-    virtual void SAL_CALL setTitle( const OUString& aTitle );
-    OUString  SAL_CALL getTitle( );
+    virtual void setTitle( const OUString& aTitle );
+    OUString getTitle( );
 
 
     // XCancellable
 
 
-    virtual void SAL_CALL cancel( );
+    virtual void cancel( );
 
 protected:
-    void SAL_CALL enableOk( bool bEnable );
-    void SAL_CALL setSelection( const OUString& aDirectory );
-    void SAL_CALL setStatusText( const OUString& aStatusText );
+    void enableOk( bool bEnable );
+    void setSelection( const OUString& aDirectory );
+    void setStatusText( const OUString& aStatusText );
 
-    virtual void SAL_CALL onInitialized( );
-    virtual void SAL_CALL onSelChanged( const OUString& aNewPath ) = 0;
+    virtual void onInitialized( );
+    virtual void onSelChanged( const OUString& aNewPath ) = 0;
 
 private:
     static sal_uInt32 onValidateFailed();
 
     // helper functions
-    static LPITEMIDLIST  SAL_CALL getItemIdListFromPath( const OUString& aDirectory );
-    OUString SAL_CALL getPathFromItemIdList( LPCITEMIDLIST lpItemIdList );
-    static void SAL_CALL releaseItemIdList( LPITEMIDLIST lpItemIdList );
+    static LPITEMIDLIST getItemIdListFromPath( const OUString& aDirectory );
+    OUString getPathFromItemIdList( LPCITEMIDLIST lpItemIdList );
+    static void releaseItemIdList( LPITEMIDLIST lpItemIdList );
 
     unsigned int run( );
 
     // create a hidden windows which serves as an request
     // target; so we guarantee synchronization
-    bool SAL_CALL createStaRequestWindow( );
+    bool createStaRequestWindow( );
 
 
     // message handler functions; remember these functions are called
     // from a different thread context!
 
 
-    bool SAL_CALL onBrowseForFolder( );
+    bool onBrowseForFolder( );
 
     static LRESULT CALLBACK StaWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI StaThreadProc( LPVOID pParam );
@@ -110,8 +110,8 @@ protected:
     HWND m_hwnd;
 
 private:
-    ATOM SAL_CALL RegisterStaRequestWindowClass( );
-    void SAL_CALL UnregisterStaRequestWindowClass( );
+    ATOM RegisterStaRequestWindowClass( );
+    void UnregisterStaRequestWindowClass( );
 
 private:
     HANDLE                      m_hStaThread;

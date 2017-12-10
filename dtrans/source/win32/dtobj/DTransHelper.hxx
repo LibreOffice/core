@@ -58,27 +58,27 @@ public:
 
     ~CStgTransferHelper( );
 
-    void SAL_CALL write( const void* lpData, ULONG cb, ULONG* cbWritten = nullptr );
-    void SAL_CALL read( LPVOID pv, ULONG cb, ULONG* pcbRead = nullptr );
+    void write( const void* lpData, ULONG cb, ULONG* cbWritten = nullptr );
+    void read( LPVOID pv, ULONG cb, ULONG* pcbRead = nullptr );
 
-    HGLOBAL SAL_CALL getHGlobal( ) const;
-    void    SAL_CALL getIStream( LPSTREAM* ppStream );
+    HGLOBAL getHGlobal( ) const;
+    void    getIStream( LPSTREAM* ppStream );
 
-    void SAL_CALL init(
+    void init(
         SIZE_T newSize,
         sal_uInt32 uiFlags = GHND,
         bool bDelStgOnRelease = false );
 
-    void SAL_CALL init(
+    void init(
         HGLOBAL hGlob,
         bool bDelStgOnRelease = false );
 
     // returns the size of the managed memory
-    sal_uInt32 SAL_CALL memSize( CLIPFORMAT cf = CF_INVALID ) const;
+    sal_uInt32 memSize( CLIPFORMAT cf = CF_INVALID ) const;
 
     // free the global memory and necessary
     // release the internal stream pointer
-    void SAL_CALL cleanup( );
+    void cleanup( );
 
 private:
     LPSTREAM m_lpStream;

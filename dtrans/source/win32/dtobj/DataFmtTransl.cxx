@@ -158,7 +158,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
     return aFlavor;
 }
 
-CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const OUString& aClipFmtName )
+CFormatEtc CDataFormatTranslator::getFormatEtcForClipformatName( const OUString& aClipFmtName )
 {
     // check parameter
     if ( !aClipFmtName.getLength( ) )
@@ -178,7 +178,7 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
     return OUString( wBuff, nLen );
 }
 
-CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf )
+CFormatEtc CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf )
 {
     CFormatEtc fetc( cf, TYMED_NULL, nullptr, DVASPECT_CONTENT );
 
@@ -211,34 +211,34 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT
     return fetc;
 }
 
-bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextFormat( CLIPFORMAT cf )
+bool CDataFormatTranslator::isOemOrAnsiTextFormat( CLIPFORMAT cf )
 {
     return ( (cf == CF_TEXT) || (cf == CF_OEMTEXT) );
 }
 
-bool SAL_CALL CDataFormatTranslator::isUnicodeTextFormat( CLIPFORMAT cf )
+bool CDataFormatTranslator::isUnicodeTextFormat( CLIPFORMAT cf )
 {
     return ( cf == CF_UNICODETEXT );
 }
 
-bool SAL_CALL CDataFormatTranslator::isTextFormat( CLIPFORMAT cf )
+bool CDataFormatTranslator::isTextFormat( CLIPFORMAT cf )
 {
     return ( isOemOrAnsiTextFormat( cf ) || isUnicodeTextFormat( cf ) );
 }
 
-bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf )
+bool CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf )
 {
     OUString clipFormatName = getClipboardFormatName( cf );
     return ( clipFormatName == HTML_FORMAT_NAME_WINDOWS );
 }
 
-bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf )
+bool CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf )
 {
     OUString clipFormatName = getClipboardFormatName( cf );
     return clipFormatName.equalsIgnoreAsciiCase( HTML_FORMAT_NAME_SOFFICE );
 }
 
-OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat )
+OUString CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat )
 {
     OSL_ASSERT( isOemOrAnsiTextFormat( aClipformat ) );
 

@@ -449,7 +449,7 @@ public:
     SwXNumberingRulesCollection( SwDoc* pDoc );
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL SAL_CALL getCount() override;
+    virtual sal_Int32 SAL_CALL getCount() override;
     virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     //XElementAccess
@@ -476,7 +476,7 @@ public:
     SwXFootnotes(bool bEnd, SwDoc* pDoc);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL SAL_CALL getCount() override;
+    virtual sal_Int32 SAL_CALL getCount() override;
     virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     //XElementAccess

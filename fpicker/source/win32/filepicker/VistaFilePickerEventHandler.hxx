@@ -113,10 +113,10 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         // XFilePickerNotifier
 
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
+        virtual void addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
 
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
+        virtual void removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
 
 
         // native interface

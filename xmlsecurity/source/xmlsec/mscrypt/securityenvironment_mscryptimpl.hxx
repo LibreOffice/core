@@ -96,7 +96,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         /// @throws css::uno::SecurityException
         /// @throws css::uno::RuntimeException
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
+        virtual css::uno::Reference< css::security::XCertificate > getCertificate(
             const OUString& issuerName,
             const OUString& serialNumber ) ;
 

@@ -171,7 +171,7 @@ bool SAL_CALL cmpAllContentTypeParameter(
 
 } // end namespace
 
-Reference< XTransferable > SAL_CALL CDOTransferable::create( const Reference< XComponentContext >& rxContext,
+Reference< XTransferable > CDOTransferable::create( const Reference< XComponentContext >& rxContext,
                                                                                      IDataObjectPtr pIDataObject )
 {
     CDOTransferable* pTransf = new CDOTransferable(rxContext, pIDataObject);
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 // we save the first offered text format which we will later use for the
 // conversion
 
-void SAL_CALL CDOTransferable::initFlavorList( )
+void CDOTransferable::initFlavorList( )
 {
     sal::systools::COMReference<IEnumFORMATETC> pEnumFormatEtc;
     HRESULT hr = m_rDataObject->EnumFormatEtc( DATADIR_GET, &pEnumFormatEtc );
@@ -321,7 +321,7 @@ void SAL_CALL CDOTransferable::initFlavorList( )
 }
 
 inline
-void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
+void CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 {
     // we ignore all formats that couldn't be translated
     if ( aFlavor.MimeType.getLength( ) )
@@ -333,7 +333,7 @@ void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
     }
 }
 
-DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
+DataFlavor CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
 {
     LCID lcid = 0;
 
@@ -350,7 +350,7 @@ DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFo
 // returns the current locale on clipboard; if there is no locale on
 // clipboard the function returns the current thread locale
 
-LCID SAL_CALL CDOTransferable::getLocaleFromClipboard( )
+LCID CDOTransferable::getLocaleFromClipboard( )
 {
     LCID lcid = GetThreadLocale( );
 
@@ -378,7 +378,7 @@ LCID SAL_CALL CDOTransferable::getLocaleFromClipboard( )
 // in case of failures because nothing should have been
 // allocated etc.
 
-CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
+CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
 {
     STGMEDIUM stgmedium;
     HRESULT hr = m_rDataObject->GetData( aFormatEtc, &stgmedium );
@@ -452,7 +452,7 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
     return byteStream;
 }
 
-OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
+OUString CDOTransferable::synthesizeUnicodeText( )
 {
     ByteSequence_t aTextSequence;
     CFormatEtc     fetc;
@@ -493,7 +493,7 @@ OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
     return OUString(pWChar);
 }
 
-bool SAL_CALL CDOTransferable::compareDataFlavors(
+bool CDOTransferable::compareDataFlavors(
     const DataFlavor& lhs, const DataFlavor& rhs )
 {
     if ( !m_rXMimeCntFactory.is( ) )

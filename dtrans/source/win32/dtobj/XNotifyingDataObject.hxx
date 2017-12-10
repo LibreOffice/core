@@ -77,7 +77,7 @@ public:
     operator IDataObject*( );
 
 private:
-    void SAL_CALL lostOwnership( );
+    void lostOwnership( );
 
 private:
     sal_Int32                                                                     m_nRefCnt;

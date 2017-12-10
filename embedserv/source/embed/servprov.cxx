@@ -50,9 +50,9 @@ class CurThreadData
         CurThreadData();
         virtual ~CurThreadData();
 
-        bool SAL_CALL setData(void *pData);
+        bool setData(void *pData);
 
-        void* SAL_CALL getData();
+        void* getData();
 
     protected:
         oslThreadKey m_hKey;

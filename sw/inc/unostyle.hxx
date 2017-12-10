@@ -130,8 +130,8 @@ public:
     virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     //XElementAccess
-    virtual css::uno::Type SAL_CALL SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL SAL_CALL hasElements(  ) override;
+    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
@@ -161,8 +161,8 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
 
     //XElementAccess
-    virtual css::uno::Type SAL_CALL SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL SAL_CALL hasElements(  ) override;
+    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 
 };
 
