@@ -875,26 +875,30 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
     switch( eProp )
     {
         case MapUnit::MapRelative:
-            nRet *= 100;
-            nRet /= nProp;
-        break;
+            if (nProp)
+            {
+                nRet *= 100;
+                nRet /= nProp;
+            }
+            break;
         case MapUnit::MapPoint:
         {
             short nTemp = (short)nProp;
             nDiff = nTemp * 20;
             if(!bCoreInTwip)
                 nDiff = (short)convertTwipToMm100((long)nDiff);
+            break;
         }
-        break;
         case MapUnit::Map100thMM:
             //then the core is surely also in 1/100 mm
             nDiff = (short)nProp;
-        break;
+            break;
         case MapUnit::MapTwip:
             // Here surely TWIP
             nDiff = ((short)nProp);
-        break;
-        default: ;//prevent warning
+            break;
+        default:
+            break;
     }
     nRet = (nDiff < 0 || nRet >= static_cast<unsigned short>(nDiff))
         ? nRet - nDiff : 0;
