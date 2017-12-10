@@ -9,8 +9,10 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 #include <algorithm>
+#include <cassert>
 #include <set>
 #include <utility>
 #include <vector>
@@ -333,6 +335,8 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     return true;
 }
 
+//TODO: This doesn't handle all possible cases of macro usage (and possibly never will be able to),
+// just what is encountered in practice:
 bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation* pLoc)
 {
     assert(!functionDecl->isTemplateInstantiation());
@@ -358,18 +362,10 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
     }
 
     SourceManager& SM = compiler.getSourceManager();
-
-    // Stop searching for "SAL_CALL" at the start of the function declaration's name (for qualified
-    // names this will point after the qualifiers, but needlessly including those in the search
-    // should be harmless):
-    SourceLocation endLoc = functionDecl->getNameInfo().getLocStart();
-    while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc))
-    {
-        endLoc = SM.getImmediateMacroCallerLoc(endLoc);
-    }
-    endLoc = SM.getSpellingLoc(endLoc);
+    std::vector<SourceRange> ranges;
 
     SourceLocation startLoc;
+    SourceLocation endLoc;
     bool noReturnType = isa<CXXConstructorDecl>(functionDecl)
                         || isa<CXXDestructorDecl>(functionDecl)
                         || isa<CXXConversionDecl>(functionDecl);
@@ -410,37 +406,81 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             return false;
         }
         startLoc = FTL.getReturnLoc().getEndLoc();
-        auto const slEnd = Lexer::getLocForEndOfToken(startLoc, 0, SM, compiler.getLangOpts());
-        if (slEnd.isValid()) // i.e., startLoc either non-macro, or at end of macro
+        while (SM.isMacroArgExpansion(startLoc, &startLoc))
         {
-            startLoc = slEnd;
         }
-        else // otherwise, resolve into macro text
+
+        // Stop searching for "SAL_CALL" at the start of the function declaration's name (for
+        // qualified names this will point after the qualifiers, but needlessly including those in
+        // the search should be harmless---modulo issues with using "SAL_CALL" as the name of a
+        // function-like macro parameter as discussed below):
+        endLoc = functionDecl->getNameInfo().getLocStart();
+        while (SM.isMacroArgExpansion(endLoc, &endLoc))
         {
+        }
+        while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc))
+        {
+            endLoc = SM.getImmediateMacroCallerLoc(endLoc);
+        }
+        endLoc = SM.getSpellingLoc(endLoc);
+
+        auto const slEnd = Lexer::getLocForEndOfToken(startLoc, 0, SM, compiler.getLangOpts());
+        if (slEnd.isValid())
+        {
+            // startLoc is either non-macro, or at end of macro; one source range from startLoc to
+            // endLoc:
+            startLoc = slEnd;
+            while (startLoc.isMacroID() && SM.isAtEndOfImmediateMacroExpansion(startLoc, &startLoc))
+            {
+            }
+            startLoc = SM.getSpellingLoc(startLoc);
+
+            if (startLoc.isValid() && endLoc.isValid() && startLoc != endLoc
+                && !SM.isBeforeInTranslationUnit(startLoc, endLoc))
+            {
+                // Happens for uses of trailing return type (in which case starting instead at the
+                // start of the function declaration should be fine), but also for cases like
+                //
+                //  void (*f())();
+                //
+                // where the function name is within the function type (TODO: in which case starting
+                // at the start can erroneously pick up the "SAL_CALL" from the returned pointer-to-
+                // function type in cases like
+                //
+                //  void SAL_CALL (*f())();
+                //
+                // that are hopefully rare):
+                startAfterReturnType = false;
+            }
+        }
+        else
+        {
+            // startLoc is within a macro body; two source ranges, first is the remainder of the
+            // corresponding macro definition's replacement text, second is from after the macro
+            // invocation to endLoc, unless endLoc is already in the first range:
+            //TODO: If the macro is a function-like macro with a parameter named "SAL_CALL", uses of
+            // that parameter in the remainder of the replacement text will be false positives.
+            assert(SM.isMacroBodyExpansion(startLoc));
+            auto const startLoc2 = SM.getImmediateExpansionRange(startLoc).second;
+            auto const MI
+                = compiler.getPreprocessor()
+                      .getMacroDefinitionAtLoc(
+                          &compiler.getASTContext().Idents.get(
+                              Lexer::getImmediateMacroName(startLoc, SM, compiler.getLangOpts())),
+                          SM.getSpellingLoc(startLoc))
+                      .getMacroInfo();
+            assert(MI != nullptr);
+            auto endLoc1 = MI->getDefinitionEndLoc();
+            assert(endLoc1.isFileID());
+            endLoc1 = Lexer::getLocForEndOfToken(endLoc1, 0, SM, compiler.getLangOpts());
             startLoc = Lexer::getLocForEndOfToken(SM.getSpellingLoc(startLoc), 0, SM,
                                                   compiler.getLangOpts());
-        }
-        while (startLoc.isMacroID() && SM.isAtEndOfImmediateMacroExpansion(startLoc, &startLoc))
-        {
-        }
-        startLoc = SM.getSpellingLoc(startLoc);
-
-        if (startLoc.isValid() && endLoc.isValid() && startLoc != endLoc
-            && !SM.isBeforeInTranslationUnit(startLoc, endLoc))
-        {
-            // Happens for uses of trailing return type (in which case starting instead at the start
-            // of the function declaration should be fine), but also for cases like
-            //
-            //  void (*f())();
-            //
-            // where the function name is within the function type (TODO: in which case starting at
-            // the start can erroneously pick up the "SAL_CALL" from the returned pointer-to-
-            // function type in cases like
-            //
-            //  void SAL_CALL (*f())();
-            //
-            // that are hopefully rare):
-            startAfterReturnType = false;
+            if (!compat::isPointWithin(SM, endLoc, startLoc, endLoc1))
+            {
+                ranges.emplace_back(startLoc, endLoc1);
+                startLoc = Lexer::getLocForEndOfToken(SM.getSpellingLoc(startLoc2), 0, SM,
+                                                      compiler.getLangOpts());
+            }
         }
     }
     if (!startAfterReturnType)
@@ -491,60 +531,63 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             }
         }
 #endif
-    }
 
-    if (startLoc.isInvalid() || endLoc.isInvalid())
-    {
-        if (isDebugMode())
+        // Stop searching for "SAL_CALL" at the start of the function declaration's name (for
+        // qualified names this will point after the qualifiers, but needlessly including those in
+        // the search should be harmless):
+        endLoc = functionDecl->getNameInfo().getLocStart();
+        while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc))
         {
-            report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #2, needs investigation",
+            endLoc = SM.getImmediateMacroCallerLoc(endLoc);
+        }
+        endLoc = SM.getSpellingLoc(endLoc);
+    }
+    ranges.emplace_back(startLoc, endLoc);
+
+    for (auto const range : ranges)
+    {
+        if (range.isInvalid())
+        {
+            if (isDebugMode())
+            {
+                report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #2, needs investigation",
+                       functionDecl->getLocation())
+                    << functionDecl->getSourceRange();
+            }
+            return false;
+        }
+        if (isDebugMode() && range.getBegin() != range.getEnd()
+            && !SM.isBeforeInTranslationUnit(range.getBegin(), range.getEnd()))
+        {
+            report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #3, needs investigation",
                    functionDecl->getLocation())
                 << functionDecl->getSourceRange();
         }
-        return false;
-    }
-    if (isDebugMode() && startLoc != endLoc && !SM.isBeforeInTranslationUnit(startLoc, endLoc))
-    {
-        report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #3, needs investigation",
-               functionDecl->getLocation())
-            << functionDecl->getSourceRange();
-    }
 
-    SourceLocation found;
-
-    while (SM.isBeforeInTranslationUnit(startLoc, endLoc))
-    {
-        unsigned n = Lexer::MeasureTokenLength(startLoc, SM, compiler.getLangOpts());
-        auto s = StringRef(compiler.getSourceManager().getCharacterData(startLoc), n);
-        while (s.startswith("\\\n"))
+        for (auto loc = range.getBegin(); SM.isBeforeInTranslationUnit(loc, range.getEnd());)
         {
-            s = s.drop_front(2);
-            while (!s.empty()
-                   && (s.front() == ' ' || s.front() == '\t' || s.front() == '\n'
-                       || s.front() == '\v' || s.front() == '\f'))
+            unsigned n = Lexer::MeasureTokenLength(loc, SM, compiler.getLangOpts());
+            auto s = StringRef(compiler.getSourceManager().getCharacterData(loc), n);
+            while (s.startswith("\\\n"))
             {
-                s = s.drop_front(1);
+                s = s.drop_front(2);
+                while (!s.empty()
+                       && (s.front() == ' ' || s.front() == '\t' || s.front() == '\n'
+                           || s.front() == '\v' || s.front() == '\f'))
+                {
+                    s = s.drop_front(1);
+                }
             }
+            if (s == "SAL_CALL")
+            {
+                if (pLoc)
+                    *pLoc = loc;
+                return true;
+            }
+            loc = loc.getLocWithOffset(std::max<unsigned>(n, 1));
         }
-        if (s == "SAL_CALL")
-        {
-            found = startLoc;
-            break;
-        }
-        if (startLoc == endLoc)
-        {
-            break;
-        }
-        startLoc = startLoc.getLocWithOffset(std::max<unsigned>(n, 1));
     }
-
-    if (found.isInvalid())
-        return false;
-
-    if (pLoc)
-        *pLoc = found;
-
-    return true;
+    return false;
 }
 
 bool SalCall::rewrite(SourceLocation locBegin)

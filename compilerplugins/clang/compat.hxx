@@ -206,6 +206,20 @@ inline void addPPCallbacks(
 #endif
 }
 
+inline bool isPointWithin(
+    clang::SourceManager const & SM, clang::SourceLocation Location, clang::SourceLocation Start,
+    clang::SourceLocation End)
+{
+#if CLANG_VERSION >= 60000
+    return SM.isPointWithin(Location, Start, End);
+#else
+    return
+        Location == Start || Location == End
+        || (SM.isBeforeInTranslationUnit(Start, Location)
+            && SM.isBeforeInTranslationUnit(Location, End));
+#endif
+}
+
 inline bool isMacroArgExpansion(
     clang::CompilerInstance& compiler, clang::SourceLocation location,
     clang::SourceLocation * startLocation)
