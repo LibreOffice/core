@@ -36,6 +36,7 @@
 #include "tablecolumn.hxx"
 #include "tablecolumns.hxx"
 #include "tableundo.hxx"
+#include <o3tl/safeint.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/strings.hrc>
@@ -1004,7 +1005,7 @@ void TableModel::optimize()
                     Reference< XPropertySet > xSet2( static_cast< XCellRange* >( maColumns[nCol-1].get() ), UNO_QUERY_THROW );
                     xSet1->getPropertyValue( sWidth ) >>= nWidth1;
                     xSet2->getPropertyValue( sWidth ) >>= nWidth2;
-                    nWidth1 += nWidth2;
+                    nWidth1 = o3tl::saturating_add(nWidth1, nWidth2);
                     xSet2->setPropertyValue( sWidth, Any( nWidth1 ) );
                 }
                 catch( Exception& )
