@@ -125,15 +125,14 @@ bool SdrHHCWrapper::ConvertNextDocument()
 
     std::list<SdrTextObj*> aTextObjs;
     SwDrawContact::GetTextObjectsFromFormat( aTextObjs, pView->GetDocShell()->GetDoc() );
-    for ( std::list<SdrTextObj*>::iterator aIt = aTextObjs.begin(); aIt != aTextObjs.end(); ++aIt )
+    for (auto const& textObj : aTextObjs)
     {
-        pTextObj = (*aIt);
-        if ( pTextObj )
+        if (textObj)
         {
-            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            OutlinerParaObject* pParaObj = textObj->GetOutlinerParaObject();
             if ( pParaObj )
             {
-                SetPaperSize( pTextObj->GetLogicRect().GetSize() );
+                SetPaperSize( textObj->GetLogicRect().GetSize() );
                 SetText( *pParaObj );
 
                 ClearModifyFlag();
