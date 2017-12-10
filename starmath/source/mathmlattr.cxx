@@ -62,8 +62,12 @@ sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction *pUN)
     assert(nDecimalPoint < nIdx);
     *pUN = Fraction(rStr.copy(0, nDecimalPoint).toInt32(), 1);
     if (++nDecimalPoint < nIdx)
-        *pUN += Fraction(rStr.copy(nDecimalPoint, nIdx-nDecimalPoint).toInt32(),
-                         lcl_GetPowerOf10(nIdx-nDecimalPoint));
+    {
+        const sal_Int32 nDigits = nIdx - nDecimalPoint;
+        if (nDigits > 9)
+            return -1;
+        *pUN += Fraction(rStr.copy(nDecimalPoint, nDigits).toInt32(), lcl_GetPowerOf10(nDigits));
+    }
     return nIdx;
 }
 
