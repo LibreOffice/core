@@ -29,6 +29,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
     aFieldSeps      ( OUString(';') ),
     bMergeFieldSeps ( false ),
+    bRemoveSpace    ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
@@ -73,6 +74,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     bFixedLen       = rCpy.bFixedLen;
     aFieldSeps      = rCpy.aFieldSeps;
     bMergeFieldSeps = rCpy.bMergeFieldSeps;
+    bRemoveSpace    = rCpy.bRemoveSpace;
     bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
     cTextSep        = rCpy.cTextSep;
     eCharSet        = rCpy.eCharSet;
@@ -181,6 +183,11 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
 
     // 9th token is used for "Save as shown" in export options
     // 10th token is used for "Save cell formulas" in export options
+    // Token 11: Boolean for Trim spaces.
+    if (nPos >= 0)
+    {
+        bRemoveSpace = rString.getToken(0, ',', nPos) == "true";
+    }
 }
 
 OUString ScAsciiOptions::WriteToString() const
@@ -243,7 +250,8 @@ OUString ScAsciiOptions::WriteToString() const
 
     // 9th token is used for "Save as shown" in export options
     // 10th token is used for "Save cell formulas" in export options
-
+    //Trim Space
+    aOutStr += "," + OUString::boolean( bRemoveSpace );
     return aOutStr;
 }
 
