@@ -4342,6 +4342,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
+    // Guard against endless recursion of Interpret() calls, for this to work
+    // ScFormulaCell::InterpretFormulaGroup() must never be called through
+    // anything else than ScFormulaCell::Interpret(), same as
+    // ScFormulaCell::InterpretTail()
+    RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
+
     if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() &&
         pCode->GetVectorState() == FormulaVectorEnabledForThreading &&
         officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
@@ -4477,12 +4483,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
         aScope.addMessage("opencl not enabled and sw interpreter not enabled");
         return false;
     }
-
-    // Guard against endless recursion of Interpret() calls, for this to work
-    // ScFormulaCell::InterpretFormulaGroup() must never be called through
-    // anything else than ScFormulaCell::Interpret(), same as
-    // ScFormulaCell::InterpretTail()
-    RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
 
     // TODO : Disable invariant formula group interpretation for now in order
     // to get implicit intersection to work.
