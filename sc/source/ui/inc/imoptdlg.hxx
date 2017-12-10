@@ -49,6 +49,7 @@ public:
                             bSaveAsShown    = rCpy.bSaveAsShown;
                             bQuoteAllText   = rCpy.bQuoteAllText;
                             bSaveFormulas   = rCpy.bSaveFormulas;
+                            bRemoveSpace    = rCpy.bRemoveSpace;
                             return *this;
                         }
 
@@ -64,6 +65,7 @@ public:
     bool        bSaveAsShown;
     bool        bQuoteAllText;
     bool        bSaveFormulas;
+    bool        bRemoveSpace;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_IMOPTDLG_HXX

@@ -29,9 +29,12 @@ ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
     aFieldSeps      ( OUString(';') ),
     bMergeFieldSeps ( false ),
+    bRemoveSpace    ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
     bSkipEmptyCells(false),
+    bSaveAsShown(true),
+    bSaveFormulas(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( osl_getThreadTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
@@ -74,11 +77,14 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     bFixedLen       = rCpy.bFixedLen;
     aFieldSeps      = rCpy.aFieldSeps;
     bMergeFieldSeps = rCpy.bMergeFieldSeps;
+    bRemoveSpace    = rCpy.bRemoveSpace;
     bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
     cTextSep        = rCpy.cTextSep;
     eCharSet        = rCpy.eCharSet;
     bCharSetSystem  = rCpy.bCharSetSystem;
     nStartRow       = rCpy.nStartRow;
+    bSaveAsShown    = rCpy.bSaveAsShown;
+    bSaveFormulas   = rCpy.bSaveFormulas;
 
     return *this;
 }
@@ -181,14 +187,27 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         bDetectSpecialNumber = true;    // default of versions that didn't add the parameter
 
     // 9th token is used for "Save as shown" in export options
+    if ( nPos >= 0 )
+    {
+        bSaveAsShown = rString.getToken(0, ',', nPos) == "true";
+    }
     // 10th token is used for "Save cell formulas" in export options
+    if ( nPos >= 0 )
+    {
+        bSaveFormulas = rString.getToken(0, ',', nPos) == "true";
+    }
+    // Token 11: Boolean for Trim spaces.
+    if (nPos >= 0)
+    {
+        bRemoveSpace = rString.getToken(0, ',', nPos) == "true";
+    }
 }
 
 OUString ScAsciiOptions::WriteToString() const
 {
     OUString aOutStr;
 
-    // Field separator.
+    // Token 0: Field separator.
     if ( bFixedLen )
         aOutStr += pStrFix;
     else if ( aFieldSeps.isEmpty() )
@@ -209,19 +228,19 @@ OUString ScAsciiOptions::WriteToString() const
         }
     }
 
-    // Text delimiter.
+    // Token 1: Text separator.
     aOutStr += "," + OUString::number(cTextSep) + ",";
 
-    // Text encoding.
+    //Token 2: Text encoding.
     if ( bCharSetSystem )           // force "SYSTEM"
         aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
     else
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
 
-    // Number of start row.
+    //Token 3: Number of start row.
     aOutStr += "," + OUString::number(nStartRow) + ",";
 
-    // Column info.
+    //Token 4: Column info.
     for (size_t nInfo=0; nInfo<mvColStart.size(); nInfo++)
     {
         if (nInfo)
@@ -235,16 +254,21 @@ OUString ScAsciiOptions::WriteToString() const
     // so new options must be added at the end, to remain compatible
 
     aOutStr += "," +
-               // Language
+               //Token 5: Language
                OUString::number((sal_uInt16)eLang) + "," +
-               // Import quoted field as text.
+               //Token 6: Import quoted field as text.
                OUString::boolean( bQuotedFieldAsText ) + "," +
-               // Detect special numbers.
+               //Token 7: Detect special numbers.
                OUString::boolean( bDetectSpecialNumber );
 
     // 9th token is used for "Save as shown" in export options
-    // 10th token is used for "Save cell formulas" in export options
+    aOutStr +="," + OUString::boolean( bSaveAsShown );
 
+    // 10th token is used for "Save cell formulas" in export options
+    aOutStr +="," + OUString::boolean( bSaveFormulas );
+
+    //Trim Space
+    aOutStr += "," + OUString::boolean( bRemoveSpace );
     return aOutStr;
 }
 
