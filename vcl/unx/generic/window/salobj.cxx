@@ -384,9 +384,9 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
 {
     std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getSalObjects();
 
-    for( std::list< SalObject* >::iterator it = rObjects.begin(); it != rObjects.end(); ++it )
+    for (auto const& elem : rObjects)
     {
-        X11SalObject* pObject = static_cast<X11SalObject*>(*it);
+        X11SalObject* pObject = static_cast<X11SalObject*>(elem);
         if( pEvent->xany.window == pObject->maPrimary ||
             pEvent->xany.window == pObject->maSecondary )
         {

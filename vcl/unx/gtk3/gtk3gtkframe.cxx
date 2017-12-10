@@ -1922,8 +1922,8 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     if( m_pParent && gtk_widget_get_screen( m_pParent->m_pWindow ) != pScreen )
         SetParent( nullptr );
     std::list< GtkSalFrame* > aChildren = m_aChildren;
-    for( std::list< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
-        (*it)->SetScreen( nNewScreen, SetType::RetainSize );
+    for (auto const& child : aChildren)
+        child->SetScreen( nNewScreen, SetType::RetainSize );
 
     m_bDefaultPos = m_bDefaultSize = false;
     updateScreenNumber();
@@ -1969,8 +1969,8 @@ void GtkSalFrame::SetApplicationID( const OUString &rWMClass )
         m_sWMClass = rWMClass;
         updateWMClass();
 
-        for( std::list< GtkSalFrame* >::iterator it = m_aChildren.begin(); it != m_aChildren.end(); ++it )
-            (*it)->SetApplicationID(rWMClass);
+        for (auto const& child : m_aChildren)
+            child->SetApplicationID(rWMClass);
     }
 }
 
