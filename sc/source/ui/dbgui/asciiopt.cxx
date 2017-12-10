@@ -29,6 +29,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
     aFieldSeps      ( OUString(';') ),
     bMergeFieldSeps ( false ),
+    bRemoveSpace    ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
@@ -43,6 +44,7 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     bFixedLen       ( rOpt.bFixedLen ),
     aFieldSeps      ( rOpt.aFieldSeps ),
     bMergeFieldSeps ( rOpt.bMergeFieldSeps ),
+    bRemoveSpace    ( rOpt.bRemoveSpace ),
     bQuotedFieldAsText(rOpt.bQuotedFieldAsText),
     bDetectSpecialNumber(rOpt.bDetectSpecialNumber),
     cTextSep        ( rOpt.cTextSep ),
@@ -89,6 +91,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     bFixedLen       = rCpy.bFixedLen;
     aFieldSeps      = rCpy.aFieldSeps;
     bMergeFieldSeps = rCpy.bMergeFieldSeps;
+    bRemoveSpace    = rCpy.bRemoveSpace;
     bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
     cTextSep        = rCpy.cTextSep;
     eCharSet        = rCpy.eCharSet;
