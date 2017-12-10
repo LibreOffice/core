@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 #include <oox/token/tokens.hxx>
@@ -40,7 +41,8 @@ namespace drawingml {
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue )
 {
-    return (nValue + 180) / 360;
+    nValue = o3tl::saturating_add<sal_Int32>(nValue, 180);
+    return nValue / 360;
 }
 
 /** converts an emu string into 1/100th mmm */
