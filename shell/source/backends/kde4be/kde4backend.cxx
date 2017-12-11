@@ -52,12 +52,12 @@
 
 namespace {
 
-OUString SAL_CALL getServiceImplementationName() {
+OUString getServiceImplementationName() {
     return OUString(
             "com.sun.star.comp.configuration.backend.KDE4Backend");
 }
 
-css::uno::Sequence< OUString > SAL_CALL getServiceSupportedServiceNames() {
+css::uno::Sequence< OUString > getServiceSupportedServiceNames() {
     OUString name(
             "com.sun.star.configuration.backend.KDE4Backend");
     return css::uno::Sequence< OUString >(&name, 1);
@@ -155,7 +155,7 @@ css::uno::Any Service::getPropertyValue(OUString const & PropertyName)
         PropertyName, static_cast< cppu::OWeakObject * >(this));
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
+css::uno::Reference< css::uno::XInterface > createInstance(
     css::uno::Reference< css::uno::XComponentContext > const &)
 {
     return static_cast< cppu::OWeakObject * >(new Service);
@@ -170,7 +170,7 @@ static cppu::ImplementationEntry const services[] = {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL kde4be1_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * kde4be1_component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
