@@ -32,7 +32,7 @@ private:
     OString             maGroupName;
     ImplConfigData*     mpData;
     ImplGroupData*      mpActGroup;
-    sal_uIntPtr         mnDataUpdateId;
+    sal_uInt32          mnDataUpdateId;
     sal_uInt16          mnLockCount;
 
     TOOLS_DLLPRIVATE bool           ImplUpdateConfig() const;
