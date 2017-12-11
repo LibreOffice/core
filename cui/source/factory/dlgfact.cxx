@@ -417,7 +417,7 @@ OUString AbstractTitleDialog_Impl::GetTitle() const
     return pDlg->GetTitle();
 }
 
-sal_uLong AbstractGalleryIdDialog_Impl::GetId() const
+sal_uInt32 AbstractGalleryIdDialog_Impl::GetId() const
 {
     return pDlg->GetId();
 }

@@ -123,7 +123,7 @@ class AbstractGalleryIdDialog :public VclAbstractDialog
 protected:
     virtual ~AbstractGalleryIdDialog() override = default;
 public:
-    virtual sal_uIntPtr GetId() const =0;
+    virtual sal_uInt32 GetId() const =0;
 };
 
 class AbstractURLDlg :public VclAbstractDialog
