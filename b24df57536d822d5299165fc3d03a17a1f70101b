@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d9648723",
+        "filename": "sal/rtl/alloc_global.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-11T09:40:17Z",
+      "side": 0,
+      "message": "(conditionally) setting FORCE_SYSALLOC should be removed from sal/Library_sal.mk",
+      "revId": "b24df57536d822d5299165fc3d03a17a1f70101b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
