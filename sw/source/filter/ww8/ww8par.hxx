@@ -1052,16 +1052,6 @@ struct WW8TabBandDesc
 typedef std::set<WW8_CP> cp_set;
 typedef std::vector<WW8_CP> cp_vector;
 
-class ImportProgress
-{
-private:
-    SwDocShell *m_pDocShell;
-public:
-    ImportProgress(SwDocShell *pDocShell);
-    void Update(sal_uInt16 nProgress);
-    ~ImportProgress();
-};
-
 class SwWW8ImplReader
 {
 private:
