@@ -663,30 +663,11 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
                                   I64S( oox::drawingml::convertHmmToEmu( nLineWidth ) ) :nullptr,
                           FSEND );
 
-    if( bColorSet )
+    if ( GETA( LineTransparence) )
     {
-        if( nColor != nOriginalColor )
-        {
-            // the user has set a different color for the line
-            WriteSolidFill( nColor );
-        }
-        else if( !sColorFillScheme.isEmpty() )
-        {
-            // the line had a scheme color and the user didn't change it
-            WriteSolidFill( sColorFillScheme, aTransformations );
-        }
-        else if( aStyleProperties.hasElements() )
-        {
-            if( nColor != nStyleColor )
-                // the line style defines some color but it wasn't being used
-                WriteSolidFill( nColor );
-            // in case the shape used the style color and the user didn't change it,
-            // we must not write a <a: solidFill> tag.
-        }
-        else
-        {
-            WriteSolidFill( nColor );
-        }
+        sal_uInt32 nTransparency;
+        mAny>>=nTransparency;
+        WriteSolidFill(nColor, MAX_PERCENT - (nTransparency*PER_PERCENT));
     }
 
     if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH )
@@ -748,6 +729,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
         }
     }
 
+     mpFS->endElementNS( XML_a, XML_ln );
+
     if( !bNoFill && nLineWidth > 1 && GETA( LineJoint ) )
     {
         LineJoint eLineJoint = mAny.get<LineJoint>();
@@ -782,8 +765,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
     {
         mpFS->singleElementNS( XML_a, XML_noFill, FSEND );
     }
-
-    mpFS->endElementNS( XML_a, XML_ln );
 }
 
 bool lcl_URLToGraphic(const OUString& rURL, Graphic& rGraphic)
