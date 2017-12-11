@@ -36,6 +36,7 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <memory>
 
 namespace treeview {
 
