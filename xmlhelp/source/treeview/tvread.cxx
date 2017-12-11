@@ -61,11 +61,10 @@ namespace treeview {
             return children.back().get();
         }
 
-        TVDom* newChild(TVDom* p)
+        void newChild(std::unique_ptr<TVDom> p)
         {
-            children.emplace_back( p );
-            p->parent = this;
-            return children.back().get();
+            children.emplace_back(std::move(p));
+            children.back()->parent = this;
         }
 
         TVDom* getParent() const
@@ -448,8 +447,13 @@ void TVChildTarget::Check(TVDom* tvDom)
                 TVDom* p = tvDom->children.back().get();
 
                 for(auto & k : p->children)
-                    if (!SearchAndInsert(k.get(), tvDom->children[i].get()))
-                        tvDom->children[i]->newChild(k.get());
+                {
+                    std::unique_ptr<TVDom> tmp(SearchAndInsert(std::move(k), tvDom->children[i].get()));
+                    if (tmp)
+                    {
+                        tvDom->children[i]->newChild(std::move(tmp));
+                    }
+                }
 
                 tvDom->children.pop_back();
                 h = true;
@@ -458,9 +462,10 @@ void TVChildTarget::Check(TVDom* tvDom)
         }
 }
 
-bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
+std::unique_ptr<TVDom>
+TVChildTarget::SearchAndInsert(std::unique_ptr<TVDom> p, TVDom* tvDom)
 {
-    if (p->isLeaf()) return false;
+    if (p->isLeaf()) return p;
 
     bool h = false;
     sal_Int32 max = 0;
@@ -481,8 +486,8 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
 
             if (p_int==c_int)
             {
-                (*(tvDom->children.insert(i+1, std::unique_ptr<TVDom>(p))))->parent = tvDom;
-                return true;
+                (*(tvDom->children.insert(i+1, std::move(p))))->parent = tvDom;
+                return nullptr;
             }
             else if(c_int>max && c_int < p_int)
             {
@@ -491,17 +496,20 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
             }
         }
     if (h)
-        (*(tvDom->children.insert(max_It, std::unique_ptr<TVDom>(p))))->parent = tvDom;
+    {
+        (*(tvDom->children.insert(max_It, std::move(p))))->parent = tvDom;
+        return nullptr;
+    }
     else
     {
         i = tvDom->children.begin();
-        while ((i!=tvDom->children.end()) && (!h))
+        while ((i!=tvDom->children.end()) && (p != nullptr))
         {
-            h = SearchAndInsert(p, i->get());
+            p = SearchAndInsert(std::move(p), i->get());
             ++i;
         }
+        return p;
     }
-    return h;
 }
 
 Any SAL_CALL
