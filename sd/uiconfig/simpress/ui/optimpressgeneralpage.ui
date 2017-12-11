@@ -619,7 +619,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="cbCompatibility">
-                    <property name="label" translatable="yes" context="optimpressgeneralpage|cbCompatibility">Add _spacing between paragraphs and tables (in current document)</property>
+                    <property name="label" translatable="yes" context="optimpressgeneralpage|cbCompatibility">Add _spacing between paragraphs and tables</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
