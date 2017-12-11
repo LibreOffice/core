@@ -2087,11 +2087,11 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
-    if( AM_SPACE==eMode || AM_NOSPACE==eMode )
-    {
-        SwTextNode *pTextNode =
-            m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode *pTextNode = (AM_SPACE==eMode || AM_NOSPACE==eMode) ?
+        m_pPam->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
 
+    if (pTextNode)
+    {
         const SvxULSpaceItem& rULSpace =
             static_cast<const SvxULSpaceItem&>(pTextNode->SwContentNode::GetAttr( RES_UL_SPACE ));
 
