@@ -323,7 +323,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* $ */     t[36] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident;
             if (FormulaGrammar::CONV_ODF == meConv)
 /* $ */         t[36] |= ScCharFlags::OdfNameMarker;
-/* % */     t[37] = ScCharFlags::Value;
+/* % */     t[37] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
 /* & */     t[38] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
 /* ' */     t[39] = ScCharFlags::NameSep;
 /* ( */     t[40] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
