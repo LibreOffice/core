@@ -25,12 +25,11 @@
 #include <vcl/timer.hxx>
 #include <vcl/image.hxx>
 #include <svtools/transfer.hxx>
+#include <memory>
 #include <vector>
 
 
 #define MIN_COLUMNWIDTH  2
-
-typedef ::std::vector< tools::Rectangle* > RectangleList;
 
 
 class ButtonFrame
@@ -101,7 +100,7 @@ public:
 
     OUString        aRealRowCount;  // to show in VScrollBar
 
-    RectangleList   aInvalidRegion; // invalidated Rectangles during !UpdateMode
+    std::vector<tools::Rectangle> aInvalidRegion; // invalidated Rectangles during !UpdateMode
     bool            bInPaint;       // TRUE while in Paint
     bool            bInCommand;     // TRUE while in Command
     bool            bNoScrollBack;  // only scroll forward

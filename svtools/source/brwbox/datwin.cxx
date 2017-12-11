@@ -214,8 +214,6 @@ void BrowserDataWin::dispose()
 {
     bInDtor = true;
 
-    for (tools::Rectangle* i : aInvalidRegion)
-        delete i;
     aInvalidRegion.clear();
     pHeaderBar.clear();
     pEventWin.clear();
@@ -283,7 +281,7 @@ void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     {
         if (bInPaint)
         {
-            aInvalidRegion.push_back(new tools::Rectangle(rRect));
+            aInvalidRegion.emplace_back(rRect);
             return;
         }
         bInPaint = true;
@@ -293,7 +291,7 @@ void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
     else
     {
-        aInvalidRegion.push_back(new tools::Rectangle(rRect));
+        aInvalidRegion.emplace_back(rRect);
     }
 }
 
@@ -637,10 +635,8 @@ void BrowserDataWin::SetUpdateMode( bool bMode )
 
 void BrowserDataWin::DoOutstandingInvalidations()
 {
-    for (tools::Rectangle* i : aInvalidRegion) {
-        Control::Invalidate( *i );
-        delete i;
-    }
+    for (auto& rRect : aInvalidRegion)
+        Control::Invalidate( rRect );
     aInvalidRegion.clear();
 }
 
@@ -649,10 +645,8 @@ void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
     {
-        for (tools::Rectangle* i : aInvalidRegion)
-            delete i;
         aInvalidRegion.clear();
-        aInvalidRegion.push_back( new tools::Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        aInvalidRegion.emplace_back( Point( 0, 0 ), GetOutputSizePixel() );
     }
     else
         Window::Invalidate( nFlags );
@@ -662,7 +656,7 @@ void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
 void BrowserDataWin::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
-        aInvalidRegion.push_back( new tools::Rectangle( rRect ) );
+        aInvalidRegion.emplace_back( rRect );
     else
         Window::Invalidate( rRect, nFlags );
 }
