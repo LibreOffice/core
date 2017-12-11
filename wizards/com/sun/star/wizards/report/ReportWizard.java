@@ -320,7 +320,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         CurTitlesComponent = new TitlesComponent(this, SOTITLEPAGE, 97, 37, 210, 7, slblColumnNames, slblColumnTitles, 34381);
         CurTitlesComponent.addTextListener(this);
         CurGroupFieldHandler = new GroupFieldHandler(m_reportDocument, this);
-        CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
+        CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34348);
         CurReportLayouter = new ReportLayouter(xMSF, m_reportDocument, this, isReportBuilderInstalled());
         CurReportFinalizer = new ReportFinalizer(m_reportDocument, this);
         bCloseDocument = true;
