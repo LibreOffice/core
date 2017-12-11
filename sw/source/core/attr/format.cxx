@@ -301,17 +301,6 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
             m_aSet.SetParent( DerivedFrom() ? &DerivedFrom()->m_aSet : nullptr );
         }
         break;
-    case RES_RESET_FMTWRITTEN:
-        {
-            // mba: here we don't use the additional stuff from NotifyClients().
-            // should we?!
-            // mba: move the code that ignores this event to the clients
-
-            // pass Hint only to dependent formats (no Frames)
-            //ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFormat) );
-            //bContinue = false;
-        }
-        break;
     default:
         {
             // attribute is defined in this format

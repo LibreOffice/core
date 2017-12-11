@@ -297,10 +297,10 @@ RES_FMT_END
 #define     RES_HIDDENPARA_PRINT      TypedWhichId<SwMsgPoolItem>(175)
 #define     RES_CONDCOLL_CONDCHG      TypedWhichId<SwCondCollCondChg>(176)
 #define     RES_VIRTPAGENUM_INFO      TypedWhichId<SwVirtPageNumInfo>(177)
-#define     RES_RESET_FMTWRITTEN      TypedWhichId<SfxBoolItem>(178)
+// empty
 #define     RES_REMOVE_UNO_OBJECT     TypedWhichId<SwPtrMsgPoolItem>(179)
 #define     RES_GRF_REREAD_AND_INCACHE   TypedWhichId<SwMsgPoolItem>(180)
-#define     RES_SECTION_RESETHIDDENFLAG  TypedWhichId<SfxBoolItem>(181)
+// empty
 #define     RES_FINDNEARESTNODE       TypedWhichId<SwFindNearestNode>(182)
 #define     RES_CONTENT_VISIBLE       TypedWhichId<SwPtrMsgPoolItem>(183)
 #define     RES_GRAPHIC_SWAPIN        TypedWhichId<SwMsgPoolItem>(184)

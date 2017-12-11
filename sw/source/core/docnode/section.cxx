@@ -492,7 +492,6 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return;
 
     case RES_SECTION_NOT_HIDDEN:
-    case RES_SECTION_RESETHIDDENFLAG:
         m_Data.SetHiddenFlag( m_Data.IsHidden() && m_Data.IsCondHidden() );
         return;
 
@@ -778,7 +777,6 @@ void SwSectionFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
         break;
 
-    case RES_SECTION_RESETHIDDENFLAG:
     case RES_FTN_AT_TXTEND:
     case RES_END_AT_TXTEND : bClients = true;
         SAL_FALLTHROUGH;
