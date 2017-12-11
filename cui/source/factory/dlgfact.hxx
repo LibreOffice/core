@@ -225,8 +225,8 @@ class GalleryIdDialog;
 class AbstractGalleryIdDialog_Impl : public AbstractGalleryIdDialog
 {
     DECL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl,GalleryIdDialog)
-    virtual sal_uLong   GetId() const override ;
 
+    virtual sal_uInt32   GetId() const override;
 };
 
 class URLDlg;

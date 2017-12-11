@@ -191,7 +191,7 @@ public:
     GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
     virtual ~GalleryIdDialog() override;
     virtual void dispose() override;
-    sal_uLong GetId() const { return m_pLbResName->GetSelectedEntryPos(); }
+    sal_uInt32 GetId() const { return m_pLbResName->GetSelectedEntryPos(); }
 };
 
 class GalleryThemeProperties : public SfxTabDialog
