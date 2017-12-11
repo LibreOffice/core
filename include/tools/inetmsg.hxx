@@ -78,14 +78,14 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIMEMessage
 
     SvLockBytesRef  m_xDocLB;
 
-    ::std::map<InetMessageMime, sal_uIntPtr>  m_nMIMEIndex;
+    ::std::map<InetMessageMime, sal_uInt32>   m_nMIMEIndex;
     INetMIMEMessage*                          pParent;
     ::std::vector< std::unique_ptr<INetMIMEMessage> >
                                               aChildren;
     OString                 m_aBoundary;
 
     OUString GetHeaderValue_Impl (
-        sal_uIntPtr nIndex) const
+        sal_uInt32 nIndex) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
             return INetMIME::decodeHeaderFieldBody(m_aHeaderList[ nIndex ]->GetValue());
@@ -95,7 +95,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIMEMessage
     }
 
     void SetHeaderField_Impl (
-        const INetMessageHeader &rHeader, sal_uIntPtr &rnIndex)
+        const INetMessageHeader &rHeader, sal_uInt32 &rnIndex)
     {
         INetMessageHeader *p = new INetMessageHeader (rHeader);
         if (m_aHeaderList.size() <= rnIndex)
@@ -112,7 +112,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIMEMessage
     void SetHeaderField_Impl (
         const OString &rName,
         const OUString &rValue,
-        sal_uIntPtr &rnIndex);
+        sal_uInt32 &rnIndex);
 
     bool IsMessage() const
     {
@@ -127,9 +127,9 @@ public:
     INetMIMEMessage();
     ~INetMIMEMessage();
 
-    sal_uIntPtr GetHeaderCount() const { return m_aHeaderList.size(); }
+    sal_uInt32 GetHeaderCount() const { return m_aHeaderList.size(); }
 
-    INetMessageHeader GetHeaderField (sal_uIntPtr nIndex) const
+    INetMessageHeader GetHeaderField (sal_uInt32 nIndex) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
             return *m_aHeaderList[ nIndex ];
@@ -169,7 +169,7 @@ public:
         return aType.matchIgnoreAsciiCase("multipart/");
     }
 
-    INetMIMEMessage* GetChild (sal_uIntPtr nIndex) const
+    INetMIMEMessage* GetChild (sal_uInt32 nIndex) const
     {
         return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ].get() : nullptr;
     }
