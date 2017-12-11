@@ -581,7 +581,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
     bool bDashSet = false;
     bool bNoFill = false;
 
-    // get InteropGrabBag and search the relevant attributes
+        // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
 
     sal_uInt32 nOriginalColor = 0;
@@ -662,6 +662,13 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
                           XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
                                   I64S( oox::drawingml::convertHmmToEmu( nLineWidth ) ) :nullptr,
                           FSEND );
+    if ( GETA( LineTransparence) )
+    {
+        sal_uInt32 nTransparency;
+        mAny>>=nTransparency;
+        sal_uInt32 nAlpha = MAX_PERCENT - (nTransparency*PER_PERCENT);
+        WriteSolidFill(nColor, nAlpha);
+    }
 
     if( bColorSet )
     {
