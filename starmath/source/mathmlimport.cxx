@@ -791,7 +791,7 @@ void SmXMLTokenAttrHelper::RetrieveAttrs(const uno::Reference<xml::sax::XAttribu
         switch(rAttrTokenMap.Get(nPrefix, aLocalName))
         {
             case XML_TOK_MATHVARIANT:
-                if (!GetMathMLMathvariantValue(sValue, &meMv))
+                if (!GetMathMLMathvariantValue(sValue, meMv))
                     SAL_WARN("starmath", "failed to recognize mathvariant: " << sValue);
                 mbMvFound = true;
                 break;
@@ -1532,7 +1532,7 @@ void SmXMLSpaceContext_Impl::StartElement(
         switch (rAttrTokenMap.Get(nPrefix, aLocalName))
         {
             case XML_TOK_WIDTH:
-                if ( ParseMathMLAttributeLengthValue(sValue.trim(), &aLV) <= 0 ||
+                if ( ParseMathMLAttributeLengthValue(sValue.trim(), aLV) <= 0 ||
                      !lcl_CountBlanks(aLV, &nWide, &nNarrow) )
                     SAL_WARN("starmath", "ignore mspace's width: " << sValue);
                 break;
