@@ -537,8 +537,9 @@ SvParserState SwHTMLParser::CallParser()
     {
         rInput.Seek(STREAM_SEEK_TO_END);
         rInput.ResetError();
-        ::StartProgress( STR_STATSTR_W4WREAD, 0, rInput.Tell(),
-                         m_xDoc->GetDocShell() );
+
+        m_xProgress.reset(new ImportProgress(m_xDoc->GetDocShell(), 0, rInput.Tell()));
+
         rInput.Seek(STREAM_SEEK_TO_BEGIN);
         rInput.ResetError();
     }
@@ -619,7 +620,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
     }
 
     // disable progress bar again
-    EndProgress( m_xDoc->GetDocShell() );
+    m_xProgress.reset();
 
     bool bLFStripped = false;
     if( SvParserState::Pending != GetStatus() )
@@ -1414,8 +1415,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 SetTextCollAttrs();
             }
             // progress bar
-            if( !GetMedium() || !GetMedium()->IsRemote() )
-                ::SetProgressState( rInput.Tell(), m_xDoc->GetDocShell() );
+            if (m_xProgress)
+                m_xProgress->Update(rInput.Tell());
         }
         break;
 
@@ -2498,9 +2499,9 @@ void SwHTMLParser::ShowStatline()
     OSL_ENSURE( SvParserState::Working==eState, "ShowStatLine not in working state - That can go wrong" );
 
     // scroll bar
-    if( !GetMedium() || !GetMedium()->IsRemote() )
+    if (m_xProgress)
     {
-        ::SetProgressState( rInput.Tell(), m_xDoc->GetDocShell() );
+        m_xProgress->Update(rInput.Tell());
         CheckActionViewShell();
     }
     else
