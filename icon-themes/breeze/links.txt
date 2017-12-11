@@ -432,16 +432,16 @@ cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 # Quit
 cmd/lc_closemasterview.png cmd/lc_quit.png
 cmd/lc_closewin.png cmd/lc_quit.png
-cmd/lc_closepreview.png cmd/lc_quit.png
 cmd/sc_closemasterview.png cmd/sc_quit.png
 cmd/sc_closewin.png cmd/sc_quit.png
-cmd/sc_closepreview.png cmd/sc_quit.png
 
 # Close
 cmd/lc_closedocs.png cmd/lc_closedoc.png
 cmd/lc_exitsearch.png cmd/lc_closedoc.png
+cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
+cmd/sc_closepreview.png cmd/sc_closedoc.png
 
 # arc
 cmd/lc_basicshapes.block-arc.png cmd/lc_arc.png
