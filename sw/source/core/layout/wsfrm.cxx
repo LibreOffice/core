@@ -1601,7 +1601,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         }
         else
         {
-            //The page can shrink to 0. The fist page keeps the same size like
+            //The page can shrink to 0. The first page keeps the same size like
             //VisArea.
             nChg = nDiff;
             long nInvaAdd = 0;

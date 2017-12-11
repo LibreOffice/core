@@ -523,7 +523,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 if ((dynamic_cast<const E3dObject* >(pObject) !=  nullptr) && (rMarkList.GetMarkCount() == 1))
                 {
                     mpWindow->SetPointer(Pointer(PointerStyle::Rotate));
-                    bDefPointer = false;     // Otherwise it'll be calles Joes routine and the mousepointer will reconfigurate again
+                    bDefPointer = false;     // Otherwise it'll be called Joe's routine and the mousepointer will reconfigurate again
                 }
             }
 

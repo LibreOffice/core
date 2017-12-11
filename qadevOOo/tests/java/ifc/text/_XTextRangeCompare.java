@@ -93,9 +93,9 @@ public class _XTextRangeCompare extends MultiMethodTest {
 
     /**
      * One cursor is created and to its position a paragraph
-     * inserted, then the fist five characters was selected.
+     * inserted, then the first five characters were selected.
      * A second cursor was created and the last 7 characters
-     * was selected.<p>
+     * were selected.<p>
      *
      * Has <b>OK</b> status if the compare returns 1, i.e.
      * the second cursor end is before the first.
@@ -134,9 +134,9 @@ public class _XTextRangeCompare extends MultiMethodTest {
 
     /**
      * One cursor is created and to its position a paragraph
-     * inserted, then the fist five characters was selected.
+     * inserted, then the first five characters were selected.
      * A second cursor was created and the last 7 characters
-     * was selected.<p>
+     * were selected.<p>
      *
      * Has <b>OK</b> status if the compare returns 1, i.e.
      * the second cursor start is before the first.

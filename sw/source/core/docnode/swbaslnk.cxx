@@ -60,7 +60,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rO
 
 static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
-    //call fist all not SwNoTextFrames, then the SwNoTextFrames.
+    //call first all not SwNoTextFrames, then the SwNoTextFrames.
     //              The reason is, that in the SwNoTextFrames the Graphic
     //              after a Paint will be swapped out! So all other "behind"
     //              them haven't a loaded Graphic.

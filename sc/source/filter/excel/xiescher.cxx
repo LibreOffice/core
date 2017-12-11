@@ -2147,7 +2147,7 @@ void XclImpCheckBoxObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sa
     maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 20 );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
     maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
@@ -2239,7 +2239,7 @@ void XclImpOptionButtonObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen
     maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 32 );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
     maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
@@ -2360,7 +2360,7 @@ void XclImpGroupBoxObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sa
     maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 26 );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
     maTextData.maData.mnShortcut = rStrm.ReaduInt16();
@@ -2441,7 +2441,7 @@ void XclImpEditObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uI
     maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 14 );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
     mnContentType = rStrm.ReaduInt16();
@@ -2549,7 +2549,7 @@ void XclImpSpinButtonObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, 
     ReadFrameData( rStrm );
     ReadSbs( rStrm );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
 }
 
@@ -2586,7 +2586,7 @@ void XclImpScrollBarObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, s
     ReadFrameData( rStrm );
     ReadSbs( rStrm );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
 }
 
@@ -2672,7 +2672,7 @@ void XclImpListBoxObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal
     maTextData.maData.mnDefFontIdx = rStrm.ReaduInt16();
     rStrm.Ignore( 4 );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
     ReadFullLbsData( rStrm, rStrm.GetRecLeft() );
     mbHasDefFontIdx = true;
@@ -2777,7 +2777,7 @@ void XclImpDropDownObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sa
     mnBottom = rStrm.ReaduInt16();
     rStrm.Ignore( 4 );
     ReadName5( rStrm, nNameLen );
-    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
+    ReadMacro5( rStrm, rStrm.ReaduInt16() );   // first macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
     ReadFullLbsData( rStrm );
     mbHasDefFontIdx = true;

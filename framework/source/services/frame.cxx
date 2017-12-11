@@ -2044,7 +2044,7 @@ void Frame::implts_forgetSubFrames()
 
 /*-****************************************************************************************************
     @short      destroy instance
-    @descr      The owner of this object calles the dispose method if the object
+    @descr      The owner of this object calls the dispose method if the object
                 should be destroyed. All other objects and components, that are registered
                 as an EventListener are forced to release their references to this object.
                 Furthermore this frame is removed from its parent frame container to release

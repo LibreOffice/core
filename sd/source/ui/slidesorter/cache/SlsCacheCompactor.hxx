@@ -75,7 +75,7 @@ protected:
     virtual void Run() = 0;
 
 private:
-    /** This timer is used to collect calles to RequestCompaction() and
+    /** This timer is used to collect calls to RequestCompaction() and
         eventually call Run().
     */
     Timer maCompactionTimer;
