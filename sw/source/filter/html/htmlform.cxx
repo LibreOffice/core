@@ -1799,7 +1799,7 @@ void SwHTMLParser::InsertInput()
         {
             aSz.Width() = HTML_DFLT_IMG_WIDTH;
             bSetGrfWidth = true;
-            if( m_pTable != nullptr )
+            if (m_xTable)
                 IncGrfsThatResizeTable();
         }
         if( !aSz.Height() )

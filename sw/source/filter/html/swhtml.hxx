@@ -401,7 +401,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwViewShell       *m_pActionViewShell;  // SwViewShell, where StartAction was called
     SwNodeIndex     *m_pSttNdIdx;
 
-    HTMLTable       *m_pTable;      // current "outermost" table
+    std::shared_ptr<HTMLTable> m_xTable; // current "outermost" table
     SwHTMLForm_Impl *m_pFormImpl;   // current form
     SdrObject       *m_pMarquee;    // current marquee
     SwField         *m_pField;      // current field
@@ -818,10 +818,10 @@ private:
     void BuildTableSection( HTMLTable *pTable, bool bReadOptions, bool bHead );
     void BuildTableColGroup( HTMLTable *pTable, bool bReadOptions );
     void BuildTableCaption( HTMLTable *pTable );
-    HTMLTable *BuildTable( SvxAdjust eCellAdjust,
-                           bool bIsParentHead = false,
-                           bool bHasParentSection=true,
-                           bool bHasToFlow = false );
+    std::shared_ptr<HTMLTable> BuildTable(SvxAdjust eCellAdjust,
+                                          bool bIsParentHead = false,
+                                          bool bHasParentSection=true,
+                                          bool bHasToFlow = false);
 
     // misc ...
 
