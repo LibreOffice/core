@@ -25,8 +25,10 @@
 #include <editeng/formatbreakitem.hxx>
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
+#include <mdiexp.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <strings.hrc>
 #include <IDocumentRedlineAccess.hxx>
 
 #include <cstddef>
@@ -318,6 +320,28 @@ public:
 };
 
 SW_DLLPUBLIC void UpdatePageDescs(SwDoc &rDoc, size_t nInPageDescOffset);
+
+class ImportProgress
+{
+private:
+    SwDocShell *m_pDocShell;
+public:
+    ImportProgress(SwDocShell *pDocShell, long nStartVal, long nEndVal)
+        : m_pDocShell(pDocShell)
+    {
+        ::StartProgress(STR_STATSTR_W4WREAD, nStartVal, nEndVal, m_pDocShell);
+    }
+
+    void Update(sal_uInt16 nProgress)
+    {
+        ::SetProgressState(nProgress, m_pDocShell);    // Update
+    }
+
+    ~ImportProgress()
+    {
+        ::EndProgress(m_pDocShell);
+    }
+};
 
 #endif
 
