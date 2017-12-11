@@ -125,13 +125,13 @@ else
 		( \
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
 		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
+		$(EXTRA_ENV_VARS) \
 		$(if $(filter gdb,$(gb_CppunitTest_GDBTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(gb_CppunitTest_malloc_check) \
 		$(if $(strip $(PYTHON_URE)),\
 			PYTHONDONTWRITEBYTECODE=1) \
-		$(EXTRA_ENV_VARS) \
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
 		$(call gb_CppunitTest__make_args) "-env:CPPUNITTESTTARGET=$@" \
