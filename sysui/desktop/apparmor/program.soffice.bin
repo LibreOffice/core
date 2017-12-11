@@ -62,7 +62,7 @@
 
 #include <tunables/global>
 
-profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
+profile libreoffice-soffice INSTDIR-program/soffice.bin {
   #include <abstractions/private-files-strict>
 
   #include <abstractions/audio>
