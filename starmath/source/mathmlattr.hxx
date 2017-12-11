@@ -45,7 +45,7 @@ struct MathMLAttributeLengthValue
     MathMLLengthUnit eUnit;
 };
 
-sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue *pV);
+sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue& rV);
 
 
 // MathML 3: 3.2.2 Mathematics style attributes common to token elements
@@ -72,7 +72,7 @@ enum class MathMLMathvariantValue {
     Stretched
 };
 
-bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue *pV);
+bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue& rV);
 
 #endif
 
