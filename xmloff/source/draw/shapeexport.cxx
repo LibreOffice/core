@@ -2410,8 +2410,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             if (!aMimeType.isEmpty())
                 GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
 
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
             ImpExportSignatureLine( xShape );
+            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
             if( !sImageURL.isEmpty() )
             {
