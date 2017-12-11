@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------
 #
 #    Copyright (C) 2016 Canonical Ltd.
+#    Copyright (C) 2017 Software in the Public Interest, Inc.
 #
 #    This Source Code Form is subject to the terms of the Mozilla Public
 #    License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,6 +9,7 @@
 #
 #    Authors: Jonathan Davies <jonathan.davies@canonical.com>
 #             Bryan Quigley <bryan.quigley@canonical.com>
+#             Rene Engelhard <rene@debian.org>
 #
 # ------------------------------------------------------------------
 
@@ -60,7 +62,7 @@
 
 #include <tunables/global>
 
-profile libreoffice-soffice INSTDIR-program/soffice.bin {
+profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
   #include <abstractions/private-files-strict>
 
   #include <abstractions/audio>
@@ -105,9 +107,9 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   # bluetooth send to
   network bluetooth,
 
-  /bin/sh                               rmix,
-  /bin/bash                             rmix,
-  /bin/dash                             rmix,
+  /{usr/,}bin/sh                        rmix,
+  /{usr/,}bin/bash                      rmix,
+  /{usr/,}bin/dash                      rmix,
   /usr/bin/bluetooth-sendto             rmPUx,
   /usr/bin/lpr                          rmPUx,
   /usr/bin/paperconf                    rmix,
