@@ -227,7 +227,7 @@ namespace treeview {
 
         static void subst( OUString& instpath );
 
-        bool SearchAndInsert(TVDom* p, TVDom* tvDom);
+        std::unique_ptr<TVDom> SearchAndInsert(std::unique_ptr<TVDom> p, TVDom* tvDom);
 
         void Check(TVDom* tvDom);
 
