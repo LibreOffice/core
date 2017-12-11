@@ -22,6 +22,8 @@ profile libreoffice-xpdfimport INSTDIR-program/xpdfimport {
   /usr/share/libreoffice/share/config/* r,
   owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
 
+  INSTDIR-program/xpdfimport        pxm,
+
   #Uncomment for build testing (should be one directory <- of instdir)
   #/mnt/store/git/libo/**    r,
 }
