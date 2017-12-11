@@ -95,8 +95,8 @@ public:
     typedef std::map<key_type,mapped_type,key_compare>::const_reverse_iterator  const_reverse_iterator;
 
 private:
-    const SdrLayerID nHellId;
-    const SdrLayerID nControlsId;
+    const SdrLayerID mnHellId;
+    const SdrLayerID mnControlsId;
     std::map<key_type,mapped_type,key_compare> maMap;
 
     std::pair< iterator, bool > insert( const sal_uInt32 nPos,
