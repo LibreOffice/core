@@ -100,11 +100,11 @@ public:
 };
 
 inline const SwTableBoxNumFormat      &SwAttrSet::GetTableBoxNumFormat(bool bInP) const
-    {   return static_cast<const SwTableBoxNumFormat&>(Get( RES_BOXATR_FORMAT,bInP)); }
+    {   return Get( RES_BOXATR_FORMAT,bInP); }
 inline const SwTableBoxFormula        &SwAttrSet::GetTableBoxFormula(bool bInP) const
-    {   return static_cast<const SwTableBoxFormula&>(Get( RES_BOXATR_FORMULA,bInP)); }
+    {   return Get( RES_BOXATR_FORMULA,bInP); }
 inline const SwTableBoxValue          &SwAttrSet::GetTableBoxValue(bool bInP) const
-    {   return static_cast<const SwTableBoxValue&>(Get( RES_BOXATR_VALUE, bInP)); }
+    {   return Get( RES_BOXATR_VALUE, bInP); }
 
 inline const SwTableBoxNumFormat      &SwFormat::GetTableBoxNumFormat(bool bInP) const
     {   return m_aSet.GetTableBoxNumFormat(bInP); }

@@ -229,46 +229,37 @@ RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
 RES_FRMATR_END
 };
 
-enum RES_GRFATR
-{
-RES_GRFATR_BEGIN = RES_FRMATR_END,
-    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 130
-    RES_GRFATR_CROPGRF,                             // 131
+#define RES_GRFATR_BEGIN RES_FRMATR_END
+#define     RES_GRFATR_MIRRORGRF    TypedWhichId<SwMirrorGrf>(RES_GRFATR_BEGIN) // 130
+#define     RES_GRFATR_CROPGRF      TypedWhichId<SwCropGrf>(131) // 131
 
-    RES_GRFATR_ROTATION,                            // 132
-    RES_GRFATR_LUMINANCE,                           // 133
-    RES_GRFATR_CONTRAST,                            // 134
-    RES_GRFATR_CHANNELR,                            // 135
-    RES_GRFATR_CHANNELG,                            // 136
-    RES_GRFATR_CHANNELB,                            // 137
-    RES_GRFATR_GAMMA,                               // 138
-    RES_GRFATR_INVERT,                              // 139
-    RES_GRFATR_TRANSPARENCY,                        // 140
-    RES_GRFATR_DRAWMODE,                            // 141
+#define     RES_GRFATR_ROTATION     TypedWhichId<SwRotationGrf>(132)  // 132
+#define     RES_GRFATR_LUMINANCE    TypedWhichId<SwLuminanceGrf>(133)  // 133
+#define     RES_GRFATR_CONTRAST     TypedWhichId<SwContrastGrf>(134)  // 134
+#define     RES_GRFATR_CHANNELR     TypedWhichId<SwChannelRGrf>(135)  // 135
+#define     RES_GRFATR_CHANNELG     TypedWhichId<SwChannelGGrf>(136)  // 136
+#define     RES_GRFATR_CHANNELB     TypedWhichId<SwChannelBGrf>(137)  // 137
+#define     RES_GRFATR_GAMMA        TypedWhichId<SwGammaGrf>(138)  // 138
+#define     RES_GRFATR_INVERT       TypedWhichId<SwInvertGrf>(139)  // 139
+#define     RES_GRFATR_TRANSPARENCY TypedWhichId<SwTransparencyGrf>(140)  // 140
+#define     RES_GRFATR_DRAWMODE     TypedWhichId<SwDrawModeGrf>(141)  // 141
 
-    RES_GRFATR_DUMMY1,                              // 142
-    RES_GRFATR_DUMMY2,                              // 143
-    RES_GRFATR_DUMMY3,                              // 144
-    RES_GRFATR_DUMMY4,                              // 145
-    RES_GRFATR_DUMMY5,                              // 146
-RES_GRFATR_END
-};
+#define     RES_GRFATR_DUMMY1       TypedWhichId<SfxBoolItem>(142)  // 142
+#define     RES_GRFATR_DUMMY2       TypedWhichId<SfxBoolItem>(143)  // 143
+#define     RES_GRFATR_DUMMY3       TypedWhichId<SfxBoolItem>(144)  // 144
+#define     RES_GRFATR_DUMMY4       TypedWhichId<SfxBoolItem>(145)  // 145
+#define     RES_GRFATR_DUMMY5       TypedWhichId<SfxBoolItem>(146)  // 146
+#define RES_GRFATR_END (147)
 
-enum RES_BOXATR
-{
-RES_BOXATR_BEGIN = RES_GRFATR_END,
-    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 147
-    RES_BOXATR_FORMULA,                             // 148
-    RES_BOXATR_VALUE,                               // 149
-RES_BOXATR_END
-};
+#define RES_BOXATR_BEGIN RES_GRFATR_END
+#define     RES_BOXATR_FORMAT       TypedWhichId<SwTableBoxNumFormat>(RES_BOXATR_BEGIN) // 147
+#define     RES_BOXATR_FORMULA      TypedWhichId<SwTableBoxFormula>(148) // 148
+#define     RES_BOXATR_VALUE        TypedWhichId<SwTableBoxValue>(149) // 149
+#define RES_BOXATR_END (150)
 
-enum RES_UNKNOWNATR
-{
-RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
-    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 150
-RES_UNKNOWNATR_END
-};
+#define RES_UNKNOWNATR_BEGIN RES_BOXATR_END
+#define     RES_UNKNOWNATR_CONTAINER TypedWhichId<SvXMLAttrContainerItem>(RES_UNKNOWNATR_BEGIN)// 150
+#define RES_UNKNOWNATR_END (151)
 
 // Format IDs
 enum RES_FMT
@@ -285,59 +276,53 @@ RES_FMT_END
 };
 
 // ID's for Messages in the Formats
-enum RES_MSG
-{
-RES_MSG_BEGIN = RES_FMT_END,
-    RES_OBJECTDYING = RES_MSG_BEGIN,                // 158
-    RES_FMT_CHG,
-    RES_ATTRSET_CHG,
-    RES_INS_TXT,
-    RES_DEL_CHR,
-    RES_DEL_TXT,
-    RES_UPDATE_ATTR,
-    RES_REFMARKFLD_UPDATE,
-    RES_DOCPOS_UPDATE,
-    RES_TABLEFML_UPDATE,
-    RES_UPDATEDDETBL,
-    RES_TBLHEADLINECHG,
-    RES_AUTOFMT_DOCNODE,
-    RES_SECTION_HIDDEN,
-    RES_SECTION_NOT_HIDDEN,
-    RES_GRAPHIC_ARRIVED,
-    RES_GRAPHIC_PIECE_ARRIVED,
-    RES_HIDDENPARA_PRINT,
-    RES_CONDCOLL_CONDCHG,
-    RES_VIRTPAGENUM_INFO,
-    RES_RESET_FMTWRITTEN,
-    RES_REMOVE_UNO_OBJECT,
-    RES_GRF_REREAD_AND_INCACHE,
-    RES_SECTION_RESETHIDDENFLAG,
-    RES_FINDNEARESTNODE,
-    RES_CONTENT_VISIBLE,
-    RES_GRAPHIC_SWAPIN,
-    RES_NAME_CHANGED,
-    RES_TITLE_CHANGED,
-    RES_DESCRIPTION_CHANGED,
-    RES_LINKED_GRAPHIC_STREAM_ARRIVED,
-RES_MSG_END
-};
+#define RES_MSG_BEGIN RES_FMT_END
+#define     RES_OBJECTDYING           TypedWhichId<SwPtrMsgPoolItem>(RES_MSG_BEGIN)                // 158
+#define     RES_FMT_CHG               TypedWhichId<SwFormatChg>(159)
+#define     RES_ATTRSET_CHG           TypedWhichId<SwAttrSetChg>(160)
+#define     RES_INS_TXT               TypedWhichId<SwInsText>(161)
+#define     RES_DEL_CHR               TypedWhichId<SwDelChr>(162)
+#define     RES_DEL_TXT               TypedWhichId<SwDelText>(163)
+#define     RES_UPDATE_ATTR           TypedWhichId<SwUpdateAttr>(164)
+#define     RES_REFMARKFLD_UPDATE     TypedWhichId<SwRefMarkFieldUpdate>(165)
+#define     RES_DOCPOS_UPDATE         TypedWhichId<SwDocPosUpdate>(166)
+#define     RES_TABLEFML_UPDATE       TypedWhichId<SwTableFormulaUpdate>(167)
+#define     RES_UPDATEDDETBL          TypedWhichId<SwMsgPoolItem>(168)
+#define     RES_TBLHEADLINECHG        TypedWhichId<SwMsgPoolItem>(169)
+#define     RES_AUTOFMT_DOCNODE       TypedWhichId<SwAutoFormatGetDocNode>(170)
+#define     RES_SECTION_HIDDEN        TypedWhichId<SwMsgPoolItem>(171)
+#define     RES_SECTION_NOT_HIDDEN    TypedWhichId<SwMsgPoolItem>(172)
+#define     RES_GRAPHIC_ARRIVED       TypedWhichId<SwMsgPoolItem>(173)
+#define     RES_GRAPHIC_PIECE_ARRIVED TypedWhichId<SwMsgPoolItem>(174)
+#define     RES_HIDDENPARA_PRINT      TypedWhichId<SwMsgPoolItem>(175)
+#define     RES_CONDCOLL_CONDCHG      TypedWhichId<SwCondCollCondChg>(176)
+#define     RES_VIRTPAGENUM_INFO      TypedWhichId<SwVirtPageNumInfo>(177)
+#define     RES_RESET_FMTWRITTEN      TypedWhichId<SfxBoolItem>(178)
+#define     RES_REMOVE_UNO_OBJECT     TypedWhichId<SwPtrMsgPoolItem>(179)
+#define     RES_GRF_REREAD_AND_INCACHE   TypedWhichId<SwMsgPoolItem>(180)
+#define     RES_SECTION_RESETHIDDENFLAG  TypedWhichId<SfxBoolItem>(181)
+#define     RES_FINDNEARESTNODE       TypedWhichId<SwFindNearestNode>(182)
+#define     RES_CONTENT_VISIBLE       TypedWhichId<SwPtrMsgPoolItem>(183)
+#define     RES_GRAPHIC_SWAPIN        TypedWhichId<SwMsgPoolItem>(184)
+#define     RES_NAME_CHANGED          TypedWhichId<SwStringMsgPoolItem>(185)
+#define     RES_TITLE_CHANGED         TypedWhichId<SwStringMsgPoolItem>(186)
+#define     RES_DESCRIPTION_CHANGED   TypedWhichId<SwStringMsgPoolItem>(187)
+#define     RES_LINKED_GRAPHIC_STREAM_ARRIVED TypedWhichId<SwMsgPoolItem>(187)
+#define RES_MSG_END (188)
 
 // An ID for the RTF-reader. The stylesheets are treated like attributes,
 // i.e. there is a StyleSheet-attribute. To avoid collision with other
 // Which()-values, the value is listed here. (The help system too defines
 // new attributes!)
-enum RES_FLTRATTR
-{
-    RES_FLTRATTR_BEGIN = RES_MSG_END,
-    RES_FLTR_BOOKMARK = RES_FLTRATTR_BEGIN,
-    RES_FLTR_ANCHOR,
-    RES_FLTR_NUMRULE,
-    RES_FLTR_TOX,
-    RES_FLTR_REDLINE,
-    RES_FLTR_ANNOTATIONMARK,
-    RES_FLTR_RDFMARK,
-    RES_FLTRATTR_END
-};
+#define     RES_FLTRATTR_BEGIN RES_MSG_END
+#define     RES_FLTR_BOOKMARK       TypedWhichId<SfxStringItem>(RES_FLTRATTR_BEGIN)
+#define     RES_FLTR_ANCHOR         TypedWhichId<SwFltAnchor>(189)
+#define     RES_FLTR_NUMRULE        TypedWhichId<SfxStringItem>(190)
+#define     RES_FLTR_TOX            TypedWhichId<SwFltTOX>(191)
+#define     RES_FLTR_REDLINE        TypedWhichId<SwFltRedline>(192)
+#define     RES_FLTR_ANNOTATIONMARK TypedWhichId<CntUInt16Item>(193)
+#define     RES_FLTR_RDFMARK        TypedWhichId<SwFltRDFMark>(194)
+#define     RES_FLTRATTR_END 195
 
 #define RES_TBX_DUMMY RES_FLTRATTR_END + 1
 

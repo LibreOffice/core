@@ -373,7 +373,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 const sal_uInt32 nNewRot(static_cast<const SfxUInt32Item*>(pItem)->GetValue() / 10);
                 SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
                 rSh.GetCurAttr(aSet);
-                const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aSet.Get(RES_GRFATR_ROTATION));
+                const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
                 const sal_uInt32 nOldRot(rRotation.GetValue());
 
                 // RotGrfFlyFrame: Rotation change here, SwFlyFrameAttrMgr aMgr is available

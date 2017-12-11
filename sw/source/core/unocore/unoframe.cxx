@@ -1035,7 +1035,7 @@ static inline void lcl_FillMirror ( SfxItemSet &rToSet, const ::SfxItemSet &rFro
 {
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {
-        SwMirrorGrf aMirror ( static_cast < const ::SwMirrorGrf& > ( rFromSet.Get ( RES_GRFATR_MIRRORGRF ) ) );
+        SwMirrorGrf aMirror ( rFromSet.Get ( RES_GRFATR_MIRRORGRF ) );
         if(pHEvenMirror)
             rRet &= static_cast<SfxPoolItem&>(aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
         if(pHOddMirror)

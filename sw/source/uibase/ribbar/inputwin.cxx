@@ -257,7 +257,7 @@ void SwInputWindow::ShowWin()
 
                 SfxItemSet aSet( pWrtShell->GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA>{} );
                 if( pWrtShell->GetTableBoxFormulaAttrs( aSet ))
-                    sEdit += static_cast<const SwTableBoxFormula&>(aSet.Get( RES_BOXATR_FORMULA )).GetFormula();
+                    sEdit += aSet.Get( RES_BOXATR_FORMULA ).GetFormula();
             }
         }
 
