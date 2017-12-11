@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f43dca8f",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1907,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-12-11T13:51:16Z",
+      "side": 1,
+      "message": "I\u0027m surprised to see this here. I imagine that the UNO nonsense behind this officecfg:: thing is hideously expensive. Can we try to avoid that ? I would prefer to use something like:\n\nsc/source/core/tool/calcconfig.cxx:    static comphelper::ConfigurationListenerProperty\u003cbool\u003e gOpenCLEnabled(getMiscListener(), \"UseOpenCL\");\n\nFor this - whereby we can call a simple function that fetches a simple static global here - presumably wrapped up in CalcConfig.\n\nAlso - in general, I\u0027d like to move the logic as to whether we actually thread / do CL stuff - into the interpret section - and not have it here - so, the boolean should mean: \"Can theoretically thread this\" - and the decision as to whether to do that is taken later based on weight, settings \u0026 so on.\n\nThanks ! \u003d)",
+      "range": {
+        "startLine": 1906,
+        "startChar": 2,
+        "endLine": 1907,
+        "endChar": 101
+      },
+      "revId": "69f984e7cd7425192522bee84f76fca0a81b8aab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
