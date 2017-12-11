@@ -253,7 +253,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_xDoc( pD ),
     m_pActionViewShell( nullptr ),
     m_pSttNdIdx( nullptr ),
-    m_pTable(nullptr),
     m_pFormImpl( nullptr ),
     m_pMarquee( nullptr ),
     m_pField( nullptr ),
@@ -452,7 +451,7 @@ SwHTMLParser::~SwHTMLParser()
     DeleteFormImpl();
     DeleteFootEndNoteImpl();
 
-    OSL_ENSURE( !m_pTable, "It exists still a open table" );
+    OSL_ENSURE(!m_xTable.get(), "It exists still a open table");
     delete m_pImageMaps;
 
     OSL_ENSURE( !m_pPendStack,
@@ -1378,20 +1377,20 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::OBJECT_ON:
 #if HAVE_FEATURE_JAVA
         NewObject();
-        m_bCallNextToken = m_pAppletImpl!=nullptr && m_pTable!=nullptr;
+        m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
 #endif
         break;
 
     case HtmlTokenId::APPLET_ON:
 #if HAVE_FEATURE_JAVA
         InsertApplet();
-        m_bCallNextToken = m_pAppletImpl!=nullptr && m_pTable!=nullptr;
+        m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
 #endif
         break;
 
     case HtmlTokenId::IFRAME_ON:
         InsertFloatingFrame();
-        m_bCallNextToken = m_bInFloatingFrame && m_pTable!=nullptr;
+        m_bCallNextToken = m_bInFloatingFrame && m_xTable;
         break;
 
     case HtmlTokenId::LINEBREAK:
@@ -1432,7 +1431,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::LINEFEEDCHAR:
         if( m_pPam->GetPoint()->nContent.GetIndex() )
             AppendTextNode();
-        if( !m_pTable && !m_xDoc->IsInHeaderFooter( m_pPam->GetPoint()->nNode ) )
+        if (!m_xTable && !m_xDoc->IsInHeaderFooter(m_pPam->GetPoint()->nNode))
         {
             NewAttr( &m_aAttrTab.pBreak, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
             EndAttr( m_aAttrTab.pBreak, false );
@@ -1502,7 +1501,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::NOEMBED_ON:
         m_bInNoEmbed = true;
-        m_bCallNextToken = m_pTable!=nullptr;
+        m_bCallNextToken = bool(m_xTable);
         ReadRawData( OOO_STRING_SVTOOLS_HTML_noembed );
         break;
 
@@ -1573,7 +1572,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::MARQUEE_ON:
         NewMarquee();
-        m_bCallNextToken = m_pMarquee!=nullptr && m_pTable!=nullptr;
+        m_bCallNextToken = m_pMarquee!=nullptr && m_xTable;
         break;
 
     case HtmlTokenId::FORM_ON:
@@ -1670,8 +1669,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         {
             if( m_nOpenParaToken != HtmlTokenId::NONE )
                 EndPara();
-            OSL_ENSURE( !m_pTable, "table in table not allowed here" );
-            if( !m_pTable && (IsNewDoc() || !m_pPam->GetNode().FindTableNode()) &&
+            OSL_ENSURE(!m_xTable.get(), "table in table not allowed here");
+            if( !m_xTable && (IsNewDoc() || !m_pPam->GetNode().FindTableNode()) &&
                 (m_pPam->GetPoint()->nNode.GetIndex() >
                             m_xDoc->GetNodes().GetEndOfExtras().GetIndex() ||
                 !m_pPam->GetNode().FindFootnoteStartNode() ) )
@@ -1849,7 +1848,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::SDFIELD_ON:
         NewField();
-        m_bCallNextToken = m_bInField && m_pTable!=nullptr;
+        m_bCallNextToken = m_bInField && m_xTable;
         break;
 
     case HtmlTokenId::EMPHASIS_OFF:
@@ -1916,12 +1915,12 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::TEXTAREA_ON:
         NewTextArea();
-        m_bCallNextToken = m_bTextArea && m_pTable!=nullptr;
+        m_bCallNextToken = m_bTextArea && m_xTable;
         break;
 
     case HtmlTokenId::SELECT_ON:
         NewSelect();
-        m_bCallNextToken = m_bSelect && m_pTable!=nullptr;
+        m_bCallNextToken = m_bSelect && m_xTable;
         break;
 
     case HtmlTokenId::ANCHOR_ON:
@@ -2375,7 +2374,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
         }
     }
 
-    if( !m_pTable && !--m_nParaCnt )
+    if (!m_xTable && !--m_nParaCnt)
         Show();
 
     return bRet;
@@ -3905,7 +3904,7 @@ void SwHTMLParser::NewPara()
 
 void SwHTMLParser::EndPara( bool bReal )
 {
-    if( HtmlTokenId::LI_ON==m_nOpenParaToken && m_pTable )
+    if (HtmlTokenId::LI_ON==m_nOpenParaToken && m_xTable)
     {
 #if OSL_DEBUG_LEVEL > 0
         const SwNumRule *pNumRule = m_pPam->GetNode().GetTextNode()->GetNumRule();
@@ -5268,7 +5267,7 @@ void SwHTMLParser::InsertHorzRule()
         // paragraph indents. That makes little sense in a table. In order to
         // avoid that the line is considered during the width calculation, it
         // still gets an appropriate LRSpace-Item.
-        if( !m_pTable )
+        if (!m_xTable)
         {
             // fake length and alignment of line above paragraph indents
             long nBrowseWidth = GetCurrentBrowseWidth();

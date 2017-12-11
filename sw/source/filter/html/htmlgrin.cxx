@@ -589,7 +589,7 @@ IMAGE_SETEVENT:
     {
         // When the graphic is in a table, it will be requested immediately,
         // so that it is available before the table is layouted.
-        if( m_pTable!=nullptr && !nWidth )
+        if (m_xTable && !nWidth)
         {
             bRequestGrfNow = true;
             IncGrfsThatResizeTable();
@@ -1399,14 +1399,14 @@ void SwHTMLParser::StripTrailingPara()
             m_xDoc->GetNodes().Delete( m_pPam->GetPoint()->nNode );
             m_pPam->Move( fnMoveBackward, GoInNode );
         }
-        else if( pCNd && pCNd->IsTextNode() && m_pTable )
+        else if (pCNd && pCNd->IsTextNode() && m_xTable)
         {
             // In empty cells we set a small font, so that the cell doesn't
             // get higher than the graphic resp. as low as possible.
             bSetSmallFont = true;
         }
     }
-    else if( pCNd && pCNd->IsTextNode() && m_pTable &&
+    else if( pCNd && pCNd->IsTextNode() && m_xTable &&
              pCNd->StartOfSectionIndex()+2 ==
              pCNd->EndOfSectionIndex() )
     {
