@@ -28,11 +28,11 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 
-int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uInt32 nSize)
 {
     sal_Char* pWBuf = pData;
 
-    sal_uIntPtr i, n;
+    sal_uInt32 i, n;
 
     if (maMsgBuffer.Tell() == 0)
     {
@@ -71,7 +71,7 @@ int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uIntPtr nSize)
     return (pWBuf - pData);
 }
 
-int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uInt32 nSize)
 {
     sal_Char* pWBuf = pData;
     sal_Char* pWEnd = pData + nSize;
@@ -81,14 +81,14 @@ int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uIntPtr nSize)
         if (pMsgStrm == nullptr)
             pMsgStrm = new SvStream (pSourceMsg->GetDocumentLB());
 
-        sal_uIntPtr nRead = pMsgStrm->ReadBytes(pWBuf, (pWEnd - pWBuf));
+        sal_uInt32 nRead = pMsgStrm->ReadBytes(pWBuf, (pWEnd - pWBuf));
         pWBuf += nRead;
     }
 
     return (pWBuf - pData);
 }
 
-int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uInt32 nSize)
 {
     // Check for header or body.
     if (!bHeaderGenerated)
@@ -252,7 +252,7 @@ INetMIMEMessageStream::~INetMIMEMessageStream()
     delete pMsgStrm;
 }
 
-int INetMIMEMessageStream::Read(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::Read(sal_Char* pData, sal_uInt32 nSize)
 {
     sal_Char* pWBuf = pData;
     sal_Char* pWEnd = pData + nSize;
@@ -260,13 +260,13 @@ int INetMIMEMessageStream::Read(sal_Char* pData, sal_uIntPtr nSize)
     while (pWBuf < pWEnd)
     {
         // Caller's buffer not yet filled.
-        sal_uIntPtr n = pRead - pWrite;
+        sal_uInt32 n = pRead - pWrite;
         if (n > 0)
         {
             // Bytes still in buffer.
-            sal_uIntPtr m = pWEnd - pWBuf;
+            sal_uInt32 m = pWEnd - pWBuf;
             if (m < n) n = m;
-            for (sal_uIntPtr i = 0; i < n; i++) *pWBuf++ = *pWrite++;
+            for (sal_uInt32 i = 0; i < n; i++) *pWBuf++ = *pWrite++;
         }
         else
         {

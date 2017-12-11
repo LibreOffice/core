@@ -43,21 +43,21 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
 
     bool done;
 
-    sal_uIntPtr                  nChildIndex;
+    sal_uInt32             nChildIndex;
     INetMIMEMessageStream *pChildStrm;
 
     INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) = delete;
     INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) = delete;
 
-    int GetHeaderLine(sal_Char *pData, sal_uIntPtr nSize);
-    int GetBodyLine(sal_Char *pData, sal_uIntPtr nSize);
-    int GetMsgLine(sal_Char *pData, sal_uIntPtr nSize);
+    int GetHeaderLine(sal_Char *pData, sal_uInt32 nSize);
+    int GetBodyLine(sal_Char *pData, sal_uInt32 nSize);
+    int GetMsgLine(sal_Char *pData, sal_uInt32 nSize);
 
 public:
     explicit INetMIMEMessageStream(INetMIMEMessage *pMsg, bool headerGenerated);
     ~INetMIMEMessageStream();
 
-    int Read (sal_Char *pData, sal_uIntPtr nSize);
+    int Read (sal_Char *pData, sal_uInt32 nSize);
 };
 
 #endif
