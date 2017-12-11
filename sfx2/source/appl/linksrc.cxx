@@ -55,7 +55,7 @@ void SvLinkSourceTimer::Invoke()
 }
 
 static void StartTimer( std::unique_ptr<SvLinkSourceTimer>& pTimer, SvLinkSource * pOwner,
-                        sal_uIntPtr nTimeout )
+                        sal_uInt64 nTimeout )
 {
     if( !pTimer )
     {
@@ -179,7 +179,7 @@ struct SvLinkSource_Impl
     OUString                aDataMimeType;
     std::unique_ptr<SvLinkSourceTimer>
                             pTimer;
-    sal_uIntPtr             nTimeout;
+    sal_uInt64              nTimeout;
     css::uno::Reference<css::io::XInputStream>
                             m_xInputStreamToLoadFrom;
     bool                    m_bIsReadOnly;
@@ -229,12 +229,12 @@ void  SvLinkSource::Closed()
             p->xSink->Closed();
 }
 
-sal_uIntPtr SvLinkSource::GetUpdateTimeout() const
+sal_uInt64 SvLinkSource::GetUpdateTimeout() const
 {
     return pImpl->nTimeout;
 }
 
-void SvLinkSource::SetUpdateTimeout( sal_uIntPtr nTimeout )
+void SvLinkSource::SetUpdateTimeout( sal_uInt64 nTimeout )
 {
     pImpl->nTimeout = nTimeout;
     if( pImpl->pTimer )

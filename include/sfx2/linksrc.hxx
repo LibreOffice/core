@@ -64,8 +64,8 @@ public:
 
     void                Closed();
 
-    sal_uIntPtr                 GetUpdateTimeout() const;
-    void                SetUpdateTimeout( sal_uIntPtr nTime );
+    sal_uInt64          GetUpdateTimeout() const;
+    void                SetUpdateTimeout( sal_uInt64 nTimeMs );
                         // notify the sink, the mime type is not
                         // a selection criterion
     void                DataChanged( const rtl::OUString & rMimeType,
