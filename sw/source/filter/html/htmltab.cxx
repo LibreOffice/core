@@ -3097,10 +3097,10 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
         nToken = HtmlTokenId::TABLEDATA_ON;
         nColl = RES_POOLCOLL_TABLE;
     }
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aEmptyOUStr, true );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aEmptyOUStr, true));
     if( SvxAdjust::End != m_eAdjust )
-        rParser.InsertAttr( &rParser.m_aAttrTab.pAdjust, SvxAdjustItem(m_eAdjust, RES_PARATR_ADJUST),
-                            pCntxt );
+        rParser.InsertAttr(&rParser.m_aAttrTab.pAdjust, SvxAdjustItem(m_eAdjust, RES_PARATR_ADJUST),
+                           xCntxt.get());
 
     if( SwHTMLParser::HasStyleOptions( m_aStyle, m_aId, m_aClass, &m_aLang, &m_aDir ) )
     {
@@ -3117,13 +3117,13 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 m_xBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
                 aItemSet.ClearItem(RES_BOX);
             }
-            rParser.InsertAttrs( aItemSet, aPropInfo, pCntxt );
+            rParser.InsertAttrs(aItemSet, aPropInfo, xCntxt.get());
         }
     }
 
-    rParser.SplitPREListingXMP( pCntxt );
+    rParser.SplitPREListingXMP(xCntxt.get());
 
-    rParser.PushContext( pCntxt );
+    rParser.PushContext(xCntxt);
 }
 
 void CellSaveStruct::AddContents( HTMLTableCnts *pNewCnts )
@@ -3926,9 +3926,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         // have been modified. Since it's gonna be restored by EndContext, it's okay
         while( m_aContexts.size() > m_nContextStAttrMin+1 )
         {
-            HTMLAttrContext *pCntxt = PopContext();
-            EndContext( pCntxt );
-            delete pCntxt;
+            std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+            EndContext(xCntxt.get());
         }
 
         // Remove LFs at the paragraph end
@@ -3936,18 +3935,16 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             StripTrailingPara();
 
         // If there was an adjustment set for the cell, we need to close it
-        HTMLAttrContext *pCntxt = PopContext();
-        EndContext( pCntxt );
-        delete pCntxt;
+        std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+        EndContext(xCntxt.get());
     }
     else
     {
         // Close all still open contexts
         while( m_aContexts.size() > m_nContextStAttrMin )
         {
-            HTMLAttrContext *pCntxt = PopContext();
-            ClearContext( pCntxt );
-            delete pCntxt;
+            std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+            ClearContext(xCntxt.get());
         }
     }
 
@@ -4636,15 +4633,15 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         else
             pStNd = InsertTableSection( RES_POOLCOLL_TEXT );
 
-        HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::CAPTION_ON );
+        std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::CAPTION_ON));
 
         // Table headers are always centered
         NewAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST) );
 
-        HTMLAttrs &rAttrs = pCntxt->GetAttrs();
+        HTMLAttrs &rAttrs = xCntxt->GetAttrs();
         rAttrs.push_back( m_aAttrTab.pAdjust );
 
-        PushContext( pCntxt );
+        PushContext(xCntxt);
 
         // Remember the start node of the section at the table
         pCurTable->SetCaption( pStNd, bTop );
@@ -4728,9 +4725,8 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     // end all still open contexts
     while( m_aContexts.size() > m_nContextStAttrMin+1 )
     {
-        HTMLAttrContext *pCntxt = PopContext();
-        EndContext( pCntxt );
-        delete pCntxt;
+        std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+        EndContext(xCntxt.get());
     }
 
     bool bLFStripped = StripTrailingLF() > 0;
@@ -4750,9 +4746,9 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     }
 
     // If there's an adjustment for the cell, we need to close it
-    HTMLAttrContext *pCntxt = PopContext();
-    EndContext( pCntxt );
-    delete pCntxt;
+    std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+    EndContext(xCntxt.get());
+    xCntxt.reset();
 
     SetAttr( false );
 
@@ -5104,9 +5100,8 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         // since the current one doesn't exist anymore afterwards
         while( m_aContexts.size() > m_nContextStAttrMin )
         {
-            HTMLAttrContext *pCntxt = PopContext();
-            ClearContext( pCntxt );
-            delete pCntxt;
+            std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+            ClearContext(xCntxt.get());
         }
 
         m_nContextStMin = pTCntxt->GetContextStMin();

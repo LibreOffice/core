@@ -250,7 +250,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
     // Parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -313,9 +313,9 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
                 bChangeNumFormat = false;
             }
 
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
+            DoPositioning(aItemSet, aPropInfo, xCntxt.get());
 
-            InsertAttrs( aItemSet, aPropInfo, pCntxt );
+            InsertAttrs(aItemSet, aPropInfo, xCntxt.get());
         }
     }
 
@@ -325,10 +325,10 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
         m_xDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
     }
 
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     // set attributes to the current template
-    SetTextCollAttrs( pCntxt );
+    SetTextCollAttrs(m_aContexts.back().get());
 }
 
 void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
@@ -355,10 +355,10 @@ void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
         AddParSpace();
 
     // get current context from stack
-    HTMLAttrContext *pCntxt = nToken != HtmlTokenId::NONE ? PopContext( getOnToken(nToken) ) : nullptr;
+    std::unique_ptr<HTMLAttrContext> xCntxt(nToken != HtmlTokenId::NONE ? PopContext(getOnToken(nToken)) : nullptr);
 
     // Don't end a list because of a token, if the context wasn't created or mustn't be ended
-    if( rInfo.GetDepth()>0 && (nToken == HtmlTokenId::NONE || pCntxt) )
+    if( rInfo.GetDepth()>0 && (nToken == HtmlTokenId::NONE || xCntxt) )
     {
         rInfo.DecDepth();
         if( !rInfo.GetDepth() )     // was that the last level?
@@ -412,10 +412,10 @@ void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
 
     // end attributes
     bool bSetAttrs = false;
-    if( pCntxt )
+    if (xCntxt)
     {
-        EndContext( pCntxt );
-        delete pCntxt;
+        EndContext(xCntxt.get());
+        xCntxt.reset();
         bSetAttrs = true;
     }
 
@@ -472,7 +472,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
 
     const bool bCountedInList = nToken != HtmlTokenId::LISTHEADER_ON;
 
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
     OUString aNumRuleName;
     if( GetNumInfo().GetNumRule() )
@@ -535,15 +535,15 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt );
+            DoPositioning(aItemSet, aPropInfo, xCntxt.get());
+            InsertAttrs(aItemSet, aPropInfo, xCntxt.get());
         }
     }
 
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     // set the new template
-    SetTextCollAttrs( pCntxt );
+    SetTextCollAttrs(m_aContexts.back().get());
 
     // Refresh scroll bar
     ShowStatline();
@@ -556,10 +556,10 @@ void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl )
         AppendTextNode( AM_NOSPACE );
 
     // Get context to that token and pop it from stack
-    HTMLAttrContext *pCntxt = nullptr;
+    std::unique_ptr<HTMLAttrContext> xCntxt;
     auto nPos = m_aContexts.size();
     nToken = getOnToken(nToken);
-    while( !pCntxt && nPos>m_nContextStMin )
+    while (!xCntxt && nPos>m_nContextStMin)
     {
         HtmlTokenId nCntxtToken = m_aContexts[--nPos]->GetToken();
         switch( nCntxtToken )
@@ -568,7 +568,7 @@ void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl )
         case HtmlTokenId::LISTHEADER_ON:
             if( nToken == HtmlTokenId::NONE || nToken == nCntxtToken  )
             {
-                pCntxt = m_aContexts[nPos];
+                xCntxt = std::move(m_aContexts[nPos]);
                 m_aContexts.erase( m_aContexts.begin() + nPos );
             }
             break;
@@ -584,11 +584,11 @@ void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl )
     }
 
     // end attributes
-    if( pCntxt )
+    if (xCntxt)
     {
-        EndContext( pCntxt );
+        EndContext(xCntxt.get());
         SetAttr();  // set paragraph attributes asap because of Javascript
-        delete pCntxt;
+        xCntxt.reset();
     }
 
     // set current template

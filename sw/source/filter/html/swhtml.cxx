@@ -657,11 +657,10 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             m_nContextStMin = 0;
             while( m_aContexts.size() )
             {
-                HTMLAttrContext *pCntxt = PopContext();
-                if( pCntxt )
+                std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+                if (xCntxt)
                 {
-                    EndContext( pCntxt );
-                    delete pCntxt;
+                    EndContext(xCntxt.get());
                 }
             }
 
@@ -3406,7 +3405,7 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3417,14 +3416,14 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             if( HtmlTokenId::SPAN_ON != nToken || aClass.isEmpty() ||
-                !CreateContainer( aClass, aItemSet, aPropInfo, pCntxt ) )
-                DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+                !CreateContainer( aClass, aItemSet, aPropInfo, xCntxt.get() ) )
+                DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
+            InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
         }
     }
 
     // save the context
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 }
 
 void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
@@ -3460,7 +3459,7 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3475,38 +3474,37 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
             aItemSet.Put( *pItem3 );
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
 
-        InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+        InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
     }
     else
     {
-        InsertAttr( ppAttr ,rItem, pCntxt );
+        InsertAttr( ppAttr ,rItem, xCntxt.get() );
         if( pItem2 )
         {
             OSL_ENSURE( ppAttr2, "missing table entry for item2" );
-            InsertAttr( ppAttr2, *pItem2, pCntxt );
+            InsertAttr( ppAttr2, *pItem2, xCntxt.get() );
         }
         if( pItem3 )
         {
             OSL_ENSURE( ppAttr3, "missing table entry for item3" );
-            InsertAttr( ppAttr3, *pItem3, pCntxt );
+            InsertAttr( ppAttr3, *pItem3, xCntxt.get() );
         }
     }
 
     // save the context
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 }
 
 void SwHTMLParser::EndTag( HtmlTokenId nToken )
 {
     // fetch context
-    HTMLAttrContext *pCntxt = PopContext( getOnToken(nToken) );
-    if( pCntxt )
+    std::unique_ptr<HTMLAttrContext> xCntxt(PopContext(getOnToken(nToken)));
+    if (xCntxt)
     {
         // and maybe end the attributes
-        EndContext( pCntxt );
-        delete pCntxt;
+        EndContext(xCntxt.get());
     }
 }
 
@@ -3550,7 +3548,7 @@ void SwHTMLParser::NewBasefontAttr()
         nSize = 7;
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::BASEFONT_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::BASEFONT_ON));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3570,22 +3568,22 @@ void SwHTMLParser::NewBasefontAttr()
         aItemSet.Put( aFontHeightCTL );
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
 
-        InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+        InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
     }
     else
     {
         SvxFontHeightItem aFontHeight( m_aFontHeights[nSize-1], 100, RES_CHRATR_FONTSIZE );
-        InsertAttr( &m_aAttrTab.pFontHeight, aFontHeight, pCntxt );
+        InsertAttr( &m_aAttrTab.pFontHeight, aFontHeight, xCntxt.get() );
         SvxFontHeightItem aFontHeightCJK( m_aFontHeights[nSize-1], 100, RES_CHRATR_CJK_FONTSIZE );
-        InsertAttr( &m_aAttrTab.pFontHeightCJK, aFontHeightCJK, pCntxt );
+        InsertAttr( &m_aAttrTab.pFontHeightCJK, aFontHeightCJK, xCntxt.get() );
         SvxFontHeightItem aFontHeightCTL( m_aFontHeights[nSize-1], 100, RES_CHRATR_CTL_FONTSIZE );
-        InsertAttr( &m_aAttrTab.pFontHeightCTL, aFontHeightCTL, pCntxt );
+        InsertAttr( &m_aAttrTab.pFontHeightCTL, aFontHeightCTL, xCntxt.get() );
     }
 
     // save the context
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     // save the font size
     m_aBaseFontStack.push_back( nSize );
@@ -3754,7 +3752,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext(nToken );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3784,36 +3782,36 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
         }
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
 
-        InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+        InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
     }
     else
     {
         if( nFontHeight )
         {
             SvxFontHeightItem aFontHeight( nFontHeight, 100, RES_CHRATR_FONTSIZE );
-            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeight, pCntxt );
+            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeight, xCntxt.get() );
             SvxFontHeightItem aFontHeightCJK( nFontHeight, 100, RES_CHRATR_CJK_FONTSIZE );
-            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeightCJK, pCntxt );
+            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeightCJK, xCntxt.get() );
             SvxFontHeightItem aFontHeightCTL( nFontHeight, 100, RES_CHRATR_CTL_FONTSIZE );
-            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeightCTL, pCntxt );
+            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeightCTL, xCntxt.get() );
         }
         if( bColor )
-            InsertAttr( &m_aAttrTab.pFontColor, SvxColorItem(aColor, RES_CHRATR_COLOR), pCntxt );
+            InsertAttr( &m_aAttrTab.pFontColor, SvxColorItem(aColor, RES_CHRATR_COLOR), xCntxt.get() );
         if( !aFontName.isEmpty() )
         {
             SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
-            InsertAttr( &m_aAttrTab.pFont, aFont, pCntxt );
+            InsertAttr( &m_aAttrTab.pFont, aFont, xCntxt.get() );
             SvxFontItem aFontCJK( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CJK_FONT );
-            InsertAttr( &m_aAttrTab.pFont, aFontCJK, pCntxt );
+            InsertAttr( &m_aAttrTab.pFont, aFontCJK, xCntxt.get() );
             SvxFontItem aFontCTL( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CTL_FONT );
-            InsertAttr( &m_aAttrTab.pFont, aFontCTL, pCntxt );
+            InsertAttr( &m_aAttrTab.pFont, aFontCTL, xCntxt.get() );
         }
     }
 
     // save the context
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     m_aFontStack.push_back( nSize );
 }
@@ -3866,10 +3864,10 @@ void SwHTMLParser::NewPara()
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt =
+    std::unique_ptr<HTMLAttrContext> xCntxt(
         !aClass.isEmpty() ? new HTMLAttrContext( HtmlTokenId::PARABREAK_ON,
                                              RES_POOLCOLL_TEXT, aClass )
-                     : new HTMLAttrContext( HtmlTokenId::PARABREAK_ON );
+                     : new HTMLAttrContext( HtmlTokenId::PARABREAK_ON ));
 
     // parse styles (Don't consider class. This is only possible as long as none of
     // the CSS1 properties of the class must be formatted hard!!!)
@@ -3882,19 +3880,19 @@ void SwHTMLParser::NewPara()
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
+            InsertAttrs( aItemSet, aPropInfo, xCntxt.get() );
         }
     }
 
     if( SvxAdjust::End != m_eParaAdjust )
-        InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), pCntxt );
+        InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), xCntxt.get() );
 
     // and push on stack
-    PushContext( pCntxt );
+    PushContext( xCntxt );
 
     // set the current style or its attributes
-    SetTextCollAttrs( !aClass.isEmpty() ? pCntxt : nullptr );
+    SetTextCollAttrs( !aClass.isEmpty() ? m_aContexts.back().get() : nullptr );
 
     // progress bar
     ShowStatline();
@@ -3932,15 +3930,15 @@ void SwHTMLParser::EndPara( bool bReal )
 
     // Pop the context of the stack. It can also be from an
     // implied opened definition list.
-    HTMLAttrContext *pCntxt =
-        PopContext( m_nOpenParaToken != HtmlTokenId::NONE ? getOnToken(m_nOpenParaToken) : HtmlTokenId::PARABREAK_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(
+        PopContext( m_nOpenParaToken != HtmlTokenId::NONE ? getOnToken(m_nOpenParaToken) : HtmlTokenId::PARABREAK_ON ));
 
     // close attribute
-    if( pCntxt )
+    if (xCntxt)
     {
-        EndContext( pCntxt );
+        EndContext(xCntxt.get());
         SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
-        delete pCntxt;
+        xCntxt.reset();
     }
 
     // reset the existing style
@@ -4004,7 +4002,7 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     }
 
     // create the context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nTextColl, aClass );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nTextColl, aClass));
 
     // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4016,19 +4014,19 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
+            InsertAttrs( aItemSet, aPropInfo, xCntxt.get() );
         }
     }
 
     if( SvxAdjust::End != m_eParaAdjust )
-        InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), pCntxt );
+        InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), xCntxt.get() );
 
     // and push on stack
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     // set the current style or its attributes
-    SetTextCollAttrs( pCntxt );
+    SetTextCollAttrs(m_aContexts.back().get());
 
     m_nFontStHeadStart = m_aFontStack.size();
 
@@ -4045,9 +4043,9 @@ void SwHTMLParser::EndHeading()
         AddParSpace();
 
     // search context matching the token and fetch it from stack
-    HTMLAttrContext *pCntxt = nullptr;
+    std::unique_ptr<HTMLAttrContext> xCntxt;
     auto nPos = m_aContexts.size();
-    while( !pCntxt && nPos>m_nContextStMin )
+    while( !xCntxt && nPos>m_nContextStMin )
     {
         switch( m_aContexts[--nPos]->GetToken() )
         {
@@ -4057,7 +4055,7 @@ void SwHTMLParser::EndHeading()
         case HtmlTokenId::HEAD4_ON:
         case HtmlTokenId::HEAD5_ON:
         case HtmlTokenId::HEAD6_ON:
-            pCntxt = m_aContexts[nPos];
+            xCntxt = std::move(m_aContexts[nPos]);
             m_aContexts.erase( m_aContexts.begin() + nPos );
             break;
         default: break;
@@ -4065,11 +4063,11 @@ void SwHTMLParser::EndHeading()
     }
 
     // and now end attributes
-    if( pCntxt )
+    if (xCntxt)
     {
-        EndContext( pCntxt );
+        EndContext(xCntxt.get());
         SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
-        delete pCntxt;
+        xCntxt.reset();
     }
 
     // reset existing style
@@ -4140,7 +4138,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         AddParSpace();
 
     // ... and save in a context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aClass );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aClass));
 
     // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4152,15 +4150,15 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
+            InsertAttrs( aItemSet, aPropInfo, xCntxt.get() );
         }
     }
 
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     // set the new style
-    SetTextCollAttrs( pCntxt );
+    SetTextCollAttrs(m_aContexts.back().get());
 
     // update progress bar
     ShowStatline();
@@ -4193,14 +4191,14 @@ void SwHTMLParser::EndTextFormatColl( HtmlTokenId nToken )
         AddParSpace();
 
     // pop current context of stack
-    HTMLAttrContext *pCntxt = PopContext( getOnToken(nToken) );
+    std::unique_ptr<HTMLAttrContext> xCntxt(PopContext(getOnToken(nToken)));
 
     // and now end attributes
-    if( pCntxt )
+    if (xCntxt)
     {
-        EndContext( pCntxt );
+        EndContext(xCntxt.get());
         SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
-        delete pCntxt;
+        xCntxt.reset();
     }
 
     // reset existing style
@@ -4268,7 +4266,7 @@ void SwHTMLParser::NewDefList()
     }
 
     // ... and save in a context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::DEFLIST_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::DEFLIST_ON));
 
     // in it save also the margins
     sal_uInt16 nLeft=0, nRight=0;
@@ -4288,7 +4286,7 @@ void SwHTMLParser::NewDefList()
         nLeft = nLeft + static_cast< sal_uInt16 >(rLRSpace.GetTextLeft());
     }
 
-    pCntxt->SetMargins( nLeft, nRight, nIndent );
+    xCntxt->SetMargins( nLeft, nRight, nIndent );
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -4298,16 +4296,16 @@ void SwHTMLParser::NewDefList()
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
+            InsertAttrs( aItemSet, aPropInfo, xCntxt.get() );
         }
     }
 
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     // set the attributes of the new style
     if( m_nDefListDeep > 1 )
-        SetTextCollAttrs( pCntxt );
+        SetTextCollAttrs(m_aContexts.back().get());
 }
 
 void SwHTMLParser::EndDefList()
@@ -4323,14 +4321,14 @@ void SwHTMLParser::EndDefList()
         m_nDefListDeep--;
 
     // pop current context of stack
-    HTMLAttrContext *pCntxt = PopContext( HtmlTokenId::DEFLIST_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(PopContext(HtmlTokenId::DEFLIST_ON));
 
     // and now end attributes
-    if( pCntxt )
+    if (xCntxt)
     {
-        EndContext( pCntxt );
+        EndContext(xCntxt.get());
         SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
-        delete pCntxt;
+        xCntxt.reset();
     }
 
     // and set style
@@ -4381,9 +4379,9 @@ void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
 
     // search context matching the token and fetch it from stack
     nToken = getOnToken(nToken);
-    HTMLAttrContext *pCntxt = nullptr;
+    std::unique_ptr<HTMLAttrContext> xCntxt;
     auto nPos = m_aContexts.size();
-    while( !pCntxt && nPos>m_nContextStMin )
+    while( !xCntxt && nPos>m_nContextStMin )
     {
         HtmlTokenId nCntxtToken = m_aContexts[--nPos]->GetToken();
         switch( nCntxtToken )
@@ -4392,7 +4390,7 @@ void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
         case HtmlTokenId::DT_ON:
             if( nToken == HtmlTokenId::NONE || nToken == nCntxtToken  )
             {
-                pCntxt = m_aContexts[nPos];
+                xCntxt = std::move(m_aContexts[nPos]);
                 m_aContexts.erase( m_aContexts.begin() + nPos );
             }
             break;
@@ -4410,11 +4408,10 @@ void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
     }
 
     // and now end attributes
-    if( pCntxt )
+    if (xCntxt)
     {
-        EndContext( pCntxt );
+        EndContext(xCntxt.get());
         SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
-        delete pCntxt;
     }
 }
 
@@ -4514,7 +4511,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 
     for( auto i = m_nContextStAttrMin; i < m_aContexts.size(); ++i )
     {
-        const HTMLAttrContext *pCntxt = m_aContexts[i];
+        const HTMLAttrContext *pCntxt = m_aContexts[i].get();
 
         sal_uInt16 nColl = pCntxt->GetTextFormatColl();
         if( nColl )
@@ -4747,7 +4744,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
     // set the style and save it in the context
     SwCharFormat* pCFormat = m_pCSS1Parser->GetChrFormat( nToken, aClass );
@@ -4763,18 +4760,18 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+            DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
+            InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
         }
     }
 
     // Character formats are stored in their own stack and can never be inserted
     // by styles. Therefore the attribute doesn't exist in CSS1-Which-Range.
     if( pCFormat )
-        InsertAttr( &m_aAttrTab.pCharFormats, SwFormatCharFormat( pCFormat ), pCntxt );
+        InsertAttr( &m_aAttrTab.pCharFormats, SwFormatCharFormat( pCFormat ), xCntxt.get() );
 
     // save the context
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 }
 
 void SwHTMLParser::InsertSpacer()
@@ -5217,13 +5214,13 @@ void SwHTMLParser::InsertHorzRule()
     m_pPam->Move( fnMoveBackward );
 
     // ...and save in a context
-    HTMLAttrContext *pCntxt =
-        new HTMLAttrContext( HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr );
+    std::unique_ptr<HTMLAttrContext> xCntxt(
+        new HTMLAttrContext(HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr));
 
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 
     // set the new style
-    SetTextCollAttrs( pCntxt );
+    SetTextCollAttrs(m_aContexts.back().get());
 
     // the hard attributes of the current paragraph will never become invalid
     if( !m_aParaAttrs.empty() )
@@ -5310,9 +5307,8 @@ void SwHTMLParser::InsertHorzRule()
         InsertBookmark( aId );
 
     // pop current context of stack
-    HTMLAttrContext *pPoppedContext = PopContext( HtmlTokenId::HORZRULE );
-    OSL_ENSURE( pPoppedContext==pCntxt, "Where does the HR context come from?" );
-    delete pPoppedContext;
+    std::unique_ptr<HTMLAttrContext> xPoppedContext(PopContext(HtmlTokenId::HORZRULE));
+    xPoppedContext.reset();
 
     m_pPam->Move( fnMoveForward );
 

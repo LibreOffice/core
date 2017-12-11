@@ -1047,12 +1047,11 @@ void SwHTMLParser::InsertBodyOptions()
 void SwHTMLParser::NewAnchor()
 {
     // end previous link if there was one
-    HTMLAttrContext *pOldCntxt = PopContext( HtmlTokenId::ANCHOR_ON );
-    if( pOldCntxt )
+    std::unique_ptr<HTMLAttrContext> xOldCntxt(PopContext(HtmlTokenId::ANCHOR_ON));
+    if (xOldCntxt)
     {
         // and maybe end attributes
-        EndContext( pOldCntxt );
-        delete pOldCntxt;
+        EndContext(xOldCntxt.get());
     }
 
     SvxMacroTableDtor aMacroTable;
@@ -1168,7 +1167,7 @@ ANCHOR_SETEVENT:
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::ANCHOR_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::ANCHOR_ON));
 
     bool bEnAnchor = false, bFootnoteAnchor = false, bFootnoteEnSymbol = false;
     OUString aFootnoteName;
@@ -1201,8 +1200,8 @@ ANCHOR_SETEVENT:
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+            DoPositioning(aItemSet, aPropInfo, xCntxt.get());
+            InsertAttrs(aItemSet, aPropInfo, xCntxt.get(), true);
         }
     }
 
@@ -1227,7 +1226,7 @@ ANCHOR_SETEVENT:
             aINetFormat.SetMacroTable( &aMacroTable );
 
         // set the default attribute
-        InsertAttr( &m_aAttrTab.pINetFormat, aINetFormat, pCntxt );
+        InsertAttr(&m_aAttrTab.pINetFormat, aINetFormat, xCntxt.get());
     }
     else if( !aName.isEmpty() )
     {
@@ -1245,7 +1244,7 @@ ANCHOR_SETEVENT:
     }
 
     // save context
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 }
 
 void SwHTMLParser::EndAnchor()
