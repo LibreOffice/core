@@ -87,7 +87,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    uno::Sequence<OUString> SAL_CALL FilePicker_getSupportedServiceNames()
+    uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<OUString> aRet(3);
         aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
