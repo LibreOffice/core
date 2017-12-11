@@ -54,8 +54,8 @@
                     <property name="id_column">1</property>
                     <items>
                       <item translatable="yes" context="optcompatpage|format">Use printer metrics for document formatting</item>
-                      <item translatable="yes" context="optcompatpage|format">Add spacing between paragraphs and tables (in current document)</item>
-                      <item translatable="yes" context="optcompatpage|format">Add paragraph and table spacing at tops of pages (in current document)</item>
+                      <item translatable="yes" context="optcompatpage|format">Add spacing between paragraphs and tables</item>
+                      <item translatable="yes" context="optcompatpage|format">Add paragraph and table spacing at tops of pages</item>
                       <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 tabstop formatting</item>
                       <item translatable="yes" context="optcompatpage|format">Do not add leading (extra space) between lines of text</item>
                       <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 line spacing</item>
@@ -66,7 +66,7 @@
                       <item translatable="yes" context="optcompatpage|format">Expand word space on lines with manual line breaks in justified paragraphs</item>
                       <item translatable="yes" context="optcompatpage|format">Protect form</item>
                       <item translatable="yes" context="optcompatpage|format">MS Word-compatible trailing blanks</item>
-                      <item translatable="yes" context="optcompatpage|format">Tolerate white lines of PDF page backgrounds for compatibility with old documents (in current document)</item>
+                      <item translatable="yes" context="optcompatpage|format">Tolerate white lines of PDF page backgrounds for compatibility with old documents</item>
                       <item translatable="yes" context="optcompatpage|format">&lt;User settings&gt;</item>
                     </items>
                   </object>
