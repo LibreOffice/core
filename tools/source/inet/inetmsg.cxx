@@ -30,7 +30,7 @@
 void INetMIMEMessage::SetHeaderField_Impl (
     const OString &rName,
     const OUString &rValue,
-    sal_uIntPtr &rnIndex)
+    sal_uInt32 &rnIndex)
 {
     SetHeaderField_Impl (
         INetMessageHeader (rName, rValue.toUtf8()), rnIndex);
@@ -213,7 +213,7 @@ INetMIMEMessage::INetMIMEMessage()
     : pParent(nullptr)
 {
     for (sal_uInt16 i = 0; i < static_cast<int>(InetMessageMime::NUMHDR); i++)
-        m_nMIMEIndex[static_cast<InetMessageMime>(i)] = CONTAINER_ENTRY_NOTFOUND;
+        m_nMIMEIndex[static_cast<InetMessageMime>(i)] = SAL_MAX_UINT32;
 }
 
 INetMIMEMessage::~INetMIMEMessage()
