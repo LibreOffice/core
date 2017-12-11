@@ -594,7 +594,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XCellRangeReferrer \
     qadevOOo/tests/java/ifc/sheet/_XCellRangesQuery \
     qadevOOo/tests/java/ifc/sheet/_XConsolidatable \
-    qadevOOo/tests/java/ifc/sheet/_XConsolidationDescriptor \
     qadevOOo/tests/java/ifc/sheet/_XDDELink \
     qadevOOo/tests/java/ifc/sheet/_XDocumentAuditing \
     qadevOOo/tests/java/ifc/sheet/_XEnhancedMouseClickBroadcaster \
@@ -1013,7 +1012,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScCellTextCursor \
     qadevOOo/tests/java/mod/_sc/ScChartObj \
     qadevOOo/tests/java/mod/_sc/ScChartsObj \
-    qadevOOo/tests/java/mod/_sc/ScConsolidationDescriptor \
     qadevOOo/tests/java/mod/_sc/ScDatabaseRangeObj \
     qadevOOo/tests/java/mod/_sc/ScDatabaseRangesObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotFieldGroupItemObj \

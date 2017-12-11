@@ -146,6 +146,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_functionlistobj \
 	CppunitTest_sc_datapilottablesobj \
 	CppunitTest_sc_databaserangesobj \
+	CppunitTest_sc_consolidationdescriptorobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
