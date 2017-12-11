@@ -113,7 +113,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         bAppended = true;
     }
 
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
     bool bStyleParsed = false, bPositioned = false;
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -126,15 +126,15 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         {
             if ( aPropInfo.m_nColumnCount >= 2 )
             {
-                delete pCntxt;
+                xCntxt.reset();
                 NewMultiCol( aPropInfo.m_nColumnCount );
                 return;
             }
             bPositioned = HtmlTokenId::DIVISION_ON == nToken && !aClass.isEmpty() &&
-                          CreateContainer( aClass, aItemSet, aPropInfo,
-                                           pCntxt );
+                          CreateContainer(aClass, aItemSet, aPropInfo,
+                                          xCntxt.get());
             if( !bPositioned )
-                bPositioned = DoPositioning( aItemSet, aPropInfo, pCntxt );
+                bPositioned = DoPositioning(aItemSet, aPropInfo, xCntxt.get());
         }
     }
 
@@ -209,7 +209,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         }
 
         SwPosition aNewPos( SwNodeIndex( rContentStIdx, 1 ), SwIndex( pCNd, 0 ) );
-        SaveDocContext( pCntxt, nFlags, &aNewPos );
+        SaveDocContext(xCntxt.get(), nFlags, &aNewPos);
     }
     else if( !bPositioned && aId.getLength() > 9 &&
              (aId[0] == 's' || aId[0] == 'S' ) &&
@@ -229,7 +229,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                     m_xDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetContentNode();
                 SwNodeIndex aTmpSwNodeIndex = SwNodeIndex(*pCNd);
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
-                SaveDocContext( pCntxt, HtmlContextFlags::MultiColMask, &aNewPos );
+                SaveDocContext(xCntxt.get(), HtmlContextFlags::MultiColMask, &aNewPos);
                 aId.clear();
                 aPropInfo.m_aId.clear();
             }
@@ -355,7 +355,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             pPostIts = nullptr;
         }
 
-        pCntxt->SetSpansSection( true );
+        xCntxt->SetSpansSection( true );
 
         // don't insert Bookmarks with same name as sections
         if( !aPropInfo.m_aId.isEmpty() && aPropInfo.m_aId==aName )
@@ -363,47 +363,45 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
     }
     else
     {
-        pCntxt->SetAppendMode( AM_NOSPACE );
+        xCntxt->SetAppendMode( AM_NOSPACE );
     }
 
     if( SvxAdjust::End != eAdjust )
     {
-        InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), pCntxt );
+        InsertAttr(&m_aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), xCntxt.get());
     }
 
     // parse style
     if( bStyleParsed )
-        InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+        InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
 
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 }
 
 void SwHTMLParser::EndDivision()
 {
     // search for the stack entry of the token (because we still have the div stack
     // we don't make a difference between DIV and CENTER)
-    HTMLAttrContext *pCntxt = nullptr;
+    std::unique_ptr<HTMLAttrContext> xCntxt;
     auto nPos = m_aContexts.size();
-    while( !pCntxt && nPos>m_nContextStMin )
+    while (!xCntxt && nPos>m_nContextStMin)
     {
         switch( m_aContexts[--nPos]->GetToken() )
         {
         case HtmlTokenId::CENTER_ON:
         case HtmlTokenId::DIVISION_ON:
-            pCntxt = m_aContexts[nPos];
+            xCntxt = std::move(m_aContexts[nPos]);
             m_aContexts.erase( m_aContexts.begin() + nPos );
             break;
         default: break;
         }
     }
 
-    if( pCntxt )
+    if (xCntxt)
     {
         // close attribute
-        EndContext( pCntxt );
+        EndContext(xCntxt.get());
         SetAttr();  // set paragraph attributes really fast because of JavaScript
-
-        delete pCntxt;
     }
 }
 
@@ -521,7 +519,7 @@ bool SwHTMLParser::EndSections( bool bLFStripped )
     auto nPos = m_aContexts.size();
     while( nPos>m_nContextStMin )
     {
-        HTMLAttrContext *pCntxt = m_aContexts[--nPos];
+        HTMLAttrContext *pCntxt = m_aContexts[--nPos].get();
         if( pCntxt->GetSpansSection() && EndSection( bLFStripped ) )
         {
             bSectionClosed = true;
@@ -578,7 +576,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
     }
 
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::MULTICOL_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::MULTICOL_ON));
 
     //.is the multicol element contained in a container? That may be the
     // case for 5.0 documents.
@@ -642,9 +640,9 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aPropInfo.m_aId.clear();
         }
 
-        InsertFlyFrame(aFrameItemSet, pCntxt, aFlyName);
+        InsertFlyFrame(aFrameItemSet, xCntxt.get(), aFlyName);
 
-        pCntxt->SetPopStack( true );
+        xCntxt->SetPopStack( true );
         bPositioned = true;
     }
 
@@ -742,7 +740,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             pPostIts = nullptr;
         }
 
-        pCntxt->SetSpansSection( true );
+        xCntxt->SetSpansSection( true );
 
         // Insert a bookmark if its name differs from the section's name only.
         if( !aPropInfo.m_aId.isEmpty() && aPropInfo.m_aId==aName )
@@ -751,9 +749,9 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
     // Additional attributes must be set as hard ones.
     if( bStyleParsed )
-        InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
+        InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
 
-    PushContext( pCntxt );
+    PushContext(xCntxt);
 }
 
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,

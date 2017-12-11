@@ -2111,8 +2111,10 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
     }
 }
 
-HTMLAttrContext *SwHTMLParser::PopContext( HtmlTokenId nToken )
+std::unique_ptr<HTMLAttrContext> SwHTMLParser::PopContext( HtmlTokenId nToken )
 {
+    std::unique_ptr<HTMLAttrContext> xCntxt;
+
     HTMLAttrContexts::size_type nPos = m_aContexts.size();
     if( nPos <= m_nContextStMin )
         return nullptr;
@@ -2140,14 +2142,13 @@ HTMLAttrContext *SwHTMLParser::PopContext( HtmlTokenId nToken )
         nPos--;
     }
 
-    HTMLAttrContext *pCntxt = nullptr;
     if( bFound )
     {
-        pCntxt = m_aContexts[nPos];
+        xCntxt = std::move(m_aContexts[nPos]);
         m_aContexts.erase( m_aContexts.begin() + nPos );
     }
 
-    return pCntxt;
+    return xCntxt;
 }
 
 bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
@@ -2166,7 +2167,7 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
 
     while( nPos > m_nContextStAttrMin )
     {
-        const HTMLAttrContext *pCntxt = m_aContexts[--nPos];
+        const HTMLAttrContext *pCntxt = m_aContexts[--nPos].get();
         if( pCntxt->IsLRSpaceChanged() )
         {
             pCntxt->GetMargins( nLeft, nRight, nIndent );
@@ -2202,7 +2203,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
     HTMLAttrContexts::size_type nPos = m_aContexts.size();
     while( nPos > m_nContextStAttrMin )
     {
-        const HTMLAttrContext *pCntxt = m_aContexts[--nPos];
+        const HTMLAttrContext *pCntxt = m_aContexts[--nPos].get();
         if( pCntxt->IsULSpaceChanged() )
         {
             pCntxt->GetULSpace( nUpper, nLower );

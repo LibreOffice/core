@@ -324,7 +324,7 @@ public:
     SwHTMLAppendMode GetAppendMode() const { return eAppend; }
 };
 
-typedef std::vector<HTMLAttrContext *> HTMLAttrContexts;
+typedef std::vector<std::unique_ptr<HTMLAttrContext>> HTMLAttrContexts;
 
 class HTMLTable;
 class SwCSS1Parser;
@@ -554,11 +554,14 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // Manage attribute context
 
     // save current context
-    inline void PushContext( HTMLAttrContext *pCntxt );
+    void PushContext(std::unique_ptr<HTMLAttrContext>& rCntxt)
+    {
+        m_aContexts.push_back(std::move(rCntxt));
+    }
 
     // Fetch top/specified context but not outside the context with token
     // nLimit. If bRemove set then remove it.
-    HTMLAttrContext *PopContext( HtmlTokenId nToken = HtmlTokenId::NONE );
+    std::unique_ptr<HTMLAttrContext> PopContext(HtmlTokenId nToken = HtmlTokenId::NONE);
 
     bool GetMarginsFromContext( sal_uInt16 &nLeft, sal_uInt16 &nRight, short& nIndent,
                                 bool bIgnoreCurrent=false ) const;
@@ -960,11 +963,6 @@ inline bool SwHTMLParser::HasStyleOptions( const OUString &rStyle,
 {
     return !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() ||
            (pLang && !pLang->isEmpty()) || (pDir && !pDir->isEmpty());
-}
-
-inline void SwHTMLParser::PushContext( HTMLAttrContext *pCntxt )
-{
-    m_aContexts.push_back( pCntxt );
 }
 
 #endif

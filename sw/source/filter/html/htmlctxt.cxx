@@ -322,14 +322,13 @@ void SwHTMLParser::EndContext( HTMLAttrContext *pContext )
         // Close all still open contexts. Our own context needs to be deleted already!
         while( m_aContexts.size() > m_nContextStMin )
         {
-            HTMLAttrContext *pCntxt = PopContext();
-            OSL_ENSURE( pCntxt != pContext,
+            std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+            OSL_ENSURE(xCntxt.get() != pContext,
                     "Context still on the stack" );
-            if( pCntxt == pContext )
+            if (xCntxt.get() == pContext)
                 break;
 
-            EndContext( pCntxt );
-            delete pCntxt;
+            EndContext(xCntxt.get());
         }
     }
 
@@ -493,7 +492,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         m_pCSS1Parser->SetFormatBreak( rItemSet, rPropInfo );
 
     OSL_ENSURE(m_aContexts.size() <= m_nContextStAttrMin ||
-            m_aContexts.back() != pContext,
+            m_aContexts.back().get() != pContext,
             "SwHTMLParser::InsertAttrs: Context already on the Stack");
 
     SfxItemIter aIter( rItemSet );
@@ -516,7 +515,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 sal_uInt16 nOldLeft = 0, nOldRight = 0;
                 short nOldIndent = 0;
                 bool bIgnoreTop = m_aContexts.size() > m_nContextStMin &&
-                                  m_aContexts.back() == pContext;
+                                  m_aContexts.back().get() == pContext;
                 GetMarginsFromContext( nOldLeft, nOldRight, nOldIndent,
                                        bIgnoreTop  );
 

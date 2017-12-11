@@ -2064,11 +2064,11 @@ void SwHTMLParser::NewTextArea()
         SetControlSize( xShape, aTextSz, false, false );
 
     // create new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::TEXTAREA_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::TEXTAREA_ON));
 
     // temporarily disable PRE/Listing/XMP
-    SplitPREListingXMP( pCntxt );
-    PushContext( pCntxt );
+    SplitPREListingXMP(xCntxt.get());
+    PushContext(xCntxt);
 
     m_bTextArea = true;
     m_bTAIgnoreNewPara = true;
@@ -2091,12 +2091,11 @@ void SwHTMLParser::EndTextArea()
     m_pFormImpl->ReleaseFCompPropSet();
 
     // get context
-    HTMLAttrContext *pCntxt = PopContext( HtmlTokenId::TEXTAREA_ON );
-    if( pCntxt )
+    std::unique_ptr<HTMLAttrContext> xCntxt(PopContext(HtmlTokenId::TEXTAREA_ON));
+    if (xCntxt)
     {
         // end attributes
-        EndContext( pCntxt );
-        delete pCntxt;
+        EndContext(xCntxt.get());
     }
 
     m_bTextArea = false;
@@ -2337,11 +2336,11 @@ void SwHTMLParser::NewSelect()
         SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
 
     // create new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::SELECT_ON );
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::SELECT_ON));
 
     // temporarily disable PRE/Listing/XMP
-    SplitPREListingXMP( pCntxt );
-    PushContext( pCntxt );
+    SplitPREListingXMP(xCntxt.get());
+    PushContext(xCntxt);
 
     m_bSelect = true;
 }
@@ -2412,12 +2411,11 @@ void SwHTMLParser::EndSelect()
     m_pFormImpl->ReleaseFCompPropSet();
 
     // get context
-    HTMLAttrContext *pCntxt = PopContext( HtmlTokenId::SELECT_ON );
-    if( pCntxt )
+    std::unique_ptr<HTMLAttrContext> xCntxt(PopContext(HtmlTokenId::SELECT_ON));
+    if (xCntxt)
     {
         // close attributes
-        EndContext( pCntxt );
-        delete pCntxt;
+        EndContext(xCntxt.get());
     }
 
     m_bSelect = false;
