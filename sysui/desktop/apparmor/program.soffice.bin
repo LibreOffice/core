@@ -113,6 +113,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
   /usr/bin/bluetooth-sendto             rmPUx,
   /usr/bin/lpr                          rmPUx,
   /usr/bin/paperconf                    rmix,
+  /usr/bin/gpgconf                      rmix,
 
   /dev/tty                              rw,
 
