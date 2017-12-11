@@ -218,7 +218,7 @@ DECLARE_RTFIMPORT_TEST(testFdo45182, "fdo45182.rtf")
                                                        uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // Encoding in the footnote was wrong.
-    OUString aExpected(u"\u017Eivnost\u00ED\n");
+    OUString aExpected(u"\u017Eivnost\u00ED" SAL_NEWLINE_STRING);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
