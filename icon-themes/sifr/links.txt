@@ -64,6 +64,8 @@ cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 # Print Preview Toolbar
 cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
+cmd/lc_closepreview.png cmd/lc_exitsearch.png
+cmd/sc_closepreview.png cmd/sc_exitsearch.png
 
 # Horizontal Text Alignment (align* is in calc and *para is used in writer)
 #cmd/lc_alignleft.png cmd/lc_leftpara.png
