@@ -718,8 +718,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
                         if ( rNew.IsIntrnlName() )
                         {
                             const SwTableBoxFormula& rOld =
-                                static_cast<const SwTableBoxFormula&>(
-                                        rSet.Get( RES_BOXATR_FORMULA ));
+                                        rSet.Get( RES_BOXATR_FORMULA );
                             const SwNode* pNd = rOld.GetNodeOfFormula();
                             if ( pNd )
                             {

@@ -79,6 +79,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <osl/diagnose.h>
 #include <swtypes.hxx>
+#include <cellatr.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unomid.h>
