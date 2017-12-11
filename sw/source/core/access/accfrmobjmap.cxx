@@ -39,8 +39,8 @@ using namespace sw::access;
 SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
                                             const SwFrame& rFrame,
                                             SwAccessibleMap& rAccMap )
-    : nHellId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetHellId() )
-    , nControlsId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetControlsId() )
+    : mnHellId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetHellId() )
+    , mnControlsId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetControlsId() )
 {
     const bool bVisibleChildrenOnly = SwAccessibleChild( &rFrame ).IsVisibleChildrenOnly();
 
@@ -135,9 +135,9 @@ std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
 {
     const SdrLayerID nLayer = pObj->GetLayer();
     SwAccessibleChildMapKey::LayerId eLayerId =
-                    (nHellId == nLayer)
+                    (mnHellId == nLayer)
                     ? SwAccessibleChildMapKey::HELL
-                    : ( (nControlsId == nLayer)
+                    : ( (mnControlsId == nLayer)
                         ? SwAccessibleChildMapKey::CONTROLS
                         : SwAccessibleChildMapKey::HEAVEN );
     SwAccessibleChildMapKey aKey( eLayerId, pObj->GetOrdNum() );
