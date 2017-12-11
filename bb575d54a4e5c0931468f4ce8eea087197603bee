@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7439dad6",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-11T12:15:11Z",
+      "side": 1,
+      "message": "Please no trailing spaces in code. That you were able to commit this indicates that you haven\u0027t activated git-hooks in your local repository, please execute\n\n ./g -z\n\nto \"restore the git hooks and do other sanity checks\".",
+      "range": {
+        "startLine": 1286,
+        "startChar": 63,
+        "endLine": 1286,
+        "endChar": 67
+      },
+      "revId": "bb575d54a4e5c0931468f4ce8eea087197603bee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b42fc286",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-11T12:15:11Z",
+      "side": 1,
+      "message": "Statement should be on the next line here, so\n\n if ( bRemoveSpace )\n     aCell \u003d aCell.trim();",
+      "range": {
+        "startLine": 1407,
+        "startChar": 20,
+        "endLine": 1407,
+        "endChar": 61
+      },
+      "revId": "bb575d54a4e5c0931468f4ce8eea087197603bee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f4530a15",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-11T12:15:11Z",
+      "side": 1,
+      "message": "Trailing blanks.",
+      "revId": "bb575d54a4e5c0931468f4ce8eea087197603bee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1455f6f8",
+        "filename": "sc/uiconfig/scalc/ui/textimportcsv.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-11T12:15:11Z",
+      "side": 1,
+      "message": "The name is misleading. We don\u0027t want to remove space, but trim leading and trailing spaces. So maybe \"Trim spaces\"?",
+      "range": {
+        "startLine": 320,
+        "startChar": 114,
+        "endLine": 320,
+        "endChar": 127
+      },
+      "revId": "bb575d54a4e5c0931468f4ce8eea087197603bee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
