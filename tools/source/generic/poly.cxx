@@ -709,11 +709,11 @@ protected:
 
 class ImplPolygonPointFilter : public ImplPointFilter
 {
-    std::unique_ptr<ImplPolygon> mxPoly;
-    sal_uInt16      mnSize;
+    ImplPolygon maPoly;
+    sal_uInt16  mnSize;
 public:
     explicit ImplPolygonPointFilter(sal_uInt16 nDestSize)
-        : mxPoly(new ImplPolygon(nDestSize))
+        : maPoly(nDestSize)
         , mnSize(0)
     {
     }
@@ -725,24 +725,24 @@ public:
     virtual void    LastPoint() override;
     virtual void    Input( const Point& rPoint ) override;
 
-    ImplPolygon*    release() { return mxPoly.release(); }
+    ImplPolygon&    get() { return maPoly; }
 };
 
 void ImplPolygonPointFilter::Input( const Point& rPoint )
 {
-    if ( !mnSize || (rPoint != mxPoly->mpPointAry[mnSize-1]) )
+    if ( !mnSize || (rPoint != maPoly.mpPointAry[mnSize-1]) )
     {
         mnSize++;
-        if ( mnSize > mxPoly->mnPoints )
-            mxPoly->ImplSetSize( mnSize );
-        mxPoly->mpPointAry[mnSize-1] = rPoint;
+        if ( mnSize > maPoly.mnPoints )
+            maPoly.ImplSetSize( mnSize );
+        maPoly.mpPointAry[mnSize-1] = rPoint;
     }
 }
 
 void ImplPolygonPointFilter::LastPoint()
 {
-    if ( mnSize < mxPoly->mnPoints )
-        mxPoly->ImplSetSize( mnSize );
+    if ( mnSize < maPoly.mnPoints )
+        maPoly.ImplSetSize( mnSize );
 };
 
 class ImplEdgePointFilter : public ImplPointFilter
@@ -1494,7 +1494,7 @@ void Polygon::Clip( const tools::Rectangle& rRect )
     else
         aPolygon.LastPoint();
 
-    mpImplPolygon = ImplType(*aPolygon.release());
+    mpImplPolygon = ImplType(aPolygon.get());
 }
 
 tools::Rectangle Polygon::GetBoundRect() const
