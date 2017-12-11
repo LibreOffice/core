@@ -516,8 +516,11 @@ bool ImplPolygon::operator==( const ImplPolygon& rCandidate) const
 
 ImplPolygon::~ImplPolygon()
 {
-    delete[] mpPointAry;
-    delete[] mpFlagAry;
+    if ( mpPointAry )
+        delete[] mpPointAry;
+
+    if( mpFlagAry )
+        delete[] mpFlagAry;
 }
 
 void ImplPolygon::ImplInitDefault()
@@ -583,7 +586,8 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
     else
         pNewAry = nullptr;
 
-    delete[] mpPointAry;
+    if ( mpPointAry )
+        delete[] mpPointAry;
 
     // take FlagArray into account, if applicable
     if( mpFlagAry )
