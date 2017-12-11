@@ -373,7 +373,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
 
     OSL_ENSURE(!nAttrId ||
         (POOLATTR_BEGIN <= nAttrId && POOLATTR_END > nAttrId) ||
-        (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
+        (RES_FLTRATTR_BEGIN <= nAttrId && sal_uInt16(RES_FLTRATTR_END) > nAttrId),
         "Wrong id for attribute");
 
     myEIter aI = m_Entries.begin();

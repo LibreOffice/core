@@ -219,8 +219,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         else if( pSh )
             pSh->StartAction();
 
-        SwMsgPoolItem aMsgHint( static_cast<sal_uInt16>(
-            bGraphicArrived ? RES_GRAPHIC_ARRIVED : RES_UPDATE_ATTR ) );
+        SwMsgPoolItem aMsgHint(
+            bGraphicArrived ? sal_uInt16(RES_GRAPHIC_ARRIVED) : sal_uInt16(RES_UPDATE_ATTR) );
 
         if ( bGraphicArrived )
         {

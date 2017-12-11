@@ -2184,8 +2184,8 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                 const SfxItemSet& rSet = *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
                 if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT,
                                     false, reinterpret_cast<const SfxPoolItem**>(&pNewFormat) ) )
-                    nOldFormat = static_cast<const SwTableBoxNumFormat&>(static_cast<const SwAttrSetChg*>(pOld)->
-                            GetChgSet()->Get( RES_BOXATR_FORMAT )).GetValue();
+                    nOldFormat = static_cast<const SwAttrSetChg*>(pOld)->
+                            GetChgSet()->Get( RES_BOXATR_FORMAT ).GetValue();
                 rSet.GetItemState( RES_BOXATR_FORMULA, false,
                                     reinterpret_cast<const SfxPoolItem**>(&pNewFormula) );
                 rSet.GetItemState( RES_BOXATR_VALUE, false,

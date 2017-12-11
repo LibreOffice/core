@@ -288,29 +288,29 @@ public:
 
 // Implementation of graphics attributes methods of SwAttr
 inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(bool bInP) const
-    { return static_cast<const SwMirrorGrf&>(Get( RES_GRFATR_MIRRORGRF,bInP)); }
+    { return Get( RES_GRFATR_MIRRORGRF,bInP); }
 inline const SwCropGrf   &SwAttrSet::GetCropGrf(bool bInP) const
-    { return static_cast<const SwCropGrf&>(Get( RES_GRFATR_CROPGRF,bInP)); }
+    { return Get( RES_GRFATR_CROPGRF,bInP); }
 inline const SwRotationGrf &SwAttrSet::GetRotationGrf(bool bInP) const
-    { return static_cast<const SwRotationGrf&>(Get( RES_GRFATR_ROTATION,bInP)); }
+    { return Get( RES_GRFATR_ROTATION,bInP); }
 inline const SwLuminanceGrf &SwAttrSet::GetLuminanceGrf(bool bInP) const
-    { return static_cast<const SwLuminanceGrf&>(Get( RES_GRFATR_LUMINANCE,bInP)); }
+    { return Get( RES_GRFATR_LUMINANCE,bInP); }
 inline const SwContrastGrf &SwAttrSet::GetContrastGrf(bool bInP) const
-    { return static_cast<const SwContrastGrf&>(Get( RES_GRFATR_CONTRAST,bInP)); }
+    { return Get( RES_GRFATR_CONTRAST,bInP); }
 inline const SwChannelRGrf &SwAttrSet::GetChannelRGrf(bool bInP) const
-    { return static_cast<const SwChannelRGrf&>(Get( RES_GRFATR_CHANNELR,bInP)); }
+    { return Get( RES_GRFATR_CHANNELR,bInP); }
 inline const SwChannelGGrf &SwAttrSet::GetChannelGGrf(bool bInP) const
-    { return static_cast<const SwChannelGGrf&>(Get( RES_GRFATR_CHANNELG,bInP)); }
+    { return Get( RES_GRFATR_CHANNELG,bInP); }
 inline const SwChannelBGrf &SwAttrSet::GetChannelBGrf(bool bInP) const
-    { return static_cast<const SwChannelBGrf&>(Get( RES_GRFATR_CHANNELB,bInP)); }
+    { return Get( RES_GRFATR_CHANNELB,bInP); }
 inline const SwGammaGrf &SwAttrSet::GetGammaGrf(bool bInP) const
-    { return static_cast<const SwGammaGrf&>(Get( RES_GRFATR_GAMMA,bInP)); }
+    { return Get( RES_GRFATR_GAMMA,bInP); }
 inline const SwInvertGrf &SwAttrSet::GetInvertGrf(bool bInP) const
-    { return static_cast<const SwInvertGrf&>(Get( RES_GRFATR_INVERT,bInP)); }
+    { return Get( RES_GRFATR_INVERT,bInP); }
 inline const SwTransparencyGrf &SwAttrSet::GetTransparencyGrf(bool bInP) const
-    { return static_cast<const SwTransparencyGrf&>(Get( RES_GRFATR_TRANSPARENCY,bInP)); }
+    { return Get( RES_GRFATR_TRANSPARENCY,bInP); }
 inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(bool bInP) const
-    { return static_cast<const SwDrawModeGrf&>(Get( RES_GRFATR_DRAWMODE,bInP)); }
+    { return Get( RES_GRFATR_DRAWMODE,bInP); }
 
 #endif // INCLUDED_SW_INC_GRFATR_HXX
 

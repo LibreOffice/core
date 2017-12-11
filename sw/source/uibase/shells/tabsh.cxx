@@ -656,13 +656,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 }
                 else
                     aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE,
-                                    static_cast<const SwTableBoxNumFormat&>(aBoxSet.Get(
-                                    RES_BOXATR_FORMAT )).GetValue() ));
+                                    aBoxSet.Get(
+                                    RES_BOXATR_FORMAT ).GetValue() ));
 
                 OUString sCurText( rSh.GetTableBoxText() );
                 aCoreSet.Put( SvxNumberInfoItem( pFormatter,
-                                    static_cast<const SwTableBoxValue&>(aBoxSet.Get(
-                                        RES_BOXATR_VALUE)).GetValue(),
+                                    aBoxSet.Get(
+                                        RES_BOXATR_VALUE).GetValue(),
                                     sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
