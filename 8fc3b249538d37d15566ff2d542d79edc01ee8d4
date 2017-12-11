@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_14c896a7",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4621,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-12-11T12:54:17Z",
+      "side": 1,
+      "message": "i don\u0027t like this floating point arithmetic, it will be converted to \"short\" anyway, and i\u0027m not sure if this will introduce rounding errors? better leave the \"240L\" as it is, that should prevent overflows.",
+      "revId": "8fc3b249538d37d15566ff2d542d79edc01ee8d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
