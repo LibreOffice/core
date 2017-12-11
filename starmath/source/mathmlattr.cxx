@@ -12,22 +12,8 @@
 #include <cassert>
 #include <unordered_map>
 
-namespace {
-
-sal_Int32 lcl_GetPowerOf10(sal_Int32 nPower)
+sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction& rUN)
 {
-    assert(nPower > 0);
-    sal_Int32 nResult = 1;
-    while (nPower--)
-        nResult *= 10;
-    return nResult;
-}
-
-}
-
-sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction *pUN)
-{
-    assert(pUN);
     auto nLen = rStr.getLength();
     sal_Int32 nDecimalPoint = -1;
     sal_Int32 nIdx;
@@ -44,113 +30,91 @@ sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction *pUN)
         if (cD < u'0' || u'9' < cD)
             break;
     }
-    if (nIdx == 0 || ((nIdx == 1 || nIdx == 11) && nDecimalPoint == 0))
+    if (nIdx == 0 || (nIdx == 1 && nDecimalPoint == 0))
         return -1;
-    if (nDecimalPoint == -1)
-    {
-        assert(nIdx > 0);
-        *pUN = Fraction(rStr.copy(0, nIdx).toInt32(), 1);
-        return nIdx;
-    }
-    if (nDecimalPoint == 0)
-    {
-        assert(nIdx > 1);
-        *pUN = Fraction(rStr.copy(1, nIdx-1).toInt32(), lcl_GetPowerOf10(nIdx-1));
-        return nIdx;
-    }
-    assert(0 < nDecimalPoint);
-    assert(nDecimalPoint < nIdx);
-    *pUN = Fraction(rStr.copy(0, nDecimalPoint).toInt32(), 1);
-    if (++nDecimalPoint < nIdx)
-    {
-        const sal_Int32 nDigits = nIdx - nDecimalPoint;
-        if (nDigits > 9)
-            return -1;
-        *pUN += Fraction(rStr.copy(nDecimalPoint, nDigits).toInt32(), lcl_GetPowerOf10(nDigits));
-    }
+
+    rUN = Fraction(rStr.copy(0, nIdx).toDouble());
+
     return nIdx;
 }
 
-sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction *pN)
+sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction& rN)
 {
-    assert(pN);
     if (rStr.isEmpty())
         return -1;
     bool bNegative = (rStr[0] == '-');
     sal_Int32 nOffset = bNegative ? 1 : 0;
     Fraction aF;
-    auto nIdx = ParseMathMLUnsignedNumber(rStr.copy(nOffset), &aF);
+    auto nIdx = ParseMathMLUnsignedNumber(rStr.copy(nOffset), aF);
     if (nIdx <= 0)
         return -1;
     if (bNegative)
-        *pN = Fraction(aF.GetNumerator(), aF.GetDenominator());
+        rN = Fraction(aF.GetNumerator(), aF.GetDenominator());
     else
-        *pN = aF;
+        rN = aF;
     return nOffset + nIdx;
 }
 
-sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue *pV)
+sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue& rV)
 {
-    assert(pV);
-    auto nIdx = ParseMathMLNumber(rStr, &pV->aNumber);
+    auto nIdx = ParseMathMLNumber(rStr, rV.aNumber);
     if (nIdx <= 0)
         return -1;
     OUString sRest = rStr.copy(nIdx);
     if (sRest.isEmpty())
     {
-        pV->eUnit = MathMLLengthUnit::None;
+        rV.eUnit = MathMLLengthUnit::None;
         return nIdx;
     }
     if (sRest.startsWith("em"))
     {
-        pV->eUnit = MathMLLengthUnit::Em;
+        rV.eUnit = MathMLLengthUnit::Em;
         return nIdx + 2;
     }
     if (sRest.startsWith("ex"))
     {
-        pV->eUnit = MathMLLengthUnit::Ex;
+        rV.eUnit = MathMLLengthUnit::Ex;
         return nIdx + 2;
     }
     if (sRest.startsWith("px"))
     {
-        pV->eUnit = MathMLLengthUnit::Px;
+        rV.eUnit = MathMLLengthUnit::Px;
         return nIdx + 2;
     }
     if (sRest.startsWith("in"))
     {
-        pV->eUnit = MathMLLengthUnit::In;
+        rV.eUnit = MathMLLengthUnit::In;
         return nIdx + 2;
     }
     if (sRest.startsWith("cm"))
     {
-        pV->eUnit = MathMLLengthUnit::Cm;
+        rV.eUnit = MathMLLengthUnit::Cm;
         return nIdx + 2;
     }
     if (sRest.startsWith("mm"))
     {
-        pV->eUnit = MathMLLengthUnit::Mm;
+        rV.eUnit = MathMLLengthUnit::Mm;
         return nIdx + 2;
     }
     if (sRest.startsWith("pt"))
     {
-        pV->eUnit = MathMLLengthUnit::Pt;
+        rV.eUnit = MathMLLengthUnit::Pt;
         return nIdx + 2;
     }
     if (sRest.startsWith("pc"))
     {
-        pV->eUnit = MathMLLengthUnit::Pc;
+        rV.eUnit = MathMLLengthUnit::Pc;
         return nIdx + 2;
     }
     if (sRest[0] == u'%')
     {
-        pV->eUnit = MathMLLengthUnit::Percent;
+        rV.eUnit = MathMLLengthUnit::Percent;
         return nIdx + 2;
     }
     return nIdx;
 }
 
-
-bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue *pV)
+bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue& rV)
 {
     static const std::unordered_map<OUString, MathMLMathvariantValue> aMap{
         {"normal", MathMLMathvariantValue::Normal},
@@ -173,11 +137,10 @@ bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue *pV)
         {"stretched", MathMLMathvariantValue::Stretched}
     };
 
-    assert(pV);
     auto it = aMap.find(rStr);
     if (it != aMap.end())
     {
-        *pV = it->second;
+        rV = it->second;
         return true;
     }
     return false;
