@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------
 #
 #    Copyright (C) 2016 Canonical Ltd.
+#    Copyright (C) 2017 Software in the Public Interest, Inc.
 #
 #    This Source Code Form is subject to the terms of the Mozilla Public
 #    License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,6 +9,7 @@
 #
 #    Authors: Jonathan Davies <jonathan.davies@canonical.com>
 #             Bryan Quigley <bryan.quigley@canonical.com>
+#             Rene Engelhard <rene@debian.org>
 #
 # ------------------------------------------------------------------
 
@@ -111,6 +113,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/bin/bluetooth-sendto             rmPUx,
   /usr/bin/lpr                          rmPUx,
   /usr/bin/paperconf                    rmix,
+  /usr/bin/gpgconf                      rmix,
 
   /dev/tty                              rw,
 
