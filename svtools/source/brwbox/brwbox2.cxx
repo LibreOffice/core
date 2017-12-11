@@ -27,6 +27,7 @@
 #include <tools/multisel.hxx>
 #include <tools/fract.hxx>
 #include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star::datatransfer;
 
@@ -234,7 +235,7 @@ void BrowseBox::ToggleSelection()
     bNotToggleSel = true;
 
     // accumulate areas of rows to highlight
-    RectangleList aHighlightList;
+    std::vector<tools::Rectangle> aHighlightList;
     long nLastRowInRect = 0; // for the CFront
 
     // don't highlight handle column
@@ -257,20 +258,18 @@ void BrowseBox::ToggleSelection()
             Point( nOfsX, (nRow-nTopRow)*GetDataRowHeight() ),
             Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) );
         if ( aHighlightList.size() && nLastRowInRect == ( nRow - 1 ) )
-            aHighlightList[ 0 ]->Union( aAddRect );
+            aHighlightList[ 0 ].Union( aAddRect );
         else
-            aHighlightList.insert( aHighlightList.begin(), new tools::Rectangle( aAddRect ) );
+            aHighlightList.emplace( aHighlightList.begin(), aAddRect );
         nLastRowInRect = nRow;
     }
 
     // unhighlight the old selection (if any)
-    for ( size_t i = aHighlightList.size(); i > 0; )
+    while ( !aHighlightList.empty() )
     {
-        tools::Rectangle *pRect = aHighlightList[ --i ];
-        pDataWin->Invalidate( *pRect );
-        delete pRect;
+        pDataWin->Invalidate( aHighlightList.back() );
+        aHighlightList.pop_back();
     }
-    aHighlightList.clear();
 
     // unhighlight old column selection (if any)
     for ( long nColId = pColSel ? pColSel->FirstSelected() : BROWSER_ENDOFSELECTION;
