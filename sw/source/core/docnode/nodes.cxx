@@ -1250,7 +1250,7 @@ sal_uInt16 SwNodes::GetSectionLevel(const SwNodeIndex &rIdx)
 {
     // special treatment for 1st Node
     if(rIdx == 0) return 1;
-    // no recursion! This calles a SwNode::GetSectionLevel (missing "s")
+    // no recursion! This calls a SwNode::GetSectionLevel (missing "s")
     return rIdx.GetNode().GetSectionLevel();
 }
 

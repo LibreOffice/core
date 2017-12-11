@@ -428,7 +428,7 @@ void ZipPackage::parseContentType()
                     if ( aContentTypeInfo.getLength() != 2 )
                         throw io::IOException(THROW_WHERE );
 
-                    // set the implicit types fist
+                    // set the implicit types first
                     for ( nInd = 0; nInd < aContentTypeInfo[0].getLength(); nInd++ )
                         m_xRootFolder->setChildStreamsTypeByExtension( aContentTypeInfo[0][nInd] );
 

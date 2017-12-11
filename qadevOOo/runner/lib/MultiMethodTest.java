@@ -114,7 +114,7 @@ public class MultiMethodTest
      * Runs the interface test: its method tests. First, it initializes some
      * of MultiMethodTest fields, like tRes, log, tEnv, etc. Then, it queries
      * the tested interface and initializes 'oObj' field (defined in a
-     * subclass). Before calling method tests, before() method calles to allow
+     * subclass). Before calling method tests, before() method is called to allow
      * initialization of s stuff before testing. Then, the method tests are
      * called. After them, after() method is called, to allow cleaning up the
      * stuff initialized in before() and test methods.

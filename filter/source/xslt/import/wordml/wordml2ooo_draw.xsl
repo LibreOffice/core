@@ -1868,7 +1868,7 @@
                     <xsl:variable name="value2" select="substring-after($tmp,' ')"/>
                     <xsl:value-of select="concat(  'atan' , '( ' ,  $value2, '/' , $value1 , ')' )"/>
                 </xsl:when><- -->
-                <!-- ellipse and sumangle are always used by arc commans like this
+                <!-- ellipse and sumangle are always used by arc command like this
                         eqn="ellipse @24 @4 height" ; and eqn="sumangle @2 360 0"
                     mod is always used too.-->
                 <!--mod  =sqrt( v*v + P1×P1 + P2×P2). ( 3 parameters )-->

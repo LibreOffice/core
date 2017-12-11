@@ -73,7 +73,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
 
         oObj.startRecording(xFrame);
 
-        log.println("dispatch calles via API must be recorded");
+        log.println("dispatch calls via API must be recorded");
         dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();

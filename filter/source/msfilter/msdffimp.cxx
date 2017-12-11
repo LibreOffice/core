@@ -5624,7 +5624,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      nOffsDgg( nOffsDgg_ ),
-     nBLIPCount(  USHRT_MAX ),              // initialize with error, since we fist check if the
+     nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first check if the
      nGroupShapeFlags(ShapeFlag::NONE),     // ensure initialization here, as some corrupted
                                             // files may yield to this being uninitialized
      maBaseURL( rBaseURL ),
