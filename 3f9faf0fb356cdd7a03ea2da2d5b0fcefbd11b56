@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b4f7c257",
+        "filename": "svtools/source/brwbox/datwin.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-11T19:02:50Z",
+      "side": 1,
+      "message": "given the simplicity and small size of Rectangle, and the fact that we only insert at the back of this vector, could just use\n  std::vector\u003cRectangle\u003e",
+      "revId": "3f9faf0fb356cdd7a03ea2da2d5b0fcefbd11b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
