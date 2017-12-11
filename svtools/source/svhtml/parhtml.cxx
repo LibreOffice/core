@@ -237,6 +237,27 @@ HTMLParser::~HTMLParser()
 {
 }
 
+namespace
+{
+    class RefGuard
+    {
+    private:
+        HTMLParser& m_rParser;
+    public:
+        RefGuard(HTMLParser& rParser)
+            : m_rParser(rParser)
+        {
+            m_rParser.AddFirstRef();
+        }
+
+        ~RefGuard()
+        {
+            if (m_rParser.GetStatus() != SvParserState::Pending)
+                m_rParser.ReleaseRef(); // Parser not needed anymore
+        }
+    };
+}
+
 SvParserState HTMLParser::CallParser()
 {
     eState = SvParserState::Working;
@@ -246,10 +267,9 @@ SvParserState HTMLParser::CallParser()
     nPre_LinePos = 0;
     bPre_IgnoreNewPara = false;
 
-    AddFirstRef();
+    RefGuard aRefGuard(*this);
+
     Continue( HtmlTokenId::NONE );
-    if( SvParserState::Pending != eState )
-        ReleaseRef();       // Parser not needed anymore
 
     return eState;
 }
