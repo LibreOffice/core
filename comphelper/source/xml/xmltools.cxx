@@ -9,6 +9,7 @@
 
 #include <comphelper/xmltools.hxx>
 #include <rtl/random.h>
+#include <rtl/uuid.h>
 #include <vector>
 
 using namespace com::sun::star;
@@ -90,6 +91,19 @@ namespace comphelper
             encodeChaff(aChaff);
 
             return OString(reinterpret_cast<const sal_Char*>(&aChaff[0]), nLength);
+        }
+
+        OString generateGUIDString()
+        {
+            sal_uInt8 aSeq[16];
+            rtl_createUuid(aSeq, nullptr, true);
+
+            char str[39];
+            sprintf(str, "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+                    aSeq[0], aSeq[1], aSeq[2], aSeq[3], aSeq[4], aSeq[5], aSeq[6], aSeq[7], aSeq[8],
+                    aSeq[9], aSeq[10], aSeq[11], aSeq[12], aSeq[13], aSeq[14], aSeq[15]);
+
+            return OString(str, SAL_N_ELEMENTS(str));
         }
     }
 }

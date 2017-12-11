@@ -20,6 +20,8 @@ namespace comphelper
     namespace xml
     {
         COMPHELPER_DLLPUBLIC OString makeXMLChaff();
+        COMPHELPER_DLLPUBLIC OString generateGUIDString();
+
     }
 }
 

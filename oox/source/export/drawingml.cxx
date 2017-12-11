@@ -76,6 +76,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/xmltools.hxx>
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
@@ -1757,22 +1758,6 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
     return aFieldValue;
 }
 
-OString DrawingML::GetUUID()
-{
-    sal_uInt8 aSeq[16];
-    rtl_createUuid(aSeq, nullptr, true);
-
-    char str[39];
-    sprintf(str, "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
-        aSeq[0], aSeq[1], aSeq[2], aSeq[3],
-        aSeq[4], aSeq[5],
-        aSeq[6], aSeq[7],
-        aSeq[8], aSeq[9],
-        aSeq[10], aSeq[11], aSeq[12], aSeq[13], aSeq[14], aSeq[15]);
-
-    return OString(str, SAL_N_ELEMENTS(str));
-}
-
 void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
                           bool& rbOverridingCharHeight, sal_Int32& rnCharHeight)
 {
@@ -1822,7 +1807,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
     {
         if( bWriteField )
         {
-            OString sUUID(GetUUID());
+            OString sUUID(comphelper::xml::generateGUIDString());
             mpFS->startElementNS( XML_a, XML_fld,
                                   XML_id, sUUID.getStr(),
                                   XML_type, OUStringToOString( sFieldValue, RTL_TEXTENCODING_UTF8 ).getStr(),

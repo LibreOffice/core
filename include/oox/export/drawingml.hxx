@@ -230,8 +230,6 @@ public:
 
     static void ResetCounters();
 
-    static OString GetUUID();
-
     static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDescriptor& rFontDesc );
 
     static sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
