@@ -24,6 +24,7 @@
 #include <unotools/datetime.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -424,9 +425,15 @@ Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine(
         aPropValues[ 0 ].Name = "CustomShape";
         aPropValues[ 0 ].Value <<= aXShape;
         aArgument[ 0 ] <<= aPropValues;
-        Reference< XInterface > xInterface( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aEngine, aArgument, xContext ) );
-        if ( xInterface.is() )
-            mxCustomShapeEngine.set( xInterface, UNO_QUERY );
+        try
+        {
+            Reference<XInterface> xInterface(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext));
+            if (xInterface.is())
+                mxCustomShapeEngine.set( xInterface, UNO_QUERY );
+        }
+        catch (const css::loader::CannotActivateFactoryException&)
+        {
+        }
     }
 
     return mxCustomShapeEngine;
