@@ -477,7 +477,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     m_bFixMarqueeWidth = false;
     if( !nWidth || bPrcWidth )
     {
-        if( m_pTable )
+        if( m_xTable )
         {
             if( !pCurTable )
             {

@@ -165,7 +165,7 @@ class HTMLTableCnts
 
     // Only one of the next two pointers must be set!
     const SwStartNode *m_pStartNode;      // a paragraph
-    HTMLTable *m_pTable;                  // a table
+    std::shared_ptr<HTMLTable> m_xTable;                  // a table
 
     std::shared_ptr<SwHTMLTableLayoutCnts> m_xLayoutInfo;
 
@@ -175,15 +175,15 @@ class HTMLTableCnts
 
 public:
 
-    explicit HTMLTableCnts( const SwStartNode* pStNd );
-    explicit HTMLTableCnts( HTMLTable* pTab );
+    explicit HTMLTableCnts(const SwStartNode* pStNd);
+    explicit HTMLTableCnts(const std::shared_ptr<HTMLTable>& rTab);
 
     ~HTMLTableCnts();                   // only allowed in ~HTMLTableCell
 
     // Determine SwStartNode and HTMLTable respectively
     const SwStartNode *GetStartNode() const { return m_pStartNode; }
-    const HTMLTable *GetTable() const { return m_pTable; }
-    HTMLTable *GetTable() { return m_pTable; }
+    const std::shared_ptr<HTMLTable>& GetTable() const { return m_xTable; }
+    std::shared_ptr<HTMLTable>& GetTable() { return m_xTable; }
 
     // Add a new node at the end of the list
     void Add( HTMLTableCnts* pNewCnts );
@@ -620,21 +620,22 @@ void HTMLTableCnts::InitCtor()
     m_bNoBreak = false;
 }
 
-HTMLTableCnts::HTMLTableCnts( const SwStartNode* pStNd ):
-    m_pStartNode(pStNd), m_pTable(nullptr)
+HTMLTableCnts::HTMLTableCnts(const SwStartNode* pStNd)
+    : m_pStartNode(pStNd)
 {
     InitCtor();
 }
 
-HTMLTableCnts::HTMLTableCnts( HTMLTable* pTab ):
-    m_pStartNode(nullptr), m_pTable(pTab)
+HTMLTableCnts::HTMLTableCnts(const std::shared_ptr<HTMLTable>& rTab)
+    : m_pStartNode(nullptr)
+    , m_xTable(rTab)
 {
     InitCtor();
 }
 
 HTMLTableCnts::~HTMLTableCnts()
 {
-    delete m_pTable;              // we don't need the tables anymore
+    m_xTable.reset();    // we don't need the tables anymore
     delete m_pNext;
 }
 
@@ -662,7 +663,7 @@ const std::shared_ptr<SwHTMLTableLayoutCnts>& HTMLTableCnts::CreateLayoutInfo()
         std::shared_ptr<SwHTMLTableLayoutCnts> xNextInfo;
         if (m_pNext)
             xNextInfo = m_pNext->CreateLayoutInfo();
-        SwHTMLTableLayout *pTableInfo = m_pTable ? m_pTable->CreateLayoutInfo() : nullptr;
+        SwHTMLTableLayout *pTableInfo = m_xTable ? m_xTable->CreateLayoutInfo() : nullptr;
 
         m_xLayoutInfo.reset(new SwHTMLTableLayoutCnts(m_pStartNode, pTableInfo, m_bNoBreak, xNextInfo));
     }
@@ -1890,7 +1891,7 @@ void HTMLTable::SetBorders()
                 bool bFirstPara = true;
                 while( pCnts )
                 {
-                    HTMLTable *pTable = pCnts->GetTable();
+                    HTMLTable *pTable = pCnts->GetTable().get();
                     if( pTable && !pTable->BordersSet() )
                     {
                         pTable->InheritBorders( this, i, j,
@@ -2658,12 +2659,12 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TABLE );
 
     const SwStartNode *pStNd;
-    if (m_pTable->m_bFirstCell )
+    if (m_xTable->m_bFirstCell )
     {
         SwNode *const pNd = & m_pPam->GetPoint()->nNode.GetNode();
         pNd->GetTextNode()->ChgFormatColl( pColl );
         pStNd = pNd->FindTableBoxStartNode();
-        m_pTable->m_bFirstCell = false;
+        m_xTable->m_bFirstCell = false;
     }
     else
     {
@@ -2675,7 +2676,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
         SwNodeIndex nIdx( *pNd, 1 );
         pStNd = m_xDoc->GetNodes().MakeTextSection( nIdx, SwTableBoxStartNode,
                                                   pColl );
-        m_pTable->IncBoxCount();
+        m_xTable->IncBoxCount();
     }
 
     //Added defaults to CJK and CTL
@@ -2706,10 +2707,10 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
 
     SwNode *const pNd = & m_pPam->GetPoint()->nNode.GetNode();
     const SwStartNode *pStNd;
-    if (m_pTable->m_bFirstCell)
+    if (m_xTable->m_bFirstCell)
     {
         pNd->GetTextNode()->ChgFormatColl( pColl );
-        m_pTable->m_bFirstCell = false;
+        m_xTable->m_bFirstCell = false;
         pStNd = pNd->FindTableBoxStartNode();
     }
     else
@@ -2733,7 +2734,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
         m_pPam->GetPoint()->nNode = pStNd->GetIndex() + 1;
         SwTextNode *pTextNd = m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
         m_pPam->GetPoint()->nContent.Assign( pTextNd, 0 );
-        m_pTable->IncBoxCount();
+        m_xTable->IncBoxCount();
     }
 
     return pStNd;
@@ -2858,7 +2859,7 @@ class SectionSaveStruct : public SwPendingStackData
 
 public:
 
-    HTMLTable *m_pTable;
+    std::shared_ptr<HTMLTable> m_xTable;
 
     explicit SectionSaveStruct( SwHTMLParser& rParser );
 
@@ -2870,8 +2871,7 @@ public:
 
 SectionSaveStruct::SectionSaveStruct( SwHTMLParser& rParser ) :
     m_nBaseFontStMinSave(0), m_nFontStMinSave(0), m_nFontStHeadStartSave(0),
-    m_nDefListDeepSave(0), m_nContextStMinSave(0), m_nContextStAttrMinSave(0),
-    m_pTable( nullptr )
+    m_nDefListDeepSave(0), m_nContextStMinSave(0), m_nContextStAttrMinSave(0)
 {
     // Freeze font stacks
     m_nBaseFontStMinSave = rParser.m_nBaseFontStMin;
@@ -3274,7 +3274,7 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
 
 sal_uInt16 SwHTMLParser::IncGrfsThatResizeTable()
 {
-    return m_pTable ? m_pTable->IncGrfsThatResize() : 0;
+    return m_xTable ? m_xTable->IncGrfsThatResize() : 0;
 }
 
 void SwHTMLParser::RegisterDrawObjectToTable( HTMLTable *pCurTable,
@@ -3289,13 +3289,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     if( !IsParserWorking() && !m_pPendStack )
         return;
 
-    CellSaveStruct* pSaveStruct;
+    std::unique_ptr<CellSaveStruct> xSaveStruct;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
     if( m_pPendStack )
     {
-        pSaveStruct = static_cast<CellSaveStruct*>(m_pPendStack->pData);
+        xSaveStruct.reset(static_cast<CellSaveStruct*>(m_pPendStack->pData));
 
         SwPendingStack* pTmp = m_pPendStack->pNext;
         delete m_pPendStack;
@@ -3308,7 +3308,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     else
     {
         // <TH> resp. <TD> were already read
-        if( m_pTable->IsOverflowing() )
+        if (m_xTable->IsOverflowing())
         {
             SaveState( HtmlTokenId::NONE );
             return;
@@ -3316,7 +3316,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
         if( !pCurTable->GetContext() )
         {
-            bool bTopTable = m_pTable==pCurTable;
+            bool bTopTable = m_xTable.get() == pCurTable;
 
             // the table has no content yet, this means the actual table needs
             // to be created first
@@ -3372,7 +3372,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             bool bParentLFStripped = false;
             if( bTopTable )
             {
-                SvxAdjust eTableAdjust = m_pTable->GetTableAdjust(false);
+                SvxAdjust eTableAdjust = m_xTable->GetTableAdjust(false);
 
                 // If the table is left or right adjusted or should be in a text frame,
                 // it'll get one
@@ -3657,7 +3657,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 }
 
                 SwNode const*const pNd = & m_pPam->GetPoint()->nNode.GetNode();
-                const SwStartNode *pStNd = (m_pTable->m_bFirstCell ? pNd->FindTableNode()
+                const SwStartNode *pStNd = (m_xTable->m_bFirstCell ? pNd->FindTableNode()
                                                             : pNd->FindTableBoxStartNode() );
 
                 pCurTable->SetTable( pStNd, pTCntxt, nLeftSpace, nRightSpace );
@@ -3670,8 +3670,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             m_nContextStAttrMin = m_nContextStMin;
         }
 
-        pSaveStruct = new CellSaveStruct( *this, pCurTable, bHead,
-                                            bReadOptions );
+        xSaveStruct.reset(new CellSaveStruct(*this, pCurTable, bHead, bReadOptions));
 
         // If the first GetNextToken() doesn't succeed (pending input), must re-read from the beginning.
         SaveState( HtmlTokenId::NONE );
@@ -3687,9 +3686,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
         nToken = FilterToken( nToken );
 
-        OSL_ENSURE( m_pPendStack || !m_bCallNextToken || pSaveStruct->IsInSection(),
+        OSL_ENSURE( m_pPendStack || !m_bCallNextToken || xSaveStruct->IsInSection(),
                 "Where is the section??" );
-        if( !m_pPendStack && m_bCallNextToken && pSaveStruct->IsInSection() )
+        if( !m_pPendStack && m_bCallNextToken && xSaveStruct->IsInSection() )
         {
             // Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
@@ -3721,10 +3720,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     // only if we create a new table, but not if we're still
                     // reading in the table after a Pending
-                    pSaveStruct->m_pTable = m_pTable;
+                    xSaveStruct->m_xTable = m_xTable;
 
                     // HACK: create a section for a table that goes in a text frame
-                    if( !pSaveStruct->IsInSection() )
+                    if( !xSaveStruct->IsInSection() )
                     {
                         // The loop needs to be forward, since the
                         // first option always wins
@@ -3742,7 +3741,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         }
                         if( bNeedsSection )
                         {
-                            pSaveStruct->AddContents(
+                            xSaveStruct->AddContents(
                                 InsertTableContents(bHead  ) );
                         }
                     }
@@ -3760,79 +3759,79 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         : SvxAdjust::End;
                 }
 
-                HTMLTable *pSubTable = BuildTable( eTabAdjust,
-                                                   bHead,
-                                                   pSaveStruct->IsInSection(),
-                                                   bHasToFly );
+                std::shared_ptr<HTMLTable> xSubTable = BuildTable(eTabAdjust,
+                                                                  bHead,
+                                                                  xSaveStruct->IsInSection(),
+                                                                  bHasToFly);
                 if( SvParserState::Pending != GetStatus() )
                 {
                     // Only if the table is really complete
-                    if( pSubTable )
+                    if (xSubTable)
                     {
-                        OSL_ENSURE( pSubTable->GetTableAdjust(false)!= SvxAdjust::Left &&
-                                pSubTable->GetTableAdjust(false)!= SvxAdjust::Right,
+                        OSL_ENSURE( xSubTable->GetTableAdjust(false)!= SvxAdjust::Left &&
+                                xSubTable->GetTableAdjust(false)!= SvxAdjust::Right,
                                 "left or right aligned tables belong in frames" );
 
-                        auto& rParentContents = pSubTable->GetParentContents();
+                        auto& rParentContents = xSubTable->GetParentContents();
                         if (rParentContents)
                         {
-                            OSL_ENSURE( !pSaveStruct->IsInSection(),
+                            OSL_ENSURE( !xSaveStruct->IsInSection(),
                                     "Where is the section" );
 
                             // If there's no table coming, we have a section
-                            pSaveStruct->AddContents(rParentContents.release());
+                            xSaveStruct->AddContents(rParentContents.release());
                         }
 
                         const SwStartNode *pCapStNd =
-                                pSubTable->GetCaptionStartNode();
+                                xSubTable->GetCaptionStartNode();
 
-                        if( pSubTable->GetContext() )
+                        if (xSubTable->GetContext())
                         {
-                            OSL_ENSURE( !pSubTable->GetContext()->GetFrameFormat(),
+                            OSL_ENSURE( !xSubTable->GetContext()->GetFrameFormat(),
                                     "table in frame" );
 
-                            if( pCapStNd && pSubTable->IsTopCaption() )
+                            if( pCapStNd && xSubTable->IsTopCaption() )
                             {
-                                pSaveStruct->AddContents(
+                                xSaveStruct->AddContents(
                                     new HTMLTableCnts(pCapStNd) );
                             }
 
-                            pSaveStruct->AddContents(
-                                new HTMLTableCnts(pSubTable) );
+                            xSaveStruct->AddContents(
+                                new HTMLTableCnts(xSubTable) );
 
-                            if( pCapStNd && !pSubTable->IsTopCaption() )
+                            if( pCapStNd && !xSubTable->IsTopCaption() )
                             {
-                                pSaveStruct->AddContents(
+                                xSaveStruct->AddContents(
                                     new HTMLTableCnts(pCapStNd) );
                             }
 
                             // We don't have a section anymore
-                            pSaveStruct->ClearIsInSection();
+                            xSaveStruct->ClearIsInSection();
                         }
                         else if( pCapStNd )
                         {
                             // Since we can't delete this section (it might
                             // belong to the first box), we'll add it
-                            pSaveStruct->AddContents(
+                            xSaveStruct->AddContents(
                                 new HTMLTableCnts(pCapStNd) );
 
                             // We don't have a section anymore
-                            pSaveStruct->ClearIsInSection();
+                            xSaveStruct->ClearIsInSection();
                         }
                     }
 
-                    m_pTable = pSaveStruct->m_pTable;
+                    m_xTable = xSaveStruct->m_xTable;
                 }
             }
             break;
 
         case HtmlTokenId::NOBR_ON:
             // HACK for MS: Is the <NOBR> at the start of the cell?
-            pSaveStruct->StartNoBreak( *m_pPam->GetPoint() );
+            xSaveStruct->StartNoBreak( *m_pPam->GetPoint() );
             break;
 
         case HtmlTokenId::NOBR_OFF:
-                pSaveStruct->EndNoBreak( *m_pPam->GetPoint() );
+                xSaveStruct->EndNoBreak( *m_pPam->GetPoint() );
             break;
 
         case HtmlTokenId::COMMENT:
@@ -3842,10 +3841,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             break;
 
         case HtmlTokenId::MARQUEE_ON:
-            if( !pSaveStruct->IsInSection() )
+            if( !xSaveStruct->IsInSection() )
             {
                 // create a new section, the PaM is gonna be there
-                pSaveStruct->AddContents(
+                xSaveStruct->AddContents(
                     InsertTableContents( bHead ) );
             }
             m_bCallNextToken = true;
@@ -3854,15 +3853,15 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
         case HtmlTokenId::TEXTTOKEN:
             // Don't add a section for an empty string
-            if( !pSaveStruct->IsInSection() && 1==aToken.getLength() &&
+            if( !xSaveStruct->IsInSection() && 1==aToken.getLength() &&
                 ' '==aToken[0] )
                 break;
             SAL_FALLTHROUGH;
         default:
-            if( !pSaveStruct->IsInSection() )
+            if( !xSaveStruct->IsInSection() )
             {
                 // add a new section, the PaM's gonna be there
-                pSaveStruct->AddContents(
+                xSaveStruct->AddContents(
                     InsertTableContents( bHead ) );
             }
 
@@ -3885,7 +3884,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     {
         m_pPendStack = new SwPendingStack( bHead ? HtmlTokenId::TABLEHEADER_ON
                                                : HtmlTokenId::TABLEDATA_ON, m_pPendStack );
-        m_pPendStack->pData = pSaveStruct;
+        m_pPendStack->pData = xSaveStruct.release();
 
         return;
     }
@@ -3894,14 +3893,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     // We also create an empty content if the cell ended with a table and had no
     // COL tags. Otherwise, it was probably exported by us and we don't
     // want to have an additional paragraph
-    if( !pSaveStruct->HasFirstContents() ||
-        (!pSaveStruct->IsInSection() && !pCurTable->HasColTags()) )
+    if( !xSaveStruct->HasFirstContents() ||
+        (!xSaveStruct->IsInSection() && !pCurTable->HasColTags()) )
     {
-        OSL_ENSURE( pSaveStruct->HasFirstContents() ||
-                !pSaveStruct->IsInSection(),
+        OSL_ENSURE( xSaveStruct->HasFirstContents() ||
+                !xSaveStruct->IsInSection(),
                 "Section or not, that is the question here" );
         const SwStartNode *pStNd =
-            InsertTableSection( static_cast< sal_uInt16 >(pSaveStruct->IsHeaderCell()
+            InsertTableSection( static_cast< sal_uInt16 >(xSaveStruct->IsHeaderCell()
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ));
         const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
@@ -3914,13 +3913,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
         pCNd->SetAttr( aFontHeightCTL );
 
-        pSaveStruct->AddContents( new HTMLTableCnts(pStNd) );
-        pSaveStruct->ClearIsInSection();
+        xSaveStruct->AddContents( new HTMLTableCnts(pStNd) );
+        xSaveStruct->ClearIsInSection();
     }
 
-    if( pSaveStruct->IsInSection() )
+    if( xSaveStruct->IsInSection() )
     {
-        pSaveStruct->CheckNoBreak( *m_pPam->GetPoint() );
+        xSaveStruct->CheckNoBreak( *m_pPam->GetPoint() );
 
         // End all open contexts. We'll take AttrMin because nContextStMin might
         // have been modified. Since it's gonna be restored by EndContext, it's okay
@@ -3956,10 +3955,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
     SetAttr( false );
 
-    pSaveStruct->InsertCell( *this, pCurTable );
+    xSaveStruct->InsertCell( *this, pCurTable );
 
     // we're probably before a <TH>, <TD>, <TR> or </TABLE>
-    delete pSaveStruct;
+    xSaveStruct.reset();
 }
 
 class RowSaveStruct : public SwPendingStackData
@@ -3984,12 +3983,12 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         return;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
-    RowSaveStruct* pSaveStruct;
+    std::unique_ptr<RowSaveStruct> xSaveStruct;
 
     bool bPending = false;
     if( m_pPendStack )
     {
-        pSaveStruct = static_cast<RowSaveStruct*>(m_pPendStack->pData);
+        xSaveStruct.reset(static_cast<RowSaveStruct*>(m_pPendStack->pData));
 
         SwPendingStack* pTmp = m_pPendStack->pNext;
         delete m_pPendStack;
@@ -4006,7 +4005,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         Color aBGColor;
         OUString aBGImage, aStyle, aId, aClass;
         bool bBGColor = false;
-        pSaveStruct = new RowSaveStruct;
+        xSaveStruct.reset(new RowSaveStruct);
 
         if( bReadOptions )
         {
@@ -4106,13 +4105,13 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
             BuildTableCell( pCurTable, true, HtmlTokenId::TABLEHEADER_ON==nToken );
             if( SvParserState::Pending != GetStatus() )
             {
-                pSaveStruct->bHasCells = true;
-                bDone = m_pTable->IsOverflowing();
+                xSaveStruct->bHasCells = true;
+                bDone = m_xTable->IsOverflowing();
             }
             break;
         case HtmlTokenId::CAPTION_ON:
             BuildTableCaption( pCurTable );
-            bDone = m_pTable->IsOverflowing();
+            bDone = m_xTable->IsOverflowing();
             break;
         case HtmlTokenId::CAPTION_OFF:
         case HtmlTokenId::TABLEHEADER_OFF:
@@ -4165,12 +4164,12 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
     if( SvParserState::Pending == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HtmlTokenId::TABLEROW_ON, m_pPendStack );
-        m_pPendStack->pData = pSaveStruct;
+        m_pPendStack->pData = xSaveStruct.release();
     }
     else
     {
-        pCurTable->CloseRow( !pSaveStruct->bHasCells );
-        delete pSaveStruct;
+        pCurTable->CloseRow(!xSaveStruct->bHasCells);
+        xSaveStruct.reset();
     }
 
     // we're probably before <TR> or </TABLE>
@@ -4186,11 +4185,11 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
-    RowSaveStruct* pSaveStruct;
+    std::unique_ptr<RowSaveStruct> xSaveStruct;
 
     if( m_pPendStack )
     {
-        pSaveStruct = static_cast<RowSaveStruct*>(m_pPendStack->pData);
+        xSaveStruct.reset(static_cast<RowSaveStruct*>(m_pPendStack->pData));
 
         SwPendingStack* pTmp = m_pPendStack->pNext;
         delete m_pPendStack;
@@ -4202,7 +4201,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
     }
     else
     {
-        pSaveStruct = new RowSaveStruct;
+        xSaveStruct.reset(new RowSaveStruct);
 
         if( bReadOptions )
         {
@@ -4216,13 +4215,13 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                     InsertBookmark( rOption.GetString() );
                     break;
                 case HtmlOptionId::ALIGN:
-                    pSaveStruct->eAdjust =
-                        rOption.GetEnum( aHTMLPAlignTable, pSaveStruct->eAdjust );
+                    xSaveStruct->eAdjust =
+                        rOption.GetEnum( aHTMLPAlignTable, xSaveStruct->eAdjust );
                     break;
                 case HtmlOptionId::VALIGN:
-                    pSaveStruct->eVertOri =
+                    xSaveStruct->eVertOri =
                         rOption.GetEnum( aHTMLTableVAlignTable,
-                                          pSaveStruct->eVertOri );
+                                          xSaveStruct->eVertOri );
                     break;
                 default: break;
                 }
@@ -4275,21 +4274,21 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             break;
         case HtmlTokenId::CAPTION_ON:
             BuildTableCaption( pCurTable );
-            bDone = m_pTable->IsOverflowing();
+            bDone = m_xTable->IsOverflowing();
             break;
         case HtmlTokenId::CAPTION_OFF:
             break;
         case HtmlTokenId::TABLEHEADER_ON:
         case HtmlTokenId::TABLEDATA_ON:
             SkipToken();
-            BuildTableRow( pCurTable, false, pSaveStruct->eAdjust,
-                           pSaveStruct->eVertOri );
-            bDone = m_pTable->IsOverflowing();
+            BuildTableRow( pCurTable, false, xSaveStruct->eAdjust,
+                           xSaveStruct->eVertOri );
+            bDone = m_xTable->IsOverflowing();
             break;
         case HtmlTokenId::TABLEROW_ON:
-            BuildTableRow( pCurTable, true, pSaveStruct->eAdjust,
-                           pSaveStruct->eVertOri );
-            bDone = m_pTable->IsOverflowing();
+            BuildTableRow( pCurTable, true, xSaveStruct->eAdjust,
+                           xSaveStruct->eVertOri );
+            bDone = m_xTable->IsOverflowing();
             break;
         case HtmlTokenId::MULTICOL_ON:
             // we can't add columned text frames here
@@ -4326,12 +4325,12 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
     {
         m_pPendStack = new SwPendingStack( bHead ? HtmlTokenId::THEAD_ON
                                                : HtmlTokenId::TBODY_ON, m_pPendStack );
-        m_pPendStack->pData = pSaveStruct;
+        m_pPendStack->pData = xSaveStruct.release();
     }
     else
     {
         pCurTable->CloseSection( bHead );
-        delete pSaveStruct;
+        xSaveStruct.reset();
     }
 
     // now we stand (perhaps) in front of <TBODY>,... or </TABLE>
@@ -4604,7 +4603,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     }
     else
     {
-        if( m_pTable->IsOverflowing() )
+        if (m_xTable->IsOverflowing())
         {
             SaveState( HtmlTokenId::NONE );
             return;
@@ -4631,7 +4630,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         // Add a text section in the icon section as a container for the header
         // and set the PaM there
         const SwStartNode *pStNd;
-        if( m_pTable == pCurTable )
+        if (m_xTable.get() == pCurTable)
             pStNd = InsertTempTableCaptionSection();
         else
             pStNd = InsertTableSection( RES_POOLCOLL_TEXT );
@@ -4669,8 +4668,8 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         case HtmlTokenId::TABLE_ON:
             if( !m_pPendStack )
             {
-                pSaveStruct->m_pTable = m_pTable;
-                bool bHasToFly = pSaveStruct->m_pTable!=pCurTable;
+                pSaveStruct->m_xTable = m_xTable;
+                bool bHasToFly = pSaveStruct->m_xTable.get() != pCurTable;
                 BuildTable( pCurTable->GetTableAdjust( true ),
                             false, true, bHasToFly );
             }
@@ -4680,7 +4679,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             }
             if( SvParserState::Pending != GetStatus() )
             {
-                m_pTable = pSaveStruct->m_pTable;
+                m_xTable = pSaveStruct->m_xTable;
             }
             break;
         case HtmlTokenId::TABLE_OFF:
@@ -4735,7 +4734,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
     bool bLFStripped = StripTrailingLF() > 0;
 
-    if( m_pTable==pCurTable )
+    if (m_xTable.get() == pCurTable)
     {
         // On moving the caption later, the last paragraph isn't moved as well.
         // That means, there has to be an empty paragraph at the end of the section
@@ -4768,10 +4767,10 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 class TableSaveStruct : public SwPendingStackData
 {
 public:
-    HTMLTable *m_pCurrentTable;
+    std::shared_ptr<HTMLTable> m_xCurrentTable;
 
-    explicit TableSaveStruct( HTMLTable *pCurTable ) :
-        m_pCurrentTable( pCurTable )
+    explicit TableSaveStruct(const std::shared_ptr<HTMLTable>& rCurTable)
+        : m_xCurrentTable(rCurTable)
     {}
 
     // Initiate creation of the table and put the table in a text frame if
@@ -4781,9 +4780,9 @@ public:
 
 void TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc )
 {
-    m_pCurrentTable->MakeTable(nullptr, nWidth);
+    m_xCurrentTable->MakeTable(nullptr, nWidth);
 
-    HTMLTableContext *pTCntxt = m_pCurrentTable->GetContext();
+    HTMLTableContext *pTCntxt = m_xCurrentTable->GetContext();
     OSL_ENSURE( pTCntxt, "Where is the table context" );
 
     SwTableNode *pTableNd = pTCntxt->GetTableNode();
@@ -4945,21 +4944,21 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     }
 }
 
-HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
-                                     bool bIsParentHead,
-                                     bool bHasParentSection,
-                                     bool bHasToFly )
+std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
+                                                    bool bIsParentHead,
+                                                    bool bHasParentSection,
+                                                    bool bHasToFly)
 {
-    if( !IsParserWorking() && !m_pPendStack )
-        return nullptr;
+    if (!IsParserWorking() && !m_pPendStack)
+        return std::shared_ptr<HTMLTable>();
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
-    TableSaveStruct* pSaveStruct;
+    std::unique_ptr<TableSaveStruct> xSaveStruct;
 
     if( m_pPendStack )
     {
-        pSaveStruct = static_cast<TableSaveStruct*>(m_pPendStack->pData);
+        xSaveStruct.reset(static_cast<TableSaveStruct*>(m_pPendStack->pData));
 
         SwPendingStack* pTmp = m_pPendStack->pNext;
         delete m_pPendStack;
@@ -4971,22 +4970,22 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
     }
     else
     {
-        m_pTable = nullptr;
+        m_xTable.reset();
         HTMLTableOptions *pTableOptions =
             new HTMLTableOptions( GetOptions(), eParentAdjust );
 
         if( !pTableOptions->aId.isEmpty() )
             InsertBookmark( pTableOptions->aId );
 
-        HTMLTable *pCurTable = new HTMLTable( this, m_pTable,
+        std::shared_ptr<HTMLTable> xCurTable(new HTMLTable(this, m_xTable.get(),
                                               bIsParentHead,
                                               bHasParentSection,
                                               bHasToFly,
-                                              pTableOptions );
-        if( !m_pTable )
-            m_pTable = pCurTable;
+                                              pTableOptions));
+        if (!m_xTable)
+            m_xTable = xCurTable;
 
-        pSaveStruct = new TableSaveStruct( pCurTable );
+        xSaveStruct.reset(new TableSaveStruct(xCurTable));
 
         delete pTableOptions;
 
@@ -4994,7 +4993,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         SaveState( HtmlTokenId::NONE );
     }
 
-    HTMLTable *pCurTable = pSaveStruct->m_pCurrentTable;
+    std::shared_ptr<HTMLTable> xCurTable = xSaveStruct->m_xCurrentTable;
 
     // </TABLE> is needed according to DTD
     if( nToken == HtmlTokenId::NONE )
@@ -5008,10 +5007,10 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         nToken = FilterToken( nToken );
 
         OSL_ENSURE( m_pPendStack || !m_bCallNextToken ||
-                pCurTable->GetContext() || pCurTable->HasParentSection(),
+                xCurTable->GetContext() || xCurTable->HasParentSection(),
                 "Where is the section?" );
         if( !m_pPendStack && m_bCallNextToken &&
-            (pCurTable->GetContext() || pCurTable->HasParentSection()) )
+            (xCurTable->GetContext() || xCurTable->HasParentSection()) )
         {
             /// Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
@@ -5019,7 +5018,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         else switch( nToken )
         {
         case HtmlTokenId::TABLE_ON:
-            if( !pCurTable->GetContext() )
+            if( !xCurTable->GetContext() )
             {
                 // If there's no table added, read the next table'
                 SkipToken();
@@ -5031,28 +5030,28 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             bDone = true;
             break;
         case HtmlTokenId::CAPTION_ON:
-            BuildTableCaption( pCurTable );
-            bDone = m_pTable->IsOverflowing();
+            BuildTableCaption(xCurTable.get());
+            bDone = m_xTable->IsOverflowing();
             break;
         case HtmlTokenId::COL_ON:
             SkipToken();
-            BuildTableColGroup( pCurTable, false );
+            BuildTableColGroup(xCurTable.get(), false);
             break;
         case HtmlTokenId::COLGROUP_ON:
-            BuildTableColGroup( pCurTable, true );
+            BuildTableColGroup(xCurTable.get(), true);
             break;
         case HtmlTokenId::TABLEROW_ON:
         case HtmlTokenId::TABLEHEADER_ON:
         case HtmlTokenId::TABLEDATA_ON:
             SkipToken();
-            BuildTableSection( pCurTable, false, false );
-            bDone = m_pTable->IsOverflowing();
+            BuildTableSection(xCurTable.get(), false, false);
+            bDone = m_xTable->IsOverflowing();
             break;
         case HtmlTokenId::THEAD_ON:
         case HtmlTokenId::TFOOT_ON:
         case HtmlTokenId::TBODY_ON:
-            BuildTableSection( pCurTable, true, HtmlTokenId::THEAD_ON==nToken );
-            bDone = m_pTable->IsOverflowing();
+            BuildTableSection(xCurTable.get(), true, HtmlTokenId::THEAD_ON==nToken);
+            bDone = m_xTable->IsOverflowing();
             break;
         case HtmlTokenId::MULTICOL_ON:
             // we can't add columned text frames here
@@ -5065,13 +5064,13 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             break;
         case HtmlTokenId::TEXTTOKEN:
             // blank strings may be a series of CR+LF and no text
-            if( (pCurTable->GetContext() ||
-                 !pCurTable->HasParentSection()) &&
+            if( (xCurTable->GetContext() ||
+                 !xCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
                 break;
             SAL_FALLTHROUGH;
         default:
-            pCurTable->MakeParentContents();
+            xCurTable->MakeParentContents();
             NextToken( nToken );
             break;
         }
@@ -5089,16 +5088,16 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
     if( SvParserState::Pending == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HtmlTokenId::TABLE_ON, m_pPendStack );
-        m_pPendStack->pData = pSaveStruct;
-        return nullptr;
+        m_pPendStack->pData = xSaveStruct.release();
+        return std::shared_ptr<HTMLTable>();
     }
 
-    HTMLTableContext *pTCntxt = pCurTable->GetContext();
+    HTMLTableContext *pTCntxt = xCurTable->GetContext();
     if( pTCntxt )
     {
 
         // Modify table structure
-        pCurTable->CloseTable();
+        xCurTable->CloseTable();
 
         // end contexts that began out of cells. Needs to exist before (!) we move the table,
         // since the current one doesn't exist anymore afterwards
@@ -5112,10 +5111,10 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         m_nContextStMin = pTCntxt->GetContextStMin();
         m_nContextStAttrMin = pTCntxt->GetContextStAttrMin();
 
-        if( m_pTable==pCurTable )
+        if (m_xTable == xCurTable)
         {
             // Set table caption
-            const SwStartNode *pCapStNd = m_pTable->GetCaptionStartNode();
+            const SwStartNode *pCapStNd = m_xTable->GetCaptionStartNode();
             if( pCapStNd )
             {
                 // The last paragraph of the section is never part of the copy.
@@ -5127,7 +5126,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                     SwNodeRange aSrcRg( *pCapStNd, 1,
                                     *pCapStNd->EndOfSectionNode(), -1 );
 
-                    bool bTop = m_pTable->IsTopCaption();
+                    bool bTop = m_xTable->IsTopCaption();
                     SwStartNode *pTableStNd = pTCntxt->GetTableNode();
 
                     OSL_ENSURE( pTableStNd, "Where is the table node" );
@@ -5159,19 +5158,19 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 m_pPam->SetMark();
                 m_pPam->DeleteMark();
                 m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
-                m_pTable->SetCaption( nullptr, false );
+                m_xTable->SetCaption( nullptr, false );
             }
 
             // Process SwTable
             sal_uInt16 nBrowseWidth = (sal_uInt16)GetCurrentBrowseWidth();
-            pSaveStruct->MakeTable( nBrowseWidth, *m_pPam->GetPoint(), m_xDoc.get() );
+            xSaveStruct->MakeTable(nBrowseWidth, *m_pPam->GetPoint(), m_xDoc.get());
         }
 
         GetNumInfo().Set( pTCntxt->GetNumInfo() );
         pTCntxt->RestorePREListingXMP( *this );
         RestoreAttrTab( pTCntxt->aAttrTab );
 
-        if( m_pTable==pCurTable )
+        if (m_xTable == xCurTable)
         {
             // Set upper paragraph spacing
             m_bUpperSpace = true;
@@ -5181,8 +5180,8 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 pTCntxt->GetTableNode()->GetTable().GetTabSortBoxes().size());
 
             // Jump to a table if needed
-            if( JUMPTO_TABLE == m_eJumpTo && m_pTable->GetSwTable() &&
-                m_pTable->GetSwTable()->GetFrameFormat()->GetName() == m_sJmpMark )
+            if( JUMPTO_TABLE == m_eJumpTo && m_xTable->GetSwTable() &&
+                m_xTable->GetSwTable()->GetFrameFormat()->GetName() == m_sJmpMark )
             {
                 m_bChkJumpMark = true;
                 m_eJumpTo = JUMPTO_NONE;
@@ -5197,32 +5196,31 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 Show();
         }
     }
-    else if( m_pTable==pCurTable )
+    else if (m_xTable == xCurTable)
     {
         // There was no table read
 
         // We maybe need to delete a read caption
-        const SwStartNode *pCapStNd = pCurTable->GetCaptionStartNode();
+        const SwStartNode *pCapStNd = xCurTable->GetCaptionStartNode();
         if( pCapStNd )
         {
             m_pPam->SetMark();
             m_pPam->DeleteMark();
             m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
-            pCurTable->SetCaption( nullptr, false );
+            xCurTable->SetCaption( nullptr, false );
         }
     }
 
-    if( m_pTable == pCurTable  )
+    if (m_xTable == xCurTable)
     {
-        delete pSaveStruct->m_pCurrentTable;
-        pSaveStruct->m_pCurrentTable = nullptr;
-        m_pTable = nullptr;
+        xSaveStruct->m_xCurrentTable.reset();
+        m_xTable.reset();
     }
 
-    HTMLTable* pRetTable = pSaveStruct->m_pCurrentTable;
-    delete pSaveStruct;
+    std::shared_ptr<HTMLTable> xRetTable = xSaveStruct->m_xCurrentTable;
+    xSaveStruct.reset();
 
-    return pRetTable;
+    return xRetTable;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
