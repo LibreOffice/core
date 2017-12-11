@@ -12,6 +12,9 @@ use warnings;
 use lib "solenv/clang-format";
 use ClangFormat;
 
+my $commit = 0;
+my $commit_id = 'HEAD';
+
 sub check_style()
 {
     if ( ! -e ".git" )
@@ -25,12 +28,13 @@ sub check_style()
     my @bad_names = ();
     my $blacklist_names = ClangFormat::get_blacklist();
     my $clang_format = ClangFormat::find();
+    my $parent = $commit + 1;
 
     # Get a list of non-deleted changed files.
     # Explicitly use the low-level 'git diff-tree' (rather than plain 'git
     # diff') so we get the new, but not the old files for renames and/or
     # copies.
-    open (FILES, "git diff-tree -r --diff-filter=AM --name-only HEAD^ HEAD |") ||  die "Cannot run git diff.";
+    open (FILES, "git diff-tree -r --diff-filter=AM --name-only ${commit_id}~${parent} ${commit_id}~${commit} |") ||  die "Cannot run git diff.";
     while (my $filename = <FILES>)
     {
         chomp $filename;
@@ -72,6 +76,18 @@ sub check_style()
         print("solenv/clang-format/check-last-commit: checked the following files:\n");
         print(join("\n", @good_names));
         print("\nsolenv/clang-format/check-last-commit: OK\n");
+    }
+}
+
+if (scalar(@ARGV) == 1)
+{
+    if (($ARGV[0] !~ /^[0-9]+$/) || (scalar($ARGV[0]) >= 8))
+    {
+        $commit_id = $ARGV[0];
+    }
+    else
+    {
+        $commit = $ARGV[0];
     }
 }
 
