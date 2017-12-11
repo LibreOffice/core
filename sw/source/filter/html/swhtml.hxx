@@ -26,6 +26,7 @@
 #include <svtools/htmltokn.h>
 #include <editeng/svxenum.hxx>
 #include <rtl/ref.hxx>
+#include <fltshell.hxx>
 #include <fmtornt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -362,6 +363,11 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     friend class SectionSaveStruct;
     friend class CellSaveStruct;
     friend class CaptionSaveStruct;
+
+    /*
+     Progress bar
+     */
+    std::unique_ptr<ImportProgress> m_xProgress;
 
     OUString      m_aPathToFile;
     OUString      m_sBaseURL;

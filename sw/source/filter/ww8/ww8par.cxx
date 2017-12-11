@@ -4902,22 +4902,6 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     }
 }
 
-ImportProgress::ImportProgress(SwDocShell *pDocShell)
-    : m_pDocShell(pDocShell)
-{
-    ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, m_pDocShell);
-}
-
-void ImportProgress::Update(sal_uInt16 nProgress)
-{
-    ::SetProgressState(nProgress, m_pDocShell);    // Update
-}
-
-ImportProgress::~ImportProgress()
-{
-    ::EndProgress(m_pDocShell);
-}
-
 ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 {
     m_rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
@@ -5006,7 +4990,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     if (!m_bNewDoc)
         aSttNdIdx = m_pPaM->GetPoint()->nNode;
 
-    m_xProgress.reset(new ImportProgress(m_pDocShell));
+    m_xProgress.reset(new ImportProgress(m_pDocShell, 0, 100));
 
     // read Font Table
     m_xFonts.reset(new WW8Fonts(*m_pTableStream, *m_xWwFib));
