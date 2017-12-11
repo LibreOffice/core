@@ -36,7 +36,7 @@ class SfxFrame_Impl : public SfxBroadcaster
 {
 public:
     css::uno::Reference< css::frame::XFrame > xFrame;
-    sal_uInt32                nType;
+    bool                      mbHasTitle;
     SfxViewFrame*             pCurrentViewFrame;
     SfxFrameDescriptor*       pDescr;
     bool                      bClosing : 1;
@@ -54,7 +54,7 @@ public:
     bool                      bMenuBarOn;
 
     explicit SfxFrame_Impl()
-        :nType( 0 )
+        :mbHasTitle( false )
         ,pCurrentViewFrame( nullptr )
         ,pDescr( nullptr )
         ,bClosing(false)

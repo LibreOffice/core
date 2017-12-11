@@ -277,14 +277,14 @@ void SfxFrame::SetCurrentViewFrame_Impl( SfxViewFrame *pFrame )
     pImpl->pCurrentViewFrame = pFrame;
 }
 
-sal_uInt32 SfxFrame::GetFrameType() const
+bool SfxFrame::GetHasTitle() const
 {
-    return pImpl->nType;
+    return pImpl->mbHasTitle;
 }
 
-void SfxFrame::SetFrameType_Impl( sal_uInt32 n )
+void SfxFrame::SetHasTitle( bool n )
 {
-    pImpl->nType = n;
+    pImpl->mbHasTitle = n;
 }
 
 void SfxFrame::GetViewData_Impl()
