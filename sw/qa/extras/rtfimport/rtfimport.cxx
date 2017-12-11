@@ -87,8 +87,6 @@ protected:
     AllSettings m_aSavedSettings;
 };
 
-#if !defined(_WIN32)
-
 DECLARE_RTFIMPORT_TEST(testN695479, "n695479.rtf")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -750,7 +748,6 @@ public:
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(testTdf105511);
 
-#endif
 DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
 {
     uno::Reference<text::XTextRange> xParaSecond = getParagraph(2);
