@@ -29,6 +29,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <o3tl/safeint.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
@@ -180,7 +181,7 @@ inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
 inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
 {
     sal_Int32 nCorrection = (nValue > 0 ? 1 : -1) * EMU_PER_HMM / 2; // So that the implicit floor will round.
-    return getLimitedValue< sal_Int32, sal_Int64 >( (nValue + nCorrection) / EMU_PER_HMM, SAL_MIN_INT32, SAL_MAX_INT32 );
+    return getLimitedValue<sal_Int32, sal_Int64>(o3tl::saturating_add<sal_Int64>(nValue, nCorrection) / EMU_PER_HMM, SAL_MIN_INT32, SAL_MAX_INT32);
 }
 
 /** Converts the passed 64-bit integer value from EMUs to Points. */
