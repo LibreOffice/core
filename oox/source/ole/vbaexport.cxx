@@ -31,9 +31,8 @@
 
 #include <sot/storage.hxx>
 
-#include <rtl/uuid.h>
-
 #include <comphelper/string.hxx>
+#include <comphelper/xmltools.hxx>
 
 #define USE_UTF8_CODEPAGE 0
 #if USE_UTF8_CODEPAGE
@@ -86,28 +85,6 @@ OUString createHexStringFromDigit(sal_uInt8 nDigit)
     if(aString.getLength() == 1)
         aString = OUString::number(0) + aString;
     return aString.toAsciiUpperCase();
-}
-
-OUString createGuidStringFromInt(sal_uInt8 const nGuid[16])
-{
-    OUStringBuffer aBuffer;
-    aBuffer.append('{');
-    for(size_t i = 0; i < 16; ++i)
-    {
-        aBuffer.append(createHexStringFromDigit(nGuid[i]));
-        if(i == 3|| i == 5 || i == 7 || i == 9 )
-            aBuffer.append('-');
-    }
-    aBuffer.append('}');
-    OUString aString = aBuffer.makeStringAndClear();
-    return aString.toAsciiUpperCase();
-}
-
-OUString generateGUIDString()
-{
-    sal_uInt8 nGuid[16];
-    rtl_createUuid(nGuid, nullptr, true);
-    return createGuidStringFromInt(nGuid);
 }
 
 }
@@ -877,7 +854,8 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
 
     // section 2.3.1.2 ProjectId
     exportString(rStrm, "ID=\"");
-    OUString aProjectID = generateGUIDString();
+    OUString aProjectID
+        = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
     exportString(rStrm, aProjectID);
     exportString(rStrm, "\"\r\n");
 
