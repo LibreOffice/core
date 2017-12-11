@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testVarType()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -24,7 +24,6 @@ Function verify_testVarType() As String
 
     Dim testName As String
     Dim TestDateTime As Date
-    Dim TestStr As String
     Dim TestInt As Integer
     Dim TestLong As Long
     Dim TestDouble As Double
