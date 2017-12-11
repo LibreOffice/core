@@ -1012,7 +1012,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
             m_xObjSh->DoClose();
         SfxObjectShellRef xDyingObjSh = m_xObjSh;
         m_xObjSh.clear();
-        if( ( GetFrameType() & SFXFRAME_HASTITLE ) && m_pImpl->nDocViewNo )
+        if( GetHasTitle() && m_pImpl->nDocViewNo )
             xDyingObjSh->GetNoSet_Impl().ReleaseIndex(m_pImpl->nDocViewNo-1);
         if ( m_pImpl->bObjLocked )
         {
@@ -1350,7 +1350,7 @@ SfxViewFrame::SfxViewFrame
 {
 
     rFrame.SetCurrentViewFrame_Impl( this );
-    rFrame.SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
+    rFrame.SetHasTitle( true );
     Construct_Impl( pObjShell );
 
     m_pImpl->pWindow = VclPtr<SfxFrameViewWindow_Impl>::Create( this, rFrame.GetWindow() );

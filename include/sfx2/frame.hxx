@@ -76,8 +76,6 @@ class SystemWindow;
 
 typedef ::std::vector<OUString> TargetList;
 
-#define SFXFRAME_HASTITLE     0x0001
-
 
 // SfxFrame is a management class for windows and their content.
 // A SfxApplication represent a hierarchy of SfxFrames, with which the actual
@@ -124,7 +122,7 @@ public:
     SfxObjectShell*     GetCurrentDocument() const;
     SfxViewFrame*       GetCurrentViewFrame() const;
 
-    sal_uInt32          GetFrameType() const;
+    bool                GetHasTitle() const;
     static void         GetDefaultTargetList( TargetList& );
     void                UpdateDescriptor( SfxObjectShell const *pDoc );
     void                Resize();
@@ -141,7 +139,7 @@ public:
     SAL_DLLPRIVATE void SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl();
     SAL_DLLPRIVATE void GetViewData_Impl();
-    SAL_DLLPRIVATE void SetFrameType_Impl( sal_uInt32 );
+    SAL_DLLPRIVATE void SetHasTitle( bool );
     SAL_DLLPRIVATE bool PrepareClose_Impl( bool bUI );
     SAL_DLLPRIVATE bool DocIsModified_Impl();
     SAL_DLLPRIVATE void SetCurrentViewFrame_Impl( SfxViewFrame* );
