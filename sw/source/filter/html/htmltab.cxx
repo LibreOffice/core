@@ -276,7 +276,7 @@ class HTMLTableRow
 
     SvxAdjust eAdjust;
     sal_Int16 eVertOri;
-    SvxBrushItem *pBGBrush;             // background of cell from STYLE
+    std::unique_ptr<SvxBrushItem> xBGBrush;             // background of cell from STYLE
 
 public:
 
@@ -297,8 +297,8 @@ public:
     void SetVertOri( sal_Int16 eV) { eVertOri = eV; }
     sal_Int16 GetVertOri() const { return eVertOri; }
 
-    void SetBGBrush( SvxBrushItem *pBrush ) { pBGBrush = pBrush; }
-    const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
+    void SetBGBrush(std::unique_ptr<SvxBrushItem>& rBrush ) { xBGBrush = std::move(rBrush); }
+    const std::unique_ptr<SvxBrushItem>& GetBGBrush() const { return xBGBrush; }
 
     void SetEndOfGroup() { bIsEndOfGroup = true; }
     bool IsEndOfGroup() const { return bIsEndOfGroup; }
@@ -397,8 +397,8 @@ class HTMLTable
     SwTableBoxFormat *m_pBoxFormat;         // frame::Frame-Format from SwTableBox
     SwTableLineFormat *m_pLineFormat;       // frame::Frame-Format from SwTableLine
     SwTableLineFormat *m_pLineFrameFormatNoHeight;
-    SvxBrushItem *m_pBackgroundBrush;         // background of the table
-    SvxBrushItem *m_pInheritedBackgroundBrush;      // "inherited" background of the table
+    std::unique_ptr<SvxBrushItem> m_xBackgroundBrush;          // background of the table
+    std::unique_ptr<SvxBrushItem> m_xInheritedBackgroundBrush; // "inherited" background of the table
     const SwStartNode *m_pCaptionStartNode;   // Start-Node of the table-caption
     //lines for the border
     SvxBorderLine m_aTopBorderLine;
@@ -503,8 +503,8 @@ class HTMLTable
     // is the border already set?
     bool BordersSet() const { return m_bBordersSet; }
 
-    const SvxBrushItem *GetBGBrush() const { return m_pBackgroundBrush; }
-    const SvxBrushItem *GetInhBGBrush() const { return m_pInheritedBackgroundBrush; }
+    const std::unique_ptr<SvxBrushItem>& GetBGBrush() const { return m_xBackgroundBrush; }
+    const std::unique_ptr<SvxBrushItem>& GetInhBGBrush() const { return m_xInheritedBackgroundBrush; }
 
     sal_uInt16 GetBorderWidth( const SvxBorderLine& rBLine,
                            bool bWithDistance=false ) const;
@@ -549,8 +549,7 @@ public:
                      bool bHasValue, double nValue, bool bNoWrap );
 
     // announce the start/end of a new row
-    void OpenRow( SvxAdjust eAdjust, sal_Int16 eVertOri,
-                  SvxBrushItem *pBGBrush );
+    void OpenRow(SvxAdjust eAdjust, sal_Int16 eVertOri, std::unique_ptr<SvxBrushItem>& rBGBrush);
     void CloseRow( bool bEmpty );
 
     // announce the end of a new section
@@ -602,7 +601,7 @@ public:
 
     const SwTable *GetSwTable() const { return m_pSwTable; }
 
-    void SetBGBrush( const SvxBrushItem& rBrush ) { delete m_pBackgroundBrush; m_pBackgroundBrush = new SvxBrushItem( rBrush ); }
+    void SetBGBrush(const SvxBrushItem& rBrush) { m_xBackgroundBrush.reset(new SvxBrushItem(rBrush)); }
 
     const OUString& GetId() const { return m_aId; }
     const OUString& GetClass() const { return m_aClass; }
@@ -759,7 +758,6 @@ HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
     nEmptyRows(0),
     eAdjust(SvxAdjust::End),
     eVertOri(text::VertOrientation::TOP),
-    pBGBrush(nullptr),
     bBottomBorder(false)
 {
     for( sal_uInt16 i=0; i<nCells; i++ )
@@ -774,7 +772,6 @@ HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
 HTMLTableRow::~HTMLTableRow()
 {
     delete m_pCells;
-    delete pBGBrush;
 }
 
 inline void HTMLTableRow::SetHeight( sal_uInt16 nHght )
@@ -916,7 +913,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     m_xBox1.reset();
     m_pBoxFormat = nullptr; m_pLineFormat = nullptr;
     m_pLineFrameFormatNoHeight = nullptr;
-    m_pInheritedBackgroundBrush = nullptr;
+    m_xInheritedBackgroundBrush.reset();
 
     m_pPrevStartNode = nullptr;
     m_pSwTable = nullptr;
@@ -1007,9 +1004,9 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
 
     m_bColSpec = false;
 
-    m_pBackgroundBrush = m_pParser->CreateBrushItem(
+    m_xBackgroundBrush.reset(m_pParser->CreateBrushItem(
                     pOptions->bBGColor ? &(pOptions->aBGColor) : nullptr,
-                    pOptions->aBGImage, aEmptyOUStr, aEmptyOUStr, aEmptyOUStr );
+                    pOptions->aBGImage, aEmptyOUStr, aEmptyOUStr, aEmptyOUStr));
 
     m_pContext = nullptr;
     m_xParentContents.reset();
@@ -1061,8 +1058,6 @@ HTMLTable::~HTMLTable()
 
     delete m_pRows;
     delete m_pColumns;
-    delete m_pBackgroundBrush;
-    delete m_pInheritedBackgroundBrush;
 
     delete m_pContext;
 
@@ -1278,12 +1273,12 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             // since the line is gonna be GC-ed (correctly).
             if( nRowSpan > 1 || (this != m_pTopTable && nRowSpan==m_nRows) )
             {
-                pBGBrushItem = (*m_pRows)[nRow]->GetBGBrush();
+                pBGBrushItem = (*m_pRows)[nRow]->GetBGBrush().get();
                 if( !pBGBrushItem && this != m_pTopTable )
                 {
-                    pBGBrushItem = GetBGBrush();
+                    pBGBrushItem = GetBGBrush().get();
                     if( !pBGBrushItem )
-                        pBGBrushItem = GetInhBGBrush();
+                        pBGBrushItem = GetInhBGBrush().get();
                 }
             }
         }
@@ -1551,15 +1546,15 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     {
         // It doesn't make sense to set a color on a line,
         // if it's the outermost and simultaneously sole line of a table in a table
-        pBGBrushItem = pTopRow->GetBGBrush();
+        pBGBrushItem = pTopRow->GetBGBrush().get();
 
         if( !pBGBrushItem && this != m_pTopTable )
         {
             // A background that's set on a table in a table is set on the rows.
             // It's the same for the background of the cell where that table is
-            pBGBrushItem = GetBGBrush();
+            pBGBrushItem = GetBGBrush().get();
             if( !pBGBrushItem )
-                pBGBrushItem = GetInhBGBrush();
+                pBGBrushItem = GetInhBGBrush().get();
         }
     }
     if( nTopRow==nBottomRow-1 && (nRowHeight || pBGBrushItem) )
@@ -1799,14 +1794,14 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
     {
         // the whole surrounding table is a table in a table and consists only of a single line
         // that's gonna be GC-ed (correctly). That's why the background of that line is copied.
-        pInhBG = (*pParent->m_pRows)[nRow]->GetBGBrush();
+        pInhBG = (*pParent->m_pRows)[nRow]->GetBGBrush().get();
         if( !pInhBG )
-            pInhBG = pParent->GetBGBrush();
+            pInhBG = pParent->GetBGBrush().get();
         if( !pInhBG )
-            pInhBG = pParent->GetInhBGBrush();
+            pInhBG = pParent->GetInhBGBrush().get();
     }
     if( pInhBG )
-        m_pInheritedBackgroundBrush = new SvxBrushItem( *pInhBG );
+        m_xInheritedBackgroundBrush.reset(new SvxBrushItem(*pInhBG));
 }
 
 void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
@@ -2077,8 +2072,8 @@ inline void HTMLTable::CloseSection( bool bHead )
         m_nHeadlineRepeat = m_nCurrentRow;
 }
 
-void HTMLTable::OpenRow( SvxAdjust eAdjust, sal_Int16 eVertOrient,
-                         SvxBrushItem *pBGBrushItem )
+void HTMLTable::OpenRow(SvxAdjust eAdjust, sal_Int16 eVertOrient,
+                        std::unique_ptr<SvxBrushItem>& rBGBrushItem)
 {
     sal_uInt16 nRowsReq = m_nCurrentRow+1;
 
@@ -2095,8 +2090,8 @@ void HTMLTable::OpenRow( SvxAdjust eAdjust, sal_Int16 eVertOrient,
     HTMLTableRow *const pCurRow = (*m_pRows)[m_nCurrentRow].get();
     pCurRow->SetAdjust( eAdjust );
     pCurRow->SetVertOri( eVertOrient );
-    if( pBGBrushItem )
-        (*m_pRows)[m_nCurrentRow]->SetBGBrush( pBGBrushItem );
+    if (rBGBrushItem)
+        (*m_pRows)[m_nCurrentRow]->SetBGBrush(rBGBrushItem);
 
     // reset the column counter
     m_nCurrentColumn=0;
@@ -4050,10 +4045,10 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         if( !aId.isEmpty() )
             InsertBookmark( aId );
 
-        SvxBrushItem *pBrushItem =
+        std::unique_ptr<SvxBrushItem> xBrushItem(
             CreateBrushItem( bBGColor ? &aBGColor : nullptr, aBGImage, aStyle,
-                             aId, aClass );
-        pCurTable->OpenRow( eAdjust, eVertOri, pBrushItem );
+                             aId, aClass ));
+        pCurTable->OpenRow(eAdjust, eVertOri, xBrushItem);
         // If the first GetNextToken() doesn't succeed (pending input), must re-read from the beginning.
         SaveState( HtmlTokenId::NONE );
     }
