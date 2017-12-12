@@ -1915,6 +1915,7 @@ rtl::Reference<LwpVirtualLayout> LwpLayout::GetContainerLayout()
 
 LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
     : LwpLayout(objHdr, pStrm)
+    , m_bGettingWrapType(false)
     , m_nWrapType(0)
     , m_nBuoyancy(0)
     , m_nBaseLineOffset(0)
@@ -1970,19 +1971,24 @@ void LwpPlacableLayout::Read()
 */
 sal_uInt8 LwpPlacableLayout::GetWrapType()
 {
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_bGettingWrapType)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingWrapType = true;
+    sal_uInt8 nWrapType = LAY_WRAP_AROUND;
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
-        return m_nWrapType;
+        nWrapType = m_nWrapType;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*>(xBase.get()))
         {
-            return pLay->GetWrapType();
+            nWrapType = pLay->GetWrapType();
         }
     }
-    return LAY_WRAP_AROUND;
+    m_bGettingWrapType = false;
+    return nWrapType;
 }
 /**
  * @descr:  get LayoutRelativity
