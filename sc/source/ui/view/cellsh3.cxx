@@ -543,24 +543,37 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pHeight;
                 sal_uInt16 nHeight;
 
-                if ( pReqArgs && pReqArgs->HasItem( FID_ROW_HEIGHT, &pHeight ) &&
-                                 pReqArgs->HasItem( FN_PARAM_1, &pRow ) )
+                if ( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, &pRow ) )
                 {
-                    std::vector<sc::ColRowSpan> aRanges;
-                    SCCOLROW nRow = static_cast<const SfxInt32Item*>(pRow)->GetValue() - 1;
-                    nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
+                    enum { NONE, OLD, NEW } eParamType;
 
-                    if ( rMark.IsRowMarked( static_cast<SCROW>(nRow) ) )
-                    {
-                        aRanges = rMark.GetMarkedRowSpans();
-                    }
-                    else
-                    {
-                        aRanges.push_back(sc::ColRowSpan(nRow, nRow));
-                    }
+                    eParamType = NONE;
+                    if ( pReqArgs->HasItem( FN_PARAM_2, &pHeight ) )
+                        eParamType = OLD;
+                    else if ( pReqArgs->HasItem( FID_ROW_HEIGHT, &pHeight ) )
+                        eParamType = NEW;
 
-                    pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, HMMToTwips(nHeight));
+                    if ( eParamType != NONE )
+                    {
+                        std::vector<sc::ColRowSpan> aRanges;
+                        SCCOLROW nRow = static_cast<const SfxInt32Item*>(pRow)->GetValue() - 1;
+                        nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
+                        ScMarkData& rMark = GetViewData()->GetMarkData();
+
+                        if ( rMark.IsRowMarked( static_cast<SCROW>(nRow) ) )
+                        {
+                            aRanges = rMark.GetMarkedRowSpans();
+                        }
+                        else
+                        {
+                            aRanges.push_back(sc::ColRowSpan(nRow, nRow));
+                        }
+
+                        if ( eParamType == NEW )
+                            nHeight = HMMToTwips(nHeight);
+
+                        pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, nHeight);
+                    }
                 }
                 else if ( pReqArgs && pReqArgs->HasItem( FID_ROW_HEIGHT, &pHeight ) )
                 {
@@ -649,24 +662,37 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pWidth;
                 sal_uInt16 nWidth;
 
-                if ( pReqArgs && pReqArgs->HasItem( FID_COL_WIDTH, &pWidth ) &&
-                                 pReqArgs->HasItem( FN_PARAM_1, &pColumn ) )
+                if ( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, &pColumn ) )
                 {
-                    std::vector<sc::ColRowSpan> aRanges;
-                    SCCOLROW nColumn = static_cast<const SfxUInt16Item*>(pColumn)->GetValue() - 1;
-                    nWidth = static_cast<const SfxUInt16Item*>(pWidth)->GetValue();
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
+                    enum { NONE, OLD, NEW } eParamType;
 
-                    if ( rMark.IsColumnMarked( static_cast<SCCOL>(nColumn) ) )
-                    {
-                        aRanges = rMark.GetMarkedColSpans();
-                    }
-                    else
-                    {
-                        aRanges.push_back(sc::ColRowSpan(nColumn, nColumn));
-                    }
+                    eParamType = NONE;
+                    if ( pReqArgs->HasItem( FN_PARAM_2, &pWidth ) )
+                        eParamType = OLD;
+                    else if ( pReqArgs->HasItem( FID_COL_WIDTH, &pWidth ) )
+                        eParamType = NEW;
 
-                    pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, HMMToTwips(nWidth));
+                    if ( eParamType != NONE )
+                    {
+                        std::vector<sc::ColRowSpan> aRanges;
+                        SCCOLROW nColumn = static_cast<const SfxUInt16Item*>(pColumn)->GetValue() - 1;
+                        nWidth = static_cast<const SfxUInt16Item*>(pWidth)->GetValue();
+                        ScMarkData& rMark = GetViewData()->GetMarkData();
+
+                        if ( rMark.IsColumnMarked( static_cast<SCCOL>(nColumn) ) )
+                        {
+                            aRanges = rMark.GetMarkedColSpans();
+                        }
+                        else
+                        {
+                            aRanges.push_back(sc::ColRowSpan(nColumn, nColumn));
+                        }
+
+                        if ( eParamType == NEW )
+                            nWidth = HMMToTwips(nWidth);
+
+                        pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, nWidth);
+                    }
                 }
                 else if ( pReqArgs && pReqArgs->HasItem( FID_COL_WIDTH, &pWidth ) )
                 {
