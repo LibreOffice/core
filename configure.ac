@@ -6565,13 +6565,13 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 # Misc Windows Stuff
-AC_ARG_WITH(ucrt-dir,
-    AS_HELP_STRING([--with-ucrt-dir],
-        [path to the directory with the arch-specific subdirectories of the Windows Universal CRT redistributables
-        from the Windows 10 SDK for packaging into the installsets (without those the target system needs to install
+AC_ARG_WITH(vcredist-dir,
+    AS_HELP_STRING([--with-vcredist-dir],
+        [path to the directory with the arch-specific executables (vc_redist.x64.exe, vc_redist.x86.exe)
+        for packaging into the installsets (without those the target system needs to install
         the Visual C++ Runtimes manually)]),
 ,)
-UCRT_REDISTDIR="$with_ucrt_dir"
+VCREDIST_DIR="$with_vcredist_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
     find_msms
@@ -6579,27 +6579,20 @@ if test $_os = "WINNT"; then
     MSVC_DLLS="$msvcdlls"
     MSM_PATH="$msmdir"
     SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
-    if test "$UCRT_REDISTDIR" = "no"; then
+    if test "$VCREDIST_DIR" = "no"; then
         dnl explicitly disabled
-        UCRT_REDISTDIR=""
+        VCREDIST_DIR=""
     else
-        UCRT_REDISTDIR="$UCRT_REDISTDIR/$WINDOWS_SDK_ARCH"
-        # https://blogs.msdn.microsoft.com/vcblog/2015/03/03/introducing-the-universal-crt/
-        # "note that the set of DLLs are necessary is different on different
-        #  versions of Windows, so you must include all of the DLLs in order for
-        #  your program to run on all supported versions of Windows"
-        if test -f "$UCRT_REDISTDIR/ucrtbase.dll"; then
-            cd "$UCRT_REDISTDIR";
-            UCRT_DLLS=$(ls *.dll | paste -d " " -s)
-            cd -
+        if test -f "$VCREDIST_DIR/vc_redist.$WINDOWS_SDK_ARCH.exe"; then
+            VCREDIST_EXE="vc_redist.$WINDOWS_SDK_ARCH.exe"
         else
-            UCRT_REDISTDIR=""
+            VCREDIST_DIR=""
             if test -n "$PKGFORMAT"; then
                for i in "$PKGFORMAT"; do
                    case "$i" in
                    msi)
-                       AC_MSG_WARN([--without-ucrt-dir not specified or dlls not found - installer will have runtime dependency])
-                       add_warning "--without-ucrt-dir not specified or dlls not found - installer will have runtime dependency"
+                       AC_MSG_WARN([--without-vcredist-dir not specified or exe not found - installer will have runtime dependency])
+                       add_warning "--without-vcredist-dir not specified or exe not found - installer will have runtime dependency"
                        ;;
                    esac
                done
@@ -6608,8 +6601,8 @@ if test $_os = "WINNT"; then
     fi
 fi
 
-AC_SUBST(UCRT_REDISTDIR)
-AC_SUBST(UCRT_DLLS)
+AC_SUBST(VCREDIST_DIR)
+AC_SUBST(VCREDIST_EXE)
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)

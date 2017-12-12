@@ -5,3 +5,5 @@ installuser	1	Software\LibreOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]
 installuser_	1	Software\LibreOffice\Layers_\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
 installmachine	2	Software\LibreOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
 installmachine_	2	Software\LibreOffice\Layers_\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+VCREDISTINSTALLED_X86	2	Software\Microsoft\VisualStudio\14.0\VC\Runtimes\x86	Version	2
+VCREDISTINSTALLED_X64	2	Software\Microsoft\VisualStudio\14.0\VC\Runtimes\x64	Version	2

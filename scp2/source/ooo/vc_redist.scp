@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#if defined(MSM_PATH)
+
 #if defined(WITH_VC140_REDIST)
 
 #if defined WINDOWS_X64
@@ -56,3 +58,27 @@ End
 
 #endif
 
+#endif // MSM_PATH
+
+#if defined(VCREDIST_EXE_NAME)
+
+File gid_File_Vcredist_Exe
+    Name = VCREDIST_EXE_NAME;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+End
+
+WindowsCustomAction gid_Customaction_InstallVCRedist
+    Name = "InstallVCRedist";
+    Typ = "66"; /* 0x02 = exe in a binary table stream; 0x40 = ignore exit code and continue */
+    Source = VCREDIST_EXE_NAME;
+    Target = "/repair /norestart /passive";
+    Inbinarytable = 1;
+#if defined WINDOWS_X64
+    Assignment1 = ("InstallUISequence", "Not Installed And ( Not VCREDISTINSTALLED_X64 Or VCREDISTINSTALLED_X64 < \"v14.0.24215.0\" )", "behind_ExecuteAction");
+#else
+    Assignment1 = ("InstallUISequence", "Not Installed And ( Not VCREDISTINSTALLED_X86 Or VCREDISTINSTALLED_X86 < \"v14.0.24215.0\" )", "behind_ExecuteAction");
+#endif
+End
+
+#endif

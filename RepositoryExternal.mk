@@ -4123,4 +4123,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+$(eval $(call gb_Helper_register_packages_for_install,vcredist_exe_binarytable,\
+	$(if $(VCREDIST_DIR),vcredist_exe) \
+))
+
 # vim: set noet sw=4 ts=4:
