@@ -69,6 +69,9 @@ void SfxLokHelper::setView(int nId)
     {
         if ((sal_Int32)pViewShell->GetViewShellId() == nViewShellId)
         {
+            // update the current LOK language for the dialog tunneling
+            comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
+
             if (pViewShell == SfxViewShell::Current())
                 return;
 
@@ -118,6 +121,20 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
         pArray[i] = (sal_Int32)pViewShell->GetViewShellId();
     }
     return true;
+}
+
+void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
+{
+    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKLanguageTag(rBcp47LanguageTag);
+            return;
+        }
+    }
 }
 
 void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload)

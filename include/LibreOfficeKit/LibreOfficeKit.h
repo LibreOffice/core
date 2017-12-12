@@ -297,6 +297,9 @@ struct _LibreOfficeKitDocumentClass
                                   int nButtons,
                                   int nModifier);
 
+    /// @see lok::Document::setViewLanguage().
+    void (*setViewLanguage) (LibreOfficeKitDocument* pThis, int nId, const char* language);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
