@@ -103,7 +103,10 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
                 }
                 break;
-
+            case FN_EDIT_SIGNATURELINE:
+                if (!isSignatureLineSelected())
+                    rSet.DisableItem(nWhich);
+                break;
             case FN_INSERT_CAPTION:
                 {
                     // There are captions for graphics, OLE objects, frames and tables
