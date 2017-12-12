@@ -1730,6 +1730,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                                                               pEntry->GetFormatstring() ) )
             {
                 // other Format
+                // Force locale's keywords.
+                pFormatScanner->ChangeIntl( ImpSvNumberformatScan::KeywordLocalization::LocaleLegacy );
                 sTmpString = sFormatString;
                 pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
                                              pStringScanner, nCheckPos, eLnge ));
@@ -1750,6 +1752,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                                                                     pEntry2->GetFormatstring() ) )
                 {
                     // other Format
+                    // Force locale's keywords.
+                    pFormatScanner->ChangeIntl( ImpSvNumberformatScan::KeywordLocalization::LocaleLegacy );
                     sTmpString = sFormatString;
                     pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
                                                  pStringScanner, nCheckPos, eLnge ));
