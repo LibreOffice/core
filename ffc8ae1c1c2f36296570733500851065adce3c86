@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_689d7e65",
+        "filename": "include/oox/drawingml/shape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-12T09:29:40Z",
+      "side": 1,
+      "message": "If Rot stands for Rotation here, please spell it out, it makes code reading easier.",
+      "revId": "ffc8ae1c1c2f36296570733500851065adce3c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c88e722d",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-12T09:29:40Z",
+      "side": 1,
+      "message": "Surrounding code naming convention would be sal_Int32 nShapeRotation for this parameter.",
+      "revId": "ffc8ae1c1c2f36296570733500851065adce3c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_889aaa6c",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-12T09:29:40Z",
+      "side": 1,
+      "message": "Please document what is the source and meaning of that 5400000*4 expression.",
+      "revId": "ffc8ae1c1c2f36296570733500851065adce3c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
