@@ -15,12 +15,14 @@
 #include <unotools/streamwrap.hxx>
 #include <view.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -32,6 +34,7 @@ using namespace css::io;
 using namespace css::lang;
 using namespace css::frame;
 using namespace css::text;
+using namespace css::view;
 using namespace css::drawing;
 using namespace css::graphic;
 
@@ -45,6 +48,53 @@ SignatureLineDialog::SignatureLineDialog(vcl::Window* pParent, SwView& rView)
     get(m_pEditInstructions, "edit_instructions");
     get(m_pCheckboxCanAddComments, "checkbox_can_add_comments");
     get(m_pCheckboxShowSignDate, "checkbox_show_sign_date");
+
+    Reference<XModel> const xModel(mrView.GetCurrentDocument());
+    Reference<XInterface> const xSelection(xModel->getCurrentSelection());
+
+    Reference<lang::XServiceInfo> xServiceInfo(xModel->getCurrentSelection(), UNO_QUERY_THROW);
+
+    if (!xServiceInfo->supportsService("com.sun.star.drawing.Shapes"))
+    {
+        // No existing signature line - start with empty dialog
+        return;
+    }
+
+    // Make sure only one object is selected
+    Reference<container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), UNO_QUERY_THROW);
+    if (xIndexAccess->getCount() != 1)
+        return;
+
+    // Make sure the selected object actually is a signature line
+    Reference<XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+    bool bIsSignatureLine = false;
+    xProps->getPropertyValue("IsSignatureLine") >>= bIsSignatureLine;
+    if (!bIsSignatureLine)
+        return;
+
+    // Read properties from selected signature line
+    xProps->getPropertyValue("SignatureLineId") >>= m_aSignatureLineId;
+    OUString aSuggestedSignerName;
+    xProps->getPropertyValue("SignatureLineSuggestedSignerName") >>= aSuggestedSignerName;
+    m_pEditName->SetText(aSuggestedSignerName);
+    OUString aSuggestedSignerTitle;
+    xProps->getPropertyValue("SignatureLineSuggestedSignerTitle") >>= aSuggestedSignerTitle;
+    m_pEditTitle->SetText(aSuggestedSignerTitle);
+    OUString aSuggestedSignerEmail;
+    xProps->getPropertyValue("SignatureLineSuggestedSignerEmail") >>= aSuggestedSignerEmail;
+    m_pEditEmail->SetText(aSuggestedSignerEmail);
+    OUString aSigningInstructions;
+    xProps->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
+    m_pEditInstructions->SetText(aSigningInstructions);
+    bool bCanAddComments = false;
+    xProps->getPropertyValue("SignatureLineShowSignDate") >>= bCanAddComments;
+    m_pCheckboxCanAddComments->Check(bCanAddComments);
+    bool bShowSignDate = false;
+    xProps->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
+    m_pCheckboxShowSignDate->Check(bShowSignDate);
+
+    // Mark this as existing shape
+    m_xExistingShapeProperties = xProps;
 }
 
 SignatureLineDialog::~SignatureLineDialog() { disposeOnce(); }
@@ -63,8 +113,9 @@ void SignatureLineDialog::dispose()
 
 void SignatureLineDialog::Apply()
 {
-    OUString aSignatureLineId
-        = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
+    if (m_aSignatureLineId.isEmpty())
+        m_aSignatureLineId
+            = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_ASCII_US);
     OUString aSignerName(m_pEditName->GetText());
     OUString aSignerTitle(m_pEditTitle->GetText());
     OUString aSignerEmail(m_pEditEmail->GetText());
@@ -83,7 +134,7 @@ void SignatureLineDialog::Apply()
     aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
     aSvgImage = aSvgImage.replaceAll("[DATE]", "");
 
-    // Insert graphic
+    // Insert/Update graphic
     SvMemoryStream aSvgStream(4096, 4096);
     aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
     Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
@@ -96,23 +147,20 @@ void SignatureLineDialog::Apply()
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
     Reference<XModel> const xModel(mrView.GetCurrentDocument());
-    Reference<XPropertySet> const xShapeProps(
-        Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY)
-            ->createInstance("com.sun.star.drawing.GraphicObjectShape"),
-        UNO_QUERY);
-    xShapeProps->setPropertyValue("Graphic", Any(xGraphic));
-    xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+    bool bIsExistingSignatureLine = m_xExistingShapeProperties.is();
+    Reference<XPropertySet> xShapeProps;
+    if (bIsExistingSignatureLine)
+        xShapeProps = m_xExistingShapeProperties;
+    else
+        xShapeProps.set(Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY)
+                            ->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                        UNO_QUERY);
 
-    // Set shape properties
-    Reference<XShape> xShape(xShapeProps, UNO_QUERY);
-    awt::Size aShapeSize;
-    aShapeSize.Height = 3000;
-    aShapeSize.Width = 6000;
-    xShape->setSize(aShapeSize);
+    xShapeProps->setPropertyValue("Graphic", Any(xGraphic));
 
     // Set signature line properties
     xShapeProps->setPropertyValue("IsSignatureLine", Any(true));
-    xShapeProps->setPropertyValue("SignatureLineId", Any(aSignatureLineId));
+    xShapeProps->setPropertyValue("SignatureLineId", Any(m_aSignatureLineId));
     if (!aSignerName.isEmpty())
         xShapeProps->setPropertyValue("SignatureLineSuggestedSignerName", Any(aSignerName));
     if (!aSignerTitle.isEmpty())
@@ -125,11 +173,24 @@ void SignatureLineDialog::Apply()
     xShapeProps->setPropertyValue("SignatureLineShowSignDate", Any(bShowSignDate));
     xShapeProps->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComments));
 
-    // Insert into document
-    Reference<XTextRange> const xEnd
-        = Reference<XTextDocument>(xModel, UNO_QUERY)->getText()->getEnd();
-    Reference<XTextContent> const xShapeContent(xShapeProps, UNO_QUERY);
-    xShapeContent->attach(xEnd);
+    if (!bIsExistingSignatureLine)
+    {
+        // Default size
+        Reference<XShape> xShape(xShapeProps, UNO_QUERY);
+        awt::Size aShapeSize;
+        aShapeSize.Height = 3000;
+        aShapeSize.Width = 6000;
+        xShape->setSize(aShapeSize);
+
+        // Default anchoring
+        xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+
+        // Insert into document
+        Reference<XTextRange> const xEnd
+            = Reference<XTextDocument>(xModel, UNO_QUERY)->getText()->getEnd();
+        Reference<XTextContent> const xShapeContent(xShapeProps, UNO_QUERY);
+        xShapeContent->attach(xEnd);
+    }
 }
 
 OUString SignatureLineDialog::getSignatureImage()
