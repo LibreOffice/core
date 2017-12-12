@@ -282,7 +282,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // NewOrLoadCompleted, because only then do all the templates exist.
     pHitTestOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()) );
 
-    SetCalcFieldValueHdl( pHitTestOutliner );
+    SetCalcFieldValueHdl( pHitTestOutliner.get() );
 
     try
     {

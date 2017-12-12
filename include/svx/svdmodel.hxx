@@ -157,22 +157,22 @@ protected:
     Fraction       aUIUnitFact;  // see above
     int            nUIUnitDecimalMark; // see above
 
-    SdrLayerAdmin*  pLayerAdmin;
+    std::unique_ptr<SdrLayerAdmin> pLayerAdmin;
     SfxItemPool*    pItemPool;
     comphelper::IEmbeddedHelper*
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
-    SdrOutliner*    pDrawOutliner;  // an Outliner for outputting text
-    SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
-    SdrOutliner*    pChainingOutliner; // an Outliner for chaining overflowing text
+    std::unique_ptr<SdrOutliner> pDrawOutliner;  // an Outliner for outputting text
+    std::unique_ptr<SdrOutliner> pHitTestOutliner;// an Outliner for the HitTest
+    std::unique_ptr<SdrOutliner> pChainingOutliner; // an Outliner for chaining overflowing text
     sal_Int32       mnDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
     SfxStyleSheet* mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; // #i119287#
     sfx2::LinkManager* pLinkManager;   // LinkManager
-    std::deque<SfxUndoAction*>* pUndoStack;
-    std::deque<SfxUndoAction*>* pRedoStack;
-    SdrUndoGroup*       pAktUndoGroup;  // for deeper
+    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> pUndoStack;
+    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> pRedoStack;
+    std::unique_ptr<SdrUndoGroup> pAktUndoGroup;  // for deeper
     sal_uInt16          nUndoLevel;     // undo nesting
     bool                bMyPool:1;        // to clean up pMyPool from 303a
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
@@ -190,14 +190,14 @@ protected:
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
 
-    TextChain*          pTextChain;
+    std::unique_ptr<TextChain> pTextChain;
 
 
 public:
     std::shared_ptr<SvxForbiddenCharactersTable> mpForbiddenCharactersTable;
     SdrSwapGraphicsMode nSwapGraphicsMode;
 
-    SdrOutlinerCache*   mpOutlinerCache;
+    std::unique_ptr<SdrOutlinerCache> mpOutlinerCache;
     //get a vector of all the SdrOutliner belonging to the model
     std::vector<SdrOutliner*> GetActiveOutliners() const;
     std::unique_ptr<SdrModelImpl>       mpImpl;
@@ -222,7 +222,7 @@ private:
     SdrModel(const SdrModel& rSrcModel) = delete;
     void operator=(const SdrModel& rSrcModel) = delete;
     bool operator==(const SdrModel& rCmpModel) const = delete;
-    SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
+    SVX_DLLPRIVATE void ImpPostUndoAction(std::unique_ptr<SdrUndoAction> pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
     SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit = false );
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();

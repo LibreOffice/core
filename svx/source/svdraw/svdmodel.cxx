@@ -192,25 +192,25 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pItemPool->SetPoolDefaultItem( makeSdrTextWordWrapItem( false ) );
 
     SetTextDefaults();
-    pLayerAdmin=new SdrLayerAdmin;
+    pLayerAdmin.reset(new SdrLayerAdmin);
     pLayerAdmin->SetModel(this);
     ImpSetUIUnit();
 
     // can't create DrawOutliner OnDemand, because I can't get the Pool,
     // then (only from 302 onwards!)
-    pDrawOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
-    ImpSetOutlinerDefaults(pDrawOutliner, true);
+    pDrawOutliner.reset(SdrMakeOutliner(OutlinerMode::TextObject, *this));
+    ImpSetOutlinerDefaults(pDrawOutliner.get(), true);
 
-    pHitTestOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
-    ImpSetOutlinerDefaults(pHitTestOutliner, true);
+    pHitTestOutliner.reset(SdrMakeOutliner(OutlinerMode::TextObject, *this));
+    ImpSetOutlinerDefaults(pHitTestOutliner.get(), true);
 
     /* Start Text Chaining related code */
     // Initialize Chaining Outliner
-    pChainingOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *this );
-    ImpSetOutlinerDefaults(pChainingOutliner, true);
+    pChainingOutliner.reset(SdrMakeOutliner( OutlinerMode::TextObject, *this ));
+    ImpSetOutlinerDefaults(pChainingOutliner.get(), true);
 
     // Make a TextChain
-    pTextChain = new TextChain;
+    pTextChain.reset(new TextChain);
     /* End Text Chaining related code */
 
     ImpCreateTables();
@@ -245,25 +245,25 @@ SdrModel::~SdrModel()
 
     Broadcast(SdrHint(SdrHintKind::ModelCleared));
 
-    delete mpOutlinerCache;
+    mpOutlinerCache.reset();
 
     ClearUndoBuffer();
 #ifdef DBG_UTIL
     SAL_WARN_IF(pAktUndoGroup, "svx", "In the Dtor of the SdrModel there is an open Undo left: \""
                     << pAktUndoGroup->GetComment() << '\"');
 #endif
-    delete pAktUndoGroup;
+    pAktUndoGroup.reset();
 
     ClearModel(true);
 
-    delete pLayerAdmin;
+    pLayerAdmin.reset();
 
-    delete pTextChain;
+    pTextChain.reset();
     // Delete DrawOutliner only after deleting ItemPool, because ItemPool
     // references Items of the DrawOutliner!
-    delete pChainingOutliner;
-    delete pHitTestOutliner;
-    delete pDrawOutliner;
+    pChainingOutliner.reset();
+    pHitTestOutliner.reset();
+    pDrawOutliner.reset();
 
     // delete StyleSheetPool, derived classes should not do this since
     // the DrawingEngine may need it in its destructor
@@ -315,9 +315,8 @@ void SdrModel::SetMaxUndoActionCount(sal_uInt32 nCount)
 {
     if (nCount<1) nCount=1;
     nMaxUndoCount=nCount;
-    if (pUndoStack!=nullptr) {
+    if (pUndoStack) {
         while (pUndoStack->size()>nMaxUndoCount) {
-            delete pUndoStack->back();
             pUndoStack->pop_back();
         }
     }
@@ -325,22 +324,8 @@ void SdrModel::SetMaxUndoActionCount(sal_uInt32 nCount)
 
 void SdrModel::ClearUndoBuffer()
 {
-    if (pUndoStack!=nullptr) {
-        while (!pUndoStack->empty()) {
-            delete pUndoStack->back();
-            pUndoStack->pop_back();
-        }
-        delete pUndoStack;
-        pUndoStack=nullptr;
-    }
-    if (pRedoStack!=nullptr) {
-        while (!pRedoStack->empty()) {
-            delete pRedoStack->back();
-            pRedoStack->pop_back();
-        }
-        delete pRedoStack;
-        pRedoStack=nullptr;
-    }
+    pUndoStack.reset();
+    pRedoStack.reset();
 }
 
 bool SdrModel::HasUndoActions() const
@@ -361,17 +346,17 @@ void SdrModel::Undo()
     }
     else
     {
-        SfxUndoAction* pDo = HasUndoActions() ? pUndoStack->front() : nullptr;
-        if(pDo!=nullptr)
+        if(HasUndoActions())
         {
+            SfxUndoAction* pDo = pUndoStack->front().get();
             const bool bWasUndoEnabled = mbUndoEnabled;
             mbUndoEnabled = false;
             pDo->Undo();
-            if(pRedoStack==nullptr)
-                pRedoStack=new std::deque<SfxUndoAction*>;
-            SfxUndoAction* p = pUndoStack->front();
+            if(!pRedoStack)
+                pRedoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
+            SfxUndoAction* p = pUndoStack->front().release();
             pUndoStack->pop_front();
-            pRedoStack->push_front(p);
+            pRedoStack->emplace_front(p);
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -385,17 +370,17 @@ void SdrModel::Redo()
     }
     else
     {
-        SfxUndoAction* pDo = HasRedoActions() ? pRedoStack->front() : nullptr;
-        if(pDo!=nullptr)
+        if(HasRedoActions())
         {
+            SfxUndoAction* pDo = pRedoStack->front().get();
             const bool bWasUndoEnabled = mbUndoEnabled;
             mbUndoEnabled = false;
             pDo->Redo();
-            if(pUndoStack==nullptr)
-                pUndoStack=new std::deque<SfxUndoAction*>;
-            SfxUndoAction* p = pRedoStack->front();
+            if(!pUndoStack)
+                pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
+            SfxUndoAction* p = pRedoStack->front().release();
             pRedoStack->pop_front();
-            pUndoStack->push_front(p);
+            pUndoStack->emplace_front(p);
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -409,9 +394,9 @@ void SdrModel::Repeat(SfxRepeatTarget& rView)
     }
     else
     {
-        SfxUndoAction* pDo = HasUndoActions() ? pUndoStack->front() : nullptr;
-        if(pDo!=nullptr)
+        if(HasUndoActions())
         {
+            SfxUndoAction* pDo =  pUndoStack->front().get();
             if(pDo->CanRepeat(rView))
             {
                 pDo->Repeat(rView);
@@ -420,32 +405,27 @@ void SdrModel::Repeat(SfxRepeatTarget& rView)
     }
 }
 
-void SdrModel::ImpPostUndoAction(SdrUndoAction* pUndo)
+void SdrModel::ImpPostUndoAction(std::unique_ptr<SdrUndoAction> pUndo)
 {
     DBG_ASSERT( mpImpl->mpUndoManager == nullptr, "svx::SdrModel::ImpPostUndoAction(), method not supported with application undo manager!" );
     if( IsUndoEnabled() )
     {
         if (aUndoLink.IsSet())
         {
-            aUndoLink.Call(pUndo);
+            aUndoLink.Call(pUndo.release());
         }
         else
         {
-            if (pUndoStack==nullptr)
-                pUndoStack=new std::deque<SfxUndoAction*>;
-            pUndoStack->push_front(pUndo);
+            if (!pUndoStack)
+                pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
+            pUndoStack->emplace_front(std::move(pUndo));
             while (pUndoStack->size()>nMaxUndoCount)
             {
-                delete pUndoStack->back();
                 pUndoStack->pop_back();
             }
             if (pRedoStack!=nullptr)
                 pRedoStack->clear();
         }
-    }
-    else
-    {
-        delete pUndo;
     }
 }
 
@@ -461,9 +441,9 @@ void SdrModel::BegUndo()
     }
     else if( IsUndoEnabled() )
     {
-        if(pAktUndoGroup==nullptr)
+        if(!pAktUndoGroup)
         {
-            pAktUndoGroup = new SdrUndoGroup(*this);
+            pAktUndoGroup.reset(new SdrUndoGroup(*this));
             nUndoLevel=1;
         }
         else
@@ -540,15 +520,13 @@ void SdrModel::EndUndo()
             {
                 if(pAktUndoGroup->GetActionCount()!=0)
                 {
-                    SdrUndoAction* pUndo=pAktUndoGroup;
-                    pAktUndoGroup=nullptr;
-                    ImpPostUndoAction(pUndo);
+                    SdrUndoAction* pUndo=pAktUndoGroup.release();
+                    ImpPostUndoAction(std::unique_ptr<SdrUndoAction>(pUndo));
                 }
                 else
                 {
                     // was empty
-                    delete pAktUndoGroup;
-                    pAktUndoGroup=nullptr;
+                    pAktUndoGroup.reset();
                 }
             }
         }
@@ -601,13 +579,13 @@ void SdrModel::AddUndo(SdrUndoAction* pUndo)
     }
     else
     {
-        if (pAktUndoGroup!=nullptr)
+        if (pAktUndoGroup)
         {
             pAktUndoGroup->AddAction(pUndo);
         }
         else
         {
-            ImpPostUndoAction(pUndo);
+            ImpPostUndoAction(std::unique_ptr<SdrUndoAction>(pUndo));
         }
     }
 }
@@ -787,8 +765,8 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
 void SdrModel::SetRefDevice(OutputDevice* pDev)
 {
     pRefOutDev=pDev;
-    ImpSetOutlinerDefaults( pDrawOutliner );
-    ImpSetOutlinerDefaults( pHitTestOutliner );
+    ImpSetOutlinerDefaults( pDrawOutliner.get() );
+    ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     RefDeviceChanged();
 }
 
@@ -1038,8 +1016,8 @@ void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
         aObjUnit=rFrac;
         pItemPool->SetDefaultMetric(eObjUnit);
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
@@ -1050,8 +1028,8 @@ void SdrModel::SetScaleUnit(MapUnit eMap)
         eObjUnit=eMap;
         pItemPool->SetDefaultMetric(eObjUnit);
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
@@ -1061,8 +1039,8 @@ void SdrModel::SetScaleFraction(const Fraction& rFrac)
     if (aObjUnit!=rFrac) {
         aObjUnit=rFrac;
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
@@ -1845,8 +1823,8 @@ void SdrModel::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharacte
 {
     mpForbiddenCharactersTable = xForbiddenChars;
 
-    ImpSetOutlinerDefaults( pDrawOutliner );
-    ImpSetOutlinerDefaults( pHitTestOutliner );
+    ImpSetOutlinerDefaults( pDrawOutliner.get() );
+    ImpSetOutlinerDefaults( pHitTestOutliner.get() );
 }
 
 
@@ -1855,8 +1833,8 @@ void SdrModel::SetCharCompressType( CharCompressType nType )
     if( nType != mnCharCompressType )
     {
         mnCharCompressType = nType;
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     }
 }
 
@@ -1865,8 +1843,8 @@ void SdrModel::SetKernAsianPunctuation( bool bEnabled )
     if( mbKernAsianPunctuation != bEnabled )
     {
         mbKernAsianPunctuation = bEnabled;
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     }
 }
 
@@ -1875,8 +1853,8 @@ void SdrModel::SetAddExtLeading( bool bEnabled )
     if( mbAddExtLeading != bEnabled )
     {
         mbAddExtLeading = bEnabled;
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     }
 }
 
@@ -1897,8 +1875,8 @@ void SdrModel::ReformatAllTextObjects()
 
 SdrOutliner* SdrModel::createOutliner( OutlinerMode nOutlinerMode )
 {
-    if( nullptr == mpOutlinerCache )
-        mpOutlinerCache = new SdrOutlinerCache(this);
+    if( !mpOutlinerCache )
+        mpOutlinerCache.reset(new SdrOutlinerCache(this));
 
     return mpOutlinerCache->createOutliner( nOutlinerMode );
 }
@@ -1906,8 +1884,8 @@ SdrOutliner* SdrModel::createOutliner( OutlinerMode nOutlinerMode )
 std::vector<SdrOutliner*> SdrModel::GetActiveOutliners() const
 {
     std::vector< SdrOutliner* > aRet(mpOutlinerCache ? mpOutlinerCache->GetActiveOutliners() : std::vector< SdrOutliner* >());
-    aRet.push_back(pDrawOutliner);
-    aRet.push_back(pHitTestOutliner);
+    aRet.push_back(pDrawOutliner.get());
+    aRet.push_back(pHitTestOutliner.get());
 
     return aRet;
 }
@@ -1988,7 +1966,7 @@ void SdrModel::PageListChanged()
 
 TextChain *SdrModel::GetTextChain() const
 {
-    return pTextChain;
+    return pTextChain.get();
 }
 
 const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const
