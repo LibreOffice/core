@@ -2729,7 +2729,10 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
     }
 
     if (!pStNd)
+    {
+        eState = SvParserState::Error;
         throw std::runtime_error("missing table start node");
+    }
 
     return pStNd;
 }
