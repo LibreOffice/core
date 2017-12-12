@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_08aeba97",
+        "filename": "sw/inc/hintids.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-12T09:22:20Z",
+      "side": 1,
+      "message": "Isn\u0027t repeating 131 here as a comment redundant now?",
+      "revId": "d905c783e7f20ea1f18600252cd92c02ea7f91f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
