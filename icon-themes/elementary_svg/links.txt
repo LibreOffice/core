@@ -427,18 +427,18 @@ cmd/sc_quickedit.svg cmd/sc_editdoc.svg
 cmd/sc_dsbeditdoc.svg cmd/sc_editdoc.svg
 
 # Quit
-cmd/lc_closemasterview.svg cmd/lc_quit.svg
 cmd/lc_closewin.svg cmd/lc_quit.svg
-cmd/lc_closepreview.svg cmd/lc_quit.svg
-cmd/sc_closemasterview.svg cmd/sc_quit.svg
 cmd/sc_closewin.svg cmd/sc_quit.svg
-cmd/sc_closepreview.svg cmd/sc_quit.svg
 
 # Close
 cmd/lc_closedocs.svg cmd/lc_closedoc.svg
 cmd/lc_exitsearch.svg cmd/lc_closedoc.svg
+cmd/lc_closepreview.svg cmd/lc_closedoc.svg
+cmd/lc_closemasterview.svg cmd/lc_closedoc.svg
 cmd/sc_closedocs.svg cmd/sc_closedoc.svg
 cmd/sc_exitsearch.svg cmd/sc_closedoc.svg
+cmd/sc_closepreview.svg cmd/sc_closedoc.svg
+cmd/sc_closemasterview.svg cmd/sc_closedoc.svg
 
 # arc
 cmd/lc_basicshapes.block-arc.svg cmd/lc_arc.svg
