@@ -68,4 +68,5 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AddTextBox"/>
   <menu:menuitem menu:id=".uno:RemoveTextBox"/>
+  <menu:menuitem menu:id=".uno:EditSignatureLine"/>
 </menu:menupopup>

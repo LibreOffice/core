@@ -531,6 +531,7 @@ public:
     bool            HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const;
     bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
+    bool isSignatureLineSelected();
 
     void            StateTabWin(SfxItemSet&);
 
