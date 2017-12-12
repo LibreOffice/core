@@ -28,4 +28,12 @@ $(eval $(call gb_Module_add_targets,msc-externals,\
 
 endif
 
+ifneq ($(VCREDIST_DIR),)
+
+$(eval $(call gb_Module_add_targets,msc-externals,\
+	Package_vcredist_exe \
+))
+
+endif
+
 # vim: set noet sw=4 ts=4:
