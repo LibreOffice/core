@@ -75,6 +75,17 @@ public:
     orcus::spreadsheet::range_t resolve_range(const char* p, size_t n) override;
 };
 
+class ScOrcusNamedExpression : public orcus::spreadsheet::iface::import_named_expression
+{
+    ScDocumentImport& mrDoc;
+    const ScOrcusGlobalSettings& mrGlobalSettings;
+
+public:
+    ScOrcusNamedExpression( ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS );
+
+    virtual void define_name(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp) override;
+};
+
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
 {
     ScOrcusFactory& mrFactory;
@@ -517,6 +528,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
     ScOrcusGlobalSettings maGlobalSettings;
     ScOrcusRefResolver maRefResolver;
     ScOrcusSharedStrings maSharedStrings;
+    ScOrcusNamedExpression maNamedExpressions;
     std::vector< std::unique_ptr<ScOrcusSheet> > maSheets;
     ScOrcusStyles maStyles;
 
@@ -533,6 +545,7 @@ public:
     virtual orcus::spreadsheet::iface::import_sheet* get_sheet(orcus::spreadsheet::sheet_t sheet_index) override;
     virtual orcus::spreadsheet::iface::import_global_settings* get_global_settings() override;
     virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings() override;
+    virtual orcus::spreadsheet::iface::import_named_expression* get_named_expression() override;
     virtual orcus::spreadsheet::iface::import_styles* get_styles() override;
     virtual void finalize() override;
 

@@ -157,6 +157,26 @@ os::range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
     return ret;
 }
 
+ScOrcusNamedExpression::ScOrcusNamedExpression(
+    ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS ) :
+    mrDoc(rDoc), mrGlobalSettings(rGS) {}
+
+void ScOrcusNamedExpression::define_name(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp)
+{
+    OUString aName(p_name, n_name, RTL_TEXTENCODING_UTF8);
+    OUString aExpr(p_exp, n_exp, RTL_TEXTENCODING_UTF8);
+
+    ScRangeName* pNames = mrDoc.getDoc().GetRangeName();
+    if (!pNames)
+        return;
+
+    ScRangeData* pRange = new ScRangeData(
+        &mrDoc.getDoc(), aName, aExpr, ScAddress(), ScRangeData::Type::Name,
+        mrGlobalSettings.getCalcGrammar());
+
+    pNames->insert(pRange, false);
+}
+
 ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
     maPos(rPos), mnIndex(nIndex) {}
 
@@ -165,6 +185,7 @@ ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
     maGlobalSettings(maDoc),
     maRefResolver(maGlobalSettings),
     maSharedStrings(*this),
+    maNamedExpressions(maDoc, maGlobalSettings),
     maStyles(rDoc),
     mnProgress(0) {}
 
@@ -246,6 +267,11 @@ orcus::spreadsheet::iface::import_global_settings* ScOrcusFactory::get_global_se
 orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_strings()
 {
     return &maSharedStrings;
+}
+
+orcus::spreadsheet::iface::import_named_expression* ScOrcusFactory::get_named_expression()
+{
+    return &maNamedExpressions;
 }
 
 orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
