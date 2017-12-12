@@ -2024,8 +2024,7 @@ void SwHTMLWriter::CollectLinkTargets()
     {
         const SwTextNode* pTextNd;
 
-        if( nullptr != (pINetFormat = static_cast<const SwFormatINetFormat*>(pDoc->GetAttrPool().GetItem2(
-            RES_TXTATR_INETFMT, n ) ) ) &&
+        if( nullptr != ( pINetFormat = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) ) &&
             nullptr != ( pTextAttr = pINetFormat->GetTextINetFormat()) &&
             nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
             pTextNd->GetNodes().IsDocNodes() )

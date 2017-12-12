@@ -1311,10 +1311,10 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
         for (SfxPoolItem const* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
         {   // check that the history recorded a hint to reset every item
             sal_uInt16 const nWhich(pItem->Which());
-            RES_TXTATR const nExpected(
+            sal_uInt16 const nExpected(
                 (isCHRATR(nWhich) || RES_TXTATR_UNKNOWN_CONTAINER == nWhich)
                     ? RES_TXTATR_AUTOFMT
-                    : static_cast<RES_TXTATR>(nWhich));
+                    : nWhich);
             if (RES_TXTATR_AUTOFMT == nExpected)
                 continue; // special case, may get set on text node itself
                           // tdf#105077 even worse, node's set could cause

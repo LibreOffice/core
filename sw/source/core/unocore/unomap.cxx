@@ -85,6 +85,7 @@
 #include <unomid.h>
 #include <cmdid.h>
 #include <unofldmid.h>
+#include <fmtruby.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>

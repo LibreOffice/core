@@ -1225,7 +1225,7 @@ const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
     sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
     {
-        pItem = static_cast<const SwFormatINetFormat*>( GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) );
+        pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n );
         if( nullptr != pItem &&
             pItem->GetName() == rName &&
             nullptr != ( pTextAttr = pItem->GetTextINetFormat()) &&
