@@ -1014,7 +1014,7 @@ sub set_custom_action
 
     # is the $exefilename a library that is included into the binary table
 
-    if ( $inbinarytable ) { $customaction_exefilename =~ s/\.//; }  # this is the entry in the binary table ("abc.dll" -> "abcdll")
+    if ( $inbinarytable ) { $customaction_exefilename =~ s/\.//g; }  # this is the entry in the binary table ("abc.dll" -> "abcdll")
 
     # is the $exefilename included into the product?
 

@@ -17,13 +17,11 @@ $(eval $(call gb_Module_add_targets,msc-externals,\
 
 endif
 
-# TODO: hackaround to install the universal crts locally (tdf#108580)
-# ideally we can create a chained installer or similar that installs them
-# systemwide using windows update
-ifneq ($(UCRT_REDISTDIR),)
+# Install the universal crts and VC runtimes (tdf#108580)
+ifneq ($(VCREDIST_DIR),)
 
 $(eval $(call gb_Module_add_targets,msc-externals,\
-	Package_ucrt \
+	Package_vcredist_exe \
 ))
 
 endif

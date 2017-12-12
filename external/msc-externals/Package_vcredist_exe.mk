@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,ucrt,$(UCRT_REDISTDIR)))
+$(eval $(call gb_Package_Package,vcredist_exe,$(VCREDIST_DIR)))
 
-$(eval $(call gb_Package_add_files,ucrt,program,\
-	   $(UCRT_DLLS) \
+$(eval $(call gb_Package_add_files,vcredist_exe,$(LIBO_ETC_FOLDER),\
+	$(VCREDIST_EXE) \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
