@@ -133,9 +133,11 @@ void PositionHandler::lcl_sprm(Sprm& rSprm)
     {
         case NS_ooxml::LN_CT_PosH_posOffset:
             m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.first.toInt32());
+            m_rPositionOffsets.first.clear();
             break;
         case NS_ooxml::LN_CT_PosV_posOffset:
             m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.second.toInt32());
+            m_rPositionOffsets.second.clear();
             break;
         case NS_ooxml::LN_CT_PosH_align:
         {
@@ -150,6 +152,7 @@ void PositionHandler::lcl_sprm(Sprm& rSprm)
                 m_nOrient = text::HoriOrientation::INSIDE;
             else if (rAlign == "outside")
                 m_nOrient = text::HoriOrientation::OUTSIDE;
+            rAlign.clear();
             break;
         }
         case NS_ooxml::LN_CT_PosV_align:
@@ -165,6 +168,7 @@ void PositionHandler::lcl_sprm(Sprm& rSprm)
                 m_nOrient = text::VertOrientation::NONE;
             else if (rAlign == "outside")
                 m_nOrient = text::VertOrientation::NONE;
+            rAlign.clear();
             break;
         }
     }
