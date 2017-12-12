@@ -519,7 +519,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
     // #i73341# If inserting GluePoint, do not insist on last points being different
     if(mpCurrentSdrDragMethod && maDragStat.IsMinMoved() && (IsInsertGluePoint() || maDragStat.GetNow() != maDragStat.GetPrev()))
     {
-        sal_uIntPtr nSavedHdlCount=0;
+        sal_Int32 nSavedHdlCount=0;
 
         if (bEliminatePolyPoints)
         {

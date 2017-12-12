@@ -420,12 +420,12 @@ void AnnotationTag::CheckPossibilities()
 {
 }
 
-sal_uLong AnnotationTag::GetMarkablePointCount() const
+sal_Int32 AnnotationTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
-sal_uLong AnnotationTag::GetMarkedPointCount() const
+sal_Int32 AnnotationTag::GetMarkedPointCount() const
 {
     return 0;
 }

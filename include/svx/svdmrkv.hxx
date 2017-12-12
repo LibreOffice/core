@@ -305,9 +305,9 @@ public:
     void SetMarkHdlSizePixel(sal_uInt16 nSiz);
 
     virtual bool HasMarkablePoints() const;
-    virtual sal_uIntPtr GetMarkablePointCount() const;
+    virtual sal_Int32 GetMarkablePointCount() const;
     virtual bool HasMarkedPoints() const;
-    virtual sal_uIntPtr GetMarkedPointCount() const;
+    virtual sal_Int32 GetMarkedPointCount() const;
 
     // There might be points which can't be marked:
     virtual bool IsPointMarkable(const SdrHdl& rHdl) const;

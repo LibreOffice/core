@@ -68,8 +68,8 @@ public:
     ::sd::View& getView() const { return mrView; }
 
 protected:
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
+    virtual sal_Int32 GetMarkablePointCount() const;
+    virtual sal_Int32 GetMarkedPointCount() const;
     virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark);
     virtual void CheckPossibilities();
     virtual bool MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark);

@@ -85,12 +85,12 @@ bool SmartTag::getContext( SdrViewContext& /*rContext*/ )
     return false;
 }
 
-sal_uLong SmartTag::GetMarkablePointCount() const
+sal_Int32 SmartTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
-sal_uLong SmartTag::GetMarkedPointCount() const
+sal_Int32 SmartTag::GetMarkedPointCount() const
 {
     return 0;
 }

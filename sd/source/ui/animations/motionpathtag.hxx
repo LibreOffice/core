@@ -50,8 +50,8 @@ public:
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
     // callbacks from sdr view
-    virtual sal_uLong GetMarkablePointCount() const override;
-    virtual sal_uLong GetMarkedPointCount() const override;
+    virtual sal_Int32 GetMarkablePointCount() const override;
+    virtual sal_Int32 GetMarkedPointCount() const override;
     virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark) override;
     virtual void CheckPossibilities() override;
     virtual bool MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark) override;
