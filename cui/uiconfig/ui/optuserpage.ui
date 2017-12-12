@@ -2,6 +2,17 @@
 <!-- Generated with glade 3.20.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" context="optuserpage|liststore1">No key</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkBox" id="OptUserPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -825,7 +836,8 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame2">
+      <object class="GtkFrame" id="cryptography">
+        <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
@@ -837,11 +849,13 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid14">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="signingkeylabel">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="optuserpage|signingkeylabel">OpenPGP signing key:</property>
@@ -855,6 +869,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="encryptionkeylabel">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="optuserpage|encryptionkeylabel">OpenPGP encryption key:</property>
@@ -869,6 +884,8 @@
                 <child>
                   <object class="GtkComboBox" id="encryptionkey">
                     <property name="can_focus">False</property>
+                    <property name="visible">True</property>
+                    <property name="model">liststore1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -877,7 +894,9 @@
                 </child>
                 <child>
                   <object class="GtkComboBox" id="signingkey">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="model">liststore1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -888,6 +907,7 @@
                   <object class="GtkCheckButton" id="encrypttoself">
                     <property name="label" translatable="yes" context="optuserpage|encrypttoself">When encrypting documents, always encrypt to self</property>
                     <property name="can_focus">True</property>
+                    <property name="visible">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -904,9 +924,10 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="label2">
+          <object class="GtkLabel" id="cryptographylabel">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optuserpage|label2">Cryptography</property>
+            <property name="visible">True</property>
+            <property name="label" translatable="yes" context="optuserpage|cryptographylabel">Cryptography</property>
             <property name="use_underline">True</property>
             <attributes>
               <attribute name="weight" value="bold"/>

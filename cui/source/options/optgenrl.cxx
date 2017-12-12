@@ -31,6 +31,7 @@
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 
 #include <unotools/useroptions.hxx>
@@ -211,22 +212,20 @@ SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCo
     : SfxTabPage(pParent, "OptUserPage", "cui/ui/optuserpage.ui", &rCoreSet)
 {
     get(m_pUseDataCB, "usefordocprop");
+
+    get(m_pCryptoFrame, "cryptography");
+    get(m_pSigningKeyLB, "signingkey");
+    get(m_pEncryptionKeyLB, "encryptionkey");
+    get(m_pEncryptToSelfCB, "encrypttoself");
     InitControls();
+#if HAVE_FEATURE_GPGME
+    InitCryptography();
+#else
+    m_pCryptoFrame->Hide();
+#endif
+
     SetExchangeSupport(); // this page needs ExchangeSupport
     SetLinks();
-#if HAVE_FEATURE_GPGME
-    // unused yet, I just wanted to see if this delivers the desired results
-    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
-    try
-    {
-        xSEInitializer = xml::crypto::GPGSEInitializer::create( comphelper::getProcessComponentContext() );
-        uno::Reference<xml::crypto::XXMLSecurityContext> xSC = xSEInitializer->createSecurityContext( OUString() );
-        // completely bogus, this is just to appease loplugins
-        xSEInitializer->freeSecurityContext( xSC );
-    }
-    catch ( uno::Exception const & )
-    {}
-#endif
 }
 
 SvxGeneralTabPage::~SvxGeneralTabPage()
@@ -237,6 +236,10 @@ SvxGeneralTabPage::~SvxGeneralTabPage()
 void SvxGeneralTabPage::dispose()
 {
     m_pUseDataCB.clear();
+    m_pSigningKeyLB.clear();
+    m_pEncryptionKeyLB.clear();
+    m_pEncryptToSelfCB.clear();
+    m_pCryptoFrame.clear();
     SfxTabPage::dispose();
 }
 
@@ -295,6 +298,33 @@ void SvxGeneralTabPage::InitControls ()
     }
 }
 
+void SvxGeneralTabPage::InitCryptography()
+{
+#if HAVE_FEATURE_GPGME
+    m_pCryptoFrame->Show();
+    // unused yet, I just wanted to see if this delivers the desired results
+    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
+    try
+    {
+        xSEInitializer = xml::crypto::GPGSEInitializer::create( comphelper::getProcessComponentContext() );
+        uno::Reference<xml::crypto::XXMLSecurityContext> xSC = xSEInitializer->createSecurityContext( OUString() );
+        uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSC->getSecurityEnvironment();
+        uno::Sequence<uno::Reference<security::XCertificate>> xCertificates = xSE->getPersonalCertificates();
+
+        if (xCertificates.hasElements())
+        {
+            for (auto& xCert : xCertificates)
+            {
+                m_pSigningKeyLB->InsertEntry( xCert->getIssuerName());
+                m_pEncryptionKeyLB->InsertEntry( xCert->getIssuerName());
+            }
+        }
+    }
+    catch ( uno::Exception const & )
+    {}
+#endif
+
+}
 
 void SvxGeneralTabPage::SetLinks ()
 {
