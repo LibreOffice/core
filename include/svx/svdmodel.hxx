@@ -457,9 +457,9 @@ public:
     void SetUndoComment(const OUString& rComment);
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr);
 
-    // The Undo management is only done if not NotifyUndoAction-Handler is set.
-    // Default is 16. Minimal MaxUndoActionCount is 1!
-    void  SetMaxUndoActionCount(sal_uIntPtr nCount);
+    // The Undo management is only done if NotifyUndoAction-Handler is not set.
+    // Default is 16. Minimal MaxUndoActionCount is 1.
+    void  SetMaxUndoActionCount(sal_uInt32 nCount);
     void  ClearUndoBuffer();
 
     bool HasUndoActions() const;

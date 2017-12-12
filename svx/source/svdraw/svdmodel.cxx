@@ -311,7 +311,7 @@ void SdrModel::SetReadOnly(bool bYes)
 }
 
 
-void SdrModel::SetMaxUndoActionCount(sal_uIntPtr nCount)
+void SdrModel::SetMaxUndoActionCount(sal_uInt32 nCount)
 {
     if (nCount<1) nCount=1;
     nMaxUndoCount=nCount;
