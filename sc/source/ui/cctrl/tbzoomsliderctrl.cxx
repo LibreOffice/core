@@ -22,6 +22,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
+
+#include <vcl/outdev.hxx>
+
 #include <vcl/settings.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -36,6 +39,8 @@
 #include <printfun.hxx>
 #include <bitmaps.hlst>
 
+#include <scresid.hxx>
+#include <strings.hrc>
 // class ScZoomSliderControl ---------------------------------------
 
 SFX_IMPL_TOOLBOX_CONTROL( ScZoomSliderControl, SvxZoomSliderItem );
@@ -118,14 +123,15 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
         }
 };
 
-const long nButtonWidth     = 10;
+const long nButtonWidth     = 10; //position only
 const long nButtonHeight    = 10;
 const long nIncDecWidth     = 11;
 const long nIncDecHeight    = 11;
 const long nSliderHeight    = 2;
 const long nSliderWidth     = 4;
 const long nSnappingHeight  = 4;
-const long nSliderXOffset   = 20;
+const long nSliderXOffset   = 20; //distance left and right
+      long nSliderCaptionWidth;
 const long nSnappingEpsilon = 5; // snapping epsilon in pixels
 const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
 
@@ -246,7 +252,7 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
 
     const Point aPoint = rMEvt.GetPosPixel();
 
-    const long nButtonLeftOffset    = ( nSliderXOffset - nIncDecWidth )/2;
+    const long nButtonLeftOffset    = ( nSliderXOffset - nIncDecWidth )/2;// + nSliderCaptionWidth;
     const long nButtonRightOffset   = ( nSliderXOffset + nIncDecWidth )/2;
 
     const long nOldZoom = mpImpl->mnCurrentZoom;
@@ -397,11 +403,13 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext)
     ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext);
     pVDev->SetOutputSizePixel(aSliderWindowSize);
 
+    nSliderCaptionWidth = pVDev->GetTextWidth(ScResId(SCSTR_TOOLBAR_SCALE));
+
     tools::Rectangle aSlider = aRect;
 
     aSlider.Top() += (aSliderWindowSize.Height() - nSliderHeight) / 2 - 1;
     aSlider.Bottom() = aSlider.Top() + nSliderHeight;
-    aSlider.Left() += nSliderXOffset;
+    aSlider.Left() += nSliderXOffset + nSliderCaptionWidth;
     aSlider.Right() -= nSliderXOffset;
 
     tools::Rectangle aFirstLine(aSlider);
@@ -430,6 +438,8 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext)
     aGradient.SetStartColor(aStartColor);
     aGradient.SetEndColor(aEndColor);
     pVDev->DrawGradient(aRect, aGradient);
+
+    pVDev->DrawText(Point(0,0), ScResId(SCSTR_TOOLBAR_SCALE));//, DrawTextFlags::Center | DrawTextFlags::VCenter);
 
     // draw slider
     pVDev->SetLineColor(Color(COL_WHITE));

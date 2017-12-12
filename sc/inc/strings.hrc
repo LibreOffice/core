@@ -65,6 +65,7 @@
 #define SCSTR_VALID_VALUE                           NC_("SCSTR_VALID_VALUE", "~Value")
 #define SCSTR_VALID_RANGE                           NC_("SCSTR_VALID_RANGE", "~Source")
 #define SCSTR_VALID_LIST                            NC_("SCSTR_VALID_LIST", "~Entries")
+#define SCSTR_TOOLBAR_SCALE                         NC_("SCSTR_TOOLBAR_SCALE", "~Scale")
 // for dialogues:
 #define SCSTR_CHARSET_USER                          NC_("SCSTR_CHARSET_USER", "System")
 #define SCSTR_COLUMN_USER                           NC_("SCSTR_COLUMN_USER", "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide")
