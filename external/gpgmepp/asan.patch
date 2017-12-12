@@ -1,13 +1,11 @@
 --- src/posix-io.c
 +++ src/posix-io.c
-@@ -468,6 +468,11 @@
+@@ -468,6 +468,9 @@
  
  	  if (atfork)
  	    atfork (atforkvalue, 0);
 +          char const * ld_path = getenv("LIBO_LD_PATH");
-+          if (!ld_path)
-+            abort();
-+          if (setenv("LD_LIBRARY_PATH", ld_path, 1) != 0)
++          if (ld_path && setenv("LD_LIBRARY_PATH", ld_path, 1) != 0)
 +            abort();
  
            /* First close all fds which will not be inherited.  If we
