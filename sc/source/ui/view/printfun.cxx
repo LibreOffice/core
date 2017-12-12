@@ -262,7 +262,7 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter,
         m_aRanges.m_aPageEndX = rState.aPageEndX;
         m_aRanges.m_aPageEndY = rState.aPageEndY;
         m_aRanges.m_aPageRows = rState.aPageRows;
-        m_aRanges.m_bCalculated = true;
+        m_aRanges.m_aInput = rState.aPrintPageRangesInput;
     }
 
     aSrcOffset = pPrinter->PixelToLogic(pPrinter->GetPageOffsetPixel(), MapMode(MapUnit::Map100thMM));
@@ -326,7 +326,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         m_aRanges.m_aPageEndX = rState.aPageEndX;
         m_aRanges.m_aPageEndY = rState.aPageEndY;
         m_aRanges.m_aPageRows = rState.aPageRows;
-        m_aRanges.m_bCalculated = true;
+        m_aRanges.m_aInput = rState.aPrintPageRangesInput;
     }
 
     Construct( pOptions );
@@ -353,6 +353,7 @@ void ScPrintFunc::GetPrintState(ScPrintState& rState,  bool bSavePageRanges)
         rState.aPageEndX = m_aRanges.m_aPageEndX;
         rState.aPageEndY = m_aRanges.m_aPageEndY;
         rState.aPageRows = m_aRanges.m_aPageRows;
+        rState.aPrintPageRangesInput = m_aRanges.m_aInput;
     }
 }
 
@@ -3003,9 +3004,7 @@ static void lcl_SetHidden( const ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEnt
 
 void ScPrintFunc::CalcPages()               // calculates aPageRect and pages from nZoom
 {
-    pDoc->SetPageSize(nPrintTab, GetDocPageSize());
-
-    m_aRanges.calculate(pDoc, aTableParam, aAreaParam, nStartRow, nEndRow, nStartCol, nEndCol, nPrintTab);
+    m_aRanges.calculate(pDoc, aTableParam.bSkipEmpty, aAreaParam.bPrintArea, nStartRow, nEndRow, nStartCol, nEndCol, nPrintTab, GetDocPageSize());
 }
 
 namespace sc
@@ -3015,18 +3014,48 @@ PrintPageRanges::PrintPageRanges()
     : m_nPagesX(0)
     , m_nPagesY(0)
     , m_nTotalY(0)
-    , m_bCalculated(false)
 {}
 
-void PrintPageRanges::calculate(ScDocument* pDoc, ScPageTableParam const & rTableParam,
-                                ScPageAreaParam const & rAreaParam,
+bool PrintPageRanges::checkIfAlreadyCalculatedAndSet(
+                                    bool bSkipEmpty, bool bPrintArea,
+                                    SCROW nStartRow, SCROW nEndRow,
+                                    SCCOL nStartCol, SCCOL nEndCol,
+                                    SCTAB nPrintTab, Size const & rDocSize)
+{
+    if (bSkipEmpty == m_aInput.m_bSkipEmpty &&
+        bPrintArea == m_aInput.m_bPrintArea &&
+        nStartRow  == m_aInput.m_nStartRow && nEndRow == m_aInput.m_nEndRow &&
+        nStartCol  == m_aInput.m_nStartCol && nEndCol == m_aInput.m_nEndCol &&
+        nPrintTab  == m_aInput.m_nPrintTab &&
+        rDocSize   == m_aInput.m_aDocSize)
+    {
+        return true;
+    }
+
+    m_aInput.m_bSkipEmpty = bSkipEmpty;
+    m_aInput.m_bPrintArea = bPrintArea;
+    m_aInput.m_nStartRow  = nStartRow;
+    m_aInput.m_nEndRow    = nEndRow;
+    m_aInput.m_nStartCol  = nStartCol;
+    m_aInput.m_nEndCol    = nEndCol;
+    m_aInput.m_nPrintTab  = nPrintTab;
+    m_aInput.m_aDocSize   = Size(rDocSize);
+
+    return false;
+}
+void PrintPageRanges::calculate(ScDocument* pDoc,
+                                bool bSkipEmpty, bool bPrintArea,
                                 SCROW nStartRow, SCROW nEndRow,
                                 SCCOL nStartCol, SCCOL nEndCol,
-                                SCTAB nPrintTab)
+                                SCTAB nPrintTab, Size const & rDocSize)
 {
     // Already calculated?
-    if (m_bCalculated)
+    if (checkIfAlreadyCalculatedAndSet(bSkipEmpty, bPrintArea,
+                                       nStartRow, nEndRow, nStartCol, nEndCol,
+                                       nPrintTab, rDocSize))
         return;
+
+    pDoc->SetPageSize(nPrintTab, rDocSize);
 
     // #i123672# use dynamic mem to react on size changes
     if (m_aPageEndX.size() < MAXCOL+1)
@@ -3034,7 +3063,7 @@ void PrintPageRanges::calculate(ScDocument* pDoc, ScPageTableParam const & rTabl
         m_aPageEndX.resize(MAXCOL+1, SCCOL());
     }
 
-    if (rAreaParam.bPrintArea)
+    if (bPrintArea)
     {
         ScRange aRange(nStartCol, nStartRow, nPrintTab, nEndCol, nEndRow, nPrintTab);
         pDoc->UpdatePageBreaks(nPrintTab, &aRange);
@@ -3109,13 +3138,13 @@ void PrintPageRanges::calculate(ScDocument* pDoc, ScPageTableParam const & rTabl
             m_aPageEndY[m_nTotalY] = nRow - 1;
             ++m_nTotalY;
 
-            if (!rTableParam.bSkipEmpty || !pDoc->IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nRow-1))
+            if (!bSkipEmpty || !pDoc->IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nRow-1))
             {
                 OSL_ENSURE(m_nPagesY < m_aPageRows.size(), "vector access error for rPageRows");
                 m_aPageRows[m_nPagesY].SetStartRow(nPageStartRow);
                 m_aPageRows[m_nPagesY].SetEndRow(nRow - 1);
                 m_aPageRows[m_nPagesY].SetPagesX(m_nPagesX);
-                if (rTableParam.bSkipEmpty)
+                if (bSkipEmpty)
                     lcl_SetHidden(pDoc, nPrintTab, m_aPageRows[m_nPagesY], nStartCol, m_aPageEndX);
                 ++m_nPagesY;
             }
@@ -3149,19 +3178,17 @@ void PrintPageRanges::calculate(ScDocument* pDoc, ScPageTableParam const & rTabl
         m_aPageEndY[m_nTotalY] = nEndRow;
         ++m_nTotalY;
 
-        if (!rTableParam.bSkipEmpty || !pDoc->IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nEndRow))
+        if (!bSkipEmpty || !pDoc->IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nEndRow))
         {
             OSL_ENSURE(m_nPagesY < m_aPageRows.size(), "vector access error for maPageRows");
             m_aPageRows[m_nPagesY].SetStartRow(nPageStartRow);
             m_aPageRows[m_nPagesY].SetEndRow(nEndRow);
             m_aPageRows[m_nPagesY].SetPagesX(m_nPagesX);
-            if (rTableParam.bSkipEmpty)
+            if (bSkipEmpty)
                 lcl_SetHidden(pDoc, nPrintTab, m_aPageRows[m_nPagesY], nStartCol, m_aPageEndX);
             ++m_nPagesY;
         }
     }
-
-    m_bCalculated = true;
 }
 
 } // end namespace sc
