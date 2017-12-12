@@ -259,12 +259,6 @@ public:
 //     bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
 //     bool Command(const CommandEvent& rCEvt, vcl::Window* pWin);
 //
-//   Exchange (Clipboard currently without SdrPrivateData):
-//   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//     sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//     sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//     sal_Bool Paste(vcl::Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//
 //   SfxItems:
 //   ~~~~~~~~~
 //     sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
