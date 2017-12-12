@@ -58,7 +58,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ZCodec
     void            UpdateCRC( sal_uInt8 const * pSource, long nDatSize );
 
 public:
-                    ZCodec( sal_uIntPtr nInBuf = 0x8000UL, sal_uIntPtr nOutBuf = 0x8000UL );
+                    ZCodec( size_t nInBufSize = 32768, size_t nOutBufSize = 32768 );
                     ~ZCodec();
 
     void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = false );
