@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_88ec6af4",
+        "filename": "oox/source/ole/vbaexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-12T08:47:07Z",
+      "side": 1,
+      "message": "I might be wrong here, but isn\u0027t RTL_TEXTENCODING_ASCII_US more efficient here?",
+      "range": {
+        "startLine": 858,
+        "startChar": 67,
+        "endLine": 858,
+        "endChar": 88
+      },
+      "revId": "c85d8064cb67552e3ddcc73099769af09d7d0edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
