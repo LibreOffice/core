@@ -73,7 +73,7 @@
 #include "filter.hxx"
 #include "orcusinterface.hxx"
 #include "generalfunction.hxx"
-
+#include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -243,6 +243,7 @@ public:
     void testTdf110440XLSX();
     void testTdf111974XLSM();
     void testTdf83672XLSX();
+    void testTdf104290XLSX();
 
     void testPageScalingXLSX();
     void testActiveXCheckboxXLSX();
@@ -374,6 +375,7 @@ public:
     CPPUNIT_TEST(testTdf110440XLSX);
     CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testTdf83672XLSX);
+    CPPUNIT_TEST(testTdf104290XLSX);
 
     CPPUNIT_TEST(testPageScalingXLSX);
     CPPUNIT_TEST(testActiveXCheckboxXLSX);
@@ -3959,6 +3961,25 @@ void ScFiltersTest::testTdf83672XLSX()
     sal_Int32 nRotate = 0;
     xShapeProperties->getPropertyValue("RotateAngle") >>= nRotate;
     CPPUNIT_ASSERT(nRotate != 0);
+    xDocSh->DoClose();
+}
+void ScFiltersTest::testTdf104290XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf104290.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf104290 .xlsx", xDocSh.is());
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocSh->GetModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(
+        xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShapeProperties(
+        xShape, uno::UNO_QUERY );
+    sal_Int32 nTextRotate = 0;
+    comphelper::SequenceAsHashMap geom(xShapeProperties->getPropertyValue("CustomShapeGeometry"));
+    geom["TextRotateAngle"]>>=nTextRotate;
+    CPPUNIT_ASSERT(nTextRotate == 0);
     xDocSh->DoClose();
 }
 
