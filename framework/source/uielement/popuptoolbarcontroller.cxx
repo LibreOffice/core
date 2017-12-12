@@ -671,7 +671,7 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
             dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() ) : nullptr;
 
         if ( pVCLPopupMenu )
-            pMenuAttributes = reinterpret_cast< MenuAttributes* >(
+            pMenuAttributes = static_cast< MenuAttributes* >(
                 pVCLPopupMenu->GetUserValue( pVCLPopupMenu->GetCurItemId() ) );
 
         if ( pMenuAttributes )

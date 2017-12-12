@@ -83,8 +83,8 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
             {
                 OUString aImageId;
                 OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
-                sal_uLong nAttributePtr = pPopupMenu->GetUserValue( nItemId );
-                MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
+                void* nAttributePtr = pPopupMenu->GetUserValue( nItemId );
+                MenuAttributes* pAttributes = static_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aImageId = pAttributes->aImageId;
 
@@ -354,7 +354,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
                 pVCLPopupMenu->InsertItem( nItemId, aTitle );
                 pVCLPopupMenu->SetItemCommand( nItemId, aURL );
 
-                sal_uIntPtr nAttributePtr = MenuAttributes::CreateAttribute( aTargetFrame, aImageId );
+                void* nAttributePtr = MenuAttributes::CreateAttribute( aTargetFrame, aImageId );
                 pVCLPopupMenu->SetUserValue( nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute );
 
                 nItemId++;
@@ -409,8 +409,8 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
                 SolarMutexGuard aSolarMutexGuard;
                 PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
                 aURL = pVCLPopupMenu->GetItemCommand(rEvent.MenuId);
-                sal_uLong nAttributePtr = pVCLPopupMenu->GetUserValue(rEvent.MenuId);
-                MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
+                void* nAttributePtr = pVCLPopupMenu->GetUserValue(rEvent.MenuId);
+                MenuAttributes* pAttributes = static_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aTargetFrame = pAttributes->aTargetFrame;
             }

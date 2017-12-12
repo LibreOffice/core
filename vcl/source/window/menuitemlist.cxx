@@ -59,7 +59,7 @@ MenuItemData* MenuItemList::Insert(
     pData->eType            = eType;
     pData->nBits            = nBits;
     pData->pSubMenu         = nullptr;
-    pData->nUserValue       = 0;
+    pData->nUserValue       = nullptr;
     pData->bChecked         = false;
     pData->bEnabled         = true;
     pData->bVisible         = true;
@@ -91,7 +91,7 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     pData->eType            = MenuItemType::SEPARATOR;
     pData->nBits            = MenuItemBits::NONE;
     pData->pSubMenu         = nullptr;
-    pData->nUserValue       = 0;
+    pData->nUserValue       = nullptr;
     pData->bChecked         = false;
     pData->bEnabled         = true;
     pData->bVisible         = true;
