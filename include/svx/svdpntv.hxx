@@ -69,10 +69,6 @@ enum class SdrAnimationMode
 };
 
 
-// defines
-#define SDRVIEWWIN_NOTFOUND     (0xFFFF)
-
-
 class SdrPaintView;
 
 namespace sdr
