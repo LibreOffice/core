@@ -20,6 +20,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
+#include <svx/svdograf.hxx>
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>
@@ -61,6 +62,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             break;
         }
         case FN_INSERT_SIGNATURELINE:
+        case FN_EDIT_SIGNATURELINE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
@@ -85,6 +87,27 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             break;
         }
     }
+}
+
+bool SwView::isSignatureLineSelected()
+{
+    SwWrtShell& rSh = GetWrtShell();
+    SdrView* pSdrView = rSh.GetDrawView();
+    if (!pSdrView)
+        return false;
+
+    if (pSdrView->GetMarkedObjectCount() != 1)
+        return false;
+
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    if (!pPickObj)
+        return false;
+
+    SdrGrafObj* pGraphic = dynamic_cast<SdrGrafObj*>(pPickObj);
+    if (!pGraphic)
+        return false;
+
+    return pGraphic->isSignatureLine();
 }
 
 void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
