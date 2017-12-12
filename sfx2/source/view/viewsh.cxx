@@ -1105,6 +1105,7 @@ SfxViewShell::SfxViewShell
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
 ,   mbPrinterSettingsModified(false)
+,   maLOKLanguageTag("en-US", true)
 {
 
     SetMargin( pViewFrame->GetMargin_Impl() );
