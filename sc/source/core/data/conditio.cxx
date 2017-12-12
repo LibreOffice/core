@@ -629,7 +629,7 @@ bool ScConditionEntry::IsEqual( const ScFormatEntry& rOther, bool bIgnoreSrcPos 
     if (GetType() != rOther.GetType())
         return false;
 
-    const ScCondFormatEntry& r = static_cast<const ScCondFormatEntry&>(rOther);
+    const ScConditionEntry& r = static_cast<const ScConditionEntry&>(rOther);
 
     bool bEq = (eOp == r.eOp && nOptions == r.nOptions &&
                 lcl_IsEqual( pFormula1, r.pFormula1 ) &&
