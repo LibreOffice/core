@@ -259,7 +259,20 @@ void DrawingFragment::onEndElement()
                 // Rotation is decided by orientation of shape determined
                 // by the anchor position given by 'editAs="oneCell"'
                 if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL )
-                        mxShape->setRotation(0);
+                {
+                    sal_Int32 nShapeRotation=0;
+                    // In xlsx files x,y,cx and cy is shape's final coordinates after rotation
+                    // and there is a rotation angle in xml file tells us shape was rotated this angle
+                    // Calc is acting like x,y,cx,cy is shape's first coordinates and rotating shape by angle
+                    // And the solition is setting shape's rotation angle to 0
+                    // But if the shape is textbox, we need to set text rotation inside textbox.
+                    // Otherwise if we rotate textbox, text wont be rotated.
+                    if(mxShape->getTextBody())
+                        nShapeRotation=mxShape->getRotation();
+                    mxShape->setRotation(0);
+                    if(mxShape->getTextBody())
+                        mxShape->setTextRotation(nShapeRotation);
+                }
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )

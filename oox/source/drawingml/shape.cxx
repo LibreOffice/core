@@ -1306,7 +1306,18 @@ void Shape::setTextBody(const TextBodyPtr & pTextBody)
 {
     mpTextBody = pTextBody;
 }
-
+sal_Int32 Shape::getTextRotation()
+{
+    return (static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) ));
+}
+void Shape::setTextRotation(sal_Int32 nShapeRotation)
+{
+    // The function is getting shape's rotation angle and adding to text's rotation
+    // and the result might be greater than 360 degrees. For that problem, we need to mod by 360 degrees.
+    // 60000 means 1 degrees, 5400000 means 90 degrees and 5400000*4 means 360 degrees
+    //mpTextBody->getTextProperties().moRotation=(static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) )+nShapeRotation)%5400000*4;
+    mpTextBody->getTextProperties().moRotation=(static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) )+nShapeRotation);
+}
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
     SAL_INFO("oox.drawingml", "Shape::setMasterTextListStyle: Set master text list style to shape id='" << msId << "'");
