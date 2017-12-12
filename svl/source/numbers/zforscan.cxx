@@ -301,7 +301,60 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         sKeyword[NF_KEY_THAI_T] = sEnglishKeyword[NF_KEY_THAI_T];
     }
 
-    const bool bL10n = (meKeywordLocalization != KeywordLocalization::EnglishOnly);
+    bool bL10n = (meKeywordLocalization != KeywordLocalization::EnglishOnly);
+    if (bL10n)
+    {
+        // Check if this actually is a locale that uses any localized keywords,
+        // if not then disable localized keywords completely.
+        if ( !eLang.anyOf( LANGUAGE_GERMAN,
+                    LANGUAGE_GERMAN_SWISS,
+                    LANGUAGE_GERMAN_AUSTRIAN,
+                    LANGUAGE_GERMAN_LUXEMBOURG,
+                    LANGUAGE_GERMAN_LIECHTENSTEIN,
+                    LANGUAGE_DUTCH,
+                    LANGUAGE_DUTCH_BELGIAN,
+                    LANGUAGE_FRENCH,
+                    LANGUAGE_FRENCH_BELGIAN,
+                    LANGUAGE_FRENCH_CANADIAN,
+                    LANGUAGE_FRENCH_SWISS,
+                    LANGUAGE_FRENCH_LUXEMBOURG,
+                    LANGUAGE_FRENCH_MONACO,
+                    LANGUAGE_FINNISH,
+                    LANGUAGE_ITALIAN,
+                    LANGUAGE_ITALIAN_SWISS,
+                    LANGUAGE_DANISH,
+                    LANGUAGE_NORWEGIAN,
+                    LANGUAGE_NORWEGIAN_BOKMAL,
+                    LANGUAGE_NORWEGIAN_NYNORSK,
+                    LANGUAGE_SWEDISH,
+                    LANGUAGE_SWEDISH_FINLAND,
+                    LANGUAGE_PORTUGUESE,
+                    LANGUAGE_PORTUGUESE_BRAZILIAN,
+                    LANGUAGE_SPANISH_MODERN,
+                    LANGUAGE_SPANISH_DATED,
+                    LANGUAGE_SPANISH_MEXICAN,
+                    LANGUAGE_SPANISH_GUATEMALA,
+                    LANGUAGE_SPANISH_COSTARICA,
+                    LANGUAGE_SPANISH_PANAMA,
+                    LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,
+                    LANGUAGE_SPANISH_VENEZUELA,
+                    LANGUAGE_SPANISH_COLOMBIA,
+                    LANGUAGE_SPANISH_PERU,
+                    LANGUAGE_SPANISH_ARGENTINA,
+                    LANGUAGE_SPANISH_ECUADOR,
+                    LANGUAGE_SPANISH_CHILE,
+                    LANGUAGE_SPANISH_URUGUAY,
+                    LANGUAGE_SPANISH_PARAGUAY,
+                    LANGUAGE_SPANISH_BOLIVIA,
+                    LANGUAGE_SPANISH_EL_SALVADOR,
+                    LANGUAGE_SPANISH_HONDURAS,
+                    LANGUAGE_SPANISH_NICARAGUA,
+                    LANGUAGE_SPANISH_PUERTO_RICO ))
+        {
+            bL10n = false;
+            meKeywordLocalization = KeywordLocalization::EnglishOnly;
+        }
+    }
 
     if ( bL10n && eLang.anyOf(
             LANGUAGE_GERMAN,
@@ -663,71 +716,25 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
         if (i == 0 && meKeywordLocalization == KeywordLocalization::AllowEnglish)
         {
             // No localized (if so) keyword, try English keywords if keywords
-            // are localized.
-            LanguageType eLang = pFormatter->GetLocaleData()->getLoadedLanguageTag().getLanguageType( false);
-            if ( eLang.anyOf( LANGUAGE_GERMAN,
-                        LANGUAGE_GERMAN_SWISS,
-                        LANGUAGE_GERMAN_AUSTRIAN,
-                        LANGUAGE_GERMAN_LUXEMBOURG,
-                        LANGUAGE_GERMAN_LIECHTENSTEIN,
-                        LANGUAGE_DUTCH,
-                        LANGUAGE_DUTCH_BELGIAN,
-                        LANGUAGE_FRENCH,
-                        LANGUAGE_FRENCH_BELGIAN,
-                        LANGUAGE_FRENCH_CANADIAN,
-                        LANGUAGE_FRENCH_SWISS,
-                        LANGUAGE_FRENCH_LUXEMBOURG,
-                        LANGUAGE_FRENCH_MONACO,
-                        LANGUAGE_FINNISH,
-                        LANGUAGE_ITALIAN,
-                        LANGUAGE_ITALIAN_SWISS,
-                        LANGUAGE_DANISH,
-                        LANGUAGE_NORWEGIAN,
-                        LANGUAGE_NORWEGIAN_BOKMAL,
-                        LANGUAGE_NORWEGIAN_NYNORSK,
-                        LANGUAGE_SWEDISH,
-                        LANGUAGE_SWEDISH_FINLAND,
-                        LANGUAGE_PORTUGUESE,
-                        LANGUAGE_PORTUGUESE_BRAZILIAN,
-                        LANGUAGE_SPANISH_MODERN,
-                        LANGUAGE_SPANISH_DATED,
-                        LANGUAGE_SPANISH_MEXICAN,
-                        LANGUAGE_SPANISH_GUATEMALA,
-                        LANGUAGE_SPANISH_COSTARICA,
-                        LANGUAGE_SPANISH_PANAMA,
-                        LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,
-                        LANGUAGE_SPANISH_VENEZUELA,
-                        LANGUAGE_SPANISH_COLOMBIA,
-                        LANGUAGE_SPANISH_PERU,
-                        LANGUAGE_SPANISH_ARGENTINA,
-                        LANGUAGE_SPANISH_ECUADOR,
-                        LANGUAGE_SPANISH_CHILE,
-                        LANGUAGE_SPANISH_URUGUAY,
-                        LANGUAGE_SPANISH_PARAGUAY,
-                        LANGUAGE_SPANISH_BOLIVIA,
-                        LANGUAGE_SPANISH_EL_SALVADOR,
-                        LANGUAGE_SPANISH_HONDURAS,
-                        LANGUAGE_SPANISH_NICARAGUA,
-                        LANGUAGE_SPANISH_PUERTO_RICO ) )
+            // are localized. That was already checked in
+            // SetDependentKeywords().
+            i = NF_KEY_LASTKEYWORD;
+            while ( i > 0 && sString.indexOf(sEnglishKeyword[i]) != 0 )
             {
-                i = NF_KEY_LASTKEYWORD;
-                while ( i > 0 && sString.indexOf(sEnglishKeyword[i]) != 0 )
+                i--;
+            }
+            if ( i > NF_KEY_LASTOLDKEYWORD && sString != sEnglishKeyword[i] )
+            {
+                // found something, but maybe it's something else?
+                // e.g. new NNN is found in NNNN, for NNNN we must search on
+                short j = i - 1;
+                while ( j > 0 && sString.indexOf(sEnglishKeyword[j]) != 0 )
                 {
-                    i--;
+                    j--;
                 }
-                if ( i > NF_KEY_LASTOLDKEYWORD && sString != sEnglishKeyword[i] )
+                if ( j && sEnglishKeyword[j].getLength() > sEnglishKeyword[i].getLength() )
                 {
-                    // found something, but maybe it's something else?
-                    // e.g. new NNN is found in NNNN, for NNNN we must search on
-                    short j = i - 1;
-                    while ( j > 0 && sString.indexOf(sEnglishKeyword[j]) != 0 )
-                    {
-                        j--;
-                    }
-                    if ( j && sEnglishKeyword[j].getLength() > sEnglishKeyword[i].getLength() )
-                    {
-                        return j;
-                    }
+                    return j;
                 }
             }
         }
