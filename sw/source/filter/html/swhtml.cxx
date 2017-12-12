@@ -531,9 +531,7 @@ SvParserState SwHTMLParser::CallParser()
             m_nEventId = nullptr;
         }
     }
-
-    // show progress bar
-    else if( !GetMedium() || !GetMedium()->IsRemote() )
+    else // show progress bar
     {
         rInput.Seek(STREAM_SEEK_TO_END);
         rInput.ResetError();
