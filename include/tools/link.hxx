@@ -88,8 +88,8 @@ public:
     bool operator !() const { return !IsSet(); }
 
     bool operator <(Link const & other) const {
-        sal_uIntPtr ptr1 = reinterpret_cast<sal_uIntPtr>(function_);
-        sal_uIntPtr ptr2 = reinterpret_cast<sal_uIntPtr>(other.function_);
+        char* ptr1 = reinterpret_cast<char*>(function_);
+        char* ptr2 = reinterpret_cast<char*>(other.function_);
         if (ptr1 < ptr2)
             return true;
         else if (ptr1 > ptr2)
