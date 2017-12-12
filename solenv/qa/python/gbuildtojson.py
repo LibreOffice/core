@@ -132,7 +132,7 @@ class CheckGbuildToJsonModules(unittest.TestCase):
             os.makedirs(os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
             shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
             if module != 'solenv':
-                shutil.copytree(os.path.join(os.environ['SRCDIR'], module), os.path.join(self.tempsrc, module))
+                shutil.copytree(os.path.join(os.environ['SRCDIR'], module), os.path.join(self.tempsrc, module), ignore=shutil.ignore_patterns('S.gpg-agent*'))
             (bashscripthandle, bashscriptname) = tempfile.mkstemp(prefix='gbuild')
             bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
             bashscript.write("set -e\n")
