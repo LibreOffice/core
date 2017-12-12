@@ -41,7 +41,9 @@
 
 #define TEST_COLS()                                                 \
 {                                                                   \
-    nR = aCol.GetRed(); nG = aCol.GetGreen(); nB = aCol.GetBlue();  \
+    sal_uInt8 nR = aCol.GetRed();                                    \
+    sal_uInt8 nG = aCol.GetGreen();                                  \
+    sal_uInt8 nB = aCol.GetBlue();                                   \
     for( i = 0; i < nCount; i++ )                                   \
     {                                                               \
         if ( ( pMinR[i] <= nR ) && ( pMaxR[i] >= nR ) &&            \
@@ -574,7 +576,7 @@ void SvxBmpMask::SetExecState( bool bEnable )
 }
 
 
-sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uIntPtr* pTols )
+sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uInt8* pTols )
 {
     sal_uInt16  nCount = 0;
 
@@ -582,28 +584,28 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
     {
         pSrcCols[nCount] = m_pQSet1->GetItemColor( 1 );
         pDstCols[nCount] = m_pLbColor1->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp1->GetValue());
+        pTols[nCount++] = sal_uInt8(m_pSp1->GetValue());
     }
 
     if ( m_pCbx2->IsChecked() )
     {
         pSrcCols[nCount] = m_pQSet2->GetItemColor( 1 );
         pDstCols[nCount] = m_pLbColor2->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp2->GetValue());
+        pTols[nCount++] = sal_uInt8(m_pSp2->GetValue());
     }
 
     if ( m_pCbx3->IsChecked() )
     {
         pSrcCols[nCount] = m_pQSet3->GetItemColor( 1 );
         pDstCols[nCount] = m_pLbColor3->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp3->GetValue());
+        pTols[nCount++] = sal_uInt8(m_pSp3->GetValue());
     }
 
     if ( m_pCbx4->IsChecked() )
     {
         pSrcCols[nCount] = m_pQSet4->GetItemColor( 1 );
         pDstCols[nCount] = m_pLbColor4->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp4->GetValue());
+        pTols[nCount++] = sal_uInt8(m_pSp4->GetValue());
     }
 
     return nCount;
@@ -614,7 +616,7 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
     Bitmap          aBitmap( rBitmap );
     Color           pSrcCols[4];
     Color           pDstCols[4];
-    sal_uIntPtr         pTols[4];
+    sal_uInt8           pTols[4];
     const sal_uInt16    nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
     EnterWait();
@@ -624,7 +626,7 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
     return aBitmap;
 }
 
-BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const long nTol )
+BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, sal_uInt8 nTol )
 {
     EnterWait();
 
@@ -644,11 +646,7 @@ BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color&
 Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
 {
     Animation   aAnimation( rAnimation );
-    Color       pSrcCols[4];
-    Color       pDstCols[4];
-    sal_uIntPtr     pTols[4];
-    InitColorArrays( pSrcCols, pDstCols, pTols );
-    sal_uInt16      nAnimationCount = aAnimation.Count();
+    sal_uInt16  nAnimationCount = aAnimation.Count();
 
     for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
@@ -666,7 +664,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     GDIMetaFile aMtf;
     Color       pSrcCols[4];
     Color       pDstCols[4];
-    sal_uIntPtr     pTols[4];
+    sal_uInt8       pTols[4];
     sal_uInt16      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
     // If no color is selected, we copy only the Mtf
@@ -676,15 +674,12 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     {
         bool        pTrans[4];
         Color       aCol;
-        long        nR;
-        long        nG;
-        long        nB;
-        std::unique_ptr<long[]> pMinR(new long[nCount]);
-        std::unique_ptr<long[]> pMaxR(new long[nCount]);
-        std::unique_ptr<long[]> pMinG(new long[nCount]);
-        std::unique_ptr<long[]> pMaxG(new long[nCount]);
-        std::unique_ptr<long[]> pMinB(new long[nCount]);
-        std::unique_ptr<long[]> pMaxB(new long[nCount]);
+        std::unique_ptr<sal_uInt8[]> pMinR(new sal_uInt8[nCount]);
+        std::unique_ptr<sal_uInt8[]> pMaxR(new sal_uInt8[nCount]);
+        std::unique_ptr<sal_uInt8[]> pMinG(new sal_uInt8[nCount]);
+        std::unique_ptr<sal_uInt8[]> pMaxG(new sal_uInt8[nCount]);
+        std::unique_ptr<sal_uInt8[]> pMinB(new sal_uInt8[nCount]);
+        std::unique_ptr<sal_uInt8[]> pMaxB(new sal_uInt8[nCount]);
         sal_uInt16      i;
 
         aMtf.SetPrefSize( rMtf.GetPrefSize() );
@@ -693,19 +688,19 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         // Prepare Color comparison array
         for( i = 0; i < nCount; i++ )
         {
-            long nTol = ( pTols[i] * 255L ) / 100L;
+            sal_uInt8 nTol = ( pTols[i] * 255 ) / 100;
 
-            long nVal = (long) pSrcCols[i].GetRed();
-            pMinR[i] = std::max( nVal - nTol, 0L );
-            pMaxR[i] = std::min( nVal + nTol, 255L );
+            sal_uInt8 nVal = pSrcCols[i].GetRed();
+            pMinR[i] = std::max<sal_uInt8>( nVal - nTol, 0 );
+            pMaxR[i] = std::min<sal_uInt8>( nVal + nTol, 255 );
 
-            nVal = ( (long) pSrcCols[i].GetGreen() );
-            pMinG[i] = std::max( nVal - nTol, 0L );
-            pMaxG[i] = std::min( nVal + nTol, 255L );
+            nVal = pSrcCols[i].GetGreen();
+            pMinG[i] = std::max<sal_uInt8>( nVal - nTol, 0 );
+            pMaxG[i] = std::min<sal_uInt8>( nVal + nTol, 255 );
 
-            nVal = ( (long) pSrcCols[i].GetBlue() );
-            pMinB[i] = std::max( nVal - nTol, 0L );
-            pMaxB[i] = std::min( nVal + nTol, 255L );
+            nVal = pSrcCols[i].GetBlue();
+            pMinB[i] = std::max<sal_uInt8>( nVal - nTol, 0 );
+            pMaxB[i] = std::min<sal_uInt8>( nVal + nTol, 255 );
 
             pTrans[ i ] = (pDstCols[ i ] == COL_TRANSPARENT);
         }
@@ -1021,7 +1016,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                 {
                     Color   pSrcCols[4];
                     Color   pDstCols[4];
-                    sal_uIntPtr pTols[4];
+                    sal_uInt8   pTols[4];
                     sal_uInt16  nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
                     if( nCount )

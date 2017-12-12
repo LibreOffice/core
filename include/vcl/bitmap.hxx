@@ -492,11 +492,11 @@ public:
         @param nTol
         Tolerance value. Specifies the maximal difference between
         rTransColor and the individual pixel values, such that the
-        corresponding pixel is still regarded transparent.
+        corresponding pixel is still regarded as transparent.
 
         @return the resulting bitmask.
      */
-    Bitmap                  CreateMask( const Color& rTransColor, sal_uLong nTol = 0 ) const;
+    Bitmap                  CreateMask( const Color& rTransColor, sal_uInt8 nTol = 0 ) const;
 
     /** Create region of similar colors in a given rectangle
 
@@ -550,7 +550,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
+    bool                    Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -574,7 +574,7 @@ public:
                                 const Color* pSearchColors,
                                 const Color* rReplaceColors,
                                 sal_uLong nColorCount,
-                                sal_uLong* pTols );
+                                const sal_uInt8* pTols );
 
     /** Convert the bitmap to a meta file
 
