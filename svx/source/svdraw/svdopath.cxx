@@ -730,8 +730,8 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                 // let the alternative that allows fewer correction win
                 if (nX1<nX2) bPnt2=false; else bPnt1=false;
             }
-            if (bPnt1) rDrag.Now()=aNeuPos1;
-            if (bPnt2) rDrag.Now()=aNeuPos2;
+            if (bPnt1) rDrag.SetNow(aNeuPos1);
+            if (bPnt2) rDrag.SetNow(aNeuPos2);
         }
         rDrag.SetActionRect(tools::Rectangle(rDrag.GetNow(),rDrag.GetNow()));
 
@@ -752,7 +752,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                 aPt=mpSdrPathDragData->aXP[nNextPnt];
                 aPt+=mpSdrPathDragData->aXP[nPrevPnt];
                 aPt/=2;
-                rDrag.Now()=aPt;
+                rDrag.SetNow(aPt);
             }
         }
 
@@ -1326,12 +1326,12 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     bool bFreeHand=IsFreeHand(pU->eAktKind);
     rStat.SetNoSnap(bFreeHand);
     rStat.SetOrtho8Possible(pU->eAktKind!=OBJ_CARC && pU->eAktKind!=OBJ_RECT && (!pU->bMixedCreate || pU->eAktKind!=OBJ_LINE));
-    rXPoly[nActPoint]=rStat.Now();
+    rXPoly[nActPoint]=rStat.GetNow();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE && rXPoly.GetPointCount()>=1) {
-        Point aPt(rStat.Start());
+        Point aPt(rStat.GetStart());
         if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
             aPt+=aPt;
-            aPt-=rStat.Now();
+            aPt-=rStat.GetNow();
         }
         rXPoly[0]=aPt;
     }
@@ -1346,7 +1346,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
             if (nMinDist<1) nMinDist=1;
 
             Point aPt0(rXPoly[nActPoint-1]);
-            Point aPt1(rStat.Now());
+            Point aPt1(rStat.GetNow());
             long dx=aPt0.X()-aPt1.X(); if (dx<0) dx=-dx;
             long dy=aPt0.Y()-aPt1.Y(); if (dy<0) dy=-dy;
             if (dx<nMinDist && dy<nMinDist) return false;
@@ -1364,7 +1364,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
                     rXPoly.SetFlags(nActPoint-3,PolyFlags::Smooth);
                 }
             }
-            rXPoly[nActPoint+1]=rStat.Now();
+            rXPoly[nActPoint+1]=rStat.GetNow();
             rStat.NextPoint();
         } else {
             pU->nBezierStartPoint=nActPoint;
@@ -1400,7 +1400,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     bool bIncomp=pView!=nullptr && pView->IsUseIncompatiblePathCreateInterface();
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
     sal_uInt16 nActPoint=rXPoly.GetPointCount()-1;
-    rXPoly[nActPoint]=rStat.Now();
+    rXPoly[nActPoint]=rStat.GetNow();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE) {
         if (rStat.GetPointCount()>=2) eCmd=SdrCreateCmd::ForceEnd;
         bRet = eCmd==SdrCreateCmd::ForceEnd;
@@ -1422,7 +1422,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     }
     if (eCmd==SdrCreateCmd::NextPoint || eCmd==SdrCreateCmd::NextObject) {
         // don't allow two consecutive points to occupy the same position
-        if (nActPoint==0 || rStat.Now()!=rXPoly[nActPoint-1]) {
+        if (nActPoint==0 || rStat.GetNow()!=rXPoly[nActPoint-1]) {
             if (bIncomp) {
                 if (pU->nBezierStartPoint>nActPoint) pU->nBezierStartPoint=nActPoint;
                 if (IsBezier(pU->eAktKind) && nActPoint-pU->nBezierStartPoint>=3 && ((nActPoint-pU->nBezierStartPoint)%3)==0) {
@@ -1536,7 +1536,7 @@ bool ImpPathForDragAndCreate::BckCreate(SdrDragStat& rStat)
             sal_uInt16 nLocalActPoint=rLocalXPoly.GetPointCount();
             if (nLocalActPoint>0) {
                 nLocalActPoint--;
-                rLocalXPoly[nLocalActPoint]=rStat.Now();
+                rLocalXPoly[nLocalActPoint]=rStat.GetNow();
             }
         }
     }

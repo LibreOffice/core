@@ -949,7 +949,7 @@ bool SdrDragMovHdl::BeginSdrDrag()
     if( !GetDragHdl() )
         return false;
 
-    DragStat().Ref1()=GetDragHdl()->GetPos();
+    DragStat().SetRef1(GetDragHdl()->GetPos());
     DragStat().SetShown(!DragStat().IsShown());
     SdrHdlKind eKind=GetDragHdl()->GetKind();
     SdrHdl* pH1=GetHdlList().GetHdl(SdrHdlKind::Ref1);
@@ -1808,7 +1808,7 @@ bool SdrDragResize::BeginSdrDrag()
     if (pRefHdl!=nullptr && !getSdrDragView().IsResizeAtCenter())
     {
         // Calc hack to adjust for calc grid
-        DragStat().Ref1()=pRefHdl->GetPos() - getSdrDragView().GetGridOffset();
+        DragStat().SetRef1(pRefHdl->GetPos() - getSdrDragView().GetGridOffset());
     }
     else
     {
@@ -1817,11 +1817,11 @@ bool SdrDragResize::BeginSdrDrag()
 
         if (pRef1!=nullptr && pRef2!=nullptr)
         {
-            DragStat().Ref1()=tools::Rectangle(pRef1->GetPos(),pRef2->GetPos()).Center();
+            DragStat().SetRef1(tools::Rectangle(pRef1->GetPos(),pRef2->GetPos()).Center());
         }
         else
         {
-            DragStat().Ref1()=GetMarkedRect().Center();
+            DragStat().SetRef1(GetMarkedRect().Center());
         }
     }
 
@@ -1833,9 +1833,9 @@ bool SdrDragResize::BeginSdrDrag()
 basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation()
 {
     basegfx::B2DHomMatrix aRetval(basegfx::utils::createTranslateB2DHomMatrix(
-        -DragStat().Ref1().X(), -DragStat().Ref1().Y()));
+        -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
     aRetval.scale(double(aXFact), double(aYFact));
-    aRetval.translate(DragStat().Ref1().X(), DragStat().Ref1().Y());
+    aRetval.translate(DragStat().GetRef1().X(), DragStat().GetRef1().Y());
 
     return aRetval;
 }
@@ -2023,7 +2023,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
 void SdrDragResize::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Resize(DragStat().Ref1(),aXFact,aYFact);
+    rTarget.Resize(DragStat().GetRef1(),aXFact,aYFact);
 }
 
 bool SdrDragResize::EndSdrDrag(bool bCopy)
@@ -2032,15 +2032,15 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
 
     if (IsDraggingPoints())
     {
-        getSdrDragView().ResizeMarkedPoints(DragStat().Ref1(),aXFact,aYFact);
+        getSdrDragView().ResizeMarkedPoints(DragStat().GetRef1(),aXFact,aYFact);
     }
     else if (IsDraggingGluePoints())
     {
-        getSdrDragView().ResizeMarkedGluePoints(DragStat().Ref1(),aXFact,aYFact,bCopy);
+        getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),aXFact,aYFact,bCopy);
     }
     else
     {
-        getSdrDragView().ResizeMarkedObj(DragStat().Ref1(),aXFact,aYFact,bCopy);
+        getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),aXFact,aYFact,bCopy);
     }
 
     return true;
@@ -2100,7 +2100,7 @@ bool SdrDragRotate::BeginSdrDrag()
     if (nullptr != pH)
     {
         Show();
-        DragStat().Ref1()=pH->GetPos();
+        DragStat().SetRef1(pH->GetPos());
         nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
         return true;
     }
@@ -2112,7 +2112,7 @@ bool SdrDragRotate::BeginSdrDrag()
     if(!aLocalMarkRect.IsEmpty())
     {
         Show();
-        DragStat().Ref1() = aLocalMarkRect.Center();
+        DragStat().SetRef1(aLocalMarkRect.Center());
         nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
         return true;
     }
@@ -2255,7 +2255,7 @@ bool SdrDragShear::BeginSdrDrag()
 
     if (pRefHdl!=nullptr)
     {
-        DragStat().Ref1()=pRefHdl->GetPos();
+        DragStat().SetRef1(pRefHdl->GetPos());
         nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
     }
     else
@@ -2528,8 +2528,8 @@ bool SdrDragMirror::BeginSdrDrag()
 
     if (pH1!=nullptr && pH2!=nullptr)
     {
-        DragStat().Ref1()=pH1->GetPos();
-        DragStat().Ref2()=pH2->GetPos();
+        DragStat().SetRef1(pH1->GetPos());
+        DragStat().SetRef2(pH2->GetPos());
         Ref1()=pH1->GetPos();
         Ref2()=pH2->GetPos();
         aDif=pH2->GetPos()-pH1->GetPos();
@@ -2633,8 +2633,8 @@ bool SdrDragGradient::BeginSdrDrag()
     if(pIAOHandle)
     {
         // save old values
-        DragStat().Ref1() = pIAOHandle->GetPos();
-        DragStat().Ref2() = pIAOHandle->Get2ndPos();
+        DragStat().SetRef1( pIAOHandle->GetPos() );
+        DragStat().SetRef2( pIAOHandle->Get2ndPos() );
 
         // what was hit?
         bool bHit(false);
@@ -2706,27 +2706,27 @@ void SdrDragGradient::MoveSdrDrag(const Point& rPnt)
         {
             if(pIAOHandle->IsMoveFirstHandle())
             {
-                pIAOHandle->SetPos(DragStat().Ref1() + aMoveDiff);
+                pIAOHandle->SetPos(DragStat().GetRef1() + aMoveDiff);
                 if(pIAOHandle->GetColorHdl1())
-                    pIAOHandle->GetColorHdl1()->SetPos(DragStat().Ref1() + aMoveDiff);
+                    pIAOHandle->GetColorHdl1()->SetPos(DragStat().GetRef1() + aMoveDiff);
             }
             else
             {
-                pIAOHandle->Set2ndPos(DragStat().Ref2() + aMoveDiff);
+                pIAOHandle->Set2ndPos(DragStat().GetRef2() + aMoveDiff);
                 if(pIAOHandle->GetColorHdl2())
-                    pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2() + aMoveDiff);
+                    pIAOHandle->GetColorHdl2()->SetPos(DragStat().GetRef2() + aMoveDiff);
             }
         }
         else
         {
-            pIAOHandle->SetPos(DragStat().Ref1() + aMoveDiff);
-            pIAOHandle->Set2ndPos(DragStat().Ref2() + aMoveDiff);
+            pIAOHandle->SetPos(DragStat().GetRef1() + aMoveDiff);
+            pIAOHandle->Set2ndPos(DragStat().GetRef2() + aMoveDiff);
 
             if(pIAOHandle->GetColorHdl1())
-                pIAOHandle->GetColorHdl1()->SetPos(DragStat().Ref1() + aMoveDiff);
+                pIAOHandle->GetColorHdl1()->SetPos(DragStat().GetRef1() + aMoveDiff);
 
             if(pIAOHandle->GetColorHdl2())
-                pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2() + aMoveDiff);
+                pIAOHandle->GetColorHdl2()->SetPos(DragStat().GetRef2() + aMoveDiff);
         }
 
         // new state
@@ -2748,14 +2748,14 @@ bool SdrDragGradient::EndSdrDrag(bool /*bCopy*/)
 void SdrDragGradient::CancelSdrDrag()
 {
     // restore old values
-    pIAOHandle->SetPos(DragStat().Ref1());
-    pIAOHandle->Set2ndPos(DragStat().Ref2());
+    pIAOHandle->SetPos(DragStat().GetRef1());
+    pIAOHandle->Set2ndPos(DragStat().GetRef2());
 
     if(pIAOHandle->GetColorHdl1())
-        pIAOHandle->GetColorHdl1()->SetPos(DragStat().Ref1());
+        pIAOHandle->GetColorHdl1()->SetPos(DragStat().GetRef1());
 
     if(pIAOHandle->GetColorHdl2())
-        pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2());
+        pIAOHandle->GetColorHdl2()->SetPos(DragStat().GetRef2());
 
     // new state
     pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, false);

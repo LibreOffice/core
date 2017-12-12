@@ -114,7 +114,7 @@ bool E3dDragMethod::BeginSdrDrag()
     if(E3dDragConstraint::Z == meConstraint)
     {
         const sal_uInt32 nCnt(maGrp.size());
-        DragStat().Ref1() = maFullBound.Center();
+        DragStat().SetRef1( maFullBound.Center() );
 
         for(sal_uInt32 nOb(0); nOb < nCnt; nOb++)
         {

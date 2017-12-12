@@ -958,7 +958,7 @@ bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
     aPt2=rStat.GetNow();
     if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
         aPt1+=aPt1;
-        aPt1-=rStat.Now();
+        aPt1-=rStat.GetNow();
     }
     SetTextDirty();
     SetBoundRectDirty();

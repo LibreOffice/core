@@ -112,7 +112,7 @@ AnnotationDragMove::AnnotationDragMove(SdrDragView& rNewView, const rtl::Referen
 
 bool AnnotationDragMove::BeginSdrDrag()
 {
-    DragStat().Ref1()=GetDragHdl()->GetPos();
+    DragStat().SetRef1(GetDragHdl()->GetPos());
     DragStat().SetShown(!DragStat().IsShown());
 
     maOrigin = GetDragHdl()->GetPos();
