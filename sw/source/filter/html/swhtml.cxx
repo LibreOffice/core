@@ -412,6 +412,14 @@ SwHTMLParser::~SwHTMLParser()
 #ifdef DBG_UTIL
     OSL_ENSURE( !m_nContinue, "DTOR in continue!" );
 #endif
+
+    OSL_ENSURE(m_aContexts.empty(), "There are still contexts on the stack");
+    while (!m_aContexts.empty())
+    {
+        std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+        ClearContext(xCntxt.get());
+    }
+
     bool bAsync = m_xDoc->IsInLoadAsynchron();
     m_xDoc->SetInLoadAsynchron( false );
     m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, m_bOldIsHTMLMode);
