@@ -23,6 +23,7 @@
 #include <unomap.hxx>
 #include <unobaseclass.hxx>
 #include <unomid.h>
+#include <fchrfmt.hxx>
 
 #include <i18nutil/searchopt.hxx>
 #include <o3tl/any.hxx>

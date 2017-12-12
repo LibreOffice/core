@@ -1333,9 +1333,10 @@ lcl_GetTextAttrs(
     std::vector<SwTextAttr *> *const pVector,
     SwTextAttr **const ppTextAttr,
     SwpHints const *const pSwpHints,
-    sal_Int32 const nIndex, RES_TXTATR const nWhich,
+    sal_Int32 const nIndex, sal_uInt16 const nWhich,
     enum SwTextNode::GetTextAttrMode const eMode)
 {
+    assert(nWhich >= RES_TXTATR_BEGIN && nWhich < RES_TXTATR_END);
     size_t const nSize = pSwpHints ? pSwpHints->Count() : 0;
     sal_Int32 nPreviousIndex(0); // index of last hint with nWhich
     bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=nullptr;
@@ -1393,15 +1394,16 @@ lcl_GetTextAttrs(
 }
 
 std::vector<SwTextAttr *>
-SwTextNode::GetTextAttrsAt(sal_Int32 const nIndex, RES_TXTATR const nWhich) const
+SwTextNode::GetTextAttrsAt(sal_Int32 const nIndex, sal_uInt16 const nWhich) const
 {
+    assert(nWhich >= RES_TXTATR_BEGIN && nWhich < RES_TXTATR_END);
     std::vector<SwTextAttr *> ret;
     lcl_GetTextAttrs(& ret, nullptr, m_pSwpHints, nIndex, nWhich, DEFAULT);
     return ret;
 }
 
 SwTextAttr *
-SwTextNode::GetTextAttrAt(sal_Int32 const nIndex, RES_TXTATR const nWhich,
+SwTextNode::GetTextAttrAt(sal_Int32 const nIndex, sal_uInt16 const nWhich,
                         enum GetTextAttrMode const eMode) const
 {
     assert(    (nWhich == RES_TXTATR_META)
@@ -2692,8 +2694,9 @@ SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
 
 SwTextAttr * SwTextNode::GetTextAttrForCharAt(
     const sal_Int32 nIndex,
-    const RES_TXTATR nWhich ) const
+    const sal_uInt16 nWhich ) const
 {
+    assert(nWhich >= RES_TXTATR_BEGIN && nWhich <= RES_TXTATR_END);
     if ( HasHints() )
     {
         for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )

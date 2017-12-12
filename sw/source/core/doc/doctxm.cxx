@@ -87,7 +87,7 @@ void SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
     const sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
     for( sal_uInt32 i = 0; i < nMaxItems; ++i )
     {
-        const SwTOXMark* pItem = static_cast<const SwTOXMark*>(GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i ));
+        const SwTOXMark* pItem = GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i );
         if( !pItem )
             continue;
         const SwTOXType* pTOXType = pItem->GetTOXType();
