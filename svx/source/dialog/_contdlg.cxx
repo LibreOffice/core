@@ -103,8 +103,7 @@ void SvxContourDlg::SetSuperClass( SvxSuperContourDlg& rSuperClass )
 }
 
 tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
-                                                     const tools::Rectangle* pRect,
-                                                     const sal_uIntPtr nFlags )
+                                                     const tools::Rectangle* pRect )
 {
     Bitmap  aBmp;
     XOutFlags nContourFlags = XOutFlags::ContourHorz;
@@ -132,7 +131,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                     // offset of the sub-image within the total animation
                     aTransMap.SetOrigin( Point( rStepBmp.aPosPix.X(), rStepBmp.aPosPix.Y() ) );
                     pVDev->SetMapMode( aTransMap );
-                    pVDev->DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect, nFlags ) );
+                    pVDev->DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect ) );
                 }
 
                 aTransMap.SetOrigin( Point() );
