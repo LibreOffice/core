@@ -37,7 +37,7 @@
 
 static const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 
-ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize )
+ZCodec::ZCodec( size_t nInBufSize, size_t nOutBufSize )
     : meState(STATE_INIT)
     , mbStatus(false)
     , mbFinish(false)
