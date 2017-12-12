@@ -61,6 +61,11 @@ $(eval $(call gb_Library_add_linked_libs,fwk,\
     $(gb_STDLIBS) \
 ))
 
+# i126622 - Base 4.1.2 does not open Tables and Queries in Mac OSX
+ifeq ($(OS),MACOSX)
+    $(call gb_LinkTarget_set_cxx_optimization,framework/source/loadenv/loadenv,$(gb_COMPILEROPT1FLAGS))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/accelerators/acceleratorcache \
     framework/source/accelerators/acceleratorconfiguration \
@@ -189,11 +194,5 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/xml/imagesconfiguration \
     framework/source/xml/imagesdocumenthandler \
 ))
-
-# i126622 - Base 4.1.2 does not open Tables and Queries in Mac OSX
-ifeq ($(OS),MACOSX)
-    $(call gb_CxxObject_get_target,framework/source/loadenv/loadenv):\
-    T_CXXFLAGS := $(gb_LinkTarget_CXXFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILERNOOPTFLAGS)
-endif
 
 # vim: set noet sw=4 ts=4:

@@ -158,8 +158,10 @@ endif
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
+gb_COMPILEROPT1FLAGS := -O0
 else
 gb_COMPILEROPTFLAGS := -Os
+gb_COMPILEROPT1FLAGS := -O1
 endif
 
 gb_COMPILERNOOPTFLAGS := -O0
@@ -185,6 +187,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
+		$(CFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
@@ -210,6 +213,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
+		$(CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \

@@ -280,6 +280,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(DEFS) \
 		$(T_CFLAGS) \
 		-Fd$(PDBFILE) \
+		$(CFLAGS) \
         $(PCHFLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
@@ -300,6 +301,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(DEFS) \
 		$(T_CXXFLAGS) \
 		-Fd$(PDBFILE) \
+		$(CXXFLAGS) \
         $(PCHFLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE) \
@@ -549,7 +551,9 @@ $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
-
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
+endif
 endef
 
 define gb_Library_add_default_nativeres

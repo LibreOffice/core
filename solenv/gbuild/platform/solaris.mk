@@ -109,15 +109,18 @@ gb_DEBUG_CFLAGS := -g
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS :=
+gb_COMPILEROPT1FLAGS :=
 else
 ifeq ($(CPUNAME),INTEL)
 gb_COMPILEROPTFLAGS := -xarch=generic -xO3
+gb_COMPILEROPT1FLAGS := -xarch=generic -xO1
 else # ifeq ($(CPUNAME),SPARC)
 #  -m32 -xarch=sparc        restrict target to 32 bit sparc
 #  -xO3                     optimization level 3
 #  -xspace                  don't do optimizations which do increase binary size
 #  -xprefetch=yes           do prefetching (helps on UltraSparc III)
 gb_COMPILEROPTFLAGS := -m32 -xarch=sparc -xO3 -xspace -xprefetch=yes
+gb_COMPILEROPT1FLAGS := -m32 -xarch=sparc -xO1 -xspace -xprefetch=yes
 endif
 endif
 
@@ -156,6 +159,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-xMF $(4) \
 		$(DEFS) \
 		$(T_CFLAGS) \
+		$(CFLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -170,6 +174,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
+		$(CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-xMMD \
