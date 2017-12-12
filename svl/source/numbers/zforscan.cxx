@@ -111,6 +111,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     , eNewLnge(LANGUAGE_DONTKNOW)
     , eTmpLnge(LANGUAGE_DONTKNOW)
     , nCurrPos(-1)
+    , meKeywordLocalization(KeywordLocalization::AllowEnglish)
 {
     pFormatter = pFormatterP;
     xNFC = css::i18n::NumberFormatMapper::create( pFormatter->GetComponentContext() );
@@ -160,8 +161,9 @@ ImpSvNumberformatScan::~ImpSvNumberformatScan()
     Reset();
 }
 
-void ImpSvNumberformatScan::ChangeIntl()
+void ImpSvNumberformatScan::ChangeIntl( KeywordLocalization eKeywordLocalization )
 {
+    meKeywordLocalization = eKeywordLocalization;
     bKeywordsNeedInit = true;
     bCompatCurNeedInit = true;
     // may be initialized by InitSpecialKeyword()
@@ -298,7 +300,10 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     {
         sKeyword[NF_KEY_THAI_T] = sEnglishKeyword[NF_KEY_THAI_T];
     }
-    if ( eLang.anyOf(
+
+    const bool bL10n = (meKeywordLocalization != KeywordLocalization::EnglishOnly);
+
+    if ( bL10n && eLang.anyOf(
             LANGUAGE_GERMAN,
             LANGUAGE_GERMAN_SWISS,
             LANGUAGE_GERMAN_AUSTRIAN,
@@ -335,7 +340,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     else
     {
         // day
-        if ( eLang.anyOf(
+        if ( bL10n && eLang.anyOf(
                 LANGUAGE_ITALIAN,
                 LANGUAGE_ITALIAN_SWISS))
         {
@@ -348,7 +353,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_GG] = "XX";
             sKeyword[NF_KEY_GGG] = "XXX";
         }
-        else if ( eLang.anyOf(
+        else if ( bL10n && eLang.anyOf(
                  LANGUAGE_FRENCH,
                  LANGUAGE_FRENCH_BELGIAN,
                  LANGUAGE_FRENCH_CANADIAN,
@@ -361,7 +366,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_DDD] = "JJJ";
             sKeyword[NF_KEY_DDDD] = "JJJJ";
         }
-        else if ( eLang == LANGUAGE_FINNISH )
+        else if ( bL10n && eLang == LANGUAGE_FINNISH )
         {
             sKeyword[NF_KEY_D] = "P";
             sKeyword[NF_KEY_DD] = "PP";
@@ -376,7 +381,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_DDDD] = sEnglishKeyword[NF_KEY_DDDD];
         }
         // month
-        if ( eLang == LANGUAGE_FINNISH )
+        if ( bL10n && eLang == LANGUAGE_FINNISH )
         {
             sKeyword[NF_KEY_M] = "K";
             sKeyword[NF_KEY_MM] = "KK";
@@ -393,7 +398,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_MMMMM] = sEnglishKeyword[NF_KEY_MMMMM];
         }
         // year
-        if ( eLang.anyOf(
+        if ( bL10n && eLang.anyOf(
             LANGUAGE_ITALIAN,
             LANGUAGE_ITALIAN_SWISS,
             LANGUAGE_FRENCH,
@@ -431,14 +436,14 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_AAA] =   "OOO";
             sKeyword[NF_KEY_AAAA] =  "OOOO";
         }
-        else if ( eLang.anyOf(
+        else if ( bL10n && eLang.anyOf(
              LANGUAGE_DUTCH,
              LANGUAGE_DUTCH_BELGIAN))
         {
             sKeyword[NF_KEY_YY] = "JJ";
             sKeyword[NF_KEY_YYYY] = "JJJJ";
         }
-        else if ( eLang == LANGUAGE_FINNISH )
+        else if ( bL10n && eLang == LANGUAGE_FINNISH )
         {
             sKeyword[NF_KEY_YY] = "VV";
             sKeyword[NF_KEY_YYYY] = "VVVV";
@@ -449,14 +454,14 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_YYYY] = sEnglishKeyword[NF_KEY_YYYY];
         }
         // hour
-        if ( eLang.anyOf(
+        if ( bL10n && eLang.anyOf(
              LANGUAGE_DUTCH,
              LANGUAGE_DUTCH_BELGIAN))
         {
             sKeyword[NF_KEY_H] = "U";
             sKeyword[NF_KEY_HH] = "UU";
         }
-        else if ( eLang.anyOf(
+        else if ( bL10n && eLang.anyOf(
             LANGUAGE_FINNISH,
             LANGUAGE_SWEDISH,
             LANGUAGE_SWEDISH_FINLAND,
@@ -475,7 +480,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         }
         // boolean
         sKeyword[NF_KEY_BOOLEAN] = sEnglishKeyword[NF_KEY_BOOLEAN];
-        // colours
+        // colours, *only* localized in German
         sKeyword[NF_KEY_COLOR] =     sEnglishKeyword[NF_KEY_COLOR];
         sKeyword[NF_KEY_BLACK] =     sEnglishKeyword[NF_KEY_BLACK];
         sKeyword[NF_KEY_BLUE] =      sEnglishKeyword[NF_KEY_BLUE];
@@ -523,22 +528,25 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     {
         i++;
     }
-    LanguageType eLang = pFormatter->GetLocaleData()->getLoadedLanguageTag().getLanguageType( false);
-    if ( i >= NF_MAX_DEFAULT_COLORS && eLang.anyOf(
-                LANGUAGE_GERMAN,
-                LANGUAGE_GERMAN_SWISS,
-                LANGUAGE_GERMAN_AUSTRIAN,
-                LANGUAGE_GERMAN_LUXEMBOURG,
-                LANGUAGE_GERMAN_LIECHTENSTEIN )) // only German use localized color names
+    if (i >= NF_MAX_DEFAULT_COLORS && meKeywordLocalization == KeywordLocalization::AllowEnglish)
     {
-        size_t j = 0;
-        while ( j < NF_MAX_DEFAULT_COLORS && sString != sEnglishKeyword[NF_KEY_FIRSTCOLOR + j] )
+        LanguageType eLang = pFormatter->GetLocaleData()->getLoadedLanguageTag().getLanguageType( false);
+        if ( eLang.anyOf(
+                    LANGUAGE_GERMAN,
+                    LANGUAGE_GERMAN_SWISS,
+                    LANGUAGE_GERMAN_AUSTRIAN,
+                    LANGUAGE_GERMAN_LUXEMBOURG,
+                    LANGUAGE_GERMAN_LIECHTENSTEIN )) // only German uses localized color names
         {
-            ++j;
-        }
-        if ( j < NF_MAX_DEFAULT_COLORS )
-        {
-            i = j;
+            size_t j = 0;
+            while ( j < NF_MAX_DEFAULT_COLORS && sString != sEnglishKeyword[NF_KEY_FIRSTCOLOR + j] )
+            {
+                ++j;
+            }
+            if ( j < NF_MAX_DEFAULT_COLORS )
+            {
+                i = j;
+            }
         }
     }
 
@@ -546,18 +554,25 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
         const OUString& rColorWord = rKeyword[NF_KEY_COLOR];
-        if (sString.startsWith(rColorWord) || sString.startsWith(sEnglishKeyword[NF_KEY_COLOR]))
+        bool bL10n = true;
+        if ((bL10n = sString.startsWith(rColorWord)) ||
+                ((meKeywordLocalization == KeywordLocalization::AllowEnglish) &&
+                 sString.startsWith(sEnglishKeyword[NF_KEY_COLOR])))
         {
-            sal_Int32 nPos = sString.startsWith(rColorWord) ?
-                                rColorWord.getLength() :
-                                sEnglishKeyword[NF_KEY_COLOR].getLength();
+            sal_Int32 nPos = (bL10n ? rColorWord.getLength() : sEnglishKeyword[NF_KEY_COLOR].getLength());
             sStr = sStr.copy(nPos);
             sStr = comphelper::string::strip(sStr, ' ');
             if (bConvertMode)
             {
+                /* TODO: this is awkward, only German has colors translated, so
+                 * actually we'd need to convert only between German and any
+                 * other and vice versa, and only the word COLOR <-> FARBE
+                 * without all the locale switching mumbo jumbo. */
+                KeywordLocalization eSaveKL = meKeywordLocalization;    // gets overwritten by ChangeIntl()
                 pFormatter->ChangeIntl(eNewLnge);
                 sStr = GetKeywords()[NF_KEY_COLOR] + sStr; // Color -> FARBE
                 pFormatter->ChangeIntl(eTmpLnge);
+                meKeywordLocalization = eSaveKL;
             }
             else
             {
@@ -581,9 +596,15 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
         sStr.clear();
         if (bConvertMode)
         {
+            /* TODO: this is awkward, only German has colors translated, so
+             * actually we'd need to convert only between German and any
+             * other and vice versa, and only the few color words
+             * without all the locale switching mumbo jumbo. */
+            KeywordLocalization eSaveKL = meKeywordLocalization;    // gets overwritten by ChangeIntl()
             pFormatter->ChangeIntl(eNewLnge);
             sStr = GetKeywords()[NF_KEY_FIRSTCOLOR+i]; // red -> rot
             pFormatter->ChangeIntl(eTmpLnge);
+            meKeywordLocalization = eSaveKL;
         }
         else
         {
@@ -599,7 +620,9 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
     OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.getLength() - nPos );
     const NfKeywordTable & rKeyword = GetKeywords();
     // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
-    if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ) || sString.startsWith( sEnglishKeyword[NF_KEY_GENERAL] ) )
+    if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ) ||
+            ((meKeywordLocalization == KeywordLocalization::AllowEnglish) &&
+             sString.startsWith( sEnglishKeyword[NF_KEY_GENERAL])))
     {
         return NF_KEY_GENERAL;
     }
@@ -637,70 +660,74 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
                 return j;
             }
         }
-        LanguageType eLang = pFormatter->GetLocaleData()->getLoadedLanguageTag().getLanguageType( false);
-        if ( i == 0 && eLang.anyOf( LANGUAGE_GERMAN,
-                                    LANGUAGE_GERMAN_SWISS,
-                                    LANGUAGE_GERMAN_AUSTRIAN,
-                                    LANGUAGE_GERMAN_LUXEMBOURG,
-                                    LANGUAGE_GERMAN_LIECHTENSTEIN,
-                                    LANGUAGE_DUTCH,
-                                    LANGUAGE_DUTCH_BELGIAN,
-                                    LANGUAGE_FRENCH,
-                                    LANGUAGE_FRENCH_BELGIAN,
-                                    LANGUAGE_FRENCH_CANADIAN,
-                                    LANGUAGE_FRENCH_SWISS,
-                                    LANGUAGE_FRENCH_LUXEMBOURG,
-                                    LANGUAGE_FRENCH_MONACO,
-                                    LANGUAGE_FINNISH,
-                                    LANGUAGE_ITALIAN,
-                                    LANGUAGE_ITALIAN_SWISS,
-                                    LANGUAGE_DANISH,
-                                    LANGUAGE_NORWEGIAN,
-                                    LANGUAGE_NORWEGIAN_BOKMAL,
-                                    LANGUAGE_NORWEGIAN_NYNORSK,
-                                    LANGUAGE_SWEDISH,
-                                    LANGUAGE_SWEDISH_FINLAND,
-                                    LANGUAGE_PORTUGUESE,
-                                    LANGUAGE_PORTUGUESE_BRAZILIAN,
-                                    LANGUAGE_SPANISH_MODERN,
-                                    LANGUAGE_SPANISH_DATED,
-                                    LANGUAGE_SPANISH_MEXICAN,
-                                    LANGUAGE_SPANISH_GUATEMALA,
-                                    LANGUAGE_SPANISH_COSTARICA,
-                                    LANGUAGE_SPANISH_PANAMA,
-                                    LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,
-                                    LANGUAGE_SPANISH_VENEZUELA,
-                                    LANGUAGE_SPANISH_COLOMBIA,
-                                    LANGUAGE_SPANISH_PERU,
-                                    LANGUAGE_SPANISH_ARGENTINA,
-                                    LANGUAGE_SPANISH_ECUADOR,
-                                    LANGUAGE_SPANISH_CHILE,
-                                    LANGUAGE_SPANISH_URUGUAY,
-                                    LANGUAGE_SPANISH_PARAGUAY,
-                                    LANGUAGE_SPANISH_BOLIVIA,
-                                    LANGUAGE_SPANISH_EL_SALVADOR,
-                                    LANGUAGE_SPANISH_HONDURAS,
-                                    LANGUAGE_SPANISH_NICARAGUA,
-                                    LANGUAGE_SPANISH_PUERTO_RICO ) )
+        if (i == 0 && meKeywordLocalization == KeywordLocalization::AllowEnglish)
         {
-            // no localized keyword, try English keywords
-            i = NF_KEY_LASTKEYWORD;
-            while ( i > 0 && sString.indexOf(sEnglishKeyword[i]) != 0 )
+            // No localized (if so) keyword, try English keywords if keywords
+            // are localized.
+            LanguageType eLang = pFormatter->GetLocaleData()->getLoadedLanguageTag().getLanguageType( false);
+            if ( eLang.anyOf( LANGUAGE_GERMAN,
+                        LANGUAGE_GERMAN_SWISS,
+                        LANGUAGE_GERMAN_AUSTRIAN,
+                        LANGUAGE_GERMAN_LUXEMBOURG,
+                        LANGUAGE_GERMAN_LIECHTENSTEIN,
+                        LANGUAGE_DUTCH,
+                        LANGUAGE_DUTCH_BELGIAN,
+                        LANGUAGE_FRENCH,
+                        LANGUAGE_FRENCH_BELGIAN,
+                        LANGUAGE_FRENCH_CANADIAN,
+                        LANGUAGE_FRENCH_SWISS,
+                        LANGUAGE_FRENCH_LUXEMBOURG,
+                        LANGUAGE_FRENCH_MONACO,
+                        LANGUAGE_FINNISH,
+                        LANGUAGE_ITALIAN,
+                        LANGUAGE_ITALIAN_SWISS,
+                        LANGUAGE_DANISH,
+                        LANGUAGE_NORWEGIAN,
+                        LANGUAGE_NORWEGIAN_BOKMAL,
+                        LANGUAGE_NORWEGIAN_NYNORSK,
+                        LANGUAGE_SWEDISH,
+                        LANGUAGE_SWEDISH_FINLAND,
+                        LANGUAGE_PORTUGUESE,
+                        LANGUAGE_PORTUGUESE_BRAZILIAN,
+                        LANGUAGE_SPANISH_MODERN,
+                        LANGUAGE_SPANISH_DATED,
+                        LANGUAGE_SPANISH_MEXICAN,
+                        LANGUAGE_SPANISH_GUATEMALA,
+                        LANGUAGE_SPANISH_COSTARICA,
+                        LANGUAGE_SPANISH_PANAMA,
+                        LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,
+                        LANGUAGE_SPANISH_VENEZUELA,
+                        LANGUAGE_SPANISH_COLOMBIA,
+                        LANGUAGE_SPANISH_PERU,
+                        LANGUAGE_SPANISH_ARGENTINA,
+                        LANGUAGE_SPANISH_ECUADOR,
+                        LANGUAGE_SPANISH_CHILE,
+                        LANGUAGE_SPANISH_URUGUAY,
+                        LANGUAGE_SPANISH_PARAGUAY,
+                        LANGUAGE_SPANISH_BOLIVIA,
+                        LANGUAGE_SPANISH_EL_SALVADOR,
+                        LANGUAGE_SPANISH_HONDURAS,
+                        LANGUAGE_SPANISH_NICARAGUA,
+                        LANGUAGE_SPANISH_PUERTO_RICO ) )
             {
-                i--;
-            }
-            if ( i > NF_KEY_LASTOLDKEYWORD && sString != sEnglishKeyword[i] )
-            {
-                // found something, but maybe it's something else?
-                // e.g. new NNN is found in NNNN, for NNNN we must search on
-                short j = i - 1;
-                while ( j > 0 && sString.indexOf(sEnglishKeyword[j]) != 0 )
+                i = NF_KEY_LASTKEYWORD;
+                while ( i > 0 && sString.indexOf(sEnglishKeyword[i]) != 0 )
                 {
-                    j--;
+                    i--;
                 }
-                if ( j && sEnglishKeyword[j].getLength() > sEnglishKeyword[i].getLength() )
+                if ( i > NF_KEY_LASTOLDKEYWORD && sString != sEnglishKeyword[i] )
                 {
-                    return j;
+                    // found something, but maybe it's something else?
+                    // e.g. new NNN is found in NNNN, for NNNN we must search on
+                    short j = i - 1;
+                    while ( j > 0 && sString.indexOf(sEnglishKeyword[j]) != 0 )
+                    {
+                        j--;
+                    }
+                    if ( j && sEnglishKeyword[j].getLength() > sEnglishKeyword[i].getLength() )
+                    {
+                        return j;
+                    }
                 }
             }
         }
