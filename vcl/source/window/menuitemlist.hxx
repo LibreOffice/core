@@ -42,7 +42,7 @@ struct MenuItemData
     OUString        aHelpCommandStr;        // Help command string (to reference external help)
     OString         sIdent;
     OString         aHelpId;                // Help-Id
-    sal_uLong       nUserValue;             // User value
+    void*           nUserValue;             // User value
     MenuUserDataReleaseFunction aUserValueReleaseFunc;   // called when MenuItemData is destroyed
     Image           aImage;                 // Image
     vcl::KeyCode    aAccelKey;              // Accelerator-Key
@@ -60,7 +60,7 @@ struct MenuItemData
         , eType(MenuItemType::DONTKNOW)
         , nBits(MenuItemBits::NONE)
         , pSubMenu(nullptr)
-        , nUserValue(0)
+        , nUserValue(nullptr)
         , aUserValueReleaseFunc(nullptr)
         , bChecked(false)
         , bEnabled(false)
@@ -75,7 +75,7 @@ struct MenuItemData
         , nBits(MenuItemBits::NONE)
         , pSubMenu(nullptr)
         , aText(rStr)
-        , nUserValue(0)
+        , nUserValue(nullptr)
         , aUserValueReleaseFunc(nullptr)
         , aImage(rImage)
         , bChecked(false)

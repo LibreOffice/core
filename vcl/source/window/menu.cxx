@@ -678,7 +678,7 @@ MenuItemBits Menu::GetItemBits( sal_uInt16 nItemId ) const
     return nBits;
 }
 
-void Menu::SetUserValue(sal_uInt16 nItemId, sal_uLong nValue, MenuUserDataReleaseFunction aFunc)
+void Menu::SetUserValue(sal_uInt16 nItemId, void* nUserValue, MenuUserDataReleaseFunction aFunc)
 {
     MenuItemData* pData = pItemList->GetData(nItemId);
     if (pData)
@@ -686,14 +686,14 @@ void Menu::SetUserValue(sal_uInt16 nItemId, sal_uLong nValue, MenuUserDataReleas
         if (pData->aUserValueReleaseFunc)
             pData->aUserValueReleaseFunc(pData->nUserValue);
         pData->aUserValueReleaseFunc = aFunc;
-        pData->nUserValue = nValue;
+        pData->nUserValue = nUserValue;
     }
 }
 
-sal_uLong Menu::GetUserValue( sal_uInt16 nItemId ) const
+void* Menu::GetUserValue( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
-    return pData ? pData->nUserValue : 0;
+    return pData ? pData->nUserValue : nullptr;
 }
 
 void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )

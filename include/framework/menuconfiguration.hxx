@@ -67,9 +67,9 @@ public:
     OUString aImageId;
     css::uno::WeakReference<css::frame::XDispatchProvider> xDispatchProvider;
 
-    static sal_uIntPtr CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr);
-    static sal_uIntPtr CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
-    static void ReleaseAttribute(sal_uIntPtr nAttributePtr);
+    static void* CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr);
+    static void* CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
+    static void ReleaseAttribute(void* nAttributePtr);
 
     void acquire()
     {

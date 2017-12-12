@@ -1125,7 +1125,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 Reference< XDispatchProvider > xPopupMenuDispatchProvider( rDispatchProvider );
 
                 // Retrieve possible attributes struct
-                MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(pMenu->GetUserValue( nItemId ));
+                MenuAttributes* pAttributes = static_cast<MenuAttributes *>(pMenu->GetUserValue( nItemId ));
                 if ( pAttributes )
                     xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
 
@@ -1513,7 +1513,7 @@ void MenuBarManager::FillMenu(
                         if ( xDispatchProvider.is() )
                         {
                             // Use attributes struct to transport special dispatch provider
-                            sal_uIntPtr nAttributePtr = MenuAttributes::CreateAttribute(xDispatchProvider);
+                            void* nAttributePtr = MenuAttributes::CreateAttribute(xDispatchProvider);
                             pMenu->SetUserValue(nId, nAttributePtr, MenuAttributes::ReleaseAttribute);
                         }
 
@@ -1766,7 +1766,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame, Menu* pAddonMenu, b
         {
             if ( pAddonMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
             {
-                MenuAttributes* pAddonAttributes = reinterpret_cast<MenuAttributes *>(pAddonMenu->GetUserValue( nItemId ));
+                MenuAttributes* pAddonAttributes = static_cast<MenuAttributes *>(pAddonMenu->GetUserValue( nItemId ));
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
 
                 if ( pAddonAttributes )
@@ -1905,7 +1905,7 @@ void MenuBarManager::FillMenuImages(Reference< XFrame > const & _xFrame, Menu* _
                 OUString aImageId;
 
                 ::framework::MenuAttributes* pMenuAttributes =
-                    reinterpret_cast< ::framework::MenuAttributes*>(_pMenu->GetUserValue( nId ));
+                    static_cast< ::framework::MenuAttributes*>(_pMenu->GetUserValue( nId ));
 
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
