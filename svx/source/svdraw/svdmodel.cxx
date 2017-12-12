@@ -185,9 +185,9 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 // using static SdrEngineDefaults only if default SvxFontHeight item is not available
     const SfxPoolItem* pPoolItem = pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
     if ( pPoolItem )
-        nDefTextHgt = static_cast<const SvxFontHeightItem*>(pPoolItem)->GetHeight();
+        mnDefTextHgt = static_cast<const SvxFontHeightItem*>(pPoolItem)->GetHeight();
     else
-        nDefTextHgt = SdrEngineDefaults::GetFontHeight();
+        mnDefTextHgt = SdrEngineDefaults::GetFontHeight();
 
     pItemPool->SetPoolDefaultItem( makeSdrTextWordWrapItem( false ) );
 
@@ -689,10 +689,10 @@ SdrPage* SdrModel::AllocPage(bool bMasterPage)
 
 void SdrModel::SetTextDefaults() const
 {
-    SetTextDefaults( pItemPool, nDefTextHgt );
+    SetTextDefaults( pItemPool, mnDefTextHgt );
 }
 
-void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt )
+void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
 {
     // set application-language specific dynamic pool language defaults
     SvxFontItem aSvxFontItem( EE_CHAR_FONTINFO) ;
@@ -889,10 +889,10 @@ void SdrModel::RefDeviceChanged()
     ImpReformatAllTextObjects();
 }
 
-void SdrModel::SetDefaultFontHeight(sal_uIntPtr nVal)
+void SdrModel::SetDefaultFontHeight(sal_Int32 nVal)
 {
-    if (nVal!=nDefTextHgt) {
-        nDefTextHgt=nVal;
+    if (nVal!=mnDefTextHgt) {
+        mnDefTextHgt=nVal;
         Broadcast(SdrHint(SdrHintKind::DefaultFontHeightChange));
         ImpReformatAllTextObjects();
     }
