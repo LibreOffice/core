@@ -1,13 +1,13 @@
 # avmedia
 # ==============================================
-avmedia/res/av02048.svg cmd/sc_avmediaplayer.svg
+avmedia/res/av02048.svg cmd/sc_open.svg
 avmedia/res/av02049.svg cmd/sc_runbasic.svg
 avmedia/res/av02050.svg cmd/sc_mediapause.svg
 avmedia/res/av02051.svg cmd/sc_basicstop.svg
 avmedia/res/av02052.svg cmd/sc_mediarepeat.svg
 avmedia/res/av02053.svg cmd/sc_ok.svg
 avmedia/res/av02054.svg cmd/sc_mediamute.svg
-avmedia/res/avl02048.svg cmd/lc_avmediaplayer.svg
+avmedia/res/avl02048.svg cmd/lc_open.svg
 avmedia/res/avl02049.svg cmd/lc_runbasic.svg
 avmedia/res/avl02050.svg cmd/lc_mediapause.svg
 avmedia/res/avl02051.svg cmd/lc_basicstop.svg
