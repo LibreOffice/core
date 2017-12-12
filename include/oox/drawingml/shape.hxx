@@ -164,6 +164,7 @@ public:
     void                            setTableType();
 
     void                setTextBody(const TextBodyPtr & pTextBody);
+    void                setTextRot(sal_Int32 shapeRot);
     const TextBodyPtr&   getTextBody() { return mpTextBody;}
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
     const TextListStylePtr&  getMasterTextListStyle() const { return mpMasterTextListStyle; }

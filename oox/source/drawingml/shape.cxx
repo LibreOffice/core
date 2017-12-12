@@ -1306,7 +1306,10 @@ void Shape::setTextBody(const TextBodyPtr & pTextBody)
 {
     mpTextBody = pTextBody;
 }
-
+void Shape::setTextRot(sal_Int32 shapeRot)
+{
+    mpTextBody->getTextProperties().moRotation=(static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) )+shapeRot)%5400000*4;
+}
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
     SAL_INFO("oox.drawingml", "Shape::setMasterTextListStyle: Set master text list style to shape id='" << msId << "'");
