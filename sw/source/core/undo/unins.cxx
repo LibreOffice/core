@@ -53,6 +53,8 @@
 #include <docary.hxx>
 #include <acorrect.hxx>
 #include <dcontact.hxx>
+#include <fmtautofmt.hxx>
+#include <fchrfmt.hxx>
 
 #include <strings.hrc>
 

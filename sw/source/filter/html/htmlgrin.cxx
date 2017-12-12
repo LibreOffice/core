@@ -66,6 +66,7 @@
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 #include <numrule.hxx>
+#include <fmtflcnt.hxx>
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/urlobj.hxx>

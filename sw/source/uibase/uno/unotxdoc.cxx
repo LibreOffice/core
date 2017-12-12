@@ -173,6 +173,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <memory>
+#include <fchrfmt.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
