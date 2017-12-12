@@ -97,6 +97,28 @@ public:
 namespace sc
 {
 
+struct PrintPageRangesInput
+{
+    bool m_bSkipEmpty;
+    bool m_bPrintArea;
+    SCROW m_nStartRow;
+    SCROW m_nEndRow;
+    SCCOL m_nStartCol;
+    SCCOL m_nEndCol;
+    SCTAB m_nPrintTab;
+    Size  m_aDocSize;
+
+    PrintPageRangesInput()
+        : m_bSkipEmpty(false)
+        , m_bPrintArea(false)
+        , m_nStartRow(0)
+        , m_nEndRow(0)
+        , m_nStartCol(0)
+        , m_nEndCol(0)
+        , m_nPrintTab(0)
+    {}
+};
+
 class PrintPageRanges
 {
 public:
@@ -110,12 +132,16 @@ public:
     size_t m_nPagesY;
     size_t m_nTotalY;
 
-    bool m_bCalculated;
+    PrintPageRangesInput m_aInput;
 
-    void calculate(ScDocument* pDoc, ScPageTableParam const & rTableParam,
-                   ScPageAreaParam const & rAreaParam,
+    bool checkIfAlreadyCalculatedAndSet(bool bSkipEmpty, bool bPrintArea,
+                                        SCROW nStartRow, SCROW nEndRow,
+                                        SCCOL nStartCol, SCCOL nEndCol,
+                                        SCTAB nPrintTab, Size const & aDocSize);
+
+    void calculate(ScDocument* pDoc, bool bSkipEmpty, bool bPrintArea,
                    SCROW nStartRow, SCROW nEndRow, SCCOL nStartCol, SCCOL nEndCol,
-                   SCTAB nPrintTab);
+                   SCTAB nPrintTab, Size const & aDocSize);
 };
 
 }
@@ -137,6 +163,7 @@ struct ScPrintState                         //  Save Variables from ScPrintFunc
 
     // Additional state of page ranges
     bool bSavedStateRanges;
+    sc::PrintPageRangesInput aPrintPageRangesInput;
     size_t nTotalY;
     std::vector<SCCOL> aPageEndX;
     std::vector<SCROW> aPageEndY;
