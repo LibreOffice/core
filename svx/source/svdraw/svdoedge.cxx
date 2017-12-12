@@ -1854,6 +1854,8 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         const bool bDragA(0 == rDragStat.GetHdl()->GetPointNum());
         const Point aPointNow(rDragStat.GetNow());
 
+        rDragStat.SetEndDragChangesGeoAndAttributes(true);
+
         if(rDragStat.GetPageView())
         {
             SdrObjConnection* pDraggedOne(bDragA ? &aCon1 : &aCon2);
