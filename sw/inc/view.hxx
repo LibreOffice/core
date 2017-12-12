@@ -531,6 +531,7 @@ public:
     bool            HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const;
     bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
+    bool isSignatureLineSelected();
 
     void            StateTabWin(SfxItemSet&);
 
@@ -544,6 +545,7 @@ public:
     void            EditLinkDlg();
     void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = nullptr);
     void            InsertCaption(const InsCaptionOpt *pOpt);
+
 
     // Async call by Core
     void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);

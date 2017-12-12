@@ -142,6 +142,7 @@
 #define FN_REDLINE_PREV_CHANGE       (FN_EDIT2 + 42)    /* Go to the previous change */
 #define FN_REDLINE_ACCEPT_ALL        (FN_EDIT2 + 43)    /* Redlining Accept All*/
 #define FN_REDLINE_REJECT_ALL        (FN_EDIT2 + 44)    /* Redlining Reject All*/
+#define FN_EDIT_SIGNATURELINE        (FN_EDIT2 + 45)    /* Edit signature line */
 
 // Region: Edit
 #define FN_REFRESH_VIEW         (FN_VIEW + 1)   /* Refresh/Redraw */

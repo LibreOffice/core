@@ -41,6 +41,15 @@
 
 #include <memory>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+
+using namespace css;
+
 void SwView::ExecDlgExt(SfxRequest const &rReq)
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
@@ -61,6 +70,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             break;
         }
         case FN_INSERT_SIGNATURELINE:
+        case FN_EDIT_SIGNATURELINE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
@@ -85,6 +95,39 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             break;
         }
     }
+}
+
+bool SwView::isSignatureLineSelected()
+{
+    uno::Reference<frame::XModel> const xModel(GetCurrentDocument());
+    uno::Reference<uno::XInterface> const xSelection(xModel->getCurrentSelection());
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xModel->getCurrentSelection(),
+                                                    uno::UNO_QUERY_THROW);
+    if (!xServiceInfo->supportsService("com.sun.star.drawing.Shapes"))
+    {
+        // No shape - no signature line
+        return false;
+    }
+
+    // Make sure only one object is selected
+    uno::Reference<container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(),
+                                                         uno::UNO_QUERY_THROW);
+    if (xIndexAccess->getCount() != 1)
+        return false;
+
+    // Make sure the selected object actually is a signature line
+    uno::Reference<beans::XPropertySet> xProps(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+    bool bIsSignatureLine = false;
+    try
+    {
+        xProps->getPropertyValue("IsSignatureLine") >>= bIsSignatureLine;
+    }
+    catch (beans::UnknownPropertyException)
+    {
+        return false;
+    }
+    return bIsSignatureLine;
 }
 
 void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)

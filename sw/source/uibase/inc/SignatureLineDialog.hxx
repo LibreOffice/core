@@ -14,6 +14,9 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
 class SwView;
 
 class SW_DLLPUBLIC SignatureLineDialog : public SvxStandardDialog
@@ -30,6 +33,8 @@ private:
 
     SwView& mrView;
 
+    css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
+    OUString m_aSignatureLineId;
     VclPtr<Edit> m_pEditName;
     VclPtr<Edit> m_pEditTitle;
     VclPtr<Edit> m_pEditEmail;
