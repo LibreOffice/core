@@ -222,7 +222,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
           aBmp8.Erase( Color( COL_WHITE ) );
 
         pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
-        bStatus = ( pAcc8 != nullptr );
+        bStatus = bool(pAcc8);
     }
 }
 
@@ -685,13 +685,13 @@ Graphic GIFReader::GetIntermediateGraphic()
             aImGraphic = BitmapEx( aBmp8, aBmp1 );
 
             pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
-            bStatus = bStatus && ( pAcc1 != nullptr );
+            bStatus = bStatus && pAcc1;
         }
         else
             aImGraphic = aBmp8;
 
         pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
-        bStatus = bStatus && ( pAcc8 != nullptr );
+        bStatus = bStatus && pAcc8;
     }
 
     return aImGraphic;

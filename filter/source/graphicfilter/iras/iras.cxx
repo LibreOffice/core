@@ -174,7 +174,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
     Bitmap aBmp(Size(mnWidth, mnHeight), mnDstBitsPerPix);
     Bitmap::ScopedWriteAccess pAcc(aBmp);
-    if (pAcc == nullptr)
+    if (!pAcc)
         return false;
 
     if (bPalette)
