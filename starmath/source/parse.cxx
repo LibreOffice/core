@@ -1021,28 +1021,39 @@ SmLineNode *SmParser::DoLine()
     return pSNode.release();
 }
 
+namespace
+{
+    SmNodeArray buildNodeArray(std::vector<std::unique_ptr<SmNode>>& rSubNodes)
+    {
+        SmNodeArray aSubArray(rSubNodes.size());
+        for (size_t i = 0; i < rSubNodes.size(); ++i)
+            aSubArray[i] = rSubNodes[i].release();
+        return aSubArray;
+    }
+}
+
 SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    SmNodeArray  RelationArray;
-    RelationArray.push_back(DoRelation());
+    std::vector<std::unique_ptr<SmNode>> RelationArray;
+    RelationArray.emplace_back(std::unique_ptr<SmNode>(DoRelation()));
     while (m_aCurToken.nLevel >= 4)
-        RelationArray.push_back(DoRelation());
+        RelationArray.emplace_back(std::unique_ptr<SmNode>(DoRelation()));
 
     if (RelationArray.size() > 1)
     {
         std::unique_ptr<SmExpressionNode> pSNode(new SmExpressionNode(m_aCurToken));
-        pSNode->SetSubNodes(RelationArray);
+        pSNode->SetSubNodes(buildNodeArray(RelationArray));
         pSNode->SetUseExtraSpaces(bUseExtraSpaces);
         return pSNode.release();
     }
     else
     {
         // This expression has only one node so just push this node.
-        return RelationArray[0];
+        return RelationArray[0].release();
     }
 }
 
@@ -1070,16 +1081,16 @@ SmNode *SmParser::DoSum()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    SmNode *pFirst = DoProduct();
+    std::unique_ptr<SmNode> xFirst(DoProduct());
     while (TokenInGroup(TG::Sum))
     {
-        std::unique_ptr<SmStructureNode> pSNode(new SmBinHorNode(m_aCurToken));
-        SmNode *pSecond = DoOpSubSup();
-        SmNode *pThird = DoProduct();
-        pSNode->SetSubNodes(pFirst, pSecond, pThird);
-        pFirst = pSNode.release();
+        std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
+        std::unique_ptr<SmNode> xSecond(DoOpSubSup());
+        std::unique_ptr<SmNode> xThird(DoProduct());
+        xSNode->SetSubNodes(xFirst.release(), xSecond.release(), xThird.release());
+        xFirst = std::move(xSNode);
     }
-    return pFirst;
+    return xFirst.release();
 }
 
 SmNode *SmParser::DoProduct()
@@ -1088,37 +1099,38 @@ SmNode *SmParser::DoProduct()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    SmNode *pFirst = DoPower();
+    std::unique_ptr<SmNode> xFirst(DoPower());
 
     while (TokenInGroup(TG::Product))
-    {   SmStructureNode *pSNode;
-        SmNode *pOper;
+    {
+        std::unique_ptr<SmStructureNode> xSNode;
+        std::unique_ptr<SmNode> xOper;
         bool bSwitchArgs = false;
 
         SmTokenType eType = m_aCurToken.eType;
         switch (eType)
         {
             case TOVER:
-                pSNode = new SmBinVerNode(m_aCurToken);
-                pOper = new SmRectangleNode(m_aCurToken);
+                xSNode.reset(new SmBinVerNode(m_aCurToken));
+                xOper.reset(new SmRectangleNode(m_aCurToken));
                 NextToken();
                 break;
 
             case TBOPER:
-                pSNode = new SmBinHorNode(m_aCurToken);
+                xSNode.reset(new SmBinHorNode(m_aCurToken));
 
                 NextToken();
 
                 //Let the glyph node know it's a binary operation
                 m_aCurToken.eType = TBOPER;
                 m_aCurToken.nGroup = TG::Product;
-                pOper = DoGlyphSpecial();
+                xOper.reset(DoGlyphSpecial());
                 break;
 
             case TOVERBRACE :
             case TUNDERBRACE :
-                pSNode = new SmVerticalBraceNode(m_aCurToken);
-                pOper = new SmMathSymbolNode(m_aCurToken);
+                xSNode.reset(new SmVerticalBraceNode(m_aCurToken));
+                xOper.reset(new SmMathSymbolNode(m_aCurToken));
 
                 NextToken();
                 break;
@@ -1128,9 +1140,9 @@ SmNode *SmParser::DoProduct()
             {
                 SmBinDiagonalNode *pSTmp = new SmBinDiagonalNode(m_aCurToken);
                 pSTmp->SetAscending(eType == TWIDESLASH);
-                pSNode = pSTmp;
+                xSNode.reset(pSTmp);
 
-                pOper = new SmPolyLineNode(m_aCurToken);
+                xOper.reset(new SmPolyLineNode(m_aCurToken));
                 NextToken();
 
                 bSwitchArgs = true;
@@ -1138,29 +1150,30 @@ SmNode *SmParser::DoProduct()
             }
 
             default:
-                pSNode = new SmBinHorNode(m_aCurToken);
+                xSNode.reset(new SmBinHorNode(m_aCurToken));
 
-                pOper = DoOpSubSup();
+                xOper.reset(DoOpSubSup());
         }
 
-        SmNode *pArg = DoPower();
+        std::unique_ptr<SmNode> xArg(DoPower());
 
         if (bSwitchArgs)
         {
             //! vgl siehe SmBinDiagonalNode::Arrange
-            pSNode->SetSubNodes(pFirst, pArg, pOper);
+            xSNode->SetSubNodes(xFirst.release(), xArg.release(), xOper.release());
         }
         else
         {
-            pSNode->SetSubNodes(pFirst, pOper, pArg);
+            xSNode->SetSubNodes(xFirst.release(), xOper.release(), xArg.release());
         }
-        pFirst = pSNode;
+        xFirst = std::move(xSNode);
     }
-    return pFirst;
+    return xFirst.release();
 }
 
 SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
 {
+    std::unique_ptr<SmNode> xGivenNode(pGivenNode);
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
@@ -1177,13 +1190,14 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
     pNode->SetUseLimits(nActiveGroup == TG::Limit);
 
     // initialize subnodes array
-    SmNodeArray aSubNodes(1 + SUBSUP_NUM_ENTRIES, nullptr);
-    aSubNodes[0] = pGivenNode;
+    std::vector<std::unique_ptr<SmNode>> aSubNodes(1 + SUBSUP_NUM_ENTRIES);
+    aSubNodes[0] = std::move(xGivenNode);
 
     // process all sub-/supscripts
     int  nIndex = 0;
     while (TokenInGroup(nActiveGroup))
-    {   SmTokenType  eType (m_aCurToken.eType);
+    {
+        SmTokenType  eType (m_aCurToken.eType);
 
         switch (eType)
         {
@@ -1205,7 +1219,7 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         if (aSubNodes[nIndex]) // if already occupied at earlier iteration
         {
             // forget the earlier one, remember an error instead
-            delete aSubNodes[nIndex];
+            aSubNodes[nIndex].reset();
             pENode.reset(DoError(SmParseError::DoubleSubsupscript)); // this also skips current token.
         }
         else
@@ -1226,10 +1240,10 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         else
             pSNode.reset(DoTerm(true));
 
-        aSubNodes[nIndex] = pENode ? pENode.release() : pSNode.release();
+        aSubNodes[nIndex] = std::move(pENode ? pENode : pSNode);
     }
 
-    pNode->SetSubNodes(aSubNodes);
+    pNode->SetSubNodes(buildNodeArray(aSubNodes));
     return pNode.release();
 }
 
@@ -2019,7 +2033,8 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
         throw std::range_error("parser depth limit");
 
     auto pBody = o3tl::make_unique<SmBracebodyNode>(m_aCurToken);
-    SmNodeArray aNodes;
+
+    std::vector<std::unique_ptr<SmNode>> aNodes;
     // get body if any
     if (bIsLeftRight)
     {
@@ -2027,14 +2042,14 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                aNodes.push_back(new SmMathSymbolNode(m_aCurToken));
+                aNodes.emplace_back(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
                 NextToken();
             }
             else if (m_aCurToken.eType != TRIGHT)
             {
-                aNodes.push_back(DoAlign());
+                aNodes.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
                 if (m_aCurToken.eType != TMLINE  &&  m_aCurToken.eType != TRIGHT)
-                    aNodes.push_back(DoError(SmParseError::RightExpected));
+                    aNodes.emplace_back(std::unique_ptr<SmNode>(DoError(SmParseError::RightExpected)));
             }
         } while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TRIGHT);
     }
@@ -2044,19 +2059,19 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                aNodes.push_back(new SmMathSymbolNode(m_aCurToken));
+                aNodes.emplace_back(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
                 NextToken();
             }
             else if (!TokenInGroup(TG::RBrace))
             {
-                aNodes.push_back(DoAlign());
+                aNodes.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
                 if (m_aCurToken.eType != TMLINE  &&  !TokenInGroup(TG::RBrace))
-                    aNodes.push_back(DoError(SmParseError::RbraceExpected));
+                    aNodes.emplace_back(std::unique_ptr<SmNode>(DoError(SmParseError::RbraceExpected)));
             }
         } while (m_aCurToken.eType != TEND  &&  !TokenInGroup(TG::RBrace));
     }
 
-    pBody->SetSubNodes(aNodes);
+    pBody->SetSubNodes(buildNodeArray(aNodes));
     pBody->SetScaleMode(bIsLeftRight ? SmScaleMode::Height : SmScaleMode::None);
     return pBody.release();
 }
