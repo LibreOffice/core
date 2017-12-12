@@ -399,7 +399,8 @@ void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
 
             // On the last append, the NumRule item and NodeNum object were copied.
             // Now we need to delete them. ResetAttr deletes the NodeNum object as well
-            m_pPam->GetNode().GetTextNode()->ResetAttr( RES_PARATR_NUMRULE );
+            if (SwTextNode *pTextNode = m_pPam->GetNode().GetTextNode())
+                pTextNode->ResetAttr(RES_PARATR_NUMRULE);
 
             rInfo.Clear();
         }
