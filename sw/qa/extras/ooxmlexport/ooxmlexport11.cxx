@@ -99,6 +99,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.Name"), sValue);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
+{
+    // This was 2096, the horizontal positioning of the star shape affected the
+    // positioning of the triangle one, so the triangle was outside the page
+    // frame.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(getShapeByName("triangle"),
+                                                "HoriOrientPosition"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
