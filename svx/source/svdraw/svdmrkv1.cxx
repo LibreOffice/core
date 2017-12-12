@@ -47,10 +47,10 @@ bool SdrMarkView::HasMarkablePoints() const
     return bRet;
 }
 
-sal_uIntPtr SdrMarkView::GetMarkablePointCount() const
+sal_Int32 SdrMarkView::GetMarkablePointCount() const
 {
     ForceUndirtyMrkPnt();
-    sal_uIntPtr nCount=0;
+    sal_Int32 nCount=0;
     if (!ImpIsFrameHandles()) {
         const size_t nMarkCount=GetMarkedObjectCount();
         if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
@@ -83,10 +83,10 @@ bool SdrMarkView::HasMarkedPoints() const
     return bRet;
 }
 
-sal_uIntPtr SdrMarkView::GetMarkedPointCount() const
+sal_Int32 SdrMarkView::GetMarkedPointCount() const
 {
     ForceUndirtyMrkPnt();
-    sal_uIntPtr nCount=0;
+    sal_Int32 nCount=0;
     if (!ImpIsFrameHandles()) {
         size_t nMarkCount=GetMarkedObjectCount();
         if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {

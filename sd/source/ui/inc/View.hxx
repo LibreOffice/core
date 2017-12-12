@@ -185,9 +185,9 @@ public:
 
     virtual SdrViewContext GetContext() const override;
     virtual bool HasMarkablePoints() const override;
-    virtual sal_uLong GetMarkablePointCount() const override;
+    virtual sal_Int32 GetMarkablePointCount() const override;
     virtual bool HasMarkedPoints() const override;
-    virtual sal_uLong GetMarkedPointCount() const override;
+    virtual sal_Int32 GetMarkedPointCount() const override;
     virtual bool IsPointMarkable(const SdrHdl& rHdl) const override;
     virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) override;
     virtual void CheckPossibilities() override;

@@ -1133,9 +1133,9 @@ bool View::HasMarkablePoints() const
         return FmFormView::HasMarkablePoints();
 }
 
-sal_uLong View::GetMarkablePointCount() const
+sal_Int32 View::GetMarkablePointCount() const
 {
-    sal_uLong nCount = FmFormView::GetMarkablePointCount();
+    sal_Int32 nCount = FmFormView::GetMarkablePointCount();
     nCount += maSmartTags.GetMarkablePointCount();
     return nCount;
 }
@@ -1148,9 +1148,9 @@ bool View::HasMarkedPoints() const
         return FmFormView::HasMarkedPoints();
 }
 
-sal_uLong View::GetMarkedPointCount() const
+sal_Int32 View::GetMarkedPointCount() const
 {
-    sal_uLong nCount = FmFormView::GetMarkedPointCount();
+    sal_Int32 nCount = FmFormView::GetMarkedPointCount();
     nCount += maSmartTags.GetMarkedPointCount();
     return nCount;
 }

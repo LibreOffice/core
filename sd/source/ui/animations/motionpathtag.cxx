@@ -752,7 +752,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
     return true;
 }
 
-sal_uLong MotionPathTag::GetMarkablePointCount() const
+sal_Int32 MotionPathTag::GetMarkablePointCount() const
 {
     if( mpPathObj && isSelected() )
     {
@@ -764,7 +764,7 @@ sal_uLong MotionPathTag::GetMarkablePointCount() const
     }
 }
 
-sal_uLong MotionPathTag::GetMarkedPointCount() const
+sal_Int32 MotionPathTag::GetMarkedPointCount() const
 {
     if( mpMark )
     {
