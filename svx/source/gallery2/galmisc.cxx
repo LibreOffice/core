@@ -369,10 +369,11 @@ GalleryProgress::~GalleryProgress()
 {
 }
 
-void GalleryProgress::Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal )
+void GalleryProgress::Update( sal_Int32 nVal, sal_Int32 nMaxVal )
 {
     if( mxProgressBar.is() && nMaxVal )
-        mxProgressBar->setValue( std::min( (sal_uIntPtr)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (sal_uIntPtr) GALLERY_PROGRESS_RANGE ) );
+        mxProgressBar->setValue( std::min<sal_Int32>( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE,
+                                                      GALLERY_PROGRESS_RANGE ) );
 }
 
 
