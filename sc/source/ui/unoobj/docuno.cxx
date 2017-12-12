@@ -1561,7 +1561,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
 
     std::unique_ptr<ScPrintFunc> pPrintFunc;
-    if (m_pPrintState)
+    if (m_pPrintState && m_pPrintState->nPrintTab == nTab)
         pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), *m_pPrintState, &aStatus.GetOptions()));
     else
         pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), nTab,
@@ -1673,7 +1673,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     //  pages of the same sheet
 
     std::unique_ptr<ScPrintFunc> pPrintFunc;
-    if (m_pPrintState)
+    if (m_pPrintState && m_pPrintState->nPrintTab == nTab)
         pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, *m_pPrintState, &aStatus.GetOptions()));
     else
         pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
