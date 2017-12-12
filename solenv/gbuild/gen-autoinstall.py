@@ -13,6 +13,11 @@ from __future__ import print_function
 
 import sys
 
+for (arg) in sys.argv:
+    print(arg)
+    print(" ")
+
+
 module = sys.argv[1]
 scp2componentcondition = sys.argv[2]
 scp2libtemplate = sys.argv[3]

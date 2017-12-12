@@ -645,6 +645,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 ))
 
 ifeq ($(OS),WNT)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,vcredist_exe_binarytable,\
+	$(if $(VCREDIST_DIR),vcredist_exe) \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbinarytable, \
 	regactivex \
 ))
@@ -829,6 +834,10 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
 	) \
 	$(if $(UCRT_REDISTDIR),ucrt) \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,vcredist_exe_binarytable,\
+	$(if $(VCREDIST_DIR),vcredist_exe) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\

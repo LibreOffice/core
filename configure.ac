@@ -6564,6 +6564,13 @@ AC_ARG_WITH(ucrt-dir,
         the Visual C++ Runtimes manually)]),
 ,)
 UCRT_REDISTDIR="$with_ucrt_dir"
+AC_ARG_WITH(vcredist-dir,
+    AS_HELP_STRING([--with-vcredist-dir],
+        [path to the directory with the arch-specific executables (vc_redist.x64.exe, vc_redist.x86.exe)
+        for packaging into the installsets (without those the target system needs to install
+        the Visual C++ Runtimes manually)]),
+,)
+VCREDIST_DIR="$with_vcredist_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
     find_msms
@@ -6598,10 +6605,32 @@ if test $_os = "WINNT"; then
             fi
         fi
     fi
+    if test "$VCREDIST_DIR" = "no"; then
+        dnl explicitly disabled
+        VCREDIST_DIR=""
+    else
+        if test -f "$VCREDIST_DIR/vc_redist.$WINDOWS_SDK_ARCH.exe"; then
+            VCREDIST_EXE="vc_redist.$WINDOWS_SDK_ARCH.exe"
+        else
+            VCREDIST_DIR=""
+            if test -n "$PKGFORMAT"; then
+               for i in "$PKGFORMAT"; do
+                   case "$i" in
+                   msi)
+                       AC_MSG_WARN([--without-vcredist-dir not specified or exe not found - installer will have runtime dependency])
+                       add_warning "--without-vcredist-dir not specified or exe not found - installer will have runtime dependency"
+                       ;;
+                   esac
+               done
+            fi
+        fi
+    fi
 fi
 
 AC_SUBST(UCRT_REDISTDIR)
 AC_SUBST(UCRT_DLLS)
+AC_SUBST(VCREDIST_DIR)
+AC_SUBST(VCREDIST_EXE)
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)

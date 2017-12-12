@@ -54,5 +54,8 @@ endif
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,writer_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,xsltfilter,,,,PACKAGE_FILELIST))
+ifneq ($(VCREDIST_DIR),)
+$(eval $(call gb_AutoInstall_add_module,vcredist_exe_binarytable,LIBO_LIB_FILE_BINARYTABLE))
+endif
 
 # vim: set noet sw=4 ts=4:
