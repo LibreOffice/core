@@ -179,7 +179,7 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
         SdrPathObj* pPathObj = mxTag->getPathObj();
         if( pPathObj )
         {
-            const Point aRef( DragStat().Ref1() );
+            const Point aRef( DragStat().GetRef1() );
             basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-aRef.X(), -aRef.Y()));
             aTrans.scale(double(aXFact), double(aYFact));
             aTrans.translate(aRef.X(), aRef.Y());

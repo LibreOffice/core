@@ -76,7 +76,6 @@ class SVX_DLLPUBLIC SdrDragStat final
     std::unique_ptr<SdrDragStatUserData>  mpUserData;     // Userdata
 
     void Clear();
-    Point&       Pnt(sal_uIntPtr nNum)               { return mvPnts[nNum]; }
 
 public:
     SdrDragStat()                                    { Reset(); }
@@ -86,21 +85,21 @@ public:
     void         SetView(SdrView* pV)                { pView=pV; }
     SdrPageView* GetPageView() const                 { return pPageView; }
     void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
-    const Point& GetPoint(sal_uIntPtr nNum) const    { return mvPnts[nNum]; }
-    sal_uIntPtr  GetPointCount() const               { return mvPnts.size(); }
-    const Point& GetStart() const                    { return GetPoint(0); }
-    Point&       Start()                             { return Pnt(0); }
-    const Point& GetPrev() const                     { return GetPoint(GetPointCount()-(GetPointCount()>=2 ? 2:1)); }
-    Point&       Prev()                              { return Pnt(GetPointCount()-(GetPointCount()>=2 ? 2:1)); }
+    const Point& GetPoint(sal_Int32 nNum) const      { return mvPnts[nNum]; }
+    sal_Int32    GetPointCount() const               { return mvPnts.size(); }
+    const Point& GetStart() const                    { return mvPnts[0]; }
+    void         SetStart(const Point &pt)           { mvPnts[0] = pt; }
+    const Point& GetPrev() const                     { return mvPnts[GetPointCount()-(GetPointCount()>=2 ? 2:1)]; }
+    void         SetPrev(const Point &pt)            { mvPnts[GetPointCount()-(GetPointCount()>=2 ? 2:1)] = pt; }
     const Point& GetPos0() const                     { return aPos0;  }
-    const Point& GetNow() const                      { return GetPoint(GetPointCount()-1); }
-    Point&       Now()                               { return Pnt(GetPointCount()-1); }
+    const Point& GetNow() const                      { return mvPnts.back(); }
+    void         SetNow(Point const &pt)             { mvPnts.back() = pt; }
     const Point& GetRealNow() const                  { return aRealNow; }
-    Point&       RealNow()                           { return aRealNow; }
+    void         SetRealNow(Point const &pt)         { aRealNow = pt; }
     const Point& GetRef1() const                     { return aRef1;  }
-    Point&       Ref1()                              { return aRef1;  }
+    void         SetRef1(const Point &pt)            { aRef1 = pt;  }
     const Point& GetRef2() const                     { return aRef2;  }
-    Point&       Ref2()                              { return aRef2;  }
+    void         SetRef2(const Point &pt)            { aRef2 = pt;  }
     const        SdrHdl* GetHdl() const              { return pHdl;   }
     void         SetHdl(SdrHdl* pH)                  { pHdl=pH;       }
     SdrDragStatUserData* GetUser() const             { return mpUserData.get();  }

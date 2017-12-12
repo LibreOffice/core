@@ -58,30 +58,30 @@ void SdrDragStat::Reset()
 void SdrDragStat::Reset(const Point& rPnt)
 {
     Reset();
-    Start()=rPnt;
+    SetStart(rPnt);
     aPos0=rPnt;
-    RealNow()=rPnt;
+    SetRealNow(rPnt);
 }
 
 void SdrDragStat::NextMove(const Point& rPnt)
 {
     aPos0=GetNow();
-    RealNow()=rPnt;
-    Now()=GetRealNow();
+    SetRealNow(rPnt);
+    SetNow(GetRealNow());
 }
 
 void SdrDragStat::NextPoint()
 {
     Point aPnt(GetNow());
     mvPnts.emplace_back(GetRealNow());
-    Prev()=aPnt;
+    SetPrev(aPnt);
 }
 
 void SdrDragStat::PrevPoint()
 {
     if (mvPnts.size()>=2) { // one has to remain at all times
         mvPnts.erase(mvPnts.begin()+mvPnts.size()-2);
-        Now() = GetRealNow();
+        SetNow( GetRealNow() );
     }
 }
 
