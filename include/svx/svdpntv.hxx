@@ -70,7 +70,6 @@ enum class SdrAnimationMode
 
 
 // defines
-#define SDR_ANYITEM             (0xFFFF)
 #define SDRVIEWWIN_NOTFOUND     (0xFFFF)
 
 
