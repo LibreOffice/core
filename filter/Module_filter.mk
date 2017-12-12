@@ -57,6 +57,7 @@ $(eval $(call gb_Module_add_check_targets,filter,\
     CppunitTest_filter_xslt \
     CppunitTest_filter_priority \
     CppunitTest_filter_msfilter \
+    CppunitTest_filter_textfilterdetect \
 ))
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)
