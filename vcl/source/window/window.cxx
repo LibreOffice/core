@@ -1865,7 +1865,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
         {
             Point aPos = GetPosPixel();
             if ( ImplGetParent() && !ImplIsOverlapWindow() )
-                aPos = ImplGetParent()->OutputToScreenPixel( aPos );
+                aPos = OutputToScreenPixel(Point(0, 0));
             tools::Rectangle   aRect( aPos, GetSizePixel() );
 
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aRect, rStr );
@@ -1880,7 +1880,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
         {
             Point aPos = GetPosPixel();
             if ( ImplGetParent() && !ImplIsOverlapWindow() )
-                aPos = ImplGetParent()->OutputToScreenPixel( aPos );
+                aPos = OutputToScreenPixel(Point(0, 0));
             tools::Rectangle   aRect( aPos, GetSizePixel() );
             OUString      aHelpText;
             if ( !rStr.isEmpty() )
