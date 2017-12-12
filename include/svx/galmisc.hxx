@@ -127,7 +127,7 @@ class SVX_DLLPUBLIC GalleryProgress
                                     GalleryProgress( GraphicFilter* pFilter = nullptr );
                                     ~GalleryProgress();
 
-    void                            Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal );
+    void                            Update( sal_Int32 nVal, sal_Int32 nMaxVal );
 };
 
 class Gallery;
