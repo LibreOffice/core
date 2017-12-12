@@ -109,7 +109,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
         Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
-        bool bResult(nullptr != pWriteAcc);
+        bool bResult(pWriteAcc);
 
         if(bResult)
         {
@@ -195,7 +195,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
         Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
-        bool bResult(nullptr != pWriteAcc);
+        bool bResult(pWriteAcc);
 
         if(pWriteAcc)
         {

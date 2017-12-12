@@ -45,9 +45,6 @@ namespace vcl
  */
 template < class Access, class Bitmap, Access* (Bitmap::* Acquire)() > class ScopedBitmapAccess
 {
-    typedef ScopedBitmapAccess< Access, Bitmap, Acquire > self_type;
-    typedef bool (self_type::* unspecified_bool_type)() const;
-
 public:
     explicit ScopedBitmapAccess( Bitmap& rBitmap ) :
         mpAccess( nullptr ),
@@ -98,9 +95,9 @@ public:
     }
 
     bool operator!() const { return !mpAccess; }
-    operator unspecified_bool_type() const
+    explicit operator bool() const
     {
-        return mpAccess ? &self_type::operator! : 0;
+        return mpAccess;
     }
 
     Access*         get() { return mpAccess; }
