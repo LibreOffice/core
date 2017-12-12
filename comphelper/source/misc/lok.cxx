@@ -27,6 +27,10 @@ static bool g_bTiledAnnotations(true);
 
 static bool g_bRangeHeaders(false);
 
+static bool g_bLocalRendering(false);
+
+static LanguageTag g_aLanguageTag("en-US", true);
+
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -87,8 +91,6 @@ bool isRangeHeaders()
     return g_bRangeHeaders;
 }
 
-static bool g_bLocalRendering(false);
-
 void setLocalRendering(bool bLocalRendering)
 {
     g_bLocalRendering = bLocalRendering;
@@ -97,6 +99,17 @@ void setLocalRendering(bool bLocalRendering)
 bool isLocalRendering()
 {
     return g_bLocalRendering;
+}
+
+void setLanguageTag(const LanguageTag& languageTag)
+{
+    if (g_aLanguageTag != languageTag)
+        g_aLanguageTag = languageTag;
+}
+
+const LanguageTag& getLanguageTag()
+{
+    return g_aLanguageTag;
 }
 
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);

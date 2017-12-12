@@ -526,6 +526,17 @@ public:
         return mpDoc->pClass->getViewIds(mpDoc, pArray, nSize);
     }
 
+    /**
+     * Set the language tag of the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param language Bcp47 languageTag, like en-US or so.
+     */
+    void setViewLanguage(int nId, const char* language)
+    {
+        mpDoc->pClass->setViewLanguage(mpDoc, nId, language);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

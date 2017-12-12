@@ -12,6 +12,8 @@
 
 #include <comphelper/comphelperdllapi.h>
 
+#include <i18nlangtag/languagetag.hxx>
+
 // Interface between the LibreOfficeKit implementation called by LibreOfficeKit clients and other
 // LibreOffice code.
 
@@ -64,6 +66,11 @@ COMPHELPER_DLLPUBLIC bool isTiledAnnotations();
 COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bTiledAnnotations);
 /// Check if range based header data is enabled
 COMPHELPER_DLLPUBLIC bool isRangeHeaders();
+
+/// Update the current LOK's language.
+COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
+/// Get the current LOK's language.
+COMPHELPER_DLLPUBLIC const LanguageTag& getLanguageTag();
 
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of

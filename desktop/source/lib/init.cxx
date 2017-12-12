@@ -598,6 +598,7 @@ static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
 static int doc_getView(LibreOfficeKitDocument* pThis);
 static int doc_getViewsCount(LibreOfficeKitDocument* pThis);
 static bool doc_getViewIds(LibreOfficeKitDocument* pThis, int* pArray, size_t nSize);
+static void doc_setViewLanguage(LibreOfficeKitDocument* pThis, int nId, const char* language);
 static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           const char *pFontName,
                           const char *pChar,
@@ -662,6 +663,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->paintWindow = doc_paintWindow;
         m_pDocumentClass->postWindow = doc_postWindow;
+
+        m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3151,6 +3154,13 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::getViewIds(pArray, nSize);
+}
+
+static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const char* language)
+{
+    SolarMutexGuard aGuard;
+
+    SfxLokHelper::setViewLanguage(nId, OStringToOUString(language, RTL_TEXTENCODING_UTF8));
 }
 
 unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
