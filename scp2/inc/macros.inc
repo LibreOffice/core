@@ -139,6 +139,12 @@ End
 #define PACKAGE_FILELIST_FONT PACKAGE_FILELIST
 #endif // WNT
 
+#define PACKAGE_FILELIST_BINARYTABLE(id,name) \
+File id \
+    Name = name; \
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY); \
+End
+
 #define SDK_PACKAGE_FILELIST(id,name) \
 File id \
     Dir = FILELIST_SDK_DIR; \
