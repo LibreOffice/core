@@ -2737,6 +2737,9 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
         m_xTable->IncBoxCount();
     }
 
+    if (!pStNd)
+        throw std::runtime_error("missing table start node");
+
     return pStNd;
 }
 
