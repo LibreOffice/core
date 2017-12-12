@@ -144,7 +144,7 @@ namespace {
             return nQuality;
         }
 
-        bool IsPageSize() const
+        bool IsPaperSize() const
         {
             return GetBoolValue("PageOptions", sal_Int32(1));
         }
@@ -167,7 +167,9 @@ namespace {
         bool IsPrinterPreferred(DocumentType eDocType) const
         {
             bool bIsDraw = eDocType == DocumentType::Draw;
-            return IsTilePage() || IsPageSize() || IsBooklet() || (!bIsDraw && !IsNotes());
+            bool result = IsTilePage() || IsPaperSize() || IsBooklet() || /*(!bIsDraw && !IsNotes());*/
+                IsNotes() || IsHandout() || IsOutline();
+            return result;
         }
 
         bool IsPrintExcluded() const
@@ -1741,7 +1743,7 @@ private:
         OSL_ASSERT(pDocument != nullptr);
         SdPage& rHandoutPage (*pDocument->GetSdPage(0, PageKind::Handout));
 
-        const bool bScalePage (mpOptions->IsPageSize());
+        const bool bScalePage (mpOptions->IsPaperSize());
 
         sal_uInt16 nPaperBin;
         if ( ! mpOptions->IsPaperBin())
@@ -1902,7 +1904,7 @@ private:
             // is it possible that the page size changed?
             const Size aPageSize = pPage->GetSize();
 
-            if (mpOptions->IsPageSize())
+            if (mpOptions->IsPaperSize())
             {
                 const double fHorz ((double) rInfo.maPrintSize.Width()  / aPageSize.Width());
                 const double fVert ((double) rInfo.maPrintSize.Height() / aPageSize.Height());
@@ -2134,7 +2136,7 @@ private:
         //    (without the unprintable borders).
         // 3. Split the page into parts of the size of the
         // printable area.
-        const bool bScalePage (mpOptions->IsPageSize());
+        const bool bScalePage (mpOptions->IsPaperSize());
         const bool bCutPage (mpOptions->IsCutPage());
         MapMode aMap (rInfo.maMap);
         if (bScalePage || bCutPage)
