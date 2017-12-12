@@ -40,9 +40,17 @@ class ImpSvNumberformatScan
 {
 public:
 
+    /** Specify what keyword localization is allowed when scanning the format code. */
+    enum class KeywordLocalization
+    {
+        LocaleLegacy,   ///< unfortunately localized in few locales, otherwise English
+        EnglishOnly,    ///< only English, no localized keywords
+        AllowEnglish    ///< allow English keywords as well as localized keywords
+    };
+
     explicit ImpSvNumberformatScan( SvNumberFormatter* pFormatter );
     ~ImpSvNumberformatScan();
-    void ChangeIntl(); // Replaces Keywords
+    void ChangeIntl( KeywordLocalization eKeywordLocalization = KeywordLocalization::AllowEnglish ); // Replaces Keywords
 
     void ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear); // Replaces reference date
     void ChangeStandardPrec(sal_uInt16 nPrec); // Replaces standard precision
@@ -209,6 +217,8 @@ private: // Private section
     sal_Int32 nCurrPos;                         // Position of currency symbol
 
     sal_uInt8 nNatNumModifier;                  // Thai T speciality
+
+    KeywordLocalization meKeywordLocalization;  ///< which keywords localization to scan
 
     // Copy assignment is forbidden and not implemented.
     ImpSvNumberformatScan (const ImpSvNumberformatScan &) = delete;
