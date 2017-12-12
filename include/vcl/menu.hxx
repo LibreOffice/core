@@ -115,7 +115,7 @@ struct ImplMenuDelData
     bool isDeleted() const { return mpMenu == nullptr; }
 };
 
-typedef void (*MenuUserDataReleaseFunction)(sal_uLong);
+typedef void (*MenuUserDataReleaseFunction)(void*);
 
 class VCL_DLLPUBLIC Menu : public VclReferenceBase
 {
@@ -265,8 +265,8 @@ public:
     void SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits GetItemBits( sal_uInt16 nItemId ) const;
 
-    void SetUserValue(sal_uInt16 nItemId, sal_uLong nValue, MenuUserDataReleaseFunction aFunc=nullptr);
-    sal_uLong GetUserValue(sal_uInt16 nItemId) const;
+    void SetUserValue(sal_uInt16 nItemId, void* nUserValue, MenuUserDataReleaseFunction aFunc=nullptr);
+    void* GetUserValue(sal_uInt16 nItemId) const;
 
     void SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
     PopupMenu* GetPopupMenu( sal_uInt16 nItemId ) const;
