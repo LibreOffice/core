@@ -137,8 +137,8 @@ void SdrText::SetModel( SdrModel* pNewModel )
     // Now move the OutlinerParaObject into a new Pool.
     // TODO: We should compare the DefTab and RefDevice of both Models to
     // see whether we need to use AutoGrow!
-    sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
-    sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
+    sal_Int32 nOldFontHgt=pOldModel->GetDefaultFontHeight();
+    sal_Int32 nNewFontHgt=pNewModel->GetDefaultFontHeight();
     bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
     bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
     if (bSetHgtItem)

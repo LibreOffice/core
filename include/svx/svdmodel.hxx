@@ -164,7 +164,7 @@ protected:
     SdrOutliner*    pDrawOutliner;  // an Outliner for outputting text
     SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
     SdrOutliner*    pChainingOutliner; // an Outliner for chaining overflowing text
-    sal_uIntPtr           nDefTextHgt;    // Default text height in logical units
+    sal_Int32       mnDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
@@ -287,7 +287,7 @@ public:
     const SdrTextObj*    GetFormattingTextObj() const;
     // put the TextDefaults (Font,Height,Color) in a Set
     void                 SetTextDefaults() const;
-    static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
+    static void          SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt );
 
     SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj) const;
     TextChain *          GetTextChain() const;
@@ -298,8 +298,8 @@ public:
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font height in logical units
-    void                 SetDefaultFontHeight(sal_uIntPtr nVal);
-    sal_uIntPtr          GetDefaultFontHeight() const           { return nDefTextHgt; }
+    void                 SetDefaultFontHeight(sal_Int32 nVal);
+    sal_Int32            GetDefaultFontHeight() const           { return mnDefTextHgt; }
     // default tabulator width for the EditEngine
     void                 SetDefaultTabulator(sal_uInt16 nVal);
     sal_uInt16           GetDefaultTabulator() const            { return nDefaultTabulator; }
