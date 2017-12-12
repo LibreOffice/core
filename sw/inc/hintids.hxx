@@ -102,9 +102,7 @@
 #define RES_CHRATR_END  (46)
 
 // this Attribute used only in a TextNodes SwpAttr-Array
-enum RES_TXTATR
-{
-RES_TXTATR_BEGIN = RES_CHRATR_END,
+#define RES_TXTATR_BEGIN RES_CHRATR_END
 
 /** text attributes with start and end.
    #i105453#:
@@ -122,31 +120,30 @@ RES_TXTATR_BEGIN = RES_CHRATR_END,
    - INETFMT should precede CJK_RUBY (for UNO API it does not matter...)
    - META and METAFIELD must precede CJK_RUBY and INETFMT
  */
-RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
-    RES_TXTATR_REFMARK = RES_TXTATR_WITHEND_BEGIN,  // 46
-    RES_TXTATR_TOXMARK,                             // 47
-    RES_TXTATR_META,                                // 48
-    RES_TXTATR_METAFIELD,                           // 49
-    RES_TXTATR_AUTOFMT,                             // 50
-    RES_TXTATR_INETFMT,                             // 51
-    RES_TXTATR_CHARFMT,                             // 52
-    RES_TXTATR_CJK_RUBY,                            // 53
-    RES_TXTATR_UNKNOWN_CONTAINER,                   // 54
-    RES_TXTATR_INPUTFIELD,                          // 55
-RES_TXTATR_WITHEND_END,
+#define RES_TXTATR_WITHEND_BEGIN RES_TXTATR_BEGIN
+#define     RES_TXTATR_REFMARK            TypedWhichId<SwFormatRefMark>(RES_TXTATR_WITHEND_BEGIN) // 46
+#define     RES_TXTATR_TOXMARK            TypedWhichId<SwTOXMark>(47)
+#define     RES_TXTATR_META               TypedWhichId<SwFormatMeta>(48)
+#define     RES_TXTATR_METAFIELD          TypedWhichId<SwFormatMeta>(49)
+#define     RES_TXTATR_AUTOFMT            TypedWhichId<SwFormatAutoFormat>(50)
+#define     RES_TXTATR_INETFMT            TypedWhichId<SwFormatINetFormat>(51)
+#define     RES_TXTATR_CHARFMT            TypedWhichId<SwFormatCharFormat>(52)
+#define     RES_TXTATR_CJK_RUBY           TypedWhichId<SwFormatRuby>(53)
+#define     RES_TXTATR_UNKNOWN_CONTAINER  TypedWhichId<SvXMLAttrContainerItem>(54)
+#define     RES_TXTATR_INPUTFIELD         TypedWhichId<SwFormatField>(55)
+#define RES_TXTATR_WITHEND_END 56
 
 // all TextAttributes without an end
-RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
-    RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 56
-    RES_TXTATR_FLYCNT,                              // 57
-    RES_TXTATR_FTN,                                 // 58
-    RES_TXTATR_ANNOTATION,                          // 59
-    RES_TXTATR_DUMMY3,                              // 60
-    RES_TXTATR_DUMMY1,                              // 61
-    RES_TXTATR_DUMMY2,                              // 62
-RES_TXTATR_NOEND_END,
-RES_TXTATR_END = RES_TXTATR_NOEND_END
-};
+#define RES_TXTATR_NOEND_BEGIN RES_TXTATR_WITHEND_END
+#define     RES_TXTATR_FIELD              TypedWhichId<SwFormatField>(RES_TXTATR_NOEND_BEGIN) // 56
+#define     RES_TXTATR_FLYCNT             TypedWhichId<SwFormatFlyCnt>(57)
+#define     RES_TXTATR_FTN                TypedWhichId<SwFormatFootnote>(58)
+#define     RES_TXTATR_ANNOTATION         TypedWhichId<SwFormatField>(59)
+#define     RES_TXTATR_DUMMY3             TypedWhichId<SfxBoolItem>(60)
+#define     RES_TXTATR_DUMMY1             TypedWhichId<SfxBoolItem>(61)
+#define     RES_TXTATR_DUMMY2             TypedWhichId<SfxBoolItem>(62)
+#define RES_TXTATR_NOEND_END 63
+#define RES_TXTATR_END RES_TXTATR_NOEND_END
 
 #define RES_PARATR_BEGIN RES_TXTATR_END
 #define    RES_PARATR_LINESPACING                  TypedWhichId<SvxLineSpacingItem>(RES_PARATR_BEGIN) // 63
@@ -231,30 +228,30 @@ RES_FRMATR_END
 
 #define RES_GRFATR_BEGIN RES_FRMATR_END
 #define     RES_GRFATR_MIRRORGRF    TypedWhichId<SwMirrorGrf>(RES_GRFATR_BEGIN) // 130
-#define     RES_GRFATR_CROPGRF      TypedWhichId<SwCropGrf>(131) // 131
+#define     RES_GRFATR_CROPGRF      TypedWhichId<SwCropGrf>(131)
 
-#define     RES_GRFATR_ROTATION     TypedWhichId<SwRotationGrf>(132)  // 132
-#define     RES_GRFATR_LUMINANCE    TypedWhichId<SwLuminanceGrf>(133)  // 133
-#define     RES_GRFATR_CONTRAST     TypedWhichId<SwContrastGrf>(134)  // 134
-#define     RES_GRFATR_CHANNELR     TypedWhichId<SwChannelRGrf>(135)  // 135
-#define     RES_GRFATR_CHANNELG     TypedWhichId<SwChannelGGrf>(136)  // 136
-#define     RES_GRFATR_CHANNELB     TypedWhichId<SwChannelBGrf>(137)  // 137
-#define     RES_GRFATR_GAMMA        TypedWhichId<SwGammaGrf>(138)  // 138
-#define     RES_GRFATR_INVERT       TypedWhichId<SwInvertGrf>(139)  // 139
-#define     RES_GRFATR_TRANSPARENCY TypedWhichId<SwTransparencyGrf>(140)  // 140
-#define     RES_GRFATR_DRAWMODE     TypedWhichId<SwDrawModeGrf>(141)  // 141
+#define     RES_GRFATR_ROTATION     TypedWhichId<SwRotationGrf>(132)
+#define     RES_GRFATR_LUMINANCE    TypedWhichId<SwLuminanceGrf>(133)
+#define     RES_GRFATR_CONTRAST     TypedWhichId<SwContrastGrf>(134)
+#define     RES_GRFATR_CHANNELR     TypedWhichId<SwChannelRGrf>(135)
+#define     RES_GRFATR_CHANNELG     TypedWhichId<SwChannelGGrf>(136)
+#define     RES_GRFATR_CHANNELB     TypedWhichId<SwChannelBGrf>(137)
+#define     RES_GRFATR_GAMMA        TypedWhichId<SwGammaGrf>(138)
+#define     RES_GRFATR_INVERT       TypedWhichId<SwInvertGrf>(139)
+#define     RES_GRFATR_TRANSPARENCY TypedWhichId<SwTransparencyGrf>(140)
+#define     RES_GRFATR_DRAWMODE     TypedWhichId<SwDrawModeGrf>(141)
 
-#define     RES_GRFATR_DUMMY1       TypedWhichId<SfxBoolItem>(142)  // 142
-#define     RES_GRFATR_DUMMY2       TypedWhichId<SfxBoolItem>(143)  // 143
-#define     RES_GRFATR_DUMMY3       TypedWhichId<SfxBoolItem>(144)  // 144
-#define     RES_GRFATR_DUMMY4       TypedWhichId<SfxBoolItem>(145)  // 145
-#define     RES_GRFATR_DUMMY5       TypedWhichId<SfxBoolItem>(146)  // 146
+#define     RES_GRFATR_DUMMY1       TypedWhichId<SfxBoolItem>(142)
+#define     RES_GRFATR_DUMMY2       TypedWhichId<SfxBoolItem>(143)
+#define     RES_GRFATR_DUMMY3       TypedWhichId<SfxBoolItem>(144)
+#define     RES_GRFATR_DUMMY4       TypedWhichId<SfxBoolItem>(145)
+#define     RES_GRFATR_DUMMY5       TypedWhichId<SfxBoolItem>(146)
 #define RES_GRFATR_END (147)
 
 #define RES_BOXATR_BEGIN RES_GRFATR_END
 #define     RES_BOXATR_FORMAT       TypedWhichId<SwTableBoxNumFormat>(RES_BOXATR_BEGIN) // 147
-#define     RES_BOXATR_FORMULA      TypedWhichId<SwTableBoxFormula>(148) // 148
-#define     RES_BOXATR_VALUE        TypedWhichId<SwTableBoxValue>(149) // 149
+#define     RES_BOXATR_FORMULA      TypedWhichId<SwTableBoxFormula>(148)
+#define     RES_BOXATR_VALUE        TypedWhichId<SwTableBoxValue>(149)
 #define RES_BOXATR_END (150)
 
 #define RES_UNKNOWNATR_BEGIN RES_BOXATR_END

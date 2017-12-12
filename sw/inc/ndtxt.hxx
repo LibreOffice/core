@@ -368,7 +368,7 @@ public:
      */
     SwTextAttr *GetTextAttrAt(
         sal_Int32 const nIndex,
-        RES_TXTATR const nWhich,
+        sal_uInt16 const nWhich,
         enum GetTextAttrMode const eMode = DEFAULT ) const;
 
     /** get the innermost text attributes covering position nIndex.
@@ -377,7 +377,7 @@ public:
      */
     std::vector<SwTextAttr *> GetTextAttrsAt(
         sal_Int32 const nIndex,
-        RES_TXTATR const nWhich ) const;
+        sal_uInt16 const nWhich ) const;
 
     /** get the text attribute at position nIndex which owns
         the dummy character CH_TXTATR_* at that position, if one exists.
@@ -388,7 +388,7 @@ public:
     */
     SwTextAttr *GetTextAttrForCharAt(
         const sal_Int32 nIndex,
-        const RES_TXTATR nWhich = RES_TXTATR_END ) const;
+        const sal_uInt16 nWhich = RES_TXTATR_END ) const;
 
     SwTextField* GetFieldTextAttrAt(
         const sal_Int32 nIndex,

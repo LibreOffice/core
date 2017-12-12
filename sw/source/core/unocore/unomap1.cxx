@@ -83,6 +83,10 @@
 #include <unomid.h>
 #include <cmdid.h>
 #include <unofldmid.h>
+#include <fchrfmt.hxx>
+#include <fmtruby.hxx>
+#include <fmtinfmt.hxx>
+#include <fmtautofmt.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/boxitem.hxx>

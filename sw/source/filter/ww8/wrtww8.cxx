@@ -3072,7 +3072,7 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2(RES_TXTATR_INETFMT);
     for (sal_uInt32 n = 0; n < nMaxItems; ++n)
     {
-        const SwFormatINetFormat* pINetFormat = static_cast<const SwFormatINetFormat*>(rDoc.GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n));
+        const SwFormatINetFormat* pINetFormat = rDoc.GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n);
         if (!pINetFormat)
             continue;
 

@@ -72,6 +72,7 @@
 #include <fmtfsize.hxx>
 #include <numrule.hxx>
 #include <tblafmt.hxx>
+#include <fmtautofmt.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -3731,7 +3732,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
 
         for ( sal_uInt32 nI = 0; nI < nCount; ++nI )
         {
-            const SwFormatRuby* pItem = static_cast<const SwFormatRuby*>(rAttrPool.GetItem2( RES_TXTATR_CJK_RUBY, nI ));
+            const SwFormatRuby* pItem = rAttrPool.GetItem2( RES_TXTATR_CJK_RUBY, nI );
             if ( pItem && pItem->GetTextRuby() )
             {
                 std::pair< sal_uInt16, text::RubyAdjust > aPair( pItem->GetPosition(), pItem->GetAdjustment() );
