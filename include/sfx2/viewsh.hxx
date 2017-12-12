@@ -157,6 +157,7 @@ friend class SfxPrinterController;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
+    LanguageTag                 maLOKLanguageTag;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -350,6 +351,10 @@ public:
     /// See OutlinerViewShell::GetEditWindowForActiveOLEObj().
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const override;
 
+    /// Set the LibreOfficeKit language of this view.
+    void SetLOKLanguageTag(const OUString& rBcp47LanguageTag) { maLOKLanguageTag = LanguageTag(rBcp47LanguageTag, true); }
+    /// Get the LibreOfficeKit language of this view.
+    const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
 };
 
 
