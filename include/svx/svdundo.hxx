@@ -98,8 +98,8 @@ public:
     virtual ~SdrUndoGroup() override;
 
     void Clear();
-    sal_uIntPtr GetActionCount() const { return aBuf.size(); }
-    SdrUndoAction* GetAction(sal_uIntPtr nNum) const { return aBuf[nNum]; }
+    sal_Int32 GetActionCount() const { return aBuf.size(); }
+    SdrUndoAction* GetAction(sal_Int32 nNum) const { return aBuf[nNum]; }
     void AddAction(SdrUndoAction* pAct);
 
     void SetComment(const OUString& rStr) { aComment=rStr; }
