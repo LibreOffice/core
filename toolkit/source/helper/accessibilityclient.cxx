@@ -25,7 +25,7 @@
 #include <osl/module.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <tools/solar.h>
+#include <tools/svlibrary.h>
 
 #include <helper/accessibilityclient.hxx>
 

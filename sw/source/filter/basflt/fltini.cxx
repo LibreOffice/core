@@ -22,6 +22,7 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
+#include <tools/svlibrary.h>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
 #include <sot/storage.hxx>

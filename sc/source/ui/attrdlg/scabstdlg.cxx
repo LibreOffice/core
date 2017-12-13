@@ -20,6 +20,7 @@
 #include <scabstdlg.hxx>
 
 #include <osl/module.hxx>
+#include <tools/svlibrary.h>
 #include <rtl/ustrbuf.hxx>
 
 typedef ScAbstractDialogFactory* (SAL_CALL *ScFuncPtrCreateDialogFactory)();

@@ -24,6 +24,7 @@
 #include <basic/basrdll.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
+#include <tools/svlibrary.h>
 #include <svtools/asynclink.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>

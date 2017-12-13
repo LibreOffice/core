@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <osl/module.hxx>
+#include <tools/svlibrary.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>

@@ -54,6 +54,7 @@
 
 #include <globstr.hrc>
 #include <o3tl/safeint.hxx>
+#include <tools/svlibrary.h>
 #include <vcl/svapp.hxx>
 
 #include <memory>

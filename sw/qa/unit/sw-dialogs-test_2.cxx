@@ -12,6 +12,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <tools/svlibrary.h>
 #include <sfx2/app.hxx>
 #include <vcl/abstdlg.hxx>
 
