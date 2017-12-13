@@ -235,7 +235,6 @@ typedef void *                   sal_Handle;
 #   define SAL_DLLPUBLIC_TEMPLATE
 #   define SAL_DLLPUBLIC_RTTI
 #   define SAL_CALL         __cdecl
-#   define SAL_CALL_ELLIPSE __cdecl
 #elif defined SAL_UNX
 #   if defined(__GNUC__)
 #     if defined(DISABLE_DYNLOADING)
@@ -270,7 +269,6 @@ typedef void *                   sal_Handle;
 #     define SAL_DLLPUBLIC_RTTI
 #   endif
 #   define SAL_CALL
-#   define SAL_CALL_ELLIPSE
 #else
 #   error("unknown platform")
 #endif
