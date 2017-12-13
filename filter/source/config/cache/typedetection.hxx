@@ -383,17 +383,17 @@ private:
 public:
 
     using cppu::WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) throw ()  override
     {
     }
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) throw () override
     {
         m_pTypeDetection->cancel();
     }
 
-    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) throw () override
     {
     }
 
