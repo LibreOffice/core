@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8172850f",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-13T21:03:45Z",
+      "side": 1,
+      "message": "Seeing this, the definition should be moved from include/svl/zformat.hxx to here (or even a separate header file and that included here). Reason is that include/svl/zformat.hxx includes this header file anyway, and most client code has more svl/zforlist.hxx included than svl/zformat.hxx",
+      "revId": "af9666e6dd3a6ff60d0404d6079b11f004595013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
