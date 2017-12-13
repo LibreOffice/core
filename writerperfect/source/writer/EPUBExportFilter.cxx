@@ -25,17 +25,6 @@
 
 using namespace com::sun::star;
 
-#if !LIBEPUBGEN_VERSION_SUPPORT
-namespace libepubgen
-{
-enum EPUBStylesMethod
-{
-    EPUB_STYLES_METHOD_CSS, //< The styles will be described in a separate CSS file.
-    EPUB_STYLES_METHOD_INLINE, //< The styles will be described inline.
-};
-}
-#endif
-
 namespace writerperfect
 {
 
@@ -88,14 +77,9 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     // file, the flat ODF filter has access to the doc model, everything else
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
-    libepubgen::EPUBTextGenerator aGenerator(&aPackage, static_cast<libepubgen::EPUBSplitMethod>(nSplitMethod)
-#if LIBEPUBGEN_VERSION_SUPPORT
-                                             , nVersion
-#endif
-                                            );
-#if LIBEPUBGEN_VERSION_SUPPORT
-    aGenerator.setStylesMethod(static_cast<libepubgen::EPUBStylesMethod>(nStylesMethod));
-#endif
+    libepubgen::EPUBTextGenerator aGenerator(&aPackage, nVersion);
+    aGenerator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, nSplitMethod);
+    aGenerator.setOption(libepubgen::EPUB_GENERATOR_OPTION_STYLES, nStylesMethod);
     uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
