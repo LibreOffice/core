@@ -604,6 +604,11 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
                 return OUString(); // never reached
         }
     }
+    else if(aSqlType == SQL_BLOB && aSqlSubType == static_cast<short>(BlobSubtype::Clob) )
+    {
+        uno::Reference<XClob> xClob = getClob(nColumnIndex);
+        return xClob->getSubString( 0, xClob->length() );
+    }
     else
     {
         return retrieveValue< ORowSetValue >(nColumnIndex, 0);

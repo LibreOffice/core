@@ -38,6 +38,8 @@ namespace connectivity
              */
             rtl::Reference<connectivity::firebird::Blob> m_aBlob;
 
+            sal_Int64 m_nCharCount;
+
         public:
             Clob(isc_db_handle* pDatabaseHandle,
                  isc_tr_handle* pTransactionHandle,

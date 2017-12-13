@@ -106,6 +106,13 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
             aSql.append(" ");
             aSql.append("CHARACTER SET OCTETS");
         }
+        else if(aType == DataType::CLOB)
+        {
+            // CLOB is a special type of blob in Firebird context.
+            // Subtype number 1 always refers to CLOB
+            aSql.append(" ");
+            aSql.append("SUB_TYPE 1");
+        }
     }
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())

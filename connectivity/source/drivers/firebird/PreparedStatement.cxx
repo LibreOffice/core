@@ -178,10 +178,10 @@ void SAL_CALL OPreparedStatement::disposing()
 }
 
 void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
-                                            const OUString& x)
+                                            const OUString& sInput)
 {
     SAL_INFO("connectivity.firebird",
-             "setString(" << nParameterIndex << " , " << x << ")");
+             "setString(" << nParameterIndex << " , " << sInput << ")");
 
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
@@ -190,7 +190,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     checkParameterIndex(nParameterIndex);
     setParameterNull(nParameterIndex, false);
 
-    OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
+    OString str = OUStringToOString(sInput , RTL_TEXTENCODING_UTF8 );
 
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
 
@@ -218,6 +218,10 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         memcpy(pVar->sqldata, str.getStr(), str.getLength());
         // Fill remainder with spaces
         memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
+        break;
+    case SQL_BLOB: // Clob
+        assert( pVar->sqlsubtype == static_cast<short>(BlobSubtype::Clob) );
+        setClob(nParameterIndex, sInput );
         break;
     default:
         ::dbtools::throwSQLException(
@@ -504,21 +508,105 @@ void OPreparedStatement::closeBlobAfterWriting(isc_blob_handle& rBlobHandle)
     ISC_STATUS aErr;
 
     aErr = isc_close_blob(m_statusVector,
-                          &rBlobHandle);
+            &rBlobHandle);
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                             "isc_close_blob failed",
-                             *this);
+                "isc_close_blob failed",
+                *this);
         assert(false);
     }
 }
 
-void SAL_CALL OPreparedStatement::setClob( sal_Int32, const Reference< XClob >& )
+void SAL_CALL OPreparedStatement::setClob(sal_Int32 nParameterIndex, const Reference< XClob >& xClob )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+#if SAL_TYPES_SIZEOFPOINTER == 8
+    isc_blob_handle aBlobHandle = 0;
+#else
+    isc_blob_handle aBlobHandle = nullptr;
+#endif
+    ISC_QUAD aBlobId;
+
+    openBlobForWriting(aBlobHandle, aBlobId);
+
+
+    // Max segment size is 2^16 == SAL_MAX_UINT16
+    // SAL_MAX_UINT16 / 4 is surely enough for UTF-8
+    // TODO apply max segment size to character encoding
+    sal_Int64 nCharWritten = 1; // XClob is indexed from 1
+    ISC_STATUS aErr = 0;
+    sal_Int64 nLen = xClob->length();
+    while ( nLen > nCharWritten )
+    {
+        sal_Int64 nCharRemain = nLen - nCharWritten;
+        constexpr sal_uInt16 MAX_SIZE = SAL_MAX_UINT16 / 4;
+        sal_uInt16 nWriteSize = (nCharRemain > MAX_SIZE) ? MAX_SIZE : nCharRemain;
+        OString sData = OUStringToOString(
+                xClob->getSubString(nCharWritten, nWriteSize),
+                RTL_TEXTENCODING_UTF8);
+        aErr = isc_put_segment( m_statusVector,
+                &aBlobHandle,
+                sData.getLength(),
+                sData.getStr() );
+        nCharWritten += nWriteSize;
+
+        if (aErr)
+            break;
+    }
+
+    // We need to make sure we close the Blob even if their are errors, hence evaluate
+    // errors after closing.
+    closeBlobAfterWriting(aBlobHandle);
+
+    if (aErr)
+    {
+        evaluateStatusVector(m_statusVector,
+                "isc_put_segment failed",
+                *this);
+        assert(false);
+    }
+
+    setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
+}
+
+void OPreparedStatement::setClob( sal_Int32 nParameterIndex, const OUString& rStr )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
+#if SAL_TYPES_SIZEOFPOINTER == 8
+    isc_blob_handle aBlobHandle = 0;
+#else
+    isc_blob_handle aBlobHandle = nullptr;
+#endif
+    ISC_QUAD aBlobId;
+
+    openBlobForWriting(aBlobHandle, aBlobId);
+
+    OString sData = OUStringToOString(
+            rStr,
+            RTL_TEXTENCODING_UTF8);
+    ISC_STATUS aErr = isc_put_segment( m_statusVector,
+                            &aBlobHandle,
+                            sData.getLength(),
+                            sData.getStr() );
+
+    // We need to make sure we close the Blob even if their are errors, hence evaluate
+    // errors after closing.
+    closeBlobAfterWriting(aBlobHandle);
+
+    if (aErr)
+    {
+        evaluateStatusVector(m_statusVector,
+                             "isc_put_segment failed",
+                             *this);
+        assert(false);
+    }
+
+    setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
 
 void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
