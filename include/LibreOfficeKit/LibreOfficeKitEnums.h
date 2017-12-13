@@ -267,6 +267,11 @@ typedef enum
     /**
      * The size and/or the position of the cell cursor changed.
      *
+     * Payload format: "x, y, width, height, column, row", where the first
+     * 4 numbers are document coordinates, in twips, and the last 2 are table
+     * coordinates starting from 0.
+     * When the cursor is not shown the payload format is the "EMPTY" string.
+     *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
     LOK_CALLBACK_CELL_CURSOR = 17,
