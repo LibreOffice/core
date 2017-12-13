@@ -58,6 +58,13 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
     // Now check whether the stream begins with a known HTML tag.
     enum DetectPhase { BeforeTag, TagOpened, InTagName };
     DetectPhase dp = BeforeTag;
+    /// BeforeDeclaration -> ? -> DeclarationOpened -> > -> BeforeDeclaration.
+    enum DeclarationPhase
+    {
+        BeforeDeclaration,
+        DeclarationOpened
+    };
+    DeclarationPhase eDeclaration = BeforeDeclaration;
 
     const char* pHeader = sHeader.getStr();
     const int   nLength = sHeader.getLength();
@@ -66,7 +73,8 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
     for ( i = 0; i < nLength; ++i, ++pHeader )
     {
         char c = *pHeader;
-        if ( c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f' )
+        if ((c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f')
+            && eDeclaration == BeforeDeclaration)
         {
             if ( dp == TagOpened )
                 return false; // Invalid: Should start with a tag name
@@ -84,6 +92,11 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
         {
             if ( dp == InTagName )
                 break; // End of tag name reached
+            else if (eDeclaration == DeclarationOpened)
+            {
+                dp = BeforeTag;
+                eDeclaration = BeforeDeclaration;
+            }
             else
                 return false; // Invalid: Empty tag or before '<'
         }
@@ -100,8 +113,13 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
                 return false; // Invalid: Should start with a tag
             else if ( dp == TagOpened )
             {
-                nStartOfTagIndex = i;
-                dp = InTagName;
+                if (c == '?' && eDeclaration == BeforeDeclaration)
+                    eDeclaration = DeclarationOpened;
+                else if (eDeclaration == BeforeDeclaration)
+                {
+                    nStartOfTagIndex = i;
+                    dp = InTagName;
+                }
             }
         }
     }
