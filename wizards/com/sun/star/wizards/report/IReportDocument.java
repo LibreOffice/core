@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 /**
  * New Interface which gives us the possibility to switch on the fly between the old
- * Wizard and the new Sun Report Builder Wizard, which use the same UI.
+ * Wizard and the new Report Builder Wizard, which use the same UI.
  */
 public interface IReportDocument
 {

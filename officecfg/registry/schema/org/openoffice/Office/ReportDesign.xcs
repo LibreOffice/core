@@ -36,17 +36,11 @@
       <info>
         <desc>specifies extension settings for the report designer.</desc>
       </info>
-      <prop oor:name="DownloadURL" oor:type="xs:string">
-        <info>
-          <desc>Direct download URL to the Oracle(tm) Report Builder extension.</desc>
-        </info>
-        <value>http://extensions.go-oo.org</value>
-      </prop>
       <prop oor:name="Name" oor:type="xs:string">
         <info>
           <desc>Name of the extension.</desc>
         </info>
-        <value>Oracle(tm) Report Builder</value>
+        <value>Report Builder</value>
       </prop>
     </group>
     <group oor:name="UserData" oor:extensible="true">
