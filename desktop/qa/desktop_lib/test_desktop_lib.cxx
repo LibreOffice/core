@@ -774,7 +774,8 @@ void DesktopLOKTest::testCellCursor()
     boost::property_tree::read_json(aStream, aTree);
 
     OString aRectangle(aTree.get<std::string>("commandValues").c_str());
-    CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1279, 255"), aRectangle);
+    // cell cursor geometry + col + row
+    CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1279, 255, 0, 0"), aRectangle);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

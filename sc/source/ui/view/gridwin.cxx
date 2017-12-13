@@ -5565,11 +5565,15 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     if (nSizeYPix == 0)
         nSizeYPix = 1;
 
-    long nSizeXTw = rtl::math::round(nSizeXPix / fPPTX);
-    long nSizeYTw = rtl::math::round(nSizeYPix / fPPTY);
+    long nPosXTw = rtl::math::round(aScrPos.getX() / fPPTX);
+    long nPosYTw = rtl::math::round(aScrPos.getY() / fPPTY);
+    // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
+    long nSizeXTw = rtl::math::round(nSizeXPix / fPPTX) - 1;
+    long nSizeYTw = rtl::math::round(nSizeYPix / fPPTY) - 1;
 
-    tools::Rectangle aRect(Point(rtl::math::round(aScrPos.getX() / fPPTX), rtl::math::round(aScrPos.getY() / fPPTY)),
-                    Size(nSizeXTw, nSizeYTw));
+    std::stringstream ss;
+    ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
+       << nX << ", " << nY;
 
     pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 
@@ -5580,7 +5584,7 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     pViewData->GetLOKHeightHelper().insert(nY - 1, aScrPos.getY());
     pViewData->SetLOKOldCurY(nY);
 
-    return aRect.toString();
+    return ss.str().c_str();
 }
 
 void ScGridWindow::updateLibreOfficeKitCellCursor(const SfxViewShell* pOtherShell) const
