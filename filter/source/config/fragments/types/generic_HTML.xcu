@@ -18,7 +18,7 @@
     <node oor:name="generic_HTML" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.filters.PlainTextFilterDetect</value></prop>
         <prop oor:name="URLPattern"><value>private:factory/swriter/web*</value></prop>
-        <prop oor:name="Extensions"><value>html htm</value></prop>
+        <prop oor:name="Extensions"><value>html htm xhtml</value></prop>
         <prop oor:name="MediaType"><value>text/html</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>HTML</value></prop>
