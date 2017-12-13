@@ -174,6 +174,14 @@ namespace sw {
                 { m_sShortName = rShortName; }
             virtual void SetKeyCode(const vcl::KeyCode& rCode) override
                 { m_aCode = rCode; }
+            virtual bool IsHidden() const override
+                { return m_bHidden; }
+            virtual const OUString& GetHideCondition() const override
+                { return m_sHideCondition; }
+            virtual void Hide(bool rHide) override
+                { m_bHidden = rHide; }
+            virtual void SetHideCondition(const OUString& rHideCondition) override
+                { m_sHideCondition = rHideCondition; }
 
             // ::sfx2::Metadatable
             virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
@@ -185,6 +193,8 @@ namespace sw {
         private:
             vcl::KeyCode m_aCode;
             OUString m_sShortName;
+            bool m_bHidden;
+            OUString m_sHideCondition;
         };
 
         class Fieldmark
