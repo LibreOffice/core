@@ -381,7 +381,7 @@ UnoControlContainer::UnoControlContainer()
     :UnoControlContainer_Base()
     ,maCListeners( *this )
 {
-    mpControls = new UnoControlHolderList;
+    mpControls.reset(new UnoControlHolderList);
 }
 
 UnoControlContainer::UnoControlContainer(const uno::Reference< awt::XWindowPeer >& xP )
@@ -390,12 +390,11 @@ UnoControlContainer::UnoControlContainer(const uno::Reference< awt::XWindowPeer 
 {
     setPeer( xP );
     mbDisposePeer = false;
-    mpControls = new UnoControlHolderList;
+    mpControls.reset(new UnoControlHolderList);
 }
 
 UnoControlContainer::~UnoControlContainer()
 {
-    DELETEZ( mpControls );
 }
 
 void UnoControlContainer::ImplActivateTabControllers()
@@ -433,8 +432,7 @@ void UnoControlContainer::dispose(  )
 
 
     // Delete all structures
-    DELETEZ( mpControls );
-    mpControls = new UnoControlHolderList;
+    mpControls.reset(new UnoControlHolderList);
 
     UnoControlBase::dispose();
 }
