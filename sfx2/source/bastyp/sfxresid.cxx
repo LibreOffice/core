@@ -17,32 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/sfxresid.hxx>
-#include "tools/resmgr.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <tools/resmgr.hxx>
 
-
-static ResMgr* pMgr=nullptr;
+static std::unique_ptr<ResMgr> pMgr;
 
 SfxResId::SfxResId( sal_uInt16 nId ) :
-
     ResId( nId, *GetResMgr() )
 {
 }
 
 ResMgr* SfxResId::GetResMgr()
 {
-    if ( !pMgr )
-    {
-        pMgr = ResMgr::CreateResMgr("sfx");
-    }
+    const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
 
-    return pMgr;
+    if (!pMgr || pMgr->GetLocale() != rLocale)
+        pMgr.reset(ResMgr::CreateResMgr("sfx", rLocale));
+
+    return pMgr.get();
 }
 
 void SfxResId::DeleteResMgr()
 {
-    DELETEZ( pMgr );
+    pMgr.reset();
 }
 
 
