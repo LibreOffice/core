@@ -1819,7 +1819,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libepubgen)/src/lib/.libs/libepubgen-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libepubgen)/src/lib/.libs/libepubgen-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libepubgen)
 
