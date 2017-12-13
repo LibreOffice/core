@@ -42,9 +42,9 @@ public:
     static sal_Unicode getUnicodeScriptStart(css::i18n::UnicodeScript type);
     static sal_Unicode getUnicodeScriptEnd(css::i18n::UnicodeScript type);
     static sal_uInt8 getUnicodeDirection( const sal_Unicode ch );
-    static bool SAL_CALL isControl( const sal_Unicode ch);
-    static bool SAL_CALL isAlpha( const sal_Unicode ch);
-    static bool SAL_CALL isSpace( const sal_Unicode ch);
+    static bool isControl( const sal_Unicode ch);
+    static bool isAlpha( const sal_Unicode ch);
+    static bool isSpace( const sal_Unicode ch);
     static bool isWhiteSpace( const sal_Unicode ch);
 
     //Map an ISO 15924 script code to Latin/Asian/Complex/Weak

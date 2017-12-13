@@ -114,7 +114,7 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
             bit(UnicodeType::PARAGRAPH_SEPARATOR)
 
 #define IsType(func, mask)  \
-bool SAL_CALL func( const sal_Unicode ch) {\
+bool func( const sal_Unicode ch) {\
     return (bit(getUnicodeType(ch)) & (mask)) != 0;\
 }
 
