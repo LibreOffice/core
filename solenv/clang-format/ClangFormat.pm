@@ -91,11 +91,19 @@ sub find()
     return $clang_format;
 }
 
-# Diffs the original and the formatted version of a single file.
+# Diffs the original and the formatted version of a single file from the index.
 sub check_style($$)
 {
+    # Make sure that not staged changes are not considered when diffing.
     my ($clang_format, $filename) = @_;
-    return system("'$clang_format' $filename | git --no-pager diff --no-index --exit-code $filename -") == 0;
+    my $index = $filename . ".index";
+    system("git show :$filename > $index");
+    my $format = $index . ".format";
+    system("'$clang_format' -assume-filename=$filename $index > $format");
+    my $ret = system("git --no-pager diff --no-index --exit-code $index $format") == 0;
+    unlink($index);
+    unlink($format);
+    return $ret;
 }
 
 # Private functions.

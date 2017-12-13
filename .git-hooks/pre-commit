@@ -161,8 +161,7 @@ sub check_style($)
                 print("cp clang-format-$version-$platform clang-format\n");
                 print("chmod +x clang-format\n\n");
 
-                print("(Or read the instructions how to build it yourself at\n");
-                print("<https://dev-www.libreoffice.org/bin/README.clang-format.txt>).\n\n");
+                print("(Or read solenv/clang-format/README on how to build it yourself.\n");
                 return;
             }
             if (!ClangFormat::check_style($clang_format, $filename))
