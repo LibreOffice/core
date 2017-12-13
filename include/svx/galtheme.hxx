@@ -85,29 +85,29 @@ private:
     GalleryThemeEntry*          pThm;
     sal_uInt32                  mnThemeLockCount;
     sal_uInt32                  mnBroadcasterLockCount;
-    sal_uIntPtr                 nDragPos;
+    sal_Int32                   nDragPos;
     bool                        bDragging;
     bool                        bAbortActualize;
 
     SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
     SgaObject*                  ImplReadSgaObject( GalleryObject const * pEntry );
-    SAL_DLLPRIVATE bool         ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
+    SAL_DLLPRIVATE bool         ImplWriteSgaObject( const SgaObject& rObj, sal_Int32 nPos, GalleryObject* pExistentEntry );
     SAL_DLLPRIVATE void         ImplWrite();
-    SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject( size_t nPos ) const
-                                { return ( nPos < aObjectList.size() ) ? aObjectList[ nPos ] : nullptr; }
+    SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject( sal_Int32 nPos ) const
+                                { return ( nPos < sal_Int32(aObjectList.size()) ) ? aObjectList[ nPos ] : nullptr; }
     const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
 
-    SAL_DLLPRIVATE size_t       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
+    SAL_DLLPRIVATE sal_Int32       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
                                 {
                                     for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
                                         if ( pObj == aObjectList[ i ] )
                                             return i;
-                                    return size_t(-1);
+                                    return -1;
                                 }
     SAL_DLLPRIVATE static INetURLObject ImplGetURL( const GalleryObject* pObject );
     SAL_DLLPRIVATE INetURLObject ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDataFormat nFormat = ConvertDataFormat::Unknown );
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
-    SAL_DLLPRIVATE void         ImplBroadcast( sal_uIntPtr nUpdatePos );
+    SAL_DLLPRIVATE void         ImplBroadcast( sal_Int32 nUpdatePos );
 
     SAL_DLLPRIVATE              GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry );
 
@@ -120,14 +120,14 @@ public:
 
     SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly );
 
-    SAL_DLLPRIVATE size_t       GetObjectCount() const { return aObjectList.size(); }
+    SAL_DLLPRIVATE sal_Int32    GetObjectCount() const { return aObjectList.size(); }
 
-    SgaObject*                  AcquireObject( size_t nPos );
+    SgaObject*                  AcquireObject( sal_Int32 nPos );
     static void                 ReleaseObject( SgaObject* pObj );
 
-    bool                        InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = CONTAINER_APPEND );
-    bool                        RemoveObject( size_t nPos );
-    SAL_DLLPRIVATE bool         ChangeObjectPos( size_t nOldPos, size_t nNewPos );
+    bool                        InsertObject( const SgaObject& rObj, sal_Int32 nPos = SAL_MAX_INT32 );
+    bool                        RemoveObject( sal_Int32 nPos );
+    SAL_DLLPRIVATE bool         ChangeObjectPos( sal_Int32 nOldPos, sal_Int32 nNewPos );
 
     const OUString&             GetName() const;
 
@@ -152,8 +152,8 @@ public:
     void                        UnlockBroadcaster();
     SAL_DLLPRIVATE bool         IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
 
-    SAL_DLLPRIVATE void         SetDragPos( sal_uIntPtr nPos ) { nDragPos = nPos; }
-    SAL_DLLPRIVATE sal_uIntPtr  GetDragPos() const { return nDragPos; }
+    SAL_DLLPRIVATE void         SetDragPos( sal_Int32 nPos ) { nDragPos = nPos; }
+    SAL_DLLPRIVATE sal_Int32    GetDragPos() const { return nDragPos; }
 
     SAL_DLLPRIVATE bool         IsThemeNameFromResource() const;
 
@@ -168,38 +168,38 @@ public:
 
 public:
 
-    SAL_DLLPRIVATE SgaObjKind   GetObjectKind( sal_uIntPtr nPos ) const
+    SAL_DLLPRIVATE SgaObjKind   GetObjectKind( sal_Int32 nPos ) const
                                 {
                                     DBG_ASSERT( nPos < GetObjectCount(), "Position out of range" );
                                     return ImplGetGalleryObject( nPos )->eObjKind;
                                 }
 
 
-    SAL_DLLPRIVATE const INetURLObject& GetObjectURL( sal_uIntPtr nPos ) const
+    SAL_DLLPRIVATE const INetURLObject& GetObjectURL( sal_Int32 nPos ) const
                                 {
                                     DBG_ASSERT( nPos < GetObjectCount(), "Position out of range" );
                                     return ImplGetGalleryObject( nPos )->aURL;
                                 }
 
-    SAL_DLLPRIVATE bool         GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp );
+    SAL_DLLPRIVATE bool         GetThumb( sal_Int32 nPos, BitmapEx& rBmp );
 
-    bool                        GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgress = false );
-    bool                        InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos );
+    bool                        GetGraphic( sal_Int32 nPos, Graphic& rGraphic, bool bProgress = false );
+    bool                        InsertGraphic( const Graphic& rGraphic, sal_Int32 nInsertPos );
 
-    bool                        GetModel( sal_uIntPtr nPos, SdrModel& rModel );
-    bool                        InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos );
+    bool                        GetModel( sal_Int32 nPos, SdrModel& rModel );
+    bool                        InsertModel( const FmFormModel& rModel, sal_Int32 nInsertPos );
 
-    SAL_DLLPRIVATE bool         GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream> const & rModelStreamRef );
-    SAL_DLLPRIVATE bool         InsertModelStream( const tools::SvRef<SotStorageStream>& rModelStream, sal_uIntPtr nInsertPos );
+    SAL_DLLPRIVATE bool         GetModelStream( sal_Int32 nPos, tools::SvRef<SotStorageStream> const & rModelStreamRef );
+    SAL_DLLPRIVATE bool         InsertModelStream( const tools::SvRef<SotStorageStream>& rModelStream, sal_Int32 nInsertPos );
 
-    SAL_DLLPRIVATE bool         GetURL( sal_uIntPtr nPos, INetURLObject& rURL );
-    bool                        InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
-    SAL_DLLPRIVATE bool         InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos );
+    SAL_DLLPRIVATE bool         GetURL( sal_Int32 nPos, INetURLObject& rURL );
+    bool                        InsertURL( const INetURLObject& rURL, sal_Int32 nInsertPos = SAL_MAX_INT32 );
+    SAL_DLLPRIVATE bool         InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_Int32 nInsertPos );
 
-    SAL_DLLPRIVATE bool         InsertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos );
+    SAL_DLLPRIVATE bool         InsertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_Int32 nInsertPos );
 
-    SAL_DLLPRIVATE void         CopyToClipboard( vcl::Window* pWindow, sal_uIntPtr nPos );
-    SAL_DLLPRIVATE void         StartDrag( vcl::Window* pWindow, sal_uIntPtr nPos );
+    SAL_DLLPRIVATE void         CopyToClipboard( vcl::Window* pWindow, sal_Int32 nPos );
+    SAL_DLLPRIVATE void         StartDrag( vcl::Window* pWindow, sal_Int32 nPos );
 
 public:
 
@@ -208,8 +208,8 @@ public:
     static void                 InsertAllThemes( ListBox& rListBox );
 
     // for buffering PreviewBitmaps and strings for object and path
-    SAL_DLLPRIVATE void GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const;
-    SAL_DLLPRIVATE void SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
+    SAL_DLLPRIVATE void GetPreviewBitmapExAndStrings(sal_Int32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const;
+    SAL_DLLPRIVATE void SetPreviewBitmapExAndStrings(sal_Int32 nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
 };
 
 SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme );
