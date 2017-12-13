@@ -30,6 +30,7 @@
 
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
+#include <tools/svlibrary.h>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>

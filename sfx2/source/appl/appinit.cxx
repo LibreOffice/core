@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <basic/sbdef.hxx>
+#include <tools/svlibrary.h>
 #include <svtools/soerr.hxx>
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>

@@ -21,6 +21,8 @@
 
 #include <svtaccessiblefactory.hxx>
 
+#include <tools/svlibrary.h>
+
 #include <osl/module.h>
 
 namespace svt

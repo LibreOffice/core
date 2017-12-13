@@ -105,16 +105,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<s
 #endif
 #endif
 
-#if defined(_WIN32)
-#define SVLIBRARY( Base ) Base "lo.dll"
-#elif defined MACOSX
-#define SVLIBRARY( Base ) "lib" Base "lo.dylib"
-#elif defined UNX
-#define SVLIBRARY( Base ) "lib" Base "lo.so"
-#else
-  #error unknown platform
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

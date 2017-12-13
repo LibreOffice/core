@@ -21,6 +21,7 @@
 
 #include <vcl/graphicfilter.hxx>
 #include <unotools/configmgr.hxx>
+#include <tools/svlibrary.h>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
