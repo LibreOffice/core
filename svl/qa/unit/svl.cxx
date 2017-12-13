@@ -67,6 +67,7 @@ public:
     void testUserDefinedNumberFormats();
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
+    void testColorNamesConversion();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testUserDefinedNumberFormats);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
+    CPPUNIT_TEST(testColorNamesConversion);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1473,6 +1475,41 @@ void Test::testStandardColorIntegrity()
     CPPUNIT_ASSERT_EQUAL( aStandardColors[7].GetColor(), COL_GRAY );
     CPPUNIT_ASSERT_EQUAL( aStandardColors[8].GetColor(), COL_YELLOW );
     CPPUNIT_ASSERT_EQUAL( aStandardColors[9].GetColor(), COL_WHITE );
+}
+
+void Test::testColorNamesConversion()
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
+    const SvNumberformat* pNumberFormat = aFormatter.GetEntry(0);
+    const ::std::vector<OUString> & rEnglishKeywords = pNumberFormat->GetEnglishKeywords();
+    const NfKeywordTable& rKeywords = pNumberFormat->GetKeywords();
+
+    // Holding a reference to the NfKeywordTable doesn't help if we switch
+    // locales internally, so copy the relevant parts in advance.
+    std::vector<OUString> aGermanKeywords(NF_KEYWORD_ENTRIES_COUNT);
+    for (size_t i = NF_KEY_COLOR; i <= NF_KEY_WHITE; ++i)
+        aGermanKeywords[i] = rKeywords[i];
+
+    // Check that we actually have German and English keywords.
+    CPPUNIT_ASSERT_EQUAL( OUString("FARBE"), aGermanKeywords[NF_KEY_COLOR]);
+    CPPUNIT_ASSERT_EQUAL( OUString("COLOR"), rEnglishKeywords[NF_KEY_COLOR]);
+
+    // Test each color conversion.
+    // [FARBE1] -> [COLOR1] can't be tested because we have no color table link
+    // set, so the scanner returns nCheckPos error.
+    sal_Int32 nCheckPos;
+    short nType;
+    sal_uInt32 nKey;
+    OUString aFormatCode;
+
+    for (size_t i = NF_KEY_BLACK; i <= NF_KEY_WHITE; ++i)
+    {
+        aFormatCode = "[" + aGermanKeywords[i] + "]0";
+        aFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType, nKey, LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", 0, nCheckPos);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Type should be NUMBER.", css::util::NumberFormat::NUMBER, nType);
+        CPPUNIT_ASSERT_EQUAL( OUString("[" + rEnglishKeywords[i] + "]0"), aFormatCode);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
