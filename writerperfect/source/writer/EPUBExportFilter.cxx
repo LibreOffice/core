@@ -54,11 +54,7 @@ sal_Int32 EPUBExportFilter::GetDefaultSplitMethod()
 
 sal_Int32 EPUBExportFilter::GetDefaultLayoutMethod()
 {
-#if LIBEPUBGEN_VERSION_SUPPORT
     return libepubgen::EPUB_LAYOUT_METHOD_REFLOWABLE;
-#else
-    return 0;
-#endif
 }
 
 sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
@@ -76,10 +72,8 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
             rDescriptor[i].Value >>= aFilterOptions;
     }
 
-#if LIBEPUBGEN_VERSION_SUPPORT
     if (aFilterOptions == "layout=fixed")
         nLayoutMethod = libepubgen::EPUB_LAYOUT_METHOD_FIXED;
-#endif
 
     for (sal_Int32 i = 0; i < aFilterData.getLength(); ++i)
     {
@@ -95,25 +89,17 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     // file, the flat ODF filter has access to the doc model, everything else
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
-    libepubgen::EPUBTextGenerator aGenerator(&aPackage
-#if LIBEPUBGEN_VERSION_SUPPORT
-                                             , nVersion
-#endif
-                                            );
-#if LIBEPUBGEN_VERSION_SUPPORT
+    libepubgen::EPUBTextGenerator aGenerator(&aPackage, nVersion);
     aGenerator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, nSplitMethod);
     aGenerator.setOption(libepubgen::EPUB_GENERATOR_OPTION_LAYOUT, nLayoutMethod);
-#endif
     OUString aSourceURL;
     uno::Reference<frame::XModel> xSourceModel(mxSourceDocument, uno::UNO_QUERY);
     if (xSourceModel.is())
         aSourceURL = xSourceModel->getURL();
 
     std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> aPageMetafiles;
-#if LIBEPUBGEN_VERSION_SUPPORT
     if (nLayoutMethod == libepubgen::EPUB_LAYOUT_METHOD_FIXED)
         CreateMetafiles(aPageMetafiles);
-#endif
 
     uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(mxContext, aGenerator, aSourceURL, rDescriptor, aPageMetafiles));
 
