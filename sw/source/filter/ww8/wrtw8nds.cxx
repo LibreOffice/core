@@ -2274,7 +2274,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
     SwSoftPageBreakList softBreakList;
     // Let's decide if we need to split the paragraph because of a section break
-    bool bNeedParaSplit = NeedTextNodeSplit( rNode, softBreakList );
+    bool bNeedParaSplit = NeedTextNodeSplit( rNode, softBreakList )
+                        && !IsInTable();
 
     auto aBreakIt = softBreakList.begin();
     // iterate through portions on different pages
