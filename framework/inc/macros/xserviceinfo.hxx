@@ -147,7 +147,7 @@ namespace framework{
     static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                   );                                                                    \
     static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                   );                                                                    \
     /* Helper for initialization of service by using own reference! */                                                                                                                                            \
-    void                                                    SAL_CALL impl_initService                   (                                   );                                                                    \
+    void                                                    impl_initService                   (                                   );                                                                    \
 
 #define DEFINE_XSERVICEINFO_MULTISERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
@@ -176,7 +176,7 @@ namespace framework{
 //                          }
 //                      )
 #define DEFINE_INIT_SERVICE( CLASS, FUNCTIONBODY )                                                              \
-    void SAL_CALL CLASS::impl_initService()                                                                     \
+    void CLASS::impl_initService()                                                                     \
     {                                                                                                           \
         FUNCTIONBODY                                                                                            \
     }

@@ -173,11 +173,6 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
             compiler.getSourceManager().getSpellingLoc(canonicalDecl->getLocation())))
         return true;
 
-    // macros make getCharacterData() extremely unreliable
-    if (compiler.getSourceManager().isMacroArgExpansion(decl->getLocation())
-        || compiler.getSourceManager().isMacroBodyExpansion(decl->getLocation()))
-        return true;
-
     SourceLocation rewriteLoc;
     SourceLocation rewriteCanonicalLoc;
     bool bDeclIsSalCall = isSalCallFunction(decl, &rewriteLoc);
@@ -398,9 +393,8 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         while (SM.isMacroArgExpansion(endLoc, &endLoc))
         {
         }
-        while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc))
+        while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc, &endLoc))
         {
-            endLoc = SM.getImmediateMacroCallerLoc(endLoc);
         }
         endLoc = SM.getSpellingLoc(endLoc);
 
@@ -442,13 +436,21 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             // that parameter in the remainder of the replacement text will be false positives.
             assert(SM.isMacroBodyExpansion(startLoc));
             auto const startLoc2 = SM.getImmediateExpansionRange(startLoc).second;
-            auto const MI
-                = compiler.getPreprocessor()
-                      .getMacroDefinitionAtLoc(
-                          &compiler.getASTContext().Idents.get(
-                              Lexer::getImmediateMacroName(startLoc, SM, compiler.getLangOpts())),
-                          SM.getSpellingLoc(startLoc))
-                      .getMacroInfo();
+            auto name = Lexer::getImmediateMacroName(startLoc, SM, compiler.getLangOpts());
+            while (name.startswith("\\\n"))
+            {
+                name = name.drop_front(2);
+                while (!name.empty()
+                       && (name.front() == ' ' || name.front() == '\t' || name.front() == '\n'
+                           || name.front() == '\v' || name.front() == '\f'))
+                {
+                    name = name.drop_front(1);
+                }
+            }
+            auto const MI = compiler.getPreprocessor()
+                                .getMacroDefinitionAtLoc(&compiler.getASTContext().Idents.get(name),
+                                                         SM.getSpellingLoc(startLoc))
+                                .getMacroInfo();
             assert(MI != nullptr);
             auto endLoc1 = MI->getDefinitionEndLoc();
             assert(endLoc1.isFileID());
@@ -465,15 +467,61 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
     }
     if (!startAfterReturnType)
     {
+        // Stop searching for "SAL_CALL" at the start of the function declaration's name (for
+        // qualified names this will point after the qualifiers, but needlessly including those in
+        // the search should be harmless):
+        endLoc = functionDecl->getNameInfo().getLocStart();
+        while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc, &endLoc))
+        {
+        }
+
+        SourceRange macroRange;
+        if (SM.isMacroBodyExpansion(endLoc))
+        {
+            auto name = Lexer::getImmediateMacroName(endLoc, SM, compiler.getLangOpts());
+            while (name.startswith("\\\n"))
+            {
+                name = name.drop_front(2);
+                while (!name.empty()
+                       && (name.front() == ' ' || name.front() == '\t' || name.front() == '\n'
+                           || name.front() == '\v' || name.front() == '\f'))
+                {
+                    name = name.drop_front(1);
+                }
+            }
+            auto const MI = compiler.getPreprocessor()
+                                .getMacroDefinitionAtLoc(&compiler.getASTContext().Idents.get(name),
+                                                         SM.getSpellingLoc(endLoc))
+                                .getMacroInfo();
+            assert(MI != nullptr);
+            macroRange = SourceRange(MI->getDefinitionLoc(), MI->getDefinitionEndLoc());
+            if (isDebugMode() && macroRange.isInvalid())
+            {
+                report(DiagnosticsEngine::Fatal, "TODO: unexpected failure #4, needs investigation",
+                       functionDecl->getLocation())
+                    << functionDecl->getSourceRange();
+            }
+        }
+
+        endLoc = SM.getSpellingLoc(endLoc);
+
         // Ctors/dtors/conversion functions don't have a return type, start searching for "SAL_CALL"
         // at the start of the function declaration:
         startLoc = functionDecl->getSourceRange().getBegin();
-        while (startLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(startLoc))
+        while (startLoc.isMacroID()
+               && !(macroRange.isValid()
+                    && compat::isPointWithin(SM, SM.getSpellingLoc(startLoc), macroRange.getBegin(),
+                                             macroRange.getEnd()))
+               && SM.isAtStartOfImmediateMacroExpansion(startLoc, &startLoc))
         {
-            startLoc = SM.getImmediateMacroCallerLoc(startLoc);
         }
-        startLoc = SM.getSpellingLoc(startLoc);
 #if !defined _WIN32
+        auto const macroStartLoc = startLoc;
+#endif
+        startLoc = SM.getSpellingLoc(startLoc);
+
+#if !defined _WIN32
+        startLoc = SM.getSpellingLoc(startLoc);
         // When the SAL_CALL macro expands to nothing, it may even precede the function
         // declaration's source range, so go back one token (unless the declaration is known to
         // start with a token that must precede a possible "SAL_CALL", like "virtual" or
@@ -487,40 +535,64 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
                  || (isa<CXXConversionDecl>(functionDecl)
                      && cast<CXXConversionDecl>(functionDecl)->isExplicitSpecified())))
         {
-            for (;;)
+            SourceLocation endLoc1;
+            if (macroStartLoc.isMacroID()
+                && SM.isAtStartOfImmediateMacroExpansion(macroStartLoc, &endLoc1))
             {
-                startLoc = Lexer::GetBeginningOfToken(startLoc.getLocWithOffset(-1), SM,
-                                                      compiler.getLangOpts());
-                auto const s
-                    = StringRef(SM.getCharacterData(startLoc),
-                                Lexer::MeasureTokenLength(startLoc, SM, compiler.getLangOpts()));
-                // When looking backward at least through a function-like macro replacement like
-                //
-                // | foo\         |
-                // |    barbaz##X    |
-                //
-                // starting at "barbaz" in the second line, the next token reported will start at "\"
-                // in the first line and include the intervening spaces and (part of? looks like an
-                // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
-                // when looking backwards here, without even trying to look at their content:
-                if (!(s.empty() || s.startswith("/*") || s.startswith("//")
-                      || s.startswith("\\\n")))
+                // startLoc is at the start of a macro body; two source ranges, first one is looking
+                // backwards one token from the call site of the macro:
+                auto startLoc1 = endLoc1;
+                for (;;)
                 {
-                    break;
+                    startLoc1 = Lexer::GetBeginningOfToken(startLoc1.getLocWithOffset(-1), SM,
+                                                           compiler.getLangOpts());
+                    auto const s = StringRef(
+                        SM.getCharacterData(startLoc1),
+                        Lexer::MeasureTokenLength(startLoc1, SM, compiler.getLangOpts()));
+                    // When looking backward at least through a function-like macro replacement like
+                    //
+                    // | foo\         |
+                    // |    barbaz##X    |
+                    //
+                    // starting at "barbaz" in the second line, the next token reported will start at "\"
+                    // in the first line and include the intervening spaces and (part of? looks like an
+                    // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
+                    // when looking backwards here, without even trying to look at their content:
+                    if (!(s.empty() || s.startswith("/*") || s.startswith("//")
+                          || s.startswith("\\\n")))
+                    {
+                        break;
+                    }
+                }
+                ranges.emplace_back(startLoc1, endLoc1);
+            }
+            else
+            {
+                for (;;)
+                {
+                    startLoc = Lexer::GetBeginningOfToken(startLoc.getLocWithOffset(-1), SM,
+                                                          compiler.getLangOpts());
+                    auto const s = StringRef(
+                        SM.getCharacterData(startLoc),
+                        Lexer::MeasureTokenLength(startLoc, SM, compiler.getLangOpts()));
+                    // When looking backward at least through a function-like macro replacement like
+                    //
+                    // | foo\         |
+                    // |    barbaz##X    |
+                    //
+                    // starting at "barbaz" in the second line, the next token reported will start at "\"
+                    // in the first line and include the intervening spaces and (part of? looks like an
+                    // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
+                    // when looking backwards here, without even trying to look at their content:
+                    if (!(s.empty() || s.startswith("/*") || s.startswith("//")
+                          || s.startswith("\\\n")))
+                    {
+                        break;
+                    }
                 }
             }
         }
 #endif
-
-        // Stop searching for "SAL_CALL" at the start of the function declaration's name (for
-        // qualified names this will point after the qualifiers, but needlessly including those in
-        // the search should be harmless):
-        endLoc = functionDecl->getNameInfo().getLocStart();
-        while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc))
-        {
-            endLoc = SM.getImmediateMacroCallerLoc(endLoc);
-        }
-        endLoc = SM.getSpellingLoc(endLoc);
     }
     ranges.emplace_back(startLoc, endLoc);
 

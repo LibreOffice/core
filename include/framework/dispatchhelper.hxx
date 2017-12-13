@@ -80,12 +80,12 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
         static css::uno::Sequence< OUString >   SAL_CALL impl_getStaticSupportedServiceNames(                                   );
         static OUString                         SAL_CALL impl_getStaticImplementationName   (                                   );
         // Helper for initialization of service by using own reference!
-        void                                    SAL_CALL impl_initService                   (                                   );
+        void                                    impl_initService                   (                                   );
 
         // Helper for registry
         /// @throws css::uno::Exception
         static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
-        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
 
         // XDispatchHelper

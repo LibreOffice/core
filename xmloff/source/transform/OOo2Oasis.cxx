@@ -2004,19 +2004,19 @@ Reference< XInterface > OOo2OasisTransformer_createInstance(
 }
 
 #define OOO_IMPORTER( className, implName, subServiceName )             \
-OUString SAL_CALL className##_getImplementationName() throw()           \
+OUString className##_getImplementationName() throw()           \
 {                                                                       \
     return OUString( implName );         \
 }                                                                       \
                                                                         \
-Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw()\
+Sequence< OUString > className##_getSupportedServiceNames() throw()\
 {                                                                       \
     const OUString aServiceName( className##_getImplementationName() ); \
     const Sequence< OUString > aSeq( &aServiceName, 1 );                \
     return aSeq;                                                        \
 }                                                                       \
                                                                         \
-Reference< XInterface > SAL_CALL className##_createInstance(            \
+Reference< XInterface > className##_createInstance(            \
         const Reference< XMultiServiceFactory > & )                     \
 {                                                                       \
     return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer( implName,      \

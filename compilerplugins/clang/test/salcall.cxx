@@ -117,13 +117,20 @@ class Class8_3 : public Class8_1, public Class8_2
     virtual ~Class8_3();
 };
 
-#define M1(m) void m
+#define M1(m) VOID m
 class Class9
 {
+    Class9(); // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
     M1(method1)(); // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
     void method2(); // expected-note {{SAL_CALL inconsistency [loplugin:salcall]}}
 };
-void SAL_CALL Class9::method1() {} // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
+#define MC(num)                                                                                    \
+    Class##num::Class##num() {}
+SAL_CALL MC(9) // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
+    ; // to appease clang-format
+void SAL_CALL Class9::method1() // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
+{
+}
 #define M2(T) T SAL_CALL
 M2(void) Class9::method2() {} // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
 
