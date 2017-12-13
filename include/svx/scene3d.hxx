@@ -75,6 +75,8 @@ protected:
     // Flag to determine if only selected objects should be drawn
     bool                        bDrawOnlySelected       : 1;
 
+    bool mbSkipSettingDirty : 1;
+
     virtual void NewObjectInserted(const E3dObject* p3DObj) override;
     virtual void StructureChanged() override;
 
@@ -161,6 +163,9 @@ public:
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
     virtual bool BckCreate(SdrDragStat& rStat) override;
     virtual void BrkCreate(SdrDragStat& rStat) override;
+
+    void EnterObjectSetupMode();
+    void ExitObjectSetupMode();
 };
 
 #endif // INCLUDED_SVX_SCENE3D_HXX

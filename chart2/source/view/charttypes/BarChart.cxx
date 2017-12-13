@@ -26,6 +26,8 @@
 #include <AxisIndexDefines.hxx>
 #include <Clipping.hxx>
 #include <DateHelper.hxx>
+#include <svx/scene3d.hxx>
+#include <svx/unoshape.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
@@ -404,6 +406,20 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
     }
 }
 
+E3dScene* lcl_getE3dScene(uno::Reference<drawing::XShapes> const & xShapes)
+{
+    E3dScene* pScene = nullptr;
+
+    SvxShape* pSvxShape = SvxShape::getImplementation(xShapes);
+    if (pSvxShape)
+    {
+        SdrObject* pObject = pSvxShape->GetSdrObject();
+        if (pObject && dynamic_cast<const E3dScene*>(pObject) != nullptr)
+            pScene = static_cast<E3dScene*>(pObject);
+    }
+    return pScene;
+}
+
 void BarChart::createShapes()
 {
     if( m_aZSlots.empty() ) //no series
@@ -761,9 +777,12 @@ void BarChart::createShapes()
                                 if( fTopHeight < 0 )
                                     fTopHeight *= -1.0;
 
+                                E3dScene* pScene = lcl_getE3dScene(xSeriesGroupShape_Shapes);
+                                pScene->EnterObjectSetupMode();
                                 xShape = createDataPoint3D_Bar(
                                     xSeriesGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
                                     , xDataPointProperties, nGeometry3D );
+                                pScene->ExitObjectSetupMode();
                             }
                             else //m_nDimension!=3
                             {
