@@ -336,7 +336,7 @@ IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, SvxColorListBox&, 
         m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
         m_pCtlPreview->Invalidate();
     }
-    m_rXFSet.Put(XFillColorItem( OUString(), m_pLbBackgroundColor->GetSelectEntryColor() ));
+    m_rXFSet.Put(XFillColorItem( OUString(), aColor ));
 
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
