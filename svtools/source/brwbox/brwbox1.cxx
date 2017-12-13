@@ -1644,7 +1644,7 @@ void BrowseBox::SelectAll()
         tools::Rectangle aHighlightRect;
         sal_uInt16 nVisibleRows =
             (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
-        for ( long nRow = std::max( nTopRow, uRow.pSel->FirstSelected() );
+        for ( long nRow = std::max<long>( nTopRow, uRow.pSel->FirstSelected() );
               nRow != BROWSER_ENDOFSELECTION && nRow < nTopRow + nVisibleRows;
               nRow = uRow.pSel->NextSelected() )
             aHighlightRect.Union( tools::Rectangle(
