@@ -195,13 +195,10 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
     OUString sUri = sUIDir + sUIFile;
 
-    LanguageTag aLanguageTag = Application::GetSettings().GetUILanguageTag();
-    if (comphelper::LibreOfficeKit::isActive())
-        aLanguageTag = comphelper::LibreOfficeKit::getLanguageTag();
-
-    bool bEN_US = (aLanguageTag.getBcp47() == "en-US");
+    const LanguageTag& rLanguageTag = Application::GetSettings().GetUILanguageTag();
+    bool bEN_US = (rLanguageTag.getBcp47() == "en-US");
     if (!bEN_US)
-        loadTranslations(aLanguageTag, sUri);
+        loadTranslations(rLanguageTag, sUri);
 
     try
     {

@@ -25,14 +25,16 @@
 // struct DialogsResMgr --------------------------------------------------
 ResMgr* CuiResMgr::GetResMgr()
 {
-    static ResMgr* pResMgr=nullptr;
+    static std::unique_ptr<ResMgr> pResMgr;
 
-    if ( !pResMgr )
+    const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
+
+    if (!pResMgr || pResMgr->GetLocale() != rLocale)
     {
-        pResMgr = ResMgr::CreateResMgr("cui", Application::GetSettings().GetUILanguageTag());
+        pResMgr.reset(ResMgr::CreateResMgr("cui", rLocale));
     }
 
-    return pResMgr;
+    return pResMgr.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

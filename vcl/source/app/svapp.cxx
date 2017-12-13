@@ -699,8 +699,7 @@ void Application::SetSettings( const AllSettings& rSettings )
         if( aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
                 pSVData->mpResMgr )
         {
-            delete pSVData->mpResMgr;
-            pSVData->mpResMgr = nullptr;
+            pSVData->mpResMgr.reset();
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
         *pSVData->maAppData.mpSettings = rSettings;

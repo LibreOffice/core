@@ -1386,6 +1386,11 @@ OString ResMgr::ReadByteString()
     return aRet;
 }
 
+const LanguageTag& ResMgr::GetLocale() const
+{
+    return pImpRes->aLocale;
+}
+
 void ResMgr::SetReadStringHook( ResHookProc pProc )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );

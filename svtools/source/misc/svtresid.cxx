@@ -22,15 +22,16 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-static ResMgr* pMgr=nullptr;
+static std::unique_ptr<ResMgr> pMgr;
 
 namespace
 {
     ResMgr* getResMgr(const LanguageTag& aLocale)
     {
-        if (!pMgr)
-            pMgr = ResMgr::CreateResMgr("svt", aLocale );
-        return pMgr;
+        if (!pMgr || pMgr->GetLocale() != aLocale)
+            pMgr.reset(ResMgr::CreateResMgr("svt", aLocale));
+
+        return pMgr.get();
     }
 
     ResMgr* getResMgr()
@@ -46,7 +47,7 @@ SvtResId::SvtResId(sal_uInt16 nId) :
 
 void SvtResId::DeleteResMgr()
 {
-    DELETEZ( pMgr );
+    pMgr.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

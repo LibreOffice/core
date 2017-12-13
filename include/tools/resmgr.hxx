@@ -190,6 +190,9 @@ public:
     OUString            ReadString();
     OString             ReadByteString();
 
+    /// The locale of this ResMgr.
+    const LanguageTag&  GetLocale() const;
+
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();
     static void         SetDefaultLocale( const LanguageTag& rLocale );

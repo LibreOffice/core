@@ -565,11 +565,7 @@ void DeInitVCL()
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = nullptr;
 
-    if ( pSVData->mpResMgr )
-    {
-        delete pSVData->mpResMgr;
-        pSVData->mpResMgr = nullptr;
-    }
+    pSVData->mpResMgr.reset();
 
     ResMgr::DestroyAllResMgr();
 
