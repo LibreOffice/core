@@ -70,9 +70,14 @@ void Blob::ensureBlobIsOpened()
     m_nBlobPosition = 0;
 
     char aBlobItems[] = {
-        isc_info_blob_total_length
+        isc_info_blob_total_length,
+        isc_info_blob_max_segment
     };
-    char aResultBuffer[20];
+
+    // Assuming a data (e.g. legth of blob) is maximum 64 bit.
+    // That means we need 8 bytes for data + 2 for length of data + 1 for item
+    // identifier for each item.
+    char aResultBuffer[11 + 11];
 
     aErr = isc_blob_info(m_statusVector,
                   &m_blobHandle,
@@ -84,16 +89,62 @@ void Blob::ensureBlobIsOpened()
     if (aErr)
         evaluateStatusVector(m_statusVector, "isc_blob_info", *this);
 
-    if (*aResultBuffer == isc_info_blob_total_length)
+    char* pIt = aResultBuffer;
+    while( *pIt != isc_info_end ) // info is in clusters
     {
-        short aResultLength = (short) isc_vax_integer(aResultBuffer+1, 2);
-        m_nBlobLength =  isc_vax_integer(aResultBuffer+3, aResultLength);
-    }
-    else
-    {
-        assert(false);
+        char item = *pIt++;
+        short aResultLength = (short) isc_vax_integer(pIt, 2);
+
+        pIt += 2;
+        switch(item)
+        {
+            case isc_info_blob_total_length:
+                m_nBlobLength = isc_vax_integer(pIt, aResultLength);
+                break;
+            case isc_info_blob_max_segment:
+                m_nMaxSegmentSize = isc_vax_integer(pIt, aResultLength);
+                break;
+            default:
+                assert(false);
+                break;
+        }
+        pIt += aResultLength;
     }
 }
+
+sal_uInt16 Blob::getMaximumSegmentSize()
+{
+    ensureBlobIsOpened();
+
+    return m_nMaxSegmentSize;
+}
+
+bool Blob::readOneSegment(uno::Sequence< sal_Int8 >& rDataOut)
+{
+    checkDisposed(Blob_BASE::rBHelper.bDisposed);
+    ensureBlobIsOpened();
+
+    sal_uInt16 nMaxSize = getMaximumSegmentSize();
+
+    if(rDataOut.getLength() < nMaxSize)
+        rDataOut.realloc(nMaxSize);
+
+    sal_uInt16 nActualSize = 0;
+    ISC_STATUS aRet = isc_get_segment(m_statusVector,
+            &m_blobHandle,
+            &nActualSize,
+            nMaxSize,
+            reinterpret_cast<char*>(rDataOut.getArray()) );
+
+    if (aRet && aRet != isc_segstr_eof && IndicatesError(m_statusVector))
+    {
+        OUString sError(StatusVectorToString(m_statusVector, "isc_get_segment"));
+        throw IOException(sError, *this);
+    }
+    m_nBlobPosition += nActualSize;
+    return aRet == isc_segstr_eof;  // last segment read
+}
+
 
 void Blob::closeBlob()
 {

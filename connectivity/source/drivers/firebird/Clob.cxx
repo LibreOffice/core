@@ -28,7 +28,8 @@ Clob::Clob(isc_db_handle* pDatabaseHandle,
            isc_tr_handle* pTransactionHandle,
            ISC_QUAD const & aBlobID):
     Clob_BASE(m_aMutex),
-    m_aBlob(new connectivity::firebird::Blob(pDatabaseHandle, pTransactionHandle, aBlobID))
+    m_aBlob(new connectivity::firebird::Blob(pDatabaseHandle, pTransactionHandle, aBlobID)),
+    m_nCharCount(-1)
 {
 }
 
@@ -44,13 +45,27 @@ sal_Int64 SAL_CALL Clob::length()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Clob_BASE::rBHelper.bDisposed);
 
-    // read the entire blob
-    // TODO FIXME better solution?
-    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob->getBytes( 1, m_aBlob->length());
-    OUString sEntireClob (  reinterpret_cast< sal_Char *>( aEntireBlob.getArray() ),
-                            aEntireBlob.getLength(),
+    if( m_nCharCount >= 0 )
+        return m_nCharCount;
+    m_nCharCount = 0;
+
+    // Read each segment, and calculate it's size by interpreting it as a
+    // character stream. Assume that no characters are split by the segments.
+    bool bLastSegmRead = false;
+    do
+    {
+        uno::Sequence < sal_Int8 > aSegmentBytes;
+        bLastSegmRead = m_aBlob->readOneSegment( aSegmentBytes );
+        OUString sSegment ( reinterpret_cast< sal_Char *>( aSegmentBytes.getArray() ),
+                            aSegmentBytes.getLength(),
                             RTL_TEXTENCODING_UTF8 );
-    return sEntireClob.getLength();
+
+        if( !bLastSegmRead)
+            m_nCharCount += sSegment.getLength();
+    }while( !bLastSegmRead );
+
+    m_aBlob->closeInput(); // reset position
+    return m_nCharCount;
 }
 
 OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
@@ -58,19 +73,58 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Clob_BASE::rBHelper.bDisposed);
+    // TODO do not reset position if it is not necessary
+    m_aBlob->closeInput(); // reset position
 
-    // read the entire blob
-    // TODO FIXME better solution?
-    // TODO FIXME Assume indexing of nPosition starts at position 1.
-    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob->getBytes( 1, m_aBlob->length());
-    OUString sEntireClob (  reinterpret_cast< sal_Char *>( aEntireBlob.getArray() ),
-                            aEntireBlob.getLength(),
+    OUStringBuffer sSegmentBuffer;
+    sal_Int64 nActPos = 1;
+    sal_Int32 nActLen = 0;
+
+    // skip irrelevant parts
+    while( nActPos < nPosition )
+    {
+        uno::Sequence < sal_Int8 > aSegmentBytes;
+        bool bLastRead = m_aBlob->readOneSegment( aSegmentBytes );
+        if( bLastRead )
+            throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
+
+        OUString sSegment ( reinterpret_cast< sal_Char *>( aSegmentBytes.getArray() ),
+                            aSegmentBytes.getLength(),
                             RTL_TEXTENCODING_UTF8 );
+        sal_Int32 nStrLen = sSegment.getLength();
+        nActPos += nStrLen;
+        if( nActPos > nPosition )
+        {
+            sal_Int32 nCharsToCopy = static_cast<sal_Int32>(nActPos - nPosition);
+            if( nCharsToCopy > nLength )
+                nCharsToCopy = nLength;
+            // append relevant part of first segment
+            sSegmentBuffer.append( sSegment.copy(0, nCharsToCopy ) );
+            nActLen += sSegmentBuffer.getLength();
+        }
+    }
 
-    if( nPosition + nLength - 1 > sEntireClob.getLength() )
-        throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
+    // read nLength characters
+    while( nActLen < nLength )
+    {
+        uno::Sequence < sal_Int8 > aSegmentBytes;
+        bool bLastRead = m_aBlob->readOneSegment( aSegmentBytes );
 
-    return sEntireClob.copy(nPosition - 1 , nLength);
+        OUString sSegment ( reinterpret_cast< sal_Char *>( aSegmentBytes.getArray() ),
+                            aSegmentBytes.getLength(),
+                            RTL_TEXTENCODING_UTF8 );
+        sal_Int32 nStrLen = sSegment.getLength();
+        if( nActLen + nStrLen > nLength )
+            sSegmentBuffer.append(sSegment.copy(0, nLength - nActLen) );
+        else
+            sSegmentBuffer.append(sSegment);
+        nActLen += nStrLen;
+
+        if( bLastRead && nActLen < nLength )
+            throw lang::IllegalArgumentException("out of range", *this, 0);
+    }
+
+    return sSegmentBuffer.makeStringAndClear();
 }
 
 uno::Reference< XInputStream > SAL_CALL  Clob::getCharacterStream()

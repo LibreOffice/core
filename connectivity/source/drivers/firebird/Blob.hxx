@@ -41,6 +41,7 @@ namespace connectivity
 
             bool                m_bBlobOpened;
             sal_Int64           m_nBlobLength;
+            sal_uInt16          m_nMaxSegmentSize;
             sal_Int64           m_nBlobPosition;
 
             ISC_STATUS_ARRAY    m_statusVector;
@@ -54,11 +55,14 @@ namespace connectivity
              * @throws css::sdbc::SQLException
              */
             void closeBlob();
+            sal_uInt16 getMaximumSegmentSize();
 
         public:
             Blob(isc_db_handle* pDatabaseHandle,
                  isc_tr_handle* pTransactionHandle,
                  ISC_QUAD const & aBlobID);
+
+            bool readOneSegment(css::uno::Sequence< sal_Int8 >& rDataOut);
 
             // ---- XBlob ----------------------------------------------------
             virtual sal_Int64 SAL_CALL

@@ -78,6 +78,7 @@ namespace connectivity
              * Assumes that all necessary mutexes have been taken.
              */
             void closeBlobAfterWriting(isc_blob_handle& rBlobHandle);
+            void setClob(sal_Int32 nParamIndex, const OUString& rStr);
 
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
