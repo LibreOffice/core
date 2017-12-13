@@ -111,7 +111,7 @@ private:
 
     void                ImplUpdateViews( sal_uInt16 nSelectionId );
     void                ImplUpdateInfoBar();
-    sal_uIntPtr               ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
+    sal_Int32           ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
     void                ImplSelectItemId( sal_uIntPtr nItemId );
 
     // Control

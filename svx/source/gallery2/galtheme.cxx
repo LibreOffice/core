@@ -106,7 +106,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
     }
 }
 
-bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
+bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, sal_Int32 nPos, GalleryObject* pExistentEntry )
 {
     std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
     bool        bRet = false;
@@ -124,7 +124,7 @@ bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, Galle
             if( !pExistentEntry )
             {
                 pEntry = new GalleryObject;
-                if ( nPos < aObjectList.size() )
+                if ( nPos < sal_Int32(aObjectList.size()) )
                 {
                     GalleryObjectList::iterator it = aObjectList.begin();
                     ::std::advance( it, nPos );
@@ -330,7 +330,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
     return aNewURL;
 }
 
-void GalleryTheme::ImplBroadcast( sal_uIntPtr nUpdatePos )
+void GalleryTheme::ImplBroadcast( sal_Int32 nUpdatePos )
 {
     if( !IsBroadcasterLocked() )
     {
@@ -364,7 +364,7 @@ void GalleryTheme::UnlockBroadcaster()
         ImplBroadcast( 0 );
 }
 
-bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_Int32 nInsertPos )
 {
     if (!rObj.IsValid())
         return false;
@@ -409,14 +409,14 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
     return true;
 }
 
-SgaObject* GalleryTheme::AcquireObject( size_t nPos )
+SgaObject* GalleryTheme::AcquireObject( sal_Int32 nPos )
 {
     return ImplReadSgaObject( aObjectList[ nPos ] );
 }
 
-void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const
+void GalleryTheme::GetPreviewBitmapExAndStrings(sal_Int32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const
 {
-    const GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : nullptr;
+    const GalleryObject* pGalleryObject = nPos < sal_Int32(aObjectList.size()) ? aObjectList[ nPos ] : nullptr;
 
     if(pGalleryObject)
     {
@@ -431,9 +431,9 @@ void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBit
     }
 }
 
-void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath)
+void GalleryTheme::SetPreviewBitmapExAndStrings(sal_Int32 nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath)
 {
-    GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : nullptr;
+    GalleryObject* pGalleryObject = nPos < sal_Int32(aObjectList.size()) ? aObjectList[ nPos ] : nullptr;
 
     if(pGalleryObject)
     {
@@ -453,10 +453,10 @@ void GalleryTheme::ReleaseObject( SgaObject* pObject )
     delete pObject;
 }
 
-bool GalleryTheme::RemoveObject( size_t nPos )
+bool GalleryTheme::RemoveObject( sal_Int32 nPos )
 {
     GalleryObject* pEntry = nullptr;
-    if ( nPos < aObjectList.size() )
+    if ( nPos < sal_Int32(aObjectList.size()) )
     {
         GalleryObjectList::iterator it = aObjectList.begin();
         ::std::advance( it, nPos );
@@ -484,9 +484,9 @@ bool GalleryTheme::RemoveObject( size_t nPos )
     return( pEntry != nullptr );
 }
 
-bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
+bool GalleryTheme::ChangeObjectPos( sal_Int32 nOldPos, sal_Int32 nNewPos )
 {
-    if (nOldPos == nNewPos || nOldPos >= aObjectList.size())
+    if (nOldPos == nNewPos || nOldPos >= sal_Int32(aObjectList.size()))
         return false;
 
     GalleryObject* pEntry = aObjectList[nOldPos];
@@ -753,7 +753,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
     return pRet;
 }
 
-bool GalleryTheme::GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp )
+bool GalleryTheme::GetThumb( sal_Int32 nPos, BitmapEx& rBmp )
 {
     SgaObject*  pObj = AcquireObject( nPos );
     bool        bRet = false;
@@ -768,7 +768,7 @@ bool GalleryTheme::GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp )
     return bRet;
 }
 
-bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgress )
+bool GalleryTheme::GetGraphic( sal_Int32 nPos, Graphic& rGraphic, bool bProgress )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;
@@ -841,7 +841,7 @@ bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgre
     return bRet;
 }
 
-bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_Int32 nInsertPos )
 {
     bool bRet = false;
 
@@ -923,7 +923,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
     return bRet;
 }
 
-bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel )
+bool GalleryTheme::GetModel( sal_Int32 nPos, SdrModel& rModel )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;
@@ -950,7 +950,7 @@ bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel )
     return bRet;
 }
 
-bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_Int32 nInsertPos )
 {
     INetURLObject   aURL( ImplCreateUniqueURL( SgaObjKind::SvDraw ) );
     tools::SvRef<SotStorage>    xStor( GetSvDrawStorage() );
@@ -995,7 +995,7 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
     return bRet;
 }
 
-bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream> const & rxModelStream )
+bool GalleryTheme::GetModelStream( sal_Int32 nPos, tools::SvRef<SotStorageStream> const & rxModelStream )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;
@@ -1046,7 +1046,7 @@ bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStre
     return bRet;
 }
 
-bool GalleryTheme::InsertModelStream( const tools::SvRef<SotStorageStream>& rxModelStream, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertModelStream( const tools::SvRef<SotStorageStream>& rxModelStream, sal_Int32 nInsertPos )
 {
     INetURLObject   aURL( ImplCreateUniqueURL( SgaObjKind::SvDraw ) );
     tools::SvRef<SotStorage>    xStor( GetSvDrawStorage() );
@@ -1080,7 +1080,7 @@ bool GalleryTheme::InsertModelStream( const tools::SvRef<SotStorageStream>& rxMo
     return bRet;
 }
 
-bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL )
+bool GalleryTheme::GetURL( sal_Int32 nPos, INetURLObject& rURL )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;
@@ -1094,7 +1094,7 @@ bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL )
     return bRet;
 }
 
-bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_Int32 nInsertPos )
 {
     Graphic         aGraphic;
     OUString        aFormat;
@@ -1119,7 +1119,7 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
     return bRet;
 }
 
-bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_Int32 nInsertPos )
 {
     INetURLObject                   aURL;
     ::std::vector< INetURLObject >  aURLVector;
@@ -1167,7 +1167,7 @@ bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_u
     return bRet;
 }
 
-bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTransferable >& rxTransferable, sal_Int32 nInsertPos )
 {
     bool bRet = false;
 
@@ -1264,13 +1264,13 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
     return bRet;
 }
 
-void GalleryTheme::CopyToClipboard( vcl::Window* pWindow, sal_uIntPtr nPos )
+void GalleryTheme::CopyToClipboard( vcl::Window* pWindow, sal_Int32 nPos )
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, false );
     pTransferable->CopyToClipboard( pWindow );
 }
 
-void GalleryTheme::StartDrag( vcl::Window* pWindow, sal_uIntPtr nPos )
+void GalleryTheme::StartDrag( vcl::Window* pWindow, sal_Int32 nPos )
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, true );
     pTransferable->StartDrag( pWindow, DND_ACTION_COPY | DND_ACTION_LINK );
