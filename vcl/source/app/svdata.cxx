@@ -162,10 +162,10 @@ vcl::Window *ImplGetDefaultContextWindow()
 ResMgr* ImplGetResMgr()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->mpResMgr )
+    LanguageTag aLocale(Application::GetSettings().GetUILanguageTag());
+    if (!pSVData->mpResMgr || pSVData->mpResMgr->GetLocale() != aLocale)
     {
-        LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
-        pSVData->mpResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
+        pSVData->mpResMgr.reset(ResMgr::SearchCreateResMgr("vcl", aLocale));
 
         static bool bMessageOnce = false;
         if( !pSVData->mpResMgr && ! bMessageOnce )
@@ -179,7 +179,7 @@ ResMgr* ImplGetResMgr()
             aBox->Execute();
         }
     }
-    return pSVData->mpResMgr;
+    return pSVData->mpResMgr.get();
 }
 
 ResId VclResId( sal_Int32 nId )

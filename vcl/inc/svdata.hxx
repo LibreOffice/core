@@ -321,7 +321,7 @@ struct ImplSVData
     SalTimer*               mpSalTimer = nullptr;           // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus = nullptr;          // interface to ime status window
     SalSystem*              mpSalSystem = nullptr;          // SalSystem interface
-    ResMgr*                 mpResMgr = nullptr;             // SV-Resource-Manager
+    std::unique_ptr<ResMgr> mpResMgr;                       // SV-Resource-Manager
     sal_uInt64              mnTimerPeriod = 0;              // current timer period
     ImplSVAppData           maAppData;                      // indepen data for class Application
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes

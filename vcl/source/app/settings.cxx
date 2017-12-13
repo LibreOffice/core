@@ -2889,6 +2889,9 @@ const LanguageTag& AllSettings::GetLanguageTag() const
         return aRet;
     }
 
+    if (comphelper::LibreOfficeKit::isActive())
+        return comphelper::LibreOfficeKit::getLanguageTag();
+
     // SYSTEM locale means: use settings from SvtSysLocale that is resolved
     if ( mxData->maLocale.isSystemLocale() )
         mxData->maLocale = mxData->maSysLocale.GetLanguageTag();
@@ -2903,6 +2906,9 @@ const LanguageTag& AllSettings::GetUILanguageTag() const
         static LanguageTag aRet("en-US");
         return aRet;
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        return comphelper::LibreOfficeKit::getLanguageTag();
 
     // the UILocale is never changed
     if ( mxData->maUILocale.isSystemLocale() )
