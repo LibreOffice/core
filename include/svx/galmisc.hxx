@@ -180,20 +180,20 @@ private:
     GalleryHintType     mnType;
     OUString            maThemeName;
     OUString            maStringData;
-    sal_uIntPtr         mnData1;
+    void*               mnData1;
 
 public:
 
-                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, sal_uIntPtr nData1 = 0 ) :
+                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, void* nData1 = nullptr ) :
                         mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ) {}
 
-                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, const OUString& rStringData, sal_uIntPtr nData1 = 0 ) :
+                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, const OUString& rStringData, void* nData1 = nullptr ) :
                         mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ) {}
 
     GalleryHintType  GetType() const { return mnType; }
     const OUString&  GetThemeName() const { return maThemeName; }
     const OUString&  GetStringData() const { return maStringData; }
-    sal_uIntPtr      GetData1() const { return mnData1; }
+    void*            GetData1() const { return mnData1; }
 };
 
 #endif

@@ -316,7 +316,7 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         case GalleryHintType::CLOSE_OBJECT:
         {
-            GalleryObject* pObj = reinterpret_cast< GalleryObject* >( rGalleryHint.GetData1() );
+            GalleryObject* pObj = static_cast< GalleryObject* >( rGalleryHint.GetData1() );
 
             if( pObj )
                 implReleaseItems( pObj );
