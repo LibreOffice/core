@@ -5112,7 +5112,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
         m_nContextStMin = pTCntxt->GetContextStMin();
         m_nContextStAttrMin = pTCntxt->GetContextStAttrMin();
 
-        if (m_xTable == xCurTable)
+        if (m_xTable == xCurTable && eState != SvParserState::Error)
         {
             // Set table caption
             const SwStartNode *pCapStNd = m_xTable->GetCaptionStartNode();
@@ -5171,7 +5171,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
         pTCntxt->RestorePREListingXMP( *this );
         RestoreAttrTab( pTCntxt->aAttrTab );
 
-        if (m_xTable == xCurTable)
+        if (m_xTable == xCurTable && eState != SvParserState::Error)
         {
             // Set upper paragraph spacing
             m_bUpperSpace = true;
