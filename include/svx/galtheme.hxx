@@ -83,8 +83,8 @@ private:
     tools::SvRef<SotStorage>    aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
-    sal_uIntPtr                 mnThemeLockCount;
-    sal_uIntPtr                 mnBroadcasterLockCount;
+    sal_uInt32                  mnThemeLockCount;
+    sal_uInt32                  mnBroadcasterLockCount;
     sal_uIntPtr                 nDragPos;
     bool                        bDragging;
     bool                        bAbortActualize;
