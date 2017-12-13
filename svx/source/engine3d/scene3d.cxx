@@ -184,7 +184,8 @@ E3dScene::E3dScene()
 :   E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     mp3DDepthRemapper(nullptr),
-    bDrawOnlySelected(false)
+    bDrawOnlySelected(false),
+    mbSkipSettingDirty(false)
 {
     // Set defaults
     E3dDefaultAttributes aDefault;
@@ -367,7 +368,9 @@ void E3dScene::NewObjectInserted(const E3dObject* p3DObj)
 void E3dScene::StructureChanged()
 {
     E3dObject::StructureChanged();
-    SetRectsDirty();
+
+    if (!GetScene()->mbSkipSettingDirty)
+        SetRectsDirty();
 
     ImpCleanup3DDepthMapper();
 }
@@ -433,6 +436,16 @@ void E3dScene::removeAllNonSelectedObjects()
 E3dScene* E3dScene::Clone() const
 {
     return CloneHelper< E3dScene >();
+}
+
+void E3dScene::EnterObjectSetupMode()
+{
+    GetScene()->mbSkipSettingDirty = true;
+}
+
+void E3dScene::ExitObjectSetupMode()
+{
+    GetScene()->mbSkipSettingDirty = false;
 }
 
 E3dScene& E3dScene::operator=(const E3dScene& rObj)
