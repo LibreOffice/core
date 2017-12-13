@@ -56,6 +56,10 @@
 #include <svtools/sfxecode.hxx>
 #include <openuriexternally.hxx>
 
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/viewsh.hxx>
+
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
@@ -505,6 +509,9 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
 /// Check for built-in help
 static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
     AppendConfigToken(aHelpRootURL, true, rLang);
     std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
@@ -533,6 +540,19 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/");
+
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
+                                                   aHelpLink.toUtf8().getStr());
+            return true;
+        }
+        return false;
+    }
+
     try
     {
         sfx2::openUriExternally(aHelpLink, false);
@@ -622,6 +642,12 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
             }
             break;
         }
+    }
+
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        impl_showOnlineHelp( aHelpURL );
+        return true;
     }
 
     if ( !impl_hasHelpInstalled() )

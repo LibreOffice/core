@@ -23,14 +23,27 @@
 #include <sfx2/sfxresid.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-
 #include <openuriexternally.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <sfx2/viewsh.hxx>
 #include <sfx2/strings.hrc>
 
 bool sfx2::openUriExternally(
     OUString const & uri, bool handleSystemShellExecuteException)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
+                                                   uri.toUtf8().getStr());
+            return true;
+        }
+        return false;
+    }
+
     css::uno::Reference< css::system::XSystemShellExecute > exec(
         css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
     try {
