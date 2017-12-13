@@ -37,8 +37,7 @@ namespace compmodule
 
     OUString ModuleRes(const char* pId)
     {
-        static std::locale loc = Translate::Create("pcr");
-        return Translate::get(pId, loc);
+        return Translate::get(pId, Translate::Create("pcr"));
     }
 
     //- registration helper

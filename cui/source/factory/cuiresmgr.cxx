@@ -22,8 +22,7 @@
 
 OUString CuiResId(const char *pKey)
 {
-    static std::locale loc(Translate::Create("cui"));
-    return Translate::get(pKey, loc);
+    return Translate::get(pKey, Translate::Create("cui"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
 
 OUString FwkResId(const char* pId)
 {
-    static std::locale loc(Translate::Create("fwk"));
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("fwk"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,8 +34,6 @@ class LocaleDataWrapper;
 
 namespace XmlSec
 {
-    const std::locale& GetResLocale();
-
     const LocaleDataWrapper&    GetLocaleData();
     DateTime        GetDateTime( const css::util::DateTime& _rDT );
     OUString        GetDateTimeString( const css::util::DateTime& _rDT );
@@ -53,7 +51,7 @@ namespace XmlSec
 
 inline OUString XsResId(const char* pId)
 {
-    return Translate::get(pId, XmlSec::GetResLocale());
+    return Translate::get(pId, Translate::Create("xsc"));
 }
 
 #endif

@@ -18,14 +18,13 @@
  */
 
 #include <ResId.hxx>
-#include <ResourceManager.hxx>
 #include <unotools/resmgr.hxx>
 
 namespace chart
 {
     OUString SchResId(const char *pId)
     {
-        return Translate::get(pId, ResourceManager::getResourceLocale());
+        return Translate::get(pId, Translate::Create("chart"));
     }
 } //  namespace chart
 

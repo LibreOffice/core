@@ -20,10 +20,9 @@
 #include <unotools/resmgr.hxx>
 #include <svx/dialmgr.hxx>
 
-const std::locale& SvxResLocale()
+std::locale SvxResLocale()
 {
-    static std::locale loc = Translate::Create("svx");
-    return loc;
+    return Translate::Create("svx");
 }
 
 OUString SvxResId(const char* pId)
