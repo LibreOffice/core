@@ -28,23 +28,23 @@
 
 typedef ::std::vector< Range* > ImpSelList;
 
-#define SFX_ENDOFSELECTION      ULONG_MAX
+#define SFX_ENDOFSELECTION      SAL_MAX_INT32
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC MultiSelection
 {
 private:
     ImpSelList      aSels;      // array of SV-selections
     Range           aTotRange;  // total range of indexes
-    sal_uIntPtr     nCurSubSel; // index in aSels of current selected index
-    long            nCurIndex;  // current selected entry
-    sal_uIntPtr     nSelCount;  // number of selected indexes
+    sal_Int32       nCurSubSel; // index in aSels of current selected index
+    sal_Int32       nCurIndex;  // current selected entry
+    sal_Int32       nSelCount;  // number of selected indexes
     bool            bInverseCur;// inverse cursor
     bool            bCurValid;  // are nCurIndex and nCurSubSel valid
 
     TOOLS_DLLPRIVATE void           ImplClear();
-    TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;
-    TOOLS_DLLPRIVATE void           ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
-    TOOLS_DLLPRIVATE long           ImplFwdUnselected();
+    TOOLS_DLLPRIVATE sal_Int32      ImplFindSubSelection( sal_Int32 nIndex ) const;
+    TOOLS_DLLPRIVATE void           ImplMergeSubSelections( sal_Int32 nPos1, sal_Int32 nPos2 );
+    TOOLS_DLLPRIVATE sal_Int32      ImplFwdUnselected();
 
 public:
                     MultiSelection();
@@ -55,25 +55,25 @@ public:
     MultiSelection& operator= ( const MultiSelection& rOrig );
 
     void            SelectAll( bool bSelect = true );
-    bool            Select( long nIndex, bool bSelect = true );
+    bool            Select( sal_Int32 nIndex, bool bSelect = true );
     void            Select( const Range& rIndexRange, bool bSelect = true );
-    bool            IsSelected( long nIndex ) const;
+    bool            IsSelected( sal_Int32 nIndex ) const;
     bool            IsAllSelected() const
-                        { return nSelCount == sal_uIntPtr(aTotRange.Len()); }
-    long            GetSelectCount() const { return nSelCount; }
+                        { return nSelCount == aTotRange.Len(); }
+    sal_Int32       GetSelectCount() const { return nSelCount; }
 
     void            SetTotalRange( const Range& rTotRange );
-    void            Insert( long nIndex, long nCount = 1 );
-    void            Remove( long nIndex );
+    void            Insert( sal_Int32 nIndex, sal_Int32 nCount = 1 );
+    void            Remove( sal_Int32 nIndex );
     void            Reset();
 
     const Range&    GetTotalRange() const { return aTotRange; }
-    long            FirstSelected();
-    long            LastSelected();
-    long            NextSelected();
+    sal_Int32       FirstSelected();
+    sal_Int32       LastSelected();
+    sal_Int32       NextSelected();
 
-    size_t          GetRangeCount() const { return aSels.size(); }
-    const Range&    GetRange( size_t nRange ) const { return *aSels[nRange]; }
+    sal_Int32       GetRangeCount() const { return aSels.size(); }
+    const Range&    GetRange( sal_Int32 nRange ) const { return *aSels[nRange]; }
 };
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringRangeEnumerator

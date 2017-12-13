@@ -99,7 +99,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
     std::vector<block> aBlocks;
 
     sal_Int32 nShownStart = 0;
-    for (size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
+    for (sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
     {
         const Range& rRange = aHiddenMulti.GetRange(i);
         const sal_Int32 nHiddenStart = rRange.Min();

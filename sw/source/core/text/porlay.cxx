@@ -709,7 +709,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     CalcHiddenRanges( rNode, aHiddenMulti );
 
     aHiddenChg.clear();
-    for( size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+    for( sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
     {
         const Range& rRange = aHiddenMulti.GetRange( i );
         const sal_Int32 nStart = rRange.Min();
@@ -1453,7 +1453,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
                             : 0);
         MultiSelection aHiddenMulti( aRange );
         SwScriptInfo::CalcHiddenRanges( rNode, aHiddenMulti );
-        for( size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+        for( sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
         {
             const Range& rRange = aHiddenMulti.GetRange( i );
             const sal_Int32 nHiddenStart = rRange.Min();
@@ -1472,7 +1472,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
 
         if ( pList )
         {
-            for( size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+            for( sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
             {
                 const Range& rRange = aHiddenMulti.GetRange( i );
                 pList->push_back( rRange.Min() );
