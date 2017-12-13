@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_21971149",
+        "filename": "sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-13T17:57:50Z",
+      "side": 0,
+      "message": "Why remove this check? We only need to query the slot if the category was actually changed, or what am I overlooking?",
+      "revId": "c7e5c7da98d40852d18bd7683e40c9679836ba49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
