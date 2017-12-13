@@ -241,7 +241,7 @@ sal_Bool SAL_CALL OStatementCommonBase::getMoreResults()
 sal_Int32 SAL_CALL OStatementCommonBase::getUpdateCount()
 {
     // TODO: verify we really can't support this
-    return 0;
+    return -1;
 }
 
 
