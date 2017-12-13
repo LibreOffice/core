@@ -3140,7 +3140,7 @@ RTFError RTFDocumentImpl::popState()
             {
                 if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
                 {
-                    // copy properties upwards so upper popState inserts it
+                    // copy properties upwards so upper popState() inserts it
                     m_aStates.top().aTableAttributes = aState.aTableAttributes;
                     m_aStates.top().aTableSprms = aState.aTableSprms;
                 }
