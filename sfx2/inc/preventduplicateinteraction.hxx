@@ -81,19 +81,19 @@ private:
 public:
 
     using cppu::WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) throw () override
     {
     }
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) throw () override
     {
         closewarningdialogs();
         Application::PostUserEvent(LINK(this, WarningDialogsParent, TerminateDesktop));
         throw css::frame::TerminationVetoException();
     }
 
-    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) throw () override
     {
     }
 
@@ -221,7 +221,8 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
     // uno interface
     public:
 
-        virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+        virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+        throw(css::uno::RuntimeException, std::exception) override;
 
         /**
             @interface  XInteractionHandler
