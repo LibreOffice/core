@@ -772,7 +772,7 @@ void SwNavigationPI::dispose()
     {
         if (m_pxObjectShell->Is())
             (*m_pxObjectShell)->DoClose();
-        delete m_pxObjectShell;
+        m_pxObjectShell.reset();
     }
 
     if (IsBound())
@@ -1019,7 +1019,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem, void)
                 m_pContentWrtShell = m_pContentView->GetWrtShellPtr();
             else
                 m_pContentWrtShell = nullptr;
-            m_pxObjectShell = new SfxObjectShellLock(pFrame->GetObjectShell());
+            m_pxObjectShell.reset( new SfxObjectShellLock(pFrame->GetObjectShell()) );
             FillBox();
             m_aContentTree->Update();
         }
@@ -1102,7 +1102,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
         {
             m_aContentTree->SetHiddenShell( nullptr );
             (*m_pxObjectShell)->DoClose();
-            DELETEZ( m_pxObjectShell);
+            m_pxObjectShell.reset();
         }
         SfxStringItem aFileItem(SID_FILE_NAME, sFileName );
         SfxStringItem aOptionsItem( SID_OPTIONS, OUString("HRC") );
