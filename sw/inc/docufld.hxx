@@ -296,7 +296,7 @@ public:
     inline bool             GetHiddenFlag() const { return bHidden; }
 };
 
-class SwHiddenTextField : public SwField
+class SW_DLLPUBLIC SwHiddenTextField : public SwField
 {
     OUString aTRUEText;         ///< Text if condition true.
     OUString aFALSEText;        ///< If condition false.
@@ -326,6 +326,10 @@ public:
                       const OUString& rFalse,
                       sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
 
+    // nSubType = TYP_CONDTXTFLD
+    SwHiddenTextField(SwHiddenTextFieldType*,
+                      const OUString& rCondTrueFalse); // value sample: " IF A == B \"TrueText\" \"FalseText\""
+
     virtual OUString    GetFieldName() const override;
 
     void                Evaluate(SwDoc*);
@@ -346,6 +350,11 @@ public:
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+
+    static void         ParseIfFieldDefinition(const OUString& aFieldDefinition,
+                                               OUString& rCondition,
+                                               OUString& rTrue,
+                                               OUString& rFalse);
 };
 
 // Field that expands to an empty line (without height).
