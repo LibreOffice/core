@@ -43,6 +43,7 @@ class TextSearch: public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
+    osl::Mutex m_aMutex;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     css::util::SearchOptions2 aSrchPara;
