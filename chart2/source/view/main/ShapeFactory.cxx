@@ -25,6 +25,7 @@
 #include "RelativeSizeHelper.hxx"
 #include "PropertyMapper.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
@@ -60,6 +61,21 @@ using ::com::sun::star::uno::Reference;
 
 namespace chart
 {
+
+namespace
+{
+
+void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<uno::Any> & rPropertyValues,
+                 OUString const & rName, uno::Any const & rAny)
+{
+    rPropertyNames.realloc(rPropertyNames.getLength() + 1);
+    rPropertyNames[rPropertyNames.getLength() - 1] = rName;
+
+    rPropertyValues.realloc(rPropertyValues.getLength() + 1);
+    rPropertyValues[rPropertyValues.getLength() - 1] = rAny;
+}
+
+} // end anonymous namespace
 
 uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
@@ -390,40 +406,42 @@ uno::Reference<drawing::XShape>
     xTarget->add(xShape);
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
+    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
+    if (xMultiPropertySet.is())
     {
         try
         {
             //depth
             double fDepth = rSize.DirectionZ;
-            if(fDepth<0)
+            if (fDepth<0)
                 fDepth*=-1.0;
-            xProp->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
-                , uno::makeAny((sal_Int32)fDepth) );
-
+         
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = bRounded ? 3 : 0;
-            xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
-                , uno::makeAny( nPercentDiagonal ) );
-
-            //Polygon
-            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
-                , createPolyPolygon_Cube( rSize, double(nPercentDiagonal)/200.0,bRounded) );
 
             //Matrix for position
-            {
-                ::basegfx::B3DHomMatrix aM;
-                if(nRotateZAngleHundredthDegree!=0)
-                    aM.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*F_PI);
-                aM.translate(rPosition.PositionX
-                            , rPosition.PositionY
-                            , rPosition.PositionZ - (fDepth/2.0));
-                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                    , uno::makeAny(aHM) );
-            }
+            basegfx::B3DHomMatrix aHomMatrix;
+            if (nRotateZAngleHundredthDegree != 0)
+                aHomMatrix.rotate(0.0, 0.0, -nRotateZAngleHundredthDegree / 18000.00 * F_PI);
+            aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY,
+                                 rPosition.PositionZ - (fDepth / 2.0));
+
+            uno::Sequence<OUString> aPropertyNames {
+                UNO_NAME_3D_EXTRUDE_DEPTH,
+                UNO_NAME_3D_PERCENT_DIAGONAL,
+                UNO_NAME_3D_POLYPOLYGON3D,
+                UNO_NAME_3D_TRANSFORM_MATRIX,
+            };
+
+            uno::Sequence<uno::Any> aPropertyValues {
+                uno::Any(sal_Int32(fDepth)), // Depth
+                uno::Any(nPercentDiagonal),  // PercentDiagonal
+                createPolyPolygon_Cube(rSize, double(nPercentDiagonal) / 200.0, bRounded),
+                uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix))
+            };
+
+            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
         catch( const uno::Exception& e )
         {
@@ -633,47 +651,45 @@ uno::Reference<drawing::XShape>
     double fHeight     = rSize.DirectionY;
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
+    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
+    if (xMultiPropertySet.is())
     {
         try
         {
-            //PercentDiagonal
-            sal_Int16 nPercentDiagonal = 5;
-            xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
-                , uno::makeAny( nPercentDiagonal ) );
-
             //Polygon
             sal_Int32 nVerticalSegmentCount = 0;
-            uno::Any aPPolygon = bCylinder ? createPolyPolygon_Cylinder(
-                                                fHeight, fRadius, nVerticalSegmentCount)
-                                           : createPolyPolygon_Cone(
-                                                fHeight, fRadius, fTopHeight, nVerticalSegmentCount);
-            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D, aPPolygon );
+            uno::Any aPPolygon = bCylinder
+                ? createPolyPolygon_Cylinder(fHeight, fRadius, nVerticalSegmentCount)
+                : createPolyPolygon_Cone(fHeight, fRadius, fTopHeight, nVerticalSegmentCount);
 
             //Matrix for position
-            {
-                ::basegfx::B3DHomMatrix aM;
-                if(nRotateZAngleHundredthDegree!=0)
-                    aM.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*F_PI);
-                //stretch the symmetric objects to given depth
-                aM.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
-                aM.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
-                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                    , uno::makeAny(aHM) );
-            }
+            basegfx::B3DHomMatrix aHomMatrix;
+            if (nRotateZAngleHundredthDegree != 0)
+                aHomMatrix.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*F_PI);
+            //stretch the symmetric objects to given depth
+            aHomMatrix.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
+            aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
 
-            //Segments
-            xProp->setPropertyValue( UNO_NAME_3D_HORZ_SEGS
-                , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
-            xProp->setPropertyValue( UNO_NAME_3D_VERT_SEGS
-                , uno::makeAny((sal_Int32)nVerticalSegmentCount) );//depends on point count of the used polygon
+            uno::Sequence<OUString> aPropertyNames{
+                UNO_NAME_3D_PERCENT_DIAGONAL,
+                UNO_NAME_3D_POLYPOLYGON3D,
+                UNO_NAME_3D_TRANSFORM_MATRIX,
+                UNO_NAME_3D_HORZ_SEGS,
+                UNO_NAME_3D_VERT_SEGS,
+                UNO_NAME_3D_REDUCED_LINE_GEOMETRY
+            };
 
-            //Reduced lines
-            xProp->setPropertyValue( UNO_NAME_3D_REDUCED_LINE_GEOMETRY
-                , uno::makeAny(true) );
+            uno::Sequence<uno::Any> aPropertyValues {
+                uno::Any(sal_Int16(5)),  // PercentDiagonal
+                aPPolygon,               // Polygon
+                uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix)), // Matrix
+                uno::Any(CHART_3DOBJECT_SEGMENTCOUNT), // Horizontal Segments
+                uno::Any(nVerticalSegmentCount),       // Vertical Segments
+                uno::Any(true)                         // Reduced lines
+            };
+
+            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
         catch( const uno::Exception& e )
         {
@@ -993,38 +1009,38 @@ uno::Reference< drawing::XShape >
     xTarget->add(xShape);
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
+    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
+    if (xMultiPropertySet.is())
     {
         try
         {
-            //Polygon
-            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
-                , rStripe.getPolyPolygonShape3D() );
+            uno::Sequence<OUString> aPropertyNames{
+                UNO_NAME_3D_POLYPOLYGON3D,
+                UNO_NAME_3D_TEXTUREPOLYGON3D,
+                UNO_NAME_3D_NORMALSPOLYGON3D,
+                UNO_NAME_3D_LINEONLY,
+                UNO_NAME_3D_DOUBLE_SIDED
+            };
 
-            //TexturePolygon
-            xProp->setPropertyValue( UNO_NAME_3D_TEXTUREPOLYGON3D
-                , Stripe::getTexturePolygon( nRotatedTexture ) );
+            uno::Sequence<uno::Any> aPropertyValues {
+                rStripe.getPolyPolygonShape3D(),            // Polygon
+                Stripe::getTexturePolygon(nRotatedTexture), // TexturePolygon
+                rStripe.getNormalsPolygon(),                // Normals Polygon
+                uno::Any(false),        // LineOnly
+                uno::Any(bDoubleSided)  // DoubleSided
+            };
 
-            //Normals Polygon
-            xProp->setPropertyValue( UNO_NAME_3D_NORMALSPOLYGON3D
-                , rStripe.getNormalsPolygon() );
             //NormalsKind
-            if(bFlatNormals)
-                xProp->setPropertyValue( UNO_NAME_3D_NORMALS_KIND
-                    , uno::makeAny( drawing::NormalsKind_FLAT ) );
+            if (bFlatNormals)
+                lcl_addProperty(aPropertyNames, aPropertyValues,
+                                UNO_NAME_3D_NORMALS_KIND, uno::Any(drawing::NormalsKind_FLAT));
 
-            //LineOnly
-            xProp->setPropertyValue( UNO_NAME_3D_LINEONLY
-                , uno::makeAny( false) );
+            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
 
-            //DoubleSided
-            xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
-                , uno::makeAny(bDoubleSided) );
-
-            if( xSourceProp.is())
-                PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
+            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+            if (xSourceProp.is() && xPropertySet.is())
+                PropertyMapper::setMappedProperties(xPropertySet, xSourceProp, rPropertyNameMap);
         }
         catch( const uno::Exception& e )
         {
@@ -1052,43 +1068,38 @@ uno::Reference< drawing::XShape >
     xTarget->add(xShape);
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
+    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
+    if (xMultiPropertySet.is())
     {
         try
         {
-            //depth
-            xProp->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
-                , uno::makeAny((sal_Int32)fDepth) );
+            uno::Sequence<OUString> aPropertyNames{
+                UNO_NAME_3D_EXTRUDE_DEPTH,
+                UNO_NAME_3D_PERCENT_DIAGONAL,
+                UNO_NAME_3D_POLYPOLYGON3D,
+                UNO_NAME_3D_DOUBLE_SIDED,
+            };
 
-            //PercentDiagonal
-            sal_Int16 nPercentDiagonal = 0;
-            xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
-                , uno::makeAny( nPercentDiagonal ) );
-
-            //Polygon
-            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
-                , uno::makeAny( rPolyPolygon ) );
-
-            //DoubleSided
-            xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
-                , uno::makeAny( true) );
+            uno::Sequence<uno::Any> aPropertyValues {
+                uno::Any(sal_Int32(fDepth)), // depth
+                uno::Any(sal_Int16(0)),      // PercentDiagonal
+                uno::Any(rPolyPolygon),      // Polygon
+                uno::Any(true)               // DoubleSided
+            };
 
             //the z component of the polygon is now ignored by the drawing layer,
             //so we need to translate the object via transformation matrix
 
             //Matrix for position
-            if( rPolyPolygon.SequenceZ.getLength()&& rPolyPolygon.SequenceZ[0].getLength() )
+            if (rPolyPolygon.SequenceZ.getLength()&& rPolyPolygon.SequenceZ[0].getLength())
             {
-                ::basegfx::B3DHomMatrix aM;
-                aM.translate( 0
-                            , 0
-                            , rPolyPolygon.SequenceZ[0][0] );
+                basegfx::B3DHomMatrix aM;
+                aM.translate(0, 0, rPolyPolygon.SequenceZ[0][0]);
                 drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                    , uno::makeAny(aHM) );
+                lcl_addProperty(aPropertyNames, aPropertyValues, UNO_NAME_3D_TRANSFORM_MATRIX, uno::Any(aHM));
             }
+            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
         catch( const uno::Exception& e )
         {
@@ -1904,40 +1915,54 @@ uno::Reference< drawing::XShape >
     xTarget->add(xShape);
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
+    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
+    if (xMultiPropertySet.is())
     {
         try
         {
-            //Polygon
-            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
-                , uno::makeAny( rPoints ) );
+             uno::Sequence<OUString> aPropertyNames {
+                UNO_NAME_3D_POLYPOLYGON3D,
+                UNO_NAME_3D_LINEONLY
+            };
 
-            //LineOnly
-            xProp->setPropertyValue( UNO_NAME_3D_LINEONLY
-                , uno::makeAny( true ) );
+            uno::Sequence<uno::Any> aPropertyValues {
+                uno::Any(rPoints),  // Polygon
+                uno::Any(true)      // LineOnly
+            };
 
             //Transparency
             if(rLineProperties.Transparence.hasValue())
-                xProp->setPropertyValue( UNO_NAME_LINETRANSPARENCE
-                    , rLineProperties.Transparence );
+            {
+                lcl_addProperty(aPropertyNames, aPropertyValues,
+                                UNO_NAME_LINETRANSPARENCE,
+                                rLineProperties.Transparence);
+            }
 
             //LineStyle
             if(rLineProperties.LineStyle.hasValue())
-                xProp->setPropertyValue( UNO_NAME_LINESTYLE
-                    , rLineProperties.LineStyle );
+            {
+                lcl_addProperty(aPropertyNames, aPropertyValues,
+                                UNO_NAME_LINESTYLE,
+                                rLineProperties.LineStyle);
+            }
 
             //LineWidth
             if(rLineProperties.Width.hasValue())
-                xProp->setPropertyValue( UNO_NAME_LINEWIDTH
-                    , rLineProperties.Width );
+            {
+                lcl_addProperty(aPropertyNames, aPropertyValues,
+                                UNO_NAME_LINEWIDTH,
+                                rLineProperties.Width);
+            }
 
             //LineColor
             if(rLineProperties.Color.hasValue())
-                xProp->setPropertyValue( UNO_NAME_LINECOLOR
-                    , rLineProperties.Color );
-                    //, uno::makeAny( sal_Int32( Color(COL_RED).GetColor()) ) );
+            {
+                lcl_addProperty(aPropertyNames, aPropertyValues,
+                                UNO_NAME_LINECOLOR,
+                                rLineProperties.Color);
+            }
+            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
         catch( const uno::Exception& e )
         {
