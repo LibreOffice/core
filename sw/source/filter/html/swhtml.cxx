@@ -414,6 +414,8 @@ SwHTMLParser::~SwHTMLParser()
 #endif
 
     OSL_ENSURE(m_aContexts.empty(), "There are still contexts on the stack");
+    OSL_ENSURE(!m_nContextStMin, "There are protected contexts");
+    m_nContextStMin = 0;
     while (!m_aContexts.empty())
     {
         std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
