@@ -122,7 +122,7 @@ public:
     SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( const OUString& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     bool                        HasTheme( const OUString& rThemeName );
-    SAL_DLLPRIVATE OUString     GetThemeName( sal_uIntPtr nThemeId ) const;
+    SAL_DLLPRIVATE OUString     GetThemeName( sal_uInt32 nThemeId ) const;
 
     bool                        CreateTheme( const OUString& rThemeName );
     SAL_DLLPRIVATE void         RenameTheme( const OUString& rOldName, const OUString& rNewName );
