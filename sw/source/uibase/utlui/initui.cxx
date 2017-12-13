@@ -38,7 +38,7 @@
 
 // Global Pointer
 
-static SwGlossaries* pGlossaries = nullptr;
+static std::unique_ptr<SwGlossaries> pGlossaries;
 
 // Provides all needed paths. Is initialized by UI.
 static SwGlossaryList* pGlossaryList = nullptr;
@@ -152,7 +152,7 @@ void FinitUI()
 
     SwEditWin::FinitStaticData();
 
-    DELETEZ(pGlossaries);
+    pGlossaries.reset();
 
     delete SwFieldType::s_pFieldNames;
 
@@ -253,8 +253,8 @@ OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
 SwGlossaries* GetGlossaries()
 {
     if (!pGlossaries)
-        pGlossaries = new SwGlossaries;
-    return pGlossaries;
+        pGlossaries.reset( new SwGlossaries );
+    return pGlossaries.get();
 }
 
 bool HasGlossaryList()
