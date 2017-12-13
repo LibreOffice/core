@@ -1541,6 +1541,106 @@ OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc *pDoc)
     return aData.sDataSource + OUStringLiteral1(DB_DELIM) + aData.sCommand;
 }
 
+// [aFieldDefinition] value sample : " IF A == B \"TrueText\" \"FalseText\""
+void SwHiddenTextField::ParseIfFieldDefinition(const OUString& aFieldDefinition,
+                                               OUString& rCondition,
+                                               OUString& rTrue,
+                                               OUString& rFalse)
+{
+    // get all positions inside the input string where words are started
+    //
+    // In: " IF A == B \"TrueText\" \"FalseText\""
+    //      0         1           2          3
+    //      01234567890 123456789 01 2345678901 2
+    //
+    // result:
+    //      [1, 4, 6, 9, 11, 22]
+    std::vector<sal_Int32> wordPosition;
+    {
+        bool quoted = false;
+        bool insideWord = false;
+        for (sal_Int32 i = 0; i < aFieldDefinition.getLength(); i++)
+        {
+            if (quoted)
+            {
+                if (aFieldDefinition[i] == '\"')
+                {
+                    quoted = false;
+                    insideWord = false;
+                }
+            }
+            else
+            {
+                if (aFieldDefinition[i] == ' ')
+                {
+                    // word delimiter
+                    insideWord = false;
+                }
+                else
+                {
+                    if (insideWord)
+                    {
+                        quoted = (aFieldDefinition[i] == '\"');
+                    }
+                    else
+                    {
+                        insideWord = true;
+                        wordPosition.push_back(i);
+                        quoted = (aFieldDefinition[i] == '\"');
+                    }
+                }
+            }
+        }
+    }
+
+    // first word is always "IF"
+    // last two words are: true-case and false-case,
+    // everything before is treated as condition expression
+    // => we need at least 4 words to be inside the input string
+    if (wordPosition.size() < 4)
+    {
+        return;
+    }
+
+
+    const sal_Int32 conditionBegin = wordPosition[1];
+    const sal_Int32 trueBegin      = wordPosition[wordPosition.size() - 2];
+    const sal_Int32 falseBegin     = wordPosition[wordPosition.size() - 1];
+
+    const sal_Int32 conditionLength = trueBegin - conditionBegin;
+    const sal_Int32 trueLength      = falseBegin - trueBegin;
+
+    // Syntax
+    // OUString::copy( sal_Int32 beginIndex, sal_Int32 count )
+    rCondition = aFieldDefinition.copy(conditionBegin, conditionLength);
+    rTrue = aFieldDefinition.copy(trueBegin, trueLength);
+    rFalse = aFieldDefinition.copy(falseBegin);
+
+    // trim
+    rCondition = rCondition.trim();
+    rTrue = rTrue.trim();
+    rFalse = rFalse.trim();
+
+    // remove quotes
+    if (rCondition.getLength() >= 2)
+    {
+        if (rCondition[0] == '\"' && rCondition[rCondition.getLength() - 1] == '\"')
+            rCondition = rCondition.copy(1, rCondition.getLength() - 2);
+    }
+    if (rTrue.getLength() >= 2)
+    {
+        if (rTrue[0] == '\"' && rTrue[rTrue.getLength() - 1] == '\"')
+            rTrue = rTrue.copy(1, rTrue.getLength() - 2);
+    }
+    if (rFalse.getLength() >= 2)
+    {
+        if (rFalse[0] == '\"' && rFalse[rFalse.getLength() - 1] == '\"')
+            rFalse = rFalse.copy(1, rFalse.getLength() - 2);
+    }
+
+    // Note: do not make trim once again, while this is a user defined data
+}
+
 // field type for line height 0
 
 SwHiddenParaFieldType::SwHiddenParaFieldType()
