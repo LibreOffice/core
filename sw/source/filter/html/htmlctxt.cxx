@@ -375,6 +375,7 @@ void SwHTMLParser::ClearContext( HTMLAttrContext *pContext )
         // but if you get that wrong, quite a lot is messed up
         DeleteAttr( pAttr );
     }
+    rAttrs.clear();
 
     OSL_ENSURE( !pContext->GetSpansSection(),
             "Area can no longer be exited" );

@@ -263,7 +263,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
     if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR && !m_pPam->GetNode().GetTextNode())
     {
         eState = SvParserState::Error;
-        throw std::runtime_error("missing paragraph");
+        return;
     }
 
     aAnchor.SetAnchor( m_pPam->GetPoint() );

@@ -1673,9 +1673,9 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             pBox = NewTableBox( pCnts->GetStartNode(), pUpper );
             pCnts->SetTableBox( pBox );
         }
-        else
+        else if (HTMLTable* pTable = pCnts->GetTable().get())
         {
-            pCnts->GetTable()->InheritVertBorders( this, nLeftCol,
+            pTable->InheritVertBorders( this, nLeftCol,
                                                    nRightCol-nLeftCol );
             // ... that's a table. We'll build a new box and put the rows of the table
             // in the rows of the box
@@ -1687,6 +1687,10 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             sal_uInt16 nInhSpace = m_pLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
             pCnts->GetTable()->MakeTable( pBox, nAbs, nRel, nLSpace, nRSpace,
                                           nInhSpace );
+        }
+        else
+        {
+            return nullptr;
         }
     }
     else
@@ -2707,7 +2711,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
         if (!pTableNd)
         {
             eState = SvParserState::Error;
-            throw std::runtime_error("missing table");
+            return nullptr;
         }
         if( pTableNd->GetTable().GetHTMLTableLayout() )
         { // if there is already a HTMTableLayout, this table is already finished
@@ -2731,7 +2735,6 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
     if (!pStNd)
     {
         eState = SvParserState::Error;
-        throw std::runtime_error("missing table start node");
     }
 
     return pStNd;
@@ -3900,15 +3903,21 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             InsertTableSection( static_cast< sal_uInt16 >(xSaveStruct->IsHeaderCell()
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ));
-        const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
-        SwContentNode *pCNd = m_xDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
-        //Added defaults to CJK and CTL
-        SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
-        pCNd->SetAttr( aFontHeight );
-        SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
-        pCNd->SetAttr( aFontHeightCJK );
-        SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
-        pCNd->SetAttr( aFontHeightCTL );
+
+        if (!pStNd)
+            eState = SvParserState::Error;
+        else
+        {
+            const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
+            SwContentNode *pCNd = m_xDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
+            //Added defaults to CJK and CTL
+            SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
+            pCNd->SetAttr( aFontHeight );
+            SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
+            pCNd->SetAttr( aFontHeightCJK );
+            SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
+            pCNd->SetAttr( aFontHeightCTL );
+        }
 
         xSaveStruct->AddContents( new HTMLTableCnts(pStNd) );
         xSaveStruct->ClearIsInSection();
