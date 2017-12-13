@@ -348,6 +348,8 @@ EditEngine& SmDocShell::GetEditEngine()
 
         mpEditEngine = new EditEngine( mpEditEngineItemPool );
 
+        mpEditEngine->SetAddExtLeading(true);
+
         mpEditEngine->EnableUndo( true );
         mpEditEngine->SetDefTab( sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth("XXXX")) );
