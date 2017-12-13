@@ -103,6 +103,40 @@
       "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_818b6567",
+        "filename": "offapi/com/sun/star/chart2/XChartDocument.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-13T14:33:18Z",
+      "side": 1,
+      "message": "is this interface unpublished by design?  is extending it considered safe?",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a1ea210d",
+        "filename": "offapi/com/sun/star/chart2/XChartDocument.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-13T14:33:18Z",
+      "side": 1,
+      "message": "this should have a\n\n  @since LibreOffice 6.1\n\ntag (if adding the method is OK at all, see above comment)",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
