@@ -150,9 +150,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, ListBox &, void)
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBLayoutMethod.
     mrFilterData["EPUBLayoutMethod"] <<= m_pLayout->GetSelectedEntryPos();
-#if LIBEPUBGEN_VERSION_SUPPORT
     m_pSplit->Enable(m_pLayout->GetSelectedEntryPos() != libepubgen::EPUB_LAYOUT_METHOD_FIXED);
-#endif
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
