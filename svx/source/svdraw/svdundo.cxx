@@ -120,7 +120,7 @@ SdrUndoGroup::~SdrUndoGroup()
 
 void SdrUndoGroup::Clear()
 {
-    for (sal_uIntPtr nu=0; nu<GetActionCount(); nu++) {
+    for (sal_Int32 nu=0; nu<GetActionCount(); nu++) {
         SdrUndoAction* pAct=GetAction(nu);
         delete pAct;
     }
@@ -134,7 +134,7 @@ void SdrUndoGroup::AddAction(SdrUndoAction* pAct)
 
 void SdrUndoGroup::Undo()
 {
-    for (sal_uIntPtr nu=GetActionCount(); nu>0;) {
+    for (sal_Int32 nu=GetActionCount(); nu>0;) {
         nu--;
         SdrUndoAction* pAct=GetAction(nu);
         pAct->Undo();
@@ -143,7 +143,7 @@ void SdrUndoGroup::Undo()
 
 void SdrUndoGroup::Redo()
 {
-    for (sal_uIntPtr nu=0; nu<GetActionCount(); nu++) {
+    for (sal_Int32 nu=0; nu<GetActionCount(); nu++) {
         SdrUndoAction* pAct=GetAction(nu);
         pAct->Redo();
     }
