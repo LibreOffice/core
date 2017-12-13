@@ -287,6 +287,7 @@ namespace sw { namespace mark
         : DdeBookmark(aPaM)
         , ::sfx2::Metadatable()
         , m_aCode(rCode)
+        , m_bHidden(false)
     {
         m_aName = rName;
     }
