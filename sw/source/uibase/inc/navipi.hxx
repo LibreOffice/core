@@ -30,6 +30,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include "conttree.hxx"
 #include <ndarr.hxx>
+#include <memory>
 
 class SwWrtShell;
 class SwNavigationPI;
@@ -78,7 +79,7 @@ class SwNavigationPI : public PanelLayout,
     OUString            m_aContextArr[3];
     OUString            m_aStatusArr[4];
 
-    SfxObjectShellLock  *m_pxObjectShell;
+    std::unique_ptr<SfxObjectShellLock>  m_pxObjectShell;
     SwView              *m_pContentView;
     SwWrtShell          *m_pContentWrtShell;
     SwView              *m_pActContView;
