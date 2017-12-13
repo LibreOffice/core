@@ -1042,7 +1042,8 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     bOffState = true;
                     nNextCh = GetNextChar();
                 }
-                if( rtl::isAsciiAlpha( nNextCh ) || '!'==nNextCh )
+                // Assume '<?' is a start of an XML declaration, ignore it.
+                if (rtl::isAsciiAlpha(nNextCh) || nNextCh == '!' || nNextCh == '?')
                 {
                     OUStringBuffer sTmpBuffer;
                     do {
