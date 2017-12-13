@@ -122,7 +122,7 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
             fprintf( stderr, "Failed to import '%s'\n",
                      OUStringToOString( aIter->GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr() );
         else
-            fprintf( stderr, "Imported file '%s' (%" SAL_PRI_SIZET "u)\n",
+            fprintf( stderr, "Imported file '%s' (%" SAL_PRIdINT32 "u)\n",
                      OUStringToOString( aIter->GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr(),
                      pGalTheme->GetObjectCount() );
     }
