@@ -301,11 +301,23 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     if (bOK)
         return true;
 
-    report(DiagnosticsEngine::Warning, "SAL_CALL unnecessary here", rewriteLoc)
-        << decl->getSourceRange();
+    if (bDeclIsSalCall)
+    {
+        report(DiagnosticsEngine::Warning, "SAL_CALL unnecessary here",
+               rewriteLoc.isValid() ? rewriteLoc : decl->getLocation())
+            << decl->getSourceRange();
+    }
     if (canonicalDecl != decl)
+    {
         report(DiagnosticsEngine::Warning, "SAL_CALL unnecessary here", rewriteCanonicalLoc)
             << canonicalDecl->getSourceRange();
+        if (!bDeclIsSalCall)
+        {
+            report(DiagnosticsEngine::Note, "defined here (without SAL_CALL decoration)",
+                   decl->getLocation())
+                << decl->getSourceRange();
+        }
+    }
 
     return true;
 }
