@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_417b3d28",
+        "filename": "include/formula/token.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-13T18:51:36Z",
+      "side": 1,
+      "message": "Given the comment this shouldn\u0027t be restricted here.. maybe changed to sal_Int16 instead, and adapt GetDoubleType() and SetDoubleType() accordingly.",
+      "revId": "43895cc425bd2c8433411471fe5f4f8fed529239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6174b935",
+        "filename": "include/svl/zformat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-13T18:51:36Z",
+      "side": 1,
+      "message": "Please derive from sal_Int16 to nail its size.",
+      "revId": "43895cc425bd2c8433411471fe5f4f8fed529239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
