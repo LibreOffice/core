@@ -2318,7 +2318,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
         const OUString& aStr( rNode.GetText() );
 
-        sal_Int32 const nEnd = aStr.getLength();
+        sal_Int32 const nEnd = bNeedParaSplit ? *aBreakIt : aStr.getLength();
         bool bIncludeEndOfParaCRInRedlineProperties = false;
         sal_Int32 nOpenAttrWithRange = 0;
 
@@ -2496,8 +2496,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 nLen -= ofs;
 
                 // if paragraph needs to be split, write only until split position
+                assert(!bNeedParaSplit || nAktPos <= *aBreakIt);
                 if( bNeedParaSplit && nAktPos + ofs + nLen > *aBreakIt)
                     nLen = *aBreakIt - nAktPos - ofs;
+                assert(0 <= nLen);
 
                 OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
                 if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
