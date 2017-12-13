@@ -34,6 +34,7 @@
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/lok.hxx>
 
 #include <uno/current_context.hxx>
 
@@ -96,6 +97,12 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
 {
     OStringBuffer aBuffer, aLaunchBuffer;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SAL_WARN("shell", "Unusual - shell attemp to launch " << aCommand << " with params " << aParameter << " under lok");
+        return;
+    }
 
     // DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
     static const char *pDesktopLaunch = getenv( "DESKTOP_LAUNCH" );
