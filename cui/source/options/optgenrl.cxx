@@ -428,10 +428,29 @@ bool SvxGeneralTabPage::GetData_Impl()
         );
 
     // modified?
+    bool bModified = false;
     for (auto const & i: vFields)
+    {
         if (i->pEdit->IsValueChangedFromSaved())
-            return true;
-    return false;
+        {
+            bModified = true;
+            break;
+        }
+    }
+
+#if HAVE_FEATURE_GPGME
+    OUString aSK = m_pSigningKeyLB->GetSelectedEntryPos() == 0 ? OUString() //i.e. no key
+                       : m_pSigningKeyLB->GetSelectedEntry();
+    OUString aEK = m_pEncryptionKeyLB->GetSelectedEntryPos() == 0 ? OUString()
+                       : m_pEncryptionKeyLB->GetSelectedEntry();
+    aUserOpt.SetToken( UserOptToken::SigningKey, aSK );
+    aUserOpt.SetToken( UserOptToken::EncryptionKey, aEK );
+
+    bModified |= m_pSigningKeyLB->IsValueChangedFromSaved();
+    bModified |= m_pEncryptionKeyLB->IsValueChangedFromSaved();
+#endif
+
+    return bModified;
 }
 
 
@@ -461,6 +480,16 @@ void SvxGeneralTabPage::SetData_Impl()
     // saving
     for (auto const & i: vFields)
         i->pEdit->SaveValue();
+
+#if HAVE_FEATURE_GPGME
+    OUString aSK = aUserOpt.GetToken(UserOptToken::SigningKey);
+    aSK.isEmpty() ? m_pSigningKeyLB->SelectEntryPos( 0 ) //i.e. 'No Key'
+                  : m_pSigningKeyLB->SelectEntry( aSK );
+
+    OUString aEK = aUserOpt.GetToken(UserOptToken::EncryptionKey);
+    aEK.isEmpty() ? m_pEncryptionKeyLB->SelectEntryPos( 0 ) //i.e. 'No Key'
+                  : m_pEncryptionKeyLB->SelectEntry( aEK );
+#endif
 }
 
 

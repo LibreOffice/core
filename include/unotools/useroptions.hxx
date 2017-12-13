@@ -45,7 +45,9 @@ enum class UserOptToken
     Zip                = 14,
     FathersName        = 15,
     Apartment          = 16,
-    LAST               = Apartment,
+    SigningKey         = 17,
+    EncryptionKey      = 18,
+    LAST               = EncryptionKey,
 };
 
 // class SvtUserOptions --------------------------------------------------
@@ -74,6 +76,8 @@ public:
     OUString GetTelephoneWork  () const;
     OUString GetFax            () const;
     OUString GetEmail          () const;
+    OUString GetSigningKey     () const;
+    OUString GetEncryptionKey  () const;
 
     OUString GetFullName       () const;
 
