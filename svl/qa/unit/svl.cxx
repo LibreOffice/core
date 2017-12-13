@@ -1506,7 +1506,7 @@ void Test::testColorNamesConversion()
     {
         aFormatCode = "[" + aGermanKeywords[i] + "]0";
         aFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType, nKey, LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", 0, nCheckPos);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", sal_Int32(0), nCheckPos);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Type should be NUMBER.", css::util::NumberFormat::NUMBER, nType);
         CPPUNIT_ASSERT_EQUAL( OUString("[" + rEnglishKeywords[i] + "]0"), aFormatCode);
     }
