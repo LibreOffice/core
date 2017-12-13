@@ -65,7 +65,9 @@ static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
     "initials",                  // UserOptToken::ID
     "postalcode",                // UserOptToken::Zip
     "fathersname",               // UserOptToken::FathersName
-    "apartment"                  // UserOptToken::Apartment
+    "apartment",                 // UserOptToken::Apartment
+    "signingkey",                // UserOptToken::SigningKey
+    "encryptionkey"              // UserOptToken::EncryptionKey
 };
 
 std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
@@ -276,6 +278,8 @@ OUString SvtUserOptions::GetTelephoneHome  () const { return GetToken(UserOptTok
 OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(UserOptToken::TelephoneWork); }
 OUString SvtUserOptions::GetFax            () const { return GetToken(UserOptToken::Fax); }
 OUString SvtUserOptions::GetEmail          () const { return GetToken(UserOptToken::Email); }
+OUString SvtUserOptions::GetSigningKey     () const { return GetToken(UserOptToken::SigningKey); }
+OUString SvtUserOptions::GetEncryptionKey  () const { return GetToken(UserOptToken::EncryptionKey); }
 
 bool SvtUserOptions::IsTokenReadonly (UserOptToken nToken) const
 {
