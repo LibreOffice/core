@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 
 #include <edtwin.hxx>

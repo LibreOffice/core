@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <vcl/errinf.hxx>
 #include <editeng/justifyitem.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/msgbox.hxx>

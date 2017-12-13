@@ -47,6 +47,7 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#include <comphelper/fileformat.h>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>

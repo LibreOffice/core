@@ -35,6 +35,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>

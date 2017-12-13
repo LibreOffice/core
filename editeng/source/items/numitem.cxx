@@ -40,6 +40,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <tools/mapunit.hxx>
 #include <unotools/configmgr.hxx>

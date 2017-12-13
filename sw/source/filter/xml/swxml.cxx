@@ -44,6 +44,7 @@
 #include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/frame.hxx>

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <sal/log.hxx>
+#include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
 
 #include <svl/macitem.hxx>

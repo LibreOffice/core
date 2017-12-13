@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/fileformat.h>
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>

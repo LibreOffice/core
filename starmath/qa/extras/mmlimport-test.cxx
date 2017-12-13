@@ -10,6 +10,8 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <comphelper/fileformat.h>
+
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxmodelfactory.hxx>

@@ -30,6 +30,7 @@
 #include <svx/unomodel.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/servicehelper.hxx>
 

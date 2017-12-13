@@ -75,6 +75,7 @@
 #include <vcl/salctype.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/storinfo.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/transfer.hxx>

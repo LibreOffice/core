@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SD_INC_SDXMLWRP_HXX
 #define INCLUDED_SD_INC_SDXMLWRP_HXX
 
+#include <comphelper/fileformat.h>
 #include <vcl/errcode.hxx>
 #include "sdfilter.hxx"
 

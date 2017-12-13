@@ -27,6 +27,7 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>

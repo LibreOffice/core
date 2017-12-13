@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/make_unique.hxx>
+#include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>

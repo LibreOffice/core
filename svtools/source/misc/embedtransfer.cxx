@@ -28,6 +28,7 @@
 #include <svtools/embedtransfer.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>

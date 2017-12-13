@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
+#include <comphelper/fileformat.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
 

@@ -24,6 +24,7 @@
 #include <bitmaps.hlst>
 #include <svtools/svtresid.hxx>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/seqstream.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

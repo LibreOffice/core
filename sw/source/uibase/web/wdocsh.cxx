@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <sfx2/objface.hxx>
 

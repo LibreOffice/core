@@ -60,6 +60,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/asynclink.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/documentconstants.hxx>
 #include <tools/link.hxx>
 

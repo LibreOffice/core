@@ -30,6 +30,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/string.hxx>
 
 #define SWAPNIBBLES(c)      \

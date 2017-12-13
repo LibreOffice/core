@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>

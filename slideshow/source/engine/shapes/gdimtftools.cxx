@@ -31,6 +31,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/uno3.hxx>
 
 #include <tools/stream.hxx>

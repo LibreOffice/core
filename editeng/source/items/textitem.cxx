@@ -41,6 +41,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/itemset.hxx>
 
+#include <comphelper/fileformat.h>
 #include <svtools/langtab.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>

@@ -20,6 +20,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/uno/Any.h>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/accessibletexthelper.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>

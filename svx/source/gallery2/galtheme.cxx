@@ -23,6 +23,7 @@
 
 #include <algorithm>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>

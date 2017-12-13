@@ -65,6 +65,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/datetime.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/fileformat.h>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/storagehelper.hxx>

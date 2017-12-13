@@ -41,6 +41,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svx/xmleohlp.hxx>

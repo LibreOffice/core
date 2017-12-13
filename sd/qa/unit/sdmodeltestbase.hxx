@@ -23,6 +23,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/color.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/strbuf.hxx>

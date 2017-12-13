@@ -29,6 +29,7 @@
 #include <objshimp.hxx>
 #include <sfx2/event.hxx>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>

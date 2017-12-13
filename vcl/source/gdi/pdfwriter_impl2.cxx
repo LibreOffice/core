@@ -33,6 +33,7 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

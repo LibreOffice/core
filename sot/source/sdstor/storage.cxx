@@ -34,6 +34,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>

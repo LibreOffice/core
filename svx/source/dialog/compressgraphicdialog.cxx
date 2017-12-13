@@ -32,6 +32,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <sfx2/dispatch.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

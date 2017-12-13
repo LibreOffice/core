@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <o3tl/make_unique.hxx>
+#include <comphelper/fileformat.h>
 #include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>

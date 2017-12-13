@@ -38,6 +38,7 @@
 #include <unotools/saveopt.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>

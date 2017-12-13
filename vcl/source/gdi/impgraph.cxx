@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <tools/fract.hxx>
 #include <tools/vcompat.hxx>

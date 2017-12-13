@@ -13,6 +13,8 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
+#include <comphelper/fileformat.h>
+
 #include <vcl/graphicfilter.hxx>
 
 using namespace ::com::sun::star;

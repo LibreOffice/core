@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 

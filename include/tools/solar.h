@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <osl/endian.h>
-#include <comphelper/fileformat.h>
 
 /** Intermediate type to solve type clash with Windows headers.
  Should be removed as soon as all code parts have been reviewed

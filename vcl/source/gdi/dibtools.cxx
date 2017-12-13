@@ -23,6 +23,7 @@
 
 #include <vcl/salbtype.hxx>
 #include <vcl/dibtools.hxx>
+#include <comphelper/fileformat.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>

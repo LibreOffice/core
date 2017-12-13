@@ -23,6 +23,7 @@
 #include <osl/detail/android-bootstrap.h>
 
 #include <unotools/tempfile.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
