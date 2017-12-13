@@ -41,6 +41,7 @@
 #include <cppuhelper/implbase9.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <memory>
 
 
 struct UnoControlComponentInfos
@@ -108,7 +109,7 @@ protected:
     bool                            mbDesignMode;
 
     UnoControlComponentInfos            maComponentInfos;
-    UnoControl_Data*                    mpData;
+    std::unique_ptr<UnoControl_Data>    mpData;
 
     ::osl::Mutex&                                                               GetMutex() { return maMutex; }
 

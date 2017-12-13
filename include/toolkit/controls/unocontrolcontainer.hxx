@@ -32,6 +32,7 @@
 #include <toolkit/helper/servicenames.hxx>
 
 #include <cppuhelper/implbase4.hxx>
+#include <memory>
 
 class UnoControlHolderList;
 
@@ -48,7 +49,7 @@ typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
 class UnoControlContainer : public UnoControlContainer_Base
 {
 private:
-    UnoControlHolderList*                   mpControls;
+    std::unique_ptr<UnoControlHolderList>   mpControls;
     css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >    maTabControllers;
     ContainerListenerMultiplexer            maCListeners;
 

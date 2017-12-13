@@ -150,7 +150,6 @@ UnoControl::UnoControl() :
 
 UnoControl::~UnoControl()
 {
-    DELETEZ( mpData );
 }
 
 OUString UnoControl::GetComponentServiceName()
