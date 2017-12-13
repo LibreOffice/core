@@ -104,6 +104,9 @@ const ::std::vector<OUString> ImpSvNumberformatScan::sEnglishKeyword =
 ::std::vector<Color> ImpSvNumberformatScan::StandardColor;
 bool ImpSvNumberformatScan::bStandardColorNeedInitialization = true;
 
+// This vector will hold *only* the color names in German language.
+::std::vector<OUString> ImpSvNumberformatScan::sGermanColorNames;
+
 const OUString ImpSvNumberformatScan::sErrStr =  "###";
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
@@ -149,6 +152,24 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
         StandardColor.push_back( Color(COL_GRAY) );
         StandardColor.push_back( Color(COL_YELLOW) );
         StandardColor.push_back( Color(COL_WHITE) );
+
+        static_assert( NF_KEY_BLACK - NF_KEY_COLOR == 1,        "bad FARBE(COLOR), SCHWARZ(BLACK) sequence");
+        static_assert( NF_KEY_FIRSTCOLOR - NF_KEY_COLOR == 1,   "bad color sequence");
+        static_assert( NF_MAX_DEFAULT_COLORS + 1 == 11,         "bad color count");
+        static_assert( NF_KEY_WHITE - NF_KEY_COLOR + 1 == 11,   "bad color sequence count");
+
+        sGermanColorNames.resize( NF_KEY_WHITE - NF_KEY_COLOR + 1 );
+        sGermanColorNames[NF_KEY_COLOR - NF_KEY_COLOR]   = "FARBE";
+        sGermanColorNames[NF_KEY_BLACK - NF_KEY_COLOR]   = "SCHWARZ";
+        sGermanColorNames[NF_KEY_BLUE - NF_KEY_COLOR]    = "BLAU";
+        sGermanColorNames[NF_KEY_GREEN - NF_KEY_COLOR]   = OUString( "GR" "\xDC" "N", 4, RTL_TEXTENCODING_ISO_8859_1 );
+        sGermanColorNames[NF_KEY_CYAN - NF_KEY_COLOR]    = "CYAN";
+        sGermanColorNames[NF_KEY_RED - NF_KEY_COLOR]     = "ROT";
+        sGermanColorNames[NF_KEY_MAGENTA - NF_KEY_COLOR] = "MAGENTA";
+        sGermanColorNames[NF_KEY_BROWN - NF_KEY_COLOR]   = "BRAUN";
+        sGermanColorNames[NF_KEY_GREY - NF_KEY_COLOR]    = "GRAU";
+        sGermanColorNames[NF_KEY_YELLOW - NF_KEY_COLOR]  = "GELB";
+        sGermanColorNames[NF_KEY_WHITE - NF_KEY_COLOR]   = "WEISS";
     }
 
     nStandardPrec = 2;
@@ -378,17 +399,17 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         sKeyword[NF_KEY_YY] =        "JJ";
         sKeyword[NF_KEY_YYYY] =      "JJJJ";
         sKeyword[NF_KEY_BOOLEAN] =   "LOGISCH";
-        sKeyword[NF_KEY_COLOR] =     "FARBE";
-        sKeyword[NF_KEY_BLACK] =     "SCHWARZ";
-        sKeyword[NF_KEY_BLUE] =      "BLAU";
-        sKeyword[NF_KEY_GREEN] = OUString( "GR" "\xDC" "N", 4, RTL_TEXTENCODING_ISO_8859_1 );
-        sKeyword[NF_KEY_CYAN] =      "CYAN";
-        sKeyword[NF_KEY_RED] =       "ROT";
-        sKeyword[NF_KEY_MAGENTA] =   "MAGENTA";
-        sKeyword[NF_KEY_BROWN] =     "BRAUN";
-        sKeyword[NF_KEY_GREY] =      "GRAU";
-        sKeyword[NF_KEY_YELLOW] =    "GELB";
-        sKeyword[NF_KEY_WHITE] =     "WEISS";
+        sKeyword[NF_KEY_COLOR] =     sGermanColorNames[NF_KEY_COLOR - NF_KEY_COLOR];
+        sKeyword[NF_KEY_BLACK] =     sGermanColorNames[NF_KEY_BLACK - NF_KEY_COLOR];
+        sKeyword[NF_KEY_BLUE] =      sGermanColorNames[NF_KEY_BLUE - NF_KEY_COLOR];
+        sKeyword[NF_KEY_GREEN] =     sGermanColorNames[NF_KEY_GREEN - NF_KEY_COLOR];
+        sKeyword[NF_KEY_CYAN] =      sGermanColorNames[NF_KEY_CYAN - NF_KEY_COLOR];
+        sKeyword[NF_KEY_RED] =       sGermanColorNames[NF_KEY_RED - NF_KEY_COLOR];
+        sKeyword[NF_KEY_MAGENTA] =   sGermanColorNames[NF_KEY_MAGENTA - NF_KEY_COLOR];
+        sKeyword[NF_KEY_BROWN] =     sGermanColorNames[NF_KEY_BROWN - NF_KEY_COLOR];
+        sKeyword[NF_KEY_GREY] =      sGermanColorNames[NF_KEY_GREY - NF_KEY_COLOR];
+        sKeyword[NF_KEY_YELLOW] =    sGermanColorNames[NF_KEY_YELLOW - NF_KEY_COLOR];
+        sKeyword[NF_KEY_WHITE] =     sGermanColorNames[NF_KEY_WHITE - NF_KEY_COLOR];
     }
     else
     {
@@ -603,6 +624,33 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
         }
     }
 
+    enum ColorKeywordConversion
+    {
+        None,
+        GermanToEnglish,
+        EnglishToGerman
+    } eColorKeywordConversion(None);
+
+    if (bConvertMode)
+    {
+        const bool bFromGerman = eTmpLnge.anyOf(
+                LANGUAGE_GERMAN,
+                LANGUAGE_GERMAN_SWISS,
+                LANGUAGE_GERMAN_AUSTRIAN,
+                LANGUAGE_GERMAN_LUXEMBOURG,
+                LANGUAGE_GERMAN_LIECHTENSTEIN);
+        const bool bToGerman = eNewLnge.anyOf(
+                LANGUAGE_GERMAN,
+                LANGUAGE_GERMAN_SWISS,
+                LANGUAGE_GERMAN_AUSTRIAN,
+                LANGUAGE_GERMAN_LUXEMBOURG,
+                LANGUAGE_GERMAN_LIECHTENSTEIN);
+        if (bFromGerman && !bToGerman)
+            eColorKeywordConversion = ColorKeywordConversion::GermanToEnglish;
+        else if (!bFromGerman && bToGerman)
+            eColorKeywordConversion = ColorKeywordConversion::EnglishToGerman;
+    }
+
     Color* pResult = nullptr;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
@@ -615,21 +663,17 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
             sal_Int32 nPos = (bL10n ? rColorWord.getLength() : sEnglishKeyword[NF_KEY_COLOR].getLength());
             sStr = sStr.copy(nPos);
             sStr = comphelper::string::strip(sStr, ' ');
-            if (bConvertMode)
+            switch (eColorKeywordConversion)
             {
-                /* TODO: this is awkward, only German has colors translated, so
-                 * actually we'd need to convert only between German and any
-                 * other and vice versa, and only the word COLOR <-> FARBE
-                 * without all the locale switching mumbo jumbo. */
-                KeywordLocalization eSaveKL = meKeywordLocalization;    // gets overwritten by ChangeIntl()
-                pFormatter->ChangeIntl(eNewLnge);
-                sStr = GetKeywords()[NF_KEY_COLOR] + sStr; // Color -> FARBE
-                pFormatter->ChangeIntl(eTmpLnge);
-                meKeywordLocalization = eSaveKL;
-            }
-            else
-            {
-                sStr = rColorWord + sStr;
+                case ColorKeywordConversion::None:
+                    sStr = rColorWord + sStr;
+                break;
+                case ColorKeywordConversion::GermanToEnglish:
+                    sStr = sEnglishKeyword[NF_KEY_COLOR] + sStr;                    // Farbe -> COLOR
+                break;
+                case ColorKeywordConversion::EnglishToGerman:
+                    sStr = sGermanColorNames[NF_KEY_COLOR - NF_KEY_COLOR] + sStr;   // Color -> FARBE
+                break;
             }
             sString = sString.copy(nPos);
             sString = comphelper::string::strip(sString, ' ');
@@ -647,21 +691,17 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     else
     {
         sStr.clear();
-        if (bConvertMode)
+        switch (eColorKeywordConversion)
         {
-            /* TODO: this is awkward, only German has colors translated, so
-             * actually we'd need to convert only between German and any
-             * other and vice versa, and only the few color words
-             * without all the locale switching mumbo jumbo. */
-            KeywordLocalization eSaveKL = meKeywordLocalization;    // gets overwritten by ChangeIntl()
-            pFormatter->ChangeIntl(eNewLnge);
-            sStr = GetKeywords()[NF_KEY_FIRSTCOLOR+i]; // red -> rot
-            pFormatter->ChangeIntl(eTmpLnge);
-            meKeywordLocalization = eSaveKL;
-        }
-        else
-        {
-            sStr = rKeyword[NF_KEY_FIRSTCOLOR+i];
+            case ColorKeywordConversion::None:
+                sStr = rKeyword[NF_KEY_FIRSTCOLOR+i];
+            break;
+            case ColorKeywordConversion::GermanToEnglish:
+                sStr = sEnglishKeyword[NF_KEY_FIRSTCOLOR + i];                  // Rot -> RED
+            break;
+            case ColorKeywordConversion::EnglishToGerman:
+                sStr = sGermanColorNames[NF_KEY_FIRSTCOLOR - NF_KEY_COLOR + i]; // Red -> ROT
+            break;
         }
         pResult = &(StandardColor[i]);
     }
