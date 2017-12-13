@@ -520,7 +520,7 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const OUString& rThemeName )
     return pFound;
 }
 
-OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
+OUString Gallery::GetThemeName( sal_uInt32 nThemeId ) const
 {
     GalleryThemeEntry* pFound = nullptr;
 
