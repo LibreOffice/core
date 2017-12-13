@@ -518,7 +518,7 @@ void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
             if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
                 SetMode( meLastMode );
 
-            ImplUpdateViews( (sal_uInt16) rGalleryHint.GetData1() + 1 );
+            ImplUpdateViews( reinterpret_cast<size_t>(rGalleryHint.GetData1()) + 1 );
         }
         break;
 
