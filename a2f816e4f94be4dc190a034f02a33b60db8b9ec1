@@ -16,6 +16,24 @@
       "revId": "a2f816e4f94be4dc190a034f02a33b60db8b9ec1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9e32e00e",
+        "filename": "sal/rtl/strimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-12-13T13:15:36Z",
+      "side": 1,
+      "message": "Yep \u003d) silly typo.",
+      "parentUuid": "1a430d35_fe468479",
+      "revId": "a2f816e4f94be4dc190a034f02a33b60db8b9ec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
