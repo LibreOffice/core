@@ -36,6 +36,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/streamwrap.hxx>
+#include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
 
 class Test : public SwModelTestBase
 {
@@ -112,6 +113,113 @@ DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(" size 12{1+1=2} {}"), formula1);
     OUString formula2(getFormula(getRun(getParagraph(2), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString(" size 12{2+2=4} {}"), formula2);
+}
+
+void testTdf43569_CheckIfFieldParse()
+{
+    {
+        const OUString fieldDefinition("IF A B C");
+
+        OUString paramCondition;
+        OUString paramTrue;
+        OUString paramFalse;
+
+        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("A"), paramCondition);
+        CPPUNIT_ASSERT_EQUAL(OUString("B"), paramTrue);
+        CPPUNIT_ASSERT_EQUAL(OUString("C"), paramFalse);
+    }
+
+    {
+        const OUString fieldDefinition("  IF AAA BBB CCC  ");
+
+        OUString paramCondition;
+        OUString paramTrue;
+        OUString paramFalse;
+
+        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("AAA"), paramCondition);
+        CPPUNIT_ASSERT_EQUAL(OUString("BBB"), paramTrue);
+        CPPUNIT_ASSERT_EQUAL(OUString("CCC"), paramFalse);
+    }
+
+    {
+        const OUString fieldDefinition("  IF AAA \"BBB\" \"CCC\"  ");
+
+        OUString paramCondition;
+        OUString paramTrue;
+        OUString paramFalse;
+
+        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("AAA"), paramCondition);
+        CPPUNIT_ASSERT_EQUAL(OUString("BBB"), paramTrue);
+        CPPUNIT_ASSERT_EQUAL(OUString("CCC"), paramFalse);
+    }
+
+    // true-case and false-case have spaces inside
+    {
+        const OUString fieldDefinition("  IF A A A \"B B B\" \"C C C\"  ");
+
+        OUString paramCondition;
+        OUString paramTrue;
+        OUString paramFalse;
+
+        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("A A A"), paramCondition);
+        CPPUNIT_ASSERT_EQUAL(OUString("B B B"), paramTrue);
+        CPPUNIT_ASSERT_EQUAL(OUString("C C C"), paramFalse);
+    }
+
+    // true-case and false-case have leading/trailing space
+    {
+        const OUString fieldDefinition("IF A1 A2 A3 \"B1 B2 \" \" C1 C2\"  ");
+
+        OUString paramCondition;
+        OUString paramTrue;
+        OUString paramFalse;
+
+        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("A1 A2 A3"), paramCondition);
+        CPPUNIT_ASSERT_EQUAL(OUString("B1 B2 "), paramTrue);
+        CPPUNIT_ASSERT_EQUAL(OUString(" C1 C2"), paramFalse);
+    }
+
+    // true-case and false-case are empty
+    {
+        const OUString fieldDefinition("IF condition \"\" \"\"  ");
+
+        OUString paramCondition;
+        OUString paramTrue;
+        OUString paramFalse;
+
+        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("condition"), paramCondition);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), paramTrue);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), paramFalse);
+    }
+}
+
+// Input document contains only one IF-field,
+// and it should be imported as com.sun.star.text.TextField.ConditionalText in any case,
+// instead of insertion of the the pair of two field-marks: <field:fieldmark-start> + <field:fieldmark-end>.
+DECLARE_ODFEXPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
+{
+    // check if our parser is valid
+    testTdf43569_CheckIfFieldParse();
+
+    // now check field creation during import
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // at least one field should be detected
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
