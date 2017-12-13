@@ -1,0 +1,1605 @@
+From 9ad1696fb13d65e5d569b7106749dd4014877c15 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Wed, 13 Dec 2017 19:27:30 +0100
+Subject: [PATCH] Recent Hunspell fixes and improvements
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Containing the following up-stream patches:
+
+commit 7ba5beb517310a942bafd7d6d08fc92beae0e439
+Author: László Németh <nemeth@numbertext.org>
+Date:   Wed Dec 13 19:01:35 2017 +0100
+
+    Support dictionary based REP replacements
+
+    using the following syntax in the dic file:
+
+    word ph:pattern->replacement
+
+commit 711466a276d5d9f3a5f6e9089bb3262894196fbc
+Author: László Németh <nemeth@numbertext.org>
+Date:   Tue Dec 12 15:09:36 2017 +0100
+
+    fix compiler warnings
+
+commit db142a3addc87bbbdd9a76bc519c69e8ad95af73
+Author: László Németh <nemeth@numbertext.org>
+Date:   Fri Dec 1 17:24:17 2017 +0100
+
+    Fix regression in Hungarian "moving rule"
+
+    from commit eb97eb789cec47a172f6e9a01db3e6cf3b8dc81d.
+
+    Dictionary words with COMPOUNDFORBIDFLAG are removed
+    from the beginning and middle of compound words,
+    overriding the effect of COMPOUNDPERMITFLAG,
+    except in Hungarian "moving rule".
+
+    Add test example.
+
+commit 05082b4e8a917cfbddefbc5fd2d543895b27f4c1
+Author: László Németh <nemeth@numbertext.org>
+Date:   Fri Dec 1 16:11:20 2017 +0100
+
+    BREAK: keep also break-at-first-break-point breaking
+
+    to handle the case of suffixes with dashes in compounds.
+
+    Add also test example.
+
+commit caa24d60f1a4514d4e0ef48fa14105e85eb6514c
+Author: László Németh <nemeth@numbertext.org>
+Date:   Fri Dec 1 11:16:35 2017 +0100
+
+    Improve ph: usage for capitalization and Unicode
+
+    - at capitalized dictionary words, add lowercase ph: patterns
+      to the REP rules in a capitalized form, too, to get correct
+      suggestions for lowercase and capitalized mispellings:
+
+      Wednesday ph:wendsay (in dic file) results
+
+      both wendsay and Wendsay -> Wednesday suggestions.
+
+      For German and Hungarian:
+
+      add also lowercase pattern -> lowercase dictionary word
+      replacement to the REP rules, supporting lowercasing
+      by compound word generation or derivational suffixes.
+
+    - fix UTF-8 support of starred ph: fields
+
+    - test examples
+
+commit 8912f2ade54cdc186fe0580471063d92d99eb572
+Author: László Németh <nemeth@numbertext.org>
+Date:   Fri Dec 1 10:26:07 2017 +0100
+
+    Allow suggestion search for prefix + *two suffixes*
+
+    Remove artificial performance limit to get correct
+    suggestions for relatively simple misspellings in
+    Hungarian, etc., when the word form contains prefix
+    and both derivative and inflectional suffixes, too:
+
+    lefikszálása -> lefixálása
+
+commit eb97eb789cec47a172f6e9a01db3e6cf3b8dc81d
+Author: László Németh <nemeth@numbertext.org>
+Date:   Fri Dec 1 08:03:38 2017 +0100
+
+    Dictionary words with COMPOUNDFORBIDFLAG are removed
+
+    from the beginning and middle of compound words,
+    overriding the effect of COMPOUNDPERMITFLAG.
+
+commit 526f600e194aacbc3817df26f01d8c95c38bf582
+Author: László Németh <nemeth@numbertext.org>
+Date:   Wed Nov 29 14:58:46 2017 +0100
+
+    skip empty ph: field and support character stripping
+
+    at replacement rule creation.
+
+    When the ph: field ends with the character *,
+    strip last character of the replacement (the correct word)
+    and last two character of the field (the * and last
+    character of the matching pattern) in the replacement rule.
+
+    For example,
+
+    pretty ph:prity*
+
+    dictionary item results "prit -> prett" REP replacement
+    rule instead of "prity -> pretty", to get
+    "prity -> pretty" and "pritiest -> prettiest" suggestions.
+
+commit ebdd308463a0e8432f56f12804976ba7029a95c4
+Author: László Németh <nemeth@numbertext.org>
+Date:   Wed Nov 29 13:13:21 2017 +0100
+
+    clean-up suggestion
+
+    - no ngram and compound word suggestions, if "good" suggestion
+      exists, ie. uppercase, REP, ph: or dictionary word pair suggestions
+
+    - word pairs are always suggested, if they exist in the dic file
+
+    - word pairs have top priority in suggestions, and
+      these are the only suggestions if there is no other good suggestion.
+
+    - also dictionary word pairs separated by dash instead of space
+      are handled specially in two-word suggestion (depending from the
+      language)
+
+commit 066704985ae474999345f309c71b4929eff1ca95
+Author: László Németh <nemeth@numbertext.org>
+Date:   Tue Nov 28 12:55:35 2017 +0100
+
+    check dictionary word pairs to filter compound word overgeneration
+
+    Now it's possible to filter bad compound words by listing
+    the correct word pairs with space in the dictionary.
+
+commit bbf2eb4ad0c589c38d03321c8b126826d2284a3f
+Author: László Németh <nemeth@numbertext.org>
+Date:   Tue Nov 28 11:25:01 2017 +0100
+
+    word pairs of the dic file get highest suggestion priority
+
+    when the words are written without space.
+
+    Instead using REP replacements, now it's enough to add
+
+    a lot
+
+    to the English dic file (like in a traditional spelling
+    dictionary) to get suggestions for "alot" in the requested
+    order:
+
+    alot
+    & alot 7 0: a lot, alto, slot, alt, lot...
+
+    (without using word pairs or the REP replacements, the order was
+
+    alot
+    & alot 7 0: alto, slot, alt, lot, a lot...)
+
+commit 90cb55f8f1a21c7f62539baf8f3cf6f062080afd
+Author: László Németh <nemeth@numbertext.org>
+Date:   Tue Nov 28 09:57:23 2017 +0100
+
+    Clean-up ngram suggestions for lowercase words
+
+    don't suggest capitalized dictionary words for lower
+    case misspellings in ngram suggestions, except
+     - PHONE usage, or
+     - in the case of German, where not only proper
+       nouns are capitalized, or
+     - the capitalized word has special pronunciation
+
+    - fix typos and comments
+
+commit e80685c83d591b834c61866295577a9e214969cb
+Author: László Németh <nemeth@numbertext.org>
+Date:   Mon Nov 27 18:26:42 2017 +0100
+
+    Remove SUBSTANDARD dictionary roots from suggestions.
+
+commit 89a8ec6ce47ac4442992f4f6ed606012b1a2b799
+Author: László Németh <nemeth@numbertext.org>
+Date:   Mon Nov 27 08:52:24 2017 +0100
+
+    Optimize condition order in walk_hashtable loop
+
+commit 4e4106fc64bc26df10f8dc24e0e578abb70025c7
+Author: László Németh <nemeth@numbertext.org>
+Date:   Sat Nov 25 01:37:52 2017 +0100
+
+    Reduce strange ngram suggestions
+
+    - don't suggest proper names for lowercase
+      misspellings, except in German
+
+    - length difference of misspellings and
+      suggestions must be less than 5 characters
+
+    Other: search capitalized suggestions for lowercase misspellings
+    without ngram suggestions, too.
+
+commit 0b8a4d8851c94485dcc13cf8b8688c8d3fb9a783
+Author: László Németh <nemeth@numbertext.org>
+Date:   Fri Nov 24 20:01:09 2017 +0100
+
+    Use only middle replentries for compound word checking
+
+    allowing compound filtering for compound stems and affixed
+    forms in every languages.
+
+    This replaces the partial fix for the CHECKCOMPOUNDREP regression
+    in commit 1fada01663b29b57c010a9c274e45a5cf9ecf222.
+
+commit 957950b792fb0fda8fa95983434be265729bb75b
+Author: László Németh <nemeth@numbertext.org>
+Date:   Fri Nov 24 10:56:13 2017 +0100
+
+    Spelling dictionary should be a real spelling dictionary
+
+    Listing common misspelling of words and *word sequences*
+    is the new recommended method to fix missing, incomplete or
+    verbose suggestions. Combined with CHECKCOMPOUNDREP,
+    this method can limit overgeneration of compound words
+    in important cases, too.
+
+    For example, the following line in the dic file
+
+    a lot ph:alot
+
+    will result the best suggestion ("a lot") for the bad "alot"
+    at the first place in the suggestion list.
+
+    Use for:
+
+    - give correct suggestions (wendsay or wensday -> Wednesday)
+
+    Wednesday ph:wendsay ph:wensday
+
+    - set priority of good suggestions (eg. wich -> which, witch, winch)
+
+    which ph:wich
+    witch ph:witch
+
+    - suggest with one or *more* spaces (eg. inspite->in spite)
+
+    in spite ph:inspite
+    Oh, my gosh! ph:omg
+
+    - switch off ngram suggestions for a common misspelling
+
+    - better suggestion during affixation and compounding
+
+    With CHECKCOMPOUNDREP
+
+    - forbid bad compound words
+
+    Implementation details:
+
+    REP reptable created from REP definitions of the aff file and from
+    "ph:" fields of the dic file (reptable contains phonetic and other
+    common misspellings of letters, letter groups, morphemes and words
+    for better suggestions). REP suggestions have greater priority in
+    the suggestion list, and they switch off ngram suggestion
+    search, avoiding overgeneration of suggestions.
+
+commit 4a8921bd65b39e24344ef38c396e797384b74677
+Author: László Németh <nemeth@numbertext.org>
+Date:   Wed Nov 22 23:27:00 2017 +0100
+
+    BREAK tries to break at the second word break
+
+    to recognize dictionary words with word break characters
+    (at the beginning of the compound word).
+
+    This fixes the problems with the new Hungarian orthography
+    about compounding of words with n-dash.
+
+    Example:
+
+    The Hungarian compound word "e-mail-cím" (e-mail address)
+    will break into "e-mail" (dictionary word) and "cím", instead
+    of "e" and "mail-cím" ("mail" is not a dictionary word) at
+    first level of recursive word breaking.
+---
+ src/hunspell/affixmgr.cxx   | 183 +++++++++++-----------------------
+ src/hunspell/affixmgr.hxx   |   5 +-
+ src/hunspell/csutil.hxx     |   6 +-
+ src/hunspell/hashmgr.cxx    | 236 +++++++++++++++++++++++++++++++++++++++++---
+ src/hunspell/hashmgr.hxx    |  15 ++-
+ src/hunspell/htypes.hxx     |   9 +-
+ src/hunspell/hunspell.cxx   |  75 ++++++++++----
+ src/hunspell/suggestmgr.cxx | 200 ++++++++++++++++++++++++-------------
+ src/hunspell/suggestmgr.hxx |   7 +-
+ 9 files changed, 503 insertions(+), 233 deletions(-)
+
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index ffce7bb..a98071a 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -96,7 +96,6 @@ AffixMgr::AffixMgr(const char* affpath,
+   complexprefixes = 0;
+   parsedmaptable = false;
+   parsedbreaktable = false;
+-  parsedrep = false;
+   iconvtable = NULL;
+   oconvtable = NULL;
+   // allow simplified compound forms (see 3rd field of CHECKCOMPOUNDPATTERN)
+@@ -529,14 +528,6 @@ int AffixMgr::parse_file(const char* affpath, const char* key) {
+       }
+     }
+ 
+-    /* parse in the typical fault correcting table */
+-    if (line.compare(0, 3, "REP", 3) == 0) {
+-      if (!parse_reptable(line, afflst)) {
+-        finishFileMgr(afflst);
+-        return 1;
+-      }
+-    }
+-
+     /* parse in the input conversion table */
+     if (line.compare(0, 5, "ICONV", 5) == 0) {
+       if (!parse_convtable(line, afflst, &iconvtable, "ICONV")) {
+@@ -1278,22 +1269,41 @@ std::string AffixMgr::prefix_check_twosfx_morph(const char* word,
+ // Is word a non compound with a REP substitution (see checkcompoundrep)?
+ int AffixMgr::cpdrep_check(const char* word, int wl) {
+ 
+-  if ((wl < 2) || reptable.empty())
++  if ((wl < 2) || get_reptable().empty())
+     return 0;
+ 
+-  for (size_t i = 0; i < reptable.size(); ++i) {
+-    const char* r = word;
+-    const size_t lenp = reptable[i].pattern.size();
+-    // search every occurence of the pattern in the word
+-    while ((r = strstr(r, reptable[i].pattern.c_str())) != NULL) {
+-      std::string candidate(word);
+-      size_t type = r == word && langnum != LANG_hu ? 1 : 0;
+-      if (r - word + reptable[i].pattern.size() == lenp && langnum != LANG_hu)
+-        type += 2;
+-      candidate.replace(r - word, lenp, reptable[i].outstrings[type]);
++  for (size_t i = 0; i < get_reptable().size(); ++i) {
++    // use only available mid patterns
++    if (!get_reptable()[i].outstrings[0].empty()) {
++      const char* r = word;
++      const size_t lenp = get_reptable()[i].pattern.size();
++      // search every occurence of the pattern in the word
++      while ((r = strstr(r, get_reptable()[i].pattern.c_str())) != NULL) {
++        std::string candidate(word);
++        candidate.replace(r - word, lenp, get_reptable()[i].outstrings[0]);
++        if (candidate_check(candidate.c_str(), candidate.size()))
++          return 1;
++        ++r;  // search for the next letter
++      }
++    }
++  }
++
++ return 0;
++}
++
++// forbid compound words, if they are in the dictionary as a
++// word pair separated by space
++int AffixMgr::cpdwordpair_check(const char * word, int wl) {
++  if (wl > 2) {
++    std::string candidate(word);
++    for (size_t i = 1; i < candidate.size(); i++) {
++      // go to end of the UTF-8 character
++      if (utf8 && ((word[i] & 0xc0) == 0x80))
++          continue;
++      candidate.insert(i, 1, ' ');
+       if (candidate_check(candidate.c_str(), candidate.size()))
+         return 1;
+-      ++r;  // search for the next letter
++      candidate.erase(i, 1);
+     }
+   }
+ 
+@@ -1647,6 +1657,12 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+         affixed = 1;
+         rv = lookup(st.c_str());  // perhaps without prefix
+ 
++        // forbid dictionary stems with COMPOUNDFORBIDFLAG in
++        // compound words, overriding the effect of COMPOUNDPERMITFLAG
++        if ((rv) && compoundforbidflag &&
++                TESTAFF(rv->astr, compoundforbidflag, rv->alen) && !hu_mov_rule)
++            continue;
++
+         // search homonym with compound flag
+         while ((rv) && !hu_mov_rule &&
+                ((needaffix && TESTAFF(rv->astr, needaffix, rv->alen)) ||
+@@ -1911,7 +1927,8 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+                  TESTAFF(rv->astr, checkcpdtable[scpd - 1].cond2, rv->alen))) {
+               // forbid compound word, if it is a non compound word with typical
+               // fault
+-              if (checkcompoundrep && cpdrep_check(word.c_str(), len))
++              if ((checkcompoundrep && cpdrep_check(word.c_str(), len)) ||
++                      cpdwordpair_check(word.c_str(), len))
+                 return NULL;
+               return rv_first;
+             }
+@@ -2035,7 +2052,8 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+                 ((!checkcompounddup || (rv != rv_first)))) {
+               // forbid compound word, if it is a non compound word with typical
+               // fault
+-              if (checkcompoundrep && cpdrep_check(word.c_str(), len))
++              if ((checkcompoundrep && cpdrep_check(word.c_str(), len)) ||
++                      cpdwordpair_check(word.c_str(), len))
+                 return NULL;
+               return rv_first;
+             }
+@@ -2060,7 +2078,11 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+             }
+             if (rv) {
+               // forbid compound word, if it is a non compound word with typical
+-              // fault
++              // fault, or a dictionary word pair
++
++              if (cpdwordpair_check(word.c_str(), len))
++                  return NULL;
++
+               if (checkcompoundrep || forbiddenword) {
+ 
+                 if (checkcompoundrep && cpdrep_check(word.c_str(), len))
+@@ -2071,7 +2093,8 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+                   char r = st[i + rv->blen];
+                   st[i + rv->blen] = '\0';
+ 
+-                  if (checkcompoundrep && cpdrep_check(st.c_str(), i + rv->blen)) {
++                  if ((checkcompoundrep && cpdrep_check(st.c_str(), i + rv->blen)) ||
++                      cpdwordpair_check(st.c_str(), i + rv->blen)) {
+                     st[ + i + rv->blen] = r;
+                     continue;
+                   }
+@@ -2198,6 +2221,12 @@ int AffixMgr::compound_check_morph(const char* word,
+ 
+       rv = lookup(st.c_str());  // perhaps without prefix
+ 
++      // forbid dictionary stems with COMPOUNDFORBIDFLAG in
++      // compound words, overriding the effect of COMPOUNDPERMITFLAG
++      if ((rv) && compoundforbidflag &&
++              TESTAFF(rv->astr, compoundforbidflag, rv->alen) && !hu_mov_rule)
++          continue;
++
+       // search homonym with compound flag
+       while ((rv) && !hu_mov_rule &&
+              ((needaffix && TESTAFF(rv->astr, needaffix, rv->alen)) ||
+@@ -3414,7 +3443,7 @@ int AffixMgr::expand_rootword(struct guessword* wlst,
+ 
+ // return replacing table
+ const std::vector<replentry>& AffixMgr::get_reptable() const {
+-  return reptable;
++  return pHMgr->get_reptable();
+ }
+ 
+ // return iconv table
+@@ -3554,6 +3583,11 @@ FLAG AffixMgr::get_nongramsuggest() const {
+   return nongramsuggest;
+ }
+ 
++// return the substandard root/affix control flag
++FLAG AffixMgr::get_substandard() const {
++  return substandard;
++}
++
+ // return the forbidden words flag modify flag
+ FLAG AffixMgr::get_needaffix() const {
+   return needaffix;
+@@ -3692,103 +3726,6 @@ bool AffixMgr::parse_cpdsyllable(const std::string& line, FileMgr* af) {
+   return true;
+ }
+ 
+-/* parse in the typical fault correcting table */
+-bool AffixMgr::parse_reptable(const std::string& line, FileMgr* af) {
+-  if (parsedrep) {
+-    HUNSPELL_WARNING(stderr, "error: line %d: multiple table definitions\n",
+-                     af->getlinenum());
+-    return false;
+-  }
+-  parsedrep = true;
+-  int numrep = -1;
+-  int i = 0;
+-  int np = 0;
+-  std::string::const_iterator iter = line.begin();
+-  std::string::const_iterator start_piece = mystrsep(line, iter);
+-  while (start_piece != line.end()) {
+-    switch (i) {
+-      case 0: {
+-        np++;
+-        break;
+-      }
+-      case 1: {
+-        numrep = atoi(std::string(start_piece, iter).c_str());
+-        if (numrep < 1) {
+-          HUNSPELL_WARNING(stderr, "error: line %d: incorrect entry number\n",
+-                           af->getlinenum());
+-          return false;
+-        }
+-        reptable.reserve(numrep);
+-        np++;
+-        break;
+-      }
+-      default:
+-        break;
+-    }
+-    ++i;
+-    start_piece = mystrsep(line, iter);
+-  }
+-  if (np != 2) {
+-    HUNSPELL_WARNING(stderr, "error: line %d: missing data\n",
+-                     af->getlinenum());
+-    return false;
+-  }
+-
+-  /* now parse the numrep lines to read in the remainder of the table */
+-  for (int j = 0; j < numrep; ++j) {
+-    std::string nl;
+-    if (!af->getline(nl))
+-      return false;
+-    mychomp(nl);
+-    reptable.push_back(replentry());
+-    iter = nl.begin();
+-    i = 0;
+-    int type = 0;
+-    start_piece = mystrsep(nl, iter);
+-    while (start_piece != nl.end()) {
+-      switch (i) {
+-        case 0: {
+-          if (nl.compare(start_piece - nl.begin(), 3, "REP", 3) != 0) {
+-            HUNSPELL_WARNING(stderr, "error: line %d: table is corrupt\n",
+-                             af->getlinenum());
+-            reptable.clear();
+-            return false;
+-          }
+-          break;
+-        }
+-        case 1: {
+-          if (*start_piece == '^')
+-            type = 1;
+-          reptable.back().pattern.assign(start_piece + type, iter);
+-          mystrrep(reptable.back().pattern, "_", " ");
+-          if (!reptable.back().pattern.empty() && reptable.back().pattern[reptable.back().pattern.size() - 1] == '$') {
+-            type += 2;
+-            reptable.back().pattern.resize(reptable.back().pattern.size() - 1);
+-          }
+-          break;
+-        }
+-        case 2: {
+-          reptable.back().outstrings[type].assign(start_piece, iter);
+-          mystrrep(reptable.back().outstrings[type], "_", " ");
+-          break;
+-        }
+-        default:
+-          break;
+-      }
+-      ++i;
+-      start_piece = mystrsep(nl, iter);
+-    }
+-    if (reptable.back().pattern.empty() || reptable.back().outstrings[type].empty()) {
+-      HUNSPELL_WARNING(stderr, "error: line %d: table is corrupt\n",
+-                       af->getlinenum());
+-      reptable.clear();
+-      return false;
+-    }
+-  }
+-  return true;
+-}
+-
+-/* parse in the typical fault correcting table */
+ bool AffixMgr::parse_convtable(const std::string& line,
+                               FileMgr* af,
+                               RepList** rl,
+diff --git a/src/hunspell/affixmgr.hxx b/src/hunspell/affixmgr.hxx
+index d41e69c..38842a3 100644
+--- a/src/hunspell/affixmgr.hxx
++++ b/src/hunspell/affixmgr.hxx
+@@ -120,8 +120,6 @@ class AffixMgr {
+   FLAG nongramsuggest;
+   FLAG needaffix;
+   int cpdmin;
+-  bool parsedrep;
+-  std::vector<replentry> reptable;
+   RepList* iconvtable;
+   RepList* oconvtable;
+   bool parsedmaptable;
+@@ -251,6 +249,7 @@ class AffixMgr {
+ 
+   short get_syllable(const std::string& word);
+   int cpdrep_check(const char* word, int len);
++  int cpdwordpair_check(const char * word, int len);
+   int cpdpat_check(const char* word,
+                    int len,
+                    hentry* r1,
+@@ -311,6 +310,7 @@ class AffixMgr {
+   FLAG get_forbiddenword() const;
+   FLAG get_nosuggest() const;
+   FLAG get_nongramsuggest() const;
++  FLAG get_substandard() const;
+   FLAG get_needaffix() const;
+   FLAG get_onlyincompound() const;
+   const char* get_derived() const;
+@@ -338,7 +338,6 @@ class AffixMgr {
+   bool parse_flag(const std::string& line, unsigned short* out, FileMgr* af);
+   bool parse_num(const std::string& line, int* out, FileMgr* af);
+   bool parse_cpdsyllable(const std::string& line, FileMgr* af);
+-  bool parse_reptable(const std::string& line, FileMgr* af);
+   bool parse_convtable(const std::string& line,
+                       FileMgr* af,
+                       RepList** rl,
+diff --git a/src/hunspell/csutil.hxx b/src/hunspell/csutil.hxx
+index 5d83f80..01c0a24 100644
+--- a/src/hunspell/csutil.hxx
++++ b/src/hunspell/csutil.hxx
+@@ -272,7 +272,7 @@ LIBHUNSPELL_DLL_EXPORTED char* get_stored_pointer(const char* s);
+ // hash entry macros
+ LIBHUNSPELL_DLL_EXPORTED inline char* HENTRY_DATA(struct hentry* h) {
+   char* ret;
+-  if (!h->var)
++  if (!(h->var & H_OPT))
+     ret = NULL;
+   else if (h->var & H_OPT_ALIASM)
+     ret = get_stored_pointer(HENTRY_WORD(h) + h->blen + 1);
+@@ -284,7 +284,7 @@ LIBHUNSPELL_DLL_EXPORTED inline char* HENTRY_DATA(struct hentry* h) {
+ LIBHUNSPELL_DLL_EXPORTED inline const char* HENTRY_DATA(
+     const struct hentry* h) {
+   const char* ret;
+-  if (!h->var)
++  if (!(h->var & H_OPT))
+     ret = NULL;
+   else if (h->var & H_OPT_ALIASM)
+     ret = get_stored_pointer(HENTRY_WORD(h) + h->blen + 1);
+@@ -297,7 +297,7 @@ LIBHUNSPELL_DLL_EXPORTED inline const char* HENTRY_DATA(
+ LIBHUNSPELL_DLL_EXPORTED inline const char* HENTRY_DATA2(
+     const struct hentry* h) {
+   const char* ret;
+-  if (!h->var)
++  if (!(h->var & H_OPT))
+     ret = "";
+   else if (h->var & H_OPT_ALIASM)
+     ret = get_stored_pointer(HENTRY_WORD(h) + h->blen + 1);
+diff --git a/src/hunspell/hashmgr.cxx b/src/hunspell/hashmgr.cxx
+index 23421b5..ec3803b 100644
+--- a/src/hunspell/hashmgr.cxx
++++ b/src/hunspell/hashmgr.cxx
+@@ -78,6 +78,7 @@
+ #include "hashmgr.hxx"
+ #include "csutil.hxx"
+ #include "atypes.hxx"
++#include "langnum.hxx"
+ 
+ // build a hash table from a munched word list
+ 
+@@ -182,7 +183,8 @@ int HashMgr::add_word(const std::string& in_word,
+                       unsigned short* aff,
+                       int al,
+                       const std::string* in_desc,
+-                      bool onlyupcase) {
++                      bool onlyupcase,
++                      int captype) {
+   const std::string* word = &in_word;
+   const std::string* desc = in_desc;
+ 
+@@ -243,20 +245,119 @@ int HashMgr::add_word(const std::string& in_word,
+   hp->astr = aff;
+   hp->next = NULL;
+   hp->next_homonym = NULL;
++  hp->var = (captype == INITCAP) ? H_OPT_INITCAP : 0;
+ 
+   // store the description string or its pointer
+   if (desc) {
+-    hp->var = H_OPT;
++    hp->var += H_OPT;
+     if (aliasm) {
+       hp->var += H_OPT_ALIASM;
+       store_pointer(hpw + word->size() + 1, get_aliasm(atoi(desc->c_str())));
+     } else {
+       strcpy(hpw + word->size() + 1, desc->c_str());
+     }
+-    if (strstr(HENTRY_DATA(hp), MORPH_PHON))
++    if (strstr(HENTRY_DATA(hp), MORPH_PHON)) {
+       hp->var += H_OPT_PHON;
+-  } else
+-    hp->var = 0;
++      // store ph: fields (pronounciation, misspellings, old orthography etc.)
++      // of a morphological description in reptable to use in REP replacements.
++      if (reptable.capacity() < (unsigned int)(tablesize/MORPH_PHON_RATIO))
++          reptable.reserve(tablesize/MORPH_PHON_RATIO);
++      std::string fields = HENTRY_DATA(hp);
++      std::string::const_iterator iter = fields.begin();
++      std::string::const_iterator start_piece = mystrsep(fields, iter);
++      while (start_piece != fields.end()) {
++        if (std::string(start_piece, iter).find(MORPH_PHON) == 0) {
++          std::string ph = std::string(start_piece, iter).substr(sizeof MORPH_PHON - 1);
++          if (ph.size() > 0) {
++            std::vector<w_char> w;
++            size_t strippatt;
++            std::string wordpart;
++            // dictionary based REP replacement, separated by "->"
++            // for example "pretty ph:prity ph:priti->pretti" to handle
++            // both prity -> pretty and pritier -> prettiest suggestions.
++            if (((strippatt = ph.find("->")) != std::string::npos) &&
++                    (strippatt > 0) && (strippatt < ph.size() - 2)) {
++                wordpart = ph.substr(strippatt + 2);
++                ph.erase(ph.begin() + strippatt, ph.end());
++            } else
++                wordpart = in_word;
++            // when the ph: field ends with the character *,
++            // strip last character of the pattern and the replacement
++            // to match in REP suggestions also at character changes,
++            // for example, "pretty ph:prity*" results "prit->prett"
++            // REP replacement instead of "prity->pretty", to get
++            // prity->pretty and pritiest->prettiest suggestions.
++            if (ph.at(ph.size()-1) == '*') {
++              strippatt = 1;
++              size_t stripword = 0;
++              if (utf8) {
++                while ((strippatt < ph.size()) &&
++                  ((ph.at(ph.size()-strippatt-1) & 0xc0) == 0x80))
++                     ++strippatt;
++                while ((stripword < wordpart.size()) &&
++                  ((wordpart.at(wordpart.size()-stripword-1) & 0xc0) == 0x80))
++                     ++stripword;
++              }
++              ++strippatt;
++              ++stripword;
++              if ((ph.size() > strippatt) && (wordpart.size() > stripword)) {
++                ph.erase(ph.size()-strippatt, strippatt);
++                wordpart.erase(in_word.size()-stripword, stripword);
++              }
++            }
++            // capitalize lowercase pattern for capitalized words to support
++            // good suggestions also for capitalized misspellings, eg.
++            // Wednesday ph:wendsay
++            // results wendsay -> Wednesday and Wendsay -> Wednesday, too.
++            if (captype==INITCAP) {
++              std::string ph_capitalized;
++              if (utf8) {
++                u8_u16(w, ph);
++                if (get_captype_utf8(w, langnum) == NOCAP) {
++                  mkinitcap_utf(w, langnum);
++                  u16_u8(ph_capitalized, w);
++                }
++              } else if (get_captype(ph, csconv) == NOCAP)
++                  mkinitcap(ph_capitalized, csconv);
++
++              if (ph_capitalized.size() > 0) {
++                // add also lowercase word in the case of German or
++                // Hungarian to support lowercase suggestions lowercased by
++                // compound word generation or derivational suffixes
++                // (for example by adjectival suffix "-i" of geographical
++                // names in Hungarian:
++                // Massachusetts ph:messzecsuzec
++                // messzecsuzeci -> massachusettsi (adjective)
++                // For lowercasing by conditional PFX rules, see
++                // tests/germancompounding test example or the
++                // Hungarian dictionary.)
++                if (langnum == LANG_de || langnum == LANG_hu) {
++                  std::string wordpart_lower(wordpart);
++                  if (utf8) {
++                    u8_u16(w, wordpart_lower);
++                    mkallsmall_utf(w, langnum);
++                    u16_u8(wordpart_lower, w);
++                  } else {
++                    mkallsmall(wordpart_lower, csconv);
++                  }
++                  reptable.push_back(replentry());
++                  reptable.back().pattern.assign(ph);
++                  reptable.back().outstrings[0].assign(wordpart_lower);
++                }
++                reptable.push_back(replentry());
++                reptable.back().pattern.assign(ph_capitalized);
++                reptable.back().outstrings[0].assign(wordpart);
++              }
++            }
++            reptable.push_back(replentry());
++            reptable.back().pattern.assign(ph);
++            reptable.back().outstrings[0].assign(wordpart);
++          }
++        }
++        start_piece = mystrsep(fields, iter);
++      }
++    }
++  }
+ 
+   struct hentry* dp = tableptr[i];
+   if (!dp) {
+@@ -347,12 +448,12 @@ int HashMgr::add_hidden_capitalized_word(const std::string& word,
+       mkallsmall_utf(w, langnum);
+       mkinitcap_utf(w, langnum);
+       u16_u8(st, w);
+-      return add_word(st, wcl, flags2, flagslen + 1, dp, true);
++      return add_word(st, wcl, flags2, flagslen + 1, dp, true, INITCAP);
+     } else {
+       std::string new_word(word);
+       mkallsmall(new_word, csconv);
+       mkinitcap(new_word, csconv);
+-      int ret = add_word(new_word, wcl, flags2, flagslen + 1, dp, true);
++      int ret = add_word(new_word, wcl, flags2, flagslen + 1, dp, true, INITCAP);
+       return ret;
+     }
+   }
+@@ -435,7 +536,7 @@ int HashMgr::add(const std::string& word) {
+     int al = 0;
+     unsigned short* flags = NULL;
+     int wcl = get_clen_and_captype(word, &captype);
+-    add_word(word, wcl, flags, al, NULL, false);
++    add_word(word, wcl, flags, al, NULL, false, captype);
+     return add_hidden_capitalized_word(word, wcl, flags, al, NULL,
+                                        captype);
+   }
+@@ -450,14 +551,14 @@ int HashMgr::add_with_affix(const std::string& word, const std::string& example)
+     int captype;
+     int wcl = get_clen_and_captype(word, &captype);
+     if (aliasf) {
+-      add_word(word, wcl, dp->astr, dp->alen, NULL, false);
++      add_word(word, wcl, dp->astr, dp->alen, NULL, false, captype);
+     } else {
+       unsigned short* flags =
+           (unsigned short*)malloc(dp->alen * sizeof(unsigned short));
+       if (flags) {
+         memcpy((void*)flags, (void*)dp->astr,
+                dp->alen * sizeof(unsigned short));
+-        add_word(word, wcl, flags, dp->alen, NULL, false);
++        add_word(word, wcl, flags, dp->alen, NULL, false, captype);
+       } else
+         return 1;
+     }
+@@ -605,7 +706,7 @@ int HashMgr::load_tables(const char* tpath, const char* key) {
+     int wcl = get_clen_and_captype(ts, &captype, workbuf);
+     const std::string *dp_str = dp.empty() ? NULL : &dp;
+     // add the word and its index plus its capitalized form optionally
+-    if (add_word(ts, wcl, flags, al, dp_str, false) ||
++    if (add_word(ts, wcl, flags, al, dp_str, false, captype) ||
+         add_hidden_capitalized_word(ts, wcl, flags, al, dp_str, captype)) {
+       delete dict;
+       return 5;
+@@ -940,8 +1041,19 @@ int HashMgr::load_config(const char* affpath, const char* key) {
+     if (line.compare(0, 15, "COMPLEXPREFIXES", 15) == 0)
+       complexprefixes = 1;
+ 
++    /* parse in the typical fault correcting table */
++    if (line.compare(0, 3, "REP", 3) == 0) {
++      if (!parse_reptable(line, afflst)) {
++        delete afflst;
++        return 1;
++      }
++    }
++
++    // don't check the full affix file, yet
+     if (((line.compare(0, 3, "SFX", 3) == 0) ||
+-         (line.compare(0, 3, "PFX", 3) == 0)) && line.size() > 3 && isspace(line[3]))
++         (line.compare(0, 3, "PFX", 3) == 0)) &&
++            line.size() > 3 && isspace(line[3]) &&
++            !reptable.empty()) // (REP table is in the end of Afrikaans aff file)
+       break;
+   }
+ 
+@@ -1191,3 +1303,103 @@ char* HashMgr::get_aliasm(int index) const {
+   HUNSPELL_WARNING(stderr, "error: bad morph. alias index: %d\n", index);
+   return NULL;
+ }
++
++/* parse in the typical fault correcting table */
++bool HashMgr::parse_reptable(const std::string& line, FileMgr* af) {
++  if (!reptable.empty()) {
++    HUNSPELL_WARNING(stderr, "error: line %d: multiple table definitions\n",
++                     af->getlinenum());
++    return false;
++  }
++  int numrep = -1;
++  int i = 0;
++  int np = 0;
++  std::string::const_iterator iter = line.begin();
++  std::string::const_iterator start_piece = mystrsep(line, iter);
++  while (start_piece != line.end()) {
++    switch (i) {
++      case 0: {
++        np++;
++        break;
++      }
++      case 1: {
++        numrep = atoi(std::string(start_piece, iter).c_str());
++        if (numrep < 1) {
++          HUNSPELL_WARNING(stderr, "error: line %d: incorrect entry number\n",
++                           af->getlinenum());
++          return false;
++        }
++        reptable.reserve(numrep);
++        np++;
++        break;
++      }
++      default:
++        break;
++    }
++    ++i;
++    start_piece = mystrsep(line, iter);
++  }
++  if (np != 2) {
++    HUNSPELL_WARNING(stderr, "error: line %d: missing data\n",
++                     af->getlinenum());
++    return false;
++  }
++
++  /* now parse the numrep lines to read in the remainder of the table */
++  for (int j = 0; j < numrep; ++j) {
++    std::string nl;
++    if (!af->getline(nl))
++      return false;
++    mychomp(nl);
++    reptable.push_back(replentry());
++    iter = nl.begin();
++    i = 0;
++    int type = 0;
++    start_piece = mystrsep(nl, iter);
++    while (start_piece != nl.end()) {
++      switch (i) {
++        case 0: {
++          if (nl.compare(start_piece - nl.begin(), 3, "REP", 3) != 0) {
++            HUNSPELL_WARNING(stderr, "error: line %d: table is corrupt\n",
++                             af->getlinenum());
++            reptable.clear();
++            return false;
++          }
++          break;
++        }
++        case 1: {
++          if (*start_piece == '^')
++            type = 1;
++          reptable.back().pattern.assign(start_piece + type, iter);
++          mystrrep(reptable.back().pattern, "_", " ");
++          if (!reptable.back().pattern.empty() && reptable.back().pattern[reptable.back().pattern.size() - 1] == '$') {
++            type += 2;
++            reptable.back().pattern.resize(reptable.back().pattern.size() - 1);
++          }
++          break;
++        }
++        case 2: {
++          reptable.back().outstrings[type].assign(start_piece, iter);
++          mystrrep(reptable.back().outstrings[type], "_", " ");
++          break;
++        }
++        default:
++          break;
++      }
++      ++i;
++      start_piece = mystrsep(nl, iter);
++    }
++    if (reptable.back().pattern.empty() || reptable.back().outstrings[type].empty()) {
++      HUNSPELL_WARNING(stderr, "error: line %d: table is corrupt\n",
++                       af->getlinenum());
++      reptable.clear();
++      return false;
++    }
++  }
++  return true;
++}
++
++// return replacing table
++const std::vector<replentry>& HashMgr::get_reptable() const {
++  return reptable;
++}
+diff --git a/src/hunspell/hashmgr.hxx b/src/hunspell/hashmgr.hxx
+index da485d7..b6eaddd 100644
+--- a/src/hunspell/hashmgr.hxx
++++ b/src/hunspell/hashmgr.hxx
+@@ -81,6 +81,12 @@
+ 
+ enum flag { FLAG_CHAR, FLAG_LONG, FLAG_NUM, FLAG_UNI };
+ 
++// morphological description of a dictionary item can contain
++// arbitrary number "ph:" (MORPH_PHON) fields to store typical
++// phonetic or other misspellings of that word.
++// ratio of lines/lines with "ph:" in the dic file: 1/MORPH_PHON_RATIO
++#define MORPH_PHON_RATIO 500
++
+ class HashMgr {
+   int tablesize;
+   struct hentry** tableptr;
+@@ -99,6 +105,10 @@ class HashMgr {
+   unsigned short* aliasflen;
+   int numaliasm;  // morphological desciption `compression' with aliases
+   char** aliasm;
++  // reptable created from REP table of aff file and from "ph:" fields
++  // of the dic file. It contains phonetic and other common misspellings
++  // (letters, letter groups and words) for better suggestions
++  std::vector<replentry> reptable;
+ 
+  public:
+   HashMgr(const char* tpath, const char* apath, const char* key = NULL);
+@@ -119,6 +129,7 @@ class HashMgr {
+   int get_aliasf(int index, unsigned short** fvec, FileMgr* af) const;
+   int is_aliasm() const;
+   char* get_aliasm(int index) const;
++  const std::vector<replentry>& get_reptable() const;
+ 
+  private:
+   int get_clen_and_captype(const std::string& word, int* captype);
+@@ -129,7 +140,8 @@ class HashMgr {
+                unsigned short* ap,
+                int al,
+                const std::string* desc,
+-               bool onlyupcase);
++               bool onlyupcase,
++               int captype);
+   int load_config(const char* affpath, const char* key);
+   bool parse_aliasf(const std::string& line, FileMgr* af);
+   int add_hidden_capitalized_word(const std::string& word,
+@@ -139,6 +151,7 @@ class HashMgr {
+                                   const std::string* dp,
+                                   int captype);
+   bool parse_aliasm(const std::string& line, FileMgr* af);
++  bool parse_reptable(const std::string& line, FileMgr* af);
+   int remove_forbidden_flag(const std::string& word);
+ };
+ 
+diff --git a/src/hunspell/htypes.hxx b/src/hunspell/htypes.hxx
+index 8f66a00..76228c4 100644
+--- a/src/hunspell/htypes.hxx
++++ b/src/hunspell/htypes.hxx
+@@ -44,9 +44,10 @@
+   (v) = ((v) << (q)) | (((v) >> (32 - q)) & ((1 << (q)) - 1));
+ 
+ // hentry options
+-#define H_OPT (1 << 0)
+-#define H_OPT_ALIASM (1 << 1)
+-#define H_OPT_PHON (1 << 2)
++#define H_OPT (1 << 0)          // is there optional morphological data?
++#define H_OPT_ALIASM (1 << 1)   // using alias compression?
++#define H_OPT_PHON (1 << 2)     // is there ph: field in the morphological data?
++#define H_OPT_INITCAP (1 << 3)  // is dictionary word capitalized?
+ 
+ // see also csutil.hxx
+ #define HENTRY_WORD(h) &(h->word[0])
+@@ -61,7 +62,7 @@ struct hentry {
+   unsigned short* astr;  // affix flag vector
+   struct hentry* next;   // next word with same hash code
+   struct hentry* next_homonym;  // next homonym word (with same hash code)
+-  char var;      // variable fields (only for special pronounciation yet)
++  char var;      // bit vector of H_OPT hentry options
+   char word[1];  // variable-length word (8-bit or UTF-8 encoding)
+ };
+ 
+diff --git a/src/hunspell/hunspell.cxx b/src/hunspell/hunspell.cxx
+index 1ef11df..6c5aeb6 100644
+--- a/src/hunspell/hunspell.cxx
++++ b/src/hunspell/hunspell.cxx
+@@ -666,6 +666,37 @@ bool HunspellImpl::spell(const std::string& word, int* info, std::string* root)
+       size_t plen = wordbreak[j].size();
+       size_t found = scw.find(wordbreak[j]);
+       if ((found > 0) && (found < wl - plen)) {
++        size_t found2 = scw.find(wordbreak[j], found + 1);
++        // try to break at the second occurance
++        // to recognize dictionary words with wordbreak
++        if (found2 > 0 && (found2 < wl - plen))
++            found = found2;
++        if (!spell(scw.substr(found + plen)))
++          continue;
++        std::string suffix(scw.substr(found));
++        scw.resize(found);
++        // examine 2 sides of the break point
++        if (spell(scw))
++          return true;
++        scw.append(suffix);
++
++        // LANG_hu: spec. dash rule
++        if (langnum == LANG_hu && wordbreak[j] == "-") {
++          suffix = scw.substr(found + 1);
++          scw.resize(found + 1);
++          if (spell(scw))
++            return true;  // check the first part with dash
++          scw.append(suffix);
++        }
++        // end of LANG specific region
++      }
++    }
++
++    // other patterns (break at first break point)
++    for (size_t j = 0; j < wordbreak.size(); ++j) {
++      size_t plen = wordbreak[j].size();
++      size_t found = scw.find(wordbreak[j]);
++      if ((found > 0) && (found < wl - plen)) {
+         if (!spell(scw.substr(found + plen)))
+           continue;
+         std::string suffix(scw.substr(found));
+@@ -870,6 +901,7 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+   }
+ 
+   int capwords = 0;
++  bool good = false;
+ 
+   // check capitalized form for FORCEUCASE
+   if (pAMgr && captype == NOCAP && pAMgr->get_forceucase()) {
+@@ -884,22 +916,27 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+ 
+   switch (captype) {
+     case NOCAP: {
+-      pSMgr->suggest(slst, scw.c_str(), &onlycmpdsug);
++      good |= pSMgr->suggest(slst, scw.c_str(), &onlycmpdsug);
++      if (abbv) {
++        std::string wspace(scw);
++        wspace.push_back('.');
++        good |= pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
++      }
+       break;
+     }
+ 
+     case INITCAP: {
+       capwords = 1;
+-      pSMgr->suggest(slst, scw.c_str(), &onlycmpdsug);
++      good |= pSMgr->suggest(slst, scw.c_str(), &onlycmpdsug);
+       std::string wspace(scw);
+       mkallsmall2(wspace, sunicw);
+-      pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
++      good |= pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
+       break;
+     }
+     case HUHINITCAP:
+       capwords = 1;
+     case HUHCAP: {
+-      pSMgr->suggest(slst, scw.c_str(), &onlycmpdsug);
++      good |= pSMgr->suggest(slst, scw.c_str(), &onlycmpdsug);
+       // something.The -> something. The
+       size_t dot_pos = scw.find('.');
+       if (dot_pos != std::string::npos) {
+@@ -925,19 +962,19 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+         // TheOpenOffice.org -> The OpenOffice.org
+         wspace = scw;
+         mkinitsmall2(wspace, sunicw);
+-        pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
++        good |= pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
+       }
+       wspace = scw;
+       mkallsmall2(wspace, sunicw);
+       if (spell(wspace.c_str()))
+         insert_sug(slst, wspace);
+       size_t prevns = slst.size();
+-      pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
++      good |= pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
+       if (captype == HUHINITCAP) {
+         mkinitcap2(wspace, sunicw);
+         if (spell(wspace.c_str()))
+           insert_sug(slst, wspace);
+-        pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
++        good |= pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
+       }
+       // aNew -> "a New" (instead of "a new")
+       for (size_t j = prevns; j < slst.size(); ++j) {
+@@ -964,11 +1001,11 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+     case ALLCAP: {
+       std::string wspace(scw);
+       mkallsmall2(wspace, sunicw);
+-      pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
++      good |= pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
+       if (pAMgr && pAMgr->get_keepcase() && spell(wspace.c_str()))
+         insert_sug(slst, wspace);
+       mkinitcap2(wspace, sunicw);
+-      pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
++      good |= pSMgr->suggest(slst, wspace.c_str(), &onlycmpdsug);
+       for (size_t j = 0; j < slst.size(); ++j) {
+         mkallcap(slst[j]);
+         if (pAMgr && pAMgr->get_checksharps()) {
+@@ -1000,12 +1037,11 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+     }
+   }
+   // END OF LANG_hu section
+-
+-  // try ngram approach since found nothing or only compound words
+-  if (pAMgr && (slst.empty() || onlycmpdsug) && (pAMgr->get_maxngramsugs() != 0)) {
++  // try ngram approach since found nothing good suggestion
++  if (!good && pAMgr && (slst.empty() || onlycmpdsug) && (pAMgr->get_maxngramsugs() != 0)) {
+     switch (captype) {
+       case NOCAP: {
+-        pSMgr->ngsuggest(slst, scw.c_str(), m_HMgrs);
++        pSMgr->ngsuggest(slst, scw.c_str(), m_HMgrs, NOCAP);
+         break;
+       }
+       case HUHINITCAP:
+@@ -1013,21 +1049,21 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+       case HUHCAP: {
+         std::string wspace(scw);
+         mkallsmall2(wspace, sunicw);
+-        pSMgr->ngsuggest(slst, wspace.c_str(), m_HMgrs);
++        pSMgr->ngsuggest(slst, wspace.c_str(), m_HMgrs, HUHCAP);
+         break;
+       }
+       case INITCAP: {
+         capwords = 1;
+         std::string wspace(scw);
+         mkallsmall2(wspace, sunicw);
+-        pSMgr->ngsuggest(slst, wspace.c_str(), m_HMgrs);
++        pSMgr->ngsuggest(slst, wspace.c_str(), m_HMgrs, INITCAP);
+         break;
+       }
+       case ALLCAP: {
+         std::string wspace(scw);
+         mkallsmall2(wspace, sunicw);
+         size_t oldns = slst.size();
+-        pSMgr->ngsuggest(slst, wspace.c_str(), m_HMgrs);
++        pSMgr->ngsuggest(slst, wspace.c_str(), m_HMgrs, ALLCAP);
+         for (size_t j = oldns; j < slst.size(); ++j) {
+           mkallcap(slst[j]);
+         }
+@@ -1037,6 +1073,11 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+   }
+ 
+   // try dash suggestion (Afo-American -> Afro-American)
++  // Note: LibreOffice was modified to treat dashes as word
++  // characters to check "scot-free" etc. word forms, but
++  // we need to handle suggestions for "Afo-American", etc.,
++  // while "Afro-American" is missing from the dictionary.
++  // TODO avoid possible overgeneration
+   size_t dash_pos = scw.find('-');
+   if (dash_pos != std::string::npos) {
+     int nodashsug = 1;
+@@ -1048,7 +1089,7 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+     size_t prev_pos = 0;
+     bool last = false;
+ 
+-    while (nodashsug && !last) {
++    while (!good && nodashsug && !last) {
+       if (dash_pos == scw.size())
+         last = 1;
+       std::string chunk = scw.substr(prev_pos, dash_pos - prev_pos);
+diff --git a/src/hunspell/suggestmgr.cxx b/src/hunspell/suggestmgr.cxx
+index 73ea91e..ade85af 100644
+--- a/src/hunspell/suggestmgr.cxx
++++ b/src/hunspell/suggestmgr.cxx
+@@ -132,6 +132,11 @@ SuggestMgr::SuggestMgr(const char* tryme, unsigned int maxn, AffixMgr* aptr) {
+       ctryl = u8_u16(ctry_utf, tryme);
+     }
+   }
++
++  // language with possible dash usage
++  // (latin letters or dash in TRY characters)
++  lang_with_dash_usage = (ctry &&
++      ((strchr(ctry, '-') != NULL) || (strchr(ctry, 'a') != NULL)));
+ }
+ 
+ SuggestMgr::~SuggestMgr() {
+@@ -169,10 +174,13 @@ void SuggestMgr::testsug(std::vector<std::string>& wlst,
+   }
+ }
+ 
+-// generate suggestions for a misspelled word
+-//    pass in address of array of char * pointers
+-// onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
+-void SuggestMgr::suggest(std::vector<std::string>& slst,
++/* generate suggestions for a misspelled word
++ *    pass in address of array of char * pointers
++ * onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
++ * return value: true, if there is a good suggestion
++ * (REP, ph: or a dictionary word pair)
++ */
++bool SuggestMgr::suggest(std::vector<std::string>& slst,
+                         const char* w,
+                         int* onlycompoundsug) {
+   int nocompoundtwowords = 0;
+@@ -182,6 +190,7 @@ void SuggestMgr::suggest(std::vector<std::string>& slst,
+   std::string w2;
+   const char* word = w;
+   size_t oldSug = 0;
++  bool good_suggestion = false;
+ 
+   // word reversing wrapper for complex prefixes
+   if (complexprefixes) {
+@@ -196,11 +205,11 @@ void SuggestMgr::suggest(std::vector<std::string>& slst,
+   if (utf8) {
+     wl = u8_u16(word_utf, word);
+     if (wl == -1) {
+-      return;
++      return false;
+     }
+   }
+ 
+-  for (int cpdsuggest = 0; (cpdsuggest < 2) && (nocompoundtwowords == 0);
++  for (int cpdsuggest = 0; (cpdsuggest < 2) && (nocompoundtwowords == 0) && !good_suggestion;
+        cpdsuggest++) {
+     // limit compound suggestion
+     if (cpdsuggest > 0)
+@@ -208,15 +217,21 @@ void SuggestMgr::suggest(std::vector<std::string>& slst,
+ 
+     // suggestions for an uppercase word (html -> HTML)
+     if (slst.size() < maxSug) {
++      size_t i = slst.size();
+       if (utf8)
+         capchars_utf(slst, &word_utf[0], wl, cpdsuggest);
+       else
+         capchars(slst, word, cpdsuggest);
++      if (slst.size() > i)
++        good_suggestion = true;
+     }
+ 
+     // perhaps we made a typical fault of spelling
+     if ((slst.size() < maxSug) && (!cpdsuggest || (slst.size() < oldSug + maxcpdsugs))) {
++      size_t i = slst.size();
+       replchars(slst, word, cpdsuggest);
++      if (slst.size() > i)
++        good_suggestion = true;
+     }
+ 
+     // perhaps we made chose the wrong char from a related set
+@@ -294,15 +309,19 @@ void SuggestMgr::suggest(std::vector<std::string>& slst,
+     }
+ 
+     // perhaps we forgot to hit space and two words ran together
+-    if (!nosplitsugs && (slst.size() < maxSug) &&
+-        (!cpdsuggest || (slst.size() < oldSug + maxcpdsugs))) {
+-      twowords(slst, word, cpdsuggest);
++    // (dictionary word pairs have top priority here, so
++    // we always suggest them, in despite of nosplitsugs, and
++    // drop compound word and other suggestions)
++    if (!cpdsuggest || (!nosplitsugs && slst.size() < oldSug + maxcpdsugs)) {
++      good_suggestion = twowords(slst, word, cpdsuggest, good_suggestion);
+     }
+ 
+   }  // repeating ``for'' statement compounding support
+ 
+   if (!nocompoundtwowords && (!slst.empty()) && onlycompoundsug)
+     *onlycompoundsug = 1;
++
++  return good_suggestion;
+ }
+ 
+ // suggestions for an uppercase word (html -> HTML)
+@@ -721,17 +740,22 @@ int SuggestMgr::forgotchar_utf(std::vector<std::string>& wlst,
+   return wlst.size();
+ }
+ 
+-/* error is should have been two words */
+-int SuggestMgr::twowords(std::vector<std::string>& wlst,
++/* error is should have been two words
++ * return value is true, if there is a dictionary word pair,
++ * or there was already a good suggestion before calling
++ * this function.
++ */
++bool SuggestMgr::twowords(std::vector<std::string>& wlst,
+                          const char* word,
+-                         int cpdsuggest) {
++                         int cpdsuggest,
++                         bool good) {
+   int c2;
+   int forbidden = 0;
+   int cwrd;
+ 
+   int wl = strlen(word);
+   if (wl < 3)
+-    return wlst.size();
++    return false;
+ 
+   if (langnum == LANG_hu)
+     forbidden = check_forbidden(word, wl);
+@@ -750,63 +774,87 @@ int SuggestMgr::twowords(std::vector<std::string>& wlst,
+     }
+     if (utf8 && p[1] == '\0')
+       break;  // last UTF-8 character
+-    *p = '\0';
+-    int c1 = checkword(candidate, cpdsuggest, NULL, NULL);
+-    if (c1) {
+-      c2 = checkword((p + 1), cpdsuggest, NULL, NULL);
+-      if (c2) {
+-        *p = ' ';
+-
+-        // spec. Hungarian code (need a better compound word support)
+-        if ((langnum == LANG_hu) && !forbidden &&
+-            // if 3 repeating letter, use - instead of space
+-            (((p[-1] == p[1]) &&
+-              (((p > candidate + 1) && (p[-1] == p[-2])) || (p[-1] == p[2]))) ||
+-             // or multiple compounding, with more, than 6 syllables
+-             ((c1 == 3) && (c2 >= 2))))
+-          *p = '-';
+-
+-        cwrd = 1;
+-        for (size_t k = 0; k < wlst.size(); ++k) {
+-          if (wlst[k] == candidate) {
+-            cwrd = 0;
+-            break;
+-          }
+-        }
+-        if (wlst.size() < maxSug) {
+-          if (cwrd) {
+-            wlst.push_back(candidate);
+-          }
+-        } else {
+-          free(candidate);
+-          return wlst.size();
++
++    // Suggest only word pairs, if they are listed in the dictionary.
++    // For example, adding "a lot" to the English dic file will
++    // result only "alot" -> "a lot" suggestion instead of
++    // "alto, slot, alt, lot, allot, aloft, aloe, clot, plot, blot, a lot".
++    // Note: using "ph:alot" keeps the other suggestions:
++    // a lot ph:alot
++    // alot -> a lot, alto, slot...
++    *p = ' ';
++    if (!cpdsuggest && checkword(candidate, cpdsuggest, NULL, NULL)) {
++      // remove not word pair suggestions
++      if (!good) {
++        good = true;
++        wlst.clear();
++      }
++      wlst.insert(wlst.begin(), candidate);
++    }
++
++    // word pairs with dash?
++    if (lang_with_dash_usage) {
++      *p = '-';
++
++      if (!cpdsuggest && checkword(candidate, cpdsuggest, NULL, NULL)) {
++        // remove not word pair suggestions
++        if (!good) {
++          good = true;
++          wlst.clear();
+         }
+-        // add two word suggestion with dash, if TRY string contains
+-        // "a" or "-"
+-        // NOTE: cwrd doesn't modified for REP twoword sugg.
+-        if (ctry && (strchr(ctry, 'a') || strchr(ctry, '-')) &&
+-            mystrlen(p + 1) > 1 && mystrlen(candidate) - mystrlen(p) > 1) {
+-          *p = '-';
++        wlst.insert(wlst.begin(), candidate);
++      }
++    }
++
++    if (wlst.size() < maxSug && !nosplitsugs && !good) {
++      *p = '\0';
++      int c1 = checkword(candidate, cpdsuggest, NULL, NULL);
++      if (c1) {
++        c2 = checkword((p + 1), cpdsuggest, NULL, NULL);
++        if (c2) {
++          // spec. Hungarian code (TODO need a better compound word support)
++          if ((langnum == LANG_hu) && !forbidden &&
++              // if 3 repeating letter, use - instead of space
++              (((p[-1] == p[1]) &&
++              (((p > candidate + 1) && (p[-1] == p[-2])) || (p[-1] == p[2]))) ||
++              // or multiple compounding, with more, than 6 syllables
++              ((c1 == 3) && (c2 >= 2))))
++            *p = '-';
++          else
++            *p = ' ';
++
++          cwrd = 1;
+           for (size_t k = 0; k < wlst.size(); ++k) {
+             if (wlst[k] == candidate) {
+               cwrd = 0;
+               break;
+             }
+           }
+-          if (wlst.size() < maxSug) {
+-            if (cwrd) {
++
++          if (cwrd && (wlst.size() < maxSug))
+               wlst.push_back(candidate);
++
++          // add two word suggestion with dash, depending on the language
++          // Note that cwrd doesn't modified for REP twoword sugg.
++          if ( !nosplitsugs && lang_with_dash_usage &&
++              mystrlen(p + 1) > 1 && mystrlen(candidate) - mystrlen(p) > 1) {
++            *p = '-';
++            for (size_t k = 0; k < wlst.size(); ++k) {
++              if (wlst[k] == candidate) {
++                cwrd = 0;
++                break;
++              }
+             }
+-          } else {
+-            free(candidate);
+-            return wlst.size();
++
++            if ((wlst.size() < maxSug) && cwrd)
++              wlst.push_back(candidate);
+           }
+         }
+       }
+     }
+   }
+   free(candidate);
+-  return wlst.size();
++  return good;
+ }
+ 
+ // error is adjacent letter were swapped
+@@ -994,7 +1042,8 @@ int SuggestMgr::movechar_utf(std::vector<std::string>& wlst,
+ // generate a set of suggestions for very poorly spelled words
+ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+                           const char* w,
+-                          const std::vector<HashMgr*>& rHMgr) {
++                          const std::vector<HashMgr*>& rHMgr,
++                          int captype) {
+   int lval;
+   int sc;
+   int lp, lpphon;
+@@ -1071,18 +1120,34 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+     u8_u16(w_word, word);
+     u8_u16(w_target, target);
+   }
+-  
++
+   std::string f;
+   std::vector<w_char> w_f;
+-  
++
+   for (size_t i = 0; i < rHMgr.size(); ++i) {
+     while (0 != (hp = rHMgr[i]->walk_hashtable(col, hp))) {
+-      if ((hp->astr) && (pAMgr) &&
+-          (TESTAFF(hp->astr, forbiddenword, hp->alen) ||
+-           TESTAFF(hp->astr, ONLYUPCASEFLAG, hp->alen) ||
+-           TESTAFF(hp->astr, nosuggest, hp->alen) ||
+-           TESTAFF(hp->astr, nongramsuggest, hp->alen) ||
+-           TESTAFF(hp->astr, onlyincompound, hp->alen)))
++      // skip exceptions
++      if (
++           // skip it, if the word length different by 5 or
++           // more characters (to avoid strange suggestions)
++           // (except Unicode characters over BMP)
++           (((abs(n - hp->clen) > 4) && !nonbmp)) ||
++           // don't suggest capitalized dictionary words for
++           // lower case misspellings in ngram suggestions, except
++           // - PHONE usage, or
++           // - in the case of German, where not only proper
++           //   nouns are capitalized, or
++           // - the capitalized word has special pronunciation
++           ((captype == NOCAP) && (hp->var & H_OPT_INITCAP) &&
++              !ph && (langnum != LANG_de) && !(hp->var & H_OPT_PHON)) ||
++           // or it has one of the following special flags
++           ((hp->astr) && (pAMgr) &&
++             (TESTAFF(hp->astr, forbiddenword, hp->alen) ||
++             TESTAFF(hp->astr, ONLYUPCASEFLAG, hp->alen) ||
++             TESTAFF(hp->astr, nosuggest, hp->alen) ||
++             TESTAFF(hp->astr, nongramsuggest, hp->alen) ||
++             TESTAFF(hp->astr, onlyincompound, hp->alen)))
++         )
+         continue;
+ 
+       if (utf8) {
+@@ -1105,7 +1170,7 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+         sc = ngram(3, word, f, NGRAM_LONGER_WORSE) + leftcommon;
+       }
+ 
+-      // check special pronounciation
++      // check special pronunciation
+       f.clear();
+       if ((hp->var & H_OPT_PHON) &&
+           copy_field(f, HENTRY_DATA(hp), MORPH_PHON)) {
+@@ -1559,7 +1624,8 @@ int SuggestMgr::checkword(const std::string& word,
+     if (rv) {
+       if ((rv->astr) &&
+           (TESTAFF(rv->astr, pAMgr->get_forbiddenword(), rv->alen) ||
+-           TESTAFF(rv->astr, pAMgr->get_nosuggest(), rv->alen)))
++           TESTAFF(rv->astr, pAMgr->get_nosuggest(), rv->alen) ||
++           TESTAFF(rv->astr, pAMgr->get_substandard(), rv->alen)))
+         return 0;
+       while (rv) {
+         if (rv->astr &&
+@@ -1584,7 +1650,7 @@ int SuggestMgr::checkword(const std::string& word,
+     if (!rv && pAMgr->have_contclass()) {
+       rv = pAMgr->suffix_check_twosfx(word.c_str(), word.size(), 0, NULL, FLAG_NULL);
+       if (!rv)
+-        rv = pAMgr->prefix_check_twosfx(word.c_str(), word.size(), 1, FLAG_NULL);
++        rv = pAMgr->prefix_check_twosfx(word.c_str(), word.size(), 0, FLAG_NULL);
+     }
+ 
+     // check forbidden words
+diff --git a/src/hunspell/suggestmgr.hxx b/src/hunspell/suggestmgr.hxx
+index 19ffc03..f0daf23 100644
+--- a/src/hunspell/suggestmgr.hxx
++++ b/src/hunspell/suggestmgr.hxx
+@@ -109,6 +109,7 @@ class SuggestMgr {
+   char* ctry;
+   size_t ctryl;
+   std::vector<w_char> ctry_utf;
++  bool lang_with_dash_usage;
+ 
+   AffixMgr* pAMgr;
+   unsigned int maxSug;
+@@ -124,8 +125,8 @@ class SuggestMgr {
+   SuggestMgr(const char* tryme, unsigned int maxn, AffixMgr* aptr);
+   ~SuggestMgr();
+ 
+-  void suggest(std::vector<std::string>& slst, const char* word, int* onlycmpdsug);
+-  void ngsuggest(std::vector<std::string>& slst, const char* word, const std::vector<HashMgr*>& rHMgr);
++  bool suggest(std::vector<std::string>& slst, const char* word, int* onlycmpdsug);
++  void ngsuggest(std::vector<std::string>& slst, const char* word, const std::vector<HashMgr*>& rHMgr, int captype);
+ 
+   std::string suggest_morph(const std::string& word);
+   std::string suggest_gen(const std::vector<std::string>& pl, const std::string& pattern);
+@@ -149,7 +150,7 @@ class SuggestMgr {
+   int extrachar(std::vector<std::string>&, const char*, int);
+   int badcharkey(std::vector<std::string>&, const char*, int);
+   int badchar(std::vector<std::string>&, const char*, int);
+-  int twowords(std::vector<std::string>&, const char*, int);
++  bool twowords(std::vector<std::string>&, const char*, int, bool);
+ 
+   void capchars_utf(std::vector<std::string>&, const w_char*, int wl, int);
+   int doubletwochars_utf(std::vector<std::string>&, const w_char*, int wl, int);
+-- 
+2.7.4
+
