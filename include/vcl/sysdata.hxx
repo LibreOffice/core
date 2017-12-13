@@ -64,7 +64,7 @@ struct SystemEnvData
     // Nothing
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
-    sal_uIntPtr         aWindow;        // the window of the object
+    unsigned long       aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use

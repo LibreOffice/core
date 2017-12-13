@@ -184,7 +184,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle()
 #elif defined IOS
     // Nothing
 #elif defined UNX
-    nRet = (sal_IntPtr) GetSystemData()->aWindow;
+    nRet = GetSystemData()->aWindow;
 #endif
 
     return nRet;
