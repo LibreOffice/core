@@ -128,6 +128,7 @@ void SwView::GetState(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     }
                     else if( m_pWrtShell->IsTableMode()
+                        || isSignatureLineSelected()
                         || m_pWrtShell->CursorInsideInputField() )
                     {
                         rSet.DisableItem(nWhich);
