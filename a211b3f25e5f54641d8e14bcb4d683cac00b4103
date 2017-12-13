@@ -123,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_a1d14159",
+        "filename": "offapi/com/sun/star/chart2/XChartDocument.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-12-13T14:46:47Z",
+      "side": 1,
+      "message": "FWIW git log indicates it was already changed twice in 2014",
+      "parentUuid": "1a430d35_818b6567",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_a1ea210d",
         "filename": "offapi/com/sun/star/chart2/XChartDocument.idl",
         "patchSetId": 1
