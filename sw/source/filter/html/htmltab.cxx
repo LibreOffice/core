@@ -1190,8 +1190,13 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
     while( pPrevCnts->Next() )
         pPrevCnts = pPrevCnts->Next();
 
-    return ( pPrevCnts->GetStartNode() ? pPrevCnts->GetStartNode()
-               : pPrevCnts->GetTable()->GetPrevBoxStartNode( USHRT_MAX, USHRT_MAX ) );
+    const SwStartNode* pRet = pPrevCnts->GetStartNode();
+    if (pRet)
+        return pRet;
+    HTMLTable* pTable = pPrevCnts->GetTable().get();
+    if (!pTable)
+        return nullptr;
+    return pTable->GetPrevBoxStartNode(USHRT_MAX, USHRT_MAX);
 }
 
 static bool IsBoxEmpty( const SwTableBox *pBox )
@@ -2658,7 +2663,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
         pStNd = pNd->FindTableBoxStartNode();
         m_xTable->m_bFirstCell = false;
     }
-    else
+    else if (pPrevStNd)
     {
         const SwNode* pNd;
         if( pPrevStNd->IsTableNode() )
@@ -2669,6 +2674,11 @@ const SwStartNode *SwHTMLParser::InsertTableSection
         pStNd = m_xDoc->GetNodes().MakeTextSection( nIdx, SwTableBoxStartNode,
                                                   pColl );
         m_xTable->IncBoxCount();
+    }
+    else
+    {
+        eState = SvParserState::Error;
+        return nullptr;
     }
 
     //Added defaults to CJK and CTL
@@ -5106,6 +5116,8 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
         while( m_aContexts.size() > m_nContextStAttrMin )
         {
             std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+            if (!xCntxt)
+                break;
             ClearContext(xCntxt.get());
         }
 
