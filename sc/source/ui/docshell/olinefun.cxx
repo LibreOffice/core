@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <olinetab.hxx>
 #include <tabvwsh.hxx>
+#include <inputhdl.hxx>
 #include <undodat.hxx>
 #include <globstr.hrc>
 #include <sc.hrc>
@@ -77,6 +78,32 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     }
     rDocShell.PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
 }
+
+static bool lcl_IsAnyViewEditingInEntryRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell)
+            {
+                ScInputHandler* pInputHandler = pTabViewShell->GetInputHandler();
+                if (pInputHandler && pInputHandler->GetActiveView())
+                {
+                    const ScViewData& rViewData = pTabViewShell->GetViewData();
+                    SCCOLROW nPos = bColumns ? rViewData.GetCurX() : rViewData.GetCurY();
+                    if (nStart <= nPos && nPos <= nEnd)
+                        return true;
+                }
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
+    return false;
+}
+
 
 void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
@@ -330,7 +357,9 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     SCCOLROW nStart, nEnd;
     rArray.GetRange( nStart, nEnd );
 
-    if ( bRecord )
+    // TODO undo can mess things up when another view is editing a cell in the range of group entry
+    // this is a temporarily workaround
+    if (!comphelper::LibreOfficeKit::isActive() && bRecord )
     {
         ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -358,8 +387,15 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     ScOutlineEntry* pEntry;
     while ((pEntry=aIter.GetNext()) != nullptr)
     {
+        SCCOLROW nThisStart = pEntry->GetStart();
+        SCCOLROW nThisEnd   = pEntry->GetEnd();
+
         sal_uInt16 nThisLevel = aIter.LastLevel();
         bool bShow = (nThisLevel < nLevel);
+
+        if (!bShow && lcl_IsAnyViewEditingInEntryRange(bColumns, nThisStart, nThisEnd))
+            continue;
+
         if (bShow)                                          // enable
         {
             pEntry->SetHidden( false );
@@ -372,12 +408,20 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         }
         else                                                // hidden below
         {
-            pEntry->SetVisible( false );
+            if (comphelper::LibreOfficeKit::isActive() && nThisLevel > 0)
+            {
+                pEntry->SetHidden( true );
+                const ScOutlineEntry* pParentEntry = rArray.GetEntryByPos(nThisLevel - 1, nThisStart);
+                if (pParentEntry && pParentEntry->IsHidden())
+                    pEntry->SetVisible( false );
+            }
+            else
+            {
+                pEntry->SetVisible( false );
+            }
         }
 
-        SCCOLROW nThisStart = pEntry->GetStart();
-        SCCOLROW nThisEnd   = pEntry->GetEnd();
-        for (SCCOLROW i=nThisStart; i<=nThisEnd; i++)
+       for (SCCOLROW i=nThisStart; i<=nThisEnd; i++)
         {
             if ( bColumns )
                 rDoc.ShowCol( static_cast<SCCOL>(i), nTab, bShow );
@@ -397,15 +441,15 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDoc.SetDrawPageSize(nTab);
     rDoc.UpdatePageBreaks( nTab );
 
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if ( pViewSh )
+        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
+
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-
-    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
-    if ( pViewSh )
-        pViewSh->OnLOKShowHideOutline(bColumns, 0);
 
     return true;
 }
@@ -435,7 +479,9 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         SCCOLROW nMax;
         SCCOLROW i;
 
-        if ( bRecord )
+        // TODO undo can mess things up when another view is editing a cell in the range of group entry
+        // this is a temporarily workaround
+        if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
         {
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -505,18 +551,18 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         rDoc.SetDrawPageSize(nTab);
         rDoc.UpdatePageBreaks( nTab );
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
-        rDocShell.SetDocumentModified();
-        bDone = true;
-
-        lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-
         ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
         if ( pViewSh )
         {
             pViewSh->OnLOKShowHideOutline(/*columns: */ true, nMinStartCol - 1);
             pViewSh->OnLOKShowHideOutline(/*columns: */ false, nMinStartRow - 1);
         }
+
+        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
+        rDocShell.SetDocumentModified();
+        bDone = true;
+
+        lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
 
     return bDone;
@@ -559,7 +605,9 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
         rRowArray.FindTouchedLevel( nStartRow, nEndRow, nRowLevel );
         rRowArray.ExtendBlock( nRowLevel, nEffStartRow, nEffEndRow );
 
-        if ( bRecord )
+        // TODO undo can mess things up when another view is editing a cell in the range of group entry
+        // this is a temporarily workaround
+        if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
         {
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -628,7 +676,9 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     SCCOLROW nStart = pEntry->GetStart();
     SCCOLROW nEnd   = pEntry->GetEnd();
 
-    if ( bRecord )
+    // TODO undo can mess things up when another view is editing a cell in the range of group entry
+    // this is a temporarily workaround
+    if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
     {
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
@@ -689,16 +739,16 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDoc.InvalidatePageBreaks(nTab);
     rDoc.UpdatePageBreaks( nTab );
 
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if ( pViewSh )
+        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
+
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
     rDocShell.SetDocumentModified();
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-
-    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
-    if ( pViewSh )
-        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
 
     return true;        //! always ???
 }
@@ -716,7 +766,13 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     SCCOLROW nStart = pEntry->GetStart();
     SCCOLROW nEnd   = pEntry->GetEnd();
 
-    if ( bRecord )
+
+    if (lcl_IsAnyViewEditingInEntryRange(bColumns, nStart, nEnd))
+        return false;
+
+    // TODO undo can mess things up when another view is editing a cell in the range of group entry
+    // this is a temporarily workaround
+    if ( !comphelper::LibreOfficeKit::isActive() &&  bRecord )
     {
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
@@ -752,6 +808,10 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDoc.InvalidatePageBreaks(nTab);
     rDoc.UpdatePageBreaks( nTab );
 
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if ( pViewSh )
+        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
+
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
@@ -759,9 +819,6 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
-    if ( pViewSh )
-        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
 
     return true;        //! always ???
 }
