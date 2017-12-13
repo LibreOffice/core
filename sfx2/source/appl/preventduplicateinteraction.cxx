@@ -243,6 +243,7 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
 }
 
 void SAL_CALL PreventDuplicateInteraction::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+              throw (css::uno::RuntimeException, std::exception)
 {
     // If we're re-initialized to set a specific new window as a parent then drop our temporary
     // dialog parent
