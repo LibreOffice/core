@@ -133,6 +133,8 @@ TextSearch::~TextSearch()
 
 void TextSearch::setOptions2( const SearchOptions2& rOptions )
 {
+    osl::MutexGuard g(m_aMutex);
+
     aSrchPara = rOptions;
 
     delete pRegexMatcher;
@@ -263,6 +265,8 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
 
 void TextSearch::setOptions( const SearchOptions& rOptions )
 {
+    osl::MutexGuard g(m_aMutex);
+
     sal_Int16 nAlgorithmType2;
     switch (rOptions.algorithmType)
     {
@@ -313,6 +317,8 @@ bool TextSearch::isCellStart(const OUString& searchStr, sal_Int32 nPos)
 
 SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
 {
+    osl::MutexGuard g(m_aMutex);
+
     SearchResult sres;
 
     OUString in_str(searchStr);
@@ -428,6 +434,8 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 
 SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
 {
+    osl::MutexGuard g(m_aMutex);
+
     SearchResult sres;
 
     OUString in_str(searchStr);
