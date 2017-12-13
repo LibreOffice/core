@@ -73,10 +73,12 @@ public:
             }
             return sKeyword;
         }
+
     static const ::std::vector<OUString> & GetEnglishKeywords()
         {
             return sEnglishKeyword;
         }
+
     // Keywords used in output like true and false
     const OUString& GetSpecialKeyword( NfKeywordIndex eIdx ) const
         {
@@ -91,7 +93,7 @@ public:
     const OUString& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
     const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
     static const OUString& GetErrorString()   { return sErrStr; }
-    static const ::std::vector<Color> & GetStandardColor()
+    static const ::std::vector<Color> & GetStandardColors()
         {
             return StandardColor;
         }

@@ -4617,4 +4617,30 @@ sal_uInt16 NfCurrencyEntry::GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
     return nIntlFormat;
 }
 
+const NfKeywordTable & SvNumberFormatter::GetKeywords( sal_uInt32 nKey )
+{
+    osl::MutexGuard aGuard( GetInstanceMutex() );
+    const SvNumberformat* pFormat = GetFormatEntry( nKey);
+    if (pFormat)
+        ChangeIntl( pFormat->GetLanguage());
+    else
+        ChangeIntl( IniLnge);
+    return pFormatScanner->GetKeywords();
+}
+
+const std::vector<OUString> & SvNumberFormatter::GetEnglishKeywords() const
+{
+    return ImpSvNumberformatScan::GetEnglishKeywords();
+}
+
+const std::vector<Color> & SvNumberFormatter::GetStandardColors() const
+{
+    return ImpSvNumberformatScan::GetStandardColors();
+}
+
+size_t SvNumberFormatter::GetMaxDefaultColors() const
+{
+    return ImpSvNumberformatScan::GetMaxDefaultColors();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

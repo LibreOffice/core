@@ -473,11 +473,6 @@ public:
             return false;
         }
 
-    const NfKeywordTable & GetKeywords() const;
-    const ::std::vector<OUString> & GetEnglishKeywords() const;
-    const ::std::vector<Color> & GetStandardColor() const;
-    size_t GetMaxDefaultColors() const;
-
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
     OUString sFormatstring;         // The format code string

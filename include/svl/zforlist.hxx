@@ -803,6 +803,33 @@ public:
     /** Check if a specific locale has supported locale data. */
     static bool IsLocaleInstalled( LanguageType eLang );
 
+    /** Obtain NfKeywordTable used with a format, possibly localized.
+
+        XXX NOTE: the content (actual keywords) is only valid as long as the
+        locale context of the associated ImpSvNumberformatScan instance does
+        not change to a locale with different keywords, which may happen
+        anytime with a call (implicit or explicit) to
+        SvNumberFormatter::ChangeIntl(). If needed longer, copy-create another
+        NfKeywordTable instance or copy individual elements.
+
+        If the format specified with nKey does not exist, the content of the
+        NfKeywordTable matches the locale with which the SvNumberFormatter
+        instance was created and initialized.
+
+        This function preliminary exists for unit tests and otherwise is
+        pretty much useless.
+     */
+    const NfKeywordTable & GetKeywords( sal_uInt32 nKey );
+
+    /** Access for unit tests. */
+    const std::vector<OUString> & GetEnglishKeywords() const;
+
+    /** Access for unit tests. */
+    const std::vector<Color> & GetStandardColors() const;
+
+    /** Access for unit tests. */
+    size_t GetMaxDefaultColors() const;
+
 private:
     mutable ::osl::Mutex m_aMutex;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
