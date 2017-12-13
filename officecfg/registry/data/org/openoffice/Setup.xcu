@@ -769,7 +769,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value xml:lang="en-US">Base: Oracle Report Builder</value>
+          <value xml:lang="en-US">Base: Report Builder</value>
         </prop>
       </node>
     </node>

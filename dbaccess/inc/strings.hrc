@@ -349,7 +349,7 @@
 #define STR_WARNINGS_DURING_CONNECT                 NC_("STR_WARNINGS_DURING_CONNECT", "Warnings were encountered while connecting to the data source. Press \"$buttontext$\" to view them.")
 #define STR_NAMED_OBJECT_ALREADY_EXISTS             NC_("STR_NAMED_OBJECT_ALREADY_EXISTS", "The name '$#$' already exists.\nPlease enter another name." )
 // #i96130# use hard coded name
-#define RID_STR_EXTENSION_NOT_PRESENT               NC_("RID_STR_EXTENSION_NOT_PRESENT", "The report, \"$file$\", requires the Oracle Report Builder feature.")
+#define RID_STR_EXTENSION_NOT_PRESENT               NC_("RID_STR_EXTENSION_NOT_PRESENT", "The report, \"$file$\", requires the Report Builder feature.")
 
 #define STR_COULDNOTCREATE_DRIVERMANAGER            NC_("STR_COULDNOTCREATE_DRIVERMANAGER", "Cannot connect to the SDBC driver manager (#servicename#).")
 #define STR_NOREGISTEREDDRIVER                      NC_("STR_NOREGISTEREDDRIVER", "A driver is not registered for the URL #connurl#.")

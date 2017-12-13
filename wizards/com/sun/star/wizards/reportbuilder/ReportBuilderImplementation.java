@@ -58,7 +58,7 @@ import com.sun.star.wizards.ui.UIConsts;
 
 /**
  * This class use the IReportDocument Interface to communicate between the UI
- * and the ReportBuilderLayouter which communicates to the new Sun Report Builder.
+ * and the ReportBuilderLayouter which communicates to the new Report Builder.
  */
 @SuppressWarnings("ucd")
 public class ReportBuilderImplementation extends ReportImplementationHelper
