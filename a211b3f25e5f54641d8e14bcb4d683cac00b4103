@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_c1880d74",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2017-12-13T14:18:47Z",
+      "side": 1,
+      "message": "Probably some missing headers: I\u0027m working with Windows version where precompiled headers are used. So here can be some differences.\n\nCan you send me compiler error log for this problem?",
+      "parentUuid": "1a430d35_1b252cc0",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_5b2b3494",
         "filename": "chart2/source/controller/main/ControllerCommandDispatch.cxx",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2017-12-06T11:24:33Z",
       "side": 1,
       "message": "Wouldn\u0027t killing only the internal data provider be sufficient here? I thought that was the purpose of this exercise: remove internal data table and allow user to replace it with their own data rane\n\nBut :shrug:",
+      "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e1a269fb",
+        "filename": "chart2/source/model/main/ChartModel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2017-12-13T14:18:47Z",
+      "side": 1,
+      "message": "Practically for copypasted chart both data providers initialized with reference to same internal data table.\n\nSo IMHO better to remove them both.",
+      "parentUuid": "1a430d35_db156449",
       "revId": "a211b3f25e5f54641d8e14bcb4d683cac00b4103",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
