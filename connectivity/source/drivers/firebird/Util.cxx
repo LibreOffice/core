@@ -118,13 +118,14 @@ sal_Int32 firebird::ColumnTypeInfo::getSdbcType() const
     short aSubType = m_aSubType;
     if( m_nScale > 0 )
     {
-        // scale makes sense only for decimal and numeric types
-        assert(aType == SQL_SHORT || aType == SQL_LONG || aType == SQL_DOUBLE
-                || aType == SQL_INT64);
-
-        // if scale is set without subtype then imply numeric
-        if( static_cast<NumberSubType>(aSubType) == NumberSubType::Other )
-            aSubType = static_cast<short>(NumberSubType::Numeric);
+        // numeric / decimal
+        if(aType == SQL_SHORT || aType == SQL_LONG || aType == SQL_DOUBLE
+                || aType == SQL_INT64)
+        {
+            // if scale is set without subtype then imply numeric
+            if( static_cast<NumberSubType>(aSubType) == NumberSubType::Other )
+                aSubType = static_cast<short>(NumberSubType::Numeric);
+        }
     }
 
     switch (aType)
