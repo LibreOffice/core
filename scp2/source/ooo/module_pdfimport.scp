@@ -19,7 +19,7 @@
 // which is duplicated across calc, draw, impress, math, writer .xcd
 // files.  For this to work, there is a hack in
 // postprocess/packregistry/makefile.mk to make pdfimport.xcd depend
-// on all those other .xcd files (optinally, as not all of the other
+// on all those other .xcd files (optionally, as not all of the other
 // .xcd files need to be present in a given installation).
 
 #include "macros.inc"
