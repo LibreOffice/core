@@ -197,28 +197,6 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
         // (121 = 1/3 of 12pt ascent, 422 = 12pt fontheight)
     nAlignB       = nBaseline;
 
-    // workaround for printer fonts with very small (possible 0 or even
-    // negative(!)) leading
-    if (aFM.GetInternalLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
-    {
-        OutputDevice    *pWindow = Application::GetDefaultDevice();
-
-        pWindow->Push(PushFlags::MAPMODE | PushFlags::FONT);
-
-        pWindow->SetMapMode(rDev.GetMapMode());
-        pWindow->SetFont(rDev.GetFontMetric());
-
-        long  nDelta = pWindow->GetFontMetric().GetInternalLeading();
-        if (nDelta == 0)
-        {   // this value approx. fits a Leading of 80 at a
-            // Fontheight of 422 (12pt)
-            nDelta = nFontHeight * 8 / 43;
-        }
-        SetTop(GetTop() - nDelta);
-
-        pWindow->Pop();
-    }
-
     // get GlyphBoundRect
     tools::Rectangle  aGlyphRect;
     bool bSuccess = SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
