@@ -70,12 +70,10 @@ STD_FONT_FILELIST(gid_File_Fnt_EmojiOne_Color, "fonts_emojione_color.filelist")
 // fontconfig updates to allow proper use of local fonts
 
 #ifdef USING_X11
-#ifndef WITHOUT_FONTS
 File gid_File_FcLocal_Conf
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
     Styles = (FILELIST);
     Name = "postprocess_fontconfig.filelist";
 End
-#endif
 #endif
