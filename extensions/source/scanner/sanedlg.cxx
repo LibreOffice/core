@@ -321,8 +321,7 @@ namespace {
 
 OUString SaneResId(const char *pID)
 {
-    static std::locale loc = Translate::Create("pcr");
-    return Translate::get(pID, loc);
+    return Translate::get(pID, Translate::Create("pcr"));
 }
 
 }

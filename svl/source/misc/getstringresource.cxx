@@ -28,8 +28,7 @@
 
 OUString SvlResId(const char* id)
 {
-    static std::locale loc = Translate::Create("svl");
-    return Translate::get(id, loc);
+    return Translate::get(id, Translate::Create("svl"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

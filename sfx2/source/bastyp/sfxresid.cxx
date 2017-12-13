@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/sfxresid.hxx>
 #include <unotools/resmgr.hxx>
 
 OUString SfxResId(const char* pId)
 {
-    static std::locale loc = Translate::Create("sfx");
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("sfx"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

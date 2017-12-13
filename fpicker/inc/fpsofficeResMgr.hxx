@@ -13,8 +13,7 @@
 
 inline OUString FpsResId(const char* pId)
 {
-    static std::locale loc = Translate::Create("fps");
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("fps"));
 };
 
 #endif

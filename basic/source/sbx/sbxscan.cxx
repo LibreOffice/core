@@ -586,10 +586,9 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     }
 }
 
-const std::locale& BasResLocale()
+std::locale BasResLocale()
 {
-    static std::locale loc(Translate::Create("sb"));
-    return loc;
+    return Translate::Create("sb");
 }
 
 OUString BasResId(const char *pId)

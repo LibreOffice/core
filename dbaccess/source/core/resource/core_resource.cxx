@@ -36,8 +36,7 @@ namespace dbaccess
 
     OUString ResourceManager::loadString(const char* pResId)
     {
-        static std::locale loc = Translate::Create("dba");
-        return Translate::get(pResId, loc);
+        return Translate::get(pResId, Translate::Create("dba"));
     }
 
     OUString ResourceManager::loadString(const char* pResId, const sal_Char* _pPlaceholderAscii, const OUString& _rReplace)

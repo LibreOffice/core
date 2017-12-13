@@ -32,12 +32,6 @@ using namespace std;
 
 namespace XmlSec
 {
-    const std::locale& GetResLocale()
-    {
-        static const std::locale loc = Translate::Create("xsc");
-        return loc;
-    }
-
     const LocaleDataWrapper&    GetLocaleData()
     {
         static SvtSysLocale ourSysLocale;

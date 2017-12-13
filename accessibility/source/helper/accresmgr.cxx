@@ -22,8 +22,7 @@
 
 OUString AccResId(const char* pId)
 {
-    static std::locale loc = Translate::Create("acc");
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("acc"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

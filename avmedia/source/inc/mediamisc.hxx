@@ -41,14 +41,9 @@
 // Mime types
 #define AVMEDIA_MIMETYPE_COMMON           "application/vnd.sun.star.media"
 
-namespace avmedia
-{
-    const std::locale& GetResLocale();
-}
-
 inline OUString AvmResId(const char* pId)
 {
-    return Translate::get(pId, ::avmedia::GetResLocale());
+    return Translate::get(pId, Translate::Create("avmedia"));
 }
 
 #endif

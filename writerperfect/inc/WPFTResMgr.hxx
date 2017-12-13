@@ -7,14 +7,9 @@
 
 #include <unotools/resmgr.hxx>
 
-struct WRITERPERFECT_DLLPUBLIC WPFTResLocale
-{
-    static std::locale &GetResLocale();
-};
-
 inline OUString WpResId(const char *pId)
 {
-    return Translate::get(pId, WPFTResLocale::GetResLocale());
+    return Translate::get(pId, Translate::Create("wpt"));
 }
 
 #endif

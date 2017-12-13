@@ -20,10 +20,9 @@
 #include <unotools/resmgr.hxx>
 #include <svtools/svtresid.hxx>
 
-const std::locale& SvtResLocale()
+std::locale SvtResLocale()
 {
-    static std::locale loc = Translate::Create("svt");
-    return loc;
+    return Translate::Create("svt");
 }
 
 OUString SvtResId(const char* pId)

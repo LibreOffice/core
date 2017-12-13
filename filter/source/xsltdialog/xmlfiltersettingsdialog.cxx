@@ -60,8 +60,7 @@ using ::rtl::Uri;
 
 OUString XsltResId(const char* pId)
 {
-    static std::locale loc = Translate::Create("flt");
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("flt"));
 }
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,

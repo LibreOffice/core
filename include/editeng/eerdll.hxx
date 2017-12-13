@@ -41,7 +41,6 @@ public:
     EditDLL();
     ~EditDLL();
 
-    static std::locale& GetResLocale();
     GlobalEditData* GetGlobalData() const   { return pGlobalData.get(); }
     std::shared_ptr<editeng::SharedVclResources> GetSharedVclResources();
     static EditDLL& Get();

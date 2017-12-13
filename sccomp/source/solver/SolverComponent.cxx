@@ -46,8 +46,7 @@ using namespace com::sun::star;
 
 OUString SolverComponent::GetResourceString(const char* pId)
 {
-    static std::locale loc = Translate::Create("scc");
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("scc"));
 }
 
 size_t ScSolverCellHash::operator()( const css::table::CellAddress& rAddress ) const

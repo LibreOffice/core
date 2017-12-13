@@ -26,8 +26,7 @@ namespace frm
     {
         OUString loadString(const char* pResId)
         {
-            static std::locale loc = Translate::Create("frm");
-            return Translate::get(pResId, loc);
+            return Translate::get(pResId, Translate::Create("frm"));
         }
     }
 }
