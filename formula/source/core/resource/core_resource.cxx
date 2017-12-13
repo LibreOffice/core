@@ -21,8 +21,7 @@
 
 OUString ForResId(const char *pId)
 {
-    static std::locale loc = Translate::Create("for");
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("for"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

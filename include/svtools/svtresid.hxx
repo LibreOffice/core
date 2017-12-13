@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <locale>
 
-SVT_DLLPUBLIC const std::locale& SvtResLocale();
+SVT_DLLPUBLIC std::locale SvtResLocale();
 SVT_DLLPUBLIC OUString SvtResId(const char* pId);
 
 #endif // INCLUDED_SVTOOLS_SVTRESID_HXX

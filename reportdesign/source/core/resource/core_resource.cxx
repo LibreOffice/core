@@ -30,8 +30,7 @@
 
 OUString RptResId(const char* pId)
 {
-    static std::locale loc = Translate::Create("rpt");
-    return Translate::get(pId, loc);
+    return Translate::get(pId, Translate::Create("rpt"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

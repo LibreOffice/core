@@ -283,8 +283,7 @@ OUString SwarmSolver::getResourceString(const char* pId)
     if (!pId)
         return sString;
 
-    static std::locale aLocale = Translate::Create("scc");
-    return Translate::get(pId, aLocale);
+    return Translate::get(pId, Translate::Create("scc"));
 }
 
 uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPosition)

@@ -42,20 +42,13 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
-static std::locale& getPDFFilterResLocale()
-{
-    static std::locale loc = Translate::Create("flt");
-    return loc;
-}
-
 OUString PDFFilterResId(const char* pId)
 {
-    return Translate::get(pId, getPDFFilterResLocale());
+    return Translate::get(pId, Translate::Create("flt"));
 }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
 
 /** Tabbed PDF dialog implementation
     Please note: the default used here are the same as per specification,

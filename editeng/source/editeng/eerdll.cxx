@@ -195,7 +195,7 @@ uno::Reference< linguistic2::XLanguageGuessing > const & GlobalEditData::GetLang
 
 OUString EditResId(const char *pId)
 {
-    return Translate::get(pId, EditDLL::GetResLocale());
+    return Translate::get(pId, Translate::Create("editeng"));
 }
 
 EditDLL::EditDLL()
@@ -205,12 +205,6 @@ EditDLL::EditDLL()
 
 EditDLL::~EditDLL()
 {
-}
-
-std::locale& EditDLL::GetResLocale()
-{
-    static std::locale loc = Translate::Create("editeng");
-    return loc;
 }
 
 editeng::SharedVclResources::SharedVclResources()

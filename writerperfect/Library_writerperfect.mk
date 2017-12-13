@@ -53,7 +53,6 @@ $(eval $(call gb_Library_add_exception_objects,writerperfect,\
 	writerperfect/source/common/DirectoryStream \
 	writerperfect/source/common/DocumentHandler \
 	writerperfect/source/common/WPFTEncodingDialog \
-	writerperfect/source/common/WPFTResMgr \
 	writerperfect/source/common/WPXSvInputStream \
 ))
 
