@@ -336,8 +336,8 @@ const bool aAllowedTokenTypesUser[] =
     true,       // XML_TOK_INDEX_TYPE_TEXT,
     true,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
     true,       // XML_TOK_INDEX_TYPE_CHAPTER,
-    false,      // XML_TOK_INDEX_TYPE_LINK_START,
-    false,      // XML_TOK_INDEX_TYPE_LINK_END,
+    true,       // XML_TOK_INDEX_TYPE_LINK_START,
+    true,       // XML_TOK_INDEX_TYPE_LINK_END,
     false       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
