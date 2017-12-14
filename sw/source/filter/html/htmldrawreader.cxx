@@ -425,7 +425,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // set attribute of environment at the Draw object
-    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttrTable* pHTMLAttrTable = m_xAttrTab.get();
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(pHTMLAttrTable);
     for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         HTMLAttr *pAttr = *pHTMLAttributes;
