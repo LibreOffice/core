@@ -443,11 +443,14 @@ bool SvxGeneralTabPage::GetData_Impl()
                        : m_pSigningKeyLB->GetSelectedEntry();
     OUString aEK = m_pEncryptionKeyLB->GetSelectedEntryPos() == 0 ? OUString()
                        : m_pEncryptionKeyLB->GetSelectedEntry();
+
     aUserOpt.SetToken( UserOptToken::SigningKey, aSK );
     aUserOpt.SetToken( UserOptToken::EncryptionKey, aEK );
+    aUserOpt.SetBoolValue( UserOptToken::EncryptToSelf, m_pEncryptToSelfCB->IsChecked() );
 
-    bModified |= m_pSigningKeyLB->IsValueChangedFromSaved();
-    bModified |= m_pEncryptionKeyLB->IsValueChangedFromSaved();
+    bModified |= m_pSigningKeyLB->IsValueChangedFromSaved() ||
+                 m_pEncryptionKeyLB->IsValueChangedFromSaved() ||
+                 m_pEncryptToSelfCB->IsValueChangedFromSaved();
 #endif
 
     return bModified;
@@ -489,6 +492,8 @@ void SvxGeneralTabPage::SetData_Impl()
     OUString aEK = aUserOpt.GetToken(UserOptToken::EncryptionKey);
     aEK.isEmpty() ? m_pEncryptionKeyLB->SelectEntryPos( 0 ) //i.e. 'No Key'
                   : m_pEncryptionKeyLB->SelectEntry( aEK );
+
+    m_pEncryptToSelfCB->Check( aUserOpt.GetEncryptToSelf() );
 #endif
 }
 

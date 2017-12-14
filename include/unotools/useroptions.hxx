@@ -47,7 +47,8 @@ enum class UserOptToken
     Apartment          = 16,
     SigningKey         = 17,
     EncryptionKey      = 18,
-    LAST               = EncryptionKey,
+    EncryptToSelf      = 19,
+    LAST               = EncryptToSelf,
 };
 
 // class SvtUserOptions --------------------------------------------------
@@ -78,12 +79,14 @@ public:
     OUString GetEmail          () const;
     OUString GetSigningKey     () const;
     OUString GetEncryptionKey  () const;
+    bool GetEncryptToSelf      () const;
 
     OUString GetFullName       () const;
 
     bool      IsTokenReadonly (UserOptToken nToken) const;
     OUString  GetToken (UserOptToken nToken) const;
     void      SetToken (UserOptToken nToken, OUString const& rNewToken);
+    void      SetBoolValue (UserOptToken nToken, bool bNewValue);
 
 private:
     class Impl;
