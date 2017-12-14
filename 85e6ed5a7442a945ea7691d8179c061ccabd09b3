@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_17441319",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-14T19:29:59Z",
+      "side": 1,
+      "message": "just an observation, but given that we own these arrays the only way this operator\u003d\u003d is ever going to return true is if either\n\n(a) both this and rCandidate have mnPoints \u003d\u003d 0\nor\n(b) this \u003d\u003d \u0026rCandidate\n\nso either we should actually compare data or we can simplify the condition",
+      "revId": "85e6ed5a7442a945ea7691d8179c061ccabd09b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
