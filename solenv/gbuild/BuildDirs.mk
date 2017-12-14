@@ -32,6 +32,11 @@ ifneq ($(and $(gb_LOCALBUILDDIR),$(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk)),
 include $(gb_LOCALBUILDDIR)/SetupLocal.mk
 endif
 
+# env variables names are uppercase only
+ifeq ($(OS),OS2)
+gb_REPOS = $(GB_REPOS)
+endif
+
 ifeq ($(strip $(gb_REPOS)),)
 gb_REPOS := $(SOLARSRC)
 endif

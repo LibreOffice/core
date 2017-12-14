@@ -49,8 +49,18 @@ define gb_Output_warn
 $(warning $(NEWLINE)[ WARN  $(2) ] !!!$(NEWLINE)[ WARN  $(2) ] !!! $(1)$(NEWLINE)[ WARN  $(2) ] !!!)
 endef
 
-gb_Output_ESCAPE := $(shell echo|awk 'BEGIN { printf "%c", 27 }' -)
-gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
+# env variables names are uppercase only
+ifeq ($(OS),OS2)
+gb_COLOR = $(GB_COLOR)
+gb_TITLES = $(GB_TITLES)
+endif
+
+# disable for OS/2
+ifneq ($(OS),OS2)
+gb_Output_ESCAPE := $(shell echo|$(gb_AWK) 'BEGIN { printf "%c", 27 }' -)
+gb_Output_BELL := $(shell echo|$(gb_AWK) 'BEGIN { printf "%c", 7 }' -)
+endif
+
 
 # only enable colorized output if
 # - gb_COLOR is set
