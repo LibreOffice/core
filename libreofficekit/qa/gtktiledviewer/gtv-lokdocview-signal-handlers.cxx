@@ -387,6 +387,11 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
 
                 gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog), aGdkRectangle);
             }
+            else if (aAction == "title_changed")
+            {
+                const std::string aTitle = aRoot.get<std::string>("title", "");
+                gtk_window_set_title(pDialog, aTitle.c_str());
+            }
         }
     }
 }
