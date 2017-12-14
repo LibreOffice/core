@@ -7820,6 +7820,7 @@ include/tools/resary.hxx
 include/tools/solar.h
 include/tools/stream.hxx
 include/tools/svborder.hxx
+include/tools/svlibrary.h
 include/tools/tenccvt.hxx
 include/tools/time.hxx
 include/tools/toolsdllapi.h
