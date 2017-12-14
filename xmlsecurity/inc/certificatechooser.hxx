@@ -73,6 +73,8 @@ private:
 
     bool                    mbInitialized;
     UserAction              meAction;
+    OUString                msPreferredKey;
+    css::uno::Reference<css::security::XCertificate> mxEncryptToSelf;
 
     DECL_LINK(ViewButtonHdl, Button*, void);
     DECL_LINK(CertificateHighlightHdl, SvTreeListBox*, void );

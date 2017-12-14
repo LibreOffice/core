@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <config_gpgme.h>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
 #include <biginteger.hxx>
@@ -31,6 +31,7 @@
 #include <resourcemanager.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/treelistentry.hxx>
+#include <unotools/useroptions.hxx>
 
 using namespace css;
 
@@ -159,11 +160,14 @@ void CertificateChooser::ImplInitialize()
     if ( mbInitialized )
         return;
 
+    SvtUserOptions aUserOpts;
+
     switch (meAction)
     {
         case UserAction::Sign:
             m_pFTSign->Show();
             m_pOKBtn->SetText( get<FixedText>("str_sign")->GetText() );
+            msPreferredKey = aUserOpts.GetSigningKey();
             break;
 
         case UserAction::Encrypt:
@@ -172,6 +176,7 @@ void CertificateChooser::ImplInitialize()
             m_pDescriptionED->Hide();
             m_pCertLB->SetSelectionMode( SelectionMode::Multiple );
             m_pOKBtn->SetText( get<FixedText>("str_encrypt")->GetText() );
+            msPreferredKey = aUserOpts.GetEncryptionKey();
             break;
 
     }
@@ -210,6 +215,7 @@ void CertificateChooser::ImplInitialize()
             }
         }
 
+
         // fill list of certificates; the first entry will be selected
         for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
         {
@@ -218,12 +224,26 @@ void CertificateChooser::ImplInitialize()
             userData->xSecurityContext = secContext;
             userData->xSecurityEnvironment = secEnvironment;
             mvUserData.push_back(userData);
+
+            OUString sIssuer = XmlSec::GetContentPart( xCerts[ nC ]->getIssuerName() );
             SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( xCerts[ nC ]->getSubjectName() )
-                + "\t" + XmlSec::GetContentPart( xCerts[ nC ]->getIssuerName() )
+                + "\t" + sIssuer
                 + "\t" + XmlSec::GetCertificateKind( xCerts[ nC ]->getCertificateKind() )
                 + "\t" + XmlSec::GetDateString( xCerts[ nC ]->getNotValidAfter() )
                 + "\t" + UsageInClearText( xCerts[ nC ]->getCertificateUsage() ) );
             pEntry->SetUserData( userData.get() );
+
+#if HAVE_FEATURE_GPGME
+            // only GPG has preferred keys
+            if ( sIssuer == msPreferredKey )
+            {
+                if ( meAction == UserAction::Sign )
+                    m_pCertLB->Select( pEntry );
+                else if ( meAction == UserAction::Encrypt &&
+                          aUserOpts.GetEncryptToSelf() )
+                    mxEncryptToSelf = xCerts[nC];
+            }
+#endif
         }
     }
 
@@ -258,6 +278,11 @@ uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser
         }
         aRet.push_back( xCert );
     }
+
+#if HAVE_FEATURE_GPGME
+    if ( mxEncryptToSelf.is())
+        aRet.push_back( mxEncryptToSelf );
+#endif
 
     return comphelper::containerToSequence(aRet);
 }
