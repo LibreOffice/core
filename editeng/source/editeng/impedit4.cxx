@@ -340,10 +340,15 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         else if ( nScriptType == 2 )
             nWhich = EE_CHAR_FONTINFO_CTL;
 
-        sal_uInt32 i = 0;
-        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(aEditDoc.GetItemPool().GetItem2( nWhich, i ));
-        while ( pFontItem )
+        auto const nFonts(aEditDoc.GetItemPool().GetItemCount2(nWhich));
+        for (sal_uInt32 i = 0; i < nFonts; ++i)
         {
+            SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(
+                    aEditDoc.GetItemPool().GetItem2(nWhich, i));
+            if (!pFontItem)
+            {
+                continue;
+            }
             bool bAlreadyExist = false;
             sal_uLong nTestMax = nScriptType ? aFontTable.size() : 1;
             for ( sal_uLong nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
@@ -353,8 +358,6 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
             if ( !bAlreadyExist )
                 aFontTable.push_back( new SvxFontItem( *pFontItem ) );
-
-            pFontItem = static_cast<const SvxFontItem*>(aEditDoc.GetItemPool().GetItem2( nWhich, ++i ));
         }
     }
 
@@ -418,18 +421,15 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     {
         aColorList.push_back(rDefault.GetValue());
     }
-    sal_uInt32 i = 0;
-    SvxColorItem const* pColorItem = static_cast<SvxColorItem const*>(
-            aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, i));
-    while ( pColorItem )
+    auto const nColors(aEditDoc.GetItemPool().GetItemCount2(EE_CHAR_COLOR));
+    for (sal_uInt32 i = 0; i < nColors; ++i)
     {
-        ++i;
-        if ( pColorItem->GetValue() != COL_AUTO )
+        SvxColorItem const*const pColorItem(static_cast<SvxColorItem const*>(
+                    aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i)));
+        if (pColorItem && pColorItem->GetValue() != COL_AUTO) // may be null!
         {
             aColorList.push_back(pColorItem->GetValue());
         }
-        pColorItem = static_cast<SvxColorItem const*>(
-                aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i));
     }
 
     rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL );
