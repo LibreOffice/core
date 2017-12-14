@@ -316,7 +316,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             nWhich = EE_CHAR_FONTINFO_CTL;
 
         auto const nFonts(aEditDoc.GetItemPool().GetItemCount2(nWhich));
-        for (std::remove_const_t<decltype(nFonts)> i = 0; i < nFonts; ++i)
+        for (sal_uInt32 i = 0; i < nFonts; ++i)
         {
             SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(
                     aEditDoc.GetItemPool().GetItem2(nWhich, i));
@@ -396,7 +396,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         aColorList.push_back(rDefault.GetValue());
     }
     auto const nColors(aEditDoc.GetItemPool().GetItemCount2(EE_CHAR_COLOR));
-    for (std::remove_const_t<decltype(nColors)> i = 0; i < nColors; ++i)
+    for (sal_uInt32 i = 0; i < nColors; ++i)
     {
         SvxColorItem const*const pColorItem(aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i));
         if (pColorItem && pColorItem->GetValue() != COL_AUTO) // may be null!
