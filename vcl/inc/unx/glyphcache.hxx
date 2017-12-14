@@ -30,9 +30,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/metric.hxx>
 
-#include <fontinstance.hxx>
 #include <sallayout.hxx>
 #include <fontattributes.hxx>
+#include <fontselect.hxx>
 #include <impfontmetricdata.hxx>
 #include <hb-ot.h>
 
@@ -192,19 +192,6 @@ private:
     bool                    mbArtBold;
 
     hb_font_t*              mpHbFont;
-};
-
-// a class for cache entries for physical font instances that are based on serverfonts
-class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
-{
-public:
-                            FreetypeFontInstance( FontSelectPattern const & );
-    virtual                 ~FreetypeFontInstance() override;
-
-    void                    SetFreetypeFont(FreetypeFont* p);
-
-private:
-    FreetypeFont*           mpFreetypeFont;
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX

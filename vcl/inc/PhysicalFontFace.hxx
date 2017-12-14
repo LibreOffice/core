@@ -46,33 +46,18 @@ public:
 // TODO: get rid of height/width for scalable fonts
 // TODO: make cloning cheaper
 
-// abstract base class for physical font faces
-
-// Note about physical and logical fonts:
-//
-// A physical font is a concept we have taken from the Java world
-//
-// From https://docs.oracle.com/javase/tutorial/2d/text/fonts.html
-//
-//      There are two types of fonts: physical fonts and logical fonts.
-//      Physical fonts are the actual font libraries consisting of, for
-//      example, TrueType or PostScript Type 1 fonts. The physical fonts
-//      may be Time, Helvetica, Courier, or any number of other fonts,
-//      including international fonts. Logical fonts are the following
-//      five font families: Serif, SansSerif, Monospaced, Dialog, and
-//      DialogInput. These logical fonts are not actual font libraries.
-//      Instead, the logical font names are mapped to physical fonts by
-//      the Java runtime environment.
-
+/**
+ * abstract base class for physical font faces
+ *
+ * It acts as a factory for its corresponding LogicalFontInstances and
+ * can be extended to cache device and font instance specific data.
+ */
 class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes
 {
 public:
     virtual                ~PhysicalFontFace() {}
 
-    // by using an PhysicalFontFace object as a factory for its corresponding
-    // LogicalFontInstance can be extended to cache device and font instance
-    // specific data
-    virtual LogicalFontInstance*  CreateFontInstance( const FontSelectPattern& ) const = 0;
+    virtual LogicalFontInstance* CreateFontInstance(const FontSelectPattern&) const;
     virtual PhysicalFontFace* Clone() const = 0;
 
     int                     GetHeight() const           { return mnHeight; }
@@ -84,7 +69,7 @@ public:
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
 
 protected:
-    explicit                PhysicalFontFace( const FontAttributes& );
+    explicit PhysicalFontFace(const FontAttributes&);
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)

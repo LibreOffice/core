@@ -145,21 +145,20 @@ public:
 // win32 specific physical font instance
 class WinFontInstance : public LogicalFontInstance
 {
+    friend LogicalFontInstance* WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
+
 public:
-    explicit                WinFontInstance( FontSelectPattern const & );
     virtual                 ~WinFontInstance() override;
 
-private:
-    // TODO: also add HFONT??? Watch out for issues with too many active fonts...
-
-    GlyphCache maGlyphCache;
 public:
     bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
+    GlyphCache& GetGlyphCache() { return maGlyphCache; }
 
-    GlyphCache& GetGlyphCache()
-    {
-        return maGlyphCache;
-    }
+private:
+    explicit WinFontInstance(const FontSelectPattern&);
+
+    // TODO: also add HFONT??? Watch out for issues with too many active fonts...
+    GlyphCache maGlyphCache;
 };
 
 class TextOutRenderer

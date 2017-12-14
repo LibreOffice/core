@@ -2231,13 +2231,6 @@ PdfBuiltinFontFace::PdfBuiltinFontFace( const PDFWriterImpl::BuiltinFont& rBuilt
     mrBuiltin( rBuiltin )
 {}
 
-LogicalFontInstance* PdfBuiltinFontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
-{
-    LogicalFontInstance* pEntry = new LogicalFontInstance( rFSD );
-    return pEntry;
-}
-
-
 void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
 {
     endPage();

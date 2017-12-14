@@ -37,6 +37,11 @@ PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
             SetSymbolFlag( true );
 }
 
+LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+{
+    return new LogicalFontInstance(rFSD);
+}
+
 sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
 {
     // compare their width, weight, italic, style name and family name

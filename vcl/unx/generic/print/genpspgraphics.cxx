@@ -41,9 +41,9 @@
 #include <config_cairo_canvas.h>
 
 #include <fontsubset.hxx>
+#include <unx/freetype_glyphcache.hxx>
 #include <unx/geninst.h>
 #include <unx/genpspgraphics.h>
-#include <unx/glyphcache.hxx>
 #include <unx/printergfx.hxx>
 #include <impfont.hxx>
 #include <langboost.hxx>
@@ -523,7 +523,7 @@ void GenPspGraphics::invert(long,long,long,long,SalInvert)
     OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
 
-class ImplPspFontData : public PhysicalFontFace
+class ImplPspFontData : public FreetypeFontFace
 {
 private:
     sal_IntPtr              mnFontId;
@@ -532,19 +532,12 @@ public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
     virtual PhysicalFontFace*   Clone() const override { return new ImplPspFontData( *this ); }
-    virtual LogicalFontInstance*  CreateFontInstance( const FontSelectPattern& ) const override;
 };
 
-ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
-:   PhysicalFontFace( GenPspGraphics::Info2FontAttributes(rInfo) ),
+ImplPspFontData::ImplPspFontData(const psp::FastPrintFontInfo& rInfo)
+:   FreetypeFontFace(nullptr, GenPspGraphics::Info2FontAttributes(rInfo)),
     mnFontId( rInfo.m_nID )
 {}
-
-LogicalFontInstance* ImplPspFontData::CreateFontInstance( const FontSelectPattern& rFSD ) const
-{
-    FreetypeFontInstance* pEntry = new FreetypeFontInstance( rFSD );
-    return pEntry;
-}
 
 class PspCommonSalLayout : public CommonSalLayout
 {

@@ -1300,7 +1300,6 @@ public:
     const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
     virtual PhysicalFontFace*           Clone() const override { return new PdfBuiltinFontFace(*this); }
-    virtual LogicalFontInstance*        CreateFontInstance( const FontSelectPattern& ) const override;
     virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
 

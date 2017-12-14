@@ -22,21 +22,24 @@
 
 #include "fontselect.hxx"
 #include "impfontmetricdata.hxx"
+#include "PhysicalFontFace.hxx"
 
 #include <unordered_map>
 
-class ImplFontCache;
 class ConvertChar;
+class ImplFontCache;
 
 // TODO: allow sharing of metrics for related fonts
 
 class VCL_PLUGIN_PUBLIC LogicalFontInstance
 {
-public:
-    explicit        LogicalFontInstance( const FontSelectPattern& );
-    virtual         ~LogicalFontInstance();
+    // just declaring the factory function doesn't work AKA
+    // friend LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend class PhysicalFontFace;
 
 public: // TODO: make data members private
+    virtual ~LogicalFontInstance();
+
     ImplFontCache * mpFontCache;
     FontSelectPattern  maFontSelData;       // FontSelectionData
     ImplFontMetricDataRef mxFontMetric;        // Font attributes
@@ -51,6 +54,9 @@ public: // TODO: make data members private
     void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
     bool            GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
     void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
+
+protected:
+    explicit LogicalFontInstance(const FontSelectPattern&);
 
 private:
     // cache of Unicode characters and replacement font names
