@@ -80,6 +80,25 @@ SubstTemplateTypeParmType const * getAsSubstTemplateTypeParmType(QualType type)
     }
 }
 
+QualType reconstructTemplateArgumentType(
+    TemplateDecl const * decl, TemplateSpecializationType const * specializationType,
+    SubstTemplateTypeParmType const * parmType)
+{
+    TemplateParameterList const * ps = decl->getTemplateParameters();
+    auto i = std::find(ps->begin(), ps->end(), parmType->getReplacedParameter()->getDecl());
+    if (i == ps->end()) {
+        return {};
+    }
+    if (ps->size() != specializationType->getNumArgs()) { //TODO
+        return {};
+    }
+    TemplateArgument const & arg = specializationType->getArg(i - ps->begin());
+    if (arg.getKind() != TemplateArgument::Type) {
+        return {};
+    }
+    return arg.getAsType();
+}
+
 bool areSameTypedef(QualType type1, QualType type2) {
     // type1.getTypePtr() == typ2.getTypePtr() fails for e.g. ::sal_Bool vs.
     // sal_Bool:
@@ -159,28 +178,22 @@ bool isBoolExpr(Expr const * expr) {
                 if (td == nullptr) {
                     break;
                 }
-                td = cast<TemplateDecl>(td->getCanonicalDecl());
-                TemplateParameterList const * ps = td->getTemplateParameters();
                 SubstTemplateTypeParmType const * t2
                     = getAsSubstTemplateTypeParmType(
                         me->getMemberDecl()->getType());
                 if (t2 == nullptr) {
                     break;
                 }
-                auto i = std::find(
-                    ps->begin(), ps->end(),
-                    t2->getReplacedParameter()->getDecl());
-                if (i == ps->end()) {
+                ty = reconstructTemplateArgumentType(td, t, t2);
+                if (ty.isNull()) {
+                    auto const canon = cast<TemplateDecl>(td->getCanonicalDecl());
+                    if (canon != td) {
+                        ty = reconstructTemplateArgumentType(canon, t, t2);
+                    }
+                }
+                if (ty.isNull()) {
                     break;
                 }
-                if (ps->size() != t->getNumArgs()) { //TODO
-                    break;
-                }
-                TemplateArgument const & arg = t->getArg(i - ps->begin());
-                if (arg.getKind() != TemplateArgument::Type) {
-                    break;
-                }
-                ty = arg.getAsType();
             } else {
                 CXXOperatorCallExpr const * op
                     = dyn_cast<CXXOperatorCallExpr>(stack.top());
