@@ -315,6 +315,7 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
     {
         const std::string aType = aRoot.get<std::string>("type");
         const std::string aSize = aRoot.get<std::string>("size");
+        const std::string aTitle = aRoot.get<std::string>("title", "");
         std::vector<int> aSizePoints = GtvHelpers::split<int>(aSize, ", ", 2);
 
         if (aType == "dialog")
@@ -325,6 +326,9 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
             gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
             g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
             g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
+
+            if (!aTitle.empty())
+                gtk_window_set_title(GTK_WINDOW(pDialog), aTitle.c_str());
 
             gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
             gtk_widget_show_all(GTK_WIDGET(pDialog));

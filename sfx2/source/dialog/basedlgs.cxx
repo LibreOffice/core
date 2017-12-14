@@ -178,8 +178,10 @@ short SfxModalDialog::Execute()
         SetLOKNotifier(pViewShell);
         const Size aSize = GetOptimalSize();
         std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back(std::make_pair("type", "dialog"));
-        aItems.emplace_back(std::make_pair("size", aSize.toString()));
+        aItems.emplace_back("type", "dialog");
+        aItems.emplace_back("size", aSize.toString());
+        if (!GetText().isEmpty())
+            aItems.emplace_back("title", GetText().toUtf8());
         pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
     }
 
@@ -217,8 +219,10 @@ void SfxModalDialog::StateChanged( StateChangedType nType )
             SetLOKNotifier(SfxViewShell::Current());
             const Size aSize = GetOptimalSize();
             std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back(std::make_pair("type", "dialog"));
-            aItems.emplace_back(std::make_pair("size", aSize.toString()));
+            aItems.emplace_back("type", "dialog");
+            aItems.emplace_back("size", aSize.toString());
+            if (!GetText().isEmpty())
+                aItems.emplace_back("title", GetText().toUtf8());
             SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
         else if (nType == StateChangedType::Visible &&
@@ -278,8 +282,10 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
         {
             SetLOKNotifier(pViewShell);
             std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back(std::make_pair("type", "dialog"));
-            aItems.emplace_back(std::make_pair("size", GetOptimalSize().toString()));
+            aItems.emplace_back("type", "dialog");
+            aItems.emplace_back("size", GetOptimalSize().toString());
+            if (!GetText().isEmpty())
+                aItems.emplace_back("title", GetText().toUtf8());
             pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
 
