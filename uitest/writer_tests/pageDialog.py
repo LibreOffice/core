@@ -7,7 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos, get_state_as_dict
 from com.sun.star.uno import RuntimeException
-from com.sun.star.awt.GradientStyle import LINEAR
+from com.sun.star.awt.GradientStyle import RECT
 from com.sun.star.drawing.HatchStyle import SINGLE
 from com.sun.star.drawing.BitmapMode import REPEAT
 from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
@@ -43,23 +43,23 @@ class WriterPageDialog(UITestCase):
                 document.StyleFamilies.PageStyles.Standard.FillColor, 7512015)
         elif btn == 'btngradient':
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradient.Style, LINEAR)
+                document.StyleFamilies.PageStyles.Standard.FillGradient.Style, RECT)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradient.StartColor, 9101876)
+                document.StyleFamilies.PageStyles.Standard.FillGradient.StartColor, 16569553)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradient.Angle, 300)
+                document.StyleFamilies.PageStyles.Standard.FillGradient.Angle, 450)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.Border, 0)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradient.XOffset, 0)
+                document.StyleFamilies.PageStyles.Standard.FillGradient.XOffset, 50)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradient.YOffset, 0)
+                document.StyleFamilies.PageStyles.Standard.FillGradient.YOffset, 50)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.StartIntensity, 100)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.EndIntensity, 100)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradientName, 'Tango Green')
+                document.StyleFamilies.PageStyles.Standard.FillGradientName, 'Pastel Dream')
         elif btn == 'btnhatch':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillHatch.Style, SINGLE )
