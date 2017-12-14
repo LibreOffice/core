@@ -27,15 +27,15 @@ class Point;
 class SAL_WARN_UNUSED ImplPolygonData
 {
 public:
-    Point*          mpPointAry;
-    PolyFlags*      mpFlagAry;
+    std::unique_ptr<Point[]> mxPointAry;
+    std::unique_ptr<PolyFlags[]> mxFlagAry;
     sal_uInt16      mnPoints;
 };
 
 class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
 {
 public:
-                    ImplPolygon() { mpPointAry = nullptr; mpFlagAry = nullptr; mnPoints = 0;};
+                    ImplPolygon() { mnPoints = 0; }
                     ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
@@ -47,7 +47,6 @@ public:
                     ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1, const Point& rBezPt2,
                                     const Point& rCtrlPt2, sal_uInt16 nPoints );
                     ImplPolygon(const basegfx::B2DPolygon& rPolygon);
-                    ~ImplPolygon();
 
     bool            operator==( const ImplPolygon& rCandidate ) const;
 
