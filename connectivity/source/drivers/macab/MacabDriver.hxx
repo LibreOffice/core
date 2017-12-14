@@ -119,7 +119,7 @@ namespace connectivity
 
         public:
             /// @throws css::uno::Exception
-            static css::uno::Reference< css::uno::XInterface > SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+            static css::uno::Reference< css::uno::XInterface > Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
             // XServiceInfo - static versions
             /// @throws css::uno::RuntimeException
