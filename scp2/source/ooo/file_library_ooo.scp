@@ -1221,7 +1221,7 @@ File gid_File_Lib_Expwrap_Uno
   #ifdef UNX
     Name = STRING(CONCAT2(expwrap.uno,UNXSUFFIX));
   #elif defined(OS2)
-    Name = "expwrap_uno.dll";
+    Name = "expwrap.dll";
   #else
     Name = "expwrap.uno.dll";
   #endif
@@ -1473,7 +1473,7 @@ File gid_File_Lib_Ucbhelper
   #ifdef UNX
     Name = STRING(CONCAT3(libucbhelper,COMID,UNXSUFFIX));
   #elif defined OS2
-    Name = "ucbh.dll";
+    Name = "ucbhelp.dll";
   #else
     Name = STRING(CONCAT3(ucbhelper,COMID,.dll));
   #endif
@@ -1843,7 +1843,7 @@ File gid_File_Lib_Raptor
        Name = STRING(CONCAT4(libraptor2,UNXSUFFIX,.,RAPTOR_MAJOR));
     #endif
   #elif defined(OS2)
-    Name = "raptor.dll";
+    Name = "raptor20.dll";
   #else
    #ifdef _gcc3
     Name = "libraptor-1.dll";
@@ -1864,7 +1864,7 @@ File gid_File_Lib_Rasqal
        Name = STRING(CONCAT4(librasqal,UNXSUFFIX,.,RASQAL_MAJOR));
     #endif
   #elif defined(OS2)
-    Name = "rasqal.dll";
+    Name = "rasqal3.dll";
   #else
    #ifdef _gcc3
        Name = STRING(CONCAT3(librasqal-,RASQAL_MAJOR,.dll));
@@ -1885,7 +1885,7 @@ File gid_File_Lib_Rdf
        Name = STRING(CONCAT4(librdf,UNXSUFFIX,.,REDLAND_MAJOR));
     #endif
   #elif defined(OS2)
-    Name = "librdf.dll";
+    Name = "rdf0.dll";
   #else
    #ifdef _gcc3
     Name = "librdf-0.dll";

@@ -64,11 +64,6 @@ $(eval $(call gb_Library_add_linked_libs,emboleobj,\
 ))
 else ifeq ($(OS),OS2)
 $(eval $(call gb_Library_add_linked_libs,emboleobj,\
-        gdi32 \
-        ole32 \
-        oleaut32 \
-        uuid \
-	user32 \
 ))
 endif
 

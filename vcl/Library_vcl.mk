@@ -51,7 +51,7 @@ $(eval $(call gb_Library_set_include,vcl,\
 ifeq ($(GUIBASE),os2)
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
-    -idirafter /@unixroot/usr/dev/toolkit452/h \
+    -idirafter /@unixroot/usr/include/os2tk45 \
 ))
 endif
 ifeq ($(GUIBASE),unx)

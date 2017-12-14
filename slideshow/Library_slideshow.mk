@@ -19,18 +19,12 @@
 #  
 #**************************************************************
 
-ifeq ($(OS),OS2)
-	SLIDESHOW_NAME := slidesho
-else
-	SLIDESHOW_NAME := slideshow
-endif
 
+$(eval $(call gb_Library_Library,slideshow))
 
-$(eval $(call gb_Library_Library,$(SLIDESHOW_NAME)))
+$(eval $(call gb_Library_set_componentfile,slideshow,slideshow/util/slideshow))
 
-$(eval $(call gb_Library_set_componentfile,$(SLIDESHOW_NAME),slideshow/util/slideshow))
-
-$(eval $(call gb_Library_add_linked_libs,$(SLIDESHOW_NAME),\
+$(eval $(call gb_Library_add_linked_libs,slideshow,\
 	avmedia \
 	basegfx \
 	canvastools \
@@ -47,13 +41,13 @@ $(eval $(call gb_Library_add_linked_libs,$(SLIDESHOW_NAME),\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,$(SLIDESHOW_NAME),\
+$(eval $(call gb_Library_add_linked_static_libs,slideshow,\
 	sldshw_s \
 ))
 
 # List this file again, even though it's in the static lib, so that
 # component_getFactory and component_getImplementationEnvironment are exported:
-$(eval $(call gb_Library_add_exception_objects,$(SLIDESHOW_NAME),\
+$(eval $(call gb_Library_add_exception_objects,slideshow,\
 	slideshow/source/engine/slideshowimpl \
 ))
 

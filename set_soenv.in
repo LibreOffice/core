@@ -358,7 +358,7 @@ elsif ( $platform =~ m/kfreebsd/ )
 }
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
-      $COM            = "@COM_IS@";
+      $COM            = "GCC";
       $COMPATH        = '@COMPATH@' . '/bin'; 
       $CVER           = "C300";
       $GUI            = "UNX";

@@ -535,6 +535,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_linked_libs,$(1),CoinMP)
 ifneq ($(OS),WNT)
+ifneq ($(OS),OS2)
 $(call gb_LinkTarget_add_linked_libs,$(1),\
     CoinUtils \
     Clp \
@@ -544,6 +545,7 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
     Cgl \
     CbcSolver \
 )
+endif
 endif
 endef
 

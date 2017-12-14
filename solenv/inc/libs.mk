@@ -83,7 +83,7 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : ucbhelper/version.mk
 .IF "$(GUI)"=="OS2"
-UCBHELPERLIB=-lucbh$(UCBHELPER_MAJOR)
+UCBHELPERLIB=-lucbhelper
 .ELSE
 UCBHELPERLIB=-lucbhelper$(COMID)
 .ENDIF

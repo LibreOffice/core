@@ -52,7 +52,7 @@ NSS_CFLAGS = -I$(MOZ_INC)$/nss
 NSPR_CFLAGS = -I$(MOZ_INC)$/nspr
 .ELIF "$(GUI)" == "OS2"
 NSS_CFLAGS = -I/@unixroot/usr/include/nss3
-NSPR_CFLAGS = I/@unixroot/usr/include/nspr4
+NSPR_CFLAGS = -I/@unixroot/usr/include/nspr4
 .ENDIF
 
 .IF "$(GUI)" == "WNT"
