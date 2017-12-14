@@ -3245,6 +3245,7 @@ static void LOKAsyncEventLink( void* pEvent, void* )
     {
         ImplWindowFrameProc(pLOKEv->mpWindow, pLOKEv->mnEvent, &pLOKEv->maMouseEvent);
     }
+    delete pLOKEv;
 }
 
 void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
