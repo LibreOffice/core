@@ -355,8 +355,16 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     pFType = static_cast<SwAuthorityFieldType*>(
                                 pSh->InsertFieldType(type));
                 }
-                pFType->SetPreSuffix(rDesc.GetAuthBrackets()[0],
-                    rDesc.GetAuthBrackets()[1]);
+                OUString const& rBrackets(rDesc.GetAuthBrackets());
+                if (rBrackets.isEmpty())
+                {
+                    pFType->SetPreSuffix('\0', '\0');
+                }
+                else
+                {
+                    assert(rBrackets.getLength() == 2);
+                    pFType->SetPreSuffix(rBrackets[0], rBrackets[1]);
+                }
                 pFType->SetSequence(rDesc.IsAuthSequence());
                 SwTOXSortKey rArr[3];
                 rArr[0] = rDesc.GetSortKey1();
