@@ -451,7 +451,7 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
         m_pListenersContainer->removeInterface( xListener );
 }
 
-uno::Sequence< OUString > SAL_CALL OZipFileAccess::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > OZipFileAccess::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.packages.zip.ZipFileAccess";
@@ -459,12 +459,12 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::impl_staticGetSupportedServic
     return aRet;
 }
 
-OUString SAL_CALL OZipFileAccess::impl_staticGetImplementationName()
+OUString OZipFileAccess::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.package.zip.ZipFileAccess");
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OZipFileAccess::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > OZipFileAccess::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& rxMSF )
 {
     return uno::Reference< uno::XInterface >( *new OZipFileAccess( comphelper::getComponentContext(rxMSF) ) );

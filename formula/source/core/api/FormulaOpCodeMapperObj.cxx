@@ -86,7 +86,7 @@ OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  )
     return getImplementationName_Static();
 }
 
-OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName_Static()
+OUString FormulaOpCodeMapperObj::getImplementationName_Static()
 {
     return OUString( "simple.formula.FormulaOpCodeMapperObj" );
 }
@@ -95,13 +95,13 @@ uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNa
 {
     return getSupportedServiceNames_Static();
 }
-uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
+uno::Sequence< OUString > FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aSeq { "com.sun.star.sheet.FormulaOpCodeMapper" };
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL FormulaOpCodeMapperObj::create(
+uno::Reference< uno::XInterface > FormulaOpCodeMapperObj::create(
                 uno::Reference< uno::XComponentContext > const & /*_xContext*/)
 {
     return static_cast<sheet::XFormulaOpCodeMapper*>(new FormulaOpCodeMapperObj(o3tl::make_unique<FormulaCompiler>()));

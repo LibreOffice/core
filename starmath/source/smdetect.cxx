@@ -147,7 +147,7 @@ OUString SmFilterDetect::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL SmFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
+Reference< XInterface > SmFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
 {
     return Reference< XInterface >( *new SmFilterDetect( xServiceManager ) );
 }

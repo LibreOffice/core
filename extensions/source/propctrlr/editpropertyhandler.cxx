@@ -62,13 +62,13 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL EditPropertyHandler::getImplementationName_static(  )
+    OUString EditPropertyHandler::getImplementationName_static(  )
     {
         return OUString( "com.sun.star.comp.extensions.EditPropertyHandler" );
     }
 
 
-    Sequence< OUString > SAL_CALL EditPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > EditPropertyHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.EditPropertyHandler" };
         return aSupported;

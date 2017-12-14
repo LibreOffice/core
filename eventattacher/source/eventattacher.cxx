@@ -207,7 +207,7 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
+    static Sequence< OUString > getSupportedServiceNames_Static(  );
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
@@ -301,7 +301,7 @@ Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
 }
 
 
-Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames_Static(  )
+Sequence<OUString> EventAttacherImpl::getSupportedServiceNames_Static(  )
 {
     OUString aStr(  SERVICENAME  );
     return Sequence< OUString >( &aStr, 1 );

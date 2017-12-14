@@ -1323,13 +1323,13 @@ Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  )
     return impl_getStaticSupportedServiceNames();
 }
 
-Sequence< OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceNames(  )
+Sequence< OUString > PasswordContainer::impl_getStaticSupportedServiceNames(  )
 {
     Sequence< OUString > aRet { "com.sun.star.task.PasswordContainer" };
     return aRet;
 }
 
-OUString SAL_CALL PasswordContainer::impl_getStaticImplementationName()
+OUString PasswordContainer::impl_getStaticImplementationName()
 {
     return OUString("stardiv.svl.PasswordContainer");
 }

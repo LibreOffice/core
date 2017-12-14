@@ -520,26 +520,26 @@ Sequence< OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames(  )
 }
 
 
-Reference< XInterface > SAL_CALL OSDBCDriverManager::Create( const Reference< XMultiServiceFactory >& _rxFactory )
+Reference< XInterface > OSDBCDriverManager::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
     return *( new OSDBCDriverManager( comphelper::getComponentContext(_rxFactory) ) );
 }
 
 
-OUString SAL_CALL OSDBCDriverManager::getImplementationName_static(  )
+OUString OSDBCDriverManager::getImplementationName_static(  )
 {
     return OUString("com.sun.star.comp.sdbc.OSDBCDriverManager");
 }
 
 
-Sequence< OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames_static(  )
+Sequence< OUString > OSDBCDriverManager::getSupportedServiceNames_static(  )
 {
     Sequence< OUString > aSupported { getSingletonName_static() };
     return aSupported;
 }
 
 
-OUString SAL_CALL OSDBCDriverManager::getSingletonName_static(  )
+OUString OSDBCDriverManager::getSingletonName_static(  )
 {
     return OUString(  "com.sun.star.sdbc.DriverManager"  );
 }

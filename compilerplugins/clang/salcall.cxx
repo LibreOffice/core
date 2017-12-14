@@ -276,23 +276,6 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
         }
     }
 
-    // these often have their address taken
-    if (methodDecl && methodDecl->getIdentifier())
-    {
-        auto name = methodDecl->getName();
-        if (name == "getImplementationName_static" || name == "getSupportedServiceNames_static"
-            || name == "getSupportedServiceNames_Static" || name == "Create" || name == "create"
-            || name == "CreateInstance" || name == "getImplementationName_Static"
-            || name == "getSingletonName_static" || name == "getLdapUserProfileBeName"
-            || name == "getLdapUserProfileBeServiceNames" || name == "impl_staticCreateSelfInstance"
-            || name == "impl_createInstance" || name == "impl_staticGetImplementationName"
-            || name == "impl_staticGetSupportedServiceNames"
-            || name == "impl_getStaticSupportedServiceNames"
-            || name == "impl_getStaticImplementationName" || name == "getBackendName"
-            || name == "getBackendServiceNames")
-            return true;
-    }
-
     bool bOK = rewrite(rewriteLoc);
     if (bOK && canonicalDecl != decl)
     {

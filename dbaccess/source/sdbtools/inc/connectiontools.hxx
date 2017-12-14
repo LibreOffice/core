@@ -63,9 +63,9 @@ namespace sdbtools
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XServiceInfo - static versions
-        static OUString SAL_CALL getImplementationName_static();
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        static OUString getImplementationName_static();
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static();
+        static css::uno::Reference< css::uno::XInterface >
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
         // XInitialization

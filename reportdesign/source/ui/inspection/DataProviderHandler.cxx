@@ -98,7 +98,7 @@ uno::Sequence< OUString > DataProviderHandler::getSupportedServiceNames_static( 
     return aSupported;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL DataProviderHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
+uno::Reference< uno::XInterface > DataProviderHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new DataProviderHandler( _rxContext ));
 }

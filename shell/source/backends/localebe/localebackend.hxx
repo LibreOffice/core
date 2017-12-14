@@ -56,13 +56,13 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
 
           @return   implementation name
           */
-        static OUString SAL_CALL getBackendName() ;
+        static OUString getBackendName() ;
         /**
           Provides the supported services names
 
           @return   service names
           */
-        static uno::Sequence<OUString> SAL_CALL getBackendServiceNames() ;
+        static uno::Sequence<OUString> getBackendServiceNames() ;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL

@@ -53,7 +53,7 @@ public:
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
     static css::uno::Reference< css::uno::XInterface >
-            SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;

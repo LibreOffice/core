@@ -125,7 +125,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
 
-    static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static() throw(  );
+    static Sequence<OUString> getSupportedServiceNames_Static() throw(  );
 
     /// @throws Exception
     friend  Reference< XInterface > BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr );

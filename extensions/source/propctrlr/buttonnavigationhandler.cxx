@@ -55,13 +55,13 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL ButtonNavigationHandler::getImplementationName_static(  )
+    OUString ButtonNavigationHandler::getImplementationName_static(  )
     {
         return OUString( "com.sun.star.comp.extensions.ButtonNavigationHandler" );
     }
 
 
-    Sequence< OUString > SAL_CALL ButtonNavigationHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > ButtonNavigationHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.ButtonNavigationHandler" };
         return aSupported;

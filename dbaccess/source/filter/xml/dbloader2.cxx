@@ -112,7 +112,7 @@ public:
     }
     static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
     static css::uno::Reference< css::uno::XInterface >
-            SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };
@@ -183,7 +183,7 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
     return OUString();
 }
 
-Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMultiServiceFactory >  & rSMgr )
+Reference< XInterface > DBTypeDetection::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
     return *(new DBTypeDetection( comphelper::getComponentContext(rSMgr) ));
 }
@@ -247,7 +247,7 @@ public:
     }
     static Sequence< OUString > getSupportedServiceNames_Static() throw(  );
     static css::uno::Reference< css::uno::XInterface >
-            SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
@@ -267,7 +267,7 @@ DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactor
 
 }
 
-Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
+Reference< XInterface > DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
     return *(new DBContentLoader( comphelper::getComponentContext(rSMgr) ));
 }

@@ -373,7 +373,7 @@ public:
     // css::lang::XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    static  css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static( );
+    static  css::uno::Sequence< OUString > getSupportedServiceNames_Static( );
 };
 
 

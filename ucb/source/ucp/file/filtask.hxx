@@ -682,9 +682,9 @@ namespace fileaccess
 
         static void getScheme( OUString& Scheme );
 
-        static OUString SAL_CALL getImplementationName_static();
+        static OUString getImplementationName_static();
 
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     };
 
 } // end namespace TaskHandling

@@ -76,7 +76,7 @@ uno::Sequence< OUString > ReportComponentHandler::getSupportedServiceNames_stati
     return aSupported;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ReportComponentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
+uno::Reference< uno::XInterface > ReportComponentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ReportComponentHandler( _rxContext ));
 }

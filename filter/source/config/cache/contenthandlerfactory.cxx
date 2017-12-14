@@ -144,7 +144,7 @@ css::uno::Sequence< OUString > ContentHandlerFactory::impl_getSupportedServiceNa
 }
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+css::uno::Reference< css::uno::XInterface > ContentHandlerFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     ContentHandlerFactory* pNew = new ContentHandlerFactory( comphelper::getComponentContext(xSMGR) );
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);

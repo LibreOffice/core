@@ -80,7 +80,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL DefaultHelpProvider::Create( const Reference< XComponentContext >& )
+    Reference< XInterface > DefaultHelpProvider::Create( const Reference< XComponentContext >& )
     {
         return *new DefaultHelpProvider;
     }

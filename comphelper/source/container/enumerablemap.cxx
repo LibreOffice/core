@@ -185,9 +185,9 @@ namespace comphelper
 
     public:
         // XServiceInfo, static version (used for component registration)
-        static OUString SAL_CALL getImplementationName_static(  );
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
-        static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
+        static OUString getImplementationName_static(  );
+        static Sequence< OUString > getSupportedServiceNames_static(  );
+        static Reference< XInterface > Create( const Reference< XComponentContext >& );
 
     private:
         void    impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues );
@@ -659,20 +659,20 @@ namespace comphelper
     }
 
 
-    OUString SAL_CALL EnumerableMap::getImplementationName_static(  )
+    OUString EnumerableMap::getImplementationName_static(  )
     {
         return OUString( "org.openoffice.comp.comphelper.EnumerableMap" );
     }
 
 
-    Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames_static(  )
+    Sequence< OUString > EnumerableMap::getSupportedServiceNames_static(  )
     {
         Sequence< OUString > aServiceNames { "com.sun.star.container.EnumerableMap" };
         return aServiceNames;
     }
 
 
-    Reference< XInterface > SAL_CALL EnumerableMap::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
+    Reference< XInterface > EnumerableMap::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
     {
         return *new EnumerableMap;
     }

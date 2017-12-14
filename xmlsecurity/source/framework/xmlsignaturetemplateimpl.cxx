@@ -125,7 +125,7 @@ OUString XMLSignatureTemplateImpl::impl_getImplementationName() {
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) {
+Reference< XInterface > XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) {
     return Reference< XInterface >( *new XMLSignatureTemplateImpl ) ;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

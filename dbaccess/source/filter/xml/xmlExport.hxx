@@ -172,13 +172,13 @@ public:
     ODBExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
 
     /// @throws css::uno::RuntimeException
-    static OUString SAL_CALL getImplementationName_Static();
+    static OUString getImplementationName_Static();
 
     /// @throws css::uno::RuntimeException
-    static css::uno::Sequence<OUString> SAL_CALL
+    static css::uno::Sequence<OUString>
     getSupportedServiceNames_Static();
 
-    static css::uno::Reference<css::uno::XInterface> SAL_CALL Create(
+    static css::uno::Reference<css::uno::XInterface> Create(
         css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
 
     rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;

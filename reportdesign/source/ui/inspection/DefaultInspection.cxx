@@ -86,7 +86,7 @@ namespace rptui
         return aSupported;
     }
 
-    Reference< XInterface > SAL_CALL DefaultComponentInspectorModel::create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > DefaultComponentInspectorModel::create( const Reference< XComponentContext >& _rxContext )
     {
         return *(new DefaultComponentInspectorModel( _rxContext ));
     }

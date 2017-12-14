@@ -124,7 +124,7 @@ namespace dbaui
             Sequence<OUString> aSupported { "com.sun.star.sdb.ViewDesign" };
             return aSupported;
         }
-        static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
+        static Reference< XInterface > Create(const Reference< XMultiServiceFactory >& _rM)
         {
             return *(new OViewController(comphelper::getComponentContext(_rM)));
         }
@@ -299,7 +299,7 @@ Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OQueryController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new OQueryController(comphelper::getComponentContext(_rxFactory)));
 }

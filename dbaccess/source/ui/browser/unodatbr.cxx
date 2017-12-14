@@ -201,7 +201,7 @@ css::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames_Stat
     return aSupported;
 }
 
-Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     SolarMutexGuard aGuard;
     return *(new SbaTableQueryBrowser(comphelper::getComponentContext(_rxFactory)));

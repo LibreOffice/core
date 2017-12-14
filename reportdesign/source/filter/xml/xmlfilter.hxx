@@ -122,7 +122,7 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     const Reference<XReportDefinition>& getReportDefinition() const {
@@ -182,7 +182,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
@@ -197,7 +197,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
@@ -212,7 +212,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
@@ -227,7 +227,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 

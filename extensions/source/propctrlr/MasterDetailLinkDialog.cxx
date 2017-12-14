@@ -46,7 +46,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL MasterDetailLinkDialog::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > MasterDetailLinkDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new MasterDetailLinkDialog( _rxContext ) );
     }

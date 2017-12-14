@@ -52,9 +52,9 @@ class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public cppu::WeakImplHelper<
 {
     ::std::unique_ptr<FormulaCompiler> m_pCompiler;
 public:
-    static OUString  SAL_CALL getImplementationName_Static();
-    static css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames_Static();
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create(const css::uno::Reference< css::uno::XComponentContext >& _xContext);
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString> getSupportedServiceNames_Static();
+    static css::uno::Reference< css::uno::XInterface > create(const css::uno::Reference< css::uno::XComponentContext >& _xContext);
 
 protected:
                             FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler> && _pCompiler);

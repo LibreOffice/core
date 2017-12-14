@@ -141,7 +141,7 @@ css::uno::Sequence< OUString > FrameLoaderFactory::impl_getSupportedServiceNames
 }
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+css::uno::Reference< css::uno::XInterface > FrameLoaderFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     FrameLoaderFactory* pNew = new FrameLoaderFactory( comphelper::getComponentContext(xSMGR) );
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);

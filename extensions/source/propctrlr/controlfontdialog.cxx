@@ -71,7 +71,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL OControlFontDialog::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > OControlFontDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new OControlFontDialog( _rxContext ) );
     }

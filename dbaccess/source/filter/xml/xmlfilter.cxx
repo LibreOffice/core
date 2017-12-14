@@ -239,7 +239,7 @@ css::uno::Sequence<OUString> ODBFilter::getSupportedServiceNames_Static()
 
 
 css::uno::Reference< css::uno::XInterface >
-    SAL_CALL ODBFilter::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+    ODBFilter::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
 {
     return static_cast< XServiceInfo* >(new ODBFilter( comphelper::getComponentContext(_rxORB)));
 }

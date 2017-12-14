@@ -47,7 +47,7 @@ Sequence<sal_Int8> SAL_CALL OTableFilterDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > SAL_CALL OTableFilterDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OTableFilterDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new OTableFilterDialog( comphelper::getComponentContext(_rxFactory) ));
 }

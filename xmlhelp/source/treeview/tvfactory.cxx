@@ -123,13 +123,13 @@ TVFactory::getAvailableServiceNames( )
 
 // static
 
-OUString SAL_CALL
+OUString
 TVFactory::getImplementationName_static()
 {
     return OUString( "com.sun.star.help.TreeViewImpl" );
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TVFactory::getSupportedServiceNames_static()
 {
     Sequence< OUString > seq( 2 );

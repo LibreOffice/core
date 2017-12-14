@@ -120,7 +120,7 @@ uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL ExportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
+uno::Reference< uno::XInterface > ExportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ExportDocumentHandler( _rxContext ));
 }
