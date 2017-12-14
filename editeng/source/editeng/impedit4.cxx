@@ -315,10 +315,15 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         else if ( nScriptType == 2 )
             nWhich = EE_CHAR_FONTINFO_CTL;
 
-        sal_uInt32 i = 0;
-        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(aEditDoc.GetItemPool().GetItem2( nWhich, i ));
-        while ( pFontItem )
+        auto const nFonts(aEditDoc.GetItemPool().GetItemCount2(nWhich));
+        for (std::remove_const_t<decltype(nFonts)> i = 0; i < nFonts; ++i)
         {
+            SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(
+                    aEditDoc.GetItemPool().GetItem2(nWhich, i));
+            if (!pFontItem)
+            {
+                continue;
+            }
             bool bAlreadyExist = false;
             sal_uLong nTestMax = nScriptType ? aFontTable.size() : 1;
             for ( sal_uLong nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
@@ -328,8 +333,6 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
             if ( !bAlreadyExist )
                 aFontTable.push_back( new SvxFontItem( *pFontItem ) );
-
-            pFontItem = static_cast<const SvxFontItem*>(aEditDoc.GetItemPool().GetItem2( nWhich, ++i ));
         }
     }
 
