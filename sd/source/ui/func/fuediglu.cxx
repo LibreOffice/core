@@ -141,7 +141,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
-            mpView->MarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, aVEvt.pPV);
+            mpView->MarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, false);
             SdrHdl* pHdl = mpView->GetGluePointHdl(aVEvt.pObj, aVEvt.nGlueId);
 
             if (pHdl)
