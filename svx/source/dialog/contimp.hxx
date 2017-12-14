@@ -59,7 +59,7 @@ class SvxSuperContourDlg : public SvxContourDlg
     VclPtr<MetricField> m_pMtfTolerance;
     VclPtr<ContourWindow> m_pContourWnd;
     VclPtr<StatusBar>   m_pStbStatus;
-    sal_uIntPtr         nGrfChanged;
+    sal_Int32           mnGrfChanged;
     bool                bExecState;
     bool                bUpdateGraphicLinked;
     bool                bGraphicLinked;
@@ -103,7 +103,7 @@ public:
 
     void                SetGraphic( const Graphic& rGraphic );
     const Graphic&      GetGraphic() const { return aGraphic; }
-    bool                IsGraphicChanged() const { return nGrfChanged > 0; }
+    bool                IsGraphicChanged() const { return mnGrfChanged > 0; }
 
     void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     tools::PolyPolygon  GetPolyPolygon();
