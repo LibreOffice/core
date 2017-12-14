@@ -187,6 +187,8 @@ short SfxModalDialog::Execute()
         aItems.emplace_back(std::make_pair("type", "dialog"));
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
         pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+        if (!GetText().isEmpty())
+            pViewShell->notifyWindow(GetLOKWindowId(), "title_changed", { {"title", GetText().toUtf8()} });
     }
 
     return ModalDialog::Execute();
@@ -226,6 +228,8 @@ void SfxModalDialog::StateChanged( StateChangedType nType )
             aItems.emplace_back(std::make_pair("type", "dialog"));
             aItems.emplace_back(std::make_pair("size", aSize.toString()));
             SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
+            if (!GetText().isEmpty())
+                SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "title_changed", { {"title", GetText().toUtf8()} });
         }
         else if (nType == StateChangedType::Visible &&
                  !IsVisible() &&
@@ -287,6 +291,8 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             aItems.emplace_back(std::make_pair("type", "dialog"));
             aItems.emplace_back(std::make_pair("size", GetOptimalSize().toString()));
             pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+            if (!GetText().isEmpty())
+                pViewShell->notifyWindow(GetLOKWindowId(), "title_changed", { {"title", GetText().toUtf8()} });
         }
 
         pImpl->bConstructed = true;

@@ -529,6 +529,8 @@ short SfxTabDialog::Execute()
         aItems.emplace_back(std::make_pair("type", "dialog"));
         aItems.emplace_back(std::make_pair("size", aSize.toString()));
         pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+        if (!GetText().isEmpty())
+            pViewShell->notifyWindow(GetLOKWindowId(), "title_changed", { {"title", GetText().toUtf8()} });
     }
 
     return TabDialog::Execute();
