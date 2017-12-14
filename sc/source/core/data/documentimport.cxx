@@ -25,9 +25,7 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
-
-#include <memory>
-#include <vector>
+#include <o3tl/make_unique.hxx>
 
 namespace {
 
@@ -271,7 +269,8 @@ void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditT
 }
 
 void ScDocumentImport::setFormulaCell(
-    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar)
+    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar,
+    const double* pResult )
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
     if (!pTab)
@@ -282,9 +281,42 @@ void ScDocumentImport::setFormulaCell(
     if (!pBlockPos)
         return;
 
+    std::unique_ptr<ScFormulaCell> pFC =
+        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
+
+    if (pResult)
+    {
+        // Set cached result to this formula cell.
+        pFC->SetResultDouble(*pResult);
+    }
+
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos =
-        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), pFC.release());
+}
+
+void ScDocumentImport::setFormulaCell(
+    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar,
+    const OUString& rResult )
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    std::unique_ptr<ScFormulaCell> pFC =
+        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
+
+    // Set cached result to this formula cell.
+    pFC->SetHybridString(mpImpl->mrDoc.GetSharedStringPool().intern(rResult));
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos =
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), pFC.release());
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArray)

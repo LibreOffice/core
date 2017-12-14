@@ -273,6 +273,8 @@ public:
     virtual orcus::spreadsheet::range_size_t get_sheet_size() const override;
 
     SCTAB getIndex() const { return mnTab; }
+
+    const sc::SharedFormulaGroups& getSharedFormulaGroups() const;
 };
 
 class ScOrcusStyles : public orcus::spreadsheet::iface::import_styles
@@ -508,28 +510,51 @@ public:
 
 class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 {
-    struct StringCellCache
+    struct CellStoreToken
     {
-        ScAddress maPos;
-        size_t mnIndex;
+        enum class Type
+        {
+            Auto,
+            Numeric,
+            String,
+            Formula,
+            FormulaWithResult,
+            SharedFormula,
+            SharedFormulaWithResult,
+            Matrix
+        };
 
-        StringCellCache(const ScAddress& rPos, size_t nIndex);
+        ScAddress maPos;
+        Type meType;
+
+        OUString maStr1;
+        OUString maStr2;
+        double mfValue;
+
+        uint32_t mnIndex1;
+        uint32_t mnIndex2;
+        formula::FormulaGrammar::Grammar meGrammar;
+
+        CellStoreToken( const ScAddress& rPos, Type eType );
+        CellStoreToken( const ScAddress& rPos, double fValue );
+        CellStoreToken( const ScAddress& rPos, uint32_t nIndex );
+        CellStoreToken( const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar );
     };
 
     typedef std::unordered_map<OUString, size_t> StringHashType;
-    typedef std::vector<StringCellCache> StringCellCaches;
+    typedef std::vector<CellStoreToken> CellStoreTokensType;
 
     ScDocumentImport maDoc;
 
     std::vector<OUString> maStrings;
     StringHashType maStringHash;
 
-    StringCellCaches maStringCells;
+    CellStoreTokensType maCellStoreTokens;
     ScOrcusGlobalSettings maGlobalSettings;
     ScOrcusRefResolver maRefResolver;
     ScOrcusSharedStrings maSharedStrings;
     ScOrcusNamedExpression maNamedExpressions;
-    std::vector< std::unique_ptr<ScOrcusSheet> > maSheets;
+    std::vector<std::unique_ptr<ScOrcusSheet>> maSheets;
     ScOrcusStyles maStyles;
 
     int mnProgress;
@@ -552,7 +577,19 @@ public:
     size_t appendString(const OUString& rStr);
     size_t addString(const OUString& rStr);
 
-    void pushStringCell(const ScAddress& rPos, size_t nStrIndex);
+    void pushCellStoreAutoToken( const ScAddress& rPos, const OUString& rVal );
+    void pushCellStoreToken( const ScAddress& rPos, uint32_t nStrIndex );
+    void pushCellStoreToken( const ScAddress& rPos, double fValue );
+    void pushCellStoreToken(
+        const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar );
+
+    void pushSharedFormulaToken( const ScAddress& rPos, uint32_t nIndex );
+    void pushMatrixFormulaToken(
+        const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar,
+        uint32_t nRowRange, uint32_t nColRange );
+
+    void pushFormulaResult( const ScAddress& rPos, double fValue );
+    void pushFormulaResult( const ScAddress& rPos, const OUString& rValue );
 
     void incrementProgress();
 
