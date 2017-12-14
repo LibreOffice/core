@@ -607,9 +607,9 @@ ScInputHandler::ScInputHandler()
         pFormulaData( nullptr ),
         pFormulaDataPara( nullptr ),
         pTipVisibleParent( nullptr ),
-        nTipVisible( 0 ),
+        nTipVisible( nullptr ),
         pTipVisibleSecParent( nullptr ),
-        nTipVisibleSec( 0 ),
+        nTipVisibleSec( nullptr ),
         nFormSelStart( 0 ),
         nFormSelEnd( 0 ),
         nAutoPar( 0 ),
@@ -869,7 +869,7 @@ void ScInputHandler::HideTip()
     {
         pTipVisibleParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
         Help::HidePopover(pTipVisibleParent, nTipVisible );
-        nTipVisible = 0;
+        nTipVisible = nullptr;
         pTipVisibleParent = nullptr;
     }
     aManualTip.clear();
@@ -880,7 +880,7 @@ void ScInputHandler::HideTipBelow()
     {
         pTipVisibleSecParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
         Help::HidePopover(pTipVisibleSecParent, nTipVisibleSec);
-        nTipVisibleSec = 0;
+        nTipVisibleSec = nullptr;
         pTipVisibleSecParent = nullptr;
     }
     aManualTip.clear();

@@ -244,19 +244,19 @@ public:
     }
 
     // return !0 to indicate popovers are shown natively, 0 otherwise
-    virtual sal_uIntPtr     ShowPopover(const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/, QuickHelpFlags /*nFlags*/)
+    virtual void*           ShowPopover(const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/, QuickHelpFlags /*nFlags*/)
     {
-        return 0;
+        return nullptr;
     }
 
     // return true to indicate popovers are shown natively, false otherwise
-    virtual bool            UpdatePopover(sal_uIntPtr /*nId*/, const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/)
+    virtual bool            UpdatePopover(void* /*nId*/, const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/)
     {
         return false;
     }
 
     // return true to indicate popovers are shown natively, false otherwise
-    virtual bool            HidePopover(sal_uIntPtr /*nId*/)
+    virtual bool            HidePopover(void* /*nId*/)
     {
         return false;
     }

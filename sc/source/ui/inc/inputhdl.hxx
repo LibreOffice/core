@@ -67,9 +67,9 @@ private:
     ScTypedCaseStrSet::const_iterator miAutoPosFormula;
 
     VclPtr<vcl::Window>     pTipVisibleParent;
-    sal_uLong               nTipVisible;
+    void*                   nTipVisible;
     VclPtr<vcl::Window>     pTipVisibleSecParent;
-    sal_uLong               nTipVisibleSec;
+    void*                   nTipVisibleSec;
     OUString                aManualTip;
     OUString                aAutoSearch;
 
@@ -231,7 +231,7 @@ public:
     bool            DataChanging( sal_Unicode cTyped = 0, bool bFromCommand = false );
     void            DataChanged( bool bFromTopNotify = false, bool bSetModified = true );
 
-    bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
+    bool            TakesReturn() const     { return ( nTipVisible != nullptr ); }
 
     void            SetModified()       { bModified = true; }
 

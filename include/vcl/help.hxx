@@ -100,15 +100,15 @@ public:
 
     static void         HideBalloonAndQuickHelp();
 
-    static sal_uLong    ShowPopover(vcl::Window* pParent,
+    static void*        ShowPopover(vcl::Window* pParent,
                                     const tools::Rectangle& rScreenRect,
                                     const OUString& rText,
                                     QuickHelpFlags nStyle);
-    static void         UpdatePopover(sal_uLong nId,
+    static void         UpdatePopover(void* nId,
                                       vcl::Window* pParent,
                                       const tools::Rectangle& rScreenRect,
                                       const OUString& rText);
-    static void         HidePopover(vcl::Window const * pParent, sal_uLong nId);
+    static void         HidePopover(vcl::Window const * pParent, void* nId);
 };
 
 #endif // INCLUDED_VCL_HELP_HXX

@@ -2474,7 +2474,7 @@ namespace
     }
 }
 
-sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags)
+void* GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags)
 {
     GtkWidget *pWidget = gtk_popover_new(getMouseEventWidget());
     OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
@@ -2496,12 +2496,12 @@ sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rec
 
     gtk_widget_show_all(pWidget);
 
-    return reinterpret_cast<sal_uIntPtr>(pWidget);
+    return pWidget;
 }
 
-bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea)
+bool GtkSalFrame::UpdatePopover(void* nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea)
 {
-    GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
+    GtkWidget *pWidget = static_cast<GtkWidget*>(nId);
 
     set_pointing_to(GTK_POPOVER(pWidget), rHelpArea, maGeometry);
 
@@ -2512,9 +2512,9 @@ bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, cons
     return true;
 }
 
-bool GtkSalFrame::HidePopover(sal_uIntPtr nId)
+bool GtkSalFrame::HidePopover(void* nId)
 {
-    GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
+    GtkWidget *pWidget = static_cast<GtkWidget*>(nId);
     gtk_widget_destroy(pWidget);
     return true;
 }

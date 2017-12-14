@@ -266,7 +266,7 @@ struct QuickHelpData
     /// Display help string as a tip rather than inline.
     bool m_bIsTip;
     /// Tip ID when a help string is displayed as a tip.
-    sal_uLong nTipId;
+    void* nTipId;
     /// Append a space character to the displayed help string (if appropriate).
     bool m_bAppendSpace;
 
@@ -5930,7 +5930,7 @@ void QuickHelpData::ClearContent()
 {
     nLen = nCurArrPos = 0;
     m_bIsDisplayed = m_bAppendSpace = false;
-    nTipId = 0;
+    nTipId = nullptr;
     m_aHelpStrings.clear();
     m_bIsTip = true;
     m_bIsAutoText = true;
