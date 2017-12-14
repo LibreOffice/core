@@ -39,9 +39,9 @@ using namespace svt;
 const sal_Unicode cNoBreakSpace = 0xA0;
 const sal_Unicode cNarrowNoBreakSpace = 0x202F;
 
-const ::std::vector<OUString> ImpSvNumberformatScan::sEnglishKeyword =
+const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
 {             // Syntax keywords in English (USA)
-    //! All keywords MUST be UPPERCASE! In same order as NfKeywordTable
+    //! All keywords MUST be UPPERCASE! In same order as NfKeywordIndex
     "",        // NF_KEY_NONE 0
     "E",       // NF_KEY_E Exponent
     "AM/PM",   // NF_KEY_AMPM AM/PM

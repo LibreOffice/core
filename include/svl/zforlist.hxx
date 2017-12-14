@@ -822,7 +822,7 @@ public:
     const NfKeywordTable & GetKeywords( sal_uInt32 nKey );
 
     /** Access for unit tests. */
-    const std::vector<OUString> & GetEnglishKeywords() const;
+    const NfKeywordTable & GetEnglishKeywords() const;
 
     /** Access for unit tests. */
     const std::vector<Color> & GetStandardColors() const;

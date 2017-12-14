@@ -111,9 +111,15 @@ class NfKeywordTable final
 
 public:
     NfKeywordTable() : m_keywords(NF_KEYWORD_ENTRIES_COUNT) {};
+    NfKeywordTable( const std::initializer_list<OUString> & l ) : m_keywords(l)
+    {
+        assert(m_keywords.size() == NF_KEYWORD_ENTRIES_COUNT);
+    }
 
     OUString & operator[] (Keywords_t::size_type n) { return m_keywords[n]; }
     const OUString & operator[] (Keywords_t::size_type n) const { return m_keywords[n]; }
+
+    Keywords_t::size_type size() const { return m_keywords.size(); }
 };
 
 #endif // INCLUDED_SVL_NFKEYTAB_HXX

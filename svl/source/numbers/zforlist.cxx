@@ -4628,7 +4628,7 @@ const NfKeywordTable & SvNumberFormatter::GetKeywords( sal_uInt32 nKey )
     return pFormatScanner->GetKeywords();
 }
 
-const std::vector<OUString> & SvNumberFormatter::GetEnglishKeywords() const
+const NfKeywordTable & SvNumberFormatter::GetEnglishKeywords() const
 {
     return ImpSvNumberformatScan::GetEnglishKeywords();
 }
