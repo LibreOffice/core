@@ -317,7 +317,7 @@ OUString MacabDriver::impl_getConfigurationSettingsPath()
     return aPath.makeStringAndClear();
 }
 
-Reference< XInterface >  SAL_CALL MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory )
+Reference< XInterface > MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
     return *(new MacabDriver(comphelper::getComponentContext(_rxFactory)));
 }
