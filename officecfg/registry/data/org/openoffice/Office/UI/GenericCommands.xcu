@@ -2643,7 +2643,7 @@
       </node>
       <node oor:name=".uno:InsertDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Doc~ument...</value>
+          <value xml:lang="en-US">Text from File...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2774,6 +2774,17 @@
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Show the Styles Sidebar</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ViewSidebarStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Styles</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:DesignerDialog</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4806,6 +4817,11 @@
           <value xml:lang="en-US">Send via ~Bluetooth...</value>
         </prop>
       </node>
+      <node oor:name=".uno:ExportAsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Export As</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ExportToPDF" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">PDF</value>
@@ -4839,7 +4855,7 @@
           <value xml:lang="en-US">EPUB</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Export as EPUB...</value>
+          <value xml:lang="en-US">Export as E~PUB...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Export as EPUB</value>
