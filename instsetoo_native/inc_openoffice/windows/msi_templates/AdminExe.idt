@@ -10,5 +10,4 @@ InstallFiles		350
 InstallFinalize		400
 InstallInitialize		250
 InstallValidate		200
-ScheduleReboot	ISSCHEDULEREBOOT	375
 SetAdminInstallProperty		248

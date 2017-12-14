@@ -1,7 +1,7 @@
 Action	Condition	Sequence
 s72	S255	I2
 InstallExecuteSequence	Action
-AllocateRegistrySpace	NOT Installed	750
+AllocateRegistrySpace	Not Installed	750
 AppSearch		25
 BindImage		2100
 CCPSearch	CCP_TEST	200
@@ -9,17 +9,17 @@ CostFinalize		500
 CostInitialize		350
 CreateFolders		1850
 CreateShortcuts		2150
-DeleteServices	VersionNT	1000
+DeleteServices		1000
 DuplicateFiles		2050
 FileCost		400
-FindRelatedProducts	NOT ISSETUPDRIVEN	100
+FindRelatedProducts		100
 InstallFiles		1950
 InstallFinalize		3150
 InstallInitialize		700
 InstallODBC		2600
-InstallServices	VersionNT	2750
+InstallServices		2750
 InstallValidate		650
-ISInitAllUsers	VersionNT And NOT Installed And Privileged	525
+ISInitAllUsers	Not Installed And Privileged	525
 IsolateComponents		450
 LaunchConditions		50
 MigrateFeatureStates		600
@@ -52,12 +52,10 @@ RemoveRegistryValues		1300
 RemoveShortcuts		1600
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
 SameProductFound	SAMEPRODUCTS	120
-ScheduleReboot	ISSCHEDULEREBOOT	3125
 SetARPInstallLocation		990
-SetARPNoRemove	VersionNT < 600	995
 SetODBCFolders		550
-StartServices	VersionNT	2800
-StopServices	VersionNT	950
+StartServices		2800
+StopServices		950
 UnpublishComponents		850
 UnpublishFeatures		900
 UnregisterClassInfo		1350
