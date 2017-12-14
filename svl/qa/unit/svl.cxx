@@ -1393,7 +1393,7 @@ void Test::testUserDefinedNumberFormats()
 void Test::testNfEnglishKeywordsIntegrity()
 {
     SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
-    const ::std::vector<OUString> & rEnglishKeywords = aFormatter.GetEnglishKeywords();
+    const NfKeywordTable& rEnglishKeywords = aFormatter.GetEnglishKeywords();
     const NfKeywordTable& sKeywords = aFormatter.GetKeywords(0);
     CPPUNIT_ASSERT_EQUAL( size_t(NF_KEYWORD_ENTRIES_COUNT), rEnglishKeywords.size() );
     for (size_t i = 0; i < size_t(NF_KEYWORD_ENTRIES_COUNT); ++i)
@@ -1478,7 +1478,7 @@ void Test::testStandardColorIntegrity()
 void Test::testColorNamesConversion()
 {
     SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
-    const ::std::vector<OUString> & rEnglishKeywords = aFormatter.GetEnglishKeywords();
+    const NfKeywordTable& rEnglishKeywords = aFormatter.GetEnglishKeywords();
     const NfKeywordTable& rKeywords = aFormatter.GetKeywords(0);
 
     // Holding a reference to the NfKeywordTable doesn't help if we switch

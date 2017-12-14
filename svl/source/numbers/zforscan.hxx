@@ -74,7 +74,7 @@ public:
             return sKeyword;
         }
 
-    static const ::std::vector<OUString> & GetEnglishKeywords()
+    static const NfKeywordTable & GetEnglishKeywords()
         {
             return sEnglishKeyword;
         }
@@ -172,7 +172,7 @@ public:
 
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
-    static const ::std::vector<OUString> sEnglishKeyword; // English Syntax keywords
+    static const NfKeywordTable sEnglishKeyword; // English Syntax keywords
     static ::std::vector<Color> StandardColor;  // Standard color array
     static bool bStandardColorNeedInitialization; // initialize Standard color array
     static ::std::vector<OUString> sGermanColorNames;   // German color names array
