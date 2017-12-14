@@ -1541,119 +1541,119 @@ HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
     switch( nWhich )
     {
     case RES_CHRATR_BLINK:
-        ppAttr = &m_aAttrTab.pBlink;
+        ppAttr = &m_xAttrTab->pBlink;
         break;
     case RES_CHRATR_CASEMAP:
-        ppAttr = &m_aAttrTab.pCaseMap;
+        ppAttr = &m_xAttrTab->pCaseMap;
         break;
     case RES_CHRATR_COLOR:
-        ppAttr = &m_aAttrTab.pFontColor;
+        ppAttr = &m_xAttrTab->pFontColor;
         break;
     case RES_CHRATR_CROSSEDOUT:
-        ppAttr = &m_aAttrTab.pStrike;
+        ppAttr = &m_xAttrTab->pStrike;
         break;
     case RES_CHRATR_ESCAPEMENT:
-        ppAttr = &m_aAttrTab.pEscapement;
+        ppAttr = &m_xAttrTab->pEscapement;
         break;
     case RES_CHRATR_FONT:
-        ppAttr = &m_aAttrTab.pFont;
+        ppAttr = &m_xAttrTab->pFont;
         break;
     case RES_CHRATR_CJK_FONT:
-        ppAttr = &m_aAttrTab.pFontCJK;
+        ppAttr = &m_xAttrTab->pFontCJK;
         break;
     case RES_CHRATR_CTL_FONT:
-        ppAttr = &m_aAttrTab.pFontCTL;
+        ppAttr = &m_xAttrTab->pFontCTL;
         break;
     case RES_CHRATR_FONTSIZE:
-        ppAttr = &m_aAttrTab.pFontHeight;
+        ppAttr = &m_xAttrTab->pFontHeight;
         break;
     case RES_CHRATR_CJK_FONTSIZE:
-        ppAttr = &m_aAttrTab.pFontHeightCJK;
+        ppAttr = &m_xAttrTab->pFontHeightCJK;
         break;
     case RES_CHRATR_CTL_FONTSIZE:
-        ppAttr = &m_aAttrTab.pFontHeightCTL;
+        ppAttr = &m_xAttrTab->pFontHeightCTL;
         break;
     case RES_CHRATR_KERNING:
-        ppAttr = &m_aAttrTab.pKerning;
+        ppAttr = &m_xAttrTab->pKerning;
         break;
     case RES_CHRATR_POSTURE:
-        ppAttr = &m_aAttrTab.pItalic;
+        ppAttr = &m_xAttrTab->pItalic;
         break;
     case RES_CHRATR_CJK_POSTURE:
-        ppAttr = &m_aAttrTab.pItalicCJK;
+        ppAttr = &m_xAttrTab->pItalicCJK;
         break;
     case RES_CHRATR_CTL_POSTURE:
-        ppAttr = &m_aAttrTab.pItalicCTL;
+        ppAttr = &m_xAttrTab->pItalicCTL;
         break;
     case RES_CHRATR_UNDERLINE:
-        ppAttr = &m_aAttrTab.pUnderline;
+        ppAttr = &m_xAttrTab->pUnderline;
         break;
     case RES_CHRATR_WEIGHT:
-        ppAttr = &m_aAttrTab.pBold;
+        ppAttr = &m_xAttrTab->pBold;
         break;
     case RES_CHRATR_CJK_WEIGHT:
-        ppAttr = &m_aAttrTab.pBoldCJK;
+        ppAttr = &m_xAttrTab->pBoldCJK;
         break;
     case RES_CHRATR_CTL_WEIGHT:
-        ppAttr = &m_aAttrTab.pBoldCTL;
+        ppAttr = &m_xAttrTab->pBoldCTL;
         break;
     case RES_CHRATR_BACKGROUND:
-        ppAttr = &m_aAttrTab.pCharBrush;
+        ppAttr = &m_xAttrTab->pCharBrush;
         break;
     case RES_CHRATR_BOX:
-        ppAttr = &m_aAttrTab.pCharBox;
+        ppAttr = &m_xAttrTab->pCharBox;
         break;
 
     case RES_PARATR_LINESPACING:
-        ppAttr = &m_aAttrTab.pLineSpacing;
+        ppAttr = &m_xAttrTab->pLineSpacing;
         break;
     case RES_PARATR_ADJUST:
-        ppAttr = &m_aAttrTab.pAdjust;
+        ppAttr = &m_xAttrTab->pAdjust;
         break;
 
     case RES_LR_SPACE:
-        ppAttr = &m_aAttrTab.pLRSpace;
+        ppAttr = &m_xAttrTab->pLRSpace;
         break;
     case RES_UL_SPACE:
-        ppAttr = &m_aAttrTab.pULSpace;
+        ppAttr = &m_xAttrTab->pULSpace;
         break;
     case RES_BOX:
-        ppAttr = &m_aAttrTab.pBox;
+        ppAttr = &m_xAttrTab->pBox;
         break;
     case RES_BACKGROUND:
-        ppAttr = &m_aAttrTab.pBrush;
+        ppAttr = &m_xAttrTab->pBrush;
         break;
     case RES_BREAK:
-        ppAttr = &m_aAttrTab.pBreak;
+        ppAttr = &m_xAttrTab->pBreak;
         break;
     case RES_PAGEDESC:
-        ppAttr = &m_aAttrTab.pPageDesc;
+        ppAttr = &m_xAttrTab->pPageDesc;
         break;
     case RES_PARATR_SPLIT:
-        ppAttr = &m_aAttrTab.pSplit;
+        ppAttr = &m_xAttrTab->pSplit;
         break;
     case RES_PARATR_WIDOWS:
-        ppAttr = &m_aAttrTab.pWidows;
+        ppAttr = &m_xAttrTab->pWidows;
         break;
     case RES_PARATR_ORPHANS:
-        ppAttr = &m_aAttrTab.pOrphans;
+        ppAttr = &m_xAttrTab->pOrphans;
         break;
     case RES_KEEP:
-        ppAttr = &m_aAttrTab.pKeep;
+        ppAttr = &m_xAttrTab->pKeep;
         break;
 
     case RES_CHRATR_LANGUAGE:
-        ppAttr = &m_aAttrTab.pLanguage;
+        ppAttr = &m_xAttrTab->pLanguage;
         break;
     case RES_CHRATR_CJK_LANGUAGE:
-        ppAttr = &m_aAttrTab.pLanguageCJK;
+        ppAttr = &m_xAttrTab->pLanguageCJK;
         break;
     case RES_CHRATR_CTL_LANGUAGE:
-        ppAttr = &m_aAttrTab.pLanguageCTL;
+        ppAttr = &m_xAttrTab->pLanguageCTL;
         break;
 
     case RES_FRAMEDIR:
-        ppAttr = &m_aAttrTab.pDirection;
+        ppAttr = &m_xAttrTab->pDirection;
         break;
     }
 
@@ -2261,7 +2261,7 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
 
         if( ppAttr )
         {
-            NewAttr( ppAttr, *pItem );
+            NewAttr(m_xAttrTab, ppAttr, *pItem);
             if( RES_PARATR_BEGIN > nWhich )
                 (*ppAttr)->SetLikePara();
             m_aParaAttrs.push_back( *ppAttr );

@@ -229,9 +229,9 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
             if( nUpper )
             {
-                NewAttr( &m_aAttrTab.pULSpace, SvxULSpaceItem( 0, nLower, RES_UL_SPACE ) );
-                m_aParaAttrs.push_back( m_aAttrTab.pULSpace );
-                EndAttr( m_aAttrTab.pULSpace, false );
+                NewAttr(m_xAttrTab, &m_xAttrTab->pULSpace, SvxULSpaceItem(0, nLower, RES_UL_SPACE));
+                m_aParaAttrs.push_back( m_xAttrTab->pULSpace );
+                EndAttr( m_xAttrTab->pULSpace, false );
             }
         }
 
@@ -311,7 +311,7 @@ void SwHTMLParser::InsertImage()
     long nWidth=0, nHeight=0;
     long nVSpace=0, nHSpace=0;
 
-    sal_uInt16 nBorder = (m_aAttrTab.pINetFormat ? 1 : 0);
+    sal_uInt16 nBorder = (m_xAttrTab->pINetFormat ? 1 : 0);
     bool bIsMap = false;
     bool bPrcWidth = false;
     bool bPrcHeight = false;
@@ -509,10 +509,10 @@ IMAGE_SETEVENT:
         ::editeng::SvxBorderLine aHBorderLine( nullptr, nHBorderWidth );
         ::editeng::SvxBorderLine aVBorderLine( nullptr, nVBorderWidth );
 
-        if( m_aAttrTab.pINetFormat )
+        if( m_xAttrTab->pINetFormat )
         {
             const OUString& rURL =
-                static_cast<const SwFormatINetFormat&>(m_aAttrTab.pINetFormat->GetItem()).GetValue();
+                static_cast<const SwFormatINetFormat&>(m_xAttrTab->pINetFormat->GetItem()).GetValue();
 
             m_pCSS1Parser->SetATagStyles();
             sal_uInt16 nPoolId =  static_cast< sal_uInt16 >(m_xDoc->IsVisitedURL( rURL )
@@ -524,8 +524,8 @@ IMAGE_SETEVENT:
         }
         else
         {
-            const SvxColorItem& rColorItem = m_aAttrTab.pFontColor ?
-              static_cast<const SvxColorItem &>(m_aAttrTab.pFontColor->GetItem()) :
+            const SvxColorItem& rColorItem = m_xAttrTab->pFontColor ?
+              static_cast<const SvxColorItem &>(m_xAttrTab->pFontColor->GetItem()) :
               static_cast<const SvxColorItem &>(m_xDoc->GetDefault(RES_CHRATR_COLOR));
             aHBorderLine.SetColor( rColorItem.GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
@@ -749,10 +749,10 @@ IMAGE_SETEVENT:
             pGrfNd->SetScaleImageMap( true );
     }
 
-    if( m_aAttrTab.pINetFormat )
+    if( m_xAttrTab->pINetFormat )
     {
         const SwFormatINetFormat &rINetFormat =
-            static_cast<const SwFormatINetFormat&>(m_aAttrTab.pINetFormat->GetItem());
+            static_cast<const SwFormatINetFormat&>(m_xAttrTab->pINetFormat->GetItem());
 
         SwFormatURL aURL( pFlyFormat->GetURL() );
 
@@ -776,14 +776,14 @@ IMAGE_SETEVENT:
         }
 
         if ((RndStdIds::FLY_AS_CHAR == pFlyFormat->GetAnchor().GetAnchorId()) &&
-            m_aAttrTab.pINetFormat->GetSttPara() ==
+            m_xAttrTab->pINetFormat->GetSttPara() ==
                         m_pPam->GetPoint()->nNode &&
-            m_aAttrTab.pINetFormat->GetSttCnt() ==
+            m_xAttrTab->pINetFormat->GetSttCnt() ==
                         m_pPam->GetPoint()->nContent.GetIndex() - 1 )
         {
             // the attribute was insert right before as-character anchored
             // graphic, therefore we move it
-            m_aAttrTab.pINetFormat->SetStart( *m_pPam->GetPoint() );
+            m_xAttrTab->pINetFormat->SetStart( *m_pPam->GetPoint() );
 
             // When the attribute is also an anchor, we'll insert
             // a bookmark before the graphic, because SwFormatURL
@@ -1233,7 +1233,7 @@ ANCHOR_SETEVENT:
             aINetFormat.SetMacroTable( &aMacroTable );
 
         // set the default attribute
-        InsertAttr(&m_aAttrTab.pINetFormat, aINetFormat, xCntxt.get());
+        InsertAttr(&m_xAttrTab->pINetFormat, aINetFormat, xCntxt.get());
     }
     else if( !aName.isEmpty() )
     {
@@ -1274,7 +1274,7 @@ void SwHTMLParser::EndAnchor()
 void SwHTMLParser::InsertBookmark( const OUString& rName )
 {
     HTMLAttr* pTmp = new HTMLAttr( *m_pPam->GetPoint(),
-            SfxStringItem( RES_FLTR_BOOKMARK, rName ));
+            SfxStringItem(RES_FLTR_BOOKMARK, rName), nullptr, std::shared_ptr<HTMLAttrTable>());
     m_aSetAttrTab.push_back( pTmp );
 }
 

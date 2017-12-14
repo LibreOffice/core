@@ -72,68 +72,6 @@ extern HTMLOptionEnum<sal_Int16> aHTMLImgVAlignTable[];
 class HTMLAttr;
 typedef std::deque<HTMLAttr *> HTMLAttrs;
 
-class HTMLAttr
-{
-    friend class SwHTMLParser;
-    friend class CellSaveStruct;
-
-    SwNodeIndex nSttPara, nEndPara;
-    sal_Int32 nSttContent, nEndContent;
-    bool bInsAtStart : 1;
-    bool bLikePara : 1; // set attribute above the whole paragraph
-    bool bValid : 1;    // is the attribute valid?
-
-    std::unique_ptr<SfxPoolItem> pItem;
-    HTMLAttr *pNext;   // still to close attributes with different values
-    HTMLAttr *pPrev;   // already closed but not set attributes
-    HTMLAttr **ppHead; // list head
-
-    HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
-               HTMLAttr **pHd=nullptr );
-
-    HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
-               sal_Int32 nEndCnt, HTMLAttr **pHd );
-
-public:
-
-    ~HTMLAttr();
-
-    HTMLAttr *Clone( const SwNodeIndex& rEndPara, sal_Int32 nEndCnt ) const;
-    void Reset( const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
-                HTMLAttr **pHd );
-    inline void SetStart( const SwPosition& rPos );
-
-    sal_uInt32 GetSttParaIdx() const { return nSttPara.GetIndex(); }
-    sal_uInt32 GetEndParaIdx() const { return nEndPara.GetIndex(); }
-
-    const SwNodeIndex& GetSttPara() const { return nSttPara; }
-    const SwNodeIndex& GetEndPara() const { return nEndPara; }
-
-    sal_Int32 GetSttCnt() const { return nSttContent; }
-    sal_Int32 GetEndCnt() const { return nEndContent; }
-
-    bool IsLikePara() const { return bLikePara; }
-    void SetLikePara() { bLikePara = true; }
-
-          SfxPoolItem& GetItem()        { return *pItem; }
-    const SfxPoolItem& GetItem() const  { return *pItem; }
-
-    HTMLAttr *GetNext() const { return pNext; }
-    void InsertNext( HTMLAttr *pNxt ) { pNext = pNxt; }
-
-    HTMLAttr *GetPrev() const { return pPrev; }
-    void InsertPrev( HTMLAttr *pPrv );
-    void ClearPrev() { pPrev = nullptr; }
-
-    void SetHead( HTMLAttr **ppHd ) { ppHead = ppHd; }
-
-    // During setting attributes from styles it can happen that these
-    // shouldn't be set anymore. To delete them would be very expensive, because
-    // you don't know all the places where they are linked in. Therefore they're
-    // made invalid and deleted at the next call of SetAttr_().
-    void Invalidate() { bValid = false; }
-};
-
 // Table of attributes: The order here is important: The attributes in the
 // beginning of the table will set first in EndAllAttrs.
 struct HTMLAttrTable
@@ -183,6 +121,73 @@ struct HTMLAttrTable
                 *pLanguageCTL,
                 *pCharBox
                 ;
+};
+
+class HTMLAttr
+{
+    friend class SwHTMLParser;
+    friend class CellSaveStruct;
+
+    SwNodeIndex nSttPara, nEndPara;
+    sal_Int32 nSttContent, nEndContent;
+    bool bInsAtStart : 1;
+    bool bLikePara : 1; // set attribute above the whole paragraph
+    bool bValid : 1;    // is the attribute valid?
+
+    std::unique_ptr<SfxPoolItem> pItem;
+    std::shared_ptr<HTMLAttrTable> xAttrTab;
+    HTMLAttr *pNext;   // still to close attributes with different values
+    HTMLAttr *pPrev;   // already closed but not set attributes
+    HTMLAttr **ppHead; // list head
+
+    HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
+               HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
+
+    HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
+               sal_Int32 nEndCnt, HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
+
+public:
+
+    ~HTMLAttr();
+
+    HTMLAttr *Clone( const SwNodeIndex& rEndPara, sal_Int32 nEndCnt ) const;
+    void Reset( const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
+                HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
+    inline void SetStart( const SwPosition& rPos );
+
+    sal_uInt32 GetSttParaIdx() const { return nSttPara.GetIndex(); }
+    sal_uInt32 GetEndParaIdx() const { return nEndPara.GetIndex(); }
+
+    const SwNodeIndex& GetSttPara() const { return nSttPara; }
+    const SwNodeIndex& GetEndPara() const { return nEndPara; }
+
+    sal_Int32 GetSttCnt() const { return nSttContent; }
+    sal_Int32 GetEndCnt() const { return nEndContent; }
+
+    bool IsLikePara() const { return bLikePara; }
+    void SetLikePara() { bLikePara = true; }
+
+          SfxPoolItem& GetItem()        { return *pItem; }
+    const SfxPoolItem& GetItem() const  { return *pItem; }
+
+    HTMLAttr *GetNext() const { return pNext; }
+    void InsertNext( HTMLAttr *pNxt ) { pNext = pNxt; }
+
+    HTMLAttr *GetPrev() const { return pPrev; }
+    void InsertPrev( HTMLAttr *pPrv );
+    void ClearPrev() { pPrev = nullptr; }
+
+    void SetHead(HTMLAttr **ppHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab)
+    {
+        ppHead = ppHd;
+        xAttrTab = rAttrTab;
+    }
+
+    // During setting attributes from styles it can happen that these
+    // shouldn't be set anymore. To delete them would be very expensive, because
+    // you don't know all the places where they are linked in. Therefore they're
+    // made invalid and deleted at the next call of SetAttr_().
+    void Invalidate() { bValid = false; }
 };
 
 class HTMLAttrContext_SaveDoc;
@@ -391,7 +396,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     HTMLAttrs      m_aSetAttrTab;// "closed", not set attributes
     HTMLAttrs      m_aParaAttrs; // temporary paragraph attributes
-    HTMLAttrTable  m_aAttrTab;   // "open" attributes
+    std::shared_ptr<HTMLAttrTable>  m_xAttrTab;   // "open" attributes
     HTMLAttrContexts m_aContexts;// the current context of attribute/token
     std::vector<SwFrameFormat *> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
@@ -512,15 +517,15 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // start/end an attribute
     // ppDepAttr indicated an attribute table entry, which attribute has to be
     // set, before the attribute is closed
-    void NewAttr( HTMLAttr **ppAttr, const SfxPoolItem& rItem );
+    void NewAttr(const std::shared_ptr<HTMLAttrTable>& rAttrTab, HTMLAttr **ppAttr, const SfxPoolItem& rItem);
     bool EndAttr( HTMLAttr *pAttr, bool bChkEmpty=true );
     void DeleteAttr( HTMLAttr* pAttr );
 
     void EndContextAttrs( HTMLAttrContext *pContext );
-    void SaveAttrTab( HTMLAttrTable& rNewAttrTab );
+    void SaveAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
     void SplitAttrTab( const SwPosition& rNewPos );
-    void SplitAttrTab( HTMLAttrTable& rNewAttrTab, bool bMoveEndBack );
-    void RestoreAttrTab( HTMLAttrTable& rNewAttrTab );
+    void SplitAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab, bool bMoveEndBack);
+    void RestoreAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
     void InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart );
     void InsertAttrs( HTMLAttrs& rAttrs );
 
