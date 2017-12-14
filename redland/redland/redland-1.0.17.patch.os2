@@ -1,0 +1,44 @@
+--- misc/redland-1.0.17/configure.ac.0	2013-12-28 17:26:46.000000000 +0100
++++ misc/build/redland-1.0.17/configure.ac	2017-12-13 15:36:08.000000000 +0100
+@@ -121,9 +121,10 @@
+ m4_defun([AC_PROG_F77],[])
+ 
+ # Libtool and LTDL initialising
+-LT_CONFIG_LTDL_DIR([libltdl])
+-LT_INIT([dlopen])
+-LTDL_INIT([convenience])
++#LT_CONFIG_LTDL_DIR([libltdl])
++#LT_INIT([dlopen])
++#LTDL_INIT([convenience])
++LT_INIT
+ 
+ # Find a tar command for 'make dist'
+ AC_CHECK_PROGS(TAR, gnutar gtar tar)
+@@ -1275,7 +1275,7 @@
+ AC_CONFIG_FILES([redland-src-config], [chmod +x redland-src-config])
+ 
+ dnl Check for gtk-doc and docbook
+-GTK_DOC_CHECK([1.3])
++#GTK_DOC_CHECK([1.3])
+ 
+ AC_OUTPUT
+ 
+--- misc/redland-1.0.17/makefile.in.0	2013-12-28 17:26:46.000000000 +0100
++++ misc/build/redland-1.0.17/makefile.in	2017-12-13 15:36:08.000000000 +0100
+@@ -383,7 +383,6 @@
+ sbindir = @sbindir@
+ sharedstatedir = @sharedstatedir@
+ srcdir = @srcdir@
+-subdirs = @subdirs@
+ sys_symbol_underscore = @sys_symbol_underscore@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+@@ -399,7 +399,7 @@
+ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+ 
+ # Subdirectories to build/install/distribute etc.
+-SUBDIRS = $(subdirs) src examples utils demos docs data scripts
++SUBDIRS = $(subdirs) src examples utils demos data scripts
+ EXTRA_DIST = \
+ ChangeLog.1 ChangeLog.2 ChangeLog.3 ChangeLog.4 \
+ ChangeLog.5 ChangeLog.6 ChangeLog.7 ChangeLog.8 ChangeLog.9 ChangeLog.10 \

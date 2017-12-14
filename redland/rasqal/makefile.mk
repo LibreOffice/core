@@ -55,10 +55,12 @@ PATCH_FILES=$(OOO_PATCH_FILES)
 
 
 .IF "$(OS)"=="OS2"
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/src
-ADDITIONAL_FILES+=src/windows.h
-OOO_PATCH_FILES+=$(TARFILE_NAME).patch.os2
+CONFIGURE_DIR=
+CONFIGURE_ACTION=libtoolize && aclocal && autoconf && .$/configure RAPTOR2_CFLAGS=-I${PWD}$/..$/${INPATH}/inc RAPTOR2_LIBS='-L${PWD}$/..$/${INPATH}/lib -lraptor2 -lxml2 -lcurl' PKG_CONFIG_PATH='../raptor2-2.0.15;../rasqal-0.9.33'
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-regex-library=posix --with-decimal=none
+BUILD_ACTION=$(GNUMAKE)
+BUILD_FLAGS+= -j$(EXTMAXPROCESS)
+BUILD_DIR=$(CONFIGURE_DIR)
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 rasqal_CC=$(CC) -mthreads
@@ -149,7 +151,8 @@ OUT2BIN+=src/rasqal-config
 # if we use dmake, this is done automagically
 .ENDIF
 .ELIF "$(OS)"=="OS2"
-# if we use dmake, this is done automagically
+OUT2LIB+=src$/.libs$/*.a
+OUT2BIN+=src$/.libs$/*.dll
 .ELSE
 OUT2LIB+=src$/.libs$/librasqal.so.$(RASQAL_MAJOR) src$/.libs$/librasqal.so
 OUT2BIN+=src/rasqal-config

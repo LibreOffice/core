@@ -54,10 +54,14 @@ PATCH_FILES=$(OOO_PATCH_FILES)
 
 
 .IF "$(OS)"=="OS2"
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)/src
-ADDITIONAL_FILES+=src/windows.h
 OOO_PATCH_FILES+=$(TARFILE_NAME).patch.os2
+CONFIGURE_DIR=
+CONFIGURE_ACTION=libtoolize && aclocal && autoconf && .$/configure
+# do not enable grddl parser (#i93768#)
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(PWD)/$(OUT) --includedir=(PWD)$/$(INCCOM) --libdir=$(PWD)$/$(LB)
+BUILD_ACTION=$(GNUMAKE)
+BUILD_FLAGS+= -j$(EXTMAXPROCESS)
+BUILD_DIR=$(CONFIGURE_DIR)
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw
@@ -149,7 +153,8 @@ OUT2BIN+=src$/.libs$/*.dll
 # if we use dmake, this is done automagically
 .ENDIF
 .ELIF "$(GUI)"=="OS2"
-# if we use dmake, this is done automagically
+OUT2LIB+=src$/.libs$/*.a
+OUT2BIN+=src$/.libs$/*.dll
 .ELSE
 OUT2LIB+=src$/.libs$/libraptor2.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor2.so
 .ENDIF

@@ -1,0 +1,15 @@
+--- misc/raptor2-2.0.15/docs/version.xml	2014-11-02 07:24:32.000000000 +0100
++++ misc/build/raptor2-2.0.15/docs/version.xml	2016-12-03 16:22:28.000000000 +0100
+@@ -1 +1 @@
+-2.0.15
++2.0.15
+--- misc/raptor2-2.0.15/src/sort_r.h	2014-10-10 01:00:44.000000000 +0200
++++ misc/build/raptor2-2.0.15/src/sort_r.h	2016-12-03 16:38:50.000000000 +0100
+@@ -22,6 +22,7 @@
+ #if (defined __APPLE__ || defined __MACH__ || defined __DARWIN__ || \
+      defined __FreeBSD__ || defined __BSD__ || defined __bsdi__ || \
+      defined OpenBSD3_1 || defined OpenBSD3_9 || defined __OpenBSD__ || \
++     defined __KLIBC__ || \
+      defined __NetBSD__ || \
+      defined __DragonFly__ || \
+      defined AMIGA)
