@@ -391,7 +391,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     HTMLAttrs      m_aSetAttrTab;// "closed", not set attributes
     HTMLAttrs      m_aParaAttrs; // temporary paragraph attributes
-    HTMLAttrTable  m_aAttrTab;   // "open" attributes
+    std::shared_ptr<HTMLAttrTable>  m_xAttrTab;   // "open" attributes
     HTMLAttrContexts m_aContexts;// the current context of attribute/token
     std::vector<SwFrameFormat *> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
@@ -517,10 +517,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void DeleteAttr( HTMLAttr* pAttr );
 
     void EndContextAttrs( HTMLAttrContext *pContext );
-    void SaveAttrTab( HTMLAttrTable& rNewAttrTab );
+    void SaveAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
     void SplitAttrTab( const SwPosition& rNewPos );
     void SplitAttrTab( HTMLAttrTable& rNewAttrTab, bool bMoveEndBack );
-    void RestoreAttrTab( HTMLAttrTable& rNewAttrTab );
+    void RestoreAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
     void InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart );
     void InsertAttrs( HTMLAttrs& rAttrs );
 
