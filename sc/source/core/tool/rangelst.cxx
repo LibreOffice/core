@@ -110,17 +110,18 @@ private:
 class FormatString
 {
 public:
-    FormatString(OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
+    FormatString(OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim, bool bFullAddressNotation) :
         mrStr(rStr),
         mnFlags(nFlags),
         mpDoc(pDoc),
         meConv(eConv),
         mcDelim(cDelim),
-        mbFirst(true) {}
+        mbFirst(true),
+        mbFullAddressNotation(bFullAddressNotation) {}
 
     void operator() (const ScRange* p)
     {
-        OUString aStr(p->Format(mnFlags, mpDoc, meConv));
+        OUString aStr(p->Format(mnFlags, mpDoc, meConv, mbFullAddressNotation));
         if (mbFirst)
             mbFirst = false;
         else
@@ -134,6 +135,7 @@ private:
     FormulaGrammar::AddressConvention meConv;
     sal_Unicode mcDelim;
     bool mbFirst;
+    bool mbFullAddressNotation;
 };
 
 }
@@ -186,14 +188,14 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
 
 void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
-                          sal_Unicode cDelimiter ) const
+                          sal_Unicode cDelimiter, bool bFullAddressNotation ) const
 {
 
     if (!cDelimiter)
         cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
     OUString aStr;
-    FormatString func(aStr, nFlags, pDoc, eConv, cDelimiter);
+    FormatString func(aStr, nFlags, pDoc, eConv, cDelimiter, bFullAddressNotation);
     for_each(maRanges.begin(), maRanges.end(), func);
     rStr = aStr;
 }
