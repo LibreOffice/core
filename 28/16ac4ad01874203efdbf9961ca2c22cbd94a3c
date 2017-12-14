@@ -1,0 +1,8 @@
+Code-Review+1: Stephan Bergmann <sbergman@redhat.com>
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-at: Thu, 14 Dec 2017 16:50:21 +0100
+Reviewed-on: https://gerrit.libreoffice.org/46447
+Project: core
+Branch: refs/heads/master
