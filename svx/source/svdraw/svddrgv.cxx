@@ -741,7 +741,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
             rGP.SetAbsolutePos(rPnt,*pObj);
 
             SdrHdl* pHdl=nullptr;
-            if (MarkGluePoint(pObj,nGlueId,pPV))
+            if (MarkGluePoint(pObj,nGlueId,false))
             {
                 pHdl=GetGluePointHdl(pObj,nGlueId);
             }
