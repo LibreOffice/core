@@ -147,7 +147,7 @@ using TransferableHelper::CopyToClipboard;
     ImageMap*                       mpImageMap;
     INetURLObject*                  mpURL;
 
-                                    GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy );
+                                    GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObjectPos, bool bLazy );
                                     virtual ~GalleryTransferable() override;
 
     void                            InitData( bool bLazy );
