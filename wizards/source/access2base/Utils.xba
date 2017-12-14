@@ -413,7 +413,7 @@ Const cstMaxBinlength = 2 * 65535
 																lSize = CLng(oValue.getLength())
 															End If
 															oValue.closeInput()
-															If lSize &lt;= cstMaxBinLength Then vValue = poResultSet.getString(piColIndex) Else vValue = &quot;&quot;
+															vValue = poResultSet.getString(piColIndex)
 														End If
 													Else
 														oValue.closeInput()
