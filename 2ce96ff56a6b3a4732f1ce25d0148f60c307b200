@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_dc32b0a6",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 12804,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-14T10:15:00Z",
+      "side": 1,
+      "message": "that interface is published, so should not be changed (at least not after finding consensus that the change is inevitable and its pros clearly outweigh its cons of breaking 3rd-party code, and after marking the commit message with \"[ABI CHANGE]\")\n\n{off,ukd}api/type_reference/ should not normally need to be changed by commits; needing changes there typically indicates that something is wrong with the commit",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
