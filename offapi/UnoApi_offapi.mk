@@ -359,7 +359,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/sdbc,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/security,\
 	CertificateContainer \
 	DocumentDigitalSignatures \
-	SerialNumberAdapter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/setup,\
 	UpdateCheck \
@@ -3336,7 +3335,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/security,\
 	XCertificateExtension \
 	XDocumentDigitalSignatures \
 	XSanExtension \
-	XSerialNumberAdapter \
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet/opencl,\

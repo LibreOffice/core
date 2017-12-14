@@ -19,9 +19,6 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="xsec_xmlsec" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.security.SerialNumberAdapter">
-    <service name="com.sun.star.security.SerialNumberAdapter"/>
-  </implementation>
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.NSSInitializer_NssImpl">
     <service name="com.sun.star.xml.crypto.NSSInitializer"/>
   </implementation>
