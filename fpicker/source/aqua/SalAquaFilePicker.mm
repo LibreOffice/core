@@ -62,7 +62,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
+    uno::Sequence<rtl::OUString> FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
         aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
@@ -468,7 +468,7 @@ void SAL_CALL SalAquaFilePicker::cancel()
 
 #pragma mark XEventListener
 
-void SAL_CALL SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
+void SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -497,25 +497,25 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSupportedServiceName
 
 #pragma mark Misc/Private
 
-void SAL_CALL SalAquaFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
+void SalAquaFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 {
     if (m_xListener.is())
         m_xListener->fileSelectionChanged( aEvent );
 }
 
-void SAL_CALL SalAquaFilePicker::directoryChanged( FilePickerEvent aEvent )
+void SalAquaFilePicker::directoryChanged( FilePickerEvent aEvent )
 {
     if (m_xListener.is())
         m_xListener->directoryChanged( aEvent );
 }
 
-void SAL_CALL SalAquaFilePicker::controlStateChanged( FilePickerEvent aEvent )
+void SalAquaFilePicker::controlStateChanged( FilePickerEvent aEvent )
 {
     if (m_xListener.is())
         m_xListener->controlStateChanged( aEvent );
 }
 
-void SAL_CALL SalAquaFilePicker::dialogSizeChanged()
+void SalAquaFilePicker::dialogSizeChanged()
 {
     if (m_xListener.is())
         m_xListener->dialogSizeChanged();

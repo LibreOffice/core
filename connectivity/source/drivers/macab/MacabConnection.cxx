@@ -285,7 +285,7 @@ void MacabConnection::disposing()
     MacabConnection_BASE::disposing();
 }
 
-Reference< XTablesSupplier > SAL_CALL MacabConnection::createCatalog()
+Reference< XTablesSupplier > MacabConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -304,7 +304,7 @@ MacabAddressBook* MacabConnection::getAddressBook() const
     return m_pAddressBook;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL createMacabConnection( void* _pDriver )
+extern "C" SAL_DLLPUBLIC_EXPORT void* createMacabConnection( void* _pDriver )
 {
     MacabConnection* pConnection = new MacabConnection( static_cast< MacabDriver* >( _pDriver ) );
     // by definition, the pointer crossing library boundaries as void ptr is acquired once

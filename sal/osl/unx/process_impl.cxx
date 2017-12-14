@@ -46,7 +46,7 @@
 
 namespace {
 
-oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
+oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
     oslProcessError result = osl_Process_E_NotFound;
 

@@ -57,7 +57,7 @@ id AquaA11yFocusListener::getFocusedUIElement()
     return m_focusedObject;
 }
 
-void SAL_CALL
+void
 AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAccessible)
 {
     if ( nil != m_focusedObject ) {
