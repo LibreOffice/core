@@ -65,24 +65,27 @@ sub find()
 {
     my $version = get_wanted_version();
     my $opt_lo = get_own_directory();
-    my $clang_format = $ENV{CLANG_FORMAT};
-    if (!(defined($clang_format) && is_matching_clang_format_version($clang_format, $version)))
+    my $clang_format;
+    if (!(defined($ENV{CLANG_FORMAT}) && is_matching_clang_format_version($ENV{CLANG_FORMAT}, $version)))
     {
-        $clang_format = "$opt_lo/clang-format";
-        if (!is_matching_clang_format_version($clang_format, $version))
+        my @dirs = split /:/, $ENV{PATH};
+        unshift(@dirs, $opt_lo);
+
+        foreach my $dir (@dirs)
         {
-            foreach my $dir (split /:/, $ENV{PATH})
+            if (is_matching_clang_format_version("$dir/clang-format", $version))
             {
-                if (is_matching_clang_format_version("$dir/clang-format", $version))
-                {
-                    $clang_format = "$dir/clang-format";
-                    last;
-                }
+                $clang_format = "$dir/clang-format";
+                last;
             }
         }
     }
+    else
+    {
+        $clang_format = $ENV{CLANG_FORMAT};
+    }
 
-    if ($^O eq "cygwin")
+    if ($^O eq "cygwin" && defined($clang_format))
     {
         $clang_format = `cygpath -m '$clang_format'`;
         chomp $clang_format;

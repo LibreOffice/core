@@ -54,7 +54,6 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <sfx2/sfxbasemodel.hxx>
