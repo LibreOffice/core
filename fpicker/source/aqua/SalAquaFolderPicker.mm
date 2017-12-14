@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
     // controlling event notifications
-    uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
+    uno::Sequence<rtl::OUString> FolderPicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);
         aRet[0] = "com.sun.star.ui.dialogs.SystemFolderPicker";

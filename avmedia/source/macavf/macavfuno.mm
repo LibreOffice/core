@@ -22,12 +22,12 @@
 
 using namespace ::com::sun::star;
 
-static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
+static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
 {
     return uno::Reference< uno::XInterface >( *new ::avmedia::macavf::Manager( rxFact ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediaMacAVF_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* avmediaMacAVF_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = nullptr;

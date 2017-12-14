@@ -78,7 +78,7 @@ const std::string TAG_END_HTML = std::string("</html>");
 const std::string TAG_BODY = std::string("<body");
 const std::string TAG_END_BODY = std::string("</body");
 
-Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
+Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
 {
     OSL_ASSERT(aTextHtml.getLength() > 0);
 

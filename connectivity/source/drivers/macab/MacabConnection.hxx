@@ -108,7 +108,7 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings(  ) override;
 
             // needed for the SQL interpreter
-            css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
+            css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
 
             // accessors
             MacabDriver*         getDriver()         const { return m_pDriver;}

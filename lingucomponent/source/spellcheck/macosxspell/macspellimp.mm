@@ -390,7 +390,7 @@ Reference< XSpellAlternatives > SAL_CALL
 }
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL MacSpellChecker_CreateInstance(
+Reference< XInterface > MacSpellChecker_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
 
@@ -526,7 +526,7 @@ Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL MacOSXSpell_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * MacOSXSpell_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
