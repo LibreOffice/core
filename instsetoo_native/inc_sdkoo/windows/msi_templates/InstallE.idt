@@ -12,7 +12,7 @@ CreateShortcuts		2150
 DeleteServices	VersionNT	1000
 DuplicateFiles		2050
 FileCost		400
-FindRelatedProducts	NOT ISSETUPDRIVEN	100
+FindRelatedProducts		100
 InstallFiles		1950
 InstallFinalize		3150
 InstallInitialize		700
@@ -50,7 +50,6 @@ RemoveODBC		1200
 RemoveRegistryValues		1300
 RemoveShortcuts		1600
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
-ScheduleReboot	ISSCHEDULEREBOOT	3125
 SetARPInstallLocation		990
 SetARPNoRemove	VersionNT < 600	995
 SetODBCFolders		550
