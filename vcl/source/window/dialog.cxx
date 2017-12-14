@@ -697,7 +697,7 @@ void Dialog::StateChanged( StateChangedType nType )
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
             std::vector<vcl::LOKPayloadItem> aPayload;
-            aPayload.push_back(std::make_pair(OString("title"), GetText().toUtf8()));
+            aPayload.emplace_back("title", GetText().toUtf8());
             pNotifier->notifyWindow(GetLOKWindowId(), "title_changed", aPayload);
         }
     }
@@ -1202,7 +1202,7 @@ void Dialog::Resize()
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back(std::make_pair("size", GetOptimalSize().toString()));
+        aItems.emplace_back("size", GetOptimalSize().toString());
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
     }
 }
