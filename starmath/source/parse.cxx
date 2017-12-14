@@ -937,6 +937,17 @@ void SmParser::NextToken()
         m_nBufferIndex = aRes.EndPos;
 }
 
+namespace
+{
+    SmNodeArray buildNodeArray(std::vector<std::unique_ptr<SmNode>>& rSubNodes)
+    {
+        SmNodeArray aSubArray(rSubNodes.size());
+        for (size_t i = 0; i < rSubNodes.size(); ++i)
+            aSubArray[i] = rSubNodes[i].release();
+        return aSubArray;
+    }
+}
+
 // grammar
 
 SmTableNode *SmParser::DoTable()
@@ -945,16 +956,16 @@ SmTableNode *SmParser::DoTable()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    SmNodeArray aLineArray;
-    aLineArray.push_back(DoLine());
+    std::vector<std::unique_ptr<SmNode>> aLineArray;
+    aLineArray.emplace_back(std::unique_ptr<SmNode>(DoLine()));
     while (m_aCurToken.eType == TNEWLINE)
     {
         NextToken();
-        aLineArray.push_back(DoLine());
+        aLineArray.emplace_back(std::unique_ptr<SmNode>(DoLine()));
     }
     assert(m_aCurToken.eType == TEND);
     std::unique_ptr<SmTableNode> pSNode(new SmTableNode(m_aCurToken));
-    pSNode->SetSubNodes(aLineArray);
+    pSNode->SetSubNodes(buildNodeArray(aLineArray));
     return pSNode.release();
 }
 
@@ -995,16 +1006,16 @@ SmLineNode *SmParser::DoLine()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    SmNodeArray  ExpressionArray;
+    std::vector<std::unique_ptr<SmNode>> ExpressionArray;
 
     // start with single expression that may have an alignment statement
     // (and go on with expressions that must not have alignment
     // statements in 'while' loop below. See also 'Expression()'.)
     if (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-        ExpressionArray.push_back(DoAlign());
+        ExpressionArray.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-        ExpressionArray.push_back(DoExpression());
+        ExpressionArray.emplace_back(std::unique_ptr<SmNode>(DoExpression()));
 
     //If there's no expression, add an empty one.
     //this is to avoid a formula tree without any caret
@@ -1013,23 +1024,12 @@ SmLineNode *SmParser::DoLine()
     {
         SmToken aTok = SmToken();
         aTok.eType = TNEWLINE;
-        ExpressionArray.push_back(new SmExpressionNode(aTok));
+        ExpressionArray.emplace_back(std::unique_ptr<SmNode>(new SmExpressionNode(aTok)));
     }
 
     auto pSNode = o3tl::make_unique<SmLineNode>(m_aCurToken);
-    pSNode->SetSubNodes(ExpressionArray);
+    pSNode->SetSubNodes(buildNodeArray(ExpressionArray));
     return pSNode.release();
-}
-
-namespace
-{
-    SmNodeArray buildNodeArray(std::vector<std::unique_ptr<SmNode>>& rSubNodes)
-    {
-        SmNodeArray aSubArray(rSubNodes.size());
-        for (size_t i = 0; i < rSubNodes.size(); ++i)
-            aSubArray[i] = rSubNodes[i].release();
-        return aSubArray;
-    }
 }
 
 SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
@@ -1270,11 +1270,11 @@ SmNode *SmParser::DoPower()
         throw std::range_error("parser depth limit");
 
     // get body for sub- supscripts on top of stack
-    SmNode *pNode = DoTerm(false);
+    std::unique_ptr<SmNode> xNode(DoTerm(false));
 
     if (m_aCurToken.nGroup == TG::Power)
-        return DoSubSup(TG::Power, pNode);
-    return pNode;
+        return DoSubSup(TG::Power, xNode.release());
+    return xNode.release();
 }
 
 SmBlankNode *SmParser::DoBlank()
