@@ -163,26 +163,27 @@ void SigningTest::setUp()
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
-#ifndef _WIN32
-    // Set up cert8.db in workdir/CppunitTest/
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aTargetDir = m_directories.getURLFromWorkdir(
                               "/CppunitTest/xmlsecurity_signing.test.user/");
+
+    // Set up cert8.db in workdir/CppunitTest/
     osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
     osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
+
+    // Make gpg use our own defined setup & keys
+    osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "pubring.gpg");
+    osl::File::copy(aSourceDir + "random_seed", aTargetDir + "random_seed");
+    osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "secring.gpg");
+    osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "trustdb.gpg");
+
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
-    setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
-#endif
-#if HAVE_FEATURE_GPGVERIFY
-    // Make gpg use our own defined setup below data dir
-    OUString aHomePath;
-    osl::FileBase::getSystemPathFromFileURL(
-        m_directories.getURLFromSrc(DATA_DIRECTORY),
-        aHomePath);
-    OUString envVar("GNUPGHOME");
-    osl_setEnvironment(envVar.pData, aHomePath.pData);
-#endif
+
+    OUString mozCertVar("MOZILLA_CERTIFICATE_FOLDER");
+    osl_setEnvironment(mozCertVar.pData, aTargetPath.pData);
+    OUString gpgHomeVar("GNUPGHOME");
+    osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
 }
 
 void SigningTest::tearDown()
