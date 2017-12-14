@@ -85,7 +85,7 @@ private:
     GC GetInvertGC();
     GC GetInvert50GC();
 
-    void DrawLines( sal_uIntPtr              nPoints,
+    void DrawLines( sal_uInt32              nPoints,
                                const SalPolyLine &rPoints,
                                GC                 pGC,
                                bool bClose

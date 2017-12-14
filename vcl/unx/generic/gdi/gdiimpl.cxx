@@ -473,7 +473,7 @@ GC X11SalGraphicsImpl::SelectPen()
     return mpPenGC;
 }
 
-void X11SalGraphicsImpl::DrawLines(sal_uLong              nPoints,
+void X11SalGraphicsImpl::DrawLines(sal_uInt32              nPoints,
                                    const SalPolyLine &rPoints,
                                    GC                 pGC,
                                    bool               bClose)
