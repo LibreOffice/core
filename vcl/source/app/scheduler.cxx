@@ -20,7 +20,14 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstdlib>
+#include <exception>
+#include <typeinfo>
 
+#include <com/sun/star/uno/Exception.hpp>
+#include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
 #include <svdata.hxx>
 #include <tools/time.hxx>
 #include <unotools/configmgr.hxx>
@@ -439,11 +446,21 @@ next_entry:
         {
             pTask->Invoke();
         }
+        catch (css::uno::Exception& e)
+        {
+            auto const e2 = cppu::getCaughtException();
+            SAL_WARN("vcl.schedule", "Uncaught " << e2.getValueTypeName() << " " << e.Message);
+            std::abort();
+        }
+        catch (std::exception& e)
+        {
+            SAL_WARN("vcl.schedule", "Uncaught " << typeid(e).name() << " " << e.what());
+            std::abort();
+        }
         catch (...)
         {
-            SAL_WARN( "vcl.schedule",
-                      "Uncaught exception during Task::Invoke()!" );
-            abort();
+            SAL_WARN("vcl.schedule", "Uncaught exception during Task::Invoke()!");
+            std::abort();
         }
         Lock( nLockCount );
         pMostUrgent->mbInScheduler = false;

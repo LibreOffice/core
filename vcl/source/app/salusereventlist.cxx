@@ -21,7 +21,14 @@
 #include <salwtype.hxx>
 
 #include <algorithm>
+#include <cstdlib>
+#include <exception>
+#include <typeinfo>
 
+#include <com/sun/star/uno/Exception.hpp>
+#include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
 #include <svdata.hxx>
 
 SalUserEventList::SalUserEventList()
@@ -90,9 +97,20 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             {
                 ProcessEvent( aEvent );
             }
+            catch (css::uno::Exception& e)
+            {
+                auto const e2 = cppu::getCaughtException();
+                SAL_WARN("vcl", "Uncaught " << e2.getValueTypeName() << " " << e.Message);
+                std::abort();
+            }
+            catch (std::exception& e)
+            {
+                SAL_WARN("vcl", "Uncaught " << typeid(e).name() << " " << e.what());
+                std::abort();
+            }
             catch (...)
             {
-                SAL_WARN( "vcl", "Uncaught exception during ProcessEvent!" );
+                SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
                 std::abort();
             }
         }
