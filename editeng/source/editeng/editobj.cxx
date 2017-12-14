@@ -98,7 +98,7 @@ XParaPortionList::XParaPortionList(
     OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY) :
     aRefMapMode(pRefDev->GetMapMode()), nStretchX(_nStretchX), nStretchY(_nStretchY)
 {
-    nRefDevPtr = reinterpret_cast<sal_uIntPtr>(pRefDev);
+    nRefDevPtr = pRefDev;
     nPaperWidth = nPW;
     eRefDevType = pRefDev->GetOutDevType();
 }
