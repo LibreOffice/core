@@ -13,7 +13,6 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <config_libepubgen.h>
 #include <sfx2/opengrf.hxx>
 
 #include "EPUBExportFilter.hxx"
