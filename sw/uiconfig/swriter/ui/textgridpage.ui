@@ -220,7 +220,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="textgridpage|labelFT_CHARRANGE">(1-45)</property>
+                            <property name="label" translatable="no" context="textgridpage|labelFT_CHARRANGE">(1-45)</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -262,7 +262,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="ypad">4</property>
-                            <property name="label" translatable="yes" context="textgridpage|labelFT_LINERANGE">(1-48)</property>
+                            <property name="label" translatable="no" context="textgridpage|labelFT_LINERANGE">(1-48)</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
