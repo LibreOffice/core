@@ -1045,10 +1045,10 @@ SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
 
     if (RelationArray.size() > 1)
     {
-        std::unique_ptr<SmExpressionNode> pSNode(new SmExpressionNode(m_aCurToken));
-        pSNode->SetSubNodes(buildNodeArray(RelationArray));
-        pSNode->SetUseExtraSpaces(bUseExtraSpaces);
-        return pSNode.release();
+        std::unique_ptr<SmExpressionNode> xSNode(new SmExpressionNode(m_aCurToken));
+        xSNode->SetSubNodes(buildNodeArray(RelationArray));
+        xSNode->SetUseExtraSpaces(bUseExtraSpaces);
+        return xSNode.release();
     }
     else
     {
@@ -1063,16 +1063,16 @@ SmNode *SmParser::DoRelation()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    SmNode *pFirst = DoSum();
+    std::unique_ptr<SmNode> xFirst(DoSum());
     while (TokenInGroup(TG::Relation))
     {
-        std::unique_ptr<SmStructureNode> pSNode(new SmBinHorNode(m_aCurToken));
-        SmNode *pSecond = DoOpSubSup();
-        SmNode *pThird = DoSum();
-        pSNode->SetSubNodes(pFirst, pSecond, pThird);
-        pFirst = pSNode.release();
+        std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
+        std::unique_ptr<SmNode> xSecond(DoOpSubSup());
+        std::unique_ptr<SmNode> xThird(DoSum());
+        xSNode->SetSubNodes(xFirst.release(), xSecond.release(), xThird.release());
+        xFirst = std::move(xSNode);
     }
-    return pFirst;
+    return xFirst.release();
 }
 
 SmNode *SmParser::DoSum()
@@ -1493,21 +1493,21 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
             if ( TokenInGroup(TG::Attribute) ||
                  TokenInGroup(TG::FontAttr) )
             {
-                std::stack<SmStructureNode *> aStack;
+                std::stack<std::unique_ptr<SmStructureNode>> aStack;
                 bool    bIsAttr;
                 while ( (bIsAttr = TokenInGroup(TG::Attribute))
                        ||  TokenInGroup(TG::FontAttr))
-                    aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
+                    aStack.push(std::unique_ptr<SmStructureNode>(bIsAttr ? DoAttribut() : DoFontAttribut()));
 
-                SmNode *pFirstNode = DoPower();
+                std::unique_ptr<SmNode> xFirstNode(DoPower());
                 while (!aStack.empty())
                 {
-                    SmStructureNode *pNode = aStack.top();
+                    std::unique_ptr<SmStructureNode> xNode = std::move(aStack.top());
                     aStack.pop();
-                    pNode->SetSubNodes(nullptr, pFirstNode);
-                    pFirstNode = pNode;
+                    xNode->SetSubNodes(nullptr, xFirstNode.release());
+                    xFirstNode = std::move(xNode);
                 }
-                return pFirstNode;
+                return xFirstNode.release();
             }
             if (TokenInGroup(TG::Function))
                 return DoFunction();
