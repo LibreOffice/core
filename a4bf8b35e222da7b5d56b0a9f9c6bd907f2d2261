@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5c76c0d7",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-14T16:25:26Z",
+      "side": 1,
+      "message": "should wrap this in\n\n  /// @cond INTERNAL\n  ...\n  /// @endcond\n\nto keep this out of the public documentation",
+      "revId": "a4bf8b35e222da7b5d56b0a9f9c6bd907f2d2261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3c601401",
+        "filename": "sal/qa/rtl/alloc/rtl_alloc.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-14T16:25:26Z",
+      "side": 1,
+      "message": "does it work to include sal/rtl/strimp.hxx instead?",
+      "revId": "a4bf8b35e222da7b5d56b0a9f9c6bd907f2d2261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7c561c2b",
+        "filename": "sal/rtl/alloc_arena.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-14T16:25:26Z",
+      "side": 1,
+      "message": "any reason this needs to be extern \"C\" and SAL_THROW_EXTERN_C()?",
+      "revId": "a4bf8b35e222da7b5d56b0a9f9c6bd907f2d2261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f706a71a",
+        "filename": "sal/rtl/strimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-14T16:25:26Z",
+      "side": 1,
+      "message": "is this needed for anything?",
+      "revId": "a4bf8b35e222da7b5d56b0a9f9c6bd907f2d2261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_bc19648a",
+        "filename": "sal/rtl/strimp.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-14T16:25:26Z",
+      "side": 1,
+      "message": "* while the types apparently want to be extern \"C\", I guess the variables themselves don\u0027t need to be\n\n* there\u0027s no synchronization of the writers (i.e., rtl_alloc_preInit) and readers of these vars, so you should document that rtl_alloc_preInit must only be called before any other threads (that use O[U]String) are spawned",
+      "revId": "a4bf8b35e222da7b5d56b0a9f9c6bd907f2d2261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
