@@ -45,7 +45,7 @@ public:
 
     void            Format( OUString&, ScRefFlags nFlags, ScDocument*,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                            sal_Unicode cDelimiter = 0 ) const;
+                            sal_Unicode cDelimiter = 0, bool bFullAddressNotation = false ) const;
 
     void            Join( const ScRange&, bool bIsInList = false );
 
