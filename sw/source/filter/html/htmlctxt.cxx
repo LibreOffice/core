@@ -46,8 +46,8 @@ class HTMLAttrContext_SaveDoc
     SwHTMLNumRuleInfo aNumRuleInfo; // Numbering for this environment
     std::unique_ptr<SwPosition>
                       pPos;         // Jump back to here when leaving context
-    std::unique_ptr<HTMLAttrTable>
-                      pAttrTab;     // Valid attributes for the environment,
+    std::shared_ptr<HTMLAttrTable>
+                      xAttrTab;     // Valid attributes for the environment,
                                     // if attributes shouldn't be preserved
 
     size_t nContextStMin;           // Stack lower bound for the environment
@@ -62,7 +62,7 @@ class HTMLAttrContext_SaveDoc
 public:
 
     HTMLAttrContext_SaveDoc() :
-        pPos( nullptr ), pAttrTab( nullptr ),
+        pPos( nullptr ),
         nContextStMin( SIZE_MAX ), nContextStAttrMin( SIZE_MAX ),
         bStripTrailingPara( false ), bKeepNumRules( false ),
         bFixHeaderDist( false ), bFixFooterDist( false )
@@ -76,7 +76,7 @@ public:
     void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
     const SwHTMLNumRuleInfo& GetNumInfo() const { return aNumRuleInfo; }
 
-    HTMLAttrTable *GetAttrTab( bool bCreate= false );
+    std::shared_ptr<HTMLAttrTable> GetAttrTab(bool bCreate = false);
 
     void SetContextStMin( size_t nMin ) { nContextStMin = nMin; }
     size_t GetContextStMin() const { return nContextStMin; }
@@ -97,14 +97,14 @@ public:
     bool GetFixFooterDist() const { return bFixFooterDist; }
 };
 
-HTMLAttrTable *HTMLAttrContext_SaveDoc::GetAttrTab( bool bCreate )
+std::shared_ptr<HTMLAttrTable> HTMLAttrContext_SaveDoc::GetAttrTab( bool bCreate )
 {
-    if( !pAttrTab && bCreate )
+    if (!xAttrTab && bCreate)
     {
-        pAttrTab.reset( new HTMLAttrTable );
-        memset( pAttrTab.get(), 0, sizeof( HTMLAttrTable ));
+        xAttrTab.reset(new HTMLAttrTable);
+        memset(xAttrTab.get(), 0, sizeof(HTMLAttrTable));
     }
-    return pAttrTab.get();
+    return xAttrTab;
 }
 
 HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
@@ -139,7 +139,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     bool bMoveBack = false;
 
     // close all open attributes and re-open them after the table
-    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(m_xAttrTab.get());
     for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         HTMLAttr *pAttr = *pHTMLAttributes;
@@ -244,8 +244,8 @@ void SwHTMLParser::SaveDocContext( HTMLAttrContext *pCntxt,
         }
         else
         {
-            HTMLAttrTable *pSaveAttrTab = pSave->GetAttrTab( true );
-            SaveAttrTab( *pSaveAttrTab );
+            std::shared_ptr<HTMLAttrTable> xSaveAttrTab = pSave->GetAttrTab(true);
+            SaveAttrTab(xSaveAttrTab);
         }
 
         pSave->SetPos( *m_pPam->GetPoint() );
@@ -282,15 +282,15 @@ void SwHTMLParser::RestoreDocContext( HTMLAttrContext *pCntxt )
             FixHeaderFooterDistance( pSave->GetFixHeaderDist(),
                                      pSave->GetPos() );
 
-        HTMLAttrTable *pSaveAttrTab = pSave->GetAttrTab();
-        if( !pSaveAttrTab )
+        std::shared_ptr<HTMLAttrTable> xSaveAttrTab = pSave->GetAttrTab();
+        if (!xSaveAttrTab)
         {
             // Close attribute on current position and start on the old one
             SplitAttrTab( *pSave->GetPos() );
         }
         else
         {
-            RestoreAttrTab( *pSaveAttrTab );
+            RestoreAttrTab(xSaveAttrTab);
         }
 
         *m_pPam->GetPoint() = *pSave->GetPos();
@@ -480,10 +480,10 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         // We only set the DropCap attribute if the initial spans multiple lines
         if( aDrop.GetLines() > 1 )
         {
-            NewAttr( &m_aAttrTab.pDropCap, aDrop );
+            NewAttr(m_xAttrTab, &m_xAttrTab->pDropCap, aDrop);
 
             HTMLAttrs &rAttrs = pContext->GetAttrs();
-            rAttrs.push_back( m_aAttrTab.pDropCap );
+            rAttrs.push_back( m_xAttrTab->pDropCap );
 
             return;
         }
@@ -562,8 +562,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 aLRItem.SetTextFirstLineOfst( nIndent );
                 aLRItem.SetTextLeft( nLeft );
                 aLRItem.SetRight( nRight );
-                NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
-                EndAttr( m_aAttrTab.pLRSpace, false );
+                NewAttr(m_xAttrTab, &m_xAttrTab->pLRSpace, aLRItem);
+                EndAttr( m_xAttrTab->pLRSpace, false );
             }
             break;
 
@@ -578,33 +578,33 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 if( !rPropInfo.m_bBottomMargin )
                     aULSpace.SetLower( nLower );
 
-                NewAttr( &m_aAttrTab.pULSpace, aULSpace );
+                NewAttr(m_xAttrTab, &m_xAttrTab->pULSpace, aULSpace);
 
                 // save context information
                 HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.push_back( m_aAttrTab.pULSpace );
+                rAttrs.push_back( m_xAttrTab->pULSpace );
 
                 pContext->SetULSpace( aULSpace.GetUpper(), aULSpace.GetLower() );
             }
             else
             {
-                ppAttr = &m_aAttrTab.pULSpace;
+                ppAttr = &m_xAttrTab->pULSpace;
             }
             break;
         case RES_CHRATR_FONTSIZE:
             // don't set attributes with a % property
             if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
-                ppAttr = &m_aAttrTab.pFontHeight;
+                ppAttr = &m_xAttrTab->pFontHeight;
             break;
         case RES_CHRATR_CJK_FONTSIZE:
             // don't set attributes with a % property
             if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
-                ppAttr = &m_aAttrTab.pFontHeightCJK;
+                ppAttr = &m_xAttrTab->pFontHeightCJK;
             break;
         case RES_CHRATR_CTL_FONTSIZE:
             // don't set attributes with a % property
             if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
-                ppAttr = &m_aAttrTab.pFontHeightCTL;
+                ppAttr = &m_xAttrTab->pFontHeightCTL;
             break;
 
         case RES_BACKGROUND:
@@ -615,16 +615,16 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
 
                 // Set the attribute
-                NewAttr( &m_aAttrTab.pCharBrush, aBrushItem );
+                NewAttr(m_xAttrTab, &m_xAttrTab->pCharBrush, aBrushItem);
 
                 // and save context information
                 HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.push_back( m_aAttrTab.pCharBrush );
+                rAttrs.push_back( m_xAttrTab->pCharBrush );
             }
             else if( pContext->GetToken() != HtmlTokenId::TABLEHEADER_ON &&
                      pContext->GetToken() != HtmlTokenId::TABLEDATA_ON )
             {
-                ppAttr = &m_aAttrTab.pBrush;
+                ppAttr = &m_xAttrTab->pBrush;
             }
             break;
 
@@ -634,14 +634,14 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 SvxBoxItem aBoxItem( *static_cast<const SvxBoxItem *>(pItem) );
                 aBoxItem.SetWhich( RES_CHRATR_BOX );
 
-                NewAttr( &m_aAttrTab.pCharBox, aBoxItem );
+                NewAttr(m_xAttrTab, &m_xAttrTab->pCharBox, aBoxItem);
 
                 HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.push_back( m_aAttrTab.pCharBox );
+                rAttrs.push_back( m_xAttrTab->pCharBox );
             }
             else
             {
-                ppAttr = &m_aAttrTab.pBox;
+                ppAttr = &m_xAttrTab->pBox;
             }
             break;
 
@@ -653,7 +653,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         if( ppAttr )
         {
             // Set the attribute
-            NewAttr( ppAttr, *pItem );
+            NewAttr(m_xAttrTab, ppAttr, *pItem);
 
             // and save context information
             HTMLAttrs &rAttrs = pContext->GetAttrs();
@@ -678,7 +678,7 @@ void SwHTMLParser::InsertAttr( HTMLAttr **ppAttr, const SfxPoolItem & rItem,
     }
 
     // Set the attribute
-    NewAttr( ppAttr, rItem );
+    NewAttr(m_xAttrTab, ppAttr, rItem);
 
     // save context information
     HTMLAttrs &rAttrs = pCntxt->GetAttrs();

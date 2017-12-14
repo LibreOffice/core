@@ -368,7 +368,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
 
     if( SvxAdjust::End != eAdjust )
     {
-        InsertAttr(&m_aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), xCntxt.get());
+        InsertAttr(&m_xAttrTab->pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), xCntxt.get());
     }
 
     // parse style
