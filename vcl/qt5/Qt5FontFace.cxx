@@ -110,7 +110,4 @@ bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) 
 
 PhysicalFontFace* Qt5FontFace::Clone() const { return new Qt5FontFace(*this); }
 
-LogicalFontInstance* Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
-{
-    return new LogicalFontInstance(rFSD);
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

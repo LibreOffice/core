@@ -22,6 +22,7 @@
 
 #include <unx/glyphcache.hxx>
 #include <PhysicalFontFace.hxx>
+#include <fontinstance.hxx>
 
 // FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
@@ -116,6 +117,22 @@ public:
     virtual LogicalFontInstance* CreateFontInstance( const FontSelectPattern& ) const override;
     virtual PhysicalFontFace* Clone() const override   { return new FreetypeFontFace( *this ); }
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
+};
+
+// a class for cache entries for physical font instances that are based on serverfonts
+class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
+{
+    friend LogicalFontInstance* FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
+
+    FreetypeFont* mpFreetypeFont;
+
+protected:
+    explicit FreetypeFontInstance(const FontSelectPattern&);
+
+public:
+    virtual ~FreetypeFontInstance() override;
+
+    void SetFreetypeFont(FreetypeFont* p);
 };
 
 #endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX

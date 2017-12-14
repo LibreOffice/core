@@ -333,10 +333,9 @@ PhysicalFontFace* WinFontFace::Clone() const
     return pClone;
 }
 
-LogicalFontInstance* WinFontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
+LogicalFontInstance* WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
-    LogicalFontInstance* pFontInstance = new WinFontInstance( rFSD );
-    return pFontInstance;
+    return new WinFontInstance(rFSD);
 }
 
 bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)

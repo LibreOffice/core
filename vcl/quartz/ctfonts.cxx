@@ -268,11 +268,6 @@ PhysicalFontFace* CoreTextFontFace::Clone() const
     return new CoreTextFontFace( *this);
 }
 
-LogicalFontInstance* CoreTextFontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
-{
-    return new LogicalFontInstance( rFSD);
-}
-
 int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
 {
     SAL_WARN_IF( pTagName[4]!='\0', "vcl", "CoreTextFontFace::GetFontTable with invalid tagname!" );
