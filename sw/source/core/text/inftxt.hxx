@@ -140,7 +140,7 @@ public:
 class SwTextSizeInfo : public SwTextInfo
 {
 private:
-    typedef std::map< sal_uIntPtr, sal_uInt16 > SwTextPortionMap;
+    typedef std::map< SwLinePortion const *, sal_uInt16 > SwTextPortionMap;
 
 protected:
     // during formatting, a small database is built, mapping portion pointers
@@ -306,13 +306,13 @@ public:
     // space among compressed kanas.
     // During formatting, the maximum values of compressable portions are
     // stored in m_aMaxWidth and discarded after a line has been formatted.
-    void SetMaxWidthDiff( const void *nKey, sal_uInt16 nVal )
+    void SetMaxWidthDiff( const SwLinePortion *nKey, sal_uInt16 nVal )
     {
-        m_aMaxWidth.insert( std::make_pair( reinterpret_cast<sal_uIntPtr>(nKey), nVal ) );
+        m_aMaxWidth.insert( std::make_pair( nKey, nVal ) );
     };
-    sal_uInt16 GetMaxWidthDiff( const void *nKey )
+    sal_uInt16 GetMaxWidthDiff( const SwLinePortion *nKey )
     {
-        SwTextPortionMap::iterator it = m_aMaxWidth.find( reinterpret_cast<sal_uIntPtr>(nKey) );
+        SwTextPortionMap::iterator it = m_aMaxWidth.find( nKey );
 
         if( it != m_aMaxWidth.end() )
             return it->second;
