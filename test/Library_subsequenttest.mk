@@ -54,6 +54,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xcellrangereferrer \
 	test/source/sheet/xcellrangesquery \
 	test/source/sheet/xcellseries \
+	test/source/sheet/xconsolidatable \
 	test/source/sheet/xconsolidationdescriptor \
 	test/source/sheet/xgoalseek \
 	test/source/sheet/xdatabaserange \

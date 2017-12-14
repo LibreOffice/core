@@ -30,8 +30,6 @@
 "ScModelObj";"com::sun::star::frame::XStorable";"store()"
 "ScModelObj";"com::sun::star::frame::XStorable";"storeAsURL()"
 "ScModelObj";"com::sun::star::frame::XStorable";"storeToURL()"
-"ScModelObj";"com::sun::star::sheet::XConsolidatable";"createConsolidationDescriptor()"
-"ScModelObj";"com::sun::star::sheet::XConsolidatable";"consolidate()"
 "ScModelObj";"com::sun::star::document::XEventsSupplier#optional";"getEvents()"
 "ScModelObj";"com::sun::star::util::XModifiable";"isModified()"
 "ScModelObj";"com::sun::star::util::XModifiable";"setModified()"

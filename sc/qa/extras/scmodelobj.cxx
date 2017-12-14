@@ -8,16 +8,23 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <test/sheet/xconsolidatable.hxx>
 #include <test/sheet/xgoalseek.hxx>
+
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 1
+#define NUMBER_OF_TESTS 3
 
-class ScModelObj : public UnoApiTest, public apitest::XGoalSeek
+class ScModelObj : public UnoApiTest, public apitest::XConsolidatable,
+                                      public apitest::XGoalSeek
 {
 public:
     virtual void setUp() override;
@@ -28,7 +35,14 @@ public:
     ScModelObj();
 
     CPPUNIT_TEST_SUITE(ScModelObj);
+
+    // XConsolidatable
+    CPPUNIT_TEST(testCreateConsolidationDescriptor);
+    CPPUNIT_TEST(testConsolidate);
+
+    // XGoalSeek
     CPPUNIT_TEST(testSeekGoal);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
