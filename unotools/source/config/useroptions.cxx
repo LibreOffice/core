@@ -67,7 +67,8 @@ static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
     "fathersname",               // UserOptToken::FathersName
     "apartment",                 // UserOptToken::Apartment
     "signingkey",                // UserOptToken::SigningKey
-    "encryptionkey"              // UserOptToken::EncryptionKey
+    "encryptionkey",             // UserOptToken::EncryptionKey
+    "encrypttoself"              // UserOptToken::EncryptToSelf
 };
 
 std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
@@ -96,12 +97,19 @@ public:
     bool IsTokenReadonly (UserOptToken nToken) const;
     OUString GetToken (UserOptToken nToken) const;
     void     SetToken (UserOptToken nToken, OUString const& rNewToken);
+    bool     GetBoolValue (UserOptToken nToken) const;
+    void     SetBoolValue (UserOptToken nToken, bool& bNewValue);
     void     Notify ();
 
 private:
     uno::Reference<util::XChangesListener> m_xChangeListener;
     uno::Reference<container::XNameAccess> m_xCfg;
     uno::Reference<beans::XPropertySet>    m_xData;
+
+    template < typename ValueType >
+    ValueType GetValue_Impl( UserOptToken nToken ) const;
+    template < typename ValueType >
+    void SetValue_Impl( UserOptToken nToken, ValueType const& rNewValue );
 };
 
 void SvtUserOptions::ChangeListener::changesOccurred (util::ChangesEvent const& rEvent)
@@ -153,9 +161,10 @@ SvtUserOptions::Impl::Impl() :
     }
 }
 
-OUString SvtUserOptions::Impl::GetToken (UserOptToken nToken) const
+template < typename ValueType >
+ValueType SvtUserOptions::Impl::GetValue_Impl (UserOptToken nToken) const
 {
-    OUString sToken;
+    ValueType sToken = ValueType();
     try
     {
         if (m_xData.is())
@@ -168,7 +177,8 @@ OUString SvtUserOptions::Impl::GetToken (UserOptToken nToken) const
     return sToken;
 }
 
-void SvtUserOptions::Impl::SetToken (UserOptToken nToken, OUString const& sToken)
+template < typename ValueType >
+void SvtUserOptions::Impl::SetValue_Impl (UserOptToken nToken, ValueType const& sToken)
 {
     try
     {
@@ -180,6 +190,26 @@ void SvtUserOptions::Impl::SetToken (UserOptToken nToken, OUString const& sToken
     {
         SAL_WARN("unotools.config", "Caught unexpected: " << ex);
     }
+}
+
+OUString SvtUserOptions::Impl::GetToken (UserOptToken nToken) const
+{
+    return GetValue_Impl<OUString>( nToken );
+}
+
+void SvtUserOptions::Impl::SetToken (UserOptToken nToken, OUString const& sToken)
+{
+    SetValue_Impl<OUString>( nToken, sToken );
+}
+
+bool SvtUserOptions::Impl::GetBoolValue (UserOptToken nToken) const
+{
+    return GetValue_Impl<bool>( nToken );
+}
+
+void SvtUserOptions::Impl::SetBoolValue (UserOptToken nToken, bool& bNewValue)
+{
+    SetValue_Impl<bool>( nToken, bNewValue );
 }
 
 OUString SvtUserOptions::Impl::GetFullName () const
@@ -297,6 +327,18 @@ void SvtUserOptions::SetToken (UserOptToken nToken, OUString const& rNewToken)
 {
     osl::MutexGuard aGuard(GetInitMutex());
     xImpl->SetToken(nToken, rNewToken);
+}
+
+void SvtUserOptions::SetBoolValue (UserOptToken nToken, bool bNewValue)
+{
+    osl::MutexGuard aGuard(GetInitMutex());
+    xImpl->SetBoolValue(nToken, bNewValue);
+}
+
+bool SvtUserOptions::GetEncryptToSelf() const
+{
+    osl::MutexGuard aGuard(GetInitMutex());
+    return xImpl->GetBoolValue(UserOptToken::EncryptToSelf);
 }
 
 OUString SvtUserOptions::GetFullName () const
