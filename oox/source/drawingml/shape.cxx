@@ -185,9 +185,9 @@ void Shape::setDefaults(bool bHeight)
     maDefaultShapeProperties.setProperty(PROP_TextAutoGrowHeight, false);
     maDefaultShapeProperties.setProperty(PROP_TextWordWrap, true);
     maDefaultShapeProperties.setProperty(PROP_TextLeftDistance, static_cast< sal_Int32 >( 250 ));
-    maDefaultShapeProperties.setProperty(PROP_TextUpperDistance, static_cast< sal_Int32 >( 125 ));
+    maDefaultShapeProperties.setProperty(PROP_TextUpperDistance, static_cast< sal_Int32 >( 0 ));
     maDefaultShapeProperties.setProperty(PROP_TextRightDistance, static_cast< sal_Int32 >( 250 ));
-    maDefaultShapeProperties.setProperty(PROP_TextLowerDistance, static_cast< sal_Int32 >( 125 ));
+    maDefaultShapeProperties.setProperty(PROP_TextLowerDistance, static_cast< sal_Int32 >( 0 ));
     if (bHeight)
         maDefaultShapeProperties.setProperty(PROP_CharHeight, static_cast< float >( 18.0 ));
     maDefaultShapeProperties.setProperty(PROP_TextVerticalAdjust, TextVerticalAdjust_TOP);
