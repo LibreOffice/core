@@ -4388,7 +4388,8 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
                                     || aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
                                     || aPropertyName == IS_INCONSISTENT_PROPERTY
                                     || aPropertyName == "URL"
-                                    || aPropertyName == "RepairPackage" ) )
+                                    || aPropertyName == "RepairPackage"
+                                    || aPropertyName == ENCRYPTION_GPG_PROPERTIES) )
            || aPropertyName == "IsRoot"
            || aPropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY )
             throw beans::PropertyVetoException( THROW_WHERE );
@@ -4507,6 +4508,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
         else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
           && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
             || aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
+            || aPropertyName == ENCRYPTION_GPG_PROPERTIES
             || aPropertyName == IS_INCONSISTENT_PROPERTY ) )
         {
             try {

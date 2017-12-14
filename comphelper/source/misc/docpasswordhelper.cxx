@@ -17,16 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_gpgme.h>
+
 #include <algorithm>
 
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>
 #include <string.h>
+
+#if HAVE_FEATURE_GPGME
+# include <gpgme.h>
+# include <context.h>
+# include <data.h>
+# include <decryptionresult.h>
+#endif
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
@@ -416,6 +427,91 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     }
 
     return (eResult == DocPasswordVerifierResult::OK) ? aEncData : uno::Sequence< beans::NamedValue >();
+}
+
+/*static*/ uno::Sequence< css::beans::NamedValue >
+    DocPasswordHelper::decryptGpgSession(
+        const uno::Sequence< uno::Sequence< beans::NamedValue > >& rGpgProperties )
+{
+#if HAVE_FEATURE_GPGME
+    if ( !rGpgProperties.hasElements() )
+        return uno::Sequence< beans::NamedValue >();
+
+    uno::Sequence< beans::NamedValue > aEncryptionData(1);
+    std::unique_ptr<GpgME::Context> ctx;
+    GpgME::initializeLibrary();
+    GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
+    if (err)
+        throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
+    if (ctx == nullptr)
+        throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+    ctx->setArmor(false);
+
+    const uno::Sequence < beans::NamedValue > *pSequence = rGpgProperties.getConstArray();
+    const sal_Int32 nLength = rGpgProperties.getLength();
+    for ( sal_Int32 i = 0; i < nLength ; i++, pSequence++ )
+    {
+        const beans::NamedValue *pValues = pSequence->getConstArray();
+        if ( pSequence->getLength() == 3 )
+        {
+            // take CipherValue and try to decrypt that - stop after
+            // the first successful decryption
+
+            // ctx is setup now, let's decrypt the lot!
+            uno::Sequence < sal_Int8 > aVector;
+            pValues[2].Value >>= aVector;
+
+            GpgME::Data cipher(
+                reinterpret_cast<const char*>(aVector.getConstArray()),
+                size_t(aVector.getLength()), false);
+            GpgME::Data plain;
+
+            GpgME::DecryptionResult crypt_res = ctx->decrypt(
+                cipher, plain);
+
+            // NO_SECKEY -> skip
+            // BAD_PASSPHRASE -> retry?
+
+            off_t result = plain.seek(0,SEEK_SET);
+            (void) result;
+            assert(result == 0);
+            int len=0, curr=0; char buf;
+            while( (curr=plain.read(&buf, 1)) )
+                len += curr;
+
+            if(crypt_res.error() || !len)
+                continue; // can't use this key, take next one
+
+            uno::Sequence < sal_Int8 > aKeyValue(len);
+            result = plain.seek(0,SEEK_SET);
+            assert(result == 0);
+            if( plain.read(aKeyValue.getArray(), len) != len )
+                throw uno::RuntimeException("The GpgME library failed to read the encrypted value.");
+
+            SAL_INFO("comphelper.crypto", "Extracted gpg session key of length: " << len);
+
+            aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
+            aEncryptionData[0].Value <<= aKeyValue;
+            break;
+        }
+    }
+
+    if ( aEncryptionData[0].Value.hasValue() )
+    {
+        uno::Sequence< beans::NamedValue > aContainer(2);
+        aContainer[0].Name = "GpgInfos";
+        aContainer[0].Value <<= rGpgProperties;
+        aContainer[1].Name = "EncryptionKey";
+        aContainer[1].Value <<= aEncryptionData;
+
+        return aContainer;
+    }
+#else
+    (void)rGpgProperties;
+#endif
+    return uno::Sequence< beans::NamedValue >();
 }
 
 } // namespace comphelper
