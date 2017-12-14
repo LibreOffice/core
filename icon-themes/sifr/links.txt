@@ -218,3 +218,7 @@ cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
+
+# view menu
+cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
+cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
