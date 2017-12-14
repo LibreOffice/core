@@ -103,6 +103,9 @@ static bool impl_hasHelpInstalled( const OUString &rLang );
 /// Return the locale we prefer for displaying help
 static OUString const & HelpLocaleString()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+
     static OUString aLocaleStr;
     if (aLocaleStr.isEmpty())
     {
