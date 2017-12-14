@@ -3231,15 +3231,33 @@ VclPtr<vcl::Window> Window::GetParentWithLOKNotifier()
     return pWindow;
 }
 
+struct LOKAsyncEvent
+{
+    VclPtr<vcl::Window> mpWindow;
+    SalEvent mnEvent;
+    MouseEvent maMouseEvent;
+};
+
+static void LOKAsyncEventLink( void* pEvent, void* )
+{
+    LOKAsyncEvent* pLOKEv = static_cast<LOKAsyncEvent*>(pEvent);
+    if (!pLOKEv->mpWindow->IsDisposed())
+    {
+        ImplWindowFrameProc(pLOKEv->mpWindow, pLOKEv->mnEvent, &pLOKEv->maMouseEvent);
+    }
+}
+
 void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (ImplIsFloatingWindow())
-        ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonDown, &rMouseEvent);
-    else
-        ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
+    LOKAsyncEvent* pEv = new LOKAsyncEvent;
+    pEv->mpWindow = ImplIsFloatingWindow() ? ImplGetBorderWindow() : this;
+    pEv->mnEvent = SalEvent::ExternalMouseButtonDown;
+    pEv->maMouseEvent = rMouseEvent;
+    Application::PostUserEvent( Link<void*, void>(pEv, LOKAsyncEventLink) );
+
 }
 
 void Window::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
@@ -3247,10 +3265,11 @@ void Window::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (ImplIsFloatingWindow())
-        ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseButtonUp, &rMouseEvent);
-    else
-        ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
+    LOKAsyncEvent* pEv = new LOKAsyncEvent;
+    pEv->mpWindow = ImplIsFloatingWindow() ? ImplGetBorderWindow() : this;
+    pEv->mnEvent = SalEvent::ExternalMouseButtonUp;
+    pEv->maMouseEvent = rMouseEvent;
+    Application::PostUserEvent( Link<void*, void>(pEv, LOKAsyncEventLink) );
 }
 
 void Window::LogicMouseMove(const MouseEvent& rMouseEvent)
@@ -3258,10 +3277,11 @@ void Window::LogicMouseMove(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (ImplIsFloatingWindow())
-        ImplWindowFrameProc(ImplGetBorderWindow(), SalEvent::ExternalMouseMove, &rMouseEvent);
-    else
-        ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
+    LOKAsyncEvent* pEv = new LOKAsyncEvent;
+    pEv->mpWindow = ImplIsFloatingWindow() ? ImplGetBorderWindow() : this;
+    pEv->mnEvent = SalEvent::ExternalMouseMove;
+    pEv->maMouseEvent = rMouseEvent;
+    Application::PostUserEvent( Link<void*, void>(pEv, LOKAsyncEventLink) );
 }
 
 void Window::LOKKeyInput(const KeyEvent& rKeyEvent)
