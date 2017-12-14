@@ -55,7 +55,7 @@
       </node>
       <node oor:name=".uno:ShowHiddenParagraphs" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Hidden Paragraphs</value>
+          <value xml:lang="en-US">Field ~Hidden Paragraphs</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>8</value>
@@ -1346,7 +1346,7 @@
       </node>
       <node oor:name=".uno:LinkDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Lin~ks...</value>
+          <value xml:lang="en-US">Lin~ks to External Files...</value>
         </prop>
       </node>
       <node oor:name=".uno:ConvertTableText" oor:op="replace">
@@ -3148,20 +3148,77 @@
           <value>11</value>
         </prop>
       </node>
+      <node oor:name=".uno:StyleApply?Style:string=Numbering ABC&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Alphabet Uppercase List</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AlphaListStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Alphabet Uppercase List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Alphabet Uppercase List Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Numbering ABC&amp;FamilyName:string=NumberingStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>11</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Numbering abc&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Alphabet Lowercase List</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AlphaLowListStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Alphabet Lowercase List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Alphabet Lowercase List Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Numbering abc&amp;FamilyName:string=NumberingStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>11</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Roman List</value>
+          <value xml:lang="en-US">Roman Uppercase List</value>
         </prop>
       </node>
       <node oor:name=".uno:RomanListStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Roman List</value>
+          <value xml:lang="en-US">Roman Uppercase List</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Roman List Style</value>
+          <value xml:lang="en-US">Roman Uppercase List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>11</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Numbering ivx&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Roman Lowercase List</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RomanLowListStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Roman Lowercase List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Roman Lowercase List Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Numbering ivx&amp;FamilyName:string=NumberingStyles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>11</value>
