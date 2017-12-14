@@ -99,6 +99,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.Name"), sValue);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if(!pXmlDoc)
+        return;
+
+    // Test document has only one paragraph. After splitting, it should contain
+    // two of them.
+    assertXPath(pXmlDoc, "//w:sectPr", 2);
+    assertXPath(pXmlDoc, "//w:p", 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

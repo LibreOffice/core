@@ -2665,17 +2665,31 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         while ( nAktPos < nEnd );
 
         // if paragraph is split, put the section break between the parts
-        // else check if section break needed after the paragraph
-        if( !bNeedParaSplit || *aBreakIt != rNode.GetText().getLength() )
+        if( bNeedParaSplit && *aBreakIt != rNode.GetText().getLength() )
         {
-            AttrOutput().SectionBreaks(rNode);
             SwNodeIndex aNextIndex( rNode, 1 );
             const SwNode& pNextNode = aNextIndex.GetNode();
-            if( pNextNode.IsTextNode() && bNeedParaSplit )
+            // if there is a next node, use its attributes to create the new
+            // section
+            if( pNextNode.IsTextNode() )
             {
-                SectionBreaksAndFrames( *static_cast<SwTextNode*>(
-                            &aNextIndex.GetNode() ));
+                const SwTextNode& rNextNode = *static_cast<SwTextNode*>(
+                        &aNextIndex.GetNode() );
+                OutputSectionBreaks(rNextNode.GetpSwAttrSet(), rNextNode);
             }
+            else if (pNextNode.IsEndNode() )
+            {
+                // In this case the same paragraph holds the next page style
+                // too.
+                const SwPageDesc* pNextPageDesc = m_pAktPageDesc->GetFollow();
+                assert(pNextPageDesc);
+                PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc);
+            }
+        }
+        else
+        {
+            // else check if section break needed after the paragraph
+            AttrOutput().SectionBreaks(rNode);
         }
 
         AttrOutput().StartParagraphProperties();
