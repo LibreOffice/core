@@ -21,7 +21,6 @@
 #include <strings.hrc>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <helpids.h>
 #include <vcl/toolbox.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/waitobj.hxx>

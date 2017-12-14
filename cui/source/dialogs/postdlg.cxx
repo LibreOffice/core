@@ -33,8 +33,6 @@
 #include <postdlg.hxx>
 #include <dialmgr.hxx>
 
-#include <helpids.h>
-
 // class SvxPostItDialog -------------------------------------------------
 
 SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet,

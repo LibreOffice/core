@@ -32,7 +32,6 @@
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <helpids.h>
 #include <page.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/brushitem.hxx>

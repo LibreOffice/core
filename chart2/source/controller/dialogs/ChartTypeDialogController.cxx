@@ -19,7 +19,6 @@
 
 #include "ChartTypeDialogController.hxx"
 #include <ResId.hxx>
-#include <helpids.h>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <ChartModelHelper.hxx>

@@ -33,7 +33,6 @@
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
 #include <cuigaldlg.hxx>
-#include <helpids.h>
 #include <bitmaps.hlst>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Reference.hxx>

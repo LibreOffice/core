@@ -23,7 +23,6 @@
 #include "ChartTypeTemplateProvider.hxx"
 #include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
-#include <helpids.h>
 
 #include "tp_RangeChooser.hxx"
 #include "tp_DataSource.hxx"

@@ -25,7 +25,6 @@
 #include <dialmgr.hxx>
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <helpids.h>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/layout.hxx>

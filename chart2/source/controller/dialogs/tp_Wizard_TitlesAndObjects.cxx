@@ -22,7 +22,6 @@
 #include <res_Titles.hxx>
 #include <res_LegendPosition.hxx>
 #include <ResId.hxx>
-#include <helpids.h>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <LegendHelper.hxx>

@@ -21,7 +21,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include "optfltr.hxx"
-#include <helpids.h>
 #include <strings.hrc>
 #include <dialmgr.hxx>
 

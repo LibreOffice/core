@@ -55,7 +55,6 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/window.hxx>
-#include <helpids.h>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>

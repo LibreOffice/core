@@ -26,7 +26,6 @@
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <helpids.h>
 #include <indexfieldscontrol.hxx>
 #include <indexcollection.hxx>
 #include <vcl/layout.hxx>

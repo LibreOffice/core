@@ -56,7 +56,6 @@
 #include <editeng/optitems.hxx>
 #include <optlingu.hxx>
 #include <dialmgr.hxx>
-#include <helpids.h>
 #include <strings.hrc>
 
 #include <ucbhelper/content.hxx>

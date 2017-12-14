@@ -28,7 +28,6 @@
 #include "dbfindex.hxx"
 #include "dsnItem.hxx"
 
-#include <helpids.h>
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
 

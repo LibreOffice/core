@@ -36,7 +36,6 @@
 #include <svx/strings.hrc>
 
 #include <strings.hrc>
-#include <helpids.h>
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
