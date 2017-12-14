@@ -601,7 +601,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
 
                 // create new field
-                SwFieldType* pFieldType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenText);
+                SwFieldType* pFieldType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_HIDDENTXTFLD);
                 SwHiddenTextField *const pHTField = new SwHiddenTextField(
                     static_cast<SwHiddenTextFieldType*>(pFieldType),
                     paramCondition,
