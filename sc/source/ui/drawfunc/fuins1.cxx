@@ -164,6 +164,9 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pObj->SetName(aName);
 
+    // Anchor images to cell by default, tdf#86739
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *(rData.GetDocument()), rData.GetTabNo());
+
     //  don't select if from (dispatch) API, to allow subsequent cell operations
     SdrInsertFlags nInsOptions = bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
     pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
