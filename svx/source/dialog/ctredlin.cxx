@@ -296,7 +296,7 @@ bool SvxRedlinTable::IsValidComment(const OUString &rCommentStr)
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
-        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uIntPtr nPos)
+        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uLong nPos)
 {
     const Color aColor = (pUserData && pUserData->bDisabled) ? Color(COL_GRAY) : GetTextColor();
 
@@ -304,7 +304,7 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
-        RedlinData *pUserData, const Color& rColor, SvTreeListEntry* pParent, sal_uIntPtr nPos)
+        RedlinData *pUserData, const Color& rColor, SvTreeListEntry* pParent, sal_uLong nPos)
 {
     maEntryColor = rColor;
     maEntryImage = Image();
@@ -317,7 +317,7 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const Image &rRedlineType, const OUString& rStr,
-        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uIntPtr nPos)
+        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uLong nPos)
 {
     maEntryColor = (pUserData && pUserData->bDisabled) ? Color(COL_GRAY) : GetTextColor();
     maEntryImage = rRedlineType;

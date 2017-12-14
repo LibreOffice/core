@@ -48,7 +48,7 @@ private:
     // Avoid ambiguity with new InsertEntry:
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                          bool bChildrenOnDemand,
-                                         sal_uIntPtr nPos, void* pUserData,
+                                         sal_uLong nPos, void* pUserData,
                                          SvLBoxButtonKind eButtonKind ) override;
 
 public:
