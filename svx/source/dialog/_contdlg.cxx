@@ -217,7 +217,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
         pUpdateEditingObject( nullptr ),
         pCheckObj           ( nullptr ),
         aContourItem        ( *this, *_pBindings ),
-        nGrfChanged         ( 0 ),
+        mnGrfChanged        ( 0 ),
         bExecState          ( false ),
         bUpdateGraphicLinked( false ),
         bGraphicLinked      ( false )
@@ -345,7 +345,7 @@ void SvxSuperContourDlg::SetGraphic( const Graphic& rGraphic )
 {
     aUndoGraphic = aRedoGraphic = Graphic();
     aGraphic = rGraphic;
-    nGrfChanged = 0;
+    mnGrfChanged = 0;
     m_pContourWnd->SetGraphic( aGraphic );
 }
 
@@ -486,7 +486,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
     }
     else if (nId == mnUndoId)
     {
-        nGrfChanged = nGrfChanged ? nGrfChanged - 1 : 0UL;
+        mnGrfChanged = mnGrfChanged ? mnGrfChanged - 1 : 0;
         aRedoGraphic = aGraphic;
         aGraphic = aUndoGraphic;
         aUndoGraphic = Graphic();
@@ -494,7 +494,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
     }
     else if (nId == mnRedoId)
     {
-        nGrfChanged++;
+        mnGrfChanged++;
         aUndoGraphic = aGraphic;
         aGraphic = aRedoGraphic;
         aRedoGraphic = Graphic();
@@ -700,7 +700,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
                 aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
-                nGrfChanged++;
+                mnGrfChanged++;
 
                 bNewContour = ( aQBox->Execute() == RET_YES );
                 rWnd.SetGraphic( aGraphic, bNewContour );
