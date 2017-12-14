@@ -1783,7 +1783,7 @@ void ScTextWnd::TextGrabFocus()
 
 ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),
-    nTipVisible ( 0 ),
+    nTipVisible ( nullptr ),
     bFormulaMode( false )
 {
     set_id("pos_window");
@@ -1965,7 +1965,7 @@ void ScPosWnd::HideTip()
         if (!pWin)
             pWin = this;
         Help::HidePopover(pWin, nTipVisible);
-        nTipVisible = 0;
+        nTipVisible = nullptr;
     }
 }
 

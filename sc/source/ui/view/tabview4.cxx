@@ -38,7 +38,7 @@ void ScTabView::HideTip()
         ScSplitPos eWhich = aViewData.GetActivePart();
         vcl::Window* pWin = pGridWin[eWhich];
         Help::HidePopover(pWin, nTipVisible);
-        nTipVisible = 0;
+        nTipVisible = nullptr;
         aTipRectangle = tools::Rectangle();
         nTipAlign = QuickHelpFlags::NONE;
         sTipString.clear();

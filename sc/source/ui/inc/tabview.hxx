@@ -170,7 +170,7 @@ private:
 
     ScExtraEditViewManager aExtraEditViewManager;
 
-    sal_uLong               nTipVisible;
+    void*                   nTipVisible;
     tools::Rectangle               aTipRectangle;
     QuickHelpFlags          nTipAlign;
     OUString                sTipString;

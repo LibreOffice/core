@@ -532,9 +532,9 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     virtual void                SetModal(bool bModal) override;
     virtual bool                ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
-    virtual sal_uIntPtr         ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
-    virtual bool                UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
-    virtual bool                HidePopover(sal_uIntPtr nId) override;
+    virtual void*               ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
+    virtual bool                UpdatePopover(void* nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
+    virtual bool                HidePopover(void* nId) override;
 #endif
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );

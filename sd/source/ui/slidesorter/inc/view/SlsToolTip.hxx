@@ -56,7 +56,7 @@ private:
     SlideSorter& mrSlideSorter;
     model::SharedPageDescriptor mpDescriptor;
     OUString msCurrentHelpText;
-    sal_uLong mnHelpWindowHandle;
+    void* mnHelpWindowHandle;
     Timer maShowTimer;
     Timer maHiddenTimer;
 

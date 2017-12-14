@@ -33,7 +33,7 @@ namespace sd { namespace slidesorter { namespace view {
 ToolTip::ToolTip (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       msCurrentHelpText(),
-      mnHelpWindowHandle(0),
+      mnHelpWindowHandle(nullptr),
       maShowTimer(),
       maHiddenTimer()
 {
@@ -139,11 +139,11 @@ void ToolTip::DoShow()
 
 bool ToolTip::Hide()
 {
-    if (mnHelpWindowHandle>0)
+    if (mnHelpWindowHandle)
     {
         sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
         Help::HidePopover(pWindow, mnHelpWindowHandle);
-        mnHelpWindowHandle = 0;
+        mnHelpWindowHandle = nullptr;
         return true;
     }
     else
