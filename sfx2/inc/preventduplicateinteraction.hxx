@@ -86,7 +86,8 @@ public:
     }
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) throw () override
+    virtual void SAL_CALL queryTermination(const css::lang::EventObject&)
+        throw (css::frame::TerminationVetoException) override
     {
         closewarningdialogs();
         Application::PostUserEvent(LINK(this, WarningDialogsParent, TerminateDesktop));
@@ -222,7 +223,7 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
     public:
 
         virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw(css::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
 
         /**
             @interface  XInteractionHandler
