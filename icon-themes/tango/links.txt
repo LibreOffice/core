@@ -624,3 +624,6 @@ cmd/sc_formatframemenu.png cmd/sc_inserttextframe.png
 cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 
+# view menu
+cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
+cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png

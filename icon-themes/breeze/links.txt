@@ -708,6 +708,8 @@ cmd/sc_presentation.png cmd/sc_dia.png
 # Style
 cmd/lc_editstyled.png cmd/lc_editstyle.png
 cmd/sc_editstyled.png cmd/sc_editstyle.png
+cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
+cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Outline
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
