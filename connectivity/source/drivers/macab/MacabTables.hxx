@@ -45,7 +45,7 @@ namespace connectivity
                   m_xMetaData(_rMetaData)
                 { }
 
-            virtual void SAL_CALL disposing() override;
+            virtual void disposing() override;
         };
     }
 }

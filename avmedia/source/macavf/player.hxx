@@ -48,9 +48,9 @@ public:
     virtual void SAL_CALL setMediaTime( double fTime ) override;
     virtual double SAL_CALL getMediaTime() override;
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL setStopTime( double fTime );
+    virtual void setStopTime( double fTime );
     /// @throws css::uno::RuntimeException
-    virtual double SAL_CALL getStopTime();
+    virtual double getStopTime();
     virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet ) override;
     virtual sal_Bool SAL_CALL isPlaybackLoop() override;
     virtual void SAL_CALL setMute( sal_Bool bSet ) override;

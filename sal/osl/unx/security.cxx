@@ -427,7 +427,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
  */
 
 #define MACOSX_CONFIG_DIR "/Library/Application Support" /* Used on iOS, too */
-static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     if( osl_psz_getHomeDir(Security, pszDirectory, nMax - sizeof(MACOSX_CONFIG_DIR) + 1) )
     {

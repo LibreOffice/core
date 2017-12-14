@@ -105,7 +105,7 @@ namespace
 }
 
 
-extern "C" { static void SAL_CALL thisModule() {} }
+extern "C" { static void thisModule() {} }
 
 bool MacabImplModule::impl_loadModule()
 {
