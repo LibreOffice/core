@@ -221,13 +221,13 @@ double SAL_CALL Player::getMediaTime()
 }
 
 
-void SAL_CALL Player::setStopTime( double fTime )
+void Player::setStopTime( double fTime )
 {
     mfStopTime = fTime;
 }
 
 
-double SAL_CALL Player::getStopTime()
+double Player::getStopTime()
 {
     return mfStopTime;
 }

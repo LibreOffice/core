@@ -281,14 +281,14 @@ void FilterHelper::setCurrentFilter( const ::rtl::OUString& aTitle )
     SetCurFilter(aTitle);
 }
 
-::rtl::OUString SAL_CALL FilterHelper::getCurrentFilter(  )
+::rtl::OUString FilterHelper::getCurrentFilter(  )
 {
     ::rtl::OUString sReturn = m_aCurrentFilter;
 
     return sReturn;
 }
 
-void SAL_CALL FilterHelper::appendFilterGroup( const ::rtl::OUString& /* sGroupTitle */, const css::uno::Sequence< css::beans::StringPair >& aFilters )
+void FilterHelper::appendFilterGroup( const ::rtl::OUString& /* sGroupTitle */, const css::uno::Sequence< css::beans::StringPair >& aFilters )
 {
     SolarMutexGuard aGuard;
 

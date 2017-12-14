@@ -111,7 +111,7 @@ public:
 
     using cppu::WeakComponentImplHelperBase::disposing;
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent );
+    virtual void disposing( const css::lang::EventObject& aEvent );
 
     // XServiceInfo
 
@@ -123,11 +123,11 @@ public:
 
     // FilePicker Event functions
 
-   void SAL_CALL fileSelectionChanged( css::ui::dialogs::FilePickerEvent aEvent );
-   void SAL_CALL directoryChanged( css::ui::dialogs::FilePickerEvent aEvent );
+   void fileSelectionChanged( css::ui::dialogs::FilePickerEvent aEvent );
+   void directoryChanged( css::ui::dialogs::FilePickerEvent aEvent );
    // OUString SAL_CALL helpRequested( css::ui::dialogs::FilePickerEvent aEvent ) const;
-   void SAL_CALL controlStateChanged( css::ui::dialogs::FilePickerEvent aEvent );
-   void SAL_CALL dialogSizeChanged( );
+   void controlStateChanged( css::ui::dialogs::FilePickerEvent aEvent );
+   void dialogSizeChanged( );
 
    AquaFilePickerDelegate * getDelegate() {
        return m_pDelegate;

@@ -28,7 +28,7 @@
 
 oslThreadKey SalData::s_aAutoReleaseKey = nullptr;
 
-static void SAL_CALL releasePool( void* pPool )
+static void releasePool( void* pPool )
 {
     if( pPool )
         [static_cast<NSAutoreleasePool*>(pPool) release];
