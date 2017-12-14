@@ -2064,7 +2064,7 @@ void SwHTMLParser::NewTextArea()
         SetControlSize( xShape, aTextSz, false, false );
 
     // create new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::TEXTAREA_ON));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::TEXTAREA_ON, m_xAttrTab));
 
     // temporarily disable PRE/Listing/XMP
     SplitPREListingXMP(xCntxt.get());
@@ -2336,7 +2336,7 @@ void SwHTMLParser::NewSelect()
         SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
 
     // create new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::SELECT_ON));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::SELECT_ON, m_xAttrTab));
 
     // temporarily disable PRE/Listing/XMP
     SplitPREListingXMP(xCntxt.get());

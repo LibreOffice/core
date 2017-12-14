@@ -122,7 +122,7 @@ class HTMLTableContext
 
 public:
 
-    HTMLAttrTable aAttrTab;        // attributes
+    std::shared_ptr<HTMLAttrTable> xAttrTab;        // attributes
 
     HTMLTableContext( SwPosition *pPs, size_t nCntxtStMin,
                        size_t nCntxtStAttrMin ) :
@@ -133,9 +133,10 @@ public:
         nContextStMin( nCntxtStMin ),
         bRestartPRE( false ),
         bRestartXMP( false ),
-        bRestartListing( false )
+        bRestartListing( false ),
+        xAttrTab(new HTMLAttrTable)
     {
-        memset( &aAttrTab, 0, sizeof( HTMLAttrTable ));
+        memset(xAttrTab.get(), 0, sizeof(HTMLAttrTable));
     }
 
     void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
@@ -3107,9 +3108,9 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
         nToken = HtmlTokenId::TABLEDATA_ON;
         nColl = RES_POOLCOLL_TABLE;
     }
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aEmptyOUStr, true));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, rParser.m_xAttrTab, nColl, aEmptyOUStr, true));
     if( SvxAdjust::End != m_eAdjust )
-        rParser.InsertAttr(&rParser.m_aAttrTab.pAdjust, SvxAdjustItem(m_eAdjust, RES_PARATR_ADJUST),
+        rParser.InsertAttr(&rParser.m_xAttrTab->pAdjust, SvxAdjustItem(m_eAdjust, RES_PARATR_ADJUST),
                            xCntxt.get());
 
     if( SwHTMLParser::HasStyleOptions( m_aStyle, m_aId, m_aClass, &m_aLang, &m_aDir ) )
@@ -3165,7 +3166,8 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 
     if( rParser.m_nContextStAttrMin == GetContextStAttrMin() )
     {
-        HTMLAttr** pTable = reinterpret_cast<HTMLAttr**>(&rParser.m_aAttrTab);
+        HTMLAttrTable* pHTMLAttrTable = rParser.m_xAttrTab.get();
+        HTMLAttr** pTable = reinterpret_cast<HTMLAttr**>(pHTMLAttrTable);
 
         for( auto nCnt = sizeof( HTMLAttrTable ) / sizeof( HTMLAttr* );
             nCnt--; ++pTable )
@@ -3263,7 +3265,8 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
     const SwNodeIndex& rSttPara = m_pPam->GetPoint()->nNode;
     sal_Int32 nSttCnt = m_pPam->GetPoint()->nContent.GetIndex();
 
-    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttrTable* pHTMLAttrTable = m_xAttrTab.get();
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(pHTMLAttrTable);
     for (sal_uInt16 nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         HTMLAttr *pAttr = *pHTMLAttributes;
@@ -3482,7 +3485,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             HTMLAttrs *pPostIts = nullptr;
             if( !bForceFrame && (bTopTable || pCurTable->HasParentSection()) )
             {
-                SplitAttrTab( pTCntxt->aAttrTab, bTopTable );
+                SplitAttrTab(*pTCntxt->xAttrTab, bTopTable);
                 // If we reuse a already existing paragraph, we can't add
                 // PostIts since the paragraph gets behind that table.
                 // They're gonna be moved into the first paragraph of the table
@@ -3496,7 +3499,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             }
             else
             {
-                SaveAttrTab( pTCntxt->aAttrTab );
+                SaveAttrTab(pTCntxt->xAttrTab);
                 if( bTopTable && !bAppended )
                 {
                     pPostIts = new HTMLAttrs;
@@ -3763,8 +3766,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     }
 
                     // There could be a section in the cell
-                    eTabAdjust = m_aAttrTab.pAdjust
-                        ? static_cast<const SvxAdjustItem&>(m_aAttrTab.pAdjust->GetItem()).
+                    eTabAdjust = m_xAttrTab->pAdjust
+                        ? static_cast<const SvxAdjustItem&>(m_xAttrTab->pAdjust->GetItem()).
                                                  GetAdjust()
                         : SvxAdjust::End;
                 }
@@ -4565,12 +4568,13 @@ class CaptionSaveStruct : public SectionSaveStruct
 
 public:
 
-    HTMLAttrTable aAttrTab;        // attributes
+    std::shared_ptr<HTMLAttrTable> xAttrTab;        // attributes
 
     CaptionSaveStruct( SwHTMLParser& rParser, const SwPosition& rPos ) :
-        SectionSaveStruct( rParser ), aSavePos( rPos )
+        SectionSaveStruct( rParser ), aSavePos( rPos ),
+        xAttrTab(new HTMLAttrTable)
     {
-        rParser.SaveAttrTab( aAttrTab );
+        rParser.SaveAttrTab(xAttrTab);
 
         // The current numbering was remembered and just needs to be closed
         aNumRuleInfo.Set( rParser.GetNumInfo() );
@@ -4585,7 +4589,7 @@ public:
         Restore( rParser );
 
         // Recover the old attribute tables
-        rParser.RestoreAttrTab( aAttrTab );
+        rParser.RestoreAttrTab(xAttrTab);
 
         // Re-open the old numbering
         rParser.GetNumInfo().Set( aNumRuleInfo );
@@ -4648,13 +4652,13 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         else
             pStNd = InsertTableSection( RES_POOLCOLL_TEXT );
 
-        std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::CAPTION_ON));
+        std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::CAPTION_ON, m_xAttrTab));
 
         // Table headers are always centered
-        NewAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST) );
+        NewAttr( &m_xAttrTab->pAdjust, SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST) );
 
         HTMLAttrs &rAttrs = xCntxt->GetAttrs();
-        rAttrs.push_back( m_aAttrTab.pAdjust );
+        rAttrs.push_back( m_xAttrTab->pAdjust );
 
         PushContext(xCntxt);
 
@@ -5181,7 +5185,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
 
         GetNumInfo().Set( pTCntxt->GetNumInfo() );
         pTCntxt->RestorePREListingXMP( *this );
-        RestoreAttrTab( pTCntxt->aAttrTab );
+        RestoreAttrTab(pTCntxt->xAttrTab);
 
         if (m_xTable == xCurTable && eState != SvParserState::Error)
         {

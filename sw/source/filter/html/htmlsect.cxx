@@ -113,7 +113,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         bAppended = true;
     }
 
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab));
 
     bool bStyleParsed = false, bPositioned = false;
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -368,7 +368,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
 
     if( SvxAdjust::End != eAdjust )
     {
-        InsertAttr(&m_aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), xCntxt.get());
+        InsertAttr(&m_xAttrTab->pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), xCntxt.get());
     }
 
     // parse style
@@ -576,7 +576,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
     }
 
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::MULTICOL_ON));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::MULTICOL_ON, m_xAttrTab));
 
     //.is the multicol element contained in a container? That may be the
     // case for 5.0 documents.

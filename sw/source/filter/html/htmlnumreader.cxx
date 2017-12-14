@@ -250,7 +250,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
     }
 
     // create a new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab));
 
     // Parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -473,7 +473,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
 
     const bool bCountedInList = nToken != HtmlTokenId::LISTHEADER_ON;
 
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab));
 
     OUString aNumRuleName;
     if( GetNumInfo().GetNumRule() )

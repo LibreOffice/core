@@ -202,6 +202,7 @@ class HTMLAttrContext
     OUString    aClass;          // context class
 
     HTMLAttrContext_SaveDoc *pSaveDocContext;
+    std::shared_ptr<HTMLAttrTable> xAttrTable;
     std::unique_ptr<SfxItemSet> pFrameItemSet;
 
     HtmlTokenId nToken;         // the token of the context
@@ -230,10 +231,11 @@ class HTMLAttrContext
 public:
     void ClearSaveDocContext();
 
-    HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
+    HTMLAttrContext( HtmlTokenId nTokn, const std::shared_ptr<HTMLAttrTable>& rAttrTable, sal_uInt16 nPoolId, const OUString& rClass,
                       bool bDfltColl=false ) :
         aClass( rClass ),
         pSaveDocContext( nullptr ),
+        xAttrTable(rAttrTable),
         nToken( nTokn ),
         nTextFormatColl( nPoolId ),
         nLeftMargin( 0 ),
@@ -253,8 +255,9 @@ public:
         bRestartListing( false )
     {}
 
-    explicit HTMLAttrContext( HtmlTokenId nTokn ) :
+    explicit HTMLAttrContext( HtmlTokenId nTokn, const std::shared_ptr<HTMLAttrTable>& rAttrTable ) :
         pSaveDocContext( nullptr ),
+        xAttrTable(rAttrTable),
         nToken( nTokn ),
         nTextFormatColl( 0 ),
         nLeftMargin( 0 ),
@@ -391,7 +394,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     HTMLAttrs      m_aSetAttrTab;// "closed", not set attributes
     HTMLAttrs      m_aParaAttrs; // temporary paragraph attributes
-    HTMLAttrTable  m_aAttrTab;   // "open" attributes
+    std::shared_ptr<HTMLAttrTable>  m_xAttrTab;   // "open" attributes
     HTMLAttrContexts m_aContexts;// the current context of attribute/token
     std::vector<SwFrameFormat *> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
@@ -517,10 +520,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void DeleteAttr( HTMLAttr* pAttr );
 
     void EndContextAttrs( HTMLAttrContext *pContext );
-    void SaveAttrTab( HTMLAttrTable& rNewAttrTab );
+    void SaveAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
     void SplitAttrTab( const SwPosition& rNewPos );
     void SplitAttrTab( HTMLAttrTable& rNewAttrTab, bool bMoveEndBack );
-    void RestoreAttrTab( HTMLAttrTable& rNewAttrTab );
+    void RestoreAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
     void InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart );
     void InsertAttrs( HTMLAttrs& rAttrs );
 

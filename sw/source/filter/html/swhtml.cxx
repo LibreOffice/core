@@ -246,6 +246,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     SwClient( nullptr ),
     m_aPathToFile( rPath ),
     m_sBaseURL( rBaseURL ),
+    m_xAttrTab(new HTMLAttrTable),
     m_pAppletImpl( nullptr ),
     m_pCSS1Parser( nullptr ),
     m_pNumRuleInfo( new SwHTMLNumRuleInfo ),
@@ -305,7 +306,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
 
     rCursor.DeleteMark();
     m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwIndexReg assert
-    memset( &m_aAttrTab, 0, sizeof( HTMLAttrTable ));
+    memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
 
     // Read the font sizes 1-7 from the INI file
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
@@ -1441,8 +1442,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             AppendTextNode();
         if (!m_xTable && !m_xDoc->IsInHeaderFooter(m_pPam->GetPoint()->nNode))
         {
-            NewAttr( &m_aAttrTab.pBreak, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
-            EndAttr( m_aAttrTab.pBreak, false );
+            NewAttr( &m_xAttrTab->pBreak, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
+            EndAttr( m_xAttrTab->pBreak, false );
         }
         break;
 
@@ -1686,8 +1687,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 if ( m_nParaCnt < 5 )
                     Show();     // show what we have up to here
 
-                SvxAdjust eAdjust = m_aAttrTab.pAdjust
-                    ? static_cast<const SvxAdjustItem&>(m_aAttrTab.pAdjust->GetItem()).
+                SvxAdjust eAdjust = m_xAttrTab->pAdjust
+                    ? static_cast<const SvxAdjustItem&>(m_xAttrTab->pAdjust->GetItem()).
                                              GetAdjust()
                     : SvxAdjust::End;
                 BuildTable( eAdjust );
@@ -1743,9 +1744,9 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             SvxPostureItem aPostureCJK( ITALIC_NORMAL, RES_CHRATR_CJK_POSTURE );
             SvxPostureItem aPostureCTL( ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE );
             NewStdAttr( HtmlTokenId::ITALIC_ON,
-                           &m_aAttrTab.pItalic, aPosture,
-                           &m_aAttrTab.pItalicCJK, &aPostureCJK,
-                           &m_aAttrTab.pItalicCTL, &aPostureCTL );
+                           &m_xAttrTab->pItalic, aPosture,
+                           &m_xAttrTab->pItalicCJK, &aPostureCJK,
+                           &m_xAttrTab->pItalicCTL, &aPostureCTL );
         }
         break;
 
@@ -1755,44 +1756,44 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             SvxWeightItem aWeightCJK( WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT );
             SvxWeightItem aWeightCTL( WEIGHT_BOLD, RES_CHRATR_CTL_WEIGHT );
             NewStdAttr( HtmlTokenId::BOLD_ON,
-                        &m_aAttrTab.pBold, aWeight,
-                        &m_aAttrTab.pBoldCJK, &aWeightCJK,
-                        &m_aAttrTab.pBoldCTL, &aWeightCTL );
+                        &m_xAttrTab->pBold, aWeight,
+                        &m_xAttrTab->pBoldCJK, &aWeightCJK,
+                        &m_xAttrTab->pBoldCTL, &aWeightCTL );
         }
         break;
 
     case HtmlTokenId::STRIKE_ON:
     case HtmlTokenId::STRIKETHROUGH_ON:
         {
-            NewStdAttr( HtmlTokenId::STRIKE_ON, &m_aAttrTab.pStrike,
+            NewStdAttr( HtmlTokenId::STRIKE_ON, &m_xAttrTab->pStrike,
                         SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT) );
         }
         break;
 
     case HtmlTokenId::UNDERLINE_ON:
         {
-            NewStdAttr( HtmlTokenId::UNDERLINE_ON, &m_aAttrTab.pUnderline,
+            NewStdAttr( HtmlTokenId::UNDERLINE_ON, &m_xAttrTab->pUnderline,
                         SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE) );
         }
         break;
 
     case HtmlTokenId::SUPERSCRIPT_ON:
         {
-            NewStdAttr( HtmlTokenId::SUPERSCRIPT_ON, &m_aAttrTab.pEscapement,
+            NewStdAttr( HtmlTokenId::SUPERSCRIPT_ON, &m_xAttrTab->pEscapement,
                         SvxEscapementItem(HTML_ESC_SUPER,HTML_ESC_PROP, RES_CHRATR_ESCAPEMENT) );
         }
         break;
 
     case HtmlTokenId::SUBSCRIPT_ON:
         {
-            NewStdAttr( HtmlTokenId::SUBSCRIPT_ON, &m_aAttrTab.pEscapement,
+            NewStdAttr( HtmlTokenId::SUBSCRIPT_ON, &m_xAttrTab->pEscapement,
                         SvxEscapementItem(HTML_ESC_SUB,HTML_ESC_PROP, RES_CHRATR_ESCAPEMENT) );
         }
         break;
 
     case HtmlTokenId::BLINK_ON:
         {
-            NewStdAttr( HtmlTokenId::BLINK_ON, &m_aAttrTab.pBlink,
+            NewStdAttr( HtmlTokenId::BLINK_ON, &m_xAttrTab->pBlink,
                         SvxBlinkItem( true, RES_CHRATR_BLINK ) );
         }
         break;
@@ -2140,7 +2141,8 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     const sal_Int32 nEndCnt = aOldPos.nContent.GetIndex();
     const SwPosition& rPos = *m_pPam->GetPoint();
 
-    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttrTable* pHTMLAttrTable = m_xAttrTab.get();
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(pHTMLAttrTable);
     for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         HTMLAttr *pAttr = *pHTMLAttributes;
@@ -3202,8 +3204,10 @@ void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
         *ppHead = pNext;
 }
 
-void SwHTMLParser::SaveAttrTab( HTMLAttrTable& rNewAttrTab )
+void SwHTMLParser::SaveAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab)
 {
+    fprintf(stderr, "SaveAttrTab\n");
+
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
     OSL_ENSURE(m_aParaAttrs.empty(),
@@ -3211,22 +3215,8 @@ void SwHTMLParser::SaveAttrTab( HTMLAttrTable& rNewAttrTab )
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
-    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
-    HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(&rNewAttrTab);
-
-    for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
-    {
-        *pSaveAttributes = *pHTMLAttributes;
-
-        HTMLAttr *pAttr = *pSaveAttributes;
-        while (pAttr)
-        {
-            pAttr->SetHead(pSaveAttributes);
-            pAttr = pAttr->GetNext();
-        }
-
-        *pHTMLAttributes = nullptr;
-    }
+    std::swap(m_xAttrTab, rNewAttrTab);
+    memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
 }
 
 void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
@@ -3243,7 +3233,8 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
     SwNodeIndex nEndIdx( nSttIdx );
 
     // close all still open attributes and re-open them after the table
-    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttrTable* pHTMLAttrTable = m_xAttrTab.get();
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(pHTMLAttrTable);
     HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(&rNewAttrTab);
     bool bSetAttr = true;
     const sal_Int32 nSttCnt = m_pPam->GetPoint()->nContent.GetIndex();
@@ -3330,7 +3321,7 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
     }
 }
 
-void SwHTMLParser::RestoreAttrTab( HTMLAttrTable& rNewAttrTab )
+void SwHTMLParser::RestoreAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab)
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
@@ -3339,26 +3330,8 @@ void SwHTMLParser::RestoreAttrTab( HTMLAttrTable& rNewAttrTab )
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
-    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
-    HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(&rNewAttrTab);
-
-    for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
-    {
-        OSL_ENSURE(!*pHTMLAttributes, "The attribute table is not empty!");
-
-        *pHTMLAttributes = *pSaveAttributes;
-
-        HTMLAttr *pAttr = *pHTMLAttributes;
-        while (pAttr)
-        {
-            OSL_ENSURE( !pAttr->GetPrev() || !pAttr->GetPrev()->ppHead,
-                    "Previous attribute has still a header" );
-            pAttr->SetHead(pHTMLAttributes);
-            pAttr = pAttr->GetNext();
-        }
-
-        *pSaveAttributes = nullptr;
-    }
+    std::swap(m_xAttrTab, rNewAttrTab);
+    memset(rNewAttrTab.get(), 0, sizeof(HTMLAttrTable));
 }
 
 void SwHTMLParser::InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart )
@@ -3413,7 +3386,7 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
     }
 
     // create a new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3467,7 +3440,7 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
     }
 
     // create a new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3556,7 +3529,7 @@ void SwHTMLParser::NewBasefontAttr()
         nSize = 7;
 
     // create a new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::BASEFONT_ON));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::BASEFONT_ON, m_xAttrTab));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3583,11 +3556,11 @@ void SwHTMLParser::NewBasefontAttr()
     else
     {
         SvxFontHeightItem aFontHeight( m_aFontHeights[nSize-1], 100, RES_CHRATR_FONTSIZE );
-        InsertAttr( &m_aAttrTab.pFontHeight, aFontHeight, xCntxt.get() );
+        InsertAttr( &m_xAttrTab->pFontHeight, aFontHeight, xCntxt.get() );
         SvxFontHeightItem aFontHeightCJK( m_aFontHeights[nSize-1], 100, RES_CHRATR_CJK_FONTSIZE );
-        InsertAttr( &m_aAttrTab.pFontHeightCJK, aFontHeightCJK, xCntxt.get() );
+        InsertAttr( &m_xAttrTab->pFontHeightCJK, aFontHeightCJK, xCntxt.get() );
         SvxFontHeightItem aFontHeightCTL( m_aFontHeights[nSize-1], 100, RES_CHRATR_CTL_FONTSIZE );
-        InsertAttr( &m_aAttrTab.pFontHeightCTL, aFontHeightCTL, xCntxt.get() );
+        InsertAttr( &m_xAttrTab->pFontHeightCTL, aFontHeightCTL, xCntxt.get() );
     }
 
     // save the context
@@ -3760,7 +3733,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
     }
 
     // create a new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab));
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3799,22 +3772,22 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
         if( nFontHeight )
         {
             SvxFontHeightItem aFontHeight( nFontHeight, 100, RES_CHRATR_FONTSIZE );
-            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeight, xCntxt.get() );
+            InsertAttr( &m_xAttrTab->pFontHeight, aFontHeight, xCntxt.get() );
             SvxFontHeightItem aFontHeightCJK( nFontHeight, 100, RES_CHRATR_CJK_FONTSIZE );
-            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeightCJK, xCntxt.get() );
+            InsertAttr( &m_xAttrTab->pFontHeight, aFontHeightCJK, xCntxt.get() );
             SvxFontHeightItem aFontHeightCTL( nFontHeight, 100, RES_CHRATR_CTL_FONTSIZE );
-            InsertAttr( &m_aAttrTab.pFontHeight, aFontHeightCTL, xCntxt.get() );
+            InsertAttr( &m_xAttrTab->pFontHeight, aFontHeightCTL, xCntxt.get() );
         }
         if( bColor )
-            InsertAttr( &m_aAttrTab.pFontColor, SvxColorItem(aColor, RES_CHRATR_COLOR), xCntxt.get() );
+            InsertAttr( &m_xAttrTab->pFontColor, SvxColorItem(aColor, RES_CHRATR_COLOR), xCntxt.get() );
         if( !aFontName.isEmpty() )
         {
             SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
-            InsertAttr( &m_aAttrTab.pFont, aFont, xCntxt.get() );
+            InsertAttr( &m_xAttrTab->pFont, aFont, xCntxt.get() );
             SvxFontItem aFontCJK( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CJK_FONT );
-            InsertAttr( &m_aAttrTab.pFont, aFontCJK, xCntxt.get() );
+            InsertAttr( &m_xAttrTab->pFont, aFontCJK, xCntxt.get() );
             SvxFontItem aFontCTL( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CTL_FONT );
-            InsertAttr( &m_aAttrTab.pFont, aFontCTL, xCntxt.get() );
+            InsertAttr( &m_xAttrTab->pFont, aFontCTL, xCntxt.get() );
         }
     }
 
@@ -3873,9 +3846,9 @@ void SwHTMLParser::NewPara()
 
     // create a new context
     std::unique_ptr<HTMLAttrContext> xCntxt(
-        !aClass.isEmpty() ? new HTMLAttrContext( HtmlTokenId::PARABREAK_ON,
+        !aClass.isEmpty() ? new HTMLAttrContext( HtmlTokenId::PARABREAK_ON, m_xAttrTab,
                                              RES_POOLCOLL_TEXT, aClass )
-                     : new HTMLAttrContext( HtmlTokenId::PARABREAK_ON ));
+                     : new HTMLAttrContext( HtmlTokenId::PARABREAK_ON, m_xAttrTab ));
 
     // parse styles (Don't consider class. This is only possible as long as none of
     // the CSS1 properties of the class must be formatted hard!!!)
@@ -3894,7 +3867,7 @@ void SwHTMLParser::NewPara()
     }
 
     if( SvxAdjust::End != m_eParaAdjust )
-        InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), xCntxt.get() );
+        InsertAttr( &m_xAttrTab->pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), xCntxt.get() );
 
     // and push on stack
     PushContext( xCntxt );
@@ -4010,7 +3983,7 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     }
 
     // create the context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nTextColl, aClass));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab, nTextColl, aClass));
 
     // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4028,7 +4001,7 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     }
 
     if( SvxAdjust::End != m_eParaAdjust )
-        InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), xCntxt.get() );
+        InsertAttr( &m_xAttrTab->pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), xCntxt.get() );
 
     // and push on stack
     PushContext(xCntxt);
@@ -4146,7 +4119,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         AddParSpace();
 
     // ... and save in a context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aClass));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab, nColl, aClass));
 
     // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4274,7 +4247,7 @@ void SwHTMLParser::NewDefList()
     }
 
     // ... and save in a context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::DEFLIST_ON));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::DEFLIST_ON, m_xAttrTab));
 
     // in it save also the margins
     sal_uInt16 nLeft=0, nRight=0;
@@ -4706,10 +4679,10 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             pItemSet->Put( aLRItem );
         else
         {
-            NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
-            m_aAttrTab.pLRSpace->SetLikePara();
-            m_aParaAttrs.push_back( m_aAttrTab.pLRSpace );
-            EndAttr( m_aAttrTab.pLRSpace, false );
+            NewAttr( &m_xAttrTab->pLRSpace, aLRItem );
+            m_xAttrTab->pLRSpace->SetLikePara();
+            m_aParaAttrs.push_back( m_xAttrTab->pLRSpace );
+            EndAttr( m_xAttrTab->pLRSpace, false );
         }
     }
 
@@ -4752,7 +4725,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     }
 
     // create a new context
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, m_xAttrTab));
 
     // set the style and save it in the context
     SwCharFormat* pCFormat = m_pCSS1Parser->GetChrFormat( nToken, aClass );
@@ -4776,7 +4749,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     // Character formats are stored in their own stack and can never be inserted
     // by styles. Therefore the attribute doesn't exist in CSS1-Which-Range.
     if( pCFormat )
-        InsertAttr( &m_aAttrTab.pCharFormats, SwFormatCharFormat( pCFormat ), xCntxt.get() );
+        InsertAttr( &m_xAttrTab->pCharFormats, SwFormatCharFormat( pCFormat ), xCntxt.get() );
 
     // save the context
     PushContext(xCntxt);
@@ -4910,8 +4883,8 @@ void SwHTMLParser::InsertSpacer()
             }
             else
             {
-                NewAttr( &m_aAttrTab.pULSpace, SvxULSpaceItem( 0, (sal_uInt16)nSize, RES_UL_SPACE ) );
-                EndAttr( m_aAttrTab.pULSpace, false );
+                NewAttr( &m_xAttrTab->pULSpace, SvxULSpaceItem( 0, (sal_uInt16)nSize, RES_UL_SPACE ) );
+                EndAttr( m_xAttrTab->pULSpace, false );
 
                 AppendTextNode();    // Don't change spacing!
             }
@@ -4943,15 +4916,15 @@ void SwHTMLParser::InsertSpacer()
                 aLRItem.SetRight( nRight );
                 aLRItem.SetTextFirstLineOfst( nIndent );
 
-                NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
-                EndAttr( m_aAttrTab.pLRSpace, false );
+                NewAttr( &m_xAttrTab->pLRSpace, aLRItem );
+                EndAttr( m_xAttrTab->pLRSpace, false );
             }
             else
             {
-                NewAttr( &m_aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
+                NewAttr( &m_xAttrTab->pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
                 OUString aTmp( ' ' );
                 m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aTmp );
-                EndAttr( m_aAttrTab.pKerning );
+                EndAttr( m_xAttrTab->pKerning );
             }
         }
     }
@@ -5137,8 +5110,8 @@ void SwHTMLParser::InsertLineBreak()
 
     if( bBreakItem && SvxBreak::PageAfter==aBreakItem.GetBreak() )
     {
-        NewAttr( &m_aAttrTab.pBreak, aBreakItem );
-        EndAttr( m_aAttrTab.pBreak, false );
+        NewAttr( &m_xAttrTab->pBreak, aBreakItem );
+        EndAttr( m_xAttrTab->pBreak, false );
     }
 
     if( !bCleared && !bBreakItem )
@@ -5158,8 +5131,8 @@ void SwHTMLParser::InsertLineBreak()
     }
     if( bBreakItem && SvxBreak::PageBefore==aBreakItem.GetBreak() )
     {
-        NewAttr( &m_aAttrTab.pBreak, aBreakItem );
-        EndAttr( m_aAttrTab.pBreak, false );
+        NewAttr( &m_xAttrTab->pBreak, aBreakItem );
+        EndAttr( m_xAttrTab->pBreak, false );
     }
 }
 
@@ -5223,7 +5196,7 @@ void SwHTMLParser::InsertHorzRule()
 
     // ...and save in a context
     std::unique_ptr<HTMLAttrContext> xCntxt(
-        new HTMLAttrContext(HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr));
+        new HTMLAttrContext(HtmlTokenId::HORZRULE, m_xAttrTab, RES_POOLCOLL_HTML_HR, aEmptyOUStr));
 
     PushContext(xCntxt);
 
