@@ -133,7 +133,7 @@ sub check_style($)
         chomp $filename;
         if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
         {
-            if (! -x $clang_format)
+            if (!defined($clang_format))
             {
                 my $version = ClangFormat::get_wanted_version();
                 my $opt_lo = ClangFormat::get_own_directory();
