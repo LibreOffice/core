@@ -27,7 +27,6 @@
 #include <sqlmessage.hxx>
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
-#include <helpids.h>
 #include <SqlNameEdit.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

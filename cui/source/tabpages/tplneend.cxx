@@ -26,7 +26,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
-#include <helpids.h>
 #include <svx/dialmgr.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>

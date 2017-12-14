@@ -45,7 +45,6 @@
 #include "macropg_impl.hxx"
 
 #include <dialmgr.hxx>
-#include <helpids.h>
 #include <cfgutil.hxx>
 #include <cfg.hxx>
 

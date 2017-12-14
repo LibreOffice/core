@@ -26,7 +26,6 @@
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <helpids.h>
 
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

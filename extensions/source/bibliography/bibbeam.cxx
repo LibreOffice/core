@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <helpids.h>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <tools/debug.hxx>

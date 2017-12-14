@@ -119,7 +119,6 @@
 #include <sqlmessage.hxx>
 #include <UITools.hxx>
 #include <dsntypes.hxx>
-#include <helpids.h>
 #include <dlgsave.hxx>
 #include <dbaccess_slotid.hrc>
 

@@ -19,7 +19,6 @@
 
 #include <linkdlg.hxx>
 #include <vcl/svapp.hxx>
-#include <helpids.h>
 
 #include <tools/urlobj.hxx>
 #include <svtools/svmedit.hxx>

@@ -49,7 +49,6 @@
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
 #include <svx/svxdlg.hxx>
-#include <helpids.h>
 #include <svx/ofaitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>

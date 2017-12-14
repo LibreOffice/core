@@ -28,7 +28,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
-#include <helpids.h>
 #include <svx/colorbox.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xtable.hxx>

@@ -24,7 +24,6 @@
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
 
-#include <helpids.h>
 #include <strings.hrc>
 
 #include <com/sun/star/i18n/Boundary.hpp>

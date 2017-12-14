@@ -23,7 +23,6 @@
 
 #include <vcl/svapp.hxx>
 #include <dbu_dlg.hxx>
-#include <helpids.h>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 
 #include <tools/debug.hxx>

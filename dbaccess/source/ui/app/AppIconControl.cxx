@@ -18,7 +18,6 @@
  */
 
 #include "AppIconControl.hxx"
-#include <helpids.h>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>

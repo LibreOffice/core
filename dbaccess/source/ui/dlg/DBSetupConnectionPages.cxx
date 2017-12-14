@@ -31,7 +31,6 @@
 #include <svl/intitem.hxx>
 #include <dsitems.hxx>
 #include "dsnItem.hxx"
-#include <helpids.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>

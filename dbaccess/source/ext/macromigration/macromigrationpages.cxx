@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <helpids.h>
 #include <strings.hrc>
 #include "macromigrationpages.hxx"
 #include "macromigrationdialog.hxx"
