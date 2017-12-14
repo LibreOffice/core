@@ -177,8 +177,27 @@ void ScOrcusNamedExpression::define_name(const char* p_name, size_t n_name, cons
     pNames->insert(pRange, false);
 }
 
-ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
-    maPos(rPos), mnIndex(nIndex) {}
+ScOrcusFactory::CellStoreToken::CellStoreToken( const ScAddress& rPos, Type eType ) :
+    maPos(rPos), meType(eType)
+{
+    rtl::math::setNan(&mfValue);
+}
+
+ScOrcusFactory::CellStoreToken::CellStoreToken( const ScAddress& rPos, double fValue ) :
+    maPos(rPos), meType(Type::Numeric), mfValue(fValue) {}
+
+ScOrcusFactory::CellStoreToken::CellStoreToken( const ScAddress& rPos, uint32_t nIndex ) :
+    maPos(rPos), meType(Type::String), mnIndex1(nIndex)
+{
+    rtl::math::setNan(&mfValue);
+}
+
+ScOrcusFactory::CellStoreToken::CellStoreToken(
+    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar ) :
+    maPos(rPos), meType(Type::Formula), maStr1(rFormula), meGrammar(eGrammar)
+{
+    rtl::math::setNan(&mfValue);
+}
 
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
     maDoc(rDoc),
@@ -281,16 +300,112 @@ orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
 
 void ScOrcusFactory::finalize()
 {
-    int nCellCount = 0;
-    StringCellCaches::const_iterator it = maStringCells.begin(), itEnd = maStringCells.end();
-    for (; it != itEnd; ++it)
+    auto toFormulaCell = [this]( const CellStoreToken& rToken ) -> std::unique_ptr<ScFormulaCell>
     {
-        if (it->mnIndex >= maStrings.size())
-            // String index out-of-bound!  Something is up.
-            continue;
+        const ScOrcusSheet& rSheet = *maSheets.at(rToken.maPos.Tab());
+        const sc::SharedFormulaGroups& rSFG = rSheet.getSharedFormulaGroups();
+        const ScTokenArray* pArray = rSFG.get(rToken.mnIndex1);
+        if (!pArray)
+            return std::unique_ptr<ScFormulaCell>();
 
-        maDoc.setStringCell(it->maPos, maStrings[it->mnIndex]);
-        ++nCellCount;
+        return o3tl::make_unique<ScFormulaCell>(&maDoc.getDoc(), rToken.maPos, *pArray);
+    };
+
+    int nCellCount = 0;
+
+    for (const CellStoreToken& rToken : maCellStoreTokens)
+    {
+        switch (rToken.meType)
+        {
+            case CellStoreToken::Type::Auto:
+            {
+                maDoc.setAutoInput(rToken.maPos, rToken.maStr1);
+                ++nCellCount;
+                break;
+            }
+            case CellStoreToken::Type::String:
+            {
+                if (rToken.mnIndex1 >= maStrings.size())
+                    // String index out-of-bound!  Something is up.
+                    break;
+
+                maDoc.setStringCell(rToken.maPos, maStrings[rToken.mnIndex1]);
+                ++nCellCount;
+                break;
+            }
+            case CellStoreToken::Type::Numeric:
+            {
+                maDoc.setNumericCell(rToken.maPos, rToken.mfValue);
+                ++nCellCount;
+                break;
+            }
+            case CellStoreToken::Type::Formula:
+            {
+                maDoc.setFormulaCell(
+                    rToken.maPos, rToken.maStr1, rToken.meGrammar);
+
+                ++nCellCount;
+                break;
+            }
+            case CellStoreToken::Type::FormulaWithResult:
+            {
+                if (rtl::math::isFinite(rToken.mfValue))
+                    maDoc.setFormulaCell(rToken.maPos, rToken.maStr1, rToken.meGrammar, &rToken.mfValue);
+                else
+                    maDoc.setFormulaCell(rToken.maPos, rToken.maStr1, rToken.meGrammar, rToken.maStr2);
+
+                ++nCellCount;
+                break;
+            }
+            case CellStoreToken::Type::SharedFormula:
+            {
+                std::unique_ptr<ScFormulaCell> pCell = toFormulaCell(rToken);
+                if (!pCell)
+                    break;
+
+                maDoc.setFormulaCell(rToken.maPos, pCell.release());
+
+                ++nCellCount;
+                break;
+            }
+            case CellStoreToken::Type::SharedFormulaWithResult:
+            {
+                std::unique_ptr<ScFormulaCell> pCell = toFormulaCell(rToken);
+                if (!pCell)
+                    break;
+
+                if (rtl::math::isFinite(rToken.mfValue))
+                    pCell->SetResultDouble(rToken.mfValue);
+                else
+                    pCell->SetHybridString(
+                        maDoc.getDoc().GetSharedStringPool().intern(rToken.maStr2));
+
+                maDoc.setFormulaCell(rToken.maPos, pCell.release());
+
+                ++nCellCount;
+                break;
+            }
+            case CellStoreToken::Type::Matrix:
+            {
+                if (!rToken.mnIndex1 || !rToken.mnIndex2)
+                    break;
+
+                ScRange aRange(rToken.maPos);
+                aRange.aEnd.IncCol(rToken.mnIndex1-1);
+                aRange.aEnd.IncRow(rToken.mnIndex2-1);
+
+                ScCompiler aComp(&maDoc.getDoc(), aRange.aStart, rToken.meGrammar);
+                std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(rToken.maStr1));
+                if (!pArray)
+                    break;
+
+                maDoc.setMatrixCells(aRange, *pArray, rToken.meGrammar);
+                break;
+            }
+            default:
+                ;
+        }
+
         if (nCellCount == 100000)
         {
             incrementProgress();
@@ -323,9 +438,96 @@ size_t ScOrcusFactory::addString(const OUString& rStr)
     return appendString(rStr);
 }
 
-void ScOrcusFactory::pushStringCell(const ScAddress& rPos, size_t nStrIndex)
+void ScOrcusFactory::pushCellStoreAutoToken( const ScAddress& rPos, const OUString& rVal )
 {
-    maStringCells.emplace_back(rPos, nStrIndex);
+    maCellStoreTokens.emplace_back(rPos, CellStoreToken::Type::Auto);
+    maCellStoreTokens.back().maStr1 = rVal;
+}
+
+void ScOrcusFactory::pushCellStoreToken( const ScAddress& rPos, uint32_t nStrIndex )
+{
+    maCellStoreTokens.emplace_back(rPos, nStrIndex);
+}
+
+void ScOrcusFactory::pushCellStoreToken( const ScAddress& rPos, double fValue )
+{
+    maCellStoreTokens.emplace_back(rPos, fValue);
+}
+
+void ScOrcusFactory::pushCellStoreToken(
+    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar )
+{
+    maCellStoreTokens.emplace_back(rPos, rFormula, eGrammar);
+}
+
+void ScOrcusFactory::pushSharedFormulaToken( const ScAddress& rPos, uint32_t nIndex )
+{
+    maCellStoreTokens.emplace_back(rPos, CellStoreToken::Type::SharedFormula);
+    maCellStoreTokens.back().mnIndex1 = nIndex;
+}
+
+void ScOrcusFactory::pushMatrixFormulaToken(
+    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar,
+    uint32_t nRowRange, uint32_t nColRange )
+{
+    maCellStoreTokens.emplace_back(rPos, CellStoreToken::Type::Matrix);
+    CellStoreToken& rT = maCellStoreTokens.back();
+    rT.maStr1 = rFormula;
+    rT.meGrammar = eGrammar;
+    rT.mnIndex1 = nColRange;
+    rT.mnIndex2 = nRowRange;
+}
+
+void ScOrcusFactory::pushFormulaResult( const ScAddress& rPos, double fValue )
+{
+    // Formula result is expected to be pushed immediately following the
+    // formula token it belongs.
+    if (maCellStoreTokens.empty())
+        return;
+
+    CellStoreToken& rToken = maCellStoreTokens.back();
+    if (rToken.maPos != rPos)
+        return;
+
+    switch (rToken.meType)
+    {
+        case CellStoreToken::Type::Formula:
+            rToken.meType = CellStoreToken::Type::FormulaWithResult;
+            break;
+        case CellStoreToken::Type::SharedFormula:
+            rToken.meType = CellStoreToken::Type::SharedFormulaWithResult;
+            break;
+        default:
+            return;
+    }
+
+    rToken.mfValue = fValue;
+}
+
+void ScOrcusFactory::pushFormulaResult( const ScAddress& rPos, const OUString& rValue )
+{
+    // Formula result is expected to be pushed immediately following the
+    // formula token it belongs.
+    if (maCellStoreTokens.empty())
+        return;
+
+    CellStoreToken& rToken = maCellStoreTokens.back();
+    if (rToken.maPos != rPos)
+        return;
+
+    switch (rToken.meType)
+    {
+        case CellStoreToken::Type::Formula:
+            rToken.meType = CellStoreToken::Type::FormulaWithResult;
+            break;
+        case CellStoreToken::Type::SharedFormula:
+            rToken.meType = CellStoreToken::Type::SharedFormulaWithResult;
+            break;
+        default:
+            return;
+    }
+
+    rToken.maStr2 = rValue;
 }
 
 void ScOrcusFactory::incrementProgress()
@@ -620,30 +822,25 @@ os::iface::import_conditional_format* ScOrcusSheet::get_conditional_format()
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
 {
     OUString aVal(p, n, RTL_TEXTENCODING_UTF8);
-    mrDoc.setAutoInput(ScAddress(col, row, mnTab), aVal);
+    mrFactory.pushCellStoreAutoToken(ScAddress(col, row, mnTab), aVal);
     cellInserted();
 }
 
 void ScOrcusSheet::set_string(os::row_t row, os::col_t col, size_t sindex)
 {
-    // We need to defer string cells since the shared string pool is not yet
-    // populated at the time this method is called.  Orcus imports string
-    // table after the cells get imported.  We won't need to do this once we
-    // implement true shared strings in Calc core.
-
-    mrFactory.pushStringCell(ScAddress(col, row, mnTab), sindex);
+    mrFactory.pushCellStoreToken(ScAddress(col, row, mnTab), uint32_t(sindex));
     cellInserted();
 }
 
 void ScOrcusSheet::set_value(os::row_t row, os::col_t col, double value)
 {
-    mrDoc.setNumericCell(ScAddress(col, row, mnTab), value);
+    mrFactory.pushCellStoreToken(ScAddress(col, row, mnTab), value);
     cellInserted();
 }
 
 void ScOrcusSheet::set_bool(os::row_t row, os::col_t col, bool value)
 {
-    mrDoc.setNumericCell(ScAddress(col, row, mnTab), value ? 1.0 : 0.0);
+    mrFactory.pushCellStoreToken(ScAddress(col, row, mnTab), value ? 1.0 : 0.0);
     cellInserted();
 }
 
@@ -666,7 +863,7 @@ void ScOrcusSheet::set_date_time(
 
     fTime /= DATE_TIME_FACTOR;
 
-    mrDoc.setNumericCell(ScAddress(col, row, mnTab), nDateDiff + fTime);
+    mrFactory.pushCellStoreToken(ScAddress(col, row, mnTab), nDateDiff + fTime);
     cellInserted();
 }
 
@@ -692,35 +889,20 @@ void ScOrcusSheet::set_formula(
     os::row_t row, os::col_t col, os::formula_grammar_t grammar, const char* p, size_t n)
 {
     OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
-    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
-    mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aFormula, eGrammar);
+    mrFactory.pushCellStoreToken(
+        ScAddress(col, row, mnTab), aFormula, getCalcGrammarFromOrcus(grammar));
     cellInserted();
 }
 
 void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* p, size_t n)
 {
-    ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
-    if (!pCell)
-    {
-        SAL_WARN("sc.orcus", "trying to set formula result for non formula "
-                "cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
-        return;
-    }
     OUString aResult( p, n, RTL_TEXTENCODING_UTF8);
-    pCell->SetHybridString(mrDoc.getDoc().GetSharedStringPool().intern(aResult));
+    mrFactory.pushFormulaResult(ScAddress(col, row, mnTab), aResult);
 }
 
-void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, double /*val*/)
+void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, double val)
 {
-    ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
-    if (!pCell)
-    {
-        SAL_WARN("sc.orcus", "trying to set formula result for non formula "
-                "cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
-        return;
-    }
-
-    // TODO: FIXME
+    mrFactory.pushFormulaResult(ScAddress(col, row, mnTab), val);
 }
 
 void ScOrcusSheet::set_shared_formula(
@@ -740,12 +922,8 @@ void ScOrcusSheet::set_shared_formula(
 
     maFormulaGroups.set(sindex, pArray);
 
-    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, *pArray);
-    mrDoc.setFormulaCell(aPos, pCell);
+    mrFactory.pushSharedFormulaToken(aPos, sindex);
     cellInserted();
-
-    // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
-    pCell->SetDirty();
 }
 
 void ScOrcusSheet::set_shared_formula(
@@ -763,29 +941,19 @@ void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sinde
     if (!pArray)
         return;
 
-    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, *pArray);
-    mrDoc.setFormulaCell(aPos, pCell);
+    mrFactory.pushSharedFormulaToken(aPos, sindex);
     cellInserted();
-
-    // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
-    pCell->SetDirty();
 }
 
 void ScOrcusSheet::set_array_formula(
     os::row_t row, os::col_t col, os::formula_grammar_t grammar,
     const char* p, size_t n, os::row_t array_rows, os::col_t array_cols)
 {
-    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
     OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
+    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus(grammar);
 
-    ScRange aRange(col, row, mnTab, col+array_cols, row + array_rows, mnTab);
-
-    ScCompiler aComp(&mrDoc.getDoc(), aRange.aStart, eGrammar);
-    std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aFormula));
-    if (!pArray)
-        return;
-
-    mrDoc.setMatrixCells(aRange, *pArray, eGrammar);
+    ScAddress aPos(col, row, mnTab);
+    mrFactory.pushMatrixFormulaToken(aPos, aFormula, eGrammar, array_rows, array_cols);
 }
 
 void ScOrcusSheet::set_array_formula(
@@ -801,6 +969,11 @@ orcus::spreadsheet::range_size_t ScOrcusSheet::get_sheet_size() const
     ret.columns = MAXCOLCOUNT;
 
     return ret;
+}
+
+const sc::SharedFormulaGroups& ScOrcusSheet::getSharedFormulaGroups() const
+{
+    return maFormulaGroups;
 }
 
 ScOrcusSharedStrings::ScOrcusSharedStrings(ScOrcusFactory& rFactory) :
