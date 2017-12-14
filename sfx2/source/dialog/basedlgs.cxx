@@ -161,10 +161,9 @@ void SfxModalDialog::dispose()
     SetDialogData_Impl();
     delete pOutputSet;
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    if (comphelper::LibreOfficeKit::isActive() && GetLOKNotifier())
     {
-        pViewShell->notifyWindow(GetLOKWindowId(), "close");
+        SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "close");
         ReleaseLOKNotifier();
     }
 
@@ -208,19 +207,26 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 
 void SfxModalDialog::StateChanged( StateChangedType nType )
 {
-    if (comphelper::LibreOfficeKit::isActive() && nType == StateChangedType::InitShow)
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        // There are some dialogs, like Hyperlink dialog, which inherit from
-        // SfxModalDialog even though they are modeless, i.e., their Execute method
-        // isn't called.
-        if (!GetLOKNotifier())
+        if (nType == StateChangedType::InitShow && !GetLOKNotifier())
         {
+            // There are some dialogs, like Hyperlink dialog, which inherit from
+            // SfxModalDialog even though they are modeless, i.e., their Execute method
+            // isn't called.
             SetLOKNotifier(SfxViewShell::Current());
             const Size aSize = GetOptimalSize();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back(std::make_pair("type", "dialog"));
             aItems.emplace_back(std::make_pair("size", aSize.toString()));
             SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+        else if (nType == StateChangedType::Visible &&
+                 !IsVisible() &&
+                 GetLOKNotifier())
+        {
+            SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
         }
     }
 
