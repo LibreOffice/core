@@ -48,7 +48,14 @@
       <menu:menuitem menu:id=".uno:CheckIn"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportTo"/>
-      <menu:menuitem menu:id=".uno:ExportToPDF"/>
+      <menu:menu menu:id=".uno:ExportAsMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ExportToPDF"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToPDF"/>
+          <menu:menuitem menu:id=".uno:ExportToEPUB"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToEPUB"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menu menu:id=".uno:SendToMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SendMail"/>
@@ -198,7 +205,7 @@
       <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
-      <menu:menuitem menu:id=".uno:DesignerDialog"/>
+      <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
       <menu:menuseparator/>
@@ -268,7 +275,6 @@
           <menu:menuitem menu:id=".uno:FlowChartShapes"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertSignatureLine"/>
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawText"/>
@@ -325,8 +331,10 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSection"/>
-      <menu:menuitem menu:id=".uno:InsertDoc"/>
       <menu:menuitem menu:id=".uno:InsertEnvelope"/>
+      <menu:menuitem menu:id=".uno:InsertSignatureLine"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:InsertDoc"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FormatMenu">
@@ -423,10 +431,10 @@
       <menu:menuitem menu:id=".uno:PageDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TitlePageDialog"/>
-      <menu:menuitem menu:id=".uno:RubyDialog"/>
-      <menu:menuitem menu:id=".uno:Watermark"/>
       <menu:menuitem menu:id=".uno:EditRegion"/>
       <menu:menuitem menu:id=".uno:FormatAllNotes"/>
+      <menu:menuitem menu:id=".uno:RubyDialog"/>
+      <menu:menuitem menu:id=".uno:Watermark"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:FormatImageMenu">
         <menu:menupopup>
@@ -484,6 +492,8 @@
           <menu:menuitem menu:id=".uno:WrapOff"/>
           <menu:menuitem menu:id=".uno:WrapOn"/>
           <menu:menuitem menu:id=".uno:WrapIdeal"/>
+          <menu:menuitem menu:id=".uno:WrapLeft"/>
+          <menu:menuitem menu:id=".uno:WrapRight"/>
           <menu:menuitem menu:id=".uno:WrapThrough"/>
           <menu:menuitem menu:id=".uno:WrapThroughTransparencyToggle"/>
           <menu:menuseparator/>
@@ -537,8 +547,6 @@
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Preformatted Text&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuseparator/>
@@ -550,7 +558,10 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering ABC&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering abc&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Numbering ivx&amp;FamilyName:string=NumberingStyles" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditStyle"/>
       <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>
