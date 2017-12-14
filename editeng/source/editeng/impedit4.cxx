@@ -392,16 +392,14 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     {
         aColorList.push_back(rDefault.GetValue());
     }
-    sal_uInt32 i = 0;
-    SvxColorItem const* pColorItem = aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, i);
-    while ( pColorItem )
+    auto const nColors(aEditDoc.GetItemPool().GetItemCount2(EE_CHAR_COLOR));
+    for (std::remove_const_t<decltype(nColors)> i = 0; i < nColors; ++i)
     {
-        ++i;
-        if ( pColorItem->GetValue() != COL_AUTO )
+        SvxColorItem const*const pColorItem(aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i));
+        if (pColorItem && pColorItem->GetValue() != COL_AUTO) // may be null!
         {
             aColorList.push_back(pColorItem->GetValue());
         }
-        pColorItem = aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i);
     }
 
     rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL );
