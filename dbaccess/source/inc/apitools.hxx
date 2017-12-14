@@ -71,7 +71,7 @@ public:
     {   \
         return getImplementationName_Static();  \
     }   \
-    OUString SAL_CALL classname::getImplementationName_Static(  )    \
+    OUString classname::getImplementationName_Static(  )    \
     {   \
         return OUString(implasciiname); \
     }   \
@@ -93,7 +93,7 @@ public:
     {   \
         return getSupportedServiceNames_Static();   \
     }   \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static(  )   \
+    css::uno::Sequence< OUString > classname::getSupportedServiceNames_Static(  )   \
     {   \
         css::uno::Sequence< OUString > aSupported { serviceasciiname }; \
         return aSupported;  \
@@ -104,7 +104,7 @@ public:
     {   \
         return getSupportedServiceNames_Static();   \
     }   \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static(  )   \
+    css::uno::Sequence< OUString > classname::getSupportedServiceNames_Static(  )   \
     {   \
         css::uno::Sequence< OUString > aSupported(2);   \
         aSupported[0] = serviceasciiname1;    \
@@ -135,7 +135,7 @@ public:
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1,serviceasciiname2) \
     css::uno::Reference< css::uno::XInterface >   \
-        SAL_CALL classname::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)  \
+        classname::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)  \
     {   \
         return static_cast< XServiceInfo* >(new classname(_rxORB)); \
     }

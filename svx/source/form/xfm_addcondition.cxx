@@ -105,7 +105,7 @@ namespace svxform
     }
 
 
-    Reference< XInterface > SAL_CALL OAddConditionDialog::Create( const Reference< XMultiServiceFactory >& _rxFactory )
+    Reference< XInterface > OAddConditionDialog::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *( new OAddConditionDialog( comphelper::getComponentContext(_rxFactory) ) );
     }

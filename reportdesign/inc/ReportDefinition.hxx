@@ -181,7 +181,7 @@ namespace reportdesign
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static();
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        static css::uno::Reference< css::uno::XInterface >
             create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
         css::uno::Reference< css::uno::XComponentContext > getContext();

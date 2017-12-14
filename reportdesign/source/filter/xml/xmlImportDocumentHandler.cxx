@@ -94,7 +94,7 @@ uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL ImportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
+uno::Reference< uno::XInterface > ImportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ImportDocumentHandler( _rxContext ));
 }

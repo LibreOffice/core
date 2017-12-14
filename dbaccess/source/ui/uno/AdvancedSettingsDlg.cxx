@@ -55,7 +55,7 @@ namespace dbaui
         /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static();
         static css::uno::Reference< css::uno::XInterface >
-                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+                Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
@@ -77,7 +77,7 @@ namespace dbaui
         return css::uno::Sequence<sal_Int8>();
     }
 
-    Reference< XInterface > SAL_CALL OAdvancedSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+    Reference< XInterface > OAdvancedSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
     {
         return *(new OAdvancedSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
     }

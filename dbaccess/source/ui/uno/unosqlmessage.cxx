@@ -60,7 +60,7 @@ Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new OSQLMessageDialog( comphelper::getComponentContext(_rxFactory) ));
 }

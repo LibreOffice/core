@@ -134,7 +134,7 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetFilterDialog, "com.sun.star.sdb.FilterDialog")
 
     css::uno::Reference< css::uno::XInterface >
-        SAL_CALL RowsetFilterDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+        RowsetFilterDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
     }
@@ -182,7 +182,7 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetOrderDialog, "com.sun.star.sdb.OrderDialog")
 
     css::uno::Reference< css::uno::XInterface >
-        SAL_CALL RowsetOrderDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+        RowsetOrderDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
     }

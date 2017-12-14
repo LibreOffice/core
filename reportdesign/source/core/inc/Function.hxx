@@ -89,7 +89,7 @@ namespace reportdesign
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static();
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        static css::uno::Reference< css::uno::XInterface >
             create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
         // css::beans::XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

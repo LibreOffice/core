@@ -76,7 +76,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL OTabOrderDialog::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > OTabOrderDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new OTabOrderDialog( _rxContext ) );
     }

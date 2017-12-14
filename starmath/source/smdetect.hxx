@@ -63,7 +63,7 @@ public:
 
     /* Helper for registry */
     /// @throws css::uno::Exception
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+    static css::uno::Reference< css::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XExtendedFilterDetect
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) override;

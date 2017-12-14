@@ -92,7 +92,7 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
+    static Sequence< OUString > getSupportedServiceNames_Static(  );
 
     // XLanguageGuessing implementation
     virtual css::lang::Locale SAL_CALL guessPrimaryLanguage( const OUString& aText, ::sal_Int32 nStartPos, ::sal_Int32 nLen ) override;
@@ -326,7 +326,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
     return getSupportedServiceNames_Static();
 }
 
-Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames_Static(  )
+Sequence<OUString> LangGuess_Impl::getSupportedServiceNames_Static(  )
 {
     OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );

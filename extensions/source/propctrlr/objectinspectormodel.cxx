@@ -75,7 +75,7 @@ namespace pcr
         static OUString getImplementationName_static(  );
         /// @throws RuntimeException
         static Sequence< OUString > getSupportedServiceNames_static(  );
-        static Reference< XInterface > SAL_CALL
+        static Reference< XInterface >
                         Create(const Reference< XComponentContext >&);
 
     protected:
@@ -178,7 +178,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL ObjectInspectorModel::Create(const Reference< XComponentContext >& /* _rxContext */ )
+    Reference< XInterface > ObjectInspectorModel::Create(const Reference< XComponentContext >& /* _rxContext */ )
     {
         return *( new ObjectInspectorModel() );
     }

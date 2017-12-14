@@ -54,7 +54,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    OUString SAL_CALL ContentProvider::getImplementationName_static()
+    OUString ContentProvider::getImplementationName_static()
     {
         return OUString(  "org.openoffice.comp.ucp.ext.ContentProvider"  );
     }
@@ -66,7 +66,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames_static(  )
+    Sequence< OUString > ContentProvider::getSupportedServiceNames_static(  )
     {
         Sequence< OUString > aServiceNames(2);
         aServiceNames[0] = "com.sun.star.ucb.ContentProvider";

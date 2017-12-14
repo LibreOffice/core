@@ -678,7 +678,7 @@ Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames()
     );
 }
 
-Sequence< OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static()
+Sequence< OUString > OControlModel::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
@@ -1511,7 +1511,7 @@ css::uno::Sequence<OUString> SAL_CALL OBoundControlModel::getSupportedServiceNam
     );
 }
 
-Sequence< OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Static()
+Sequence< OUString > OBoundControlModel::getSupportedServiceNames_Static()
 {
     Sequence<OUString> aOwnServiceNames { "com.sun.star.form.DataAwareControlModel" };
     return ::comphelper::concatSequences(

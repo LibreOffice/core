@@ -38,12 +38,12 @@ public:
         OSL_ENSURE( xContext.is(), "No service manager is provided!" );
     }
 
-    static css::uno::Sequence< OUString > SAL_CALL
+    static css::uno::Sequence< OUString >
             impl_staticGetSupportedServiceNames();
 
-    static OUString SAL_CALL impl_staticGetImplementationName();
+    static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         impl_staticCreateSelfInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 

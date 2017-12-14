@@ -341,7 +341,7 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(SQLExceptionInteractionHandler, "com.sun.star.sdb.DatabaseInteractionHandler")
 
     Reference< XInterface >
-        SAL_CALL SQLExceptionInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
+        SQLExceptionInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new SQLExceptionInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }
@@ -352,7 +352,7 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.InteractionHandler")
 
     Reference< XInterface >
-        SAL_CALL LegacyInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
+        LegacyInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new LegacyInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }

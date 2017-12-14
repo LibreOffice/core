@@ -192,7 +192,7 @@ namespace pcr
         static OUString getImplementationName_static(  );
         /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        static css::uno::Reference< css::uno::XInterface >
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     protected:

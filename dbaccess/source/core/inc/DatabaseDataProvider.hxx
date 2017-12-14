@@ -62,7 +62,7 @@ public:
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
     static css::uno::Reference< css::uno::XInterface >
-        SAL_CALL Create(css::uno::Reference< css::uno::XComponentContext > const & context);
+        Create(css::uno::Reference< css::uno::XComponentContext > const & context);
 
 private:
     // css::uno::XInterface:

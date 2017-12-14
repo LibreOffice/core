@@ -47,7 +47,7 @@ Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > SAL_CALL ODataSourcePropertyDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ODataSourcePropertyDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new ODataSourcePropertyDialog( comphelper::getComponentContext(_rxFactory) ));
 }

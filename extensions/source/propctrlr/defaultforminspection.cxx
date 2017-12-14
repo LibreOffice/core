@@ -91,7 +91,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL DefaultFormComponentInspectorModel::Create( const Reference< XComponentContext >& )
+    Reference< XInterface > DefaultFormComponentInspectorModel::Create( const Reference< XComponentContext >& )
     {
         return *new DefaultFormComponentInspectorModel();
     }

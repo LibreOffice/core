@@ -310,9 +310,9 @@ public:
 
     // provide factory
     /// @throws css::uno::RuntimeException
-    static OUString SAL_CALL        impl_getStaticImplementationName( );
+    static OUString impl_getStaticImplementationName( );
     /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > SAL_CALL
+    static css::uno::Sequence< OUString >
                     impl_getStaticSupportedServiceNames(  );
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::lang::XSingleServiceFactory >

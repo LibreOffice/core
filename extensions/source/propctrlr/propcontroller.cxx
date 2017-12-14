@@ -570,7 +570,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > SAL_CALL OPropertyBrowserController::Create(const Reference< XComponentContext >& _rxContext)
+    Reference< XInterface > OPropertyBrowserController::Create(const Reference< XComponentContext >& _rxContext)
     {
         return *(new OPropertyBrowserController( _rxContext ) );
     }

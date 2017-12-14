@@ -1121,7 +1121,7 @@ OUString SvtFilePicker::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL SvtFilePicker::impl_createInstance(
+Reference< XInterface > SvtFilePicker::impl_createInstance(
     const Reference< XComponentContext >& )
 {
     return Reference< XInterface >( *new SvtFilePicker );
@@ -1185,7 +1185,7 @@ OUString SvtRemoteFilePicker::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL SvtRemoteFilePicker::impl_createInstance(
+Reference< XInterface > SvtRemoteFilePicker::impl_createInstance(
     const Reference< XComponentContext >& )
 {
     return Reference< XInterface >( *new SvtRemoteFilePicker );

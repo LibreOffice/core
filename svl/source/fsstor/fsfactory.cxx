@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-uno::Sequence< OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > FSStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.FileSystemStorageFactory";
@@ -45,7 +45,7 @@ uno::Sequence< OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServ
     return aRet;
 }
 
-OUString SAL_CALL FSStorageFactory::impl_staticGetImplementationName()
+OUString FSStorageFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
 }

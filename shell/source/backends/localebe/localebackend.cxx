@@ -320,7 +320,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
 }
 
 
-OUString SAL_CALL LocaleBackend::getBackendName() {
+OUString LocaleBackend::getBackendName() {
     return OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;
 }
 
@@ -329,7 +329,7 @@ OUString SAL_CALL LocaleBackend::getImplementationName()
     return getBackendName() ;
 }
 
-uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames()
+uno::Sequence<OUString> LocaleBackend::getBackendServiceNames()
 {
     uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.LocaleBackend" };
     return aServiceNameList ;

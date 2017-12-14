@@ -85,7 +85,7 @@ public:
     }
     static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
     static css::uno::Reference< css::uno::XInterface >
-            SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
@@ -106,7 +106,7 @@ extern "C" void createRegistryInfo_DBContentLoader()
     static ::dbaui::OMultiInstanceAutoRegistration< DBContentLoader > aAutoRegistration;
 }
 
-Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
+Reference< XInterface > DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
     return *(new DBContentLoader(comphelper::getComponentContext(rSMgr)));
 }

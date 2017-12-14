@@ -61,7 +61,7 @@ Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ODBTypeWizDialogSetup::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     Reference < XInterface > xDBWizard = *(new ODBTypeWizDialogSetup( comphelper::getComponentContext(_rxFactory) ));
     return xDBWizard;

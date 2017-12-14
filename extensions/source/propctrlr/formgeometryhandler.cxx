@@ -211,9 +211,9 @@ namespace pcr
         );
 
         /// @throws RuntimeException
-        static OUString SAL_CALL getImplementationName_static(  );
+        static OUString getImplementationName_static(  );
         /// @throws RuntimeException
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
+        static Sequence< OUString > getSupportedServiceNames_static(  );
 
     protected:
         virtual ~FormGeometryHandler() override;
@@ -309,13 +309,13 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL FormGeometryHandler::getImplementationName_static(  )
+    OUString FormGeometryHandler::getImplementationName_static(  )
     {
         return OUString( "com.sun.star.comp.extensions.FormGeometryHandler" );
     }
 
 
-    Sequence< OUString > SAL_CALL FormGeometryHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > FormGeometryHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.FormGeometryHandler" };
         return aSupported;

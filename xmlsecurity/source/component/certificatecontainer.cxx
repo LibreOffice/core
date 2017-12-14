@@ -101,20 +101,20 @@ CertificateContainer::getSupportedServiceNames(  )
     return impl_getStaticSupportedServiceNames();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 CertificateContainer::impl_getStaticSupportedServiceNames(  )
 {
     Sequence< OUString > aRet { "com.sun.star.security.CertificateContainer" };
     return aRet;
 }
 
-OUString SAL_CALL
+OUString
 CertificateContainer::impl_getStaticImplementationName()
 {
     return OUString("com.sun.star.security.CertificateContainer");
 }
 
-Reference< XInterface > SAL_CALL CertificateContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
+Reference< XInterface > CertificateContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
 {
     return Reference< XInterface >( *new CertificateContainer( xServiceManager ) );
 }

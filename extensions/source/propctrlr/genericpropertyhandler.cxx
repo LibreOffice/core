@@ -280,18 +280,18 @@ namespace pcr
         return getSupportedServiceNames_static();
     }
 
-    OUString SAL_CALL GenericPropertyHandler::getImplementationName_static(  )
+    OUString GenericPropertyHandler::getImplementationName_static(  )
     {
         return OUString( "com.sun.star.comp.extensions.GenericPropertyHandler" );
     }
 
-    Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > GenericPropertyHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.inspection.GenericPropertyHandler" };
         return aSupported;
     }
 
-    Reference< XInterface > SAL_CALL GenericPropertyHandler::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > GenericPropertyHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new GenericPropertyHandler( _rxContext ) );
     }

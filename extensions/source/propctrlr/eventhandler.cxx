@@ -468,18 +468,18 @@ namespace pcr
         return getSupportedServiceNames_static();
     }
 
-    OUString SAL_CALL EventHandler::getImplementationName_static(  )
+    OUString EventHandler::getImplementationName_static(  )
     {
         return OUString(  "com.sun.star.comp.extensions.EventHandler"  );
     }
 
-    Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > EventHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.EventHandler" };
         return aSupported;
     }
 
-    Reference< XInterface > SAL_CALL EventHandler::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > EventHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new EventHandler( _rxContext ) );
     }

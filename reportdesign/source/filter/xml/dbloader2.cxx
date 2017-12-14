@@ -76,7 +76,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
     return OUString();
 }
 
-Reference< XInterface > SAL_CALL
+Reference< XInterface >
         ORptTypeDetection::create(Reference< XComponentContext > const & xContext)
 {
     return *(new ORptTypeDetection(xContext));

@@ -104,13 +104,13 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL SubmissionPropertyHandler::getImplementationName_static(  )
+    OUString SubmissionPropertyHandler::getImplementationName_static(  )
     {
         return OUString( "com.sun.star.comp.extensions.SubmissionPropertyHandler" );
     }
 
 
-    Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > SubmissionPropertyHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.SubmissionPropertyHandler" };
         return aSupported;

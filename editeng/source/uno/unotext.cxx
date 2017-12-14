@@ -1465,7 +1465,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames
     return getSupportedServiceNames_Static();
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames_Static()
+uno::Sequence< OUString > SvxUnoTextRangeBase::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq(3);
     aSeq[0] = "com.sun.star.style.CharacterProperties";

@@ -159,7 +159,7 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     // XExporter
@@ -181,7 +181,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
@@ -196,7 +196,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
@@ -211,7 +211,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
@@ -226,7 +226,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 /** Exports all
@@ -240,7 +240,7 @@ public:
     static OUString getImplementationName_Static(  );
     /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 

@@ -125,7 +125,7 @@ IMPLEMENT_SERVICE_INFO_SUPPORTS(LimitBoxController)
 IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LimitBoxController, "com.sun.star.frame.ToolbarController")
 
 uno::Reference< uno::XInterface >
-    SAL_CALL LimitBoxController::Create(const uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+    LimitBoxController::Create(const uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
 {
     return static_cast< XServiceInfo* >(new LimitBoxController( comphelper::getComponentContext(_rxORB) ));
 }

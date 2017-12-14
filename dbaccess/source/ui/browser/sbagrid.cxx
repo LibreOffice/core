@@ -115,7 +115,7 @@ css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames(
     return getSupportedServiceNames_Static();
 }
 
-Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SbaXGridControl::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new SbaXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }

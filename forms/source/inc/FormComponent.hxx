@@ -400,7 +400,7 @@ public:
 
 // XSericeInfo - static version(s)
     /// @throws css::uno::RuntimeException
-    static  css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames_Static();
+    static  css::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
 // XPersistObject
     virtual OUString SAL_CALL    getServiceName() override = 0;
@@ -976,7 +976,7 @@ public:
 
     // XServiceInfo - static version
     /// @throws css::uno::RuntimeException
-    static  css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames_Static();
+    static  css::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
     // XChild
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;

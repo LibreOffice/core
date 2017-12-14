@@ -263,7 +263,7 @@ uno::Sequence< OUString > GeometryHandler::getSupportedServiceNames_static(  )
     return aSupported;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL GeometryHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
+uno::Reference< uno::XInterface > GeometryHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new GeometryHandler( _rxContext ));
 }

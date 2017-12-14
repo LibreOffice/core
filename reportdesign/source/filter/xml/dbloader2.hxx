@@ -78,7 +78,7 @@ public:
     }
     /// @throws css::uno::RuntimeException
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;

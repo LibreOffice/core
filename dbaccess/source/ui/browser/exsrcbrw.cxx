@@ -91,7 +91,7 @@ css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_
     return aSupported;
 }
 
-Reference< XInterface > SAL_CALL SbaExternalSourceBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SbaExternalSourceBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new SbaExternalSourceBrowser( comphelper::getComponentContext(_rxFactory)));
 }

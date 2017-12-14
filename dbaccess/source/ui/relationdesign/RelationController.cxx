@@ -114,7 +114,7 @@ Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ORelationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new ORelationController(comphelper::getComponentContext(_rxFactory)));
 }

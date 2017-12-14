@@ -3067,14 +3067,14 @@ TaskManager::getScheme( OUString& Scheme )
   Scheme = "file";
 }
 
-OUString SAL_CALL
+OUString
 TaskManager::getImplementationName_static()
 {
   return OUString("com.sun.star.comp.ucb.FileProvider");
 }
 
 
-uno::Sequence< OUString > SAL_CALL
+uno::Sequence< OUString >
 TaskManager::getSupportedServiceNames_static()
 {
   OUString Supported("com.sun.star.ucb.FileContentProvider");

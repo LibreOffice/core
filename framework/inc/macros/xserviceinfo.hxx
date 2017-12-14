@@ -144,8 +144,8 @@ namespace framework{
     virtual sal_Bool                                        SAL_CALL supportsService                    ( const OUString&   sServiceName    ) override;   \
     virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                   ) override;   \
     /* Helper for XServiceInfo */                                                                                                                                                                                 \
-    static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                   );                                                                    \
-    static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                   );                                                                    \
+    static css::uno::Sequence< OUString >                   impl_getStaticSupportedServiceNames(                                   );                                                                    \
+    static OUString                                         impl_getStaticImplementationName   (                                   );                                                                    \
     /* Helper for initialization of service by using own reference! */                                                                                                                                            \
     void                                                    impl_initService                   (                                   );                                                                    \
 
