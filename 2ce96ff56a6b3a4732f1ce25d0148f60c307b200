@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_5cc96058",
+        "filename": "offapi/com/sun/star/sheet/XSpreadsheetDocument.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-14T12:39:20Z",
+      "side": 1,
+      "message": "Changing/invalidating this published interface is a no-go, see also Stephan\u0027s comment in offapi/type_reference/offapi.idl\n\nInstead, create another interface e.g. XSpreadsheetDocument2 derived from this XSpreadsheetDocument and add the new createDataProvider() there.",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_dc32b0a6",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 3
