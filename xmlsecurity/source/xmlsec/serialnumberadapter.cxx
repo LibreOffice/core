@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/security/XSerialNumberAdapter.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -38,8 +37,7 @@
 namespace {
 
 class Service:
-    public cppu::WeakImplHelper<
-        css::lang::XServiceInfo, css::security::XSerialNumberAdapter >
+    public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
     Service() {}
@@ -57,14 +55,6 @@ private:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
     { return xml_security::serial_number_adapter::serviceNames(); }
-
-    virtual OUString SAL_CALL toString(
-        css::uno::Sequence< sal_Int8 > const & SerialNumber) override
-    { return xmlsecurity::bigIntegerToNumericString(SerialNumber); }
-
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL toSequence(
-        OUString const & SerialNumber) override
-    { return xmlsecurity::numericStringToBigInteger(SerialNumber); }
 };
 
 }
