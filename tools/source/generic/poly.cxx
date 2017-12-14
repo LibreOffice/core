@@ -112,7 +112,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect )
          mxPointAry[4] = rRect.TopLeft();
      }
      else
-        ImplInitDefault();
+        mnPoints = 0;
 }
 
 ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
@@ -164,7 +164,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
         }
     }
     else
-        ImplInitDefault();
+        mnPoints = 0;
 }
 
 ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
@@ -220,7 +220,7 @@ ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
         }
     }
     else
-        ImplInitDefault();
+        mnPoints = 0;
 }
 
 ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
@@ -305,7 +305,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
             mxPointAry[nPoints] = mxPointAry[0];
     }
     else
-        ImplInitDefault();
+        mnPoints = 0;
 }
 
 ImplPolygon::ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1,
@@ -352,12 +352,11 @@ ImplPolygon::ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1,
 // and a memcopy at ImplPolygon creation, but contains no zero-controlpoints
 // for straight edges.
 ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
+    : mnPoints(0)
 {
     const bool bCurve(rPolygon.areControlPointsUsed());
     const bool bClosed(rPolygon.isClosed());
     sal_uInt32 nB2DLocalCount(rPolygon.count());
-
-    ImplInitDefault();
 
     if(bCurve)
     {
@@ -487,18 +486,9 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
 
 bool ImplPolygon::operator==( const ImplPolygon& rCandidate) const
 {
-    if(mnPoints == rCandidate.mnPoints)
-    {
-        if (mxFlagAry.get() == rCandidate.mxFlagAry.get() && mxPointAry.get() == rCandidate.mxPointAry.get())
-            return true;
-    }
-
-    return false;
-}
-
-void ImplPolygon::ImplInitDefault()
-{
-    mnPoints = 0;
+    return mnPoints == rCandidate.mnPoints &&
+           mxFlagAry.get() == rCandidate.mxFlagAry.get() &&
+           mxPointAry.get() == rCandidate.mxPointAry.get();
 }
 
 void ImplPolygon::ImplInitSize(sal_uInt16 nInitSize, bool bFlags)

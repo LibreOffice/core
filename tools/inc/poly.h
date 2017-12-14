@@ -24,18 +24,15 @@
 
 class Point;
 
-class SAL_WARN_UNUSED ImplPolygonData
+class SAL_WARN_UNUSED ImplPolygon
 {
 public:
     std::unique_ptr<Point[]> mxPointAry;
     std::unique_ptr<PolyFlags[]> mxFlagAry;
     sal_uInt16      mnPoints;
-};
 
-class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
-{
 public:
-                    ImplPolygon() { mnPoints = 0; }
+                    ImplPolygon() : mnPoints(0) {}
                     ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
@@ -50,7 +47,6 @@ public:
 
     bool            operator==( const ImplPolygon& rCandidate ) const;
 
-    void            ImplInitDefault();
     void            ImplInitSize(sal_uInt16 nInitSize, bool bFlags = false);
     void            ImplSetSize( sal_uInt16 nSize, bool bResize = true );
     void            ImplCreateFlagArray();
