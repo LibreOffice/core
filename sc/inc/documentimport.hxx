@@ -96,7 +96,15 @@ public:
     void setNumericCell(const ScAddress& rPos, double fVal);
     void setStringCell(const ScAddress& rPos, const OUString& rStr);
     void setEditCell(const ScAddress& rPos, EditTextObject* pEditText);
-    void setFormulaCell(const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar);
+
+    void setFormulaCell(
+        const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar,
+        const double* pResult = nullptr );
+
+    void setFormulaCell(
+        const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar,
+        const OUString& rResult );
+
     void setFormulaCell(const ScAddress& rPos, ScTokenArray* pArray);
     void setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell);
 
