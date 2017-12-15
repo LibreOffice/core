@@ -585,6 +585,31 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(bool bColumns, SCTAB nCurr
     ScTabViewShell::notifyAllViewsHeaderInvalidation(eHeaderType, nCurrentTabIndex);
 }
 
+bool ScTabViewShell::isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell)
+            {
+                ScInputHandler* pInputHandler = pTabViewShell->GetInputHandler();
+                if (pInputHandler && pInputHandler->GetActiveView())
+                {
+                    const ScViewData& rViewData = pTabViewShell->GetViewData();
+                    SCCOLROW nPos = bColumns ? rViewData.GetCurX() : rViewData.GetCurY();
+                    if (nStart <= nPos && nPos <= nEnd)
+                        return true;
+                }
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
+    return false;
+}
+
 bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
 {
     bool bSubTotal = false;

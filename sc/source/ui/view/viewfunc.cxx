@@ -2239,7 +2239,7 @@ void ScViewFunc::SetWidthOrHeight(
     for (; itr != itrEnd; ++itr)
         rDoc.UpdatePageBreaks( *itr );
 
-    GetViewData().GetView()->UpdateScrollBars();
+    GetViewData().GetView()->UpdateScrollBars(bWidth ? COLUMN_HEADER : ROW_HEADER);
 
     {
         itr = aMarkData.begin();
@@ -2294,8 +2294,6 @@ void ScViewFunc::SetWidthOrHeight(
             HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "column-resize");
         }
     }
-
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(bWidth, GetViewData().GetTabNo());
 }
 
 //  column width/row height (via marked range)
