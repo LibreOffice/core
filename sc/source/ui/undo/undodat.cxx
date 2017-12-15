@@ -365,8 +365,8 @@ void ScUndoOutlineBlock::Undo()
     pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top);
 
 
-    pViewShell->OnLOKShowHideOutline(/*columns: */ true, nStartCol - 1);
-    pViewShell->OnLOKShowHideOutline(/*columns: */ false, nStartRow - 1);
+    pViewShell->OnLOKShowHideColRow(/*columns: */ true, nStartCol - 1);
+    pViewShell->OnLOKShowHideColRow(/*columns: */ false, nStartRow - 1);
 
     EndUndo();
 }
@@ -736,6 +736,9 @@ OUString ScUndoQuery::GetComment() const
 
 void ScUndoQuery::Undo()
 {
+    if (ScTabViewShell::isAnyEditViewInRange(/*bColumns*/ false, aQueryParam.nRow1, aQueryParam.nRow2))
+        return;
+
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -811,7 +814,11 @@ void ScUndoQuery::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-        //  Paint
+
+    // invalidate cache positions and update cursor and selection
+    pViewShell->OnLOKShowHideColRow(/*bColumns*/ false, aQueryParam.nRow1 - 1);
+
+    //  Paint
 
     if (bCopy)
     {

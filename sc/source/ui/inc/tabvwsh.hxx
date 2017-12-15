@@ -92,13 +92,6 @@ enum ObjectSelectionType
     OST_Media
 };
 
-enum HeaderType
-{
-    COLUMN_HEADER,
-    ROW_HEADER,
-    BOTH_HEADERS
-};
-
 class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
@@ -398,6 +391,7 @@ public:
     /// Emits a LOK_CALLBACK_INVALIDATE_HEADER for all views whose current tab is equal to nCurrentTabIndex
     static void notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SCTAB nCurrentTabIndex = -1);
     static void notifyAllViewsHeaderInvalidation(bool Columns, SCTAB nCurrentTabIndex = -1);
+    static bool isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
 };
 
