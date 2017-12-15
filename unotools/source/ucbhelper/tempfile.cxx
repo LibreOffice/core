@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <utility>
 
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
@@ -364,6 +365,14 @@ TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
     SequentialTokens t(_bStartWithZero);
     aName = lcl_createName( rLeadingChars, t, pExtension, pParent, false,
                             true, true, bCreateParentDirs );
+}
+
+TempFile::TempFile(TempFile && other):
+    aName(std::move(other.aName)), pStream(other.pStream), bIsDirectory(other.bIsDirectory),
+    bKillingFileEnabled(other.bKillingFileEnabled)
+{
+    other.pStream = nullptr;
+    other.bKillingFileEnabled = false;
 }
 
 TempFile::~TempFile()

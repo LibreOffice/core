@@ -51,8 +51,9 @@ void FirebirdTest::setUp()
  */
 void FirebirdTest::testEmptyDBConnection()
 {
+    auto const tmp = createTempCopy("firebird_empty.odb");
     uno::Reference< XOfficeDatabaseDocument > xDocument =
-        getDocumentForFileName("firebird_empty.odb");
+        getDocumentForUrl(tmp.GetURL());
 
     getConnectionForDocument(xDocument);
 

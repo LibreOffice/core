@@ -49,9 +49,6 @@ class UNOTOOLS_DLLPUBLIC TempFile
     bool        bIsDirectory;
     bool        bKillingFileEnabled;
 
-    TempFile( const TempFile& ) = delete;
-    TempFile& operator=(const TempFile&) = delete;
-
 public:
                     /**
                     Create a temporary file or directory, in the default tempfile folder or if possible in a given folder.
@@ -71,6 +68,8 @@ public:
                     */
                     TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr,
                               const OUString* pParent=nullptr, bool bCreateParentDirs=false );
+
+                    TempFile(TempFile && other);
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingFile(true) was called before.
