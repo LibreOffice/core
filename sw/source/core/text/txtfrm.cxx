@@ -2123,18 +2123,18 @@ SwTextFrame* SwTextFrame::GetFormatted( bool bForceQuickFormat )
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     SwSwapIfSwapped swap( this );
 
-    // The IdleCollector could've removed my cached information
-    // Calc() calls our format
+    // In case the SwLineLayout was cleared out of the pTextCache, recreate it.
     // Not for empty paragraphs
     if( !HasPara() && !(isFrameAreaDefinitionValid() && IsEmpty()) )
     {
         // Calc() must be called, because frame position can be wrong
         const bool bFormat = isFrameAreaSizeValid();
-        Calc(pRenderContext);
+        Calc(pRenderContext); // calls Format() if invalid
 
-        // It could be that Calc() did not trigger Format(), because
-        // we've been asked by the IdleCollector to throw away our
-        // format information
+        // If the flags were valid (hence bFormat=true), Calc did nothing,
+        // so Format() must be called manually in order to recreate
+        // the SwLineLayout that has been deleted from the
+        // SwTextFrame::pTextCache (hence !HasPara() above).
         // Optimization with FormatQuick()
         if( bFormat && !FormatQuick( bForceQuickFormat ) )
             Format(getRootFrame()->GetCurrShell()->GetOut());

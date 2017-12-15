@@ -55,7 +55,12 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     friend class TextFrameLockGuard; // May Lock()/Unlock()
     friend bool sw_ChangeOffset( SwTextFrame* pFrame, sal_Int32 nNew );
 
-    static SwCache *pTextCache;  // Pointer to the Line Cache
+    /// SwLineLayout cache: the lines are not actually owned by the SwTextFrame
+    /// but by this SwCache, so they will be deleted in large documents
+    /// if there are too many of them, but the "valid" flags of the frame
+    /// will still be set; GetFormatted() is the function that forces
+    /// recreation of the SwLineLayout by Format() if necessary.
+    static SwCache *pTextCache;
     static long nMinPrtLine;    // This Line must not be underrun when printing
                                 // Hack for table cells stretching multiple pages
 
@@ -446,7 +451,7 @@ public:
     SwTextFrame *FindQuoVadisFrame();
 
     /**
-     * Makes up for formatting if the Idle Handler has struck
+     * In case the SwLineLayout was cleared out of the pTextCache, recreate it.
      *
      * #i29062# GetFormatted() can trigger a full formatting
      * of the paragraph, causing other layout frames to become invalid. This
