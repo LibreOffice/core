@@ -68,6 +68,7 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/vcl/canvascustomsprite \
 	canvas/source/vcl/canvasfont \
 	canvas/source/vcl/canvashelper \
+	canvas/source/vcl/canvashelper_texturefill \
 	canvas/source/vcl/devicehelper \
 	canvas/source/vcl/impltools \
 	canvas/source/vcl/services \
@@ -80,14 +81,9 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 ))
 
 # Solaris Sparc with Sun Compiler: noopt
-ifneq ($(strip($OS)),SOLARIS)
-$(eval $(call gb_Library_add_exception_objects,vclcanvas,\
-	canvas/source/vcl/canvashelper_texturefill \
-))
-else
-$(eval $(call gb_Library_add_cxxobjects,vclcanvas,\
-	canvas/source/vcl/canvashelper_texturefill \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+ifeq ($(strip($OS)),SOLARIS)
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	canvas/source/vcl/canvashelper_texturefill, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 

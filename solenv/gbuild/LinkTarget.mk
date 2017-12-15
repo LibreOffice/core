@@ -480,19 +480,19 @@ endif
 endef
 
 define gb_LinkTarget_set_c_optimization
-$(call gb_CObject_get_target,$(1)) : CFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CFLAGS)) $(2)
+$(foreach object,$(1),$(eval $(call gb_CObject_get_target,$(object)) : CFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CFLAGS)) $(2)))
 endef
 
 define gb_LinkTarget_set_cxx_optimization
-$(call gb_CxxObject_get_target,$(1)) : CXXFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CXXFLAGS)) $(2)
+$(foreach object,$(1),$(eval $(call gb_CxxObject_get_target,$(object)) : CXXFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CXXFLAGS)) $(2)))
 endef
 
 define gb_LinkTarget_set_gencxx_optimization
-$(call gb_GenCxxObject_get_target,$(1)) : CXXFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CXXFLAGS)) $(2)
+$(foreach object,$(1),$(eval $(call gb_GenCxxObject_get_target,$(object)) : CXXFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CXXFLAGS)) $(2)))
 endef
 
 define gb_LinkTarget_set_objcxx_optimization
-$(call gb_ObjCxxObject_get_target,$(1)) : OBJCXXFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(OBJCXXFLAGS)) $(2)
+$(foreach object,$(1),$(eval $(call gb_ObjCxxObject_get_target,$(object)) : OBJCXXFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(OBJCXXFLAGS)) $(2)))
 endef
 
 define gb_LinkTarget_set_include

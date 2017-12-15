@@ -63,6 +63,7 @@ $(eval $(call gb_Library_add_exception_objects,sdfilt,\
 	sd/source/filter/ppt/pptatom \
 	sd/source/filter/ppt/ppt97animations \
 	sd/source/filter/eppt/eppt \
+	sd/source/filter/eppt/epptso \
 	sd/source/filter/eppt/escherex \
 	sd/source/filter/eppt/pptexanimations \
 	sd/source/filter/eppt/pptexsoundcollection \
@@ -72,13 +73,8 @@ $(eval $(call gb_Library_add_exception_objects,sdfilt,\
 # Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
 # the latter is currently not supported by gbuild and needs a fix here later
 ifeq ($(COM),GCC)
-$(eval $(call gb_Library_add_cxxobjects,sdfilt,\
-    sd/source/filter/eppt/epptso \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sdfilt,\
-    sd/source/filter/eppt/epptso \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	sd/source/filter/eppt/epptso, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 

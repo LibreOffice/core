@@ -133,14 +133,19 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/view/tabview4 \
 	sc/source/ui/view/tabview5 \
 	sc/source/ui/view/viewfunc \
+	sc/source/ui/view/viewfun2 \
 	sc/source/ui/view/viewfun3 \
+	sc/source/ui/view/viewfun4 \
 	sc/source/ui/view/viewfun5 \
 	sc/source/ui/view/viewfun6 \
 	sc/source/ui/view/viewfun7 \
 	sc/source/ui/view/dbfunc \
+	sc/source/ui/view/dbfunc2 \
 	sc/source/ui/view/dbfunc3 \
 	sc/source/ui/view/dbfunc4 \
+	sc/source/ui/view/drawview \
 	sc/source/ui/view/tabvwsh \
+	sc/source/ui/view/tabvwsh2 \
 	sc/source/ui/view/tabvwsh3 \
 	sc/source/ui/view/tabvwsh4 \
 	sc/source/ui/view/tabvwsh5 \
@@ -265,6 +270,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/drawfunc/fupoor \
 	sc/source/ui/drawfunc/fumark \
 	sc/source/ui/drawfunc/fudraw \
+	sc/source/ui/drawfunc/fusel \
 	sc/source/ui/drawfunc/fusel2 \
 	sc/source/ui/drawfunc/fuconstr \
 	sc/source/ui/drawfunc/fuconrec \
@@ -303,6 +309,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/navipi/navcitem \
 	sc/source/ui/navipi/scenwnd \
 	sc/source/ui/navipi/content \
+	sc/source/ui/unoobj/cellsuno \
 	sc/source/ui/unoobj/docuno \
 	sc/source/ui/unoobj/servuno \
 	sc/source/ui/unoobj/defltuno \
@@ -323,6 +330,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/unoobj/datauno \
 	sc/source/ui/unoobj/dapiuno \
 	sc/source/ui/unoobj/chartuno \
+	sc/source/ui/unoobj/chart2uno \
 	sc/source/ui/unoobj/shapeuno \
 	sc/source/ui/unoobj/pageuno \
 	sc/source/ui/unoobj/forbiuno \
@@ -349,15 +357,20 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/attrib \
 	sc/source/core/data/autonamecache \
 	sc/source/core/data/bcaslot \
+	sc/source/core/data/cell \
 	sc/source/core/data/cell2 \
 	sc/source/core/data/clipparam \
 	sc/source/core/data/column \
+	sc/source/core/data/column2 \
+	sc/source/core/data/column3 \
 	sc/source/core/data/compressedarray \
+	sc/source/core/data/conditio \
 	sc/source/core/data/dbdocutl \
 	sc/source/core/data/dociter \
 	sc/source/core/data/docpool \
 	sc/source/core/data/documen2 \
 	sc/source/core/data/documen3 \
+	sc/source/core/data/documen4 \
 	sc/source/core/data/documen5 \
 	sc/source/core/data/documen6 \
 	sc/source/core/data/documen7 \
@@ -400,11 +413,14 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/tabbgcolor \
 	sc/source/core/data/table1 \
 	sc/source/core/data/table2 \
+	sc/source/core/data/table3 \
+	sc/source/core/data/table4 \
 	sc/source/core/data/table5 \
 	sc/source/core/data/table6 \
 	sc/source/core/data/tabprotection \
 	sc/source/core/data/userdat \
 	sc/source/core/data/postit \
+	sc/source/core/data/validat \
 	sc/source/core/tool/addincfg \
 	sc/source/core/tool/addincol \
 	sc/source/core/tool/addinhelpid \
@@ -416,6 +432,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/callform \
 	sc/source/core/tool/cellform \
 	sc/source/core/tool/cellkeytranslator \
+	sc/source/core/tool/chartarr \
 	sc/source/core/tool/charthelper \
 	sc/source/core/tool/chartpos \
 	sc/source/core/tool/chartlis \
@@ -437,8 +454,11 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/hints \
 	sc/source/core/tool/inputopt \
 	sc/source/core/tool/interpr1 \
+	sc/source/core/tool/interpr2 \
 	sc/source/core/tool/interpr3 \
+	sc/source/core/tool/interpr4 \
 	sc/source/core/tool/interpr5 \
+	sc/source/core/tool/interpr6 \
 	sc/source/core/tool/lookupcache \
 	sc/source/core/tool/navicfg \
 	sc/source/core/tool/odffmap \
@@ -459,7 +479,9 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/reftokenhelper \
 	sc/source/core/tool/refupdat \
 	sc/source/core/tool/scmatrix \
+	sc/source/core/tool/subtotal \
 	sc/source/core/tool/stringutil \
+	sc/source/core/tool/token \
 	sc/source/core/tool/unitconv \
 	sc/source/core/tool/userlist \
 	sc/source/core/tool/viewopti \
@@ -474,6 +496,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/filter/xml/xmlrowi \
 	sc/source/filter/xml/xmlcelli \
 	sc/source/filter/xml/xmlconti \
+	sc/source/filter/xml/xmlcvali \
 	sc/source/filter/xml/xmlcoli \
 	sc/source/filter/xml/xmlsubti \
 	sc/source/filter/xml/xmlnexpi \
@@ -538,89 +561,55 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/Accessibility/AccessibleCsvControl \
 ))
 
-$(eval $(call gb_Library_add_cxxobjects,sc,\
-	sc/source/ui/view/drawview \
-	sc/source/ui/view/dbfunc2 \
-	sc/source/ui/view/tabvwsh2 \
-	sc/source/ui/drawfunc/fusel \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
 	sc/source/filter/xml/xmlcvali \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+	sc/source/ui/drawfunc/fusel \
+	sc/source/ui/view/dbfunc2 \
+	sc/source/ui/view/drawview \
+	sc/source/ui/view/tabvwsh2 \
+	, $(gb_COMPILERNOOPTFLAGS) \
 ))
-
+	
 ifeq ($(OS)$(COM)$(CPUNAME),LINUXGCCPOWERPC)
-$(eval $(call gb_Library_add_cxxobjects,sc,\
-	sc/source/core/tool/subtotal \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sc,\
-	sc/source/core/tool/subtotal \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	sc/source/core/tool/subtotal, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 
 ifeq ($(OS)$(COM)$(CPUNAME),LINUXGCCSPARC)
-$(eval $(call gb_Library_add_cxxobjects,sc,\
-	sc/source/ui/view/viewfun4 \
-	sc/source/ui/view/viewfun2 \
-	sc/source/ui/unoobj/cellsuno \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	sc/source/core/data/cell \
 	sc/source/core/data/column2 \
 	sc/source/core/data/column3 \
+	sc/source/core/data/conditio \
+	sc/source/core/data/documen4 \
 	sc/source/core/data/table3 \
 	sc/source/core/data/table4 \
-	sc/source/core/data/documen4 \
-	sc/source/core/data/conditio \
 	sc/source/core/data/validat \
-	sc/source/core/data/cell \
+	sc/source/core/tool/chartarr \
 	sc/source/core/tool/interpr2 \
 	sc/source/core/tool/interpr4 \
-	sc/source/core/tool/token \
-	sc/source/core/tool/chartarr \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sc,\
-	sc/source/ui/view/viewfun4 \
-	sc/source/ui/view/viewfun2 \
+	sc/source/core/tool/token
 	sc/source/ui/unoobj/cellsuno \
-	sc/source/core/data/column2 \
-	sc/source/core/data/column3 \
-	sc/source/core/data/table3 \
-	sc/source/core/data/table4 \
-	sc/source/core/data/documen4 \
-	sc/source/core/data/conditio \
-	sc/source/core/data/validat \
-	sc/source/core/data/cell \
-	sc/source/core/tool/interpr2 \
-	sc/source/core/tool/interpr4 \
-	sc/source/core/tool/token \
-	sc/source/core/tool/chartarr \
+	sc/source/ui/view/viewfun2 \
+	sc/source/ui/view/viewfun4 \
+	, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 
 ifeq ($(GUI),OS2)
-$(eval $(call gb_Library_add_cxxobjects,sc,\
-	sc/source/core/tool/interpr6 \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sc,\
-	sc/source/core/tool/interpr6 \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	sc/source/core/tool/interpr6, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 
 # Work around bug in gcc 4.2 / 4.3, see
 # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35182
 ifeq ($(COM),GCC)
-$(eval $(call gb_Library_add_cxxobjects,sc,\
-	sc/source/ui/unoobj/chart2uno \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sc,\
-	sc/source/ui/unoobj/chart2uno \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	sc/source/ui/unoobj/chart2uno, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
-
 
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
 

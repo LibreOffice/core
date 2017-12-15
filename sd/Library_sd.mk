@@ -152,6 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/ViewTabBar \
 	sd/source/ui/view/WindowUpdater \
 	sd/source/ui/view/viewoverlaymanager \
+	sd/source/ui/app/optsitem \
 	sd/source/ui/app/sdmod \
 	sd/source/ui/app/sdmod1 \
 	sd/source/ui/app/sdmod2 \
@@ -258,6 +259,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/unoidl/unopback \
 	sd/source/ui/unoidl/unodoc \
 	sd/source/ui/unoidl/unomodule \
+	sd/source/ui/unoidl/unowcntr \
 	sd/source/ui/unoidl/randomnode \
 	sd/source/ui/animations/CustomAnimationCreateDialog \
 	sd/source/ui/animations/CustomAnimationDialog \
@@ -295,6 +297,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/func/undolayer \
 	sd/source/ui/func/fupoor \
 	sd/source/ui/func/fudraw \
+	sd/source/ui/func/futext \
 	sd/source/ui/func/fuzoom \
 	sd/source/ui/func/fusel \
 	sd/source/ui/func/fuconstr \
@@ -473,26 +476,16 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 # Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
 # the latter is currently not supported by gbuild and needs a fix here later
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_cxxobjects,sd,\
-    sd/source/ui/app/optsitem \
-    sd/source/ui/func/futext \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sd,\
-    sd/source/ui/app/optsitem \
-    sd/source/ui/func/futext \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	sd/source/ui/app/optsitem \
+	sd/source/ui/func/futext \
+	, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 
 ifeq ($(COM),GCC)
-$(eval $(call gb_Library_add_cxxobjects,sd,\
-    sd/source/ui/unoidl/unowcntr \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sd,\
-    sd/source/ui/unoidl/unowcntr \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+    sd/source/ui/unoidl/unowcntr, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 

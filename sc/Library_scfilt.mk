@@ -105,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/excel/xeview \
 	sc/source/filter/excel/xichart \
 	sc/source/filter/excel/xicontent \
+	sc/source/filter/excel/xiescher \
 	sc/source/filter/excel/xiformula \
 	sc/source/filter/excel/xihelper \
 	sc/source/filter/excel/xilink \
@@ -163,13 +164,8 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 ))
 
 ifeq ($(OS)$(COM)$(CPUNAME),LINUXGCCSPARC)
-$(eval $(call gb_Library_add_cxxobjects,scfilt,\
-	sc/source/filter/excel/xiescher \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,scfilt,\
-	sc/source/filter/excel/xiescher \
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	sc/source/filter/excel/xiescher, $(gb_COMPILERNOOPTFLAGS) \
 ))
 endif
 

@@ -94,12 +94,11 @@ endif
 $(eval $(call gb_Library_add_exception_objects,sts,\
 	automation/source/server/XMLParser \
 	automation/source/server/server \
-))
-
-$(eval $(call gb_Library_add_cxxobjects,sts,\
 	automation/source/server/statemnt \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	automation/source/server/statement, $(gb_COMPILERNOOPTFLAGS) \
+))
 
 # vim: set noet sw=4 ts=4:

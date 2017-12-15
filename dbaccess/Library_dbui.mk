@@ -269,12 +269,22 @@ $(eval $(call gb_Library_add_exception_objects,dbui,\
 	dbaccess/source/ui/uno/UserSettingsDlg \
 	dbaccess/source/ui/uno/admindlg \
 	dbaccess/source/ui/uno/composerdialogs \
+	dbaccess/source/ui/uno/copytablewizard \
 	dbaccess/source/ui/uno/dbinteraction \
 	dbaccess/source/ui/uno/textconnectionsettings_uno \
 	dbaccess/source/ui/uno/unoDirectSql \
 	dbaccess/source/ui/uno/unoadmin \
 	dbaccess/source/ui/uno/unosqlmessage \
 ))
+
+# the following source file can't be compiled with optimization by some compilers (crash or endless loop):
+# Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
+# the latter is currently not supported by gbuild and needs a fix here later
+ifneq ($(COM),$(filter-out GCC,$(COM)))
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	dbaccess/source/ui/uno/copytablewizard, $(gb_COMPILERNOOPTFLAGS) \
+))
+endif
 
 $(eval $(call gb_Library_add_noexception_objects,dbui, \
 	dbaccess/source/shared/dbu_reghelper \
@@ -298,19 +308,5 @@ $(eval $(call gb_Library_add_noexception_objects,dbui, \
 	dbaccess/source/ui/querydesign/QTableWindowData \
 	dbaccess/source/ui/querydesign/TableFieldInfo \
 ))
-
-# the following source file can't be compiled with optimization by some compilers (crash or endless loop):
-# Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
-# the latter is currently not supported by gbuild and needs a fix here later
-ifeq ($(COM),$(filter-out GCC,$(COM)))
-$(eval $(call gb_Library_add_exception_objects,dbui,\
-    dbaccess/source/ui/uno/copytablewizard \
-))
-else
-$(eval $(call gb_Library_add_cxxobjects,dbui,\
-    dbaccess/source/ui/uno/copytablewizard \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
