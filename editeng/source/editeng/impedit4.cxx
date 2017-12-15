@@ -88,13 +88,13 @@ EditPaM ImpEditEngine::Read(SvStream& rInput, const OUString& rBaseURL, EETextFo
     bool _bUpdate = GetUpdateMode();
     SetUpdateMode( false );
     EditPaM aPaM;
-    if ( eFormat == EE_FORMAT_TEXT )
+    if ( eFormat == EETextFormat::Text )
         aPaM = ReadText( rInput, rSel );
-    else if ( eFormat == EE_FORMAT_RTF )
+    else if ( eFormat == EETextFormat::Rtf )
         aPaM = ReadRTF( rInput, rSel );
-    else if ( eFormat == EE_FORMAT_XML )
+    else if ( eFormat == EETextFormat::Xml )
         aPaM = ReadXML( rInput, rSel );
-    else if ( eFormat == EE_FORMAT_HTML )
+    else if ( eFormat == EETextFormat::Html )
         aPaM = ReadHTML( rInput, rBaseURL, rSel, pHTTPHeaderAttrs );
     else
     {
@@ -189,13 +189,13 @@ void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSel
 
     if ( !rOutput.GetError() )
     {
-        if ( eFormat == EE_FORMAT_TEXT )
+        if ( eFormat == EETextFormat::Text )
             WriteText( rOutput, rSel );
-        else if ( eFormat == EE_FORMAT_RTF )
+        else if ( eFormat == EETextFormat::Rtf )
             WriteRTF( rOutput, rSel );
-        else if ( eFormat == EE_FORMAT_XML )
+        else if ( eFormat == EETextFormat::Xml )
             WriteXML( rOutput, rSel );
-        else if ( eFormat == EE_FORMAT_HTML )
+        else if ( eFormat == EETextFormat::Html )
             ;
         else
         {

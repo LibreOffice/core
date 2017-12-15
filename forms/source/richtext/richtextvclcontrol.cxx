@@ -229,10 +229,10 @@ namespace frm
                         EETextFormat    eFormat;
                     } aExportFormats[] =
                     {
-                        { "OASIS OpenDocument (*.xml)", "*.xml", EE_FORMAT_XML },
-                        { "HyperText Markup Language (*.html)", "*.html", EE_FORMAT_HTML },
-                        { "Rich Text format (*.rtf)", "*.rtf", EE_FORMAT_RTF },
-                        { "Text (*.txt)", "*.txt", EE_FORMAT_TEXT }
+                        { "OASIS OpenDocument (*.xml)", "*.xml", EETextFormat::Xml },
+                        { "HyperText Markup Language (*.html)", "*.html", EETextFormat::Html },
+                        { "Rich Text format (*.rtf)", "*.rtf", EETextFormat::Rtf },
+                        { "Text (*.txt)", "*.txt", EETextFormat::Text }
                     };
 
                     ::sfx2::FileDialogHelper aFP( bLoad ? css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE : css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, this );
@@ -252,7 +252,7 @@ namespace frm
                         );
                         if ( pStream )
                         {
-                            EETextFormat eFormat = EE_FORMAT_XML;
+                            EETextFormat eFormat = EETextFormat::Xml;
                             OUString sFilter = aFP.GetCurrentFilter();
                             for (auto & aExportFormat : aExportFormats)
                             {

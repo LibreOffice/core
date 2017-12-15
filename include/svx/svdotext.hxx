@@ -49,6 +49,7 @@ class EditStatus;
 class TextChain;
 class TextChainFlow;
 enum class EEAnchorMode;
+enum class EETextFormat;
 
 namespace sdr { namespace properties {
     class TextProperties;
@@ -377,8 +378,8 @@ public:
     void SetDisableAutoWidthOnDragging(bool bOn) { bDisableAutoWidthOnDragging=bOn; }
     void NbcSetText(const OUString& rStr);
     void SetText(const OUString& rStr);
-    void NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
-    void SetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
+    void NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat);
+    void SetText(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat);
 
     // FitToSize and Fontwork are not taken into account in GetTextSize()!
     virtual const Size& GetTextSize() const;

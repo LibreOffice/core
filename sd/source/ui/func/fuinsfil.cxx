@@ -426,12 +426,12 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     if( nRet == RET_OK )
     {
         // selected file format: text, RTF or HTML (default is text)
-        sal_uInt16 nFormat = EE_FORMAT_TEXT;
+        EETextFormat nFormat = EETextFormat::Text;
 
         if( aFilterName.indexOf( "Rich") != -1 )
-            nFormat = EE_FORMAT_RTF;
+            nFormat = EETextFormat::Rtf;
         else if( aFilterName.indexOf( "HTML" ) != -1 )
-            nFormat = EE_FORMAT_HTML;
+            nFormat = EETextFormat::Html;
 
         /* create our own outline since:
            - it is possible that the document outliner is actually used in the
@@ -547,12 +547,12 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
     // selected file format: text, RTF or HTML (default is text)
-    sal_uInt16 nFormat = EE_FORMAT_TEXT;
+    EETextFormat nFormat = EETextFormat::Text;
 
     if( aFilterName.indexOf( "Rich") != -1 )
-        nFormat = EE_FORMAT_RTF;
+        nFormat = EETextFormat::Rtf;
     else if( aFilterName.indexOf( "HTML" ) != -1 )
-        nFormat = EE_FORMAT_HTML;
+        nFormat = EETextFormat::Html;
 
     ::Outliner&    rDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
 

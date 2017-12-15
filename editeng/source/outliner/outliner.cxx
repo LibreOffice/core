@@ -1081,7 +1081,7 @@ void Outliner::InvalidateBullet(sal_Int32 nPara)
     }
 }
 
-ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
 
     bool bOldUndo = pEditEngine->IsUndoEnabled();
@@ -1093,7 +1093,7 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16 e
     Clear();
 
     ImplBlockInsertionCallbacks( true );
-    ErrCode nRet = pEditEngine->Read( rInput, rBaseURL, (EETextFormat)eFormat, pHTTPHeaderAttrs );
+    ErrCode nRet = pEditEngine->Read( rInput, rBaseURL, eFormat, pHTTPHeaderAttrs );
 
     bFirstParaIsEmpty = false;
 
@@ -1103,20 +1103,9 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16 e
     {
         Paragraph* pPara = new Paragraph( 0 );
         pParaList->Append(pPara);
-
-        if ( eFormat == EE_FORMAT_BIN )
-        {
-            const SfxItemSet& rAttrs = pEditEngine->GetParaAttribs( n );
-            const SfxInt16Item& rLevel = rAttrs.Get( EE_PARA_OUTLLEVEL );
-            sal_Int16 nDepth = rLevel.GetValue();
-            ImplInitDepth( n, nDepth, false );
-        }
     }
 
-    if ( eFormat != EE_FORMAT_BIN )
-    {
-        ImpFilterIndents( 0, nParas-1 );
-    }
+    ImpFilterIndents( 0, nParas-1 );
 
     ImplBlockInsertionCallbacks( false );
     pEditEngine->SetUpdateMode( bUpdate );

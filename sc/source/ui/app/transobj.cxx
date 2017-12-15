@@ -437,7 +437,7 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
                 ScTabEditEngine* pEngine = static_cast<ScTabEditEngine*>(pUserObject);
                 if ( nUserObjectId == SCTRANS_TYPE_EDIT_RTF )
                 {
-                    pEngine->Write( *rxOStm, EE_FORMAT_RTF );
+                    pEngine->Write( *rxOStm, EETextFormat::Rtf );
                     bRet = ( rxOStm->GetError() == ERRCODE_NONE );
                 }
                 else
@@ -464,7 +464,7 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
                 ScTabEditEngine* pEngine = static_cast<ScTabEditEngine*>(pUserObject);
                 if ( nUserObjectId == SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT )
                 {
-                    pEngine->Write( *rxOStm, EE_FORMAT_XML );
+                    pEngine->Write( *rxOStm, EETextFormat::Xml );
                     bRet = ( rxOStm->GetError() == ERRCODE_NONE );
                 }
             }

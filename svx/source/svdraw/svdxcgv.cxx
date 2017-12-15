@@ -165,7 +165,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     return true;
 }
 
-bool SdrExchangeView::Paste(SvStream& rInput, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
+bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);

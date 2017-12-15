@@ -270,7 +270,7 @@ ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
         }
     }
 
-    ErrCode nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_HTML, pAttributes );
+    ErrCode nErr = pEdit->Read( rStream, rBaseURL, EETextFormat::Html, pAttributes );
 
     pEdit->SetHtmlImportHdl( aOldLink );
     // Create column width
@@ -2820,7 +2820,7 @@ ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
 
     Link<HtmlImportInfo&,void> aOldLink = pEdit->GetHtmlImportHdl();
     pEdit->SetHtmlImportHdl( LINK( this, ScHTMLQueryParser, HTMLImportHdl ) );
-    ErrCode nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
+    ErrCode nErr = pEdit->Read( rStrm, rBaseURL, EETextFormat::Html, pAttributes );
     pEdit->SetHtmlImportHdl( aOldLink );
 
     mxGlobTable->Recalc();

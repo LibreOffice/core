@@ -886,7 +886,7 @@ public:
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
     sal_uLong           GetLineHeight( sal_Int32 nParagraph );
 
-    ErrCode             Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
+    ErrCode             Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
     ::svl::IUndoManager& GetUndoManager();
     ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);

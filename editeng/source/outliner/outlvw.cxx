@@ -1388,22 +1388,11 @@ void OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueItera
 
     for ( sal_Int32 n = nChangesStart; n <= nChangesEnd; n++ )
     {
-        if ( eFormat == EE_FORMAT_BIN )
-        {
-            const SfxItemSet& rAttrs = pOwner->GetParaAttribs( n );
-            const SfxInt16Item& rLevel = rAttrs.Get( EE_PARA_OUTLLEVEL );
-            sal_uInt16 nDepth = rLevel.GetValue();
-            pOwner->ImplInitDepth( n, nDepth, false );
-        }
-
         if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
             pOwner->ImplSetLevelDependentStyleSheet( n );
     }
 
-    if ( eFormat != EE_FORMAT_BIN )
-    {
-        pOwner->ImpFilterIndents( nChangesStart, nChangesEnd );
-    }
+    pOwner->ImpFilterIndents( nChangesStart, nChangesEnd );
 }
 
 void OutlinerView::SetBackgroundColor( const Color& rColor )
