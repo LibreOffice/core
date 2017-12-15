@@ -58,6 +58,13 @@ namespace chart2 { namespace data {
     struct HighlightedRange;
 }}}}}
 
+enum HeaderType
+{
+    COLUMN_HEADER,
+    ROW_HEADER,
+    BOTH_HEADERS
+};
+
 //      Help - Window
 
 class ScCornerButton : public vcl::Window
@@ -496,7 +503,7 @@ public:
     long            GetGridWidth( ScHSplitPos eWhich );
     long            GetGridHeight( ScVSplitPos eWhich );
 
-    void            UpdateScrollBars();
+    void            UpdateScrollBars( HeaderType eHeaderType = BOTH_HEADERS );
     void            SetNewVisArea();
 
     void            InvalidateAttribs();

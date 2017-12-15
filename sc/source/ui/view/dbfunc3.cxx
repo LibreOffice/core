@@ -195,8 +195,7 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
 
     if (bOk)
     {
-        UpdateScrollBars();
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(BOTH_HEADERS, GetViewData().GetTabNo());
+        UpdateScrollBars(BOTH_HEADERS);
     }
 }
 
@@ -229,7 +228,7 @@ void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord )
     bool bOk = aFunc.SelectLevel( nTab, bColumns, nLevel, bRecord, true/*bPaint*/ );
 
     if (bOk)
-        UpdateScrollBars();
+        UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
 }
 
 // show individual outline groups
@@ -257,7 +256,7 @@ void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
     bool bOk = aFunc.ShowOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
 
     if ( bOk && bPaint )
-        UpdateScrollBars();
+        UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
 }
 
 // hide individual outline groups
@@ -271,7 +270,7 @@ void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
     bool bOk = aFunc.HideOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
 
     if ( bOk && bPaint )
-        UpdateScrollBars();
+        UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
 }
 
 // menu status: show/hide marked range
@@ -2263,7 +2262,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         ErrorMessage(STR_MSSG_REPEATDB_0);
 }
 
-void ScDBFunc::OnLOKShowHideOutline(bool bColumns, SCCOLROW nStart)
+void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -2288,8 +2287,6 @@ void ScDBFunc::OnLOKShowHideOutline(bool bColumns, SCCOLROW nStart)
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
-
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, nCurrentTabIndex);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
