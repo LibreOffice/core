@@ -25,7 +25,7 @@ namespace wrapper
         Instance( int argc, const char * const argv[] );
         Instance( const Instance& other );
         Instance& operator=( const Instance& other );
-        virtual ~Instance();
+        ~Instance();
 
         operator libvlc_instance_t*()
         {

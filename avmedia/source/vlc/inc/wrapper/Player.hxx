@@ -34,7 +34,7 @@ namespace wrapper
         explicit Player( Media& media );
         Player( const Player& other );
         Player& operator=( const Player& other );
-        virtual ~Player();
+        ~Player();
 
         bool play();
         void pause();
