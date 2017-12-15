@@ -2362,7 +2362,8 @@ public:
 
     std::pair<bool,bool> compareByValue(
         const ScRefCellValue& rCell, SCCOL nCol, SCROW nRow,
-        const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem)
+        const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+        const ScInterpreterContext* pContext = nullptr)
     {
         bool bOk = false;
         bool bTestEqual = false;
@@ -2393,8 +2394,10 @@ public:
          * stripped here. */
         if (rItem.meType == ScQueryEntry::ByDate)
         {
-            sal_uInt32 nNumFmt = mrTab.GetNumberFormat(nCol, nRow);
-            const SvNumberformat* pEntry = mrDoc.GetFormatTable()->GetEntry(nNumFmt);
+            sal_uInt32 nNumFmt = pContext ? mrTab.GetNumberFormat(*pContext, ScAddress(nCol, nRow, mrTab.GetTab())) :
+                mrTab.GetNumberFormat(nCol, nRow);
+            SvNumberFormatter* pFormatter = pContext ? pContext->mpFormatter : mrDoc.GetFormatTable();
+            const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
             if (pEntry)
             {
                 short nNumFmtType = pEntry->GetType();
@@ -2447,7 +2450,8 @@ public:
     }
 
     std::pair<bool,bool> compareByString(
-        ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem)
+        ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+        const ScInterpreterContext* pContext = nullptr)
     {
         bool bOk = false;
         bool bTestEqual = false;
@@ -2468,9 +2472,11 @@ public:
                 aCellStr = *rCell.mpString;
             else
             {
-                sal_uInt32 nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
+                sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
+                    mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 OUString aStr;
-                ScCellFormat::GetInputString(rCell, nFormat, aStr, *mrDoc.GetFormatTable(), &mrDoc);
+                SvNumberFormatter* pFormatter = pContext ? pContext->mpFormatter : mrDoc.GetFormatTable();
+                ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrDoc);
                 aCellStr = mrStrPool.intern(aStr);
             }
         }
@@ -2678,7 +2684,8 @@ public:
 }
 
 bool ScTable::ValidQuery(
-    SCROW nRow, const ScQueryParam& rParam, const ScRefCellValue* pCell, bool* pbTestEqualCondition)
+    SCROW nRow, const ScQueryParam& rParam, const ScRefCellValue* pCell, bool* pbTestEqualCondition,
+    const ScInterpreterContext* pContext)
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
@@ -2726,14 +2733,14 @@ bool ScTable::ValidQuery(
                 if (aEval.isQueryByValue(*itr, nCol, nRow, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
-                        aEval.compareByValue(aCell, nCol, nRow, rEntry, *itr);
+                        aEval.compareByValue(aCell, nCol, nRow, rEntry, *itr, pContext);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
                 else if (aEval.isQueryByString(rEntry, *itr, nCol, nRow, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
-                        aEval.compareByString(aCell, nRow, rEntry, *itr);
+                        aEval.compareByString(aCell, nRow, rEntry, *itr, pContext);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
