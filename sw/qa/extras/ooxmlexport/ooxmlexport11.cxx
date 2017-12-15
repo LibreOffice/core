@@ -106,10 +106,10 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-sectio
     if(!pXmlDoc)
         return;
 
-    // Test document has only one paragraph. After splitting, it should contain
-    // two of them.
+    // Test document has only two paragraphs. After splitting, it should contain
+    // three of them.
     assertXPath(pXmlDoc, "//w:sectPr", 2);
-    assertXPath(pXmlDoc, "//w:p", 2);
+    assertXPath(pXmlDoc, "//w:p", 3);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
