@@ -243,41 +243,31 @@ void NetChart::impl_createSeriesShapes()
     //the polygon shapes for each series need to be created before
 
     //iterate through all series again to create the series shapes
-    std::vector< std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
-    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
+    for( auto const& rZSlot : m_aZSlots )
     {
-        std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
-        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+        for( auto const& rXSlot : rZSlot )
         {
-            std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-
-            std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-            const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-
             std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
             drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
 
             //iterate through all series
-            for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+            for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
             {
-                sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
+                sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
                 PlotterBase::m_pPosHelper = pPosHelper;
 
-                pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
+                pSeriesPoly = &pSeries->m_aPolyPolygonShape3D;
                 if( m_bArea )
                 {
-                    if( !impl_createArea( *aSeriesIter, pSeriesPoly, aPreviousSeriesPolyMap[nAttachedAxisIndex], pPosHelper ) )
+                    if( !impl_createArea( pSeries, pSeriesPoly, aPreviousSeriesPolyMap[nAttachedAxisIndex], pPosHelper ) )
                         continue;
                 }
                 if( m_bLine )
                 {
-                    if( !impl_createLine( *aSeriesIter, pSeriesPoly, pPosHelper ) )
+                    if( !impl_createLine( pSeries, pSeriesPoly, pPosHelper ) )
                         continue;
                 }
                 aPreviousSeriesPolyMap[nAttachedAxisIndex] = pSeriesPoly;
@@ -374,11 +364,8 @@ void NetChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
-        std::vector< std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
-        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-
         std::map< sal_Int32, double > aLogicYSumMap;//one for each different nAttachedAxisIndex
-        for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+        for( auto const& rZSlot : m_aZSlots )
         {
             std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
             const std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();

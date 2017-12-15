@@ -196,31 +196,29 @@ void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue 
                                      , OUString & rRangeRepresentation, uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories )
 {
-    const beans::PropertyValue* pArguments = rArguments.getConstArray();
-    for(sal_Int32 i=0; i<rArguments.getLength(); ++i, ++pArguments)
+    for(const beans::PropertyValue& rProperty : rArguments)
     {
-        const beans::PropertyValue& aProperty = *pArguments;
-        if ( aProperty.Name == "DataRowSource" )
+        if ( rProperty.Name == "DataRowSource" )
         {
             css::chart::ChartDataRowSource eRowSource;
-            if( aProperty.Value >>= eRowSource )
+            if( rProperty.Value >>= eRowSource )
                 bUseColumns = (eRowSource==css::chart::ChartDataRowSource_COLUMNS);
         }
-        else if ( aProperty.Name == "FirstCellAsLabel" )
+        else if ( rProperty.Name == "FirstCellAsLabel" )
         {
-            aProperty.Value >>= bFirstCellAsLabel;
+            rProperty.Value >>= bFirstCellAsLabel;
         }
-        else if ( aProperty.Name == "HasCategories" )
+        else if ( rProperty.Name == "HasCategories" )
         {
-            aProperty.Value >>= bHasCategories;
+            rProperty.Value >>= bHasCategories;
         }
-        else if ( aProperty.Name == "CellRangeRepresentation" )
+        else if ( rProperty.Name == "CellRangeRepresentation" )
         {
-            aProperty.Value >>= rRangeRepresentation;
+            rProperty.Value >>= rRangeRepresentation;
         }
-        else if ( aProperty.Name == "SequenceMapping" )
+        else if ( rProperty.Name == "SequenceMapping" )
         {
-            aProperty.Value >>= rSequenceMapping;
+            rProperty.Value >>= rSequenceMapping;
         }
     }
 }
@@ -398,26 +396,24 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
     {
         const uno::Sequence< beans::PropertyValue > aArguments(
             xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartDocument )));
-        const beans::PropertyValue* pArguments = aArguments.getConstArray();
-        for(sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)
+        for(const beans::PropertyValue& rProperty : aArguments)
         {
-            const beans::PropertyValue& aProperty = *pArguments;
-            if ( aProperty.Name == "DataRowSource" )
+            if ( rProperty.Name == "DataRowSource" )
             {
                 bHasDataRowSource =
-                    (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(
+                    (rProperty.Value.hasValue() && rProperty.Value.isExtractableTo(
                         cppu::UnoType<css::chart::ChartDataRowSource>::get()));
             }
-            else if ( aProperty.Name == "FirstCellAsLabel" )
+            else if ( rProperty.Name == "FirstCellAsLabel" )
             {
                 bHasFirstCellAsLabel =
-                    (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(cppu::UnoType<bool>::get()));
+                    (rProperty.Value.hasValue() && rProperty.Value.isExtractableTo(cppu::UnoType<bool>::get()));
             }
-            else if ( aProperty.Name == "CellRangeRepresentation" )
+            else if ( rProperty.Name == "CellRangeRepresentation" )
             {
                 OUString aRange;
                 bHasCellRangeRepresentation =
-                    (aProperty.Value.hasValue() && (aProperty.Value >>= aRange) && !aRange.isEmpty());
+                    (rProperty.Value.hasValue() && (rProperty.Value >>= aRange) && !aRange.isEmpty());
             }
         }
     }
