@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9249f1b9",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-12-15T13:02:51Z",
+      "side": 1,
+      "message": "Not sure, if I should return true or false here…\n\nI\u0027m going with false, so we don\u0027t busy loop until some other thread has finished processing his batch of user events.",
+      "revId": "50e6de3c9dc2ea6bba34ae26b21d80e225376446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
