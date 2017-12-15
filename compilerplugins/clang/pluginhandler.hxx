@@ -80,11 +80,7 @@ class LibreOfficeAction
     : public PluginASTAction
 {
 public:
-#if CLANG_VERSION >= 30600
     virtual std::unique_ptr<ASTConsumer> CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
-#else
-    virtual ASTConsumer* CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
-#endif
 
     virtual bool ParseArgs( const CompilerInstance& CI, const std::vector< std::string >& args );
 private:

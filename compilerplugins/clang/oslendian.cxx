@@ -8,8 +8,8 @@
  */
 
 #include <cassert>
+#include <memory>
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -17,7 +17,7 @@ namespace {
 class OslEndian: public loplugin::Plugin, public PPCallbacks {
 public:
     explicit OslEndian(loplugin::InstantiationData const & data): Plugin(data) {
-        compat::addPPCallbacks(compiler.getPreprocessor(), this);
+        compiler.getPreprocessor().addPPCallbacks(std::unique_ptr<PPCallbacks>(this));
     }
 
     enum { isPPCallback = true };
@@ -59,7 +59,7 @@ private:
     }
 
     void MacroUndefined(
-        Token const & MacroNameTok, compat::MacroDefinitionParam
+        Token const & MacroNameTok, MacroDefinition const &
 #if CLANG_VERSION >= 50000
         , MacroDirective const *
 #endif
@@ -75,7 +75,7 @@ private:
     }
 
     void Defined(
-        Token const & MacroNameTok, compat::MacroDefinitionParam, SourceRange)
+        Token const & MacroNameTok, MacroDefinition const &, SourceRange)
         override
     {
         check(MacroNameTok);
@@ -83,14 +83,14 @@ private:
 
     void Ifdef(
         SourceLocation, Token const & MacroNameTok,
-        compat::MacroDefinitionParam) override
+        MacroDefinition const &) override
     {
         check(MacroNameTok);
     }
 
     void Ifndef(
         SourceLocation, Token const & MacroNameTok,
-        compat::MacroDefinitionParam) override
+        MacroDefinition const &) override
     {
         check(MacroNameTok);
     }

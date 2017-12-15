@@ -11,7 +11,6 @@
 #include <iostream>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "check.hxx"
 #include "clang/AST/CXXInheritance.h"
 
@@ -34,13 +33,7 @@ public:
     bool VisitCXXRecordDecl( const CXXRecordDecl* );
 };
 
-bool BaseCheckNotSfxPoolItemSubclass(
-    const CXXRecordDecl *BaseDefinition
-#if CLANG_VERSION < 30800
-    , void *
-#endif
-    )
-{
+bool BaseCheckNotSfxPoolItemSubclass(const CXXRecordDecl *BaseDefinition) {
     if (BaseDefinition && loplugin::TypeCheck(BaseDefinition).Class("SfxPoolItem").GlobalNamespace()) {
         return false;
     }
@@ -58,20 +51,14 @@ bool isDerivedFromSfxPoolItem(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotSfxPoolItemSubclass, nullptr, true)) {
+        !decl->forallBases(BaseCheckNotSfxPoolItemSubclass, true)) {
         return true;
     }
     return false;
 }
 
 
-bool BaseCheckNotSwMsgPoolItemSubclass(
-    const CXXRecordDecl *BaseDefinition
-#if CLANG_VERSION < 30800
-    , void *
-#endif
-    )
-{
+bool BaseCheckNotSwMsgPoolItemSubclass(const CXXRecordDecl *BaseDefinition) {
     if (BaseDefinition && loplugin::TypeCheck(BaseDefinition).Class("SwMsgPoolItem")) {
         return false;
     }
@@ -89,7 +76,7 @@ bool isDerivedFromSwMsgPoolItem(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotSwMsgPoolItemSubclass, nullptr, true)) {
+        !decl->forallBases(BaseCheckNotSwMsgPoolItemSubclass, true)) {
         return true;
     }
     return false;

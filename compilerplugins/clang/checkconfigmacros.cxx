@@ -9,9 +9,9 @@
  *
  */
 
+#include <memory>
 #include <set>
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 #include <clang/Lex/Preprocessor.h>
@@ -37,14 +37,14 @@ class CheckConfigMacros
         explicit CheckConfigMacros( const InstantiationData& data );
         virtual void run() override;
         virtual void MacroDefined( const Token& macroToken, const MacroDirective* info ) override;
-        virtual void MacroUndefined( const Token& macroToken, compat::MacroDefinitionParam
+        virtual void MacroUndefined( const Token& macroToken, MacroDefinition const &
 #if CLANG_VERSION >= 50000
             , MacroDirective const *
 #endif
             ) override;
-        virtual void Ifdef( SourceLocation location, const Token& macroToken, compat::MacroDefinitionParam ) override;
-        virtual void Ifndef( SourceLocation location, const Token& macroToken, compat::MacroDefinitionParam ) override;
-        virtual void Defined( const Token& macroToken, compat::MacroDefinitionParam, SourceRange Range ) override;
+        virtual void Ifdef( SourceLocation location, const Token& macroToken, MacroDefinition const & ) override;
+        virtual void Ifndef( SourceLocation location, const Token& macroToken, MacroDefinition const & ) override;
+        virtual void Defined( const Token& macroToken, MacroDefinition const &, SourceRange Range ) override;
         enum { isPPCallback = true };
     private:
         void checkMacro( const Token& macroToken, SourceLocation location );
@@ -54,7 +54,7 @@ class CheckConfigMacros
 CheckConfigMacros::CheckConfigMacros( const InstantiationData& data )
     : Plugin( data )
     {
-    compat::addPPCallbacks(compiler.getPreprocessor(), this);
+    compiler.getPreprocessor().addPPCallbacks(std::unique_ptr<PPCallbacks>(this));
     }
 
 void CheckConfigMacros::run()
@@ -75,7 +75,7 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
         }
     }
 
-void CheckConfigMacros::MacroUndefined( const Token& macroToken, compat::MacroDefinitionParam
+void CheckConfigMacros::MacroUndefined( const Token& macroToken, MacroDefinition const &
 #if CLANG_VERSION >= 50000
                                         , MacroDirective const *
 #endif
@@ -84,17 +84,17 @@ void CheckConfigMacros::MacroUndefined( const Token& macroToken, compat::MacroDe
     configMacros.erase( macroToken.getIdentifierInfo()->getName());
     }
 
-void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, compat::MacroDefinitionParam )
+void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, MacroDefinition const & )
     {
     checkMacro( macroToken, location );
     }
 
-void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, compat::MacroDefinitionParam )
+void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, MacroDefinition const & )
     {
     checkMacro( macroToken, location );
     }
 
-void CheckConfigMacros::Defined( const Token& macroToken, compat::MacroDefinitionParam , SourceRange )
+void CheckConfigMacros::Defined( const Token& macroToken, MacroDefinition const &, SourceRange )
     {
     checkMacro( macroToken, macroToken.getLocation());
     }

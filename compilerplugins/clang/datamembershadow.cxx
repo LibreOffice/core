@@ -100,8 +100,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
 
     fieldDecl = fieldDecl->getCanonicalDecl();
 
-#if CLANG_VERSION >= 30800
-
     auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath& Paths)
     {
         if (!cxxBaseSpecifier->getType().getTypePtr())
@@ -143,7 +141,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
 
     CXXBasePaths aPaths;
     parentCXXRecordDecl->lookupInBases(BaseMatchesCallback, aPaths);
-#endif
     return true;
 }
 

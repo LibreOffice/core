@@ -13,7 +13,6 @@
 #include <fstream>
 #include <set>
 #include "plugin.hxx"
-#include "compat.hxx"
 
 /**
 Look for fields that are only ever assigned a single constant value.
@@ -262,7 +261,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     if (parentFunction && parent && isa<ReturnStmt>(parent)) {
         const Stmt* parent2 = getParentStmt(parent);
         if (parent2 && isa<CompoundStmt>(parent2)) {
-            QualType qt = compat::getReturnType(*parentFunction).getDesugaredType(compiler.getASTContext());
+            QualType qt = parentFunction->getReturnType().getDesugaredType(compiler.getASTContext());
             if (!qt.isConstQualified() && qt->isReferenceType()) {
                 bPotentiallyAssignedTo = true;
             }
@@ -449,10 +448,10 @@ void SingleValFields::checkCallExpr(const Stmt* child, const CallExpr* callExpr,
         return;
     }
     for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
-        if (i >= compat::getNumParams(*proto)) // can happen in template code
+        if (i >= proto->getNumParams()) // can happen in template code
             break;
         if (callExpr->getArg(i) == child) {
-            QualType qt = compat::getParamType(*proto, i).getDesugaredType(compiler.getASTContext());
+            QualType qt = proto->getParamType(i).getDesugaredType(compiler.getASTContext());
             if (!qt.isConstQualified() && qt->isReferenceType()) {
                 assignValue = "?";
                 bPotentiallyAssignedTo = true;

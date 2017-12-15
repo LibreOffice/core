@@ -136,11 +136,8 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
-// workaround clang-3.5 issue
-#if CLANG_VERSION >= 30600
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
-#endif
 
     MyFuncInfo aInfo;
     switch (functionDecl->getAccess())
@@ -151,7 +148,7 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
     default: aInfo.access = "unknown"; break;
     }
     if (!isa<CXXConstructorDecl>(functionDecl)) {
-        aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+        aInfo.returnType = functionDecl->getReturnType().getCanonicalType().getAsString();
     } else {
         aInfo.returnType = "";
     }
@@ -262,7 +259,7 @@ gotfunc:
     }
 
     // Now do the checks necessary for the "unused return value" analysis
-    if (compat::getReturnType(*calleeFunctionDecl)->isVoidType()) {
+    if (calleeFunctionDecl->getReturnType()->isVoidType()) {
         return true;
     }
     if (!parent) {

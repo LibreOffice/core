@@ -9,8 +9,9 @@
 
 #include <cassert>
 
+#include <clang/AST/DeclCXX.h>
+
 #include "check.hxx"
-#include "compat.hxx"
 
 namespace loplugin {
 
@@ -153,14 +154,14 @@ ContextCheck DeclCheck::MemberFunction() const {
 TerminalCheck ContextCheck::GlobalNamespace() const {
     return TerminalCheck(
         context_ != nullptr
-        && ((compat::isLookupContext(*context_)
+        && ((context_->isLookupContext()
              ? context_ : context_->getLookupParent())
             ->isTranslationUnit()));
 }
 
 TerminalCheck ContextCheck::StdNamespace() const {
     return TerminalCheck(
-        context_ != nullptr && compat::isStdNamespace(*context_));
+        context_ != nullptr && context_->isStdNamespace());
 }
 
 ContextCheck ContextCheck::AnonymousNamespace() const {
@@ -171,13 +172,7 @@ ContextCheck ContextCheck::AnonymousNamespace() const {
 
 namespace {
 
-bool BaseCheckNotSomethingInterestingSubclass(
-    const clang::CXXRecordDecl *BaseDefinition
-#if CLANG_VERSION < 30800
-    , void *
-#endif
-    )
-{
+bool BaseCheckNotSomethingInterestingSubclass(const clang::CXXRecordDecl *BaseDefinition) {
     if (BaseDefinition) {
         auto tc = TypeCheck(BaseDefinition);
         if (tc.Class("Dialog").GlobalNamespace() || tc.Class("SfxPoolItem").GlobalNamespace()) {
@@ -201,7 +196,7 @@ bool isDerivedFromSomethingInteresting(const clang::CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotSomethingInterestingSubclass, nullptr, true)) {
+        !decl->forallBases(BaseCheckNotSomethingInterestingSubclass, true)) {
         return true;
     }
     return false;

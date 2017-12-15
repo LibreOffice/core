@@ -11,7 +11,6 @@
 #include <set>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find places where various things are passed by value.
@@ -222,7 +221,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         return;
     }
 
-    const QualType type = compat::getReturnType(*functionDecl).getDesugaredType(compiler.getASTContext());
+    const QualType type = functionDecl->getReturnType().getDesugaredType(compiler.getASTContext());
     if (type->isReferenceType() || type->isIntegralOrEnumerationType() || type->isPointerType()
         || type->isTemplateTypeParmType() || type->isDependentType() || type->isBuiltinType()
         || type->isScalarType())

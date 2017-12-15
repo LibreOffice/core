@@ -12,7 +12,6 @@
 #include <iostream>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "check.hxx"
 #include "clang/AST/CXXInheritance.h"
 
@@ -55,13 +54,7 @@ private:
 
 #define BASE_REF_COUNTED_CLASS "VclReferenceBase"
 
-bool BaseCheckNotWindowSubclass(
-    const CXXRecordDecl *BaseDefinition
-#if CLANG_VERSION < 30800
-    , void *
-#endif
-    )
-{
+bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition) {
     return !loplugin::DeclCheck(BaseDefinition).Class(BASE_REF_COUNTED_CLASS)
         .GlobalNamespace();
 }
@@ -80,7 +73,7 @@ bool isDerivedFromVclReferenceBase(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotWindowSubclass, nullptr, true)) {
+        !decl->forallBases(BaseCheckNotWindowSubclass, true)) {
         return true;
     }
     return false;

@@ -84,7 +84,7 @@ std::string niceName(const CXXMethodDecl* functionDecl)
 {
     std::string s =
            functionDecl->getParent()->getQualifiedNameAsString() + "::"
-           + compat::getReturnType(*functionDecl).getAsString() + "-"
+           + functionDecl->getReturnType().getAsString() + "-"
            + functionDecl->getNameAsString() + "(";
     for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         s += pParmVarDecl->getType().getAsString();
