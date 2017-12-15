@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 
 #include <assert.h>
 
@@ -69,6 +70,7 @@ protected:
     std::deque< SalUserEvent > m_aProcessingUserEvents;
     bool                       m_bAllUserEventProcessedSignaled;
     SalFrameSet                m_aFrames;
+    oslThreadIdentifier        m_aProcessingThread;
 
     virtual void ProcessEvent( SalUserEvent aEvent ) = 0;
     virtual void TriggerUserEventProcessing() = 0;
