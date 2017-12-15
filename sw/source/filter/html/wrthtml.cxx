@@ -183,6 +183,8 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     {
         mbEmbedImages = true;
     }
+    else if (sFilterOptions == "XHTML")
+        mbXHTML = true;
 }
 
 sal_uLong SwHTMLWriter::WriteStream()
@@ -934,7 +936,10 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     OStringBuffer sOut;
     if (!mbSkipHeaderFooter)
     {
-        sOut.append(OOO_STRING_SVTOOLS_HTML_doctype " " OOO_STRING_SVTOOLS_HTML_doctype40);
+        if (mbXHTML)
+            sOut.append(OOO_STRING_SVTOOLS_HTML_doctype " " OOO_STRING_SVTOOLS_XHTML_doctype11);
+        else
+            sOut.append(OOO_STRING_SVTOOLS_HTML_doctype " " OOO_STRING_SVTOOLS_HTML_doctype40);
         HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
 
         // build prelude
@@ -1280,8 +1285,12 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
     if( LANGUAGE_DONTKNOW != nLang )
     {
         OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_lang)
-            .append("=\"");
+        sOut.append(' ');
+        if (mbXHTML)
+            sOut.append(OOO_STRING_SVTOOLS_XHTML_O_lang);
+        else
+            sOut.append(OOO_STRING_SVTOOLS_HTML_O_lang);
+        sOut.append("=\"");
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
                                   m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '"' );
