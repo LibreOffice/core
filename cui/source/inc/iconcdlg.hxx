@@ -37,6 +37,7 @@ class IconChoiceDialog;
 class IconChoicePage;
 class SfxItemPool;
 class SfxItemSet;
+enum class HyperLinkPageType;
 
 // Create-Function
 typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pAttrSet);
@@ -44,13 +45,13 @@ typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, IconChoiceDia
 /// Data-structure for pages in dialog
 struct IconChoicePageData
 {
-    sal_uInt16 nId;
+    HyperLinkPageType nId;
     CreatePage fnCreatePage;    ///< pointer to the factory
     VclPtr<IconChoicePage> pPage;      ///< the TabPage itself
     bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
-    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage )
+    IconChoicePageData( HyperLinkPageType Id, CreatePage fnPage )
         : nId           ( Id ),
           fnCreatePage  ( fnPage ),
           pPage         ( nullptr ),
@@ -102,7 +103,7 @@ private:
 
     VclPtr<SvtIconChoiceCtrl>       m_pIconCtrl;
 
-    sal_uInt16                  mnCurrentPageId;
+    HyperLinkPageType               mnCurrentPageId;
 
     // Buttons
     VclPtr<OKButton>                m_pOKBtn;
@@ -123,18 +124,18 @@ private:
     DECL_LINK( ResetHdl, Button*, void) ;
     DECL_LINK( CancelHdl, Button*, void );
 
-    IconChoicePageData*     GetPageData ( sal_uInt16 nId );
+    IconChoicePageData*     GetPageData ( HyperLinkPageType nId );
     void                    Start_Impl();
     bool                    OK_Impl();
 
-    void                    FocusOnIcon ( sal_uInt16 nId );
+    void                    FocusOnIcon ( HyperLinkPageType nId );
 
 protected:
     static void             ShowPageImpl ( IconChoicePageData const * pData );
     static void             HidePageImpl ( IconChoicePageData const * pData );
 
-    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
-    IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
+    virtual void            PageCreated( HyperLinkPageType nId, IconChoicePage& rPage );
+    IconChoicePage*         GetTabPage( HyperLinkPageType nPageId )
                                 { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : nullptr); }
 
     void                    ActivatePageImpl ();
@@ -152,12 +153,12 @@ public:
 
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
-        sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
+        HyperLinkPageType nId, const OUString& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */ );
 
-    void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
-    sal_uInt16          GetCurPageId() const       { return mnCurrentPageId; }
-    void                ShowPage( sal_uInt16 nId );
+    void                SetCurPageId( HyperLinkPageType nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
+    HyperLinkPageType   GetCurPageId() const       { return mnCurrentPageId; }
+    void                ShowPage( HyperLinkPageType nId );
 
     /// gives via map converted local slots if applicable
     const sal_uInt16*   GetInputRanges( const SfxItemPool& );

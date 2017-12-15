@@ -33,12 +33,13 @@
 #include "iconcdlg.hxx"
 
 // hyperlink dialog
-enum HyperLinkPageType
+enum class HyperLinkPageType
 {
-    INTERNET,
-    MAIL,
-    DOCUMENT,
-    NEWDOCUMENT
+    Internet,
+    Mail,
+    Document,
+    NewDocument,
+    NONE = USHRT_MAX
 };
 
 /*************************************************************************
@@ -94,7 +95,7 @@ public:
     virtual ~SvxHpLinkDlg () override;
     virtual void dispose() override;
 
-    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) override;
+    virtual void            PageCreated( HyperLinkPageType nId, IconChoicePage& rPage ) override;
 
     void                    SetPage( SvxHyperlinkItem const * pItem );
     void                    SetReadOnlyMode( bool bReadOnly );

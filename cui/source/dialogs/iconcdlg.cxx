@@ -22,6 +22,7 @@
 #include <dialmgr.hxx>
 
 #include <iconcdlg.hxx>
+#include <cuihyperdlg.hxx>
 
 #include <helpids.h>
 #include <unotools/viewoptions.hxx>
@@ -148,7 +149,7 @@ VCL_BUILDER_FACTORY_ARGS(SvtIconChoiceCtrl,
 IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
                                      const OUString& rUIXMLDescription )
 :   SfxModalDialog         ( pParent, rID, rUIXMLDescription ),
-    mnCurrentPageId ( USHRT_MAX ),
+    mnCurrentPageId ( HyperLinkPageType::NONE ),
 
     pSet            ( nullptr ),
     pOutSet         ( nullptr ),
@@ -255,7 +256,7 @@ void IconChoiceDialog::dispose()
 \**********************************************************************/
 
 SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
-    sal_uInt16          nId,
+    HyperLinkPageType nId,
     const OUString&   rIconText,
     const Image&    rChoiceIcon,
     CreatePage      pCreateFunc /* != 0 */
@@ -264,9 +265,8 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc );
     maPageList.push_back( pData );
 
-    sal_uInt16 *pId = new sal_uInt16 ( nId );
     SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->InsertEntry( rIconText, rChoiceIcon );
-    pEntry->SetUserData ( static_cast<void*>(pId) );
+    pEntry->SetUserData ( reinterpret_cast<void*>(nId) );
     return pEntry;
 }
 
@@ -296,9 +296,9 @@ void IconChoiceDialog::HidePageImpl ( IconChoicePageData const * pData )
         pData->pPage->Hide();
 }
 
-void IconChoiceDialog::ShowPage(sal_uInt16 nId)
+void IconChoiceDialog::ShowPage(HyperLinkPageType nId)
 {
-    sal_uInt16 nOldPageId = GetCurPageId();
+    HyperLinkPageType nOldPageId = GetCurPageId();
     bool bInvalidate = nOldPageId != nId;
     if (bInvalidate)
     {
@@ -329,11 +329,11 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
     if ( !pEntry )
         pEntry = m_pIconCtrl->GetCursor( );
 
-    sal_uInt16 *pId = static_cast<sal_uInt16*>(pEntry->GetUserData());
+    HyperLinkPageType nId = static_cast<HyperLinkPageType>(reinterpret_cast<sal_uIntPtr>(pEntry->GetUserData()));
 
-    if( *pId != mnCurrentPageId )
+    if( nId != mnCurrentPageId )
     {
-        ShowPage(*pId);
+        ShowPage(nId);
     }
 }
 
@@ -536,7 +536,7 @@ void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 }
 
 
-void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*/ )
+void IconChoiceDialog::PageCreated( HyperLinkPageType /*nId*/, IconChoicePage& /*rPage*/ )
 {
     // not interested in
 }
@@ -593,7 +593,7 @@ void IconChoiceDialog::Start_Impl()
 |
 \**********************************************************************/
 
-IconChoicePageData* IconChoiceDialog::GetPageData ( sal_uInt16 nId )
+IconChoicePageData* IconChoiceDialog::GetPageData ( HyperLinkPageType nId )
 {
     IconChoicePageData *pRet = nullptr;
     for (IconChoicePageData* pData : maPageList)
@@ -656,7 +656,7 @@ void IconChoiceDialog::Ok()
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
-        IconChoicePageData* pData = GetPageData ( i );
+        IconChoicePageData* pData = GetPageData ( maPageList[i]->nId );
 
         IconChoicePage* pPage = pData->pPage;
 
@@ -677,15 +677,15 @@ void IconChoiceDialog::Ok()
     }
 }
 
-void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
+void IconChoiceDialog::FocusOnIcon( HyperLinkPageType nId )
 {
     // set focus to icon for the current visible page
     for ( sal_Int32 i=0; i<m_pIconCtrl->GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
-        sal_uInt16* pUserData = static_cast<sal_uInt16*>(pEntry->GetUserData());
+        HyperLinkPageType nUserData = static_cast<HyperLinkPageType>(reinterpret_cast<sal_uIntPtr>(pEntry->GetUserData()));
 
-        if ( pUserData && *pUserData == nId )
+        if ( nUserData == nId )
         {
             m_pIconCtrl->SetCursor( pEntry );
             break;
