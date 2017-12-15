@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_firebird_test, \
     svt \
     test \
     unotest \
+    utl \
     xo \
 ))
 
