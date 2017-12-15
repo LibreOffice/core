@@ -23,10 +23,11 @@
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 
 #include <assert.h>
 
-#include <deque>
+#include <list>
 #include <unordered_set>
 
 class SalFrame;
@@ -65,10 +66,11 @@ public:
 
 protected:
     mutable osl::Mutex         m_aUserEventsMutex;
-    std::deque< SalUserEvent > m_aUserEvents;
-    std::deque< SalUserEvent > m_aProcessingUserEvents;
+    std::list< SalUserEvent >  m_aUserEvents;
+    std::list< SalUserEvent >  m_aProcessingUserEvents;
     bool                       m_bAllUserEventProcessedSignaled;
     SalFrameSet                m_aFrames;
+    oslThreadIdentifier        m_aProcessingThread;
 
     virtual void ProcessEvent( SalUserEvent aEvent ) = 0;
     virtual void TriggerUserEventProcessing() = 0;
