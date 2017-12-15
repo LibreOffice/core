@@ -23,6 +23,8 @@
 #include <config_libcxx.h>
 #if HAVE_LIBCXX && __cplusplus >= 201703L
 #define _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
+#elif defined _MSC_VER && __cplusplus >= 201703L
+#define _HAS_AUTO_PTR_ETC 1
 #endif
 
 #include <config_folders.h>
