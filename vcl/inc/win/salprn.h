@@ -77,7 +77,7 @@ public:
     WinSalInfoPrinter*      mpInfoPrinter;          // pointer to the compatible InfoPrinter
     WinSalPrinter*          mpNextPrinter;          // next printing printer
     HDC                     mhDC;                   // printer hdc
-    sal_uIntPtr             mnError;                // error code
+    SalPrinterError         mnError;                // error code
     sal_uIntPtr             mnCopies;               // copies
     bool                    mbCollate;              // collated copies
     bool                    mbAbort;                // Job Aborted
@@ -102,7 +102,7 @@ public:
     virtual bool                    EndJob() override;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) override;
     virtual void                    EndPage() override;
-    virtual sal_uIntPtr             GetErrorCode() override;
+    virtual SalPrinterError         GetErrorCode() override;
 
     void markInvalid();
     bool isValid() const { return mbValid; }

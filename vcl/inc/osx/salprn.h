@@ -95,7 +95,6 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     bool                        AbortJob();
     SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
     bool                        EndPage();
-    static sal_uLong            GetErrorCode();
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
     void setStartPageOffset( int nOffsetX, int nOffsetY ) { mnStartPageOffsetX = nOffsetX; mnStartPageOffsetY = nOffsetY; }
@@ -136,7 +135,6 @@ class AquaSalPrinter : public SalPrinter
     virtual bool                    EndJob() override;
     virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;
     virtual void                    EndPage() override;
-    virtual sal_uLong               GetErrorCode() override;
 
     private:
     AquaSalPrinter( const AquaSalPrinter& ) = delete;

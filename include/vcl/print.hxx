@@ -43,6 +43,7 @@ class SalInfoPrinter;
 struct SalPrinterQueueInfo;
 class SalPrinter;
 class VirtualDevice;
+enum class SalPrinterError;
 namespace vcl { class Window; }
 
 namespace vcl {
@@ -217,7 +218,7 @@ private:
     SAL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController> const & );
 
     static SAL_DLLPRIVATE ErrCode
-                                ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
+                                ImplSalPrinterErrorCodeToVCL( SalPrinterError nError );
 
 private:
     SAL_DLLPRIVATE bool         EndJob();
