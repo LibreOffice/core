@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -57,7 +57,6 @@
     </child>
     <child>
       <object class="GtkFrame" id="filedlgframe">
-        <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
