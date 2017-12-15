@@ -267,7 +267,7 @@ bool OCopyTable::checkAppendData()
     {
         const ODatabaseExport::TColumnVector& rSrcColumns = m_pParent->getSrcVector();
         const sal_uInt32 nSrcSize = rSrcColumns.size();
-        m_pParent->m_vColumnPos.resize( nSrcSize, ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
+        m_pParent->m_vColumnPositions.resize( nSrcSize, ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
         m_pParent->m_vColumnTypes.resize( nSrcSize , COLUMN_POSITION_NOT_FOUND );
 
         // set new destination
@@ -282,7 +282,7 @@ bool OCopyTable::checkAppendData()
         for(sal_Int32 nPos = 1;aDestIter != aDestEnd && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
         {
             bool bNotConvert = true;
-            m_pParent->m_vColumnPos[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
+            m_pParent->m_vColumnPositions[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
             TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
             if ( !bNotConvert )
             {
