@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
+#include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
@@ -28,9 +29,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 15
+#define NUMBER_OF_TESTS 16
 
 class ScCellCursorObj : public CalcUnoApiTest, public apitest::XCellFormatRangesSupplier,
+                                               public apitest::XCellRangeAddressable,
                                                public apitest::XCellSeries,
                                                public apitest::XMultipleOperation,
                                                public apitest::XSheetCellRange,
@@ -60,6 +62,9 @@ public:
 
     // XCellFormatRangesSupplier
     CPPUNIT_TEST(testGetCellFormatRanges);
+
+    // XCellRangeAddressable
+    CPPUNIT_TEST(testGetRangeAddress);
 
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);

@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/cellproperties.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
+#include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xcellseries.hxx>
@@ -45,10 +46,11 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 28
+#define NUMBER_OF_TESTS 29
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellFormatRangesSupplier,
+                                              public apitest::XCellRangeAddressable,
                                               public apitest::XCellRangeData,
                                               public apitest::XCellRangesQuery,
                                               public apitest::XCellSeries,
@@ -84,6 +86,9 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XCellRangeAddressable
+    CPPUNIT_TEST(testGetRangeAddress);
 
     // XCellRangeData
     CPPUNIT_TEST(testGetDataArray);
