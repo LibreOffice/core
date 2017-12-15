@@ -755,7 +755,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl, Button*, void)
 bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 {
     bool bRet = true;
-    m_vColumnPos.clear();
+    m_vColumnPositions.clear();
     m_vColumnTypes.clear();
 
     OSL_ENSURE( m_xDestConnection.is(), "OCopyTableWizard::CheckColumns: No connection!" );
@@ -781,7 +781,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                     m_bAddPKFirstTime = false;
                     insertColumn(0,pField);
                 }
-                m_vColumnPos.emplace_back(1,1);
+                m_vColumnPositions.emplace_back(1,1);
                 m_vColumnTypes.push_back(pTypeInfo->nType);
             }
         }
@@ -798,12 +798,12 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 {
                     ODatabaseExport::TColumnVector::const_iterator aFind = std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
                     sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
-                    m_vColumnPos.emplace_back(nPos,nPos);
+                    m_vColumnPositions.emplace_back(nPos,nPos);
                     m_vColumnTypes.push_back((*aFind)->second->GetType());
                 }
                 else
                 {
-                    m_vColumnPos.emplace_back( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND );
+                    m_vColumnPositions.emplace_back( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND );
                     m_vColumnTypes.push_back(0);
                 }
             }
@@ -827,7 +827,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
-                m_vColumnPos.emplace_back(m_vDestColumns.size(),m_vDestColumns.size());
+                m_vColumnPositions.emplace_back(m_vDestColumns.size(),m_vDestColumns.size());
                 m_vColumnTypes.push_back((*aSrcIter)->second->GetType());
             }
         }
@@ -1274,19 +1274,19 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
 
                     ODatabaseExport::TPositions::iterator aPosFind = std::find_if(
-                        m_vColumnPos.begin(),
-                        m_vColumnPos.end(),
+                        m_vColumnPositions.begin(),
+                        m_vColumnPositions.end(),
                         [nPos] (const ODatabaseExport::TPositions::value_type& tPos) {
                             return tPos.first == nPos;
                         }
                     );
 
-                    if ( m_vColumnPos.end() != aPosFind )
+                    if ( m_vColumnPositions.end() != aPosFind )
                     {
                         aPosFind->second = nNewPos;
-                        OSL_ENSURE( m_vColumnTypes.size() > size_t( aPosFind - m_vColumnPos.begin() ),
+                        OSL_ENSURE( m_vColumnTypes.size() > size_t( aPosFind - m_vColumnPositions.begin() ),
                             "Invalid index for vector!" );
-                        m_vColumnTypes[ aPosFind - m_vColumnPos.begin() ] = (*aFind)->second->GetType();
+                        m_vColumnTypes[ aPosFind - m_vColumnPositions.begin() ] = (*aFind)->second->GetType();
                     }
                 }
             }

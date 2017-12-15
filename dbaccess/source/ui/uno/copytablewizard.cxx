@@ -1097,7 +1097,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_QUERY_THROW );
 
     const OCopyTableWizard& rWizard             = impl_getDialog_throw();
-    ODatabaseExport::TPositions aColumnMapping  = rWizard.GetColumnPositions();
+    ODatabaseExport::TPositions aColumnPositions = rWizard.GetColumnPositions();
     bool bAutoIncrement                         = rWizard.shouldCreatePrimaryKey();
 
     Reference< XRow > xRow              ( _rxSourceResultSet, UNO_QUERY_THROW );
@@ -1123,7 +1123,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     }
 
     // now create, fill and execute the prepared statement
-    Reference< XPreparedStatement > xStatement( ODatabaseExport::createPreparedStatment( xDestMetaData, _rxDestTable, aColumnMapping ), UNO_SET_THROW );
+    Reference< XPreparedStatement > xStatement( ODatabaseExport::createPreparedStatment( xDestMetaData, _rxDestTable, aColumnPositions ), UNO_SET_THROW );
     Reference< XParameters > xStatementParams( xStatement, UNO_QUERY_THROW );
 
     const bool bSelectedRecordsOnly = m_aSourceSelection.getLength() != 0;
@@ -1166,8 +1166,8 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         }
 
         ++nRowCount;
-        ODatabaseExport::TPositions::const_iterator aPosIter = aColumnMapping.begin();
-        ODatabaseExport::TPositions::const_iterator aPosEnd = aColumnMapping.end();
+        ODatabaseExport::TPositions::const_iterator aPosIter = aColumnPositions.begin();
+        ODatabaseExport::TPositions::const_iterator aPosEnd = aColumnPositions.end();
 
         aCopyEvent.Error.clear();
         try
@@ -1433,15 +1433,14 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
     OUStringBuffer sColumns;
     // 1st check if the columns matching
     const OCopyTableWizard& rWizard             = impl_getDialog_throw();
-    ODatabaseExport::TPositions aColumnMapping  = rWizard.GetColumnPositions();
-    ODatabaseExport::TPositions::const_iterator aPosIter = aColumnMapping.begin();
-    for ( sal_Int32 i = 0; aPosIter != aColumnMapping.end() ; ++aPosIter,++i )
+    ODatabaseExport::TPositions const & rColumnPositions = rWizard.GetColumnPositions();
+    for ( auto const & rColumnPositionPair : rColumnPositions )
     {
-        if ( COLUMN_POSITION_NOT_FOUND != aPosIter->second )
+        if ( COLUMN_POSITION_NOT_FOUND != rColumnPositionPair.second )
         {
             if ( !sColumns.isEmpty() )
                 sColumns.append(",");
-            sColumns.append(sQuote + aDestColumnNames[aPosIter->second - 1] + sQuote);
+            sColumns.append(sQuote + aDestColumnNames[rColumnPositionPair.second - 1] + sQuote);
         }
     }
     const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::EComposeRule::InDataManipulation, true );

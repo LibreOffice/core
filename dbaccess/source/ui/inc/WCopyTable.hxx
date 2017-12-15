@@ -250,7 +250,7 @@ namespace dbaui
         std::vector<OTypeInfoMap::iterator>   m_aDestTypeInfoIndex;
         TNameMapping                            m_mNameMapping;
 
-        ODatabaseExport::TPositions             m_vColumnPos;
+        ODatabaseExport::TPositions             m_vColumnPositions;
         std::vector<sal_Int32>                m_vColumnTypes;
 
         css::uno::Reference< css::sdbc::XConnection >         m_xDestConnection;
@@ -332,7 +332,7 @@ namespace dbaui
 
         // returns a vector where the position of a column and if the column is in the selection
         // when not the value is COLUMN_POSITION_NOT_FOUND == (sal_uInt32)-1
-        const ODatabaseExport::TPositions& GetColumnPositions()    const { return m_vColumnPos; }
+        const ODatabaseExport::TPositions& GetColumnPositions()    const { return m_vColumnPositions; }
         const std::vector<sal_Int32>&    GetColumnTypes()        const { return m_vColumnTypes; }
         bool                        UseHeaderLine()         const { return m_bUseHeaderLine; }
         void                        setUseHeaderLine(bool _bUseHeaderLine) { m_bUseHeaderLine = _bUseHeaderLine; }

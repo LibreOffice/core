@@ -89,7 +89,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const OTypeInfoMap* _pInfoMap,
                                  bool _bAutoIncrementEnabled,
                                  SvStream& _rInputStream)
-    :m_vColumns(_rColumnPositions)
+    :m_vColumnPositions(_rColumnPositions)
     ,m_aDestColumns(true)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)
@@ -112,7 +112,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 {
     m_nRows += nRows;
     sal_Int32 nCount = 0;
-    for(const std::pair<sal_Int32,sal_Int32> & rPair : m_vColumns)
+    for(const std::pair<sal_Int32,sal_Int32> & rPair : m_vColumnPositions)
         if ( rPair.first != COLUMN_POSITION_NOT_FOUND )
             ++nCount;
 
@@ -298,11 +298,11 @@ void ODatabaseExport::insertValueIntoColumn()
         if(pField)
         {
             sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
-            OSL_ENSURE(nNewPos < static_cast<sal_Int32>(m_vColumns.size()),"m_vColumns: Illegal index for vector");
+            OSL_ENSURE(nNewPos < static_cast<sal_Int32>(m_vColumnPositions.size()),"m_vColumnPositions: Illegal index for vector");
 
-            if ( nNewPos < static_cast<sal_Int32>(m_vColumns.size() ) )
+            if ( nNewPos < static_cast<sal_Int32>(m_vColumnPositions.size() ) )
             {
-                sal_Int32 nPos = m_vColumns[nNewPos].first;
+                sal_Int32 nPos = m_vColumnPositions[nNewPos].first;
                 if ( nPos != COLUMN_POSITION_NOT_FOUND )
                 {
                     if ( m_sTextToken.isEmpty() && pField->IsNullable() )
@@ -672,7 +672,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 
 bool ODatabaseExport::createRowSet()
 {
-    m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
+    m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumnPositions)));
 
     return m_pUpdateHelper.get() != nullptr;
 }
@@ -713,7 +713,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
                                 m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
                         }
                         m_bIsAutoIncrement  = aWizard->shouldCreatePrimaryKey();
-                        m_vColumns          = aWizard->GetColumnPositions();
+                        m_vColumnPositions  = aWizard->GetColumnPositions();
                         m_vColumnTypes      = aWizard->GetColumnTypes();
                         m_bAppendFirstLine  = !aWizard->UseHeaderLine();
                     }
@@ -762,10 +762,10 @@ void ODatabaseExport::adjustFormat()
     if ( !m_sTextToken.isEmpty() )
     {
         sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
-        OSL_ENSURE(nNewPos < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
-        if ( nNewPos < static_cast<sal_Int32>(m_vColumns.size()) )
+        OSL_ENSURE(nNewPos < static_cast<sal_Int32>(m_vColumnPositions.size()),"Illegal index for vector");
+        if ( nNewPos < static_cast<sal_Int32>(m_vColumnPositions.size()) )
         {
-            sal_Int32 nColPos = m_vColumns[nNewPos].first;
+            sal_Int32 nColPos = m_vColumnPositions[nNewPos].first;
             if( nColPos != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND))
             {
                 --nColPos;

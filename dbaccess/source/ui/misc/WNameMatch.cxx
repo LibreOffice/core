@@ -141,9 +141,9 @@ bool OWizNameMatching::LeavePage()
 
     const ODatabaseExport::TColumnVector& rSrcColumns = m_pParent->getSrcVector();
 
-    m_pParent->m_vColumnPos.clear();
+    m_pParent->m_vColumnPositions.clear();
     m_pParent->m_vColumnTypes.clear();
-    m_pParent->m_vColumnPos.resize( rSrcColumns.size(), ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
+    m_pParent->m_vColumnPositions.resize( rSrcColumns.size(), ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
     m_pParent->m_vColumnTypes.resize( rSrcColumns.size(), COLUMN_POSITION_NOT_FOUND );
 
     sal_Int32 nParamPos = 0;
@@ -171,9 +171,9 @@ bool OWizNameMatching::LeavePage()
             for(;aDestIter != aDestEnd && (*aDestIter)->second != pDestField;++aDestIter)
                 ;
 
-            OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPos.size()),"m_pParent->m_vColumnPos: Illegal index for vector");
-            m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
-            m_pParent->m_vColumnPos[nPos].second = std::distance(rDestColumns.begin(),aDestIter) + 1;
+            OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPositions.size()),"m_pParent->m_vColumnPositions: Illegal index for vector");
+            m_pParent->m_vColumnPositions[nPos].first = ++nParamPos;
+            m_pParent->m_vColumnPositions[nPos].second = std::distance(rDestColumns.begin(),aDestIter) + 1;
 
             TOTypeInfoSP pTypeInfo;
 
@@ -191,8 +191,8 @@ bool OWizNameMatching::LeavePage()
         }
         else
         {
-            m_pParent->m_vColumnPos[nPos].first = COLUMN_POSITION_NOT_FOUND;
-            m_pParent->m_vColumnPos[nPos].second = COLUMN_POSITION_NOT_FOUND;
+            m_pParent->m_vColumnPositions[nPos].first = COLUMN_POSITION_NOT_FOUND;
+            m_pParent->m_vColumnPositions[nPos].second = COLUMN_POSITION_NOT_FOUND;
         }
 
         pLeftEntry = m_pCTRL_LEFT->GetModel()->Next(pLeftEntry);

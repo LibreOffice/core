@@ -64,7 +64,7 @@ namespace dbaui
         typedef std::vector< std::pair<sal_Int32,sal_Int32> >   TPositions;
 
     protected:
-        TPositions                      m_vColumns;     ///< columns to be used
+        TPositions                      m_vColumnPositions;  ///< columns to be used
         std::vector<sal_Int32>        m_vColumnTypes; ///< ColumnTypes for faster access
         std::vector<sal_Int32>        m_vColumnSize;
         std::vector<sal_Int16>        m_vNumberFormat;
@@ -161,7 +161,7 @@ namespace dbaui
 
         static css::uno::Reference< css::sdbc::XPreparedStatement > createPreparedStatment( const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData
                                                        ,const css::uno::Reference< css::beans::XPropertySet>& _xDestTable
-                                                       ,const TPositions& _rvColumns);
+                                                       ,const TPositions& _rvColumnPositions);
     };
 }
 
