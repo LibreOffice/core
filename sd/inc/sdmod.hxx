@@ -41,6 +41,7 @@ class SdTransferable;
 class SvNumberFormatter;
 class SfxErrorHandler;
 class SfxFrame;
+struct SfxItemPropertyMapEntry;
 namespace svtools { class ColorConfig; }
 
 namespace com { namespace sun { namespace star { namespace frame {
@@ -53,7 +54,7 @@ enum SdOptionStreamMode
     SD_OPTION_STORE = 1
 };
 
-typedef std::map< sal_uIntPtr, css::uno::Reference<css::beans::XPropertySetInfo> > SdExtPropertySetInfoCache;
+typedef std::map< SfxItemPropertyMapEntry const * , css::uno::Reference<css::beans::XPropertySetInfo> > SdExtPropertySetInfoCache;
 typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache;
 
 /*
