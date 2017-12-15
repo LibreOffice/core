@@ -837,7 +837,7 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
     {
         //  for user-specified subtotal function with all measures,
         //  display only function name
-        assert(eForceFunc < SAL_N_ELEMENTS(aFuncStrIds));
+        assert(unsigned(eForceFunc) < SAL_N_ELEMENTS(aFuncStrIds));
         if ( eForceFunc != SUBTOTAL_FUNC_NONE )
             return ScGlobal::GetRscString(aFuncStrIds[eForceFunc]);
 
