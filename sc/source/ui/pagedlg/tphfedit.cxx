@@ -93,7 +93,7 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
     pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EEControlBits::MARKFIELDS );
     mbRTL = ScGlobal::IsSystemRTL();
     if (mbRTL)
-        pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);
+        pEdEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
     pEdView = new EditView( pEdEngine, this );
     pEdView->SetOutputArea( tools::Rectangle( Point(0,0), GetOutputSize() ) );
