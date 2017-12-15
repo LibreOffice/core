@@ -108,7 +108,7 @@ BoolOverloadKind isBoolOverloadOf(
 // encounter in practice:
 bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
     auto ctx = decl->getDeclContext();
-    if (!compat::isLookupContext(*ctx)) {
+    if (!ctx->isLookupContext()) {
         return false;
     }
     auto res = ctx->lookup(decl->getDeclName());
@@ -285,8 +285,8 @@ bool SalBool::VisitCallExpr(CallExpr * expr) {
         }
     }
     if (ft != nullptr) {
-        for (unsigned i = 0; i != compat::getNumParams(*ft); ++i) {
-            QualType t(compat::getParamType(*ft, i));
+        for (unsigned i = 0; i != ft->getNumParams(); ++i) {
+            QualType t(ft->getParamType(i));
             bool b = false;
             if (t->isLValueReferenceType()) {
                 t = t.getNonReferenceType();
@@ -688,7 +688,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (isSalBool(compat::getReturnType(*decl).getNonReferenceType())
+    if (isSalBool(decl->getReturnType().getNonReferenceType())
         && !(decl->isDeletedAsWritten() && isa<CXXConversionDecl>(decl)))
     {
         FunctionDecl const * f = decl->getCanonicalDecl();

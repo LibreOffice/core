@@ -31,10 +31,10 @@ private:
 };
 
 static bool oneAndOnlyOne(clang::Stmt::const_child_range range) {
-    if (compat::begin(range) == compat::end(range)) {
+    if (range.begin() == range.end()) {
         return false;
     }
-    if (++compat::begin(range) != compat::end(range)) {
+    if (++range.begin() != range.end()) {
         return false;
     }
     return true;
@@ -133,7 +133,7 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
         {
             childStmt2 = *childStmt2->child_begin();
             if (dyn_cast<CXXThisExpr>( childStmt2 ) != nullptr
-                && compat::begin(childStmt2->children()) == compat::end(childStmt2->children()))
+                && childStmt2->children().begin() == childStmt2->children().end())
             {
                 return true;
             }
@@ -144,7 +144,7 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
     {
         const Stmt* childStmt2 = *childStmt->child_begin();
         if (dyn_cast<CXXThisExpr>( childStmt2 ) != nullptr
-            && compat::begin(childStmt2->children()) == compat::end(childStmt2->children()))
+            && childStmt2->children().begin() == childStmt2->children().end())
         {
             return true;
         }
@@ -207,7 +207,7 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
                 }
              return true;
         }
-        if ( compat::begin(childStmt->children()) == compat::end(childStmt->children()) )
+        if ( childStmt->children().begin() == childStmt->children().end() )
             return true;
         childStmt = *childStmt->child_begin();
     }

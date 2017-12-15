@@ -10,7 +10,8 @@
  */
 
 #include <memory>
-#include "compat.hxx"
+#include <system_error>
+
 #include "plugin.hxx"
 #include "pluginhandler.hxx"
 
@@ -168,9 +169,9 @@ DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, const c
     }
     fullMessage += "]";
     if( loc.isValid())
-        return diag.Report( loc, compat::getCustomDiagID(diag, level, fullMessage) );
+        return diag.Report( loc, diag.getDiagnosticIDs()->getCustomDiagID(static_cast<DiagnosticIDs::Level>(level), fullMessage) );
     else
-        return diag.Report( compat::getCustomDiagID(diag, level, fullMessage) );
+        return diag.Report( diag.getDiagnosticIDs()->getCustomDiagID(static_cast<DiagnosticIDs::Level>(level), fullMessage) );
 }
 
 DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
@@ -305,15 +306,18 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         sprintf( filename, "%s.new.%d", modifyFile.c_str(), getpid());
         std::string error;
         bool bOk = false;
+        std::error_code ec;
         std::unique_ptr<raw_fd_ostream> ostream(
-            compat::create_raw_fd_ostream(filename, error) );
-        if( error.empty())
+            new raw_fd_ostream(filename, ec, sys::fs::F_None));
+        if( !ec)
         {
             it->second.write( *ostream );
             ostream->close();
             if( !ostream->has_error() && rename( filename, modifyFile.c_str()) == 0 )
                 bOk = true;
         }
+        else
+            error = "error: " + ec.message();
         ostream->clear_error();
         unlink( filename );
         if( !bOk )
@@ -323,17 +327,10 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
 #endif
  }
 
-#if CLANG_VERSION >= 30600
 std::unique_ptr<ASTConsumer> LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
 {
     return llvm::make_unique<PluginHandler>( Compiler, _args );
 }
-#else
-ASTConsumer* LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
-{
-    return new PluginHandler( Compiler, _args );
-}
-#endif
 
 bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const std::vector< std::string >& args )
 {

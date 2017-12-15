@@ -103,20 +103,10 @@ public:
         }
     }
 
-    bool TraverseInitListExpr(
-        InitListExpr * expr
-#if CLANG_VERSION >= 30800
-        , DataRecursionQueue * queue = nullptr
-#endif
-        )
-    {
+    bool TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * queue = nullptr) {
         return WalkUpFromInitListExpr(expr)
             && TraverseSynOrSemInitListExpr(
-                expr->isSemanticForm() ? expr : expr->getSemanticForm()
-#if CLANG_VERSION >= 30800
-                , queue
-#endif
-                );
+                expr->isSemanticForm() ? expr : expr->getSemanticForm(), queue);
     }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
@@ -806,7 +796,7 @@ bool RedundantCast::visitBinOp(BinaryOperator const * expr) {
 
 bool RedundantCast::isOverloadedFunction(FunctionDecl const * decl) {
     auto const ctx = decl->getDeclContext();
-    if (!compat::isLookupContext(*ctx)) {
+    if (!ctx->isLookupContext()) {
         return false;
     }
     auto const canon = decl->getCanonicalDecl();

@@ -76,7 +76,7 @@ UnusedMethodsRemove::~UnusedMethodsRemove()
 std::string niceName(const CXXMethodDecl* functionDecl)
 {
     std::string s =
-        compat::getReturnType(*functionDecl).getCanonicalType().getAsString()
+        functionDecl->getReturnType().getCanonicalType().getAsString()
         + " " + functionDecl->getParent()->getQualifiedNameAsString()
         + "::" + functionDecl->getNameAsString()
         + "(";
