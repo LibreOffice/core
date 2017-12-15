@@ -114,7 +114,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     Color aOldOutlinerBackgrdColor;
     // set default horizontal text direction on painting <hell> or
     // <heaven>.
-    EEHorizontalTextDirection aOldEEHoriTextDir = EE_HTEXTDIR_L2R;
+    EEHorizontalTextDirection aOldEEHoriTextDir = EEHorizontalTextDirection::L2R;
     const IDocumentDrawModelAccess& rIDDMA = GetShell()->getIDocumentDrawModelAccess();
     if ( (_nLayerID == rIDDMA.GetHellId()) ||
          (_nLayerID == rIDDMA.GetHeavenId()) )
@@ -131,7 +131,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         aOldEEHoriTextDir =
             GetDrawView()->GetModel()->GetDrawOutliner().GetDefaultHorizontalTextDirection();
         EEHorizontalTextDirection aEEHoriTextDirOfPage =
-            _bIsPageRightToLeft ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
+            _bIsPageRightToLeft ? EEHorizontalTextDirection::R2L : EEHorizontalTextDirection::L2R;
         GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
     }
 

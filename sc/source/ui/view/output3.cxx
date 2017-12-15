@@ -178,7 +178,7 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
     SdrOutliner& rOutl = pModel->GetDrawOutliner();
     rOutl.EnableAutoColor( mbUseStyleColor );
     rOutl.SetDefaultHorizontalTextDirection(
-                (EEHorizontalTextDirection)mpDoc->GetEditTextDirection( nTab ) );
+                mpDoc->GetEditTextDirection( nTab ) );
 
     //  #i69767# The hyphenator must be set (used to be before drawing a text shape with hyphenation).
     //  LinguMgr::GetHyphenator (EditEngine) uses a wrapper now that creates the real hyphenator on demand,

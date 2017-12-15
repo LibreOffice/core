@@ -783,7 +783,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
             ScDocument* pDoc = rViewData.GetDocument();
             pDoc->ApplyAsianEditSettings( *mpEditEngine );
             mpEditEngine->SetDefaultHorizontalTextDirection(
-                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( rViewData.GetTabNo() ) );
+                pDoc->GetEditTextDirection( rViewData.GetTabNo() ) );
             mpEditEngine->SetFirstWordCapitalization( false );
         }
 

@@ -2123,7 +2123,7 @@ ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
     pEngine->SetControlWord( nCtrl );
     mpDoc->ApplyAsianEditSettings( *pEngine );
     pEngine->EnableAutoColor( mbUseStyleColor );
-    pEngine->SetDefaultHorizontalTextDirection( (EEHorizontalTextDirection)mpDoc->GetEditTextDirection( nTab ) );
+    pEngine->SetDefaultHorizontalTextDirection( mpDoc->GetEditTextDirection( nTab ) );
     return pEngine;
 }
 
