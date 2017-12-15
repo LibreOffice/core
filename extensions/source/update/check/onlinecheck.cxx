@@ -31,7 +31,7 @@
 #include <wininet.h>
 
 // #i71984
-extern "C" bool SAL_CALL WNT_hasInternetConnection()
+extern "C" bool WNT_hasInternetConnection()
 {
     DWORD   dwFlags;
     WCHAR   szConnectionName[1024];

@@ -39,7 +39,7 @@ using namespace com::sun::star::ui::dialogs;
 
 namespace
 {
-    Sequence< OUString > SAL_CALL FolderPicker_getSupportedServiceNames()
+    Sequence< OUString > FolderPicker_getSupportedServiceNames()
     {
         Sequence< OUString > aRet { "com.sun.star.ui.dialogs.SystemFolderPicker" };
         return aRet;

@@ -34,13 +34,13 @@ using namespace std;
 namespace ole_adapter
 {
 /// @throws Exception
-Reference< XInterface> SAL_CALL ConverterProvider_CreateInstance2(  const Reference<XMultiServiceFactory> & xSMgr);
+Reference< XInterface> ConverterProvider_CreateInstance2(  const Reference<XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-Reference< XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(   const Reference<XMultiServiceFactory> & xSMgr);
+Reference< XInterface> ConverterProvider_CreateInstanceVar1(   const Reference<XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-Reference<XInterface> SAL_CALL OleClient_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr);
+Reference<XInterface> OleClient_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr);
+Reference<XInterface> OleServer_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr);
 /*****************************************************************************
 
     class declaration IClassFactoryWrapper

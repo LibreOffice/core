@@ -226,7 +226,7 @@ typedef BOOL (WINAPI *SymGetModuleInfo_PROC)(
     BTW: We are using ANSI function because not all version of IMAGEHLP.DLL contain Unicode support
 */
 
-static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustrURL )
+static bool osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustrURL )
 {
     bool    bSuccess    = false;    /* Assume failure */
 
@@ -329,7 +329,7 @@ typedef BOOL (WINAPI *GetModuleInformation_PROC)(
 
 /* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Library 6.0a say so */
 
-static bool SAL_CALL osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrURL )
+static bool osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrURL )
 {
     bool    bSuccess    = false;    /* Assume failure */
     static HMODULE      hModPsapi = nullptr;

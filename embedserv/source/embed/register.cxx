@@ -32,20 +32,20 @@
 using namespace ::com::sun::star;
 
 /// @throws uno::Exception
-uno::Reference<uno::XInterface> SAL_CALL EmbedServer_createInstance(
+uno::Reference<uno::XInterface> EmbedServer_createInstance(
     const uno::Reference<lang::XMultiServiceFactory> & xSMgr)
 {
     uno::Reference<uno::XInterface > xService = *new EmbedServer_Impl( xSMgr );
     return xService;
 }
 
-OUString SAL_CALL EmbedServer_getImplementationName() throw()
+OUString EmbedServer_getImplementationName() throw()
 {
     return OUString("com.sun.star.comp.ole.EmbedServer");
 
 }
 
-uno::Sequence< OUString > SAL_CALL EmbedServer_getSupportedServiceNames() throw()
+uno::Sequence< OUString > EmbedServer_getSupportedServiceNames() throw()
 {
     uno::Sequence<OUString> aServiceNames { "com.sun.star.document.OleEmbeddedServerRegistration" };
     return aServiceNames;
@@ -53,7 +53,7 @@ uno::Sequence< OUString > SAL_CALL EmbedServer_getSupportedServiceNames() throw(
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL emser_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void * emser_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
 

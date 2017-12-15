@@ -29,7 +29,7 @@ using namespace cppu;
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL dtrans_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * dtrans_component_getFactory(
     const sal_Char * pImplName,
     void * pServiceManager,
     void * /*pRegistryKey*/

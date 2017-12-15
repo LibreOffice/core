@@ -38,7 +38,7 @@ using namespace com::sun::star::lang;
 
 namespace
 {
-    Sequence< OUString > SAL_CALL WinClipboard_getSupportedServiceNames()
+    Sequence< OUString > WinClipboard_getSupportedServiceNames()
     {
         Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
         return aRet;

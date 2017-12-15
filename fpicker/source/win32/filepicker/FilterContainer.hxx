@@ -102,7 +102,7 @@ private:
 // the Win32 API requires, e.g. "Text\0*.txt\0Doc\0*.doc;*xls\0\0"
 
 
-OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer );
+OUString makeWinFilterBuffer( CFilterContainer& aFilterContainer );
 
 #endif
 

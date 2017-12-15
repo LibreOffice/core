@@ -425,7 +425,7 @@ static void RemoveKeyFromList( PTLS pTls )
     }
 }
 
-void SAL_CALL osl_callThreadKeyCallbackOnThreadDetach(void)
+void osl_callThreadKeyCallbackOnThreadDetach(void)
 {
     PTLS    pTls;
 

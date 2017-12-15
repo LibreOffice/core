@@ -59,7 +59,7 @@ using namespace com::sun::star::container;
 
 namespace
 {
-    Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
+    Sequence< OUString > DataFormatTranslator_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet { "com.sun.star.datatransfer.DataFormatTranslator" };
         return aRet;
@@ -360,7 +360,7 @@ static const std::vector< FormatEntry > g_TranslTable {
 
 namespace {
 
-void SAL_CALL findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor )
+void findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor )
 {
     /*
         we break the for loop if we find the first CF_INVALID
@@ -382,7 +382,7 @@ void SAL_CALL findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, Da
     }
 }
 
-void SAL_CALL findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor )
+void findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor )
 {
     vector< FormatEntry >::const_iterator citer_end = g_TranslTable.end( );
     for ( vector< FormatEntry >::const_iterator citer = g_TranslTable.begin( );
@@ -397,7 +397,7 @@ void SAL_CALL findDataFlavorForNativeFormatName( const OUString& aNativeFormatNa
     }
 }
 
-void SAL_CALL findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny )
+void findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny )
 {
     if ( aCharset.equalsIgnoreAsciiCase( "utf-16" ) )
         aAny <<= static_cast< sal_Int32 >( CF_UNICODETEXT );
@@ -409,7 +409,7 @@ void SAL_CALL findStandardFormatIdForCharset( const OUString& aCharset, Any& aAn
     }
 }
 
-void SAL_CALL setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny )
+void setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny )
 {
     vector< FormatEntry >::const_iterator citer_end = g_TranslTable.end( );
     for ( vector< FormatEntry >::const_iterator citer = g_TranslTable.begin( ); citer != citer_end; ++citer )
@@ -423,7 +423,7 @@ void SAL_CALL setStandardFormatIdForNativeFormatName( const OUString& aNativeFor
     }
 }
 
-void SAL_CALL findStdFormatIdOrNativeFormatNameForFullMediaType(
+void findStdFormatIdOrNativeFormatNameForFullMediaType(
     const Reference< XMimeContentTypeFactory >& aRefXMimeFactory,
     const OUString& aFullMediaType,
     Any& aAny )
@@ -454,7 +454,7 @@ inline bool isTextPlainMediaType( const OUString& fullMediaType )
     return fullMediaType.equalsIgnoreAsciiCase("text/plain");
 }
 
-DataFlavor SAL_CALL mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)
+DataFlavor mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)
 {
     DataFlavor dflv;
     dflv.MimeType             = cnttype;

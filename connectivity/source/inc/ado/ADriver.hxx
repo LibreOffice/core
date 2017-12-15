@@ -35,7 +35,7 @@ namespace connectivity
     namespace ado
     {
         /// @throws css::uno::Exception
-        css::uno::Reference< css::uno::XInterface >  SAL_CALL ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+        css::uno::Reference< css::uno::XInterface > ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver,
                                                  css::sdbcx::XDataDefinitionSupplier,

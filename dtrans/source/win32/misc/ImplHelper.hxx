@@ -36,47 +36,47 @@
 #endif
 
 // target device and formatetc helper
-void      SAL_CALL DeleteTargetDevice(DVTARGETDEVICE* ptd);
-bool  SAL_CALL CopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc);
-sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLeft, const FORMATETC* pFetcRight);
-bool  SAL_CALL CompareTargetDevice(DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE const * ptdRight);
-DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc);
+void DeleteTargetDevice(DVTARGETDEVICE* ptd);
+bool CopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc);
+sal_Int32 CompareFormatEtc( const FORMATETC* pFetcLeft, const FORMATETC* pFetcRight);
+bool CompareTargetDevice(DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE const * ptdRight);
+DVTARGETDEVICE* CopyTargetDevice(DVTARGETDEVICE* ptdSrc);
 
 // some codepage helper functions
 
 // returns a windows codepage appropriate to the
 // given mime charset parameter value
 
-sal_uInt32 SAL_CALL getWinCPFromMimeCharset(
+sal_uInt32 getWinCPFromMimeCharset(
     const OUString& charset );
 
 // returns a windows codepage appropriate to the
 // given locale and locale type
 
-OUString SAL_CALL getWinCPFromLocaleId(
+OUString getWinCPFromLocaleId(
     LCID lcid, LCTYPE lctype );
 
 // returns a mime charset parameter value appropriate
 // to the given codepage, optional a prefix can be
 // given, e.g. "windows-" or "cp"
 
-OUString SAL_CALL getMimeCharsetFromWinCP(
+OUString getMimeCharsetFromWinCP(
     sal_uInt32 cp, const OUString& aPrefix );
 
 // returns a mime charset parameter value appropriate
 // to the given locale id and locale type, optional a
 // prefix can be given, e.g. "windows-" or "cp"
 
-OUString SAL_CALL getMimeCharsetFromLocaleId(
+OUString getMimeCharsetFromLocaleId(
     LCID lcid, LCTYPE lctype, const OUString& aPrefix  );
 
 // returns true, if a given codepage is an oem codepage
 
-bool SAL_CALL IsOEMCP( sal_uInt32 codepage );
+bool IsOEMCP( sal_uInt32 codepage );
 
 // converts a codepage into a string representation
 
-OUString SAL_CALL cptostr( sal_uInt32 codepage );
+OUString cptostr( sal_uInt32 codepage );
 
 #endif
 

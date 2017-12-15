@@ -46,7 +46,7 @@ void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
                  "osl_systemPathEnsureSeparator: Post condition failed");
 }
 
-void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
+void osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
     rtl::OUString path(*ppustrPath);
 

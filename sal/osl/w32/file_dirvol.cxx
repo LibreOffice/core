@@ -490,7 +490,7 @@ static oslFileError osl_openLocalRoot(
     return error;
 }
 
-static oslFileError SAL_CALL osl_openFileDirectory(
+static oslFileError osl_openFileDirectory(
     rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
 {
     oslFileError error = osl_File_E_None;
@@ -542,7 +542,7 @@ static oslFileError SAL_CALL osl_openFileDirectory(
     return error;
 }
 
-static oslFileError SAL_CALL osl_openNetworkServer(
+static oslFileError osl_openNetworkServer(
     rtl_uString *strSysDirPath, oslDirectory *pDirectory)
 {
     NETRESOURCEW    aNetResource;
@@ -757,7 +757,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
     return error;
 }
 
-static oslFileError SAL_CALL osl_getNextNetResource(
+static oslFileError osl_getNextNetResource(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
@@ -802,7 +802,7 @@ static oslFileError SAL_CALL osl_getNextNetResource(
     }
 }
 
-static oslFileError SAL_CALL osl_getNextDrive(
+static oslFileError osl_getNextDrive(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
@@ -843,7 +843,7 @@ static oslFileError SAL_CALL osl_getNextDrive(
     }
 }
 
-static oslFileError SAL_CALL osl_getNextFileItem(
+static oslFileError osl_getNextFileItem(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/)
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
@@ -1434,7 +1434,7 @@ oslFileError SAL_CALL osl_getVolumeInformation(
     return osl_File_E_None;
 }
 
-static oslFileError SAL_CALL osl_getDriveInfo(
+static oslFileError osl_getDriveInfo(
     oslDirectoryItem Item, oslFileStatus *pStatus, sal_uInt32 uFieldMask)
 {
     DirectoryItem_Impl  *pItemImpl = static_cast<DirectoryItem_Impl *>(Item);
@@ -1532,7 +1532,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
     return osl_File_E_None;
 }
 
-static oslFileError SAL_CALL osl_getServerInfo(
+static oslFileError osl_getServerInfo(
     oslDirectoryItem Item, oslFileStatus *pStatus, sal_uInt32 uFieldMask )
 {
     DirectoryItem_Impl  *pItemImpl = static_cast<DirectoryItem_Impl *>(Item);

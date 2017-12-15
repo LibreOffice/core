@@ -29,13 +29,13 @@ using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;
 using namespace ::com::sun::star::lang;
 
-Reference< XInterface > SAL_CALL createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
+Reference< XInterface > createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
 {
     DragSource* pSource= new DragSource( comphelper::getComponentContext(rServiceManager) );
     return Reference<XInterface>( static_cast<XInitialization*>(pSource), UNO_QUERY);
 }
 
-Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServiceFactory >& rServiceManager )
+Reference< XInterface > createDropTarget( const Reference< XMultiServiceFactory >& rServiceManager )
 {
     DropTarget* pTarget= new DropTarget( comphelper::getComponentContext(rServiceManager) );
     return Reference<XInterface>( static_cast<XInitialization*>(pTarget), UNO_QUERY);
@@ -44,7 +44,7 @@ Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServic
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL
+SAL_DLLPUBLIC_EXPORT void*
 dnd_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;

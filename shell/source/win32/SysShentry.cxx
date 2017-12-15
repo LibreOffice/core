@@ -33,7 +33,7 @@ using com::sun::star::system::XSystemShellExecute;
 
 namespace
 {
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XComponentContext >& xContext )
+    Reference< XInterface > createInstance( const Reference< XComponentContext >& xContext )
     {
         return Reference< XInterface >( static_cast< XSystemShellExecute* >( new CSysShExec(xContext) ) );
     }
@@ -42,7 +42,7 @@ namespace
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL syssh_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* syssh_component_getFactory(
         const sal_Char* pImplName, void*, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;

@@ -190,13 +190,13 @@ void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
         removeClipboard(xClipboard->getName());
 }
 
-Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
+Reference< XInterface > ClipboardManager_createInstance(
     const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
 {
     return Reference < XInterface >(static_cast<OWeakObject *>(new ClipboardManager()));
 }
 
-Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames()
+Sequence< OUString > ClipboardManager_getSupportedServiceNames()
 {
     Sequence < OUString > SupportedServicesNames { "com.sun.star.datatransfer.clipboard.ClipboardManager" };
     return SupportedServicesNames;

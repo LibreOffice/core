@@ -37,7 +37,7 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
 
-void* SAL_CALL mscrypt_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
+void* mscrypt_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
     Reference< XSingleServiceFactory > xFactory ;

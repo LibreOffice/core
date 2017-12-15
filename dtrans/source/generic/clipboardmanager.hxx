@@ -90,8 +90,8 @@ namespace dtrans
 
 }
 
-css::uno::Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ClipboardManager_createInstance(
+css::uno::Sequence< OUString > ClipboardManager_getSupportedServiceNames();
+css::uno::Reference< css::uno::XInterface > ClipboardManager_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 #endif

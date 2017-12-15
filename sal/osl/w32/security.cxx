@@ -70,7 +70,7 @@ static bool GetSpecialFolder(rtl_uString **strPath,int nFolder);
 // We use LPCTSTR here, because we use it with SE_foo_NAME constants
 // which are defined in winnt.h as UNICODE-dependent TEXT("PrivilegeName")
 static BOOL Privilege(LPCTSTR pszPrivilege, BOOL bEnable);
-static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName, bool bIncludeDomain);
+static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName, bool bIncludeDomain);
 
 oslSecurity SAL_CALL osl_getCurrentSecurity(void)
 {
@@ -747,7 +747,7 @@ static BOOL Privilege(LPCTSTR strPrivilege, BOOL bEnable)
     return TRUE;
 }
 
-static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool bIncludeDomain)
+static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool bIncludeDomain)
 {
     if (Security != nullptr)
     {

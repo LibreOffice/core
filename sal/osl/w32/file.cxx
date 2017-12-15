@@ -659,7 +659,7 @@ oslFileError FileHandle_Impl::syncFile()
     return result;
 }
 
-extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle(
+extern "C" oslFileHandle osl_createFileHandleFromOSHandle(
     HANDLE     hFile,
     sal_uInt32 uFlags)
 {

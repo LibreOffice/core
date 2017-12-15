@@ -101,8 +101,8 @@ namespace dtrans
 
 }
 
-css::uno::Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames();
-css::uno::Reference< css::uno::XInterface > SAL_CALL GenericClipboard_createInstance(
+css::uno::Sequence< OUString > GenericClipboard_getSupportedServiceNames();
+css::uno::Reference< css::uno::XInterface > GenericClipboard_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 #endif

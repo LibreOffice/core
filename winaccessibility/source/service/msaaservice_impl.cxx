@@ -239,7 +239,7 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
  * @param xContext No use here.
  * @return The object interface.
  */
-Reference< XInterface > SAL_CALL create_MSAAServiceImpl( Reference< XComponentContext > const & /*xContext*/ )
+Reference< XInterface > create_MSAAServiceImpl( Reference< XComponentContext > const & /*xContext*/ )
 {
     Reference< XMSAAService > xAccMgr( new MSAAServiceImpl() );
 
@@ -298,7 +298,7 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL iacc2_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * iacc2_component_getFactory(
         sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
         registry::XRegistryKey * xRegistry )
     {
