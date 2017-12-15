@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9753a338",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-15T07:56:54Z",
+      "side": 1,
+      "message": "does that work this way?  I\u0027ve only ever seen the full doxygen /**...*/ comment plus declaration it pertains to wrapped in those /// cond lines",
+      "revId": "153b379ea7b7ccb07213586cb75d71f478275c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d737ebfc",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-15T07:56:54Z",
+      "side": 1,
+      "message": "...and no other thread that will use that in the future has yet been spawned",
+      "revId": "153b379ea7b7ccb07213586cb75d71f478275c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
