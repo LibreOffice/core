@@ -29,7 +29,6 @@
 #include <svx/xtable.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <helpids.h>
 #include <svtools/valueset.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/svxitems.hrc>

@@ -29,7 +29,6 @@
 #include <editeng/editeng.hxx>
 
 #include <app.hrc>
-#include <helpids.h>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
 #include <View.hxx>

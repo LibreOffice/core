@@ -53,7 +53,6 @@
 #include <algorithm>
 #include <memory>
 
-#include <helpids.h>
 #include <bitmaps.hlst>
 
 using ::svtools::ToolbarMenu;

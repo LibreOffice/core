@@ -46,7 +46,6 @@
 #include <sdresid.hxx>
 #include <EventMultiplexer.hxx>
 #include <ViewShellManager.hxx>
-#include <helpids.h>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
 #include <smarttag.hxx>

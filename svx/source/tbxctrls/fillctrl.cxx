@@ -38,7 +38,6 @@
 #include <svx/fillctrl.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
-#include <helpids.h>
 #include <memory>
 #include <o3tl/make_unique.hxx>
 

@@ -50,8 +50,6 @@
 #include <strings.hrc>
 #include <app.hrc>
 
-#include <helpids.h>
-
 #include <sdmod.hxx>
 #include <fupoor.hxx>
 #include <sdresid.hxx>
