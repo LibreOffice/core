@@ -232,7 +232,7 @@ void SdrTextObj::SetText(const OUString& rStr)
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat)
+void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
@@ -246,7 +246,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     bTextSizeDirty=false;
 }
 
-void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat)
+void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat)
 {
     tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetText(rInput,rBaseURL,eFormat);

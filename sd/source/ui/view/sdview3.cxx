@@ -1388,7 +1388,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             xStm->Seek( 0 );
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            bReturn = SdrView::Paste( *xStm, EE_FORMAT_HTML, maDropPos, pPage, nPasteOptions );
+            bReturn = SdrView::Paste( *xStm, EETextFormat::Html, maDropPos, pPage, nPasteOptions );
         }
     }
 
@@ -1409,14 +1409,14 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    pOLV->Read( *xStm, EE_FORMAT_XML, mpDocSh->GetHeaderAttributes() );
+                    pOLV->Read( *xStm, EETextFormat::Xml, mpDocSh->GetHeaderAttributes() );
                     bReturn = true;
                 }
             }
 
             if( !bReturn )
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bReturn = SdrView::Paste( *xStm, EE_FORMAT_XML, maDropPos, pPage, nPasteOptions );
+                bReturn = SdrView::Paste( *xStm, EETextFormat::Xml, maDropPos, pPage, nPasteOptions );
         }
     }
 
@@ -1445,14 +1445,14 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        pOLV->Read( *xStm, EE_FORMAT_RTF, mpDocSh->GetHeaderAttributes() );
+                        pOLV->Read( *xStm, EETextFormat::Rtf, mpDocSh->GetHeaderAttributes() );
                         bReturn = true;
                     }
                 }
 
                 if( !bReturn )
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    bReturn = SdrView::Paste( *xStm, EE_FORMAT_RTF, maDropPos, pPage, nPasteOptions );
+                    bReturn = SdrView::Paste( *xStm, EETextFormat::Rtf, maDropPos, pPage, nPasteOptions );
             }
         }
     }

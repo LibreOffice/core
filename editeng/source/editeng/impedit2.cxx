@@ -3528,7 +3528,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 aData >>= aSeq;
                 {
                     SvMemoryStream aODFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                    aNewSelection = Read( aODFStream, rBaseURL, EE_FORMAT_XML, rPaM );
+                    aNewSelection = Read( aODFStream, rBaseURL, EETextFormat::Xml, rPaM );
                 }
                 bDone = true;
             }
@@ -3560,7 +3560,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     aData >>= aSeq;
                     {
                         SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                        aNewSelection = Read( aRTFStream, rBaseURL, EE_FORMAT_RTF, rPaM );
+                        aNewSelection = Read( aRTFStream, rBaseURL, EETextFormat::Rtf, rPaM );
                     }
                     bDone = true;
                 }

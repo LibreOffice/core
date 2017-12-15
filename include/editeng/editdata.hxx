@@ -33,7 +33,7 @@ class SvxFieldItem;
 class SvxRTFItemStackType;
 enum class HtmlTokenId : sal_Int16;
 
-enum EETextFormat       { EE_FORMAT_TEXT = 0x20, EE_FORMAT_RTF, EE_FORMAT_BIN = 0x31, EE_FORMAT_HTML, EE_FORMAT_XML };
+enum class EETextFormat { Text = 0x20, Rtf, Html = 0x32, Xml };
 enum EEHorizontalTextDirection { EE_HTEXTDIR_DEFAULT, EE_HTEXTDIR_L2R, EE_HTEXTDIR_R2L };
 enum class EESelectionMode  { Std, TxtOnly, Hidden };
     // EE_SELMODE_HIDDEN can be used to completely hide the selection. This is useful e.g. when you want show the selection

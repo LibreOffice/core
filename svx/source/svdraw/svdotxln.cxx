@@ -228,7 +228,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, rtl_TextEncoding eCharSet)
 
         if( !pIStm->GetError() )
         {
-            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), sal::static_int_cast< sal_uInt16 >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
+            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), bRTF ? EETextFormat::Rtf : EETextFormat::Text );
             bRet = true;
         }
     }

@@ -60,7 +60,7 @@ ErrCode ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
     Link<RtfImportInfo&,void> aOldLink = pEdit->GetRtfImportHdl();
     pEdit->SetRtfImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
-    ErrCode nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
+    ErrCode nErr = pEdit->Read( rStream, rBaseURL, EETextFormat::Rtf );
     if ( nRtfLastToken == RTF_PAR )
     {
         if ( !maList.empty() )

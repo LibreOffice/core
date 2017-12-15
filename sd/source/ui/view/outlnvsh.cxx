@@ -1760,7 +1760,7 @@ ErrCode OutlineViewShell::ReadRtf(SvStream& rInput)
     OutlineViewPageChangesGuard aGuard( pOlView );
     OutlineViewModelChangeGuard aGuard2( *pOlView );
 
-    bRet = rOutl.Read( rInput, OUString(), EE_FORMAT_RTF, GetDocSh()->GetHeaderAttributes() );
+    bRet = rOutl.Read( rInput, OUString(), EETextFormat::Rtf, GetDocSh()->GetHeaderAttributes() );
 
     SdPage* pPage = GetDoc()->GetSdPage( GetDoc()->GetSdPageCount(PageKind::Standard) - 1, PageKind::Standard );
     SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );

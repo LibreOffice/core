@@ -110,7 +110,7 @@ public:
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
 
     bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
-    bool            Paste(SvStream& rInput, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
+    bool            Paste(SvStream& rInput, EETextFormat eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
 };
 
 #endif // INCLUDED_SVX_SVDXCGV_HXX
