@@ -41,7 +41,6 @@
 "ScTableSheetObj";"com::sun::star::style::CharacterPropertiesAsian";"ParaIsCharacterDistance"
 "ScTableSheetObj";"com::sun::star::style::CharacterPropertiesAsian";"ParaIsForbiddenRules"
 "ScTableSheetObj";"com::sun::star::style::CharacterPropertiesAsian";"ParaIsHangingPunctuation"
-"ScTableSheetObj";"com::sun::star::sheet::XCellRangeAddressable";"getRangeAddress()"
 "ScTableSheetObj";"com::sun::star::util::XReplaceable";"createReplaceDescriptor()"
 "ScTableSheetObj";"com::sun::star::util::XReplaceable";"replaceAll()"
 "ScTableSheetObj";"com::sun::star::chart::XChartData";"addChartDataChangeEventListener()"
