@@ -21,7 +21,6 @@
 #include <memory>
 #include <svtools/addresstemplate.hxx>
 #include <svtools/strings.hrc>
-#include <svtools/helpids.h>
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/interaction.hxx>

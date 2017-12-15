@@ -29,7 +29,6 @@
 #include <fmprop.hxx>
 
 #include <fmundo.hxx>
-#include <helpids.h>
 #include <fmexpl.hxx>
 #include <svx/strings.hrc>
 #include <fmshimp.hxx>

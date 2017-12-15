@@ -34,7 +34,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 
-#include <helpids.h>
 #include <Outliner.hxx>
 #include <headerfooterdlg.hxx>
 #include <DrawDocShell.hxx>
