@@ -13,7 +13,6 @@
 // only compile this on clang 3.7 or higher, which is known to work
 // there were problems on clang 3.5 at least
 #include "config_clang.h"
-#if CLANG_VERSION >= 30700
 #include <cassert>
 #include <stdlib.h>
 #include <string>
@@ -311,7 +310,6 @@ std::string GetImplementationName::initSrcdir() {
 loplugin::Plugin::Registration<GetImplementationName> X(
     "getimplementationname", false);
 }
-#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -107,12 +107,8 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
-// workaround clang-3.5 issue
-#if CLANG_VERSION >= 30600
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
-#endif
-
 
     if (!functionDecl->getNameInfo().getLoc().isValid())
         return;
@@ -131,7 +127,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
 
 
     MyCallSiteInfo aInfo;
-    aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+    aInfo.returnType = functionDecl->getReturnType().getCanonicalType().getAsString();
 
     if (isa<CXXMethodDecl>(functionDecl)) {
         const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
@@ -259,11 +255,8 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
-// workaround clang-3.5 issue
-#if CLANG_VERSION >= 30600
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
-#endif
 
     unsigned len = std::max(callExpr->getNumArgs(), functionDecl->getNumParams());
     for (unsigned i = 0; i < len; ++i) {
