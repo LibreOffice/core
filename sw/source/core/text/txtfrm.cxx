@@ -398,7 +398,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
 
 void SwTextFrame::DestroyImpl()
 {
-    // Remove associated SwParaPortion from pTextCache
+    // Remove associated SwParaPortion from s_pTextCache
     ClearPara();
 
     const SwContentNode* pCNd;
@@ -2123,7 +2123,7 @@ SwTextFrame* SwTextFrame::GetFormatted( bool bForceQuickFormat )
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     SwSwapIfSwapped swap( this );
 
-    // In case the SwLineLayout was cleared out of the pTextCache, recreate it.
+    // In case the SwLineLayout was cleared out of the s_pTextCache, recreate it
     // Not for empty paragraphs
     if( !HasPara() && !(isFrameAreaDefinitionValid() && IsEmpty()) )
     {
@@ -2134,7 +2134,7 @@ SwTextFrame* SwTextFrame::GetFormatted( bool bForceQuickFormat )
         // If the flags were valid (hence bFormat=true), Calc did nothing,
         // so Format() must be called manually in order to recreate
         // the SwLineLayout that has been deleted from the
-        // SwTextFrame::pTextCache (hence !HasPara() above).
+        // SwTextFrame::s_pTextCache (hence !HasPara() above).
         // Optimization with FormatQuick()
         if( bFormat && !FormatQuick( bForceQuickFormat ) )
             Format(getRootFrame()->GetCurrShell()->GetOut());

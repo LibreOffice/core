@@ -38,7 +38,7 @@
 #include <txtfly.hxx>
 #include <dbg_lay.hxx>
 
-SwCache *SwTextFrame::pTextCache = nullptr;
+SwCache *SwTextFrame::s_pTextCache = nullptr;
 long SwTextFrame::nMinPrtLine = 0;
 SwContourCache *pContourCache = nullptr;
 SwDropCapCache *pDropCapCache = nullptr;
@@ -59,7 +59,7 @@ void TextInit_()
     pSwFontCache = new SwFontCache; // Cache for SwTextFormatColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
     SwCache *pTextCache = new SwCache( 250 // Cache for SwTextFrame -> SwTextLine = { SwParaPortion* pLine }
 #ifdef DBG_UTIL
-    , "static SwTextFrame::pTextCache"
+    , "static SwTextFrame::s_pTextCache"
 #endif
     );
     SwTextFrame::SetTextCache( pTextCache );

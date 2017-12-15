@@ -60,7 +60,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     /// if there are too many of them, but the "valid" flags of the frame
     /// will still be set; GetFormatted() is the function that forces
     /// recreation of the SwLineLayout by Format() if necessary.
-    static SwCache *pTextCache;
+    static SwCache *s_pTextCache;
     static long nMinPrtLine;    // This Line must not be underrun when printing
                                 // Hack for table cells stretching multiple pages
 
@@ -451,7 +451,7 @@ public:
     SwTextFrame *FindQuoVadisFrame();
 
     /**
-     * In case the SwLineLayout was cleared out of the pTextCache, recreate it.
+     * In case the SwLineLayout was cleared out of the s_pTextCache, recreate it
      *
      * #i29062# GetFormatted() can trigger a full formatting
      * of the paragraph, causing other layout frames to become invalid. This
@@ -472,8 +472,8 @@ public:
     bool GetDropRect( SwRect &rRect ) const
     { return HasPara() && GetDropRect_( rRect ); }
 
-    static SwCache *GetTextCache() { return pTextCache; }
-    static void     SetTextCache( SwCache *pNew ) { pTextCache = pNew; }
+    static SwCache *GetTextCache() { return s_pTextCache; }
+    static void     SetTextCache( SwCache *pNew ) { s_pTextCache = pNew; }
 
     static long GetMinPrtLine() { return nMinPrtLine; }
 
