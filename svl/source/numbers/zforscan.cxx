@@ -121,22 +121,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     bConvertMode = false;
     mbConvertForExcelExport = false;
     bConvertSystemToSystem = false;
-
-    sKeyword[NF_KEY_E] =     sEnglishKeyword[NF_KEY_E];        // Exponent
-    sKeyword[NF_KEY_AMPM] =  sEnglishKeyword[NF_KEY_AMPM];     // AM/PM
-    sKeyword[NF_KEY_AP] =    sEnglishKeyword[NF_KEY_AP];       // AM/PM short
-    sKeyword[NF_KEY_MI] =    sEnglishKeyword[NF_KEY_MI];       // Minute
-    sKeyword[NF_KEY_MMI] =   sEnglishKeyword[NF_KEY_MMI];      // Minute 02
-    sKeyword[NF_KEY_S] =     sEnglishKeyword[NF_KEY_S];        // Second
-    sKeyword[NF_KEY_SS] =    sEnglishKeyword[NF_KEY_SS];       // Second 02
-    sKeyword[NF_KEY_Q] =     sEnglishKeyword[NF_KEY_Q];        // Quarter short 'Q'
-    sKeyword[NF_KEY_QQ] =    sEnglishKeyword[NF_KEY_QQ];       // Quarter long
-    sKeyword[NF_KEY_NN] =    sEnglishKeyword[NF_KEY_NN];       // Day of week short
-    sKeyword[NF_KEY_NNN] =   sEnglishKeyword[NF_KEY_NNN];      // Day of week long
-    sKeyword[NF_KEY_NNNN] =  sEnglishKeyword[NF_KEY_NNNN];     // Day of week long incl. separator
-    sKeyword[NF_KEY_WW] =    sEnglishKeyword[NF_KEY_WW];       // Week of year
-    sKeyword[NF_KEY_CCC] =   sEnglishKeyword[NF_KEY_CCC];      // Currency abbreviation
-    bKeywordsNeedInit = true;            // locale dependent keywords
+    bKeywordsNeedInit = true;            // locale dependent and not locale dependent keywords
     bCompatCurNeedInit = true;           // locale dependent compatibility currency strings
 
     if ( bStandardColorNeedInitialization )
@@ -296,32 +281,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     const LanguageTag& rLoadedLocale = pLocaleData->getLoadedLanguageTag();
     LanguageType eLang = rLoadedLocale.getLanguageType( false);
 
-    i18n::NumberFormatCode aFormat = xNFC->getFormatCode( NF_NUMBER_STANDARD, rLoadedLocale.getLocale() );
-    sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code );
-    sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
-
-    // preset new calendar keywords
-    sKeyword[NF_KEY_AAA] =   sEnglishKeyword[NF_KEY_AAA];
-    sKeyword[NF_KEY_AAAA] =  sEnglishKeyword[NF_KEY_AAAA];
-    sKeyword[NF_KEY_EC] =    sEnglishKeyword[NF_KEY_EC];
-    sKeyword[NF_KEY_EEC] =   sEnglishKeyword[NF_KEY_EEC];
-    sKeyword[NF_KEY_G] =     sEnglishKeyword[NF_KEY_G];
-    sKeyword[NF_KEY_GG] =    sEnglishKeyword[NF_KEY_GG];
-    sKeyword[NF_KEY_GGG] =   sEnglishKeyword[NF_KEY_GGG];
-    sKeyword[NF_KEY_R] =     sEnglishKeyword[NF_KEY_R];
-    sKeyword[NF_KEY_RR] =    sEnglishKeyword[NF_KEY_RR];
-
-    // Thai T NatNum special. Other locale's small letter 't' results in upper
-    // case comparison not matching but length does in conversion mode. Ugly.
-    if (eLang == LANGUAGE_THAI)
-    {
-        sKeyword[NF_KEY_THAI_T] = "T";
-    }
-    else
-    {
-        sKeyword[NF_KEY_THAI_T] = sEnglishKeyword[NF_KEY_THAI_T];
-    }
-
     bool bL10n = (meKeywordLocalization != KeywordLocalization::EnglishOnly);
     if (bL10n)
     {
@@ -377,7 +336,38 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         }
     }
 
-    if ( bL10n && eLang.anyOf(
+    // Init the current NfKeywordTable with English keywords.
+    sKeyword = sEnglishKeyword;
+
+    // Set the uppercase localized General name, e.g. Standard -> STANDARD
+    i18n::NumberFormatCode aFormat = xNFC->getFormatCode( NF_NUMBER_STANDARD, rLoadedLocale.getLocale() );
+    sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code );
+    sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
+
+    // Thai T NatNum special. Other locale's small letter 't' results in upper
+    // case comparison not matching but length does in conversion mode. Ugly.
+    if (eLang == LANGUAGE_THAI)
+    {
+        sKeyword[NF_KEY_THAI_T] = "T";
+    }
+    else
+    {
+        sKeyword[NF_KEY_THAI_T] = sEnglishKeyword[NF_KEY_THAI_T];
+    }
+
+    // boolean keywords
+    InitSpecialKeyword( NF_KEY_TRUE );
+    InitSpecialKeyword( NF_KEY_FALSE );
+
+    // compatibility currency strings
+    InitCompatCur();
+
+    if (!bL10n)
+        return;
+
+    // All locale dependent keywords overrides follow.
+
+    if ( eLang.anyOf(
             LANGUAGE_GERMAN,
             LANGUAGE_GERMAN_SWISS,
             LANGUAGE_GERMAN_AUSTRIAN,
@@ -414,7 +404,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     else
     {
         // day
-        if ( bL10n && eLang.anyOf(
+        if ( eLang.anyOf(
                 LANGUAGE_ITALIAN,
                 LANGUAGE_ITALIAN_SWISS))
         {
@@ -427,7 +417,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_GG] = "XX";
             sKeyword[NF_KEY_GGG] = "XXX";
         }
-        else if ( bL10n && eLang.anyOf(
+        else if ( eLang.anyOf(
                  LANGUAGE_FRENCH,
                  LANGUAGE_FRENCH_BELGIAN,
                  LANGUAGE_FRENCH_CANADIAN,
@@ -440,22 +430,16 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_DDD] = "JJJ";
             sKeyword[NF_KEY_DDDD] = "JJJJ";
         }
-        else if ( bL10n && eLang == LANGUAGE_FINNISH )
+        else if ( eLang == LANGUAGE_FINNISH )
         {
             sKeyword[NF_KEY_D] = "P";
             sKeyword[NF_KEY_DD] = "PP";
             sKeyword[NF_KEY_DDD] = "PPP";
             sKeyword[NF_KEY_DDDD] = "PPPP";
         }
-        else
-        {
-            sKeyword[NF_KEY_D] = sEnglishKeyword[NF_KEY_D];
-            sKeyword[NF_KEY_DD] = sEnglishKeyword[NF_KEY_DD];
-            sKeyword[NF_KEY_DDD] = sEnglishKeyword[NF_KEY_DDD];
-            sKeyword[NF_KEY_DDDD] = sEnglishKeyword[NF_KEY_DDDD];
-        }
+
         // month
-        if ( bL10n && eLang == LANGUAGE_FINNISH )
+        if ( eLang == LANGUAGE_FINNISH )
         {
             sKeyword[NF_KEY_M] = "K";
             sKeyword[NF_KEY_MM] = "KK";
@@ -463,16 +447,9 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_MMMM] = "KKKK";
             sKeyword[NF_KEY_MMMMM] = "KKKKK";
         }
-        else
-        {
-            sKeyword[NF_KEY_M] = sEnglishKeyword[NF_KEY_M];
-            sKeyword[NF_KEY_MM] = sEnglishKeyword[NF_KEY_MM];
-            sKeyword[NF_KEY_MMM] = sEnglishKeyword[NF_KEY_MMM];
-            sKeyword[NF_KEY_MMMM] = sEnglishKeyword[NF_KEY_MMMM];
-            sKeyword[NF_KEY_MMMMM] = sEnglishKeyword[NF_KEY_MMMMM];
-        }
+
         // year
-        if ( bL10n && eLang.anyOf(
+        if ( eLang.anyOf(
             LANGUAGE_ITALIAN,
             LANGUAGE_ITALIAN_SWISS,
             LANGUAGE_FRENCH,
@@ -510,32 +487,28 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_AAA] =   "OOO";
             sKeyword[NF_KEY_AAAA] =  "OOOO";
         }
-        else if ( bL10n && eLang.anyOf(
+        else if ( eLang.anyOf(
              LANGUAGE_DUTCH,
              LANGUAGE_DUTCH_BELGIAN))
         {
             sKeyword[NF_KEY_YY] = "JJ";
             sKeyword[NF_KEY_YYYY] = "JJJJ";
         }
-        else if ( bL10n && eLang == LANGUAGE_FINNISH )
+        else if ( eLang == LANGUAGE_FINNISH )
         {
             sKeyword[NF_KEY_YY] = "VV";
             sKeyword[NF_KEY_YYYY] = "VVVV";
         }
-        else
-        {
-            sKeyword[NF_KEY_YY] = sEnglishKeyword[NF_KEY_YY];
-            sKeyword[NF_KEY_YYYY] = sEnglishKeyword[NF_KEY_YYYY];
-        }
+
         // hour
-        if ( bL10n && eLang.anyOf(
+        if ( eLang.anyOf(
              LANGUAGE_DUTCH,
              LANGUAGE_DUTCH_BELGIAN))
         {
             sKeyword[NF_KEY_H] = "U";
             sKeyword[NF_KEY_HH] = "UU";
         }
-        else if ( bL10n && eLang.anyOf(
+        else if ( eLang.anyOf(
             LANGUAGE_FINNISH,
             LANGUAGE_SWEDISH,
             LANGUAGE_SWEDISH_FINLAND,
@@ -547,33 +520,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_H] = "T";
             sKeyword[NF_KEY_HH] = "TT";
         }
-        else
-        {
-            sKeyword[NF_KEY_H] = sEnglishKeyword[NF_KEY_H];
-            sKeyword[NF_KEY_HH] = sEnglishKeyword[NF_KEY_HH];
-        }
-        // boolean
-        sKeyword[NF_KEY_BOOLEAN] = sEnglishKeyword[NF_KEY_BOOLEAN];
-        // colours, *only* localized in German
-        sKeyword[NF_KEY_COLOR] =     sEnglishKeyword[NF_KEY_COLOR];
-        sKeyword[NF_KEY_BLACK] =     sEnglishKeyword[NF_KEY_BLACK];
-        sKeyword[NF_KEY_BLUE] =      sEnglishKeyword[NF_KEY_BLUE];
-        sKeyword[NF_KEY_GREEN] =     sEnglishKeyword[NF_KEY_GREEN];
-        sKeyword[NF_KEY_CYAN] =      sEnglishKeyword[NF_KEY_CYAN];
-        sKeyword[NF_KEY_RED] =       sEnglishKeyword[NF_KEY_RED];
-        sKeyword[NF_KEY_MAGENTA] =   sEnglishKeyword[NF_KEY_MAGENTA];
-        sKeyword[NF_KEY_BROWN] =     sEnglishKeyword[NF_KEY_BROWN];
-        sKeyword[NF_KEY_GREY] =      sEnglishKeyword[NF_KEY_GREY];
-        sKeyword[NF_KEY_YELLOW] =    sEnglishKeyword[NF_KEY_YELLOW];
-        sKeyword[NF_KEY_WHITE] =     sEnglishKeyword[NF_KEY_WHITE];
     }
-
-    // boolean keywords
-    InitSpecialKeyword( NF_KEY_TRUE );
-    InitSpecialKeyword( NF_KEY_FALSE );
-
-    // compatibility currency strings
-    InitCompatCur();
 }
 
 void ImpSvNumberformatScan::ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
