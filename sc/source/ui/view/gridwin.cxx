@@ -795,6 +795,9 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             // Something went terribly wrong!
             return;
 
+        if (ScTabViewShell::isAnyEditViewInRange(/*bColumns*/ false, aParam.nRow1, aParam.nRow2))
+            return;
+
         pEntry->bDoQuery = true;
         pEntry->nField = rPos.Col();
         pEntry->eConnect = SC_AND;

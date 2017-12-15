@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 
 #include <tabview.hxx>
+#include <tabvwsh.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <scmod.hxx>
@@ -375,8 +376,10 @@ static long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, 
     return ( nEnd - nStart );       // for range starting at 0
 }
 
-void ScTabView::UpdateScrollBars()
+void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 {
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(eHeaderType, GetViewData().GetTabNo());
+
     long        nDiff;
     bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
     bool        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
