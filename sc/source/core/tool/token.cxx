@@ -1344,7 +1344,8 @@ void ScTokenArray::CheckForThreading( OpCode eOp  )
         ocOffset,
         ocTableOp,
         ocVLookup,
-        ocHLookup
+        ocHLookup,
+        ocMatch
     });
 
     // We only call this if it was already disabled
