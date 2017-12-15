@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_12ea61ac",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T12:43:16Z",
+      "side": 1,
+      "message": "This can\u0027t work. If 9th and 10th token are used as described, then checking the next nPos after token 7 will read the value of token 8 (the 9th token..)",
+      "revId": "91e95b9f8924013898e2891d9091dde8176f3805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_32d3dd05",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T12:43:16Z",
+      "side": 1,
+      "message": "This writes a 9th token.",
+      "revId": "91e95b9f8924013898e2891d9091dde8176f3805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1201816a",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1551,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T12:43:16Z",
+      "side": 1,
+      "message": "What do the _i and _f suffixes stand for?",
+      "revId": "91e95b9f8924013898e2891d9091dde8176f3805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_72f00592",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T12:43:16Z",
+      "side": 1,
+      "message": "Nitpick: please one space between keyword and opening parenthesis, so while (...)",
+      "range": {
+        "startLine": 1554,
+        "startChar": 12,
+        "endLine": 1554,
+        "endChar": 18
+      },
+      "revId": "91e95b9f8924013898e2891d9091dde8176f3805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_32fafd75",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T12:43:16Z",
+      "side": 1,
+      "message": "If p was still pointing to the first character then ptrim_f-1 will run out of bounds.",
+      "range": {
+        "startLine": 1556,
+        "startChar": 20,
+        "endLine": 1556,
+        "endChar": 31
+      },
+      "revId": "91e95b9f8924013898e2891d9091dde8176f3805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
