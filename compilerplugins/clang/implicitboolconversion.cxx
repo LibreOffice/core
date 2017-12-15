@@ -19,30 +19,6 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
-#if CLANG_VERSION < 30700
-
-namespace std {
-
-template<> struct iterator_traits<ExprIterator> {
-    typedef std::ptrdiff_t difference_type;
-    typedef Expr * value_type;
-    typedef Expr const ** pointer;
-    typedef Expr const & reference;
-    typedef std::random_access_iterator_tag iterator_category;
-};
-
-template<> struct iterator_traits<ConstExprIterator> {
-    typedef std::ptrdiff_t difference_type;
-    typedef Expr const * value_type;
-    typedef Expr const ** pointer;
-    typedef Expr const & reference;
-    typedef std::random_access_iterator_tag iterator_category;
-};
-
-}
-
-#endif
-
 namespace {
 
 Expr const * ignoreParenAndTemporaryMaterialization(Expr const * expr) {
@@ -334,19 +310,19 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
             std::ptrdiff_t n = j - expr->arg_begin();
             assert(n >= 0);
             if (t != nullptr
-                && static_cast<std::size_t>(n) >= compat::getNumParams(*t))
+                && static_cast<std::size_t>(n) >= t->getNumParams())
             {
                 assert(t->isVariadic());
                 // ignore bool to int promotions of variadic arguments
             } else if (bExt) {
                 if (t != nullptr) {
                     assert(
-                        static_cast<std::size_t>(n) < compat::getNumParams(*t));
-                    if (!(compat::getParamType(*t, n)->isSpecificBuiltinType(
+                        static_cast<std::size_t>(n) < t->getNumParams());
+                    if (!(t->getParamType(n)->isSpecificBuiltinType(
                               BuiltinType::Int)
-                          || compat::getParamType(*t, n)->isSpecificBuiltinType(
+                          || t->getParamType(n)->isSpecificBuiltinType(
                               BuiltinType::UInt)
-                          || compat::getParamType(*t, n)->isSpecificBuiltinType(
+                          || t->getParamType(n)->isSpecificBuiltinType(
                               BuiltinType::Long)))
                     {
                         reportWarning(i);
@@ -831,7 +807,7 @@ bool ImplicitBoolConversion::TraverseReturnStmt(ReturnStmt * stmt) {
 bool ImplicitBoolConversion::TraverseFunctionDecl(FunctionDecl * decl) {
     bool bExt = false;
     if (hasCLanguageLinkageType(decl) && decl->isThisDeclarationADefinition()) {
-        QualType t { compat::getReturnType(*decl) };
+        QualType t { decl->getReturnType() };
         if (t->isSpecificBuiltinType(BuiltinType::Int)
             || t->isSpecificBuiltinType(BuiltinType::UInt))
         {

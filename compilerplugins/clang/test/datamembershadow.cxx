@@ -11,8 +11,6 @@
 
 #include <config_clang.h>
 
-// '#if CLANG_VERSION >= 30800' covers large parts of compilerplugins/clang/datamembershadow.cxx
-#if CLANG_VERSION >= 30800
 struct Bar {
     int x; // expected-note {{superclass member here [loplugin:datamembershadow]}}
 };
@@ -20,8 +18,5 @@ struct Bar {
 struct Foo : public Bar {
     int x; // expected-error {{data member x is shadowing member in superclass, through inheritance path Foo->Bar [loplugin:datamembershadow]}}
 };
-#else
-// expected-no-diagnostics
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
