@@ -311,7 +311,7 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand, const Color& rIn
     OUString aCommandCopy = aCommand;
     SvColorDialog aColorDlg( nullptr );
     aColorDlg.SetColor(rInitialColor);
-    aColorDlg.SetMode(svtools::ColorPickerMode_MODIFY);
+    aColorDlg.SetMode(svtools::ColorPickerMode::Modify);
     if( aColorDlg.Execute() == RET_OK )
     {
         if (mpBtnUpdater)

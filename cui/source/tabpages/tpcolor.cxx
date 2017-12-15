@@ -424,7 +424,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
     std::unique_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
 
     pColorDlg->SetColor (aCurrentColor);
-    pColorDlg->SetMode( svtools::ColorPickerMode_MODIFY );
+    pColorDlg->SetMode( svtools::ColorPickerMode::Modify );
 
     if( pColorDlg->Execute() == RET_OK )
     {

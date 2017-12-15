@@ -39,7 +39,7 @@ using namespace ::com::sun::star::ui::dialogs;
 
 SvColorDialog::SvColorDialog( vcl::Window* pWindow )
 : mpParent( pWindow )
-, meMode( svtools::ColorPickerMode_SELECT )
+, meMode( svtools::ColorPickerMode::Select )
 {
 }
 
@@ -53,7 +53,7 @@ void SvColorDialog::SetColor( const Color& rColor )
 }
 
 
-void SvColorDialog::SetMode( sal_Int16 eMode )
+void SvColorDialog::SetMode( svtools::ColorPickerMode eMode )
 {
     meMode = eMode;
 }
@@ -76,7 +76,7 @@ short SvColorDialog::Execute()
         props[0].Name = sColor;
         props[0].Value <<= (sal_Int32) maColor.GetColor();
         props[1].Name = "Mode";
-        props[1].Value <<= meMode;
+        props[1].Value <<= static_cast<sal_Int16>(meMode);
 
         xPropertyAccess->setPropertyValues( props );
 
