@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b29c2dc1",
+        "filename": "sw/source/ui/table/tautofmt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-15T09:43:37Z",
+      "side": 1,
+      "message": "How did you came up with this list? What makes you disable exactly these properties, not others?",
+      "revId": "68a89b33778ae1f41b6fb7895278cb0c8a31ea94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
