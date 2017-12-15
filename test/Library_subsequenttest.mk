@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xarealink \
 	test/source/sheet/xarealinks \
 	test/source/sheet/xcelladdressable \
+	test/source/sheet/xcellformatrangessupplier \
 	test/source/sheet/xcellrangedata \
 	test/source/sheet/xcellrangereferrer \
 	test/source/sheet/xcellrangesquery \
