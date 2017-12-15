@@ -3137,7 +3137,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream &rStream)
 
     ErrCode nRet = ERRCODE_SFX_DOLOADFAILED;
 
-    nRet = SmXMLImportWrapper::ReadThroughComponent(xStream, xModel, xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false);
+    try
+    {
+        nRet = SmXMLImportWrapper::ReadThroughComponent(xStream, xModel, xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false);
+    }
+    catch (...)
+    {
+    }
 
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
