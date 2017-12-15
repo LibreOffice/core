@@ -2449,11 +2449,17 @@ void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
         aCon1=rEGeo.aCon1;
         if (aCon1.pObj!=nullptr) aCon1.pObj->AddListener(*this);
     }
+    else
+        aCon1=rEGeo.aCon1;
+
     if (aCon2.pObj!=rEGeo.aCon2.pObj) {
         if (aCon2.pObj!=nullptr) aCon2.pObj->RemoveListener(*this);
         aCon2=rEGeo.aCon2;
         if (aCon2.pObj!=nullptr) aCon2.pObj->AddListener(*this);
     }
+    else
+        aCon2=rEGeo.aCon2;
+
     *pEdgeTrack    =*rEGeo.pEdgeTrack;
     bEdgeTrackDirty=rEGeo.bEdgeTrackDirty;
     bEdgeTrackUserDefined=rEGeo.bEdgeTrackUserDefined;
