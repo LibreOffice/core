@@ -60,7 +60,9 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
 
     {
         osl::MutexGuard aGuard( m_aUserEventsMutex );
-        assert( m_aProcessingUserEvents.empty() );
+        // prevent processing user events in parallel
+        if (!m_aProcessingUserEvents.empty())
+            return false;
         if( ! m_aUserEvents.empty() )
         {
             if( bHandleAllCurrentEvents )
@@ -77,13 +79,18 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
     if( bWasEvent )
     {
         SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
+        // to remove the event from the event list, after it was processed
+        bool bPopAfterProcess = false;
         do {
             {
                 osl::MutexGuard aGuard( m_aUserEventsMutex );
+                if (bPopAfterProcess)
+                    m_aProcessingUserEvents.pop_front();
+                else
+                    bPopAfterProcess = true;
                 if ( m_aProcessingUserEvents.empty() )
                     break;
                 aEvent = m_aProcessingUserEvents.front();
-                m_aProcessingUserEvents.pop_front();
             }
 
             if ( !isFrameAlive( aEvent.m_pFrame ) )
