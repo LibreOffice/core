@@ -295,7 +295,7 @@ SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
  * for each pair, so we can accurately restore
  * it later.
  */
-thread_local std::stack<sal_uIntPtr> GtkYieldMutex::yieldCounts;
+thread_local std::stack<sal_uInt32> GtkYieldMutex::yieldCounts;
 
 void GtkYieldMutex::ThreadsEnter()
 {
