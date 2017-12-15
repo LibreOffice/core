@@ -53,7 +53,6 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
 
     {
         osl::MutexGuard aGuard( m_aUserEventsMutex );
-        assert( m_aProcessingUserEvents.empty() );
         if( ! m_aUserEvents.empty() )
         {
             if( bHandleAllCurrentEvents )
