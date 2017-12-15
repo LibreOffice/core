@@ -586,7 +586,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XActivationBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_XArrayFormulaRange \
     qadevOOo/tests/java/ifc/sheet/_XCalculatable \
-    qadevOOo/tests/java/ifc/sheet/_XCellFormatRangesSupplier \
     qadevOOo/tests/java/ifc/sheet/_XCellRangeAddressable \
     qadevOOo/tests/java/ifc/sheet/_XCellRangeData \
     qadevOOo/tests/java/ifc/sheet/_XCellRangeFormula \
