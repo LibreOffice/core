@@ -90,7 +90,6 @@
 #include <basic/basmgr.hxx>
 #include <svtools/strings.hrc>
 #include <sfx2/QuerySaveDocument.hxx>
-#include <helpids.h>
 #include <sfx2/msg.hxx>
 #include <appbaslib.hxx>
 #include <sfx2/sfxbasemodel.hxx>

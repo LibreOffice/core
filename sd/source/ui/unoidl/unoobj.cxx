@@ -70,7 +70,6 @@
 #include <unokywds.hxx>
 #include <unopage.hxx>
 #include <DrawDocShell.hxx>
-#include <helpids.h>
 #include <glob.hxx>
 #include <strings.hrc>
 #include "unolayer.hxx"

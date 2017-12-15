@@ -20,7 +20,6 @@
 
 #include <sal/macros.h>
 
-#include <helpids.h>
 #include <fmprop.hxx>
 #include <fmPropBrw.hxx>
 #include <svx/strings.hrc>

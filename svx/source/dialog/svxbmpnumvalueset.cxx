@@ -22,7 +22,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/languageoptions.hxx>
-#include <helpids.h>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>

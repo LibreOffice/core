@@ -25,7 +25,6 @@
 #include <datanavi.hxx>
 #include <fmservs.hxx>
 
-#include <helpids.h>
 #include <bitmaps.hlst>
 #include <fpicker/strings.hrc>
 #include <svx/svxids.hrc>

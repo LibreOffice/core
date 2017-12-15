@@ -103,7 +103,6 @@
 #include <helper.hxx>
 #include <sfx2/strings.hrc>
 #include <workwin.hxx>
-#include <helpids.h>
 #include <sfx2/sfxdlg.hxx>
 #include <appbaslib.hxx>
 #include <openflag.hxx>

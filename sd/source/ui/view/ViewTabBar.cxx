@@ -29,7 +29,6 @@
 
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <helpids.h>
 #include <Client.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>

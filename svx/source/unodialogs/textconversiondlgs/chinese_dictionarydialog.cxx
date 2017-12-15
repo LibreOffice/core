@@ -37,7 +37,6 @@
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <helpids.h>
 
 
 namespace textconversiondlgs

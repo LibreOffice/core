@@ -42,7 +42,6 @@
 #include <sdxfer.hxx>
 
 #include <app.hrc>
-#include <helpids.h>
 
 #include <OutlineView.hxx>
 #include <Client.hxx>

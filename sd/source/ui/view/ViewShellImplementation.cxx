@@ -26,7 +26,6 @@
 #include <sdresid.hxx>
 #include <strings.hrc>
 #include <app.hrc>
-#include <helpids.h>
 #include <sdattr.hxx>
 #include <sdabstdlg.hxx>
 #include <unmodpg.hxx>

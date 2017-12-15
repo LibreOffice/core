@@ -41,7 +41,6 @@
 
 #include <app.hrc>
 #include <strings.hrc>
-#include <helpids.h>
 #include <Window.hxx>
 #include <imapinfo.hxx>
 #include <sdresid.hxx>

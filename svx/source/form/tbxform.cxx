@@ -34,7 +34,6 @@
 #include <svx/strings.hrc>
 #include <svx/tbxctl.hxx>
 #include <tbxform.hxx>
-#include <helpids.h>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 

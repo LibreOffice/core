@@ -144,7 +144,6 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/confignode.hxx>
-#include <helpids.h>
 
 #include <ReportControllerObserver.hxx>
 
