@@ -880,10 +880,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                     // this one - otherwise the whole will be considered as Any-Sequence
                     bool bNeedsInit = true;
 
-                    sal_Int32 nSize = nUpper - nLower + 1;
-                    sal_Int32 aIdx[1];
-                    aIdx[0] = nLower;
-                    for (sal_Int32 i = 0; i < nSize; ++i, ++aIdx[0])
+                    for (sal_Int32 aIdx[1] = { nLower }; aIdx[0] <= nUpper; ++aIdx[0])
                     {
                         SbxVariableRef xVar = pArray->Get32(aIdx);
                         Type aType = getUnoTypeForSbxValue( xVar.get() );
