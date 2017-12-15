@@ -69,7 +69,7 @@ void ORowSetImportExport::initialize()
     m_aColumnTypes.reserve(nCount);
     for (sal_Int32 i = 1;i <= nCount; ++i)
     {
-        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exist
+        sal_Int32 nPos = COLUMN_POSITION_NOT_FOUND; // means column is autoincrement or doesn't exist
         if(!m_xTargetResultSetMetaData->isAutoIncrement(i))
         {
             try

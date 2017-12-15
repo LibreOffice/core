@@ -766,7 +766,7 @@ void ODatabaseExport::adjustFormat()
         if ( nNewPos < static_cast<sal_Int32>(m_vColumnPositions.size()) )
         {
             sal_Int32 nColPos = m_vColumnPositions[nNewPos].first;
-            if( nColPos != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND))
+            if( nColPos != COLUMN_POSITION_NOT_FOUND)
             {
                 --nColPos;
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vNumberFormat.size()),"m_vFormatKey: Illegal index for vector");
@@ -832,7 +832,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
         ODatabaseExport::TPositions::const_iterator aFind = std::find_if(_rvColumns.begin(),_rvColumns.end(),
             [j] (const ODatabaseExport::TPositions::value_type& tPos)
                 { return tPos.second == (sal_Int32)(j+1); });
-        if ( _rvColumns.end() != aFind && aFind->second != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) && aFind->first != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) )
+        if ( _rvColumns.end() != aFind && aFind->second != COLUMN_POSITION_NOT_FOUND && aFind->first != COLUMN_POSITION_NOT_FOUND )
         {
             OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");
             aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pIter+j));

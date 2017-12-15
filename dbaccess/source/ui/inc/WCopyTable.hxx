@@ -331,7 +331,7 @@ namespace dbaui
         void                CheckButtons(); // checks which button can be disabled, enabled
 
         // returns a vector where the position of a column and if the column is in the selection
-        // when not the value is COLUMN_POSITION_NOT_FOUND == (sal_uInt32)-1
+        // when not the value is COLUMN_POSITION_NOT_FOUND.
         const ODatabaseExport::TPositions& GetColumnPositions()    const { return m_vColumnPositions; }
         const std::vector<sal_Int32>&    GetColumnTypes()        const { return m_vColumnTypes; }
         bool                        UseHeaderLine()         const { return m_bUseHeaderLine; }
