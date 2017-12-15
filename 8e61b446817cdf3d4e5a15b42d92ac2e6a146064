@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4dcd2c84",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T21:39:18Z",
+      "side": 1,
+      "message": "What is dbdocfun.hxx needed for?",
+      "range": {
+        "startLine": 33,
+        "startChar": 10,
+        "endLine": 33,
+        "endChar": 22
+      },
+      "revId": "8e61b446817cdf3d4e5a15b42d92ac2e6a146064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2dd0e01e",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T21:39:18Z",
+      "side": 1,
+      "message": "What is vcl/svapp.hxx needed for?",
+      "range": {
+        "startLine": 34,
+        "startChar": 10,
+        "endLine": 34,
+        "endChar": 23
+      },
+      "revId": "8e61b446817cdf3d4e5a15b42d92ac2e6a146064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ad893028",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T21:39:18Z",
+      "side": 1,
+      "message": "This shouldn\u0027t modify maDBRangeName as that would result in \"Name_1_Name_2\" already after the second iteration. Instead, tested and constructed/modified should be a temporary name variable.\n\nSee also sc/source/filter/oox/workbookhelper.cxx findUnusedName(), probably that should be made a static WorkbookGlobals function and used, instead of duplicating the code wrongly.",
+      "range": {
+        "startLine": 110,
+        "startChar": 12,
+        "endLine": 110,
+        "endChar": 25
+      },
+      "revId": "8e61b446817cdf3d4e5a15b42d92ac2e6a146064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cd8e7c2d",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T21:39:18Z",
+      "side": 1,
+      "message": "Why the guard?",
+      "revId": "8e61b446817cdf3d4e5a15b42d92ac2e6a146064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cdc03c53",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T21:39:18Z",
+      "side": 1,
+      "message": "NamedDBs::insert(p) takes ownership of p by moving it to unique_ptr, so deleting it here again is wrong. The comment in sc/inc/dbdata.hxx was wrong about that but meanwhile corrected.",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 34
+      },
+      "revId": "8e61b446817cdf3d4e5a15b42d92ac2e6a146064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4de60c16",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T21:39:18Z",
+      "side": 1,
+      "message": "Compiling formulas here is certainly wrong.",
+      "range": {
+        "startLine": 129,
+        "startChar": 12,
+        "endLine": 129,
+        "endChar": 40
+      },
+      "revId": "8e61b446817cdf3d4e5a15b42d92ac2e6a146064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
