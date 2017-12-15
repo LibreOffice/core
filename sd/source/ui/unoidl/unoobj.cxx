@@ -406,7 +406,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName )
 //XPropertySet
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getPropertySetInfo()
 {
-    sal_uIntPtr nObjId = reinterpret_cast<sal_uIntPtr>(mpShape->getPropertyMapEntries());
+    SfxItemPropertyMapEntry const * nObjId = mpShape->getPropertyMapEntries();
     css::uno::Reference<css::beans::XPropertySetInfo> pInfo;
 
     SdExtPropertySetInfoCache& rCache = (mpModel && mpModel->IsImpressDocument()) ?
