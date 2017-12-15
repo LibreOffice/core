@@ -390,7 +390,7 @@ const char* aFuncStrIds[] = {
 OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
 {
     OUStringBuffer aRet;
-    assert(eFunc < SAL_N_ELEMENTS(aFuncStrIds));
+    assert(unsigned(eFunc) < SAL_N_ELEMENTS(aFuncStrIds));
     const char* pId = aFuncStrIds[eFunc];
     if (pId)
     {
