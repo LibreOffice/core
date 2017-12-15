@@ -383,7 +383,7 @@ public:
     // Next method is called, if via ToTop, ToBtm, ... the
     // sequence of object has been changed. It is called after
     // each SdrObjList::SetObjectOrdNum(nOldPos,nNewPos);
-    virtual void ObjOrderChanged(SdrObject* pObj, sal_uIntPtr nOldPos, sal_uIntPtr nNewPos);
+    virtual void ObjOrderChanged(SdrObject* pObj, size_t nOldPos, size_t nNewPos);
 
     // If one or more objects of the type SdrGrafObj or SdrOle2Obj
     // are marked and these are capable to deliver a StarView-metafile,

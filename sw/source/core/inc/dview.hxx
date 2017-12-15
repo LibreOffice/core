@@ -90,8 +90,8 @@ public:
     // Override to reuse edit background color in active text edit view (OutlinerView)
     virtual void ModelHasChanged() override;
 
-    virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
-                                            sal_uLong nNewPos ) override;
+    virtual void         ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
+                                            size_t nNewPos ) override;
     virtual bool TakeDragLimit(SdrDragMode eMode, tools::Rectangle& rRect) const override;
     virtual void MakeVisible( const tools::Rectangle&, vcl::Window &rWin ) override;
     virtual void CheckPossibilities() override;

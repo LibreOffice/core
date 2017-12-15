@@ -421,8 +421,8 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
 }
 
 // --> adjustment and re-factoring of method
-void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
-                                          sal_uLong nNewPos )
+void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
+                                          size_t nNewPos )
 {
     // nothing to do for group members
     if ( pObj->GetUpGroup() )
