@@ -122,13 +122,13 @@ Any byteStreamToAny( CDOTransferable::ByteSequence_t& aByteStream, const Type& a
     return aAny;
 }
 
-bool SAL_CALL cmpFullMediaType(
+bool cmpFullMediaType(
     const Reference< XMimeContentType >& xLhs, const Reference< XMimeContentType >& xRhs )
 {
     return xLhs->getFullMediaType().equalsIgnoreAsciiCase( xRhs->getFullMediaType( ) );
 }
 
-bool SAL_CALL cmpAllContentTypeParameter(
+bool cmpAllContentTypeParameter(
     const Reference< XMimeContentType >& xLhs, const Reference< XMimeContentType >& xRhs )
 {
     Sequence< OUString > xLhsFlavors = xLhs->getParameters( );

@@ -58,7 +58,7 @@ struct METAFILEHEADER
 
 // convert a windows metafile picture to a openoffice metafile picture
 
-Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
+Sequence< sal_Int8 > WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
 {
     OSL_ASSERT( aMetaFilePict.getLength( ) == sizeof( METAFILEPICT ) );
 
@@ -128,7 +128,7 @@ Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFi
 
 // convert a windows enhanced metafile to a openoffice metafile
 
-Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
+Sequence< sal_Int8 > WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
 {
     Sequence< sal_Int8 >    aRet;
     UINT                    nSize = 0;
@@ -147,7 +147,7 @@ Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile 
 
 // convert a openoffice metafile picture to a windows metafile picture
 
-HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
+HMETAFILEPICT OOMFPictToWinMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
 {
     HMETAFILEPICT   hPict = nullptr;
     HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength(), reinterpret_cast<unsigned char const *>(aOOMetaFilePict.getConstArray()) );
@@ -169,7 +169,7 @@ HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 > const & aOOMeta
 
 // convert a openoffice metafile picture to a windows enhanced metafile picture
 
-HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
+HENHMETAFILE OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
 {
     HENHMETAFILE hEnhMtf = SetEnhMetaFileBits( aOOMetaFilePict.getLength(), reinterpret_cast<unsigned char const *>(aOOMetaFilePict.getConstArray()) );
 
@@ -178,7 +178,7 @@ HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMe
 
 // convert a windows device independent bitmap into a openoffice bitmap
 
-Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
+Sequence< sal_Int8 > WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
     OSL_ENSURE(sal_uInt32(aWinDIB.getLength()) > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
     Sequence< sal_Int8 > ooBmpStream;
@@ -211,7 +211,7 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
 
 // convert a openoffice bitmap into a windows device independent bitmap
 
-Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
+Sequence< sal_Int8 > OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 {
     Sequence< sal_Int8 > winDIBStream( aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
@@ -243,7 +243,7 @@ const std::string TAG_END_HTML = std::string("</html>");
 const std::string TAG_BODY = std::string("<body");
 const std::string TAG_END_BODY = std::string("</body");
 
-Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
+Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
 {
     OSL_ASSERT(aTextHtml.getLength() > 0);
 
@@ -403,7 +403,7 @@ ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
 
 // convert a windows bitmap handle into a openoffice bitmap
 
-Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP aHBMP )
+Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP aHBMP )
 {
     Sequence< sal_Int8 > ooBmpStream;
 

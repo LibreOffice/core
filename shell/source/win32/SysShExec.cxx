@@ -56,7 +56,7 @@ using namespace cppu;
 
 namespace
 {
-    Sequence< OUString > SAL_CALL SysShExec_getSupportedServiceNames()
+    Sequence< OUString > SysShExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet { "com.sun.star.system.SystemShellExecute" };
         return aRet;

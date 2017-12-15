@@ -91,7 +91,7 @@ Sequence< OUString > ODriver::getSupportedServiceNames_Static(  )
     return aSNS;
 }
 
-css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::ado::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
+css::uno::Reference< css::uno::XInterface > connectivity::ado::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new ODriver(_rxFactory));
 }

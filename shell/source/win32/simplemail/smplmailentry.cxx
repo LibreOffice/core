@@ -33,7 +33,7 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 
 namespace
 {
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& )
+    Reference< XInterface > createInstance( const Reference< XMultiServiceFactory >& )
     {
         return Reference< XInterface >( static_cast< XSimpleMailClientSupplier* >( new CSmplMailSuppl( ) ) );
     }
@@ -42,7 +42,7 @@ namespace
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL smplmail_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* smplmail_component_getFactory(
         const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;

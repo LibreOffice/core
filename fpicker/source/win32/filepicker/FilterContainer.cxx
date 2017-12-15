@@ -235,7 +235,7 @@ void wcsmemcpy( sal_Unicode* pDest, const sal_Unicode* pSrc, sal_uInt32 nLength 
 // format the Win32 API requires,
 // e.g. "Text\0*.txt\0Doc\0*.doc;*xls\0\0"
 
-OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer )
+OUString makeWinFilterBuffer( CFilterContainer& aFilterContainer )
 {
     // calculate the required buffer size
     sal_uInt32 reqBuffSize = getTotalFilterLength( aFilterContainer );

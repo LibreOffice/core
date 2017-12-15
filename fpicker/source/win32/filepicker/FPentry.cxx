@@ -39,7 +39,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::cppu;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
 
-static Reference< XInterface > SAL_CALL createInstance(
+static Reference< XInterface > createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
     Reference< XInterface > xDlg;
@@ -50,7 +50,7 @@ static Reference< XInterface > SAL_CALL createInstance(
     return xDlg;
 }
 
-static Reference< XInterface > SAL_CALL
+static Reference< XInterface >
 createInstance_fop( const Reference< XMultiServiceFactory >& rServiceManager )
 {
     return Reference< XInterface >( static_cast< cppu::OWeakObject * >( new CFolderPicker( rServiceManager ) ) );
@@ -59,7 +59,7 @@ createInstance_fop( const Reference< XMultiServiceFactory >& rServiceManager )
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_win32_component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* fps_win32_component_getFactory(
     const sal_Char* pImplName, void* pSrvManager, void* )
 {
     void* pRet = nullptr;

@@ -187,7 +187,7 @@ namespace dxcanvas
 
 // The C shared lib entry points
 extern "C"
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL directx9canvas_component_getFactory( sal_Char const* pImplName,
+SAL_DLLPUBLIC_EXPORT void* directx9canvas_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
     return sdecl::component_getFactoryHelper( pImplName, {&dxcanvas::dxSpriteCanvasDecl} );

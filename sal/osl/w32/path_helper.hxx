@@ -42,7 +42,7 @@ void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath);
  if the path is not the root path '\'
 */
 
-void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath);
+void osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath);
 
 /**
  Returns whether a given path is only a logical drive pattern or not.

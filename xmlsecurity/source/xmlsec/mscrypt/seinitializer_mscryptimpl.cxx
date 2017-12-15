@@ -152,13 +152,13 @@ OUString SEInitializer_MSCryptImpl_getImplementationName()
     return OUString( "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_MSCryptImpl" );
 }
 
-cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames()
+cssu::Sequence< OUString > SEInitializer_MSCryptImpl_getSupportedServiceNames()
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.SEInitializer" };
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL SEInitializer_MSCryptImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
+cssu::Reference< cssu::XInterface > SEInitializer_MSCryptImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new SEInitializer_MSCryptImpl( comphelper::getComponentContext(rSMgr) ));
 }

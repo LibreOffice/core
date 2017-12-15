@@ -137,13 +137,13 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
         rBHelper.aLC.removeInterface( cppu::UnoType<XClipboardListener>::get(), listener );
 }
 
-Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
+Sequence< OUString > GenericClipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.GenericClipboard" };
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL GenericClipboard_createInstance(
+Reference< XInterface > GenericClipboard_createInstance(
     const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
 {
     return Reference < XInterface >(static_cast<OWeakObject *>(new GenericClipboard()));

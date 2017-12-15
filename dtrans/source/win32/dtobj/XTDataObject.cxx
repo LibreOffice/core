@@ -53,7 +53,7 @@ using namespace com::sun::star::lang;
 
 namespace {
 
-void SAL_CALL setupStgMedium( const FORMATETC& fetc,
+void setupStgMedium( const FORMATETC& fetc,
                                              CStgTransferHelper& stgTransHlp,
                                              STGMEDIUM& stgmedium )
 {
@@ -141,13 +141,13 @@ void validateFormatEtc( LPFORMATETC lpFormatEtc )
 }
 
 inline
-void SAL_CALL invalidateStgMedium( STGMEDIUM& stgmedium )
+void invalidateStgMedium( STGMEDIUM& stgmedium )
 {
     stgmedium.tymed = TYMED_NULL;
 }
 
 inline
-HRESULT SAL_CALL translateStgExceptionCode( HRESULT hr )
+HRESULT translateStgExceptionCode( HRESULT hr )
 {
     HRESULT hrTransl;
 
@@ -166,7 +166,7 @@ HRESULT SAL_CALL translateStgExceptionCode( HRESULT hr )
 }
 
 // inline
-void SAL_CALL renderDataAndSetupStgMedium(
+void renderDataAndSetupStgMedium(
     const sal_Int8* lpStorage, const FORMATETC& fetc, sal_uInt32 nInitStgSize,
     sal_uInt32 nBytesToTransfer, STGMEDIUM& stgmedium )
 {

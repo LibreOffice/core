@@ -14,7 +14,7 @@
 
 #include <sal/types.h>
 
-void SAL_CALL osl_callThreadKeyCallbackOnThreadDetach(void);
+void osl_callThreadKeyCallbackOnThreadDetach(void);
 
 extern DWORD g_dwTLSTextEncodingIndex;
 
