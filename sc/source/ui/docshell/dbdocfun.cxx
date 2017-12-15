@@ -614,6 +614,12 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument& rDoc = rDocShell.GetDocument();
+
+    if (ScTabViewShell::isAnyEditViewInRange(/*bColumns*/ false, rQueryParam.nRow1, rQueryParam.nRow2))
+    {
+        return false;
+    }
+
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
     ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rQueryParam.nCol1, rQueryParam.nRow1,
@@ -922,6 +928,16 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoQuery( &rDocShell, nTab, rQueryParam, pUndoDoc, pUndoDB,
                                         pOld, bDoSize, pAdvSource ) );
+    }
+
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if ( pViewSh )
+    {
+        // could there be horizontal autofilter ?
+        // maybe it would be better to set bColumns to !rQueryParam.bByRow ?
+        // anyway at the beginning the value of bByRow is 'false'
+        // then after the first sort action it becomes 'true'
+        pViewSh->OnLOKShowHideColRow(/*bColumns*/ false, rQueryParam.nRow1 - 1);
     }
 
     if (bCopy)
