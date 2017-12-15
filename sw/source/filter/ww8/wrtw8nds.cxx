@@ -2686,7 +2686,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc);
             }
         }
-        else
+        else if (!bNeedParaSplit)
         {
             // else check if section break needed after the paragraph
             AttrOutput().SectionBreaks(rNode);
