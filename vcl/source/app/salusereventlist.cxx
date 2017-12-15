@@ -33,6 +33,7 @@
 
 SalUserEventList::SalUserEventList()
     : m_bAllUserEventProcessedSignaled( true )
+    , m_aProcessingThread(0)
 {
 }
 
@@ -57,30 +58,40 @@ void SalUserEventList::eraseFrame( SalFrame* pFrame )
 bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
 {
     bool bWasEvent = false;
+    oslThreadIdentifier aCurId = osl::Thread::getCurrentIdentifier();
 
+    DBG_TESTSOLARMUTEX();
+    // cleared after we pop a single event and are save in the 2nd guard.
+    // this way we guarantee to process at least one event, if available.
+    osl::ResettableMutexGuard aResettableGuard(m_aUserEventsMutex);
+
+    if (!m_aUserEvents.empty())
     {
-        osl::MutexGuard aGuard( m_aUserEventsMutex );
-        assert( m_aProcessingUserEvents.empty() );
-        if( ! m_aUserEvents.empty() )
+        if (bHandleAllCurrentEvents)
         {
-            if( bHandleAllCurrentEvents )
-                m_aProcessingUserEvents.swap( m_aUserEvents );
+            if (m_aProcessingUserEvents.empty())
+                m_aProcessingUserEvents.swap(m_aUserEvents);
             else
-            {
-                m_aProcessingUserEvents.push_back( m_aUserEvents.front() );
-                m_aUserEvents.pop_front();
-            }
-            bWasEvent = true;
+                m_aProcessingUserEvents.splice(m_aProcessingUserEvents.end(), m_aUserEvents);
+        }
+        else if (m_aProcessingUserEvents.empty())
+        {
+            m_aProcessingUserEvents.push_back( m_aUserEvents.front() );
+            m_aUserEvents.pop_front();
         }
     }
 
-    if( bWasEvent )
+    if (HasUserEvents())
     {
+        bWasEvent = true;
+        m_aProcessingThread = aCurId;
+
         SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
         do {
             {
-                osl::MutexGuard aGuard( m_aUserEventsMutex );
-                if ( m_aProcessingUserEvents.empty() )
+                osl::MutexGuard aGuard(m_aUserEventsMutex);
+                aResettableGuard.clear();
+                if (m_aProcessingUserEvents.empty() || aCurId != m_aProcessingThread)
                     break;
                 aEvent = m_aProcessingUserEvents.front();
                 m_aProcessingUserEvents.pop_front();
@@ -113,11 +124,13 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
                 std::abort();
             }
+            if (!bHandleAllCurrentEvents)
+                break;
         }
         while( true );
+        aResettableGuard.reset();
     }
 
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
     if ( !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
     {
         m_bAllUserEventProcessedSignaled = true;
