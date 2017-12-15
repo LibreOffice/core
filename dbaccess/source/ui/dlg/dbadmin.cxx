@@ -265,7 +265,7 @@ SfxItemSet* ODbAdminDialog::getWriteOutputSet()
     return m_pExampleSet;
 }
 
-std::pair< Reference<XConnection>,sal_Bool> ODbAdminDialog::createConnection()
+std::pair< Reference<XConnection>,bool> ODbAdminDialog::createConnection()
 {
     return m_pImpl->createConnection();
 }

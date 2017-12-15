@@ -343,9 +343,9 @@ void ODbDataSourceAdministrationHelper::clearPassword()
         m_pItemSetHelper->getWriteOutputSet()->ClearItem(DSID_PASSWORD);
 }
 
-std::pair< Reference<XConnection>,sal_Bool> ODbDataSourceAdministrationHelper::createConnection()
+std::pair< Reference<XConnection>,bool> ODbDataSourceAdministrationHelper::createConnection()
 {
-    std::pair< Reference<XConnection>,sal_Bool> aRet;
+    std::pair< Reference<XConnection>,bool> aRet;
     aRet.second = false;
     Sequence< PropertyValue > aConnectionParams;
     if ( getCurrentSettings(aConnectionParams) )

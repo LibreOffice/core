@@ -501,7 +501,7 @@ namespace dbaui
         return m_pExampleSet;
     }
 
-    std::pair< Reference< XConnection >, sal_Bool > AdvancedSettingsDialog::createConnection()
+    std::pair< Reference< XConnection >, bool > AdvancedSettingsDialog::createConnection()
     {
         return m_pImpl->createConnection();
     }
