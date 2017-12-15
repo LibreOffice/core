@@ -387,6 +387,8 @@ public:
     /// If HTML header and footer should be written as well, or just the content itself.
     bool mbSkipHeaderFooter : 1;
     bool mbEmbedImages : 1;
+    /// If XHTML markup should be written instead of HTML.
+    bool mbXHTML = false;
 
 #define sCSS2_P_CLASS_leaders "leaders"
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
