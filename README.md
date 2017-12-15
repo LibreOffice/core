@@ -45,6 +45,10 @@ run and compile LibreOffice, also used by the TDF builds:
     * Runtime: 11.0 (only support for newer i devices == 64 bit)
     * Build: Xcode 9.0 and iPhone SDK 11.1
 
+At least Clang 3.4.2 is known to be too old to pass the configure.ac check "whether $CXX supports
+C++17, C++14, or C++11" in its current form (due to the #pragma GCC diagnostic ignored "-Wpragmas"
+that it does not understand).
+
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 3.4. Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
