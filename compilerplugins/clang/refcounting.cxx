@@ -11,7 +11,6 @@
 #include <iostream>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 #include "clang/AST/CXXInheritance.h"
 
@@ -95,15 +94,10 @@ bool isDerivedFrom(const CXXRecordDecl *decl, DeclChecker base) {
     if (!decl->hasDefinition()) {
         return false;
     }
-    if (!compat::forallBases(
-            *decl,
-#if CLANG_VERSION < 30800
-            BaseCheckNotSubclass,
-#else
+    if (!decl->forallBases(
             [&base](const CXXRecordDecl *BaseDefinition) -> bool
                 { return BaseCheckNotSubclass(BaseDefinition, &base); },
-#endif
-            &base, true))
+            true))
     {
         return true;
     }
@@ -550,7 +544,7 @@ bool RefCounting::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (methodDecl && methodDecl->size_overridden_methods() > 0) {
             return true;
     }
-    checkUnoReference(compat::getReturnType(*functionDecl), functionDecl, nullptr, "return");
+    checkUnoReference(functionDecl->getReturnType(), functionDecl, nullptr, "return");
     return true;
 }
 

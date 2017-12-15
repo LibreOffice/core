@@ -95,11 +95,8 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
-// workaround clang-3.5 issue
-#if CLANG_VERSION >= 30600
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
-#endif
 
     switch (functionDecl->getAccess())
     {
@@ -108,7 +105,7 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
     case AS_protected: aInfo.access = "protected"; break;
     default: aInfo.access = "unknown"; break;
     }
-    aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+    aInfo.returnType = functionDecl->getReturnType().getCanonicalType().getAsString();
 
     if (isa<CXXMethodDecl>(functionDecl)) {
         const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
@@ -160,11 +157,8 @@ bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
-// workaround clang-3.5 issue
-#if CLANG_VERSION >= 30600
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
-#endif
     int n = functionDecl->getNumParams() - 1;
     if (n < 0 || !functionDecl->getParamDecl(n)->hasDefaultArg()) {
         return true;
@@ -192,11 +186,8 @@ bool CountUsersOfDefaultParams::VisitCXXConstructExpr(const CXXConstructExpr * c
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getInstantiatedFromMemberFunction());
     else if (constructorDecl->getClassScopeSpecializationPattern())
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getClassScopeSpecializationPattern());
-// workaround clang-3.5 issue
-#if CLANG_VERSION >= 30600
     else if (constructorDecl->getTemplateInstantiationPattern())
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getTemplateInstantiationPattern());
-#endif
     int n = constructorDecl->getNumParams() - 1;
     if (n < 0 || !constructorDecl->getParamDecl(n)->hasDefaultArg()) {
         return true;

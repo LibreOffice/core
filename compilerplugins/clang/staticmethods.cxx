@@ -10,7 +10,6 @@
 #include "clang/AST/Attr.h"
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /*
@@ -39,13 +38,7 @@ private:
     StringRef getFilename(SourceLocation loc);
 };
 
-bool BaseCheckNotTestFixtureSubclass(
-    const CXXRecordDecl *BaseDefinition
-#if CLANG_VERSION < 30800
-    , void *
-#endif
-    )
-{
+bool BaseCheckNotTestFixtureSubclass(const CXXRecordDecl *BaseDefinition) {
     if (loplugin::TypeCheck(BaseDefinition).Class("TestFixture").Namespace("CppUnit").GlobalNamespace()) {
         return false;
     }
@@ -58,7 +51,7 @@ bool isDerivedFromTestFixture(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotTestFixtureSubclass, nullptr, true)) {
+        !decl->forallBases(BaseCheckNotTestFixtureSubclass, true)) {
         return true;
     }
     return false;

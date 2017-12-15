@@ -6457,6 +6457,13 @@ if test "$COM_IS_CLANG" = "TRUE"; then
     else
         compiler_plugins=no
     fi
+    if test "$compiler_plugins" != no -a "$CLANGVER" -lt 30800; then
+        if test "$compiler_plugins" = yes; then
+            AC_MSG_ERROR([Clang $CLANGVER is too old to build compiler plugins; need >= 3.8.0.])
+        else
+            compiler_plugins=no
+        fi
+    fi
     if test "$compiler_plugins" != "no"; then
         dnl The prefix where Clang resides, override to where Clang resides if
         dnl using a source build:

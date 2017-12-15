@@ -11,7 +11,6 @@
 #include <string>
 #include <iostream>
 #include "plugin.hxx"
-#include "compat.hxx"
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -75,7 +74,7 @@ std::string niceName(const CXXMethodDecl* functionDecl)
 {
     std::string s =
            functionDecl->getParent()->getQualifiedNameAsString() + "::"
-           + compat::getReturnType(*functionDecl).getAsString() + "-"
+           + functionDecl->getReturnType().getAsString() + "-"
            + functionDecl->getNameAsString() + "(";
     for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
         s += pParmVarDecl->getType().getAsString();
