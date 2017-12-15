@@ -38,7 +38,7 @@ public:
     bool VisitDeclRefExpr(DeclRefExpr const* stmt);
 
 private:
-    VarDecl const* mLoopVarDecl = nullptr;
+    std::vector<VarDecl const*> mLoopVarDecls;
     std::unordered_set<VarDecl const*> mFoundSet;
 };
 
@@ -46,27 +46,28 @@ bool UnusedIndex::TraverseForStmt(ForStmt* stmt)
 {
     if (ignoreLocation(stmt))
         return true;
-    auto savedCopy = mLoopVarDecl;
 
-    mLoopVarDecl = nullptr;
+    VarDecl const* loopVarDecl = nullptr;
     if (stmt->getInit())
     {
         auto declStmt = dyn_cast<DeclStmt>(stmt->getInit());
         if (declStmt && declStmt->isSingleDecl())
         {
-            auto varDecl = dyn_cast<VarDecl>(declStmt->getSingleDecl());
-            if (varDecl)
-                mLoopVarDecl = varDecl;
+            loopVarDecl = dyn_cast<VarDecl>(declStmt->getSingleDecl());
         }
     }
+    if (loopVarDecl)
+        mLoopVarDecls.push_back(loopVarDecl);
 
     // deliberately ignore the other parts of the for stmt, except for the body
     auto ret = RecursiveASTVisitor::TraverseStmt(stmt->getBody());
 
-    if (mLoopVarDecl && mFoundSet.erase(mLoopVarDecl) == 0)
-        report(DiagnosticsEngine::Warning, "loop variable not used", mLoopVarDecl->getLocStart())
-            << mLoopVarDecl->getSourceRange();
-    mLoopVarDecl = savedCopy;
+    if (loopVarDecl && mFoundSet.erase(loopVarDecl) == 0)
+        report(DiagnosticsEngine::Warning, "loop variable not used", loopVarDecl->getLocStart())
+            << loopVarDecl->getSourceRange();
+
+    if (loopVarDecl)
+        mLoopVarDecls.pop_back();
     return ret;
 }
 
@@ -75,7 +76,7 @@ bool UnusedIndex::VisitDeclRefExpr(DeclRefExpr const* stmt)
     auto varDecl = dyn_cast<VarDecl>(stmt->getDecl());
     if (!varDecl)
         return true;
-    if (mLoopVarDecl && mLoopVarDecl == varDecl)
+    if (std::find(mLoopVarDecls.begin(), mLoopVarDecls.end(), varDecl) != mLoopVarDecls.end())
         mFoundSet.insert(varDecl);
     return true;
 }

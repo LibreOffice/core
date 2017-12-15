@@ -18,6 +18,22 @@ void func1()
         n += 1;
     for (int i = 0; i < 10; ++i)
         n += i;
+
+    for (int i = 0; i < 10; ++i) // expected-error {{loop variable not used [loplugin:unusedindex]}}
+    {
+        for (int j = 0; j < 10; ++j)
+        {
+            n += j;
+        }
+    }
+    for (int i = 0; i < 10; ++i)
+    {
+        for (int j = 0; j < 10; ++j)
+        {
+            n += j;
+            n += i;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
