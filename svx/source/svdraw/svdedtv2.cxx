@@ -56,7 +56,7 @@ SdrObject* SdrEditView::GetMaxToBtmObj(SdrObject* /*pObj*/) const
   return nullptr;
 }
 
-void SdrEditView::ObjOrderChanged(SdrObject* /*pObj*/, sal_uIntPtr /*nOldPos*/, sal_uIntPtr /*nNewPos*/)
+void SdrEditView::ObjOrderChanged(SdrObject* /*pObj*/, size_t /*nOldPos*/, size_t /*nNewPos*/)
 {
 }
 
