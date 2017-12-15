@@ -624,6 +624,8 @@ void FloatingWindow::StateChanged( StateChangedType nType )
             }
             aItems.emplace_back("size", GetSizePixel().toString());
             aItems.emplace_back("position", mpImplData->maPos.toString());
+            if (!GetText().isEmpty())
+                aItems.emplace_back("title", GetText().toUtf8());
             GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
         else if (!IsVisible() && nType == StateChangedType::Visible)

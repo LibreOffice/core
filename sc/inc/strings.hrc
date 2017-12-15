@@ -164,6 +164,7 @@
 #define SCSTR_QHLP_SCEN_LISTBOX                     NC_("SCSTR_QHLP_SCEN_LISTBOX", "Scenario Name")
 #define SCSTR_QHLP_SCEN_COMMENT                     NC_("SCSTR_QHLP_SCEN_COMMENT", "Comment")
 
+#define STR_MENU_AUTOFILTER                         NC_("STR_MENU_AUTOFILTER", "AutoFilter")
 #define STR_MENU_SORT_ASC                           NC_("STR_MENU_SORT_ASC", "Sort Ascending")
 #define STR_MENU_SORT_DESC                          NC_("STR_MENU_SORT_DESC", "Sort Descending")
 #define STR_MENU_SORT_CUSTOM                        NC_("STR_MENU_SORT_CUSTOM", "Custom Sort")
