@@ -213,7 +213,7 @@ namespace osl
         */
         void reset()
         {
-            if( pResetT )
+            if (!this->pT)
             {
                 this->pT = pResetT;
                 this->pT->acquire();
