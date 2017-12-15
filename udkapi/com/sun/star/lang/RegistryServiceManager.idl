@@ -48,7 +48,7 @@ published service RegistryServiceManager
     */
     service com::sun::star::lang::ServiceManager;
 
-    /** The first two arguments of the intitialization arguments reference:
+    /** The first two arguments of the initialization arguments reference:
         <ol>
         <li>a simple registry
         (com::sun::star::registry::XSimpleRegistry),

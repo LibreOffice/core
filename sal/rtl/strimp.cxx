@@ -109,7 +109,7 @@ void SAL_CALL rtl_alloc_preInit (sal_Bool start) SAL_THROW_EXTERN_C()
         rtl_allocateString = rtl_allocateMemory;
         rtl_freeString = rtl_freeMemory;
 
-        // TODO: also re-intialize main allocator as well.
+        // TODO: also re-initialize main allocator as well.
     }
 }
 
