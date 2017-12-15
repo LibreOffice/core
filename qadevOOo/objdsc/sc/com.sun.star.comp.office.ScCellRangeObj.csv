@@ -204,7 +204,6 @@
 "ScCellRangeObj";"com::sun::star::chart::XChartDataArray";"setRowDescriptions()"
 "ScCellRangeObj";"com::sun::star::chart::XChartDataArray";"getColumnDescriptions()"
 "ScCellRangeObj";"com::sun::star::chart::XChartDataArray";"setColumnDescriptions()"
-"ScCellRangeObj";"com::sun::star::sheet::XCellFormatRangesSupplier";"getCellFormatRanges()"
 "ScCellRangeObj";"com::sun::star::util::XModifyBroadcaster#optional";"addModifyListener()"
 "ScCellRangeObj";"com::sun::star::util::XModifyBroadcaster#optional";"removeModifyListener()"
 "ScCellRangeObj";"com::sun::star::util::XImportable";"createImportDescriptor()"

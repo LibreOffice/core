@@ -231,7 +231,6 @@
 "ScTableSheetObj";"com::sun::star::chart::XChartDataArray";"setRowDescriptions()"
 "ScTableSheetObj";"com::sun::star::chart::XChartDataArray";"getColumnDescriptions()"
 "ScTableSheetObj";"com::sun::star::chart::XChartDataArray";"setColumnDescriptions()"
-"ScTableSheetObj";"com::sun::star::sheet::XCellFormatRangesSupplier";"getCellFormatRanges()"
 "ScTableSheetObj";"com::sun::star::util::XModifyBroadcaster#optional";"addModifyListener()"
 "ScTableSheetObj";"com::sun::star::util::XModifyBroadcaster#optional";"removeModifyListener()"
 "ScTableSheetObj";"com::sun::star::util::XImportable";"createImportDescriptor()"

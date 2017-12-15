@@ -209,7 +209,6 @@
 "ScCellCursorObj";"com::sun::star::chart::XChartDataArray";"setRowDescriptions()"
 "ScCellCursorObj";"com::sun::star::chart::XChartDataArray";"getColumnDescriptions()"
 "ScCellCursorObj";"com::sun::star::chart::XChartDataArray";"setColumnDescriptions()"
-"ScCellCursorObj";"com::sun::star::sheet::XCellFormatRangesSupplier";"getCellFormatRanges()"
 "ScCellCursorObj";"com::sun::star::sheet::XSheetCellCursor";"collapseToCurrentRegion()"
 "ScCellCursorObj";"com::sun::star::sheet::XSheetCellCursor";"collapseToCurrentArray()"
 "ScCellCursorObj";"com::sun::star::sheet::XSheetCellCursor";"collapseToMergedArea()"
