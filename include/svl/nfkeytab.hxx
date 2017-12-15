@@ -120,6 +120,12 @@ public:
     const OUString & operator[] (Keywords_t::size_type n) const { return m_keywords[n]; }
 
     Keywords_t::size_type size() const { return m_keywords.size(); }
+
+    NfKeywordTable& operator=( const NfKeywordTable& r )
+    {
+        m_keywords = r.m_keywords;
+        return *this;
+    }
 };
 
 #endif // INCLUDED_SVL_NFKEYTAB_HXX
