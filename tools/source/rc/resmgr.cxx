@@ -838,6 +838,10 @@ ResMgr::ResMgr( InternalResMgr * pImpMgr )
 
 ResMgr::~ResMgr()
 {
+    // our container was freed by DestroyAllResMgr
+    if (!pResMgrMutex)
+        return;
+
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     ResMgrContainer::get().freeResMgr( pImpRes );
