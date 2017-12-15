@@ -14,7 +14,6 @@
 #include <set>
 
 #include <clang/AST/CXXInheritance.h>
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -102,12 +101,7 @@ public:
 
 private:
     const CXXMethodDecl * findOverriddenOrSimilarMethodInSuperclasses(const CXXMethodDecl *);
-    bool BaseCheckCallback(
-        const CXXRecordDecl *BaseDefinition
-    #if CLANG_VERSION < 30800
-        , void *
-    #endif
-        );
+    bool BaseCheckCallback(const CXXRecordDecl *BaseDefinition);
 };
 
 bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
@@ -277,8 +271,8 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         }
     }
 
-    if (compat::getReturnType(*methodDecl).getCanonicalType()
-        != compat::getReturnType(*overriddenMethodDecl).getCanonicalType())
+    if (methodDecl->getReturnType().getCanonicalType()
+        != overriddenMethodDecl->getReturnType().getCanonicalType())
     {
         return true;
     }
@@ -290,7 +284,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
 
     const CXXMemberCallExpr* callExpr = nullptr;
-    if (compat::getReturnType(*methodDecl).getCanonicalType()->isVoidType())
+    if (methodDecl->getReturnType().getCanonicalType()->isVoidType())
     {
         if (auto const e = dyn_cast<Expr>(*compoundStmt->body_begin())) {
             callExpr = dyn_cast<CXXMemberCallExpr>(e->IgnoreImplicit()->IgnoreParens());
@@ -395,9 +389,6 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
         return nullptr;
     }
 
-#if CLANG_VERSION < 30800
-        return nullptr;
-#else
     std::vector<const CXXMethodDecl*> maSimilarMethods;
 
     auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath& )
@@ -425,8 +416,8 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
             {
                 continue;
             }
-            if (compat::getReturnType(*methodDecl).getCanonicalType()
-                != compat::getReturnType(*baseMethod).getCanonicalType())
+            if (methodDecl->getReturnType().getCanonicalType()
+                != baseMethod->getReturnType().getCanonicalType())
             {
                 continue;
             }
@@ -454,7 +445,6 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
         return maSimilarMethods[0];
     }
     return nullptr;
-#endif
 }
 
 

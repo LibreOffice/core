@@ -50,7 +50,7 @@ C++17, C++14, or C++11" in its current form (due to the #pragma GCC diagnostic i
 that it does not understand).
 
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
-version of Clang is 3.4. Since Xcode doesn't provide the compiler plugin
+version of Clang is 3.8. Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
 
 You can find the TDF configure switches in the distro-configs/ directory.

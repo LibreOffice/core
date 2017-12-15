@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <memory>
+
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -16,7 +18,7 @@ class IncludeForm final: public PPCallbacks, public loplugin::RewritePlugin {
 public:
     explicit IncludeForm(loplugin::InstantiationData const & data):
         RewritePlugin(data)
-    { compat::addPPCallbacks(compiler.getPreprocessor(), this); }
+    { compiler.getPreprocessor().addPPCallbacks(std::unique_ptr<PPCallbacks>(this)); }
 
 private:
     void run() override {}

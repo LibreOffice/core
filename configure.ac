@@ -5921,8 +5921,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    dnl Available in GCC 4.9 and at least in Clang 3.4 (which is the baseline
-    dnl for at least --enable-compiler-plugins according to README.md):
+    dnl Available in GCC 4.9 and at least since Clang 3.4:
     AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
@@ -6418,6 +6417,13 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         compiler_plugins=test
     else
         compiler_plugins=no
+    fi
+    if test "$compiler_plugins" != no -a "$CLANGVER" -lt 30800; then
+        if test "$compiler_plugins" = yes; then
+            AC_MSG_ERROR([Clang $CLANGVER is too old to build compiler plugins; need >= 3.8.0.])
+        else
+            compiler_plugins=no
+        fi
     fi
     if test "$compiler_plugins" != "no"; then
         dnl The prefix where Clang resides, override to where Clang resides if
