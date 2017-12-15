@@ -21,14 +21,15 @@
 #include <svtools/svtresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/lazydelete.hxx>
 
-static std::unique_ptr<ResMgr> pMgr;
+static vcl::DeleteOnDeinit<ResMgr> pMgr(nullptr);
 
 namespace
 {
     ResMgr* getResMgr(const LanguageTag& aLocale)
     {
-        if (!pMgr || pMgr->GetLocale() != aLocale)
+        if (!pMgr.get() || pMgr.get()->GetLocale() != aLocale)
             pMgr.reset(ResMgr::CreateResMgr("svt", aLocale));
 
         return pMgr.get();

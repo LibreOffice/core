@@ -21,8 +21,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/resmgr.hxx>
+#include <vcl/lazydelete.hxx>
 
-static std::unique_ptr<ResMgr> pMgr;
+static vcl::DeleteOnDeinit<ResMgr> pMgr(nullptr);
 
 SfxResId::SfxResId( sal_uInt16 nId ) :
     ResId( nId, *GetResMgr() )
@@ -33,7 +34,7 @@ ResMgr* SfxResId::GetResMgr()
 {
     const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
 
-    if (!pMgr || pMgr->GetLocale() != rLocale)
+    if (!pMgr.get() || pMgr.get()->GetLocale() != rLocale)
         pMgr.reset(ResMgr::CreateResMgr("sfx", rLocale));
 
     return pMgr.get();
