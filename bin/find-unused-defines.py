@@ -97,6 +97,7 @@ def in_exclusion_set( a ):
             return True;
     return False;
 
+# find defines, excluding the externals folder
 a = subprocess.Popen("git grep -hP '^#define\s+\w+\s+' -- \"[!e][!x][!t]*\" | sort -u", stdout=subprocess.PIPE, shell=True)
 
 with a.stdout as txt:
