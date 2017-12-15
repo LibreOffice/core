@@ -77,7 +77,7 @@ public:
     WinSalInfoPrinter*      mpInfoPrinter;          // pointer to the compatible InfoPrinter
     WinSalPrinter*          mpNextPrinter;          // next printing printer
     HDC                     mhDC;                   // printer hdc
-    sal_uIntPtr             mnError;                // error code
+    SalPrinterError         mnError;                // error code
     sal_uIntPtr             mnCopies;               // copies
     bool                    mbCollate;              // collated copies
     bool                    mbAbort;                // Job Aborted

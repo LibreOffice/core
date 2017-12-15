@@ -88,7 +88,6 @@ public:
     virtual bool                    EndJob() override;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) override;
     virtual void                    EndPage() override;
-    virtual sal_uIntPtr                 GetErrorCode() override;
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GENPRN_H

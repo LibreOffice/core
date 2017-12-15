@@ -967,11 +967,6 @@ void PspSalPrinter::EndPage()
     SAL_INFO( "vcl.unx.print", "PspSalPrinter::EndPage");
 }
 
-sal_uLong PspSalPrinter::GetErrorCode()
-{
-    return 0;
-}
-
 struct PDFNewJobParameters
 {
     Size        maPageSize;
