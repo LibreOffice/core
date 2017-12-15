@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_72aba575",
+        "filename": "include/svl/zformat.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-15T12:21:04Z",
+      "side": 1,
+      "message": "? where would that be needed now?",
+      "revId": "8f76d72ee489e735a7e00c547cef1e7b30c389d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
