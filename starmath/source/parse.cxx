@@ -1340,7 +1340,8 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 return pNode.release();
             }
             auto pSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
-            pSNode->SetSubNodes(pNode.release(), DoError(SmParseError::RgroupExpected));
+            std::unique_ptr<SmNode> xError(DoError(SmParseError::RgroupExpected));
+            pSNode->SetSubNodes(pNode.release(), xError.release());
             return pSNode.release();
         }
 
@@ -1566,16 +1567,15 @@ SmOperNode *SmParser::DoOperator()
     auto pSNode = o3tl::make_unique<SmOperNode>(m_aCurToken);
 
     // get operator
-    SmNode *pOperator = DoOper();
+    std::unique_ptr<SmNode> xOperator(DoOper());
 
-    if ( m_aCurToken.nGroup == TG::Limit ||
-         m_aCurToken.nGroup == TG::Power )
-        pOperator = DoSubSup(m_aCurToken.nGroup, pOperator);
+    if (m_aCurToken.nGroup == TG::Limit || m_aCurToken.nGroup == TG::Power)
+        xOperator.reset(DoSubSup(m_aCurToken.nGroup, xOperator.release()));
 
     // get argument
-    SmNode *pArg = DoPower();
+    std::unique_ptr<SmNode> xArg(DoPower());
 
-    pSNode->SetSubNodes(pOperator, pArg);
+    pSNode->SetSubNodes(xOperator.release(), xArg.release());
     return pSNode.release();
 }
 
