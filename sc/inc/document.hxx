@@ -55,6 +55,7 @@ enum class SvtScriptType;
 enum class ScMF;
 enum class FormulaError : sal_uInt16;
 enum class CharCompressType;
+enum class EEHorizontalTextDirection;
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
@@ -2032,7 +2033,7 @@ public:
     void            SetAsianKerning(bool bNew);
     void            ApplyAsianEditSettings(ScEditEngineDefaulter& rEngine);
 
-    sal_uInt8       GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
+    EEHorizontalTextDirection       GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
 
     SC_DLLPUBLIC ScLkUpdMode        GetLinkMode() const             { return eLinkMode ;}
     void                            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}

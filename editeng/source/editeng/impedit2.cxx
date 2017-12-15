@@ -137,7 +137,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     nAsianCompressionMode = CharCompressType::NONE;
 
-    eDefaultHorizontalTextDirection = EE_HTEXTDIR_DEFAULT;
+    eDefaultHorizontalTextDirection = EEHorizontalTextDirection::Default;
 
 
     aStatus.GetControlWord() =  EEControlBits::USECHARATTRIBS | EEControlBits::DOIDLEFORMAT |
@@ -1971,12 +1971,12 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
 
     if ( !IsVertical() )
     {
-        bR2L = GetDefaultHorizontalTextDirection() == EE_HTEXTDIR_R2L;
+        bR2L = GetDefaultHorizontalTextDirection() == EEHorizontalTextDirection::R2L;
         pFrameDirItem = &GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
         if ( pFrameDirItem->GetValue() == SvxFrameDirection::Environment )
         {
             // #103045# if DefaultHorizontalTextDirection is set, use that value, otherwise pool default.
-            if ( GetDefaultHorizontalTextDirection() != EE_HTEXTDIR_DEFAULT )
+            if ( GetDefaultHorizontalTextDirection() != EEHorizontalTextDirection::Default )
             {
                 pFrameDirItem = nullptr; // bR2L already set to default horizontal text direction
             }

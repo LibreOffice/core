@@ -3472,7 +3472,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
     }
 
     rOutl.SetDefaultHorizontalTextDirection(
-        (EEHorizontalTextDirection)pLocalDoc->GetEditTextDirection( nTabNo ) );
+        pLocalDoc->GetEditTextDirection( nTabNo ) );
 }
 
 ScAddress ScViewData::GetCurPos() const
