@@ -94,7 +94,7 @@ namespace dbaui
 
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */
-        std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool>      createConnection();
+        std::pair< css::uno::Reference< css::sdbc::XConnection >,bool>      createConnection();
 
         /** return the corresponding driver for the selected URL
         */

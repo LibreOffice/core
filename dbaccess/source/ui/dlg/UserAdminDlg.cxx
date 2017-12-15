@@ -141,14 +141,14 @@ namespace dbaui
     {
         return m_pItemSet;
     }
-    std::pair< Reference<XConnection>,sal_Bool> OUserAdminDlg::createConnection()
+    std::pair< Reference<XConnection>,bool> OUserAdminDlg::createConnection()
     {
         if ( !m_xConnection.is() )
         {
             m_xConnection = m_pImpl->createConnection().first;
             m_bOwnConnection = m_xConnection.is();
         }
-        return std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,false);
+        return std::pair< Reference<XConnection>,bool> (m_xConnection,false);
     }
     Reference< XComponentContext > OUserAdminDlg::getORB() const
     {
