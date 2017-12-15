@@ -41,7 +41,6 @@
 "ScCellCursorObj";"com::sun::star::style::CharacterPropertiesAsian";"ParaIsCharacterDistance"
 "ScCellCursorObj";"com::sun::star::style::CharacterPropertiesAsian";"ParaIsForbiddenRules"
 "ScCellCursorObj";"com::sun::star::style::CharacterPropertiesAsian";"ParaIsHangingPunctuation"
-"ScCellCursorObj";"com::sun::star::sheet::XCellRangeAddressable";"getRangeAddress()"
 "ScCellCursorObj";"com::sun::star::table::XCellCursor";"gotoStart()"
 "ScCellCursorObj";"com::sun::star::table::XCellCursor";"gotoEnd()"
 "ScCellCursorObj";"com::sun::star::table::XCellCursor";"gotoNext()"
