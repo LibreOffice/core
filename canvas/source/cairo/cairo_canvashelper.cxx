@@ -2097,7 +2097,7 @@ namespace cairocanvas
                         *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
                         *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
                         *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                        *pOut++ = 1.0; // the value does not matter
+                        *pOut++ = 1.0; pIn++; // the value does not matter
                     }
                     return aRes;
                 }
