@@ -6037,11 +6037,11 @@ libo_FUZZ_ARG_ENABLE(c++17,
 )
 
 CXXFLAGS_CXX11=
-if test "$COM" = MSC; then
+if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     AC_MSG_CHECKING([whether $CXX supports C++11])
     AC_MSG_RESULT(yes)
     # MSVC supports (a subset of) CXX11 without any switch
-elif test "$GCC" = "yes"; then
+elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     HAVE_CXX11=
     AC_MSG_CHECKING([whether $CXX supports C++17, C++14, or C++11])
     dnl But only use C++17 if the gperf that is being used knows not to emit
@@ -6052,6 +6052,9 @@ elif test "$GCC" = "yes"; then
         my_flags="-std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z $my_flags"
     fi
     for flag in $my_flags; do
+        if test "$COM" = MSC; then
+            flag="-Xclang $flag"
+        fi
         save_CXXFLAGS=$CXXFLAGS
         CXXFLAGS="$CXXFLAGS $flag -Werror"
         if test "$SYSTEM_LIBCMIS" = TRUE; then

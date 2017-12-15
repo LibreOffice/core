@@ -30,6 +30,12 @@ $(eval $(call gb_Library_add_defs,orcus-parser,\
 	-D__ORCUS_PSR_BUILDING_DLL \
 ))
 
+# Needed when building against MSVC in C++17 mode, as
+# workdir/UnpackedTarball/liborcus/include/orcus/global.hpp uses std::unary_function:
+$(eval $(call gb_Library_add_defs,orcus-parser, \
+    -D_HAS_AUTO_PTR_ETC=1 \
+))
+
 $(eval $(call gb_Library_set_generated_cxx_suffix,orcus-parser,cpp))
 
 $(eval $(call gb_Library_add_generated_exception_objects,orcus-parser,\
