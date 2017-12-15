@@ -36,6 +36,12 @@ $(eval $(call gb_Library_add_defs,orcus,\
 	-D__ORCUS_XLS_XML \
 ))
 
+# Needed when building against MSVC in C++17 mode, as
+# workdir/UnpackedTarball/liborcus/src/liborcus/css_document_tree.cpp uses std::unary_function:
+$(eval $(call gb_Library_add_defs,orcus, \
+    -D_HAS_AUTO_PTR_ETC=1 \
+))
+
 $(eval $(call gb_Library_use_libraries,orcus,\
 	orcus-parser \
 ))

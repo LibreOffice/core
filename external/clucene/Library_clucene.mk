@@ -29,6 +29,12 @@ $(eval $(call gb_Library_add_defs,clucene,\
     -Dclucene_contribs_lib_EXPORTS \
 ))
 
+# Needed when building against MSVC in C++17 mode, as
+# workdir/UnpackedTarball/clucene/src/core/CLucene/util/Equators.h uses std::binary_function:
+$(eval $(call gb_Library_add_defs,clucene, \
+    -D_HAS_AUTO_PTR_ETC=1 \
+))
+
 # clucene is riddled with warnings... let's spare use
 # the pointless spamming
 $(eval $(call gb_Library_add_cxxflags,clucene,\

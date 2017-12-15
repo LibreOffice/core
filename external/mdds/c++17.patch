@@ -1,0 +1,22 @@
+--- include/mdds/multi_type_matrix.hpp
++++ include/mdds/multi_type_matrix.hpp
+@@ -149,7 +149,7 @@
+ 
+ private:
+     template<typename _Func>
+-    struct walk_func : std::unary_function<typename store_type::const_iterator::value_type, void>
++    struct walk_func
+     {
+         _Func& m_func;
+         walk_func(_Func& func) : m_func(func) {}
+--- include/mdds/multi_type_vector.hpp
++++ include/mdds/multi_type_vector.hpp
+@@ -139,7 +139,7 @@
+         block& operator=(block);
+     };
+ 
+-    struct element_block_deleter : public std::unary_function<void, const element_block_type*>
++    struct element_block_deleter
+     {
+         void operator() (const element_block_type* p)
+         {
