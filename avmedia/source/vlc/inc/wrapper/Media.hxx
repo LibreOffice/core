@@ -31,7 +31,7 @@ namespace wrapper
 
         int getDuration() const;
 
-        virtual ~Media();
+        ~Media();
 
         operator libvlc_media_t*()
         {

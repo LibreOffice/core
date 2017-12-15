@@ -1,3 +1,9 @@
+avmedia/source/vlc/inc/wrapper/Instance.hxx:28
+    avmedia::vlc::wrapper::Instance::void-~Instance()
+avmedia/source/vlc/inc/wrapper/Media.hxx:34
+    avmedia::vlc::wrapper::Media::void-~Media()
+avmedia/source/vlc/inc/wrapper/Player.hxx:37
+    avmedia::vlc::wrapper::Player::void-~Player()
 basic/source/comp/codegen.cxx:391
     PCodeVisitor::void-~PCodeVisitor<T>()
 basic/source/comp/codegen.cxx:468
@@ -84,13 +90,13 @@ include/comphelper/servicedecl.hxx:168
     comphelper::service_decl::detail::OwnServiceImpl::sal_Bool-supportsService(const class rtl::OUString &,)
 include/comphelper/servicedecl.hxx:172
     comphelper::service_decl::detail::OwnServiceImpl::css::uno::Sequence<OUString>-getSupportedServiceNames()
-include/comphelper/unique_disposing_ptr.hxx:40
+include/comphelper/unique_disposing_ptr.hxx:41
     comphelper::unique_disposing_ptr::void-reset(T *,)
-include/comphelper/unique_disposing_ptr.hxx:40
+include/comphelper/unique_disposing_ptr.hxx:41
     comphelper::unique_disposing_ptr::void-reset(class (anonymous namespace)::ImpTimedRefDev *,)
-include/comphelper/unique_disposing_ptr.hxx:65
+include/comphelper/unique_disposing_ptr.hxx:66
     comphelper::unique_disposing_ptr::void-~unique_disposing_ptr<T>()
-include/comphelper/unique_disposing_ptr.hxx:168
+include/comphelper/unique_disposing_ptr.hxx:169
     comphelper::unique_disposing_solar_mutex_reset_ptr::void-reset(T *,)
 include/comphelper/weakeventlistener.hxx:118
     comphelper::OWeakListenerAdapter::void-disposing(const css::lang::EventObject &,)
@@ -130,14 +136,12 @@ include/sfx2/itemwrapper.hxx:158
     sfx::IdentItemWrapper::void-SetItemValue(ItemT &,const ItemT &,)const
 include/svl/svdde.hxx:307
     DdeService::void-~DdeService()
+include/svtools/svparser.hxx:92
+    SvParser::void-NextToken(T,)
+include/svtools/svparser.hxx:128
+    SvParser::void-Continue(T,)
 include/toolkit/controls/geometrycontrolmodel.hxx:192
     OGeometryControlModel::void-fillProperties(css::uno::Sequence<css::beans::Property> &,css::uno::Sequence<css::beans::Property> &,)const
-include/tools/stream.hxx:294
-    SvStream::_Bool-ReadLine(class rtl::OString &,sal_Int32,)
-include/tools/stream.hxx:410
-    SvStream::_Bool-good()const
-include/unotools/fontcvt.hxx:55
-    StarSymbolToMSMultiFont::void-~StarSymbolToMSMultiFont()
 include/vbahelper/vbacollectionimpl.hxx:290
     ScVbaCollectionBase::::sal_Int32-getCount()
 include/vbahelper/vbacollectionimpl.hxx:295
@@ -164,8 +168,6 @@ include/vcl/vclptr.hxx:110
     VclPtr::void-~VclPtr<T>()
 mysqlc/source/mysqlc_subcomponent.hxx:104
     connectivity::mysqlc::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:109
-    oox::drawingml::LayoutAtom::void-addChild(const oox::drawingml::LayoutAtomPtr &,)
 sc/inc/compressedarray.hxx:72
     ScCompressedArray::void-~ScCompressedArray<A, D>()
 sc/source/core/opencl/formulagroupcl.cxx:934
@@ -176,13 +178,13 @@ sc/source/core/opencl/formulagroupcl.cxx:943
     sc::opencl::DynamicKernelSlidingArgument::std::string-GenSlidingWindowDeclRef(_Bool,)const
 sc/source/core/opencl/formulagroupcl.cxx:966
     sc::opencl::DynamicKernelSlidingArgument::size_t-GenReductionLoopHeader(std::stringstream &,_Bool &,)
-sc/source/core/opencl/formulagroupcl.cxx:1222
+sc/source/core/opencl/formulagroupcl.cxx:1219
     sc::opencl::ParallelReductionVectorRef::void-GenSlidingWindowFunction(std::stringstream &,)
-sc/source/core/opencl/formulagroupcl.cxx:1401
+sc/source/core/opencl/formulagroupcl.cxx:1398
     sc::opencl::ParallelReductionVectorRef::std::string-GenSlidingWindowDeclRef(_Bool,)const
-sc/source/core/opencl/formulagroupcl.cxx:1411
+sc/source/core/opencl/formulagroupcl.cxx:1408
     sc::opencl::ParallelReductionVectorRef::size_t-GenReductionLoopHeader(std::stringstream &,int,_Bool &,)
-sc/source/core/opencl/formulagroupcl.cxx:1435
+sc/source/core/opencl/formulagroupcl.cxx:1432
     sc::opencl::ParallelReductionVectorRef::size_t-Marshal(cl_kernel,int,int,cl_program,)
 sc/source/ui/inc/anyrefdg.hxx:220
     ScRefHdlrImpl::void-dispose()
@@ -192,6 +194,8 @@ sc/source/ui/vba/vbacondition.hxx:40
     ScVbaCondition::class rtl::OUString-Formula2()
 sc/source/ui/vba/vbacondition.hxx:42
     ScVbaCondition::void-setFormula1(const uno::Any &,)
+sc/source/ui/vba/vbacondition.hxx:44
+    ScVbaCondition::sal_Int32-Operator(_Bool,)
 sc/source/ui/vba/vbaformat.hxx:73
     ScVbaFormat::css::uno::Any-Borders(const css::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:76
@@ -252,8 +256,6 @@ sc/source/ui/vba/vbapagebreak.hxx:49
     ScVbaPageBreak::css::uno::Reference<ov::excel::XRange>-Location()
 sd/source/ui/inc/ShellFactory.hxx:41
     sd::ShellFactory::void-~ShellFactory<ShellType>()
-sd/source/ui/remotecontrol/ZeroconfService.hxx:41
-    sd::ZeroconfService::void-~ZeroconfService()
 sd/source/ui/slidesorter/inc/model/SlsEnumeration.hxx:34
     sd::slidesorter::model::Enumeration::void-~Enumeration<T>()
 slideshow/source/engine/activities/activitiesfactory.cxx:173
@@ -274,8 +276,6 @@ slideshow/source/engine/animationfactory.cxx:442
     slideshow::internal::(anonymous namespace)::GenericAnimation::void-prefetch(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
 slideshow/source/engine/animationfactory.cxx:446
     slideshow::internal::(anonymous namespace)::GenericAnimation::void-start(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
-sw/inc/doc.hxx:436
-    SwDoc::void-~SwDoc()
 sw/inc/docary.hxx:116
     SwVectorModifyBase::void-~SwVectorModifyBase<Value>()
 sw/inc/flypos.hxx:37
@@ -286,7 +286,7 @@ vcl/inc/opengl/BufferObject.hxx:31
     vcl::BufferObject::void-~BufferObject<TYPE, BUFFER_TYPE>()
 vcl/inc/salframe.hxx:177
     SalFrame::void-Flush(const tools::Rectangle &,)
-vcl/inc/sallayout.hxx:180
+vcl/inc/sallayout.hxx:181
     SalLayout::_Bool-GetBoundRect(class SalGraphics &,tools::Rectangle &,)const
 vcl/inc/salmenu.hxx:92
     SalMenu::tools::Rectangle-GetMenuBarButtonRectPixel(sal_uInt16,class SalFrame *,)
@@ -316,7 +316,7 @@ vcl/inc/unx/saldisp.hxx:180
     SalXLib::void-StopTimer()
 vcl/inc/unx/saldisp.hxx:182
     SalXLib::_Bool-CheckTimeout(_Bool,)
-vcl/inc/unx/saldisp.hxx:390
+vcl/inc/unx/saldisp.hxx:393
     SalX11Display::void-Yield()
 vcl/inc/unx/salinst.h:47
     X11SalInstance::class SalX11Display *-CreateDisplay()const
