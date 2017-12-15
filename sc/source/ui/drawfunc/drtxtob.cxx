@@ -1170,7 +1170,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         if ( eAttrDir == SvxFrameDirection::Environment )
         {
             //  get "environment" direction from page style
-            if ( pViewData->GetDocument()->GetEditTextDirection( pViewData->GetTabNo() ) == EE_HTEXTDIR_R2L )
+            if ( pViewData->GetDocument()->GetEditTextDirection( pViewData->GetTabNo() ) == EEHorizontalTextDirection::R2L )
                 eAttrDir = SvxFrameDirection::Horizontal_RL_TB;
             else
                 eAttrDir = SvxFrameDirection::Horizontal_LR_TB;

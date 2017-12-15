@@ -2737,17 +2737,17 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
         rAttrSet.Get( ATTR_VERTICAL_ASIAN ).GetValue();
 
     bool bBidiDontCare = (rAttrSet.GetItemState( ATTR_WRITINGDIR ) == SfxItemState::DONTCARE);
-    EEHorizontalTextDirection eBidiDir = EE_HTEXTDIR_DEFAULT;
+    EEHorizontalTextDirection eBidiDir = EEHorizontalTextDirection::Default;
     if ( !bBidiDontCare )
     {
         SvxFrameDirection eCellDir = rAttrSet.Get( ATTR_WRITINGDIR ).GetValue();
         if ( eCellDir == SvxFrameDirection::Environment )
-            eBidiDir = (EEHorizontalTextDirection)GetViewData()->GetDocument()->
+            eBidiDir = GetViewData()->GetDocument()->
                                 GetEditTextDirection( GetViewData()->GetTabNo() );
         else if ( eCellDir == SvxFrameDirection::Horizontal_RL_TB )
-            eBidiDir = EE_HTEXTDIR_R2L;
+            eBidiDir = EEHorizontalTextDirection::R2L;
         else
-            eBidiDir = EE_HTEXTDIR_L2R;
+            eBidiDir = EEHorizontalTextDirection::L2R;
     }
 
     SvtLanguageOptions  aLangOpt;
@@ -2786,9 +2786,9 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
                     else if ( bBidiDontCare )
                         rSet.InvalidateItem( nWhich );
                     else if ( nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT )
-                        rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_L2R ) );
+                        rSet.Put( SfxBoolItem( nWhich, eBidiDir == EEHorizontalTextDirection::L2R ) );
                     else
-                        rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_R2L ) );
+                        rSet.Put( SfxBoolItem( nWhich, eBidiDir == EEHorizontalTextDirection::R2L ) );
                 }
         }
         nWhich = aIter.NextWhich();

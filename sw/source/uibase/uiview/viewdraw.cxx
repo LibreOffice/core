@@ -538,7 +538,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 
         // set default horizontal text direction at outliner
         EEHorizontalTextDirection aDefHoriTextDir =
-            pSh->IsShapeDefaultHoriTextDirR2L() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
+            pSh->IsShapeDefaultHoriTextDirR2L() ? EEHorizontalTextDirection::R2L : EEHorizontalTextDirection::L2R;
         pOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
     }
 

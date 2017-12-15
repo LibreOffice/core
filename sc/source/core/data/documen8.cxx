@@ -360,9 +360,9 @@ bool ScDocument::RenamePageStyleInUse( const OUString& rOld, const OUString& rNe
     return bWasInUse;
 }
 
-sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
+EEHorizontalTextDirection ScDocument::GetEditTextDirection(SCTAB nTab) const
 {
-    EEHorizontalTextDirection eRet = EE_HTEXTDIR_DEFAULT;
+    EEHorizontalTextDirection eRet = EEHorizontalTextDirection::Default;
 
     OUString aStyleName = GetPageStyle( nTab );
     SfxStyleSheetBase* pStyle = mxPoolHelper->GetStylePool()->Find( aStyleName, SfxStyleFamily::Page );
@@ -373,13 +373,13 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
             rStyleSet.Get( ATTR_WRITINGDIR ).GetValue();
 
         if ( eDirection == SvxFrameDirection::Horizontal_LR_TB )
-            eRet = EE_HTEXTDIR_L2R;
+            eRet = EEHorizontalTextDirection::L2R;
         else if ( eDirection == SvxFrameDirection::Horizontal_RL_TB )
-            eRet = EE_HTEXTDIR_R2L;
+            eRet = EEHorizontalTextDirection::R2L;
         // else (invalid for EditEngine): keep "default"
     }
 
-    return sal::static_int_cast<sal_uInt8>(eRet);
+    return eRet;
 }
 
 ScMacroManager* ScDocument::GetMacroManager()

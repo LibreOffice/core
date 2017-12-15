@@ -34,7 +34,7 @@ class SvxRTFItemStackType;
 enum class HtmlTokenId : sal_Int16;
 
 enum class EETextFormat { Text = 0x20, Rtf, Html = 0x32, Xml };
-enum EEHorizontalTextDirection { EE_HTEXTDIR_DEFAULT, EE_HTEXTDIR_L2R, EE_HTEXTDIR_R2L };
+enum class EEHorizontalTextDirection { Default, L2R, R2L };
 enum class EESelectionMode  { Std, TxtOnly, Hidden };
     // EE_SELMODE_HIDDEN can be used to completely hide the selection. This is useful e.g. when you want show the selection
     // only as long as your window (which the edit view works on) has the focus
