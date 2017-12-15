@@ -108,7 +108,7 @@ public:
     virtual bool                    EndJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
     virtual void                    EndPage() = 0;
-    virtual sal_uLong               GetErrorCode() = 0;
+    virtual SalPrinterError         GetErrorCode() { return SalPrinterError::NONE; }
 
 };
 

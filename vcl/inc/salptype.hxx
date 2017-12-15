@@ -39,8 +39,11 @@ template<> struct typed_flags<JobSetFlags>: is_typed_flags<JobSetFlags, 0xF> {};
 
 }
 
-#define SAL_PRINTER_ERROR_GENERALERROR          1
-#define SAL_PRINTER_ERROR_ABORT                 2
+enum class SalPrinterError {
+  NONE = 0,
+  General = 1,
+  Abort = 2
+};
 
 class SalPrinter;
 typedef long (*SALPRNABORTPROC)( void* pInst, SalPrinter* pPrinter );

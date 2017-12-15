@@ -1352,7 +1352,7 @@ WinSalPrinter::WinSalPrinter() :
     mpInfoPrinter( nullptr ),
     mpNextPrinter( nullptr ),
     mhDC( nullptr ),
-    mnError( 0 ),
+    mnError( SalPrinterError::NONE ),
     mnCopies( 0 ),
     mbCollate( FALSE ),
     mbAbort( FALSE ),
@@ -1420,7 +1420,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
                            bool /*bDirect*/,
                            ImplJobSetup* pSetupData )
 {
-    mnError     = 0;
+    mnError     = SalPrinterError::NONE;
     mbAbort     = FALSE;
     mnCopies        = nCopies;
     mbCollate   = bCollate;
@@ -1449,7 +1449,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
     if ( !hDC )
     {
-        mnError = SAL_PRINTER_ERROR_GENERALERROR;
+        mnError = SalPrinterError::General;
         return FALSE;
     }
 
@@ -1457,11 +1457,11 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     mhDC = hDC;
     if ( SetAbortProc( hDC, SalPrintAbortProc ) <= 0 )
     {
-        mnError = SAL_PRINTER_ERROR_GENERALERROR;
+        mnError = SalPrinterError::General;
         return FALSE;
     }
 
-    mnError = 0;
+    mnError = SalPrinterError::NONE;
     mbAbort = FALSE;
 
     // As the Telecom Balloon Fax driver tends to send messages repeatedly
@@ -1486,7 +1486,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
         }
         else
         {
-            mnError = SAL_PRINTER_ERROR_ABORT;
+            mnError = SalPrinterError::Abort;
             return FALSE;
         }
     }
@@ -1514,9 +1514,9 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     {
         long nError = GetLastError();
         if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (nError == ERROR_PRINT_CANCELLED) || (nError == ERROR_CANCELLED) )
-            mnError = SAL_PRINTER_ERROR_ABORT;
+            mnError = SalPrinterError::Abort;
         else
-            mnError = SAL_PRINTER_ERROR_GENERALERROR;
+            mnError = SalPrinterError::General;
         return FALSE;
     }
 
@@ -1584,7 +1584,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobDat
     if ( nRet <= 0 )
     {
         GetLastError();
-        mnError = SAL_PRINTER_ERROR_GENERALERROR;
+        mnError = SalPrinterError::General;
         return nullptr;
     }
 
@@ -1621,11 +1621,11 @@ void WinSalPrinter::EndPage()
     if ( nRet <= 0 )
     {
         GetLastError();
-        mnError = SAL_PRINTER_ERROR_GENERALERROR;
+        mnError = SalPrinterError::General;
     }
 }
 
-sal_uLong WinSalPrinter::GetErrorCode()
+SalPrinterError WinSalPrinter::GetErrorCode()
 {
     return mnError;
 }

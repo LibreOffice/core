@@ -555,11 +555,6 @@ bool AquaSalInfoPrinter::EndPage()
     return true;
 }
 
-sal_uLong AquaSalInfoPrinter::GetErrorCode()
-{
-    return 0;
-}
-
 AquaSalPrinter::AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter ) :
     mpInfoPrinter( i_pInfoPrinter )
 {
@@ -603,11 +598,6 @@ SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJ
 void AquaSalPrinter::EndPage()
 {
     mpInfoPrinter->EndPage();
-}
-
-sal_uLong AquaSalPrinter::GetErrorCode()
-{
-    return AquaSalInfoPrinter::GetErrorCode();
 }
 
 void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )

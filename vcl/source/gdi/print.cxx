@@ -1604,15 +1604,15 @@ bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
     return true;
 }
 
-ErrCode Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
+ErrCode Printer::ImplSalPrinterErrorCodeToVCL( SalPrinterError nError )
 {
     ErrCode nVCLError;
     switch ( nError )
     {
-        case 0:
+        case SalPrinterError::NONE:
             nVCLError = ERRCODE_NONE;
             break;
-        case SAL_PRINTER_ERROR_ABORT:
+        case SalPrinterError::Abort:
             nVCLError = PRINTER_ABORT;
             break;
         default:
