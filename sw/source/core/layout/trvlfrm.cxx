@@ -1434,9 +1434,12 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     else if ( aAct.X() > aRect.Right() )
         aAct.X() = aRect.Right();
 
-    if( !pAct->IsValid() )
+    if (!pAct->IsValid() ||
+        (pAct->IsTextFrame() && !static_cast<SwTextFrame const*>(pAct)->HasPara()))
     {
         // ContentFrame not formatted -> always on node-beginning
+        // tdf#100635 also if the SwTextFrame would require reformatting,
+        // which is unwanted in case this is called from text formatting code
         SwContentNode* pCNd = const_cast<SwContentNode*>(pAct->GetNode());
         OSL_ENSURE( pCNd, "Where is my ContentNode?" );
         rPos.nNode = *pCNd;
