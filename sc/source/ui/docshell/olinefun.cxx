@@ -79,32 +79,6 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     rDocShell.PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
 }
 
-static bool lcl_IsAnyViewEditingInEntryRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
-{
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell)
-            {
-                ScInputHandler* pInputHandler = pTabViewShell->GetInputHandler();
-                if (pInputHandler && pInputHandler->GetActiveView())
-                {
-                    const ScViewData& rViewData = pTabViewShell->GetViewData();
-                    SCCOLROW nPos = bColumns ? rViewData.GetCurX() : rViewData.GetCurY();
-                    if (nStart <= nPos && nPos <= nEnd)
-                        return true;
-                }
-            }
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
-    }
-    return false;
-}
-
-
 void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
     SCCOL nStartCol = rRange.aStart.Col();
@@ -393,7 +367,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         sal_uInt16 nThisLevel = aIter.LastLevel();
         bool bShow = (nThisLevel < nLevel);
 
-        if (!bShow && lcl_IsAnyViewEditingInEntryRange(bColumns, nThisStart, nThisEnd))
+        if (!bShow && ScTabViewShell::isAnyEditViewInRange(bColumns, nThisStart, nThisEnd))
             continue;
 
         if (bShow)                                          // enable
@@ -443,7 +417,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if ( pViewSh )
-        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
+        pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
 
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
@@ -554,8 +528,8 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
         if ( pViewSh )
         {
-            pViewSh->OnLOKShowHideOutline(/*columns: */ true, nMinStartCol - 1);
-            pViewSh->OnLOKShowHideOutline(/*columns: */ false, nMinStartRow - 1);
+            pViewSh->OnLOKShowHideColRow(/*columns: */ true, nMinStartCol - 1);
+            pViewSh->OnLOKShowHideColRow(/*columns: */ false, nMinStartRow - 1);
         }
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
@@ -741,7 +715,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if ( pViewSh )
-        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
+        pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
 
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
@@ -767,7 +741,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     SCCOLROW nEnd   = pEntry->GetEnd();
 
 
-    if (lcl_IsAnyViewEditingInEntryRange(bColumns, nStart, nEnd))
+    if (ScTabViewShell::isAnyEditViewInRange(bColumns, nStart, nEnd))
         return false;
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
@@ -810,7 +784,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if ( pViewSh )
-        pViewSh->OnLOKShowHideOutline(bColumns, nStart - 1);
+        pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
 
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );

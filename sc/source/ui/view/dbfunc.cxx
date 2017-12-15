@@ -256,7 +256,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
 
         if (!bCopy)
         {
-            UpdateScrollBars();
+            UpdateScrollBars(ROW_HEADER);
             SelectionChanged();     // for attribute states (filtered rows are ignored)
         }
 

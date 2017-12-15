@@ -125,13 +125,11 @@ void ScUndoWidthOrHeight::Undo()
 
     if (pViewShell)
     {
-        pViewShell->UpdateScrollBars();
+        pViewShell->UpdateScrollBars(bWidth ? COLUMN_HEADER : ROW_HEADER);
 
         SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNo();
         if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
-
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(bWidth, pViewShell->GetViewData().GetTabNo());
     }
 
     EndUndo();
