@@ -93,7 +93,7 @@ void XMLTextParagraphExport::exportTextFootnote(
     else
     {
         // create span (for citation mark) if necessary; footnote content
-        // wil be handled via exportTextFootnoteHelper, exportText
+        // will be handled via exportTextFootnoteHelper, exportText
         bool bHasHyperlink;
         bool bIsUICharStyle = false;
         bool bHasAutoStyle = false;

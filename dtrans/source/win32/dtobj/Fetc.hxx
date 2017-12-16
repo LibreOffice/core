@@ -36,7 +36,7 @@
 
 /**********************************************************************
  stl container elements must fulfill the following requirements:
- 1. they need a copy ctor and assignement operator(?)
+ 1. they need a copy ctor and assignment operator(?)
  2. they must be comparable
  because the FORMATETC structure has a pointer to a TARGETDEVICE
  structure we need a simple wrapper class to fulfill these needs
