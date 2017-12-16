@@ -1595,6 +1595,22 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables S/W interpreter for formula group");
         meVectorState = FormulaVectorDisabledNotInSoftwareSubset;
     }
+    else
+    {
+        // All the rest, special commands, separators, error codes, ...
+        switch (eOp)
+        {
+            case ocName:
+                // Named expression would need "recursive" handling of its
+                // token array for vector state in
+                // ScFormulaCell::InterpretFormulaGroup() and below.
+                SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
+                meVectorState = FormulaVectorDisabledByOpCode;
+            break;
+            default:
+                ;   // nothing
+        }
+    }
 }
 
 bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
