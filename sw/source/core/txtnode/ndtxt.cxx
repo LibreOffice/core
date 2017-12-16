@@ -3571,9 +3571,9 @@ void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVa
     }
 
     // reset fill information
-    if(maFillAttributes.get())
+    if (maFillAttributes.get() && pNewValue)
     {
-        const sal_uInt16 nWhich = pNewValue ? pNewValue->Which() : 0;
+        const sal_uInt16 nWhich = pNewValue->Which();
         bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
 
         if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
