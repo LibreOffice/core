@@ -65,6 +65,7 @@ public:
         OUString& rCommandURL,
         OUString& rLabel,
         sal_uInt16& rType,
+        sal_Int32& rStyle,
         css::uno::Reference< css::container::XIndexAccess >& rSubMenu );
     static bool GetToolbarItemData(
         const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
