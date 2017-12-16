@@ -827,9 +827,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[17] = new ORowSetValueDecorator();             // Unused
         aRow[18] = new ORowSetValueDecorator(sal_Int16(10));// Radix
 
-        // SQL_TEXT
+        // Char
         aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TEXT, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::CHAR);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
         aRow[9] = new ORowSetValueDecorator(
@@ -839,14 +839,26 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
 
-        // SQL_VARYING
+        // Varchar
         aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_VARYING, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::VARCHAR);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
+        // Binary (CHAR)
+        // It is distinguished from Text type by its character set
+        aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
+        aRow[2] = new ORowSetValueDecorator(DataType::BINARY);
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::NONE)); // Searchable
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
@@ -860,19 +872,19 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
             aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
             aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         }
-        // SQL_SHORT
+        // Smallint (SQL_SHORT)
         aRow[1] = new ORowSetValueDecorator(OUString("SMALLINT"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_SHORT, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::SMALLINT);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(5)); // Prevision
         aResults.push_back(aRow);
-        // SQL_LONG
+        // Integer (SQL_LONG)
         aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_LONG, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(10)); // Precision
         aResults.push_back(aRow);
-        // SQL_INT64
+        // Bigint (SQL_INT64)
         aRow[1] = new ORowSetValueDecorator(OUString("BIGINT"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_INT64, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::BIGINT);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(20)); // Precision
         aResults.push_back(aRow);
 
@@ -884,14 +896,14 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         }
 
         aRow[6] = new ORowSetValueDecorator(OUString("PRECISION,SCALE")); // Create params
-        // NUMERIC
+        // Numeric
         aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
         aRow[2] = new ORowSetValueDecorator(DataType::NUMERIC);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
         aResults.push_back(aRow);
-        // DECIMAL
+        // Decimal
         aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
@@ -900,34 +912,26 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aResults.push_back(aRow);
 
         aRow[6] = new ORowSetValueDecorator(); // Create Params
-        // SQL_FLOAT
+        // Float (SQL_FLOAT)
         aRow[1] = new ORowSetValueDecorator(OUString("FLOAT"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_FLOAT, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::FLOAT);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(7)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(7)); // Max scale
         aResults.push_back(aRow);
-        // SQL_DOUBLE
+        // Double (SQL_DOUBLE)
         aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE PRECISION"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_DOUBLE, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::DOUBLE);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
         aResults.push_back(aRow);
 
-//         // SQL_D_FLOAT
-//         aRow[1] = new ORowSetValueDecorator(getColumnTypeNameFromFBType(SQL_D_FLOAT, 0, 0));
-//         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_D_FLOAT, 0, 0));
-//         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
-//         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
-//         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
-//         aResults.push_back(aRow);
         // TODO: no idea whether D_FLOAT corresponds to an sql type
 
         // SQL_TIMESTAMP
-        // TODO: precision?
         aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TIMESTAMP, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
@@ -938,9 +942,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aResults.push_back(aRow);
 
         // SQL_TYPE_TIME
-        // TODO: precision?
         aRow[1] = new ORowSetValueDecorator(OUString("TIME"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_TIME, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::TIME);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
@@ -951,9 +954,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aResults.push_back(aRow);
 
         // SQL_TYPE_DATE
-        // TODO: precision?
         aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_DATE, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::DATE);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
@@ -964,9 +966,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aResults.push_back(aRow);
 
         // SQL_BLOB
-        // TODO: precision?
         aRow[1] = new ORowSetValueDecorator(OUString("BLOB"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_BLOB, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::BLOB);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(0)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
@@ -977,9 +978,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aResults.push_back(aRow);
 
         // SQL_BOOLEAN
-        // TODO FIXME precision
         aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
-        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_BOOLEAN, 0, 0));
+        aRow[2] = new ORowSetValueDecorator(DataType::BOOLEAN);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(1)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
@@ -989,10 +989,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
 
-        // TODO: complete
-//     case SQL_ARRAY:
-//     case SQL_NULL:
-//     case SQL_QUAD:      // Is a "Blob ID" according to the docs
     }
     pResultSet->setRows(aResults);
     return xResultSet;
@@ -1099,10 +1095,13 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         // this is also the one we manually fiddle when changin NULL/NOT NULL
         // (see Table.cxx)
         "relfields.RDB$NULL_FLAG, "      // 11
-        "fields.RDB$CHARACTER_LENGTH "   // 12
+        "fields.RDB$CHARACTER_LENGTH, "   // 12
+        "charset.RDB$CHARACTER_SET_NAME " // 13
         "FROM RDB$RELATION_FIELDS relfields "
         "JOIN RDB$FIELDS fields "
         "on (fields.RDB$FIELD_NAME = relfields.RDB$FIELD_SOURCE) "
+        "LEFT JOIN RDB$CHARACTER_SETS charset "
+        "on (fields.RDB$CHARACTER_SET_ID = charset.RDB$CHARACTER_SET_ID) "
         "WHERE (1 = 1) ");
 
     if (!tableNamePattern.isEmpty())
@@ -1152,11 +1151,16 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         aCurrentRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2)));
         // 5. Datatype
         short aType = getFBTypeFromBlrType(xRow->getShort(6));
-        short aSubType = xRow->getShort(7);
         short aScale = xRow->getShort(10);
-        aCurrentRow[5] = new ORowSetValueDecorator(getColumnTypeFromFBType(aType, aSubType, aScale));
+        OUString sCharsetName = xRow->getString(13);
+        // result field may be filled with spaces
+        sCharsetName = sCharsetName.trim();
+        ColumnTypeInfo aInfo(aType, xRow->getShort(7), aScale,
+                xRow->getString(13));
+
+        aCurrentRow[5] = new ORowSetValueDecorator(aInfo.getSdbcType());
         // 6. Typename (SQL_*)
-        aCurrentRow[6] = new ORowSetValueDecorator(getColumnTypeNameFromFBType(aType, aSubType, aScale));
+        aCurrentRow[6] = new ORowSetValueDecorator(aInfo.getColumnTypeName());
 
         // 7. Column Sizes
         {

@@ -33,6 +33,42 @@ namespace connectivity
             Clob = 1
         };
 
+        // Numeric and decimal types can be identified by their subtype
+        // 1 for NUMERIC, 2 for DECIMAL
+        enum class NumberSubType {
+            Other = 0,
+            Numeric = 1,
+            Decimal = 2
+        };
+
+        class ColumnTypeInfo {
+private:
+            short m_aType;
+            short m_aSubType;
+            short m_nScale;
+            OUString m_sCharsetName;
+public:
+            explicit ColumnTypeInfo( short aType, short aSubType = 0,
+                    short nScale = 0, const OUString& sCharset = OUString() )
+                : m_aType(aType)
+                , m_aSubType(aSubType)
+                , m_nScale(nScale)
+                , m_sCharsetName(sCharset) {}
+            explicit ColumnTypeInfo( short aType, const OUString& sCharset )
+                : m_aType(aType)
+                , m_aSubType(0)
+                , m_nScale(0)
+                , m_sCharsetName(sCharset) {}
+            short getType() const { return m_aType; }
+            short getSubType() const { return m_aSubType; }
+            short getScale() const { return m_nScale; }
+            OUString getCharacterSet() const { return m_sCharsetName; }
+
+            sal_Int32 getSdbcType() const;
+            ::rtl::OUString getColumnTypeName() const;
+
+        };
+
         /**
          * Make sure an identifier is safe to use within the database. Currently
          * firebird seems to return identifiers with 93 character (instead of
@@ -61,9 +97,6 @@ namespace connectivity
         void evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
                                   const ::rtl::OUString& aCause,
                                   const css::uno::Reference< css::uno::XInterface >& _rxContext);
-
-        sal_Int32 getColumnTypeFromFBType(short aType, short aSubType, short aScale);
-        ::rtl::OUString getColumnTypeNameFromFBType(short aType, short aSubType, short aScale);
 
         /**
          * Internally (i.e. in RDB$FIELD_TYPE) firebird stores the data type

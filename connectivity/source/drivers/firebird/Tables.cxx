@@ -92,6 +92,21 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
 
     aSql.append(dbtools::createStandardTypePart(xColProp, _xConnection));
 
+    // Add character set for BINARY (fix) type:
+    // BINARY is distinguished from other CHAR types by its character set.
+    // Octets is a special character set for binary data.
+    if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(
+                    PROPERTY_ID_TYPE)) )
+    {
+        sal_Int32 aType = 0;
+        xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))
+            >>= aType;
+        if(aType == DataType::BINARY)
+        {
+            aSql.append(" ");
+            aSql.append("CHARACTER SET OCTETS");
+        }
+    }
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {

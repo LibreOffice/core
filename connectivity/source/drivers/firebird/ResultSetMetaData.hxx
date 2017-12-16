@@ -45,6 +45,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             void verifyValidColumn(sal_Int32 column);
+            OUString getCharacterSet(sal_Int32 nIndex);
         public:
             // a constructor, which is required for returning objects:
             OResultSetMetaData(Connection* pConnection,
