@@ -30,6 +30,6 @@ with open(ofile, "a") as output:
             keyid = entry.msgctxt + '|' + entry.msgid
             print >> output, '#. ' + polib.genKeyId(keyid)
             location = entry.occurrences[0][0]
-            location = os.path.basename(location)
+            location = os.path.relpath(location, os.environ['SRCDIR'])
             entry.occurrences[0] = location, entry.occurrences[0][1]
             print >> output, entry
