@@ -18,6 +18,8 @@
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
 
+#include <llvm/Support/Path.h>
+
 #include "pluginhandler.hxx"
 
 /*
@@ -618,8 +620,18 @@ bool hasPathnamePrefix(StringRef pathname, StringRef prefix)
         [](StringRef p, StringRef a) { return p.startswith(a); });
 }
 
+StringRef getAbsolutePath(const StringRef& path)
+{
+    llvm::SmallString<512> absPath(path);
+    llvm::sys::fs::make_absolute(absPath);
+    llvm::sys::path::remove_dots(absPath, true);
+    return absPath.str();
+}
+
 bool isSamePathname(StringRef pathname, StringRef other)
 {
+    pathname = getAbsolutePath(pathname);
+    other = getAbsolutePath(other);
     return checkPathname(
         pathname, other, [](StringRef p, StringRef a) { return p == a; });
 }
