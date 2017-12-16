@@ -254,6 +254,13 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
             break;
             case svIndex:
             {
+                if (p->GetOpCode() != ocName)
+                {
+                    // May be DB-range or TableRef
+                    mrGroupTokens.AddToken(*p);
+                    break;
+                }
+
                 // Named range.
                 ScRangeName* pNames = mrDoc.GetRangeName();
                 if (!pNames)
