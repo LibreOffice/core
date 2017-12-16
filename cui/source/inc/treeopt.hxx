@@ -101,6 +101,12 @@ struct OptionsNode
         for ( size_t i = 0; i < m_aLeaves.size(); ++i )
             delete m_aLeaves[i];
         m_aLeaves.clear();
+        for (auto & oneGroupLeaves : m_aGroupedLeaves)
+        {
+            for (auto const& leaf : oneGroupLeaves)
+                delete leaf;
+            oneGroupLeaves.clear();
+        }
         m_aGroupedLeaves.clear();
     }
 };
