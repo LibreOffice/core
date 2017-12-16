@@ -18,6 +18,7 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Lex/PPCallbacks.h>
+
 #include <stdio.h>
 
 #if defined _WIN32
@@ -116,6 +117,8 @@ void PluginHandler::handleOption( const std::string& option )
         unitTestMode = true;
     else if (option == "debug")
         debugMode = true;
+    else if ( option.substr(0, 15) == "lool-base-path=" )
+        loolBasePath = option.substr(15);
     else
         report( DiagnosticsEngine::Fatal, "unknown option %0" ) << option;
 }
@@ -193,7 +196,7 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
     if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
-    if (bufferName == NULL
+    if (bufferName == nullptr
         || hasPathnamePrefix(bufferName, SRCDIR "/external/")
         || isSamePathname(bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list") )
             // workdir/CustomTarget/sdext/pdfimport/hash.cxx is generated from
@@ -221,6 +224,11 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
         normalizeDotDotInFilePath(s);
         if (hasPathnamePrefix(s, WORKDIR))
             return true;
+    }
+    if ( isLOOLMode() ) {
+        std::string absPath = getAbsolutePath(bufferName);
+        if ( StringRef(absPath).startswith(loolBasePath) )
+            return false;
     }
     if( hasPathnamePrefix(bufferName, BUILDDIR)
         || hasPathnamePrefix(bufferName, SRCDIR) )
@@ -277,6 +285,12 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             pathWarning = "modified source in build dir : %0";
         else if( name.startswith(SRCDIR "/") )
             ; // ok
+        else if ( isLOOLMode() )
+        {
+            std::string absPath = getAbsolutePath(name);
+            if ( !StringRef(absPath).startswith(loolBasePath) )
+                bSkip = true;
+        }
         else
         {
             pathWarning = "modified source in unknown location, not modifying : %0";

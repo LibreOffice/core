@@ -79,6 +79,7 @@ protected:
     bool isInUnoIncludeFile(const FunctionDecl*) const;
 
     bool isDebugMode() const { return handler.isDebugMode(); }
+    bool isLOOLMode() const { return handler.isLOOLMode(); }
 
     static bool isUnitTestMode();
 
@@ -227,6 +228,9 @@ void normalizeDotDotInFilePath(std::string&);
 // Same as pathname.startswith(prefix), except on Windows, where pathname and
 // prefix may also contain backslashes:
 bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
+
+// get the absolute path for a given path
+std::string getAbsolutePath(StringRef path);
 
 // Same as pathname == other, except on Windows, where pathname and other may
 // also contain backslashes:
