@@ -471,9 +471,10 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
         OUString                aLabel;
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
+        sal_Int32 nStyle(0);
 
         bool bItem = SvxConfigPageHelper::GetMenuItemData( xMenuSettings, nIndex,
-            aCommandURL, aLabel, nType, xSubMenu );
+            aCommandURL, aLabel, nType, nStyle, xSubMenu );
 
         if ( bItem )
         {
@@ -530,6 +531,7 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
                 SvxConfigEntry* pEntry = new SvxConfigEntry(
                     aLabel, aCommandURL, xSubMenu.is(), /*bParentData*/false );
 
+                pEntry->SetStyle( nStyle );
                 pEntry->SetUserDefined( bIsUserDefined );
                 if ( !bUseDefaultLabel )
                     pEntry->SetName( aLabel );

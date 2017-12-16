@@ -1073,13 +1073,10 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         Reference< XDispatch > xDispatch;
         Reference< XStatusListener > xStatusListener;
         VclPtr<PopupMenu> pPopup = pMenu->GetPopupMenu( nItemId );
-        bool bItemShowMenuImages = m_bShowMenuImages;
         // overwrite the show icons on menu option?
-        if (!bItemShowMenuImages)
-        {
-            MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
-            bItemShowMenuImages = ( ( nBits & MenuItemBits::ICON ) == MenuItemBits::ICON );
-        }
+        MenuItemBits nBits = pMenu->GetItemBits( nItemId ) & ( MenuItemBits::ICON | MenuItemBits::TEXT );
+        bool bItemShowMenuImages = ( m_bShowMenuImages && nBits != MenuItemBits::TEXT ) || nBits & MenuItemBits::ICON;
+
         if ( pPopup )
         {
             // Retrieve module identifier from Help Command entry
@@ -1891,13 +1888,9 @@ void MenuBarManager::FillMenuImages(Reference< XFrame > const & _xFrame, Menu* _
         sal_uInt16 nId = _pMenu->GetItemId( nPos );
         if ( _pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR )
         {
-            bool bTmpShowMenuImages( bShowMenuImages );
             // overwrite the show icons on menu option?
-            if (!bTmpShowMenuImages)
-            {
-                MenuItemBits nBits =  _pMenu->GetItemBits( nId );
-                bTmpShowMenuImages = ( ( nBits & MenuItemBits::ICON ) == MenuItemBits::ICON );
-            }
+            MenuItemBits nBits = _pMenu->GetItemBits( nId ) & ( MenuItemBits::ICON | MenuItemBits::TEXT );
+            bool bTmpShowMenuImages = ( bShowMenuImages && nBits != MenuItemBits::TEXT ) || nBits & MenuItemBits::ICON;
 
             if ( bTmpShowMenuImages )
             {

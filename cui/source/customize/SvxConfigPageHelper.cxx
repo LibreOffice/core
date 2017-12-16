@@ -297,6 +297,7 @@ bool SvxConfigPageHelper::GetMenuItemData(
     OUString& rCommandURL,
     OUString& rLabel,
     sal_uInt16& rType,
+    sal_Int32& rStyle,
     css::uno::Reference< css::container::XIndexAccess >& rSubMenu )
 {
     try
@@ -313,6 +314,10 @@ bool SvxConfigPageHelper::GetMenuItemData(
                 else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
                 {
                     aProp[i].Value >>= rSubMenu;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+                {
+                    aProp[i].Value >>= rStyle;
                 }
                 else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
                 {
@@ -385,7 +390,7 @@ bool SvxConfigPageHelper::GetToolbarItemData(
 css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertSvxConfigEntry(
         const SvxConfigEntry* pEntry )
 {
-    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 3 );
+    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 4 );
 
     aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aPropSeq[0].Value <<= pEntry->GetCommand();
@@ -405,6 +410,9 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertSvxC
     {
         aPropSeq[2].Value <<= pEntry->GetName();
     }
+
+    aPropSeq[3].Name = ITEM_DESCRIPTOR_STYLE;
+    aPropSeq[3].Value <<= static_cast<sal_Int16>(pEntry->GetStyle());
 
     return aPropSeq;
 }
