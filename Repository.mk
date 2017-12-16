@@ -955,17 +955,22 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	$(if $(USING_X11)$(ENABLE_HEADLESS)$(filter ANDROID,$(OS)), \
 		postprocess_fontconfig) \
 	$(call gb_Helper_optional,MORE_FONTS,\
+		fonts_amiri \
 		fonts_caladea \
 		fonts_carlito \
 		fonts_dejavu \
 		fonts_emojione_color \
 		fonts_gentium \
+		fonts_kacst \
 		fonts_liberation \
 		fonts_liberation_narrow \
 		fonts_libertineg \
 		fonts_noto \
+		fonts_reem \
 		fonts_sourcecode \
 		fonts_sourcesans \
+		fonts_scheherazade \
+		fonts_thabit \
 	) \
 ))
 
