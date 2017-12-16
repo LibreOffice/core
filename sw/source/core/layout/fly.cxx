@@ -758,7 +758,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( FrameSizeChg( rNew ) )
                 NotifyDrawObj();
             rInvFlags |= 0x7F;
-            if ( RES_FMT_CHG == nWhich )
+            if (pOld && RES_FMT_CHG == nWhich)
             {
                 SwRect aNew( GetObjRectWithSpaces() );
                 SwRect aOld( getFrameArea() );
