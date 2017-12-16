@@ -474,7 +474,7 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
                 case C_TOKEN( pictureOptions ):
                     return new PictureOptionsContext( *this, mrModel.mxPicOptions.create(bMSO2007Doc) );
                 case C_TOKEN( shape ):
-                    mrModel.monShape = rAttribs.getToken( bMSO2007Doc ? XML_val : XML_box );
+                    mrModel.monShape = rAttribs.getToken(XML_val);
                     return nullptr;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create(bMSO2007Doc) );
