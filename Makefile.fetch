@@ -177,6 +177,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESANS_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_EMOJIONE_COLOR_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_CULMUS_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LIBRE_HEBREW_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_ALEF_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,MYSQL_CONNECTOR_CPP,MYSQL_CONNECTOR_CPP_TARBALL) \
