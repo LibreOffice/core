@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b1dc2a74",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/FunctionHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-16T15:33:38Z",
+      "side": 1,
+      "message": "This is wrong. It is not apparent, but a parent. So keep as is.",
+      "revId": "dc79085348e8f63820371a5dd472993307143c06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
