@@ -1718,19 +1718,16 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl, Timer *, void)
 
 IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, Edit&, rBox, void )
 {
-    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    sal_uInt16 nMask = 1;
+    for(sal_uInt16 e = 0; e < pActNum->GetLevelCount(); e++)
     {
-        sal_uInt16 nMask = 1;
-        for(sal_uInt16 e = 0; e < pActNum->GetLevelCount(); e++)
+        if(nActNumLvl & nMask)
         {
-            if(nActNumLvl & nMask)
-            {
-                SvxNumberFormat aNumFmt(pActNum->GetLevel(e));
-                aNumFmt.SetIncludeUpperLevels((sal_uInt8) std::min(static_cast<NumericField&>(rBox).GetValue(), sal_Int64(e + 1)) );
-                pActNum->SetLevel(e, aNumFmt);
-            }
-            nMask <<= 1;
+            SvxNumberFormat aNumFmt(pActNum->GetLevel(e));
+            aNumFmt.SetIncludeUpperLevels((sal_uInt8) std::min(static_cast<NumericField&>(rBox).GetValue(), sal_Int64(e + 1)) );
+            pActNum->SetLevel(e, aNumFmt);
         }
+        nMask <<= 1;
     }
     SetModified();
 }
