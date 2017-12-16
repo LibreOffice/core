@@ -15,10 +15,20 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoMono-Regular.ttf \
 	NotoNaskhArabic-Bold.ttf \
 	NotoNaskhArabic-Regular.ttf \
+	NotoNaskhArabicUI-Bold.ttf \
+	NotoNaskhArabicUI-Regular.ttf \
+	NotoSansArabic-Bold.ttf \
+	NotoSansArabic-Regular.ttf \
+	NotoSansArabicUI-Bold.ttf \
+	NotoSansArabicUI-Regular.ttf \
 	NotoSansArmenian-Bold.ttf \
 	NotoSansArmenian-Regular.ttf \
 	NotoSans-Bold.ttf \
 	NotoSans-BoldItalic.ttf \
+	NotoSans-Condensed.ttf \
+	NotoSans-CondensedBold.ttf \
+	NotoSans-CondensedBoldItalic.ttf \
+	NotoSans-CondensedItalic.ttf \
 	NotoSansGeorgian-Bold.ttf \
 	NotoSansGeorgian-Regular.ttf \
 	NotoSansHebrew-Bold.ttf \
@@ -26,12 +36,18 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSans-Italic.ttf \
 	NotoSansLao-Bold.ttf \
 	NotoSansLao-Regular.ttf \
+	NotoSans-Light.ttf \
+	NotoSans-LightItalic.ttf \
 	NotoSansLisu-Regular.ttf \
 	NotoSans-Regular.ttf \
 	NotoSerifArmenian-Bold.ttf \
 	NotoSerifArmenian-Regular.ttf \
 	NotoSerif-Bold.ttf \
 	NotoSerif-BoldItalic.ttf \
+	NotoSerif-Condensed.ttf \
+	NotoSerif-CondensedBold.ttf \
+	NotoSerif-CondensedBoldItalic.ttf \
+	NotoSerif-CondensedItalic.ttf \
 	NotoSerifGeorgian-Bold.ttf \
 	NotoSerifGeorgian-Regular.ttf \
 	NotoSerifHebrew-Bold.ttf \
@@ -39,6 +55,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSerif-Italic.ttf \
 	NotoSerifLao-Bold.ttf \
 	NotoSerifLao-Regular.ttf \
+	NotoSerif-Light.ttf \
+	NotoSerif-LightItalic.ttf \
 	NotoSerif-Regular.ttf \
 ))
 
