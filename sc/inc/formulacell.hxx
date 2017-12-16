@@ -65,6 +65,7 @@ public:
     ScTokenArray* mpCode;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
+    sal_Int32 mnWeight;
     short mnFormatType;
     bool mbInvariant:1;
     bool mbSubTotal:1;
