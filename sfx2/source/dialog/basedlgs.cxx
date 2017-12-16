@@ -379,7 +379,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
 
 /*  [Description]
 
-    If a ModelessDialog is enabled its ViewFrame wil be activated.
+    If a ModelessDialog is enabled its ViewFrame will be activated.
     This is necessary by PluginInFrames.
 */
 bool SfxModelessDialog::EventNotify( NotifyEvent& rEvt )

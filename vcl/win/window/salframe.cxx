@@ -5455,7 +5455,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     static int  bInWheelMsg = FALSE;
     static int  bInQueryEnd = FALSE;
 
-    // By WM_CRETAE we connect the frame with the window handle
+    // By WM_CREATE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
     {
         // Save Window-Instance in Windowhandle
