@@ -596,10 +596,6 @@ void SwSpellPopup::checkRedline()
     };
     SwDoc *pDoc = m_pSh->GetDoc();
     SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_PREV_CHANGE>{});
-    for (sal_uInt16 nWhich : pRedlineIds)
-    {
-        aSet.Put(SfxVoidItem(nWhich));
-    }
     m_pSh->GetView().GetState(aSet);
 
     // Enable/disable items based on if the which id of the void items are
@@ -615,7 +611,11 @@ void SwSpellPopup::checkRedline()
             nId = m_nRedlineNextId;
         else if (nWhich == FN_REDLINE_PREV_CHANGE)
             nId = m_nRedlinePrevId;
-        m_xPopupMenu->EnableItem(nId, aSet.Get(nWhich).Which());
+        auto valueWhich = aSet.Get(nWhich).Which();
+        m_xPopupMenu->EnableItem(nId, valueWhich);
+        // Put the value only if we enable item to avoid mem leak
+        if (valueWhich)
+            aSet.Put(SfxVoidItem(nWhich));
     }
 }
 
