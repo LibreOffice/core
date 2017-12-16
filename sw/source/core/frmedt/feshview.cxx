@@ -1165,7 +1165,7 @@ bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
 
 bool SwFEShell::IsRotationOfSwGrfNodePossible() const
 {
-    // RotGrfFlyFrame: check if RotationMode is possibe
+    // RotGrfFlyFrame: check if RotationMode is possible
     const SdrView *pSdrView = Imp()->GetDrawView();
 
     if(pSdrView)
