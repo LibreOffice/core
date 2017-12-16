@@ -2546,58 +2546,61 @@ bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
 
 void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    SwFormatHeader const *pH = nullptr;
-    SwFormatFooter const *pF = nullptr;
-
-    const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
-
-    if( RES_ATTRSET_CHG == nWhich )
+    if (pNew)
     {
-        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-            RES_HEADER, false, reinterpret_cast<const SfxPoolItem**>(&pH) );
-        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-            RES_FOOTER, false, reinterpret_cast<const SfxPoolItem**>(&pF) );
+        SwFormatHeader const *pH = nullptr;
+        SwFormatFooter const *pF = nullptr;
 
-        // reset fill information
-        if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
+        const sal_uInt16 nWhich = pNew->Which();
+
+        if( RES_ATTRSET_CHG == nWhich )
         {
-            SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNew)->GetChgSet());
-            bool bReset(false);
+            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
+                RES_HEADER, false, reinterpret_cast<const SfxPoolItem**>(&pH) );
+            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
+                RES_FOOTER, false, reinterpret_cast<const SfxPoolItem**>(&pF) );
 
-            for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+            // reset fill information
+            if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
             {
-                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
-            }
+                SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNew)->GetChgSet());
+                bool bReset(false);
 
-            if(bReset)
+                for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+                {
+                    bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
+                }
+
+                if(bReset)
+                {
+                    maFillAttributes.reset();
+                }
+            }
+        }
+        else if(RES_FMT_CHG == nWhich)
+        {
+            // reset fill information on format change (e.g. style changed)
+            if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
             {
                 maFillAttributes.reset();
             }
         }
-    }
-    else if(RES_FMT_CHG == nWhich)
-    {
-        // reset fill information on format change (e.g. style changed)
-        if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
-        {
-            maFillAttributes.reset();
+        else if( RES_HEADER == nWhich )
+            pH = static_cast<const SwFormatHeader*>(pNew);
+        else if( RES_FOOTER == nWhich )
+            pF = static_cast<const SwFormatFooter*>(pNew);
+
+        if( pH && pH->IsActive() && !pH->GetHeaderFormat() )
+        {   //If he doesn't have one, I'll add one
+            SwFrameFormat *pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::HEADER, nullptr );
+            const_cast<SwFormatHeader *>(pH)->RegisterToFormat( *pFormat );
         }
-    }
-    else if( RES_HEADER == nWhich )
-        pH = static_cast<const SwFormatHeader*>(pNew);
-    else if( RES_FOOTER == nWhich )
-        pF = static_cast<const SwFormatFooter*>(pNew);
 
-    if( pH && pH->IsActive() && !pH->GetHeaderFormat() )
-    {   //If he doesn't have one, I'll add one
-        SwFrameFormat *pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::HEADER, nullptr );
-        const_cast<SwFormatHeader *>(pH)->RegisterToFormat( *pFormat );
-    }
-
-    if( pF && pF->IsActive() && !pF->GetFooterFormat() )
-    {   //If he doesn't have one, I'll add one
-        SwFrameFormat *pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::FOOTER, nullptr );
-        const_cast<SwFormatFooter *>(pF)->RegisterToFormat( *pFormat );
+        if( pF && pF->IsActive() && !pF->GetFooterFormat() )
+        {   //If he doesn't have one, I'll add one
+            SwFrameFormat *pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::FOOTER, nullptr );
+            const_cast<SwFormatFooter *>(pF)->RegisterToFormat( *pFormat );
+        }
     }
 
     SwFormat::Modify( pOld, pNew );
