@@ -5766,8 +5766,9 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
 
     long nPosXTw = rtl::math::round(aScrPos.getX() / fPPTX);
     long nPosYTw = rtl::math::round(aScrPos.getY() / fPPTY);
-    long nSizeXTw = rtl::math::round(nSizeXPix / fPPTX);
-    long nSizeYTw = rtl::math::round(nSizeYPix / fPPTY);
+    // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
+    long nSizeXTw = rtl::math::round(nSizeXPix / fPPTX) - 1;
+    long nSizeYTw = rtl::math::round(nSizeYPix / fPPTY) - 1;
 
     std::stringstream ss;
     ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
