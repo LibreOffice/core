@@ -997,7 +997,7 @@ namespace svgio
                                     // in the polygon to find tangents unequal to zero, skipping empty edges
                                     // see basegfx descriptions)
                                     // Hint: Mozilla, Inkscape and others use only leaving tangent for start marker
-                                    // and entering tangent for end marker. To achieve this (if wanted) it is possibe
+                                    // and entering tangent for end marker. To achieve this (if wanted) it is possible
                                     // to make the fetch of aEntering/aLeaving dependent on bIsFirstMarker/bIsLastMarker.
                                     // This is not done here, see comment 14 in task #1232379#
                                     // or http://www.w3.org/TR/SVG/painting.html#OrientAttribute

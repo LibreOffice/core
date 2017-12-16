@@ -505,7 +505,7 @@ public:
     // Start cropping the selected image
     void StartCropImage();
 
-    // RotGrfFlyFrame: check if RotationMode is possibe
+    // RotGrfFlyFrame: check if RotationMode is possible
     bool IsRotationOfSwGrfNodePossible() const;
 
     size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
