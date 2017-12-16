@@ -4498,7 +4498,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     rBox.m_aDAString = aDA.makeStringAndClear();
     //to encrypt this (el)
     rBox.m_aMKDict = "/CA";
-    //after this assignement, to m_aMKDic cannot be added anything
+    //after this assignment, to m_aMKDic cannot be added anything
     rBox.m_aMKDictCAString = "l";
 
     rBox.m_aRect = aCheckRect;
