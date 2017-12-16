@@ -523,6 +523,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mpCode(nullptr),
     mpTopCell(nullptr),
     mnLength(0),
+    mnWeight(0),
     mnFormatType(css::util::NumberFormat::NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
@@ -3875,6 +3876,7 @@ void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
 
     mxGroup = xRef;
     pCode = mxGroup->mpCode;
+    mxGroup->mnWeight = 0;      // invalidate
 }
 
 ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaCell& rOther ) const
@@ -4919,12 +4921,18 @@ sal_Int32 ScFormulaCell::GetWeight() const
 {
     if (!mxGroup)
         return 1;
+
+    if (mxGroup->mnWeight > 0)
+        return mxGroup->mnWeight;
+
     double nSharedCodeWeight = GetSharedCode()->GetWeight();
     double nResult = nSharedCodeWeight * GetSharedLength();
     if (nResult < SAL_MAX_INT32)
-        return nResult;
+        mxGroup->mnWeight = nResult;
     else
-        return SAL_MAX_INT32;
+        mxGroup->mnWeight = SAL_MAX_INT32;
+
+    return mxGroup->mnWeight;
 }
 
 ScTokenArray* ScFormulaCell::GetSharedCode()
