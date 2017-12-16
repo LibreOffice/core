@@ -169,7 +169,6 @@ class UnoMultiPageModel : public ControlModelContainerBase
 public:
     UnoMultiPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoMultiPageModel() override;
-    UnoMultiPageModel( const UnoMultiPageModel& rModel );
 
     UnoControlModel*    Clone() const override;
 
@@ -244,7 +243,6 @@ class UnoPageModel : public ControlModelContainerBase
 public:
     UnoPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoPageModel() override;
-    UnoPageModel( const UnoPageModel& rModel );
 
     UnoControlModel*    Clone() const override;
 
@@ -278,7 +276,6 @@ class UnoFrameModel : public ControlModelContainerBase
 public:
     UnoFrameModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoFrameModel() override;
-    UnoFrameModel( const UnoFrameModel& rModel );
 
     UnoControlModel*    Clone() const override;
 
