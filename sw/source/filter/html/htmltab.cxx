@@ -3960,6 +3960,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         while( m_aContexts.size() > m_nContextStAttrMin )
         {
             std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+            if (!xCntxt)
+                break;
             ClearContext(xCntxt.get());
         }
     }
