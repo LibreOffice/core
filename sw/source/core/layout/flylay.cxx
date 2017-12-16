@@ -713,20 +713,23 @@ SwFlyLayFrame::SwFlyLayFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame 
 
 void SwFlyLayFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
-
     const SwFormatAnchor *pAnch = nullptr;
-    if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
-        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
-            reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
-        ; // GetItemState sets the anchor pointer!
 
-    else if( RES_ANCHOR == nWhich )
+    if (pNew)
     {
-        // Change of anchor. I'm attaching myself to the new place.
-        // It's not allowed to change the anchor type. This is only
-        // possible via SwFEShell.
-        pAnch = static_cast<const SwFormatAnchor*>(pNew);
+        const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+        if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
+            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
+                reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
+            ; // GetItemState sets the anchor pointer!
+
+        else if( RES_ANCHOR == nWhich )
+        {
+            // Change of anchor. I'm attaching myself to the new place.
+            // It's not allowed to change the anchor type. This is only
+            // possible via SwFEShell.
+            pAnch = static_cast<const SwFormatAnchor*>(pNew);
+        }
     }
 
     if( pAnch )

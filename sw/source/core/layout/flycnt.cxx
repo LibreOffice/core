@@ -77,20 +77,23 @@ SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
 
 void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
     const SwFormatAnchor *pAnch = nullptr;
 
-    if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
-        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
-            reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
-        ;       // The anchor pointer is set at GetItemState!
-
-    else if( RES_ANCHOR == nWhich )
+    if (pNew)
     {
-        //Change anchor, I move myself to a new place.
-        //The anchor type must not change, this is only possible using
-        //SwFEShell.
-        pAnch = static_cast<const SwFormatAnchor*>(pNew);
+        const sal_uInt16 nWhich = pNew->Which();
+        if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
+            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
+                reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
+            ;       // The anchor pointer is set at GetItemState!
+
+        else if( RES_ANCHOR == nWhich )
+        {
+            //Change anchor, I move myself to a new place.
+            //The anchor type must not change, this is only possible using
+            //SwFEShell.
+            pAnch = static_cast<const SwFormatAnchor*>(pNew);
+        }
     }
 
     if( pAnch )
