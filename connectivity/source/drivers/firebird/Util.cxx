@@ -17,6 +17,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
+using namespace firebird;
+
 OUString firebird::sanitizeIdentifier(const OUString& rIdentifier)
 {
     OUString sRet = rIdentifier.trim();
@@ -64,41 +66,76 @@ void firebird::evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
     }
 }
 
-sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType, short aScale)
+sal_Int32 lcl_getNumberType( short aType, NumberSubType aSubType )
 {
-    aType &= ~1; // Remove last bit -- it is used to denote whether column
-                 // can store Null, not needed for type determination
+    switch(aSubType)
+    {
+        case NumberSubType::Numeric:
+            return DataType::NUMERIC;
+        case NumberSubType::Decimal:
+            return DataType::DECIMAL;
+        default:
+            switch(aType)
+            {
+                case SQL_SHORT:
+                    return DataType::SMALLINT;
+                case SQL_LONG:
+                    return DataType::INTEGER;
+                case SQL_DOUBLE:
+                    return DataType::DOUBLE;
+                case SQL_INT64:
+                    return DataType::BIGINT;
+                default:
+                    assert(false); // not a number
+                    return 0;
+            }
+    }
+}
+sal_Int32 lcl_getCharColumnType( short aType, const OUString& sCharset )
+{
+    switch(aType)
+    {
+        case SQL_TEXT:
+            if( sCharset == "OCTETS")
+                return DataType::BINARY;
+            else
+                return DataType::CHAR;
+        case SQL_VARYING: // TODO VARBINARY
+            return DataType::VARCHAR;
+        default:
+            assert(false);
+            return 0;
+    }
+}
 
-    // if scale is set without subtype then imply numeric
-    if(aSubType == 0 && aScale < 0)
-        aSubType = 1;
+sal_Int32 firebird::ColumnTypeInfo::getSdbcType() const
+{
+    short aType = m_aType & ~1; // Remove last bit -- it is used to denote whether column
+                 // can store Null, not needed for type determination
+    short aSubType = m_aSubType;
+    if( m_nScale > 0 )
+    {
+        // scale makes sense only for decimal and numeric types
+        assert(aType == SQL_SHORT || aType == SQL_LONG || aType == SQL_DOUBLE
+                || aType == SQL_INT64);
+
+        // if scale is set without subtype then imply numeric
+        if( static_cast<NumberSubType>(aSubType) == NumberSubType::Other )
+            aSubType = static_cast<short>(NumberSubType::Numeric);
+    }
 
     switch (aType)
     {
     case SQL_TEXT:
-        return DataType::CHAR;
     case SQL_VARYING:
-        return DataType::VARCHAR;
+        return lcl_getCharColumnType(aType, m_sCharsetName);
     case SQL_SHORT:
-        if(aSubType == 1)
-            return DataType::NUMERIC;
-        if(aSubType == 2)
-            return DataType::DECIMAL;
-        return DataType::SMALLINT;
     case SQL_LONG:
-        if(aSubType == 1)
-            return DataType::NUMERIC;
-        if(aSubType == 2)
-            return DataType::DECIMAL;
-        return DataType::INTEGER;
+    case SQL_DOUBLE:
+    case SQL_INT64:
+        return lcl_getNumberType(aType, static_cast<NumberSubType>(aSubType) );
     case SQL_FLOAT:
         return DataType::FLOAT;
-    case SQL_DOUBLE:
-        if(aSubType == 1)
-            return DataType::NUMERIC;
-        if(aSubType == 2)
-            return DataType::DECIMAL;
-        return DataType::DOUBLE;
     case SQL_D_FLOAT:
         return DataType::DOUBLE;
     case SQL_TIMESTAMP:
@@ -121,12 +158,6 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType, short a
         return DataType::TIME;
     case SQL_TYPE_DATE:
         return DataType::DATE;
-    case SQL_INT64:
-        if(aSubType == 1)
-            return DataType::NUMERIC;
-        if(aSubType == 2)
-            return DataType::DECIMAL;
-        return DataType::BIGINT;
     case SQL_NULL:
         return DataType::SQLNULL;
     case SQL_QUAD:      // Is a "Blob ID" according to the docs
@@ -139,68 +170,48 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType, short a
     }
 }
 
-OUString firebird::getColumnTypeNameFromFBType(short aType, short aSubType, short aScale)
+OUString firebird::ColumnTypeInfo::getColumnTypeName() const
 {
-    aType &= ~1; // Remove last bit -- it is used to denote whether column
+    short aType = m_aType & ~1; // Remove last bit -- it is used to denote whether column
                 // can store Null, not needed for type determination
 
-    // if scale is set without subtype than imply numeric
-    if(aSubType == 0 && aScale < 0)
-        aSubType = 1;
-
-   switch (aType)
+    switch (aType)
     {
-    case SQL_TEXT:
-        return OUString("SQL_TEXT");
-    case SQL_VARYING:
-        return OUString("SQL_VARYING");
-    case SQL_SHORT:
-        if(aSubType == 1)
-            return OUString("SQL_NUMERIC");
-        if(aSubType == 2)
-            return OUString("SQL_DECIMAL");
-        return OUString("SQL_SHORT");
-    case SQL_LONG:
-        if(aSubType == 1)
-            return OUString("SQL_NUMERIC");
-        if(aSubType == 2)
-            return OUString("SQL_DECIMAL");
-        return OUString("SQL_LONG");
-    case SQL_FLOAT:
-        return OUString("SQL_FLOAT");
-    case SQL_DOUBLE:
-        if(aSubType == 1)
-            return OUString("SQL_NUMERIC");
-        if(aSubType == 2)
-            return OUString("SQL_DECIMAL");
-        return OUString("SQL_DOUBLE");
-    case SQL_D_FLOAT:
-        return OUString("SQL_D_FLOAT");
-    case SQL_TIMESTAMP:
-        return OUString("SQL_TIMESTAMP");
-    case SQL_BLOB:
-        return OUString("SQL_BLOB");
-    case SQL_ARRAY:
-        return OUString("SQL_ARRAY");
-    case SQL_TYPE_TIME:
-        return OUString("SQL_TYPE_TIME");
-    case SQL_TYPE_DATE:
-        return OUString("SQL_TYPE_DATE");
-    case SQL_INT64:
-        if(aSubType == 1)
-            return OUString("SQL_NUMERIC");
-        if(aSubType == 2)
-            return OUString("SQL_DECIMAL");
-        return OUString("SQL_INT64");
-    case SQL_NULL:
-        return OUString("SQL_NULL");
-    case SQL_QUAD:
-        return OUString("SQL_QUAD");
-    case SQL_BOOLEAN:
-        return OUString("SQL_BOOLEAN");
-    default:
-        assert(false); // Should never happen
-        return OUString();
+     case SQL_TEXT:
+         return OUString("SQL_TEXT");
+     case SQL_VARYING:
+         return OUString("SQL_VARYING");
+     case SQL_SHORT:
+         return OUString("SQL_SHORT");
+     case SQL_LONG:
+         return OUString("SQL_LONG");
+     case SQL_FLOAT:
+         return OUString("SQL_FLOAT");
+     case SQL_DOUBLE:
+         return OUString("SQL_DOUBLE");
+     case SQL_D_FLOAT:
+         return OUString("SQL_D_FLOAT");
+     case SQL_TIMESTAMP:
+         return OUString("SQL_TIMESTAMP");
+     case SQL_BLOB:
+         return OUString("SQL_BLOB");
+     case SQL_ARRAY:
+         return OUString("SQL_ARRAY");
+     case SQL_TYPE_TIME:
+         return OUString("SQL_TYPE_TIME");
+     case SQL_TYPE_DATE:
+         return OUString("SQL_TYPE_DATE");
+     case SQL_INT64:
+         return OUString("SQL_INT64");
+     case SQL_NULL:
+         return OUString("SQL_NULL");
+     case SQL_QUAD:
+         return OUString("SQL_QUAD");
+     case SQL_BOOLEAN:
+         return OUString("SQL_BOOLEAN");
+     default:
+         assert(false); // Should never happen
+         return OUString();
     }
 }
 
