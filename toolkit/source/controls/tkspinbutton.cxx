@@ -47,7 +47,6 @@ protected:
 
 public:
     explicit UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
-    UnoSpinButtonModel( const UnoSpinButtonModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoSpinButtonModel( *this ); }
 

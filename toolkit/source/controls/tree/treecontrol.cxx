@@ -69,11 +69,6 @@ UnoTreeModel::UnoTreeModel( const css::uno::Reference< css::uno::XComponentConte
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
-UnoTreeModel::UnoTreeModel( const UnoTreeModel& rModel )
-: UnoControlModel( rModel )
-{
-}
-
 UnoControlModel* UnoTreeModel::Clone() const
 {
     return new UnoTreeModel( *this );

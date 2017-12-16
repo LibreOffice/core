@@ -38,7 +38,6 @@ protected:
 
 public:
     explicit UnoTreeModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
-    UnoTreeModel( const UnoTreeModel& rModel );
 
     UnoControlModel* Clone() const override;
 

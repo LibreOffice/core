@@ -33,7 +33,6 @@ class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 {
 public:
     explicit SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
-    SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource );
 
     virtual UnoControlModel* Clone() const override;
 
@@ -76,12 +75,6 @@ protected:
             }
         }
         osl_atomic_decrement( &m_refCount );
-    }
-
-
-    SpinningProgressControlModel::SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource )
-        :SpinningProgressControlModel_Base( i_copySource )
-    {
     }
 
 

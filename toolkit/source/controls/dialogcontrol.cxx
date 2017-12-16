@@ -868,11 +868,6 @@ UnoMultiPageModel::UnoMultiPageModel( const Reference< XComponentContext >& rxCo
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
-UnoMultiPageModel::UnoMultiPageModel( const UnoMultiPageModel& rModel )
-    : ControlModelContainerBase( rModel )
-{
-}
-
 UnoMultiPageModel::~UnoMultiPageModel()
 {
 }
@@ -984,11 +979,6 @@ UnoPageModel::UnoPageModel( const Reference< XComponentContext >& rxContext ) : 
 
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
-}
-
-UnoPageModel::UnoPageModel( const UnoPageModel& rModel )
-    : ControlModelContainerBase( rModel )
-{
 }
 
 UnoPageModel::~UnoPageModel()
@@ -1143,11 +1133,6 @@ UnoFrameModel::UnoFrameModel(  const Reference< XComponentContext >& rxContext )
 
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
-}
-
-UnoFrameModel::UnoFrameModel( const UnoFrameModel& rModel )
-    : ControlModelContainerBase( rModel )
-{
 }
 
 UnoFrameModel::~UnoFrameModel()
