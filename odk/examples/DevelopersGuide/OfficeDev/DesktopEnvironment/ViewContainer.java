@@ -71,7 +71,7 @@ public class ViewContainer extends Thread
     /**
      * ctor
      * It's private - because nobody should create any instance
-     * expect the only global one, which wil be created by ourself!
+     * expect the only global one, which will be created by ourself!
      */
     private ViewContainer()
     {
@@ -162,7 +162,7 @@ public class ViewContainer extends Thread
 
 
     /**
-     * add/remove listener for possibe shutdown events
+     * add/remove listener for possible shutdown events
      */
     public void addListener( IShutdownListener rListener )
     {

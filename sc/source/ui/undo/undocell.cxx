@@ -270,7 +270,7 @@ void ScUndoEnterData::Redo()
         {
             ScAddress aPos = maPos;
             aPos.SetTab(nTab);
-            // edit text wil be cloned.
+            // edit text will be cloned.
             rDoc.SetEditText(aPos, *mpNewEditData, nullptr);
         }
         else

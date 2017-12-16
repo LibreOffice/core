@@ -306,7 +306,7 @@ public class FunctionHelper
                 // the systemw window handle. A possible reason can be an invisible
                 // java window. In this case it should be enough to set return
                 // values to null. All other resources (which was created before)
-                // will be freed automatically if scope wil be leaved.
+                // will be freed automatically if scope will be leaved.
                 System.out.println("May be the NativeView object wasn't really visible at calling time of getNativeWindow()?");
                 xPeer   = null;
                 xWindow = null;
@@ -870,12 +870,12 @@ public class FunctionHelper
      * This method doesn't show any API concepts...
      * but is necessary for this demo application.
      *
-     * @param   aParent parent window of this dialog
+     * @param   apparent parent window of this dialog
      * @param   bOpen   If it is set to true =>
      *                  dialog is opened in "file open" mode -
      *                  otherwise in "file save" mode.
      */
-    public static String askUserForFileURL(Component aParent,boolean bOpen)
+    public static String askUserForFileURL(Component apparent,boolean bOpen)
     {
         String        sFileURL  = null;
         int           nDecision = JFileChooser.CANCEL_OPTION;
@@ -890,9 +890,9 @@ public class FunctionHelper
 
         // decide between file open/save dialog
         if( bOpen )
-            nDecision = aChooser.showOpenDialog(aParent);
+            nDecision = aChooser.showOpenDialog(apparent);
         else
-            nDecision = aChooser.showSaveDialog(aParent);
+            nDecision = aChooser.showSaveDialog(apparent);
 
         // react for "OK" result only
         if(nDecision == JFileChooser.APPROVE_OPTION)
