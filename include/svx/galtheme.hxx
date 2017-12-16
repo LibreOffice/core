@@ -94,10 +94,10 @@ private:
     SAL_DLLPRIVATE bool         ImplWriteSgaObject( const SgaObject& rObj, sal_Int32 nPos, GalleryObject* pExistentEntry );
     SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject( sal_Int32 nPos ) const
-                                { return ( nPos < sal_Int32(aObjectList.size()) ) ? aObjectList[ nPos ] : nullptr; }
+                                { return ( nPos >= 0 && nPos < sal_Int32(aObjectList.size()) ) ? aObjectList[nPos] : nullptr; }
     const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
 
-    SAL_DLLPRIVATE sal_Int32       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
+    SAL_DLLPRIVATE sal_Int32    ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
                                 {
                                     for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
                                         if ( pObj == aObjectList[ i ] )
