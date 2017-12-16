@@ -79,6 +79,7 @@ protected:
     bool isInUnoIncludeFile(const FunctionDecl*) const;
 
     bool isDebugMode() const { return handler.isDebugMode(); }
+    bool isLOOLMode() const { return handler.isLOOLMode(); }
 
     static bool isUnitTestMode();
 

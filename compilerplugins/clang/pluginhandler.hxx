@@ -56,6 +56,7 @@ public:
     bool ignoreLocation(SourceLocation loc);
     bool addRemoval( SourceLocation loc );
     bool isDebugMode() const { return debugMode; }
+    bool isLOOLMode() const { return !loolBasePath.empty(); }
     static bool isUnitTestMode();
 private:
     void handleOption( const std::string& option );
@@ -69,6 +70,7 @@ private:
     std::set< SourceLocation > removals;
     std::string scope;
     std::string warningsOnly;
+    std::string loolBasePath;
     bool warningsAsErrors;
     bool debugMode = false;
 };
