@@ -1440,14 +1440,16 @@ void ScTiledRenderingTest::testDocumentRepair()
     int nView2 = SfxLokHelper::getView();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
-        std::unique_ptr<SfxPoolItem> pItem1;
-        std::unique_ptr<SfxPoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
-        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem1.get()));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem2.get()));
-        CPPUNIT_ASSERT_EQUAL(false, dynamic_cast< const SfxBoolItem* >(pItem1.get())->GetValue());
-        CPPUNIT_ASSERT_EQUAL(false, dynamic_cast< const SfxBoolItem* >(pItem2.get())->GetValue());
+        std::unique_ptr<SfxPoolItem> xItem1;
+        std::unique_ptr<SfxPoolItem> xItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
+        const SfxBoolItem* pItem1 = dynamic_cast< const SfxBoolItem* >(xItem1.get());
+        const SfxBoolItem* pItem2 = dynamic_cast< const SfxBoolItem* >(xItem2.get());
+        CPPUNIT_ASSERT(pItem1);
+        CPPUNIT_ASSERT(pItem2);
+        CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
+        CPPUNIT_ASSERT_EQUAL(false, pItem2->GetValue());
     }
 
     // Insert a character in the second view.
@@ -1459,14 +1461,16 @@ void ScTiledRenderingTest::testDocumentRepair()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     {
-        std::unique_ptr<SfxPoolItem> pItem1;
-        std::unique_ptr<SfxPoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
-        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem1.get()));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem2.get()));
-        CPPUNIT_ASSERT_EQUAL(true, dynamic_cast< const SfxBoolItem* >(pItem1.get())->GetValue());
-        CPPUNIT_ASSERT_EQUAL(true, dynamic_cast< const SfxBoolItem* >(pItem2.get())->GetValue());
+        std::unique_ptr<SfxPoolItem> xItem1;
+        std::unique_ptr<SfxPoolItem> xItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
+        const SfxBoolItem* pItem1 = dynamic_cast< const SfxBoolItem* >(xItem1.get());
+        const SfxBoolItem* pItem2 = dynamic_cast< const SfxBoolItem* >(xItem2.get());
+        CPPUNIT_ASSERT(pItem1);
+        CPPUNIT_ASSERT(pItem2);
+        CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
+        CPPUNIT_ASSERT_EQUAL(true, pItem2->GetValue());
     }
 
     comphelper::LibreOfficeKit::setActive(false);
@@ -1489,14 +1493,16 @@ void ScTiledRenderingTest::testLanguageStatus()
     CPPUNIT_ASSERT(pView1 != pView2);
     const OUString aLangBolivia("Spanish (Bolivia)");
     {
-        std::unique_ptr<SfxPoolItem> pItem1;
-        std::unique_ptr<SfxPoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem2);
-        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem1.get()));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem2.get()));
-        CPPUNIT_ASSERT(!dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue().isEmpty());
-        CPPUNIT_ASSERT(!dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue().isEmpty());
+        std::unique_ptr<SfxPoolItem> xItem1;
+        std::unique_ptr<SfxPoolItem> xItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
+        const SfxStringItem* pItem1 = dynamic_cast<const SfxStringItem*>(xItem1.get());
+        const SfxStringItem* pItem2 = dynamic_cast<const SfxStringItem*>(xItem2.get());
+        CPPUNIT_ASSERT(pItem1);
+        CPPUNIT_ASSERT(pItem2);
+        CPPUNIT_ASSERT(!pItem1->GetValue().isEmpty());
+        CPPUNIT_ASSERT(!pItem2->GetValue().isEmpty());
     }
 
     {
@@ -1506,14 +1512,16 @@ void ScTiledRenderingTest::testLanguageStatus()
     }
 
     {
-        std::unique_ptr<SfxPoolItem> pItem1;
-        std::unique_ptr<SfxPoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem2);
-        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem1.get()));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem2.get()));
-        CPPUNIT_ASSERT_EQUAL(aLangBolivia, dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue());
-        CPPUNIT_ASSERT_EQUAL(aLangBolivia, dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue());
+        std::unique_ptr<SfxPoolItem> xItem1;
+        std::unique_ptr<SfxPoolItem> xItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
+        const SfxStringItem* pItem1 = dynamic_cast<const SfxStringItem*>(xItem1.get());
+        const SfxStringItem* pItem2 = dynamic_cast<const SfxStringItem*>(xItem2.get());
+        CPPUNIT_ASSERT(pItem1);
+        CPPUNIT_ASSERT(pItem2);
+        CPPUNIT_ASSERT_EQUAL(aLangBolivia, pItem1->GetValue());
+        CPPUNIT_ASSERT_EQUAL(aLangBolivia, pItem2->GetValue());
     }
 }
 
