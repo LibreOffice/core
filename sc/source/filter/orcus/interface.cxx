@@ -158,15 +158,15 @@ os::range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
 }
 
 ScOrcusNamedExpression::ScOrcusNamedExpression(
-    ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS ) :
-    mrDoc(rDoc), mrGlobalSettings(rGS) {}
+    ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab ) :
+    mrDoc(rDoc), mrGlobalSettings(rGS), mnTab(nTab) {}
 
 void ScOrcusNamedExpression::define_name(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp)
 {
     OUString aName(p_name, n_name, RTL_TEXTENCODING_UTF8);
     OUString aExpr(p_exp, n_exp, RTL_TEXTENCODING_UTF8);
 
-    ScRangeName* pNames = mrDoc.getDoc().GetRangeName();
+    ScRangeName* pNames = mnTab >= 0 ? mrDoc.getDoc().GetRangeName(mnTab) : mrDoc.getDoc().GetRangeName();
     if (!pNames)
         return;
 
@@ -554,6 +554,11 @@ void ScOrcusFactory::setStatusIndicator(const uno::Reference<task::XStatusIndica
     mxStatusIndicator = rIndicator;
 }
 
+const ScOrcusGlobalSettings& ScOrcusFactory::getGlobalSettings() const
+{
+    return maGlobalSettings;
+}
+
 ScOrcusSheetProperties::ScOrcusSheetProperties(SCTAB nTab, ScDocumentImport& rDoc):
     mrDoc(rDoc),
     mnTab(nTab)
@@ -785,6 +790,7 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     maAutoFilter(),
     maProperties(mnTab, mrDoc),
     maConditionalFormat(mnTab, rDoc.getDoc()),
+    maNamedExpressions(rDoc, rFactory.getGlobalSettings(), nTab),
     mnCellCount(0)
 {
 }
@@ -817,6 +823,11 @@ os::iface::import_sheet_properties* ScOrcusSheet::get_sheet_properties()
 os::iface::import_conditional_format* ScOrcusSheet::get_conditional_format()
 {
     return &maConditionalFormat;
+}
+
+os::iface::import_named_expression* ScOrcusSheet::get_named_expression()
+{
+    return &maNamedExpressions;
 }
 
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
