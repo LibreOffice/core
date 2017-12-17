@@ -69,20 +69,12 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     for( sal_Int32 nIndex = 0; nIndex < nEndIndex; nIndex++ )
     {
-        std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-        for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+        for( auto const& rZSlot : m_aZSlots )
         {
-            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-            for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+            for( auto const& rXSlot : rZSlot )
             {
-                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
                 {
-                    VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
                         continue;
 
@@ -207,31 +199,20 @@ void BubbleChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
-        std::vector< std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
-        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-
-        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
+        for( auto const& rZSlot : m_aZSlots )
         {
-            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
-            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
+            for( auto const& rXSlot : rZSlot )
             {
-                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-
                 //iterate through all series
-                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
+                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
                 {
-                    VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
                         continue;
 
                     bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
                     bool bHasBorderColorMapping = pSeries->hasPropertyMapping("LineColor");
 
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, xSeriesTarget);
+                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                     PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
@@ -324,7 +305,7 @@ void BubbleChart::createShapes()
                         ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
 
                         //create data point label
-                        if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
+                        if( pSeries->getDataPointLabelIfLabel(nIndex) )
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
@@ -366,7 +347,7 @@ void BubbleChart::createShapes()
                             sal_Int32 nOffset = 0;
                             if(eAlignment!=LABEL_ALIGN_CENTER)
                                 nOffset = 100;//add some spacing //@todo maybe get more intelligent values
-                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, *pSeries, nIndex
                                             , fBubbleSize, fBubbleSize, aScreenPosition2D, eAlignment, nOffset );
                         }
                     }

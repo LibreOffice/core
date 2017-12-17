@@ -427,22 +427,21 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
     SolarMutexGuard aGuard;
     sal_Int16 nColId = -1;
-    const PropertyValue* pArgs = aArgs.getConstArray();
-    for (sal_Int32 i=0; i<aArgs.getLength(); ++i, ++pArgs)
+    for (const PropertyValue& rArg : aArgs)
     {
-        if (pArgs->Name == "ColumnViewPos")
+        if (rArg.Name == "ColumnViewPos")
         {
-            nColId = pGrid->GetColumnIdFromViewPos(::comphelper::getINT16(pArgs->Value));
+            nColId = pGrid->GetColumnIdFromViewPos(::comphelper::getINT16(rArg.Value));
             break;
         }
-        if (pArgs->Name == "ColumnModelPos")
+        if (rArg.Name == "ColumnModelPos")
         {
-            nColId = pGrid->GetColumnIdFromModelPos(::comphelper::getINT16(pArgs->Value));
+            nColId = pGrid->GetColumnIdFromModelPos(::comphelper::getINT16(rArg.Value));
             break;
         }
-        if (pArgs->Name == "ColumnId")
+        if (rArg.Name == "ColumnId")
         {
-            nColId = ::comphelper::getINT16(pArgs->Value);
+            nColId = ::comphelper::getINT16(rArg.Value);
             break;
         }
     }

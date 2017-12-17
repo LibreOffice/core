@@ -243,12 +243,10 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                         // Export the images to the storage
                         Reference< document::XGraphicObjectResolver > xGraphicResolver =
                             document::GraphicObjectResolver::createWithStorage( mxContext, xStorage );
-                        std::vector< OUString >::iterator it = vEmbeddedImageURLs.begin();
-                        std::vector< OUString >::iterator it_end = vEmbeddedImageURLs.end();
                         if ( xGraphicResolver.is() )
                         {
-                            for ( sal_Int32 count = 0; it != it_end; ++it, ++count )
-                                xGraphicResolver->resolveGraphicObjectURL( *it );
+                            for ( const OUString& rURL : vEmbeddedImageURLs )
+                                xGraphicResolver->resolveGraphicObjectURL( rURL );
                         }
                     }
                 }

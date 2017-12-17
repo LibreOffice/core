@@ -217,11 +217,10 @@ sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  )
 
 void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< uno::Any >& aArguments )
 {
-    const uno::Any* pArguments = aArguments.getConstArray();
-    for(sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)
+    for(const uno::Any& rArgument : aArguments)
     {
         beans::PropertyValue aProperty;
-        if(*pArguments >>= aProperty)
+        if(rArgument >>= aProperty)
         {
             if( aProperty.Name == "ParentWindow" )
             {

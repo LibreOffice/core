@@ -329,12 +329,8 @@ MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMa
     DBG_ASSERT(xFields.is(), "MappingDialog_Impl::MappingDialog_Impl : gave me an invalid form !");
     if(xFields.is())
     {
-        Sequence< OUString > aNames = xFields->getElementNames();
-        sal_Int32 nFieldsCount = aNames.getLength();
-        const OUString* pNames = aNames.getConstArray();
-
-        for(sal_Int32 nField = 0; nField < nFieldsCount; nField++)
-            aListBoxes[0]->InsertEntry(pNames[nField]);
+        for(const OUString& rName : xFields->getElementNames())
+            aListBoxes[0]->InsertEntry(rName);
     }
 
     Link<ListBox&,void> aLnk = LINK(this, MappingDialog_Impl, ListBoxSelectHdl);
@@ -486,10 +482,8 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* p
     try
     {
         OUString sActiveSource = pDatMan->getActiveDataSource();
-        const Sequence< OUString >& rSources = aConfig.GetDataSourceNames();
-        const OUString* pSourceNames = rSources.getConstArray();
-        for (sal_Int32 i = 0; i < rSources.getLength(); ++i)
-            m_pSelectionLB->InsertEntry(pSourceNames[i]);
+        for (const OUString& rSourceName : aConfig.GetDataSourceNames())
+            m_pSelectionLB->InsertEntry(rSourceName);
 
         m_pSelectionLB->SelectEntry(sActiveSource);
     }
@@ -566,10 +560,9 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
 {
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
-    const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for ( sal_Int32 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
+    for ( const DispatchDescriptor& rDescript : aDescripts )
     {
-        *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
+        *pReturn++ = queryDispatch( rDescript.FeatureURL, rDescript.FrameName, rDescript.SearchFlags );
     }
     return aReturn;
 }
@@ -650,11 +643,8 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
         // remove the old fields
         if ( xColContainer->hasElements() )
         {
-            Sequence< OUString > aNames = xColContainer->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            const OUString* pNamesEnd = pNames + aNames.getLength();
-            for ( ; pNames != pNamesEnd; ++pNames )
-                xColContainer->removeByName( *pNames );
+            for ( OUString& rName : xColContainer->getElementNames() )
+                xColContainer->removeByName( rName );
         }
 
         Reference< XNameAccess >  xFields = getColumns( m_xForm );
@@ -665,13 +655,9 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
 
         Reference< XPropertySet >  xField;
 
-        Sequence< OUString > aFields( xFields->getElementNames() );
-        const OUString* pFields = aFields.getConstArray();
-        const OUString* pFieldsEnd = pFields + aFields.getLength();
-
-        for ( ; pFields != pFieldsEnd; ++pFields )
+        for ( const OUString& rField : xFields->getElementNames() )
         {
-            xFields->getByName( *pFields ) >>= xField;
+            xFields->getByName( rField ) >>= xField;
 
             OUString sCurrentModelType;
             const OUString sType("Type");
@@ -713,11 +699,11 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                 Any aFormatted(bFormattedIsNumeric);
                 xCurrentCol->setPropertyValue("TreatAsNumber", aFormatted);
             }
-            Any aColName = makeAny( *pFields );
+            Any aColName = makeAny( rField );
             xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
             xCurrentCol->setPropertyValue(FM_PROP_LABEL, aColName);
 
-            xColContainer->insertByName( *pFields, makeAny( xCurrentCol ) );
+            xColContainer->insertByName( rField, makeAny( xCurrentCol ) );
         }
     }
     catch (const Exception&)
@@ -796,12 +782,11 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 
             if(aTableNameSeq.getLength() > 0)
             {
-                const OUString* pTableNames = aTableNameSeq.getConstArray();
                 if(!rDesc.sTableOrQuery.isEmpty())
                     aActiveDataTable = rDesc.sTableOrQuery;
                 else
                 {
-                    rDesc.sTableOrQuery = aActiveDataTable = pTableNames[0];
+                    rDesc.sTableOrQuery = aActiveDataTable = aTableNameSeq[0];
                     rDesc.nCommandType = CommandType::TABLE;
                 }
 
@@ -918,11 +903,10 @@ OUString BibDataManager::getQueryField()
     OUString aFieldString = pConfig->getQueryField();
     if(aFieldString.isEmpty())
     {
-        Sequence< OUString > aSeq = getQueryFields();
-        const OUString* pFields = aSeq.getConstArray();
+        const Sequence< OUString > aSeq = getQueryFields();
         if(aSeq.getLength()>0)
         {
-            aFieldString=pFields[0];
+            aFieldString=aSeq[0];
         }
     }
     return aFieldString;
@@ -986,8 +970,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
         }
         if(aTableNameSeq.getLength() > 0)
         {
-            const OUString* pTableNames = aTableNameSeq.getConstArray();
-            aActiveDataTable = pTableNames[0];
+            aActiveDataTable = aTableNameSeq[0];
             aVal <<= aActiveDataTable;
             aPropertySet->setPropertyValue("Command", aVal);
             aPropertySet->setPropertyValue("CommandType", makeAny(CommandType::TABLE));
@@ -1431,17 +1414,12 @@ void BibDataManager::SetMeAsUidListener()
         if (!xFields.is())
             return;
 
-        Sequence< OUString > aFields(xFields->getElementNames());
-        const OUString* pFields = aFields.getConstArray();
-        sal_Int32 nCount=aFields.getLength();
         OUString theFieldName;
-        for( sal_Int32 i=0; i<nCount; i++ )
+        for( const OUString& rName : xFields->getElementNames() )
         {
-            const OUString& rName = pFields[i];
-
             if (rName.equalsIgnoreAsciiCase(STR_UID))
             {
-                theFieldName=pFields[i];
+                theFieldName=rName;
                 break;
             }
         }
@@ -1472,18 +1450,12 @@ void BibDataManager::RemoveMeAsUidListener()
         if (!xFields.is())
             return;
 
-
-        Sequence< OUString > aFields(xFields->getElementNames());
-        const OUString* pFields = aFields.getConstArray();
-        sal_Int32 nCount=aFields.getLength();
         OUString theFieldName;
-        for( sal_Int32 i=0; i<nCount; i++ )
+        for(const OUString& rName : xFields->getElementNames() )
         {
-            const OUString& rName = pFields[i];
-
             if (rName.equalsIgnoreAsciiCase(STR_UID))
             {
-                theFieldName=pFields[i];
+                theFieldName=rName;
                 break;
             }
         }

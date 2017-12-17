@@ -177,15 +177,12 @@ namespace pcr
 
         try
         {
-            Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels() );
-            const Reference< XControlModel >* pControlModels = aControlModels.getConstArray();
-
             OUString aName;
             Image aImage;
 
-            for ( sal_Int32 i=0; i < aControlModels.getLength(); ++i, ++pControlModels )
+            for ( auto const& rControlModel : m_xTempModel->getControlModels() )
             {
-                Reference< XPropertySet > xControl( *pControlModels, UNO_QUERY );
+                Reference< XPropertySet > xControl( rControlModel, UNO_QUERY );
                 Reference< XPropertySetInfo > xPI;
                 if ( xControl.is() )
                     xPI = xControl->getPropertySetInfo();
@@ -261,18 +258,17 @@ namespace pcr
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
         Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
         Reference< XControlModel > * pSortedControlModels = aSortedControlModelSeq.getArray();
-        const Reference< XControlModel > * pControlModels = aControlModels.getConstArray();
 
         for (sal_uLong i=0; i < nEntryCount; i++)
         {
             SvTreeListEntry* pEntry = m_pLB_Controls->GetEntry(i);
 
-            for( sal_Int32 j=0; j<aControlModels.getLength(); j++ )
+            for( auto const& rControlModel : aControlModels )
             {
-                Reference< XPropertySet >  xSet(pControlModels[j], UNO_QUERY);
+                Reference< XPropertySet >  xSet(rControlModel, UNO_QUERY);
                 if (xSet.get() == static_cast<XPropertySet*>(pEntry->GetUserData()))
                 {
-                    pSortedControlModels[i] = pControlModels[j];
+                    pSortedControlModels[i] = rControlModel;
                     break;
                 }
             }

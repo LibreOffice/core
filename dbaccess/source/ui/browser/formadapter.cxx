@@ -1206,14 +1206,11 @@ Reference< css::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertyS
     if (-1 == m_nNamePropHandle)
     {
         // we need to determine the handle for the NAME property
- Sequence< css::beans::Property> aProps = xReturn->getProperties();
-        const css::beans::Property* pProps = aProps.getConstArray();
-
-        for (sal_Int32 i=0; i<aProps.getLength(); ++i, ++pProps)
+        for (const css::beans::Property& rProp : xReturn->getProperties())
         {
-            if (pProps->Name == PROPERTY_NAME)
+            if (rProp.Name == PROPERTY_NAME)
             {
-                m_nNamePropHandle = pProps->Handle;
+                m_nNamePropHandle = rProp.Handle;
                 break;
             }
         }
@@ -1234,16 +1231,14 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUSt
     if (!xSet.is())
         return Sequence< Any>(aPropertyNames.getLength());
 
- Sequence< Any> aReturn = xSet->getPropertyValues(aPropertyNames);
+    Sequence< Any> aReturn = xSet->getPropertyValues(aPropertyNames);
 
     // search for (and fake) the NAME property
-    const OUString* pNames = aPropertyNames.getConstArray();
-    Any* pValues = aReturn.getArray();
     OSL_ENSURE(aReturn.getLength() == aPropertyNames.getLength(), "SAL_CALL SbaXFormAdapter::getPropertyValues : the main form returned an invalid-length sequence !");
-    for (sal_Int32 i=0; i<aPropertyNames.getLength(); ++i, ++pNames, ++pValues)
-        if (*pNames == PROPERTY_NAME)
+    for (sal_Int32 i=0; i<aPropertyNames.getLength(); ++i)
+        if (aPropertyNames[i] == PROPERTY_NAME)
         {
-            (*pValues) <<= m_sName;
+            aReturn[i] <<= m_sName;
             break;
         }
 
@@ -1336,9 +1331,8 @@ Sequence< css::beans::PropertyState> SAL_CALL SbaXFormAdapter::getPropertyStates
 
     // set them all to DEFAULT
      Sequence< css::beans::PropertyState> aReturn(aPropertyName.getLength());
-    css::beans::PropertyState* pStates = aReturn.getArray();
-    for (sal_Int32 i=0; i<aPropertyName.getLength(); ++i, ++pStates)
-        *pStates = css::beans::PropertyState_DEFAULT_VALUE;
+    for (css::beans::PropertyState& rState : aReturn)
+        rState = css::beans::PropertyState_DEFAULT_VALUE;
     return aReturn;
 }
 

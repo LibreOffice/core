@@ -389,55 +389,49 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
     // get migration description from org.openoffice.Setup/Migration
     // and build vector of migration steps
     uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName("MigrationSteps"), uno::UNO_QUERY_THROW);
-    uno::Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
     uno::Reference< XNameAccess > tmpAccess;
     uno::Sequence< OUString > tmpSeq;
     migrations_vr vrMigrations(new migrations_v);
-    for (sal_Int32 i = 0; i < seqMigrations.getLength(); i++) {
+    for (const OUString& rMigrationStep : theNameAccess->getElementNames()) {
         // get current migration step
-        theNameAccess->getByName(seqMigrations[i]) >>= tmpAccess;
+        theNameAccess->getByName(rMigrationStep) >>= tmpAccess;
         migration_step tmpStep;
-        tmpStep.name = seqMigrations[i];
+        tmpStep.name = rMigrationStep;
 
         // read included files from current step description
-        OUString aSeqEntry;
         if (tmpAccess->getByName("IncludedFiles") >>= tmpSeq) {
-            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++) {
-                aSeqEntry = tmpSeq[j];
-                tmpStep.includeFiles.push_back(aSeqEntry);
-            }
+            for (const OUString& rSeqEntry : tmpSeq)
+                tmpStep.includeFiles.push_back(rSeqEntry);
         }
 
         // excluded files...
         if (tmpAccess->getByName("ExcludedFiles") >>= tmpSeq) {
-            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
-                tmpStep.excludeFiles.push_back(tmpSeq[j]);
+            for (const OUString& rSeqEntry : tmpSeq)
+                tmpStep.excludeFiles.push_back(rSeqEntry);
         }
 
         // included nodes...
         if (tmpAccess->getByName("IncludedNodes") >>= tmpSeq) {
-            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
-                tmpStep.includeConfig.push_back(tmpSeq[j]);
+            for (const OUString& rSeqEntry : tmpSeq)
+                tmpStep.includeConfig.push_back(rSeqEntry);
         }
 
         // excluded nodes...
         if (tmpAccess->getByName("ExcludedNodes") >>= tmpSeq) {
-            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
-                tmpStep.excludeConfig.push_back(tmpSeq[j]);
+            for (const OUString& rSeqEntry : tmpSeq)
+                tmpStep.excludeConfig.push_back(rSeqEntry);
         }
 
         // included extensions...
         if (tmpAccess->getByName("IncludedExtensions") >>= tmpSeq) {
-            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
-                tmpStep.includeExtensions.push_back(tmpSeq[j]);
+            for (const OUString& rSeqEntry : tmpSeq)
+                tmpStep.includeExtensions.push_back(rSeqEntry);
         }
 
         // excluded extensions...
         if (tmpAccess->getByName("ExcludedExtensions") >>= tmpSeq) {
-            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++) {
-                aSeqEntry = tmpSeq[j];
-                tmpStep.excludeExtensions.push_back(aSeqEntry);
-            }
+            for (const OUString& rSeqEntry : tmpSeq)
+                tmpStep.excludeExtensions.push_back(rSeqEntry);
         }
 
         // generic service
@@ -714,20 +708,17 @@ uno::Sequence< OUString > setToSeq(std::set< OUString > const & set)
 void MigrationImpl::copyConfig()
 {
     Components comps;
-    for (migrations_v::const_iterator i(m_vrMigrations->begin());
-         i != m_vrMigrations->end(); ++i) {
-        for (strings_v::const_iterator j(i->includeConfig.begin());
-             j != i->includeConfig.end(); ++j) {
+    for (auto const& rMigrationStep : *m_vrMigrations) {
+        for (const OUString& rIncludePath : rMigrationStep.includeConfig) {
             OUString comp;
-            if (getComponent(*j, &comp)) {
-                comps[comp].includedPaths.insert(*j);
+            if (getComponent(rIncludePath, &comp)) {
+                comps[comp].includedPaths.insert(rIncludePath);
             }
         }
-        for (strings_v::const_iterator j(i->excludeConfig.begin());
-             j != i->excludeConfig.end(); ++j) {
+        for (const OUString& rExcludePath : rMigrationStep.excludeConfig) {
             OUString comp;
-            if (getComponent(*j, &comp)) {
-                comps[comp].excludedPaths.insert(*j);
+            if (getComponent(rExcludePath, &comp)) {
+                comps[comp].excludedPaths.insert(rExcludePath);
             }
         }
     }

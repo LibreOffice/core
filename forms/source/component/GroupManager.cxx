@@ -172,14 +172,12 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
 
 Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 {
-    sal_Int32 nLen = m_aCompArray.size();
-    Sequence<Reference<XControlModel> > aControlModelSeq( nLen );
+    Sequence<Reference<XControlModel> > aControlModelSeq( m_aCompArray.size() );
     Reference<XControlModel>* pModels = aControlModelSeq.getArray();
 
-    OGroupCompArr::const_iterator aGroupComps = m_aCompArray.begin();
-    for (sal_Int32 i = 0; i < nLen; ++i, ++pModels, ++aGroupComps)
+    for (auto const& rGroupComp : m_aCompArray)
     {
-        *pModels = aGroupComps->GetControlModel();
+        *pModels++ = rGroupComp.GetControlModel();
     }
     return aControlModelSeq;
 }

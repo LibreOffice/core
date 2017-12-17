@@ -879,8 +879,8 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
             {
                 const sal_uInt32* pDeletedKeys = pInfoItem->GetDelArray();
 
-                for (sal_uInt32 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
-                    _pFormatter->DeleteEntry(*pDeletedKeys);
+                for (sal_uInt32 i=0; i< pInfoItem->GetDelCount(); ++i)
+                    _pFormatter->DeleteEntry(pDeletedKeys[i]);
             }
         }
     }
@@ -916,16 +916,14 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
             bool bHasToInsert = true;
-            const OUString* pBegin = aFilter.getConstArray();
-            const OUString* pEnd = pBegin + aFilter.getLength();
-            for (;pBegin != pEnd; ++pBegin)
+            for (const OUString& rItem : aFilter)
             {
-                if(pBegin->indexOf('%') != -1)
+                if(rItem.indexOf('%') != -1)
                 {
                     sal_Int32 nLen;
-                    if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(_sName,nLen))
+                    if((nLen = rItem.lastIndexOf('.')) != -1 && !rItem.compareTo(_sName,nLen))
                         bHasToInsert = false;
-                    else if(pBegin->getLength() == 1)
+                    else if(rItem.getLength() == 1)
                         bHasToInsert = false;
                 }
             }
