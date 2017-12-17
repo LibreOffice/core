@@ -24,11 +24,6 @@
           <value xml:lang="en-US">S~lide</value>
         </prop>
       </node>
-      <node oor:name=".uno:SlideNavigateMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Navigate</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SlideMoveMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Move</value>
@@ -670,7 +665,7 @@
       </node>
       <node oor:name=".uno:ManageLinks" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Lin~ks...</value>
+          <value xml:lang="en-US">Lin~ks to External Files...</value>
         </prop>
       </node>
       <node oor:name=".uno:ConvertInto3DLathe" oor:op="replace">
@@ -741,7 +736,7 @@
       </node>
       <node oor:name=".uno:ImportSlideFromFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Import Slides...</value>
+          <value xml:lang="en-US">Insert Slide from File...</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:ImportFromFile</value>
