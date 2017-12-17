@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b4941843",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1984,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-17T18:43:30Z",
+      "side": 1,
+      "message": "Here would be better to use C++ style cast, instead of C style cast.",
+      "range": {
+        "startLine": 1984,
+        "startChar": 54,
+        "endLine": 1984,
+        "endChar": 59
+      },
+      "revId": "faecb10d486a84d7d2045889d500427dec3abbad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d49d2467",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-17T18:43:30Z",
+      "side": 1,
+      "message": "C style cast in this line too.",
+      "range": {
+        "startLine": 1987,
+        "startChar": 55,
+        "endLine": 1987,
+        "endChar": 64
+      },
+      "revId": "faecb10d486a84d7d2045889d500427dec3abbad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_54dbf44e",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-17T18:43:30Z",
+      "side": 1,
+      "message": "This is also a float to int conversion.",
+      "range": {
+        "startLine": 1987,
+        "startChar": 101,
+        "endLine": 1987,
+        "endChar": 110
+      },
+      "revId": "faecb10d486a84d7d2045889d500427dec3abbad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
