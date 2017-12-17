@@ -817,6 +817,7 @@ void ScUndoQuery::Undo()
 
     // invalidate cache positions and update cursor and selection
     pViewShell->OnLOKShowHideColRow(/*bColumns*/ false, aQueryParam.nRow1 - 1);
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
 
     //  Paint
 
