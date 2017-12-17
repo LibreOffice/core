@@ -33,6 +33,7 @@ private:
     bool        bMergeFieldSeps;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
+    bool        bSkipEmptyCells;
     sal_Unicode cTextSep;
     rtl_TextEncoding eCharSet;
     LanguageType eLang;
@@ -57,6 +58,7 @@ public:
     bool                IsMergeSeps() const     { return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
+    bool                IsSkipEmptyCells() const      { return bSkipEmptyCells; }
     sal_Unicode         GetTextSep() const      { return cTextSep; }
     bool                IsFixedLen() const      { return bFixedLen; }
     sal_uInt16          GetInfoCount() const    { return mvColStart.size(); }
@@ -72,6 +74,7 @@ public:
     void    SetMergeSeps( bool bSet )           { bMergeFieldSeps = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
+    void    SetSkipEmptyCells(bool bSet)        { bSkipEmptyCells = bSet; }
     void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
     void    SetLanguage(LanguageType e)         { eLang = e; }
