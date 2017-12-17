@@ -262,6 +262,29 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The token is expected to be shared.", pFC->GetCode(), pFC->GetSharedCode());
 
+    // Test implicit intersection with shared formulas.
+    aPos.Set(2,0,0);
+    {
+        // Insert data in C1:D2 and formulas in E1:E2
+        const char* pData[][3] = {
+            { "5", "1", "=C:C/D:D" },
+            { "4", "2", "=C:C/D:D" }
+        };
+
+        insertRangeData(m_pDoc, aPos, pData, SAL_N_ELEMENTS(pData));
+    }
+    aPos.Set(4,1,0);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("E2 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The token is expected to be shared.", pFC->GetCode(), pFC->GetSharedCode());
+
+    aPos.SetRow(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("5/1=5", 5.0, m_pDoc->GetValue(aPos));
+    aPos.SetRow(1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("4/2=2", 2.0, m_pDoc->GetValue(aPos));
+
     m_pDoc->DeleteTab(0);
 }
 
