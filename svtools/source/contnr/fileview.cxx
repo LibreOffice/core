@@ -97,7 +97,7 @@ using ::svt::FolderDescriptor;
 #define COLUMN_DATE         4
 
 #define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
-#define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
+#define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reset
 
 enum class FileViewFlags
 {
