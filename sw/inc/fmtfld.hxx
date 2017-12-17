@@ -48,9 +48,6 @@ class SW_DLLPUBLIC SwFormatField
     SwField* mpField;
     SwTextField* mpTextField; // the TextAttribute
 
-    // @@@ copy construction allowed, but copy assignment is not? @@@
-    SwFormatField& operator=(const SwFormatField& rField) = delete;
-
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override;
@@ -60,7 +57,6 @@ public:
     /// Single argument constructors shall be explicit.
     explicit SwFormatField( const SwField &rField );
 
-    /// @@@ copy construction allowed, but copy assignment is not? @@@
     SwFormatField( const SwFormatField& rAttr );
 
     virtual ~SwFormatField() override;
