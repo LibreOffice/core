@@ -93,6 +93,8 @@ eclipsesettingfile.xml
 .cxx_tags
 .yavide_proj
 .yavide_session
+.vscode
+*.code-workspace
 
 # things below this point are targeted for elimination
 
