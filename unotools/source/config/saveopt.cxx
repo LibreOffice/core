@@ -49,7 +49,7 @@ struct SvtLoadSaveOptions_Impl
     std::unique_ptr<SvtLoadOptions_Impl> pLoadOpt;
 };
 
-static std::unique_ptr<SvtLoadSaveOptions_Impl> pOptions;
+static SvtLoadSaveOptions_Impl* pOptions = nullptr;
 static sal_Int32           nRefCount = 0;
 
 class SvtSaveOptions_Impl : public utl::ConfigItem
@@ -802,14 +802,14 @@ SvtSaveOptions::SvtSaveOptions()
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
-        pOptions.reset(new SvtLoadSaveOptions_Impl);
+        pOptions = new SvtLoadSaveOptions_Impl;
         pOptions->pSaveOpt.reset(new SvtSaveOptions_Impl);
         pOptions->pLoadOpt.reset( new SvtLoadOptions_Impl);
 
         ItemHolder1::holdConfigItem(EItem::SaveOptions);
    }
    ++nRefCount;
-    pImp = pOptions.get();
+    pImp = pOptions;
 }
 
 SvtSaveOptions::~SvtSaveOptions()
@@ -823,7 +823,7 @@ SvtSaveOptions::~SvtSaveOptions()
         if ( pOptions->pLoadOpt->IsModified() )
             pOptions->pLoadOpt->Commit();
 
-        pOptions.reset();
+        DELETEZ( pOptions );
     }
 }
 
