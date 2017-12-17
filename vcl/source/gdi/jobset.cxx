@@ -256,7 +256,9 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 
             ImplJobSetup& rJobData = rJobSetup.ImplGetData();
 
+            pData->cPrinterName[SAL_N_ELEMENTS(pData->cPrinterName) - 1] = 0;
             rJobData.SetPrinterName( OStringToOUString(pData->cPrinterName, aStreamEncoding) );
+            pData->cDriverName[SAL_N_ELEMENTS(pData->cDriverName) - 1] = 0;
             rJobData.SetDriver( OStringToOUString(pData->cDriverName, aStreamEncoding) );
 
             // Are these our new JobSetup files?
@@ -345,9 +347,9 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             ImplOldJobSetupData aOldData;
             memset( &aOldData, 0, sizeof( aOldData ) );
             OString aPrnByteName(OUStringToOString(rJobData.GetPrinterName(), RTL_TEXTENCODING_UTF8));
-            strncpy( aOldData.cPrinterName, aPrnByteName.getStr(), 63 );
+            strncpy(aOldData.cPrinterName, aPrnByteName.getStr(), SAL_N_ELEMENTS(aOldData.cPrinterName) - 1);
             OString aDriverByteName(OUStringToOString(rJobData.GetDriver(), RTL_TEXTENCODING_UTF8));
-            strncpy( aOldData.cDriverName, aDriverByteName.getStr(), 31 );
+            strncpy(aOldData.cDriverName, aDriverByteName.getStr(), SAL_N_ELEMENTS(aOldData.cDriverName) - 1);
             int nPos = rOStream.Tell();
             rOStream.WriteUInt16( 0 );
             rOStream.WriteUInt16( JOBSET_FILE605_SYSTEM );
