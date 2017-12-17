@@ -66,7 +66,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
 
     if ( aValue.isEmpty() && !aNamespaceName.isEmpty() )
     {
-        // namespace should be reseted - as xml draft states this is only allowed
+        // namespace should be reset - as xml draft states this is only allowed
         // for the default namespace - check and throw exception if check fails
         throw SAXException( "Clearing xml namespace only allowed for default namespace!", Reference< XInterface >(), Any() );
     }

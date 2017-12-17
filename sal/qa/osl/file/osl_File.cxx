@@ -4317,7 +4317,7 @@ namespace osl_Directory
             // reset enumeration
             nError2 = testDirectory.reset();
             CPPUNIT_ASSERT_EQUAL(nError2, osl::FileBase::E_None);
-            // get reseted Item, if reset does not work, getNextItem() should return the second Item (aTmpName1)
+            // get reset Item, if reset does not work, getNextItem() should return the second Item (aTmpName1)
             nError1 = testDirectory.getNextItem(rItem);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
 
