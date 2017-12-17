@@ -1422,7 +1422,7 @@
       </node>
       <node oor:name=".uno:Hide" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Hide Sheets</value>
+          <value xml:lang="en-US">~Hide Sheet</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1918,10 +1918,7 @@
       </node>
       <node oor:name=".uno:EditLinks" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Edit Lin~ks...</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Lin~ks...</value>
+          <value xml:lang="en-US">Lin~ks to External Files...</value>
         </prop>
       </node>
       <node oor:name=".uno:SheetRightToLeft" oor:op="replace">
