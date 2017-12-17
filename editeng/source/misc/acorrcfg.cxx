@@ -59,8 +59,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     Reference < ucb::XCommandEnvironment > xEnv;
     ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, sUserPath, aContent);
 
-    OUString* pS = &sSharePath;
-    for( sal_uInt16 n = 0; n < 2; ++n, pS = &sUserPath )
+    for( OUString* pS : { &sSharePath, &sUserPath } )
     {
         INetURLObject aPath( *pS );
         aPath.insertName("acor");

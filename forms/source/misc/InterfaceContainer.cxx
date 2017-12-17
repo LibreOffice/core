@@ -81,11 +81,9 @@ namespace
 bool
 lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
 {
-    const ScriptEventDescriptor* pDesc = sEvents.getConstArray();
-    const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
-    for ( ; pDesc != pEnd; ++pDesc )
+    for ( auto const& rDesc : sEvents )
     {
-        if ( pDesc->ScriptType == "VBAInterop" )
+        if ( rDesc.ScriptType == "VBAInterop" )
             return true;
     }
     return false;
@@ -95,19 +93,17 @@ Sequence< ScriptEventDescriptor >
 lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
 {
     Sequence< ScriptEventDescriptor > sStripped( sEvents.getLength() );
+    ScriptEventDescriptor* pStripped = sStripped.getArray();
 
-    const ScriptEventDescriptor* pDesc = sEvents.getConstArray();
-    const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
     sal_Int32 nCopied = 0;
-    for ( ; pDesc != pEnd; ++pDesc )
+    for ( auto const& rDesc : sEvents )
     {
-        if ( pDesc->ScriptType != "VBAInterop" )
+        if ( rDesc.ScriptType != "VBAInterop" )
         {
-            sStripped[ nCopied++ ] = *pDesc;
+            pStripped[ nCopied++ ] = rDesc;
         }
     }
-    if ( nCopied )
-        sStripped.realloc( nCopied );
+    sStripped.realloc( nCopied );
     return sStripped;
 }
 

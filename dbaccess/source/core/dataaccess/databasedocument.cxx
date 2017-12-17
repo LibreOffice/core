@@ -383,12 +383,10 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
     {
         // Export the images to the storage
         Reference< XGraphicObjectResolver > xGraphicResolver = GraphicObjectResolver::createWithStorage(rxContext, xTmpPic);
-        std::vector< OUString >::const_iterator it = vEmbedImgUrls.begin();
-        std::vector< OUString >::const_iterator it_end = vEmbedImgUrls.end();
         if ( xGraphicResolver.is() )
         {
-            for ( sal_Int32 count = 0; it != it_end; ++it, ++count )
-                xGraphicResolver->resolveGraphicObjectURL( *it );
+            for ( const OUString& rURL : vEmbedImgUrls )
+                xGraphicResolver->resolveGraphicObjectURL( rURL );
         }
 
         // delete old 'Pictures' storage and copy the contents of tempPictures into xStorage

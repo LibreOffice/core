@@ -296,17 +296,15 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
     static const sal_Unicode aDollar( '$' );
     static const sal_Unicode aBackslash( '\\' );
 
-    sal_Int32 nStartPos = 0;
-    sal_Int32 nEndPos = nStartPos;
     const sal_Int32 nLength = rXMLString.getLength();
 
     // reset
     CellRange aResult;
 
     // iterate over different ranges
-    for( sal_Int32 i = 0;
+    for( sal_Int32 nStartPos = 0, nEndPos = nStartPos;
          nEndPos < nLength;
-         nStartPos = ++nEndPos, i++ )
+         nStartPos = ++nEndPos )
     {
         // find start point of next range
 

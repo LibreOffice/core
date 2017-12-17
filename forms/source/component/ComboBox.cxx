@@ -417,10 +417,8 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
         m_aListSource.clear();
         css::uno::Sequence<OUString> aListSource;
         _rxInStream >> aListSource;
-        const OUString* pToken = aListSource.getConstArray();
-        sal_Int32 nLen = aListSource.getLength();
-        for (sal_Int32 i = 0; i < nLen; ++i, ++pToken)
-            m_aListSource += *pToken;
+        for (const OUString& rToken : aListSource)
+            m_aListSource += rToken;
     }
 
     sal_Int16 nListSourceType;
@@ -647,12 +645,8 @@ void OComboBoxModel::loadData( bool _bForce )
                 Reference<XNameAccess> xFieldNames = getTableFields(xConnection, m_aListSource);
                 if (xFieldNames.is())
                 {
-                    css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
-                    sal_Int32 nFieldsCount = seqNames.getLength();
-                    const OUString* pustrNames = seqNames.getConstArray();
-
-                    for (sal_Int32 k=0; k<nFieldsCount; ++k)
-                        aStringList.push_back(pustrNames[k]);
+                    for (const OUString& rustrNames : xFieldNames->getElementNames())
+                        aStringList.push_back(rustrNames);
                 }
             }
             break;
@@ -770,20 +764,19 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         css::uno::Sequence<OUString> aStringItemList;
         if ( getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList )
         {
-            const OUString* pStringItems = aStringItemList.getConstArray();
-            sal_Int32 i;
-            for (i=0; i<aStringItemList.getLength(); ++i, ++pStringItems)
+            bool bFound = false;
+            for (const OUString& rStringItem : aStringItemList)
             {
-                if ( *pStringItems == sNewValue )
+                if ( (bFound = rStringItem == sNewValue) )
                     break;
             }
 
             // not found -> add
-            if (i >= aStringItemList.getLength())
+            if (!bFound)
             {
                 sal_Int32 nOldLen = aStringItemList.getLength();
                 aStringItemList.realloc( nOldLen + 1 );
-                aStringItemList.getArray()[ nOldLen ] = sNewValue;
+                aStringItemList[ nOldLen ] = sNewValue;
 
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
                 setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );

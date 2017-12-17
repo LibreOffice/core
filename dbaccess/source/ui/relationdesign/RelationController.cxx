@@ -315,12 +315,11 @@ namespace
     {
         osl_setThreadName("RelationLoader");
 
-        const OUString* pIter = m_aTableList.getConstArray() + m_nStartIndex;
-        for(sal_Int32 i = m_nStartIndex; i < m_nEndIndex;++i,++pIter)
+        for(sal_Int32 i = m_nStartIndex; i < m_nEndIndex; ++i)
         {
             OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xMetaData,
-                                                *pIter,
+                                                m_aTableList[i],
                                                 sCatalog,
                                                 sSchema,
                                                 sTable,
@@ -335,7 +334,7 @@ namespace
                 if ( xResult.is() && xResult->next() )
                 {
                     ::comphelper::disposeComponent(xResult);
-                    loadTableData(m_xTables->getByName(*pIter));
+                    loadTableData(m_xTables->getByName(m_aTableList[i]));
                 }
             }
             catch( const Exception& )
@@ -406,14 +405,12 @@ namespace
                     // insert columns
                     const Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
                     OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
-                    const Reference<XNameAccess> xColumns       = xColsSup->getColumns();
+                    const Reference<XNameAccess> xColumns = xColsSup->getColumns();
                     const Sequence< OUString> aNames = xColumns->getElementNames();
-                    const OUString* pIter    = aNames.getConstArray();
-                    const OUString* pEnd     = pIter + aNames.getLength();
                     OUString sColumnName,sRelatedName;
-                    for(sal_uInt16 j=0;pIter != pEnd;++pIter,++j)
+                    for(sal_Int32 j=0;j<aNames.getLength();++j)
                     {
-                        const Reference<XPropertySet> xPropSet(xColumns->getByName(*pIter),UNO_QUERY);
+                        const Reference<XPropertySet> xPropSet(xColumns->getByName(aNames[j]),UNO_QUERY);
                         OSL_ENSURE(xPropSet.is(),"Invalid column found in KeyColumns!");
                         if ( xPropSet.is() )
                         {

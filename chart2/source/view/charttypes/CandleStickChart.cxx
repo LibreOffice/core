@@ -137,18 +137,13 @@ void CandleStickChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nIndex = 0; nIndex < nEndIndex; nIndex++ )
     {
-        std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-        for( sal_Int32 nZ=0; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
+        for( auto const& rZSlot : m_aZSlots )
         {
-            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
             sal_Int32 nAttachedAxisIndex = 0;
             BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
-            if( aXSlotIter != aXSlotEnd )
+            if( rZSlot.size() )
             {
-                nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
+                nAttachedAxisIndex = rZSlot.front().getAttachedAxisIndexForFirstSeries();
                 //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
                 pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
@@ -157,29 +152,26 @@ void CandleStickChart::createShapes()
             PlotterBase::m_pPosHelper = pPosHelper;
 
             //update/create information for current group
-            pPosHelper->updateSeriesCount( aZSlotIter->size() );
+            pPosHelper->updateSeriesCount( rZSlot.size() );
+            double fSlotX=0;
             //iterate through all x slots in this category
-            for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
+            for( auto const& rXSlot : rZSlot )
             {
-                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-
-                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+                for( VDataSeries* const pSeries : rXSlot.m_aSeriesVector )
                 {
                     //collect data point information (logic coordinates, style ):
-                    double fUnscaledX = (*aSeriesIter)->getXValue( nIndex );
+                    double fUnscaledX = pSeries->getXValue( nIndex );
                     if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
                         fUnscaledX = DateHelper::RasterizeDateValue( fUnscaledX, m_aNullDate, m_nTimeResolution );
                     if(fUnscaledX<pPosHelper->getLogicMinX() || fUnscaledX>pPosHelper->getLogicMaxX())
                         continue;//point not visible
                     double fScaledX = pPosHelper->getScaledSlotPos( fUnscaledX, fSlotX );
 
-                    double fUnscaledY_First = (*aSeriesIter)->getY_First( nIndex );
-                    double fUnscaledY_Last = (*aSeriesIter)->getY_Last( nIndex );
-                    double fUnscaledY_Min = (*aSeriesIter)->getY_Min( nIndex );
-                    double fUnscaledY_Max = (*aSeriesIter)->getY_Max( nIndex );
+                    double fUnscaledY_First = pSeries->getY_First( nIndex );
+                    double fUnscaledY_Last = pSeries->getY_Last( nIndex );
+                    double fUnscaledY_Min = pSeries->getY_Min( nIndex );
+                    double fUnscaledY_Max = pSeries->getY_Max( nIndex );
 
                     bool bBlack=false;
                     if(fUnscaledY_Last<=fUnscaledY_First)
@@ -216,11 +208,11 @@ void CandleStickChart::createShapes()
                     if(bBlack)
                         xLossGainTarget = xLossTarget;
 
-                    uno::Reference< beans::XPropertySet > xPointProp( (*aSeriesIter)->getPropertiesOfPoint( nIndex ));
+                    uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint( nIndex ));
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(nullptr);
                     {
-                        OUString aPointCID = ObjectIdentifier::createPointCID( (*aSeriesIter)->getPointCID_Stub(), nIndex );
-                        uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
+                        OUString aPointCID = ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nIndex );
+                        uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(pSeries, xSeriesTarget) );
                         xPointGroupShape_Shapes = createGroupShape(xSeriesGroupShape_Shapes,aPointCID);
                     }
 
@@ -296,22 +288,23 @@ void CandleStickChart::createShapes()
                     }
 
                     //create data point label
-                    if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
+                    if( pSeries->getDataPointLabelIfLabel(nIndex) )
                     {
                         if(isValidPosition(aPosMiddleFirst))
-                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, *pSeries, nIndex
                                         , fUnscaledY_First, 1.0, Position3DToAWTPoint(aPosMiddleFirst), LABEL_ALIGN_LEFT_BOTTOM );
                         if(isValidPosition(aPosMiddleLast))
-                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, *pSeries, nIndex
                                         , fUnscaledY_Last, 1.0, Position3DToAWTPoint(aPosMiddleLast), LABEL_ALIGN_RIGHT_TOP );
                         if(isValidPosition(aPosMiddleMinimum))
-                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, *pSeries, nIndex
                                         , fUnscaledY_Min, 1.0, Position3DToAWTPoint(aPosMiddleMinimum), LABEL_ALIGN_BOTTOM );
                         if(isValidPosition(aPosMiddleMaximum))
-                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, *pSeries, nIndex
                                         , fUnscaledY_Max, 1.0, Position3DToAWTPoint(aPosMiddleMaximum), LABEL_ALIGN_TOP );
                     }
                 }//next series in x slot (next y slot)
+                fSlotX+=1.0;
             }//next x slot
         }//next z slot
     }//next category
@@ -319,7 +312,7 @@ void CandleStickChart::createShapes()
     //remove and delete point-group-shape if empty
     if(!xSeriesGroupShape_Shapes->getCount())
     {
-        (*aSeriesIter)->m_xShape.set(NULL);
+        pSeries->m_xShape.set(NULL);
         m_xLogicTarget->remove(xSeriesGroupShape_Shape);
     }
     */

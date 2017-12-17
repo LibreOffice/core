@@ -530,44 +530,34 @@ void AreaChart::impl_createSeriesShapes()
     //the polygon shapes for each series need to be created before
 
     //iterate through all series again to create the series shapes
-    std::vector< std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
-    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
+    for( auto const& rZSlot : m_aZSlots )
     {
-        std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
-        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+        for( auto const& rXSlot : rZSlot )
         {
-            std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-
-            std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-            const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-
             std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
             drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
 
             //iterate through all series
-            for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+            for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
             {
-                sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
+                sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
                 PlotterBase::m_pPosHelper = pPosHelper;
 
-                createRegressionCurvesShapes( **aSeriesIter, m_xErrorBarTarget, m_xRegressionCurveEquationTarget,
+                createRegressionCurvesShapes( *pSeries, m_xErrorBarTarget, m_xRegressionCurveEquationTarget,
                                               m_pPosHelper->maySkipPointsInRegressionCalculation());
 
-                pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
+                pSeriesPoly = &pSeries->m_aPolyPolygonShape3D;
                 if( m_bArea )
                 {
-                    if( !impl_createArea( *aSeriesIter, pSeriesPoly, aPreviousSeriesPolyMap[nAttachedAxisIndex], pPosHelper ) )
+                    if( !impl_createArea( pSeries, pSeriesPoly, aPreviousSeriesPolyMap[nAttachedAxisIndex], pPosHelper ) )
                         continue;
                 }
                 if( m_bLine )
                 {
-                    if( !impl_createLine( *aSeriesIter, pSeriesPoly, pPosHelper ) )
+                    if( !impl_createLine( pSeries, pSeriesPoly, pPosHelper ) )
                         continue;
                 }
                 aPreviousSeriesPolyMap[nAttachedAxisIndex] = pSeriesPoly;
@@ -666,25 +656,14 @@ void AreaChart::createShapes()
 
     bool bDateCategory = (m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis());
 
-    std::vector< std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
-    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-
     std::vector<std::map< sal_Int32, double > > aLogicYSumMapByX(nEndIndex);//one for each different nAttachedAxisIndex
-    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+    for( auto const& rZSlot : m_aZSlots )
     {
-        std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
-        const std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();
-
         //iterate through all x slots in this category to get 100percent sum
-        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+        for( auto const& rXSlot : rZSlot )
         {
-            std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
-            std::vector<VDataSeries*>::iterator aSeriesIter = rSeriesList.begin();
-            std::vector<VDataSeries*>::iterator aSeriesEnd  = rSeriesList.end();
-
-            for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+            for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
             {
-                VDataSeries* pSeries( *aSeriesIter );
                 if(!pSeries)
                     continue;
 
@@ -711,31 +690,23 @@ void AreaChart::createShapes()
         }
     }
 
-    aZSlotIter = m_aZSlots.begin();
-    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
+    sal_Int32 nZ=1;
+    for( auto const& rZSlot : m_aZSlots )
     {
-        std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = aZSlotIter->begin();
-        std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
         //for the area chart there should be at most one x slot (no side by side stacking available)
         //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
-        for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
+        for( auto const& rXSlot : rZSlot )
         {
-            const std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
-            std::vector<VDataSeries*>::const_iterator aSeriesIter = rSeriesList.begin();
-            const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = rSeriesList.end();
-
             std::vector<std::map< sal_Int32, double > > aLogicYForNextSeriesMapByX(nEndIndex); //one for each different nAttachedAxisIndex
             //iterate through all series
-            for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
+            for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
             {
-                VDataSeries* pSeries( *aSeriesIter );
                 if(!pSeries)
                     continue;
 
-                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xSeriesTarget);
+                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(pSeries, m_xSeriesTarget);
 
-                sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
+                sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
@@ -743,7 +714,7 @@ void AreaChart::createShapes()
 
                 if(m_nDimension==3)
                     fLogicZ = nZ+0.5;
-                (*aSeriesIter)->m_fLogicZPos = fLogicZ;
+                pSeries->m_fLogicZPos = fLogicZ;
 
                 for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
                 {
@@ -751,16 +722,16 @@ void AreaChart::createShapes()
                     /*  #i70133# ignore points outside of series length in standard area
                         charts. Stacked area charts will use missing points as zeros. In
                         standard charts, pSeriesList contains only one series. */
-                    if( m_bArea && (rSeriesList.size() == 1) && (nIndex >= (*aSeriesIter)->getTotalPointCount()) )
+                    if( m_bArea && (rXSlot.m_aSeriesVector.size() == 1) && (nIndex >= pSeries->getTotalPointCount()) )
                         continue;
 
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = (*aSeriesIter)->getXValue(nIndex);
+                    double fLogicX = pSeries->getXValue(nIndex);
                     if (bDateCategory)
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
-                    double fLogicY = (*aSeriesIter)->getYValue(nIndex);
+                    double fLogicY = pSeries->getYValue(nIndex);
 
-                    if( m_nDimension==3 && m_bArea && rSeriesList.size()!=1 )
+                    if( m_nDimension==3 && m_bArea && rXSlot.m_aSeriesVector.size()!=1 )
                         fLogicY = fabs( fLogicY );
 
                     std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
@@ -773,10 +744,10 @@ void AreaChart::createShapes()
                             || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
                             || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
                     {
-                        if( (*aSeriesIter)->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
+                        if( pSeries->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {
-                            drawing::PolyPolygonShape3D& rPolygon = (*aSeriesIter)->m_aPolyPolygonShape3D;
-                            sal_Int32& rIndex = (*aSeriesIter)->m_nPolygonIndex;
+                            drawing::PolyPolygonShape3D& rPolygon = pSeries->m_aPolyPolygonShape3D;
+                            sal_Int32& rIndex = pSeries->m_nPolygonIndex;
                             if( 0<= rIndex && rIndex < rPolygon.SequenceX.getLength() )
                             {
                                 if( rPolygon.SequenceX[ rIndex ].getLength() )
@@ -800,10 +771,10 @@ void AreaChart::createShapes()
                     //remind minimal and maximal x values for area 'grounding' points
                     //only for filled area
                     {
-                        double& rfMinX = (*aSeriesIter)->m_fLogicMinX;
+                        double& rfMinX = pSeries->m_fLogicMinX;
                         if(!nIndex||fLogicX<rfMinX)
                             rfMinX=fLogicX;
-                        double& rfMaxX = (*aSeriesIter)->m_fLogicMaxX;
+                        double& rfMaxX = pSeries->m_fLogicMaxX;
                         if(!nIndex||fLogicX>rfMaxX)
                             rfMaxX=fLogicX;
                     }
@@ -833,7 +804,7 @@ void AreaChart::createShapes()
                     //for area and/or line (symbols only do not need this)
                     if( isValidPosition(aScaledLogicPosition) )
                     {
-                        AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
+                        AddPointToPoly( pSeries->m_aPolyPolygonShape3D, aScaledLogicPosition, pSeries->m_nPolygonIndex );
                     }
 
                     //create a single datapoint if point is visible
@@ -864,7 +835,7 @@ void AreaChart::createShapes()
                         }
                     }
 
-                    Symbol* pSymbolProperties = m_bSymbol ? (*aSeriesIter)->getSymbolProperties( nIndex ) : nullptr;
+                    Symbol* pSymbolProperties = m_bSymbol ? pSeries->getSymbolProperties( nIndex ) : nullptr;
                     bool bCreateSymbol = pSymbolProperties && (pSymbolProperties->Style != SymbolStyle_NONE);
 
                     if( !bCreateSymbol && !bCreateYErrorBar &&
@@ -873,7 +844,7 @@ void AreaChart::createShapes()
 
                     //create a group shape for this point and add to the series shape:
                     OUString aPointCID = ObjectIdentifier::createPointCID(
-                            (*aSeriesIter)->getPointCID_Stub(), nIndex );
+                            pSeries->getPointCID_Stub(), nIndex );
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
                             createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
                     uno::Reference<drawing::XShape> xPointGroupShape_Shape =
@@ -917,13 +888,13 @@ void AreaChart::createShapes()
                         }
                         //create error bars
                         if (bCreateXErrorBar)
-                            createErrorBar_X( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
+                            createErrorBar_X( aUnscaledLogicPosition, *pSeries, nIndex, m_xErrorBarTarget );
 
                         if (bCreateYErrorBar)
-                            createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget, nullptr );
+                            createErrorBar_Y( aUnscaledLogicPosition, *pSeries, nIndex, m_xErrorBarTarget, nullptr );
 
                         //create data point label
-                        if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
+                        if( pSeries->getDataPointLabelIfLabel(nIndex) )
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
@@ -970,7 +941,7 @@ void AreaChart::createShapes()
                                         .transformSceneToScreenPosition( aScenePosition3D ) );
                             }
 
-                            createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( m_xTextTarget, *pSeries, nIndex
                                     , fLogicValueForLabeDisplay
                                     , rLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
                         }
@@ -983,6 +954,7 @@ void AreaChart::createShapes()
 
             }//next series in x slot (next y slot)
         }//next x slot
+        ++nZ;
     }//next z slot
 
     impl_createSeriesShapes();
@@ -991,7 +963,7 @@ void AreaChart::createShapes()
     //remove and delete point-group-shape if empty
     if(!xSeriesGroupShape_Shapes->getCount())
     {
-        (*aSeriesIter)->m_xShape.set(NULL);
+        pSeries->m_xShape.set(NULL);
         m_xLogicTarget->remove(xSeriesGroupShape_Shape);
     }
     */

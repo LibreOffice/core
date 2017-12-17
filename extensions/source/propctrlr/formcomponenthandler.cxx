@@ -272,21 +272,17 @@ namespace pcr
                 Sequence< OUString > aStrings;
                 aPropertyValue >>= aStrings;
 
-                const OUString* pStrings = aStrings.getConstArray();
-                sal_Int32 nCount = aStrings.getLength();
-
                 std::vector< OUString > aResolvedStrings;
-                aResolvedStrings.resize( nCount );
+                aResolvedStrings.reserve( aStrings.getLength() );
                 try
                 {
-                    for ( sal_Int32 i = 0; i < nCount; ++i )
+                    for ( const OUString& rIdStr : aStrings )
                     {
-                        OUString aIdStr = pStrings[i];
-                        OUString aPureIdStr = aIdStr.copy( 1 );
+                        OUString aPureIdStr = rIdStr.copy( 1 );
                         if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
-                            aResolvedStrings[i] = xStringResourceResolver->resolveString( aPureIdStr );
+                            aResolvedStrings.push_back(xStringResourceResolver->resolveString( aPureIdStr ));
                         else
-                            aResolvedStrings[i] = aIdStr;
+                            aResolvedStrings.push_back(rIdStr);
                     }
                 }
                 catch( const resource::MissingResourceException & )
@@ -333,10 +329,8 @@ namespace pcr
             // special handling, the value is a faked value we generated ourself in impl_executeFontDialog_nothrow
             Sequence< NamedValue > aFontPropertyValues;
             OSL_VERIFY( _rValue >>= aFontPropertyValues );
-            const NamedValue* fontPropertyValue = aFontPropertyValues.getConstArray();
-            const NamedValue* fontPropertyValueEnd = fontPropertyValue + aFontPropertyValues.getLength();
-            for ( ; fontPropertyValue != fontPropertyValueEnd; ++fontPropertyValue )
-                m_xComponent->setPropertyValue( fontPropertyValue->Name, fontPropertyValue->Value );
+            for ( const NamedValue& fontPropertyValue : aFontPropertyValues )
+                m_xComponent->setPropertyValue( fontPropertyValue.Name, fontPropertyValue.Value );
         }
         else
         {
@@ -374,8 +368,7 @@ namespace pcr
                         Sequence< OUString > aNewStrings;
                         _rValue >>= aNewStrings;
 
-                        const OUString* pNewStrings = aNewStrings.getConstArray();
-                        sal_Int32 nNewCount = aNewStrings.getLength();
+                        const sal_Int32 nNewCount = aNewStrings.getLength();
 
                         // Create new Ids
                         std::unique_ptr<OUString[]> pNewPureIds(new OUString[nNewCount]);
@@ -399,8 +392,6 @@ namespace pcr
 
                         // Move strings to new Ids for all locales
                         Sequence< Locale > aLocaleSeq = xStringResourceManager->getLocales();
-                        const Locale* pLocale = aLocaleSeq.getConstArray();
-                        sal_Int32 nLocaleCount = aLocaleSeq.getLength();
                         Sequence< OUString > aOldIdStrings;
                         aPropertyValue >>= aOldIdStrings;
                         try
@@ -418,20 +409,18 @@ namespace pcr
                                 }
                                 OUString aNewPureIdStr = pNewPureIds[i];
 
-                                for ( sal_Int32 iLocale = 0; iLocale < nLocaleCount; ++iLocale )
+                                for ( const Locale& rLocale : aLocaleSeq )
                                 {
-                                    Locale aLocale = pLocale[iLocale];
-
                                     OUString aResourceStr;
                                     if( !aOldPureIdStr.isEmpty() )
                                     {
-                                        if( xStringResourceManager->hasEntryForIdAndLocale( aOldPureIdStr, aLocale ) )
+                                        if( xStringResourceManager->hasEntryForIdAndLocale( aOldPureIdStr, rLocale ) )
                                         {
                                             aResourceStr = xStringResourceManager->
-                                                resolveStringForLocale( aOldPureIdStr, aLocale );
+                                                resolveStringForLocale( aOldPureIdStr, rLocale );
                                         }
                                     }
-                                    xStringResourceManager->setStringForLocale( aNewPureIdStr, aResourceStr, aLocale );
+                                    xStringResourceManager->setStringForLocale( aNewPureIdStr, aResourceStr, rLocale );
                                 }
                             }
                         }
@@ -446,8 +435,8 @@ namespace pcr
                         OUString* pNewIdStrings = aNewIdStrings.getArray();
                         for ( i = 0; i < nNewCount; ++i )
                         {
-                            OUString aPureIdStr = pNewPureIds[i];
-                            OUString aStr = pNewStrings[i];
+                            const OUString& aPureIdStr = pNewPureIds[i];
+                            const OUString& aStr = aNewStrings[i];
                             xStringResourceManager->setString( aPureIdStr, aStr );
 
                             pNewIdStrings[i] = "&" + aPureIdStr;
@@ -455,18 +444,14 @@ namespace pcr
                         aValue <<= aNewIdStrings;
 
                         // Remove old ids from resource for all locales
-                        const OUString* pOldIdStrings = aOldIdStrings.getConstArray();
-                        sal_Int32 nOldIdCount = aOldIdStrings.getLength();
-                        for( i = 0 ; i < nOldIdCount ; ++i )
+                        for( const OUString& rIdStr : aOldIdStrings )
                         {
-                            OUString aIdStr = pOldIdStrings[i];
-                            OUString aPureIdStr = aIdStr.copy( 1 );
-                            for ( sal_Int32 iLocale = 0; iLocale < nLocaleCount; ++iLocale )
+                            OUString aPureIdStr = rIdStr.copy( 1 );
+                            for ( const Locale& rLocale : aLocaleSeq )
                             {
-                                Locale aLocale = pLocale[iLocale];
                                 try
                                 {
-                                    xStringResourceManager->removeIdForLocale( aPureIdStr, aLocale );
+                                    xStringResourceManager->removeIdForLocale( aPureIdStr, rLocale );
                                 }
                                 catch( const resource::MissingResourceException & )
                                 {}
@@ -2316,11 +2301,8 @@ namespace pcr
                 sal_Int32 nObjectType = CommandType::COMMAND;
                 OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nObjectType );
 
-                Sequence< OUString > aFields( ::dbtools::getFieldNamesByCommandDescriptor( m_xRowSetConnection, nObjectType, sObjectName ) );
-
-                const OUString* pFields = aFields.getConstArray();
-                for ( sal_Int32 i = 0; i < aFields.getLength(); ++i, ++pFields )
-                    _rFieldNames.push_back( *pFields );
+                for ( const OUString& rField : ::dbtools::getFieldNamesByCommandDescriptor( m_xRowSetConnection, nObjectType, sObjectName ) )
+                    _rFieldNames.push_back( rField );
             }
         }
         catch (const Exception&)
@@ -2454,12 +2436,8 @@ namespace pcr
         if ( !xTableNames.is() )
             return;
 
-        Sequence< OUString> aTableNames = xTableNames->getElementNames();
-        sal_uInt32 nCount = aTableNames.getLength();
-        const OUString* pTableNames = aTableNames.getConstArray();
-
-        for ( sal_uInt32 i=0; i<nCount; ++i ,++pTableNames )
-            _out_rNames.push_back( *pTableNames );
+        for ( const OUString& rTableName : xTableNames->getElementNames() )
+            _out_rNames.push_back( rTableName );
     }
 
 
@@ -2483,12 +2461,9 @@ namespace pcr
         if ( !_xQueryNames.is() )
             return;
 
-        Sequence< OUString> aQueryNames = _xQueryNames->getElementNames();
-        sal_uInt32 nCount = aQueryNames.getLength();
-        const OUString* pQueryNames = aQueryNames.getConstArray();
         bool bAdd = !_sName.isEmpty();
 
-        for ( sal_uInt32 i=0; i<nCount; i++, ++pQueryNames )
+        for ( const OUString& rQueryName : _xQueryNames->getElementNames() )
         {
             OUStringBuffer sTemp;
             if ( bAdd )
@@ -2496,8 +2471,8 @@ namespace pcr
                 sTemp.append(_sName);
                 sTemp.append("/");
             }
-            sTemp.append(*pQueryNames);
-            Reference< XNameAccess > xSubQueries(_xQueryNames->getByName(*pQueryNames),UNO_QUERY);
+            sTemp.append(rQueryName);
+            Reference< XNameAccess > xSubQueries(_xQueryNames->getByName(rQueryName),UNO_QUERY);
             if ( xSubQueries.is() )
                 impl_fillQueryNames_throw(xSubQueries,_out_rNames,sTemp.makeStringAndClear());
             else
@@ -2696,8 +2671,8 @@ namespace pcr
                 {
                     const sal_uInt32* pDeletedKeys = pInfoItem->GetDelArray();
 
-                    for (sal_uInt32 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
-                        pFormatter->DeleteEntry(*pDeletedKeys);
+                    for (sal_uInt32 i=0; i< pInfoItem->GetDelCount(); ++i)
+                        pFormatter->DeleteEntry(pDeletedKeys[i]);
                 }
 
                 pItem = nullptr;

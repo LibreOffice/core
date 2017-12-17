@@ -712,22 +712,17 @@ namespace pcr
                         continue;
 
                     // loop through all methods
-                    Sequence< OUString > aMethods( comphelper::getEventMethodsForType( rListener ) );
-
-                    const OUString* pMethods = aMethods.getConstArray();
-                    sal_uInt32 methodCount = aMethods.getLength();
-
-                    for (sal_uInt32 method = 0 ; method < methodCount ; ++method, ++pMethods )
+                    for (const OUString& rMethod : comphelper::getEventMethodsForType( rListener ))
                     {
                         EventDescription aEvent;
-                        if ( !lcl_getEventDescriptionForMethod( *pMethods, aEvent ) )
+                        if ( !lcl_getEventDescriptionForMethod( rMethod, aEvent ) )
                             continue;
 
                         if ( !impl_filterMethod_nothrow( aEvent ) )
                             continue;
 
                         m_aEvents.emplace(
-                            lcl_getEventPropertyName( sListenerClassName, *pMethods ), aEvent );
+                            lcl_getEventPropertyName( sListenerClassName, rMethod ), aEvent );
                     }
                 }
 

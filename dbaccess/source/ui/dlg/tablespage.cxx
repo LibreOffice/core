@@ -159,13 +159,12 @@ namespace dbaui
 
         SvTreeListEntry* pRootEntry = m_pTablesList->getAllObjectsEntry();
 
-        const OUString* pIncludeTable = _rTables.getConstArray();
-        for (sal_Int32 i=0; i<_rTables.getLength(); ++i, ++pIncludeTable)
+        for (const OUString& rIncludeTable : _rTables)
         {
             if (xMeta.is())
-                qualifiedNameComponents(xMeta, pIncludeTable->getStr(), sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
+                qualifiedNameComponents(xMeta, rIncludeTable.getStr(), sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
             else
-                sName = *pIncludeTable;
+                sName = rIncludeTable;
 
             bool bAllTables = (1 == sName.getLength()) && ('%' == sName[0]);
             bool bAllSchemas = (1 == sSchema.getLength()) && ('%' == sSchema[0]);

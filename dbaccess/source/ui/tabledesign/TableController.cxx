@@ -781,14 +781,11 @@ void OTableController::loadData()
         // For Add and Drop all rows can be edited
         //  sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
         bool bIsAlterAllowed = isAlterAllowed();
-        Sequence< OUString> aColumns = xColumns->getElementNames();
-        const OUString* pIter    = aColumns.getConstArray();
-        const OUString* pEnd     = pIter + aColumns.getLength();
 
-        for(;pIter != pEnd;++pIter)
+        for(const OUString& rColumn : xColumns->getElementNames())
         {
             Reference<XPropertySet> xColumn;
-            xColumns->getByName(*pIter) >>= xColumn;
+            xColumns->getByName(rColumn) >>= xColumn;
             sal_Int32 nType         = 0;
             sal_Int32 nScale        = 0;
             sal_Int32 nPrecision    = 0;
@@ -855,19 +852,13 @@ void OTableController::loadData()
         Reference<XNameAccess> xKeyColumns  = getKeyColumns();
         if(xKeyColumns.is())
         {
-            Sequence< OUString> aKeyColumns = xKeyColumns->getElementNames();
-            const OUString* pKeyBegin    = aKeyColumns.getConstArray();
-            const OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
-
-            for(;pKeyBegin != pKeyEnd;++pKeyBegin)
+            for(const OUString& rKeyColumn : xKeyColumns->getElementNames())
             {
-                std::vector< std::shared_ptr<OTableRow> >::const_iterator rowIter = m_vRowList.begin();
-                std::vector< std::shared_ptr<OTableRow> >::const_iterator rowEnd = m_vRowList.end();
-                for(;rowIter != rowEnd;++rowIter)
+                for(std::shared_ptr<OTableRow> const& pRow : m_vRowList)
                 {
-                    if((*rowIter)->GetActFieldDescr()->GetName() == *pKeyBegin)
+                    if(pRow->GetActFieldDescr()->GetName() == rKeyColumn)
                     {
-                        (*rowIter)->SetPrimaryKey(true);
+                        pRow->SetPrimaryKey(true);
                         break;
                     }
                 }
@@ -1176,17 +1167,14 @@ void OTableController::alterColumns()
     // now we have to look for the columns who could be deleted
     if ( xDrop.is() )
     {
-        Sequence< OUString> aColumnNames = xColumns->getElementNames();
-        const OUString* pIter = aColumnNames.getConstArray();
-        const OUString* pEnd = pIter + aColumnNames.getLength();
-        for(;pIter != pEnd;++pIter)
+        for(const OUString& rColumnName : xColumns->getElementNames())
         {
-            if(aColumns.find(*pIter) == aColumns.end()) // found a column to delete
+            if(aColumns.find(rColumnName) == aColumns.end()) // found a column to delete
             {
-                if(xKeyColumns.is() && xKeyColumns->hasByName(*pIter)) // check if this column is a member of the primary key
+                if(xKeyColumns.is() && xKeyColumns->hasByName(rColumnName)) // check if this column is a member of the primary key
                 {
                     OUString aMsgT(DBA_RES(STR_TBL_COLUMN_IS_KEYCOLUMN));
-                    aMsgT = aMsgT.replaceFirst("$column$",*pIter);
+                    aMsgT = aMsgT.replaceFirst("$column$",rColumnName);
                     OUString aTitle(DBA_RES(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
                     ScopedVclPtrInstance< OSQLMessageBox > aMsg(getView(),aTitle,aMsgT,MessBoxStyle::YesNo| MessBoxStyle::DefaultYes);
                     if(aMsg->Execute() == RET_YES)
@@ -1202,12 +1190,12 @@ void OTableController::alterColumns()
                 }
                 try
                 {
-                    xDrop->dropByName(*pIter);
+                    xDrop->dropByName(rColumnName);
                 }
                 catch (const SQLException&)
                 {
                     OUString sError( DBA_RES( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
-                    sError = sError.replaceFirst( "$column$", *pIter );
+                    sError = sError.replaceFirst( "$column$", rColumnName );
 
                     SQLException aNewException;
                     aNewException.Message = sError;
