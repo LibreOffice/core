@@ -58,18 +58,18 @@ SwFormatField::SwFormatField( const SwField &rField )
     , mpField( rField.CopyField() )
     , mpTextField( nullptr )
 {
-    if ( GetField()->GetTyp()->Which() == SwFieldIds::Input )
+    if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
         // input field in-place editing
         SetWhich( RES_TXTATR_INPUTFIELD );
-        static_cast<SwInputField*>(GetField())->SetFormatField( *this );
+        static_cast<SwInputField*>(mpField)->SetFormatField( *this );
     }
-    else if (GetField()->GetTyp()->Which() == SwFieldIds::SetExp)
+    else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
     {
         // see SwWrtShell::StartInputFieldDlg
-        static_cast<SwSetExpField *>(GetField())->SetFormatField(*this);
+        static_cast<SwSetExpField *>(mpField)->SetFormatField(*this);
     }
-    else if ( GetField()->GetTyp()->Which() == SwFieldIds::Postit )
+    else if ( mpField->GetTyp()->Which() == SwFieldIds::Postit )
     {
         // text annotation field
         SetWhich( RES_TXTATR_ANNOTATION );
@@ -87,25 +87,25 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
     , mpField( nullptr )
     , mpTextField( nullptr )
 {
-    if ( rAttr.GetField() )
+    if ( rAttr.mpField )
     {
-        rAttr.GetField()->GetTyp()->Add(this);
-        mpField = rAttr.GetField()->CopyField();
-        if ( GetField()->GetTyp()->Which() == SwFieldIds::Input )
+        rAttr.mpField->GetTyp()->Add(this);
+        mpField = rAttr.mpField->CopyField();
+        if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
         {
             // input field in-place editing
             SetWhich( RES_TXTATR_INPUTFIELD );
-            SwInputField *pField = dynamic_cast<SwInputField*>(GetField());
+            SwInputField *pField = dynamic_cast<SwInputField*>(mpField);
             assert(pField);
             if (pField)
                 pField->SetFormatField( *this );
         }
-        else if (GetField()->GetTyp()->Which() == SwFieldIds::SetExp)
+        else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
         {
             // see SwWrtShell::StartInputFieldDlg
-            static_cast<SwSetExpField *>(GetField())->SetFormatField(*this);
+            static_cast<SwSetExpField *>(mpField)->SetFormatField(*this);
         }
-        else if ( GetField()->GetTyp()->Which() == SwFieldIds::Postit )
+        else if ( mpField->GetTyp()->Which() == SwFieldIds::Postit )
         {
             // text annotation field
             SetWhich( RES_TXTATR_ANNOTATION );
@@ -162,14 +162,14 @@ void SwFormatField::SetField(SwField * _pField)
     delete mpField;
 
     mpField = _pField;
-    if ( GetField()->GetTyp()->Which() == SwFieldIds::Input )
+    if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
-        static_cast<SwInputField* >(GetField())->SetFormatField( *this );
+        static_cast<SwInputField* >(mpField)->SetFormatField( *this );
     }
-    else if (GetField()->GetTyp()->Which() == SwFieldIds::SetExp)
+    else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
     {
         // see SwWrtShell::StartInputFieldDlg
-        static_cast<SwSetExpField *>(GetField())->SetFormatField(*this);
+        static_cast<SwSetExpField *>(mpField)->SetFormatField(*this);
     }
     Broadcast( SwFormatFieldHint( this, SwFormatFieldHintWhich::CHANGED ) );
 }
@@ -188,11 +188,11 @@ bool SwFormatField::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return ( mpField
-             && static_cast<const SwFormatField&>(rAttr).GetField()
-             && mpField->GetTyp() == static_cast<const SwFormatField&>(rAttr).GetField()->GetTyp()
-             && mpField->GetFormat() == static_cast<const SwFormatField&>(rAttr).GetField()->GetFormat() )
+             && static_cast<const SwFormatField&>(rAttr).mpField
+             && mpField->GetTyp() == static_cast<const SwFormatField&>(rAttr).mpField->GetTyp()
+             && mpField->GetFormat() == static_cast<const SwFormatField&>(rAttr).mpField->GetFormat() )
            ||
-           ( !mpField && !static_cast<const SwFormatField&>(rAttr).GetField() );
+           ( !mpField && !static_cast<const SwFormatField&>(rAttr).mpField );
 }
 
 SfxPoolItem* SwFormatField::Clone( SfxItemPool* ) const
@@ -223,7 +223,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         pPaM->GetPoint()->nNode = rTextNode;
         pPaM->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(&rTextNode), mpTextField->GetStart() );
 
-        OUString const aEntry( GetField()->ExpandField( pDoc->IsClipBoard() ) );
+        OUString const aEntry( mpField->ExpandField( pDoc->IsClipBoard() ) );
         pPaM->SetMark();
         pPaM->Move( fnMoveForward );
         pDoc->getIDocumentContentOperations().DeleteRange( *pPaM );
@@ -235,7 +235,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached UNO object
-        SetXTextField(css::uno::Reference<css::text::XTextField>(nullptr));
+        m_wXTextField = nullptr;
         // ??? why does this Modify method not already do this?
         NotifyClients(pOld, pNew);
         return;
@@ -256,10 +256,10 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         {
         case RES_REFMARKFLD_UPDATE:
                 // update GetRef fields
-                if( SwFieldIds::GetRef == GetField()->GetTyp()->Which() )
+                if( SwFieldIds::GetRef == mpField->GetTyp()->Which() )
                 {
                     // #i81002#
-                    static_cast<SwGetRefField*>(GetField())->UpdateField( mpTextField );
+                    static_cast<SwGetRefField*>(mpField)->UpdateField( mpTextField );
                 }
                 break;
         case RES_DOCPOS_UPDATE:
@@ -276,7 +276,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
     }
 
-    switch (GetField()->GetTyp()->Which())
+    switch (mpField->GetTyp()->Which())
     {
         case SwFieldIds::HiddenPara:
             if( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
@@ -291,9 +291,9 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         default: break;
     }
 
-    if( SwFieldIds::User == GetField()->GetTyp()->Which() )
+    if( SwFieldIds::User == mpField->GetTyp()->Which() )
     {
-        SwUserFieldType* pType = static_cast<SwUserFieldType*>(GetField()->GetTyp());
+        SwUserFieldType* pType = static_cast<SwUserFieldType*>(mpField->GetTyp());
         if(!pType->IsValid())
         {
             SwCalc aCalc( *pTextNd->GetDoc() );
@@ -336,7 +336,7 @@ void SwFormatField::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mpTextField"), "%p", mpTextField);
 
     SfxPoolItem::dumpAsXml(pWriter);
-    GetField()->dumpAsXml(pWriter);
+    mpField->dumpAsXml(pWriter);
 
     xmlTextWriterEndElement(pWriter);
 }
