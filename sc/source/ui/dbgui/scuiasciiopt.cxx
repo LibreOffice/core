@@ -52,18 +52,37 @@ const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 using namespace com::sun::star::uno;
 
 // Defines - CSV Import Preserve Options
-#define FIXED_WIDTH         "FixedWidth"
-#define FROM_ROW            "FromRow"
-#define CHAR_SET            "CharSet"
-#define SEPARATORS          "Separators"
-#define TEXT_SEPARATORS     "TextSeparators"
-#define MERGE_DELIMITERS    "MergeDelimiters"
-#define QUOTED_AS_TEXT      "QuotedFieldAsText"
-#define DETECT_SPECIAL_NUM  "DetectSpecialNumbers"
-#define LANGUAGE            "Language"
-#define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
-#define SEP_PATH_CLPBRD     "Office.Calc/Dialogs/ClipboardTextImport"
-#define SEP_PATH_TEXT2COL   "Office.Calc/Dialogs/TextToColumnsImport"
+enum CSVImportOptionsIndex
+{
+    CSVIO_MergeDelimiters = 0,
+    CSVIO_Separators,
+    CSVIO_TextSeparators,
+    CSVIO_FixedWidth,
+    CSVIO_FromRow,
+    CSVIO_Text2ColSkipEmptyCells = CSVIO_FromRow,
+    CSVIO_CharSet,
+    CSVIO_QuotedAsText,
+    CSVIO_DetectSpecialNum,
+    CSVIO_Language,
+    CSVIO_PasteSkipEmptyCells
+};
+
+const ::std::vector<OUString> CSVImportOptionNames =
+{
+    "MergeDelimiters",
+    "Separators",
+    "TextSeparators",
+    "FixedWidth",
+    "FromRow",
+    "CharSet",
+    "QuotedFieldAsText",
+    "DetectSpecialNumbers",
+    "Language",
+    "SkipEmptyCells"
+};
+const OUString aSep_Path =           "Office.Calc/Dialogs/CSVImport";
+const OUString aSep_Path_Clpbrd =    "Office.Calc/Dialogs/ClipboardTextImport";
+const OUString aSep_Path_Text2Col =  "Office.Calc/Dialogs/TextToColumnsImport";
 
 static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {
@@ -110,129 +129,134 @@ static sal_Unicode lcl_CharFromCombo( const ComboBox& rCombo, const OUString& rL
     return c;
 }
 
-static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparators,
-                             bool &bMergeDelimiters, bool& bQuotedAsText, bool& bDetectSpecialNum,
-                             bool &bFixedWidth, sal_Int32 &nFromRow, sal_Int32 &nCharSet,
-                             sal_Int32& nLanguage, ScImportAsciiCall eCall )
+void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& rNames, ScImportAsciiCall eCall )
 {
-    Sequence<Any>aValues;
-    const Any *pProperties;
-    Sequence<OUString> aNames( eCall == SC_TEXTTOCOLUMNS ? 4 : 9 );
-    OUString* pNames = aNames.getArray();
-    OUString aSepPath;
+    sal_Int32 nProperties = 0;
+
     switch(eCall)
     {
         case SC_IMPORTFILE:
-            aSepPath = SEP_PATH;
+            rSepPath = aSep_Path;
+            nProperties = 9;
             break;
         case SC_PASTETEXT:
-            aSepPath = SEP_PATH_CLPBRD;
+            rSepPath = aSep_Path_Clpbrd;
+            nProperties = 10;
             break;
         case SC_TEXTTOCOLUMNS:
         default:
-            aSepPath = SEP_PATH_TEXT2COL;
+            rSepPath = aSep_Path_Text2Col;
+            nProperties = 5;
             break;
     }
-    ScLinkConfigItem aItem( aSepPath );
-
-    pNames[0] = MERGE_DELIMITERS;
-    pNames[1] = SEPARATORS;
-    pNames[2] = TEXT_SEPARATORS;
-    pNames[3] = FIXED_WIDTH;
+    rNames.realloc( nProperties );
+    OUString* pNames = rNames.getArray();
+    pNames[ CSVIO_MergeDelimiters ] =   CSVImportOptionNames[ CSVIO_MergeDelimiters ];
+    pNames[ CSVIO_Separators ] =        CSVImportOptionNames[ CSVIO_Separators ];
+    pNames[ CSVIO_TextSeparators ] =    CSVImportOptionNames[ CSVIO_TextSeparators ];
+    pNames[ CSVIO_FixedWidth ] =        CSVImportOptionNames[ CSVIO_FixedWidth ];
     if (eCall != SC_TEXTTOCOLUMNS)
     {
-        pNames[4] = FROM_ROW;
-        pNames[5] = CHAR_SET;
-        pNames[6] = QUOTED_AS_TEXT;
-        pNames[7] = DETECT_SPECIAL_NUM;
-        pNames[8] = LANGUAGE;
+        pNames[ CSVIO_FromRow ] =       CSVImportOptionNames[ CSVIO_FromRow ];
+        pNames[ CSVIO_CharSet ] =       CSVImportOptionNames[ CSVIO_CharSet ];
+        pNames[ CSVIO_QuotedAsText ] =  CSVImportOptionNames[ CSVIO_QuotedAsText ];
+        pNames[ CSVIO_DetectSpecialNum ] = CSVImportOptionNames[ CSVIO_DetectSpecialNum ];
+        pNames[ CSVIO_Language ] =      CSVImportOptionNames[ CSVIO_Language ];
     }
-    aValues = aItem.GetProperties( aNames );
-    pProperties = aValues.getConstArray();
-
-    if( pProperties[0].hasValue() )
-        bMergeDelimiters = ScUnoHelpFunctions::GetBoolFromAny( pProperties[0] );
-
-    if( pProperties[1].hasValue() )
-        pProperties[1] >>= sFieldSeparators;
-
-    if( pProperties[2].hasValue() )
-        pProperties[2] >>= sTextSeparators;
-
-    if( pProperties[3].hasValue() )
-        bFixedWidth = ScUnoHelpFunctions::GetBoolFromAny( pProperties[3] );
-
-    if (eCall != SC_TEXTTOCOLUMNS)
+    if (eCall != SC_IMPORTFILE)
     {
-        if( pProperties[4].hasValue() )
-            pProperties[4] >>= nFromRow;
-
-        if( pProperties[5].hasValue() )
-            pProperties[5] >>= nCharSet;
-
-        if ( pProperties[6].hasValue() )
-            pProperties[6] >>= bQuotedAsText;
-
-        if ( pProperties[7].hasValue() )
-            pProperties[7] >>= bDetectSpecialNum;
-
-        if ( pProperties[8].hasValue() )
-            pProperties[8] >>= nLanguage;
+        pNames[ eCall == SC_TEXTTOCOLUMNS ?
+                CSVIO_Text2ColSkipEmptyCells :
+                CSVIO_PasteSkipEmptyCells ] = CSVImportOptionNames[ CSVIO_PasteSkipEmptyCells ];
     }
 }
 
-static void save_Separators(
-    const OUString& maSeparators, const OUString& maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
-    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
-    sal_Int32 nCharSet, sal_Int32 nLanguage, ScImportAsciiCall eCall )
+static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSeparators,
+                             bool& rMergeDelimiters, bool& rQuotedAsText, bool& rDetectSpecialNum,
+                             bool& rFixedWidth, sal_Int32& rFromRow, sal_Int32& rCharSet,
+                             sal_Int32& rLanguage, bool& rSkipEmptyCells, ScImportAsciiCall eCall )
 {
-    OUString sFieldSeparators = maSeparators;
-    OUString sTextSeparators = maTxtSep;
+    Sequence<Any>aValues;
+    const Any *pProperties;
+    Sequence<OUString> aNames;
+    OUString aSepPath;
+    lcl_CreatePropertiesNames ( aSepPath, aNames, eCall);
+    ScLinkConfigItem aItem( aSepPath );
+    aValues = aItem.GetProperties( aNames );
+    pProperties = aValues.getConstArray();
+
+    if( pProperties[ CSVIO_MergeDelimiters ].hasValue() )
+        rMergeDelimiters = ScUnoHelpFunctions::GetBoolFromAny( pProperties[ CSVIO_MergeDelimiters ] );
+
+    if( pProperties[ CSVIO_Separators ].hasValue() )
+        pProperties[ CSVIO_Separators ] >>= rFieldSeparators;
+
+    if( pProperties[ CSVIO_TextSeparators ].hasValue() )
+        pProperties[ CSVIO_TextSeparators ] >>= rTextSeparators;
+
+    if( pProperties[ CSVIO_FixedWidth ].hasValue() )
+        rFixedWidth = ScUnoHelpFunctions::GetBoolFromAny( pProperties[ CSVIO_FixedWidth ] );
+
+    if (eCall != SC_TEXTTOCOLUMNS)
+    {
+        if( pProperties[ CSVIO_FromRow ].hasValue() )
+            pProperties[ CSVIO_FromRow ] >>= rFromRow;
+
+        if( pProperties[ CSVIO_CharSet ].hasValue() )
+            pProperties[ CSVIO_CharSet ] >>= rCharSet;
+
+        if ( pProperties[ CSVIO_QuotedAsText ].hasValue() )
+            pProperties[ CSVIO_QuotedAsText ] >>= rQuotedAsText;
+
+        if ( pProperties[ CSVIO_DetectSpecialNum ].hasValue() )
+            pProperties[ CSVIO_DetectSpecialNum ] >>= rDetectSpecialNum;
+
+        if ( pProperties[ CSVIO_Language ].hasValue() )
+            pProperties[ CSVIO_Language ] >>= rLanguage;
+    }
+    if (eCall != SC_IMPORTFILE)
+    {
+        sal_Int32 nSkipEmptyCells = eCall == SC_TEXTTOCOLUMNS ?
+                                    CSVIO_Text2ColSkipEmptyCells :
+                                    CSVIO_PasteSkipEmptyCells;
+        if( pProperties[nSkipEmptyCells].hasValue() )
+            rSkipEmptyCells = ScUnoHelpFunctions::GetBoolFromAny( pProperties[nSkipEmptyCells] );
+    }
+}
+
+static void lcl_SaveSeparators(
+    const OUString& rSeparators, const OUString& rTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
+    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
+    sal_Int32 nCharSet, sal_Int32 nLanguage, bool bSkipEmptyCells, ScImportAsciiCall eCall )
+{
+    OUString sFieldSeparators = rSeparators;
+    OUString sTextSeparators = rTxtSep;
     Sequence<Any> aValues;
     Any *pProperties;
-    Sequence<OUString> aNames( eCall == SC_TEXTTOCOLUMNS ? 4 : 9 );
-    OUString* pNames = aNames.getArray();
+    Sequence<OUString> aNames;
     OUString aSepPath;
-    switch(eCall)
-    {
-        case SC_IMPORTFILE:
-            aSepPath = SEP_PATH;
-            break;
-        case SC_PASTETEXT:
-            aSepPath = SEP_PATH_CLPBRD;
-            break;
-        case SC_TEXTTOCOLUMNS:
-        default:
-            aSepPath = SEP_PATH_TEXT2COL;
-            break;
-    }
+    lcl_CreatePropertiesNames ( aSepPath, aNames, eCall );
     ScLinkConfigItem aItem( aSepPath );
-
-    pNames[0] = MERGE_DELIMITERS;
-    pNames[1] = SEPARATORS;
-    pNames[2] = TEXT_SEPARATORS;
-    pNames[3] = FIXED_WIDTH;
-    if (eCall != SC_TEXTTOCOLUMNS)
-    {
-        pNames[4] = FROM_ROW;
-        pNames[5] = CHAR_SET;
-        pNames[6] = QUOTED_AS_TEXT;
-        pNames[7] = DETECT_SPECIAL_NUM;
-        pNames[8] = LANGUAGE;
-    }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
-    pProperties[0] <<= bMergeDelimiters;
-    pProperties[1] <<= sFieldSeparators;
-    pProperties[2] <<= sTextSeparators;
-    pProperties[3] <<= bFixedWidth;
+
+    pProperties[ CSVIO_MergeDelimiters ] <<= bMergeDelimiters;
+    pProperties[ CSVIO_Separators ] <<= sFieldSeparators;
+    pProperties[ CSVIO_TextSeparators ] <<= sTextSeparators;
+    pProperties[ CSVIO_FixedWidth ] <<= bFixedWidth;
     if (eCall != SC_TEXTTOCOLUMNS)
     {
-        pProperties[4] <<= nFromRow;
-        pProperties[5] <<= nCharSet;
-        pProperties[6] <<= bQuotedAsText;
-        pProperties[7] <<= bDetectSpecialNum;
-        pProperties[8] <<= nLanguage;
+        pProperties[ CSVIO_FromRow ] <<= nFromRow;
+        pProperties[ CSVIO_CharSet ] <<= nCharSet;
+        pProperties[ CSVIO_QuotedAsText ] <<= bQuotedAsText;
+        pProperties[ CSVIO_DetectSpecialNum ] <<= bDetectSpecialNum;
+        pProperties[ CSVIO_Language ] <<= nLanguage;
+    }
+    if (eCall != SC_IMPORTFILE)
+    {
+        pProperties[ eCall == SC_TEXTTOCOLUMNS ?
+                                CSVIO_Text2ColSkipEmptyCells :
+                                CSVIO_PasteSkipEmptyCells ] <<= bSkipEmptyCells;
     }
 
     aItem.PutProperties(aNames, aValues);
@@ -275,6 +299,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     get(pCbTextSep, "textdelimiter");
     get(pCkbQuotedAsText, "quotedfieldastext");
     get(pCkbDetectNumber, "detectspecialnumbers");
+    get(pCkbSkipEmptyCells, "skipemptycells");
     get(pFtType, "textcolumntype");
     get(pLbType, "columntype");
     get(mpTableBox, "scrolledwindowcolumntype");
@@ -303,11 +328,13 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     bool bFixedWidth = false;
     bool bQuotedFieldAsText = false;
     bool bDetectSpecialNum = true;
+    bool bSkipEmptyCells = true;
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;
     sal_Int32 nLanguage = 0;
-    load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
-                         bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage, meCall);
+    lcl_LoadSeparators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
+                         bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow,
+                         nCharSet, nLanguage, bSkipEmptyCells, meCall);
     // load from saved settings
     maFieldSeparators = sFieldSeparators;
 
@@ -317,6 +344,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
         pCkbQuotedAsText->Check();
     if (bDetectSpecialNum)
         pCkbDetectNumber->Check();
+    if (bSkipEmptyCells)
+        pCkbSkipEmptyCells->Check();
     if( bFixedWidth && !bIsTSV )
         pRbFixed->Check();
     if( nFromRow != 1 )
@@ -390,6 +419,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pCkbAsOnce->SetClickHdl( aSeparatorClickHdl );
     pCkbQuotedAsText->SetClickHdl( aSeparatorClickHdl );
     pCkbDetectNumber->SetClickHdl( aSeparatorClickHdl );
+    pCkbSkipEmptyCells->SetClickHdl( aSeparatorClickHdl );
     pCkbSpace->SetClickHdl( aSeparatorClickHdl );
     pCkbOther->SetClickHdl( aSeparatorClickHdl );
     pEdOther->SetModifyHdl( aSeparatorHdl );
@@ -468,6 +498,12 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
         pCkbDetectNumber->Check();
         pCkbDetectNumber->Disable();
     }
+    if (meCall == SC_IMPORTFILE)
+    {
+        //Empty cells in imported file are empty
+        pCkbSkipEmptyCells->Check(false);
+        pCkbSkipEmptyCells->Hide();
+    }
 }
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
@@ -497,6 +533,7 @@ void ScImportAsciiDlg::dispose()
     pCbTextSep.clear();
     pCkbQuotedAsText.clear();
     pCkbDetectNumber.clear();
+    pCkbSkipEmptyCells.clear();
     pFtType.clear();
     pLbType.clear();
     mpTableBox.clear();
@@ -584,16 +621,18 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 
     rOpt.SetQuotedAsText(pCkbQuotedAsText->IsChecked());
     rOpt.SetDetectSpecialNumber(pCkbDetectNumber->IsChecked());
+    rOpt.SetSkipEmptyCells(pCkbSkipEmptyCells->IsChecked());
 }
 
 void ScImportAsciiDlg::SaveParameters()
 {
-    save_Separators( maFieldSeparators, pCbTextSep->GetText(), pCkbAsOnce->IsChecked(),
+    lcl_SaveSeparators( maFieldSeparators, pCbTextSep->GetText(), pCkbAsOnce->IsChecked(),
                      pCkbQuotedAsText->IsChecked(), pCkbDetectNumber->IsChecked(),
                      pRbFixed->IsChecked(),
                      static_cast<sal_Int32>(pNfRow->GetValue()),
                      pLbCharSet->GetSelectedEntryPos(),
-                     static_cast<sal_uInt16>(pLbCustomLang->GetSelectLanguage()), meCall );
+                     static_cast<sal_uInt16>(pLbCustomLang->GetSelectLanguage()),
+                     pCkbSkipEmptyCells->IsChecked(), meCall );
 }
 
 void ScImportAsciiDlg::SetSeparators()

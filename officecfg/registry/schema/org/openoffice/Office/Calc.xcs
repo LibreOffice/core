@@ -1177,6 +1177,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="SkipEmptyCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc delete content of previous cells.</desc>
+            <label>SkipEmptyCells</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
@@ -1244,6 +1251,13 @@
             <label>Separators</label>
           </info>
           <value>	</value>
+        </prop>
+        <prop oor:name="SkipEmptyCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc delete content of previous cells.</desc>
+            <label>SkipEmptyCells</label>
+          </info>
+          <value>false</value>
         </prop>
         <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
           <info>
