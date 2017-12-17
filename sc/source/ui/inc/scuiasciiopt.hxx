@@ -73,6 +73,7 @@ class ScImportAsciiDlg : public ModalDialog
 
     VclPtr<CheckBox>                   pCkbQuotedAsText;
     VclPtr<CheckBox>                   pCkbDetectNumber;
+    VclPtr<CheckBox>                   pCkbSkipEmptyCells;
 
     VclPtr<FixedText>                  pFtType;
     VclPtr<ListBox>                    pLbType;
