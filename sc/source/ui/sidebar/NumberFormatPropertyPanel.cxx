@@ -214,6 +214,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     mpBtnThousand->Check(false);
                     mpBtnEngineering->Show(bIsScientific);
                     mpBtnEngineering->Enable(bIsScientific);
+                    mpBtnEngineering->Check(false);
                     mpBtnNegRed->Enable();
                     mpFtDenominator->Show(bIsFraction);
                     mpEdDenominator->Show(bIsFraction);
