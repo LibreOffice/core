@@ -498,8 +498,8 @@ private:
     sal_uLong               mnUsedSize; // currently used memory footprint of all swapped in graphics
     GraphicCache*           mpCache;
 
-                        GraphicManager( const GraphicManager& ) {}
-    GraphicManager&     operator=( const GraphicManager& ) { return *this; }
+                        GraphicManager( const GraphicManager& ) = delete;
+    GraphicManager&     operator=( const GraphicManager& ) = delete;
 
     bool SVT_DLLPRIVATE ImplDraw(
                             OutputDevice* pOut,
