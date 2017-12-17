@@ -688,7 +688,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     // r/o-Doc couldn't be switched to writing mode
-                    if ( bForEdit && SID_EDITDOC == rReq.GetSlot() )
+                    if ( bForEdit && ( SID_EDITDOC == rReq.GetSlot() || SID_READONLYDOC == rReq.GetSlot() ) )
                     {
                         // ask user for opening as template
                         ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
@@ -716,7 +716,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xNewObj->SetModifyPasswordEntered( false );
                         xNewObj->SetReadOnly();
                     }
-                    else if ( rReq.GetSlot() == SID_EDITDOC )
+                    else if ( rReq.GetSlot() == SID_EDITDOC || rReq.GetSlot() == SID_READONLYDOC )
                     {
                         xNewObj->SetReadOnlyUI( !bForEdit );
                     }
