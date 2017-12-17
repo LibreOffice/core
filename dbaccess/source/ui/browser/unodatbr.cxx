@@ -657,16 +657,13 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
             OUString aCurrentModelType;
             Reference<XColumnsSupplier> xSupCols(getRowSet(),UNO_QUERY);
             Reference<XNameAccess> xColumns     = xSupCols->getColumns();
-            Sequence< OUString> aNames   = xColumns->getElementNames();
-            const OUString* pIter        = aNames.getConstArray();
-            const OUString* pEnd         = pIter + aNames.getLength();
 
             OUString sDefaultProperty;
             Reference< XPropertySet > xColumn;
             Reference< XPropertySetInfo > xColPSI;
-            for (sal_uInt16 i=0; pIter != pEnd; ++i,++pIter)
+            for (const OUString& rName : xColumns->getElementNames())
             {
-                xColumn.set( xColumns->getByName( *pIter ), UNO_QUERY_THROW );
+                xColumn.set( xColumns->getByName( rName ), UNO_QUERY_THROW );
                 xColPSI.set( xColumn->getPropertySetInfo(), UNO_SET_THROW );
 
                 // ignore the column when it is a rowversion one
@@ -730,13 +727,13 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         break;
                 }
 
-                aInitialValues.emplace_back( PROPERTY_CONTROLSOURCE, makeAny( *pIter ) );
+                aInitialValues.emplace_back( PROPERTY_CONTROLSOURCE, makeAny( rName ) );
                 OUString sLabel;
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
                 if ( !sLabel.isEmpty() )
                     aInitialValues.emplace_back( PROPERTY_LABEL, makeAny( sLabel ) );
                 else
-                    aInitialValues.emplace_back( PROPERTY_LABEL, makeAny( *pIter ) );
+                    aInitialValues.emplace_back( PROPERTY_LABEL, makeAny( rName ) );
 
                 Reference< XPropertySet > xGridCol( xColFactory->createColumn( aCurrentModelType ), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xGridColPSI( xGridCol->getPropertySetInfo(), UNO_SET_THROW );
@@ -799,7 +796,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     )
                     xGridCol->setPropertyValue( *copyPropertyName, xColumn->getPropertyValue( *copyPropertyName ) );
 
-                xColContainer->insertByName(*pIter, makeAny(xGridCol));
+                xColContainer->insertByName(rName, makeAny(xGridCol));
             }
         }
     }
@@ -2083,11 +2080,8 @@ void SbaTableQueryBrowser::initializeTreeModel()
         OUString sQueriesName, sTablesName;
 
         // fill the model with the names of the registered datasources
-        Sequence< OUString > aDatasources = m_xDatabaseContext->getElementNames();
-        const OUString* pIter    = aDatasources.getConstArray();
-        const OUString* pEnd     = pIter + aDatasources.getLength();
-        for (; pIter != pEnd; ++pIter)
-            implAddDatasource( *pIter, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage, SharedConnection() );
+        for (const OUString& rDatasource : m_xDatabaseContext->getElementNames())
+            implAddDatasource( rDatasource, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage, SharedConnection() );
     }
 }
 
@@ -2101,22 +2095,19 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
 
     try
     {
-        Sequence< OUString > aNames = _xNameAccess->getElementNames();
-        const OUString* pIter    = aNames.getConstArray();
-        const OUString* pEnd     = pIter + aNames.getLength();
-        for (; pIter != pEnd; ++pIter)
+        for (const OUString& rName : _xNameAccess->getElementNames())
         {
-            if( !m_pTreeView->getListBox().GetEntryPosByName(*pIter,_pParent))
+            if( !m_pTreeView->getListBox().GetEntryPosByName(rName,_pParent))
             {
                 DBTreeListUserData* pEntryData = new DBTreeListUserData;
                 pEntryData->eType = _eEntryType;
                 if ( _eEntryType == etQuery )
                 {
-                    Reference<XNameAccess> xChild(_xNameAccess->getByName(*pIter),UNO_QUERY);
+                    Reference<XNameAccess> xChild(_xNameAccess->getByName(rName),UNO_QUERY);
                     if ( xChild.is() )
                         pEntryData->eType = etQueryContainer;
                 }
-                implAppendEntry( _pParent, *pIter, pEntryData, pEntryData->eType );
+                implAppendEntry( _pParent, rName, pEntryData, pEntryData->eType );
             }
         }
     }
@@ -3591,14 +3582,11 @@ void SbaTableQueryBrowser::frameAction(const css::frame::FrameActionEvent& aEven
 void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _xColContainer)
 {
     // first we have to clear the grid
-    Sequence< OUString > aNames = _xColContainer->getElementNames();
-    const OUString* pIter    = aNames.getConstArray();
-    const OUString* pEnd     = pIter + aNames.getLength();
     Reference< XInterface > xColumn;
-    for (; pIter != pEnd;++pIter)
+    for (const OUString& rName : _xColContainer->getElementNames())
     {
-        _xColContainer->getByName(*pIter) >>= xColumn;
-        _xColContainer->removeByName(*pIter);
+        _xColContainer->getByName(rName) >>= xColumn;
+        _xColContainer->removeByName(rName);
         ::comphelper::disposeComponent(xColumn);
     }
 }

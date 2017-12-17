@@ -281,20 +281,16 @@ void ODbaseIndexDialog::Init()
 
     // first assume for all indexes they're free
 
-    Sequence< OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
-
     OUString const aIndexExt("ndx");
     OUString const aTableExt("dbf");
 
     std::vector< OUString > aUsedIndexes;
 
-    const OUString *pBegin = aFolderContent.getConstArray();
-    const OUString *pEnd   = pBegin + aFolderContent.getLength();
     aURL.SetSmartProtocol(INetProtocol::File);
-    for(;pBegin != pEnd;++pBegin)
+    for(const OUString& rURL : ::utl::LocalFileHelper::GetFolderContents(m_aDSN, bFolder))
     {
         OUString aName;
-        osl::FileBase::getSystemPathFromFileURL(pBegin->getStr(),aName);
+        osl::FileBase::getSystemPathFromFileURL(rURL,aName);
         aURL.SetSmartURL(aName);
         OUString aExt = aURL.getExtension();
         if (aExt == aIndexExt)

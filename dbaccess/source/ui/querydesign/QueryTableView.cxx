@@ -139,13 +139,10 @@ namespace
         OUString sRelatedColumn;
 
         // iterate through all foreignkey columns to create the connections
-        Sequence< OUString> aElements(_rxSourceForeignKeyColumns->getElementNames());
-        const OUString* pIter = aElements.getConstArray();
-        const OUString* pEnd   = pIter + aElements.getLength();
-        for(sal_Int32 i=0;pIter != pEnd;++pIter,++i)
+        for(const OUString& rElement : _rxSourceForeignKeyColumns->getElementNames())
         {
             Reference<XPropertySet> xColumn;
-            if ( !( _rxSourceForeignKeyColumns->getByName(*pIter) >>= xColumn ) )
+            if ( !( _rxSourceForeignKeyColumns->getByName(rElement) >>= xColumn ) )
             {
                 OSL_FAIL( "addConnections: invalid foreign key column!" );
                 continue;
@@ -154,7 +151,7 @@ namespace
             xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN) >>= sRelatedColumn;
 
             {
-                Sequence< sal_Int16> aFind(::comphelper::findValue(_rSource.GetOriginalColumns()->getElementNames(),*pIter,true));
+                Sequence< sal_Int16> aFind(::comphelper::findValue(_rSource.GetOriginalColumns()->getElementNames(),rElement,true));
                 if(aFind.getLength())
                     pNewConnData->SetFieldIndex(JTCS_FROM,aFind[0]+1);
                 else
@@ -170,7 +167,7 @@ namespace
                 else
                     OSL_FAIL("Column not found!");
             }
-            pNewConnData->AppendConnLine(*pIter,sRelatedColumn);
+            pNewConnData->AppendConnLine(rElement,sRelatedColumn);
 
             // now add the Conn itself
             ScopedVclPtrInstance< OQueryTableConnection > aNewConn(_pView, aNewConnData);

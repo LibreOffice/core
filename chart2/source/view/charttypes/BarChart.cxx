@@ -450,28 +450,22 @@ void BarChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nPointIndex = nStartIndex; nPointIndex < nEndIndex; nPointIndex++ )
     {
-        std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-
         //sum up the values for all series in a complete z slot per attached axis
         std::map< sal_Int32,  double > aLogicYSumMap;
-        for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+        for( auto& rZSlot : m_aZSlots )
         {
-            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
-            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter )
+            for( auto& rXSlot : rZSlot )
             {
-                sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
+                sal_Int32 nAttachedAxisIndex = rXSlot.getAttachedAxisIndexForFirstSeries();
                 if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
                     aLogicYSumMap[nAttachedAxisIndex]=0.0;
 
-                const sal_Int32 nSlotPoints = aXSlotIter->getPointCount();
+                const sal_Int32 nSlotPoints = rXSlot.getPointCount();
                 if( nPointIndex >= nSlotPoints )
                     continue;
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
-                aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
+                rXSlot.calculateYMinAndMaxForCategory( nPointIndex
                     , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 if( !::rtl::math::isNan( fMaximumY ) && fMaximumY > 0)
@@ -481,39 +475,33 @@ void BarChart::createShapes()
             }
         }
 
-        aZSlotIter = m_aZSlots.begin();
-        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
+        sal_Int32 nZ=1;
+        for( auto& rZSlot : m_aZSlots )
         {
-            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
             //iterate through all x slots in this category
             double fSlotX=0;
-            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
+            for( auto& rXSlot : rZSlot )
             {
                 sal_Int32 nAttachedAxisIndex = 0;
                 BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
-                if( aXSlotIter != aXSlotEnd )
-                {
-                    nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
-                    //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
-                    pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
-                    if(!pPosHelper)
-                        pPosHelper = m_pMainPosHelper.get();
-                }
+
+                nAttachedAxisIndex = rXSlot.getAttachedAxisIndexForFirstSeries();
+                //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
+                pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
+                if(!pPosHelper)
+                    pPosHelper = m_pMainPosHelper.get();
+
                 PlotterBase::m_pPosHelper = pPosHelper;
 
                 //update/create information for current group
-                pPosHelper->updateSeriesCount( aZSlotIter->size() );
+                pPosHelper->updateSeriesCount( rZSlot.size() );
                 double fLogicBaseWidth = pPosHelper->getScaledSlotWidth();
-
-                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
                 // get distance from base value to maximum and minimum
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
-                if( nPointIndex < aXSlotIter->getPointCount())
-                    aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
+                if( nPointIndex < rXSlot.getPointCount())
+                    rXSlot.calculateYMinAndMaxForCategory( nPointIndex
                         , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 double fLogicPositiveYSum = 0.0;
@@ -547,17 +535,14 @@ void BarChart::createShapes()
                 }
 
                 double fBaseValue = 0.0;
-                if( !pPosHelper->isPercentY() && pSeriesList->size()<=1 )
+                if( !pPosHelper->isPercentY() && rXSlot.m_aSeriesVector.size()<=1 )
                     fBaseValue = pPosHelper->getBaseValueY();
                 double fPositiveLogicYForNextSeries = fBaseValue;
                 double fNegativeLogicYForNextSeries = fBaseValue;
 
-                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
                 {
-                    VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
                         continue;
 
@@ -566,7 +551,7 @@ void BarChart::createShapes()
                     bOnlyConnectionLinesForThisPoint = false;
 
                     if(nPointIndex==nStartIndex)//do not create a regression line for each point
-                        createRegressionCurvesShapes( **aSeriesIter, xRegressionCurveTarget, xRegressionCurveEquationTarget,
+                        createRegressionCurvesShapes( *pSeries, xRegressionCurveTarget, xRegressionCurveEquationTarget,
                                                       m_pPosHelper->maySkipPointsInRegressionCalculation());
 
                     if( !bDrawConnectionLinesInited )
@@ -574,7 +559,7 @@ void BarChart::createShapes()
                         bDrawConnectionLines = pSeries->getConnectBars();
                         if( m_nDimension==3 )
                             bDrawConnectionLines = false;
-                        if( bDrawConnectionLines && pSeriesList->size()==1 )
+                        if( bDrawConnectionLines && rXSlot.m_aSeriesVector.size()==1 )
                         {
                             //detect whether we have a stacked chart or not:
                             StackingDirection eDirection = pSeries->getStackingDirection();
@@ -585,10 +570,10 @@ void BarChart::createShapes()
                     }
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
-                        getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
+                        getSeriesGroupShape(pSeries, xSeriesTarget) );
 
                     //collect data point information (logic coordinates, style ):
-                    double fUnscaledLogicX = (*aSeriesIter)->getXValue( nPointIndex );
+                    double fUnscaledLogicX = pSeries->getXValue( nPointIndex );
                     fUnscaledLogicX = DateHelper::RasterizeDateValue( fUnscaledLogicX, m_aNullDate, m_nTimeResolution );
                     if(fUnscaledLogicX<pPosHelper->getLogicMinX())
                         continue;//point not visible
@@ -598,7 +583,7 @@ void BarChart::createShapes()
                         continue;//point not visible
                     double fLogicX = pPosHelper->getScaledSlotPos( fUnscaledLogicX, fSlotX );
 
-                    double fLogicBarHeight = (*aSeriesIter)->getYValue( nPointIndex );
+                    double fLogicBarHeight = pSeries->getYValue( nPointIndex );
                     if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
                         continue;
 
@@ -634,7 +619,7 @@ void BarChart::createShapes()
     //              uno::Reference<drawing::XShape> xPointGroupShape_Shape =
     //                      uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
                     //as long as we do not iterate we do not need to create an additional group for each point
-                    uno::Reference< beans::XPropertySet > xDataPointProperties( (*aSeriesIter)->getPropertiesOfPoint( nPointIndex ) );
+                    uno::Reference< beans::XPropertySet > xDataPointProperties( pSeries->getPropertiesOfPoint( nPointIndex ) );
                     sal_Int32 nGeometry3D = DataPointGeometry3D::CUBOID;
                     if(m_nDimension==3) try
                     {
@@ -724,9 +709,9 @@ void BarChart::createShapes()
                             drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUnclippedUpperYValue,fLogicZ );
 
                             if( isValidPosition(aLeftUpperPoint) )
-                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aLeftUpperPoint );
+                                AddPointToPoly( pSeries->m_aPolyPolygonShape3D, aLeftUpperPoint );
                             if( isValidPosition(aRightUpperPoint) )
-                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aRightUpperPoint );
+                                AddPointToPoly( pSeries->m_aPolyPolygonShape3D, aRightUpperPoint );
                         }
 
                         if( bOnlyConnectionLinesForThisPoint )
@@ -813,14 +798,14 @@ void BarChart::createShapes()
                             //set name/classified ObjectID (CID)
                             ShapeFactory::setShapeName(xShape
                                 , ObjectIdentifier::createPointCID(
-                                    (*aSeriesIter)->getPointCID_Stub(),nPointIndex) );
+                                    pSeries->getPointCID_Stub(),nPointIndex) );
                         }
 
                         //create error bar
-                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nPointIndex, m_xLogicTarget, &fLogicX );
+                        createErrorBar_Y( aUnscaledLogicPosition, *pSeries, nPointIndex, m_xLogicTarget, &fLogicX );
 
                         //create data point label
-                        if( (**aSeriesIter).getDataPointLabelIfLabel(nPointIndex) )
+                        if( pSeries->getDataPointLabelIfLabel(nPointIndex) )
                         {
                             double fLogicSum = aLogicYSumMap[nAttachedAxisIndex];
 
@@ -849,29 +834,26 @@ void BarChart::createShapes()
                                     nOffset = 260;
                             }
                             createDataLabel(
-                                xTextTarget, **aSeriesIter, nPointIndex,
+                                xTextTarget, *pSeries, nPointIndex,
                                 fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset);
                         }
 
                     }//end iteration through partial points
 
                 }//next series in x slot (next y slot)
+                fSlotX+=1.0;
             }//next x slot
+            ++nZ;
         }//next z slot
     }//next category
     if( bDrawConnectionLines )
     {
-        std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
+        for( auto const& rZSlot : m_aZSlots )
         {
-            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
             BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
-            if( aXSlotIter != aXSlotEnd )
+            if( rZSlot.size() )
             {
-                sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
+                sal_Int32 nAttachedAxisIndex = rZSlot.front().getAttachedAxisIndexForFirstSeries();
                 //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
                 pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
@@ -880,16 +862,11 @@ void BarChart::createShapes()
             PlotterBase::m_pPosHelper = pPosHelper;
 
             //iterate through all x slots in this category
-            for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
+            for( auto const& rXSlot : rZSlot )
             {
-                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-
-                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
                 {
-                    VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
                         continue;
                     drawing::PolyPolygonShape3D* pSeriesPoly = &pSeries->m_aPolyPolygonShape3D;
@@ -906,7 +883,7 @@ void BarChart::createShapes()
                     pPosHelper->transformScaledLogicToScene( aPoly );
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
-                        getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
+                        getSeriesGroupShape(pSeries, xSeriesTarget) );
                     uno::Reference< drawing::XShape > xShape( m_pShapeFactory->createLine2D(
                         xSeriesGroupShape_Shapes, PolyToPointSequence( aPoly ) ) );
                     setMappedProperties( xShape, pSeries->getPropertiesOfSeries()

@@ -466,18 +466,14 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
         if (xSetInfo.is())
             aProperties = xSetInfo->getProperties();
 
-        if (aProperties.getLength())
+        for ( const Property& rProperty : aProperties )
         {
-            const Property* pProperties = aProperties.getConstArray();
-            for ( sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties )
+            if  (   ( ( rProperty.Attributes & PropertyAttribute::TRANSIENT) != 0 )
+                &&  ( ( rProperty.Attributes & PropertyAttribute::READONLY) == 0 )
+                )
             {
-                if  (   ( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
-                    &&  ( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
-                    )
-                {
-                    // found such a property
-                    aRememberProps.put( pProperties->Name, xSource->getPropertyValue( pProperties->Name ) );
-                }
+                // found such a property
+                aRememberProps.put( rProperty.Name, xSource->getPropertyValue( rProperty.Name ) );
             }
         }
     }

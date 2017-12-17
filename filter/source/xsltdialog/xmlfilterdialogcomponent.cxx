@@ -307,11 +307,10 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  )
 
 void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArguments )
 {
-    const Any* pArguments = aArguments.getConstArray();
-    for(sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)
+    for(const Any& rArgument : aArguments)
     {
         PropertyValue aProperty;
-        if(*pArguments >>= aProperty)
+        if(rArgument >>= aProperty)
         {
             if( aProperty.Name == "ParentWindow" )
             {
