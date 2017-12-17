@@ -34,28 +34,24 @@
 #include <vector>
 
 class SfxBaseController;
-
 typedef std::vector<SfxShell*> SfxShellArr_Impl;
-
 class SfxClipboardChangeListener;
-
-using SfxInPlaceClientList = std::vector<SfxInPlaceClient*>;
 
 struct SfxViewShell_Impl
 {
-    ::osl::Mutex                aMutex;
+    ::osl::Mutex aMutex;
     ::comphelper::OInterfaceContainerHelper2 aInterceptorContainer;
-    SfxShellArr_Impl            aArr;
-    Size                        aMargin;
-    bool                        m_bHasPrintOptions;
-    bool                        m_bIsShowView;
-    sal_uInt16                  m_nFamily;
+    SfxShellArr_Impl aArr;
+    Size aMargin;
+    bool m_bHasPrintOptions;
+    bool m_bIsShowView;
+    sal_uInt16 m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
     std::shared_ptr< vcl::PrinterController > m_xPrinterController;
 
-    mutable SfxInPlaceClientList* mpIPClientList;
+    mutable std::vector<SfxInPlaceClient*>* mpIPClients;
 
     LibreOfficeKitCallback m_pLibreOfficeKitViewCallback;
     void* m_pLibreOfficeKitViewData;
@@ -67,7 +63,7 @@ struct SfxViewShell_Impl
     explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags);
     ~SfxViewShell_Impl();
 
-    SfxInPlaceClientList* GetIPClientList_Impl( bool bCreate = true ) const;
+    std::vector< SfxInPlaceClient* >* GetIPClients_Impl(bool bCreate = true) const;
 };
 
 #endif

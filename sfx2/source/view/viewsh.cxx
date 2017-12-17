@@ -215,7 +215,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_bIsShowView(!(nFlags & SfxViewShellFlags::NO_SHOW))
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pController(nullptr)
-,   mpIPClientList(nullptr)
+,   mpIPClients(nullptr)
 ,   m_pLibreOfficeKitViewCallback(nullptr)
 ,   m_pLibreOfficeKitViewData(nullptr)
 ,   m_bTiledSearching(false)
@@ -224,14 +224,14 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 
 SfxViewShell_Impl::~SfxViewShell_Impl()
 {
-    DELETEZ(mpIPClientList);
+    DELETEZ(mpIPClients);
 }
 
-SfxInPlaceClientList* SfxViewShell_Impl::GetIPClientList_Impl( bool bCreate ) const
+std::vector< SfxInPlaceClient* > *SfxViewShell_Impl::GetIPClients_Impl( bool bCreate ) const
 {
-    if (!mpIPClientList && bCreate)
-        mpIPClientList = new SfxInPlaceClientList;
-    return mpIPClientList;
+    if (!mpIPClients && bCreate)
+        mpIPClients = new std::vector< SfxInPlaceClient* >;
+    return mpIPClients;
 }
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewShell,SfxShell)
@@ -351,18 +351,18 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
 
 void SfxViewShell::NewIPClient_Impl( SfxInPlaceClient *pIPClient )
 {
-    pImpl->GetIPClientList_Impl()->push_back(pIPClient);
+    pImpl->GetIPClients_Impl()->push_back(pIPClient);
 }
 
 void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient const *pIPClient )
 {
-    SfxInPlaceClientList* pClientList = pImpl->GetIPClientList_Impl();
+    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl();
 
-    for( SfxInPlaceClientList::iterator it = pClientList->begin(); it != pClientList->end(); ++it )
+    for(std::vector< SfxInPlaceClient* >::iterator it = pClients->begin(); it != pClients->end(); ++it)
     {
         if ( *it == pIPClient )
         {
-            pClientList->erase( it );
+            pClients->erase( it );
             break;
         }
     }
@@ -770,7 +770,7 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
     vcl::Window*             pObjParentWin
 )   const
 {
-    SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
+    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
     if ( !pClients )
         return nullptr;
 
@@ -795,7 +795,7 @@ SfxInPlaceClient* SfxViewShell::GetIPClient() const
 SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 {
     // this method is needed as long as SFX still manages the border space for ChildWindows (see SfxFrame::Resize)
-    SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
+    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
     if ( !pClients )
         return nullptr;
 
@@ -810,7 +810,7 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
-    SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
+    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
     if ( !pClients )
         return nullptr;
 
@@ -1575,7 +1575,7 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient const *pIP )
 {
 
-    SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
+    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
     if ( !pClients )
         return;
 
@@ -1589,7 +1589,7 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient const *pIP )
 
 void SfxViewShell::DisconnectAllClients()
 {
-    SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
+    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
     if ( !pClients )
         return;
 
@@ -1606,7 +1606,7 @@ void SfxViewShell::QueryObjAreaPixel( tools::Rectangle& ) const
 
 void SfxViewShell::VisAreaChanged()
 {
-    SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
+    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
     if ( !pClients )
         return;
 
