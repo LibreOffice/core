@@ -97,6 +97,7 @@
             <menu:menu menu:id=".uno:EditSelectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:TableSelectAll"/>
+                    <menu:menuitem menu:id=".uno:SelectTables"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:JumpToNextTableSel"/>
                     <menu:menuitem menu:id=".uno:JumpToPrevTableSel"/>
@@ -132,7 +133,6 @@
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
             <menu:menuitem menu:id=".uno:EditDoc"/>
         </menu:menupopup>
     </menu:menu>
@@ -171,7 +171,7 @@
             <menu:menuitem menu:id=".uno:SplitWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Sidebar"/>
-            <menu:menuitem menu:id=".uno:DesignerDialog"/>
+            <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuitem menu:id=".uno:FunctionBox"/>
@@ -240,7 +240,6 @@
                     <menu:menuitem menu:id=".uno:FlowChartShapes"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
             <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FunctionDialog"/>
@@ -249,6 +248,7 @@
             <menu:menuitem menu:id=".uno:DrawText"/>
             <menu:menuitem menu:id=".uno:InsertAnnotation"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
+            <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
             <menu:menuseparator/>
@@ -278,6 +278,7 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:InsertFormMenu">
                 <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:Label"/>
                     <menu:menuitem menu:id=".uno:Edit"/>
                     <menu:menuitem menu:id=".uno:CheckBox"/>
                     <menu:menuitem menu:id=".uno:RadioButton"/>
@@ -287,9 +288,6 @@
                     <menu:menuitem menu:id=".uno:Pushbutton"/>
                     <menu:menuitem menu:id=".uno:Imagebutton"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:Label"/>
-                    <menu:menuitem menu:id=".uno:SpinButton"/>
-                    <menu:menuitem menu:id=".uno:ImageControl"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:FormattedField"/>
                     <menu:menuitem menu:id=".uno:DateField"/>
@@ -298,10 +296,15 @@
                     <menu:menuitem menu:id=".uno:CurrencyField"/>
                     <menu:menuitem menu:id=".uno:PatternField"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:FileControl"/>
                     <menu:menuitem menu:id=".uno:GroupBox"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ImageControl"/>
+                    <menu:menuitem menu:id=".uno:FileControl"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:Grid"/>
                     <menu:menuitem menu:id=".uno:NavigationBar"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SpinButton"/>
                     <menu:menuitem menu:id=".uno:ScrollBar"/>
                 </menu:menupopup>
             </menu:menu>
@@ -449,12 +452,6 @@
                     <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:FormatFormMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ControlProperties"/>
-                    <menu:menuitem menu:id=".uno:FormProperties"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:RenameObject"/>
             <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
@@ -584,14 +581,17 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:Delete"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Move"/>
             <menu:menuitem menu:id=".uno:RenameTable"/>
             <menu:menuitem menu:id=".uno:Hide"/>
             <menu:menuitem menu:id=".uno:Show"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:JumpToPrevTable"/>
-            <menu:menuitem menu:id=".uno:JumpToNextTable"/>
-            <menu:menuitem menu:id=".uno:SelectTables"/>
+            <menu:menuitem menu:id=".uno:Move"/>
+            <menu:menu menu:id=".uno:NavigateMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:JumpToPrevTable"/>
+                    <menu:menuitem menu:id=".uno:JumpToNextTable"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetTabBgColor"/>
             <menu:menuitem menu:id=".uno:TableEvents"/>
@@ -715,6 +715,23 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ScenarioManager"/>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:ToolsFormsMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
+                    <menu:menuitem menu:id=".uno:UseWizards"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ControlProperties"/>
+                    <menu:menuitem menu:id=".uno:FormProperties"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ShowFmExplorer"/>
+                    <menu:menuitem menu:id=".uno:TabDialog"/>
+                    <menu:menuitem menu:id=".uno:AddField"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:OpenReadOnly"/>
+                    <menu:menuitem menu:id=".uno:AutoControlFocus"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShareDocument"/>
             <menu:menuitem menu:id=".uno:Protect"/>
