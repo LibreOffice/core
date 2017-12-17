@@ -589,18 +589,17 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         catch(Exception&) { }
 
         // collect the names of the additional settings
-        const PropertyValue* pAdditionalInfo = aAdditionalInfo.getConstArray();
         PropertyValueSet aInfos;
-        for (sal_Int32 i=0; i<aAdditionalInfo.getLength(); ++i, ++pAdditionalInfo)
+        for (const PropertyValue& rAdditionalInfo : aAdditionalInfo)
         {
-            if( pAdditionalInfo->Name == "JDBCDRV" )
+            if( rAdditionalInfo.Name == "JDBCDRV" )
             {   // compatibility
-                PropertyValue aCompatibility(*pAdditionalInfo);
+                PropertyValue aCompatibility(rAdditionalInfo);
                 aCompatibility.Name = "JavaDriverClass";
                 aInfos.insert(aCompatibility);
             }
             else
-                aInfos.insert(*pAdditionalInfo);
+                aInfos.insert(rAdditionalInfo);
         }
 
         // go through all known translations and check if we have such a setting

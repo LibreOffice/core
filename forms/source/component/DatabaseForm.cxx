@@ -645,16 +645,12 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 Reference<XControlContainer>  xControlContainer(rxSubmitButton->getContext(), UNO_QUERY);
                 if( !xControlContainer.is() ) break;
 
-                Sequence<Reference<XControl> > aControlSeq = xControlContainer->getControls();
-                Reference<XControl>  xControl;
-
                 // Find the right control
-                sal_Int32 i;
-                for( i=0; i<aControlSeq.getLength(); i++ )
+                bool bFound = false;
+                for( auto const& xControl : xControlContainer->getControls() )
                 {
-                    xControl = aControlSeq.getConstArray()[i];
                     Reference<XPropertySet>  xModel(xControl->getModel(), UNO_QUERY);
-                    if (xModel == xComponentSet)
+                    if ((bFound = xModel == xComponentSet))
                     {
                         Reference<XTextComponent>  xTextComponent(xControl, UNO_QUERY);
                         if( xTextComponent.is() )
@@ -663,7 +659,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     }
                 }
                 // Couldn't find control or it does not exist (edit in the grid)
-                if (i == aControlSeq.getLength())
+                if (!bFound)
                     xComponentSet->getPropertyValue( PROPERTY_TEXT ) >>= sText;
             }
             else
@@ -2410,17 +2406,15 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
     // Set TabIndex in the order of the sequence
-    const Reference<XControlModel>* pControls = rControls.getConstArray();
     sal_Int32 nCount = getCount();
-    sal_Int32 nNewCount = rControls.getLength();
 
     // HiddenControls and forms are not listed
-    if (nNewCount <= nCount)
+    if (rControls.getLength() <= nCount)
     {
         sal_Int16 nTabIndex = 1;
-        for (sal_Int32 i=0; i < nNewCount; ++i, ++pControls)
+        for (auto const& rControl : rControls)
         {
-            Reference<XFormComponent>  xComp(*pControls, UNO_QUERY);
+            Reference<XFormComponent> xComp(rControl, UNO_QUERY);
             if (xComp.is())
             {
                 // Find component in the list
@@ -2455,13 +2449,12 @@ void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >
 
     // The controls are grouped by adjusting their names to the name of the
     // first control of the sequence
-    const Reference<XControlModel>* pControls = _rGroup.getConstArray();
     Reference< XPropertySet > xSet;
     OUString sGroupName( Name );
 
-    for( sal_Int32 i=0; i<_rGroup.getLength(); ++i, ++pControls )
+    for( auto const& rControl : _rGroup )
     {
-        xSet.set(*pControls, css::uno::UNO_QUERY);
+        xSet.set(rControl, css::uno::UNO_QUERY);
         if ( !xSet.is() )
         {
             // can't throw an exception other than a RuntimeException (which would not be appropriate),

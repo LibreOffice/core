@@ -1218,12 +1218,9 @@ namespace accessibility
         ::comphelper::SequenceAsHashMap aPropHashMap( getDefaultAttributes( aPropertyNames ) );
 
         // ... and override them with the direct attributes from the specific position
-        uno::Sequence< beans::PropertyValue > aRunAttribs( getRunAttributes( nIndex, aPropertyNames ) );
-        sal_Int32 nRunAttribs = aRunAttribs.getLength();
-        const beans::PropertyValue *pRunAttrib = aRunAttribs.getConstArray();
-        for (sal_Int32 k = 0;  k < nRunAttribs;  ++k)
+        const uno::Sequence< beans::PropertyValue > aRunAttribs( getRunAttributes( nIndex, aPropertyNames ) );
+        for (auto const& rRunAttrib : aRunAttribs)
         {
-            const beans::PropertyValue &rRunAttrib = pRunAttrib[k];
             aPropHashMap[ rRunAttrib.Name ] = rRunAttrib.Value; //!! should not only be the value !!
         }
 
@@ -1234,16 +1231,13 @@ namespace accessibility
         // since SequenceAsHashMap ignores property handles and property state
         // we have to restore the property state here (property handles are
         // of no use to the accessibility API).
-        sal_Int32 nRes = aRes.getLength();
-        beans::PropertyValue *pRes = aRes.getArray();
-        for (sal_Int32 i = 0;  i < nRes;  ++i)
+        for (beans::PropertyValue & rRes : aRes)
         {
-            beans::PropertyValue &rRes = pRes[i];
             bool bIsDirectVal = false;
-            for (sal_Int32 k = 0;  k < nRunAttribs && !bIsDirectVal;  ++k)
+            for (auto const& rRunAttrib : aRunAttribs)
             {
-                if (rRes.Name == pRunAttrib[k].Name)
-                    bIsDirectVal = true;
+                if ((bIsDirectVal = rRes.Name == rRunAttrib.Name))
+                    break;
             }
             rRes.Handle = -1;
             rRes.State  = bIsDirectVal ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
@@ -1252,10 +1246,9 @@ namespace accessibility
         {
             _correctValues( aRes );
             // NumberingPrefix
-            nRes = aRes.getLength();
+            sal_Int32 nRes = aRes.getLength();
             aRes.realloc( nRes + 1 );
-            pRes = aRes.getArray();
-            beans::PropertyValue &rRes = pRes[nRes];
+            beans::PropertyValue &rRes = aRes[nRes];
             rRes.Name = "NumberingPrefix";
             OUString numStr;
             if (aBulletInfo.nType != SVX_NUM_CHAR_SPECIAL && aBulletInfo.nType != SVX_NUM_BITMAP)
@@ -1269,32 +1262,30 @@ namespace accessibility
             {
                 nRes = aRes.getLength();
                 aRes.realloc( nRes + 1 );
-                pRes = aRes.getArray();
-                beans::PropertyValue &rResField = pRes[nRes];
-                beans::PropertyValue aFieldType;
+                beans::PropertyValue &rResField = aRes[nRes];
                 rResField.Name = "FieldType";
                 rResField.Value <<= strFieldType.toAsciiLowerCase();
                 rResField.Handle = -1;
                 rResField.State = PropertyState_DIRECT_VALUE;
-        }
-        //sort property values
-        // build sorted index array
-        sal_Int32 nLength = aRes.getLength();
-        const beans::PropertyValue* pPairs = aRes.getConstArray();
-        std::unique_ptr<sal_Int32[]> pIndices(new sal_Int32[nLength]);
-        sal_Int32 i = 0;
-        for( i = 0; i < nLength; i++ )
-            pIndices[i] = i;
-        sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
-        // create sorted sequences according to index array
-        uno::Sequence<beans::PropertyValue> aNewValues( nLength );
-        beans::PropertyValue* pNewValues = aNewValues.getArray();
-        for( i = 0; i < nLength; i++ )
-        {
-            pNewValues[i] = pPairs[pIndices[i]];
-        }
+            }
+            //sort property values
+            // build sorted index array
+            sal_Int32 nLength = aRes.getLength();
+            const beans::PropertyValue* pPairs = aRes.getConstArray();
+            std::unique_ptr<sal_Int32[]> pIndices(new sal_Int32[nLength]);
+            sal_Int32 i = 0;
+            for( i = 0; i < nLength; i++ )
+                pIndices[i] = i;
+            sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
+            // create sorted sequences according to index array
+            uno::Sequence<beans::PropertyValue> aNewValues( nLength );
+            beans::PropertyValue* pNewValues = aNewValues.getArray();
+            for( i = 0; i < nLength; i++ )
+            {
+                pNewValues[i] = pPairs[pIndices[i]];
+            }
 
-        return aNewValues;
+            return aNewValues;
         }
         return aRes;
     }
@@ -2352,20 +2343,16 @@ namespace accessibility
             xPropSet->SetSelection( MakeSelection(nStartIndex, nEndIndex) );
 
             // convert from PropertyValue to Any
-            sal_Int32 i, nLength( aAttributeSet.getLength() );
-            const beans::PropertyValue* pPropArray = aAttributeSet.getConstArray();
-            for(i=0; i<nLength; ++i)
+            for(const beans::PropertyValue& rProp : aAttributeSet)
             {
                 try
                 {
-                    xPropSet->setPropertyValue(pPropArray->Name, pPropArray->Value);
+                    xPropSet->setPropertyValue(rProp.Name, rProp.Value);
                 }
                 catch (const uno::Exception&)
                 {
                     OSL_FAIL("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
                 }
-
-                ++pPropArray;
             }
 
             rCacheTF.QuickFormatDoc();
@@ -2410,21 +2397,18 @@ namespace accessibility
                         ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
         // build sequence of available properties to check
-        sal_Int32 nLenReqAttr = rRequestedAttributes.getLength();
         uno::Sequence< beans::Property > aProperties;
-        if (nLenReqAttr)
+        if (const sal_Int32 nLenReqAttr = rRequestedAttributes.getLength())
         {
-            const OUString *pRequestedAttributes = rRequestedAttributes.getConstArray();
-
             aProperties.realloc( nLenReqAttr );
             beans::Property *pProperties = aProperties.getArray();
             sal_Int32 nCurLen = 0;
-            for (sal_Int32 i = 0;  i < nLenReqAttr;  ++i)
+            for (const OUString& rRequestedAttribute : rRequestedAttributes)
             {
                 beans::Property aProp;
                 try
                 {
-                    aProp = xPropSetInfo->getPropertyByName( pRequestedAttributes[i] );
+                    aProp = xPropSetInfo->getPropertyByName( rRequestedAttribute );
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -2437,19 +2421,16 @@ namespace accessibility
         else
             aProperties = xPropSetInfo->getProperties();
 
-        sal_Int32 nLength = aProperties.getLength();
-        const beans::Property *pProperties = aProperties.getConstArray();
-
         // build resulting sequence
-        uno::Sequence< beans::PropertyValue > aOutSequence( nLength );
+        uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
         beans::PropertyValue* pOutSequence = aOutSequence.getArray();
         sal_Int32 nOutLen = 0;
-        for (sal_Int32 i = 0;  i < nLength;  ++i)
+        for (const beans::Property& rProperty : aProperties)
         {
             // calling implementation functions:
             // _getPropertyState and _getPropertyValue (see below) to provide
             // the proper paragraph number when retrieving paragraph attributes
-            PropertyState eState = xPropSet->_getPropertyState( pProperties->Name, mnParagraphIndex );
+            PropertyState eState = xPropSet->_getPropertyState( rProperty.Name, mnParagraphIndex );
             if ( eState == PropertyState_AMBIGUOUS_VALUE )
             {
                 OSL_FAIL( "ambiguous property value encountered" );
@@ -2460,15 +2441,14 @@ namespace accessibility
             // properties spanning the whole paragraph should be returned
             // and declared as default value
             {
-                pOutSequence->Name      = pProperties->Name;
-                pOutSequence->Handle    = pProperties->Handle;
-                pOutSequence->Value     = xPropSet->_getPropertyValue( pProperties->Name, mnParagraphIndex );
+                pOutSequence->Name      = rProperty.Name;
+                pOutSequence->Handle    = rProperty.Handle;
+                pOutSequence->Value     = xPropSet->_getPropertyValue( rProperty.Name, mnParagraphIndex );
                 pOutSequence->State     = PropertyState_DEFAULT_VALUE;
 
                 ++pOutSequence;
                 ++nOutLen;
             }
-            ++pProperties;
         }
         aOutSequence.realloc( nOutLen );
 
@@ -2503,21 +2483,18 @@ namespace accessibility
                                         ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
         // build sequence of available properties to check
-        sal_Int32 nLenReqAttr = rRequestedAttributes.getLength();
         uno::Sequence< beans::Property > aProperties;
-        if (nLenReqAttr)
+        if (const sal_Int32 nLenReqAttr = rRequestedAttributes.getLength())
         {
-            const OUString *pRequestedAttributes = rRequestedAttributes.getConstArray();
-
             aProperties.realloc( nLenReqAttr );
             beans::Property *pProperties = aProperties.getArray();
             sal_Int32 nCurLen = 0;
-            for (sal_Int32 i = 0;  i < nLenReqAttr;  ++i)
+            for (const OUString& rRequestedAttribute : rRequestedAttributes)
             {
                 beans::Property aProp;
                 try
                 {
-                    aProp = xPropSetInfo->getPropertyByName( pRequestedAttributes[i] );
+                    aProp = xPropSetInfo->getPropertyByName( rRequestedAttribute );
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -2530,28 +2507,24 @@ namespace accessibility
         else
             aProperties = xPropSetInfo->getProperties();
 
-        sal_Int32 nLength = aProperties.getLength();
-        const beans::Property *pProperties = aProperties.getConstArray();
-
         // build resulting sequence
-        uno::Sequence< beans::PropertyValue > aOutSequence( nLength );
+        uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
         beans::PropertyValue* pOutSequence = aOutSequence.getArray();
         sal_Int32 nOutLen = 0;
-        for (sal_Int32 i = 0;  i < nLength;  ++i)
+        for (const beans::Property& rProperty : aProperties)
         {
             // calling 'regular' functions that will operate on the selection
-            PropertyState eState = xPropSet->getPropertyState( pProperties->Name );
+            PropertyState eState = xPropSet->getPropertyState( rProperty.Name );
             if (eState == PropertyState_DIRECT_VALUE)
             {
-                pOutSequence->Name      = pProperties->Name;
-                pOutSequence->Handle    = pProperties->Handle;
-                pOutSequence->Value     = xPropSet->getPropertyValue( pProperties->Name );
+                pOutSequence->Name      = rProperty.Name;
+                pOutSequence->Handle    = rProperty.Handle;
+                pOutSequence->Value     = xPropSet->getPropertyValue( rProperty.Name );
                 pOutSequence->State     = eState;
 
                 ++pOutSequence;
                 ++nOutLen;
             }
-            ++pProperties;
         }
         aOutSequence.realloc( nOutLen );
 

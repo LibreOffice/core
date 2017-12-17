@@ -131,12 +131,10 @@ namespace param
     OUString ParameterWrapper::impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const
     {
         Reference< XPropertySetInfo >  xInfo = const_cast<ParameterWrapper*>( this )->getPropertySetInfo();
-        Sequence< Property > aProperties = xInfo->getProperties();
-        const Property* pProperties = aProperties.getConstArray();
-        for ( sal_Int32 i = 0; i < aProperties.getLength(); ++i, ++pProperties )
+        for ( const Property& rProperty : xInfo->getProperties() )
         {
-            if ( pProperties->Handle == _nHandle )
-                return pProperties->Name;
+            if ( rProperty.Handle == _nHandle )
+                return rProperty.Name;
         }
 
         OSL_FAIL( "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );

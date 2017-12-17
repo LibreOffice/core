@@ -326,35 +326,36 @@ void XMLFilterTestDialog::onExportBrowse()
                     continue;
 
                 OUString aInterfaceName;
-                PropertyValue* pValues = aValues.getArray();
                 OUString aType, aService;
                 sal_Int32 nFlags( 0 );
 
                 int nFound = 0;
 
-                for( sal_Int32  nValue = 0; (nValue < aValues.getLength()) && (nFound != 15); nValue++, pValues++ )
+                for( const PropertyValue& rValue : aValues )
                 {
-                    if ( pValues->Name == "Type" )
+                    if ( rValue.Name == "Type" )
                     {
-                        pValues->Value >>= aType;
+                        rValue.Value >>= aType;
                         nFound |= 1;
                     }
-                    else if ( pValues->Name == "DocumentService" )
+                    else if ( rValue.Name == "DocumentService" )
                     {
-                        pValues->Value >>= aService;
+                        rValue.Value >>= aService;
                         nFound |= 2;
                     }
-                    else if ( pValues->Name == "Flags" )
+                    else if ( rValue.Name == "Flags" )
                     {
-                        pValues->Value >>= nFlags;
+                        rValue.Value >>= nFlags;
                         nFound |= 4;
                     }
-                    if ( pValues->Name == "UIName" )
+                    else if ( rValue.Name == "UIName" )
                     {
-                        pValues->Value >>= aInterfaceName;
+                        rValue.Value >>= aInterfaceName;
                         nFound |= 8;
                     }
 
+                    if (nFound == 15)
+                        break;
                 }
 
                 if( (nFound == 15) && (!aType.isEmpty() && aService == m_pFilterInfo->maDocumentService) )

@@ -170,26 +170,23 @@ void OQuery::rebuildColumns()
                 throw RuntimeException();
         }
 
-        Sequence< OUString> aNames = xColumns->getElementNames();
-        const OUString* pIter = aNames.getConstArray();
-        const OUString* pEnd  = pIter + aNames.getLength();
-        for ( sal_Int32 i = 0;pIter != pEnd; ++pIter,++i)
+        for ( const OUString& rName : xColumns->getElementNames() )
         {
-            Reference<XPropertySet> xSource(xColumns->getByName( *pIter ),UNO_QUERY);
-            OUString sLabel = *pIter;
-            if ( xColumnDefinitions.is() && xColumnDefinitions->hasByName(*pIter) )
+            Reference<XPropertySet> xSource(xColumns->getByName( rName ),UNO_QUERY);
+            OUString sLabel = rName;
+            if ( xColumnDefinitions.is() && xColumnDefinitions->hasByName(rName) )
             {
-                Reference<XPropertySet> xCommandColumn(xColumnDefinitions->getByName( *pIter ),UNO_QUERY);
+                Reference<XPropertySet> xCommandColumn(xColumnDefinitions->getByName( rName ),UNO_QUERY);
                 xCommandColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             }
             OQueryColumn* pColumn = new OQueryColumn( xSource, m_xConnection, sLabel);
             Reference< XChild > xChild( *pColumn, UNO_QUERY_THROW );
             xChild->setParent( *this );
 
-            implAppendColumn( *pIter, pColumn );
+            implAppendColumn( rName, pColumn );
             Reference< XPropertySet > xDest( *pColumn, UNO_QUERY_THROW );
             if ( m_pColumnMediator.is() )
-                m_pColumnMediator->notifyElementCreated( *pIter, xDest );
+                m_pColumnMediator->notifyElementCreated( rName, xDest );
         }
     }
     catch( const SQLContext& e )

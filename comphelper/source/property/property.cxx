@@ -71,20 +71,19 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
     Reference< XPropertySetInfo > xDestProps = _rxDest->getPropertySetInfo();
 
     Sequence< Property > aSourceProps = xSourceProps->getProperties();
-    const Property* pSourceProps = aSourceProps.getConstArray();
     Property aDestProp;
-    for (sal_Int32 i=0; i<aSourceProps.getLength(); ++i, ++pSourceProps)
+    for (const Property& rSourceProp : aSourceProps)
     {
-        if ( xDestProps->hasPropertyByName(pSourceProps->Name) )
+        if ( xDestProps->hasPropertyByName(rSourceProp.Name) )
         {
             try
             {
-                aDestProp = xDestProps->getPropertyByName(pSourceProps->Name);
+                aDestProp = xDestProps->getPropertyByName(rSourceProp.Name);
                 if (0 == (aDestProp.Attributes & PropertyAttribute::READONLY) )
                 {
-                    const Any aSourceValue = _rxSource->getPropertyValue(pSourceProps->Name);
+                    const Any aSourceValue = _rxSource->getPropertyValue(rSourceProp.Name);
                     if ( 0 != (aDestProp.Attributes & PropertyAttribute::MAYBEVOID) || aSourceValue.hasValue() )
-                        _rxDest->setPropertyValue(pSourceProps->Name, aSourceValue);
+                        _rxDest->setPropertyValue(rSourceProp.Name, aSourceValue);
                 }
             }
             catch (Exception&)
@@ -92,7 +91,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 #if OSL_DEBUG_LEVEL > 0
                 OUStringBuffer aBuffer;
                 aBuffer.append( "::comphelper::copyProperties: could not copy property '" );
-                aBuffer.append( pSourceProps->Name );
+                aBuffer.append(rSourceProp.Name );
                 aBuffer.append( "' to the destination set (a '" );
 
                 Reference< XServiceInfo > xSI( _rxDest, UNO_QUERY );

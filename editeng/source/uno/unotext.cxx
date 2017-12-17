@@ -1042,43 +1042,32 @@ uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextRangeBase::getPropertyS
 
 uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(const uno::Sequence< OUString >& PropertyName, sal_Int32 nPara /* = -1 */)
 {
-    const sal_Int32 nCount = PropertyName.getLength();
-    const OUString* pNames = PropertyName.getConstArray();
-
-    uno::Sequence< beans::PropertyState > aRet( nCount );
-    beans::PropertyState* pState = aRet.getArray();
+    uno::Sequence< beans::PropertyState > aRet( PropertyName.getLength() );
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
-        SfxItemSet* pSet = nullptr;
+        std::unique_ptr<SfxItemSet> pSet;
         if( nPara != -1 )
         {
-            pSet = new SfxItemSet( pForwarder->GetParaAttribs( nPara ) );
+            pSet.reset(new SfxItemSet( pForwarder->GetParaAttribs( nPara ) ));
         }
         else
         {
             ESelection aSel( GetSelection() );
             CheckSelection( aSel, pForwarder );
-            pSet = new SfxItemSet( pForwarder->GetAttribs( aSel, EditEngineAttribs::OnlyHard ) );
+            pSet.reset(new SfxItemSet( pForwarder->GetAttribs( aSel, EditEngineAttribs::OnlyHard ) ));
         }
 
-        bool bUnknownPropertyFound = false;
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        beans::PropertyState* pState = aRet.getArray();
+        for( const OUString& rName : PropertyName )
         {
-            const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( *pNames++ );
-            if( nullptr == pMap )
+            const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( rName );
+            if( !_getOnePropertyStates(pSet.get(), pMap, *pState++) )
             {
-                bUnknownPropertyFound = true;
-                break;
+                throw beans::UnknownPropertyException();
             }
-            bUnknownPropertyFound = !_getOnePropertyStates(pSet, pMap, *pState++);
         }
-
-        delete pSet;
-
-        if( bUnknownPropertyFound )
-            throw beans::UnknownPropertyException();
     }
 
     return aRet;
@@ -1302,22 +1291,20 @@ void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault()
 
 void SAL_CALL SvxUnoTextRangeBase::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
 {
-    sal_Int32 nCount = aPropertyNames.getLength();
-    for( const OUString* pName = aPropertyNames.getConstArray(); nCount; pName++, nCount-- )
+    for( const OUString& rName : aPropertyNames )
     {
-        setPropertyToDefault( *pName );
+        setPropertyToDefault( rName );
     }
 }
 
 uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
 {
-    sal_Int32 nCount = aPropertyNames.getLength();
-    uno::Sequence< uno::Any > ret( nCount );
+    uno::Sequence< uno::Any > ret( aPropertyNames.getLength() );
     uno::Any* pDefaults = ret.getArray();
 
-    for( const OUString* pName = aPropertyNames.getConstArray(); nCount; pName++, nCount--, pDefaults++ )
+    for( const OUString& rName : aPropertyNames )
     {
-        *pDefaults = getPropertyDefault( *pName );
+        *pDefaults++ = getPropertyDefault( rName );
     }
 
     return ret;
@@ -2004,13 +1991,11 @@ void SvxPropertyValuesToItemSet(
         SvxTextForwarder *pForwarder /*needed for WID_NUMLEVEL*/,
         sal_Int32 nPara /*needed for WID_NUMLEVEL*/)
 {
-    sal_Int32 nProps = rPropertyVaules.getLength();
-    const beans::PropertyValue *pProps = rPropertyVaules.getConstArray();
-    for (sal_Int32 i = 0;  i < nProps;  ++i)
+    for (const beans::PropertyValue& rProp : rPropertyVaules)
     {
-        const SfxItemPropertySimpleEntry *pEntry = pPropSet->getPropertyMap().getByName( pProps[i].Name );
+        const SfxItemPropertySimpleEntry *pEntry = pPropSet->getPropertyMap().getByName( rProp.Name );
         if (!pEntry)
-            throw beans::UnknownPropertyException( "Unknown property: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rProp.Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
         // Note: there is no need to take special care of the properties
         //      TextField (EE_FEATURE_FIELD) and
         //      TextPortionType (WID_PORTIONTYPE)
@@ -2018,13 +2003,13 @@ void SvxPropertyValuesToItemSet(
 
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
             // should be PropertyVetoException which is not yet defined for the new import API's functions
-            throw uno::RuntimeException("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
-            //throw PropertyVetoException ("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+            throw uno::RuntimeException("Property is read-only: " + rProp.Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
+            //throw PropertyVetoException ("Property is read-only: " + rProp.Name, static_cast < cppu::OWeakObject * > ( 0 ) );
 
         if (pEntry->nWID == WID_FONTDESC)
         {
             awt::FontDescriptor aDesc;
-            if (pProps[i].Value >>= aDesc)
+            if (rProp.Value >>= aDesc)
                 SvxUnoFontDescriptor::FillItemSet( aDesc, rItemSet );
         }
         else if (pEntry->nWID == WID_NUMLEVEL)
@@ -2032,7 +2017,7 @@ void SvxPropertyValuesToItemSet(
             if (pForwarder)
             {
                 sal_Int16 nLevel = -1;
-                pProps[i].Value >>= nLevel;
+                rProp.Value >>= nLevel;
 
                 // #101004# Call interface method instead of unsafe cast
                 if (!pForwarder->SetDepth( nPara, nLevel ))
@@ -2044,7 +2029,7 @@ void SvxPropertyValuesToItemSet(
             if( pForwarder )
             {
                 sal_Int16 nStartValue = -1;
-                if( !(pProps[i].Value >>= nStartValue) )
+                if( !(rProp.Value >>= nStartValue) )
                     throw lang::IllegalArgumentException();
 
                 pForwarder->SetNumberingStartValue( nPara, nStartValue );
@@ -2055,14 +2040,14 @@ void SvxPropertyValuesToItemSet(
             if( pForwarder )
             {
                 bool bParaIsNumberingRestart = false;
-                if( !(pProps[i].Value >>= bParaIsNumberingRestart) )
+                if( !(rProp.Value >>= bParaIsNumberingRestart) )
                     throw lang::IllegalArgumentException();
 
                 pForwarder->SetParaIsNumberingRestart( nPara, bParaIsNumberingRestart );
             }
         }
         else
-            pPropSet->setPropertyValue( pProps[i].Name, pProps[i].Value, rItemSet );
+            pPropSet->setPropertyValue( rProp.Name, rProp.Value, rItemSet );
     }
 }
 
@@ -2144,9 +2129,8 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
         xRet = pRange;
         pRange->SetSelection( aSel );
-        const beans::PropertyValue* pProps = rCharAndParaProps.getConstArray();
-        for( sal_Int32 nProp = 0; nProp < rCharAndParaProps.getLength(); ++nProp )
-            pRange->setPropertyValue( pProps[nProp].Name, pProps[nProp].Value );
+        for( const beans::PropertyValue& rProp : rCharAndParaProps )
+            pRange->setPropertyValue( rProp.Name, rProp.Value );
     }
     return xRet;
 }

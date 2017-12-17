@@ -132,39 +132,38 @@ void SbaExternalSourceBrowser::modified(const css::lang::EventObject& aEvent)
 
 void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, const Sequence< css::beans::PropertyValue>& aArgs)
 {
-    const css::beans::PropertyValue* pArguments = aArgs.getConstArray();
     if ( aURL.Complete == ".uno:FormSlots/AddGridColumn" )
     {
         // search the argument describing the column to create
         OUString sControlType;
         sal_Int32 nControlPos = -1;
         Sequence< css::beans::PropertyValue> aControlProps;
-        for ( sal_Int32 i = 0; i < aArgs.getLength(); ++i, ++pArguments )
+        for ( const css::beans::PropertyValue& rArgument : aArgs )
         {
-            if ( pArguments->Name == "ColumnType" )
+            if ( rArgument.Name == "ColumnType" )
             {
-                auto s = o3tl::tryAccess<OUString>(pArguments->Value);
+                auto s = o3tl::tryAccess<OUString>(rArgument.Value);
                 OSL_ENSURE(s, "invalid type for argument \"ColumnType\" !");
                 if (s)
                     sControlType = *s;
             }
-            else if ( pArguments->Name == "ColumnPosition" )
+            else if ( rArgument.Name == "ColumnPosition" )
             {
-                auto n = o3tl::tryAccess<sal_Int16>(pArguments->Value);
+                auto n = o3tl::tryAccess<sal_Int16>(rArgument.Value);
                 OSL_ENSURE(n, "invalid type for argument \"ColumnPosition\" !");
                 if (n)
                     nControlPos = *n;
             }
-            else if ( pArguments->Name == "ColumnProperties" )
+            else if ( rArgument.Name == "ColumnProperties" )
             {
                 auto s = o3tl::tryAccess<Sequence<css::beans::PropertyValue>>(
-                    pArguments->Value);
+                    rArgument.Value);
                 OSL_ENSURE(s, "invalid type for argument \"ColumnProperties\" !");
                 if (s)
                     aControlProps = *s;
             }
             else
-                SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (" << pArguments->Name << ") !");
+                SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (" << rArgument.Name << ") !");
         }
         if (sControlType.isEmpty())
         {
@@ -182,17 +181,16 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         // set its properties
         if (xNewColProperties.is())
         {
-            const css::beans::PropertyValue* pControlProps = aControlProps.getConstArray();
-            for (sal_Int32 i=0; i<aControlProps.getLength(); ++i, ++pControlProps)
+            for (const css::beans::PropertyValue& rControlProp : aControlProps)
             {
                 try
                 {
-                    if (xNewColProperties->hasPropertyByName(pControlProps->Name))
-                        xNewCol->setPropertyValue(pControlProps->Name, pControlProps->Value);
+                    if (xNewColProperties->hasPropertyByName(rControlProp.Name))
+                        xNewCol->setPropertyValue(rControlProp.Name, rControlProp.Value);
                 }
                 catch (const Exception&)
                 {
-                    SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch : could not set a column property (" << pControlProps->Name << ")!");
+                    SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch : could not set a column property (" << rControlProp.Name << ")!");
                 }
             }
         }
@@ -219,11 +217,11 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
 
         Reference< XRowSet >  xMasterForm;
         // search the arguments for the master form
-        for (sal_Int32 i=0; i<aArgs.getLength(); ++i, ++pArguments)
+        for (const css::beans::PropertyValue& rArgument : aArgs)
         {
-            if ( (pArguments->Name == "MasterForm") && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE) )
+            if ( (rArgument.Name == "MasterForm") && (rArgument.Value.getValueTypeClass() == TypeClass_INTERFACE) )
             {
-                xMasterForm.set(pArguments->Value, UNO_QUERY);
+                xMasterForm.set(rArgument.Value, UNO_QUERY);
                 break;
             }
         }

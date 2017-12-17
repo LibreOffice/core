@@ -195,9 +195,8 @@ TokenLabelInfo::TokenLabelInfo()
     // Token accepted as label by VBA
     static const SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
                                COMPARE, COMPATIBLE, DEFERR, ERROR_, BASIC_EXPLICIT, LIB, LINE, LPRINT, NAME,
-                               TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
-    SbiToken eTok;
-    for( const SbiToken* pTok = eLabelToken ; (eTok = *pTok) != NIL ; ++pTok )
+                               TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT };
+    for( SbiToken eTok : eLabelToken )
     {
         m_pTokenCanBeLabelTab[eTok] = true;
     }

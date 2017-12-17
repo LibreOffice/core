@@ -1166,8 +1166,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         }
 
         ++nRowCount;
-        ODatabaseExport::TPositions::const_iterator aPosIter = aColumnPositions.begin();
-        ODatabaseExport::TPositions::const_iterator aPosEnd = aColumnPositions.end();
 
         aCopyEvent.Error.clear();
         try
@@ -1180,9 +1178,9 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             sal_Int32 nSourceColumn( 1 );
             ValueTransfer aTransfer( nSourceColumn, nDestColumn, aSourceColTypes, xRow, xStatementParams );
 
-            for ( ; aPosIter != aPosEnd; ++aPosIter )
+            for ( auto const& rColumnPos : aColumnPositions )
             {
-                nDestColumn = aPosIter->first;
+                nDestColumn = rColumnPos.first;
                 if ( nDestColumn == COLUMN_POSITION_NOT_FOUND )
                 {
                     ++nSourceColumn;
@@ -1432,9 +1430,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
     const OUString sQuote = xDestMetaData->getIdentifierQuoteString();
     OUStringBuffer sColumns;
     // 1st check if the columns matching
-    const OCopyTableWizard& rWizard             = impl_getDialog_throw();
-    ODatabaseExport::TPositions const & rColumnPositions = rWizard.GetColumnPositions();
-    for ( auto const & rColumnPositionPair : rColumnPositions )
+    for ( auto const & rColumnPositionPair : impl_getDialog_throw().GetColumnPositions() )
     {
         if ( COLUMN_POSITION_NOT_FOUND != rColumnPositionPair.second )
         {

@@ -284,16 +284,11 @@ void CommandEnvironmentImpl::handle(
     }
 
     // select:
-    Sequence< Reference<task::XInteractionContinuation> > conts(
-        xRequest->getContinuations() );
-    Reference<task::XInteractionContinuation> const * pConts =
-        conts.getConstArray();
-    sal_Int32 len = conts.getLength();
-    for ( sal_Int32 pos = 0; pos < len; ++pos )
+    for ( auto const& rCont : xRequest->getContinuations() )
     {
         if (approve) {
             Reference<task::XInteractionApprove> xInteractionApprove(
-                pConts[ pos ], UNO_QUERY );
+                rCont, UNO_QUERY );
             if (xInteractionApprove.is()) {
                 xInteractionApprove->select();
                 break;
@@ -301,7 +296,7 @@ void CommandEnvironmentImpl::handle(
         }
         else if (abort) {
             Reference<task::XInteractionAbort> xInteractionAbort(
-                pConts[ pos ], UNO_QUERY );
+                rCont, UNO_QUERY );
             if (xInteractionAbort.is()) {
                 xInteractionAbort->select();
                 break;
