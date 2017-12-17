@@ -3178,6 +3178,8 @@ void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
     // now delete the attribute
     HTMLAttr *pNext = pAttr->GetNext();
     HTMLAttr *pPrev = pAttr->GetPrev();
+    //hold ref to xAttrTab until end of scope to ensure *ppHead validity
+    std::shared_ptr<HTMLAttrTable> xAttrTab(pAttr->xAttrTab);
     delete pAttr;
 
     if( pPrev )
