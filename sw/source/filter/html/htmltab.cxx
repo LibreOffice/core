@@ -3952,7 +3952,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
         // If there was an adjustment set for the cell, we need to close it
         std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
-        EndContext(xCntxt.get());
+        if (xCntxt)
+            EndContext(xCntxt.get());
     }
     else
     {
