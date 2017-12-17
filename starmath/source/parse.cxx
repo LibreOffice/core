@@ -964,9 +964,9 @@ SmTableNode *SmParser::DoTable()
         aLineArray.emplace_back(std::unique_ptr<SmNode>(DoLine()));
     }
     assert(m_aCurToken.eType == TEND);
-    std::unique_ptr<SmTableNode> pSNode(new SmTableNode(m_aCurToken));
-    pSNode->SetSubNodes(buildNodeArray(aLineArray));
-    return pSNode.release();
+    std::unique_ptr<SmTableNode> xSNode(new SmTableNode(m_aCurToken));
+    xSNode->SetSubNodes(buildNodeArray(aLineArray));
+    return xSNode.release();
 }
 
 SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
@@ -976,11 +976,11 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    std::unique_ptr<SmStructureNode> pSNode;
+    std::unique_ptr<SmStructureNode> xSNode;
 
     if (TokenInGroup(TG::Align))
     {
-        pSNode.reset(new SmAlignNode(m_aCurToken));
+        xSNode.reset(new SmAlignNode(m_aCurToken));
 
         NextToken();
 
@@ -991,10 +991,10 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
 
     std::unique_ptr<SmNode> pNode(DoExpression(bUseExtraSpaces));
 
-    if (pSNode)
+    if (xSNode)
     {
-        pSNode->SetSubNode(0, pNode.release());
-        return pSNode.release();
+        xSNode->SetSubNode(0, pNode.release());
+        return xSNode.release();
     }
     return pNode.release();
 }
@@ -1027,9 +1027,9 @@ SmLineNode *SmParser::DoLine()
         ExpressionArray.emplace_back(std::unique_ptr<SmNode>(new SmExpressionNode(aTok)));
     }
 
-    auto pSNode = o3tl::make_unique<SmLineNode>(m_aCurToken);
-    pSNode->SetSubNodes(buildNodeArray(ExpressionArray));
-    return pSNode.release();
+    auto xSNode = o3tl::make_unique<SmLineNode>(m_aCurToken);
+    xSNode->SetSubNodes(buildNodeArray(ExpressionArray));
+    return xSNode.release();
 }
 
 SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
@@ -1215,12 +1215,12 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         nIndex++;
         assert(1 <= nIndex  &&  nIndex <= SUBSUP_NUM_ENTRIES);
 
-        std::unique_ptr<SmNode> pENode;
+        std::unique_ptr<SmNode> xENode;
         if (aSubNodes[nIndex]) // if already occupied at earlier iteration
         {
             // forget the earlier one, remember an error instead
             aSubNodes[nIndex].reset();
-            pENode.reset(DoError(SmParseError::DoubleSubsupscript)); // this also skips current token.
+            xENode.reset(DoError(SmParseError::DoubleSubsupscript)); // this also skips current token.
         }
         else
         {
@@ -1231,16 +1231,16 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         // get sub-/supscript node
         // (even when we saw a double-sub/supscript error in the above
         // in order to minimize mess and continue parsing.)
-        std::unique_ptr<SmNode> pSNode;
+        std::unique_ptr<SmNode> xSNode;
         if (eType == TFROM  ||  eType == TTO)
         {
             // parse limits in old 4.0 and 5.0 style
-            pSNode.reset(DoRelation());
+            xSNode.reset(DoRelation());
         }
         else
-            pSNode.reset(DoTerm(true));
+            xSNode.reset(DoTerm(true));
 
-        aSubNodes[nIndex] = std::move(pENode ? pENode : pSNode);
+        aSubNodes[nIndex] = std::move(xENode ? xENode : xSNode);
     }
 
     pNode->SetSubNodes(buildNodeArray(aSubNodes));
@@ -1327,11 +1327,11 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
             // allow for empty group
             if (m_aCurToken.eType == TRGROUP)
             {
-                std::unique_ptr<SmStructureNode> pSNode(new SmExpressionNode(m_aCurToken));
-                pSNode->SetSubNodes(nullptr, nullptr);
+                std::unique_ptr<SmStructureNode> xSNode(new SmExpressionNode(m_aCurToken));
+                xSNode->SetSubNodes(nullptr, nullptr);
 
                 NextToken();
-                return pSNode.release();
+                return xSNode.release();
             }
 
             std::unique_ptr<SmNode> pNode(DoAlign(!bNoSpace));
@@ -1339,10 +1339,10 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 NextToken();
                 return pNode.release();
             }
-            auto pSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
+            auto xSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
             std::unique_ptr<SmNode> xError(DoError(SmParseError::RgroupExpected));
-            pSNode->SetSubNodes(pNode.release(), xError.release());
-            return pSNode.release();
+            xSNode->SetSubNodes(pNode.release(), xError.release());
+            return xSNode.release();
         }
 
         case TLEFT :
@@ -1376,7 +1376,7 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 NextToken();
                 return pTextNode.release();
             }
-            SmNodeArray aNodes;
+            std::vector<std::unique_ptr<SmNode>> aNodes;
             // Some people want to be able to write "x_2n" for "x_{2n}"
             // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
             // The tokenizer skips whitespaces so we need some additional
@@ -1402,11 +1402,11 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                     moveToNextToken = false;
                     break;
                 }
-                aNodes.push_back(new SmTextNode(m_aCurToken,
+                aNodes.emplace_back(std::unique_ptr<SmNode>(new SmTextNode(m_aCurToken,
                                                 m_aCurToken.eType ==
                                                 TNUMBER ?
                                                 FNT_NUMBER :
-                                                FNT_VARIABLE));
+                                                FNT_VARIABLE)));
             }
             if (moveToNextToken)
                 NextToken();
@@ -1414,10 +1414,10 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 return pTextNode.release();
             // We have several concatenated identifiers and numbers.
             // Let's group them into one SmExpressionNode.
-            aNodes.insert(aNodes.begin(), pTextNode.release());
-            std::unique_ptr<SmExpressionNode> pNode(new SmExpressionNode(SmToken()));
-            pNode->SetSubNodes(aNodes);
-            return pNode.release();
+            aNodes.insert(aNodes.begin(), std::move(pTextNode));
+            std::unique_ptr<SmExpressionNode> xNode(new SmExpressionNode(SmToken()));
+            xNode->SetSubNodes(buildNodeArray(aNodes));
+            return xNode.release();
         }
         case TLEFTARROW :
         case TRIGHTARROW :
@@ -1564,7 +1564,7 @@ SmOperNode *SmParser::DoOperator()
 
     assert(TokenInGroup(TG::Oper));
 
-    auto pSNode = o3tl::make_unique<SmOperNode>(m_aCurToken);
+    auto xSNode = o3tl::make_unique<SmOperNode>(m_aCurToken);
 
     // get operator
     std::unique_ptr<SmNode> xOperator(DoOper());
@@ -1575,8 +1575,8 @@ SmOperNode *SmParser::DoOperator()
     // get argument
     std::unique_ptr<SmNode> xArg(DoPower());
 
-    pSNode->SetSubNodes(xOperator.release(), xArg.release());
-    return pSNode.release();
+    xSNode->SetSubNodes(xOperator.release(), xArg.release());
+    return xSNode.release();
 }
 
 SmNode *SmParser::DoOper()
@@ -1649,7 +1649,7 @@ SmStructureNode *SmParser::DoUnOper()
     SmTokenType  eType      = m_aCurToken.eType;
     bool         bIsPostfix = eType == TFACT;
 
-    std::unique_ptr<SmStructureNode> pSNode;
+    std::unique_ptr<SmStructureNode> xSNode;
     std::unique_ptr<SmNode> xOper;
     std::unique_ptr<SmNode> xExtra;
     std::unique_ptr<SmNode> xArg;
@@ -1692,8 +1692,8 @@ SmStructureNode *SmParser::DoUnOper()
 
     if (eType == TABS)
     {
-        pSNode.reset(new SmBraceNode(aNodeToken));
-        pSNode->SetScaleMode(SmScaleMode::Height);
+        xSNode.reset(new SmBraceNode(aNodeToken));
+        xSNode->SetScaleMode(SmScaleMode::Height);
 
         // build nodes for left & right lines
         // (text, group, level of the used token are of no interest here)
@@ -1706,24 +1706,26 @@ SmStructureNode *SmParser::DoUnOper()
         aNodeToken.cMathChar = MS_VERTLINE;
         std::unique_ptr<SmNode> xRight(new SmMathSymbolNode(aNodeToken));
 
-        pSNode->SetSubNodes(xLeft.release(), xArg.release(), xRight.release());
+        xSNode->SetSubNodes(xLeft.release(), xArg.release(), xRight.release());
     }
     else if (eType == TSQRT  ||  eType == TNROOT)
     {
-        pSNode.reset(new SmRootNode(aNodeToken));
+        xSNode.reset(new SmRootNode(aNodeToken));
         xOper.reset(new SmRootSymbolNode(aNodeToken));
-        pSNode->SetSubNodes(xExtra.release(), xOper.release(), xArg.release());
+        xSNode->SetSubNodes(xExtra.release(), xOper.release(), xArg.release());
     }
     else
     {
-        pSNode.reset(new SmUnHorNode(aNodeToken));
+        xSNode.reset(new SmUnHorNode(aNodeToken));
         if (bIsPostfix)
-            pSNode->SetSubNodes(xArg.release(), xOper.release());
+            xSNode->SetSubNodes(xArg.release(), xOper.release());
         else
+        {
             // prefix operator
-            pSNode->SetSubNodes(xOper.release(), xArg.release());
+            xSNode->SetSubNodes(xOper.release(), xArg.release());
+        }
     }
-    return pSNode.release();
+    return xSNode.release();
 }
 
 SmAttributNode *SmParser::DoAttribut()
@@ -1734,8 +1736,8 @@ SmAttributNode *SmParser::DoAttribut()
 
     assert(TokenInGroup(TG::Attribute));
 
-    auto pSNode = o3tl::make_unique<SmAttributNode>(m_aCurToken);
-    SmNode      *pAttr;
+    auto xSNode = o3tl::make_unique<SmAttributNode>(m_aCurToken);
+    std::unique_ptr<SmNode> xAttr;
     SmScaleMode  eScaleMode = SmScaleMode::None;
 
     // get appropriate node for the attribute itself
@@ -1743,26 +1745,26 @@ SmAttributNode *SmParser::DoAttribut()
     {   case TUNDERLINE :
         case TOVERLINE :
         case TOVERSTRIKE :
-            pAttr = new SmRectangleNode(m_aCurToken);
+            xAttr.reset(new SmRectangleNode(m_aCurToken));
             eScaleMode = SmScaleMode::Width;
             break;
 
         case TWIDEVEC :
         case TWIDEHAT :
         case TWIDETILDE :
-            pAttr = new SmMathSymbolNode(m_aCurToken);
+            xAttr.reset(new SmMathSymbolNode(m_aCurToken));
             eScaleMode = SmScaleMode::Width;
             break;
 
         default :
-            pAttr = new SmMathSymbolNode(m_aCurToken);
+            xAttr.reset(new SmMathSymbolNode(m_aCurToken));
     }
 
     NextToken();
 
-    pSNode->SetSubNodes(pAttr, nullptr); // the body will be filled later
-    pSNode->SetScaleMode(eScaleMode);
-    return pSNode.release();
+    xSNode->SetSubNodes(xAttr.release(), nullptr); // the body will be filled later
+    xSNode->SetScaleMode(eScaleMode);
+    return xSNode.release();
 }
 
 SmStructureNode *SmParser::DoFontAttribut()
@@ -1946,7 +1948,7 @@ SmStructureNode *SmParser::DoBrace()
 
     assert(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TG::LBrace));
 
-    std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(m_aCurToken));
+    std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
     std::unique_ptr<SmNode> pBody, pLeft, pRight;
     SmScaleMode   eScaleMode = SmScaleMode::None;
     SmParseError  eError     = SmParseError::None;
@@ -2019,9 +2021,9 @@ SmStructureNode *SmParser::DoBrace()
     {
         assert(pLeft);
         assert(pRight);
-        pSNode->SetSubNodes(pLeft.release(), pBody.release(), pRight.release());
-        pSNode->SetScaleMode(eScaleMode);
-        return pSNode.release();
+        xSNode->SetSubNodes(pLeft.release(), pBody.release(), pRight.release());
+        xSNode->SetScaleMode(eScaleMode);
+        return xSNode.release();
     }
     return DoError(eError);
 }
@@ -2125,14 +2127,14 @@ SmTableNode *SmParser::DoBinom()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    auto pSNode = o3tl::make_unique<SmTableNode>(m_aCurToken);
+    auto xSNode = o3tl::make_unique<SmTableNode>(m_aCurToken);
 
     NextToken();
 
-    SmNode *pFirst = DoSum();
-    SmNode *pSecond = DoSum();
-    pSNode->SetSubNodes(pFirst, pSecond);
-    return pSNode.release();
+    std::unique_ptr<SmNode> xFirst(DoSum());
+    std::unique_ptr<SmNode> xSecond(DoSum());
+    xSNode->SetSubNodes(xFirst.release(), xSecond.release());
+    return xSNode.release();
 }
 
 SmStructureNode *SmParser::DoStack()
@@ -2141,25 +2143,25 @@ SmStructureNode *SmParser::DoStack()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
+    std::unique_ptr<SmStructureNode> xSNode(new SmTableNode(m_aCurToken));
     NextToken();
     if (m_aCurToken.eType != TLGROUP)
         return DoError(SmParseError::LgroupExpected);
-    SmNodeArray aExprArr;
+    std::vector<std::unique_ptr<SmNode>> aExprArr;
     do
     {
         NextToken();
-        aExprArr.push_back(DoAlign());
+        aExprArr.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
     }
     while (m_aCurToken.eType == TPOUND);
 
     if (m_aCurToken.eType == TRGROUP)
         NextToken();
     else
-        aExprArr.push_back(DoError(SmParseError::RgroupExpected));
+        aExprArr.emplace_back(std::unique_ptr<SmNode>(DoError(SmParseError::RgroupExpected)));
 
-    pSNode->SetSubNodes(aExprArr);
-    return pSNode.release();
+    xSNode->SetSubNodes(buildNodeArray(aExprArr));
+    return xSNode.release();
 }
 
 SmStructureNode *SmParser::DoMatrix()
@@ -2168,16 +2170,16 @@ SmStructureNode *SmParser::DoMatrix()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    std::unique_ptr<SmMatrixNode> pMNode(new SmMatrixNode(m_aCurToken));
+    std::unique_ptr<SmMatrixNode> xMNode(new SmMatrixNode(m_aCurToken));
     NextToken();
     if (m_aCurToken.eType != TLGROUP)
         return DoError(SmParseError::LgroupExpected);
 
-    SmNodeArray aExprArr;
+    std::vector<std::unique_ptr<SmNode>> aExprArr;
     do
     {
         NextToken();
-        aExprArr.push_back(DoAlign());
+        aExprArr.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
     }
     while (m_aCurToken.eType == TPOUND);
 
@@ -2188,15 +2190,15 @@ SmStructureNode *SmParser::DoMatrix()
         NextToken();
         for (size_t i = 0; i < nCol; i++)
         {
-            std::unique_ptr<SmNode> pNode(DoAlign());
+            std::unique_ptr<SmNode> xNode(DoAlign());
             if (i < (nCol - 1))
             {
                 if (m_aCurToken.eType == TPOUND)
                     NextToken();
                 else
-                    pNode.reset(DoError(SmParseError::PoundExpected));
+                    xNode.reset(DoError(SmParseError::PoundExpected));
             }
-            aExprArr.push_back(pNode.release());
+            aExprArr.emplace_back(std::move(xNode));
         }
         ++nRow;
     }
@@ -2205,21 +2207,18 @@ SmStructureNode *SmParser::DoMatrix()
         NextToken();
     else
     {
-        auto pENode = DoError(SmParseError::RgroupExpected);
+        std::unique_ptr<SmNode> xENode(DoError(SmParseError::RgroupExpected));
         if (aExprArr.empty())
             nRow = nCol = 1;
         else
-        {
-            delete aExprArr.back();
             aExprArr.pop_back();
-        }
-        aExprArr.push_back(pENode);
+        aExprArr.emplace_back(std::move(xENode));
     }
 
-    pMNode->SetSubNodes(aExprArr);
-    pMNode->SetRowCol(static_cast<sal_uInt16>(nRow),
+    xMNode->SetSubNodes(buildNodeArray(aExprArr));
+    xMNode->SetRowCol(static_cast<sal_uInt16>(nRow),
                       static_cast<sal_uInt16>(nCol));
-    return pMNode.release();
+    return xMNode.release();
 }
 
 SmSpecialNode *SmParser::DoSpecial()
@@ -2285,15 +2284,15 @@ SmExpressionNode *SmParser::DoError(SmParseError eError)
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    auto pSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
+    auto xSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
     SmErrorNode     *pErr   = new SmErrorNode(m_aCurToken);
-    pSNode->SetSubNodes(pErr, nullptr);
+    xSNode->SetSubNodes(pErr, nullptr);
 
-    AddError(eError, pSNode.get());
+    AddError(eError, xSNode.get());
 
     NextToken();
 
-    return pSNode.release();
+    return xSNode.release();
 }
 
 // end grammar
