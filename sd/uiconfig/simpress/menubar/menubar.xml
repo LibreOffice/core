@@ -62,13 +62,13 @@
             <menu:menuitem menu:id=".uno:Print"/>
             <menu:menuitem menu:id=".uno:PrinterSetup"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
             <menu:menu menu:id=".uno:SignaturesMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Signature"/>
                     <menu:menuitem menu:id=".uno:SignPDF"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
@@ -81,6 +81,7 @@
             <menu:menuitem menu:id=".uno:Cut"/>
             <menu:menuitem menu:id=".uno:Copy"/>
             <menu:menuitem menu:id=".uno:Paste"/>
+            <menu:menuitem menu:id=".uno:PasteUnformatted"/>
             <menu:menuitem menu:id=".uno:PasteSpecial"/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
@@ -98,7 +99,6 @@
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
             <menu:menuitem menu:id=".uno:EditDoc"/>
         </menu:menupopup>
     </menu:menu>
@@ -150,7 +150,7 @@
             <menu:menuitem menu:id=".uno:ModifyPage"/>
             <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
             <menu:menuitem menu:id=".uno:CustomAnimation"/>
-            <menu:menuitem menu:id=".uno:DesignerDialog"/>
+            <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
@@ -217,7 +217,6 @@
                     <menu:menuitem menu:id=".uno:FlowChartShapes"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
             <menu:menuitem menu:id=".uno:InsertTable"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CapturePoint"/>
@@ -225,6 +224,7 @@
             <menu:menuitem menu:id=".uno:Text"/>
             <menu:menuitem menu:id=".uno:InsertAnnotation"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
+            <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
             <menu:menuseparator/>
@@ -260,6 +260,7 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:InsertFormMenu">
                 <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:Label"/>
                     <menu:menuitem menu:id=".uno:Edit"/>
                     <menu:menuitem menu:id=".uno:CheckBox"/>
                     <menu:menuitem menu:id=".uno:RadioButton"/>
@@ -269,10 +270,6 @@
                     <menu:menuitem menu:id=".uno:Pushbutton"/>
                     <menu:menuitem menu:id=".uno:Imagebutton"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:Label"/>
-                    <menu:menuitem menu:id=".uno:SpinButton"/>
-                    <menu:menuitem menu:id=".uno:ImageControl"/>
-                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:FormattedField"/>
                     <menu:menuitem menu:id=".uno:DateField"/>
                     <menu:menuitem menu:id=".uno:TimeField"/>
@@ -280,11 +277,13 @@
                     <menu:menuitem menu:id=".uno:CurrencyField"/>
                     <menu:menuitem menu:id=".uno:PatternField"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:FileControl"/>
                     <menu:menuitem menu:id=".uno:GroupBox"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ImageControl"/>
+                    <menu:menuitem menu:id=".uno:FileControl"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:Grid"/>
                     <menu:menuitem menu:id=".uno:NavigationBar"/>
-                    <menu:menuitem menu:id=".uno:ScrollBar"/>
                 </menu:menupopup>
             </menu:menu>
         </menu:menupopup>
@@ -413,12 +412,6 @@
                     <menu:menuitem menu:id=".uno:TextAttributes"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:FormatFormMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ControlProperties"/>
-                    <menu:menuitem menu:id=".uno:FormProperties"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuitem menu:id=".uno:FillShadow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CustomAnimation"/>
@@ -488,6 +481,9 @@
             <menu:menuitem menu:id=".uno:DuplicateSlide"/>
             <menu:menuitem menu:id=".uno:DeleteSlide"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SummaryPage"/>
+            <menu:menuitem menu:id=".uno:ExpandPage"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:InsertMasterPage"/>
             <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
             <menu:menuseparator/>
@@ -522,22 +518,10 @@
             <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
             <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:RenameSlide"/>
             <menu:menuitem menu:id=".uno:HideSlide"/>
             <menu:menuitem menu:id=".uno:ShowSlide"/>
-            <menu:menuitem menu:id=".uno:RenameSlide"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SummaryPage"/>
-            <menu:menuitem menu:id=".uno:ExpandPage"/>
-            <menu:menuseparator/>
-            <menu:menu menu:id=".uno:SlideNavigateMenu">
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:FirstSlide"/>
-                <menu:menuitem menu:id=".uno:PreviousSlide"/>
-                <menu:menuitem menu:id=".uno:NextSlide"/>
-                <menu:menuitem menu:id=".uno:LastSlide"/>
-              </menu:menupopup>
-            </menu:menu>
-            <menu:menuitem menu:id=".uno:RestoreEditingView"/>
             <menu:menu menu:id=".uno:SlideMoveMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:MoveSlideFirst"/>
@@ -546,6 +530,15 @@
                 <menu:menuitem menu:id=".uno:MoveSlideLast"/>
               </menu:menupopup>
             </menu:menu>
+            <menu:menu menu:id=".uno:NavigateMenu">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:FirstSlide"/>
+                <menu:menuitem menu:id=".uno:PreviousSlide"/>
+                <menu:menuitem menu:id=".uno:NextSlide"/>
+                <menu:menuitem menu:id=".uno:LastSlide"/>
+              </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id=".uno:RestoreEditingView"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
         </menu:menupopup>
@@ -583,6 +576,23 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:BmpMask"/>
             <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:ToolsFormsMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
+                    <menu:menuitem menu:id=".uno:UseWizards"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ControlProperties"/>
+                    <menu:menuitem menu:id=".uno:FormProperties"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ShowFmExplorer"/>
+                    <menu:menuitem menu:id=".uno:TabDialog"/>
+                    <menu:menuitem menu:id=".uno:AddField"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:OpenReadOnly"/>
+                    <menu:menuitem menu:id=".uno:AutoControlFocus"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:PresentationMinimizer"/>
             <menu:menuseparator/>
