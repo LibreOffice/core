@@ -79,9 +79,10 @@ class ScOrcusNamedExpression : public orcus::spreadsheet::iface::import_named_ex
 {
     ScDocumentImport& mrDoc;
     const ScOrcusGlobalSettings& mrGlobalSettings;
+    SCTAB mnTab; //< negative if global, else >= 0 for sheet-local named expressions.
 
 public:
-    ScOrcusNamedExpression( ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS );
+    ScOrcusNamedExpression( ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab = -1 );
 
     virtual void define_name(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp) override;
 };
@@ -223,6 +224,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScOrcusAutoFilter maAutoFilter;
     ScOrcusSheetProperties maProperties;
     ScOrcusConditionalFormat maConditionalFormat;
+    ScOrcusNamedExpression maNamedExpressions;
 
     int mnCellCount;
 
@@ -235,6 +237,7 @@ public:
     virtual orcus::spreadsheet::iface::import_table* get_table() override;
     virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() override;
     virtual orcus::spreadsheet::iface::import_conditional_format* get_conditional_format() override;
+    virtual orcus::spreadsheet::iface::import_named_expression* get_named_expression() override;
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) override;
@@ -594,6 +597,8 @@ public:
     void incrementProgress();
 
     void setStatusIndicator(const css::uno::Reference<css::task::XStatusIndicator>& rIndicator);
+
+    const ScOrcusGlobalSettings& getGlobalSettings() const;
 };
 
 #endif
