@@ -2850,6 +2850,11 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             if ( !m_aValueListeners.empty() )
                 m_bGotDataChangedHint = true;
         }
+        else if (nId == SfxHintId::ScClearCache)
+        {
+            // necessary after import
+            m_aDataArray.clear();
+        }
     }
 }
 

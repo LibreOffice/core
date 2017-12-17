@@ -1870,6 +1870,11 @@ void SAL_CALL ScXMLImport::endDocument()
     }
     SvXMLImport::endDocument();
 
+    if (pDoc)
+    {
+        pDoc->BroadcastUno(SfxHint(SfxHintId::ScClearCache));
+    }
+
     if(pDoc && bSelfImportingXMLSet)
         ScModelObj::getImplementation(GetModel())->AfterXMLLoading();
 }
