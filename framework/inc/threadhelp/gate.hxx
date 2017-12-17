@@ -104,7 +104,7 @@ class Gate
             // Reset condition -> wait blocks now -> gate is closed
             m_aPassage.reset();
             // Check if operation was successful!
-            // Check returns false if condition was reseted => m_bClosed will be true then => we can return true; closing ok
+            // Check returns false if condition was reset => m_bClosed will be true then => we can return true; closing ok
             m_bClosed = !m_aPassage.check();
         }
 

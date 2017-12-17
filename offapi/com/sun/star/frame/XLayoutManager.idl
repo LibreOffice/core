@@ -84,7 +84,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
 
         <p>
         This call should be handled with care as all user interface elements will
-        be destroyed and the layout manager is reseted to a state after a
+        be destroyed and the layout manager is reset to a state after a
         attachFrame() has been made. That means an attached frame
         which has been set by attachFrame() is not released.
         The layout manager itself calls reset after a component has been attached

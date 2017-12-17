@@ -1784,7 +1784,7 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
     const uno::Any* pValues = aValues.getConstArray();
 
     // make sure mbIsMultiPropertyCall and mpImpl->mpItemSet are
-    // reseted even when an exception is thrown
+    // reset even when an exception is thrown
     const ::comphelper::ScopeGuard aGuard( [this] () { return this->endSetPropertyValues(); } );
 
     mbIsMultiPropertyCall = true;
