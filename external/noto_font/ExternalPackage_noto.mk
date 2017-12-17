@@ -17,8 +17,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoMono-Regular.ttf \
 	NotoNaskhArabic-Bold.ttf \
 	NotoNaskhArabic-Regular.ttf \
-	NotoNaskhArabicUI-Bold.ttf \
-	NotoNaskhArabicUI-Regular.ttf \
 	NotoNastaliqUrdu-Regular.ttf \
 	NotoSansArmenian-Bold.ttf \
 	NotoSansArmenian-Regular.ttf \
@@ -28,8 +26,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansBatak-Regular.ttf \
 	NotoSansBengali-Bold.ttf \
 	NotoSansBengali-Regular.ttf \
-	NotoSansBengaliUI-Bold.ttf \
-	NotoSansBengaliUI-Regular.ttf \
 	NotoSans-BoldItalic.ttf \
 	NotoSans-Bold.ttf \
 	NotoSansBrahmi-Regular.ttf \
@@ -40,42 +36,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansCham-Bold.ttf \
 	NotoSansCham-Regular.ttf \
 	NotoSansCherokee-Regular.ttf \
-	NotoSansCJKjp-Black.otf \
-	NotoSansCJKjp-Bold.otf \
-	NotoSansCJKjp-DemiLight.otf \
-	NotoSansCJKjp-Light.otf \
-	NotoSansCJKjp-Medium.otf \
-	NotoSansCJKjp-Regular.otf \
-	NotoSansCJKjp-Thin.otf \
-	NotoSansCJKkr-Black.otf \
-	NotoSansCJKkr-Bold.otf \
-	NotoSansCJKkr-DemiLight.otf \
-	NotoSansCJKkr-Light.otf \
-	NotoSansCJKkr-Medium.otf \
-	NotoSansCJKkr-Regular.otf \
-	NotoSansCJKkr-Thin.otf \
-	NotoSansCJKsc-Black.otf \
-	NotoSansCJKsc-Bold.otf \
-	NotoSansCJKsc-DemiLight.otf \
-	NotoSansCJKsc-Light.otf \
-	NotoSansCJKsc-Medium.otf \
-	NotoSansCJKsc-Regular.otf \
-	NotoSansCJKsc-Thin.otf \
-	NotoSansCJKtc-Black.otf \
-	NotoSansCJKtc-Bold.otf \
-	NotoSansCJKtc-DemiLight.otf \
-	NotoSansCJKtc-Light.otf \
-	NotoSansCJKtc-Medium.otf \
-	NotoSansCJKtc-Regular.otf \
-	NotoSansCJKtc-Thin.otf \
 	NotoSansCoptic-Regular.ttf \
 	NotoSansCuneiform-Regular.ttf \
 	NotoSansCypriot-Regular.ttf \
 	NotoSansDeseret-Regular.ttf \
 	NotoSansDevanagari-Bold.ttf \
 	NotoSansDevanagari-Regular.ttf \
-	NotoSansDevanagariUI-Bold.ttf \
-	NotoSansDevanagariUI-Regular.ttf \
 	NotoSansEgyptianHieroglyphs-Regular.ttf \
 	NotoSansEthiopic-Bold.ttf \
 	NotoSansEthiopic-Regular.ttf \
@@ -85,12 +51,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansGothic-Regular.ttf \
 	NotoSansGujarati-Bold.ttf \
 	NotoSansGujarati-Regular.ttf \
-	NotoSansGujaratiUI-Bold.ttf \
-	NotoSansGujaratiUI-Regular.ttf \
 	NotoSansGurmukhi-Bold.ttf \
 	NotoSansGurmukhi-Regular.ttf \
-	NotoSansGurmukhiUI-Bold.ttf \
-	NotoSansGurmukhiUI-Regular.ttf \
 	NotoSansHanunoo-Regular.ttf \
 	NotoSansHebrew-Bold.ttf \
 	NotoSansHebrew-Regular.ttf \
@@ -102,18 +64,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansKaithi-Regular.ttf \
 	NotoSansKannada-Bold.ttf \
 	NotoSansKannada-Regular.ttf \
-	NotoSansKannadaUI-Bold.ttf \
-	NotoSansKannadaUI-Regular.ttf \
 	NotoSansKayahLi-Regular.ttf \
 	NotoSansKharoshthi-Regular.ttf \
 	NotoSansKhmer-Bold.ttf \
 	NotoSansKhmer-Regular.ttf \
-	NotoSansKhmerUI-Bold.ttf \
-	NotoSansKhmerUI-Regular.ttf \
 	NotoSansLao-Bold.ttf \
 	NotoSansLao-Regular.ttf \
-	NotoSansLaoUI-Bold.ttf \
-	NotoSansLaoUI-Regular.ttf \
 	NotoSansLepcha-Regular.ttf \
 	NotoSansLimbu-Regular.ttf \
 	NotoSansLinearB-Regular.ttf \
@@ -122,23 +78,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansLydian-Regular.ttf \
 	NotoSansMalayalam-Bold.ttf \
 	NotoSansMalayalam-Regular.ttf \
-	NotoSansMalayalamUI-Bold.ttf \
-	NotoSansMalayalamUI-Regular.ttf \
 	NotoSansMandaic-Regular.ttf \
 	NotoSansMeeteiMayek-Regular.ttf \
 	NotoSansMongolian-Regular.ttf \
-	NotoSansMonoCJKjp-Bold.otf \
-	NotoSansMonoCJKjp-Regular.otf \
-	NotoSansMonoCJKkr-Bold.otf \
-	NotoSansMonoCJKkr-Regular.otf \
-	NotoSansMonoCJKsc-Bold.otf \
-	NotoSansMonoCJKsc-Regular.otf \
-	NotoSansMonoCJKtc-Bold.otf \
-	NotoSansMonoCJKtc-Regular.otf \
 	NotoSansMyanmar-Bold.ttf \
 	NotoSansMyanmar-Regular.ttf \
-	NotoSansMyanmarUI-Bold.ttf \
-	NotoSansMyanmarUI-Regular.ttf \
 	NotoSansNewTaiLue-Regular.ttf \
 	NotoSansNKo-Regular.ttf \
 	NotoSansOgham-Regular.ttf \
@@ -149,8 +93,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansOldTurkic-Regular.ttf \
 	NotoSansOriya-Bold.ttf \
 	NotoSansOriya-Regular.ttf \
-	NotoSansOriyaUI-Bold.ttf \
-	NotoSansOriyaUI-Regular.ttf \
 	NotoSansOsmanya-Regular.ttf \
 	NotoSansPhagsPa-Regular.ttf \
 	NotoSansPhoenician-Regular.ttf \
@@ -175,26 +117,16 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansTaiViet-Regular.ttf \
 	NotoSansTamil-Bold.ttf \
 	NotoSansTamil-Regular.ttf \
-	NotoSansTamilUI-Bold.ttf \
-	NotoSansTamilUI-Regular.ttf \
 	NotoSansTelugu-Bold.ttf \
 	NotoSansTelugu-Regular.ttf \
-	NotoSansTeluguUI-Bold.ttf \
-	NotoSansTeluguUI-Regular.ttf \
 	NotoSansThaana-Bold.ttf \
 	NotoSansThaana-Regular.ttf \
 	NotoSansThai-Bold.ttf \
 	NotoSansThai-Regular.ttf \
-	NotoSansThaiUI-Bold.ttf \
-	NotoSansThaiUI-Regular.ttf \
 	NotoSansTibetan-Bold.ttf \
 	NotoSansTibetan-Regular.ttf \
 	NotoSansTifinagh-Regular.ttf \
 	NotoSansUgaritic-Regular.ttf \
-	NotoSansUI-BoldItalic.ttf \
-	NotoSansUI-Bold.ttf \
-	NotoSansUI-Italic.ttf \
-	NotoSansUI-Regular.ttf \
 	NotoSansVai-Regular.ttf \
 	NotoSansYi-Regular.ttf \
 	NotoSerifArmenian-Bold.ttf \

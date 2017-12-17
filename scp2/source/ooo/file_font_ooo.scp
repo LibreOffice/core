@@ -73,6 +73,14 @@ STD_FONT_FILELIST(gid_File_Fnt_Karla, "fonts_karla.filelist")
 #ifdef WITH_NOTO_FONT
 // Noto fonts
 STD_FONT_FILELIST(gid_File_Fnt_Noto, "fonts_noto.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSansJp, "fonts_notosansjp.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSansKr, "fonts_notosanskr.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSansSc, "fonts_notosanssc.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSansTc, "fonts_notosanstc.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSerifJp, "fonts_notoserifjp.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSerifKr, "fonts_notoserifkr.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSerifSc, "fonts_notoserifsc.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_NotoSerifTc, "fonts_notoseriftc.filelist")
 #endif
 
 #endif

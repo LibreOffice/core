@@ -11,7 +11,23 @@ $(eval $(call gb_Module_Module,noto_font))
 
 $(eval $(call gb_Module_add_targets,noto_font,\
 	ExternalPackage_noto \
+	ExternalPackage_notosansjp \
+	ExternalPackage_notosanskr \
+	ExternalPackage_notosanssc \
+	ExternalPackage_notosanstc \
+	ExternalPackage_notoserifjp \
+	ExternalPackage_notoserifkr \
+	ExternalPackage_notoserifsc \
+	ExternalPackage_notoseriftc \
 	UnpackedTarball_noto \
+	UnpackedTarball_notosansjp \
+	UnpackedTarball_notosanskr \
+	UnpackedTarball_notosanssc \
+	UnpackedTarball_notosanstc \
+	UnpackedTarball_notoserifjp \
+	UnpackedTarball_notoserifkr \
+	UnpackedTarball_notoserifsc \
+	UnpackedTarball_notoseriftc \
 ))
 
 # vim: set noet sw=4 ts=4:
