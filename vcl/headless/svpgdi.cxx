@@ -103,7 +103,7 @@ namespace
     cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
     {
         cairo_format_t nFormat;
-#ifdef HAVE_CAIRO_FORMAT_24BIT_RGB
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
         assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 24 || rBuffer.mnBitCount == 1);
 #else
         assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 1);
@@ -111,9 +111,9 @@ namespace
 
         if (rBuffer.mnBitCount == 32)
             nFormat = CAIRO_FORMAT_ARGB32;
-#ifdef HAVE_CAIRO_FORMAT_24BIT_RGB
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
         else if (rBuffer.mnBitCount == 24)
-            nFormat = CAIRO_FORMAT_24BIT_RGB;
+            nFormat = CAIRO_FORMAT_RGB24_888;
 #endif
         else
             nFormat = CAIRO_FORMAT_A1;
@@ -188,7 +188,7 @@ namespace
             {
                 if ((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcRgba)
                 {
-                    assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcRgb);
+                    assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N24BitTcRgb);
                     pD[0] = pS[0];
                     pD[1] = pS[1];
                     pD[2] = pS[2];
@@ -196,7 +196,7 @@ namespace
                 }
                 else if ((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcBgra)
                 {
-                    assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcBgr);
+                    assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N24BitTcBgr);
                     pD[0] = pS[0];
                     pD[1] = pS[1];
                     pD[2] = pS[2];
@@ -204,7 +204,7 @@ namespace
                 }
                 else if ((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcArgb)
                 {
-                    assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcRgb);
+                    assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N24BitTcRgb);
                     pD[0] = 0xff; // Alpha
                     pD[1] = pS[0];
                     pD[2] = pS[1];
@@ -229,7 +229,7 @@ namespace
         explicit SourceHelper(const SalBitmap& rSourceBitmap)
         {
             const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
-#ifdef HAVE_CAIRO_FORMAT_24BIT_RGB
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
             if (rSrcBmp.GetBitCount() != 32 && rSrcBmp.GetBitCount() != 24)
 #else
             if (rSrcBmp.GetBitCount() != 32)
@@ -1456,7 +1456,7 @@ namespace
             return false;
 
         // We use Cairo that supports 24-bit RGB.
-#ifdef HAVE_CAIRO_FORMAT_24BIT_RGB
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
         if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 24 && pBuffer->mnBitCount != 1)
 #else
         if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
