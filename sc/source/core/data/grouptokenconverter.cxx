@@ -166,6 +166,18 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
             break;
             case svDoubleRef:
             {
+                /* FIXME: this simply does not work, it doesn't know
+                 * a) the context of implicit intersection, for which creating
+                      two arrays dows not only result in huge unnecessary matrix
+                      operations but also produces wrong results, e.g. =B:B/C:C
+                 * b) when to keep a reference as a reference depending on the
+                      expected parameter type, e.g. INDEX(), OFFSET() and
+                      others (though that *may* be disabled by OpCode already).
+                 * Until both are solved keep the reference. */
+                mrGroupTokens.AddToken(*p);
+                break;
+
+#if 0
                 ScComplexRefData aRef = *p->GetDoubleRef();
                 ScRange aAbs = aRef.toAbs(mrPos);
 
@@ -238,6 +250,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
                     //ensure that backing storage exists for our lifetime
                     mxFormulaGroupContext = mrDoc.GetFormulaGroupContext();
                 }
+#endif
             }
             break;
             case svIndex:
