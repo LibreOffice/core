@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f4b4e035",
+        "filename": "vcl/source/gdi/gdimtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-17T09:27:26Z",
+      "side": 1,
+      "message": "I\u0027m not English native but just wonder if it shouldn\u0027t be:\n\"This neither increments the incoming action ref-count nor decrements...\"",
+      "range": {
+        "startLine": 190,
+        "startChar": 16,
+        "endLine": 191,
+        "endChar": 15
+      },
+      "revId": "5120ac130bc96af6d7af8f4fbee7d3fcc556e4ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
