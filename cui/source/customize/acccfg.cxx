@@ -963,12 +963,12 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
     for (i2=0; i2<c2; ++i2)
     {
         const awt::KeyEvent& aAWTKey  = lKeys[i2];
-              OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
-              OUString     sLabel   = GetLabel4Command(sCommand);
-              vcl::KeyCode aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
-              sal_uLong    nPos     = MapKeyCodeToPos(aKeyCode);
+        OUString sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
+        OUString sLabel = GetLabel4Command(sCommand);
+        vcl::KeyCode aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
+        sal_Int32 nPos = MapKeyCodeToPos(aKeyCode);
 
-        if (nPos == TREELIST_ENTRY_NOTFOUND)
+        if (nPos == -1)
             continue;
 
         m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
@@ -987,9 +987,9 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
     for (i3 = 0; i3 < c3; ++i3)
     {
         const vcl::KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
-        sal_uLong nPos = MapKeyCodeToPos(*pKeyCode);
+        sal_Int32 nPos = MapKeyCodeToPos(*pKeyCode);
 
-        if (nPos == TREELIST_ENTRY_NOTFOUND)
+        if (nPos == -1)
             continue;
 
         // Hardcoded function mapped so no ID possible and mark entry as not changeable
@@ -1187,7 +1187,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, void )
         // goto selected "key" entry of the key box
         SvTreeListEntry* pE2 = nullptr;
         TAccInfo* pU2 = nullptr;
-        sal_uLong nP2 = TREELIST_ENTRY_NOTFOUND;
+        sal_Int32 nP2 = -1;
         SvTreeListEntry* pE3 = nullptr;
 
         pE2 = m_pKeyBox->FirstSelected();
@@ -1195,7 +1195,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, void )
             pU2 = static_cast<TAccInfo*>(pE2->GetUserData());
         if (pU2)
             nP2 = MapKeyCodeToPos(pU2->m_aKey);
-        if (nP2 != TREELIST_ENTRY_NOTFOUND)
+        if (nP2 != -1)
             pE3 = m_pEntriesBox->GetEntry( nullptr, nP2 );
         if (pE3)
         {
@@ -1461,12 +1461,11 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
     }
 }
 
-
-sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) const
+sal_Int32 SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) const
 {
     sal_uInt16 nCode1 = aKey.GetCode() + aKey.GetModifier();
     SvTreeListEntry* pEntry = m_pEntriesBox->First();
-    sal_uLong i = 0;
+    sal_Int32 i = 0;
 
     while (pEntry)
     {
@@ -1481,7 +1480,7 @@ sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) co
         ++i;
     }
 
-    return TREELIST_ENTRY_NOTFOUND;
+    return -1;
 }
 
 
