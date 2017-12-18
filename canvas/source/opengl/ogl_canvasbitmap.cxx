@@ -22,10 +22,8 @@ namespace oglcanvas
 {
     CanvasBitmap::CanvasBitmap( const geometry::IntegerSize2D& rSize,
                                 const SpriteCanvasRef&         rDevice,
-                                SpriteDeviceHelper&            rDeviceHelper,
-                                bool                           bHasAlpha ) :
-        mpDevice( rDevice ),
-        mbHasAlpha( bHasAlpha )
+                                SpriteDeviceHelper&            rDeviceHelper ) :
+        mpDevice( rDevice )
     {
         ENSURE_OR_THROW( mpDevice.is(),
                          "CanvasBitmap::CanvasBitmap(): Invalid surface or device" );
@@ -34,8 +32,7 @@ namespace oglcanvas
     }
 
     CanvasBitmap::CanvasBitmap( const CanvasBitmap& rSrc ) :
-        mpDevice( rSrc.mpDevice ),
-        mbHasAlpha( rSrc.mbHasAlpha )
+        mpDevice( rSrc.mpDevice )
     {
         maCanvasHelper = rSrc.maCanvasHelper;
     }
