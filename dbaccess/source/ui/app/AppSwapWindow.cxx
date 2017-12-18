@@ -129,7 +129,7 @@ bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 ElementType OApplicationSwapWindow::getElementType() const
 {
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl->GetSelectedEntry();
-    return pEntry ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
+    return pEntry ? *pEntry->GetUserData<ElementType*>() : E_NONE;
 }
 
 bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
@@ -154,7 +154,7 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
     ElementType eType = E_NONE;
     if ( pEntry )
     {
-        eType = *static_cast<ElementType*>(pEntry->GetUserData());
+        eType = *pEntry->GetUserData<ElementType*>();
         onContainerSelected( eType ); // i87582
     }
 }
@@ -171,7 +171,7 @@ void OApplicationSwapWindow::selectContainer(ElementType _eType)
     for (sal_uLong i=0; i < nCount; ++i)
     {
         pEntry = m_aIconControl->GetEntry(i);
-        if ( pEntry && *static_cast<ElementType*>(pEntry->GetUserData()) == _eType )
+        if ( pEntry && *pEntry->GetUserData<ElementType*>() == _eType )
             break;
         pEntry = nullptr;
     }
