@@ -1975,7 +1975,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                     }
 
                     // export categories
-                    if( eChartType != chart::TYPEID_SCATTER && mxCategoriesValues.is() )
+                    if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BUBBLE && mxCategoriesValues.is() )
                         exportSeriesCategory( mxCategoriesValues );
 
                     if( (eChartType == chart::TYPEID_SCATTER)
