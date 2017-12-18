@@ -284,6 +284,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
      * unless there is a change of page number.
      */
     public void showPageNumberRect() {
+        if (null == mPartPageRectangles) return;
         PointF midPoint = mLayerView.getLayerClient().convertViewPointToLayerPoint(new PointF(getWidth()/2f, getHeight()/2f));
         int index = previousIndex;
         // search which page the user in currently on. can enhance the search algorithm to binary search if necessary
@@ -311,6 +312,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
      * Hide page number rectangle canvas element.
      */
     public void hidePageNumberRect() {
+        if (null == mPageNumberRect) return;
         if (mPageNumberRect.isVisible()) {
             mPageNumberRect.setVisible(false);
             invalidate();

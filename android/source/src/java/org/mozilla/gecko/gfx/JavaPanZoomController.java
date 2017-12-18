@@ -741,7 +741,11 @@ class JavaPanZoomController
         float maxZoomFactor = MAX_ZOOM;
 
         ZoomConstraints constraints = mTarget.getZoomConstraints();
+        if (null == constraints) {
+            Log.e(LOGTAG, "zoomConstraits not available - too impatient?");
+            return viewportMetrics;
 
+        }
         if (constraints.getMinZoom() > 0)
             minZoomFactor = constraints.getMinZoom();
         if (constraints.getMaxZoom() > 0)
@@ -824,7 +828,7 @@ class JavaPanZoomController
         if (mState == PanZoomState.ANIMATED_ZOOM)
             return false;
 
-        if (!mTarget.getZoomConstraints().getAllowZoom())
+        if (null == mTarget.getZoomConstraints() || !mTarget.getZoomConstraints().getAllowZoom())
             return false;
 
         setState(PanZoomState.PINCHING);
@@ -987,7 +991,7 @@ class JavaPanZoomController
 
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
-        if (!mTarget.getZoomConstraints().getAllowDoubleTapZoom()) {
+        if (null == mTarget.getZoomConstraints() || !mTarget.getZoomConstraints().getAllowDoubleTapZoom()) {
             return true;
         }
         // Double tap zooms in or out depending on the current zoom factor
