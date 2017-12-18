@@ -76,6 +76,7 @@ private:
 
     Menu*           pMenu;
     PopupMenu*      pActivePopup;
+    std::unique_ptr<PopupMenu> mpParentPopup;
     sal_uInt16      nHighlightedItem;
     sal_uInt16      nRolloveredItem;
     VclPtr<vcl::Window> xSaveFocusId;

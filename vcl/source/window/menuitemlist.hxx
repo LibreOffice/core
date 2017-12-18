@@ -52,6 +52,7 @@ struct MenuItemData
     bool            bIsTemporary;           // Temporary inserted ('No selection possible')
     bool            bMirrorMode;
     long            nItemImageAngle;
+    bool            bHiddenOnGUI;
     Size            aSz;                    // only temporarily valid
     OUString        aAccessibleName;        // accessible name
 
@@ -71,6 +72,7 @@ struct MenuItemData
         , bIsTemporary(false)
         , bMirrorMode(false)
         , nItemImageAngle(0)
+        , bHiddenOnGUI(false)
         , pSalMenuItem(nullptr)
     {
     }
@@ -90,6 +92,7 @@ struct MenuItemData
         , bIsTemporary(false)
         , bMirrorMode(false)
         , nItemImageAngle(0)
+        , bHiddenOnGUI(false)
         , pSalMenuItem(nullptr)
     {
     }
