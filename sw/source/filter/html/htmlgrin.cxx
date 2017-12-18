@@ -715,6 +715,10 @@ IMAGE_SETEVENT:
     aFrameSize.SetHeightPercent( nPrcHeight );
     aFrameSet.Put( aFrameSize );
 
+    const SwNodeType eNodeType = m_pPam->GetNode().GetNodeType();
+    if (eNodeType != SwNodeType::Text && eNodeType != SwNodeType::Table)
+        return;
+
     // passing empty sGrfNm here, means we don't want the graphic to be linked
     SwFrameFormat *const pFlyFormat =
         m_xDoc->getIDocumentContentOperations().InsertGraphic(
