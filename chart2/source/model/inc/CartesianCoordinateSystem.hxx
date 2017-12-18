@@ -27,9 +27,7 @@ namespace chart
 class CartesianCoordinateSystem : public BaseCoordinateSystem
 {
 public:
-    explicit CartesianCoordinateSystem(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        sal_Int32 nDimensionCount );
+    explicit CartesianCoordinateSystem( sal_Int32 nDimensionCount );
     explicit CartesianCoordinateSystem( const CartesianCoordinateSystem & rSource );
     virtual ~CartesianCoordinateSystem() override;
 
@@ -49,8 +47,7 @@ public:
 class CartesianCoordinateSystem2d : public CartesianCoordinateSystem
 {
 public:
-    explicit CartesianCoordinateSystem2d(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit CartesianCoordinateSystem2d();
     virtual ~CartesianCoordinateSystem2d() override;
 
     // ____ XServiceInfo ____
@@ -62,9 +59,7 @@ public:
 class CartesianCoordinateSystem3d : public CartesianCoordinateSystem
 {
 public:
-    explicit CartesianCoordinateSystem3d(
-        const css::uno::Reference<
-            css::uno::XComponentContext > & xContext );
+    explicit CartesianCoordinateSystem3d();
     virtual ~CartesianCoordinateSystem3d() override;
 
     // ____ XServiceInfo ____
