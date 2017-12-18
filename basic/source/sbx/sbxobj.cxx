@@ -414,7 +414,6 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     SetModified( true );
     // The object listen always
     StartListening( pVar->GetBroadcaster(), true );
-    Broadcast( SfxHintId::BasicObjectChanged );
     return pVar;
 }
 
@@ -458,7 +457,6 @@ void SbxObject::Insert( SbxVariable* pVar )
             pVar->SetParent( this );
         }
         SetModified( true );
-        Broadcast( SfxHintId::BasicObjectChanged );
 #ifdef DBG_UTIL
         static const char* pCls[] =
             { "DontCare","Array","Value","Variable","Method","Property","Object" };
@@ -558,7 +556,6 @@ void SbxObject::Remove( SbxVariable* pVar )
             pVar_->SetParent( nullptr );
         }
         SetModified( true );
-        Broadcast( SfxHintId::BasicObjectChanged );
     }
 }
 

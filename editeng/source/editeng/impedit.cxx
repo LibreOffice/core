@@ -81,7 +81,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pCursor             = nullptr;
     bReadOnly           = false;
     bClickedInSelection = false;
-    eSelectionMode      = EESelectionMode::TxtOnly;
+    eSelectionMode      = EESelectionMode::Std;
     eAnchorMode         = EEAnchorMode::TopLeft;
     mpEditViewCallbacks = nullptr;
     nInvMore            = 1;

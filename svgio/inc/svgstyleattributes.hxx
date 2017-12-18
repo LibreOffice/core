@@ -99,13 +99,6 @@ namespace svgio
             FontStyle_oblique
         };
 
-        enum FontVariant
-        {
-            FontVariant_notset,
-            FontVariant_normal,
-            FontVariant_small_caps
-        };
-
         enum FontWeight
         {
             FontWeight_notset,

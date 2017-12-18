@@ -25,8 +25,6 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 
-enum class CubeFaces;
-
 /*************************************************************************
 |*
 |* Class for managing the 3D default attributes
