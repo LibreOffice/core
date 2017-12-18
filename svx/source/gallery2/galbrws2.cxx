@@ -111,7 +111,7 @@ class GalleryThemePopup : public ::cppu::WeakImplHelper< css::frame::XStatusList
 {
 private:
     const GalleryTheme* mpTheme;
-    sal_uIntPtr         mnObjectPos;
+    sal_uInt32          mnObjectPos;
     bool                mbPreview;
     VclBuilder          maBuilder;
     VclPtr<PopupMenu> mpPopupMenu;
@@ -128,7 +128,7 @@ private:
     DECL_LINK( BackgroundMenuSelectHdl, Menu*, bool );
 public:
     GalleryThemePopup( const GalleryTheme* pTheme,
-                       sal_uIntPtr nObjectPos,
+                       sal_uInt32 nObjectPos,
                        bool bPreview,
                        GalleryBrowser2* pBrowser );
 
@@ -141,7 +141,7 @@ public:
 
 GalleryThemePopup::GalleryThemePopup(
     const GalleryTheme* pTheme,
-    sal_uIntPtr nObjectPos,
+    sal_uInt32 nObjectPos,
     bool bPreview,
     GalleryBrowser2* pBrowser )
     : mpTheme( pTheme )
@@ -559,8 +559,8 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if( mpCurTheme )
     {
         Point       aSelPos;
-        const sal_Int32 nItemId = ImplGetSelectedItemId( &rEvt.maPosPixel, aSelPos );
-        const sal_uIntPtr nInsertPos = (nItemId ? (nItemId - 1) : mpCurTheme->GetObjectCount());
+        const sal_uInt32 nItemId = ImplGetSelectedItemId( &rEvt.maPosPixel, aSelPos );
+        const sal_uInt32 nInsertPos = (nItemId ? (nItemId - 1) : mpCurTheme->GetObjectCount());
 
         if( mpCurTheme->IsDragging() )
             mpCurTheme->ChangeObjectPos( mpCurTheme->GetDragPos(), nInsertPos );
@@ -576,7 +576,7 @@ void GalleryBrowser2::StartDrag( const Point* pDragPoint )
     if( mpCurTheme )
     {
         Point       aSelPos;
-        const sal_Int32 nItemId = ImplGetSelectedItemId( pDragPoint, aSelPos );
+        const sal_uInt32 nItemId = ImplGetSelectedItemId( pDragPoint, aSelPos );
 
         if( nItemId )
             mpCurTheme->StartDrag( this, nItemId - 1 );
@@ -592,7 +592,7 @@ void GalleryBrowser2::TogglePreview()
 void GalleryBrowser2::ShowContextMenu( const Point* pContextPoint )
 {
     Point aSelPos;
-    const sal_Int32 nItemId = ImplGetSelectedItemId( pContextPoint, aSelPos );
+    const sal_uInt32 nItemId = ImplGetSelectedItemId( pContextPoint, aSelPos );
 
     if( mpCurTheme && nItemId && ( nItemId <= mpCurTheme->GetObjectCount() ) )
     {
@@ -616,7 +616,7 @@ void GalleryBrowser2::ShowContextMenu( const Point* pContextPoint )
 bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* /*pWindow*/ )
 {
     Point       aSelPos;
-    const sal_Int32   nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
+    const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
     bool bRet = false;
     svx::sidebar::GalleryControl* pParentControl = dynamic_cast<svx::sidebar::GalleryControl*>(GetParent());
     if (pParentControl != nullptr)
@@ -781,13 +781,13 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
             {
                 Graphic     aGraphic;
                 Point       aSelPos;
-                const sal_Int32   nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
+                const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
 
                 if( nItemId )
                 {
-                    const sal_uIntPtr nPos = nItemId - 1;
+                    const sal_uInt32 nPos = nItemId - 1;
 
-                       mpIconView->Hide();
+                    mpIconView->Hide();
                     mpListView->Hide();
 
                     if( mpCurTheme )
@@ -835,11 +835,11 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
     if( mpCurTheme )
     {
         Point       aSelPos;
-        const sal_Int32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
+        const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
 
         if( nItemId )
         {
-            sal_Int32 nNewItemId = nItemId;
+            sal_uInt32 nNewItemId = nItemId;
 
             switch( eTravel )
             {
@@ -864,7 +864,7 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
                 if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
                 {
                     Graphic     aGraphic;
-                    const sal_uIntPtr nPos = nNewItemId - 1;
+                    const sal_uInt32 nPos = nNewItemId - 1;
 
                     mpCurTheme->GetGraphic( nPos, aGraphic );
                     mpPreview->SetGraphic( aGraphic );
@@ -890,7 +890,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 
     if( mpCurTheme )
     {
-        for( sal_uIntPtr i = 0, nCount = mpCurTheme->GetObjectCount(); i < nCount; )
+        for (sal_uInt32 i = 0, nCount = mpCurTheme->GetObjectCount(); i < nCount;)
         {
             mpListView->RowInserted( i++ );
             mpIconView->InsertItem( (sal_uInt16) i );
@@ -918,10 +918,10 @@ void GalleryBrowser2::ImplUpdateInfoBar()
          maInfoBar->SetText( mpCurTheme->GetName() );
 }
 
-sal_Int32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
+sal_uInt32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
 {
     const Size  aOutputSizePixel( GetOutputSizePixel() );
-    sal_Int32   nRet = 0;
+    sal_uInt32 nRet = 0;
 
     if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
     {
@@ -942,7 +942,7 @@ sal_Int32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& r
         else
         {
             nRet = mpIconView->GetSelectItemId();
-            rSelPos = mpIconView->GetItemRect( (sal_uInt16) nRet ).Center();
+            rSelPos = mpIconView->GetItemRect(nRet).Center();
         }
     }
     else
@@ -970,12 +970,12 @@ sal_Int32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& r
     return nRet;
 }
 
-void GalleryBrowser2::ImplSelectItemId( sal_uIntPtr nItemId )
+void GalleryBrowser2::ImplSelectItemId(sal_uInt32 nItemId)
 {
     if( nItemId )
     {
 
-        mpIconView->SelectItem( (sal_uInt16) nItemId );
+        mpIconView->SelectItem(nItemId);
         mpListView->SelectRow( nItemId - 1 );
     }
 }
@@ -999,7 +999,7 @@ void GalleryBrowser2::DispatchAdd(
     const css::util::URL &rURL)
 {
     Point aSelPos;
-    const sal_Int32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
+    const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
 
     if( !mpCurTheme || !nItemId )
         return;
@@ -1089,7 +1089,7 @@ void GalleryBrowser2::DispatchAdd(
 void GalleryBrowser2::Execute(const OString &rIdent)
 {
     Point       aSelPos;
-    const sal_Int32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
+    const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
 
     if( mpCurTheme && nItemId )
     {
