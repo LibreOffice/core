@@ -77,7 +77,7 @@ typedef ::cppu::WeakImplHelper<
 class VBAMacroResolver : public VBAMacroResolverBase
 {
 public:
-    explicit            VBAMacroResolver();
+                        VBAMacroResolver();
     virtual             ~VBAMacroResolver() override;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------

@@ -27,7 +27,7 @@ namespace chart
 class AreaChartType final : public ChartType
 {
 public:
-    explicit AreaChartType();
+    AreaChartType();
     virtual ~AreaChartType() override;
 
     virtual OUString SAL_CALL

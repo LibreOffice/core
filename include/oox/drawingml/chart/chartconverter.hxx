@@ -46,7 +46,7 @@ struct DataSequenceModel;
 class OOX_DLLPUBLIC ChartConverter
 {
 public:
-    explicit            ChartConverter();
+                        ChartConverter();
     virtual             ~ChartConverter();
 
     /** Converts the passed OOXML chart model to the passed chart2 document.

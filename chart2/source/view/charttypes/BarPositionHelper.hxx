@@ -29,7 +29,7 @@ namespace chart
 class BarPositionHelper : public CategoryPositionHelper, public PlottingPositionHelper
 {
 public:
-    explicit BarPositionHelper();
+    BarPositionHelper();
     BarPositionHelper( const BarPositionHelper& rSource );
     virtual ~BarPositionHelper() override;
 

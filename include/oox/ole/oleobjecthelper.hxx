@@ -49,7 +49,7 @@ struct OOX_DLLPUBLIC OleObjectInfo
     bool                mbShowAsIcon;       ///< True = show as icon, false = show contents.
     bool                mbAutoUpdate;
 
-    explicit            OleObjectInfo();
+                        OleObjectInfo();
 };
 
 

@@ -123,7 +123,7 @@ struct TrendlineLabelModel
     TextRef             mxText;             /// Text source of the label.
     NumberFormat        maNumberFormat;     /// Number format for coefficients.
 
-    explicit            TrendlineLabelModel();
+                        TrendlineLabelModel();
                         ~TrendlineLabelModel();
 };
 

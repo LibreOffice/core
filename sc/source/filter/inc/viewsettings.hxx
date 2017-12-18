@@ -34,7 +34,7 @@ struct PaneSelectionModel
     ScRangeList         maSelection;                    /// Selected cell ranges.
     sal_Int32           mnActiveCellId;                 /// Index of active cell in selection list.
 
-    explicit            PaneSelectionModel();
+                        PaneSelectionModel();
 };
 
 /** Contains all view settings for a single sheet. */
@@ -66,7 +66,7 @@ struct SheetViewModel
     bool                mbShowOutline;                  /// True = show outlines.
     bool                mbZoomToFit;                    /// True = zoom chart sheet to fit window.
 
-    explicit            SheetViewModel();
+                        SheetViewModel();
 
     /** Returns true, if page break preview is active. */
     bool                isPageBreakPreview() const;
@@ -138,7 +138,7 @@ struct WorkbookViewModel
     bool                mbShowVerScroll;    /// True = show vertical sheet scrollbars.
     bool                mbMinimized;        /// True = workbook window is minimized.
 
-    explicit            WorkbookViewModel();
+                        WorkbookViewModel();
 };
 
 typedef std::shared_ptr< WorkbookViewModel > WorkbookViewModelRef;

@@ -25,7 +25,7 @@ namespace
     {
         GError* m_pError;
         public:
-            explicit GErrorWrapper() : m_pError(nullptr) {}
+            GErrorWrapper() : m_pError(nullptr) {}
             ~GErrorWrapper() noexcept(false)
             {
                 if(!m_pError)

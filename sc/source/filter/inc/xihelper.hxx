@@ -195,7 +195,7 @@ private:    // types
         ESelection          maSel;          /// Edit engine selection.
         sal_Int32           mnHeight;       /// Height of previous lines in twips.
         sal_uInt16          mnMaxLineHt;    /// Maximum font height for the current text line.
-        explicit            XclImpHFPortionInfo();
+                            XclImpHFPortionInfo();
     };
     typedef ::std::vector< XclImpHFPortionInfo > XclImpHFPortionInfoVec;
 

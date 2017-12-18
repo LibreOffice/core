@@ -105,7 +105,7 @@ public:
 class FORMULA_DLLPUBLIC MissingConventionOOXML : public MissingConvention
 {
 public:
-    explicit    MissingConventionOOXML() : MissingConvention( MissingConvention::FORMULA_MISSING_CONVENTION_OOXML) {}
+    MissingConventionOOXML() : MissingConvention( MissingConvention::FORMULA_MISSING_CONVENTION_OOXML) {}
     // Implementation and usage only in token.cxx
     static inline bool isRewriteNeeded( OpCode eOp );
 };

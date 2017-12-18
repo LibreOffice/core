@@ -36,7 +36,7 @@ class Impl_OlePres
     sal_uInt32      nAdvFlags;
     Size            aSize;      // size in 100TH_MM
 public:
-    explicit Impl_OlePres()
+    Impl_OlePres()
         : nFormat( SotClipboardFormatId::GDIMETAFILE )
         , nAspect( ASPECT_CONTENT )
         , pMtf( nullptr )

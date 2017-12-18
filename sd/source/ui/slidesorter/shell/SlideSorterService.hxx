@@ -48,7 +48,7 @@ class SlideSorterService
       public SlideSorterServiceInterfaceBase
 {
 public:
-    explicit SlideSorterService();
+    SlideSorterService();
     virtual ~SlideSorterService() override;
     SlideSorterService(const SlideSorterService&) = delete;
     SlideSorterService& operator=(const SlideSorterService&) = delete;

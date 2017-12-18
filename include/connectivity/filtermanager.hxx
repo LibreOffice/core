@@ -77,7 +77,7 @@ namespace dbtools
 
     public:
         /// ctor
-        explicit FilterManager();
+        FilterManager();
 
         /// late ctor
         void    initialize(const css::uno::Reference< css::beans::XPropertySet >& _rxComponentAggregate );

@@ -26,7 +26,7 @@ class OrcusFormatDetect : public ::cppu::WeakImplHelper<
                           css::lang::XServiceInfo >
 {
 public:
-    explicit            OrcusFormatDetect();
+                        OrcusFormatDetect();
 
     virtual OUString SAL_CALL getImplementationName() override;
 

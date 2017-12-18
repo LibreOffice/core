@@ -72,7 +72,7 @@ namespace drawinglayer { namespace primitive2d {
                                                                         public Primitive2DDecompositionVisitor
     {
     public:
-        explicit Primitive2DContainer() {}
+        Primitive2DContainer() {}
         explicit Primitive2DContainer( size_type count ) : deque(count) {}
         virtual ~Primitive2DContainer() override;
         Primitive2DContainer( const Primitive2DContainer& other ) : deque(other) {}

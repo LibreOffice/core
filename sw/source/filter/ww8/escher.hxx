@@ -76,7 +76,7 @@ private:
 class SwEscherExGlobal : public EscherExGlobal
 {
 public:
-    explicit            SwEscherExGlobal();
+    SwEscherExGlobal();
     virtual             ~SwEscherExGlobal() override;
 
 private:

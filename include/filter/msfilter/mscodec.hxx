@@ -138,7 +138,7 @@ private:
 class MSFILTER_DLLPUBLIC MSCodec_XorXLS95 : public MSCodec_Xor95
 {
 public:
-    explicit            MSCodec_XorXLS95() : MSCodec_Xor95(2) {}
+                        MSCodec_XorXLS95() : MSCodec_Xor95(2) {}
 
     /** Decodes a block of memory inplace.
 
@@ -159,7 +159,7 @@ public:
 class MSFILTER_DLLPUBLIC MSCodec_XorWord95 : public MSCodec_Xor95
 {
 public:
-    explicit            MSCodec_XorWord95() : MSCodec_Xor95(7) {}
+                        MSCodec_XorWord95() : MSCodec_Xor95(7) {}
 
     /** Decodes a block of memory inplace.
 

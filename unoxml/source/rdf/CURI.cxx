@@ -39,7 +39,7 @@ class CURI:
         css::rdf::XURI>
 {
 public:
-    explicit CURI();
+    CURI();
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;

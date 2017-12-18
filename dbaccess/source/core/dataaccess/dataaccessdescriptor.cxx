@@ -240,7 +240,7 @@ namespace
     }
 
 struct Instance {
-    explicit Instance():
+    Instance():
         instance(new DataAccessDescriptorFactory())
     {}
 

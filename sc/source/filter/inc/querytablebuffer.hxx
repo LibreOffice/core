@@ -44,7 +44,7 @@ struct QueryTableModel : public AutoFormatModel
     bool                mbAdjustColWidth;   /// True = adjust column widths after refresh.
     bool                mbIntermediate;     /// True = query table defined but not built yet.
 
-    explicit            QueryTableModel();
+                        QueryTableModel();
 };
 
 class QueryTable : public WorksheetHelper

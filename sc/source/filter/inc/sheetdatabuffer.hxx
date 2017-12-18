@@ -42,7 +42,7 @@ struct CellModel
     sal_Int32           mnXfId;             /// XF (cell formatting) identifier.
     bool                mbShowPhonetic;     /// True = show phonetic text.
 
-    explicit            CellModel();
+                        CellModel();
 };
 
 /** Stores data about cell formulas. */
@@ -52,7 +52,7 @@ struct CellFormulaModel
     sal_Int32           mnFormulaType;      /// Type of the formula (regular, array, shared, table).
     sal_Int32           mnSharedId;         /// Identifier of a shared formula (OOXML only).
 
-    explicit            CellFormulaModel();
+                        CellFormulaModel();
 
     /** Returns true, if the passed cell address is valid for an array formula. */
     bool                isValidArrayRef( const ScAddress& rCellAddr );
@@ -70,7 +70,7 @@ struct DataTableModel
     bool                mbRef1Deleted;      /// True = first reference cell deleted.
     bool                mbRef2Deleted;      /// True = second reference cell deleted.
 
-    explicit            DataTableModel();
+                        DataTableModel();
 };
 
 /** Manages all cell blocks currently in use. */
@@ -183,7 +183,7 @@ private:
         ValueRange          maRowRange;         /// Indexes of first and last row.
         sal_Int32           mnXfId;             /// XF identifier for the row range.
 
-        explicit            XfIdRowRange();
+                            XfIdRowRange();
         void                set( sal_Int32 nRow, sal_Int32 nXfId );
         bool                tryExpand( sal_Int32 nRow, sal_Int32 nXfId );
     };

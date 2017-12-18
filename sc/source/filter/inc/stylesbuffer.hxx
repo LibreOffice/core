@@ -150,7 +150,7 @@ struct FontModel
     bool                mbOutline;          /// True = outlined characters.
     bool                mbShadow;           /// True = shadowed chgaracters.
 
-    explicit            FontModel();
+                        FontModel();
 
     void                setBiff12Scheme( sal_uInt8 nScheme );
     void                setBiffHeight( sal_uInt16 nHeight );
@@ -184,7 +184,7 @@ struct ApiScriptFontName
     sal_Int16           mnFamily;           /// Font family.
     sal_Int16           mnTextEnc;          /// Font text encoding.
 
-    explicit            ApiScriptFontName();
+                        ApiScriptFontName();
 };
 
 /** Contains all API font attributes. */
@@ -200,7 +200,7 @@ struct ApiFontData
     bool                     mbOutline;          /// True = outlined characters.
     bool                     mbShadow;           /// True = shadowed chgaracters.
 
-    explicit            ApiFontData();
+                        ApiFontData();
 };
 
 class Font : public WorkbookHelper
@@ -274,7 +274,7 @@ struct AlignmentModel
     bool                mbShrink;           /// True = shrink to fit cell size.
     bool                mbJustLastLine;     /// True = justify last line in block text.
 
-    explicit            AlignmentModel();
+                        AlignmentModel();
 
     /** Sets horizontal alignment from the passed BIFF data. */
     void                setBiffHorAlign( sal_uInt8 nHorAlign );
@@ -296,7 +296,7 @@ struct ApiAlignmentData
     bool                         mbWrapText;         /// True = multi-line text.
     bool                         mbShrink;           /// True = shrink to fit cell size.
 
-    explicit            ApiAlignmentData();
+                        ApiAlignmentData();
 };
 
 bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight );
@@ -336,7 +336,7 @@ struct ProtectionModel
     bool                mbLocked;           /// True = locked against editing.
     bool                mbHidden;           /// True = formula is hidden.
 
-    explicit            ProtectionModel();
+                        ProtectionModel();
 };
 
 /** Contains all API cell protection attributes. */
@@ -346,7 +346,7 @@ struct ApiProtectionData
 
     ApiCellProtection   maCellProt;
 
-    explicit            ApiProtectionData();
+                        ApiProtectionData();
 };
 
 bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight );
@@ -415,7 +415,7 @@ struct ApiBorderData
     bool                mbBorderUsed;       /// True = left/right/top/bottom line format used.
     bool                mbDiagUsed;         /// True = diagonal line format used.
 
-    explicit            ApiBorderData();
+                        ApiBorderData();
 
     /** Returns true, if any of the outer border lines is visible. */
     bool                hasAnyOuterBorder() const;
@@ -492,7 +492,7 @@ struct GradientFillModel
     double              mfBottom;           /// Bottom convergence for type path.
     ColorMap            maColors;           /// Gradient colors.
 
-    explicit            GradientFillModel();
+                        GradientFillModel();
 
     /** Reads BIFF12 gradient settings from a FILL or DXF record. */
     void                readGradient( SequenceInputStream& rStrm );
@@ -507,7 +507,7 @@ struct ApiSolidFillData
     bool                mbTransparent;      /// True = transparent area.
     bool                mbUsed;             /// True = fill data is valid.
 
-    explicit            ApiSolidFillData();
+                        ApiSolidFillData();
 };
 
 /** Contains cell fill attributes, either a pattern fill or a gradient fill. */
@@ -573,7 +573,7 @@ struct XfModel
     bool                mbBorderUsed;       /// True = border data used.
     bool                mbAreaUsed;         /// True = area data used.
 
-    explicit            XfModel();
+                        XfModel();
 };
 
 bool operator==( const XfModel& rXfModel1,  const XfModel& rXfModel2 );
@@ -692,7 +692,7 @@ struct CellStyleModel
     bool                mbCustom;           /// True = customized builtin style.
     bool                mbHidden;           /// True = style not visible in GUI.
 
-    explicit            CellStyleModel();
+                        CellStyleModel();
 
     /** Returns true, if this style is a builtin style. */
     bool                isBuiltin() const;
@@ -779,7 +779,7 @@ struct AutoFormatModel
     bool                mbApplyFill;        /// True = apply fill from autoformatting.
     bool                mbApplyProtection;  /// True = apply protection from autoformatting.
 
-    explicit            AutoFormatModel();
+                        AutoFormatModel();
 };
 
 class StylesBuffer : public WorkbookHelper

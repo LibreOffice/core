@@ -53,7 +53,7 @@ class ChartType :
     public ::property::OPropertySet
 {
 public:
-    explicit ChartType();
+    ChartType();
     virtual ~ChartType() override;
 
     /// merge XInterface implementations

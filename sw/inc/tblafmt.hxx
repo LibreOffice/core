@@ -346,7 +346,7 @@ class SW_DLLPUBLIC SwTableAutoFormatTable
     SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;
 
 public:
-    explicit SwTableAutoFormatTable();
+    SwTableAutoFormatTable();
     ~SwTableAutoFormatTable();
 
     size_t size() const;

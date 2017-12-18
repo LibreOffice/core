@@ -70,7 +70,7 @@ namespace xmlscript
     class XMLBasicExporter : public XMLBasicExporterBase
     {
     public:
-        explicit XMLBasicExporter();
+        XMLBasicExporter();
         virtual ~XMLBasicExporter() override;
 
         // XServiceInfo
@@ -83,7 +83,7 @@ namespace xmlscript
     class XMLOasisBasicExporter : public XMLBasicExporterBase
     {
     public:
-        explicit XMLOasisBasicExporter();
+        XMLOasisBasicExporter();
         virtual ~XMLOasisBasicExporter() override;
 
         // XServiceInfo

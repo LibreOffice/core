@@ -1135,7 +1135,7 @@ struct XMLTextParagraphExport::Impl
     typedef ::std::map<Reference<XFormField>, sal_Int32> FieldMarkMap_t;
     FieldMarkMap_t m_FieldMarkMap;
 
-    explicit Impl() {}
+    Impl() {}
     sal_Int32 AddFieldMarkStart(Reference<XFormField> const& i_xFieldMark)
     {
         assert(m_FieldMarkMap.find(i_xFieldMark) == m_FieldMarkMap.end());

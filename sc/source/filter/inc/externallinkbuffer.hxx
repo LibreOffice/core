@@ -48,7 +48,7 @@ struct ExternalNameModel
     bool                mbOleObj;           /// Name is an OLE object.
     bool                mbIconified;        /// Iconified object link.
 
-    explicit            ExternalNameModel();
+    ExternalNameModel();
 };
 
 class ExternalLink;
@@ -119,7 +119,7 @@ typedef std::shared_ptr< ExternalName > ExternalNameRef;
 class LinkSheetRange
 {
 public:
-    explicit     LinkSheetRange() { setDeleted(); }
+    LinkSheetRange() { setDeleted(); }
 
     /** Sets this struct to deleted state. */
     void                setDeleted();
@@ -296,7 +296,7 @@ struct RefSheetsModel
     sal_Int32           mnTabId1;           /// Zero-based index to first sheet in external document.
     sal_Int32           mnTabId2;           /// Zero-based index to last sheet in external document.
 
-    explicit            RefSheetsModel();
+                        RefSheetsModel();
 
     void                readBiff12Data( SequenceInputStream& rStrm );
 };

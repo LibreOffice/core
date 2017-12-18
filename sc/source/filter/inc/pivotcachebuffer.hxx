@@ -46,7 +46,7 @@ typedef ::std::vector< IdCaptionPair > IdCaptionPairList;
 class PivotCacheItem
 {
 public:
-    explicit            PivotCacheItem();
+                        PivotCacheItem();
 
     /** Reads the string value from a pivot cache item. */
     void                readString( const AttributeList& rAttribs );
@@ -143,7 +143,7 @@ struct PCFieldModel
     bool                mbUniqueList;       /// True = list of unique ODBC items exists.
     bool                mbMemberPropField;  /// True = contains OLAP member properties.
 
-    explicit            PCFieldModel();
+                        PCFieldModel();
 };
 
 struct PCSharedItemsModel
@@ -158,7 +158,7 @@ struct PCSharedItemsModel
     bool                mbIsInteger;        /// True = has numeric item(s) with only integers, maybe other types except date.
     bool                mbHasLongText;      /// True = contains strings with >255 characters.
 
-    explicit            PCSharedItemsModel();
+                        PCSharedItemsModel();
 };
 
 struct PCFieldGroupModel
@@ -178,7 +178,7 @@ struct PCFieldGroupModel
     OUString            msFinalGroupName ;  /// Finalized group name of this field used in internal pivot table collection.
 
 
-    explicit            PCFieldGroupModel();
+                        PCFieldGroupModel();
 
     /** Sets the group-by value for BIFF import. */
     void                setBiffGroupBy( sal_uInt8 nGroupBy );
@@ -327,7 +327,7 @@ struct PCDefinitionModel
     bool                mbSupportSubquery;  /// True = data source supports subqueries.
     bool                mbSupportDrill;     /// True = data source supports drilldown.
 
-    explicit            PCDefinitionModel();
+                        PCDefinitionModel();
 };
 
 struct PCSourceModel
@@ -335,7 +335,7 @@ struct PCSourceModel
     sal_Int32           mnSourceType;       /// Type of the source data (sheet, consolidation, scenario, external).
     sal_Int32           mnConnectionId;     /// Connection identifier for external data source.
 
-    explicit            PCSourceModel();
+                        PCSourceModel();
 };
 
 struct PCWorksheetSourceModel
@@ -345,7 +345,7 @@ struct PCWorksheetSourceModel
     OUString     maDefName;          /// Defined name containing a cell range if present.
     ScRange      maRange;            /// Source cell range of the data.
 
-    explicit            PCWorksheetSourceModel();
+                        PCWorksheetSourceModel();
 };
 
 class PivotCache : public WorkbookHelper

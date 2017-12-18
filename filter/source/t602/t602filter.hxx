@@ -110,7 +110,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
                                     css::beans::PropertyValue >& aProps ) override;
 
 public:
-    explicit T602ImportFilterDialog();
+    T602ImportFilterDialog();
 
 };
 

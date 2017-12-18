@@ -51,7 +51,7 @@ class FormattedString final :
     public ::property::OPropertySet
 {
 public:
-    explicit FormattedString();
+    FormattedString();
     virtual ~FormattedString() override;
 
     /// declare XServiceInfo methods

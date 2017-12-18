@@ -31,7 +31,7 @@ class XclImpString
 {
 public:
     /** Constructs an empty string. */
-    explicit            XclImpString();
+                        XclImpString();
     /** Constructs an unformatted string. */
     explicit            XclImpString( const OUString& rString );
 

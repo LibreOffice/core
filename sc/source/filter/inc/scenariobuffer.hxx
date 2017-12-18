@@ -34,7 +34,7 @@ struct ScenarioCellModel
     sal_Int32           mnNumFmtId;
     bool                mbDeleted;
 
-    explicit            ScenarioCellModel();
+                        ScenarioCellModel();
 };
 
 struct ScenarioModel
@@ -46,7 +46,7 @@ struct ScenarioModel
     bool                mbHidden;           /// True = scenario is hidden.
     bool                mbActive;
 
-    explicit            ScenarioModel();
+                        ScenarioModel();
 };
 
 class Scenario : public WorkbookHelper
@@ -80,7 +80,7 @@ struct SheetScenariosModel
     sal_Int32           mnCurrent;          /// Selected scenario.
     sal_Int32           mnShown;            /// Visible scenario.
 
-    explicit            SheetScenariosModel();
+                        SheetScenariosModel();
 };
 
 class SheetScenarios : public WorkbookHelper

@@ -27,7 +27,7 @@ namespace chart
 class FilledNetChartType final : public NetChartType_Base
 {
 public:
-    explicit FilledNetChartType();
+    FilledNetChartType();
     virtual ~FilledNetChartType() override;
 
     virtual OUString SAL_CALL

@@ -79,7 +79,7 @@ private:
     sal_Int32 meStyle;
 
 public:
-    OOO_DLLPUBLIC_CHARTTOOLS explicit ErrorBar();
+    OOO_DLLPUBLIC_CHARTTOOLS ErrorBar();
     virtual ~ErrorBar() override;
 
     /// XServiceInfo declarations

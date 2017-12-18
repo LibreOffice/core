@@ -301,7 +301,7 @@ struct XclFontData
     bool                mbShadow;       /// true = Shadowed.
 
     /** Constructs an empty font data structure. */
-    explicit            XclFontData();
+                        XclFontData();
     /** Constructs a font data structure and fills it with the passed font attributes (except color). */
     explicit            XclFontData( const vcl::Font& rFont );
     /** As directly above but also fills in the escapement member. */
@@ -404,7 +404,7 @@ enum XclFontPropSetType
 class XclFontPropSetHelper
 {
 public:
-    explicit            XclFontPropSetHelper();
+                        XclFontPropSetHelper();
 
     /** Reads all font properties from the passed property set. */
     void                ReadFontProperties( XclFontData& rFontData,
@@ -480,7 +480,7 @@ struct XclCellProt
     bool                mbLocked;       /// true = Locked against editing.
     bool                mbHidden;       /// true = Formula is hidden.
 
-    explicit            XclCellProt();
+                        XclCellProt();
 };
 
 bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight );
@@ -497,7 +497,7 @@ struct XclCellAlign
     bool                mbLineBreak;    /// true = Multi-line text.
     bool                mbShrink;       /// true = Shrink to fit cell size.
 
-    explicit            XclCellAlign();
+                        XclCellAlign();
 
     /** Returns the Calc horizontal alignment. */
     SvxCellHorJustify   GetScHorAlign() const;
@@ -536,7 +536,7 @@ struct XclCellBorder
     bool                mbDiagTLtoBR;   /// true = Top-left to bottom-right on.
     bool                mbDiagBLtoTR;   /// true = Bottom-left to top-right on.
 
-    explicit            XclCellBorder();
+                        XclCellBorder();
 };
 
 bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight );
@@ -548,7 +548,7 @@ struct XclCellArea
     sal_uInt16          mnBackColor;    /// Palette index to background color.
     sal_uInt8           mnPattern;      /// Fill pattern.
 
-    explicit            XclCellArea();
+                        XclCellArea();
 
     /** Returns true, if the area represents transparent state. */
     bool                IsTransparent() const;

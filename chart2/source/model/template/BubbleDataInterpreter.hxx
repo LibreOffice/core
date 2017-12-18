@@ -27,7 +27,7 @@ namespace chart
 class BubbleDataInterpreter : public DataInterpreter
 {
 public:
-    explicit BubbleDataInterpreter();
+    BubbleDataInterpreter();
     virtual ~BubbleDataInterpreter() override;
 
 protected:

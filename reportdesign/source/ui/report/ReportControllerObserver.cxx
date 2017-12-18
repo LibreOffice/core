@@ -52,7 +52,7 @@ public:
     ::osl::Mutex                                        m_aMutex;
     oslInterlockedCount                                 m_nLocks;
 
-    explicit OXReportControllerObserverImpl();
+             OXReportControllerObserverImpl();
     OXReportControllerObserverImpl(const OXReportControllerObserverImpl&) = delete;
     OXReportControllerObserverImpl& operator=(const OXReportControllerObserverImpl&) = delete;
 };

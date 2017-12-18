@@ -27,7 +27,7 @@ namespace chart
 class NetChartType_Base : public ChartType
 {
 public:
-    explicit NetChartType_Base();
+    NetChartType_Base();
     virtual ~NetChartType_Base() override;
 
 protected:
@@ -50,7 +50,7 @@ protected:
 class NetChartType final : public NetChartType_Base
 {
 public:
-    explicit NetChartType();
+    NetChartType();
     virtual ~NetChartType() override;
 
     virtual OUString SAL_CALL

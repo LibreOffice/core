@@ -98,7 +98,7 @@ protected:
     static void               BeforeReleaseHandler();
 
 public:
-    explicit SalYieldMutex();
+    SalYieldMutex();
 
     virtual bool              IsCurrentThread() const override;
     virtual bool              tryToAcquire() override;

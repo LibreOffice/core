@@ -209,7 +209,7 @@ struct ItemFormat
     OUString     maItemName;         ///< Name of the item.
     OUString     maListName;         ///< Name of a name list to be used for this item.
 
-    explicit            ItemFormat();
+                        ItemFormat();
 
     void                set( DataType eDataType, FormatType eFmtType, const OUString& rItemName );
 

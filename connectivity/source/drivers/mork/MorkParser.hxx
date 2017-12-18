@@ -69,7 +69,7 @@ class LO_DLLPUBLIC_MORK MorkParser final
 {
 public:
 
-    explicit MorkParser();
+    MorkParser();
 
     /// Open and parse mork file
 

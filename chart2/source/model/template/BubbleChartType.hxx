@@ -28,7 +28,7 @@ namespace chart
 class BubbleChartType final : public ChartType
 {
 public:
-    explicit BubbleChartType();
+    BubbleChartType();
     virtual ~BubbleChartType() override;
 
     virtual OUString SAL_CALL

@@ -3853,7 +3853,7 @@ void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
 struct BorderLinesGuard
 {
-    explicit BorderLinesGuard() : m_pBorderLines(std::move(gProp.pBLines))
+    BorderLinesGuard() : m_pBorderLines(std::move(gProp.pBLines))
     {
         gProp.pBLines.reset(new BorderLines);
     }

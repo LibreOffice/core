@@ -49,7 +49,7 @@ class Title final :
     public ::property::OPropertySet
 {
 public:
-    explicit Title();
+    Title();
     virtual ~Title() override;
 
     /// XServiceInfo declarations

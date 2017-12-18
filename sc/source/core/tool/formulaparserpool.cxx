@@ -38,7 +38,7 @@ namespace {
 class ScParserFactoryMap
 {
 public:
-    explicit            ScParserFactoryMap();
+    ScParserFactoryMap();
 
     Reference< XFormulaParser > createFormulaParser(
                             const Reference< XComponent >& rxComponent,

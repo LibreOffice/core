@@ -439,7 +439,7 @@ class ScTokenArray;
 class XclTokenArrayIterator
 {
 public:
-    explicit            XclTokenArrayIterator();
+                        XclTokenArrayIterator();
     explicit            XclTokenArrayIterator( const ScTokenArray& rScTokArr, bool bSkipSpaces );
     /** Copy constructor that allows to change the skip-spaces mode. */
     explicit            XclTokenArrayIterator( const XclTokenArrayIterator& rTokArrIt, bool bSkipSpaces );

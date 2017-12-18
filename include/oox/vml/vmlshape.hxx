@@ -114,7 +114,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OptValue<OUString> moCropTop; ///< Specifies how much to crop the image from the top down as a fraction of picture size.
     OUString maLayoutFlowAlt; ///< Specifies the alternate layout flow for text in textboxes.
 
-    explicit            ShapeTypeModel();
+                        ShapeTypeModel();
 
     void                assignUsed( const ShapeTypeModel& rSource );
 };
@@ -191,7 +191,7 @@ struct ClientData
     bool                mbVScroll;          ///< True = textbox has a vertical scrollbar.
     bool                mbSecretEdit;       ///< True = textbox is a password edit field.
 
-    explicit            ClientData();
+                        ClientData();
 };
 
 
@@ -218,7 +218,7 @@ struct ShapeModel
     bool         mbSignatureLineShowSignDate;
     bool         mbSignatureLineCanAddComment;
 
-    explicit            ShapeModel();
+                        ShapeModel();
                         ~ShapeModel();
 
     /** Creates and returns a new shape textbox structure. */

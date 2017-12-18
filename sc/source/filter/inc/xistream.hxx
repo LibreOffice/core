@@ -43,7 +43,7 @@ typedef std::shared_ptr< XclImpDecrypter > XclImpDecrypterRef;
 class XclImpDecrypter : public ::comphelper::IDocPasswordVerifier
 {
 public:
-    explicit            XclImpDecrypter();
+                        XclImpDecrypter();
     virtual             ~XclImpDecrypter() override;
 
     /** Returns the current error code of the decrypter. */
@@ -201,7 +201,7 @@ class XclImpStreamPos
 {
 public:
     /** Constructs an invalid stream position data object. */
-    explicit            XclImpStreamPos();
+                        XclImpStreamPos();
 
     /** Sets the stream position data to the passed values. */
     void                Set( const SvStream& rStrm, std::size_t nNextPos, std::size_t nCurrSize,

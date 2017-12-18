@@ -82,7 +82,7 @@ struct XclExpHashEntrySWO
 class XclExpSstImpl
 {
 public:
-    explicit            XclExpSstImpl();
+                        XclExpSstImpl();
 
     /** Inserts the passed string, if not already inserted, and returns the unique SST index. */
     sal_uInt32          Insert( XclExpStringRef xString );

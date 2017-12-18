@@ -35,7 +35,7 @@ class SvXMLAutoCorrectTokenHandler : public
         public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    explicit SvXMLAutoCorrectTokenHandler();
+    SvXMLAutoCorrectTokenHandler();
     virtual ~SvXMLAutoCorrectTokenHandler() override;
 
     //XFastTokenHandler

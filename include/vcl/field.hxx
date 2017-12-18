@@ -59,7 +59,7 @@ protected:
     bool                    IsDefaultLocale() const { return mbDefaultLocale; }
 
 public:
-    explicit                FormatterBase();
+                            FormatterBase();
     virtual                 ~FormatterBase();
 
     const LocaleDataWrapper& GetLocaleDataWrapper() const;

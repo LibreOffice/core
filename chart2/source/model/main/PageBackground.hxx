@@ -48,7 +48,7 @@ class PageBackground final :
     public ::property::OPropertySet
 {
 public:
-    explicit PageBackground();
+    PageBackground();
     virtual ~PageBackground() override;
 
     /// XServiceInfo declarations

@@ -71,7 +71,7 @@ std::vector< OUString > translateExternalUris(
 
 class ExtCommandLineSupplier: public CommandLineArgs::Supplier {
 public:
-    explicit ExtCommandLineSupplier():
+    ExtCommandLineSupplier():
         m_count(
             comphelper::LibreOfficeKit::isActive()
             ? 0 : rtl_getAppCommandArgCount()),

@@ -43,7 +43,7 @@ struct PTFieldItemModel
     bool                mbShowDetails;      /// True = show item details (items of child fields).
     bool                mbHidden;           /// True = item is hidden.
 
-    explicit            PTFieldItemModel();
+                        PTFieldItemModel();
 
     /** Sets item type for BIFF import. */
     void                setBiffType( sal_uInt16 nType );
@@ -80,7 +80,7 @@ struct PTFieldModel
     bool                mbTopAutoShow;      /// True = auto show filter shows top entries, false = bottom.
     bool                mbMultiPageItems;   /// True = multiple items selectable in page dimension.
 
-    explicit            PTFieldModel();
+                        PTFieldModel();
 
     /** Sets axis type for BIFF import. */
     void                setBiffAxis( sal_uInt8 nAxisFlags );
@@ -92,7 +92,7 @@ struct PTPageFieldModel
     sal_Int32           mnField;            /// Base pivot field.
     sal_Int32           mnItem;             /// Index of field item that is shown by the page field.
 
-    explicit            PTPageFieldModel();
+                        PTPageFieldModel();
 };
 
 struct PTDataFieldModel
@@ -105,7 +105,7 @@ struct PTDataFieldModel
     sal_Int32           mnBaseItem;         /// Base item for 'show data as'.
     sal_Int32           mnNumFmtId;         /// Number format for the result.
 
-    explicit            PTDataFieldModel();
+                        PTDataFieldModel();
 
     /** Sets the subtotal aggregation function for BIFF import. */
     void                setBiffSubtotal( sal_Int32 nSubtotal );
@@ -196,7 +196,7 @@ struct PTFilterModel
     sal_Int32           mnMeasureHier;      /// Hierarchy for filter calculation.
     bool                mbTopFilter;        /// True = filter shows top entries, false = bottom.
 
-    explicit            PTFilterModel();
+                        PTFilterModel();
 };
 
 class PivotTableFilter : public WorkbookHelper
@@ -265,7 +265,7 @@ struct PTDefinitionModel : public AutoFormatModel
     bool                mbFieldListSortAsc;
     bool                mbCustomListSort;
 
-    explicit            PTDefinitionModel();
+                        PTDefinitionModel();
 };
 
 struct PTLocationModel
@@ -277,7 +277,7 @@ struct PTLocationModel
     sal_Int32           mnRowPageCount;     /// Number of rows in page filter area.
     sal_Int32           mnColPageCount;     /// Number of columns in page filter area.
 
-    explicit            PTLocationModel();
+                        PTLocationModel();
 };
 
 class PivotTable : public WorkbookHelper

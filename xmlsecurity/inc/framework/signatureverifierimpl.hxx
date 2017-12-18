@@ -59,7 +59,7 @@ private:
     virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate) override;
 
 public:
-    explicit SignatureVerifierImpl();
+    SignatureVerifierImpl();
     virtual ~SignatureVerifierImpl() override;
 
     /* XSignatureVerifyResultBroadcaster */

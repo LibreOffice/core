@@ -70,7 +70,7 @@ private:
         OUString            maComment;
         bool                mbProtected;
 
-        explicit     ScenarioEntry() : mbProtected( false ) {}
+                     ScenarioEntry() : mbProtected( false ) {}
     };
     typedef ::std::vector< ScenarioEntry > ScenarioList;
 

@@ -65,7 +65,7 @@ private:
     virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate) override;
 
 public:
-    explicit SignatureCreatorImpl();
+    SignatureCreatorImpl();
     virtual ~SignatureCreatorImpl() override;
 
     /* XBlockerMonitor */

@@ -143,7 +143,7 @@ private:
 class SFX2_DLLPUBLIC ControlWrapperBase
 {
 public:
-    explicit     ControlWrapperBase() {}
+                 ControlWrapperBase() {}
     virtual             ~ControlWrapperBase();
 
     /** Derived classes enable, disable, show, or hide control(s).
@@ -348,7 +348,7 @@ struct MultiControlWrapperHelper_Impl;
 class SFX2_DLLPUBLIC MultiControlWrapperHelper : public ControlWrapperBase
 {
 public:
-    explicit            MultiControlWrapperHelper();
+                        MultiControlWrapperHelper();
     virtual             ~MultiControlWrapperHelper() override;
 
     /** Registers a control wrapper (should be a member of a derived class). */

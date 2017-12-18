@@ -126,7 +126,7 @@ private:
 
     public:
         /** Constructs an invisible frame style. */
-        explicit implStyle() :
+        implStyle() :
             maColorPrim(),
             maColorSecn(),
             maColorGap(),
@@ -148,7 +148,7 @@ private:
 
 public:
     /** Constructs an invisible frame style. */
-    explicit Style();
+    Style();
     /** Constructs a frame style with passed line widths. */
     explicit Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale );
     /** Constructs a frame style with passed color and line widths. */

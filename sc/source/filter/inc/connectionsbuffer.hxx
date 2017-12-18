@@ -57,7 +57,7 @@ struct WebPrModel
     bool                mbXl2000Refreshed;  /// True = refreshed with Excel 2000 or newer.
     bool                mbHtmlTables;       /// True = HTML tables, false = entire document.
 
-    explicit            WebPrModel();
+                        WebPrModel();
 };
 
 /** Common properties of an external data connection. */
@@ -85,7 +85,7 @@ struct ConnectionModel
     bool                mbSaveData;         /// True = save cached data with connection.
     bool                mbSavePassword;     /// True = save password in connection string.
 
-    explicit            ConnectionModel();
+                        ConnectionModel();
 
     WebPrModel&         createWebPr();
 };

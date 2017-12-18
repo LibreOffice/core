@@ -33,7 +33,7 @@ namespace drawingml {
 class TextFont
 {
 public:
-    explicit            TextFont();
+                        TextFont();
 
     /** Sets attributes from the passed attribute list. */
     void                setAttributes( const AttributeList& rAttribs );

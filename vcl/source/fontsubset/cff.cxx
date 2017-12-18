@@ -207,7 +207,7 @@ struct TYPE2OP
 
 struct CffGlobal
 {
-    explicit CffGlobal();
+    CffGlobal();
 
     int     mnNameIdxBase;
     int     mnStringIdxBase;
@@ -231,7 +231,7 @@ struct CffGlobal
 
 struct CffLocal
 {
-    explicit CffLocal();
+    CffLocal();
 
     int     mnPrivDictBase;
     int     mnPrivDictSize;

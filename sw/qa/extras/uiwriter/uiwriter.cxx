@@ -4110,7 +4110,7 @@ class PortionHandler : public SwPortionHandler
   public:
 
     std::vector<PortionItem> mPortionItems;
-    explicit PortionHandler()
+    PortionHandler()
         : SwPortionHandler()
     {}
 

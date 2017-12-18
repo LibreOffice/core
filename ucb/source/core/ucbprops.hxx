@@ -46,7 +46,7 @@ private:
                             css::beans::Property& rProp );
 
 public:
-    explicit UcbPropertiesManager();
+    UcbPropertiesManager();
     virtual ~UcbPropertiesManager() override;
 
     // XServiceInfo

@@ -53,7 +53,7 @@ class XclExpSstImpl;
 class XclExpSst : public XclExpRecordBase
 {
 public:
-    explicit            XclExpSst();
+                        XclExpSst();
     virtual             ~XclExpSst() override;
 
     /** Inserts a new string into the table.

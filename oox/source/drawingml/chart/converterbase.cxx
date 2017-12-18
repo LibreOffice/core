@@ -71,7 +71,7 @@ struct TitleLayoutInfo
     ModelRef< LayoutModel > mxLayout;   /// The layout model, if existing.
     GetShapeFunc        mpGetShape;     /// Helper function to receive the title shape.
 
-    explicit     TitleLayoutInfo() : mpGetShape( nullptr ) {}
+    TitleLayoutInfo() : mpGetShape( nullptr ) {}
 
     void                convertTitlePos(
                             ConverterRoot const & rRoot,

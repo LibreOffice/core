@@ -82,7 +82,7 @@ class HostnameCache
     sal_uInt32                     m_nCapacity;
 
 public:
-    explicit HostnameCache()
+    HostnameCache()
         : m_nCapacity( 256 ) {}
 
     bool get( const OUString & rKey, OUString & rValue ) const

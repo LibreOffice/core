@@ -164,7 +164,7 @@ private:
 class TextOutRenderer
 {
 protected:
-    explicit TextOutRenderer() = default;
+    TextOutRenderer() = default;
     TextOutRenderer(const TextOutRenderer &) = delete;
     TextOutRenderer & operator = (const TextOutRenderer &) = delete;
 
@@ -184,7 +184,7 @@ class ExTextOutRenderer : public TextOutRenderer
     ExTextOutRenderer & operator = (const ExTextOutRenderer &) = delete;
 
 public:
-    explicit ExTextOutRenderer() = default;
+    ExTextOutRenderer() = default;
 
     bool operator ()(CommonSalLayout const &rLayout,
         SalGraphics &rGraphics,

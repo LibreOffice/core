@@ -62,7 +62,7 @@ struct CondFormatRuleModel
     bool                mbAboveAverage;     /// In average rules: True = above average, false = below.
     bool                mbEqualAverage;     /// In average rules: True = include average, false = exclude.
 
-    explicit            CondFormatRuleModel();
+                        CondFormatRuleModel();
 
     /** Sets the passed BIFF operator for condition type cellIs. */
     void                setBiffOperator( sal_Int32 nOperator );
@@ -188,7 +188,7 @@ struct CondFormatModel
     ScRangeList         maRanges;           /// Cell ranges for this conditional format.
     bool                mbPivot;            /// Conditional formatting belongs to pivot table.
 
-    explicit            CondFormatModel();
+                        CondFormatModel();
 };
 
 /** Represents a conditional formatting object with a list of affected cell ranges. */

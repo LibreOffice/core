@@ -27,7 +27,7 @@ namespace chart
 class PieChartType final: public ChartType
 {
 public:
-    explicit PieChartType();
+    PieChartType();
     virtual ~PieChartType() override;
 
     virtual OUString SAL_CALL

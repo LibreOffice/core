@@ -107,7 +107,7 @@ public:
         SvNumFormatType mnType;
         sal_uLong mnIndex;
 
-        explicit CellFormat();
+        CellFormat();
     };
 
 private:

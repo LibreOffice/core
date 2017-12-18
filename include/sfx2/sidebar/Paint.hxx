@@ -50,7 +50,7 @@ public:
     static Paint Create (const css::uno::Any& rValue);
 
     // Create paint with type NoPaint.
-    explicit Paint();
+    Paint();
 
     // Create a Paint object for the given color.
     explicit Paint (const Color& rColor);

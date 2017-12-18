@@ -97,7 +97,7 @@ protected:
     sal_uInt8 ch;
 
 public:
-    explicit Tcg255SubStruct();
+    Tcg255SubStruct();
     sal_uInt8 id() const { return ch; }
     bool Read(SvStream &rS) override;
 };
@@ -143,7 +143,7 @@ class SwCTBWrapper : public Tcg255SubStruct
     SwCTBWrapper& operator = ( const SwCTBWrapper&) = delete;
 
 public:
-    explicit SwCTBWrapper();
+    SwCTBWrapper();
     virtual ~SwCTBWrapper() override;
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
     SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
@@ -179,7 +179,7 @@ class PlfMcd : public Tcg255SubStruct
     PlfMcd& operator = ( const PlfMcd&) = delete;
 
 public:
-    explicit PlfMcd();
+    PlfMcd();
     bool Read(SvStream &rS) override;
 };
 
@@ -203,7 +203,7 @@ class PlfAcd: public Tcg255SubStruct
     PlfAcd& operator = ( const PlfAcd&) = delete;
 
 public:
-    explicit PlfAcd();
+    PlfAcd();
     virtual ~PlfAcd() override;
     bool Read(SvStream &rS) override;
 };
@@ -234,7 +234,7 @@ class PlfKme : public Tcg255SubStruct
     PlfKme& operator = ( const PlfKme&) = delete;
 
 public:
-    explicit PlfKme();
+    PlfKme();
     virtual ~PlfKme() override;
     bool Read(SvStream &rS) override;
 };
@@ -269,7 +269,7 @@ class TcgSttbf : public Tcg255SubStruct
     TcgSttbf& operator = ( const TcgSttbf&) = delete;
 
 public:
-    explicit TcgSttbf();
+    TcgSttbf();
     bool Read(SvStream &rS) override;
 };
 
@@ -307,7 +307,7 @@ class MacroNames : public Tcg255SubStruct
     MacroNames& operator = ( const MacroNames&) = delete;
 
 public:
-    explicit MacroNames();
+    MacroNames();
     virtual ~MacroNames() override;
     bool Read(SvStream &rS) override;
 };

@@ -127,7 +127,7 @@ private:
 class MeanValueRegressionCurve : public RegressionCurveModel
 {
 public:
-    explicit MeanValueRegressionCurve();
+    MeanValueRegressionCurve();
     explicit MeanValueRegressionCurve(
         const MeanValueRegressionCurve & rOther );
     virtual ~MeanValueRegressionCurve() override;
@@ -144,7 +144,7 @@ public:
 class LinearRegressionCurve : public RegressionCurveModel
 {
 public:
-    explicit LinearRegressionCurve();
+    LinearRegressionCurve();
     explicit LinearRegressionCurve( const LinearRegressionCurve & rOther );
     virtual ~LinearRegressionCurve() override;
 
@@ -160,7 +160,7 @@ public:
 class LogarithmicRegressionCurve : public RegressionCurveModel
 {
 public:
-    explicit LogarithmicRegressionCurve();
+    LogarithmicRegressionCurve();
     explicit LogarithmicRegressionCurve( const LogarithmicRegressionCurve & rOther );
     virtual ~LogarithmicRegressionCurve() override;
 
@@ -176,7 +176,7 @@ public:
 class ExponentialRegressionCurve : public RegressionCurveModel
 {
 public:
-    explicit ExponentialRegressionCurve();
+    ExponentialRegressionCurve();
     explicit ExponentialRegressionCurve( const ExponentialRegressionCurve & rOther );
     virtual ~ExponentialRegressionCurve() override;
 
@@ -192,7 +192,7 @@ public:
 class PotentialRegressionCurve : public RegressionCurveModel
 {
 public:
-    explicit PotentialRegressionCurve();
+    PotentialRegressionCurve();
     explicit PotentialRegressionCurve( const PotentialRegressionCurve & rOther );
     virtual ~PotentialRegressionCurve() override;
 
@@ -208,7 +208,7 @@ public:
 class PolynomialRegressionCurve : public RegressionCurveModel
 {
 public:
-    explicit PolynomialRegressionCurve();
+    PolynomialRegressionCurve();
     explicit PolynomialRegressionCurve( const PolynomialRegressionCurve & rOther );
     virtual ~PolynomialRegressionCurve() override;
 
@@ -224,7 +224,7 @@ public:
 class MovingAverageRegressionCurve : public RegressionCurveModel
 {
 public:
-    explicit MovingAverageRegressionCurve();
+    MovingAverageRegressionCurve();
     explicit MovingAverageRegressionCurve( const MovingAverageRegressionCurve & rOther );
     virtual ~MovingAverageRegressionCurve() override;
 

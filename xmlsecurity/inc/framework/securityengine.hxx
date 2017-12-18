@@ -99,7 +99,7 @@ protected:
     css::uno::Reference< css::uno::XInterface > m_xResultListener;
 
 protected:
-    explicit SecurityEngine();
+    SecurityEngine();
     virtual ~SecurityEngine() override {};
 
     /*

@@ -603,7 +603,7 @@ private:
     {
         SCCOLROW            mnScEndPos;         /// The end position of a group in a level.
         bool                mbHidden;           /// true = Group in this level is hidden.
-        explicit     XclExpLevelInfo() : mnScEndPos( 0 ), mbHidden( false ) {}
+                     XclExpLevelInfo() : mnScEndPos( 0 ), mbHidden( false ) {}
     };
     typedef ::std::vector< XclExpLevelInfo > XclExpLevelInfoVec;
 
@@ -794,7 +794,7 @@ struct XclExpDefaultRowData
     sal_uInt16          mnFlags;            /// Default flags for unspecified rows.
     sal_uInt16          mnHeight;           /// Default height for unspecified rows.
 
-    explicit            XclExpDefaultRowData();
+                        XclExpDefaultRowData();
     explicit            XclExpDefaultRowData( const XclExpRow& rRow );
 
     /** Returns true, if rows are hidden by default. */
@@ -807,7 +807,7 @@ struct XclExpDefaultRowData
 class XclExpDefrowheight : public XclExpRecord
 {
 public:
-    explicit            XclExpDefrowheight();
+                        XclExpDefrowheight();
 
     /** Sets the passed default data as current record contents. */
     void                SetDefaultData( const XclExpDefaultRowData& rDefData );

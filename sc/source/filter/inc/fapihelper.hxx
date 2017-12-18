@@ -105,7 +105,7 @@ css::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< 
 class ScfPropertySet
 {
 public:
-    explicit     ScfPropertySet() {}
+                 ScfPropertySet() {}
     /** Constructs a property set wrapper with the passed UNO property set. */
     explicit     ScfPropertySet( const css::uno::Reference< css::beans::XPropertySet > & xPropSet ) { Set( xPropSet ); }
     /** Constructs a property set wrapper after querying the XPropertySet interface. */

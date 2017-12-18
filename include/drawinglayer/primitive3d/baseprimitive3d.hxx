@@ -57,7 +57,7 @@ namespace drawinglayer { namespace primitive3d {
     class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive3DContainer : public std::deque< Primitive3DReference >
     {
     public:
-        explicit Primitive3DContainer() {}
+        Primitive3DContainer() {}
         explicit Primitive3DContainer( size_type count ) : deque(count) {}
         Primitive3DContainer( const Primitive3DContainer& other ) : deque(other) {}
         Primitive3DContainer( const Primitive3DContainer&& other ) : deque(other) {}

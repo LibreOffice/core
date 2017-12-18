@@ -45,7 +45,7 @@ public:
     bool                mbResizeWithCell = false;
     bool                mbWasInHiddenRow = false;
 
-    explicit            ScDrawObjData();
+                        ScDrawObjData();
 
     tools::Rectangle getShapeRect() { return maShapeRect; };
     tools::Rectangle getLastCellRect() { return maLastCellRect; };

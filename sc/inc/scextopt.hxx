@@ -33,7 +33,7 @@ struct ScExtDocSettings
     sal_uInt32          mnLinkCnt;          ///< Recursive counter for loading external documents.
     SCTAB               mnDisplTab;         ///< Index of displayed sheet.
 
-    explicit            ScExtDocSettings();
+    ScExtDocSettings();
 };
 
 /** Enumerates possible positions of panes in split sheets. */
@@ -64,7 +64,7 @@ struct ScExtTabSettings
     bool                mbPageMode;         ///< true = Pagebreak mode; false = Normal view mode.
     bool                mbShowGrid;         ///< Whether or not to display gridlines.
 
-    explicit            ScExtTabSettings();
+    ScExtTabSettings();
 };
 
 struct ScExtDocOptionsImpl;
@@ -78,7 +78,7 @@ struct ScExtDocOptionsImpl;
 class SC_DLLPUBLIC ScExtDocOptions
 {
 public:
-    explicit            ScExtDocOptions();
+                        ScExtDocOptions();
                         ScExtDocOptions( const ScExtDocOptions& rSrc );
                         ~ScExtDocOptions();
 

@@ -52,7 +52,7 @@ protected:
     std::stringstream m_responseStream;
 
 public:
-    explicit Gtk3KDE5FilePickerIpc();
+    Gtk3KDE5FilePickerIpc();
     ~Gtk3KDE5FilePickerIpc();
 
     sal_Int16 execute();

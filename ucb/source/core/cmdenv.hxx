@@ -38,7 +38,7 @@ class UcbCommandEnvironment :
     css::uno::Reference< css::ucb::XProgressHandler >     m_xPH;
 
 public:
-    explicit UcbCommandEnvironment();
+    UcbCommandEnvironment();
     virtual ~UcbCommandEnvironment() override;
 
     // XInitialization

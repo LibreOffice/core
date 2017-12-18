@@ -39,7 +39,7 @@ namespace writerfilter
         const char* pName;
 
     public:
-        explicit TagLogger();
+        TagLogger();
         ~TagLogger();
 
         static TagLogger& getInstance();

@@ -87,7 +87,7 @@ const sal_uInt8 VBA_SITEINFO_MASK               = 0x7F;
 class VbaControlNamesSet
 {
 public:
-    explicit            VbaControlNamesSet();
+                        VbaControlNamesSet();
 
     /** Inserts the name of the passed control. */
     void                insertName( const VbaFormControl& rControl );

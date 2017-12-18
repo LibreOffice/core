@@ -34,7 +34,7 @@ struct BinAddress
     sal_Int32           mnCol;
     sal_Int32           mnRow;
 
-    explicit     BinAddress() : mnCol( 0 ), mnRow( 0 ) {}
+                 BinAddress() : mnCol( 0 ), mnRow( 0 ) {}
     explicit     BinAddress( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
     explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
 
@@ -71,7 +71,7 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& or
 class BinRangeList
 {
 public:
-    explicit     BinRangeList() : mvRanges() {}
+    BinRangeList() : mvRanges() {}
 
     ::std::vector< BinRange >::const_iterator begin() const { return mvRanges.begin(); }
     ::std::vector< BinRange >::const_iterator end() const { return mvRanges.end(); }

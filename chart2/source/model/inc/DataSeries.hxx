@@ -66,7 +66,7 @@ class DataSeries final :
     public ::property::OPropertySet
 {
 public:
-    explicit DataSeries();
+    DataSeries();
     virtual ~DataSeries() override;
 
     /// XServiceInfo declarations

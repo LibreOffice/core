@@ -45,7 +45,7 @@ namespace vcl {
 class VCL_DLLPUBLIC Font
 {
 public:
-    explicit            Font();
+                        Font();
                         Font( const Font& ); // TODO make me explicit
                         Font( Font&& );
     explicit            Font( const OUString& rFamilyName, const Size& );

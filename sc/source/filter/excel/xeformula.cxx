@@ -57,7 +57,7 @@ struct XclExpScToken
     const FormulaToken* mpScToken;          /// Currently processed Calc token.
     sal_uInt8           mnSpaces;           /// Number of spaces before the Calc token.
 
-    explicit     XclExpScToken() : mpScToken( nullptr ), mnSpaces( 0 ) {}
+                 XclExpScToken() : mpScToken( nullptr ), mnSpaces( 0 ) {}
     bool         Is() const { return mpScToken != nullptr; }
     StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : svUnknown; }
     OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : ocNone; }
@@ -83,7 +83,7 @@ struct XclExpTokenConvInfo
     or for all parameters of a function. */
 struct XclExpOperandList : public std::vector< XclExpTokenConvInfo >
 {
-    explicit     XclExpOperandList() { reserve( 2 ); }
+                        XclExpOperandList() { reserve( 2 ); }
     void                AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eConv, bool bValType );
 };
 
@@ -106,7 +106,7 @@ struct XclExpExtFuncData
     bool                mbVBasic;           /// True = Visual Basic macro call.
     bool                mbHidden;           /// True = Create hidden defined name.
 
-    explicit     XclExpExtFuncData() : mbVBasic( false ), mbHidden( false ) {}
+                        XclExpExtFuncData() : mbVBasic( false ), mbHidden( false ) {}
     void                Set( const OUString& rFuncName, bool bVBasic, bool bHidden );
 };
 

@@ -181,7 +181,7 @@ struct XmlFilterBaseImpl
     const NamespaceMap&            mrNamespaceMap;
 
     /// @throws RuntimeException
-    explicit            XmlFilterBaseImpl();
+    XmlFilterBaseImpl();
 };
 
 XmlFilterBaseImpl::XmlFilterBaseImpl() :

@@ -248,7 +248,7 @@ public:
     // if you want to use symbol objects inherited from SdrAttrObj.
     // If, however, you use objects inheriting from SdrObject you are free
     // to chose a pool of your liking.
-    explicit SdrModel();
+    SdrModel();
     explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers);
     explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
     virtual ~SdrModel() override;

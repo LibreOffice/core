@@ -34,7 +34,7 @@ struct UpDownBarsModel
     ShapeRef            mxUpBars;           /// Formatting of up bars.
     sal_Int32           mnGapWidth;         /// Space between up/down bars.
 
-    explicit            UpDownBarsModel();
+                        UpDownBarsModel();
                         ~UpDownBarsModel();
 };
 

@@ -146,7 +146,7 @@ class WinGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    explicit WinGlyphFallbackSubstititution()
+    WinGlyphFallbackSubstititution()
     {
         mhDC = GetDC(nullptr);
     };

@@ -48,7 +48,7 @@ namespace xlsb {
 
 class RecordObjectBase final : public SequenceRecordObjectBase
 {
-    explicit            RecordObjectBase();
+                        RecordObjectBase();
     virtual             ~RecordObjectBase() override;
 
     using               SequenceRecordObjectBase::construct;

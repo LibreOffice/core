@@ -44,7 +44,7 @@ class PropertySet
       public PropertySetInterfaceBase
 {
 public:
-    explicit PropertySet();
+    PropertySet();
     virtual ~PropertySet() override;
 
     virtual void SAL_CALL disposing() override;

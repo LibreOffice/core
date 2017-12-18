@@ -23,7 +23,7 @@
 class ImageList
 {
 public:
-                    explicit ImageList();
+                    ImageList();
                     ImageList( const std::vector<OUString>& rNameVector,
                                const OUString& rPrefix);
 

@@ -103,7 +103,7 @@ class StyleSet
     std::vector<StyleRedefinition> maStyles;
 
 public:
-    explicit StyleSet()
+    StyleSet()
         : maStyles()
     {}
 

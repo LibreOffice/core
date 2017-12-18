@@ -77,7 +77,7 @@ struct StdFontInfo
     sal_uInt16          mnCharSet;      ///< Font charset.
     sal_uInt8           mnFlags;        ///< Font flags.
 
-    explicit            StdFontInfo();
+                        StdFontInfo();
     explicit            StdFontInfo(
                             const OUString& rName,
                             sal_uInt32 nHeight );

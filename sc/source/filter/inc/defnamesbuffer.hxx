@@ -58,7 +58,7 @@ struct DefinedNameModel
     bool                mbVBName;       /// True = VBA macro, false = sheet macro.
     bool                mbHidden;       /// True = name hidden in UI.
 
-    explicit            DefinedNameModel();
+                        DefinedNameModel();
 };
 
 /** Base class for defined names and external names. */

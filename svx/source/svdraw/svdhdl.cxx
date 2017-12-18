@@ -89,7 +89,7 @@ class SdrHdlBitmapSet
     BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const tools::Rectangle& rRectangle);
 
 public:
-    explicit SdrHdlBitmapSet();
+    SdrHdlBitmapSet();
 
     const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
 };

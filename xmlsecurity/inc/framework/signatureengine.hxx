@@ -85,7 +85,7 @@ protected:
     std::vector< css::uno::Reference< css::io::XInputStream > > m_vXInputStreams;
 
 protected:
-    explicit SignatureEngine();
+    SignatureEngine();
     virtual ~SignatureEngine() override {};
 
     virtual void tryToPerform( ) override;

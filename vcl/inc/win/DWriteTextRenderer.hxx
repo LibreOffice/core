@@ -49,7 +49,7 @@ class D2DWriteTextOutRenderer : public TextOutRenderer
 public:
     static bool InitModules();
 
-    explicit D2DWriteTextOutRenderer();
+    D2DWriteTextOutRenderer();
     virtual ~D2DWriteTextOutRenderer() override;
 
     bool operator ()(CommonSalLayout const &rLayout,

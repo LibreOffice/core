@@ -46,7 +46,7 @@ class PanelFactory
       public PanelFactoryInterfaceBase
 {
 public:
-    explicit PanelFactory ();
+    PanelFactory ();
     virtual ~PanelFactory() override;
     PanelFactory(const PanelFactory&) = delete;
     PanelFactory& operator=(const PanelFactory&) = delete;

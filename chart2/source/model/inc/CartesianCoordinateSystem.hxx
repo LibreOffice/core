@@ -47,7 +47,7 @@ public:
 class CartesianCoordinateSystem2d : public CartesianCoordinateSystem
 {
 public:
-    explicit CartesianCoordinateSystem2d();
+    CartesianCoordinateSystem2d();
     virtual ~CartesianCoordinateSystem2d() override;
 
     // ____ XServiceInfo ____
@@ -59,7 +59,7 @@ public:
 class CartesianCoordinateSystem3d : public CartesianCoordinateSystem
 {
 public:
-    explicit CartesianCoordinateSystem3d();
+    CartesianCoordinateSystem3d();
     virtual ~CartesianCoordinateSystem3d() override;
 
     // ____ XServiceInfo ____

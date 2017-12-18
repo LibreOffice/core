@@ -132,7 +132,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         OString           m_aFontFile;        // relative to directory
         int               m_nCollectionEntry; // 0 for regular fonts, 0 to ... for fonts stemming from collections
 
-        explicit PrintFont();
+        PrintFont();
     };
 
     fontID                                      m_nNextFontID;

@@ -74,7 +74,7 @@ struct PageSettingsModel
     bool                mbPrintGrid;            /// True = print grid lines.
     bool                mbPrintHeadings;        /// True = print column/row headings.
 
-    explicit            PageSettingsModel();
+                        PageSettingsModel();
 
     /** Sets the BIFF print errors mode. */
     void                setBiffPrintErrors( sal_uInt8 nPrintErrors );

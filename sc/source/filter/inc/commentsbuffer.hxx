@@ -41,7 +41,7 @@ struct CommentModel
     sal_Int32           mnTVA;              /// Vertical Alignment
     css::awt::Rectangle maAnchor;           /// Anchor parameters
 
-    explicit            CommentModel();
+                        CommentModel();
 };
 
 class Comment : public WorksheetHelper

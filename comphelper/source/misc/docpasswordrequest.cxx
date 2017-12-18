@@ -53,7 +53,7 @@ public:
 class PasswordContinuation : public ::cppu::WeakImplHelper< XInteractionPassword2 >
 {
 public:
-    explicit     PasswordContinuation() : mbReadOnly( false ), mbSelected( false ) {}
+    PasswordContinuation() : mbReadOnly( false ), mbSelected( false ) {}
 
     bool     isSelected() const { return mbSelected; }
 

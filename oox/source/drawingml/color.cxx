@@ -40,7 +40,7 @@ struct PresetColorsPool
     ColorVector         maDmlColors;        /// Predefined colors in DrawingML, indexed by XML token.
     ColorVector         maVmlColors;        /// Predefined colors in VML, indexed by XML token.
 
-    explicit            PresetColorsPool();
+    PresetColorsPool();
 };
 
 PresetColorsPool::PresetColorsPool() :

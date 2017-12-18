@@ -49,7 +49,7 @@ class Request
     public:
 
 
-        explicit Request()
+        Request()
             : m_aJoiner   (  )
             , m_nRequest  (-1)
             , m_lArguments(  )

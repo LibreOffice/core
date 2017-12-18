@@ -338,7 +338,7 @@ namespace {
     private:
         DECL_LINK(OpenHdl, Button*, void);
     public:
-        explicit ProfileExportedDialog();
+        ProfileExportedDialog();
     };
 
     ProfileExportedDialog::ProfileExportedDialog()

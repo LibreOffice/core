@@ -248,7 +248,7 @@ typedef std::shared_ptr<FieldContext>  FieldContextPtr;
 struct DeletableTabStop : public css::style::TabStop
 {
     bool bDeleted;
-    explicit DeletableTabStop()
+    DeletableTabStop()
         : bDeleted(false)
     {
         // same defaults as SvxXMLTabStopContext_Impl

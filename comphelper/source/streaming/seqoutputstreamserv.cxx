@@ -42,7 +42,7 @@ class SequenceOutputStreamService:
     public cppu::WeakImplHelper<lang::XServiceInfo, io::XSequenceOutputStream>
 {
 public:
-    explicit SequenceOutputStreamService();
+    SequenceOutputStreamService();
 
     // noncopyable
     SequenceOutputStreamService(const SequenceOutputStreamService&) = delete;

@@ -46,7 +46,7 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper<
         css::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public:
-        explicit XMLSignatureTemplateImpl();
+        XMLSignatureTemplateImpl();
         virtual ~XMLSignatureTemplateImpl() override;
 
         //Methods from XXMLSignatureTemplate

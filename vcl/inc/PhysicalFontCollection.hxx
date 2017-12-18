@@ -37,7 +37,7 @@ class ImplPreMatchFontSubstitution;
 class VCL_PLUGIN_PUBLIC PhysicalFontCollection final
 {
 public:
-    explicit                PhysicalFontCollection();
+                            PhysicalFontCollection();
                             ~PhysicalFontCollection();
 
     // fill the list with device font faces

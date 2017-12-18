@@ -47,7 +47,7 @@ public:
 class PolarCoordinateSystem2d : public PolarCoordinateSystem
 {
 public:
-    explicit PolarCoordinateSystem2d();
+    PolarCoordinateSystem2d();
     virtual ~PolarCoordinateSystem2d() override;
 
     // ____ XServiceInfo ____
@@ -59,7 +59,7 @@ public:
 class PolarCoordinateSystem3d : public PolarCoordinateSystem
 {
 public:
-    explicit PolarCoordinateSystem3d();
+    PolarCoordinateSystem3d();
     virtual ~PolarCoordinateSystem3d() override;
 
     // ____ XServiceInfo ____

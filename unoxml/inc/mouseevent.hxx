@@ -46,7 +46,7 @@ class CMouseEvent
     sal_Int16 m_button;
 
 public:
-    explicit CMouseEvent();
+    CMouseEvent();
 
     virtual sal_Int32 SAL_CALL getScreenX() override;
     virtual sal_Int32 SAL_CALL getScreenY() override;

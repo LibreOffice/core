@@ -27,7 +27,7 @@ namespace chart
 class BarChartType final : public ChartType
 {
 public:
-    explicit BarChartType();
+    BarChartType();
     virtual ~BarChartType() override;
 
     virtual OUString SAL_CALL

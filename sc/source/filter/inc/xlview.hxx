@@ -99,7 +99,7 @@ struct XclDocViewData
     sal_uInt16          mnXclSelectCnt;     /// Number of selected sheets.
     sal_uInt16          mnTabBarWidth;      /// Width of sheet tabbar (1/1000 of window width).
 
-    explicit            XclDocViewData();
+                        XclDocViewData();
 };
 
 /** Contains all settings for a selection in a single pane of a sheet. */
@@ -109,7 +109,7 @@ struct XclSelectionData
     XclRangeList        maXclSelection;     /// Selected cell ranges.
     sal_uInt16          mnCursorIdx;        /// Index of cursor in selection list.
 
-    explicit     XclSelectionData() : mnCursorIdx( 0 ) {}
+                 XclSelectionData() : mnCursorIdx( 0 ) {}
 };
 
 typedef std::shared_ptr< XclSelectionData > XclSelectionDataRef;
@@ -144,7 +144,7 @@ struct XclTabViewData
     bool                IsDefaultTabBgColor() const { return maTabBgColor == COL_AUTO; };
     sal_uInt32          mnTabBgColorId;     /// palette color id
 
-    explicit            XclTabViewData();
+                        XclTabViewData();
                         ~XclTabViewData();
 
     /** Sets Excel default view settings. */

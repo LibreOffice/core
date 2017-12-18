@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
 class ScFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
-    explicit ScFilterDetect();
+             ScFilterDetect();
     virtual ~ScFilterDetect() override;
 
     /* XServiceInfo */

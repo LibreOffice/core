@@ -27,7 +27,7 @@ namespace chart
 class XYDataInterpreter : public DataInterpreter
 {
 public:
-    explicit XYDataInterpreter();
+    XYDataInterpreter();
     virtual ~XYDataInterpreter() override;
 
 protected:

@@ -505,7 +505,7 @@ Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
 class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo, XUnoTunnel >
 {
 public:
-    explicit SvUnoImageMap();
+    SvUnoImageMap();
     SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
 
     bool fillImageMap( ImageMap& rMap ) const;

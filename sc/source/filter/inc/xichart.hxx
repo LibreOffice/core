@@ -217,7 +217,7 @@ class XclImpChLineFormat
 {
 public:
     /** Creates a new line format object with automatic formatting. */
-    explicit     XclImpChLineFormat() {}
+                 XclImpChLineFormat() {}
     /** Creates a new line format object with the passed formatting. */
     explicit     XclImpChLineFormat( const XclChLineFormat& rLineFmt ) : maData( rLineFmt ) {}
 
@@ -249,7 +249,7 @@ class XclImpChAreaFormat
 {
 public:
     /** Creates a new area format object with automatic formatting. */
-    explicit     XclImpChAreaFormat() {}
+                 XclImpChAreaFormat() {}
     /** Creates a new area format object with the passed formatting. */
     explicit     XclImpChAreaFormat( const XclChAreaFormat& rAreaFmt ) : maData( rAreaFmt ) {}
 
@@ -305,7 +305,7 @@ class XclImpChFrameBase : public XclImpChGroupBase
 {
 public:
     /** Creates a new frame object without internal formatting objects. */
-    explicit     XclImpChFrameBase() {}
+                 XclImpChFrameBase() {}
     /** Creates a new frame object with specific default formatting. */
     explicit            XclImpChFrameBase( const XclChFormatInfo& rFmtInfo );
 
@@ -447,7 +447,7 @@ public:
 class XclImpChFont
 {
 public:
-    explicit            XclImpChFont();
+                        XclImpChFont();
     /** Reads the CHFONT record (font index). */
     void                ReadChFont( XclImpStream& rStrm );
 
@@ -564,7 +564,7 @@ typedef std::shared_ptr< XclImpChMarkerFormat > XclImpChMarkerFormatRef;
 class XclImpChPieFormat
 {
 public:
-    explicit            XclImpChPieFormat();
+                        XclImpChPieFormat();
     /** Reads the CHPIEFORMAT record (pie segment properties). */
     void                ReadChPieFormat( XclImpStream& rStrm );
     /** Converts and writes the contained data to the passed property set. */
@@ -580,7 +580,7 @@ typedef std::shared_ptr< XclImpChPieFormat > XclImpChPieFormatRef;
 class XclImpChSeriesFormat
 {
 public:
-    explicit            XclImpChSeriesFormat();
+                        XclImpChSeriesFormat();
     /** Reads the CHSERIESFORMAT record (additional settings for a series). */
     void                ReadChSeriesFormat( XclImpStream& rStrm );
     /** Returns true, if the series line is smoothed. */

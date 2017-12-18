@@ -54,7 +54,7 @@ namespace connectivity
     class SQLError_Impl
     {
     public:
-        explicit SQLError_Impl();
+        SQLError_Impl();
 
         // versions of the public SQLError methods which are just delegated to this impl-class
         static const OUString& getMessagePrefix();

@@ -54,7 +54,7 @@ class Axis final :
     public ::property::OPropertySet
 {
 public:
-    explicit Axis();
+    Axis();
     virtual ~Axis() override;
 
     /// XServiceInfo declarations

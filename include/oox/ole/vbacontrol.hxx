@@ -53,7 +53,7 @@ namespace ole {
 class VbaSiteModel final
 {
 public:
-    explicit            VbaSiteModel();
+                        VbaSiteModel();
                         ~VbaSiteModel();
 
     /** Allows to set single properties specified by XML token identifier. */
@@ -118,7 +118,7 @@ typedef std::shared_ptr< VbaSiteModel > VbaSiteModelRef;
 class VbaFormControl
 {
 public:
-    explicit            VbaFormControl();
+                        VbaFormControl();
     virtual             ~VbaFormControl();
 
     /** Imports the model from the passed stream or storage, depending on the

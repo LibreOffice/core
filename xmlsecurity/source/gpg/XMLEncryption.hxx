@@ -24,7 +24,7 @@
 class XMLEncryptionGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLEncryption >
 {
 public:
-    explicit XMLEncryptionGpg();
+    XMLEncryptionGpg();
     virtual ~XMLEncryptionGpg() override;
 
     // XXMLEncryption

@@ -48,7 +48,7 @@ class XMLSignature_NssImpl
     : public ::cppu::WeakImplHelper<xml::crypto::XXMLSignature, lang::XServiceInfo>
 {
 public:
-    explicit XMLSignature_NssImpl();
+    XMLSignature_NssImpl();
 
     //Methods from XXMLSignature
     virtual uno::Reference<xml::crypto::XXMLSignatureTemplate> SAL_CALL
