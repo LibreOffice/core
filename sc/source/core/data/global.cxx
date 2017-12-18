@@ -233,7 +233,7 @@ const SvxSearchItem& ScGlobal::GetSearchItem()
 
 void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 {
-    // FIXME: An assignement operator would be nice here
+    // FIXME: An assignment operator would be nice here
     delete pSearchItem;
     pSearchItem = static_cast<SvxSearchItem*>(rNew.Clone());
 

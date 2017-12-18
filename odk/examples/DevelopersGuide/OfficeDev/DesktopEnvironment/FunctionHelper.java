@@ -306,7 +306,7 @@ public class FunctionHelper
                 // the systemw window handle. A possible reason can be an invisible
                 // java window. In this case it should be enough to set return
                 // values to null. All other resources (which was created before)
-                // will be freed automatically if scope wil be leaved.
+                // will be freed automatically if scope will be leaved.
                 System.out.println("May be the NativeView object wasn't really visible at calling time of getNativeWindow()?");
                 xPeer   = null;
                 xWindow = null;

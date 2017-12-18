@@ -574,7 +574,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
     css::uno::Reference< css::frame::XFrame > xTarget = xFrame;
     while(true)
     {
-        // a) top frames wil be closed
+        // a) top frames will be closed
         if (xTarget->isTop())
             return xTarget;
 

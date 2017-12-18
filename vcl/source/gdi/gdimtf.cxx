@@ -187,7 +187,7 @@ MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
         pAction->Delete();
         return nullptr;
     }
-    //fdo#39995 This does't increment the incoming action ref-count nor does it
+    //fdo#39995 This doesn't increment the incoming action ref-count nor does it
     //decrement the outgoing action ref-count
     std::swap(pAction, m_aList[nAction]);
     return pAction;

@@ -48,7 +48,7 @@
       if there is one, he requests the data in this format
 
     - This class inherits from IDataObject an so can be placed on the
-      OleClipboard. The class wrapps a transferable object which is the
+      OleClipboard. The class wraps a transferable object which is the
       original DataSource
     - DataFlavors offerd by this transferable will be translated into
       appropriate clipboard formats

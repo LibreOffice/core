@@ -57,7 +57,7 @@ class Pane
       public PaneInterfaceBase
 {
 public:
-    /** Create a new Pane object that wrapps the given window.
+    /** Create a new Pane object that wraps the given window.
         @param rsPaneURL
             The URL that is used by the configuration to identify the pane.
             The given URL has to be valid.
