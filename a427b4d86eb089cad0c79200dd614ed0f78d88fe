@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a5c30488",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T23:35:36Z",
+      "side": 1,
+      "message": "The \"rely on the property is the last\" mentioned below even occurs at three different places. There should be some better solution.\n\nAlso, the property offsets are relevant in all three create_PropertiesNames() and load_separators() and save_separators() functions, which is a clear sign that it actually should be some named constexpr or define instead.",
+      "revId": "a427b4d86eb089cad0c79200dd614ed0f78d88fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a5dce473",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T23:35:36Z",
+      "side": 1,
+      "message": "As these are references now they should be named rSepPath and rNames.",
+      "range": {
+        "startLine": 114,
+        "startChar": 30,
+        "endLine": 114,
+        "endChar": 76
+      },
+      "revId": "a427b4d86eb089cad0c79200dd614ed0f78d88fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e5e26c2e",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T23:35:36Z",
+      "side": 1,
+      "message": "This relies on that the property will always be the last, and in case that changes because we append another one that would also have to be adapted, which is error prone. Rather use a fixed number like in the other cases, 4 or 9 respectively.",
+      "range": {
+        "startLine": 150,
+        "startChar": 16,
+        "endLine": 150,
+        "endChar": 31
+      },
+      "revId": "a427b4d86eb089cad0c79200dd614ed0f78d88fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_45c8a0a8",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T23:35:36Z",
+      "side": 1,
+      "message": "This relies on that the property will always be the last, and in case that changes because we append another one that would also have to be adapted, which is error prone. Rather use a fixed number like in the other cases, 4 or 9 respectively.",
+      "range": {
+        "startLine": 199,
+        "startChar": 36,
+        "endLine": 199,
+        "endChar": 58
+      },
+      "revId": "a427b4d86eb089cad0c79200dd614ed0f78d88fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c5e57038",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T23:35:36Z",
+      "side": 1,
+      "message": "This relies on that the property will always be the last, and in case that changes because we append another one that would also have to be adapted, which is error prone. Rather use a fixed number like in the other cases, 4 or 9 respectively.",
+      "range": {
+        "startLine": 235,
+        "startChar": 21,
+        "endLine": 235,
+        "endChar": 41
+      },
+      "revId": "a427b4d86eb089cad0c79200dd614ed0f78d88fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c5bc9008",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T23:35:36Z",
+      "side": 1,
+      "message": "Probably a pCkbSkipEmptyCells-\u003eHide() would be appropriate here as well.",
+      "revId": "a427b4d86eb089cad0c79200dd614ed0f78d88fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_85dfe867",
+        "filename": "sc/uiconfig/scalc/ui/textimportcsv.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T23:35:36Z",
+      "side": 1,
+      "message": "I didn\u0027t try the patch yet, but this may look confusing in the case of a CSV file import if the option is visible (though disabled).",
+      "revId": "a427b4d86eb089cad0c79200dd614ed0f78d88fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
