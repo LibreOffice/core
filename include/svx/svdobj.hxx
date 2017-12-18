@@ -801,6 +801,9 @@ public:
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
+    /// Is this a textbox of a drawinglayer shape?
+    virtual bool IsTextBox() const;
+
     void SetEmptyPresObj(bool bEpt);
     bool IsEmptyPresObj() const { return bEmptyPresObj;}
     void SetNotVisibleAsMaster(bool bFlg);

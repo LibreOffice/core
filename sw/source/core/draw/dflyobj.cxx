@@ -47,6 +47,7 @@
 #include <grfatr.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
+#include <textboxhelper.hxx>
 #include <wrtsh.hxx>
 #include <ndgrf.hxx>
 #include <frmmgr.hxx>
@@ -1273,6 +1274,11 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
         }
     }
     return SdrObject::CheckMacroHit( rRec );
+}
+
+bool SwVirtFlyDrawObj::IsTextBox() const
+{
+    return SwTextBoxHelper::isTextBox(GetFormat(), RES_FLYFRMFMT);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
