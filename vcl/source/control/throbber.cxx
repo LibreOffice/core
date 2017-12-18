@@ -189,9 +189,6 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
     case ImageSet::N16px:  index = 0;  break;
     case ImageSet::N32px:  index = 1;  break;
     case ImageSet::N64px:  index = 2;  break;
-    case ImageSet::Auto:
-        OSL_ENSURE( false, "Throbber::getDefaultImageURLs: illegal image set!" );
-        return aImageURLs;
     }
 
     aImageURLs.reserve( nImageCounts[index] );

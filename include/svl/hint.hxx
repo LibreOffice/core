@@ -54,12 +54,9 @@ enum class SfxHintId {
     TextViewCaretChanged,
 
 // BASIC hints
-    BasicDying,
     BasicDataWanted,
     BasicDataChanged,
-    BasicConverted,
     BasicInfoWanted,
-    BasicObjectChanged,
     BasicStart,
     BasicStop,
 
