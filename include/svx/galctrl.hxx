@@ -118,7 +118,7 @@ private:
 
     Link<GalleryListView*,void>  maSelectHdl;
     GalleryTheme*       mpTheme;
-    long                mnCurRow;
+    sal_uInt32          mnCurRow;
 
     void                InitSettings();
 
