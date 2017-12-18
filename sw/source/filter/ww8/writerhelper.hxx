@@ -65,8 +65,6 @@ namespace ww8
 {
     /// STL container of Paragraph Styles (SwTextFormatColl)
     typedef std::vector<SwTextFormatColl *> ParaStyles;
-    /// STL iterator for ParaStyles
-    typedef ParaStyles::iterator ParaStyleIter;
     /// STL container of SfxPoolItems (Attributes)
     typedef std::map<sal_uInt16, const SfxPoolItem *, sw::util::ItemSort> PoolItems;
     /// STL const iterator for ParaStyles

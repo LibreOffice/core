@@ -36,7 +36,6 @@ namespace ucb { namespace ucp { namespace ext
 
     //= DataSupplier
 
-    typedef ::ucbhelper::ResultSetDataSupplier  DataSupplier_Base;
     class DataSupplier : public ::ucbhelper::ResultSetDataSupplier
     {
     public:

@@ -30,8 +30,6 @@ namespace dxcanvas
         virtual ~BitmapProvider() {}
         virtual IBitmapSharedPtr getBitmap() const = 0;
     };
-
-    typedef std::shared_ptr<BitmapProvider> BitmapProviderSharedPtr;
 }
 
 #endif

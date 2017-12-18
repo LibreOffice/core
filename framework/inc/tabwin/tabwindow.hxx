@@ -141,8 +141,6 @@ class TabWindow final : public css::lang::XTypeProvider             ,
         void        implts_SendNotification( Notification eNotify, sal_Int32 ID ) const;
         void        implts_SendNotification( Notification eNotify, sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& rSeq ) const;
 
-        typedef std::vector< sal_uInt16 > PageIdVector;
-
         bool                                                   m_bInitialized : 1,
                                                                m_bDisposed : 1;
         sal_Int32                                              m_nNextTabID;

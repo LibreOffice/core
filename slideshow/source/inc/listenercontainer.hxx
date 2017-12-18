@@ -196,7 +196,6 @@ template< typename ListenerT,
 public:
     typedef ListenerT        listener_type;
     typedef ContainerT       container_type;
-    typedef MutexHolderBaseT mutex_type;
 
     /** Check whether listener container is empty
 

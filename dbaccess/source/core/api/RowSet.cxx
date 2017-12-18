@@ -279,7 +279,6 @@ void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) c
     }
 }
 
-//  typedef ::comphelper::OPropertyArrayUsageHelper<ORowSet> ORowSet_Prop;
 void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
 {
     switch(nHandle)

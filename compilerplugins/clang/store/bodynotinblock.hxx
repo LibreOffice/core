@@ -29,7 +29,6 @@ class BodyNotInBlock
         bool VisitForStmt( const ForStmt* stmt );
         bool VisitCXXForRangeStmt( const CXXForRangeStmt* stmt );
     private:
-        typedef std::vector< const Stmt* > StmtParents;
         void checkBody( const Stmt* body, SourceLocation stmtLocation, int stmtType, bool dontGoUp = false );
     };
 

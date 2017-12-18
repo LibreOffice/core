@@ -78,7 +78,6 @@ namespace canvas
     {
     public:
         typedef GraphicDeviceBase< Base, DeviceHelper, Mutex, UnambiguousBase > BaseType;
-        typedef BufferedGraphicDeviceBase OurType;
         typedef Mutex MutexType;
 
         BufferedGraphicDeviceBase() :

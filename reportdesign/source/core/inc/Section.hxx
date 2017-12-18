@@ -124,9 +124,6 @@ namespace reportdesign
         // TODO: VirtualFunctionFinder: This is virtual function!
 
         virtual void SAL_CALL disposing() override;
-    public:
-        typedef rtl::Reference<OSection> TSection;
-
     private:
         OSection(const css::uno::Reference< css::report::XReportDefinition >& xParentDef
                 ,const css::uno::Reference< css::report::XGroup >& xParentGroup

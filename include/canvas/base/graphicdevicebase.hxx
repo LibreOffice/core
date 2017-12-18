@@ -109,7 +109,6 @@ namespace canvas
         typedef DeviceHelper      DeviceHelperType;
         typedef Mutex             MutexType;
         typedef UnambiguousBase   UnambiguousBaseType;
-        typedef GraphicDeviceBase ThisType;
 
         typedef ::rtl::Reference< GraphicDeviceBase > Reference;
 

@@ -34,14 +34,6 @@ namespace svt { namespace table
     /// a value denoting a row position within a table
     typedef sal_Int32   RowPos;
 
-    /** a value denoting an arbitrary coordinate value of a position within
-        a table
-
-        Values of this type are guaranteed to be large enough to hold column
-        positions as well as row positions.
-    */
-    typedef sal_Int32   AnyPos;
-
     typedef sal_Int32   TableMetrics;
 
 /// denotes the column containing the row headers

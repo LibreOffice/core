@@ -64,7 +64,6 @@ namespace component {
 namespace {
 
 typedef std::deque<OUString> t_stringlist;
-typedef std::vector< std::pair<OUString, OUString> > t_stringpairvec;
 
 #define IMPLEMENTATION_NAME  "com.sun.star.comp.deployment.component.PackageRegistryBackend"
 

@@ -44,8 +44,6 @@ namespace basegfx
         // Helper functionality for sweep-line algorithm
         // ====================================================
 
-        typedef std::vector<B2DRange> VectorOfRanges;
-
         class ImplPolygon;
         typedef o3tl::vector_pool<ImplPolygon> VectorOfPolygons;
 

@@ -55,8 +55,6 @@ namespace dbaui
 
         virtual SvParserState   CallParser() override;// base class
     };
-
-    typedef tools::SvRef<ORTFReader> ORTFReaderRef;
 }
 #endif
 

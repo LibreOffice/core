@@ -45,7 +45,6 @@ namespace reportdesign
                     public ReportEngineBase,
                     public ReportEnginePropertySet
     {
-        typedef ::std::multimap< OUString, css::uno::Any , ::comphelper::UStringMixLess>            TComponentMap;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::report::XReportDefinition >     m_xReport;
         css::uno::Reference< css::task::XStatusIndicator>         m_StatusIndicator;
@@ -78,8 +77,6 @@ namespace reportdesign
 
         virtual ~OReportEngineJFree() override;
     public:
-        typedef rtl::Reference<OReportEngineJFree> TReportEngine;
-
         OReportEngineJFree(const css::uno::Reference< css::uno::XComponentContext >& context);
 
         DECLARE_XINTERFACE( )

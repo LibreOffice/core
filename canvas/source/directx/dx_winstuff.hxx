@@ -66,9 +66,7 @@ namespace dxcanvas
     typedef std::shared_ptr< Gdiplus::Graphics >        GraphicsSharedPtr;
     typedef std::shared_ptr< Gdiplus::GraphicsPath >    GraphicsPathSharedPtr;
     typedef std::shared_ptr< Gdiplus::Bitmap >          BitmapSharedPtr;
-    typedef std::shared_ptr< Gdiplus::CachedBitmap >    CachedBitmapSharedPtr;
     typedef std::shared_ptr< Gdiplus::Font >            FontSharedPtr;
-    typedef std::shared_ptr< Gdiplus::Brush >           BrushSharedPtr;
     typedef std::shared_ptr< Gdiplus::TextureBrush >    TextureBrushSharedPtr;
 
     /** COM object RAII wrapper

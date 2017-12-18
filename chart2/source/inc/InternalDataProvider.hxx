@@ -201,7 +201,6 @@ private:
             css::uno::WeakReference< css::chart2::data::XDataSequence > >
         tSequenceMap;
     typedef std::pair< tSequenceMap::iterator, tSequenceMap::iterator > tSequenceMapRange;
-    typedef std::pair< tSequenceMap::const_iterator, tSequenceMap::const_iterator > tConstSequenceMapRange;
 
     /** cache for all sequences that have been returned.
 

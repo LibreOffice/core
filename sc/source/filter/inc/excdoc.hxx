@@ -78,7 +78,6 @@ friend class ExcTable;
 
 private:
     typedef XclExpRecordList< ExcTable >            ExcTableList;
-    typedef ExcTableList::RecordRefType             ExcTableRef;
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
     typedef ExcBoundsheetList::RecordRefType        ExcBoundsheetRef;
 
