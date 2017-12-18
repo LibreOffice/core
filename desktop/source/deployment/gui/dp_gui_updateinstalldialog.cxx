@@ -597,7 +597,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv.get() );
 
     ::ucbhelper::Content sourceContent;
-    dp_misc::create_ucb_content( &sourceContent, sDownloadURL, m_updateCmdEnv.get() );
+    (void)dp_misc::create_ucb_content(&sourceContent, sDownloadURL, m_updateCmdEnv.get());
 
     const OUString sTitle( StrTitle::getTitle( sourceContent ) );
 
