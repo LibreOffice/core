@@ -157,7 +157,6 @@ public:
 
 
 private:
-    typedef ::std::map< sal_Int32, sal_Int32 > SystemPalette;
     typedef ::std::deque< css::uno::Reference< css::graphic::XGraphicObject > > GraphicObjectDeque;
     typedef ::std::map< OUString, css::uno::Reference< css::graphic::XGraphic > > EmbeddedGraphicMap;
 
@@ -165,7 +164,7 @@ private:
     css::uno::Reference< css::graphic::XGraphicProvider2 > mxGraphicProvider;
     css::uno::Reference< css::awt::XUnitConversion > mxUnitConversion;
     css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
-    SystemPalette       maSystemPalette;            ///< Maps system colors (XML tokens) to RGB color values.
+    ::std::map< sal_Int32, sal_Int32 >  maSystemPalette;  ///< Maps system colors (XML tokens) to RGB color values.
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
     mutable GraphicObjectDeque maGraphicObjects;    ///< Caches all created graphic objects to keep them alive.
     mutable EmbeddedGraphicMap maEmbeddedGraphics;  ///< Maps all embedded graphics by their storage path.

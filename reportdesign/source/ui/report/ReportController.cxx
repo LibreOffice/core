@@ -4006,8 +4006,7 @@ void OReportController::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any&
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL OReportController::getInfoHelper()
 {
-    typedef ::comphelper::OPropertyArrayUsageHelper<OReportController_BASE> OReportController_PROP;
-    return *OReportController_PROP::getArrayHelper();
+    return *::comphelper::OPropertyArrayUsageHelper<OReportController_BASE>::getArrayHelper();
 }
 
 void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle,const Any& _aValue)

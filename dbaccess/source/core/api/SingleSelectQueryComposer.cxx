@@ -834,8 +834,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         }
 
         const ::comphelper::UStringMixEqual aCaseCompare( bCase );
-        typedef std::set< size_t > SizeTSet;
-        SizeTSet aUsedSelectColumns;
+        std::set< size_t > aUsedSelectColumns;
         ::connectivity::parse::OParseColumn::StringMap aColumnNames;
 
         sal_Int32 nCount = xResultSetMeta->getColumnCount();

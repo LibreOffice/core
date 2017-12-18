@@ -426,11 +426,10 @@ GtkPrintDialog::impl_initDialog()
 void
 GtkPrintDialog::impl_initCustomTab()
 {
-    typedef std::map<OUString, GtkWidget*> DependencyMap_t;
     typedef std::vector<std::pair<GtkWidget*, OUString> > CustomTabs_t;
 
     const uno::Sequence<beans::PropertyValue>& rOptions(m_rController.getUIOptions());
-    DependencyMap_t aPropertyToDependencyRowMap;
+    std::map<OUString, GtkWidget*> aPropertyToDependencyRowMap;
     CustomTabs_t aCustomTabs;
     GtkWidget* pCurParent = nullptr;
     GtkWidget* pCurTabPage = nullptr;

@@ -55,9 +55,8 @@ public:
         }
         // try to insert into the map
         list_.push_front( rContent); // create a temp entry
-        typedef std::pair<typename LruList::iterator, IdxType> MappedType;
         typedef std::pair<typename LruItMap::iterator,bool> MapPair;
-        MapPair aMP = map_.insert( MappedType( list_.begin(), 0));
+        MapPair aMP = map_.emplace( list_.begin(), 0 );
         *pbFound = !aMP.second;
 
         if( !aMP.second) { // insertion not needed => found the entry

@@ -148,8 +148,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
-    typedef std::vector<SvxColumnDescription> SvxColumnDescriptionVector;
-    SvxColumnDescriptionVector aColumns; // Column array
+    std::vector<SvxColumnDescription>  aColumns; // Column array
 
     long nLeft;             // Left edge for the table
     long nRight;            // Right edge for the table; for columns always

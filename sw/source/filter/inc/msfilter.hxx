@@ -294,7 +294,6 @@ namespace sw
         {
         private:
             std::vector<SwFltStackEntry *> maStack;
-            typedef std::vector<SwFltStackEntry *>::reverse_iterator myriter;
             SwDoc &mrDoc;
 
             RedlineStack(RedlineStack const&) = delete;
@@ -376,7 +375,6 @@ namespace sw
         };
 
         typedef std::vector<CharRunEntry> CharRuns;
-        typedef CharRuns::const_iterator cCharRunIter;
 
         /** Collect the ranges of Text which share
 

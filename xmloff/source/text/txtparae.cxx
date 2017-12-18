@@ -139,8 +139,7 @@ namespace
     class TextContentSet
     {
         public:
-            typedef Reference<XTextContent> text_content_ref_t;
-            typedef list<text_content_ref_t> contents_t;
+            typedef list<Reference<XTextContent>> contents_t;
             typedef back_insert_iterator<contents_t> inserter_t;
             typedef contents_t::const_iterator const_iterator_t;
 

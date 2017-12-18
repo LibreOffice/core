@@ -140,9 +140,6 @@ typedef std::unordered_map<OString, XMLElement*> LangHashMap;
 /// Mapping XML Element string identifier <-> Language Map
 typedef std::unordered_map<OString, LangHashMap*> XMLHashMap;
 
-/// Mapping XML tag names <-> have localizable strings
-typedef std::unordered_map<OString, sal_Bool> TagMap;
-
 /** Holds information of a XML file, is root node of tree
  */
 class XMLFile final : public XMLParentNode
@@ -180,7 +177,9 @@ private:
     // DATA
     OString m_sFileName;
 
-    TagMap m_aNodes_localize;
+    /// Mapping XML tag names <-> have localizable strings
+    std::unordered_map<OString, sal_Bool> m_aNodes_localize;
+
     std::unique_ptr<XMLHashMap> m_pXMLStrings;
 
     std::vector <OString> m_vOrder;

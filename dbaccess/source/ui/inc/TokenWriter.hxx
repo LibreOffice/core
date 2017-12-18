@@ -48,8 +48,7 @@ namespace dbaui
 {
     // ODatabaseImportExport base class for import/export
     class ODatabaseExport;
-    typedef ::cppu::WeakImplHelper< css::lang::XEventListener> ODatabaseImportExport_BASE;
-    class ODatabaseImportExport : public ODatabaseImportExport_BASE
+    class ODatabaseImportExport : public ::cppu::WeakImplHelper< css::lang::XEventListener>
     {
     protected:
         css::lang::Locale                                     m_aLocale;

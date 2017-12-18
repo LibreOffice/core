@@ -62,8 +62,7 @@ namespace canvas
 
         // this is the container holding all created pages,
         // behind the scenes these are real hardware surfaces.
-        typedef std::vector<PageSharedPtr> PageContainer_t;
-        PageContainer_t maPages;
+        std::vector<PageSharedPtr> maPages;
 
         bool relocate( const FragmentSharedPtr& pFragment );
     };

@@ -37,10 +37,9 @@ namespace connectivity
         };
 
         class OMySQLColumn;
-        typedef sdbcx::OColumn OMySQLColumn_BASE;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OMySQLColumn> OMySQLColumn_PROP;
 
-        class OMySQLColumn :    public OMySQLColumn_BASE,
+        class OMySQLColumn :    public sdbcx::OColumn,
                                 public OMySQLColumn_PROP
         {
             OUString m_sAutoIncrement;

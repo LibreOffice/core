@@ -72,7 +72,8 @@ namespace connectivity
         private:
             SvStream*       m_pFileStream;                  // Stream to read/write the index
             NDXHeader       m_aHeader;
-            ONDXPageList    m_aCollector;                   // Pool of obsolete pages
+            std::vector<ONDXPage*>
+                            m_aCollector;                   // Pool of obsolete pages
             ONDXPagePtr     m_aRoot,                        // Root of the B+ tree
                             m_aCurLeaf;                     // Current leaf
             sal_uInt16      m_nCurNode;                     // Position of the current node

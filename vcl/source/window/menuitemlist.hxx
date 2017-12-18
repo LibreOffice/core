@@ -98,8 +98,7 @@ struct MenuItemData
 class MenuItemList
 {
 private:
-    typedef ::std::vector< std::unique_ptr<MenuItemData> > MenuItemDataList_impl;
-    MenuItemDataList_impl maItemList;
+    ::std::vector< std::unique_ptr<MenuItemData> > maItemList;
 
 public:
                     MenuItemList() {}

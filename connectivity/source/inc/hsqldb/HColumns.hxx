@@ -37,10 +37,9 @@ namespace connectivity
         };
 
         class OHSQLColumn;
-        typedef sdbcx::OColumn OHSQLColumn_BASE;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OHSQLColumn> OHSQLColumn_PROP;
 
-        class OHSQLColumn : public OHSQLColumn_BASE,
+        class OHSQLColumn : public sdbcx::OColumn,
                                 public OHSQLColumn_PROP
         {
             OUString m_sAutoIncrement;

@@ -768,8 +768,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
 {
     if ( !m_pRootEntry )
     {
-        typedef std::unordered_map< OUString, bool > MenuInfo;
-        MenuInfo aMenuInfo;
+        std::unordered_map< OUString, bool > aMenuInfo;
 
         m_pRootEntry.reset( new SvxConfigEntry( "ContextMenus", OUString(), true, /*bParentData*/false ) );
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aElementsInfo;

@@ -257,7 +257,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< Layer >    LayerSharedPtr;
         typedef ::std::weak_ptr< Layer >      LayerWeakPtr;
-        typedef ::std::vector< LayerSharedPtr > LayerVector;
 
     }
 }

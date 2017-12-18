@@ -315,9 +315,8 @@ void printf_packages(
     }
     else
     {
-        typedef std::vector< Reference<deployment::XPackage> >::const_iterator I_EXT;
         int index = 0;
-        for (I_EXT i = allExtensions.begin(); i != allExtensions.end(); ++i, ++index)
+        for (auto i = allExtensions.begin(); i != allExtensions.end(); ++i, ++index)
         {
             if (vecUnaccepted[index])
                 printf_unaccepted_licenses(*i);

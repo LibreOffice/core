@@ -276,7 +276,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
             {
                 OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
                     "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
-                PropertyContainerIterator aIter = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
+                auto aIter = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
                 pPropContainer = &(*aIter);
             }
             else

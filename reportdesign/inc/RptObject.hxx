@@ -64,11 +64,8 @@ class OPropertyMediator;
 
 class REPORTDESIGN_DLLPUBLIC OObjectBase
 {
-public:
-    typedef rtl::Reference<OPropertyMediator> TMediator;
-
 protected:
-    mutable TMediator                                                 m_xMediator;
+    mutable rtl::Reference<OPropertyMediator>                         m_xMediator;
     mutable css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     mutable css::uno::Reference< css::report::XReportComponent>       m_xReportComponent;
     css::uno::Reference< css::uno::XInterface >                       m_xKeepShapeAlive;

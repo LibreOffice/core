@@ -172,9 +172,8 @@ private:
     StorageRef          getSubStorage( const OUString& rElementName, bool bCreateMissing );
 
 private:
-    typedef RefMap< OUString, StorageBase > SubStorageMap;
-
-    SubStorageMap       maSubStorages;      ///< Map of direct sub storages.
+    RefMap< OUString, StorageBase >
+                        maSubStorages;      ///< Map of direct sub storages.
     css::uno::Reference< css::io::XInputStream >
                         mxInStream;         ///< Cached base input stream (to keep it alive).
     css::uno::Reference< css::io::XStream >

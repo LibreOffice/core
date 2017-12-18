@@ -1339,13 +1339,12 @@ namespace
 
 namespace
 {
-    typedef std::deque< PackedFileEntry > PackedFileEntryVector;
-
     class PackedFile
     {
     private:
         const OUString          maURL;
-        PackedFileEntryVector   maPackedFileEntryVector;
+        std::deque< PackedFileEntry >
+                                maPackedFileEntryVector;
         bool                    mbChanged;
 
     public:

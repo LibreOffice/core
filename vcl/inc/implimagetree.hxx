@@ -101,11 +101,9 @@ private:
         {}
     };
 
-    /// Map between the theme name(s) and the content.
-    typedef std::unordered_map<OUString, IconSet> StyleIconSet;
-
     /// Remember all the (used) icon styles and individual icons in them.
-    StyleIconSet maIconSets;
+    /// Map between the theme name(s) and the content.
+    std::unordered_map<OUString, IconSet> maIconSets;
 
     /// Style used for the current operations; switches switch several times during fallback search.
     OUString maCurrentStyle;

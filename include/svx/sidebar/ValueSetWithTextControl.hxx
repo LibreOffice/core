@@ -53,8 +53,7 @@ private:
         OUString maItemText2;
     };
 
-    typedef ::std::vector< ValueSetWithTextItem > tItemList;
-    tItemList maItems;
+    ::std::vector< ValueSetWithTextItem > maItems;
 };
 
 } } // end of namespace svx::sidebar

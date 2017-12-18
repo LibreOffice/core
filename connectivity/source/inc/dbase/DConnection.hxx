@@ -27,8 +27,7 @@ namespace connectivity
     namespace dbase
     {
         class ODriver;
-        typedef file::OConnection ODbaseConnection_Base;
-        class ODbaseConnection : public ODbaseConnection_Base
+        class ODbaseConnection : public file::OConnection
         {
         protected:
             virtual ~ODbaseConnection() override;

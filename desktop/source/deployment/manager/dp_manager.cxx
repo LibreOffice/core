@@ -1193,10 +1193,9 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
     bool bModified = false;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
-    typedef ActivePackages::Entries::const_iterator ITActive;
     bool bShared = (m_context == "shared");
 
-    for (ITActive i = id2temp.begin(); i != id2temp.end(); ++i)
+    for (auto i = id2temp.begin(); i != id2temp.end(); ++i)
     {
         try
         {

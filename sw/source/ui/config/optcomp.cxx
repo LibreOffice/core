@@ -43,9 +43,7 @@ using namespace ::std;
 
 struct SwCompatibilityOptPage_Impl
 {
-    typedef vector< SvtCompatibilityEntry > SwCompatibilityItemList;
-
-    SwCompatibilityItemList m_aList;
+    std::vector< SvtCompatibilityEntry > m_aList;
 };
 
 SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxItemSet& rSet)

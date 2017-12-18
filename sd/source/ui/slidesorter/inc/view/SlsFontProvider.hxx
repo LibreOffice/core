@@ -36,8 +36,6 @@ class FontProvider
     : public SdGlobalResource
 {
 public:
-    typedef std::shared_ptr<vcl::Font> SharedFontPointer;
-
     /** Return the single instance of this class.  Throws a RuntimeException
         when no instance can be created.
     */
@@ -57,7 +55,7 @@ private:
         replaced by another one only when GetFont() is called with a device
         with a different map mode or by a call to Invalidate().
     */
-    SharedFontPointer maFont;
+    std::shared_ptr<vcl::Font> maFont;
 
     FontProvider();
     virtual ~FontProvider() override;

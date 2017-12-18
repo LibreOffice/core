@@ -84,7 +84,6 @@ namespace svxform
 
     typedef ::std::map< Reference< XInterface >, SdrObject*, ::comphelper::OInterfaceCompare< XInterface > >
             MapModelToShape;
-    typedef MapModelToShape::value_type ModelShapePair;
 
 
     void    collectShapeModelMapping( SdrPage const * _pPage, MapModelToShape& _rMapping )
@@ -105,7 +104,7 @@ namespace svxform
                 // note that this is normalized (i.e. queried for XInterface explicitly)
 
             ::std::pair< MapModelToShape::iterator, bool > aPos =
-                  _rMapping.insert( ModelShapePair( xNormalizedModel, pSdrObject ) );
+                  _rMapping.emplace( xNormalizedModel, pSdrObject );
             DBG_ASSERT( aPos.second, "collectShapeModelMapping: model was already existent!" );
                 // if this asserts, this would mean we have 2 shapes pointing to the same model
         }

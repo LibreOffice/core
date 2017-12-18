@@ -179,8 +179,6 @@ namespace utl
         }
     };
 
-    typedef std::vector<NodeValueAccessor> NodeValueAccessors;
-
     //= OConfigurationValueContainerImpl
 
     struct OConfigurationValueContainerImpl
@@ -189,7 +187,7 @@ namespace utl
         ::osl::Mutex&                           rMutex;         // the mutex for accessing the data containers
         OConfigurationTreeRoot                  aConfigRoot;    // the configuration node we're accessing
 
-        NodeValueAccessors                      aAccessors;     // the accessors to the node values
+        std::vector<NodeValueAccessor>          aAccessors;     // the accessors to the node values
 
         OConfigurationValueContainerImpl( const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rMutex )
             :xORB( _rxORB )

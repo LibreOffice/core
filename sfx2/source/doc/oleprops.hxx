@@ -121,8 +121,7 @@ public:
     void                SetCodePage( sal_uInt16 nCodePage );
 
 private:
-    typedef std::shared_ptr< rtl_TextEncoding > TextEncRef;
-    TextEncRef          mxTextEnc;
+    std::shared_ptr< rtl_TextEncoding > mxTextEnc;
 };
 
 

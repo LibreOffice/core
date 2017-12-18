@@ -48,8 +48,7 @@ class ODbDataSourceAdministrationHelper;
 class ODbAdminDialog final : public SfxTabDialog , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
-    typedef std::stack< sal_Int32 > PageStack;
-    PageStack               m_aCurrentDetailPages;  // ids of all currently enabled (type-dependent) detail pages
+    std::stack< sal_Int32 > m_aCurrentDetailPages;  // ids of all currently enabled (type-dependent) detail pages
 
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 

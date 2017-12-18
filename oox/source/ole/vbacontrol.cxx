@@ -95,8 +95,8 @@ public:
     OUString            generateDummyName();
 
 private:
-    typedef ::std::set< OUString > OUStringSet;
-    OUStringSet         maCtrlNames;
+    ::std::set< OUString >
+                        maCtrlNames;
     const OUString      maDummyBaseName;
     sal_Int32           mnIndex;
 };

@@ -44,10 +44,8 @@
 namespace DOM
 {
 
-    typedef std::stack< css::uno::Reference< css::xml::dom::XNode > > NodeStack;
     typedef std::map< OUString, OUString > NSMap;
     typedef std::map< OUString, OUString > AttrMap;
-    typedef std::stack< NSMap > NSStack;
 
     class  CSAXDocumentBuilder
         : public ::cppu::WeakImplHelper< css::xml::dom::XSAXDocumentBuilder2, css::lang::XServiceInfo >
@@ -58,8 +56,8 @@ namespace DOM
         const css::uno::Reference< css::lang::XMultiServiceFactory > m_aServiceManager;
 
         css::xml::dom::SAXDocumentBuilderState m_aState;
-        NodeStack m_aNodeStack;
-        NSStack m_aNSStack;
+        std::stack< css::uno::Reference< css::xml::dom::XNode > > m_aNodeStack;
+        std::stack< NSMap > m_aNSStack;
 
         css::uno::Reference< css::xml::dom::XDocument > m_aDocument;
         css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;

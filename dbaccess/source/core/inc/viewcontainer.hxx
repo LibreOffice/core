@@ -46,11 +46,9 @@ namespace dbtools
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper1< css::container::XContainerListener> OViewContainer_Base;
-
     // OViewContainer
     class OViewContainer :  public OFilteredContainer,
-                            public OViewContainer_Base
+                            public ::cppu::ImplHelper1< css::container::XContainerListener>
     {
     public:
         /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>

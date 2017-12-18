@@ -666,9 +666,8 @@ void LngSvcMgr::UpdateAll()
     using lang::Locale;
     using uno::Sequence;
 
-    typedef OUString OUstring_t;
     typedef Sequence< OUString > Sequence_OUString_t;
-    typedef std::map< OUstring_t, Sequence_OUString_t > list_entry_map_t;
+    typedef std::map< OUString, Sequence_OUString_t > list_entry_map_t;
 
     SvtLinguConfig aCfg;
 

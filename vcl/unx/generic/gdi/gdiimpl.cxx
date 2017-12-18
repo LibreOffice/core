@@ -1507,8 +1507,7 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2D
         return false;
 
      // convert the B2DTrapezoids into XRender-Trapezoids
-    typedef std::vector<XTrapezoid> TrapezoidVector;
-    TrapezoidVector aTrapVector( nTrapCount );
+    std::vector<XTrapezoid> aTrapVector( nTrapCount );
     const basegfx::B2DTrapezoid* pB2DTrap = pB2DTraps;
     for( int i = 0; i < nTrapCount; ++pB2DTrap, ++i )
     {

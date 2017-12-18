@@ -42,8 +42,6 @@ namespace DOM
 {
     class CElement;
 
-    typedef std::vector< xmlNodePtr > nodevector_t;
-
     class CElementListImpl
         : public cppu::WeakImplHelper< css::xml::dom::XNodeList,
                 css::xml::dom::events::XEventListener >
@@ -59,7 +57,7 @@ namespace DOM
         ::std::unique_ptr<xmlChar[]> const m_pName;
         ::std::unique_ptr<xmlChar[]> const m_pURI;
         bool m_bRebuild;
-        nodevector_t m_nodevector;
+        std::vector< xmlNodePtr > m_nodevector;
 
         void buildlist(xmlNodePtr pNode, bool start=true);
 

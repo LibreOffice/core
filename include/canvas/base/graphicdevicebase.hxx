@@ -106,7 +106,6 @@ namespace canvas
     {
     public:
         typedef Base              BaseType;
-        typedef DeviceHelper      DeviceHelperType;
         typedef Mutex             MutexType;
         typedef UnambiguousBase   UnambiguousBaseType;
         typedef GraphicDeviceBase ThisType;
@@ -334,7 +333,7 @@ namespace canvas
             rAny >>= mbDumpScreenContent;
         }
 
-        DeviceHelperType  maDeviceHelper;
+        DeviceHelper      maDeviceHelper;
         PropertySetHelper maPropHelper;
         bool              mbDumpScreenContent;
 

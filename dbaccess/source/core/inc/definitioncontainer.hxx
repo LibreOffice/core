@@ -96,7 +96,6 @@ class ODefinitionContainer
 {
 protected:
     typedef std::map< OUString, css::uno::WeakReference< css::ucb::XContent > > Documents;
-    typedef std::vector<Documents::iterator> DocumentsIndexAccess;
 
     enum ContainerOperation
     {
@@ -117,7 +116,8 @@ private:
 protected:
     // we can't just hold a vector of XContentRefs, as after initialization they're all empty
     // cause we load them only on access
-    DocumentsIndexAccess    m_aDocuments;               // for a efficient index access
+    std::vector<Documents::iterator>
+                            m_aDocuments;               // for a efficient index access
     Documents               m_aDocumentMap;             // for a efficient name access
 
     ::comphelper::OInterfaceContainerHelper2

@@ -37,10 +37,8 @@ using namespace ::com::sun::star::io;
 namespace io_acceptor
 {
 
-    typedef WeakImplHelper< XConnection > MyPipeConnection;
-
     class PipeConnection :
-        public MyPipeConnection
+        public WeakImplHelper< XConnection >
     {
     public:
         explicit PipeConnection( const OUString &sConnectionDescription);

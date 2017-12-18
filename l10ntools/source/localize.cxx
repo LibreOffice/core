@@ -247,9 +247,7 @@ void handleFilesOfDir(
     ///Handle files in lexical order
     std::sort(aFiles.begin(), aFiles.end());
 
-    typedef std::vector<OUString>::const_iterator citer_t;
-
-    for( citer_t aIt = aFiles.begin(); aIt != aFiles.end(); ++aIt )
+    for( auto aIt = aFiles.begin(); aIt != aFiles.end(); ++aIt )
         handleFile(rProject, *aIt, rPotDir);
 }
 

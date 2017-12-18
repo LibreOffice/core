@@ -43,8 +43,6 @@
 
 typedef ::std::pair< MetaAction*, int > Component; // MetaAction plus index in metafile
 
-typedef ::std::list< Component > ComponentList;
-
 // List of (intersecting) actions, plus overall bounds
 struct ConnectedComponents
 {
@@ -56,7 +54,7 @@ struct ConnectedComponents
         bIsFullyTransparent(false)
     {}
 
-    ComponentList   aComponentList;
+    ::std::list< Component > aComponentList;
     tools::Rectangle       aBounds;
     Color           aBgColor;
     bool            bIsSpecial;

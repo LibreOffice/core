@@ -16,9 +16,8 @@ namespace connectivity
     namespace firebird
     {
         class Column;
-        typedef sdbcx::OColumn Column_BASE;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<Column> Column_PROP;
-        class Column : public Column_BASE,
+        class Column : public sdbcx::OColumn,
                            public Column_PROP
         {
             OUString m_sAutoIncrement;

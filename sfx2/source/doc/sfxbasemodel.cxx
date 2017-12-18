@@ -1072,8 +1072,7 @@ void SAL_CALL SfxBaseModel::disconnectController( const Reference< frame::XContr
 
 namespace
 {
-    typedef ::cppu::WeakImplHelper< XUndoAction > ControllerLockUndoAction_Base;
-    class ControllerLockUndoAction : public ControllerLockUndoAction_Base
+    class ControllerLockUndoAction : public ::cppu::WeakImplHelper< XUndoAction >
     {
     public:
         ControllerLockUndoAction( const Reference< XModel >& i_model, const bool i_undoIsUnlock )

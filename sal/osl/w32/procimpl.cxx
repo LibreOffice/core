@@ -45,7 +45,6 @@ namespace /* private */
     typedef std::vector<rtl::OUString> string_container_t;
     typedef string_container_t::iterator string_container_iterator_t;
     typedef string_container_t::const_iterator string_container_const_iterator_t;
-    typedef std::pair<string_container_iterator_t, string_container_iterator_t> iterator_pair_t;
     typedef std::vector<sal_Unicode> environment_container_t;
 
     /* Function object that compares two strings that are
@@ -144,7 +143,7 @@ namespace /* private */
             if (env_var.getLength() == 0)
                 return false;
 
-            iterator_pair_t iter_pair = std::equal_range(
+            auto iter_pair = std::equal_range(
                 merged_env->begin(),
                 merged_env->end(),
                 env_var,

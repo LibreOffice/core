@@ -138,8 +138,7 @@ private: //member
 
     mutable css::uno::Reference< css::lang::XUnoTunnel > m_xChartView;
 
-    typedef std::map< OUString, css::uno::Reference< css::container::XNameContainer > > tTableMap;//GradientTable, HatchTable etc.
-    tTableMap   m_aTableMap;
+    std::map< OUString, css::uno::Reference< css::container::XNameContainer > > m_aTableMap;
 };
 
 } //  namespace wrapper
