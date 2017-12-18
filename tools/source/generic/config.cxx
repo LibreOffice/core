@@ -54,8 +54,8 @@ struct ImplConfigData
 {
     ImplGroupData*  mpFirstGroup;
     OUString        maFileName;
-    sal_uIntPtr     mnDataUpdateId;
-    sal_uIntPtr     mnTimeStamp;
+    sal_uInt32      mnDataUpdateId;
+    sal_uInt32      mnTimeStamp;
     LineEnd         meLineEnd;
     bool            mbModified;
     bool            mbRead;
@@ -78,9 +78,9 @@ static OUString toUncPath( const OUString& rPath )
     return aFileURL;
 }
 
-static sal_uIntPtr ImplSysGetConfigTimeStamp( const OUString& rFileName )
+static sal_uInt32 ImplSysGetConfigTimeStamp( const OUString& rFileName )
 {
-    sal_uIntPtr nTimeStamp = 0;
+    sal_uInt32 nTimeStamp = 0;
     ::osl::DirectoryItem aItem;
     ::osl::FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
 
@@ -94,7 +94,7 @@ static sal_uIntPtr ImplSysGetConfigTimeStamp( const OUString& rFileName )
 }
 
 static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
-                                sal_uInt64& rRead, bool& rbRead, bool& rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
+                                sal_uInt64& rRead, bool& rbRead, bool& rbIsUTF8BOM, sal_uInt32& rTimeStamp )
 {
     sal_uInt8*          pBuf = nullptr;
     ::osl::File aFile( rFileName );
@@ -138,7 +138,7 @@ static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
 }
 
 static bool ImplSysWriteConfig( const OUString& rFileName,
-                                const sal_uInt8* pBuf, sal_uIntPtr nBufLen, bool rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
+                                const sal_uInt8* pBuf, sal_uInt32 nBufLen, bool rbIsUTF8BOM, sal_uInt32& rTimeStamp )
 {
     bool bSuccess = false;
     bool bUTF8BOMSuccess = false;
@@ -361,14 +361,14 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     }
 }
 
-static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr& rLen )
+static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uInt32& rLen )
 {
     sal_uInt8*      pWriteBuf;
     sal_uInt8*      pBuf;
     sal_uInt8       aLineEndBuf[2] = {0, 0};
     ImplKeyData*    pKey;
     ImplGroupData*  pGroup;
-    unsigned int    nBufLen;
+    sal_uInt32      nBufLen;
     sal_uInt32      nValueLen;
     sal_uInt32      nKeyLen;
     sal_uInt32      nLineEndLen;
@@ -513,7 +513,7 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
 
 static void ImplReadConfig( ImplConfigData* pData )
 {
-    sal_uIntPtr nTimeStamp = 0;
+    sal_uInt32   nTimeStamp = 0;
     sal_uInt64  nRead = 0;
     bool    bRead = false;
     bool    bIsUTF8BOM = false;
@@ -539,7 +539,7 @@ static void ImplWriteConfig( ImplConfigData* pData )
         "tools.generic", "Config overwrites modified configfile: " << pData->maFileName );
 
     // Read config list from buffer
-    sal_uIntPtr nBufLen;
+    sal_uInt32 nBufLen;
     sal_uInt8*  pBuf = ImplGetConfigBuffer( pData, nBufLen );
     if ( pBuf )
     {
