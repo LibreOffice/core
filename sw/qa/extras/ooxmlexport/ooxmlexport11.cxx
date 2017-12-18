@@ -170,6 +170,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
                                                 "HoriOrientPosition"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(
+        xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aProps(xLevels->getByIndex(0)); // 1st level
+    // This was 0, first-line left margin of the numbering was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-635), aProps["FirstLineIndent"].get<sal_Int32>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
