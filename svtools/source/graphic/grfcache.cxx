@@ -147,9 +147,9 @@ private:
 
     GraphicID               maID;
     GfxLink                 maGfxLink;
-    BitmapEx*               mpBmpEx;
-    GDIMetaFile*            mpMtf;
-    Animation*              mpAnimation;
+    std::unique_ptr<BitmapEx>    mpBmpEx;
+    std::unique_ptr<GDIMetaFile> mpMtf;
+    std::unique_ptr<Animation>   mpAnimation;
     bool                    mbSwappedAll;
 
     // VectorGraphicData support
@@ -178,9 +178,6 @@ public:
 
 GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     maID            ( rObj ),
-    mpBmpEx         ( nullptr ),
-    mpMtf           ( nullptr ),
-    mpAnimation     ( nullptr ),
     mbSwappedAll    ( true )
 {
     mbSwappedAll = !ImplInit( rObj );
@@ -193,10 +190,6 @@ GraphicCacheEntry::~GraphicCacheEntry()
         maGraphicObjectList.empty(),
         "GraphicCacheEntry::~GraphicCacheEntry(): Not all GraphicObjects are removed from this entry"
     );
-
-    delete mpBmpEx;
-    delete mpMtf;
-    delete mpAnimation;
 }
 
 bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
@@ -207,23 +200,9 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
     {
         const Graphic& rGraphic = rObj.GetGraphic();
 
-        if( mpBmpEx )
-        {
-            delete mpBmpEx;
-            mpBmpEx = nullptr;
-        }
-
-        if( mpMtf )
-        {
-            delete mpMtf;
-            mpMtf = nullptr;
-        }
-
-        if( mpAnimation )
-        {
-            delete mpAnimation;
-            mpAnimation = nullptr;
-        }
+        mpBmpEx.reset();
+        mpMtf.reset();
+        mpAnimation.reset();
 
         switch( rGraphic.GetType() )
         {
@@ -235,11 +214,11 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
                 }
                 else if( rGraphic.IsAnimated() )
                 {
-                    mpAnimation = new Animation( rGraphic.GetAnimation() );
+                    mpAnimation.reset(new Animation( rGraphic.GetAnimation() ));
                 }
                 else
                 {
-                    mpBmpEx = new BitmapEx( rGraphic.GetBitmapEx() );
+                    mpBmpEx.reset(new BitmapEx( rGraphic.GetBitmapEx() ));
                     if (rGraphic.getPdfData().hasElements())
                         maPdfData = rGraphic.getPdfData();
                 }
@@ -248,7 +227,7 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
 
             case GraphicType::GdiMetafile:
             {
-                mpMtf = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
+                mpMtf.reset(new GDIMetaFile( rGraphic.GetGDIMetaFile() ));
             }
             break;
 
@@ -375,12 +354,9 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut()
     if( !mbSwappedAll )
         return;
 
-    delete mpBmpEx;
-    mpBmpEx = nullptr;
-    delete mpMtf;
-    mpMtf = nullptr;
-    delete mpAnimation;
-    mpAnimation = nullptr;
+    mpBmpEx.reset();
+    mpMtf.reset();
+    mpAnimation.reset();
 
     // #119176# also reset VectorGraphicData
     maVectorGraphicData.reset();
@@ -399,8 +375,8 @@ private:
 
     ::salhelper::TTimeValue     maReleaseTime;
     const GraphicCacheEntry*    mpRefCacheEntry;
-    GDIMetaFile*                mpMtf;
-    BitmapEx*                   mpBmpEx;
+    std::unique_ptr<GDIMetaFile> mpMtf;
+    std::unique_ptr<BitmapEx>   mpBmpEx;
     GraphicAttr                 maAttr;
     Size                        maOutSizePix;
     sal_uLong                   mnCacheSize;
@@ -425,7 +401,7 @@ public:
                                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                           const BitmapEx& rBmpEx ) :
                                     mpRefCacheEntry( pRefCacheEntry ),
-                                    mpMtf( nullptr ), mpBmpEx( new BitmapEx( rBmpEx ) ),
+                                    mpBmpEx( new BitmapEx( rBmpEx ) ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
                                     mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
                                     mnOutDevDrawMode( pOut->GetDrawMode() ),
@@ -438,7 +414,7 @@ public:
                                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                           const GDIMetaFile& rMtf ) :
                                     mpRefCacheEntry( pRefCacheEntry ),
-                                    mpMtf( new GDIMetaFile( rMtf ) ), mpBmpEx( nullptr ),
+                                    mpMtf( new GDIMetaFile( rMtf ) ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
                                     mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
                                     mnOutDevDrawMode( pOut->GetDrawMode() ),
@@ -446,8 +422,6 @@ public:
                                     {
                                     }
 
-
-                                ~GraphicDisplayCacheEntry();
 
     sal_uLong                   GetCacheSize() const { return mnCacheSize; }
     const GraphicCacheEntry*    GetReferencedCacheEntry() const { return mpRefCacheEntry; }
@@ -795,12 +769,6 @@ sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice const * pOut, co
     }
     else
         return rGraphic.GetSizeBytes();
-}
-
-GraphicDisplayCacheEntry::~GraphicDisplayCacheEntry()
-{
-    delete mpMtf;
-    delete mpBmpEx;
 }
 
 void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const
