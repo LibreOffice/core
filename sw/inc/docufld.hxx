@@ -317,10 +317,6 @@ public:
                       const OUString& rFalse,
                       sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
 
-    // nSubType = TYP_CONDTXTFLD
-    SwHiddenTextField(SwHiddenTextFieldType*,
-                      const OUString& rCondTrueFalse); // value sample: " IF A == B \"TrueText\" \"FalseText\""
-
     virtual OUString    GetFieldName() const override;
 
     void                Evaluate(SwDoc*);

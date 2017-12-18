@@ -55,10 +55,7 @@ public:
                wrapper::EventHandler& eh );
 
     void setVideoSize( unsigned width, unsigned height );
-    unsigned getWidth() const;
-    unsigned getHeight() const;
 
-    void setScale( float factor );
     void setWindowID( const intptr_t windowID );
 
     void SAL_CALL start() override;

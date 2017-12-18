@@ -55,16 +55,6 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url,
     mPlayer.setMouseHandling( false );
 }
 
-unsigned VLCPlayer::getWidth() const
-{
-    return mPlayer.getWidth();
-}
-
-unsigned VLCPlayer::getHeight() const
-{
-    return mPlayer.getHeight();
-}
-
 void SAL_CALL VLCPlayer::start()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -90,12 +80,6 @@ double SAL_CALL VLCPlayer::getDuration()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return static_cast<double>( mMedia.getDuration() ) / MS_IN_SEC;
-}
-
-void VLCPlayer::setScale( float factor )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    mPlayer.setScale( factor );
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
