@@ -256,7 +256,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     maPageList.push_back( pData );
 
     SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->InsertEntry( rIconText, rChoiceIcon );
-    pEntry->SetUserData ( reinterpret_cast<void*>(nId) );
+    pEntry->SetUserData<HyperLinkPageType>( nId );
     return pEntry;
 }
 
@@ -319,7 +319,7 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
     if ( !pEntry )
         pEntry = m_pIconCtrl->GetCursor( );
 
-    HyperLinkPageType nId = static_cast<HyperLinkPageType>(reinterpret_cast<sal_uIntPtr>(pEntry->GetUserData()));
+    HyperLinkPageType nId = pEntry->GetUserData<HyperLinkPageType>();
 
     if( nId != mnCurrentPageId )
     {
@@ -673,7 +673,7 @@ void IconChoiceDialog::FocusOnIcon( HyperLinkPageType nId )
     for ( sal_Int32 i=0; i<m_pIconCtrl->GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
-        HyperLinkPageType nUserData = static_cast<HyperLinkPageType>(reinterpret_cast<sal_uIntPtr>(pEntry->GetUserData()));
+        HyperLinkPageType nUserData = pEntry->GetUserData<HyperLinkPageType>();
 
         if ( nUserData == nId )
         {
