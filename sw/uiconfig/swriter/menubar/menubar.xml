@@ -275,7 +275,9 @@
           <menu:menuitem menu:id=".uno:FlowChartShapes"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:InsertSection"/>
+      <menu:menuitem menu:id=".uno:InsertDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawText"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
@@ -287,6 +289,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
+      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertBookmark"/>
@@ -330,11 +333,8 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertSection"/>
       <menu:menuitem menu:id=".uno:InsertEnvelope"/>
       <menu:menuitem menu:id=".uno:InsertSignatureLine"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertDoc"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FormatMenu">
