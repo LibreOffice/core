@@ -79,7 +79,7 @@ public:
     virtual bool        Equals( const BaseStorageStream& rStream ) const = 0;
 };
 
-enum class SotClipboardFormatId : sal_uLong;
+enum class SotClipboardFormatId : sal_uInt32;
 
 class SAL_DLLPUBLIC_RTTI BaseStorage : public StorageBase
 {

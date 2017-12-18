@@ -24,7 +24,7 @@
 
 // - predefined formats -
 // Do NOT change the order of these values as the implementation depends on them!
-enum class SotClipboardFormatId : sal_uLong
+enum class SotClipboardFormatId : sal_uInt32
 {
 // standard formats for that Copy/Paste methods exist
     STRING                 = 1,
@@ -181,7 +181,7 @@ enum class SotClipboardFormatId : sal_uLong
 /** Make it easier to iterate over format IDs */
 inline SotClipboardFormatId& operator++(SotClipboardFormatId& v)
 {
-    v = static_cast<SotClipboardFormatId>(static_cast<sal_uLong>(v) + 1);
+    v = static_cast<SotClipboardFormatId>(static_cast<sal_uInt32>(v) + 1);
     return v;
 }
 
