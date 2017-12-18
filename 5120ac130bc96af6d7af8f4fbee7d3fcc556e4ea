@@ -22,6 +22,30 @@
       "revId": "5120ac130bc96af6d7af8f4fbee7d3fcc556e4ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5a107b59",
+        "filename": "vcl/source/gdi/gdimtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-18T21:17:02Z",
+      "side": 1,
+      "message": "Given that the original author is a native English speaker I\u0027d say that the original version at least wasn\u0027t that bad.. ;-) except the small typo.\n\nSuggest to only correct the typo and not reword.",
+      "parentUuid": "1a430d35_f4b4e035",
+      "range": {
+        "startLine": 190,
+        "startChar": 16,
+        "endLine": 191,
+        "endChar": 15
+      },
+      "revId": "5120ac130bc96af6d7af8f4fbee7d3fcc556e4ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
