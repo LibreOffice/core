@@ -363,7 +363,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
             SwFormatVertOrient aVert(pTextBox->GetVertOrient());
             aVert.SetVertOrient(css::text::VertOrientation::NONE);
-            sal_Int32 nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top() - nFlyAsc;
+            sal_Int32 const nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top();
             aVert.SetPos(nTop);
 
             pTextBox->LockModify();
