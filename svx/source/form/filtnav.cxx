@@ -198,14 +198,14 @@ public:
 
 class FmFilterInsertedHint : public FmFilterHint
 {
-    sal_uLong m_nPos;   // Position relative to the parent of the data
+    size_t m_nPos;   // Position relative to the parent of the data
 
 public:
-    FmFilterInsertedHint(FmFilterData* pData, sal_uLong nRelPos)
+    FmFilterInsertedHint(FmFilterData* pData, size_t nRelPos)
         :FmFilterHint(pData)
         ,m_nPos(nRelPos){}
 
-    sal_uLong GetPos() const { return m_nPos; }
+    size_t GetPos() const { return m_nPos; }
 };
 
 class FmFilterRemovedHint : public FmFilterHint
@@ -710,18 +710,18 @@ void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
     }
 }
 
-
 void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
+    size_t nPos;
     ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChildren();
-    sal_uLong nPos = rPos == rItems.end() ? CONTAINER_APPEND : rPos - rItems.begin();
-    if (nPos == CONTAINER_APPEND)
+    if (rPos == rItems.end())
     {
+        nPos = rItems.size();
         rItems.push_back(pData);
-        nPos = rItems.size() - 1;
     }
     else
     {
+        nPos = rPos - rItems.begin();
         rItems.insert(rPos, pData);
     }
 
