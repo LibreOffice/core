@@ -176,7 +176,7 @@ protected:
     SAL_DLLPRIVATE sal_uInt16 ImplGetFirstVisible() const;
     SAL_DLLPRIVATE sal_uInt16 ImplGetPrevVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplGetNextVisible( sal_uInt16 nPos ) const;
-    SAL_DLLPRIVATE void ImplPaint(vcl::RenderContext& rRenderContext,
+    SAL_DLLPRIVATE void ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                                   sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = nullptr,
                                   bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
     SAL_DLLPRIVATE void ImplPaintMenuTitle(vcl::RenderContext&, const Rectangle& rRect) const;

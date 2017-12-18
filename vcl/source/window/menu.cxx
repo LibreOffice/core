@@ -1754,7 +1754,7 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const Rectangl
     rRenderContext.SetBackground(aOldBackground);
 }
 
-void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
+void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                      sal_uInt16 nBorder, long nStartY, MenuItemData* pThisItemOnly,
                      bool bHighlighted, bool bLayout, bool bRollover) const
 {
@@ -1782,7 +1782,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
     }
 
     // for the computations, use size of the underlying window, not of RenderContext
-    Size aOutSz = pWindow->GetOutputSizePixel();
+    Size aOutSz(rSize);
 
     size_t nCount = pItemList->size();
     if (bLayout)
@@ -2271,12 +2271,13 @@ void Menu::ImplFillLayoutData() const
         mpLayoutData = new MenuLayoutData();
         if (IsMenuBar())
         {
-            ImplPaint(*pWindow, 0, 0, nullptr, false, true); // FIXME
+            ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), 0, 0, nullptr, false, true); // FIXME
         }
         else
         {
             MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
-            ImplPaint(*pWindow, pFloat->nScrollerHeight, pFloat->ImplGetStartY(), nullptr, false, true); //FIXME
+            ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), pFloat->nScrollerHeight, pFloat->ImplGetStartY(),
+                      nullptr, false, true); //FIXME
         }
     }
 }

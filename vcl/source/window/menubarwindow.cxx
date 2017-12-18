@@ -589,6 +589,10 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
 
     long nX = 0;
     size_t nCount = pMenu->pItemList->size();
+
+    Size aOutputSize = GetOutputSizePixel();
+    aOutputSize.Width() -= aCloseBtn->GetSizePixel().Width();
+
     for (size_t n = 0; n < nCount; n++)
     {
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
@@ -597,7 +601,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
             if (pData->eType != MenuItemType::SEPARATOR)
             {
                 // #107747# give menuitems the height of the menubar
-                Rectangle aRect = Rectangle(Point(nX, 1), Size(pData->aSz.Width(), GetOutputSizePixel().Height() - 2));
+                Rectangle aRect = Rectangle(Point(nX, 1), Size(pData->aSz.Width(), aOutputSize.Height() - 2));
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(aRect);
                 bool bRollover = nPos != nHighlightedItem;
@@ -612,12 +616,12 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                          Erase(rRenderContext);
                     else
                     {
-                        Rectangle aBgRegion(Point(), GetOutputSizePixel());
+                        Rectangle aBgRegion(Point(), aOutputSize);
                         rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aBgRegion,
                                                          ControlState::ENABLED, aControlValue, OUString());
                     }
 
-                    ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aControlValue);
+                    ImplAddNWFSeparator(rRenderContext, aOutputSize, aControlValue);
 
                     // draw selected item
                     ControlState nState = ControlState::ENABLED;
@@ -638,7 +642,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                     rRenderContext.DrawRect(aRect);
                 }
                 rRenderContext.Pop();
-                pMenu->ImplPaint(rRenderContext, 0, 0, pData, true/*bHighlight*/, false, bRollover);
+                pMenu->ImplPaint(rRenderContext, aOutputSize, 0, 0, pData, true/*bHighlight*/, false, bRollover);
             }
             return;
         }
@@ -844,6 +848,8 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
+    Size aOutputSize = GetOutputSizePixel();
+
     // no VCL paint if native menus
     if (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar())
     {
@@ -861,17 +867,21 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         else
         {
             Point aPt;
-            Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
+            Rectangle aCtrlRegion( aPt, aOutputSize );
 
             rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aCtrlRegion,
                                              ControlState::ENABLED, aMenubarValue, OUString());
         }
 
-        ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aMenubarValue);
+        ImplAddNWFSeparator(rRenderContext, aOutputSize, aMenubarValue);
     }
+
+    // shrink the area of the buttons
+    aOutputSize.Width() -= aCloseBtn->GetSizePixel().Width();
+
     rRenderContext.SetFillColor(rStyleSettings.GetMenuColor());
 
-    pMenu->ImplPaint(rRenderContext, 0);
+    pMenu->ImplPaint(rRenderContext, aOutputSize, 0);
     if (nHighlightedItem != ITEMPOS_INVALID)
         HighlightItem(rRenderContext, nHighlightedItem);
 
