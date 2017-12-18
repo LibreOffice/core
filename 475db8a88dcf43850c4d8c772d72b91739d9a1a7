@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1a84335c",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-12-18T13:23:56Z",
+      "side": 1,
+      "message": "Signature line is not available in 6.0",
+      "revId": "475db8a88dcf43850c4d8c772d72b91739d9a1a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
