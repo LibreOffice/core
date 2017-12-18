@@ -224,16 +224,6 @@ void IconChoiceDialog::dispose()
     }
     maPageList.clear();
 
-    if (m_pIconCtrl)
-    {
-        // remove Userdata from Icons
-        for ( sal_Int32 i=0; i < m_pIconCtrl->GetEntryCount(); i++)
-        {
-            SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( i );
-            delete static_cast<sal_uInt16*>(pEntry->GetUserData());
-        }
-    }
-
     delete pRanges;
     pRanges = nullptr;
     delete pOutSet;
