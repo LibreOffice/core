@@ -66,7 +66,6 @@ enum class EItem
     PrintFileOptions              ,   // 2
     PrintWarningOptions           ,
 
-    SaveOptions                   ,
     SecurityOptions               ,
     SysLocaleOptions              ,   // 2
 
