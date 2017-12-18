@@ -96,7 +96,8 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
     short aType = m_pSqlda->sqlvar[column-1].sqltype & ~1;
     OUString sCharset;
 
-    if(aType == SQL_TEXT)
+    // do not query the character set unnecessarily
+    if(aType == SQL_TEXT || aType == SQL_VARYING)
     {
         sCharset = getCharacterSet(column);
     }
