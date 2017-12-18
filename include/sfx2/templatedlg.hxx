@@ -180,7 +180,7 @@ public:
 
 public:
 
-    explicit SfxTemplateCategoryDialog();
+    SfxTemplateCategoryDialog();
 
     virtual ~SfxTemplateCategoryDialog() override;
     virtual void dispose() override;

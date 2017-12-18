@@ -325,7 +325,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventO
 }
 
 struct Instance {
-    explicit Instance():
+    Instance():
         instance(static_cast<cppu::OWeakObject *>(
                     new ContextChangeEventMultiplexer()))
     {

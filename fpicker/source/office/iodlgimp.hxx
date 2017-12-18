@@ -175,7 +175,7 @@ public:
     // remember sizes
     OUString                        _aIniKey;
 
-    explicit                SvtExpFileDlg_Impl();
+                            SvtExpFileDlg_Impl();
                             ~SvtExpFileDlg_Impl();
 
 

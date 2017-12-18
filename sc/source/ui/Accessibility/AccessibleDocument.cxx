@@ -1355,7 +1355,7 @@ namespace
 {
     struct ScVisAreaChanged
     {
-        explicit ScVisAreaChanged() {}
+        ScVisAreaChanged() {}
         void operator() (const ScAccessibleShapeData* pAccShapeData) const
         {
             if (pAccShapeData && pAccShapeData->pAccShape.is())

@@ -50,7 +50,7 @@ protected:
 
 public:
 
-    explicit CEvent();
+    CEvent();
 
     virtual ~CEvent() override;
     virtual OUString SAL_CALL getType() override;

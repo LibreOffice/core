@@ -100,7 +100,7 @@ const sal_Int32 CLIPDATAFMT_DIB         = 8;
 class SfxOleTextEncoding
 {
 public:
-    explicit     SfxOleTextEncoding() :
+                 SfxOleTextEncoding() :
                             mxTextEnc( new rtl_TextEncoding( osl_getThreadTextEncoding() ) ) {}
     explicit     SfxOleTextEncoding( rtl_TextEncoding eTextEnc ) :
                             mxTextEnc( new rtl_TextEncoding( eTextEnc ) ) {}
@@ -166,7 +166,7 @@ private:
 class SfxOleObjectBase
 {
 public:
-    explicit     SfxOleObjectBase() : mnErrCode( ERRCODE_NONE ) {}
+                 SfxOleObjectBase() : mnErrCode( ERRCODE_NONE ) {}
     virtual             ~SfxOleObjectBase();
 
     /** Returns the current error code. */
@@ -222,7 +222,7 @@ typedef std::shared_ptr< SfxOlePropertyBase > SfxOlePropertyRef;
 class SfxOleCodePageProperty : public SfxOlePropertyBase, public SfxOleTextEncoding
 {
 public:
-    explicit            SfxOleCodePageProperty();
+                        SfxOleCodePageProperty();
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -356,7 +356,7 @@ enum SfxOleSectionType
 class SfxOlePropertySet : public SfxOleObjectBase
 {
 public:
-    explicit     SfxOlePropertySet() {}
+                        SfxOlePropertySet() {}
 
     /** Loads this object from the passed storage. */
     ErrCode const &     LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName );

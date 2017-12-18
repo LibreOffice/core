@@ -38,7 +38,7 @@ namespace sdr
 
         public:
             // constructor/destructor
-            SAL_DLLPRIVATE explicit Event();
+            SAL_DLLPRIVATE Event();
             virtual ~Event();
 
             // get/set time

@@ -40,7 +40,7 @@ class CLiteral:
         css::rdf::XLiteral>
 {
 public:
-    explicit CLiteral();
+    CLiteral();
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;

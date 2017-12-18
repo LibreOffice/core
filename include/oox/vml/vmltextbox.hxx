@@ -60,7 +60,7 @@ struct OOX_DLLPUBLIC TextFontModel
     OptValue< bool >    mobStrikeout;
     OptValue<sal_Int32> monSpacing;
 
-    explicit            TextFontModel();
+                        TextFontModel();
 };
 
 

@@ -48,7 +48,7 @@ class OOX_DLLPUBLIC FastTokenHandler :
     public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    explicit            FastTokenHandler();
+                        FastTokenHandler();
     virtual             ~FastTokenHandler() override;
 
     // XServiceInfo

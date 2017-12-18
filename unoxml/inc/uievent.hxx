@@ -42,7 +42,7 @@ protected:
     css::uno::Reference< css::xml::dom::views::XAbstractView > m_view;
 
 public:
-    explicit CUIEvent();
+    CUIEvent();
 
     virtual css::uno::Reference< css::xml::dom::views::XAbstractView > SAL_CALL getView() override;
     virtual sal_Int32 SAL_CALL getDetail() override;

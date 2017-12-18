@@ -54,7 +54,7 @@ class SD_DLLPUBLIC WindowUpdater
     : public utl::ConfigurationListener
 {
 public:
-    explicit WindowUpdater();
+    WindowUpdater();
     virtual ~WindowUpdater() throw() override;
 
     /** Add the given device to the list of devices which will be updated

@@ -959,7 +959,7 @@ namespace
         SectionViewAction   m_eAction;
 
     public:
-        explicit ApplySectionViewAction()
+        ApplySectionViewAction()
             : m_eAction(eEndDragObj)
         {
         }

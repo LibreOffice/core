@@ -43,7 +43,7 @@ private:
     FILE *m_pOutFd;
 
 public:
-    explicit UnxSplashScreen();
+    UnxSplashScreen();
 
     // XStatusIndicator
     virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) override;

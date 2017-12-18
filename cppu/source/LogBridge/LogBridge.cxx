@@ -43,7 +43,7 @@ class LogBridge : public cppu::Enterable
     virtual  ~LogBridge() override;
 
 public:
-    explicit LogBridge();
+    LogBridge();
 
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) override;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) override;

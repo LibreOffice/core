@@ -37,7 +37,7 @@ struct SheetSettingsModel
     bool                mbSummaryBelow;         /// True = row outline symbols below group.
     bool                mbSummaryRight;         /// True = column outline symbols right of group.
 
-    explicit            SheetSettingsModel();
+                        SheetSettingsModel();
 };
 
 /** Sheet protection settings. */
@@ -67,7 +67,7 @@ struct SheetProtectionModel
 
     ::std::vector< ScEnhancedProtection >   maEnhancedProtections;
 
-    explicit            SheetProtectionModel();
+                        SheetProtectionModel();
 };
 
 class WorksheetSettings : public WorksheetHelper

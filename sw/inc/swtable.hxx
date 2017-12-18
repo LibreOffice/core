@@ -151,7 +151,7 @@ public:
     };
 
 
-    explicit SwTable();
+    SwTable();
     virtual ~SwTable() override;
 
     // @@@ public copy ctor, but no copy assignment?

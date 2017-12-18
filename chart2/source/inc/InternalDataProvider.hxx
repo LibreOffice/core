@@ -68,7 +68,7 @@ class InternalDataProvider :
         public impl::InternalDataProvider_Base
 {
 public:
-    explicit InternalDataProvider();
+    InternalDataProvider();
 
     // #i120559# allow handing over a default for data orientation
     // (DataInColumns) that will be used when no data is available

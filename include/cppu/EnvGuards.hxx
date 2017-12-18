@@ -85,7 +85,7 @@ namespace cppu
         css::uno::Environment m_env;
 
     public:
-        explicit AntiEnvGuard()
+        AntiEnvGuard()
             : m_env(css::uno::Environment::getCurrent())
         {
             uno_Environment_enter(NULL);

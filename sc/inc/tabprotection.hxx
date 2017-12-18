@@ -104,7 +104,7 @@ public:
         NONE        ///< last item - used to resize the vector
     };
 
-    explicit ScDocProtection();
+    ScDocProtection();
     explicit ScDocProtection(const ScDocProtection& r);
     virtual ~ScDocProtection() override;
 
@@ -188,7 +188,7 @@ public:
         NONE        ///< last item - used to resize the vector
     };
 
-    explicit ScTableProtection();
+    ScTableProtection();
     explicit ScTableProtection(const ScTableProtection& r);
     virtual ~ScTableProtection() override;
 

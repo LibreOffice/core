@@ -21,7 +21,7 @@ namespace chart {
 class GL3DBarChartType final : public ChartType
 {
 public:
-    explicit GL3DBarChartType();
+    GL3DBarChartType();
     virtual ~GL3DBarChartType() override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL

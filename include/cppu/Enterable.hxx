@@ -45,7 +45,7 @@ public:
     virtual ~Enterable() {}
 
 public:
-    inline explicit Enterable();
+    inline Enterable();
 
     void enter() {m_enter(this);}
     void leave() {m_leave(this);}

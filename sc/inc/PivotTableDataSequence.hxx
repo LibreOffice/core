@@ -50,7 +50,7 @@ struct ValueAndFormat
     ValueType m_eType;
     sal_uInt32 m_nNumberFormat;
 
-    explicit ValueAndFormat()
+    ValueAndFormat()
         : m_fValue(0.0)
         , m_aString()
         , m_eType(ValueType::Empty)

@@ -38,7 +38,7 @@ struct SheetInfoModel
     sal_Int32    mnSheetId;      /// Sheet identifier.
     sal_Int32    mnState;        /// Visibility state.
 
-    explicit     SheetInfoModel();
+                 SheetInfoModel();
 };
 
 /** Stores information about all sheets in a spreadsheet document.

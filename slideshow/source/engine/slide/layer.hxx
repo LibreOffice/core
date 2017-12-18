@@ -223,7 +223,7 @@ namespace slideshow
                 background, to contain shapes that should appear in
                 front of animated objects.
              */
-            explicit Layer();
+            Layer();
 
             struct ViewEntry
             {

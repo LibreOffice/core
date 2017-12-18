@@ -125,7 +125,7 @@ class CGMElements
         // Delimiter Counts -> which will be increased by each 'begin' operation
         //                     and decreased by each 'end' operation
         bool                bSegmentCount;
-        explicit CGMElements();
+        CGMElements();
         ~CGMElements();
         CGMElements&        operator=( const CGMElements& );
         void                Init();

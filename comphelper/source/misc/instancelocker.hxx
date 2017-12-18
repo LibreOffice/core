@@ -54,7 +54,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper< css::lang::XComponent,
     bool m_bInitialized;
 
 public:
-    explicit OInstanceLocker();
+    OInstanceLocker();
     virtual ~OInstanceLocker() override;
 
 // XComponent

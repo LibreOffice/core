@@ -69,7 +69,7 @@ class ElementSelectorToolbarController : public ::svt::ToolboxController
                                                 , public ElementSelectorToolbarController_BASE
 {
 public:
-    explicit ElementSelectorToolbarController();
+    ElementSelectorToolbarController();
     virtual ~ElementSelectorToolbarController() override;
 
     // XServiceInfo

@@ -42,7 +42,7 @@ struct AxisDispUnitsModel
     double              mfCustomUnit;       /// Custom unit size on value axis.
     OUString            mnBuiltInUnit;      /// Built-in unit on value axis.
 
-    explicit            AxisDispUnitsModel();
+                        AxisDispUnitsModel();
                         ~AxisDispUnitsModel();
 };
 

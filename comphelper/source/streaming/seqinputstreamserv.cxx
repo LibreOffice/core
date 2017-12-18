@@ -48,7 +48,7 @@ class SequenceInputStreamService:
         lang::XInitialization>
 {
 public:
-    explicit SequenceInputStreamService();
+    SequenceInputStreamService();
 
     // noncopyable
     SequenceInputStreamService(const SequenceInputStreamService&) = delete;

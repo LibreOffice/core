@@ -27,7 +27,7 @@ namespace chart
 class CandleStickChartType final : public ChartType
 {
 public:
-    explicit CandleStickChartType();
+    CandleStickChartType();
     virtual ~CandleStickChartType() override;
 
     virtual OUString SAL_CALL

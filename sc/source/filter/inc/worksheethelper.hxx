@@ -78,7 +78,7 @@ struct ColumnModel
     bool                mbHidden:1;         /// True = column is hidden.
     bool                mbCollapsed:1;      /// True = column outline is collapsed.
 
-    explicit            ColumnModel();
+                        ColumnModel();
 
     /** Returns true, if this entry can be merged with the passed column range (column settings are equal). */
     bool                isMergeable( const ColumnModel& rModel ) const;
@@ -100,7 +100,7 @@ struct RowModel
     bool                mbThickTop:1;       /// True = row has extra space above text.
     bool                mbThickBottom:1;    /// True = row has extra space below text.
 
-    explicit            RowModel();
+                        RowModel();
 
     /** Inserts the passed column span into the row model. */
     void                insertColSpan( const ValueRange& rColSpan );
@@ -116,7 +116,7 @@ struct PageBreakModel
     sal_Int32           mnMax;              /// End of limited break.
     bool                mbManual;           /// True = manual page break.
 
-    explicit            PageBreakModel();
+                        PageBreakModel();
 };
 
 /** Stores data about a hyperlink range. */
@@ -125,7 +125,7 @@ struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
     ScRange             maRange;            /// The cell area containing the hyperlink.
     OUString            maTooltip;          /// Additional tooltip text.
 
-    explicit            HyperlinkModel();
+                        HyperlinkModel();
 };
 
 /** Stores data about ranges with data validation settings. */
@@ -147,7 +147,7 @@ struct ValidationModel
     bool                mbNoDropDown:1;
     bool                mbAllowBlank:1;
 
-    explicit            ValidationModel();
+                        ValidationModel();
 
     /** Sets the passed BIFF validation type. */
     void                setBiffType( sal_uInt8 nType );

@@ -147,7 +147,7 @@ class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsLayoutItem();
+                            SdOptionsLayoutItem();
                             SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -312,7 +312,7 @@ class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsMiscItem();
+                            SdOptionsMiscItem();
                             SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -380,7 +380,7 @@ class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsSnapItem();
+                            SdOptionsSnapItem();
                             SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -548,7 +548,7 @@ class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsPrintItem();
+                            SdOptionsPrintItem();
     explicit                SdOptionsPrintItem( SdOptions const * pOpts );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

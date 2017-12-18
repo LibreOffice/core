@@ -41,7 +41,7 @@ typedef ::cppu::WeakImplHelper<
 class OOXMLFormulaParser : public OOXMLFormulaParser_BASE
 {
 public:
-    explicit            OOXMLFormulaParser();
+                        OOXMLFormulaParser();
     virtual             ~OOXMLFormulaParser() override;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------

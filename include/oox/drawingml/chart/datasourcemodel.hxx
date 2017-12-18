@@ -41,7 +41,7 @@ struct DataSequenceModel
     OUString     maFormatCode;       /// Number format for double values.
     sal_Int32           mnPointCount;       /// Number of points in this series source.
 
-    explicit            DataSequenceModel();
+                        DataSequenceModel();
                         ~DataSequenceModel();
 };
 
@@ -52,7 +52,7 @@ struct DataSourceModel
 
     DataSequenceRef     mxDataSeq;          /// The data sequence or formula link of this source.
 
-    explicit            DataSourceModel();
+                        DataSourceModel();
                         ~DataSourceModel();
 };
 

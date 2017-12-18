@@ -110,7 +110,7 @@ class ScVbaHlinkContainer : public ::cppu::WeakImplHelper< container::XIndexAcce
 {
 public:
     /// @throws uno::RuntimeException
-    explicit ScVbaHlinkContainer();
+             ScVbaHlinkContainer();
     /// @throws uno::RuntimeException
     explicit ScVbaHlinkContainer( const ScVbaHlinkContainerRef& rxSheetContainer, const ScRangeList& rScRanges );
 

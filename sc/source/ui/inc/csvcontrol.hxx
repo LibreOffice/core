@@ -137,7 +137,7 @@ struct ScCsvLayoutData
     mutable sal_Int32           mnNoRepaint;        /// >0 = no repaint.
     bool                        mbAppRTL;           /// true = application in RTL mode.
 
-    explicit                    ScCsvLayoutData();
+                                ScCsvLayoutData();
 
     /** Returns differences to rData.
         @descr  For each difference the appropriate bit is set in the returned value. */
@@ -207,7 +207,7 @@ private:
     sal_Int32                   mnParam2;       /// Second parameter.
 
 public:
-    explicit             ScCsvCmd() : meType( CSVCMD_NONE ),
+                         ScCsvCmd() : meType( CSVCMD_NONE ),
                                     mnParam1( CSV_POS_INVALID ), mnParam2( CSV_POS_INVALID ) {}
 
     inline void                 Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 );

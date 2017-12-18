@@ -1035,7 +1035,7 @@ class StarSymbolToMSMultiFontImpl : public StarSymbolToMSMultiFont
 private:
     ::std::multimap<sal_Unicode, SymbolEntry> maMagicMap;
 public:
-    explicit StarSymbolToMSMultiFontImpl();
+    StarSymbolToMSMultiFontImpl();
     OUString ConvertChar(sal_Unicode &rChar) override;
 };
 

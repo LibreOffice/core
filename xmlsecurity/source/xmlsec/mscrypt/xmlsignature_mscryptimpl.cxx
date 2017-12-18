@@ -51,7 +51,7 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo >
 {
     public:
-        explicit XMLSignature_MSCryptImpl();
+        XMLSignature_MSCryptImpl();
 
         //Methods from XXMLSignature
         virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(

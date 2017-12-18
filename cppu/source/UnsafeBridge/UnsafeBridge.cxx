@@ -35,7 +35,7 @@ class UnsafeBridge : public cppu::Enterable
     virtual  ~UnsafeBridge() override;
 
 public:
-    explicit UnsafeBridge();
+    UnsafeBridge();
 
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) override;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) override;

@@ -291,7 +291,7 @@ struct XclImpCellBorder : public XclCellBorder
     bool                mbBottomUsed;   /// true = Bottom line style used.
     bool                mbDiagUsed;     /// true = Diagonal line style used.
 
-    explicit            XclImpCellBorder();
+                        XclImpCellBorder();
 
     /** Sets outer line states and diagonal line states to used or unused. */
     void                SetUsedFlags( bool bOuterUsed, bool bDiagUsed );
@@ -327,7 +327,7 @@ struct XclImpCellArea : public XclCellArea
     bool                mbBackUsed;     /// true = Background color used.
     bool                mbPattUsed;     /// true = Pattern used.
 
-    explicit            XclImpCellArea();
+                        XclImpCellArea();
 
     /** Sets colors and pattern state to used or unused. */
     void                SetUsedFlags( bool bUsed );
@@ -572,7 +572,7 @@ public:
 
     typedef std::vector< std::unique_ptr<XclImpXFRange> > IndexList;
 
-    explicit     XclImpXFRangeColumn() {}
+                 XclImpXFRangeColumn() {}
 
     IndexList::iterator begin() { return maIndexList.begin(); }
     IndexList::iterator end() { return maIndexList.end(); }

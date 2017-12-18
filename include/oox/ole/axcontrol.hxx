@@ -347,7 +347,7 @@ private:
 class OOX_DLLPUBLIC ControlModelBase
 {
 public:
-    explicit            ControlModelBase();
+                        ControlModelBase();
     virtual             ~ControlModelBase();
 
     /** Sets this control model to AWT model mode. */
@@ -475,7 +475,7 @@ private:
 class OOX_DLLPUBLIC AxControlModelBase : public ControlModelBase
 {
 public:
-    explicit            AxControlModelBase();
+                        AxControlModelBase();
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
 };
@@ -508,7 +508,7 @@ private:
 class OOX_DLLPUBLIC AxCommandButtonModel : public AxFontDataModel
 {
 public:
-    explicit            AxCommandButtonModel();
+                        AxCommandButtonModel();
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm ) override;
@@ -536,7 +536,7 @@ public: // direct access needed for legacy VML drawing controls
 class OOX_DLLPUBLIC AxLabelModel : public AxFontDataModel
 {
 public:
-    explicit            AxLabelModel();
+                        AxLabelModel();
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
@@ -563,7 +563,7 @@ public: // direct access needed for legacy VML drawing controls
 class OOX_DLLPUBLIC AxImageModel : public AxControlModelBase
 {
 public:
-    explicit            AxImageModel();
+                        AxImageModel();
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm ) override;
@@ -589,7 +589,7 @@ private:
 class OOX_DLLPUBLIC AxTabStripModel : public AxFontDataModel
 {
 public:
-    explicit            AxTabStripModel();
+                        AxTabStripModel();
 
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
 
@@ -609,7 +609,7 @@ public:
 class OOX_DLLPUBLIC AxMorphDataModelBase : public AxFontDataModel
 {
 public:
-    explicit            AxMorphDataModelBase();
+                        AxMorphDataModelBase();
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm ) override;
@@ -646,7 +646,7 @@ public: // direct access needed for legacy VML drawing controls
 class OOX_DLLPUBLIC AxToggleButtonModel : public AxMorphDataModelBase
 {
 public:
-    explicit            AxToggleButtonModel();
+                        AxToggleButtonModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -659,7 +659,7 @@ public:
 class OOX_DLLPUBLIC AxCheckBoxModel : public AxMorphDataModelBase
 {
 public:
-    explicit            AxCheckBoxModel();
+                        AxCheckBoxModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -672,7 +672,7 @@ public:
 class OOX_DLLPUBLIC AxOptionButtonModel : public AxMorphDataModelBase
 {
 public:
-    explicit            AxOptionButtonModel();
+                        AxOptionButtonModel();
 
     /** Returns the group name used to goup several option buttons together. */
     const OUString& getGroupName() const { return maGroupName; }
@@ -688,7 +688,7 @@ public:
 class OOX_DLLPUBLIC AxTextBoxModel : public AxMorphDataModelBase
 {
 public:
-    explicit            AxTextBoxModel();
+                        AxTextBoxModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -701,7 +701,7 @@ public:
 class OOX_DLLPUBLIC AxNumericFieldModel : public AxMorphDataModelBase
 {
 public:
-    explicit            AxNumericFieldModel();
+                        AxNumericFieldModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -714,7 +714,7 @@ public:
 class OOX_DLLPUBLIC AxListBoxModel : public AxMorphDataModelBase
 {
 public:
-    explicit            AxListBoxModel();
+                        AxListBoxModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -727,7 +727,7 @@ public:
 class OOX_DLLPUBLIC AxComboBoxModel : public AxMorphDataModelBase
 {
 public:
-    explicit            AxComboBoxModel();
+                        AxComboBoxModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -740,7 +740,7 @@ public:
 class OOX_DLLPUBLIC AxSpinButtonModel : public AxControlModelBase
 {
 public:
-    explicit            AxSpinButtonModel();
+                        AxSpinButtonModel();
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
@@ -768,7 +768,7 @@ public: // direct access needed for legacy VML drawing controls
 class OOX_DLLPUBLIC AxScrollBarModel : public AxControlModelBase
 {
 public:
-    explicit            AxScrollBarModel();
+                        AxScrollBarModel();
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
@@ -838,7 +838,7 @@ public: // direct access needed for legacy VML drawing controls
 class OOX_DLLPUBLIC AxFrameModel : public AxContainerModelBase
 {
 public:
-    explicit            AxFrameModel();
+                        AxFrameModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -847,7 +847,7 @@ public:
 class OOX_DLLPUBLIC AxPageModel : public AxContainerModelBase
 {
 public:
-    explicit            AxPageModel();
+                        AxPageModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -856,7 +856,7 @@ public:
 class OOX_DLLPUBLIC AxMultiPageModel : public AxContainerModelBase
 {
 public:
-    explicit            AxMultiPageModel();
+                        AxMultiPageModel();
 
     virtual ApiControlType getControlType() const override;
     void                importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages );
@@ -871,7 +871,7 @@ public:
 class OOX_DLLPUBLIC AxUserFormModel : public AxContainerModelBase
 {
 public:
-    explicit            AxUserFormModel();
+                        AxUserFormModel();
 
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
@@ -890,7 +890,7 @@ public:
 class HtmlTextBoxModel : public AxTextBoxModel
 {
 public:
-    explicit            HtmlTextBoxModel();
+                        HtmlTextBoxModel();
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
 };
 

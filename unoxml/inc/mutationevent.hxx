@@ -47,7 +47,7 @@ class CMutationEvent
     css::xml::dom::events::AttrChangeType m_attrChangeType;
 
 public:
-    explicit CMutationEvent();
+    CMutationEvent();
 
     virtual ~CMutationEvent() override;
 

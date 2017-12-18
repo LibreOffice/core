@@ -59,7 +59,7 @@ public:
 class SwMarginPortion : public SwGluePortion
 {
 public:
-    explicit SwMarginPortion();
+    SwMarginPortion();
     void AdjustRight( const SwLineLayout* pCurr );
 };
 

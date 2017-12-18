@@ -235,7 +235,7 @@ struct ScHTMLPos
     SCCOL               mnCol;
     SCROW               mnRow;
 
-    explicit     ScHTMLPos() : mnCol( 0 ), mnRow( 0 ) {}
+                 ScHTMLPos() : mnCol( 0 ), mnRow( 0 ) {}
     explicit     ScHTMLPos( SCCOL nCol, SCROW nRow ) :
                             mnCol( nCol ), mnRow( nRow ) {}
     explicit     ScHTMLPos( const ScAddress& rAddr ) { Set( rAddr ); }

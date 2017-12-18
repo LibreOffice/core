@@ -35,7 +35,7 @@ struct XclExpRefLogEntry
     sal_uInt16          mnFirstXclTab;      /// Calc index of the first sheet.
     sal_uInt16          mnLastXclTab;       /// Calc index of the last sheet.
 
-    explicit            XclExpRefLogEntry();
+                        XclExpRefLogEntry();
 };
 
 /** Vector containing a log for all external references in a formula, used i.e. in change tracking. */

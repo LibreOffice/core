@@ -35,7 +35,7 @@ struct TextModel
     DataSequenceRef     mxDataSeq;          /// The string data or formula link of this text.
     TextBodyRef         mxTextBody;         /// Rich-formatted literal text (for title objects only).
 
-    explicit            TextModel();
+                        TextModel();
                         ~TextModel();
 };
 

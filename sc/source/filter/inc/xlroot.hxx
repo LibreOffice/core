@@ -45,7 +45,7 @@ struct XclRange;
 struct XclDebugObjCounter
 {
     sal_Int32           mnObjCnt;
-    explicit     XclDebugObjCounter() : mnObjCnt( 0 ) {}
+                 XclDebugObjCounter() : mnObjCnt( 0 ) {}
                         ~XclDebugObjCounter();
 };
 #endif

@@ -229,7 +229,7 @@ struct BinSingleRef2d
     bool                mbColRel;           /// True = relative column reference.
     bool                mbRowRel;           /// True = relative row reference.
 
-    explicit            BinSingleRef2d();
+                        BinSingleRef2d();
 
     void                setBiff12Data( sal_uInt16 nCol, sal_Int32 nRow, bool bRelativeAsOffset );
 
@@ -258,7 +258,7 @@ typedef css::beans::Pair< css::table::CellAddress, sal_Bool > ApiSpecialTokenInf
 class ApiTokenVector
 {
 public:
-    explicit            ApiTokenVector();
+                        ApiTokenVector();
 
     ApiToken& operator[]( size_t i ) { return mvTokens[i]; }
 

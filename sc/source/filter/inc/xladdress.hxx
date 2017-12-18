@@ -33,7 +33,7 @@ struct XclAddress
     sal_uInt32          mnRow;
 
     explicit     XclAddress( ScAddress::Uninitialized ) {}
-    explicit     XclAddress() : mnCol( 0 ), mnRow( 0 ) {}
+                 XclAddress() : mnCol( 0 ), mnRow( 0 ) {}
     explicit     XclAddress( sal_uInt16 nCol, sal_uInt32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
 
     void         Set( sal_uInt16 nCol, sal_uInt32 nRow ) { mnCol = nCol; mnRow = nRow; }
@@ -61,7 +61,7 @@ struct XclRange
     XclAddress          maLast;
 
     explicit     XclRange( ScAddress::Uninitialized e ) : maFirst( e ), maLast( e ) {}
-    explicit     XclRange() {}
+                 XclRange() {}
     explicit     XclRange( const XclAddress& rPos ) : maFirst( rPos ), maLast( rPos ) {}
     explicit     XclRange( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 ) :
                             maFirst( nCol1, nRow1 ), maLast( nCol2, nRow2 ) {}
@@ -98,7 +98,7 @@ private:
     XclRangeVector mRanges;
 
 public:
-    explicit     XclRangeList() : mRanges() {}
+                 XclRangeList() : mRanges() {}
 
     size_t size() const { return mRanges.size(); }
     bool empty() const { return mRanges.empty(); }

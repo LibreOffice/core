@@ -44,7 +44,7 @@ class Player final : public ::cppu::BaseMutex,
 {
 public:
 
-    explicit Player();
+    Player();
     virtual ~Player() override;
 
     void preparePlaybin( const OUString& rURL, GstElement *pSink );

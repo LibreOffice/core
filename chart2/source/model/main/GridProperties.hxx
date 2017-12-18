@@ -50,7 +50,7 @@ class GridProperties final :
         public ::property::OPropertySet
 {
 public:
-    explicit GridProperties();
+    GridProperties();
     virtual ~GridProperties() override;
 
     /// XServiceInfo declarations

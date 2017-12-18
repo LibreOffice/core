@@ -57,7 +57,7 @@ ScExtTabSettings::ScExtTabSettings() :
 class ScExtTabSettingsCont
 {
 public:
-    explicit            ScExtTabSettingsCont();
+                        ScExtTabSettingsCont();
                         ScExtTabSettingsCont( const ScExtTabSettingsCont& rSrc );
     ScExtTabSettingsCont& operator=( const ScExtTabSettingsCont& rSrc );
 
@@ -125,7 +125,7 @@ struct ScExtDocOptionsImpl
     std::vector< OUString > maCodeNames;        /// Codenames for all sheets (VBA module names).
     bool                mbChanged;          /// Use only if something has been changed.
 
-    explicit            ScExtDocOptionsImpl();
+                        ScExtDocOptionsImpl();
 };
 
 ScExtDocOptionsImpl::ScExtDocOptionsImpl() :

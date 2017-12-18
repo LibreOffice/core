@@ -60,7 +60,7 @@ struct OOX_DLLPUBLIC AxFontData
     AxHorizontalAlign   mnHorAlign;         ///< Horizontal text alignment.
     bool                mbDblUnderline;     ///< True = double underline style (legacy VML drawing controls only).
 
-    explicit            AxFontData();
+                        AxFontData();
 
     /** Converts the internal representation of the font height to points. */
     sal_Int16           getHeightPoints() const;

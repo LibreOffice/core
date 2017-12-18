@@ -53,7 +53,7 @@ class RegressionEquation final :
         public ::property::OPropertySet
 {
 public:
-    explicit RegressionEquation();
+    RegressionEquation();
     virtual ~RegressionEquation() override;
 
     virtual OUString SAL_CALL

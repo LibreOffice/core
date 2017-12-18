@@ -519,7 +519,7 @@ private:
 class XclExpInterfaceEnd : public XclExpRecord
 {
 public:
-    explicit XclExpInterfaceEnd();
+             XclExpInterfaceEnd();
     virtual ~XclExpInterfaceEnd() override;
 
 private:
@@ -531,7 +531,7 @@ private:
 class XclExpWriteAccess : public XclExpRecord
 {
 public:
-    explicit XclExpWriteAccess();
+             XclExpWriteAccess();
     virtual ~XclExpWriteAccess() override;
 
 private:
@@ -557,7 +557,7 @@ private:
 class XclExpProt4Rev : public XclExpRecord
 {
 public:
-    explicit XclExpProt4Rev();
+             XclExpProt4Rev();
     virtual ~XclExpProt4Rev() override;
 
 private:
@@ -567,7 +567,7 @@ private:
 class XclExpProt4RevPass : public XclExpRecord
 {
 public:
-    explicit XclExpProt4RevPass();
+             XclExpProt4RevPass();
     virtual ~XclExpProt4RevPass() override;
 
 private:
@@ -577,13 +577,13 @@ private:
 class XclExpRecalcId : public XclExpDummyRecord
 {
 public:
-    explicit XclExpRecalcId();
+             XclExpRecalcId();
 };
 
 class XclExpBookExt : public XclExpDummyRecord
 {
 public:
-    explicit XclExpBookExt();
+             XclExpBookExt();
 };
 
 #endif // _XCL97REC_HXX

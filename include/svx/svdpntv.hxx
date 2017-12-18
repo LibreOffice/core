@@ -83,7 +83,7 @@ namespace sdr
 class SVX_DLLPUBLIC SvxViewChangedHint : public SfxHint
 {
 public:
-    explicit SvxViewChangedHint();
+    SvxViewChangedHint();
 };
 
 /// Typedefs for a list of SdrPaintWindows

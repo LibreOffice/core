@@ -41,7 +41,7 @@ struct ApiFilterSettings
     FilterFieldVector   maFilterFields;     /// List of UNO API filter settings.
     OptValue< bool >    mobNeedsRegExp;     /// If set, requires regular expressions to be enabled/disabled.
 
-    explicit            ApiFilterSettings();
+                        ApiFilterSettings();
 
     void appendField( bool bAnd, sal_Int32 nOperator, double fValue );
     void appendField( bool bAnd, sal_Int32 nOperator, const OUString& rValue );
@@ -115,7 +115,7 @@ struct FilterCriterionModel
     sal_Int32           mnOperator;     /// Comparison operator.
     sal_uInt8           mnDataType;     /// Operand data type (BIFF only).
 
-    explicit            FilterCriterionModel();
+                        FilterCriterionModel();
 
     /** Sets the passed BIFF operator constant. */
     void                setBiffOperator( sal_uInt8 nOperator );

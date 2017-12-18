@@ -52,7 +52,7 @@ namespace vcl { struct FontCapabilities; }
 class VCL_DLLPUBLIC GlyphCache
 {
 public:
-    explicit                GlyphCache();
+                            GlyphCache();
     virtual                 ~GlyphCache();
 
     static GlyphCache&      GetInstance();

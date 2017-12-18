@@ -63,7 +63,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Array
 {
 public:
     /** Constructs an empty array. */
-    explicit            Array();
+    Array();
 
     /** Destructs the array. */
                         ~Array();

@@ -121,7 +121,7 @@ private:
         OUString            maScName;
         sal_uInt16          mnXclTab;
         ExcTabBufFlags      mnFlags;
-        explicit     XclExpTabInfoEntry() : mnXclTab( 0 ), mnFlags( ExcTabBufFlags::NONE ) {}
+                     XclExpTabInfoEntry() : mnXclTab( 0 ), mnFlags( ExcTabBufFlags::NONE ) {}
     };
 
     typedef ::std::vector< XclExpTabInfoEntry > XclExpTabInfoVec;

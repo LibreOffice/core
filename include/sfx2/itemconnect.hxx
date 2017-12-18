@@ -366,7 +366,7 @@ class ItemConnectionArrayImpl;
 class ItemConnectionArray : public ItemConnectionBase
 {
 public:
-    explicit            ItemConnectionArray();
+                        ItemConnectionArray();
     virtual             ~ItemConnectionArray() override;
 
     /** Adds a new connection to the list.

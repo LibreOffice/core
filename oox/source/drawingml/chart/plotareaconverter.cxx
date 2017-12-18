@@ -56,7 +56,7 @@ struct AxesSetModel
     TypeGroupVector     maTypeGroups;       /// All type groups containing data series.
     AxisMap             maAxes;             /// All axes mapped by API axis type.
 
-    explicit     AxesSetModel() {}
+    AxesSetModel() {}
 };
 
 /** Axes set converter. This is a helper class for the plot area converter. */

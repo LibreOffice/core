@@ -34,7 +34,7 @@ class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
     std::unique_ptr<wrapper::Instance> mInstance;
     wrapper::EventHandler mEventHandler;
 public:
-    explicit Manager();
+    Manager();
     virtual ~Manager() override;
 
     css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) override;

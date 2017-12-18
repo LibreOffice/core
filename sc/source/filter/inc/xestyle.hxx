@@ -352,7 +352,7 @@ struct XclExpCellBorder : public XclCellBorder
     sal_uInt32          mnBottomColorId;    /// Color ID for bottom line.
     sal_uInt32          mnDiagColorId;      /// Color ID for diagonal line(s).
 
-    explicit            XclExpCellBorder();
+                        XclExpCellBorder();
 
     /** Fills the border attributes from the passed item set.
         @descr  Fills only the attributes exported in the passed BIFF version.
@@ -380,7 +380,7 @@ struct XclExpCellArea : public XclCellArea
     sal_uInt32          mnForeColorId;  /// Foreground color ID.
     sal_uInt32          mnBackColorId;  /// Background color ID.
 
-    explicit            XclExpCellArea();
+                        XclExpCellArea();
 
     /** Fills the area attributes from the passed item set.
         @return  true = At least one area item is set. */
@@ -416,7 +416,7 @@ struct XclExpXFId
     sal_uInt32          mnXFId;         /// Temporary XF identifier.
     sal_uInt16          mnXFIndex;      /// Real Excel XF index.
 
-    explicit            XclExpXFId();
+                        XclExpXFId();
     explicit            XclExpXFId( sal_uInt32 nXFId );
 
     /** Converts the XF identifier in mnXFId to an Excel XF index and stores it in mnXFIndex. */
@@ -678,7 +678,7 @@ private:
         sal_uInt8           mnLevel;            /// Level for RowLevel/ColLevel styles.
         bool                mbPredefined;       /// true = XF still predefined.
         bool                mbHasStyleRec;      /// true = STYLE record created.
-        explicit            XclExpBuiltInInfo();
+                            XclExpBuiltInInfo();
     };
     typedef ::std::map< sal_uInt32, XclExpBuiltInInfo > XclExpBuiltInMap;
     typedef ::std::vector< XclExpCellBorder >           XclExpBorderList;

@@ -215,7 +215,7 @@ private:
     std::vector< XclImpDrawObjRef > mObjs;
 
 public:
-    explicit     XclImpDrawObjVector() : mObjs() {}
+                 XclImpDrawObjVector() : mObjs() {}
 
     std::vector< XclImpDrawObjRef >::const_iterator begin() const { return mObjs.begin(); }
     std::vector< XclImpDrawObjRef >::const_iterator end() const { return mObjs.end(); }
@@ -887,7 +887,7 @@ private:
     {
         SdrObject*          mpSdrObj;       /// Pointer to an SdrObject.
         ShapeFlag           mnDffFlags;     /// Shape flags from DFF stream.
-        explicit     XclImpSdrInfo() : mpSdrObj( nullptr ), mnDffFlags( ShapeFlag::NONE ) {}
+                     XclImpSdrInfo() : mpSdrObj( nullptr ), mnDffFlags( ShapeFlag::NONE ) {}
         void         Set( SdrObject* pSdrObj, ShapeFlag nDffFlags )
                                 { mpSdrObj = pSdrObj; mnDffFlags = nDffFlags; }
     };

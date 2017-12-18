@@ -42,7 +42,7 @@ struct TextBodyProperties
     boost::optional< sal_Int32 >                    moTextOffRight;
     css::drawing::TextVerticalAdjust                meVA;
 
-    explicit            TextBodyProperties();
+                        TextBodyProperties();
 
     void                pushRotationAdjustments();
     void                pushVertSimulation();

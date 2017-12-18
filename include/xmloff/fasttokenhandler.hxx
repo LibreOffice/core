@@ -23,7 +23,7 @@ namespace token {
 class TokenMap
 {
 public:
-    explicit TokenMap();
+             TokenMap();
             ~TokenMap();
 
     /** Returns the UTF-8 name of the passed token identifier as byte sequence. */
@@ -63,7 +63,7 @@ class XMLOFF_DLLPUBLIC FastTokenHandler : public cppu::WeakImplHelper<
     public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    explicit FastTokenHandler();
+    FastTokenHandler();
     virtual ~FastTokenHandler() override;
 
     // XFastTokenHandler

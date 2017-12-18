@@ -61,7 +61,7 @@ public:
         When that does not exist then a internal default value is
         used.
     */
-    explicit BitmapCache ();
+    BitmapCache ();
 
     /** The destructor clears the cache and releases all bitmaps still in it.
     */

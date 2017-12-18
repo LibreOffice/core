@@ -206,7 +206,7 @@ namespace sax_fastparser {
 class FastSaxParserImpl
 {
 public:
-    explicit FastSaxParserImpl();
+             FastSaxParserImpl();
     ~FastSaxParserImpl();
 
     // XFastParser

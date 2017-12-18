@@ -38,7 +38,7 @@ struct FileSharingModel
     sal_uInt16          mnPasswordHash;         /// Hash value of the write protection password. (unrelated to the above)
     bool                mbRecommendReadOnly;    /// True = recommend read-only mode on opening.
 
-    explicit            FileSharingModel();
+                        FileSharingModel();
 };
 
 /** Global workbook settings. */
@@ -52,7 +52,7 @@ struct WorkbookSettingsModel
     bool                mbDateCompatibility;    /// False = null date is 1899-12-30.
     bool                mbSaveExtLinkValues;    /// True = save cached cell values for external links.
 
-    explicit            WorkbookSettingsModel();
+                        WorkbookSettingsModel();
 
     /** Sets BIFF object visibility mode. */
     void                setBiffObjectMode( sal_uInt16 nObjMode );
@@ -74,7 +74,7 @@ struct CalcSettingsModel
     bool                mbConcurrent;           /// True = concurrent calculation enabled.
     bool                mbUseNlr;               /// True = use natural language references in formulas.
 
-    explicit            CalcSettingsModel();
+                        CalcSettingsModel();
 };
 
 class WorkbookSettings : public WorkbookHelper

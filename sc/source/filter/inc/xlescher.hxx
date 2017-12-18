@@ -291,7 +291,7 @@ struct XclObjAnchor : public XclRange
     sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
     sal_uInt32          mnBY;       /// Y offset in bottom row (1/256 of row height).
 
-    explicit            XclObjAnchor();
+                        XclObjAnchor();
 
     /** Calculates a rectangle from the contained coordinates. */
     tools::Rectangle           GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const;
@@ -358,7 +358,7 @@ struct XclObjLineData
     sal_uInt8           mnWidth;
     sal_uInt8           mnAuto;
 
-    explicit            XclObjLineData();
+                        XclObjLineData();
 
     bool         IsAuto() const { return ::get_flag( mnAuto, EXC_OBJ_LINE_AUTO ); }
     bool         IsVisible() const { return IsAuto() || (mnStyle != EXC_OBJ_LINE_NONE); }
@@ -373,7 +373,7 @@ struct XclObjFillData
     sal_uInt8           mnPattern;
     sal_uInt8           mnAuto;
 
-    explicit            XclObjFillData();
+                        XclObjFillData();
 
     bool         IsAuto() const { return ::get_flag( mnAuto, EXC_OBJ_FILL_AUTO ); }
     bool         IsFilled() const { return IsAuto() || (mnPattern != EXC_PATT_NONE); }
@@ -393,7 +393,7 @@ struct XclObjTextData
     sal_uInt16          mnShortcut;
     sal_uInt16          mnShortcutEA;
 
-    explicit            XclObjTextData();
+                        XclObjTextData();
 
     /** Reads text data from a BIFF3/BIFF4 OBJ record. */
     void                ReadObj3( XclImpStream& rStrm );

@@ -829,7 +829,7 @@ namespace accessibility
     class AccessibleTextHelper_UpdateChildBounds
     {
     public:
-        explicit AccessibleTextHelper_UpdateChildBounds() {}
+        AccessibleTextHelper_UpdateChildBounds() {}
         ::accessibility::AccessibleParaManager::WeakChild operator()( const ::accessibility::AccessibleParaManager::WeakChild& rChild )
         {
             // retrieve hard reference from weak one

@@ -27,7 +27,7 @@ namespace {
 class ConverterCache
 {
 public:
-    explicit    ConverterCache();
+                ConverterCache();
                 ~ConverterCache();
     sal_uInt16  convertOne( int nSelect, sal_Unicode );
 private:

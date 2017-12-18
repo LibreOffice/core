@@ -40,7 +40,7 @@ union DecodedDouble
     double              mfValue;
     sal_math_Double     maStruct;
 
-    explicit     DecodedDouble() {}
+                 DecodedDouble() {}
     explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
 };
 

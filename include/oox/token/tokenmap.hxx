@@ -35,7 +35,7 @@ namespace oox {
 class TokenMap
 {
 public:
-    explicit            TokenMap();
+                        TokenMap();
                         ~TokenMap();
 
     /** Returns the token identifier for the passed Unicode token name. */

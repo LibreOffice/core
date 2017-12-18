@@ -52,7 +52,7 @@ class MSFILTER_DLLPUBLIC DffPropSet
         void ReadPropSet( SvStream&, bool );
 
     public:
-        explicit DffPropSet();
+        DffPropSet();
         ~DffPropSet();
 
         bool IsProperty( sal_uInt32 nRecType ) const { return ( mpPropSetEntries[ nRecType & 0x3ff ].aFlags.bSet ); };

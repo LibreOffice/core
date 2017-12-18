@@ -41,7 +41,7 @@ class XSECGPG_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo >
 {
     public:
-        explicit XMLSignature_GpgImpl();
+        XMLSignature_GpgImpl();
         virtual ~XMLSignature_GpgImpl() override ;
 
         //Methods from XXMLSignature

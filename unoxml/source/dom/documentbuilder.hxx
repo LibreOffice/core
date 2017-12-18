@@ -57,7 +57,7 @@ namespace DOM
     public:
 
         // ctor
-        explicit CDocumentBuilder();
+        CDocumentBuilder();
 
         // static helpers for service info and component management
         static const char* aImplementationName;

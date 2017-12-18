@@ -31,7 +31,7 @@ class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
 {
 public:
 
-    explicit Manager();
+    Manager();
     virtual ~Manager() override;
 
     // XManager

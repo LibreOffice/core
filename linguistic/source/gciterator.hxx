@@ -145,7 +145,7 @@ public:
 
     void DequeueAndCheck();
 
-    explicit GrammarCheckingIterator();
+    GrammarCheckingIterator();
     virtual ~GrammarCheckingIterator() override;
 
     // XProofreadingIterator

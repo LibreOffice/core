@@ -56,7 +56,7 @@ public:
     osl::Condition        m_outerCondition;
     std::unique_ptr<OuterThread> m_pOuterThread;
 
-    explicit  AffineBridge();
+    AffineBridge();
     virtual  ~AffineBridge() override;
 
     virtual void  v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) override;

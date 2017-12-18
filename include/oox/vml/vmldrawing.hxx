@@ -83,7 +83,7 @@ struct OOX_DLLPUBLIC ControlInfo
     OUString     maName;             ///< Programmatical name of the form control.
     bool         mbTextContentShape; ///< Whether this control shape will be imported to Writer or not (has AnchorType property or not).
 
-    explicit            ControlInfo();
+                        ControlInfo();
 
     /** Sets the string representation of the passed numeric shape identifier. */
     void                setShapeId( sal_Int32 nShapeId );

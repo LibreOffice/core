@@ -58,7 +58,7 @@ struct XclGuid
 {
     sal_uInt8           mpnData[ 16 ];  /// Stores GUID always in little endian.
 
-    explicit            XclGuid();
+                        XclGuid();
     explicit            XclGuid(
                             sal_uInt32 nData1,
                             sal_uInt16 nData2, sal_uInt16 nData3,

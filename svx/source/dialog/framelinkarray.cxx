@@ -54,7 +54,7 @@ public:
     bool                mbOverlapY;
 
 public:
-    explicit            Cell();
+    Cell();
 
     void SetStyleLeft(const Style& rStyle) { maLeft = rStyle; }
     void SetStyleRight(const Style& rStyle) { maRight = rStyle; }

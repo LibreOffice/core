@@ -26,7 +26,7 @@ typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 class ImplFontMetric : public SvRefBase
 {
 public:
-    explicit            ImplFontMetric();
+                        ImplFontMetric();
 
     long                GetAscent() const                           { return mnAscent; }
     long                GetDescent() const                          { return mnDescent; }

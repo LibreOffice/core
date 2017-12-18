@@ -37,7 +37,7 @@ struct NumFmtModel
     OUString            maFmtCode;
     sal_Int16           mnPredefId;
 
-    explicit            NumFmtModel();
+                        NumFmtModel();
 };
 
 /** Contains all API number format attributes. */
@@ -45,7 +45,7 @@ struct ApiNumFmtData
 {
     sal_Int32           mnIndex;            /// API number format index.
 
-    explicit            ApiNumFmtData();
+                        ApiNumFmtData();
 };
 
 /** Contains all data for a number format code. */

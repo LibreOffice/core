@@ -229,7 +229,7 @@ class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
 {
 public:
     /** Default c'tor sets the width and height to 0. */
-    explicit                    ScPageScaleToItem();
+                                ScPageScaleToItem();
     explicit                    ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight );
 
     virtual                     ~ScPageScaleToItem() override;
@@ -263,7 +263,7 @@ private:
 class ScCondFormatItem : public SfxPoolItem
 {
 public:
-    explicit ScCondFormatItem();
+    ScCondFormatItem();
     explicit ScCondFormatItem(const std::vector<sal_uInt32>& nIndex);
 
     virtual ~ScCondFormatItem() override;

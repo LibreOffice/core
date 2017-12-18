@@ -37,7 +37,7 @@ class LogarithmicScaling :
 {
 public:
     /// base is 10.0
-    explicit LogarithmicScaling();
+    LogarithmicScaling();
     LogarithmicScaling( double fBase );
     virtual ~LogarithmicScaling() override;
 
@@ -70,7 +70,7 @@ class ExponentialScaling :
 {
 public:
     /// base is 10.0
-    explicit ExponentialScaling();
+    ExponentialScaling();
     explicit ExponentialScaling( double fBase );
     virtual ~ExponentialScaling() override;
 
@@ -101,7 +101,7 @@ class LinearScaling : public ::cppu::WeakImplHelper<
 {
 public:
     /// y(x) = x
-    explicit LinearScaling();
+    LinearScaling();
     /// y(x) = fSlope * x + fOffset
     LinearScaling( double fSlope, double fOffset );
     virtual ~LinearScaling() override;
@@ -133,7 +133,7 @@ class PowerScaling : public ::cppu::WeakImplHelper<
 {
 public:
     /// exponent 10.0
-    explicit PowerScaling();
+    PowerScaling();
     explicit PowerScaling( double fExponent );
     virtual ~PowerScaling() override;
 

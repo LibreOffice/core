@@ -70,7 +70,7 @@ class ColorConfig_Impl : public utl::ConfigItem
     virtual void                    ImplCommit() override;
 
 public:
-    explicit ColorConfig_Impl();
+    ColorConfig_Impl();
     virtual ~ColorConfig_Impl() override;
 
     void                            Load(const OUString& rScheme);

@@ -112,7 +112,7 @@ struct ScVbaAppSettings
     bool mbDisplayNoteIndicator;
     bool mbShowWindowsInTaskbar;
     bool mbEnableCancelKey;
-    explicit ScVbaAppSettings();
+             ScVbaAppSettings();
 };
 
 ScVbaAppSettings::ScVbaAppSettings() :

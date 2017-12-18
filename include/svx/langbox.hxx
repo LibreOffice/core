@@ -62,7 +62,7 @@ private:
     SvxLanguageBoxBase(const SvxLanguageBoxBase&) = delete;
     SvxLanguageBoxBase& operator=(const SvxLanguageBoxBase&) = delete;
 public:
-    explicit SvxLanguageBoxBase();
+    SvxLanguageBoxBase();
     virtual ~SvxLanguageBoxBase();
 
     void            SetLanguageList( SvxLanguageListFlags nLangList,

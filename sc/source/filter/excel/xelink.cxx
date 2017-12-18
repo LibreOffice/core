@@ -374,7 +374,7 @@ struct XclExpXti
     sal_uInt16          mnFirstSBTab;   /// Index to the first sheet of the range in the SUPBOOK.
     sal_uInt16          mnLastSBTab;    /// Index to the last sheet of the range in the SUPBOOK.
 
-    explicit     XclExpXti() : mnSupbook( 0 ), mnFirstSBTab( 0 ), mnLastSBTab( 0 ) {}
+                 XclExpXti() : mnSupbook( 0 ), mnFirstSBTab( 0 ), mnLastSBTab( 0 ) {}
     explicit     XclExpXti( sal_uInt16 nSupbook, sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) :
                             mnSupbook( nSupbook ), mnFirstSBTab( nFirstSBTab ), mnLastSBTab( nLastSBTab ) {}
 

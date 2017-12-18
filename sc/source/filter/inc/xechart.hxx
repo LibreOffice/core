@@ -322,7 +322,7 @@ typedef std::shared_ptr< XclExpChEscherFormat > XclExpChEscherFormatRef;
 class XclExpChFrameBase
 {
 public:
-    explicit            XclExpChFrameBase();
+                        XclExpChFrameBase();
     virtual             ~XclExpChFrameBase();
 
 protected:
@@ -570,7 +570,7 @@ typedef std::shared_ptr< XclExpChMarkerFormat > XclExpChMarkerFormatRef;
 class XclExpChPieFormat : public XclExpUInt16Record
 {
 public:
-    explicit            XclExpChPieFormat();
+                        XclExpChPieFormat();
 
     /** Sets pie segment properties from the passed property set. */
     void                Convert( const ScfPropertySet& rPropSet );
@@ -582,7 +582,7 @@ typedef std::shared_ptr< XclExpChPieFormat > XclExpChPieFormatRef;
 class XclExpCh3dDataFormat : public XclExpRecord
 {
 public:
-    explicit            XclExpCh3dDataFormat();
+                        XclExpCh3dDataFormat();
 
     /** Sets 3d bar properties from the passed property set. */
     void                Convert( const ScfPropertySet& rPropSet );
@@ -788,7 +788,7 @@ private:
 class XclExpChChart3d : public XclExpRecord
 {
 public:
-    explicit            XclExpChChart3d();
+                        XclExpChChart3d();
 
     /** Converts 3d settings for the passed chart type. */
     void                Convert( const ScfPropertySet& rPropSet, bool b3dWallChart );

@@ -51,7 +51,7 @@ private:
 class WrappedLinkNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
-    explicit WrappedLinkNumberFormatProperty();
+    WrappedLinkNumberFormatProperty();
     virtual ~WrappedLinkNumberFormatProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;

@@ -330,7 +330,7 @@ private:
 class XclExpFiltermode : public XclExpEmptyRecord
 {
 public:
-    explicit            XclExpFiltermode();
+    XclExpFiltermode();
 };
 
 class XclExpAutofilterinfo : public XclExpUInt16Record

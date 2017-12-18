@@ -51,7 +51,7 @@ class Legend final :
     public ::property::OPropertySet
 {
 public:
-    explicit Legend();
+    Legend();
     virtual ~Legend() override;
 
     /// XServiceInfo declarations

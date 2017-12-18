@@ -34,7 +34,7 @@ typedef tools::SvRef<FontCharMap> FontCharMapRef;
 class VCL_DLLPUBLIC FontMetric : public vcl::Font
 {
 public:
-    explicit            FontMetric();
+                        FontMetric();
                         FontMetric( const FontMetric& );  // TODO make this explicit
     virtual             ~FontMetric() override;
 

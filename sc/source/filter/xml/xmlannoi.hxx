@@ -59,7 +59,7 @@ struct ScXMLAnnotationData
     bool                mbShown;
     std::vector<ScXMLAnnotationStyleEntry> maContentStyles;
 
-    explicit            ScXMLAnnotationData();
+                        ScXMLAnnotationData();
                         ~ScXMLAnnotationData();
 };
 

@@ -63,7 +63,7 @@ struct SfxProgress_Impl
     SfxWorkWindow*          pWorkWin;
     SfxViewFrame*           pView;
 
-    explicit                SfxProgress_Impl();
+                            SfxProgress_Impl();
     void                    Enable_Impl();
 
 };

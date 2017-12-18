@@ -62,7 +62,7 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
     SwWrtShell* m_pWrtShell;
 
     public:
-        explicit SwDBTreeList_Impl()
+        SwDBTreeList_Impl()
             : m_pWrtShell(nullptr)
         {
         }

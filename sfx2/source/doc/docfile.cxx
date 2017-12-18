@@ -240,7 +240,7 @@ public:
 
     util::DateTime m_aDateTime;
 
-    explicit SfxMedium_Impl();
+    SfxMedium_Impl();
     ~SfxMedium_Impl();
     SfxMedium_Impl(const SfxMedium_Impl&) = delete;
     SfxMedium_Impl& operator=(const SfxMedium_Impl&) = delete;

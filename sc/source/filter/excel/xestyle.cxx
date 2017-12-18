@@ -209,7 +209,7 @@ struct XclRemap
     sal_uInt32          mnPalIndex;     /// Index to palette.
     bool                mbProcessed;    /// true = List color already processed.
 
-    explicit     XclRemap() : mnPalIndex( 0 ), mbProcessed( false ) {}
+                 XclRemap() : mnPalIndex( 0 ), mbProcessed( false ) {}
     void         SetIndex( sal_uInt32 nPalIndex )
                             { mnPalIndex = nPalIndex; mbProcessed = true; }
 };
@@ -220,7 +220,7 @@ struct XclNearest
     sal_uInt32          mnPalIndex;     /// Index to nearest palette color.
     sal_Int32           mnDist;         /// Distance to palette color.
 
-    explicit     XclNearest() : mnPalIndex( 0 ), mnDist( 0 ) {}
+    XclNearest() : mnPalIndex( 0 ), mnDist( 0 ) {}
 };
 
 } // namespace

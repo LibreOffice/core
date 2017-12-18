@@ -37,7 +37,7 @@ struct TableModel
     sal_Int32           mnHeaderRows;       /// Number of header rows.
     sal_Int32           mnTotalsRows;       /// Number of totals rows.
 
-    explicit            TableModel();
+                        TableModel();
 };
 
 class Table : public WorkbookHelper

@@ -59,7 +59,7 @@ class OOX_DLLPUBLIC FastParser
 {
 public:
     /// @throws css::uno::RuntimeException
-    explicit            FastParser();
+                        FastParser();
 
                         FastParser(const FastParser&) = delete;
                         FastParser& operator=(const FastParser&) = delete;

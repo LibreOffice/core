@@ -482,7 +482,7 @@ private:
     sal_Int32 mnNumId;
 
 public:
-    explicit StyleSheetPropertyMap();
+    StyleSheetPropertyMap();
 
     sal_Int32 GetListId() const          { return mnListId; }
     void      SetListId( sal_Int32 nId ) { mnListId = nId; }
@@ -502,7 +502,7 @@ class ParagraphPropertyMap
     , public ParagraphProperties
 {
 public:
-    explicit ParagraphPropertyMap() {}
+    ParagraphPropertyMap() {}
 };
 
 class TablePropertyMap
@@ -540,7 +540,7 @@ private:
     ValidValue m_aValidValues[TablePropertyMapTarget_MAX];
 
 public:
-    explicit TablePropertyMap() {}
+    TablePropertyMap() {}
 
     bool getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill );
     void setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet );

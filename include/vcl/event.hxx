@@ -119,7 +119,7 @@ private:
     sal_uInt16          mnCode;
 
 public:
-    explicit        MouseEvent();
+                    MouseEvent();
     explicit        MouseEvent( const Point& rPos, sal_uInt16 nClicks = 1,
                                 MouseEventModifiers nMode = MouseEventModifiers::NONE, sal_uInt16 nButtons = 0,
                                 sal_uInt16 nModifier = 0 );

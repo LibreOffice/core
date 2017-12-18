@@ -30,14 +30,14 @@ namespace xls {
 /** Absolute position in a spreadsheet (in EMUs) independent from cells. */
 struct AnchorPointModel : public ::oox::drawingml::EmuPoint
 {
-    explicit     AnchorPointModel() : ::oox::drawingml::EmuPoint( -1, -1 ) {}
+                 AnchorPointModel() : ::oox::drawingml::EmuPoint( -1, -1 ) {}
     bool         isValid() const { return (X >= 0) && (Y >= 0); }
 };
 
 /** Absolute size in a spreadsheet (in EMUs). */
 struct AnchorSizeModel : public ::oox::drawingml::EmuSize
 {
-    explicit     AnchorSizeModel() : ::oox::drawingml::EmuSize( -1, -1 ) {}
+                 AnchorSizeModel() : ::oox::drawingml::EmuSize( -1, -1 ) {}
     bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
 
@@ -49,7 +49,7 @@ struct CellAnchorModel
     sal_Int64           mnColOffset;        /// X offset inside the column.
     sal_Int64           mnRowOffset;        /// Y offset inside the row.
 
-    explicit            CellAnchorModel();
+                        CellAnchorModel();
     bool         isValid() const { return (mnCol >= 0) && (mnRow >= 0); }
 };
 
@@ -59,7 +59,7 @@ struct AnchorClientDataModel
     bool                mbLocksWithSheet;
     bool                mbPrintsWithSheet;
 
-    explicit            AnchorClientDataModel();
+                        AnchorClientDataModel();
 };
 
 /** Contains the position of a shape in the spreadsheet. Supports different

@@ -47,7 +47,7 @@ namespace o3tl {
 class FontSubsetInfo final
 {
 public:
-    explicit    FontSubsetInfo();
+                FontSubsetInfo();
                 ~FontSubsetInfo();
 
     void        LoadFont( FontType eInFontType,

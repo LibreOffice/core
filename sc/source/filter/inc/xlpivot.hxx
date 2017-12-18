@@ -373,7 +373,7 @@ const sal_uInt16 EXC_ID_SXADDL       = 0x0864;
 class XclPCItem
 {
 public:
-    explicit            XclPCItem();
+                        XclPCItem();
     virtual             ~XclPCItem();
 
     /** Sets the item to 'empty' type. */
@@ -445,7 +445,7 @@ struct XclPCFieldInfo
     sal_uInt16          mnBaseItems;    /// Number of items in the base field.
     sal_uInt16          mnOrigItems;    /// Number of original source data items.
 
-    explicit            XclPCFieldInfo();
+                        XclPCFieldInfo();
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPCFieldInfo& rInfo );
@@ -458,7 +458,7 @@ struct XclPCNumGroupInfo
 {
     sal_uInt16          mnFlags;        /// Various flags.
 
-    explicit            XclPCNumGroupInfo();
+                        XclPCNumGroupInfo();
 
     void                SetNumType();
 
@@ -535,7 +535,7 @@ struct XclPCInfo
     sal_uInt16          mnSrcType;      /// Database type.
     OUString       maUserName;     /// Name of user who last modified the cache.
 
-    explicit            XclPCInfo();
+                        XclPCInfo();
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPCInfo& rInfo );
@@ -551,7 +551,7 @@ struct XclPTCachedName
     OUString       maName;         /// The visible name, if used.
     bool                mbUseCache;     /// true = Use name in cache instead of maName.
 
-    explicit     XclPTCachedName() : mbUseCache( true ) {}
+                 XclPTCachedName() : mbUseCache( true ) {}
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName );
@@ -579,7 +579,7 @@ struct XclPTItemInfo : public XclPTVisNameInfo
     sal_uInt16          mnFlags;        /// Several flags.
     sal_uInt16          mnCacheIdx;     /// Index into cache for item name.
 
-    explicit            XclPTItemInfo();
+                        XclPTItemInfo();
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTItemInfo& rInfo );
@@ -598,7 +598,7 @@ struct XclPTFieldInfo : public XclPTVisNameInfo
     sal_uInt16          mnItemCount;    /// Number of items of this field.
     sal_uInt16          mnCacheIdx;     /// Index into cache for field name (not part of record).
 
-    explicit            XclPTFieldInfo();
+                        XclPTFieldInfo();
 
     /** Returns the API enum representing the orientation (first of row/col/page/data).
         @param nMask  Restricts the axes taken into account.
@@ -627,7 +627,7 @@ struct XclPTFieldExtInfo
     sal_uInt16          mnNumFmt;
     std::unique_ptr<OUString> mpFieldTotalName;
 
-    explicit            XclPTFieldExtInfo();
+                        XclPTFieldExtInfo();
 
     /** Returns the API constant representing the sorting mode. */
     sal_Int32           GetApiSortMode() const;
@@ -662,7 +662,7 @@ struct XclPTPageFieldInfo
     sal_uInt16          mnSelItem;      /// Index to selected item.
     sal_uInt16          mnObjId;        /// Escher object ID of dropdown listbox.
 
-    explicit            XclPTPageFieldInfo();
+                        XclPTPageFieldInfo();
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTPageFieldInfo& rInfo );
@@ -680,7 +680,7 @@ struct XclPTDataFieldInfo : public XclPTVisNameInfo
     sal_uInt16          mnRefItem;      /// Index to SXVI of referred item of the used field.
     sal_uInt16          mnNumFmt;       /// Number format of the results.
 
-    explicit            XclPTDataFieldInfo();
+                        XclPTDataFieldInfo();
 
     /** Returns the API enum representing the aggregation function. */
     ScGeneralFunction GetApiAggFunc() const;
@@ -724,7 +724,7 @@ struct XclPTInfo
     sal_uInt16          mnFlags;            /// Flags for the entire pivot table.
     sal_uInt16          mnAutoFmtIdx;       /// Index to pivot table autoformat.
 
-    explicit            XclPTInfo();
+                        XclPTInfo();
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTInfo& rInfo );
@@ -741,7 +741,7 @@ struct XclPTExtInfo
     sal_uInt16          mnPagePerCol;       /// Number of page fields per column.
     sal_uInt32          mnFlags;            /// Flags for the entire pivot table.
 
-    explicit            XclPTExtInfo();
+                        XclPTExtInfo();
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTExtInfo& rInfo );
@@ -757,7 +757,7 @@ struct XclPTViewEx9Info
     sal_uInt8           mnGridLayout;       /// 0 == gridlayout, 0x10 == modern
     OUString       maGrandTotalName;
 
-    explicit            XclPTViewEx9Info();
+                        XclPTViewEx9Info();
     void                Init( const ScDPObject& rDPObj );
 };
 
@@ -768,7 +768,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo );
 struct XclPTAddl
 {
     bool          mbCompactMode;
-    explicit      XclPTAddl();
+                  XclPTAddl();
 };
 
 XclImpStream& operator>>(XclImpStream& rStrm, XclPTAddl& rInfo);

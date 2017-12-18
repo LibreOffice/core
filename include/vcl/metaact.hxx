@@ -1442,7 +1442,7 @@ protected:
     virtual             ~MetaCommentAction() override;
 
 public:
-    explicit            MetaCommentAction();
+                        MetaCommentAction();
     explicit            MetaCommentAction( const MetaCommentAction& rAct );
     explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0, const sal_uInt8* pData = nullptr, sal_uInt32 nDataSize = 0 );
 

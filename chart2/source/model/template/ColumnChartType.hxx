@@ -27,7 +27,7 @@ namespace chart
 class ColumnChartType final : public ChartType
 {
 public:
-    explicit ColumnChartType();
+    ColumnChartType();
     virtual ~ColumnChartType() override;
 
     virtual OUString SAL_CALL

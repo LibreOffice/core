@@ -1338,7 +1338,7 @@ class ColorPicker : protected ::cppu::BaseMutex,    // Struct for right initiali
                     public ColorPickerBase
 {
 public:
-    explicit ColorPicker();
+    ColorPicker();
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;

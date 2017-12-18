@@ -312,7 +312,7 @@ public:
 class XMLNumberWithAutoInsteadZeroPropHdl : public XMLNumberWithoutZeroPropHdl
 {
 public:
-    explicit XMLNumberWithAutoInsteadZeroPropHdl() : XMLNumberWithoutZeroPropHdl(4) {}
+    XMLNumberWithAutoInsteadZeroPropHdl() : XMLNumberWithoutZeroPropHdl(4) {}
     virtual ~XMLNumberWithAutoInsteadZeroPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

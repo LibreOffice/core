@@ -45,7 +45,7 @@ class LabeledDataSequence :
         public impl::LabeledDataSequence_Base
 {
 public:
-    explicit LabeledDataSequence();
+    LabeledDataSequence();
     explicit LabeledDataSequence(
         const css::uno::Reference< css::chart2::data::XDataSequence > & rValues );
     explicit LabeledDataSequence(

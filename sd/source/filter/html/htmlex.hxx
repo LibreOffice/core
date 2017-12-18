@@ -66,7 +66,7 @@ private:
     OUString  maURL2;
 
 public:
-                    explicit HtmlErrorContext();
+                    HtmlErrorContext();
 
     virtual bool    GetString( ErrCode nErrId, OUString& rCtxStr ) override;
 

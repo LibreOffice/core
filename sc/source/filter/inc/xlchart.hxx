@@ -739,7 +739,7 @@ struct XclChRectangle
     sal_Int32           mnWidth;            /// Width of the object in 1/4000 of chart width.
     sal_Int32           mnHeight;           /// Height of the object in 1/4000 of chart height.
 
-    explicit            XclChRectangle();
+                        XclChRectangle();
 };
 
 /** Specifies the position of a data series or data point. */
@@ -775,7 +775,7 @@ struct XclChFramePos
     sal_uInt16          mnTLMode;           /// Top-left position mode.
     sal_uInt16          mnBRMode;           /// Bottom-right position mode.
 
-    explicit            XclChFramePos();
+                        XclChFramePos();
 };
 
 struct XclChLineFormat
@@ -785,7 +785,7 @@ struct XclChLineFormat
     sal_Int16           mnWeight;           /// Line weight (hairline, single, ...).
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChLineFormat();
+                        XclChLineFormat();
 };
 
 struct XclChAreaFormat
@@ -795,7 +795,7 @@ struct XclChAreaFormat
     sal_uInt16          mnPattern;          /// Fill pattern.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChAreaFormat();
+                        XclChAreaFormat();
 };
 
 class SfxItemSet;
@@ -809,7 +809,7 @@ struct XclChEscherFormat
     SfxItemSetRef       mxItemSet;          /// Item set for Escher properties import.
     EscherPropSetRef    mxEscherSet;        /// Container for Escher properties export.
 
-    explicit            XclChEscherFormat();
+                        XclChEscherFormat();
                         ~XclChEscherFormat();
 };
 
@@ -819,7 +819,7 @@ struct XclChPicFormat
     sal_uInt16          mnFlags;            /// Additional flags.
     double              mfScale;            /// Picture scaling (units).
 
-    explicit            XclChPicFormat();
+                        XclChPicFormat();
 };
 
 struct XclChFrame
@@ -827,7 +827,7 @@ struct XclChFrame
     sal_uInt16          mnFormat;           /// Format type of the frame.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChFrame();
+                        XclChFrame();
 };
 
 // Source links ===============================================================
@@ -839,7 +839,7 @@ struct XclChSourceLink
     sal_uInt16          mnFlags;            /// Additional flags.
     sal_uInt16          mnNumFmtIdx;        /// Number format index.
 
-    explicit            XclChSourceLink();
+                        XclChSourceLink();
 };
 
 // Text =======================================================================
@@ -849,7 +849,7 @@ struct XclChObjectLink
     XclChDataPointPos   maPointPos;         /// Position of the data point.
     sal_uInt16          mnTarget;           /// Target of the link.
 
-    explicit            XclChObjectLink();
+                        XclChObjectLink();
 };
 
 struct XclChFrLabelProps
@@ -857,7 +857,7 @@ struct XclChFrLabelProps
     OUString       maSeparator;        /// Separator between label values.
     sal_uInt16          mnFlags;            /// Flags indicating which values to be displayed.
 
-    explicit            XclChFrLabelProps();
+                        XclChFrLabelProps();
 };
 
 struct XclChText
@@ -871,7 +871,7 @@ struct XclChText
     sal_uInt16          mnFlags2;           /// Text object placement and text direction (BIFF8+).
     sal_uInt16          mnRotation;         /// Text object rotation (BIFF8+).
 
-    explicit            XclChText();
+                        XclChText();
 };
 
 // Data series ================================================================
@@ -884,7 +884,7 @@ struct XclChMarkerFormat
     sal_uInt16          mnMarkerType;       /// Marker type (none, diamond, ...).
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChMarkerFormat();
+                        XclChMarkerFormat();
 };
 
 struct XclCh3dDataFormat
@@ -892,7 +892,7 @@ struct XclCh3dDataFormat
     sal_uInt8           mnBase;             /// Base form.
     sal_uInt8           mnTop;              /// Top edge mode.
 
-    explicit            XclCh3dDataFormat();
+                        XclCh3dDataFormat();
 };
 
 struct XclChDataFormat
@@ -901,7 +901,7 @@ struct XclChDataFormat
     sal_uInt16          mnFormatIdx;        /// Formatting index for automatic colors.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChDataFormat();
+                        XclChDataFormat();
 };
 
 struct XclChSerTrendLine
@@ -914,7 +914,7 @@ struct XclChSerTrendLine
     sal_uInt8           mnShowEquation;     /// 1 = Show equation.
     sal_uInt8           mnShowRSquared;     /// 1 = Show R-squared.
 
-    explicit            XclChSerTrendLine();
+                        XclChSerTrendLine();
 };
 
 struct XclChSerErrorBar
@@ -925,7 +925,7 @@ struct XclChSerErrorBar
     sal_uInt8           mnSourceType;       /// Type of source values.
     sal_uInt8           mnLineEnd;          /// Type of the line ends.
 
-    explicit            XclChSerErrorBar();
+                        XclChSerErrorBar();
 };
 
 struct XclChSeries
@@ -937,7 +937,7 @@ struct XclChSeries
     sal_uInt16          mnValueCount;       /// Number of value entries.
     sal_uInt16          mnBubbleCount;      /// Number of bubble entries.
 
-    explicit            XclChSeries();
+                        XclChSeries();
 };
 
 // Chart type groups ==========================================================
@@ -952,7 +952,7 @@ struct XclChType
     sal_uInt16          mnBubbleType;       /// Bubble type in bubble chart (CHSCATTER).
     sal_uInt16          mnFlags;            /// Additional flags (all chart types).
 
-    explicit            XclChType();
+                        XclChType();
 };
 
 struct XclChChart3d
@@ -965,7 +965,7 @@ struct XclChChart3d
     sal_uInt16          mnDepthGap;         /// Space between series.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChChart3d();
+                        XclChChart3d();
 };
 
 struct XclChLegend
@@ -975,7 +975,7 @@ struct XclChLegend
     sal_uInt8           mnSpacing;          /// Spacing between elements.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChLegend();
+                        XclChLegend();
 };
 
 struct XclChTypeGroup
@@ -983,7 +983,7 @@ struct XclChTypeGroup
     sal_uInt16          mnFlags;            /// Additional flags.
     sal_uInt16          mnGroupIdx;         /// Chart type group index.
 
-    explicit            XclChTypeGroup();
+                        XclChTypeGroup();
 };
 
 struct XclChProperties
@@ -991,7 +991,7 @@ struct XclChProperties
     sal_uInt16          mnFlags;            /// Additional flags.
     sal_uInt8           mnEmptyMode;        /// Plotting mode for empty cells.
 
-    explicit            XclChProperties();
+                        XclChProperties();
 };
 
 // Axes =======================================================================
@@ -1003,7 +1003,7 @@ struct XclChLabelRange
     sal_uInt16          mnTickFreq;         /// Frequency of ticks.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChLabelRange();
+                        XclChLabelRange();
 };
 
 struct XclChDateRange
@@ -1018,7 +1018,7 @@ struct XclChDateRange
     sal_uInt16          mnCross;            /// Crossing position of other axis.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChDateRange();
+                        XclChDateRange();
 };
 
 struct XclChValueRange
@@ -1030,7 +1030,7 @@ struct XclChValueRange
     double              mfCross;            /// Crossing position of other axis.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    explicit            XclChValueRange();
+                        XclChValueRange();
 };
 
 struct XclChTick
@@ -1043,14 +1043,14 @@ struct XclChTick
     sal_uInt16          mnFlags;            /// Additional flags.
     sal_uInt16          mnRotation;         /// Tick labels angle (BIFF8+).
 
-    explicit            XclChTick();
+                        XclChTick();
 };
 
 struct XclChAxis
 {
     sal_uInt16          mnType;             /// Axis type.
 
-    explicit            XclChAxis();
+                        XclChAxis();
 
     /** Returns the axis dimension index used by the chart API. */
     sal_Int32           GetApiAxisDimension() const;
@@ -1061,7 +1061,7 @@ struct XclChAxesSet
     XclChRectangle      maRect;             /// Position of the axes set (inner plot area).
     sal_uInt16          mnAxesSetId;        /// Primary/secondary axes set.
 
-    explicit            XclChAxesSet();
+                        XclChAxesSet();
 
     /** Returns the axes set index used by the chart API. */
     sal_Int32           GetApiAxesSetIndex() const;
@@ -1145,7 +1145,7 @@ struct XclChFormatInfo
 class XclChFormatInfoProvider
 {
 public:
-    explicit            XclChFormatInfoProvider();
+                        XclChFormatInfoProvider();
 
     /** Returns an info struct about auto formatting for the passed object type. */
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
@@ -1239,7 +1239,7 @@ struct XclChExtTypeInfo : public XclChTypeInfo
 class XclChTypeInfoProvider
 {
 public:
-    explicit            XclChTypeInfoProvider();
+                        XclChTypeInfoProvider();
 
     /** Returns chart type info for a unique chart type identifier. */
     const XclChTypeInfo& GetTypeInfo( XclChTypeId eType ) const;
@@ -1304,7 +1304,7 @@ struct XclFontData;
 class XclChPropSetHelper
 {
 public:
-    explicit            XclChPropSetHelper();
+                        XclChPropSetHelper();
 
     /** Reads all line properties from the passed property set. */
     void                ReadLineProperties(
@@ -1413,7 +1413,7 @@ struct XclChRootData
     double              mfUnitSizeX;            /// Size of a chart X unit (1/4000 of chart width) in 1/100 mm.
     double              mfUnitSizeY;            /// Size of a chart Y unit (1/4000 of chart height) in 1/100 mm.
 
-    explicit            XclChRootData();
+                        XclChRootData();
     virtual             ~XclChRootData();
 
     /** Starts the API chart document conversion. Must be called once before any API access. */

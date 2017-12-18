@@ -35,7 +35,7 @@ class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
 {
 public:
 
-    explicit Window();
+    Window();
     virtual ~Window() override;
 
     // XPlayerWindow

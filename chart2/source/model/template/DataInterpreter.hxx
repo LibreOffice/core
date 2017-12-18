@@ -32,7 +32,7 @@ class DataInterpreter : public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo >
 {
 public:
-    explicit DataInterpreter();
+    DataInterpreter();
     virtual ~DataInterpreter() override;
 
     /// XServiceInfo declarations

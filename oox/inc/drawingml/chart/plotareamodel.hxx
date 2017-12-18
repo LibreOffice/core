@@ -50,7 +50,7 @@ struct WallFloorModel
     ShapeRef            mxShapeProp;        /// Wall/floor frame formatting.
     PictureOptionsRef   mxPicOptions;       /// Fill bitmap settings.
 
-    explicit            WallFloorModel();
+                        WallFloorModel();
                         ~WallFloorModel();
 };
 
@@ -59,7 +59,7 @@ struct DataTableModel
     bool                mbShowHBorder;      /// Show Horizontal Border
     bool                mbShowVBorder;      /// Show Vertical Border
     bool                mbShowOutline;      /// Show outline
-    explicit            DataTableModel();
+                        DataTableModel();
                         ~DataTableModel();
 };
 
@@ -77,7 +77,7 @@ struct PlotAreaModel
     LayoutRef           mxLayout;           /// Layout/position of the plot area.
     DataTableRef        mxDataTable;        /// Data table of the plot area.
 
-    explicit            PlotAreaModel();
+                        PlotAreaModel();
                         ~PlotAreaModel();
 };
 

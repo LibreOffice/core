@@ -84,7 +84,7 @@ struct FontPortionModel
     sal_Int32           mnPos;          /// First character in the string.
     sal_Int32           mnFontId;       /// Font identifier for the next characters.
 
-    explicit FontPortionModel() : mnPos( 0 ), mnFontId( -1 ) {}
+             FontPortionModel() : mnPos( 0 ), mnFontId( -1 ) {}
     explicit FontPortionModel( sal_Int32 nPos ) : mnPos( nPos ), mnFontId( -1 ) {}
 
     void                read( SequenceInputStream& rStrm );
@@ -95,7 +95,7 @@ class FontPortionModelList {
     ::std::vector< FontPortionModel > mvModels;
 
 public:
-    explicit     FontPortionModelList() : mvModels() {}
+                 FontPortionModelList() : mvModels() {}
 
     bool empty() const { return mvModels.empty(); }
 
@@ -122,7 +122,7 @@ struct PhoneticDataModel
     sal_Int32           mnType;         /// Phonetic text type.
     sal_Int32           mnAlignment;    /// Phonetic portion alignment.
 
-    explicit            PhoneticDataModel();
+                        PhoneticDataModel();
 
     /** Sets the passed data from binary import. */
     void                setBiffData( sal_Int32 nType, sal_Int32 nAlignment );
@@ -174,7 +174,7 @@ struct PhoneticPortionModel
     sal_Int32           mnBasePos;      /// First character in base text.
     sal_Int32           mnBaseLen;      /// Number of characters in base text.
 
-    explicit PhoneticPortionModel() : mnPos( -1 ), mnBasePos( -1 ), mnBaseLen( 0 ) {}
+             PhoneticPortionModel() : mnPos( -1 ), mnBasePos( -1 ), mnBaseLen( 0 ) {}
     explicit PhoneticPortionModel( sal_Int32 nPos, sal_Int32 nBasePos, sal_Int32 nBaseLen ) :
                             mnPos( nPos ), mnBasePos( nBasePos ), mnBaseLen( nBaseLen ) {}
 
@@ -185,7 +185,7 @@ struct PhoneticPortionModel
 class PhoneticPortionModelList
 {
 public:
-    explicit     PhoneticPortionModelList() : mvModels() {}
+                 PhoneticPortionModelList() : mvModels() {}
 
     bool empty() const { return mvModels.empty(); }
 

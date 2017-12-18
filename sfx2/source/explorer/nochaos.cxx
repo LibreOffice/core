@@ -44,7 +44,7 @@ private:
     inline void Insert( SfxPoolItem* pItem );
 
 public:
-    explicit CntStaticPoolDefaults_Impl();
+    CntStaticPoolDefaults_Impl();
     ~CntStaticPoolDefaults_Impl();
     CntStaticPoolDefaults_Impl(const CntStaticPoolDefaults_Impl&) = delete;
     CntStaticPoolDefaults_Impl& operator=(const CntStaticPoolDefaults_Impl&) = delete;

@@ -823,7 +823,7 @@ struct ScCaptionInitData
     Size                maCaptionSize;      /// Size of the caption object.
     bool                mbDefaultPosSize;   /// True = use default position and size for caption.
 
-    explicit            ScCaptionInitData();
+                        ScCaptionInitData();
 };
 
 ScCaptionInitData::ScCaptionInitData() :

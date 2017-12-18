@@ -32,7 +32,7 @@
 class ImplFont
 {
 public:
-    explicit            ImplFont();
+                        ImplFont();
     explicit            ImplFont( const ImplFont& );
 
     // device independent font functions

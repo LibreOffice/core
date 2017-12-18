@@ -967,7 +967,7 @@ public:
 class MSFILTER_DLLPUBLIC EscherExGlobal : public EscherGraphicProvider
 {
 public:
-    explicit            EscherExGlobal();
+                        EscherExGlobal();
     virtual             ~EscherExGlobal() override;
 
     /** Returns a new drawing ID for a new drawing container (DGCONTAINER). */

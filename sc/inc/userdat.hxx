@@ -44,7 +44,7 @@ public:
     tools::Rectangle           maLastRect;
     bool                mbResizeWithCell = false;
 
-    explicit            ScDrawObjData();
+                        ScDrawObjData();
 
 private:
      virtual ScDrawObjData* Clone( SdrObject* pObj ) const override;

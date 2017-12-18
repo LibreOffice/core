@@ -164,7 +164,7 @@ namespace connectivity
             void disposeStatements();
 
         public:
-            explicit Connection();
+            Connection();
             virtual ~Connection() override;
 
             /// @throws css::sdbc::SQLException

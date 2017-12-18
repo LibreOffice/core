@@ -94,7 +94,7 @@ private:
 
 public:
 
-    explicit BackingComp();
+    BackingComp();
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;

@@ -173,7 +173,7 @@ namespace webdav_ucp
         DAVOptionsMap m_aTheCache;
         osl::Mutex         m_aMutex;
     public:
-        explicit DAVOptionsCache();
+        DAVOptionsCache();
         ~DAVOptionsCache();
 
         bool getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions );

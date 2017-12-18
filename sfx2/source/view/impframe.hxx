@@ -53,7 +53,7 @@ public:
     bool                      bLockResize;
     bool                      bMenuBarOn;
 
-    explicit SfxFrame_Impl()
+    SfxFrame_Impl()
         :mbHasTitle( false )
         ,pCurrentViewFrame( nullptr )
         ,pDescr( nullptr )

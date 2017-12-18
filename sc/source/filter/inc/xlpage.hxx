@@ -136,7 +136,7 @@ struct XclPageData
     bool                mbPrintHeadings;    /// true = print column and row headings.
     bool                mbPrintGrid;        /// true = print grid lines.
 
-    explicit            XclPageData();
+                        XclPageData();
                         ~XclPageData();
 
     /** Sets Excel default page settings. */

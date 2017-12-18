@@ -28,7 +28,7 @@ namespace chart
 class LineChartType final : public ChartType
 {
 public:
-    explicit LineChartType();
+    LineChartType();
     virtual ~LineChartType() override;
 
     virtual OUString SAL_CALL

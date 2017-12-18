@@ -44,7 +44,7 @@ class COMPHELPER_DLLPUBLIC SimplePasswordRequest :
         public cppu::WeakImplHelper<css::task::XInteractionRequest>
 {
 public:
-    explicit    SimplePasswordRequest();
+                SimplePasswordRequest();
     virtual     ~SimplePasswordRequest() override;
 
     bool         isPassword() const;
