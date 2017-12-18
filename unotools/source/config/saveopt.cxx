@@ -32,7 +32,6 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
-#include "itemholder1.hxx"
 #include <officecfg/Office/Recovery.hxx>
 
 using namespace utl;
@@ -805,8 +804,6 @@ SvtSaveOptions::SvtSaveOptions()
         pOptions.reset(new SvtLoadSaveOptions_Impl);
         pOptions->pSaveOpt.reset(new SvtSaveOptions_Impl);
         pOptions->pLoadOpt.reset( new SvtLoadOptions_Impl);
-
-        ItemHolder1::holdConfigItem(EItem::SaveOptions);
    }
    ++nRefCount;
     pImp = pOptions.get();
