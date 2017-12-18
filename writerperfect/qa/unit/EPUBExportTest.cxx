@@ -171,6 +171,7 @@ void EPUBExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("opf"), BAD_CAST("http://www.idpf.org/2007/opf"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"), BAD_CAST("http://www.w3.org/2000/svg"));
 }
 
 void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData)
@@ -813,6 +814,12 @@ void EPUBExportTest::testPageSize()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // 21,59cm x 27.94cm (letter).
     assertXPath(mpXmlDoc, "/xhtml:html/xhtml:head/xhtml:meta[@name='viewport']", "content", "width=816, height=1056");
+
+    xmlFreeDoc(mpXmlDoc);
+    mpXmlDoc = parseExport("OEBPS/images/image0001.svg");
+    // This was 288mm, logic->logic conversion input was a pixel value.
+    assertXPath(mpXmlDoc, "/svg:svg", "width", "216mm");
+    assertXPath(mpXmlDoc, "/svg:svg", "height", "279mm");
 }
 
 void EPUBExportTest::testSVG()

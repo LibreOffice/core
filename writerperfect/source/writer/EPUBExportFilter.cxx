@@ -140,15 +140,23 @@ void EPUBExportFilter::CreateMetafiles(std::vector<std::pair<uno::Sequence<sal_I
     for (sal_Int16 nPage = 1; nPage <= nPages; ++nPage)
     {
         Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
-        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aDocumentSizePixel, COL_WHITE);
-        const GDIMetaFile &rGDIMetaFile = aGraphic.GetGDIMetaFile();
-        SvMemoryStream aMemoryStream;
-        const_cast<GDIMetaFile &>(rGDIMetaFile).Write(aMemoryStream);
-        uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8 *>(aMemoryStream.GetData()), aMemoryStream.Tell());
-
         Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage);
         // Get the CSS pixel size of the page (mm100 -> pixel using 96 DPI, independent from system DPI).
         Size aCss(static_cast<double>(aLogic.getWidth()) / 26.4583, static_cast<double>(aLogic.getHeight()) / 26.4583);
+        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aCss, COL_WHITE);
+        GDIMetaFile &rGDIMetaFile = const_cast<GDIMetaFile &>(aGraphic.GetGDIMetaFile());
+
+        // Set preferred map unit and size on the metafile, so the SVG size
+        // will be correct in MM.
+        MapMode aMapMode;
+        aMapMode.SetMapUnit(MapUnit::Map100thMM);
+        rGDIMetaFile.SetPrefMapMode(aMapMode);
+        rGDIMetaFile.SetPrefSize(aLogic);
+
+        SvMemoryStream aMemoryStream;
+        rGDIMetaFile.Write(aMemoryStream);
+        uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8 *>(aMemoryStream.GetData()), aMemoryStream.Tell());
+
         rPageMetafiles.emplace_back(aSequence, aCss);
     }
 }
