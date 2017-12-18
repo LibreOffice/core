@@ -1636,14 +1636,15 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 sModuleBuf.append("mergedlo");
                 sModuleBuf.append(SAL_DLLEXTENSION);
                 OUString sMergedModule = sModuleBuf.makeStringAndClear();
-                pModule->loadRelative(&thisModule, sMergedModule);
+                bool ok = pModule->loadRelative(&thisModule, sMergedModule);
                 if (!pModule->getFunctionSymbol(sFunction))
                 {
-                    pModule->loadRelative(&thisModule, sModule);
+                    ok = pModule->loadRelative(&thisModule, sModule);
                 }
 #else
-                pModule->loadRelative(&thisModule, sModule);
+                bool ok = pModule->loadRelative(&thisModule, sModule);
 #endif
+                assert(ok || "bad module name in .ui"); (void)ok;
                 aI = m_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<osl::Module>(pModule))).first;
             }
             customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
