@@ -96,7 +96,7 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, c
 {
     SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage);
 
-    _pImpl->InsertEntry( pEntry, CONTAINER_APPEND );
+    _pImpl->InsertEntry(pEntry, _pImpl->GetEntryCount());
 
     return pEntry;
 }
