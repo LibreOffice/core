@@ -1753,18 +1753,11 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
 
     if (xRefUndoData)
         xRefUndoData->DeleteUnchanged(&pDocShell->GetDocument());
-
-    SetChangeTrack();
 }
 
 OUString ScUndoDataForm::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PASTE );
-}
-
-void ScUndoDataForm::SetChangeTrack()
-{
-    nStartChangeAction = 0;
 }
 
 void ScUndoDataForm::Undo()
@@ -1856,10 +1849,8 @@ void ScUndoDataForm::DoChange( const bool bUndo )
     {
         ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
         if ( pChangeTrack )
-            pChangeTrack->Undo( nStartChangeAction, 0 );
+            pChangeTrack->Undo( 0, 0 );
     }
-    else
-        SetChangeTrack();
 
     ScRange aDrawRange( aBlockRange );
     rDoc.ExtendMerge( aDrawRange, true );      // only needed for single sheet (text/rtf etc.)

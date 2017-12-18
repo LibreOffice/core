@@ -444,11 +444,9 @@ private:
     ScDocumentUniquePtr xRedoDoc;
     std::unique_ptr<ScRefUndoData> xRefUndoData;
     std::unique_ptr<ScRefUndoData> xRefRedoData;
-    sal_uLong       nStartChangeAction;
     bool            bRedoFilled;
 
     void            DoChange( const bool bUndo );
-    void            SetChangeTrack();
 };
 
 #endif

@@ -1,21 +1,21 @@
-avmedia/source/viewer/mediawindow_impl.hxx:150
-    avmedia::priv::MediaWindowImpl mbEventTransparent
-    1
 chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed
     0
 chart2/source/view/inc/GL3DRenderer.hxx:161
     chart::opengl3D::TextInfoBatch batchNum
     512
-connectivity/source/inc/odbc/OBoundParam.hxx:113
-    connectivity::odbc::OBoundParam paramLength
-    0
-cui/source/inc/cfgutil.hxx:132
-    SfxConfigGroupListBox m_pImageProvider
-    0
 include/basic/sbxvar.hxx:67
     SbxValues::(anonymous) pData
     0
+include/editeng/charsetcoloritem.hxx:35
+    SvxCharSetColorItem eFrom
+    0
+include/filter/msfilter/dffpropset.hxx:33
+    DffPropFlags bSet
+    0
+include/filter/msfilter/dffpropset.hxx:35
+    DffPropFlags bBlip
+    1
 include/o3tl/vector_pool.hxx:93
     o3tl::detail::struct_from_value::type nextFree
     -1
@@ -24,9 +24,6 @@ include/svtools/svparser.hxx:74
     0
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
-    0
-include/vcl/field.hxx:99
-    PatternFormatter mbInPattKeyInput
     0
 include/vcl/filter/pdfdocument.hxx:173
     vcl::filter::PDFNameElement m_nLength
@@ -67,14 +64,11 @@ sax/source/tools/fastserializer.hxx:231
 sc/inc/compiler.hxx:108
     ScRawToken::(anonymous union)::(anonymous) eInForceArray
     0
-sc/inc/recursionhelper.hxx:56
-    ScRecursionHelper bConverging
-    0
 sc/qa/unit/ucalc.hxx:41
     Test::RangeNameDef mnIndex
     1
-sc/source/ui/inc/undodat.hxx:448
-    ScUndoDataForm nEndChangeAction
+sc/source/ui/inc/undodat.hxx:447
+    ScUndoDataForm nStartChangeAction
     0
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
@@ -82,9 +76,6 @@ sd/inc/sdpptwrp.hxx:42
 sd/source/filter/html/htmlex.hxx:114
     HtmlExport mbAutoSlide
     1
-sd/source/ui/remotecontrol/DiscoveryService.hxx:43
-    sd::DiscoveryService zService
-    0
 sfx2/source/appl/lnkbase2.cxx:76
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
@@ -97,9 +88,6 @@ sfx2/source/doc/doctemplates.cxx:136
 sfx2/source/view/ipclient.cxx:78
     SfxBooleanFlagGuard m_bLifeValue
     1
-shell/source/sessioninstall/SyncDbusSessionHelper.cxx:26
-    (anonymous namespace)::GErrorWrapper m_pError
-    0
 soltools/cpp/cpp.h:120
     includelist deleted
     1
@@ -109,9 +97,6 @@ soltools/mkdepend/def.h:130
 soltools/mkdepend/def.h:132
     inclist i_searched
     1
-starmath/inc/node.hxx:104
-    SmNode mnFlags
-    0
 stoc/source/inspect/introspection.cxx:1533
     (anonymous namespace)::Cache::Data hits
     1
@@ -124,24 +109,9 @@ sw/inc/pagepreviewlayout.hxx:49
 sw/source/core/inc/frmtool.hxx:260
     SwBorderAttrs m_bBorderDist
     1
-sw/source/core/inc/swfont.hxx:158
-    SwFont m_nToxCount
-    0
-sw/source/core/inc/swfont.hxx:159
-    SwFont m_nRefCount
-    0
-sw/source/core/inc/swfont.hxx:160
-    SwFont m_nMetaCount
-    0
-sw/source/core/inc/swfont.hxx:161
-    SwFont m_nInputFieldCount
-    0
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nKenn
     4294967295
-sw/source/core/text/porlay.hxx:239
-    SwParaPortion m_nDelta
-    0
 sw/source/filter/html/htmlcss1.cxx:77
     SwCSS1ItemIds nFormatBreak
     93
@@ -157,15 +127,15 @@ sw/source/filter/html/svxcss1.hxx:199
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
-sw/source/filter/ww8/ww8par2.hxx:58
-    WW8SwFlyPara eAnchor
-    0
-sw/source/filter/ww8/ww8par.hxx:650
+sw/source/filter/ww8/ww8par.hxx:651
     WW8FormulaControl mfUnknown
     0
-sw/source/filter/ww8/ww8par.hxx:659
+sw/source/filter/ww8/ww8par.hxx:660
     WW8FormulaControl mhpsCheckBox
     20
+sw/source/uibase/lingu/sdrhhcwrap.hxx:33
+    SdrHHCWrapper pTextObj
+    0
 vcl/inc/salprn.hxx:41
     SalPrinterQueueInfo mnStatus
     0
@@ -175,23 +145,17 @@ vcl/inc/salprn.hxx:42
 vcl/inc/salprn.hxx:43
     SalPrinterQueueInfo mpSysData
     0
-vcl/inc/svdata.hxx:267
+vcl/inc/svdata.hxx:268
     ImplSVNWFData mnStatusBarLowerRightOffset
     0
-vcl/inc/svdata.hxx:283
+vcl/inc/svdata.hxx:284
     ImplSVNWFData mbCenteredTabs
     0
-vcl/inc/svdata.hxx:284
+vcl/inc/svdata.hxx:285
     ImplSVNWFData mbNoActiveTabTextRaise
     0
-vcl/inc/svdata.hxx:286
+vcl/inc/svdata.hxx:287
     ImplSVNWFData mbProgressNeedsErase
-    0
-vcl/source/edit/textdat2.hxx:53
-    TETextPortion nWidth
-    -1
-vcl/source/edit/textdat2.hxx:54
-    TETextPortion nKind
     0
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect
