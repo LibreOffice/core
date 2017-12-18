@@ -251,7 +251,8 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
         {
             OUString sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand(".uno:FormatPaintbrush" ) );
             mpDoc->BegUndo( sLabel );
-            mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
+            if (dynamic_cast< sdr::table::SdrTableObj* >( pObj ) == nullptr)
+                mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
         }
 
         mpView->ApplyFormatPaintBrush( *mxItemSet.get(), bNoCharacterFormats, bNoParagraphFormats );
