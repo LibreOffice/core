@@ -133,7 +133,6 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
 
 SbxValue::~SbxValue()
 {
-    Broadcast( SfxHintId::BasicDying );
     SetFlag( SbxFlagBits::Write );
     SbxValue::Clear();
 }
@@ -817,7 +816,6 @@ bool SbxValue::Convert( SbxDataType eTo )
             Put( aNew );
             SetModified( true );
         }
-        Broadcast( SfxHintId::BasicConverted );
         return true;
     }
     else
