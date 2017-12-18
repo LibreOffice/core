@@ -121,7 +121,49 @@ void ImplClosePopupToolBox( const VclPtr<vcl::Window>& pWin )
     }
 }
 
+// TODO: Move to common code with the same function in toolbox
+// Draw the ">>" - more indictor at the coordinates
+void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+{
+    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    rRenderContext.SetLineColor();
+
+    if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
+        rRenderContext.SetFillColor(Color(COL_WHITE));
+    else
+        rRenderContext.SetFillColor(Color(COL_BLACK));
+    float fScaleFactor = rRenderContext.GetDPIScaleFactor();
+
+    int linewidth = 1 * fScaleFactor;
+    int space = 4 * fScaleFactor;
+
+    long width = 8 * fScaleFactor;
+    long height = 5 * fScaleFactor;
+
+    //Keep odd b/c drawing code works better
+    if ( height % 2 == 0 )
+        height--;
+
+    long heightOrig = height;
+
+    long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
+    long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
+    while( height >= 1)
+    {
+        rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
+        x += space;
+        rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
+        x -= space;
+        y++;
+        if( height <= heightOrig / 2 + 1) x--;
+        else            x++;
+        height--;
+    }
+    rRenderContext.Pop();
 }
+
+} // end anonymouse namespace
+
 
 Menu::Menu()
     : mpFirstDel(nullptr),
@@ -1138,6 +1180,22 @@ Menu& Menu::operator=( const Menu& rMenu )
     return *this;
 }
 
+// Returns true if the item is completely hidden on the GUI and shouldn't
+// be possible to interact with
+bool Menu::ImplCurrentlyHiddenOnGUI(sal_uInt16 nPos) const
+{
+    MenuItemData* pData = pItemList->GetDataFromPos(nPos);
+    if (pData)
+    {
+        MenuItemData* pPreviousData = pItemList->GetDataFromPos( nPos - 1 );
+        if (pPreviousData && pPreviousData->bHiddenOnGUI)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
 {
     bool bVisible = true;
@@ -1696,6 +1754,8 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
     if (!pThisItemOnly && !IsMenuBar() && nTitleHeight > 0)
         ImplPaintMenuTitle(rRenderContext, tools::Rectangle(aTopLeft, aOutSz));
 
+    bool bHiddenItems = false; // are any items on the GUI hidden
+
     for (size_t n = 0; n < nCount; n++)
     {
         MenuItemData* pData = pItemList->GetDataFromPos( n );
@@ -1921,7 +1981,25 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     {
                         nMaxItemTextWidth -= nFontHeight - nExtra;
                     }
-                    OUString aItemText(getShortenedString(pData->aText, rRenderContext, nMaxItemTextWidth));
+
+                    OUString aItemText(pData->aText);
+                    pData->bHiddenOnGUI = false;
+
+                    if (IsMenuBar()) // In case of menubar if we are out of bounds we shouldn't paint the item
+                    {
+                        if (nMaxItemTextWidth < rRenderContext.GetTextWidth(aItemText))
+                        {
+                            aItemText = "";
+                            pData->bHiddenOnGUI = true;
+                            bHiddenItems = true;
+                        }
+                    }
+                    else
+                    {
+                        aItemText = getShortenedString(aItemText, rRenderContext, nMaxItemTextWidth);
+                        pData->bHiddenOnGUI = false;
+                    }
+
                     rRenderContext.DrawCtrlText(aTmpPos, aItemText, 0, aItemText.getLength(), nStyle, pVector, pDisplayText);
                     if (bSetTmpBackground)
                         rRenderContext.SetBackground();
@@ -2013,6 +2091,14 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
             aTopLeft.Y() += pData->aSz.Height();
         else
             aTopLeft.X() += pData->aSz.Width();
+    }
+
+    // draw "more" (">>") indicator if some items have been hidden as they go out of visible area
+    if (bHiddenItems)
+    {
+        sal_Int32 nSize = nFontHeight;
+        tools::Rectangle aRectangle(Point(aOutSz.Width() - nSize, (aOutSz.Height() / 2) - (nSize / 2)), Size(nSize, nSize));
+        lclDrawMoreIndicator(rRenderContext, aRectangle);
     }
 }
 

@@ -69,6 +69,7 @@ private:
 
     VclPtr<Menu>           pMenu;
     VclPtr<PopupMenu>      pActivePopup;
+    VclPtr<PopupMenu>      mpParentPopup;
     sal_uInt16      nHighlightedItem;
     sal_uInt16      nRolloveredItem;
     VclPtr<vcl::Window> xSaveFocusId;
