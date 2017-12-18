@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVTOOLS_IVCTRL_HXX
 #define INCLUDED_SVTOOLS_IVCTRL_HXX
 
-#include <memory>
 #include <svtools/svtdllapi.h>
 #include <vcl/ctrl.hxx>
 #include <tools/link.hxx>
@@ -29,6 +28,8 @@
 #include <vcl/seleng.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
+#include <type_traits>
 
 class Point;
 class SvxIconChoiceCtrl_Impl;
@@ -122,8 +123,30 @@ public:
     OUString SVT_DLLPUBLIC  GetDisplayText() const;
     void                    SetQuickHelpText( const OUString& rText ) { aQuickHelpText = rText; }
     const OUString&         GetQuickHelpText() const { return aQuickHelpText; }
-    void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
-    void*                   GetUserData () { return pUserData; }
+
+    // Use some template magic to make call-sites explicitly spell out the type they want to
+    // store in user data.
+    template<typename T>
+    void                    SetUserData ( typename std::common_type<T>::type p )
+    {
+        // The use of std::common_type prevents template argument deduction
+        static_assert(sizeof(T) <= sizeof(pUserData), "type too big");
+        pUserData = reinterpret_cast<void*>(p);
+    }
+    template<typename T>
+    typename std::enable_if<!std::is_pointer<T>::value, T>::type GetUserData()
+    {
+        static_assert(sizeof(T) <= sizeof(pUserData), "type too big");
+        return static_cast<T>(reinterpret_cast<sal_uIntPtr>(pUserData));
+    }
+    template<typename T>
+    typename std::enable_if<std::is_pointer<T>::value, T>::type GetUserData()
+    {
+        // Need two versions of GetUserData because of the different casting rules
+        // around pointer vs. non-pointer.
+        static_assert(sizeof(T) <= sizeof(pUserData), "type too big");
+        return reinterpret_cast<T>(pUserData);
+    }
 
     SvxIconChoiceCtrlTextMode   GetTextMode() const { return eTextMode; }
     SvxIconViewFlags        GetFlags() const { return nFlags; }
