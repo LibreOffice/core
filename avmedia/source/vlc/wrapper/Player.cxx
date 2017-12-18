@@ -204,11 +204,6 @@ namespace wrapper
         return libvlc_media_player_is_playing( mPlayer ) == 1;
     }
 
-    float Player::getRate() const
-    {
-        return libvlc_media_player_get_rate( mPlayer );
-    }
-
     void Player::setVolume( int volume )
     {
         libvlc_audio_set_volume( mPlayer, volume );

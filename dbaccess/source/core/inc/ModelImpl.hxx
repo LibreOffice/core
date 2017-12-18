@@ -117,28 +117,6 @@ struct AsciiPropertyValue
 class ODatabaseContext;
 class OSharedConnectionManager;
 
-// VosMutexFacade
-/** a class which provides an SolarMutex interface to an OSL-based mutex
-*/
-class VosMutexFacade : public comphelper::SolarMutex
-{
-public:
-    /** beware of life time: the mutex you pass here must live as least as long
-        as the VosMutexFacade instance lives.
-    */
-    explicit VosMutexFacade( ::osl::Mutex& _rMutex );
-
-    virtual bool tryToAcquire() override;
-    virtual bool IsCurrentThread() const override;
-
-protected:
-    virtual void doAcquire( sal_uInt32 nLockCount ) override;
-    virtual sal_uInt32 doRelease( bool bUnlockAll ) override;
-
-private:
-    ::osl::Mutex&   m_rMutex;
-};
-
 // ODatabaseModelImpl
 typedef ::utl::SharedUNOComponent< css::embed::XStorage >  SharedStorage;
 
