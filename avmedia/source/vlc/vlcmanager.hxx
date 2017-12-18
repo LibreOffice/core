@@ -34,7 +34,7 @@ class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
     std::unique_ptr<wrapper::Instance> mInstance;
     wrapper::EventHandler mEventHandler;
 public:
-    explicit Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
+    explicit Manager();
     virtual ~Manager() override;
 
     css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) override;
@@ -44,7 +44,6 @@ public:
     css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
     css::uno::Reference< css::media::XPlayer >             mPlayer;
     rtl::OUString                                          mURL;
     bool                                                   m_is_vlc_found;

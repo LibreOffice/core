@@ -37,9 +37,8 @@ namespace
     };
 }
 
-Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
+Manager::Manager()
     : mEventHandler()
-    , mxMgr( rxMgr )
 {
     using namespace wrapper;
     static bool success = Instance::LoadSymbols() && EventManager::LoadSymbols()

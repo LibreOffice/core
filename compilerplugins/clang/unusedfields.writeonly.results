@@ -54,8 +54,6 @@ canvas/source/cairo/cairo_spritedevicehelper.hxx:77
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
 canvas/source/cairo/cairo_spritehelper.hxx:103
     cairocanvas::SpriteHelper mbTextureDirty _Bool
-canvas/source/opengl/ogl_canvasbitmap.hxx:71
-    oglcanvas::CanvasBitmap mbHasAlpha _Bool
 canvas/source/opengl/ogl_spritedevicehelper.hxx:126
     oglcanvas::SpriteDeviceHelper mpDevice css::rendering::XGraphicDevice *
 chart2/inc/ChartModel.hxx:482
@@ -66,14 +64,8 @@ chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
 chart2/source/inc/MediaDescriptorHelper.hxx:82
     apphelper::MediaDescriptorHelper ReadOnly _Bool
-chart2/source/model/inc/BaseCoordinateSystem.hxx:118
-    chart::BaseCoordinateSystem m_xContext css::uno::Reference<css::uno::XComponentContext>
 chart2/source/view/charttypes/PieChart.hxx:128
     chart::PieChart::PieLabelInfo fValue double
-chart2/source/view/inc/GL3DRenderer.hxx:54
-    chart::opengl3D::MaterialParameters pad float
-chart2/source/view/inc/GL3DRenderer.hxx:55
-    chart::opengl3D::MaterialParameters pad1 float
 chart2/source/view/inc/GL3DRenderer.hxx:63
     chart::opengl3D::LightSource lightPower float
 chart2/source/view/inc/GL3DRenderer.hxx:80
@@ -92,8 +84,6 @@ codemaker/source/cppumaker/dependencies.hxx:115
     codemaker::cppumaker::Dependencies m_doubleDependency _Bool
 configmgr/source/components.cxx:163
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
-connectivity/source/drivers/evoab2/NStatement.hxx:58
-    connectivity::evoab::FieldSort bAscending _Bool
 connectivity/source/drivers/mork/MorkParser.hxx:133
     MorkParser error_ enum MorkErrors
 connectivity/source/inc/dbase/DTable.hxx:62
@@ -170,7 +160,7 @@ cui/source/inc/cuihyperdlg.hxx:76
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:290
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:176
+desktop/qa/desktop_lib/test_desktop_lib.cxx:178
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:119
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
@@ -194,8 +184,6 @@ drawinglayer/source/tools/emfppen.hxx:63
     emfplushelper::EMFPPen customStartCap struct emfplushelper::EMFPCustomLineCap *
 drawinglayer/source/tools/emfppen.hxx:65
     emfplushelper::EMFPPen customEndCap struct emfplushelper::EMFPCustomLineCap *
-editeng/inc/editdoc.hxx:486
-    EditLine nCrsrHeight sal_uInt16
 embeddedobj/source/inc/oleembobj.hxx:127
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:139
@@ -246,10 +234,6 @@ include/connectivity/OSubComponent.hxx:54
     connectivity::OSubComponent m_xParent css::uno::Reference<css::uno::XInterface>
 include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
-include/formula/vectortoken.hxx:65
-    formula::SingleVectorRefToken mnRequestedLength size_t
-include/formula/vectortoken.hxx:85
-    formula::DoubleVectorRefToken mnRequestedLength size_t
 include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
 include/opencl/openclwrapper.hxx:36
@@ -286,8 +270,6 @@ include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
-include/xmloff/xmlexp.hxx:141
-    SvXMLExport msImgFilterName class rtl::OUString
 l10ntools/inc/common.hxx:31
     common::HandledArgs m_bUTF8BOM _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:61
@@ -336,8 +318,6 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
-sc/inc/chartarr.hxx:61
-    ScChartArray aName class rtl::OUString
 sc/inc/compiler.hxx:258
     ScCompiler::AddInMap pODFF const char *
 sc/inc/compiler.hxx:259
@@ -354,10 +334,6 @@ sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
 sc/source/core/data/column4.cxx:1290
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/document.cxx:1269
-    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1270
-    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:24
@@ -390,9 +366,9 @@ sc/source/filter/inc/exp_op.hxx:52
     ExportBiff5 pExcRoot struct RootData *
 sc/source/filter/inc/imp_op.hxx:88
     ImportExcel::LastFormula mpCell class ScFormulaCell *
-sc/source/filter/inc/orcusinterface.hxx:355
+sc/source/filter/inc/orcusinterface.hxx:353
     ScOrcusStyles::xf mnStyleXf size_t
-sc/source/filter/inc/orcusinterface.hxx:373
+sc/source/filter/inc/orcusinterface.hxx:371
     ScOrcusStyles::cell_style mnBuiltInId size_t
 sc/source/filter/inc/root.hxx:95
     LOTUS_ROOT eActType enum Lotus123Typ
@@ -416,7 +392,7 @@ sc/source/ui/inc/filtdlg.hxx:198
     ScSpecialFilterDlg pOptionsMgr class ScFilterOptionsMgr *
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
-sc/source/ui/inc/tabvwsh.hxx:129
+sc/source/ui/inc/tabvwsh.hxx:136
     ScTabViewShell pPivotSource class ScArea *
 sd/source/filter/eppt/eppt.hxx:176
     PPTWriter mnTxId sal_uInt32
@@ -440,16 +416,12 @@ sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
 sd/source/ui/sidebar/SlideBackground.hxx:99
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
-sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
-    sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sfx2/source/inc/appdata.hxx:74
     SfxAppData_Impl pDocTopics SfxDdeDocTopics_Impl *
 sfx2/source/inc/appdata.hxx:75
     SfxAppData_Impl pTriggerTopic class SfxDdeTriggerTopic_Impl *
 sfx2/source/inc/appdata.hxx:76
     SfxAppData_Impl pDdeService2 class DdeService *
-sfx2/source/inc/workwin.hxx:50
-    SfxObjectBar_Impl nPos sal_uInt16
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
@@ -504,11 +476,11 @@ svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
 sw/inc/shellio.hxx:147
     SwReader aFileName class rtl::OUString
-sw/source/core/doc/tblafmt.cxx:183
+sw/source/core/doc/tblafmt.cxx:184
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
 sw/source/core/inc/swfont.hxx:980
     SvStatistics nGetStretchTextSize sal_uInt16
-sw/source/core/text/xmldump.cxx:33
+sw/source/core/text/xmldump.cxx:34
     XmlPortionDumper ofs sal_Int32
 sw/source/filter/html/htmlcss1.cxx:77
     SwCSS1ItemIds nFormatBreak sal_uInt16
@@ -523,7 +495,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo3/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
