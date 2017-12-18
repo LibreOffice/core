@@ -3108,6 +3108,11 @@ bool SdrObject::HasText() const
     return false;
 }
 
+bool SdrObject::IsTextBox() const
+{
+    return false;
+}
+
 SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel)
 {
     nInventor=nInvent;
