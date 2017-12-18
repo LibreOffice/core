@@ -138,7 +138,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         UErrorCode status = U_ZERO_ERROR;
         OUString rule = LocaleDataImpl::get()->getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (!rule.isEmpty()) {
-            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);
+            collator = new icu::RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
         if (!collator && OUString(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
@@ -343,7 +343,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 size_t ruleImageSize = funclen();
 
 #if (U_ICU_VERSION_MAJOR_NUM == 4) && (U_ICU_VERSION_MINOR_NUM <= 2)
-                uca_base = new RuleBasedCollator(static_cast<UChar*>(NULL), status);
+                uca_base = new icu::RuleBasedCollator(static_cast<UChar*>(NULL), status);
 #else
                 // Not only changed ICU 53.1 the API behavior that a negative
                 // length (ruleImageSize) now leads to failure, but also that
@@ -354,11 +354,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 // The default collator of the en-US locale would also fulfill
                 // the requirement. The collator of the actual locale or the
                 // NULL (default) locale does not.
-                uca_base = static_cast<RuleBasedCollator*>(icu::Collator::createInstance(
+                uca_base = static_cast<icu::RuleBasedCollator*>(icu::Collator::createInstance(
                             icu::Locale::getRoot(), status));
 #endif
                 if (! U_SUCCESS(status)) throw RuntimeException();
-                collator = new RuleBasedCollator(
+                collator = new icu::RuleBasedCollator(
                         reinterpret_cast<const uint8_t*>(ruleImage), ruleImageSize, uca_base, status);
                 if (! U_SUCCESS(status)) throw RuntimeException();
             }
@@ -372,17 +372,17 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             */
             icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale), rAlgorithm));
             // load ICU collator
-            collator = static_cast<RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) );
+            collator = static_cast<icu::RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) );
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
     }
 
     if (options & CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT)
-        collator->setStrength(Collator::PRIMARY);
+        collator->setStrength(icu::Collator::PRIMARY);
     else if (options & CollatorOptions::CollatorOptions_IGNORE_CASE)
-        collator->setStrength(Collator::SECONDARY);
+        collator->setStrength(icu::Collator::SECONDARY);
     else
-        collator->setStrength(Collator::TERTIARY);
+        collator->setStrength(icu::Collator::TERTIARY);
 
     return 0;
 }
