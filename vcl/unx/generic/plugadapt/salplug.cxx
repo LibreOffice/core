@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/module.h>
+#include <osl/module.hxx>
 #include <osl/process.h>
 
 #include <rtl/bootstrap.hxx>
@@ -75,21 +75,20 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 #endif
             "vclplug_" + rModuleBase + "lo" SAL_DLLEXTENSION );
 
-    oslModule aMod = osl_loadModuleRelative(
-        reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
-        SAL_LOADMODULE_GLOBAL );
-    if( aMod )
+    osl::Module aMod;
+    if (aMod.loadRelative(reinterpret_cast<oslGenericFunction>(&tryInstance), aModule, SAL_LOADMODULE_GLOBAL))
     {
-        salFactoryProc aProc = reinterpret_cast<salFactoryProc>(osl_getAsciiFunctionSymbol( aMod, "create_SalInstance" ));
-        if( aProc )
+        salFactoryProc aProc = reinterpret_cast<salFactoryProc>(aMod.getFunctionSymbol("create_SalInstance"));
+        if (aProc)
         {
             pInst = aProc();
             SAL_INFO(
                 "vcl.plugadapt",
                 "sal plugin " << aModule << " produced instance " << pInst);
-            if( pInst )
+            if (pInst)
             {
-                pCloseModule = aMod;
+                pCloseModule = static_cast<oslModule>(aMod);
+                aMod.release();
 
 #ifndef ANDROID
                 /*
@@ -106,8 +105,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                 }
 #endif
             }
-            else
-                osl_unloadModule( aMod );
         }
         else
         {
@@ -115,7 +112,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                 "vcl.plugadapt",
                 "could not load symbol create_SalInstance from shared object "
                     << aModule);
-            osl_unloadModule( aMod );
         }
     }
     else if (bForce)
