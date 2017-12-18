@@ -43,8 +43,6 @@ namespace wrapper
         int getTime() const;
         bool isPlaying() const;
 
-        float getRate() const;
-
         void setVolume( int volume );
         int getVolume() const;
 
