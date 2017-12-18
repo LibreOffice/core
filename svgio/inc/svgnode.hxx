@@ -45,7 +45,6 @@ namespace svgio
     namespace svgreader
     {
         typedef ::std::vector< SvgNode* > SvgNodeVector;
-        typedef ::std::vector< const SvgStyleAttributes* > SvgStyleAttributeVector;
 
         enum XmlSpace
         {
@@ -109,7 +108,7 @@ namespace svgio
             // CSS style vector chain, used in decompose phase and built up once per node.
             // It contains the StyleHierarchy for the local node. INdependent from the
             // node hierarchy itself which also needs to be used in style entry solving
-            SvgStyleAttributeVector     maCssStyleVector;
+            ::std::vector< const SvgStyleAttributes* > maCssStyleVector;
 
             /// possible local CssStyle, e.g. style="fill:red; stroke:red;"
             SvgStyleAttributes*         mpLocalCssStyle;

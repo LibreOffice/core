@@ -267,8 +267,8 @@ private:
         }
         bool operator!=(const CursorMoveAttempt& r) const { return !(*this == r); }
     };
-    typedef std::stack<CursorMoveAttempt> GotoStack;
-    GotoStack       m_aGotoStack;
+    std::stack<CursorMoveAttempt>
+                    m_aGotoStack;
 
     ::std::unique_ptr< ::svt::BrowseBoxImpl >  m_pImpl;       // impl structure of the BrowseBox object
 

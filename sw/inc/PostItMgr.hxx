@@ -72,7 +72,6 @@ namespace i18nutil { struct SearchOptions2; }
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
 
 typedef std::list<SwSidebarItem*> SwSidebarItem_list;
-typedef std::list<SwSidebarItem*>::iterator SwSidebarItem_iterator;
 
 struct SwPostItPageItem
 {

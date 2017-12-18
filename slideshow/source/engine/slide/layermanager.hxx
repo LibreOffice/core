@@ -240,7 +240,6 @@ namespace slideshow
              */
         private:
             typedef ::std::map< ShapeSharedPtr, LayerWeakPtr, ShapeComparator > LayerShapeMap;
-            typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
 
 
             /// Adds shape area to containing layer's damage area
@@ -306,7 +305,8 @@ namespace slideshow
             const UnoViewContainer&  mrViews;
 
             /// All layers of this object. Vector owns the layers
-            LayerVector              maLayers;
+            ::std::vector< LayerSharedPtr >
+                                     maLayers;
 
             /** Contains all shapes with their XShape reference as the key
              */
@@ -328,7 +328,8 @@ namespace slideshow
                 has bNeedsUpdate set to true. We maintain this
                 redundant information for faster update processing.
              */
-            ShapeUpdateSet           maUpdateShapes;
+            ::std::set< ShapeSharedPtr >
+                                     maUpdateShapes;
 
             /// Number of shape sprites currently active on this LayerManager
             sal_Int32                mnActiveSprites;

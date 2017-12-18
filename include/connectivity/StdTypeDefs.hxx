@@ -28,7 +28,6 @@
 namespace connectivity
 {
     typedef ::std::vector< OUString>         TStringVector;
-    typedef ::std::vector< sal_Int32>        TIntVector;
     typedef ::std::map<sal_Int32,sal_Int32>  TInt2IntMap;
 }
 

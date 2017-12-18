@@ -2027,8 +2027,7 @@ private:
         }
 
         // create pairs of pages to print on each page
-        typedef std::vector< std::pair< sal_uInt16, sal_uInt16 > > PairVector;
-        PairVector aPairVector;
+        std::vector< std::pair< sal_uInt16, sal_uInt16 > > aPairVector;
         if ( ! aPageVector.empty())
         {
             sal_uInt32 nFirstIndex = 0, nLastIndex = aPageVector.size() - 1;

@@ -680,8 +680,7 @@ void SAL_CALL ORowSet::close(  )
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSet::getInfoHelper()
 {
-    typedef ::comphelper::OPropertyArrayUsageHelper<ORowSet> ORowSet_PROP;
-    return *ORowSet_PROP::getArrayHelper();
+    return *::comphelper::OPropertyArrayUsageHelper<ORowSet>::getArrayHelper();
 }
 
 void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
@@ -2935,8 +2934,7 @@ void ORowSetClone::close()
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSetClone::getInfoHelper()
 {
-    typedef ::comphelper::OPropertyArrayUsageHelper<ORowSetClone> ORowSetClone_PROP;
-    return *ORowSetClone_PROP::getArrayHelper();
+    return *::comphelper::OPropertyArrayUsageHelper<ORowSetClone>::getArrayHelper();
 }
 
 Sequence< sal_Int8 > ORowSetClone::getUnoTunnelImplementationId()

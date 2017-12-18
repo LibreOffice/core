@@ -51,7 +51,7 @@ namespace svgio
         {
             if(!rStr.isEmpty())
             {
-                maIdTokenMapperList.insert(IdTokenValueType(rStr, &rNode));
+                maIdTokenMapperList.emplace(rStr, &rNode);
             }
         }
 
@@ -81,7 +81,7 @@ namespace svgio
         {
             if(!rStr.isEmpty())
             {
-                maIdStyleTokenMapperList.insert(IdStyleTokenValueType(rStr, &rSvgStyleAttributes));
+                maIdStyleTokenMapperList.emplace(rStr, &rSvgStyleAttributes);
             }
         }
 

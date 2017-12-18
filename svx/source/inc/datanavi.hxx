@@ -96,7 +96,6 @@ namespace svxform
     typedef css::uno::Reference< css::xforms::XSubmission >             XSubmission_ref;
     typedef css::uno::Sequence< css::beans::PropertyValue >             PropertyValue_seq;
     typedef std::vector< XContainer_ref >                               ContainerList;
-    typedef std::vector< XEventTarget_ref >                             EventTargetList;
 
 
     class DataTreeListBox : public SvTreeListBox
@@ -321,7 +320,8 @@ namespace svxform
         bool                        m_bIsNotifyDisabled;
         PageList                    m_aPageList;
         ContainerList               m_aContainerList;
-        EventTargetList             m_aEventTargetList;
+        std::vector< XEventTarget_ref >
+                                    m_aEventTargetList;
         Timer                       m_aUpdateTimer;
 
         DataListener_ref            m_xDataListener;
@@ -493,8 +493,6 @@ namespace svxform
     class NamespaceItemDialog : public ModalDialog
     {
     private:
-        typedef std::vector< OUString > PrefixList;
-
         VclPtr<SvSimpleTable>      m_pNamespacesList;
         VclPtr<PushButton>         m_pAddNamespaceBtn;
         VclPtr<PushButton>         m_pEditNamespaceBtn;
@@ -502,7 +500,7 @@ namespace svxform
         VclPtr<OKButton>           m_pOKBtn;
 
         VclPtr<AddConditionDialog> m_pConditionDlg;
-        PrefixList          m_aRemovedList;
+        std::vector< OUString >    m_aRemovedList;
 
         XNameContainer_ref& m_rNamespaces;
 

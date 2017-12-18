@@ -186,9 +186,7 @@ private:
 private:
     SlideShowContext                                   maContext;
 
-    typedef ::std::vector< AnimationNodeSharedPtr >    ListenerVector;
-
-    ListenerVector                                     maDeactivatingListeners;
+    ::std::vector< AnimationNodeSharedPtr >            maDeactivatingListeners;
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
     ::std::shared_ptr< BaseContainerNode >           mpParent;
     ::std::shared_ptr< BaseNode >                    mpSelf;

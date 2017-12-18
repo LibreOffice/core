@@ -36,9 +36,7 @@ namespace utl
  * @author  Dirk Grobler
  * @since   00/28/03
  */
-    typedef cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable> InputStreamHelper_Base;
-    // needed for some compilers
-class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public InputStreamHelper_Base
+class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
 {
     ::osl::Mutex    m_aMutex;
     SvLockBytesRef  m_xLockBytes;

@@ -693,8 +693,7 @@ bool FreetypeFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
                 return true;
     }
 
-    typedef std::vector<sal_uInt32> U32Vector;
-    U32Vector aCodes;
+    std::vector<sal_uInt32> aCodes;
 
     // FT's coverage is available since FT>=2.1.0 (OOo-baseline>=2.1.4 => ok)
     aCodes.reserve( 0x1000 );

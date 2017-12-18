@@ -34,9 +34,7 @@ namespace connectivity
         /*
         **  MacabResultSetMetaData
         */
-        typedef ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>   MacabResultSetMetaData_BASE;
-
-        class MacabResultSetMetaData : public MacabResultSetMetaData_BASE
+        class MacabResultSetMetaData : public ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>
         {
             MacabConnection*                m_pConnection;
             OUString                 m_sTableName;

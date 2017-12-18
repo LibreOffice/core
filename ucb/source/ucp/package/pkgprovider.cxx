@@ -81,10 +81,7 @@ public:
 };
 
 
-// Packages.
-typedef std::unordered_map<OUString, Package*> PackageMap;
-
-class Packages : public PackageMap {};
+class Packages : public std::unordered_map<OUString, Package*> {};
 
 }
 

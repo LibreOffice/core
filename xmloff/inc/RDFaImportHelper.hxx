@@ -45,9 +45,7 @@ class RDFaImportHelper
 private:
     const SvXMLImport & m_rImport;
 
-    typedef ::std::vector< RDFaEntry > RDFaEntries_t;
-
-    RDFaEntries_t m_RDFaEntries;
+    ::std::vector< RDFaEntry > m_RDFaEntries;
 
     const SvXMLImport & GetImport() const { return m_rImport; }
 

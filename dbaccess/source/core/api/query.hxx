@@ -55,11 +55,7 @@ class OQuery    :public OContentHelper
 {
     friend struct TRelease;
 
-public:
-    typedef std::map< OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
-
 protected:
-//  TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
     css::uno::Reference< css::beans::XPropertySet >           m_xCommandDefinition;
     css::uno::Reference< css::sdbc::XConnection >             m_xConnection;
     css::uno::Reference< css::beans::XPropertySetInfo >       m_xCommandPropInfo;

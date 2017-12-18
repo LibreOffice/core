@@ -107,8 +107,7 @@ namespace canvas
                 {
                     // aClipBoundsB = maCurrClipBounds, i.e. last
                     // clip, intersected with sprite area
-                    typedef std::vector< ::basegfx::B2DRectangle > VectorOfRects;
-                    VectorOfRects aClipDifferences;
+                    std::vector< ::basegfx::B2DRectangle > aClipDifferences;
 
                     // get all rectangles covered by exactly one
                     // of the polygons (aka XOR)

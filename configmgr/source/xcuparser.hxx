@@ -135,8 +135,6 @@ private:
         {}
     };
 
-    typedef std::stack< State > StateStack;
-
     ValueParser valueParser_;
     Data & data_;
     Partial const * partial_;
@@ -145,7 +143,7 @@ private:
     bool recordModifications_;
     bool trackPath_;
     OUString componentName_;
-    StateStack state_;
+    std::stack< State > state_;
     std::vector<OUString> path_;
 };
 

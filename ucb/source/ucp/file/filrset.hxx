@@ -427,11 +427,10 @@ class XResultSet_impl : public Notifier,
 
         typedef std::vector< css::uno::Reference< css::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< css::uno::Reference< css::sdbc::XRow > >         ItemSet;
-        typedef std::vector< OUString >                        UnqPathSet;
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;
-        UnqPathSet                          m_aUnqPath;
+        std::vector< OUString >             m_aUnqPath;
         const OUString                 m_aBaseDirectory;
 
         osl::Directory                        m_aFolder;

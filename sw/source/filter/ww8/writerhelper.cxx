@@ -700,7 +700,7 @@ namespace sw
         bool RedlineStack::close(const SwPosition& rPos, RedlineType_t eType)
         {
             //Search from end for same type
-            myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
+            auto aResult = std::find_if(maStack.rbegin(), maStack.rend(),
                 SameOpenRedlineType(eType));
             if (aResult != maStack.rend())
             {

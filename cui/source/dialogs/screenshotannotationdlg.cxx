@@ -124,7 +124,6 @@ private:
 };
 
 typedef std::vector< ControlDataEntry > ControlDataCollection;
-typedef std::set< ControlDataEntry* > ControlDataSet;
 
 class ScreenshotAnnotationDlg_Impl // : public ModalDialog
 {
@@ -173,7 +172,8 @@ private:
 
     // hilighted/selected children
     ControlDataEntry*           mpHilighted;
-    ControlDataSet              maSelected;
+    std::set< ControlDataEntry* >
+                                maSelected;
 
     // list of detected controls
     VclPtr<FixedImage>          mpPicture;

@@ -536,8 +536,6 @@ public:
         {}
     };
 
-    typedef std::map<PDFWriter::StructAttribute, PDFStructureAttribute > PDFStructAttributes;
-
     struct PDFStructureElementKid // for Kids entries
     {
         sal_Int32 nObject;  // an object number if nMCID is -1,
@@ -559,8 +557,9 @@ public:
         bool                                                m_bOpenMCSeq;
         std::list< sal_Int32 >                              m_aChildren; // indexes into structure vector
         std::list< PDFStructureElementKid >                 m_aKids;
-        PDFStructAttributes                                 m_aAttributes;
-        tools::Rectangle                                           m_aBBox;
+        std::map<PDFWriter::StructAttribute, PDFStructureAttribute >
+                                                            m_aAttributes;
+        tools::Rectangle                                    m_aBBox;
         OUString                                            m_aActualText;
         OUString                                            m_aAltText;
         css::lang::Locale                                   m_aLocale;

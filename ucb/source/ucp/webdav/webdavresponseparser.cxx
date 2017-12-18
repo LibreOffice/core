@@ -146,7 +146,6 @@ namespace
 namespace
 {
     typedef std::map< OUString, OUString > NamespaceMap;
-    typedef std::pair< const OUString, OUString > NamespaceValueType;
 
     class WebDAVContext
     {
@@ -198,7 +197,7 @@ namespace
                     {
                         const OUString aToken(aName.copy(nIndex + 1));
 
-                        maNamespaceMap.insert(NamespaceValueType(aToken, xAttribs->getValueByIndex(a)));
+                        maNamespaceMap.emplace(aToken, xAttribs->getValueByIndex(a));
                     }
                 }
             }

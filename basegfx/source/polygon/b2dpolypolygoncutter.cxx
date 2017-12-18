@@ -93,7 +93,6 @@ namespace basegfx
         typedef std::vector< VN > VNV;
         typedef std::vector< SN > SNV;
         typedef std::pair< basegfx::B2DPoint /*orig*/, basegfx::B2DPoint /*repl*/ > CorrectionPair;
-        typedef std::vector< CorrectionPair > CorrectionTable;
 
         class solver
         {
@@ -102,7 +101,8 @@ namespace basegfx
             PNV                     maPNV;
             VNV                     maVNV;
             SNV                     maSNV;
-            CorrectionTable         maCorrectionTable;
+            std::vector< CorrectionPair >
+                                    maCorrectionTable;
 
             bool                    mbIsCurve : 1;
             bool                    mbChanged : 1;

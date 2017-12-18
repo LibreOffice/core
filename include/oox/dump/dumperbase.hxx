@@ -880,8 +880,7 @@ protected:
     const OUString*     implGetOption( const OUString& rKey ) const;
 
 private:
-    typedef std::shared_ptr< SharedConfigData > SharedConfigDataRef;
-    SharedConfigDataRef mxCfgData;
+    std::shared_ptr< SharedConfigData > mxCfgData;
 };
 
 typedef std::shared_ptr< Config > ConfigRef;
@@ -984,13 +983,12 @@ private:
     void                writeItemName( const String& rItemName );
 
 private:
-    typedef ::std::vector< sal_Int32 > StringLenVec;
-
     css::uno::Reference< css::io::XTextOutputStream2 > mxStrm;
     OUString            maIndent;
     OUStringBuffer      maLine;
     OUString            maLastItem;
-    StringLenVec        maColPos;
+    ::std::vector< sal_Int32 >
+                        maColPos;
     size_t              mnCol;
     size_t              mnItemLevel;
     size_t              mnMultiLevel;
@@ -1681,8 +1679,7 @@ protected:
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) = 0;
 
 private:
-    typedef std::shared_ptr< StreamDataSequence > StreamDataSeqRef;
-    StreamDataSeqRef    mxRecData;
+    std::shared_ptr< StreamDataSequence > mxRecData;
 };
 
 

@@ -934,7 +934,7 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
         return false;
     }
 
-    SwSidebarItem_iterator aItem = mPages[aPage-1]->mList->end();
+    auto aItem = mPages[aPage-1]->mList->end();
     --aItem;
     OSL_ENSURE ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen");
     if ((*aItem)->pPostIt)

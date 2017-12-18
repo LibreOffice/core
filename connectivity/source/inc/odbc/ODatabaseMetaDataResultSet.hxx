@@ -62,7 +62,7 @@ namespace connectivity
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
         {
-            ::connectivity::TIntVector                  m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
+            std::vector< sal_Int32>                     m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
 
             std::map<sal_Int32, ::connectivity::TInt2IntMap >
                                                         m_aValueRange;

@@ -76,7 +76,6 @@ namespace canvas
     {
     public:
         typedef IntegerBitmapBase< BitmapCanvasBase2<Base, CanvasHelper, Mutex, UnambiguousBase> > BaseType;
-        typedef SpriteHelper                                                    SpriteHelperType;
 
         CanvasCustomSpriteBase() :
             maSpriteHelper()
@@ -255,7 +254,7 @@ namespace canvas
         }
 
     protected:
-        SpriteHelperType maSpriteHelper;
+        SpriteHelper maSpriteHelper;
     };
 }
 

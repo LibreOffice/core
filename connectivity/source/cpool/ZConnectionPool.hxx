@@ -59,8 +59,6 @@ namespace connectivity
     // OConnectionPool - the one-instance service for PooledConnections
     // manages the active connections and the connections in the pool
 
-    typedef ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener>  OConnectionPool_Base;
-
     // typedef for the internal structure
     typedef std::vector< css::uno::Reference< css::sdbc::XPooledConnection> > TPooledConnections;
 
@@ -106,7 +104,7 @@ namespace connectivity
     typedef std::map< css::uno::Reference< css::sdbc::XConnection>,
                         TActiveConnectionInfo> TActiveConnectionMap;
 
-    class OConnectionPool : public OConnectionPool_Base
+    class OConnectionPool : public ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener>
     {
         TConnectionMap          m_aPool;                // the pooled connections
         TActiveConnectionMap    m_aActiveConnections;   // the currently active connections

@@ -166,7 +166,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                         uno::Any aSelection = xSelectionSupplier->getSelection();
                         if( aSelection.hasValue() )
                         {
-                            ObjectSequence aSelectedPageSequence;
+                            Sequence< Reference< XInterface > > aSelectedPageSequence;
                             aSelection >>= aSelectedPageSequence;
                             mSelectedPages.resize( aSelectedPageSequence.getLength() );
                             for( size_t j=0; j<mSelectedPages.size(); ++j )

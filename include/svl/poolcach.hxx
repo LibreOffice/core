@@ -34,10 +34,10 @@ class SVL_DLLPUBLIC SfxItemPoolCache
         const SfxSetItem  *pOrigItem;
         SfxSetItem        *pPoolItem;
     };
-    typedef std::vector<SfxItemModifyImpl> SfxItemModifyArr_Impl;
 
     SfxItemPool             *pPool;
-    SfxItemModifyArr_Impl   m_aCache;
+    std::vector<SfxItemModifyImpl>
+                             m_aCache;
     const SfxItemSet        *pSetToPut;
     const SfxPoolItem       *pItemToPut;
 

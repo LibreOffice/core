@@ -1462,7 +1462,7 @@ private:
     const SwTextNode& rNd;
 
     sw::util::CharRuns maCharRuns;
-    sw::util::cCharRunIter maCharRunIter;
+    sw::util::CharRuns::const_iterator maCharRunIter;
 
     rtl_TextEncoding meChrSet;
     sal_uInt16 mnScript;

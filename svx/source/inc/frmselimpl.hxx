@@ -239,7 +239,6 @@ class FrameBorderIterBase
 public:
     typedef Cont container_type;
     typedef Iter iterator_type;
-    typedef Pred predicate_type;
     typedef typename Cont::value_type value_type;
     typedef FrameBorderIterBase<Cont, Iter, Pred> this_type;
 
@@ -251,7 +250,7 @@ public:
 private:
     iterator_type       maIt;
     iterator_type       maEnd;
-    predicate_type      maPred;
+    Pred                maPred;
 };
 
 /** Iterator for constant svx::FrameBorder containers, iterates over all borders. */

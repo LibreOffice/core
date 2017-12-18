@@ -199,9 +199,6 @@ namespace dbaui
     };
 
 
-    typedef ::std::deque< FeatureListener > FeatureListeners;
-
-
     class FindFeatureListener
     {
         const css::uno::Reference< css::frame::XStatusListener >& m_xListener;
@@ -266,7 +263,8 @@ namespace dbaui
         typedef std::map<sal_uInt16, FeatureState> StateCache;
         typedef std::vector<DispatchTarget> Dispatch;
 
-        FeatureListeners        m_aFeaturesToInvalidate;
+        ::std::deque< FeatureListener >
+                                m_aFeaturesToInvalidate;
 
         ::osl::Mutex            m_aFeatureMutex;        // locked when features are append to or remove from deque
         StateCache              m_aStateCache;          // save the current status of feature state

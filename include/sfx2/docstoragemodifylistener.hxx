@@ -50,9 +50,7 @@ namespace sfx2
 
     //= DocumentStorageModifyListener
 
-    typedef cppu::WeakImplHelper<css::util::XModifyListener> DocumentStorageModifyListener_Base;
-
-    class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
+    class SFX2_DLLPUBLIC DocumentStorageModifyListener : public cppu::WeakImplHelper<css::util::XModifyListener>
     {
         IModifiableDocument*    m_pDocument;
         comphelper::SolarMutex& m_rMutex;

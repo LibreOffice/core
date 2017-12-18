@@ -48,7 +48,6 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
     typedef ::std::pair< OUString, OUString >                                             URLPair;
     typedef ::std::vector< URLPair >                                                                    URLPairVector;
     typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
-    typedef ::std::set< OUString >                                                               URLSet;
     typedef ::std::vector< css::uno::Reference< css::io::XOutputStream > >    GraphicOutputStreamVector;
 
     ::osl::Mutex                maMutex;
@@ -57,7 +56,7 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
     URLPairVector               maGrfURLs;
     GraphicObjectVector         maGrfObjs;
     GraphicOutputStreamVector   maGrfStms;
-    URLSet                      maURLSet;
+    ::std::set< OUString >      maURLSet;
     SvXMLGraphicHelperMode      meCreateMode;
     OUString                    maOutputMimeType;
     bool                        mbDirect;

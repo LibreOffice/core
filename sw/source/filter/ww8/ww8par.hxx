@@ -1188,7 +1188,6 @@ private:
 
     //Keep track of APO environments
     std::deque<bool> m_aApos;
-    typedef std::deque<bool>::const_iterator mycApoIter;
     /*
     Keep track of generated Ruby character formats we can minimize the
     number of character formats created

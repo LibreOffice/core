@@ -934,8 +934,7 @@ void ScDPCache::PostInit()
     OSL_ENSURE(!maFields.empty(), "Cache not initialized!");
 
     maEmptyRows.build_tree();
-    typedef mdds::flat_segment_tree<SCROW, bool>::const_reverse_iterator itr_type;
-    itr_type it = maEmptyRows.rbegin();
+    auto it = maEmptyRows.rbegin();
     OSL_ENSURE(it != maEmptyRows.rend(), "corrupt flat_segment_tree instance!");
     mnDataSize = maFields[0]->maData.size();
     ++it; // Skip the first position.

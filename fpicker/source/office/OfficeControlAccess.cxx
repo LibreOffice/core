@@ -58,7 +58,6 @@ namespace svt
 
 
         typedef const ControlDescription* ControlDescIterator;
-        typedef ::std::pair< ControlDescIterator, ControlDescIterator > ControlDescRange;
 
 
         #define PROPERTY_FLAGS_COMMON       ( PropFlags::Enabled | PropFlags::Visible | PropFlags::HelpUrl )
@@ -234,7 +233,7 @@ namespace svt
         tmpDesc.pControlName = aControlName.getStr();
 
         // translate the name into an id
-        ControlDescRange aFoundRange = ::std::equal_range( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
+        auto aFoundRange = ::std::equal_range( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
         if ( aFoundRange.first != aFoundRange.second )
         {
             // get the VCL control determined by this id

@@ -43,8 +43,7 @@ public:
 private:
     FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;
-    typedef std::shared_ptr<FormControlHelper_Impl> ImplPointer_t;
-    ImplPointer_t m_pImpl;
+    std::shared_ptr<FormControlHelper_Impl> m_pImpl;
 
     bool createCheckbox(css::uno::Reference<css::text::XTextRange> const& xTextRange,
                         const OUString & rControlName);

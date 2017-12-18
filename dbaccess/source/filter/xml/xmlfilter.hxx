@@ -58,11 +58,10 @@ class ODBFilter : public SvXMLImport
 {
 public:
     typedef std::map< OUString, Sequence<PropertyValue> > TPropertyNameMap;
-    typedef std::vector< css::beans::PropertyValue> TInfoSequence;
 private:
     TPropertyNameMap                                m_aQuerySettings;
     TPropertyNameMap                                m_aTablesSettings;
-    TInfoSequence                                   m_aInfoSequence;
+    std::vector< css::beans::PropertyValue>         m_aInfoSequence;
 
     mutable std::unique_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
     mutable std::unique_ptr<SvXMLTokenMap>          m_pDocContentElemTokenMap;

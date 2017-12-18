@@ -80,7 +80,6 @@ namespace dbaccess
 
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;
-    typedef ::cppu::BaseMutex    OContentHelper_MBASE;
     typedef ::cppu::WeakComponentImplHelper<   css::ucb::XContent
                                            ,   css::ucb::XCommandProcessor
                                            ,   css::lang::XServiceInfo
@@ -92,7 +91,7 @@ namespace dbaccess
                                            ,   css::sdbcx::XRename
                                            >   OContentHelper_COMPBASE;
 
-    class OContentHelper :   public OContentHelper_MBASE
+    class OContentHelper :   public ::cppu::BaseMutex
                             ,public OContentHelper_COMPBASE
     {
         css::uno::Sequence< css::uno::Any >

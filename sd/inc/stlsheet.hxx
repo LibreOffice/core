@@ -151,8 +151,7 @@ private:
     SdStyleSheet& operator=( const SdStyleSheet& ) = delete;
 };
 
-typedef rtl::Reference< SdStyleSheet > SdStyleSheetRef;
-typedef std::vector< SdStyleSheetRef > SdStyleSheetVector;
+typedef std::vector< rtl::Reference< SdStyleSheet > > SdStyleSheetVector;
 
 #endif // INCLUDED_SD_INC_STLSHEET_HXX
 

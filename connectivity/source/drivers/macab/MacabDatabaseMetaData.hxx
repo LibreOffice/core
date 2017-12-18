@@ -29,12 +29,7 @@ namespace connectivity
     namespace macab
     {
 
-        //************ Class: MacabDatabaseMetaData
-
-
-        typedef ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData> MacabDatabaseMetaData_BASE;
-
-        class MacabDatabaseMetaData : public MacabDatabaseMetaData_BASE
+        class MacabDatabaseMetaData : public ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData>
         {
             rtl::Reference< MacabConnection > m_xConnection;
             bool                                   m_bUseCatalog;

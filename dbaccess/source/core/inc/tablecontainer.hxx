@@ -42,13 +42,11 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper1< css::container::XContainerListener> OTableContainer_Base;
-
     // OTableContainer
     class OContainerMediator;
 
     class OTableContainer :  public OFilteredContainer,
-                             public OTableContainer_Base
+                             public ::cppu::ImplHelper1< css::container::XContainerListener>
     {
         css::uno::Reference< css::container::XNameContainer > m_xTableDefinitions;
         ::rtl::Reference< OContainerMediator >                m_pTableMediator;

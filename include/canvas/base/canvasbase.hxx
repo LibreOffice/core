@@ -99,7 +99,6 @@ namespace canvas
     {
     public:
         typedef Base            BaseType;
-        typedef CanvasHelper    HelperType;
         typedef Mutex           MutexType;
         typedef UnambiguousBase UnambiguousBaseType;
 
@@ -429,7 +428,7 @@ namespace canvas
     protected:
         ~CanvasBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.
 
-        HelperType          maCanvasHelper;
+        CanvasHelper        maCanvasHelper;
         mutable bool        mbSurfaceDirty;
 
     private:

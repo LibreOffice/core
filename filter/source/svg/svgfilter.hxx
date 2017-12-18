@@ -183,7 +183,6 @@ class SVGFilter : public cppu::WeakImplHelper < XFilter,
 public:
     typedef std::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface >    ObjectMap;
     typedef std::unordered_set< Reference< XInterface >, HashReferenceXInterface >                          ObjectSet;
-    typedef Sequence< Reference< XInterface > >                                                                 ObjectSequence;
 
     typedef std::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
     typedef std::unordered_map< OUString, UCharSet >                                          UCharSetMap;

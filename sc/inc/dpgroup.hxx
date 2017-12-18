@@ -119,15 +119,14 @@ public:
 
 class ScDPGroupTableData : public ScDPTableData
 {
-    typedef std::unordered_set< OUString > StringHashSet;
-
     std::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;
     ScDPGroupDimensionVec   aGroups;
     std::unique_ptr<ScDPNumGroupDimension[]>
                             pNumGroups;     // array[nSourceCount]
     ScDocument*             pDoc;
-    StringHashSet           aGroupNames;
+    std::unordered_set< OUString >
+                            aGroupNames;
 
     void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<long>& rDims);
     virtual long                GetSourceDim( long nDim ) override;

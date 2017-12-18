@@ -131,13 +131,7 @@ namespace dbaui
 
     private:
         virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) override;
-#ifdef _MSC_VER
-        typedef css::frame::XStatusListener xstlist_type;
-        typedef css::uno::Reference< xstlist_type > xlistener_type;
-        void NotifyStatusChanged(const css::util::URL& aUrl, const xlistener_type & xControl = xlistener_type() );
-#else
         void NotifyStatusChanged(const css::util::URL& aUrl, const css::uno::Reference< css::frame::XStatusListener > & xControl);
-#endif // # _MSC_VER
 
         // for any execution of XDispatch::dispatch
         struct DispatchArgs

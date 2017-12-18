@@ -75,8 +75,7 @@ using namespace ::com::sun::star::util;
 template< typename T >
 class SimpleNamedThingContainer : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
-    typedef std::unordered_map< OUString, Reference< T > > NamedThingsHash;
-    NamedThingsHash things;
+    std::unordered_map< OUString, Reference< T > > things;
     ::osl::Mutex m_aMutex;
 public:
     // css::container::XNameContainer, XNameReplace, XNameAccess
