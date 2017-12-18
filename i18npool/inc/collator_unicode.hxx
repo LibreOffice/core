@@ -63,7 +63,7 @@ public:
 
 private:
     const sal_Char *implementationName;
-    RuleBasedCollator *uca_base, *collator;
+    icu::RuleBasedCollator *uca_base, *collator;
 #ifndef DISABLE_DYNLOADING
     oslModule hModule;
 #endif
