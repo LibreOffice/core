@@ -863,6 +863,17 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
 
+        // Varbinary (VARCHAR)
+        aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
+        aRow[2] = new ORowSetValueDecorator(DataType::VARBINARY);
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::NONE)); // Searchable
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
         // Integer Types common
         {
             aRow[6] = new ORowSetValueDecorator(); // Create Params

@@ -101,7 +101,7 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
         sal_Int32 aType = 0;
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))
             >>= aType;
-        if(aType == DataType::BINARY)
+        if(aType == DataType::BINARY || aType == DataType::VARBINARY)
         {
             aSql.append(" ");
             aSql.append("CHARACTER SET OCTETS");
