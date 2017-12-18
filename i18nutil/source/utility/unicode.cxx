@@ -750,15 +750,15 @@ OUString unicode::formatPercent(double dNumber,
 
     icu::Locale aLocale = LanguageTagIcu::getIcuLocale(aLangTag);
 
-    std::unique_ptr<NumberFormat> xF(
-        NumberFormat::createPercentInstance(aLocale, errorCode));
+    std::unique_ptr<icu::NumberFormat> xF(
+        icu::NumberFormat::createPercentInstance(aLocale, errorCode));
     if(U_FAILURE(errorCode))
     {
-        SAL_WARN("i18n", "NumberFormat::createPercentInstance failed");
+        SAL_WARN("i18n", "icu::NumberFormat::createPercentInstance failed");
         return OUString::number(dNumber) + "%";
     }
 
-    UnicodeString output;
+    icu::UnicodeString output;
     xF->format(dNumber/100, output);
     OUString aRet(reinterpret_cast<const sal_Unicode *>(output.getBuffer()),
         output.length());
