@@ -3047,11 +3047,12 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
         bInsert = false;
     }
 
-    if( bInsert && bScript )
+    const SwTextNode *pTextNd = (bInsert && bScript) ?
+        pAttr->GetSttPara().GetNode().GetTextNode() :
+        nullptr;
+
+    if (pTextNd)
     {
-        const SwTextNode *pTextNd = pAttr->GetSttPara().GetNode()
-                                            .GetTextNode();
-        OSL_ENSURE( pTextNd, "No text node" );
         const OUString& rText = pTextNd->GetText();
         sal_uInt16 nScriptText = g_pBreakIt->GetBreakIter()->getScriptType(
                         rText, pAttr->GetSttCnt() );
