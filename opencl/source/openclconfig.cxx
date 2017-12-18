@@ -119,7 +119,7 @@ bool match(const OUString& rPattern, const OUString& rInput)
     UErrorCode nIcuError(U_ZERO_ERROR);
     icu::UnicodeString sIcuPattern(reinterpret_cast<const UChar*>(rPattern.getStr()), rPattern.getLength());
     icu::UnicodeString sIcuInput(reinterpret_cast<const UChar*>(rInput.getStr()), rInput.getLength());
-    RegexMatcher aMatcher(sIcuPattern, sIcuInput, 0, nIcuError);
+    icu::RegexMatcher aMatcher(sIcuPattern, sIcuInput, 0, nIcuError);
 
     return U_SUCCESS(nIcuError) && aMatcher.matches(nIcuError) && U_SUCCESS(nIcuError);
 }
