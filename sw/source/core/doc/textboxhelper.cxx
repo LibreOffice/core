@@ -148,20 +148,13 @@ bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
    return true;
 }
 
-bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
-{
-    const SwVirtFlyDrawObj* pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(pObject);
-    if (!pVirtFlyDrawObj)
-        return false;
-    return isTextBox(pVirtFlyDrawObj->GetFormat(), RES_FLYFRMFMT);
-}
-
 sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage)
 {
     sal_Int32 nRet = 0;
     for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
-        if (isTextBox(pPage->GetObj(i)))
+        SdrObject* p = pPage->GetObj(i);
+        if (p && p->IsTextBox())
             continue;
         ++nRet;
     }
@@ -189,11 +182,12 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex) throw(lan
     sal_Int32 nCount = 0; // Current logical index.
     for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
-        if (isTextBox(pPage->GetObj(i)))
+        SdrObject* p = pPage->GetObj(i);
+        if (p && p->IsTextBox())
             continue;
         if (nCount == nIndex)
         {
-            pRet = pPage->GetObj(i);
+            pRet = p;
             break;
         }
         ++nCount;
@@ -212,9 +206,10 @@ sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
         sal_Int32 nOrder = 0; // Current logical order.
         for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
         {
-            if (isTextBox(pPage->GetObj(i)))
+            SdrObject* p = pPage->GetObj(i);
+            if (p && p->IsTextBox())
                 continue;
-            if (pPage->GetObj(i) == pObject)
+            if (p == pObject)
                 return nOrder;
             ++nOrder;
         }

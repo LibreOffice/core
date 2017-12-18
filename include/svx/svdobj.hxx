@@ -948,6 +948,9 @@ public:
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
+    /// Is this a textbox of a drawinglayer shape?
+    virtual bool IsTextBox() const;
+
 protected:
     /// Sets a new UNO shape
     ///
