@@ -250,7 +250,7 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uLong nRelPos, bool bAlterModel)
+    void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uInt32 nRelPos, bool bAlterModel)
     {
         if (IsListening(*m_pFormModel))
             EndListening(*m_pFormModel);

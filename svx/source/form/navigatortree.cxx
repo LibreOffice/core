@@ -1343,7 +1343,7 @@ namespace svxform
 
 
         // insert form
-        GetNavModel()->Insert( pNewFormData, TREELIST_APPEND, true );
+        GetNavModel()->Insert(pNewFormData, SAL_MAX_UINT32, true);
 
 
         // set new form as active
@@ -1394,7 +1394,7 @@ namespace svxform
 
 
         // insert FormComponent
-        GetNavModel()->Insert( pNewFormControlData, TREELIST_APPEND, true );
+        GetNavModel()->Insert(pNewFormControlData, SAL_MAX_UINT32, true);
         GetNavModel()->SetModified();
 
         if (bEditName)
