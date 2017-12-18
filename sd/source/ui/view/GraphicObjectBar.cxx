@@ -123,7 +123,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
         {
             GraphicObject aFilterObj( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
 
-            if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
+            if( SvxGraphicFilterResult::NONE ==
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
             {
                 SdrPageView* pPageView = mpView->GetSdrPageView();

@@ -707,7 +707,7 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
                 if ( pFilterObj )
                 {
                     GraphicObject aFilterObj( *pFilterObj );
-                    if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
+                    if( SvxGraphicFilterResult::NONE ==
                         SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
                         GetShell().ReRead( OUString(), OUString(),
                                            &aFilterObj.GetGraphic() );
