@@ -29,7 +29,7 @@
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
-enum class SotClipboardFormatId : sal_uLong;
+enum class SotClipboardFormatId : sal_uInt32;
 
 class SotStorage;
 class BaseStorageStream;
