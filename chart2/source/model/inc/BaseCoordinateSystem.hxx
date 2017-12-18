@@ -54,9 +54,7 @@ class BaseCoordinateSystem :
         public ::property::OPropertySet
 {
 public:
-    BaseCoordinateSystem(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        sal_Int32 nDimensionCount );
+    BaseCoordinateSystem( sal_Int32 nDimensionCount );
     explicit BaseCoordinateSystem( const BaseCoordinateSystem & rSource );
     virtual ~BaseCoordinateSystem() override;
 
@@ -115,8 +113,6 @@ protected:
     void fireModifyEvent();
 
 protected:
-    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
-
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 
 private:

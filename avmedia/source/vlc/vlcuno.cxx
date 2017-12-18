@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 #define IMPL_NAME    "com.sun.star.comp.media.Manager_VLC"
 #define SERVICE_NAME "com.sun.star.comp.avmedia.Manager_VLC"
 
-static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
+static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& /*rxFact*/ )
 {
     SAL_INFO("avmedia", "create VLC Media player !");
 
@@ -38,7 +38,7 @@ static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Referenc
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
         return nullptr;
 
-    static uno::Reference< uno::XInterface > manager( *new ::avmedia::vlc::Manager( rxFact ) );
+    static uno::Reference< uno::XInterface > manager( *new ::avmedia::vlc::Manager );
     return manager;
 }
 

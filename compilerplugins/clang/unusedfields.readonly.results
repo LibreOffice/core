@@ -1,3 +1,9 @@
+avmedia/source/vlc/wrapper/Types.hxx:35
+    libvlc_event_t type int
+avmedia/source/vlc/wrapper/Types.hxx:49
+    libvlc_track_description_t i_id int
+avmedia/source/vlc/wrapper/Types.hxx:51
+    libvlc_track_description_t p_next struct libvlc_track_description_t *
 basegfx/source/polygon/b2dtrapezoid.cxx:201
     basegfx::trapezoidhelper::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
 basic/source/inc/expr.hxx:93
@@ -48,10 +54,6 @@ bridges/source/jni_uno/jni_java2uno.cxx:151
     jni_uno::largest a uno_Any
 chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed _Bool
-chart2/source/view/inc/GL3DRenderer.hxx:54
-    chart::opengl3D::MaterialParameters pad float
-chart2/source/view/inc/GL3DRenderer.hxx:55
-    chart::opengl3D::MaterialParameters pad1 float
 connectivity/source/drivers/evoab2/EApi.h:125
     (anonymous) po char *
 connectivity/source/drivers/evoab2/EApi.h:127
@@ -285,7 +287,7 @@ include/test/sheet/xnamedranges.hxx:38
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo3/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -318,7 +320,7 @@ include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/xmloff/nmspmap.hxx:70
     SvXMLNamespaceMap sEmpty const class rtl::OUString
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:46
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:51
     GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading gboolean
@@ -367,7 +369,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:126
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:127
-    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:124:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo3/sc/inc/compiler.hxx:124:9)
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:42
@@ -404,8 +406,6 @@ sc/source/ui/vba/vbaformatconditions.hxx:46
     ScVbaFormatConditions mxRangeParent css::uno::Reference<ov::excel::XRange>
 sc/source/ui/vba/vbaformatconditions.hxx:47
     ScVbaFormatConditions mxParentRangePropertySet css::uno::Reference<css::beans::XPropertySet>
-sc/source/ui/vba/vbatitle.hxx:43
-    TitleImpl m_Palette class ScVbaPalette
 sd/inc/sdmod.hxx:117
     SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
 sd/inc/sdmod.hxx:118
@@ -564,8 +564,6 @@ unoidl/source/unoidlprovider.cxx:456
     unoidl::detail::MapEntry data struct unoidl::detail::(anonymous namespace)::Memory32
 unotools/source/config/saveopt.cxx:82
     SvtSaveOptions_Impl bROUserAutoSave _Bool
-vcl/inc/PhysicalFontCollection.hxx:71
-    PhysicalFontCollection mbMapNames _Bool
 vcl/inc/printerinfomanager.hxx:72
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
 vcl/inc/salwtype.hxx:153
@@ -578,17 +576,17 @@ vcl/inc/salwtype.hxx:202
     SalSurroundingTextSelectionChangeEvent mnEnd sal_uLong
 vcl/inc/salwtype.hxx:208
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:267
+vcl/inc/svdata.hxx:268
     ImplSVNWFData mnStatusBarLowerRightOffset int
-vcl/inc/svdata.hxx:273
+vcl/inc/svdata.hxx:274
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:283
-    ImplSVNWFData mbCenteredTabs _Bool
 vcl/inc/svdata.hxx:284
+    ImplSVNWFData mbCenteredTabs _Bool
+vcl/inc/svdata.hxx:285
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
-vcl/inc/svdata.hxx:286
+vcl/inc/svdata.hxx:287
     ImplSVNWFData mbProgressNeedsErase _Bool
-vcl/inc/svdata.hxx:295
+vcl/inc/svdata.hxx:296
     ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/unx/i18n_status.hxx:56
     vcl::I18NStatus m_aCurrentIM class rtl::OUString
@@ -610,39 +608,39 @@ vcl/source/fontsubset/sft.cxx:1056
     vcl::_subHeader2 entryCount sal_uInt16
 vcl/source/fontsubset/sft.cxx:1057
     vcl::_subHeader2 idDelta sal_uInt16
-vcl/source/gdi/dibtools.cxx:48
-    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:49
-    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
+    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:50
+    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
+vcl/source/gdi/dibtools.cxx:51
     (anonymous namespace)::CIEXYZ aXyzZ FXPT2DOT30
-vcl/source/gdi/dibtools.cxx:61
-    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
 vcl/source/gdi/dibtools.cxx:62
-    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
 vcl/source/gdi/dibtools.cxx:63
+    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+vcl/source/gdi/dibtools.cxx:64
     (anonymous namespace)::CIEXYZTriple aXyzBlue struct (anonymous namespace)::CIEXYZ
-vcl/source/gdi/dibtools.cxx:103
-    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:104
-    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:105
-    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:106
+    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
+vcl/source/gdi/dibtools.cxx:107
     (anonymous namespace)::DIBV5Header nV5AlphaMask sal_uInt32
-vcl/source/gdi/dibtools.cxx:108
-    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
 vcl/source/gdi/dibtools.cxx:109
-    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
+    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
 vcl/source/gdi/dibtools.cxx:110
-    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
 vcl/source/gdi/dibtools.cxx:111
+    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
+vcl/source/gdi/dibtools.cxx:112
     (anonymous namespace)::DIBV5Header nV5GammaBlue sal_uInt32
-vcl/source/gdi/dibtools.cxx:113
-    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
 vcl/source/gdi/dibtools.cxx:114
-    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
 vcl/source/gdi/dibtools.cxx:115
+    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
+vcl/source/gdi/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
 vcl/source/window/menuitemlist.hxx:54
     MenuItemData aAccessibleName class rtl::OUString

@@ -38,10 +38,8 @@ namespace chart
 {
 
 // explicit
-PolarCoordinateSystem::PolarCoordinateSystem(
-    const uno::Reference< uno::XComponentContext > & xContext,
-    sal_Int32 nDimensionCount /* = 2 */ ) :
-        BaseCoordinateSystem( xContext, nDimensionCount )
+PolarCoordinateSystem::PolarCoordinateSystem( sal_Int32 nDimensionCount /* = 2 */ ) :
+        BaseCoordinateSystem( nDimensionCount )
 {}
 
 PolarCoordinateSystem::PolarCoordinateSystem(
@@ -87,9 +85,8 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem::getSupportedServi
 
 // ==== PolarCoordinateSystem2d ====
 
-PolarCoordinateSystem2d::PolarCoordinateSystem2d(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        PolarCoordinateSystem( xContext, 2 )
+PolarCoordinateSystem2d::PolarCoordinateSystem2d() :
+        PolarCoordinateSystem( 2 )
 {}
 
 PolarCoordinateSystem2d::~PolarCoordinateSystem2d()
@@ -115,9 +112,8 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedSer
 
 // ==== PolarCoordinateSystem3d ====
 
-PolarCoordinateSystem3d::PolarCoordinateSystem3d(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        PolarCoordinateSystem( xContext, 3 )
+PolarCoordinateSystem3d::PolarCoordinateSystem3d() :
+        PolarCoordinateSystem( 3 )
 {}
 
 PolarCoordinateSystem3d::~PolarCoordinateSystem3d()
@@ -144,17 +140,17 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedSer
 }  // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_PolarCoordinateSystem2d_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_PolarCoordinateSystem2d_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::PolarCoordinateSystem2d(context));
+    return cppu::acquire(new ::chart::PolarCoordinateSystem2d);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_PolarCoordinateSystem3d_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_PolarCoordinateSystem3d_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::PolarCoordinateSystem3d(context));
+    return cppu::acquire(new ::chart::PolarCoordinateSystem3d);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

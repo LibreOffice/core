@@ -39,9 +39,8 @@ namespace chart
 
 // explicit
 CartesianCoordinateSystem::CartesianCoordinateSystem(
-    const uno::Reference< uno::XComponentContext > & xContext,
     sal_Int32 nDimensionCount /* = 2 */ ) :
-        BaseCoordinateSystem( xContext, nDimensionCount )
+        BaseCoordinateSystem( nDimensionCount )
 {}
 
 CartesianCoordinateSystem::CartesianCoordinateSystem(
@@ -87,9 +86,8 @@ css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem::getSupportedS
 
 // ==== CartesianCoordinateSystem2d ====
 
-CartesianCoordinateSystem2d::CartesianCoordinateSystem2d(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        CartesianCoordinateSystem( xContext, 2 )
+CartesianCoordinateSystem2d::CartesianCoordinateSystem2d() :
+        CartesianCoordinateSystem( 2 )
 {}
 
 CartesianCoordinateSystem2d::~CartesianCoordinateSystem2d()
@@ -116,9 +114,8 @@ css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem2d::getSupporte
 
 // ==== CartesianCoordinateSystem3d ====
 
-CartesianCoordinateSystem3d::CartesianCoordinateSystem3d(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        CartesianCoordinateSystem( xContext, 3 )
+CartesianCoordinateSystem3d::CartesianCoordinateSystem3d() :
+        CartesianCoordinateSystem( 3 )
 {}
 
 CartesianCoordinateSystem3d::~CartesianCoordinateSystem3d()
@@ -146,17 +143,17 @@ css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem3d::getSupporte
 }  // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::CartesianCoordinateSystem2d(context));
+    return cppu::acquire(new ::chart::CartesianCoordinateSystem2d);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::CartesianCoordinateSystem3d(context));
+    return cppu::acquire(new ::chart::CartesianCoordinateSystem3d);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
