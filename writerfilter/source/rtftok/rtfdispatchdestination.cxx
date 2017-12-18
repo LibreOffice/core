@@ -11,7 +11,7 @@
 
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 
 #include <filter/msfilter/escherex.hxx>
 #include <rtl/character.hxx>
@@ -598,11 +598,10 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     if (xDrawSupplier.is())
                     {
                         uno::Reference<drawing::XShape> xShape(xGroupShape, uno::UNO_QUERY);
-                        // set AnchorType before inserting
+                        // set default VertOrient before inserting
                         uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY)
-                            ->setPropertyValue(
-                                "AnchorType",
-                                uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                            ->setPropertyValue("VertOrient",
+                                               uno::makeAny(text::VertOrientation::NONE));
                         xDrawSupplier->getDrawPage()->add(xShape);
                     }
                     m_pSdrImport->pushParent(xGroupShape);

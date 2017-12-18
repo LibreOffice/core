@@ -341,6 +341,7 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
         o_xPropSet->setPropertyValue(
             "FillColor",
             uno::makeAny(sal_uInt32(0xffffff))); // White in Word, kind of blue in Writer.
+        o_xPropSet->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::NONE));
     }
 
     return nType;
