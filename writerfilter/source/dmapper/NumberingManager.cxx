@@ -119,6 +119,12 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         default:
             OSL_FAIL( "this line should never be reached");
     }
+    m_bHasValues = true;
+}
+
+bool ListLevel::HasValues() const
+{
+    return m_bHasValues;
 }
 
 void ListLevel::SetParaStyle( const std::shared_ptr< StyleSheetEntry >& pStyle )
@@ -467,9 +473,9 @@ uno::Sequence< uno::Sequence< beans::PropertyValue > > ListDef::GetPropertyValue
     for ( sal_Int32 i = 0; i < nThisCount && i < nAbstractCount; i++ )
     {
         uno::Sequence< beans::PropertyValue > level = aThis[i];
-        if ( level.hasElements() )
+        if (level.hasElements() && GetLevel(i)->HasValues())
         {
-            // If the element contains something, merge it
+            // If the element contains something, merge it, but ignore stub overrides.
             lcl_mergeProperties( level, aAbstract[i] );
         }
     }
