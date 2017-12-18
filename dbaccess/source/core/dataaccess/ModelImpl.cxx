@@ -86,35 +86,6 @@ using namespace ::comphelper;
 namespace dbaccess
 {
 
-// VosMutexFacade
-VosMutexFacade::VosMutexFacade( ::osl::Mutex& _rMutex )
-    :m_rMutex( _rMutex )
-{
-}
-
-void VosMutexFacade::doAcquire( sal_uInt32 nLockCount )
-{
-    assert( 1 == nLockCount ); (void) nLockCount;
-    m_rMutex.acquire();
-}
-
-sal_uInt32 VosMutexFacade::doRelease( bool bUnlockAll )
-{
-    assert( !bUnlockAll ); (void) bUnlockAll;
-    m_rMutex.release();
-    return 1;
-}
-
-bool VosMutexFacade::tryToAcquire()
-{
-    return m_rMutex.tryToAcquire();
-}
-
-bool VosMutexFacade::IsCurrentThread() const
-{
-    return true;
-}
-
 // DocumentStorageAccess
 class DocumentStorageAccess : public ::cppu::WeakImplHelper<   XDocumentSubStorageSupplier
                                                            ,   XTransactionListener >
