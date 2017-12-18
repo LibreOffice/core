@@ -79,7 +79,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
     if (!U_SUCCESS(nCode))
         return retValue;
 
-    std::unique_ptr<NumberFormat> xNumberFormat(icu::NumberFormat::createInstance(aIcuLocale, nCode));
+    std::unique_ptr<icu::NumberFormat> xNumberFormat(icu::NumberFormat::createInstance(aIcuLocale, nCode));
     if (!U_SUCCESS(nCode))
         return retValue;
 

@@ -56,14 +56,14 @@ BreakIterator_Unicode::~BreakIterator_Unicode()
 }
 
 /*
-    Wrapper class to provide public access to the RuleBasedBreakIterator's
+    Wrapper class to provide public access to the icu::RuleBasedBreakIterator's
     setbreakType method.
 */
-class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
+class OOoRuleBasedBreakIterator : public icu::RuleBasedBreakIterator
 {
     public:
 #if (U_ICU_VERSION_MAJOR_NUM < 58)
-    // RuleBasedBreakIterator::setBreakType() is private as of ICU 58.
+    // icu::RuleBasedBreakIterator::setBreakType() is private as of ICU 58.
     void publicSetBreakType(int32_t type)
         {
             setBreakType(type);
@@ -71,7 +71,7 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
 #endif
     OOoRuleBasedBreakIterator(UDataMemory* image,
                               UErrorCode &status)
-        : RuleBasedBreakIterator(image, status)
+        : icu::RuleBasedBreakIterator(image, status)
         { };
 
 };
@@ -334,7 +334,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
         icu::BreakIterator* pBI = character.mpValue->mpBreakIterator.get();
         for (nDone = 0; nDone < nCount; nDone++) {
             nStartPos = pBI->following(nStartPos);
-            if (nStartPos == BreakIterator::DONE)
+            if (nStartPos == icu::BreakIterator::DONE)
                 return Text.getLength();
         }
     } else { // for CHARACTER mode
@@ -353,7 +353,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
         icu::BreakIterator* pBI = character.mpValue->mpBreakIterator.get();
         for (nDone = 0; nDone < nCount; nDone++) {
             nStartPos = pBI->preceding(nStartPos);
-            if (nStartPos == BreakIterator::DONE)
+            if (nStartPos == icu::BreakIterator::DONE)
                 return 0;
         }
     } else { // for BS to delete one char and CHARACTER mode.
@@ -371,7 +371,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 
     Boundary rv;
     rv.startPos = icuBI->mpValue->mpBreakIterator->following(nStartPos);
-    if( rv.startPos >= Text.getLength() || rv.startPos == BreakIterator::DONE )
+    if( rv.startPos >= Text.getLength() || rv.startPos == icu::BreakIterator::DONE )
         rv.endPos = result.startPos;
     else {
         if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
@@ -380,7 +380,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
             rv.startPos = icuBI->mpValue->mpBreakIterator->following(rv.startPos);
 
         rv.endPos = icuBI->mpValue->mpBreakIterator->following(rv.startPos);
-        if(rv.endPos == BreakIterator::DONE)
+        if(rv.endPos == icu::BreakIterator::DONE)
             rv.endPos = rv.startPos;
     }
     return rv;
@@ -394,7 +394,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 
     Boundary rv;
     rv.startPos = icuBI->mpValue->mpBreakIterator->preceding(nStartPos);
-    if( rv.startPos < 0 || rv.startPos == BreakIterator::DONE)
+    if( rv.startPos < 0 || rv.startPos == icu::BreakIterator::DONE)
         rv.endPos = rv.startPos;
     else {
         if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
@@ -403,7 +403,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
             rv.startPos = icuBI->mpValue->mpBreakIterator->preceding(rv.startPos);
 
         rv.endPos = icuBI->mpValue->mpBreakIterator->following(rv.startPos);
-        if(rv.endPos == BreakIterator::DONE)
+        if(rv.endPos == icu::BreakIterator::DONE)
             rv.endPos = rv.startPos;
     }
     return rv;
@@ -435,9 +435,9 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
             rv.endPos = icuBI->mpValue->mpBreakIterator->following(nPos);
         }
     }
-    if (rv.startPos == BreakIterator::DONE)
+    if (rv.startPos == icu::BreakIterator::DONE)
         rv.startPos = rv.endPos;
-    else if (rv.endPos == BreakIterator::DONE)
+    else if (rv.endPos == icu::BreakIterator::DONE)
         rv.endPos = rv.startPos;
 
     return rv;
@@ -502,7 +502,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
             lbr.breakIndex = nStartPos;
             lbr.breakType = BreakType::WORDBOUNDARY;
         } else if (hOptions.rHyphenator.is()) { //Hyphenation break
-            sal_Int32 boundary_with_punctuation = (pLineBI->next() != BreakIterator::DONE) ? pLineBI->current() : 0;
+            sal_Int32 boundary_with_punctuation = (pLineBI->next() != icu::BreakIterator::DONE) ? pLineBI->current() : 0;
             pLineBI->preceding(nStartPos + 1); // reset to check correct hyphenation of "word-word"
 
             sal_Int32 nStartPosWordEnd = nStartPos;
