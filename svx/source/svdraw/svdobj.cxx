@@ -3065,6 +3065,11 @@ bool SdrObject::HasText() const
     return false;
 }
 
+bool SdrObject::IsTextBox() const
+{
+    return false;
+}
+
 SdrDelayBroadcastObjectChange::SdrDelayBroadcastObjectChange( SdrObject& rObj ) :
     mrObj(rObj), mbOldDelayBroadcastObjectChange( rObj.mbDelayBroadcastObjectChange)
 {
