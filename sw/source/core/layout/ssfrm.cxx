@@ -82,22 +82,6 @@ bool SwFrame::SetMaxBottom( long nDeadline )
     return false;
 }
 
-bool SwFrame::SetMinTop( long nDeadline )
-{
-    SwTwips nDiff = nDeadline - getFrameArea().Top();
-    if( nDiff > 0 )
-    {
-        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.Top( nDeadline );
-
-        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-        aPrt.Height( aPrt.Height() - nDiff );
-
-        return true;
-    }
-    return false;
-}
-
 bool SwFrame::SetMaxRight( long nDeadline )
 {
     SwTwips nDiff = getFrameArea().Left() + getFrameArea().Width() - nDeadline;
@@ -132,28 +116,6 @@ void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     if( bNotify )
     {
         aFrm.Pos().Y() += 1;
-    }
-}
-
-void SwFrame::MakeUpperPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
-{
-    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-
-    if( pPrv )
-    {
-        aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().Y() -= aFrm.Height();
-    }
-    else
-    {
-        aFrm.Pos( pUp->getFrameArea().Pos() );
-        aFrm.Pos() += pUp->getFramePrintArea().Pos();
-        aFrm.Pos().Y() += pUp->getFramePrintArea().Height() - aFrm.Height();
-    }
-
-    if( bNotify )
-    {
-        aFrm.Pos().Y() -= 1;
     }
 }
 
@@ -201,13 +163,6 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
 }
 
 void SwFrame::SetTopBottomMargins( long nTop, long nBot )
-{
-    SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-    aPrt.Top( nTop );
-    aPrt.Height( getFrameArea().Height() - nTop - nBot );
-}
-
-void SwFrame::SetBottomTopMargins( long nBot, long nTop )
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Top( nTop );

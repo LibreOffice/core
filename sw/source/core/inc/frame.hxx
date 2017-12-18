@@ -849,7 +849,6 @@ public:
     long GetLeftMargin() const;
     long GetRightMargin() const;
     void SetTopBottomMargins( long, long );
-    void SetBottomTopMargins( long, long );
     void SetLeftRightMargins( long, long );
     void SetRightLeftMargins( long, long );
     long GetPrtLeft() const;
@@ -859,9 +858,7 @@ public:
     bool SetMinLeft( long );
     bool SetMaxBottom( long );
     bool SetMaxRight( long );
-    bool SetMinTop( long );
     void MakeBelowPos( const SwFrame*, const SwFrame*, bool );
-    void MakeUpperPos( const SwFrame*, const SwFrame*, bool );
     void MakeLeftPos( const SwFrame*, const SwFrame*, bool );
     void MakeRightPos( const SwFrame*, const SwFrame*, bool );
     bool IsNeighbourFrame() const
