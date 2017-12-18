@@ -127,6 +127,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
     SwDrawContact::GetTextObjectsFromFormat( aTextObjs, pView->GetDocShell()->GetDoc() );
     for (auto const& textObj : aTextObjs)
     {
+        pTextObj = textObj;
         if (textObj)
         {
             OutlinerParaObject* pParaObj = textObj->GetOutlinerParaObject();
