@@ -383,7 +383,6 @@ class MultiControlWrapper : public MultiControlWrapperHelper
 public:
     typedef MultiControlWrapperHelper       ControlType;
     typedef ValueT                          ControlValueType;
-    typedef MultiControlWrapper< ValueT >   MultiControlWrapperType;
 
     MultiControlWrapper() : maDefValue( 0 ){}
 

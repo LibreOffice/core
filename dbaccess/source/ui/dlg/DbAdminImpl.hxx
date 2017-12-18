@@ -65,7 +65,6 @@ namespace dbaui
 
         css::uno::Any              m_aDataSourceOrName;
         typedef std::set< OUString >   StringSet;
-        typedef StringSet::const_iterator       ConstStringSetIterator;
 
         MapInt2String           m_aDirectPropTranslator;    /// translating property id's into names (direct properties of a data source)
         MapInt2String           m_aIndirectPropTranslator;  /// translating property id's into names (indirect properties of a data source)

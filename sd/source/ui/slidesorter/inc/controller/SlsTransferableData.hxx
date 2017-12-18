@@ -71,7 +71,6 @@ public:
 private:
     SlideSorterViewShell* mpViewShell;
     const ::std::vector<Representative> maRepresentatives;
-    typedef ::std::vector<std::function<void (sal_uInt8)> > CallbackContainer;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
 };

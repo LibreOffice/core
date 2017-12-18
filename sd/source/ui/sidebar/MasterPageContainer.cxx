@@ -164,8 +164,6 @@ private:
     Size maSmallPreviewSizePixel;
     Size maLargePreviewSizePixel;
 
-    typedef ::std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
-
     Image GetPreviewSubstitution(const char* pId, PreviewSize ePreviewSize);
 
     void CleanContainer();

@@ -35,8 +35,6 @@ namespace connectivity
         class ONDXKey;
 
         typedef sdbcx::OIndex ODbaseIndex_BASE;
-        typedef file::OBoolOperator OBoolOperator_BASE;
-        typedef file::OOperand OOperand_BASE;
 
         class ODbaseIndex : public ODbaseIndex_BASE
         {

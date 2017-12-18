@@ -248,7 +248,6 @@ public:
 private:
     typedef std::shared_ptr< ItemConnectionBase > ItemConnectionRef;
     typedef std::vector< ItemConnectionRef > ItemConnectionVector;
-    typedef ItemConnectionVector::iterator ItemConnectionVectorIt;
 
     ItemConnectionVector maVector;
 };

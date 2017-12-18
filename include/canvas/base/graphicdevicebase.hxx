@@ -108,7 +108,6 @@ namespace canvas
         typedef Base              BaseType;
         typedef Mutex             MutexType;
         typedef UnambiguousBase   UnambiguousBaseType;
-        typedef GraphicDeviceBase ThisType;
 
         typedef ::rtl::Reference< GraphicDeviceBase > Reference;
 

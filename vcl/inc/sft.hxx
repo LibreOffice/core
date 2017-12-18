@@ -57,7 +57,6 @@ namespace vcl
 {
 
 /*@{*/
-    typedef sal_Int16       F2Dot14;            /**< fixed: 2.14 */
     typedef sal_Int32       F16Dot16;           /**< fixed: 16.16 */
 /*@}*/
 

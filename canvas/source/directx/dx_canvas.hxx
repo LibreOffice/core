@@ -158,8 +158,6 @@ namespace dxcanvas
         css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
         IBitmapSharedPtr                                                             mpTarget;
     };
-
-    typedef ::rtl::Reference< BitmapCanvas > BitmapCanvasRef;
 }
 
 #endif

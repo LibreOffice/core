@@ -88,8 +88,6 @@ private:
     void InitCode();
 public:
 
-    typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
-
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const OUString& rName,
                                  const OUString& rSymbol,

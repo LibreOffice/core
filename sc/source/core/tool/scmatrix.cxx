@@ -3295,9 +3295,7 @@ private:
     COp<TOp, TEmptyRes> maCOp;
 
 public:
-    typedef TEmptyRes empty_value_type;
     typedef TRet number_value_type;
-    typedef svl::SharedString string_value_type;
 
     MatOp( TOp aOp, ScInterpreter* pErrorInterpreter,
             double fVal = 0.0, const svl::SharedString& rString = svl::SharedString() ):

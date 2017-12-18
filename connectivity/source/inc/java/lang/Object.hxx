@@ -40,7 +40,6 @@ namespace comphelper
 
 namespace connectivity
 {
-    typedef std::shared_ptr< jvmaccess::VirtualMachine::AttachGuard> TGuard;
     class SDBThreadAttach
     {
         jvmaccess::VirtualMachine::AttachGuard m_aGuard;

@@ -51,7 +51,6 @@ class PresenterScrollBar
       public PresenterScrollBarInterfaceBase
 {
 public:
-    typedef ::std::function<void (double)> ThumbMotionListener;
     virtual ~PresenterScrollBar() override;
     PresenterScrollBar(const PresenterScrollBar&) = delete;
     PresenterScrollBar& operator=(const PresenterScrollBar&) = delete;

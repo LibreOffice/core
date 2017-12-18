@@ -39,7 +39,6 @@ struct FilterEntry;
 struct ElementEntry_Impl;
 
 typedef ::std::vector < FilterEntry >     FilterVector;
-typedef ::std::vector < ElementEntry_Impl >   ElementVector;
 
 // class declaration
 

@@ -75,7 +75,6 @@ public:
         OUString maValueStr;
         sal_Int32 mnCellType;
     };
-    typedef std::pair<ScAddress, double> ValueAddressPair;
 
     struct SheetItem
     {
