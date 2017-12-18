@@ -100,7 +100,7 @@ private:
     VclPtr<GalleryToolBox> maViewBox;
     VclPtr<FixedLine>   maSeparator;
     VclPtr<FixedText>   maInfoBar;
-    sal_uIntPtr         mnCurActionPos;
+    sal_uInt32 mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
 
@@ -111,8 +111,8 @@ private:
 
     void                ImplUpdateViews( sal_uInt16 nSelectionId );
     void                ImplUpdateInfoBar();
-    sal_Int32           ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
-    void                ImplSelectItemId( sal_uIntPtr nItemId );
+    sal_uInt32          ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
+    void                ImplSelectItemId(sal_uInt32 nItemId);
 
     // Control
     virtual void        Resize() override;
