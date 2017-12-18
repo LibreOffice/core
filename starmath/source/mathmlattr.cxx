@@ -44,14 +44,11 @@ sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction& rN)
         return -1;
     bool bNegative = (rStr[0] == '-');
     sal_Int32 nOffset = bNegative ? 1 : 0;
-    Fraction aF;
-    auto nIdx = ParseMathMLUnsignedNumber(rStr.copy(nOffset), aF);
-    if (nIdx <= 0)
+    auto nIdx = ParseMathMLUnsignedNumber(rStr.copy(nOffset), rN);
+    if (nIdx <= 0 || !rN.IsValid())
         return -1;
     if (bNegative)
-        rN = Fraction(aF.GetNumerator(), aF.GetDenominator());
-    else
-        rN = aF;
+        rN *= -1;
     return nOffset + nIdx;
 }
 
