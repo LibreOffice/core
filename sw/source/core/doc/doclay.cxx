@@ -328,7 +328,10 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             (SwNodeIndex( GetNodes().GetEndOfAutotext()),
              getIDocumentStylePoolAccess().GetTextCollFromPool( nCollId ));
         SwContentNode * pAnchorNode = pAnchorPos->nNode.GetNode().GetContentNode();
-        assert(pAnchorNode); // pAnchorNode from cursor, must be valid
+        // pAnchorNode from cursor must be valid, unless a whole table is selected (in which
+        // case the node is not a content node, and pAnchorNode is nullptr). In the latter case,
+        // bCalledFromShell is false.
+        assert(!bCalledFromShell || pAnchorNode);
 
         const SfxPoolItem * pItem = nullptr;
 
