@@ -73,9 +73,12 @@
  <!-- These command can be enabled when tdf#107000 is fixed -->
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="List Styles" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BulletListStyle" toolbar:text="Bullet"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberListStyle" toolbar:text="Number"/>
- <toolbar:toolbaritem xlink:href=".uno:RomanListStyle" toolbar:text="Roman"/>
+ <toolbar:toolbaritem xlink:href=".uno:BulletListStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberListStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlphaListStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlphaLowListStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:RomanListStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:RomanLowListStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
