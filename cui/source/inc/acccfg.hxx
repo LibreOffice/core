@@ -160,7 +160,7 @@ private:
     OUString                    GetLabel4Command(const OUString& rCommand);
     SvTreeListEntry*            applySearchFilter(OUString const & rSearchTerm, SvTreeListBox* rListBox);
     void                        InitAccCfg();
-    sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
+    sal_Int32                   MapKeyCodeToPos(const vcl::KeyCode &rCode) const;
     void                        StartFileDialog( StartFileDialogType nType, const OUString& rTitle );
 
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
