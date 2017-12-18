@@ -31,10 +31,10 @@
 #include <memory>
 
 
-sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq, GraphicObject& rFilterObject )
+SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq, GraphicObject& rFilterObject )
 {
     const Graphic&  rGraphic = rFilterObject.GetGraphic();
-    sal_uIntPtr         nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
+    SvxGraphicFilterResult nRet = SvxGraphicFilterResult::UnsupportedGraphicType;
 
     if( rGraphic.GetType() == GraphicType::Bitmap )
     {
@@ -251,14 +251,14 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq, Gra
             case SID_GRFFILTER :
             {
                 // do nothing; no error
-                nRet = SVX_GRAPHICFILTER_ERRCODE_NONE;
+                nRet = SvxGraphicFilterResult::NONE;
                 break;
             }
 
             default:
             {
                 OSL_FAIL( "SvxGraphicFilter: selected filter slot not yet implemented" );
-                nRet = SVX_GRAPHICFILTER_UNSUPPORTED_SLOT;
+                nRet = SvxGraphicFilterResult::UnsupportedSlot;
             }
             break;
         }
@@ -266,7 +266,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq, Gra
         if( aGraphic.GetType() != GraphicType::NONE )
         {
             rFilterObject.SetGraphic( aGraphic );
-            nRet = SVX_GRAPHICFILTER_ERRCODE_NONE;
+            nRet = SvxGraphicFilterResult::NONE;
         }
     }
 
