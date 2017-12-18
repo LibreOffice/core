@@ -52,6 +52,7 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nTabstop;
     std::shared_ptr< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
+    bool m_bHasValues = false;
 
 public:
 
@@ -80,6 +81,8 @@ public:
     const OUString& GetBulletChar( ) { return m_sBulletChar; };
     const std::shared_ptr< StyleSheetEntry >& GetParaStyle( ) { return m_pParaStyle; };
     bool isOutlineNumbering() const { return m_outline; }
+    /// Determines if SetValue() was called at least once.
+    bool HasValues() const;
 
     // UNO mapping functions
 
