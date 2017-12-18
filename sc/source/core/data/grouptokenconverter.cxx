@@ -167,7 +167,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
             {
                 /* FIXME: this simply does not work, it doesn't know
                  * a) the context of implicit intersection, for which creating
-                      two arrays dows not only result in huge unnecessary matrix
+                      two arrays does not only result in huge unnecessary matrix
                       operations but also produces wrong results, e.g. =B:B/C:C
                  * b) when to keep a reference as a reference depending on the
                       expected parameter type, e.g. INDEX(), OFFSET() and
