@@ -35,8 +35,8 @@ enum class HtmlTokenId : sal_Int16;
 
 enum class EETextFormat { Text = 0x20, Rtf, Html = 0x32, Xml };
 enum class EEHorizontalTextDirection { Default, L2R, R2L };
-enum class EESelectionMode  { Std, TxtOnly, Hidden };
-    // EE_SELMODE_HIDDEN can be used to completely hide the selection. This is useful e.g. when you want show the selection
+enum class EESelectionMode  { Std, Hidden };
+    // EESelectionMode::Hidden can be used to completely hide the selection. This is useful e.g. when you want show the selection
     // only as long as your window (which the edit view works on) has the focus
 enum class EESpellState  { Ok, LanguageNotInstalled, NoSpeller, ErrorFound };
 enum class EEAnchorMode {

@@ -1,4 +1,102 @@
-include/editeng/borderline.hxx:127
+dbaccess/source/filter/xml/xmlEnums.hxx:31
+    enum dbaxml::XMLDocTokens XML_TOK_DOC_META
+drawinglayer/source/tools/emfpbrush.hxx:32
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleVertical
+drawinglayer/source/tools/emfpbrush.hxx:33
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleForwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:34
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleBackwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:35
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleLargeGrid
+drawinglayer/source/tools/emfpbrush.hxx:36
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDiagonalCross
+drawinglayer/source/tools/emfpbrush.hxx:49
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightDownwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:50
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightUpwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:51
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkDownwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:52
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkUpwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:53
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleWideDownwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:54
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleWideUpwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:55
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightVertical
+drawinglayer/source/tools/emfpbrush.hxx:56
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightHorizontal
+drawinglayer/source/tools/emfpbrush.hxx:57
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleNarrowVertical
+drawinglayer/source/tools/emfpbrush.hxx:58
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleNarrowHorizontal
+drawinglayer/source/tools/emfpbrush.hxx:59
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkVertical
+drawinglayer/source/tools/emfpbrush.hxx:60
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkHorizontal
+drawinglayer/source/tools/emfpbrush.hxx:61
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedDownwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:62
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedUpwardDiagonal
+drawinglayer/source/tools/emfpbrush.hxx:63
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedHorizontal
+drawinglayer/source/tools/emfpbrush.hxx:64
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedVertical
+drawinglayer/source/tools/emfpbrush.hxx:65
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleSmallConfetti
+drawinglayer/source/tools/emfpbrush.hxx:66
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleLargeConfetti
+drawinglayer/source/tools/emfpbrush.hxx:67
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleZigZag
+drawinglayer/source/tools/emfpbrush.hxx:68
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleWave
+drawinglayer/source/tools/emfpbrush.hxx:69
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDiagonalBrick
+drawinglayer/source/tools/emfpbrush.hxx:70
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleHorizontalBrick
+drawinglayer/source/tools/emfpbrush.hxx:71
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleWeave
+drawinglayer/source/tools/emfpbrush.hxx:72
+    enum emfplushelper::EmfPlusHatchStyle HatchStylePlaid
+drawinglayer/source/tools/emfpbrush.hxx:73
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDivot
+drawinglayer/source/tools/emfpbrush.hxx:74
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDottedGrid
+drawinglayer/source/tools/emfpbrush.hxx:75
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleDottedDiamond
+drawinglayer/source/tools/emfpbrush.hxx:76
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleShingle
+drawinglayer/source/tools/emfpbrush.hxx:77
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleTrellis
+drawinglayer/source/tools/emfpbrush.hxx:78
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleSphere
+drawinglayer/source/tools/emfpbrush.hxx:79
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleSmallGrid
+drawinglayer/source/tools/emfpbrush.hxx:80
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleSmallCheckerBoard
+drawinglayer/source/tools/emfpbrush.hxx:81
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleLargeCheckerBoard
+drawinglayer/source/tools/emfpbrush.hxx:82
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleOutlinedDiamond
+drawinglayer/source/tools/emfpbrush.hxx:83
+    enum emfplushelper::EmfPlusHatchStyle HatchStyleSolidDiamond
+drawinglayer/source/tools/emfphelperdata.cxx:101
+    emfplushelper::ImageDataType ImageDataTypeUnknown
+drawinglayer/source/tools/emfphelperdata.hxx:110
+    enum emfplushelper::UnitType UnitTypeWorld
+drawinglayer/source/tools/emfphelperdata.hxx:111
+    enum emfplushelper::UnitType UnitTypeDisplay
+drawinglayer/source/tools/emfphelperdata.hxx:113
+    enum emfplushelper::UnitType UnitTypePoint
+drawinglayer/source/tools/emfphelperdata.hxx:114
+    enum emfplushelper::UnitType UnitTypeInch
+drawinglayer/source/tools/emfphelperdata.hxx:115
+    enum emfplushelper::UnitType UnitTypeDocument
+drawinglayer/source/tools/emfphelperdata.hxx:116
+    enum emfplushelper::UnitType UnitTypeMillimeter
+include/connectivity/dbtools.hxx:831
+    enum connectivity::dbase::DBFType dBaseIVMemo
+include/editeng/borderline.hxx:128
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
 include/i18nutil/transliteration.hxx:46
     enum TransliterationFlags NumToTextLower_zh_CN
@@ -24,55 +122,171 @@ include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
 include/oox/ole/axfontdata.hxx:40
     enum AxFontFlags AutoColor
-include/unotools/eventcfg.hxx:34
+include/svx/cube3d.hxx:57
+    enum CubeFaces Full
+include/unotools/eventcfg.hxx:33
     enum GlobalEventId STARTAPP
-include/unotools/eventcfg.hxx:35
+include/unotools/eventcfg.hxx:34
     enum GlobalEventId CLOSEAPP
-libreofficekit/source/gtk/lokdocview.cxx:286
-    enum (anonymous at libreofficekit/source/gtk/lokdocview.cxx:284:1) PROP_0
-sw/inc/poolfmt.hxx:96
-    enum RES_POOLFMT RES_POOL_CHRFMT
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
+    enum (anonymous at /home/noel/libo3/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
+libreofficekit/source/gtk/lokdocview.cxx:287
+    enum (anonymous at /home/noel/libo3/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
+sc/source/filter/xml/xmlimprt.hxx:89
+    enum ScXMLCondFormatsTokens XML_TOK_CONDFORMATS_CONDFORMAT
+sc/source/filter/xml/xmlimprt.hxx:94
+    enum ScXMLCondFormatTokens XML_TOK_CONDFORMAT_COLORSCALE
+sc/source/filter/xml/xmlimprt.hxx:95
+    enum ScXMLCondFormatTokens XML_TOK_CONDFORMAT_DATABAR
+sc/source/filter/xml/xmlimprt.hxx:96
+    enum ScXMLCondFormatTokens XML_TOK_CONDFORMAT_CONDITION
+sc/source/filter/xml/xmlimprt.hxx:97
+    enum ScXMLCondFormatTokens XML_TOK_CONDFORMAT_ICONSET
+sc/source/filter/xml/xmlimprt.hxx:98
+    enum ScXMLCondFormatTokens XML_TOK_CONDFORMAT_DATE
+sc/source/filter/xml/xmlimprt.hxx:103
+    enum ScXMLCondFormatAttrTokens XML_TOK_CONDFORMAT_TARGET_RANGE
+sc/source/filter/xml/xmlimprt.hxx:108
+    enum ScXMLCondDateAttrTokens XML_TOK_COND_DATE_VALUE
+sc/source/filter/xml/xmlimprt.hxx:109
+    enum ScXMLCondDateAttrTokens XML_TOK_COND_DATE_STYLE
+sc/source/filter/xml/xmlimprt.hxx:114
+    enum ScXMLConditionAttrTokens XML_TOK_CONDITION_VALUE
+sc/source/filter/xml/xmlimprt.hxx:115
+    enum ScXMLConditionAttrTokens XML_TOK_CONDITION_APPLY_STYLE_NAME
+sc/source/filter/xml/xmlimprt.hxx:116
+    enum ScXMLConditionAttrTokens XML_TOK_CONDITION_BASE_CELL_ADDRESS
+sc/source/filter/xml/xmlimprt.hxx:121
+    enum ScXMLColorScaleFormatTokens XML_TOK_COLORSCALE_COLORSCALEENTRY
+sc/source/filter/xml/xmlimprt.hxx:126
+    enum ScXMLColorScaleEntryAttrTokens XML_TOK_COLORSCALEENTRY_TYPE
+sc/source/filter/xml/xmlimprt.hxx:127
+    enum ScXMLColorScaleEntryAttrTokens XML_TOK_COLORSCALEENTRY_VALUE
+sc/source/filter/xml/xmlimprt.hxx:128
+    enum ScXMLColorScaleEntryAttrTokens XML_TOK_COLORSCALEENTRY_COLOR
+sc/source/filter/xml/xmlimprt.hxx:133
+    enum ScXMLFormattingFormatTokens XML_TOK_DATABAR_DATABARENTRY
+sc/source/filter/xml/xmlimprt.hxx:134
+    enum ScXMLFormattingFormatTokens XML_TOK_FORMATTING_ENTRY
+sc/source/filter/xml/xmlimprt.hxx:139
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_POSITIVE_COLOR
+sc/source/filter/xml/xmlimprt.hxx:140
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_NEGATIVE_COLOR
+sc/source/filter/xml/xmlimprt.hxx:141
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_GRADIENT
+sc/source/filter/xml/xmlimprt.hxx:142
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_AXISPOSITION
+sc/source/filter/xml/xmlimprt.hxx:143
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_SHOWVALUE
+sc/source/filter/xml/xmlimprt.hxx:144
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_AXISCOLOR
+sc/source/filter/xml/xmlimprt.hxx:145
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_MINLENGTH
+sc/source/filter/xml/xmlimprt.hxx:146
+    enum ScXMLDataBarAttrTokens XML_TOK_DATABAR_MAXLENGTH
+sc/source/filter/xml/xmlimprt.hxx:151
+    enum ScXMLDataBarEntryAttrTokens XML_TOK_DATABARENTRY_TYPE
+sc/source/filter/xml/xmlimprt.hxx:152
+    enum ScXMLDataBarEntryAttrTokens XML_TOK_DATABARENTRY_VALUE
+sc/source/filter/xml/xmlimprt.hxx:157
+    enum ScXMLIconSetAttrTokens XML_TOK_ICONSET_TYPE
+sc/source/filter/xml/xmlimprt.hxx:158
+    enum ScXMLIconSetAttrTokens XML_TOK_ICONSET_SHOWVALUE
+svgio/inc/svgstyleattributes.hxx:104
+    enum svgio::svgreader::FontVariant FontVariant_notset
+svgio/inc/svgstyleattributes.hxx:105
+    enum svgio::svgreader::FontVariant FontVariant_normal
+svgio/inc/svgstyleattributes.hxx:106
+    enum svgio::svgreader::FontVariant FontVariant_small_caps
 sw/inc/poolfmt.hxx:97
-    enum RES_POOLFMT RES_POOL_FRMFMT
+    enum RES_POOLFMT RES_POOL_CHRFMT
 sw/inc/poolfmt.hxx:98
-    enum RES_POOLFMT RES_POOL_TXTCOLL
+    enum RES_POOLFMT RES_POOL_FRMFMT
 sw/inc/poolfmt.hxx:99
+    enum RES_POOLFMT RES_POOL_TXTCOLL
+sw/inc/poolfmt.hxx:100
     enum RES_POOLFMT RES_POOL_PAGEFMT
-sw/inc/poolfmt.hxx:101
-    enum RES_POOLFMT RES_POOL_PARFMT
 sw/inc/poolfmt.hxx:102
-    enum RES_POOLFMT RES_POOL_GRFFMT
+    enum RES_POOLFMT RES_POOL_PARFMT
 sw/inc/poolfmt.hxx:103
+    enum RES_POOLFMT RES_POOL_GRFFMT
+sw/inc/poolfmt.hxx:104
     enum RES_POOLFMT RES_POOLFMT_END
-sw/inc/poolfmt.hxx:208
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK1
-sw/inc/poolfmt.hxx:209
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK2
 sw/inc/poolfmt.hxx:210
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLUE
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK1
 sw/inc/poolfmt.hxx:211
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BROWN
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK2
 sw/inc/poolfmt.hxx:212
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLUE
 sw/inc/poolfmt.hxx:213
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_3D
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BROWN
 sw/inc/poolfmt.hxx:214
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_GRAY
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY
 sw/inc/poolfmt.hxx:215
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_LAVENDER
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_3D
 sw/inc/poolfmt.hxx:216
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_GRAY
 sw/inc/poolfmt.hxx:217
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GRAY
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_LAVENDER
 sw/inc/poolfmt.hxx:218
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GREEN
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
 sw/inc/poolfmt.hxx:219
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LAVENDER
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GRAY
 sw/inc/poolfmt.hxx:220
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_RED
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GREEN
 sw/inc/poolfmt.hxx:221
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_TURQUOISE
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LAVENDER
 sw/inc/poolfmt.hxx:222
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_RED
+sw/inc/poolfmt.hxx:223
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_TURQUOISE
+sw/inc/poolfmt.hxx:224
     enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_YELLOW
-vcl/source/gdi/CommonSalLayout.cxx:313
+sw/inc/poolfmt.hxx:226
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_ACADEMIC
+sw/inc/poolfmt.hxx:227
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_BLUE
+sw/inc/poolfmt.hxx:228
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_GREEN
+sw/inc/poolfmt.hxx:229
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_RED
+sw/inc/poolfmt.hxx:230
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_YELLOW
+sw/inc/poolfmt.hxx:231
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_ELEGANT
+sw/inc/poolfmt.hxx:232
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_FINANCIAL
+sw/inc/poolfmt.hxx:233
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_COLUMNS
+sw/inc/poolfmt.hxx:234
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
+sw/inc/poolfmt.hxx:235
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
+sw/source/ui/fldui/fldref.cxx:745
+    enum FMT_REF_IDX FMT_REF_PAGE_IDX
+sw/source/ui/fldui/fldref.cxx:746
+    enum FMT_REF_IDX FMT_REF_CHAPTER_IDX
+sw/source/ui/fldui/fldref.cxx:747
+    enum FMT_REF_IDX FMT_REF_TEXT_IDX
+sw/source/ui/fldui/fldref.cxx:748
+    enum FMT_REF_IDX FMT_REF_UPDOWN_IDX
+sw/source/ui/fldui/fldref.cxx:750
+    enum FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
+sw/source/ui/fldui/fldref.cxx:751
+    enum FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
+sw/source/uibase/utlui/content.cxx:803
+    enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
+sw/source/uibase/utlui/content.cxx:804
+    enum STR_CONTEXT_IDX IDX_STR_COPY_REGION
+sw/source/uibase/utlui/content.cxx:809
+    enum STR_CONTEXT_IDX IDX_STR_INACTIVE
+sw/source/uibase/utlui/glbltree.cxx:147
+    enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_INDEX
+sw/source/uibase/utlui/glbltree.cxx:148
+    enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
+sw/source/uibase/utlui/glbltree.cxx:149
+    enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
+vcl/source/gdi/CommonSalLayout.cxx:384
     enum (anonymous namespace)::VerticalOrientation Rotated
+xmloff/source/style/ImageStyle.cxx:45
+    enum SvXMLTokenMapAttrs XML_TOK_TABSTOP_END

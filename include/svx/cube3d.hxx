@@ -27,7 +27,6 @@
 #include <svx/obj3d.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
-#include <o3tl/typed_flags_set.hxx>
 
 namespace sdr { namespace contact { class ViewContact; } }
 
@@ -45,21 +44,6 @@ class E3dDefaultAttributes;
 |* created).
 |*
 \************************************************************************/
-
-enum class CubeFaces
-{
-    Bottom        = 0x0001,
-    Back          = 0x0002,
-    Left          = 0x0004,
-    Top           = 0x0008,
-    Right         = 0x0010,
-    Front         = 0x0020,
-    Full          = Bottom | Back | Left | Top | Right | Front
-};
-namespace o3tl
-{
-    template<> struct typed_flags<CubeFaces> : is_typed_flags<CubeFaces, 0x003f> {};
-}
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
 {

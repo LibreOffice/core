@@ -28,7 +28,6 @@ namespace dbaxml
         XML_TOK_DOC_SETTINGS,
         XML_TOK_DOC_STYLES,
         XML_TOK_DOC_CONTENT,
-        XML_TOK_DOC_META
     };
     enum XMLDocContentTokens
     {
