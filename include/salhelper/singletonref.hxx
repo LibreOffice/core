@@ -111,7 +111,7 @@ class SingletonRef
         /** @short  standard dtor.
 
                     The internal wrapped object is removed only,
-                    if its ref count wil be 0. Otherwise this method
+                    if its ref count will be 0. Otherwise this method
                     does nothing ... except decreasing of the internal
                     ref count!
          */

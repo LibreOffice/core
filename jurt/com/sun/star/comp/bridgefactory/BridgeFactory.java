@@ -38,7 +38,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * The BridgeFactory class implements the <code>XBridgeFactory</code> Interface.
  *
- * <p>It wrapps the <code>UnoRuntime#getBridgeByName</code>method and delivers a
+ * <p>It wraps the <code>UnoRuntime#getBridgeByName</code>method and delivers a
  * XBridge component.</p>
  *
  * <p>This component is only usable for remote bridges.</p>

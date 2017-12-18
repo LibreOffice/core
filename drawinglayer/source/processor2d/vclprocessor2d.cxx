@@ -650,7 +650,7 @@ namespace drawinglayer
                                         // tools::PolyPolygon is filled. Create the bitmap tile area in object
                                         // coordinates. For this, the object transformation needs to be created
                                         // from the already scaled PolyPolygon. The tile area in object
-                                        // coordinates wil always be non-rotated, so it's not necessary to
+                                        // coordinates will always be non-rotated, so it's not necessary to
                                         // work with a polygon here
                                         basegfx::B2DRange aTileRange(rFillGraphicAttribute.getGraphicRange());
                                         const basegfx::B2DRange aPolyPolygonRange(rPolyPolygon.getB2DRange());

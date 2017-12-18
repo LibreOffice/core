@@ -1325,7 +1325,7 @@ void DelBookmarks(
 
     // Copy all Redlines which are in the move area into an array
     // which holds all position information as offset.
-    // Assignement happens after moving.
+    // Assignment happens after moving.
     SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     for(SwRangeRedline* pRedl : rTable)
     {

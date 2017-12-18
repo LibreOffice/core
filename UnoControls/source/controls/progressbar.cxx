@@ -204,7 +204,7 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax )
 
     // save impossible cases
     // This method is only defined for valid values
-    // If you ignore this, the release version wil produce an error "division by zero" in "ProgressBar::setValue()"!
+    // If you ignore this, the release version will produce an error "division by zero" in "ProgressBar::setValue()"!
     DBG_ASSERT ( ( nMin != nMax ) , "ProgressBar::setRange()\nValues for MIN and MAX are the same. This is not allowed!\n" );
 
     // Ready for multithreading

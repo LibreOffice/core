@@ -1593,7 +1593,7 @@ SwPageFrame* SwRootFrame::GetPageByPageNum( sal_uInt16 _nPageNum ) const
 }
 
 /**
- * @return true, when the given physical pagenumber does't exist or this page is an empty page.
+ * @return true, when the given physical pagenumber doesn't exist or this page is an empty page.
  */
 bool SwRootFrame::IsDummyPage( sal_uInt16 nPageNum ) const
 {

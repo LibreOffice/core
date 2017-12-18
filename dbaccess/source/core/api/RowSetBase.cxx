@@ -1374,7 +1374,7 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     ,m_bWasModified( false )
 {
 
-    OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
+    OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This will crash." );
 
     // remember the "inserted" and "modified" state for later firing
     m_bWasNew       = m_pRowSet->isNew( ORowSetBase::GrantNotifierAccess() );
@@ -1392,7 +1392,7 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
     ,m_bWasModified( false )
 {
 
-    OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
+    OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This will crash." );
     m_pImpl->aRow = i_aRow; // yes, create a copy to store the old values
 }
 
