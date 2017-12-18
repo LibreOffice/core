@@ -89,8 +89,6 @@ public:
      *              Valid types are RES_DRAWFRMFMT and RES_FLYFRMFMT.
      */
     static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType);
-    /// Is pObject a textbox of a drawinglayer shape?
-    static bool isTextBox(const SdrObject* pObject);
 
     /// Count number of shapes in the document, excluding TextBoxes.
     static sal_Int32 getCount(const SwDoc* pDoc);

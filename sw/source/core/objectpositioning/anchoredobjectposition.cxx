@@ -511,7 +511,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
              && nAdjustedRelPosY < nProposedRelPosY )
         {
             const SwFrameFormat* pFormat = &(GetFrameFormat());
-            if ( SwTextBoxHelper::isTextBox(&GetObject()) )
+            if ( GetObject().IsTextBox() )
             {
                 // shrink textboxes to extend beyond the page bottom
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());

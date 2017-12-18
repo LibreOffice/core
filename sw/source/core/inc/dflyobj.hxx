@@ -128,6 +128,8 @@ public:
 
     // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation.
     virtual bool HasLimitedRotation() const override;
+
+    virtual bool IsTextBox() const override;
 };
 
 #endif
