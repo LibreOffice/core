@@ -100,8 +100,11 @@ sal_Int32 lcl_getCharColumnType( short aType, const OUString& sCharset )
                 return DataType::BINARY;
             else
                 return DataType::CHAR;
-        case SQL_VARYING: // TODO VARBINARY
-            return DataType::VARCHAR;
+        case SQL_VARYING:
+            if( sCharset == "OCTETS")
+                return DataType::VARBINARY;
+            else
+                return DataType::VARCHAR;
         default:
             assert(false);
             return 0;
