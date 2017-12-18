@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 
+# c++17.patch upstreamed as <https://gitlab.com/mdds/mdds/merge_requests/11> "Remove some
+# unnecessary uses of obsolete std::unary_function":
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
     external/mdds/c++17.patch \
 ))
