@@ -53,7 +53,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
             DBA_RES(aCategorie.pLabelResId) ,
             Image(BitmapEx(OUString::createFromAscii(aCategorie.aImageResId))));
         if ( pEntry )
-            pEntry->SetUserData( new ElementType( aCategorie.eType ) );
+            pEntry->SetUserData<ElementType*>( new ElementType( aCategorie.eType ) );
     }
 
     SetChoiceWithCursor();
@@ -73,8 +73,8 @@ void OApplicationIconControl::dispose()
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         if ( pEntry )
         {
-            std::unique_ptr<ElementType> aType(static_cast<ElementType*>(pEntry->GetUserData()));
-            pEntry->SetUserData(nullptr);
+            std::unique_ptr<ElementType> aType(pEntry->GetUserData<ElementType*>());
+            pEntry->SetUserData<ElementType*>(nullptr);
         }
     }
     DropTargetHelper::dispose();
