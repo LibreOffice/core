@@ -164,6 +164,7 @@ protected:
     SAL_DLLPRIVATE Menu* ImplFindMenu( sal_uInt16 nId );
     SAL_DLLPRIVATE Size  ImplCalcSize( vcl::Window* pWin );
     SAL_DLLPRIVATE bool  ImplIsVisible( sal_uInt16 nPos ) const;
+    SAL_DLLPRIVATE bool  ImplCurrentlyHiddenOnGUI(sal_uInt16 nPos) const;
     SAL_DLLPRIVATE bool  ImplIsSelectable( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplGetVisibleItemCount() const;
     SAL_DLLPRIVATE sal_uInt16 ImplGetFirstVisible() const;

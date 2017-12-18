@@ -160,6 +160,7 @@ void MenuBarWindow::dispose()
     aCloseBtn->RemoveEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
     RemoveEventListener(LINK(this, MenuBarWindow, ShowHideListener));
 
+    mpParentPopup.disposeAndClear();
     aHideBtn.disposeAndClear();
     aFloatBtn.disposeAndClear();
     aCloseBtn.disposeAndClear();
@@ -301,6 +302,29 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
             Point aItemBottomRight( aItemTopLeft );
             aItemBottomRight.X() += pData->aSz.Width();
 
+            if (pData->bHiddenOnGUI)
+            {
+                mpParentPopup.disposeAndClear();
+                mpParentPopup = VclPtr<PopupMenu>::Create();
+                pActivePopup = mpParentPopup.get();
+
+                for (sal_uInt16 i = nHighlightedItem; i < pMenu->GetItemCount(); ++i)
+                {
+                    sal_uInt16 nId = pMenu->GetItemId(i);
+
+                    MenuItemData* pParentItemData = pMenu->GetItemList()->GetData(nId);
+
+                    mpParentPopup->InsertItem(nId, pParentItemData->aText, pParentItemData->nBits, pParentItemData->sIdent);
+                    mpParentPopup->SetHelpId(nId, pParentItemData->aHelpId);
+                    mpParentPopup->SetHelpText(nId, pParentItemData->aHelpText);
+                    mpParentPopup->SetAccelKey(nId, pParentItemData->aAccelKey);
+                    mpParentPopup->SetItemCommand(nId, pParentItemData->aCommandStr);
+                    mpParentPopup->SetHelpCommand(nId, pParentItemData->aHelpCommandStr);
+
+                    PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
+                    mpParentPopup->SetPopupMenu(nId, pPopup);
+                }
+            }
             // the menu bar could have height 0 in fullscreen mode:
             // so do not use always WindowHeight, as ItemHeight < WindowHeight.
             if ( GetSizePixel().Height() )
@@ -340,6 +364,15 @@ void MenuBarWindow::KillActivePopup()
         // check for pActivePopup, if stopped by deactivate...
         if ( pActivePopup->ImplGetWindow() )
         {
+            if (mpParentPopup)
+            {
+                for (sal_uInt16 i = 0; i < mpParentPopup->GetItemCount(); ++i)
+                {
+                    sal_uInt16 nId = mpParentPopup->GetItemId(i);
+                    MenuItemData* pParentItemData = mpParentPopup->GetItemList()->GetData(nId);
+                    pParentItemData->pSubMenu = nullptr;
+                }
+            }
             pActivePopup->ImplGetFloatingWindow()->StopExecute();
             pActivePopup->ImplGetFloatingWindow()->doShutdown();
             pActivePopup->pWindow->doLazyDelete();
@@ -769,7 +802,9 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                 }
 
                 MenuItemData* pData = pMenu->GetItemList()->GetDataFromPos( n );
-                if ( ( pData->eType != MenuItemType::SEPARATOR ) && pMenu->ImplIsVisible( n ) )
+                if (pData->eType != MenuItemType::SEPARATOR &&
+                    pMenu->ImplIsVisible(n) &&
+                    !pMenu->ImplCurrentlyHiddenOnGUI(n))
                 {
                     bool bDoSelect = true;
                     if( ImplGetSVData()->maNWFData.mbOpenMenuOnF10 )
@@ -891,9 +926,9 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     aOutputSize.Width() -= aCloseBtn->GetSizePixel().Width();
 
     rRenderContext.SetFillColor(rStyleSettings.GetMenuColor());
-
     pMenu->ImplPaint(rRenderContext, aOutputSize, 0);
-    if (nHighlightedItem != ITEMPOS_INVALID)
+
+    if (nHighlightedItem != ITEMPOS_INVALID && pMenu && !pMenu->GetItemList()->GetDataFromPos(nHighlightedItem)->bHiddenOnGUI)
         HighlightItem(rRenderContext, nHighlightedItem);
     else if (ImplGetSVData()->maNWFData.mbRolloverMenubar && nRolloveredItem != ITEMPOS_INVALID)
         HighlightItem(rRenderContext, nRolloveredItem);
