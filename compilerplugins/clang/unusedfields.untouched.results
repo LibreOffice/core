@@ -1,15 +1,37 @@
+avmedia/source/vlc/vlcmanager.hxx:47
+    avmedia::vlc::Manager mxMgr css::uno::Reference<css::lang::XMultiServiceFactory>
+avmedia/source/vlc/wrapper/Types.hxx:36
+    libvlc_event_t p_obj void *
+avmedia/source/vlc/wrapper/Types.hxx:41
+    libvlc_event_t::(anonymous union)::(anonymous) dummy1 const char *
+avmedia/source/vlc/wrapper/Types.hxx:42
+    libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
+avmedia/source/vlc/wrapper/Types.hxx:43
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo3/avmedia/source/vlc/wrapper/Types.hxx:40:7)
+avmedia/source/vlc/wrapper/Types.hxx:44
+    libvlc_event_t u union (anonymous union at /home/noel/libo3/avmedia/source/vlc/wrapper/Types.hxx:38:5)
+avmedia/source/vlc/wrapper/Types.hxx:50
+    libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
 basic/source/runtime/dllmgr.hxx:48
     SbiDllMgr impl_ std::unique_ptr<Impl>
+canvas/source/opengl/ogl_canvasbitmap.hxx:71
+    oglcanvas::CanvasBitmap mbHasAlpha _Bool
 canvas/source/vcl/canvasbitmap.hxx:117
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 chart2/source/controller/inc/RangeSelectionListener.hxx:62
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
+chart2/source/model/inc/BaseCoordinateSystem.hxx:118
+    chart::BaseCoordinateSystem m_xContext css::uno::Reference<css::uno::XComponentContext>
+chart2/source/view/inc/GL3DRenderer.hxx:54
+    chart::opengl3D::MaterialParameters pad float
+chart2/source/view/inc/GL3DRenderer.hxx:55
+    chart::opengl3D::MaterialParameters pad1 float
 chart2/source/view/inc/GL3DRenderer.hxx:64
     chart::opengl3D::LightSource pad1 float
 chart2/source/view/inc/GL3DRenderer.hxx:65
@@ -22,6 +44,8 @@ connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
+connectivity/source/drivers/evoab2/NStatement.hxx:58
+    connectivity::evoab::FieldSort bAscending _Bool
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 cppu/source/threadpool/threadpool.cxx:355
@@ -30,7 +54,7 @@ cppu/source/typelib/typelib.cxx:61
     AlignSize_Impl nInt16 sal_Int16
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-emfio/source/emfuno/xemfparser.cxx:59
+emfio/source/emfuno/xemfparser.cxx:60
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:44
     ScannerManager maProtector osl::Mutex
@@ -44,6 +68,8 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
 include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
+include/registry/registry.hxx:35
+    Registry_Api acquire void (*)(RegHandle)
 include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
@@ -74,7 +100,7 @@ include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
-libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:34
+libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
     GtvApplicationWindowPrivate lokDialog GtkWidget *
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
     GtvApplicationWindow parent_instance GtkApplicationWindow
@@ -130,6 +156,10 @@ sc/inc/interpretercontext.hxx:23
     ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
+sc/source/core/data/document.cxx:1269
+    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
+sc/source/core/data/document.cxx:1270
+    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
 sc/source/core/data/formulacell.cxx:1741
     (anonymous namespace)::StackCleaner pInt std::unique_ptr<ScInterpreter>
 sc/source/filter/inc/sheetdatacontext.hxx:61
@@ -138,6 +168,8 @@ sc/source/ui/inc/docsh.hxx:439
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
+sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
+    sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1318
@@ -158,6 +190,8 @@ starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
 starmath/inc/view.hxx:218
     SmViewShell maGraphicController class SmGraphicController
+starmath/source/accessibility.hxx:273
+    SmEditSource rEditAcc class SmEditAccessible &
 svl/source/crypto/cryptosign.cxx:121
     (anonymous namespace)::(anonymous) extnID SECItem
 svl/source/crypto/cryptosign.cxx:122
@@ -169,7 +203,7 @@ svl/source/crypto/cryptosign.cxx:281
 svl/source/crypto/cryptosign.cxx:282
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561

@@ -151,7 +151,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
     PieChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
 {
     Reference< chart2::XCoordinateSystem > xResult(
-        new PolarCoordinateSystem( GetComponentContext(), DimensionCount ));
+        new PolarCoordinateSystem( DimensionCount ));
 
     for( sal_Int32 i=0; i<DimensionCount; ++i )
     {

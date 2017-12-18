@@ -218,8 +218,7 @@ namespace oglcanvas
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( size,
                               mpSpriteCanvas,
-                              *this,
-                              false ) );
+                              *this ) );
     }
 
     uno::Reference< rendering::XVolatileBitmap > SpriteDeviceHelper::createVolatileBitmap(
@@ -240,8 +239,7 @@ namespace oglcanvas
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( size,
                               mpSpriteCanvas,
-                              *this,
-                              true ) );
+                              *this ) );
     }
 
     uno::Reference< rendering::XVolatileBitmap > SpriteDeviceHelper::createVolatileAlphaBitmap(

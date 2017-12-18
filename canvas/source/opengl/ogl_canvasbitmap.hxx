@@ -49,8 +49,7 @@ namespace oglcanvas
          */
         CanvasBitmap( const css::geometry::IntegerSize2D&              rSize,
                       const SpriteCanvasRef&                           rDevice,
-                      SpriteDeviceHelper&                              rDeviceHelper,
-                      bool                                             bHasAlpha );
+                      SpriteDeviceHelper&                              rDeviceHelper );
 
         /** Create verbatim copy (including all recorded actions)
          */
@@ -68,7 +67,6 @@ namespace oglcanvas
             raw pointer (without refcounting)
         */
         SpriteCanvasRef mpDevice;
-        bool            mbHasAlpha;
     };
 }
 

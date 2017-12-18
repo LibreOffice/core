@@ -27,9 +27,7 @@ namespace chart
 class PolarCoordinateSystem : public BaseCoordinateSystem
 {
 public:
-    explicit PolarCoordinateSystem(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        sal_Int32 nDimensionCount );
+    explicit PolarCoordinateSystem( sal_Int32 nDimensionCount );
     explicit PolarCoordinateSystem( const PolarCoordinateSystem & rSource );
     virtual ~PolarCoordinateSystem() override;
 
@@ -49,8 +47,7 @@ public:
 class PolarCoordinateSystem2d : public PolarCoordinateSystem
 {
 public:
-    explicit PolarCoordinateSystem2d(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit PolarCoordinateSystem2d();
     virtual ~PolarCoordinateSystem2d() override;
 
     // ____ XServiceInfo ____
@@ -62,8 +59,7 @@ public:
 class PolarCoordinateSystem3d : public PolarCoordinateSystem
 {
 public:
-    explicit PolarCoordinateSystem3d(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit PolarCoordinateSystem3d();
     virtual ~PolarCoordinateSystem3d() override;
 
     // ____ XServiceInfo ____
