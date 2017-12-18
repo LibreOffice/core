@@ -3597,11 +3597,11 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 }
 
                 SwNode const*const pNd = & m_pPam->GetPoint()->nNode.GetNode();
-                if( !bAppended && !bForceFrame )
+                SwTextNode *const pOldTextNd = (!bAppended && !bForceFrame) ?
+                    pSavePos->nNode.GetNode().GetTextNode() : nullptr;
+
+                if (pOldTextNd)
                 {
-                    SwTextNode *const pOldTextNd =
-                        pSavePos->nNode.GetNode().GetTextNode();
-                    OSL_ENSURE( pOldTextNd, "Why we aren't in a text node?" );
                     SwFrameFormat *pFrameFormat = pSwTable->GetFrameFormat();
 
                     const SfxPoolItem* pItem2;
