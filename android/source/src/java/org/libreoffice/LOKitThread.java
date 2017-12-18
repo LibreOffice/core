@@ -166,6 +166,10 @@ class LOKitThread extends Thread {
      * Result is stored in DocumentOverlayView class.
      */
     private void updatePartPageRectangles() {
+        if (mTileProvider == null) {
+            Log.d(LOGTAG, "mTileProvider==null when calling updatePartPageRectangles");
+            return;
+        }
         String partPageRectString = ((LOKitTileProvider) mTileProvider).getPartPageRectangles();
         List<RectF> partPageRectangles = mInvalidationHandler.convertPayloadToRectangles(partPageRectString);
         mContext.getDocumentOverlay().setPartPageRectangles(partPageRectangles);
@@ -334,16 +338,19 @@ class LOKitThread extends Thread {
                 changeHandlePosition(event.mHandleType, event.mDocumentCoordinate);
                 break;
             case LOEvent.SWIPE_LEFT:
-                onSwipeLeft();
+                if (null != mTileProvider) onSwipeLeft();
                 break;
             case LOEvent.SWIPE_RIGHT:
-                onSwipeRight();
+                if (null != mTileProvider) onSwipeRight();
                 break;
             case LOEvent.NAVIGATION_CLICK:
                 mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
                 break;
             case LOEvent.UNO_COMMAND:
-                mTileProvider.postUnoCommand(event.mString, event.mValue);
+                if (null == mTileProvider)
+                    Log.e(LOGTAG, "no mTileProvider when trying to process "+event.mValue+" from UNO_COMMAND "+event.mString);
+                else
+                    mTileProvider.postUnoCommand(event.mString, event.mValue);
                 break;
             case LOEvent.UPDATE_PART_PAGE_RECT:
                 updatePartPageRectangles();
@@ -361,6 +368,7 @@ class LOKitThread extends Thread {
     }
 
     private void updateCalcHeaders() {
+        if (null == mTileProvider) return;
         LOKitTileProvider tileProvider = (LOKitTileProvider)mTileProvider;
         String values = tileProvider.getCalcHeaders();
         mContext.getCalcHeadersController().setHeaders(values);
