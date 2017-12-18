@@ -16,6 +16,24 @@
       "revId": "d55b628b1f36d5f2fbc42362d5a4088cb251f872",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_177b2ef6",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-12-18T10:34:28Z",
+      "side": 1,
+      "message": "clear() is already idempotent. This change would just match reset() to clear(). Otherwise one should add an assert() to both functions, so you don\u0027t call it multiple times.\n\nThe current handling is definitely not consistent in any way.\n\nOTOH all rebases resulted in Jenkins failures, so probably something already depends on this strange behavior…",
+      "parentUuid": "1a430d35_37966a3f",
+      "revId": "d55b628b1f36d5f2fbc42362d5a4088cb251f872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
