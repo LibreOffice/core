@@ -39,7 +39,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <unotools/optionsdlg.hxx>
-#include <unotools/saveopt.hxx>
 #include <unotools/searchopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/viewoptions.hxx>
@@ -175,10 +174,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case EItem::MiscConfig :
             rItem.pItem.reset( new ::utl::MiscCfg() );
-            break;
-
-        case EItem::SaveOptions :
-            rItem.pItem.reset( new SvtSaveOptions() );
             break;
 
         case EItem::SecurityOptions :
