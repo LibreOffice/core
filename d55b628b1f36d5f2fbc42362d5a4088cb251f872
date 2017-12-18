@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_37966a3f",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-18T09:33:46Z",
+      "side": 1,
+      "message": "I\u0027m not sure an idempotent reset() is an improvement; so an alternative would be to just drop the redundant \"if (true)\" guard around the following code",
+      "revId": "d55b628b1f36d5f2fbc42362d5a4088cb251f872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
