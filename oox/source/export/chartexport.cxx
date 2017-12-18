@@ -1545,9 +1545,9 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
         pFS->startElement( FSNS( XML_c, nTypeId ),
                 FSEND );
 
-        exportVaryColors(xChartType);
-
         exportGrouping( );
+
+        exportVaryColors(xChartType);
         // TODO: show marker symbol in series?
         bool bPrimaryAxes = true;
         exportSeries(xChartType, *itr, bPrimaryAxes);
