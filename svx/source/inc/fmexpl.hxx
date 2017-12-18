@@ -348,9 +348,9 @@ namespace svxform
         void FillBranch( FmFormData* pParentData );
         void UpdateContent( FmFormShell* pNewShell );
 
-        void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = CONTAINER_APPEND,
-                                              bool bAlterModel = false );
-        void Remove( FmEntryData* pEntryData, bool bAlterModel = false );
+        void Insert(FmEntryData* pEntryData, sal_uInt32 nRelPos = SAL_MAX_UINT32,
+                                             bool bAlterModel = false);
+        void Remove(FmEntryData* pEntryData, bool bAlterModel = false);
 
         static bool Rename( FmEntryData* pEntryData, const OUString& rNewText );
 
