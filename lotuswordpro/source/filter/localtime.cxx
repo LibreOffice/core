@@ -174,7 +174,7 @@ bool LtgLocalTime(long rtime,LtTm& rtm)
 
     if ((rtime > 3 * DAY_SEC)&&(rtime < LONG_MAX - 3 * DAY_SEC))
     {
-        TimeZone* pLocalZone = TimeZone::createDefault();
+        icu::TimeZone* pLocalZone = icu::TimeZone::createDefault();
         long offset = (pLocalZone->getRawOffset())/1000;
         delete pLocalZone;
         long ltime = rtime + offset;
