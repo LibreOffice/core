@@ -717,7 +717,7 @@ void SwFlyLayFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     if (pNew)
     {
-        const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+        const sal_uInt16 nWhich = pNew->Which();
         if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
             static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
                 reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
