@@ -1697,9 +1697,8 @@ namespace svxform
                         bool bDoRemove = false;
                         if (IsAdditionalPage(nId))
                         {
-                            PageList::iterator aPageListEnd = m_aPageList.end();
-                            PageList::iterator aFoundPage =
-                                std::find( m_aPageList.begin(), aPageListEnd, pPage );
+                            auto aPageListEnd = m_aPageList.end();
+                            auto aFoundPage = std::find( m_aPageList.begin(), aPageListEnd, pPage );
                             if ( aFoundPage != aPageListEnd )
                             {
                                 m_aPageList.erase( aFoundPage );
@@ -2090,7 +2089,7 @@ namespace svxform
     }
 
 
-    void DataNavigatorWindow::AddContainerBroadcaster( const XContainer_ref& xContainer )
+    void DataNavigatorWindow::AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer >& xContainer )
     {
         Reference< XContainerListener > xListener(
             static_cast< XContainerListener* >( m_xDataListener.get() ), UNO_QUERY );
@@ -2099,7 +2098,7 @@ namespace svxform
     }
 
 
-    void DataNavigatorWindow::AddEventBroadcaster( const XEventTarget_ref& xTarget )
+    void DataNavigatorWindow::AddEventBroadcaster( const css::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget )
     {
         Reference< XEventListener > xListener(
             static_cast< XEventListener* >( m_xDataListener.get() ), UNO_QUERY );
