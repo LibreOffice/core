@@ -2914,7 +2914,7 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
     m_aStyles.append(' ');
 
-    SvxLRSpaceItem aLR(static_cast<const SvxLRSpaceItem&>(rNdSet.Get(RES_LR_SPACE)));
+    SvxLRSpaceItem aLR(rNdSet.Get(RES_LR_SPACE));
     aLR.SetTextLeft(aLR.GetTextLeft() + pFormat->GetIndentAt());
     aLR.SetTextFirstLineOfst(pFormat->GetFirstLineOffset());
 

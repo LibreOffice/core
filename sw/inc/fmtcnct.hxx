@@ -65,7 +65,7 @@ SwFormatChain &SwFormatChain::operator=( const SwFormatChain &rCpy )
 }
 
 inline const SwFormatChain &SwAttrSet::GetChain(bool bInP) const
-    { return static_cast<const SwFormatChain&>(Get( RES_CHAIN,bInP)); }
+    { return Get( RES_CHAIN,bInP); }
 
 inline const SwFormatChain &SwFormat::GetChain(bool bInP) const
     { return m_aSet.GetChain(bInP); }

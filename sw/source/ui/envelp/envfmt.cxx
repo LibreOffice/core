@@ -311,8 +311,7 @@ IMPL_LINK( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
         aTmpSet.Put( aTabPos );
 
         // left border as offset
-        const long nOff = static_cast<const SvxLRSpaceItem&>(aTmpSet.Get( RES_LR_SPACE )).
-                                                            GetTextLeft();
+        const long nOff = aTmpSet.Get( RES_LR_SPACE ).GetTextLeft();
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aTmpSet.Put( aOff );
 

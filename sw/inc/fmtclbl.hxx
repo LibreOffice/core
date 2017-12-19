@@ -37,7 +37,7 @@ public:
 };
 
 inline const SwFormatNoBalancedColumns &SwAttrSet::GetBalancedColumns(bool bInP) const
-    { return static_cast<const SwFormatNoBalancedColumns&>(Get( RES_COLUMNBALANCE, bInP )); }
+    { return Get( RES_COLUMNBALANCE, bInP ); }
 
 inline const SwFormatNoBalancedColumns &SwFormat::GetBalancedColumns(bool bInP) const
     { return m_aSet.GetBalancedColumns( bInP ); }
