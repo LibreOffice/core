@@ -1019,7 +1019,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             RES_COL, RES_COL,
             RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>{});
     rSh.GetFlyFrameAttr( aSet );
-    RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
+    RndStdIds eAnchorId = aSet.Get(RES_ANCHOR).GetAnchorId();
     Size aSnap;
     bool bHuge(MOVE_LEFT_HUGE == nDir ||
         MOVE_UP_HUGE == nDir ||
@@ -1055,10 +1055,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     // adjustment for allowing vertical position
     // aligned to page for fly frame anchored to paragraph or to character.
     {
-        SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
+        SwFormatVertOrient aVert( aSet.Get(RES_VERT_ORIENT) );
         const bool bFollowTextFlow =
-                static_cast<const SwFormatFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
-        const SwPosition* pToCharContentPos = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetContentAnchor();
+                aSet.Get(RES_FOLLOW_TEXT_FLOW).GetValue();
+        const SwPosition* pToCharContentPos = aSet.Get(RES_ANCHOR).GetContentAnchor();
         rSh.CalcBoundRect( aBoundRect, eAnchorId,
                            text::RelOrientation::FRAME, aVert.GetRelationOrient(),
                            pToCharContentPos, bFollowTextFlow,
@@ -1109,7 +1109,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             aDiff = 0;
         else if ( aDiff < -aTmp.Height() )
             aDiff = -aTmp.Height();
-        SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
+        SwFormatVertOrient aVert( aSet.Get(RES_VERT_ORIENT) );
         sal_Int16 eNew;
         if( bWeb )
         {
@@ -1150,7 +1150,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     if (bWeb && (RndStdIds::FLY_AT_PARA == eAnchorId)
         && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
     {
-        SwFormatHoriOrient aHori( static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT)) );
+        SwFormatHoriOrient aHori( aSet.Get(RES_HORI_ORIENT) );
         sal_Int16 eNew;
         eNew = aHori.GetHoriOrient();
         switch( eNew )
