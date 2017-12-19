@@ -272,7 +272,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
         {
             // @todo: also be able to deal with x-error bars
             const bool bYError =
-                static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
 
             uno::Reference< chart2::data::XDataSource > xErrorBarSource( GetPropertySet(), uno::UNO_QUERY );
             uno::Reference< chart2::XChartDocument > xChartDoc( m_xModel, uno::UNO_QUERY );
@@ -424,7 +424,7 @@ void ErrorBarItemConverter::FillSpecialItem(
         case SCHATTR_STAT_RANGE_NEG:
         {
             const bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
 
             uno::Reference< chart2::data::XDataSource > xErrorBarSource( GetPropertySet(), uno::UNO_QUERY );
             if( xErrorBarSource.is())

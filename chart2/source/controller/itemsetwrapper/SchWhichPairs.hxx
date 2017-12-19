@@ -19,10 +19,15 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_ITEMSETWRAPPER_SCHWHICHPAIRS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_ITEMSETWRAPPER_SCHWHICHPAIRS_HXX
 
+#include <svl/intitem.hxx>
+#include <svl/ilstitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <svx/svddef.hxx>
+#include <svx/chrtitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/sizeitem.hxx>
 
 #include <chartview/ChartSfxItemIds.hxx>
 

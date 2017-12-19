@@ -443,19 +443,19 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
 bool lcl_isDateAxis( const SfxItemSet & rItemSet )
 {
-    sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();//css::chart2::AxisType
+    sal_Int32 nAxisType = rItemSet.Get( SCHATTR_AXISTYPE ).GetValue();//css::chart2::AxisType
     return (nAxisType == chart2::AxisType::DATE);
 }
 
 bool lcl_isAutoMajor( const SfxItemSet & rItemSet )
 {
-    bool bRet = static_cast< const SfxBoolItem & >( rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_MAIN )).GetValue();
+    bool bRet = rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_MAIN ).GetValue();
     return bRet;
 }
 
 bool lcl_isAutoMinor( const SfxItemSet & rItemSet )
 {
-    bool bRet = static_cast< const SfxBoolItem & >( rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_HELP )).GetValue();
+    bool bRet = rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_HELP ).GetValue();
     return bRet;
 }
 
@@ -484,8 +484,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_MAX:
             // only if auto if false
-            if( ! (static_cast< const SfxBoolItem & >(
-                       rItemSet.Get( SCHATTR_AXIS_AUTO_MAX )).GetValue() ))
+            if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_MAX ).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
@@ -508,8 +507,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_MIN:
             // only if auto if false
-            if( ! (static_cast< const SfxBoolItem & >(
-                       rItemSet.Get( SCHATTR_AXIS_AUTO_MIN )).GetValue() ))
+            if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_MIN ).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
@@ -677,7 +675,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
         case SCHATTR_AXIS_TIME_RESOLUTION:
             // only if auto is false
-            if( ! (static_cast< const SfxBoolItem & >( rItemSet.Get( SCHATTR_AXIS_AUTO_TIME_RESOLUTION )).GetValue() ))
+            if( ! ( rItemSet.Get( SCHATTR_AXIS_AUTO_TIME_RESOLUTION ).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
@@ -702,8 +700,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SCHATTR_AXIS_ORIGIN:
         {
             // only if auto is false
-            if( ! (static_cast< const SfxBoolItem & >(
-                       rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN )).GetValue() ))
+            if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN ).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
