@@ -772,9 +772,15 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
     ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
         mpViewData->GetDocument()->GetAddressConvention());
     if(nFlags & ScRefFlags::VALID)
+    {
         rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+        mpBtnOk->Enable(true);
+    }
     else
+    {
         rEdit.SetControlBackground(COL_LIGHTRED);
+        mpBtnOk->Enable(false);
+    }
 
     updateTitle();
 }
