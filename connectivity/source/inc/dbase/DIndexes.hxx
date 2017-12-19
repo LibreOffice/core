@@ -42,7 +42,7 @@ namespace connectivity
             virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
         public:
             ODbaseIndexes(ODbaseTable* _pTable, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : ODbaseIndexes_BASE(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                const ::std::vector< OUString> &_rVector) : ODbaseIndexes_BASE(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 , m_pTable(_pTable)
             {}
 

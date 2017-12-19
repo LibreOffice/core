@@ -28,7 +28,6 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sdbcx/VKey.hxx>
-#include <connectivity/StdTypeDefs.hxx>
 #include <com/sun/star/sdb/tools/XTableRename.hpp>
 #include <com/sun/star/sdb/tools/XTableAlteration.hpp>
 #include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
@@ -81,27 +80,27 @@ namespace connectivity
     {
         ::std::unique_ptr<OTableHelperImpl> m_pImpl;
 
-        void refreshPrimaryKeys(TStringVector& _rKeys);
-        void refreshForeignKeys(TStringVector& _rKeys);
+        void refreshPrimaryKeys(::std::vector< OUString>& _rKeys);
+        void refreshForeignKeys(::std::vector< OUString>& _rKeys);
 
     protected:
         /** creates the column collection for the table
             @param  _rNames
                 The column names.
         */
-        virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames) = 0;
+        virtual sdbcx::OCollection* createColumns(const ::std::vector< OUString>& _rNames) = 0;
 
         /** creates the key collection for the table
             @param  _rNames
                 The key names.
         */
-        virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames) = 0;
+        virtual sdbcx::OCollection* createKeys(const ::std::vector< OUString>& _rNames) = 0;
 
         /** creates the index collection for the table
             @param  _rNames
                 The index names.
         */
-        virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames) = 0;
+        virtual sdbcx::OCollection* createIndexes(const ::std::vector< OUString>& _rNames) = 0;
 
         /** this function is called upon disposing the component
         */

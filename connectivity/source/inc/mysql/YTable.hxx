@@ -47,19 +47,19 @@ namespace connectivity
                 @param  _rNames
                     The column names.
             */
-            virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames) override;
+            virtual sdbcx::OCollection* createColumns(const ::std::vector< OUString>& _rNames) override;
 
             /** creates the key collection for the table
                 @param  _rNames
                     The key names.
             */
-            virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames) override;
+            virtual sdbcx::OCollection* createKeys(const ::std::vector< OUString>& _rNames) override;
 
             /** creates the index collection for the table
                 @param  _rNames
                     The index names.
             */
-            virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames) override;
+            virtual sdbcx::OCollection* createIndexes(const ::std::vector< OUString>& _rNames) override;
 
             /** Returns always "RENAME TABLE " even for views.
             *

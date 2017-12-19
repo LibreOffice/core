@@ -36,7 +36,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/container/XContainer.hpp>
-#include <connectivity/StdTypeDefs.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <memory>
 
@@ -69,7 +68,7 @@ namespace connectivity
             virtual void swapAll() = 0;
             virtual void swap() = 0;
             virtual void clear() = 0;
-            virtual void reFill(const TStringVector &_rVector) = 0;
+            virtual void reFill(const ::std::vector< OUString> &_rVector) = 0;
             virtual void insert(const OUString& _sName, const ObjectType& _xObject) = 0;
             virtual bool rename(const OUString& _sOldName, const OUString& _sNewName) = 0;
             virtual sal_Int32 size() = 0;
@@ -147,7 +146,7 @@ namespace connectivity
             OCollection(::cppu::OWeakObject& _rParent,
                         bool _bCase,
                         ::osl::Mutex& _rMutex,
-                        const TStringVector &_rVector,
+                        const ::std::vector< OUString> &_rVector,
                         bool _bUseIndexOnly = false,
                         bool _bUseHardRef = true);
 
@@ -171,7 +170,7 @@ namespace connectivity
             virtual ~OCollection();
             DECLARE_SERVICE_INFO();
 
-            void reFill(const TStringVector &_rVector);
+            void reFill(const ::std::vector< OUString> &_rVector);
             bool isCaseSensitive() const { return m_pElements->isCaseSensitive(); }
             void renameObject(const OUString& _sOldName, const OUString& _sNewName);
 

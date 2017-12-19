@@ -40,7 +40,7 @@ MacabCatalog::MacabCatalog(MacabConnection* _pCon)
 
 void MacabCatalog::refreshTables()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     Sequence< OUString > aTypes { "%" };
     Reference< XResultSet > xResult = m_xMetaData->getTables(
         Any(), "%", "%", aTypes);

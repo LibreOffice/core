@@ -789,7 +789,7 @@ void ODatabaseMetaDataResultSet::setProceduresMap()
     m_aColMapping.push_back(6);
     m_aColMapping.push_back(4);
 
-    TInt2IntMap aMap;
+    ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[DB_PT_UNKNOWN]     = ProcedureResult::UNKNOWN;
     aMap[DB_PT_PROCEDURE]   = ProcedureResult::NONE;
     aMap[DB_PT_FUNCTION]    = ProcedureResult::RETURN;
@@ -854,7 +854,7 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     m_aColMapping.push_back(7);
     m_aColMapping.push_back(11);
 
-    TInt2IntMap aMap;
+    ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
     aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
     aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);
@@ -934,7 +934,7 @@ void ODatabaseMetaDataResultSet::setProcedureColumnsMap()
     m_aColMapping.push_back(9);
     m_aColMapping.push_back(14);
 
-    TInt2IntMap aMap;
+    ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[DBTYPE_EMPTY] = DataType::SQLNULL;
     aMap[DBTYPE_NULL] = DataType::SQLNULL;
     aMap[DBTYPE_I2] = DataType::SMALLINT;
@@ -1017,7 +1017,7 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
     m_aColMapping.push_back(23);
     m_aColMapping.push_back(24);
 
-    TInt2IntMap aMap;
+    ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[DBPROPVAL_IT_HASH] = IndexType::HASHED;
     aMap[DBPROPVAL_IT_CONTENT] = IndexType::OTHER;
     aMap[DBPROPVAL_IT_OTHER] = IndexType::OTHER;
@@ -1025,7 +1025,7 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
 
     m_aValueRange[10] = aMap;
 
-    TInt2IntMap aMap2;
+    ::std::map<sal_Int32,sal_Int32> aMap2;
     aMap[0] = 1;
     aMap[1] = 0;
     m_aValueRange[8] = aMap2;
@@ -1106,7 +1106,7 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(bool _bJetEngine)
 
     m_aStrValueRange[18] = aMap1;
 
-    TInt2IntMap aMap;
+    ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
     aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
     aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);
@@ -1150,14 +1150,14 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(bool _bJetEngine)
 
     m_aValueRange[2] = aMap;
 
-    TInt2IntMap aColumnValueMapping;
+    ::std::map<sal_Int32,sal_Int32> aColumnValueMapping;
     aColumnValueMapping[VARIANT_FALSE]      = ColumnValue::NO_NULLS;
     aColumnValueMapping[VARIANT_TRUE]       = ColumnValue::NULLABLE;
     m_aValueRange[7] = aColumnValueMapping;
 
     // now adjust the column mapping
     // OJ 24.01.2002  96860
-    TInt2IntMap aSerachMapping;
+    ::std::map<sal_Int32,sal_Int32> aSerachMapping;
     aSerachMapping[DB_UNSEARCHABLE]     = ColumnSearch::NONE;
     aSerachMapping[DB_LIKE_ONLY]        = ColumnSearch::CHAR;
     aSerachMapping[DB_ALL_EXCEPT_LIKE]  = ColumnSearch::BASIC;
@@ -1165,7 +1165,7 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(bool _bJetEngine)
 
     m_aValueRange[9] = aSerachMapping;
 
-    TInt2IntMap aCurrencyMapping;
+    ::std::map<sal_Int32,sal_Int32> aCurrencyMapping;
     m_aValueRange[11] = aCurrencyMapping;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);

@@ -160,7 +160,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
         _io_tableInfo.sType = OptionalString( sTypeName );
     }
 
-    connectivity::TStringVector lcl_filter( const TableInfos& _unfilteredTables,
+    ::std::vector< OUString> lcl_filter( const TableInfos& _unfilteredTables,
         const Sequence< OUString >& _tableFilter, const Sequence< OUString >& _tableTypeFilter,
         const Reference< XDatabaseMetaData >& _metaData, const Reference< XNameAccess >& _masterContainer )
     {
@@ -222,7 +222,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
             }
         }
 
-        connectivity::TStringVector aReturn;
+        ::std::vector< OUString> aReturn;
         for (   TableInfos::iterator table = aFilteredTables.begin();
                 table != aFilteredTables.end();
                 ++table

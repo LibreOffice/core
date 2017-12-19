@@ -102,12 +102,12 @@ namespace
             m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(_sName,_xObject)));
         }
 
-        virtual void reFill(const TStringVector &_rVector) override
+        virtual void reFill(const ::std::vector< OUString> &_rVector) override
         {
             OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
             m_aElements.reserve(_rVector.size());
 
-            for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
+            for(::std::vector< OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
                 m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,ObjectType())));
         }
 
@@ -217,7 +217,7 @@ IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.st
 OCollection::OCollection(::cppu::OWeakObject& _rParent
                          , bool _bCase
                          , ::osl::Mutex& _rMutex
-                         , const TStringVector &_rVector
+                         , const ::std::vector< OUString> &_rVector
                          , bool _bUseIndexOnly
                          , bool _bUseHardRef)
                      :m_aContainerListeners(_rMutex)
@@ -335,7 +335,7 @@ void SAL_CALL OCollection::refresh(  )
     m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
 }
 
-void OCollection::reFill(const TStringVector &_rVector)
+void OCollection::reFill(const ::std::vector< OUString> &_rVector)
 {
     m_pElements->reFill(_rVector);
 }

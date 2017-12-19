@@ -51,7 +51,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 
 HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-    const TStringVector &_rVector )
+    const ::std::vector< OUString> &_rVector )
     :sdbcx::OCollection( _rParent, true, _rMutex, _rVector )
     ,m_xConnection( _rxConnection )
     ,m_xMetaData( _rxConnection->getMetaData() )

@@ -38,7 +38,7 @@ OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
 
 void OCalcCatalog::refreshTables()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     Sequence< OUString > aTypes;
     OCalcConnection::ODocHolder aDocHolder(static_cast<OCalcConnection*>(m_pConnection));
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),

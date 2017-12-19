@@ -109,19 +109,19 @@ void OHSQLTable::construct()
     return *static_cast<OHSQLTable_PROP*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
 
-sdbcx::OCollection* OHSQLTable::createColumns(const TStringVector& _rNames)
+sdbcx::OCollection* OHSQLTable::createColumns(const ::std::vector< OUString>& _rNames)
 {
     OHSQLColumns* pColumns = new OHSQLColumns(*this,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
 
-sdbcx::OCollection* OHSQLTable::createKeys(const TStringVector& _rNames)
+sdbcx::OCollection* OHSQLTable::createKeys(const ::std::vector< OUString>& _rNames)
 {
     return new OKeysHelper(this,m_aMutex,_rNames);
 }
 
-sdbcx::OCollection* OHSQLTable::createIndexes(const TStringVector& _rNames)
+sdbcx::OCollection* OHSQLTable::createIndexes(const ::std::vector< OUString>& _rNames)
 {
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }

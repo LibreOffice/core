@@ -41,7 +41,7 @@ OHCatalog::OHCatalog(const Reference< XConnection >& _xConnection) : sdbcx::OCat
 {
 }
 
-void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
+void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,::std::vector< OUString>& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
                                                             "%",
@@ -52,7 +52,7 @@ void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStrin
 
 void OHCatalog::refreshTables()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     Sequence< OUString > sTableTypes(2);
     sTableTypes[0] = "VIEW";
@@ -87,7 +87,7 @@ void OHCatalog::refreshViews()
     {
     }
 
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     if ( bSupportsViews )
         refreshObjects(aTypes,aVector);
 
@@ -103,7 +103,7 @@ void OHCatalog::refreshGroups()
 
 void OHCatalog::refreshUsers()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
     Reference< XResultSet >  xResult = xStmt->executeQuery("select User from hsqldb.user group by User");
     if ( xResult.is() )

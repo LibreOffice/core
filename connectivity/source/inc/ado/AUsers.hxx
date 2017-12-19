@@ -42,7 +42,7 @@ namespace connectivity
         public:
             OUsers( OCatalog* _pParent,
                     ::osl::Mutex& _rMutex,
-                    const TStringVector &_rVector,
+                    const ::std::vector< OUString> &_rVector,
                     const WpADOUsers&   _rCollection,
                     bool _bCase)
                     :sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)

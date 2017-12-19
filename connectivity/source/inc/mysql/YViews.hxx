@@ -38,7 +38,7 @@ namespace connectivity
             void createView( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
         public:
             OViews(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
+                const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
                 ,m_xMetaData(_rMetaData)
                 ,m_bInDrop(false)
             {}

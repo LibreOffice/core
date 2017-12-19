@@ -38,7 +38,7 @@ void Catalog::refreshTables()
     if (!xTables.is())
         return;
 
-    TStringVector aTableNames;
+    ::std::vector< OUString> aTableNames;
 
     fillNames(xTables, aTableNames);
 
@@ -75,7 +75,7 @@ void Catalog::refreshUsers()
     if (!xUsers.is())
         return;
 
-    TStringVector aUserNames;
+    ::std::vector< OUString> aUserNames;
 
     uno::Reference< XRow > xRow(xUsers,UNO_QUERY);
     while (xUsers->next())

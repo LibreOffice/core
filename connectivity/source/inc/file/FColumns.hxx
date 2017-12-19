@@ -40,7 +40,7 @@ namespace connectivity
         public:
             OColumns(   OFileTable* _pTable,
                         ::osl::Mutex& _rMutex,
-                        const TStringVector &_rVector
+                        const ::std::vector< OUString> &_rVector
                     ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_pTable(_pTable)
             {}

@@ -25,7 +25,6 @@
 #include <vector>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "OColumn.hxx"
-#include <connectivity/StdTypeDefs.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity

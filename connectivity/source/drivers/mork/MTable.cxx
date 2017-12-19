@@ -36,19 +36,19 @@ OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
 }
 
 
-sdbcx::OCollection* OTable::createColumns( const TStringVector& _rNames )
+sdbcx::OCollection* OTable::createColumns( const ::std::vector< OUString>& _rNames )
 {
     return new OColumns( this, m_aMutex, _rNames );
 }
 
 
-sdbcx::OCollection* OTable::createKeys(const TStringVector& _rNames)
+sdbcx::OCollection* OTable::createKeys(const ::std::vector< OUString>& _rNames)
 {
     return new OKeysHelper( this, m_aMutex, _rNames );
 }
 
 
-sdbcx::OCollection* OTable::createIndexes(const TStringVector& _rNames)
+sdbcx::OCollection* OTable::createIndexes(const ::std::vector< OUString>& _rNames)
 {
     return new OIndexesHelper( this, m_aMutex, _rNames );
 }

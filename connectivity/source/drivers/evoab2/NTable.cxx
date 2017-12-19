@@ -53,7 +53,7 @@ OEvoabTable::OEvoabTable( sdbcx::OCollection* _pTables,
 
 void OEvoabTable::refreshColumns()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     if (!isNew())
     {

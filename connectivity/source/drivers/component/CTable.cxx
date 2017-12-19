@@ -84,7 +84,7 @@ void OComponentTable::refreshColumns()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     OSQLColumns::Vector::const_iterator aEnd = m_aColumns->get().end();
     for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != aEnd;++aIter)

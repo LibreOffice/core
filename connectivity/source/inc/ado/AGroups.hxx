@@ -42,7 +42,7 @@ namespace connectivity
         public:
             OGroups(OCatalog* _pParent,
                      ::osl::Mutex& _rMutex,
-                     const TStringVector &_rVector,
+                     const ::std::vector< OUString> &_rVector,
                      const WpADOGroups& _rCollection,bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                     ,m_aCollection(_rCollection)
                     ,m_pCatalog(_pParent)

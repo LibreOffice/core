@@ -42,7 +42,7 @@ namespace connectivity
             Users(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& rMetaData,
                   ::cppu::OWeakObject& rParent,
                   ::osl::Mutex& rMutex,
-                  ::connectivity::TStringVector const & rNames);
+                  ::std::vector< OUString> const & rNames);
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.

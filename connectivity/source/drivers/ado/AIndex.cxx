@@ -56,7 +56,7 @@ OAdoIndex::OAdoIndex(bool _bCase,OConnection* _pConnection)
 
 void OAdoIndex::refreshColumns()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOColumns aColumns;
     if ( m_aIndex.IsValid() )

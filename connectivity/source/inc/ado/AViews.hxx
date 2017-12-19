@@ -42,7 +42,7 @@ namespace connectivity
             virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
         public:
             OViews(OCatalog* _pParent, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector,
+                const ::std::vector< OUString> &_rVector,
                 WpADOViews const & _rCollection,bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                 ,m_aCollection(_rCollection)
                 ,m_pCatalog(_pParent)

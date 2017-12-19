@@ -39,7 +39,7 @@ namespace connectivity
         public:
             ODbaseIndexColumns( ODbaseIndex* _pIndex,
                                 ::osl::Mutex& _rMutex,
-                                const TStringVector &_rVector)
+                                const ::std::vector< OUString> &_rVector)
                         : sdbcx::OCollection(*_pIndex,_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                         , m_pIndex(_pIndex)
             {}

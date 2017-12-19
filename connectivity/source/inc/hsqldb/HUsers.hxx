@@ -43,7 +43,7 @@ namespace connectivity
         public:
             OUsers( ::cppu::OWeakObject& _rParent,
                     ::osl::Mutex& _rMutex,
-                    const TStringVector &_rVector,
+                    const ::std::vector< OUString> &_rVector,
                     const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                     connectivity::sdbcx::IRefreshableUsers* _pParent);
         };

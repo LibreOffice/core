@@ -45,7 +45,7 @@ OCatalog::~OCatalog()
 
 void OCatalog::refreshTables()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOTables aTables(m_aCatalog.get_Tables());
   if ( aTables.IsValid() )
@@ -74,7 +74,7 @@ void OCatalog::refreshTables()
 
 void OCatalog::refreshViews()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOViews aViews = m_aCatalog.get_Views();
     aViews.fillElementNames(aVector);
@@ -87,7 +87,7 @@ void OCatalog::refreshViews()
 
 void OCatalog::refreshGroups()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOGroups aGroups = m_aCatalog.get_Groups();
     aGroups.fillElementNames(aVector);
@@ -100,7 +100,7 @@ void OCatalog::refreshGroups()
 
 void OCatalog::refreshUsers()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOUsers aUsers = m_aCatalog.get_Users();
     aUsers.fillElementNames(aVector);

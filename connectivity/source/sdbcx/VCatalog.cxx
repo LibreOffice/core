@@ -197,7 +197,7 @@ OUString OCatalog::buildName(const Reference< XRow >& _xRow)
     return sComposedName;
 }
 
-void OCatalog::fillNames(Reference< XResultSet >& _xResult,TStringVector& _rNames)
+void OCatalog::fillNames(Reference< XResultSet >& _xResult,::std::vector< OUString>& _rNames)
 {
     if ( _xResult.is() )
     {

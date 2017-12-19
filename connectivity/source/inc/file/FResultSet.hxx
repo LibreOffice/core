@@ -38,7 +38,6 @@
 #include <file/fanalyzer.hxx>
 #include <file/FTable.hxx>
 #include <file/filedllapi.hxx>
-#include <connectivity/StdTypeDefs.hxx>
 #include <TSortIndex.hxx>
 #include <TSkipDeletedSet.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>

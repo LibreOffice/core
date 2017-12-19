@@ -43,7 +43,7 @@ namespace connectivity
     public:
         OKeysHelper(    OTableHelper* _pTable,
                 ::osl::Mutex& _rMutex,
-                const TStringVector& _rVector
+                const ::std::vector< OUString>& _rVector
                 );
 
         static void cloneDescriptorColumns(

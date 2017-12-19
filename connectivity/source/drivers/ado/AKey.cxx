@@ -52,7 +52,7 @@ OAdoKey::OAdoKey(bool _bCase,OConnection* _pConnection)
 
 void OAdoKey::refreshColumns()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOColumns aColumns;
     if ( m_aKey.IsValid() )

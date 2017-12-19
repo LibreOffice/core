@@ -40,7 +40,7 @@ OWriterCatalog::OWriterCatalog(OWriterConnection* pConnection) : file::OFileCata
 
 void OWriterCatalog::refreshTables()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     uno::Sequence<OUString> aTypes;
     OWriterConnection::ODocHolder aDocHolder(static_cast<OWriterConnection*>(m_pConnection));
     uno::Reference< sdbc::XResultSet > xResult = m_xMetaData->getTables(uno::Any(), "%", "%", aTypes);
