@@ -2712,7 +2712,13 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
     const SwStartNode *pStNd;
     if (m_xTable->m_bFirstCell)
     {
-        pNd->GetTextNode()->ChgFormatColl( pColl );
+        SwTextNode* pTextNd = pNd->GetTextNode();
+        if (!pTextNd)
+        {
+            eState = SvParserState::Error;
+            return nullptr;
+        }
+        pTextNd->ChgFormatColl(pColl);
         m_xTable->m_bFirstCell = false;
         pStNd = pNd->FindTableBoxStartNode();
     }
