@@ -2493,7 +2493,7 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
     }
 
     // If necessary headlines should be processed. In order to
-    // not to fragment good code, we interate once more.
+    // not to fragment good code, we iterate once more.
     const sal_uInt16 nRowsToRepeat = rTable.GetRowsToRepeat();
     if ( nRowsToRepeat > 0 &&
          ( ( !bBehind && ( nBfPos == USHRT_MAX || nBfPos + 1 < nRowsToRepeat ) ) ||

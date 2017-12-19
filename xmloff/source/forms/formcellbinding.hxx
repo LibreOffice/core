@@ -204,7 +204,7 @@ namespace xmloff
                             const OUString& _rService
                         );
 
-        /** checkes whether a given component supports a given servive
+        /** checks whether a given component supports a given servive
         */
         static bool     doesComponentSupport(
                             const css::uno::Reference< css::uno::XInterface >& _rxComponent,
