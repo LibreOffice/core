@@ -1070,10 +1070,11 @@ void ScInterpreter::ScRawSubtract()
     // Obtain the minuend.
     double fRes = GetDouble();
 
-    while (nGlobalError == FormulaError::NONE && nParamCount-- > 1)
+    while (nGlobalError == FormulaError::NONE && nParamCount > 1)
     {
         // Simple single values without matrix support.
         fRes -= GetDouble();
+        --nParamCount;
     }
     while (nParamCount-- > 0)
         PopError();
