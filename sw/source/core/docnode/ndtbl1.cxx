@@ -873,7 +873,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                 SvxBoxItem aBox( pFormat->GetBox() );
 
                 if ( !pBorderLine && bSetLine )
-                    aBox = *static_cast<const SvxBoxItem*>(::GetDfltAttr( RES_BOX ));
+                    aBox = *::GetDfltAttr( RES_BOX );
                 else
                 {
                     if ( aBox.GetTop() )
@@ -922,7 +922,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
 
     if( !aUnions.empty() )
     {
-        SvxBoxItem     aSetBox    (static_cast<const SvxBoxItem    &>( rSet.Get(RES_BOX    )));
+        SvxBoxItem     aSetBox    ( rSet.Get(RES_BOX    ) );
         SvxBoxInfoItem aSetBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
 
         bool bTopSet      = false,
@@ -1111,7 +1111,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
         // fdo#62470 fix the reading for table format.
         if ( bRTLTab )
         {
-            SvxBoxItem     aTempBox    (static_cast<const SvxBoxItem    &>( rSet.Get(RES_BOX    )));
+            SvxBoxItem     aTempBox    ( rSet.Get(RES_BOX    ) );
             SvxBoxInfoItem aTempBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
 
             aTempBox.SetLine( aSetBox.GetRight(), SvxBoxItemLine::RIGHT);

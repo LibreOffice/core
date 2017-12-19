@@ -281,7 +281,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 
 void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 {
-    auto const & rSize = static_cast<SwFormatFrameSize const &>(rSet.Get( RES_FRM_SIZE ));
+    auto const & rSize = rSet.Get( RES_FRM_SIZE );
     lMaxHeight = rSize.GetHeight();
 
     const SfxPoolItem* pItem;
@@ -315,7 +315,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 
     if ( rSet.GetItemState( RES_UL_SPACE , false ) == SfxItemState::SET )
     {
-        const SvxULSpaceItem &rUL = static_cast<const SvxULSpaceItem&>(rSet.Get( RES_UL_SPACE ));
+        const SvxULSpaceItem &rUL = rSet.Get( RES_UL_SPACE );
         lMaxHeight -= rUL.GetUpper() + rUL.GetLower();
     }
 

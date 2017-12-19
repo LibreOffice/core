@@ -91,9 +91,9 @@ public:
 };
 
 inline const SwFormatHeader &SwAttrSet::GetHeader(bool bInP) const
-    { return static_cast<const SwFormatHeader&>(Get( RES_HEADER,bInP)); }
+    { return Get( RES_HEADER,bInP); }
 inline const SwFormatFooter &SwAttrSet::GetFooter(bool bInP) const
-    { return static_cast<const SwFormatFooter&>(Get( RES_FOOTER,bInP)); }
+    { return Get( RES_FOOTER,bInP); }
 
 inline const SwFormatHeader &SwFormat::GetHeader(bool bInP) const
     { return m_aSet.GetHeader(bInP); }

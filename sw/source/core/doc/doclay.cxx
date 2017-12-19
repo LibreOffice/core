@@ -352,7 +352,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                                     const SwSelBoxes* pSelBoxes,
                                     SwFrameFormat *pParent )
 {
-    const SwFormatAnchor& rAnch = static_cast<const SwFormatAnchor&>(rSet.Get( RES_ANCHOR ));
+    const SwFormatAnchor& rAnch = rSet.Get( RES_ANCHOR );
 
     GetIDocumentUndoRedo().StartUndo( SwUndoId::INSLAYFMT, nullptr );
 
@@ -1627,8 +1627,7 @@ SvxFrameDirection SwDoc::GetTextDirection( const SwPosition& rPos,
             }
         }
         if( !pItem )
-            pItem = static_cast<const SvxFrameDirectionItem*>(&GetAttrPool().GetDefaultItem(
-                                                            RES_FRAMEDIR ));
+            pItem = &GetAttrPool().GetDefaultItem( RES_FRAMEDIR );
         nRet = pItem->GetValue();
     }
     return nRet;
