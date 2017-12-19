@@ -3028,7 +3028,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     {
                         continue; // for
                     }
-                    // DM might be splitted into D and M
+                    // DM might be split into D and M
                     if ( sStrArray[i].getLength() < sOldCurSymbol.getLength() &&
                          pChrCls->uppercase( sStrArray[i], 0, 1 )[0] ==
                          sOldCurString[0] )

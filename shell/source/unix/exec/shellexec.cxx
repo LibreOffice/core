@@ -100,7 +100,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        SAL_WARN("shell", "Unusual - shell attemp to launch " << aCommand << " with params " << aParameter << " under lok");
+        SAL_WARN("shell", "Unusual - shell attempt to launch " << aCommand << " with params " << aParameter << " under lok");
         return;
     }
 
