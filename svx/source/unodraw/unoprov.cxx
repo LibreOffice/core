@@ -1498,7 +1498,7 @@ static const char* RID_SVXSTR_TRASNGR[] =
     RID_SVXSTR_TRASNGR0
 };
 
-bool SvxUnoGetResourceRanges( const short nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) throw()
+bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) throw()
 {
     switch( nWhich )
     {
@@ -1785,7 +1785,7 @@ bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char**
 /** if the given name is a predefined name for the current language it is replaced by
     the corresponding api name.
 */
-OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName)
+OUString SvxUnogetApiNameForItem(const sal_uInt16 nWhich, const OUString& rInternalName)
 {
     OUString aNew = rInternalName;
 
@@ -1818,7 +1818,7 @@ OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rIntern
 /** if the given name is a predefined api name it is replaced by the predefined name
     for the current language.
 */
-OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName)
+OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& rApiName)
 {
     OUString aNew = rApiName;
 

@@ -148,7 +148,7 @@ protected:
 
     css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap ) const;
 
-    bool SetFillAttribute( sal_Int32 nWID, const OUString& rName );
+    bool SetFillAttribute( sal_uInt16 nWID, const OUString& rName );
 
     /** called from the XActionLockable interface methods on initial locking */
     virtual void lock();
@@ -216,8 +216,8 @@ public:
     sal_uInt32 getShapeKind() const;
 
     // styles need this
-    static bool SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel );
-    static bool SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet );
+    static bool SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel );
+    static bool SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItemSet& rSet );
 
     /** same as SetFillAttribute but for property names instead of which ids,
         and the property found is returned instead of set at the object
