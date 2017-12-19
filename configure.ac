@@ -3621,16 +3621,10 @@ HAVE_GCC_FINLINE_LIMIT=
 HAVE_GCC_FNO_INLINE=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -ggdb2])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # Option just ignored and silly warning that isn't a real
-        # warning printed
-        :
-    else
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -ggdb2"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
-        CFLAGS=$save_CFLAGS
-    fi
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -ggdb2"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
+    CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_GGDB2" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
@@ -3638,15 +3632,10 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CC supports -finline-limit=0])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # As above
-        :
-    else
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -finline-limit=0"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FINLINE_LIMIT=TRUE ],[])
-        CFLAGS=$save_CFLAGS
-    fi
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -finline-limit=0"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FINLINE_LIMIT=TRUE ],[])
+    CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_FINLINE_LIMIT" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
@@ -3654,15 +3643,10 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CC supports -fno-inline])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # Ditto
-        :
-    else
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -fno-inline"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_INLINE=TRUE ],[])
-        CFLAGS=$save_CFLAGS
-    fi
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -fno-inline"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_INLINE=TRUE ],[])
+    CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_FNO_INLINE" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
@@ -6385,18 +6369,12 @@ HAVE_GCC_FNO_DEFAULT_INLINE=
 HAVE_GCC_FNO_ENFORCE_EH_SPECS=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CXX supports -fno-default-inline])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # Option just ignored and silly warning that isn't a real
-        # warning printed
-        :
-    else
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CFLAGS -Werror -fno-default-inline"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_DEFAULT_INLINE=TRUE ],[])
-        CXXFLAGS=$save_CXXFLAGS
-        AC_LANG_POP([C++])
-    fi
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CFLAGS -Werror -fno-default-inline"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_DEFAULT_INLINE=TRUE ],[])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
     if test "$HAVE_GCC_FNO_DEFAULT_INLINE" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
@@ -6404,17 +6382,12 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CXX supports -fno-enforce-eh-specs])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # As above
-        :
-    else
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CFLAGS -Werror -fno-enforce-eh-specs"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_ENFORCE_EH_SPECS=TRUE ],[])
-        CXXFLAGS=$save_CXXFLAGS
-        AC_LANG_POP([C++])
-    fi
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CFLAGS -Werror -fno-enforce-eh-specs"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_ENFORCE_EH_SPECS=TRUE ],[])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
     if test "$HAVE_GCC_FNO_ENFORCE_EH_SPECS" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
