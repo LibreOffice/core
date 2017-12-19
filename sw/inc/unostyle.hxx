@@ -104,8 +104,8 @@ namespace sw
     class ICoreFrameStyle
     {
         public:
-            virtual void SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem) =0;
-            virtual const SfxPoolItem* GetItem(enum RES_FRMATR eAtr) =0;
+            virtual void SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem) =0;
+            virtual const SfxPoolItem* GetItem(sal_uInt16 eAtr) =0;
             virtual css::document::XEventsSupplier& GetEventsSupplier() =0;
             virtual ~ICoreFrameStyle() {};
     };

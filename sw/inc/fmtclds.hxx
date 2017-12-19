@@ -162,7 +162,7 @@ public:
 };
 
 inline const SwFormatCol &SwAttrSet::GetCol(bool bInP) const
-    { return static_cast<const SwFormatCol&>(Get( RES_COL,bInP)); }
+    { return Get( RES_COL,bInP); }
 
 inline const SwFormatCol &SwFormat::GetCol(bool bInP) const
     { return m_aSet.GetCol(bInP); }

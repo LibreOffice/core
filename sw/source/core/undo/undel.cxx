@@ -946,8 +946,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( m_bResetPgDesc || m_bResetPgBrk )
         {
-            sal_uInt16 nStt = static_cast<sal_uInt16>( m_bResetPgDesc ? RES_PAGEDESC : RES_BREAK );
-            sal_uInt16 nEnd = static_cast<sal_uInt16>( m_bResetPgBrk ? RES_BREAK : RES_PAGEDESC );
+            sal_uInt16 nStt = m_bResetPgDesc ? sal_uInt16(RES_PAGEDESC) : sal_uInt16(RES_BREAK);
+            sal_uInt16 nEnd = m_bResetPgBrk ? sal_uInt16(RES_BREAK) : sal_uInt16(RES_PAGEDESC);
 
             SwNode* pNode = rDoc.GetNodes()[ nEndNode + 1 ];
             if( pNode->IsContentNode() )
