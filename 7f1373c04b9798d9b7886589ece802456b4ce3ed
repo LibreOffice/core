@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ab711378",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5253,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-19T21:49:45Z",
+      "side": 1,
+      "message": "those two are kind of orthogonal to the actual fix, I\u0027d leave those out, or move to a separate test (if worth testing)",
+      "revId": "7f1373c04b9798d9b7886589ece802456b4ce3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cb6adf80",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5255,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-19T21:49:45Z",
+      "side": 1,
+      "message": "I\u0027d put that into one line.",
+      "revId": "7f1373c04b9798d9b7886589ece802456b4ce3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_eb679bb4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5267,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-19T21:49:45Z",
+      "side": 1,
+      "message": "I\u0027d just let this crash if loading fail. this is basic functionality that does not need to be tested in every unit test",
+      "revId": "7f1373c04b9798d9b7886589ece802456b4ce3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0b0787ca",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5269,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-19T21:49:45Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "7f1373c04b9798d9b7886589ece802456b4ce3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2b0c43ec",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5271,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-19T21:49:45Z",
+      "side": 1,
+      "message": "I\u0027d cut down this test to exactly this line, and the one below testing for 1",
+      "revId": "7f1373c04b9798d9b7886589ece802456b4ce3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6b12cb0a",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-19T21:49:45Z",
+      "side": 1,
+      "message": "not a blocker, but perhaps while you\u0027re at it - add a brief summary comment above the if statement, what\u0027s supposed to be tested there?",
+      "revId": "7f1373c04b9798d9b7886589ece802456b4ce3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4b0d0fe7",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-19T21:49:45Z",
+      "side": 1,
+      "message": "please keep line within ~80 chars",
+      "revId": "7f1373c04b9798d9b7886589ece802456b4ce3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
