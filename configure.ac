@@ -5926,7 +5926,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -Werror -Wunknown-pragmas"
+    CXXFLAGS="$CXXFLAGS -Werror"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             struct __attribute__((warn_unused)) dummy {};
         ])], [
