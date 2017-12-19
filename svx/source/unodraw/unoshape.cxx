@@ -1400,9 +1400,9 @@ void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Re
 }
 
 
-bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
+bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName )
 {
-    SfxItemSet aSet( mpModel->GetItemPool(),    {{(sal_uInt16)nWID, (sal_uInt16)nWID}} );
+    SfxItemSet aSet( mpModel->GetItemPool(),    {{nWID, nWID}} );
 
     if( SetFillAttribute( nWID, rName, aSet, mpModel ) )
     {
@@ -1418,7 +1418,7 @@ bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 }
 
 
-bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel )
+bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel )
 {
     // check if an item with the given name and which id is inside the models
     // pool or the stylesheet pool, if found it's put in the itemset
@@ -1427,7 +1427,7 @@ bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemS
         // we did not find such item in one of the pools, so we check
         // the property lists that are loaded for the model for items
         // that support such.
-        OUString aStrName = SvxUnogetInternalNameForItem((sal_Int16)nWID, rName);
+        OUString aStrName = SvxUnogetInternalNameForItem(nWID, rName);
 
         switch( nWID )
         {
@@ -1530,9 +1530,9 @@ bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemS
 }
 
 
-bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
+bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItemSet& rSet )
 {
-    OUString aName = SvxUnogetInternalNameForItem((sal_Int16)nWID, rName);
+    OUString aName = SvxUnogetInternalNameForItem(nWID, rName);
 
     if (aName.isEmpty())
     {
@@ -1563,11 +1563,11 @@ bool SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemS
 
     const SfxItemPool* pPool = rSet.GetPool();
 
-    const sal_uInt32 nCount = pPool->GetItemCount2((sal_uInt16)nWID);
+    const sal_uInt32 nCount = pPool->GetItemCount2(nWID);
 
     for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        const NameOrIndex* pItem = static_cast<const NameOrIndex*>(pPool->GetItem2((sal_uInt16)nWID, nSurrogate));
+        const NameOrIndex* pItem = static_cast<const NameOrIndex*>(pPool->GetItem2(nWID, nSurrogate));
         if( pItem && ( pItem->GetName() == aName ) )
         {
             rSet.Put( *pItem );

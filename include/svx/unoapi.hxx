@@ -80,7 +80,7 @@ SVX_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const FieldUnit nVcl, short& eApi 
  * @throws std::exception
 */
 SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
-    SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName);
+    SvxUnogetApiNameForItem(const sal_uInt16 nWhich, const OUString& rInternalName);
 
 /**
  * If the given name is a predefined API name it is replaced by the predefined name
@@ -89,7 +89,7 @@ SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
  * @throws std::exception
 */
 SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
-    SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName);
+    SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& rApiName);
 
 #endif // INCLUDED_SVX_UNOAPI_HXX
 

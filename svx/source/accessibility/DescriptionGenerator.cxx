@@ -126,7 +126,7 @@ void DescriptionGenerator::AddProperty (
     const OUString& sPropertyName,
     PropertyType aType,
     const char* pLocalizedNameId,
-    long nWhichId)
+    sal_uInt16 nWhichId)
 {
     OUString sLocalizedName;
     {
@@ -138,7 +138,7 @@ void DescriptionGenerator::AddProperty (
 
 
 void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
-    PropertyType aType, const OUString& sLocalizedName, long nWhichId)
+    PropertyType aType, const OUString& sLocalizedName, sal_uInt16 nWhichId)
 {
     uno::Reference<beans::XPropertyState> xState (mxShape, uno::UNO_QUERY);
     if (xState.is()
@@ -270,7 +270,7 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
 
 
 void DescriptionGenerator::AddString (const OUString& sPropertyName,
-    const OUString& sLocalizedName, long nWhichId)
+    const OUString& sLocalizedName, sal_uInt16 nWhichId)
 {
     msDescription.append(sLocalizedName);
     msDescription.append('=');
@@ -283,12 +283,11 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
             OUString sValue;
             aValue >>= sValue;
 
-            if (nWhichId >= 0)
+            if (nWhichId != 0xffff)
             {
                 SolarMutexGuard aGuard;
                 OUString sLocalizedValue =
-                    SvxUnogetInternalNameForItem(sal::static_int_cast<sal_Int16>(nWhichId),
-                                              sValue);
+                    SvxUnogetInternalNameForItem(nWhichId, sValue);
                 msDescription.append (sLocalizedValue);
             }
             else

@@ -101,7 +101,7 @@ public:
     void AddProperty (const OUString& sPropertyName,
         PropertyType aType,
         const OUString& sLocalizedName=OUString(),
-        long nWhichId=-1);
+        sal_uInt16 nWhichId = 0xffff);
 
     /** Add the given property name and its associated value to the
         description string.  If the property value does not differ from the
@@ -123,7 +123,7 @@ public:
     void AddProperty (const OUString& sPropertyName,
         PropertyType aType,
         const char* pResourceId,
-        long nWhichId=-1);
+        sal_uInt16 nWhichId = 0xffff);
 
     /** Append the given string as is to the current description.
         @param sString
@@ -178,7 +178,7 @@ private:
             Name of the property.
     */
     SVX_DLLPRIVATE void AddString (const OUString& sPropertyName,
-        const OUString& sLocalizedName, long nWhichId);
+        const OUString& sLocalizedName, sal_uInt16 nWhichId);
 
     /** Add a property value formatted as fill style to the description
         string.  If the fill style is <const>HATCH</const>,
