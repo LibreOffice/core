@@ -3308,7 +3308,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
     if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
     {
         if (nAction == LOK_WINDOW_CLOSE)
-            pDialog->EndDialog( RET_CANCEL );
+            pDialog->Close();
     }
 }
 
