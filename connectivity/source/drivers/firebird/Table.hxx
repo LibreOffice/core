@@ -51,11 +51,11 @@ namespace connectivity
 
             // OTableHelper
             virtual ::connectivity::sdbcx::OCollection* createColumns(
-                const ::connectivity::TStringVector& rNames) override;
+                const ::std::vector< OUString>& rNames) override;
             virtual ::connectivity::sdbcx::OCollection* createKeys(
-                const ::connectivity::TStringVector& rNames) override;
+                const ::std::vector< OUString>& rNames) override;
             virtual ::connectivity::sdbcx::OCollection* createIndexes(
-                const ::connectivity::TStringVector& rNames) override;
+                const ::std::vector< OUString>& rNames) override;
 
             // XAlterTable
             /**

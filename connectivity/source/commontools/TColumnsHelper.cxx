@@ -61,7 +61,7 @@ namespace connectivity
 OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
                                 ,bool _bCase
                                 ,::osl::Mutex& _rMutex
-                                ,const TStringVector &_rVector
+                                ,const ::std::vector< OUString> &_rVector
                                 ,bool _bUseHardRef
             ) : OCollection(_rParent,_bCase,_rMutex,_rVector,false,_bUseHardRef)
     ,m_pTable(nullptr)

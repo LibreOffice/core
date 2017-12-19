@@ -76,19 +76,19 @@ namespace dbaccess
             @param  _rNames
                 The column names.
         */
-        virtual ::connectivity::sdbcx::OCollection* createColumns(const ::connectivity::TStringVector& _rNames) override;
+        virtual ::connectivity::sdbcx::OCollection* createColumns(const ::std::vector< OUString>& _rNames) override;
 
         /** creates the key collection for the table
             @param  _rNames
                 The key names.
         */
-        virtual ::connectivity::sdbcx::OCollection* createKeys(const ::connectivity::TStringVector& _rNames) override;
+        virtual ::connectivity::sdbcx::OCollection* createKeys(const ::std::vector< OUString>& _rNames) override;
 
         /** creates the index collection for the table
             @param  _rNames
                 The index names.
         */
-        virtual ::connectivity::sdbcx::OCollection* createIndexes(const ::connectivity::TStringVector& _rNames) override;
+        virtual ::connectivity::sdbcx::OCollection* createIndexes(const ::std::vector< OUString>& _rNames) override;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;

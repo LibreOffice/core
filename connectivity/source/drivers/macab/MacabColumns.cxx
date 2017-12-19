@@ -85,7 +85,7 @@ void MacabColumns::impl_refresh()
 
 MacabColumns::MacabColumns( MacabTable* _pTable,
                         ::osl::Mutex& _rMutex,
-                        const TStringVector &_rVector)
+                        const ::std::vector< OUString> &_rVector)
     : sdbcx::OCollection(*_pTable, true, _rMutex, _rVector),
       m_pTable(_pTable)
 {

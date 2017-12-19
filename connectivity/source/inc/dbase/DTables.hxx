@@ -38,7 +38,7 @@ namespace connectivity
             virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
         public:
             ODbaseTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : ODbaseTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
+                const ::std::vector< OUString> &_rVector) : ODbaseTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
             {}
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

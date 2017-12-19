@@ -41,7 +41,7 @@ namespace connectivity
         public:
             OIndexes(::cppu::OWeakObject& _rParent,
                      ::osl::Mutex& _rMutex,
-                     const TStringVector &_rVector,
+                     const ::std::vector< OUString> &_rVector,
                      const WpADOIndexes&    _rCollection,
                      bool _bCase,
                      OConnection* _pConnection)

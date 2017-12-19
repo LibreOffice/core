@@ -47,7 +47,7 @@ namespace connectivity
         OColumnsHelper( ::cppu::OWeakObject& _rParent
                         ,bool _bCase
                         ,::osl::Mutex& _rMutex
-                        ,const TStringVector &_rVector
+                        ,const ::std::vector< OUString> &_rVector
                         ,bool _bUseHardRef
                     );
         virtual ~OColumnsHelper() override;

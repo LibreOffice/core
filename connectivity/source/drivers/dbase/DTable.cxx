@@ -639,7 +639,7 @@ void ODbaseTable::refreshColumns()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     aVector.reserve(m_aColumns->get().size());
 
     for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != m_aColumns->get().end();++aIter)
@@ -653,7 +653,7 @@ void ODbaseTable::refreshColumns()
 
 void ODbaseTable::refreshIndexes()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     if(m_pFileStream && (!m_pIndexes || m_pIndexes->getCount() == 0))
     {
         INetURLObject aURL;

@@ -61,7 +61,7 @@ MacabTable::MacabTable( sdbcx::OCollection* _pTables,
 
 void MacabTable::refreshColumns()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     if (!isNew())
     {

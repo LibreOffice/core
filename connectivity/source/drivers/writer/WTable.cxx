@@ -43,7 +43,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/types.hxx>
-#include <connectivity/StdTypeDefs.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 
 using namespace ::com::sun::star;

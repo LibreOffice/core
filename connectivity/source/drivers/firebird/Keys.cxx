@@ -23,7 +23,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-Keys::Keys(Table* pTable, Mutex& rMutex, const TStringVector& rNames):
+Keys::Keys(Table* pTable, Mutex& rMutex, const ::std::vector< OUString>& rNames):
     OKeysHelper(pTable,
                 rMutex,
                 rNames),

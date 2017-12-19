@@ -32,7 +32,6 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include <connectivity/StdTypeDefs.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
@@ -86,7 +85,7 @@ namespace connectivity
                 @param  _rNames
                     The vector who will be filled.
             */
-            void fillNames(css::uno::Reference< css::sdbc::XResultSet >& _xResult,TStringVector& _rNames);
+            void fillNames(css::uno::Reference< css::sdbc::XResultSet >& _xResult,::std::vector< OUString>& _rNames);
 
         public:
             OCatalog(const css::uno::Reference< css::sdbc::XConnection> &_xConnection);

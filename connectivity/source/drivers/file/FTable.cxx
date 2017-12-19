@@ -78,7 +78,7 @@ OFileTable::~OFileTable( )
 
 void OFileTable::refreshColumns()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
                                                                                m_SchemaName,m_Name, "%");
 

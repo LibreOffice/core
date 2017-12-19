@@ -261,7 +261,7 @@ namespace
 
 void OTableHelper::refreshColumns()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     if(!isNew())
     {
         Any aCatalog;
@@ -294,7 +294,7 @@ void OTableHelper::refreshColumns()
         std::transform(
             aSortedColumns.begin(),
             aSortedColumns.end(),
-            std::insert_iterator< TStringVector >( aVector, aVector.begin() ),
+            std::insert_iterator< ::std::vector< OUString> >( aVector, aVector.begin() ),
             ::o3tl::select2nd< std::map< OrdinalPosition, OUString >::value_type >()
             );
     }
@@ -320,7 +320,7 @@ const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) con
     return pRet;
 }
 
-void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
+void OTableHelper::refreshPrimaryKeys(::std::vector< OUString>& _rNames)
 {
     Any aCatalog;
     if ( !m_CatalogName.isEmpty() )
@@ -356,7 +356,7 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
     ::comphelper::disposeComponent(xResult);
 }
 
-void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
+void OTableHelper::refreshForeignKeys(::std::vector< OUString>& _rNames)
 {
     Any aCatalog;
     if ( !m_CatalogName.isEmpty() )
@@ -423,7 +423,7 @@ void OTableHelper::refreshKeys()
 {
     m_pImpl->m_aKeys.clear();
 
-    TStringVector aNames;
+    ::std::vector< OUString> aNames;
 
     if(!isNew())
     {
@@ -441,7 +441,7 @@ void OTableHelper::refreshKeys()
 
 void OTableHelper::refreshIndexes()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     if(!isNew())
     {
         // fill indexes

@@ -92,7 +92,7 @@ void ODbaseIndex::refreshColumns()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     if(!isNew())
     {
         OSL_ENSURE(m_pFileStream,"FileStream is not opened!");

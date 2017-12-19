@@ -41,7 +41,7 @@ OMySQLCatalog::OMySQLCatalog(const Reference< XConnection >& _xConnection) : OCa
 {
 }
 
-void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
+void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,::std::vector< OUString>& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
                                                             "%",
@@ -52,7 +52,7 @@ void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TS
 
 void OMySQLCatalog::refreshTables()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     Sequence< OUString > sTableTypes(3);
     sTableTypes[0] = "VIEW";
@@ -75,7 +75,7 @@ void OMySQLCatalog::refreshViews()
     // as of this writing might not return the proper information in getTableTypes, so
     // don't rely on it.
 
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     refreshObjects(aTypes,aVector);
 
     if ( m_pViews )
@@ -90,7 +90,7 @@ void OMySQLCatalog::refreshGroups()
 
 void OMySQLCatalog::refreshUsers()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
     Reference< XResultSet >  xResult = xStmt->executeQuery("SELECT grantee FROM information_schema.user_privileges GROUP BY grantee");
     if ( xResult.is() )

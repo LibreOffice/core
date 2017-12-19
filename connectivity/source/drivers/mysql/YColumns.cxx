@@ -34,7 +34,7 @@ using namespace ::com::sun::star::lang;
 
 OMySQLColumns::OMySQLColumns(   ::cppu::OWeakObject& _rParent
                                 ,::osl::Mutex& _rMutex
-                                ,const TStringVector &_rVector
+                                ,const ::std::vector< OUString> &_rVector
             ) : OColumnsHelper(_rParent,true/*_bCase*/,_rMutex,_rVector,true/*_bUseHardRef*/)
 {
 }

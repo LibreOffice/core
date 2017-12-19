@@ -66,7 +66,7 @@ namespace connectivity
         public:
             OMySQLKeysHelper(   OTableHelper* _pTable,
                 ::osl::Mutex& _rMutex,
-                const TStringVector& _rVector
+                const ::std::vector< OUString>& _rVector
                 ) : OKeysHelper(_pTable,_rMutex,_rVector){}
 
         };
@@ -128,19 +128,19 @@ void OMySQLTable::construct()
     return *static_cast<OMySQLTable_PROP*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
 
-sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)
+sdbcx::OCollection* OMySQLTable::createColumns(const ::std::vector< OUString>& _rNames)
 {
     OMySQLColumns* pColumns = new OMySQLColumns(*this,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
 
-sdbcx::OCollection* OMySQLTable::createKeys(const TStringVector& _rNames)
+sdbcx::OCollection* OMySQLTable::createKeys(const ::std::vector< OUString>& _rNames)
 {
     return new OMySQLKeysHelper(this,m_aMutex,_rNames);
 }
 
-sdbcx::OCollection* OMySQLTable::createIndexes(const TStringVector& _rNames)
+sdbcx::OCollection* OMySQLTable::createIndexes(const ::std::vector< OUString>& _rNames)
 {
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }

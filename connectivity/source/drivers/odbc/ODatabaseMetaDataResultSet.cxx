@@ -176,7 +176,7 @@ template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::get
 
         if ( !m_aValueRange.empty() )
         {
-            std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator aValueRangeIter (m_aValueRange.find(columnIndex));
+            auto aValueRangeIter = m_aValueRange.find(columnIndex);
             if ( aValueRangeIter != m_aValueRange.end() )
                 return static_cast<T>(aValueRangeIter->second[nVal]);
         }
@@ -788,7 +788,7 @@ void ODatabaseMetaDataResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nH
 
 void ODatabaseMetaDataResultSet::openTypeInfo()
 {
-    TInt2IntMap aMap;
+    ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[SQL_BIT]               = DataType::BIT;
     aMap[SQL_TINYINT]           = DataType::TINYINT;
     aMap[SQL_SMALLINT]          = DataType::SMALLINT;
@@ -990,7 +990,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), SQL_NTS);
 
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    TInt2IntMap aMap;
+    ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[SQL_BIT]               = DataType::BIT;
     aMap[SQL_TINYINT]           = DataType::TINYINT;
     aMap[SQL_SMALLINT]          = DataType::SMALLINT;

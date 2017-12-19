@@ -42,7 +42,7 @@ namespace connectivity
         public:
             OKeys(::cppu::OWeakObject& _rParent,
                      ::osl::Mutex& _rMutex,
-                     const TStringVector &_rVector,
+                     const ::std::vector< OUString> &_rVector,
                      const WpADOKeys& _rCollection,
                      bool _bCase,
                      OConnection* _pConnection) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)

@@ -45,7 +45,7 @@ namespace connectivity
             Tables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& rMetaData,
                    ::cppu::OWeakObject& rParent,
                    ::osl::Mutex& rMutex,
-                   ::connectivity::TStringVector const & rNames) : sdbcx::OCollection(rParent, true, rMutex, rNames), m_xMetaData(rMetaData) {}
+                   ::std::vector< OUString> const & rNames) : sdbcx::OCollection(rParent, true, rMutex, rNames), m_xMetaData(rMetaData) {}
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.

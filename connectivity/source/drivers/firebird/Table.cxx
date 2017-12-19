@@ -88,21 +88,21 @@ void Table::construct()
     }
 }
 //----- OTableHelper ---------------------------------------------------------
-OCollection* Table::createColumns(const TStringVector& rNames)
+OCollection* Table::createColumns(const ::std::vector< OUString>& rNames)
 {
     return new Columns(*this,
                        m_rMutex,
                        rNames);
 }
 
-OCollection* Table::createKeys(const TStringVector& rNames)
+OCollection* Table::createKeys(const ::std::vector< OUString>& rNames)
 {
     return new Keys(this,
                     m_rMutex,
                     rNames);
 }
 
-OCollection* Table::createIndexes(const TStringVector& rNames)
+OCollection* Table::createIndexes(const ::std::vector< OUString>& rNames)
 {
     return new Indexes(this,
                        m_rMutex,

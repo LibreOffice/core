@@ -37,7 +37,7 @@ namespace connectivity
         public:
             ODbaseColumns(file::OFileTable* _pTable,
                             ::osl::Mutex& _rMutex,
-                            const TStringVector &_rVector
+                            const ::std::vector< OUString> &_rVector
                          ) : file::OColumns(_pTable,_rMutex,_rVector)
             {}
         };

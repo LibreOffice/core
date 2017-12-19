@@ -23,7 +23,6 @@
 #include <osl/thread.h>
 #include <map>
 #include <vector>
-#include <connectivity/StdTypeDefs.hxx>
 
 namespace rtl
 {
@@ -177,7 +176,7 @@ namespace connectivity
                     aRet.setWithOutAddRef(pT);
                 return aRet;
             }
-            void fillElementNames(TStringVector& _rVector)
+            void fillElementNames(::std::vector< OUString>& _rVector)
             {
                 if(IsValid())
                 {

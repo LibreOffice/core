@@ -40,7 +40,7 @@ namespace connectivity
                 const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector)
+                const ::std::vector< OUString> &_rVector)
                 : sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
                   m_xMetaData(_rMetaData)
                 { }

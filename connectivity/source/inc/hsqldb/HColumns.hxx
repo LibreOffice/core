@@ -32,7 +32,7 @@ namespace connectivity
         public:
             OHSQLColumns(   ::cppu::OWeakObject& _rParent
                             ,::osl::Mutex& _rMutex
-                            ,const TStringVector &_rVector
+                            ,const ::std::vector< OUString> &_rVector
                         );
         };
 

@@ -161,7 +161,6 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <connectivity/CommonTools.hxx>
-#include <connectivity/StdTypeDefs.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>

@@ -36,7 +36,7 @@ namespace connectivity
             virtual void impl_refresh() override;
         public:
             OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
             {}
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

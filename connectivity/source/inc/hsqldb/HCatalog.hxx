@@ -20,7 +20,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCATALOG_HXX
 
 #include <connectivity/sdbcx/VCatalog.hxx>
-#include <connectivity/StdTypeDefs.hxx>
 
 namespace connectivity
 {
@@ -38,7 +37,7 @@ namespace connectivity
                 @param  _rNames
                     The container for the names to be filled.
             */
-            void refreshObjects(const css::uno::Sequence< OUString >& _sKindOfObject,TStringVector& _rNames);
+            void refreshObjects(const css::uno::Sequence< OUString >& _sKindOfObject,::std::vector< OUString>& _rNames);
 
         public:
             // implementation of the pure virtual methods

@@ -57,7 +57,7 @@ OAdoUser::OAdoUser(OCatalog* _pParent,bool _bCase,   const OUString& Name)
 
 void OAdoUser::refreshGroups()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
     WpADOGroups aGroups(m_aUser.get_Groups());
     aGroups.fillElementNames(aVector);
     if(m_pGroups)

@@ -75,7 +75,7 @@ void SAL_CALL OAdoTable::disposing()
 
 void OAdoTable::refreshColumns()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOColumns aColumns;
     if ( m_aTable.IsValid() )
@@ -92,7 +92,7 @@ void OAdoTable::refreshColumns()
 
 void OAdoTable::refreshKeys()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOKeys aKeys;
     if(m_aTable.IsValid())
@@ -109,7 +109,7 @@ void OAdoTable::refreshKeys()
 
 void OAdoTable::refreshIndexes()
 {
-    TStringVector aVector;
+    ::std::vector< OUString> aVector;
 
     WpADOIndexes aIndexes;
     if(m_aTable.IsValid())

@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 
 Columns::Columns(Table& rTable,
                  Mutex& rMutex,
-                 const TStringVector& rVector):
+                 const ::std::vector< OUString>& rVector):
     OColumnsHelper(rTable,
                    true, // TODO: is this case sensitivity?
                    rMutex,

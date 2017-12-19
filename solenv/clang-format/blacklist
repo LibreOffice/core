@@ -6094,7 +6094,6 @@ include/connectivity/OSubComponent.hxx
 include/connectivity/PColumn.hxx
 include/connectivity/ParameterCont.hxx
 include/connectivity/SQLStatementHelper.hxx
-include/connectivity/StdTypeDefs.hxx
 include/connectivity/TColumnsHelper.hxx
 include/connectivity/TIndex.hxx
 include/connectivity/TIndexColumns.hxx

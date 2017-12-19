@@ -41,7 +41,7 @@ namespace connectivity
         public:
             HViews(
                 const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, const TStringVector &_rVector );
+                ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, const ::std::vector< OUString> &_rVector );
 
             // only the name is identical to ::cppu::OComponentHelper
             virtual void disposing() override;

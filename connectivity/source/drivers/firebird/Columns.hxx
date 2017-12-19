@@ -25,7 +25,7 @@ namespace connectivity
         public:
             Columns(Table& rTable,
                     ::osl::Mutex& rMutex,
-                    const ::connectivity::TStringVector &_rVector);
+                    const ::std::vector< OUString> &_rVector);
         };
 
     } // namespace firebird

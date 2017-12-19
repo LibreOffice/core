@@ -333,7 +333,7 @@ Reference< XPropertySet > ODBTable::createColumnDescriptor()
     return new OTableColumnDescriptor( true );
 }
 
-sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
+sdbcx::OCollection* ODBTable::createColumns(const ::std::vector< OUString>& _rNames)
 {
     Reference<XDatabaseMetaData> xMeta = getMetaData();
     OColumns* pCol = new OColumns(*this, m_aMutex, nullptr, isCaseSensitive(), _rNames, this,this,
@@ -346,12 +346,12 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
     return pCol;
 }
 
-sdbcx::OCollection* ODBTable::createKeys(const TStringVector& _rNames)
+sdbcx::OCollection* ODBTable::createKeys(const ::std::vector< OUString>& _rNames)
 {
     return new connectivity::OKeysHelper(this,m_aMutex,_rNames);
 }
 
-sdbcx::OCollection* ODBTable::createIndexes(const TStringVector& _rNames)
+sdbcx::OCollection* ODBTable::createIndexes(const ::std::vector< OUString>& _rNames)
 {
     return new OIndexes(this,m_aMutex,_rNames,nullptr);
 }
