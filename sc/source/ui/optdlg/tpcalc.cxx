@@ -63,6 +63,7 @@ ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAt
     get(m_pBtnGeneralPrec, "generalprec");
     get(m_pFtPrec, "precft");
     get(m_pEdPrec, "prec");
+    get(m_pBtnThread, "threadingenabled");
     Init();
     SetExchangeSupport();
 }
@@ -94,6 +95,7 @@ void ScTpCalcOptions::dispose()
     m_pBtnGeneralPrec.clear();
     m_pFtPrec.clear();
     m_pEdPrec.clear();
+    m_pBtnThread.clear();
     SfxTabPage::dispose();
 }
 
@@ -104,6 +106,7 @@ void ScTpCalcOptions::Init()
     m_pBtnDateStd->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_pBtnDateSc10->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_pBtnThread->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
 VclPtr<SfxTabPage> ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
@@ -180,6 +183,9 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
         m_pEdPrec->SetValue(nPrec);
     }
 
+    m_pBtnThread->Enable();
+    m_pBtnThread->Check( officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get() );
+
     CheckClickHdl(m_pBtnIterate);
 }
 
@@ -200,6 +206,13 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
     else
         pLocalOptions->SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
 
+    bool bShouldEnableThreading = m_pBtnThread->IsChecked();
+    if (bShouldEnableThreading != officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::set(bShouldEnableThreading, xBatch);
+        xBatch->commit();
+    }
     if ( *pLocalOptions != *pOldOptions )
     {
         rCoreAttrs->Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );

@@ -68,6 +68,8 @@ private:
     VclPtr<FixedText>      m_pFtPrec;
     VclPtr<NumericField>   m_pEdPrec;
 
+    VclPtr<CheckBox>       m_pBtnThread;
+
     ScDocOptions*          pOldOptions;
     ScDocOptions*          pLocalOptions;
     sal_uInt16             nWhichCalc;
