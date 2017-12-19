@@ -559,6 +559,12 @@ SvParserState SwHTMLParser::CallParser()
     return eRet;
 }
 
+bool SwHTMLParser::CanRemoveNode(sal_uLong nNodeIdx) const
+{
+    const SwNode *pPrev = m_xDoc->GetNodes()[nNodeIdx - 1];
+    return pPrev->IsContentNode() || (pPrev->IsEndNode() && pPrev->StartOfSectionNode()->IsSectionNode());
+}
+
 void SwHTMLParser::Continue( HtmlTokenId nToken )
 {
 #ifdef DBG_UTIL
@@ -749,11 +755,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
 
             if( IsNewDoc() )
             {
-                const SwNode *pPrev = m_xDoc->GetNodes()[nNodeIdx -1];
-                if( !m_pPam->GetPoint()->nContent.GetIndex() &&
-                    ( pPrev->IsContentNode() ||
-                      (pPrev->IsEndNode() &&
-                      pPrev->StartOfSectionNode()->IsSectionNode()) ) )
+                if (!m_pPam->GetPoint()->nContent.GetIndex() && CanRemoveNode(nNodeIdx))
                 {
                     SwContentNode* pCNd = m_pPam->GetContentNode();
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
