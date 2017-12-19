@@ -122,6 +122,22 @@ void setFont(const SvxFont& rNewFont, SvxFont& rImplFont)
     rImplFont.SetAlignment(ALIGN_BASELINE);
 }
 
+/*
+ * removes line feeds and carriage returns from string
+ * returns if param is empty
+ */
+bool CleanAndCheckEmpty(OUString& rText)
+{
+    bool bEmpty = true;
+    for (sal_Int32 i = 0; i < rText.getLength(); ++i)
+    {
+        if (0xa == rText[i] || 0xd == rText[i])
+            rText = rText.replaceAt(i, 1, " ");
+        else
+            bEmpty = false;
+    }
+    return bEmpty;
+}
 } // end anonymous namespace
 
 class FontPrevWin_Impl
@@ -611,24 +627,6 @@ void SvxFontPrevWindow::UseResourceText()
 {
     pImpl->mbUseResText = true;
 }
-
-/*
- * removes line feeds and carriage returns from string
- * returns if param is empty
- */
-bool CleanAndCheckEmpty(OUString& rText)
-{
-    bool bEmpty = true;
-    for (sal_Int32 i = 0; i < rText.getLength(); ++i)
-    {
-        if (0xa == rText[i] || 0xd == rText[i])
-            rText = rText.replaceAt(i, 1, " ");
-        else
-            bEmpty = false;
-    }
-    return bEmpty;
-}
-
 
 void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
