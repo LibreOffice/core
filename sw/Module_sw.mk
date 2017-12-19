@@ -48,6 +48,10 @@ $(eval $(call gb_Module_add_targets,sw,\
 
 endif
 
+$(eval $(call gb_Module_add_check_targets,sw,\
+    CppunitTest_sw_uibase_unit \
+))
+
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sw_uwriter) \

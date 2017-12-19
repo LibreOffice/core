@@ -144,6 +144,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
+using namespace sw;
 
 #define DB_SEP_SPACE    0
 #define DB_SEP_TAB      1
@@ -2555,18 +2556,8 @@ uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
     return xDBContext->getElementNames();
 }
 
-namespace {
-enum class DBConnURIType {
-    UNKNOWN = 0,
-    ODB,
-    CALC,
-    DBASE,
-    FLAT,
-    MSJET,
-    MSACE,
-    WRITER
-};
-
+namespace  sw
+{
 DBConnURIType GetDBunoType(const INetURLObject &rURL)
 {
     OUString sExt(rURL.GetExtension());
@@ -2607,7 +2598,10 @@ DBConnURIType GetDBunoType(const INetURLObject &rURL)
 #endif
     return type;
 }
+}
 
+namespace
+{
 uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
 {
     uno::Any aURLAny;
