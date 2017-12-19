@@ -121,8 +121,6 @@ public:
     void                    SetSaveRelFSys( bool b );
     bool                IsSaveRelFSys() const;
 
-    bool                IsSaveUnpacked() const;
-
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;
 
@@ -138,10 +136,6 @@ public:
     void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
     ODFDefaultVersion       GetODFDefaultVersion() const;
     ODFSaneDefaultVersion   GetODFSaneDefaultVersion() const;
-
-    bool                IsUseSHA1InODF12() const;
-
-    bool                IsUseBlowfishInODF12() const;
 
     bool                IsReadOnly( EOption eOption ) const;
 };
