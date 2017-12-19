@@ -145,7 +145,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
             const SwFormatPageDesc *pDesc;
-            if( nullptr != (pDesc = static_cast<const SwFormatPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
+            if( nullptr != (pDesc = rPool.GetItem2( RES_PAGEDESC, n ) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
                 const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );

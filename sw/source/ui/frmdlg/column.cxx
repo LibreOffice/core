@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, Button*, void)
     if(pSelectionSet && SfxItemState::SET == pSelectionSet->GetItemState(RES_COL))
     {
         //insert region with columns
-        const SwFormatCol& rColItem = static_cast<const SwFormatCol&>(pSelectionSet->Get(RES_COL));
+        const SwFormatCol& rColItem = pSelectionSet->Get(RES_COL);
         //only if there actually are columns!
         if(rColItem.GetNumCols() > 1)
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
@@ -603,8 +603,8 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
             m_pColMgr->SetActualWidth(FRAME_FORMAT_WIDTH);
         else
         {
-            const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(rSet->Get(RES_FRM_SIZE));
-            const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rSet->Get(RES_BOX));
+            const SwFormatFrameSize& rSize = rSet->Get(RES_FRM_SIZE);
+            const SvxBoxItem& rBox = rSet->Get(RES_BOX);
             m_pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetSmallestDistance());
         }
     }
@@ -620,7 +620,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     //text direction
     if( SfxItemState::DEFAULT <= rSet->GetItemState( RES_FRAMEDIR ) )
     {
-        const SvxFrameDirectionItem& rItem = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR));
+        const SvxFrameDirectionItem& rItem = rSet->Get(RES_FRAMEDIR);
         SvxFrameDirection nVal  = rItem.GetValue();
         const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nVal) );
         m_pTextDirectionLB->SelectEntryPos( nPos );
@@ -1209,7 +1209,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
     if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR))
     {
         const SvxFrameDirectionItem& rDirItem =
-                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
+                    rSet.Get(RES_FRAMEDIR);
         bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
                     rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
     }
@@ -1224,17 +1224,15 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 
             if (!bVertical)
             {
-                const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
-                                                                    RES_LR_SPACE ));
-                const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+                const SvxLRSpaceItem& rLRSpace = rSet.Get(RES_LR_SPACE);
+                const SvxBoxItem& rBox = rSet.Get(RES_BOX);
                 nActWidth = rSize.GetSize().Width()
                                 - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetSmallestDistance();
             }
             else
             {
-                const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get(
-                                                                    RES_UL_SPACE ));
-                const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+                const SvxULSpaceItem& rULSpace = rSet.Get( RES_UL_SPACE );
+                const SvxBoxItem& rBox = rSet.Get(RES_BOX);
                 nActWidth = rSize.GetSize().Height()
                                 - rULSpace.GetUpper() - rULSpace.GetLower() - rBox.GetSmallestDistance();
 
@@ -1258,8 +1256,8 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         m_pFrameExampleWN->Show();
 
         // Size
-        const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE));
-        const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+        const SwFormatFrameSize& rSize = rSet.Get(RES_FRM_SIZE);
+        const SvxBoxItem& rBox = rSet.Get(RES_BOX);
 
         sal_uInt16 nTotalWish;
         if (m_bFormat)

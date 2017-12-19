@@ -465,7 +465,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
              SfxItemSet aSet( m_pWrtShell->GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
             m_pWrtShell->GetFlyFrameAttr( aSet );
-            const SwFormatURL& rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
+            const SwFormatURL& rURL = aSet.Get( RES_URL );
             if( rURL.GetMap() )
                 m_pImageMap.reset(new ImageMap( *rURL.GetMap() ));
             else if( !rURL.GetURL().isEmpty() )
@@ -986,7 +986,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     {
         SfxItemSet aSet( m_pWrtShell->GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
         m_pWrtShell->GetFlyFrameAttr( aSet );
-        const SwFormatURL& rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
+        const SwFormatURL& rURL = aSet.Get( RES_URL );
         if( rURL.GetMap() )
         {
             m_pImageMap.reset( new ImageMap( *rURL.GetMap() ) );
@@ -1991,7 +1991,7 @@ bool SwTransferable::PasteTargetURL( TransferableDataHelper& rData,
     {
         SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
         rSh.GetFlyFrameAttr( aSet );
-        SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+        SwFormatURL aURL( aSet.Get( RES_URL ) );
 
         if( aURL.GetURL() != aINetImg.GetTargetURL() ||
             aURL.GetTargetFrameName() != aINetImg.GetTargetFrame() )
@@ -2381,7 +2381,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                     {
                         SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
                         rSh.GetFlyFrameAttr( aSet );
-                        SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+                        SwFormatURL aURL( aSet.Get( RES_URL ) );
                         aURL.SetURL( aBkmk.GetURL(), false );
                         aSet.Put( aURL );
                         rSh.SetFlyFrameAttr( aSet );
@@ -2437,7 +2437,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
             rSh.GetFlyFrameAttr( aSet );
-            SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+            SwFormatURL aURL( aSet.Get( RES_URL ) );
             aURL.SetMap( &aMap );
             aSet.Put( aURL );
             rSh.SetFlyFrameAttr( aSet );
@@ -2456,7 +2456,7 @@ bool SwTransferable::PasteImageMap( TransferableDataHelper& rData,
     {
         SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
         rSh.GetFlyFrameAttr( aSet );
-        SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+        SwFormatURL aURL( aSet.Get( RES_URL ) );
         const ImageMap* pOld = aURL.GetMap();
 
         // set or replace, that is the question
@@ -2497,7 +2497,7 @@ bool SwTransferable::PasteAsHyperlink( TransferableDataHelper& rData,
             {
                 SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
                 rSh.GetFlyFrameAttr( aSet );
-                SwFormatURL aURL2( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+                SwFormatURL aURL2( aSet.Get( RES_URL ) );
                 aURL2.SetURL( sFile, false );
                 if( aURL2.GetName().isEmpty() )
                     aURL2.SetName( sFile );
@@ -2591,7 +2591,7 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
                         {
                             SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
                             rSh.GetFlyFrameAttr( aSet );
-                            SwFormatURL aURL2( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+                            SwFormatURL aURL2( aSet.Get( RES_URL ) );
                             aURL2.SetURL( sFile, false );
                             if( aURL2.GetName().isEmpty() )
                                 aURL2.SetName( sFile );
@@ -3122,7 +3122,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     {
         SfxItemSet aSet( m_pWrtShell->GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
         m_pWrtShell->GetFlyFrameAttr( aSet );
-        const SwFormatURL& rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
+        const SwFormatURL& rURL = aSet.Get( RES_URL );
         if( rURL.GetMap() )
         {
             m_pImageMap.reset( new ImageMap( *rURL.GetMap() ) );
@@ -3332,7 +3332,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
                 rSh.GetFlyFrameAttr( aSet );
-                SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+                SwFormatURL aURL( aSet.Get( RES_URL ) );
                 aURL.SetURL( aTmp.GetURL(), false );
                 aSet.Put( aURL );
                 rSh.SetFlyFrameAttr( aSet );
