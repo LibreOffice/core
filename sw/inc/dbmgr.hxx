@@ -473,6 +473,23 @@ public:
     void RevokeNotUsedConnections();
 };
 
+namespace sw
+{
+enum class DBConnURIType
+{
+    UNKNOWN = 0,
+    ODB,
+    CALC,
+    DBASE,
+    FLAT,
+    MSJET,
+    MSACE,
+    WRITER
+};
+
+DBConnURIType SW_DLLPUBLIC GetDBunoType(const INetURLObject &rURL);
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
