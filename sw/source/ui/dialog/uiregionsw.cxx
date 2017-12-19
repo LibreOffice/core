@@ -1443,7 +1443,7 @@ void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nColumnPageId)
     {
-        const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(GetInputSetImpl()->Get(RES_FRM_SIZE));
+        const SwFormatFrameSize& rSize = GetInputSetImpl()->Get(RES_FRM_SIZE);
         static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
         static_cast<SwColumnPage&>(rPage).ShowBalance(true);
         static_cast<SwColumnPage&>(rPage).SetInSection(true);
@@ -2010,10 +2010,8 @@ void SwSectionFootnoteEndTabPage::ResetState( bool bFootnote,
 
 void SwSectionFootnoteEndTabPage::Reset( const SfxItemSet* rSet )
 {
-    ResetState( true, static_cast<const SwFormatFootnoteAtTextEnd&>(rSet->Get(
-                                    RES_FTN_AT_TXTEND, false )));
-    ResetState( false, static_cast<const SwFormatEndAtTextEnd&>(rSet->Get(
-                                    RES_END_AT_TXTEND, false )));
+    ResetState( true, rSet->Get( RES_FTN_AT_TXTEND, false ));
+    ResetState( false, rSet->Get( RES_END_AT_TXTEND, false ));
 }
 
 VclPtr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( vcl::Window* pParent,
@@ -2170,7 +2168,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxLRSpaceItem& rSpace =
-            static_cast<const SvxLRSpaceItem&>(rSet->Get( RES_LR_SPACE ));
+            rSet->Get( RES_LR_SPACE );
 
         m_pBeforeMF->SetValue( m_pBeforeMF->Normalize(rSpace.GetLeft()), FUNIT_TWIP );
         m_pAfterMF->SetValue( m_pAfterMF->Normalize(rSpace.GetRight()), FUNIT_TWIP );

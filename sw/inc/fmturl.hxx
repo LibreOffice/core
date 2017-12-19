@@ -73,7 +73,7 @@ public:
 };
 
 inline const SwFormatURL &SwAttrSet::GetURL(bool bInP) const
-    { return static_cast<const SwFormatURL&>(Get( RES_URL,bInP)); }
+    { return Get( RES_URL,bInP); }
 
 inline const SwFormatURL &SwFormat::GetURL(bool bInP) const
     { return m_aSet.GetURL(bInP); }

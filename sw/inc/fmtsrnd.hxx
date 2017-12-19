@@ -71,7 +71,7 @@ inline SwFormatSurround &SwFormatSurround::operator=( const SwFormatSurround &rC
 }
 
 inline const SwFormatSurround &SwAttrSet::GetSurround(bool bInP) const
-    { return static_cast<const SwFormatSurround&>(Get( RES_SURROUND,bInP)); }
+    { return Get( RES_SURROUND,bInP); }
 
 inline const SwFormatSurround &SwFormat::GetSurround(bool bInP) const
     { return m_aSet.GetSurround(bInP); }

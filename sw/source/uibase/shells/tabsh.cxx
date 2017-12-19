@@ -477,8 +477,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SvxBoxInfoItem aCoreInfo( SID_ATTR_BORDER_INNER );
             aCoreSet.Put(aCoreInfo);
             rSh.GetTabBorders( aCoreSet );
-            const SvxBoxItem& rCoreBox = static_cast<const SvxBoxItem&>(
-                                                    aCoreSet.Get(RES_BOX));
+            const SvxBoxItem& rCoreBox = aCoreSet.Get(RES_BOX);
             const SfxPoolItem *pBoxItem = nullptr;
             if ( pArgs->GetItemState(RES_BOX, true, &pBoxItem) == SfxItemState::SET )
             {
@@ -1446,7 +1445,7 @@ void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
     aCoreSet.Put(aCoreInfo);
     GetShell().GetTabBorders( aCoreSet );
 
-    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aCoreSet.Get( RES_BOX ));
+    const SvxBoxItem& rBoxItem = aCoreSet.Get( RES_BOX );
     const SvxBorderLine* pLine = rBoxItem.GetTop();
 
     rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
