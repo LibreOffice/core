@@ -986,6 +986,8 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetBookmarkPropertyMap
     {
         { OUString(UNO_LINK_DISPLAY_NAME), FN_PARAM_LINK_DISPLAY_NAME,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xff},
         COMMON_TEXT_CONTENT_PROPERTIES
+        { OUString(UNO_NAME_BOOKMARK_HIDDEN), 0/*which id?*/,  cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { OUString(UNO_NAME_BOOKMARK_CONDITION), 0/*which id?*/,  cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
