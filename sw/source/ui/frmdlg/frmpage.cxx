@@ -910,7 +910,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     SetMetric( *m_pAtVertPosED, aMetric );
 
     const SfxPoolItem* pItem = nullptr;
-    const SwFormatAnchor& rAnchor = static_cast<const SwFormatAnchor&>(rSet->Get(RES_ANCHOR));
+    const SwFormatAnchor& rAnchor = rSet->Get(RES_ANCHOR);
 
     if (SfxItemState::SET == rSet->GetItemState(FN_OLE_IS_MATH, false, &pItem))
         m_bIsMathOLE = static_cast<const SfxBoolItem*>(pItem)->GetValue();
@@ -965,7 +965,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     }
     else
     {
-        m_aGrfSize = static_cast<const SwFormatFrameSize&>(rSet->Get(RES_FRM_SIZE)).GetSize();
+        m_aGrfSize = rSet->Get(RES_FRM_SIZE).GetSize();
     }
 
     // entering procent value made possible
@@ -974,7 +974,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     //the available space is not yet known so the RefValue has to be calculated from size and relative size values
     //this is needed only if relative values are already set
 
-    const SwFormatFrameSize& rFrameSize = static_cast<const SwFormatFrameSize&>(rSet->Get(RES_FRM_SIZE));
+    const SwFormatFrameSize& rFrameSize = rSet->Get(RES_FRM_SIZE);
 
     m_pRelWidthRelationLB->InsertEntry(SvxSwFramePosString::GetString(SwFPos::FRAME));
     m_pRelWidthRelationLB->InsertEntry(SvxSwFramePosString::GetString(SwFPos::REL_PG_FRAME));
@@ -1020,7 +1020,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     // i#18732 - init checkbox value
     {
         const bool bFollowTextFlow =
-            static_cast<const SwFormatFollowTextFlow&>(rSet->Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+            rSet->Get(RES_FOLLOW_TEXT_FLOW).GetValue();
         m_pFollowTextFlowCB->Check( bFollowTextFlow );
     }
 
@@ -1092,8 +1092,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
 
     if ( m_pHMap )
     {
-        SwFormatHoriOrient aHoriOrient( static_cast<const SwFormatHoriOrient&>(
-                                                rOldSet.Get(RES_HORI_ORIENT)) );
+        SwFormatHoriOrient aHoriOrient( rOldSet.Get(RES_HORI_ORIENT) );
 
         const sal_Int32 nMapPos = GetMapPos(m_pHMap, *m_pHorizontalDLB);
         const sal_Int16 eHOri = GetAlignment(m_pHMap, nMapPos, *m_pHoriRelationLB);
@@ -1128,8 +1127,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
     if ( m_pVMap )
     {
         // alignment vertical
-        SwFormatVertOrient aVertOrient( static_cast<const SwFormatVertOrient&>(
-                                                rOldSet.Get(RES_VERT_ORIENT)) );
+        SwFormatVertOrient aVertOrient( rOldSet.Get(RES_VERT_ORIENT) );
 
         const sal_Int32 nMapPos = GetMapPos(m_pVMap, *m_pVerticalDLB);
         const sal_Int16 eVOri = GetAlignment(m_pVMap, nMapPos, *m_pVertRelationLB);
@@ -1173,7 +1171,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
     // for a graphic that isn't even loaded, are set. Then no SetSize
     // is done here when the size settings were not changed by the
     // user.
-    const SwFormatFrameSize& rOldSize = static_cast<const SwFormatFrameSize& >(rOldSet.Get(RES_FRM_SIZE));
+    const SwFormatFrameSize& rOldSize = rOldSet.Get(RES_FRM_SIZE);
     SwFormatFrameSize aSz( rOldSize );
 
     sal_Int32 nRelWidthRelation = m_pRelWidthRelationLB->GetSelectedEntryPos();
@@ -1869,7 +1867,7 @@ void SwFramePage::RangeModifyHdl()
     if(GetTabDialog()->GetExampleSet() &&
             SfxItemState::DEFAULT <= GetTabDialog()->GetExampleSet()->GetItemState(RES_COL))
     {
-        const SwFormatCol& rCol = static_cast<const SwFormatCol&>(GetTabDialog()->GetExampleSet()->Get(RES_COL));
+        const SwFormatCol& rCol = GetTabDialog()->GetExampleSet()->Get(RES_COL);
         if ( rCol.GetColumns().size() > 1 )
         {
             for (const SwColumn & i : rCol.GetColumns())
@@ -2202,7 +2200,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
         }
     }
 
-    const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE));
+    const SwFormatFrameSize& rSize = rSet.Get(RES_FRM_SIZE);
     sal_Int64 nWidth  = m_aWidthED.NormalizePercent(rSize.GetWidth());
     sal_Int64 nHeight = m_aHeightED.NormalizePercent(rSize.GetHeight());
 
@@ -2258,7 +2256,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
         m_pAutoHeightCB->Hide();
 
     // organise circulation-gap for character bound frames
-    const SvxULSpaceItem &rUL = static_cast<const SvxULSpaceItem &>(rSet.Get(RES_UL_SPACE));
+    const SvxULSpaceItem &rUL = rSet.Get(RES_UL_SPACE);
     m_nUpperBorder = rUL.GetUpper();
     m_nLowerBorder = rUL.GetLower();
 
@@ -2269,7 +2267,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
     }
 
     // columns
-    SwFormatCol aCol( static_cast<const SwFormatCol&>(rSet.Get(RES_COL)) );
+    SwFormatCol aCol( rSet.Get(RES_COL) );
     ::FitToActualSize( aCol, (sal_uInt16)rSize.GetWidth() );
 
     RndStdIds eAnchorId = GetAnchor();
@@ -2278,8 +2276,8 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
         InitPos(eAnchorId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
     else
     {
-        const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));
-        const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT));
+        const SwFormatHoriOrient& rHori = rSet.Get(RES_HORI_ORIENT);
+        const SwFormatVertOrient& rVert = rSet.Get(RES_VERT_ORIENT);
         m_nOldH    = rHori.GetHoriOrient();
         m_nOldHRel = rHori.GetRelationOrient();
         m_nOldV    = rVert.GetVertOrient();
@@ -2311,12 +2309,12 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
 
     // transparent for example
     // circulation for example
-    const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
+    const SwFormatSurround& rSurround = rSet.Get(RES_SURROUND);
     m_pExampleWN->SetWrap( rSurround.GetSurround() );
 
     if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
     {
-        const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(rSet.Get(RES_OPAQUE));
+        const SvxOpaqueItem& rOpaque = rSet.Get(RES_OPAQUE);
         m_pExampleWN->SetTransparent(!rOpaque.GetValue());
     }
 
@@ -2462,7 +2460,7 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
 
 void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 {
-    const SvxProtectItem& rProt = static_cast<const SvxProtectItem& >(rSet.Get(RES_PROTECT));
+    const SvxProtectItem& rProt = rSet.Get(RES_PROTECT);
     bool bProtContent = rProt.IsContentProtected();
 
     const SfxPoolItem* pItem = nullptr;
@@ -3105,16 +3103,16 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         }
     }
     // Pos Protected
-    const SvxProtectItem& rProt = static_cast<const SvxProtectItem& >(rSet->Get(RES_PROTECT));
+    const SvxProtectItem& rProt = rSet->Get(RES_PROTECT);
     m_pProtectFrameCB->Check(rProt.IsPosProtected());
     m_pProtectContentCB->Check(rProt.IsContentProtected());
     m_pProtectSizeCB->Check(rProt.IsSizeProtected());
 
-    const SwFormatEditInReadonly& rEdit = static_cast<const SwFormatEditInReadonly& >(rSet->Get(RES_EDIT_IN_READONLY));
+    const SwFormatEditInReadonly& rEdit = rSet->Get(RES_EDIT_IN_READONLY);
     m_pEditInReadonlyCB->Check(rEdit.GetValue());          m_pEditInReadonlyCB->SaveValue();
 
     // print
-    const SvxPrintItem& rPrt = static_cast<const SvxPrintItem&>(rSet->Get(RES_PRINT));
+    const SvxPrintItem& rPrt = rSet->Get(RES_PRINT);
     m_pPrintFrameCB->Check(rPrt.GetValue());               m_pPrintFrameCB->SaveValue();
 
     // textflow
@@ -3130,7 +3128,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         {
             m_pTextFlowLB->RemoveEntry(m_pTextFlowLB->GetEntryPos(reinterpret_cast<void*>(SvxFrameDirection::Vertical_RL_TB)));
         }
-        SvxFrameDirection nVal = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR)).GetValue();
+        SvxFrameDirection nVal = rSet->Get(RES_FRAMEDIR).GetValue();
         sal_Int32 nPos;
         for( nPos = m_pTextFlowLB->GetEntryCount(); nPos; )
             if( static_cast<SvxFrameDirection>(reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( --nPos ))) == nVal )
@@ -3147,7 +3145,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     // Content alignment
     if ( rSet->GetItemState(RES_TEXT_VERT_ADJUST) > SfxItemState::DEFAULT )
     {
-        SdrTextVertAdjust nAdjust = static_cast<const SdrTextVertAdjustItem&>(rSet->Get(RES_TEXT_VERT_ADJUST)).GetValue();
+        SdrTextVertAdjust nAdjust = rSet->Get(RES_TEXT_VERT_ADJUST).GetValue();
         sal_Int32 nPos = 0;
         switch(nAdjust)
         {
@@ -3172,7 +3170,7 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
         bRet |= nullptr != rSet->Put(SfxStringItem(FN_UNO_DESCRIPTION, m_pDescriptionED->GetText()));
 
     const SfxPoolItem* pOldItem;
-    SvxProtectItem aProt ( static_cast<const SvxProtectItem& >(GetItemSet().Get(RES_PROTECT)) );
+    SvxProtectItem aProt ( GetItemSet().Get(RES_PROTECT) );
     aProt.SetContentProtect( m_pProtectContentCB->IsChecked() );
     aProt.SetSizeProtect ( m_pProtectSizeCB->IsChecked() );
     aProt.SetPosProtect  ( m_pProtectFrameCB->IsChecked() );

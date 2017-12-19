@@ -1295,9 +1295,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
 
 SvxFrameDirection SwHTMLWriter::GetHTMLDirection( const SfxItemSet& rItemSet ) const
 {
-    return GetHTMLDirection(
-        static_cast < const SvxFrameDirectionItem& >( rItemSet.Get( RES_FRAMEDIR ) )
-            .GetValue() );
+    return GetHTMLDirection( rItemSet.Get( RES_FRAMEDIR ).GetValue() );
 }
 
 SvxFrameDirection SwHTMLWriter::GetHTMLDirection( SvxFrameDirection nDir ) const

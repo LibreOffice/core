@@ -573,7 +573,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
     // we will need the lower spacing of the paragraph later on
     const SvxULSpaceItem& rULSpace =
-        pNodeItemSet ? static_cast<const SvxULSpaceItem &>(pNodeItemSet->Get(RES_UL_SPACE))
+        pNodeItemSet ? pNodeItemSet->Get(RES_UL_SPACE)
                      : rFormat.GetULSpace();
 
     if( (rHWrt.m_bOutHeader &&
@@ -627,7 +627,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                          rWrt.pCurPam->GetMark()->nNode.GetIndex());
     // If styles are exported, indented paragraphs become definition lists
     const SvxLRSpaceItem& rLRSpace =
-        pNodeItemSet ? static_cast<const SvxLRSpaceItem &>(pNodeItemSet->Get(RES_LR_SPACE))
+        pNodeItemSet ? pNodeItemSet->Get(RES_LR_SPACE)
                      : rFormat.GetLRSpace();
     if( (!rHWrt.m_bCfgOutStyles || bForceDL) && !rInfo.bInNumBulList )
     {
@@ -824,8 +824,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
     // and the text direction
     SvxFrameDirection nDir = rHWrt.GetHTMLDirection(
-            (pNodeItemSet ? static_cast < const SvxFrameDirectionItem& >(
-                                    pNodeItemSet->Get( RES_FRAMEDIR ) )
+            (pNodeItemSet ? pNodeItemSet->Get( RES_FRAMEDIR )
                           : rFormat.GetFrameDir() ).GetValue() );
 
     // We only write a <P>, if
@@ -2515,7 +2514,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         {
             HtmlWriter aHtml(rHTMLWrt.Strm());
             aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
-            const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>( pNd->GetSwAttrSet().Get(RES_UL_SPACE) );
+            const SvxULSpaceItem& rULSpace = pNd->GetSwAttrSet().Get(RES_UL_SPACE);
             if (rULSpace.GetLower() > 0 &&
                 !bEndOfCell &&
                 !rHTMLWrt.IsHTMLMode(HTMLMODE_NO_BR_AT_PAREND) )

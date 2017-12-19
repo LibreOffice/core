@@ -35,6 +35,7 @@
 #include <unoprnms.hxx>
 #include <unocrsrhelper.hxx>
 #include <hintids.hxx>
+#include <fmtpdsc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

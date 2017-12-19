@@ -4497,7 +4497,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
             nPageSize = pFormat->GetFrameSize().GetHeight();
             nPageSize -= rUL.GetUpper() + rUL.GetLower();
 
-            const SwFormatHeader *header = dynamic_cast<const SwFormatHeader *>(pFormat->GetAttrSet().GetItem(RES_HEADER));
+            const SwFormatHeader *header = pFormat->GetAttrSet().GetItem(RES_HEADER);
             if ( header )
             {
                 const SwFrameFormat *headerFormat = header->GetHeaderFormat();
@@ -4506,7 +4506,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
                     nPageSize -= headerFormat->GetFrameSize().GetHeight();
                 }
             }
-            const SwFormatFooter *footer = dynamic_cast<const SwFormatFooter *>(pFormat->GetAttrSet().GetItem(RES_FOOTER));
+            const SwFormatFooter *footer = pFormat->GetAttrSet().GetItem(RES_FOOTER);
             if ( footer )
             {
                 const SwFrameFormat *footerFormat = footer->GetFooterFormat();

@@ -733,7 +733,7 @@ void RtfExport::ExportDocument_Impl()
         sal_uInt32 const nMaxItem = rPool.GetItemCount2(RES_PROTECT);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            auto pProtect = static_cast<const SvxProtectItem*>(rPool.GetItem2(RES_PROTECT, n));
+            auto pProtect = rPool.GetItem2(RES_PROTECT, n);
             if (pProtect && pProtect->IsContentProtected())
             {
                 Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMPROT);
@@ -766,7 +766,7 @@ void RtfExport::ExportDocument_Impl()
             if (pSet)
             {
                 std::size_t nPosInDoc;
-                pSttPgDsc = static_cast<const SwFormatPageDesc*>(&pSet->Get(RES_PAGEDESC));
+                pSttPgDsc = &pSet->Get(RES_PAGEDESC);
                 if (!pSttPgDsc->GetPageDesc())
                     pSttPgDsc = nullptr;
                 else if (m_pDoc->FindPageDesc(pSttPgDsc->GetPageDesc()->GetName(), &nPosInDoc))
@@ -1224,18 +1224,16 @@ void RtfExport::OutColorTable()
 
     // shadow color
     {
-        auto pShadow = static_cast<const SvxShadowItem*>(GetDfltAttr(RES_SHADOW));
+        auto pShadow = GetDfltAttr(RES_SHADOW);
         InsColor(pShadow->GetColor());
-        if (nullptr
-            != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetPoolDefaultItem(RES_SHADOW))))
+        if (nullptr != (pShadow = rPool.GetPoolDefaultItem(RES_SHADOW)))
         {
             InsColor(pShadow->GetColor());
         }
         nMaxItem = rPool.GetItemCount2(RES_SHADOW);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (nullptr
-                != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetItem2(RES_SHADOW, n))))
+            if (nullptr != (pShadow = rPool.GetItem2(RES_SHADOW, n)))
             {
                 InsColor(pShadow->GetColor());
             }
@@ -1245,12 +1243,12 @@ void RtfExport::OutColorTable()
     // frame border color
     {
         const SvxBoxItem* pBox;
-        if (nullptr != (pBox = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_BOX))))
+        if (nullptr != (pBox = rPool.GetPoolDefaultItem(RES_BOX)))
             InsColorLine(*pBox);
         nMaxItem = rPool.GetItemCount2(RES_BOX);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (nullptr != (pBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_BOX, n))))
+            if (nullptr != (pBox = rPool.GetItem2(RES_BOX, n)))
                 InsColorLine(*pBox);
         }
     }
