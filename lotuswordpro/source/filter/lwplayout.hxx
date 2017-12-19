@@ -497,6 +497,7 @@ protected:
     void Read() override;
 protected:
     bool m_bGettingWrapType;
+    bool m_bGettingLayoutRelativity;
     sal_uInt8 m_nWrapType;
     sal_uInt8 m_nBuoyancy;
     sal_Int32 m_nBaseLineOffset;
