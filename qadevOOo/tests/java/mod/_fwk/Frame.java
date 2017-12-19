@@ -91,7 +91,7 @@ public class Frame extends TestCase {
     /**
      * Disposes the document created and finally disposes
      * the frame containing the document (for case when the frame
-     * contains no model after some interafce manipulations).
+     * contains no model after some interface manipulations).
      */
     @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {

@@ -231,7 +231,7 @@ namespace dbtools
         void clearParameters();
 
     private:
-        /// checkes whether the object is already initialized, and not yet disposed
+        /// checks whether the object is already initialized, and not yet disposed
         bool    isAlive() const { return m_xComponent.get().is() && m_xInnerParamUpdate.is(); }
 
         /** creates a filter expression from a master-detail link where the detail denotes a column name

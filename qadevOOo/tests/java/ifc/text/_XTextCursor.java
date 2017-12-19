@@ -222,7 +222,7 @@ public class _XTextCursor extends MultiMethodTest {
 
     /**
      * Restores the text of the component to the
-     * state it was before this interafce test.
+     * state it was before this interface test.
      */
     @Override
     public void after() {
