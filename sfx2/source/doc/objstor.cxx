@@ -368,8 +368,8 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 {
                     SvtSaveOptions aSaveOpt;
                     nDefVersion = aSaveOpt.GetODFDefaultVersion();
-                    bUseSHA1InODF12 = aSaveOpt.IsUseSHA1InODF12();
-                    bUseBlowfishInODF12 = aSaveOpt.IsUseBlowfishInODF12();
+                    bUseSHA1InODF12 = officecfg::Office::Common::Save::ODF::UseSHA1InODF12::get();
+                    bUseBlowfishInODF12 = officecfg::Office::Common::Save::ODF::UseBlowfishInODF12::get();
                 }
 
                 // the default values, that should be used for ODF1.1 and older formats
@@ -2631,7 +2631,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         return false;
     }
 
-    if (SfxItemState::SET != rItemSet.GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked())
+    if (SfxItemState::SET != rItemSet.GetItemState(SID_UNPACK) && officecfg::Office::Common::Save::Document::Unpacked::get())
         rItemSet.Put(SfxBoolItem(SID_UNPACK, false));
 
     OUString aTempFileURL;
