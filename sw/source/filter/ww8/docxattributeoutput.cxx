@@ -7603,7 +7603,7 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
 
     const SfxItemSet* pItems = GetExport().GetCurItemSet();
     const SvxFrameDirectionItem* rFrameDir = pItems?
-        static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) ): nullptr;
+        pItems->GetItem( RES_FRAMEDIR ) : nullptr;
 
     SvxFrameDirection nDir = SvxFrameDirection::Environment;
     if( rFrameDir != nullptr )

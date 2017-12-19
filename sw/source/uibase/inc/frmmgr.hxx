@@ -137,28 +137,28 @@ public:
 
 inline const Size& SwFlyFrameAttrMgr::GetSize() const
 {
-    return static_cast<const SwFormatFrameSize&>(m_aSet.Get(RES_FRM_SIZE)).GetSize();
+    return m_aSet.Get(RES_FRM_SIZE).GetSize();
 }
 
 inline const SwFormatVertOrient &SwFlyFrameAttrMgr::GetVertOrient() const
 {
-    return static_cast<const SwFormatVertOrient&>(m_aSet.Get(RES_VERT_ORIENT));
+    return m_aSet.Get(RES_VERT_ORIENT);
 }
 inline const SwFormatHoriOrient &SwFlyFrameAttrMgr::GetHoriOrient() const
 {
-    return static_cast<const SwFormatHoriOrient &>(m_aSet.Get(RES_HORI_ORIENT));
+    return m_aSet.Get(RES_HORI_ORIENT);
 }
 inline const SwFormatFrameSize& SwFlyFrameAttrMgr::GetFrameSize() const
 {
-    return static_cast<const SwFormatFrameSize&>(m_aSet.Get(RES_FRM_SIZE));
+    return m_aSet.Get(RES_FRM_SIZE);
 }
 inline const SvxShadowItem &SwFlyFrameAttrMgr::GetShadow() const
 {
-    return static_cast<const SvxShadowItem&>(m_aSet.Get(RES_SHADOW));
+    return m_aSet.Get(RES_SHADOW);
 }
 inline const SvxBoxItem &SwFlyFrameAttrMgr::GetBox() const
 {
-    return static_cast<const SvxBoxItem&>(m_aSet.Get(RES_BOX));
+    return m_aSet.Get(RES_BOX);
 }
 inline Point SwFlyFrameAttrMgr::GetPos() const
 {
@@ -166,7 +166,7 @@ inline Point SwFlyFrameAttrMgr::GetPos() const
 }
 inline RndStdIds SwFlyFrameAttrMgr::GetAnchor()  const
 {
-    return static_cast<const SwFormatAnchor&>(m_aSet.Get(RES_ANCHOR)).GetAnchorId();
+    return m_aSet.Get(RES_ANCHOR).GetAnchorId();
 }
 
 #endif

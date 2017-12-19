@@ -2037,8 +2037,8 @@ void SwHTMLWriter::CollectLinkTargets()
     nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_URL );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( nullptr != (pURL = static_cast<const SwFormatURL*>(pDoc->GetAttrPool().GetItem2(
-            RES_URL, n ) ) ) )
+        if( nullptr != (pURL = pDoc->GetAttrPool().GetItem2(
+            RES_URL, n ) ) )
         {
             AddLinkTarget( pURL->GetURL() );
             const ImageMap *pIMap = pURL->GetMap();

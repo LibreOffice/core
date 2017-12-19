@@ -105,7 +105,7 @@ public:
 };
 
 inline const SwFormatFrameSize &SwAttrSet::GetFrameSize(bool bInP) const
-    { return static_cast<const SwFormatFrameSize&>(Get( RES_FRM_SIZE,bInP)); }
+    { return Get( RES_FRM_SIZE,bInP); }
 
 inline const SwFormatFrameSize &SwFormat::GetFrameSize(bool bInP) const
     { return m_aSet.GetFrameSize(bInP); }

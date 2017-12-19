@@ -4867,7 +4867,7 @@ void SwHTMLParser::InsertSpacer()
 
             // create the frame
             RndStdIds eAnchorId =
-                static_cast<const SwFormatAnchor &>(aFrameSet.Get(RES_ANCHOR)).GetAnchorId();
+                aFrameSet.Get(RES_ANCHOR).GetAnchorId();
             SwFrameFormat *pFlyFormat = m_xDoc->MakeFlySection( eAnchorId,
                                             m_pPam->GetPoint(), &aFrameSet );
             // Possibly create frames and register auto-bound frames.
@@ -5129,7 +5129,7 @@ void SwHTMLParser::InsertLineBreak()
         {
             if( m_pCSS1Parser->SetFormatBreak( aItemSet, aPropInfo ) )
             {
-                aBreakItem = static_cast<const SvxFormatBreakItem &>(aItemSet.Get( RES_BREAK ));
+                aBreakItem = aItemSet.Get( RES_BREAK );
                 bBreakItem = true;
             }
             if( !aPropInfo.m_aId.isEmpty() )

@@ -2833,8 +2833,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             cannot export that, if it's ltr then that's ok as that is word's
             default. Otherwise we must add a RTL attribute to our export list
             */
-            const SvxFrameDirectionItem* pItem = static_cast<const SvxFrameDirectionItem*>(
-                rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR));
+            const SvxFrameDirectionItem* pItem =
+                rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
             if (
                 (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
                 aAttrIter.IsParaRTL()
@@ -3117,8 +3117,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         if ( rNd.IsContentNode() )
         {
             pSet = &rNd.GetContentNode()->GetSwAttrSet();
-            nRstLnNum = static_cast<const SwFormatLineNumber&>(pSet->Get(
-                            RES_LINENUMBER )).GetStartValue();
+            nRstLnNum = pSet->Get( RES_LINENUMBER ).GetStartValue();
         }
         else
             pSet = nullptr;

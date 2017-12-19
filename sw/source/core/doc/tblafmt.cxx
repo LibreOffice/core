@@ -764,13 +764,13 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
     }
     if( UPDATE_BOX & eFlags )
     {
-        pFormat->SetBox( static_cast<const SvxBoxItem&>(rSet.Get( RES_BOX )) );
+        pFormat->SetBox( rSet.Get( RES_BOX ) );
 // FIXME - add attribute IDs for the diagonal line items
 //        pFormat->SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
 //        pFormat->SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
-        pFormat->SetBackground( static_cast<const SvxBrushItem&>(rSet.Get( RES_BACKGROUND )) );
-        pFormat->SetTextOrientation(static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR)));
-        pFormat->SetVerticalAlignment(static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT)));
+        pFormat->SetBackground( rSet.Get( RES_BACKGROUND ) );
+        pFormat->SetTextOrientation(rSet.Get(RES_FRAMEDIR));
+        pFormat->SetVerticalAlignment(rSet.Get(RES_VERT_ORIENT));
 
         const SwTableBoxNumFormat* pNumFormatItem;
         const SvNumberformat* pNumFormat = nullptr;
@@ -938,15 +938,15 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
 
     const SfxItemSet &rSet = pFormat->GetAttrSet();
 
-    m_aBreak = static_cast<const SvxFormatBreakItem&>(rSet.Get(RES_BREAK));
-    m_aPageDesc = static_cast<const SwFormatPageDesc&>(rSet.Get(RES_PAGEDESC));
-    const SwFormatLayoutSplit &layoutSplit = static_cast<const SwFormatLayoutSplit&>(rSet.Get(RES_LAYOUT_SPLIT));
+    m_aBreak = rSet.Get(RES_BREAK);
+    m_aPageDesc = rSet.Get(RES_PAGEDESC);
+    const SwFormatLayoutSplit &layoutSplit = rSet.Get(RES_LAYOUT_SPLIT);
     m_bLayoutSplit = layoutSplit.GetValue();
-    m_bCollapsingBorders = static_cast<const SfxBoolItem&>(rSet.Get(RES_COLLAPSING_BORDERS)).GetValue();
+    m_bCollapsingBorders = rSet.Get(RES_COLLAPSING_BORDERS).GetValue();
 
-    m_aKeepWithNextPara = static_cast<const SvxFormatKeepItem&>(rSet.Get(RES_KEEP));
+    m_aKeepWithNextPara = rSet.Get(RES_KEEP);
     m_aRepeatHeading = table.GetRowsToRepeat();
-    m_aShadow = static_cast<const SvxShadowItem&>(rSet.Get(RES_SHADOW));
+    m_aShadow = rSet.Get(RES_SHADOW);
 }
 
 bool SwTableAutoFormat::FirstRowEndColumnIsRow()

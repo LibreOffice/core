@@ -5330,7 +5330,7 @@ sal_uInt16 SwTabFrame::GetBottomLineSize() const
 
 bool SwTabFrame::IsCollapsingBorders() const
 {
-    return static_cast<const SfxBoolItem&>(GetFormat()->GetAttrSet().Get( RES_COLLAPSING_BORDERS )).GetValue();
+    return GetFormat()->GetAttrSet().Get( RES_COLLAPSING_BORDERS ).GetValue();
 }
 
 /// Local helper function to calculate height of first text row
