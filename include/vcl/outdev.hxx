@@ -206,7 +206,7 @@ namespace o3tl
 }
 
 // DrawModes
-enum class DrawModeFlags : sal_uLong
+enum class DrawModeFlags : sal_uInt32
 {
     Default                = 0x00000000,
     BlackLine              = 0x00000001,
