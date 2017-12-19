@@ -283,8 +283,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
                 if( aPropInfo.m_bTextIndent )
                 {
                     short nTextIndent =
-                        static_cast<const SvxLRSpaceItem &>(aItemSet.Get( RES_LR_SPACE ))
-                                                        .GetTextFirstLineOfst();
+                        aItemSet.Get( RES_LR_SPACE ).GetTextFirstLineOfst();
                     aNumFormat.SetFirstLineOffset( nTextIndent );
                     bChangeNumFormat = true;
                 }

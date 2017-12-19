@@ -57,7 +57,7 @@ public:
 };
 
 inline const SwFormatWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(bool bInP) const
-    { return static_cast<const SwFormatWrapInfluenceOnObjPos&>(Get( RES_WRAP_INFLUENCE_ON_OBJPOS,bInP)); }
+    { return Get( RES_WRAP_INFLUENCE_ON_OBJPOS,bInP); }
 
  inline const SwFormatWrapInfluenceOnObjPos& SwFormat::GetWrapInfluenceOnObjPos(bool bInP) const
     { return m_aSet.GetWrapInfluenceOnObjPos(bInP); }

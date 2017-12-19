@@ -109,7 +109,7 @@ static bool lcl_FindAnchorPos(
     SfxItemSet& rSet )
 {
     bool bRet = true;
-    SwFormatAnchor aNewAnch( static_cast<const SwFormatAnchor&>(rSet.Get( RES_ANCHOR )) );
+    SwFormatAnchor aNewAnch( rSet.Get( RES_ANCHOR ) );
     RndStdIds nNew = aNewAnch.GetAnchorId();
     const SwFrame *pNewAnch;
 
@@ -206,7 +206,7 @@ bool sw_ChkAndSetNewAnchor(
     const SwFormatAnchor &rOldAnch = rFormat.GetAnchor();
     const RndStdIds nOld = rOldAnch.GetAnchorId();
 
-    RndStdIds nNew = static_cast<const SwFormatAnchor&>(rSet.Get( RES_ANCHOR )).GetAnchorId();
+    RndStdIds nNew = rSet.Get( RES_ANCHOR ).GetAnchorId();
 
     if( nOld == nNew )
         return false;
@@ -644,7 +644,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
 
     const SwPosition& rPos = *pCursor->Start();
 
-    SwFormatAnchor& rAnch = const_cast<SwFormatAnchor&>(static_cast<const SwFormatAnchor&>(rSet.Get( RES_ANCHOR )));
+    SwFormatAnchor& rAnch = const_cast<SwFormatAnchor&>(rSet.Get( RES_ANCHOR ));
     RndStdIds eRndId = rAnch.GetAnchorId();
     switch( eRndId )
     {
@@ -1103,7 +1103,7 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     StartAllAction();
     if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))
     {
-        RndStdIds nNew = static_cast<const SwFormatAnchor&>(rSet.Get( RES_ANCHOR )).GetAnchorId();
+        RndStdIds nNew = rSet.Get( RES_ANCHOR ).GetAnchorId();
         if ( nNew != pFormat->GetAnchor().GetAnchorId() )
         {
             ChgAnchor( nNew );

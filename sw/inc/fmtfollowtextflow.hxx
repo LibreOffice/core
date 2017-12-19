@@ -45,7 +45,7 @@ public:
 };
 
 inline const SwFormatFollowTextFlow &SwAttrSet::GetFollowTextFlow(bool bInP) const
-    { return static_cast<const SwFormatFollowTextFlow&>(Get( RES_FOLLOW_TEXT_FLOW, bInP )); }
+    { return Get( RES_FOLLOW_TEXT_FLOW, bInP ); }
 
 inline const SwFormatFollowTextFlow &SwFormat::GetFollowTextFlow(bool bInP) const
     { return m_aSet.GetFollowTextFlow( bInP ); }

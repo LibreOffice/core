@@ -76,7 +76,7 @@ public:
 };
 
 inline const SwFormatAnchor &SwAttrSet::GetAnchor(bool bInP) const
-    { return static_cast<const SwFormatAnchor&>(Get(RES_ANCHOR, bInP)); }
+    { return Get(RES_ANCHOR, bInP); }
 
  inline const SwFormatAnchor &SwFormat::GetAnchor(bool bInP) const
      { return m_aSet.GetAnchor(bInP); }
