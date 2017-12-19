@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2006221d",
+        "filename": "extras/source/autocorr/emoji/emoji.ulf",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-19T09:11:23Z",
+      "side": 1,
+      "message": "was this empty line added by mistake?",
+      "revId": "87ada8fe44c6caf21f1fd9a0f78aa2c26f1607f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
