@@ -43,7 +43,7 @@ public:
 };
 
 inline const SwFormatEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const
-    { return static_cast<const SwFormatEditInReadonly&>(Get( RES_EDIT_IN_READONLY,bInP)); }
+    { return Get( RES_EDIT_IN_READONLY,bInP); }
 
 inline const SwFormatEditInReadonly &SwFormat::GetEditInReadonly(bool bInP) const
     { return m_aSet.GetEditInReadonly(bInP); }

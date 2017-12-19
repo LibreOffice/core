@@ -408,8 +408,8 @@ public:
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 
     //ICoreStyle
-    virtual void SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem) override;
-    virtual const SfxPoolItem* GetItem(enum RES_FRMATR eAtr) override;
+    virtual void SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem) override;
+    virtual const SfxPoolItem* GetItem(sal_uInt16 eAtr) override;
     virtual css::document::XEventsSupplier& GetEventsSupplier() override
             { return *this; };
 };
@@ -3289,8 +3289,9 @@ SwXFrameStyle::SwXFrameStyle(SwDoc *pDoc)
     : SwXStyle(pDoc, SfxStyleFamily::Frame, false)
 { }
 
-void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
+void SwXFrameStyle::SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem)
 {
+    assert(eAtr >= RES_FRMATR_BEGIN && eAtr < RES_FRMATR_END);
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
         return;
@@ -3301,8 +3302,9 @@ void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
     xStyle->SetItemSet(aSet);
 }
 
-const SfxPoolItem* SwXFrameStyle::GetItem(enum RES_FRMATR eAtr)
+const SfxPoolItem* SwXFrameStyle::GetItem(sal_uInt16 eAtr)
 {
+    assert(eAtr >= RES_FRMATR_BEGIN && eAtr < RES_FRMATR_END);
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
         return nullptr;

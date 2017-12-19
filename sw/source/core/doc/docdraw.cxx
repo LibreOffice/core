@@ -110,7 +110,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
             const SvxFrameDirectionItem& rDirItem =
-                static_cast<const SvxFrameDirectionItem&>(_pFrameFormat->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR ));
+                _pFrameFormat->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR );
             switch ( rDirItem.GetValue() )
             {
                 case SvxFrameDirection::Vertical_LR_TB:
