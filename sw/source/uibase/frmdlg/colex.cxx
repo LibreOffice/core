@@ -44,8 +44,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
     if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR))
     {
-        const SvxFrameDirectionItem& rDirItem =
-                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
+        const SvxFrameDirectionItem& rDirItem = rSet.Get(RES_FRAMEDIR);
         m_bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
                     rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
     }
@@ -128,7 +127,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             if(SfxItemState::SET == rHeaderSet.GetItemState(RES_BACKGROUND))
             {
                 // create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
-                const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(RES_BACKGROUND));
+                const SvxBrushItem& rItem = rHeaderSet.Get(RES_BACKGROUND);
                 SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
@@ -166,7 +165,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             if( rFooterSet.GetItemState( RES_BACKGROUND ) == SfxItemState::SET )
             {
                 // create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
-                const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rFooterSet.Get(RES_BACKGROUND));
+                const SvxBrushItem& rItem = rFooterSet.Get(RES_BACKGROUND);
                 SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
@@ -612,7 +611,7 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     DELETEZ(pGridItem);
     //get the grid information
     if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID))
-        pGridItem = static_cast<SwTextGridItem*>(static_cast<const SwTextGridItem&>(rSet.Get(RES_TEXTGRID)).Clone());
+        pGridItem = static_cast<SwTextGridItem*>(rSet.Get(RES_TEXTGRID).Clone());
     SwPageExample::UpdateExample(rSet);
 }
 

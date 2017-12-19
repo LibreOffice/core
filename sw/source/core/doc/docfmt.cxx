@@ -1353,7 +1353,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
 {
     // Treat the header and footer attributes in the right way:
     // Copy content nodes across documents!
-    sal_uInt16 nAttr = static_cast<sal_uInt16>( bCpyHeader ? RES_HEADER : RES_FOOTER );
+    sal_uInt16 nAttr = bCpyHeader ? sal_uInt16(RES_HEADER) : sal_uInt16(RES_FOOTER);
     const SfxPoolItem* pItem;
     if( SfxItemState::SET != rSrcFormat.GetAttrSet().GetItemState( nAttr, false, &pItem ))
         return ;

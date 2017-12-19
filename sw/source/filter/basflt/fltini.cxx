@@ -307,7 +307,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
             MINFLY > static_cast<const SwFormatFrameSize*>(pItem)->GetWidth() )
     {
-        SwFormatFrameSize aSz(static_cast<const SwFormatFrameSize&>(rFlySet.Get(RES_FRM_SIZE)));
+        SwFormatFrameSize aSz(rFlySet.Get(RES_FRM_SIZE));
         if (pItem)
             aSz = static_cast<const SwFormatFrameSize&>(*pItem);
 
@@ -320,8 +320,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         else
             nWidth = nPageWidth;
 
-        const SwNodeIndex* pSttNd = static_cast<const SwFormatContent&>(rFlySet.Get( RES_CNTNT )).
-                                                                GetContentIdx();
+        const SwNodeIndex* pSttNd = rFlySet.Get( RES_CNTNT ).GetContentIdx();
         if( pSttNd )
         {
             bool bOnlyOneNode = true;
@@ -366,7 +365,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                 }
 
                 // consider border and distance to content
-                const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rFlySet.Get( RES_BOX ));
+                const SvxBoxItem& rBoxItem = rFlySet.Get( RES_BOX );
                 SvxBoxItemLine nLine = SvxBoxItemLine::LEFT;
                 for( int i = 0; i < 2; ++i )
                 {
