@@ -1335,13 +1335,12 @@ void SwHTMLParser::StripTrailingPara()
     bool bSetSmallFont = false;
 
     SwContentNode* pCNd = m_pPam->GetContentNode();
+    sal_uLong nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
     if( !m_pPam->GetPoint()->nContent.GetIndex() )
     {
-        if( pCNd && pCNd->StartOfSectionIndex()+2 <
-            pCNd->EndOfSectionIndex() )
+        if( pCNd && pCNd->StartOfSectionIndex() + 2 <
+            pCNd->EndOfSectionIndex() && CanRemoveNode(nNodeIdx))
         {
-            sal_uLong nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
-
             const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
 
             for( auto pFormat : rFrameFormatTable )

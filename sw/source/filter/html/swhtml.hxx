@@ -860,6 +860,8 @@ private:
 
     // Remove empty paragraph at the PaM position
     void StripTrailingPara();
+    // If removing an empty node would corrupt the document
+    bool CanRemoveNode(sal_uLong nNodeIdx) const;
 
     // Are there fly frames in the current paragraph?
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,
