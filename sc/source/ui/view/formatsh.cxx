@@ -1004,6 +1004,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     {
         switch ( nSlot )
         {
+            case SID_NUMBER_TYPE_FORMAT:
             case SID_NUMBER_TWODEC:
             case SID_NUMBER_SCIENTIFIC:
             case SID_NUMBER_DATE:
