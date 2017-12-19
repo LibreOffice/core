@@ -259,18 +259,15 @@ RES_FRMATR_END
 #define RES_UNKNOWNATR_END (151)
 
 // Format IDs
-enum RES_FMT
-{
-RES_FMT_BEGIN = RES_UNKNOWNATR_END,
-    RES_CHRFMT = RES_FMT_BEGIN,                     // 151
-    RES_FRMFMT,                                     // 152
-    RES_FLYFRMFMT,                                  // 153
-    RES_TXTFMTCOLL,                                 // 154
-    RES_GRFFMTCOLL,                                 // 155
-    RES_DRAWFRMFMT,                                 // 156
-    RES_CONDTXTFMTCOLL,                             // 157
-RES_FMT_END
-};
+#define RES_FMT_BEGIN RES_UNKNOWNATR_END
+#define     RES_CHRFMT                TypedWhichId<SwCharFormat>(RES_FMT_BEGIN)  // 151
+#define     RES_FRMFMT                TypedWhichId<SwFrameFormat>(152)
+#define     RES_FLYFRMFMT             TypedWhichId<SwFlyFrameFormat>(153)
+#define     RES_TXTFMTCOLL            TypedWhichId<SwTextFormatColl>(154)
+#define     RES_GRFFMTCOLL            TypedWhichId<SwGrfFormatColl>(155)
+#define     RES_DRAWFRMFMT            TypedWhichId<SwDrawFrameFormat>(156)
+#define     RES_CONDTXTFMTCOLL        TypedWhichId<SwConditionTextFormatColl>(157)
+#define RES_FMT_END 158
 
 // ID's for Messages in the Formats
 #define RES_MSG_BEGIN RES_FMT_END

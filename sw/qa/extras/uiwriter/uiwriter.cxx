@@ -1111,14 +1111,14 @@ void SwUiWriterTest::testShapeTextboxSelect()
     SdrObject* pObject = pPage->GetObj(1);
     SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
     // First, make sure that pTextBox is a fly frame (textbox of a shape).
-    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFormat()->Which()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_FLYFRMFMT), pTextBox->GetFormat()->Which());
 
     // Then select it.
     pWrtShell->SelectObj(Point(), 0, pObject);
     const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
     SwDrawContact* pShape = static_cast<SwDrawContact*>(rMarkList.GetMark(0)->GetMarkedSdrObj()->GetUserCall());
     // And finally make sure the shape got selected, not just the textbox itself.
-    CPPUNIT_ASSERT_EQUAL(RES_DRAWFRMFMT, static_cast<RES_FMT>(pShape->GetFormat()->Which()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_DRAWFRMFMT), pShape->GetFormat()->Which());
 }
 
 void SwUiWriterTest::testShapeTextboxDelete()
@@ -4569,7 +4569,7 @@ void SwUiWriterTest::testTdf84695()
     SdrObject* pObject = pPage->GetObj(1);
     SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
     // First, make sure that pTextBox is a fly frame (textbox of a shape).
-    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFormat()->Which()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_FLYFRMFMT), pTextBox->GetFormat()->Which());
 
     // Then select it.
     pWrtShell->SelectObj(Point(), 0, pObject);
@@ -4593,7 +4593,7 @@ void SwUiWriterTest::testTdf84695NormalChar()
     SdrObject* pObject = pPage->GetObj(1);
     SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
     // First, make sure that pTextBox is a fly frame (textbox of a shape).
-    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFormat()->Which()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_FLYFRMFMT), pTextBox->GetFormat()->Which());
 
     // Then select it.
     pWrtShell->SelectObj(Point(), 0, pObject);
@@ -4616,7 +4616,7 @@ void SwUiWriterTest::testTdf84695Tab()
     SdrObject* pObject = pPage->GetObj(0);
     SwContact* pShape = static_cast<SwContact*>(pObject->GetUserCall());
     // First, make sure that pShape is a draw shape.
-    CPPUNIT_ASSERT_EQUAL(RES_DRAWFRMFMT, static_cast<RES_FMT>(pShape->GetFormat()->Which()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_DRAWFRMFMT), pShape->GetFormat()->Which());
 
     // Then select it.
     pWrtShell->SelectObj(Point(), 0, pObject);
