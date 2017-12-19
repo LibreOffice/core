@@ -1279,8 +1279,9 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
-static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, RES_FMT eType)
+static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, sal_uInt16 eType)
 {
+    assert(eType >= RES_FMT_BEGIN && eType < RES_FMT_END);
     if( pDoc->IsInMailMerge())
     {
         OUString newName = "MailMergeFly"
