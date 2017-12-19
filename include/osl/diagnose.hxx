@@ -65,9 +65,6 @@ SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
 // that would break binary compatibility.
 #ifdef __clang__
 #pragma clang diagnostic push
-// Guard against slightly older clang versions that don't have
-// -Wreturn-type-c-linkage...
-#pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
 
