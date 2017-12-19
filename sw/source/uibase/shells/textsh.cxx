@@ -867,7 +867,7 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
 
     // Delete minimum size in columns.
     SvxBoxInfoItem aBoxInfo(aSet.Get(SID_ATTR_BORDER_INNER));
-    const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
+    const SvxBoxItem& rBox = aSet.Get(RES_BOX);
     aBoxInfo.SetMinDist(false);
     aBoxInfo.SetDefDist(rBox.GetDistance(SvxBoxItemLine::LEFT));
     aSet.Put(aBoxInfo);

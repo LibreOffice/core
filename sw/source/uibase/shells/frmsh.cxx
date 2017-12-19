@@ -168,7 +168,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 SfxItemSet aSet(GetPool(),svl::Items<RES_COL,RES_COL>{});
                 rSh.GetFlyFrameAttr( aSet );
-                SwFormatCol aCol(static_cast<const SwFormatCol&>(aSet.Get(RES_COL)));
+                SwFormatCol aCol(aSet.Get(RES_COL));
                 // GutterWidth will not always passed, hence get firstly
                 // (see view2: Execute on this slot)
                 sal_uInt16 nGutterWidth = aCol.GetGutterWidth();
@@ -203,7 +203,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
                 rSh.GetFlyFrameAttr( aSet );
-                SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+                SwFormatURL aURL( aSet.Get( RES_URL ) );
 
                 OUString sOldName(rHLinkItem.GetName().toAsciiUpperCase());
                 OUString sFlyName(rSh.GetFlyName().toAsciiUpperCase());
@@ -457,7 +457,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
                 // On % values initialize size
-                SwFormatFrameSize& rSize = const_cast<SwFormatFrameSize&>(static_cast<const SwFormatFrameSize&>(aSet.Get(RES_FRM_SIZE)));
+                SwFormatFrameSize& rSize = const_cast<SwFormatFrameSize&>(aSet.Get(RES_FRM_SIZE));
                 if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrameSize::SYNCED)
                     rSize.SetWidth(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width());
                 if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrameSize::SYNCED)
@@ -999,13 +999,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
     // At first pick the default BoxItem out of the pool.
     // If unequal to regular box item, then it has already
     // been changed (New one is no default).
-    const SvxBoxItem* pPoolBoxItem = static_cast<const SvxBoxItem*>(::GetDfltAttr(RES_BOX));
+    const SvxBoxItem* pPoolBoxItem = ::GetDfltAttr(RES_BOX);
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     SfxItemSet aFrameSet(rSh.GetAttrPool(), svl::Items<RES_BOX, RES_BOX>{});
 
     rSh.GetFlyFrameAttr( aFrameSet );
-    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aFrameSet.Get(RES_BOX));
+    const SvxBoxItem& rBoxItem = aFrameSet.Get(RES_BOX);
 
     if (pPoolBoxItem == &rBoxItem)
         bDefault = true;
@@ -1198,7 +1198,7 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 
             rSh.GetFlyFrameAttr(aFrameSet);
 
-            const SvxBorderLine* pLine = static_cast<const SvxBoxItem&>(aFrameSet.Get(RES_BOX)).GetTop();
+            const SvxBorderLine* pLine = aFrameSet.Get(RES_BOX).GetTop();
             rSet.Put(SvxColorItem(pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR));
         }
     }

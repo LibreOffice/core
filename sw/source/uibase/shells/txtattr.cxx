@@ -720,7 +720,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 eState = aCoreSet.GetItemState(RES_LR_SPACE);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aCoreSet.Get( RES_LR_SPACE ) );
+                    SvxLRSpaceItem aLR = aCoreSet.Get( RES_LR_SPACE );
                     aLR.SetWhich(nSlot);
                     rSet.Put(aLR);
                 }
@@ -746,7 +746,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     aCoreSet.GetItemState( RES_FRAMEDIR, false ) >= SfxItemState::DEFAULT)
                     {
                         SvxFrameDirection eFrameDir =
-                                static_cast<const SvxFrameDirectionItem& >(aCoreSet.Get(RES_FRAMEDIR)).GetValue();
+                                aCoreSet.Get(RES_FRAMEDIR).GetValue();
                         if (SvxFrameDirection::Environment == eFrameDir)
                         {
                             eFrameDir = rSh.IsInRightToLeftText() ?
