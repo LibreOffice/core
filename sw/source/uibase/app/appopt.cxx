@@ -342,8 +342,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     // Background only in WebDialog
     if(SfxItemState::SET == rSet.GetItemState(RES_BACKGROUND))
     {
-        const SvxBrushItem& rBrushItem = static_cast<const SvxBrushItem&>(rSet.Get(
-                                RES_BACKGROUND));
+        const SvxBrushItem& rBrushItem = rSet.Get(RES_BACKGROUND);
         aViewOpt.SetRetoucheColor( rBrushItem.GetColor() );
     }
 

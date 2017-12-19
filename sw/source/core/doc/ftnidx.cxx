@@ -283,8 +283,8 @@ SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFnd
 const SwSectionNode* SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr(
                 const SwTextFootnote& rTextFootnote )
 {
-    sal_uInt16 nWh = static_cast<sal_uInt16>( rTextFootnote.GetFootnote().IsEndNote() ?
-                        RES_END_AT_TXTEND : RES_FTN_AT_TXTEND );
+    sal_uInt16 nWh = rTextFootnote.GetFootnote().IsEndNote() ?
+                        sal_uInt16(RES_END_AT_TXTEND) : sal_uInt16(RES_FTN_AT_TXTEND);
     sal_uInt16 nVal;
     const SwSectionNode* pNd = rTextFootnote.GetTextNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =

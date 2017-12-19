@@ -408,8 +408,8 @@ public:
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 
     //ICoreStyle
-    virtual void SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem) override;
-    virtual const SfxPoolItem* GetItem(enum RES_FRMATR eAtr) override;
+    virtual void SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem) override;
+    virtual const SfxPoolItem* GetItem(sal_uInt16 eAtr) override;
     virtual css::document::XEventsSupplier& GetEventsSupplier() override
             { return *this; };
 };
@@ -1635,7 +1635,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPro
         SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, aValue, o_rStyleBase);
 }
 template<>
-void SwXStyle::SetPropertyValue<RES_BACKGROUND>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
@@ -3289,8 +3289,9 @@ SwXFrameStyle::SwXFrameStyle(SwDoc *pDoc)
     : SwXStyle(pDoc, SfxStyleFamily::Frame, false)
 { }
 
-void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
+void SwXFrameStyle::SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem)
 {
+    assert(eAtr >= RES_FRMATR_BEGIN && eAtr < RES_FRMATR_END);
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
         return;
@@ -3301,8 +3302,9 @@ void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
     xStyle->SetItemSet(aSet);
 }
 
-const SfxPoolItem* SwXFrameStyle::GetItem(enum RES_FRMATR eAtr)
+const SfxPoolItem* SwXFrameStyle::GetItem(sal_uInt16 eAtr)
 {
+    assert(eAtr >= RES_FRMATR_BEGIN && eAtr < RES_FRMATR_END);
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
         return nullptr;
