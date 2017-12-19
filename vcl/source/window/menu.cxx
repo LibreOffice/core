@@ -122,7 +122,7 @@ void ImplClosePopupToolBox( const VclPtr<vcl::Window>& pWin )
 }
 
 // TODO: Move to common code with the same function in toolbox
-// Draw the ">>" - more indictor at the coordinates
+// Draw the ">>" - more indicator at the coordinates
 void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
