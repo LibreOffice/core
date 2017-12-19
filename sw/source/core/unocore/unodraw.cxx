@@ -1145,7 +1145,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 // #i26791# - special handling for property FN_TEXT_RANGE
                 else if ( FN_TEXT_RANGE == pEntry->nWID )
                 {
-                    SwFormatAnchor aAnchor( static_cast<const SwFormatAnchor&>(aSet.Get( RES_ANCHOR )) );
+                    SwFormatAnchor aAnchor( aSet.Get( RES_ANCHOR ) );
                     if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
                     {
                         // set property <TextRange> not valid for to-page anchored shapes

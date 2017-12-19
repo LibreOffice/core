@@ -1639,16 +1639,14 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     const SfxItemSet& rOldSet = pSdrObj->GetMergedItemSet();
 
     // some Items can be taken over directly
-    const sal_uInt16 nDirectMatch = 2;
-    static RES_FRMATR const aDirectMatch[ nDirectMatch ] =
+    static sal_uInt16 const aDirectMatch[]
     {
         RES_LR_SPACE,   // outer spacing left/right: SvxLRSpaceItem
         RES_UL_SPACE    // outer spacing top/bottom: SvxULSpaceItem
     };
     const SfxPoolItem* pPoolItem;
-    for(RES_FRMATR i : aDirectMatch)
-        if( SfxItemState::SET == rOldSet.GetItemState(
-                    static_cast< sal_uInt16 >(i), false, &pPoolItem) )
+    for(sal_uInt16 i : aDirectMatch)
+        if( SfxItemState::SET == rOldSet.GetItemState(i, false, &pPoolItem) )
         {
             rFlySet.Put( *pPoolItem );
         }
@@ -1713,7 +1711,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     }
     else // If a size is set, adjust it to consider border thickness
     {
-        SwFormatFrameSize aSize = static_cast<const SwFormatFrameSize &>(rFlySet.Get(RES_FRM_SIZE));
+        SwFormatFrameSize aSize = rFlySet.Get(RES_FRM_SIZE);
 
         SwFormatFrameSize aNewSize = SwFormatFrameSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
             aSize.GetWidth()  + 2*nOutside,
@@ -1726,13 +1724,11 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     // graphic in relation to the top left inside the border. We don't
     if (nOutside)
     {
-        SwFormatHoriOrient aHori = static_cast<const SwFormatHoriOrient &>(rFlySet.Get(
-            RES_HORI_ORIENT));
+        SwFormatHoriOrient aHori = rFlySet.Get(RES_HORI_ORIENT);
         aHori.SetPos(MakeSafePositioningValue(aHori.GetPos()-nOutside));
         rFlySet.Put(aHori);
 
-        SwFormatVertOrient aVert = static_cast<const SwFormatVertOrient &>(rFlySet.Get(
-            RES_VERT_ORIENT));
+        SwFormatVertOrient aVert = rFlySet.Get(RES_VERT_ORIENT);
         aVert.SetPos(aVert.GetPos()-nOutside);
         rFlySet.Put(aVert);
     }

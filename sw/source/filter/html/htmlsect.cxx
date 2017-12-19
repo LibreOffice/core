@@ -760,7 +760,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    const OUString& rName )
 {
     RndStdIds eAnchorId =
-        static_cast<const SwFormatAnchor&>(rItemSet.Get( RES_ANCHOR )).GetAnchorId();
+        rItemSet.Get( RES_ANCHOR ).GetAnchorId();
 
     // create frame
     SwFlyFrameFormat* pFlyFormat = m_xDoc->MakeFlySection( eAnchorId, m_pPam->GetPoint(),
