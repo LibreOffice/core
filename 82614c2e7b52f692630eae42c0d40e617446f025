@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e046da4d",
+        "filename": "sal/qa/rtl/alloc/rtl_alloc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-19T09:53:41Z",
+      "side": 1,
+      "message": "or normalize to \"../../../rtl/strimp.hxx\"",
+      "revId": "82614c2e7b52f692630eae42c0d40e617446f025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
