@@ -221,7 +221,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                     {
                         if( xChartTypeProps->getPropertyValue( aPropName ) >>= aBarPositionSequence )
                         {
-                            bool bGroupBarsPerAxis =  static_cast< const SfxBoolItem & >(rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS )).GetValue();
+                            bool bGroupBarsPerAxis =  rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS ).GetValue();
                             if(!bGroupBarsPerAxis)
                             {
                                 //set the same value for all axes
