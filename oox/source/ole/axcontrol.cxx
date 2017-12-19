@@ -270,6 +270,15 @@ void ControlConverter::convertPicture( PropertyMap& rPropMap, const StreamDataSe
     }
 }
 
+void ControlConverter::convertToPicture( PropertySet& rPropSet, const StreamDataSequence& rPicData ) const
+{
+    OUString aGraphicUrl;
+    if( rPropSet.getProperty( aGraphicUrl, PROP_ImageURL ) )
+    {
+        mrGraphicHelper.exportGraphicObject( rPicData, aGraphicUrl ); // TODO : define exportGraphicObject(...) in GraphicHelper.cxx
+    }
+}
+
 void ControlConverter::convertOrientation( PropertyMap& rPropMap, bool bHorizontal )
 {
     sal_Int32 nScrollOrient = bHorizontal ? ScrollBarOrientation::HORIZONTAL : ScrollBarOrientation::VERTICAL;
@@ -479,6 +488,33 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
         default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture position" );
     }
     rPropMap.setProperty( PROP_ImagePosition, nImagePos );
+}
+
+void ControlConverter::convertToAxPicture( PropertySet& rPropSet, const StreamDataSequence& rPicData, sal_uInt32& nPicPos ) const
+{
+    // the picture
+    convertToPicture( rPropSet, rPicData );
+
+    // picture position
+    sal_Int16 nImagePos;
+    rPropSet.GetProperty( nImagePos, PROP_ImagePosition );
+    switch( nImagePos )
+    {
+        case ImagePosition::LeftTop:     nPicPos = AX_PICPOS_LEFTTOP;     break;
+        case ImagePosition::LeftCenter: nPicPos = AX_PICPOS_LEFTCENTER;  break;
+        case ImagePosition::LeftBottom:  nPicPos = AX_PICPOS_LEFTBOTTOM;  break;
+        case ImagePosition::RightTop:    nPicPos = AX_PICPOS_RIGHTTOP;    break;
+        case ImagePosition::RightCenter: nPicPos = AX_PICPOS_RIGHTCENTER; break;
+        case ImagePosition::RightBottom: nPicPos = AX_PICPOS_RIGHTBOTTOM; break;
+        case ImagePosition::AboveLeft:   nPicPos = AX_PICPOS_ABOVELEFT;   break;
+        case ImagePosition::AboveCenter: nPicPos = AX_PICPOS_ABOVECENTER; break;
+        case ImagePosition::AboveRight:  nPicPos = AX_PICPOS_ABOVERIGHT;  break;
+        case ImagePosition::BelowLeft:   nPicPos = AX_PICPOS_BELOWLEFT;   break;
+        case ImagePosition::BelowCenter: nPicPos = AX_PICPOS_BELOWCENTER; break;
+        case ImagePosition::BelowRight:  nPicPos = AX_PICPOS_BELOWRIGHT;  break;
+        case ImagePosition::Centered:      nPicPos = AX_PICPOS_CENTER;    break;
+        default:    OSL_FAIL( "ControlConverter::convertToAxPicture - unknown picture position" );
+    }
 }
 
 void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamDataSequence& rPicData,
@@ -1013,7 +1049,10 @@ void AxCommandButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); // pict pos
     aWriter.writePairProperty( maSize );
     aWriter.skipProperty(); // mouse pointer
-    aWriter.skipProperty(); // picture data
+    if ( maPictureData )
+        aWriter.writePictureProperty( maPictureData ); // picture data
+    else
+        aWriter.skipProperty();
     aWriter.skipProperty(); // accelerator
     aWriter.writeBoolProperty( mbFocusOnClick ); // binary flag means "do not take focus"
     aWriter.skipProperty(); // mouse icon
@@ -1077,6 +1116,7 @@ void AxCommandButtonModel::convertFromProperties( PropertySet& rPropSet, const C
     ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
+    ControlConverter::convertToAxPicture(rPropSet, maPictureData, mnPicturePos );
     AxFontDataModel::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1284,7 +1324,7 @@ void AxImageModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.writeIntProperty< sal_uInt8 >( mnPicSizeMode );
     aWriter.writeIntProperty< sal_uInt8 >( mnSpecialEffect );
     aWriter.writePairProperty( maSize );
-    aWriter.skipProperty(); //maPictureData );
+    aWriter.skipProperty(); //maPictureData
     aWriter.writeIntProperty< sal_uInt8 >( mnPicAlign );
     aWriter.writeBoolProperty( mbPicTiling );
     aWriter.writeIntProperty< sal_uInt32 >( mnFlags );

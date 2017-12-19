@@ -140,6 +140,10 @@ private:
     /** Stream property for a picture or mouse icon. */
     struct PictureProperty : public ComplexProperty
     {
+        StreamDataSequence& mrPicData;
+
+        explicit            PictureProperty( StreamDataSequence& rPicData ) :
+                                mrPicData( rPicData ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
     };
 

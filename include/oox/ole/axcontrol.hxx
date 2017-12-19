@@ -230,6 +230,10 @@ public:
                             PropertyMap& rPropMap,
                             const StreamDataSequence& rPicData ) const;
 
+    static void         convertToPicture(
+                            PropertySet const & rPropSet,
+                            const StreamDataSequence& rPicData ) const;
+
     /** Converts the control orientation to UNO properties. */
     static void         convertOrientation(
                             PropertyMap& rPropMap,
@@ -301,6 +305,11 @@ public:
                             PropertyMap& rPropMap,
                             const StreamDataSequence& rPicData,
                             sal_uInt32 nPicPos ) const;
+
+    void                convertToAxPicture(
+                            PropertySet const & rPropSet,
+                            const StreamDataSequence& rPicData,
+                            sal_uInt32& nPicPos ) const;
 
     /** Converts the passed picture stream and Forms 2.0 position to UNO
         properties. */
