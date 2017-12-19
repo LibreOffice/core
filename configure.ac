@@ -6061,6 +6061,36 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             CXXFLAGS="$CXXFLAGS -DSYSTEM_LIBCMIS $LIBCMIS_CFLAGS"
         fi
         AC_LANG_PUSH([C++])
+        dnl Clang 3.9 supports __float128 since
+        dnl <http://llvm.org/viewvc/llvm-project?view=revision&revision=268898> "Enable support for
+        dnl __float128 in Clang and enable it on pertinent platforms", but Clang 3.8 may need a
+        dnl hacky workaround to be able to include <vector> (as is done in the main check whether
+        dnl $flag is supported below, so check this first):
+        my_float128hack=
+        my_float128hack_impl=-D__float128=void
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+            #include <vector>
+            // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
+            // (__float128)
+            ]])
+        ],,[
+            dnl The only reason why libstdc++ headers fail with Clang in C++11 mode is because they
+            dnl use the __float128 type that Clang doesn't know (libstdc++ checks whether __float128
+            dnl is available during its build, but it's usually built using GCC, and so c++config.h
+            dnl hardcodes __float128 being supported). At least for some older libstc++, the only
+            dnl place where __float128 is used is in a template specialization, -D__float128=void
+            dnl will avoid the problem there while still causing a problem if somebody actually uses
+            dnl the type. (But some later libstdc++ are known to use __float128 also in algorithm ->
+            dnl bits/stl_alog.h -> cstdlib -> bits/std_abs.h, in a way that unfortunately cannot be
+            dnl "fixed" with this hack):
+            CXXFLAGS="$CXXFLAGS $my_float128hack_impl"
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+                #include <vector>
+                // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
+                // (__float128)
+                ]])
+            ],[my_float128hack=$my_float128hack_impl])
+        ])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
             #include <algorithm>
             #include <functional>
@@ -6091,7 +6121,7 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                 std::sort(v.begin(), v.end(), fn);
             }
-            ]])],[CXXFLAGS_CXX11=$flag])
+            ]])],[CXXFLAGS_CXX11=$flag $my_float128hack])
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
         if test -n "$CXXFLAGS_CXX11"; then
@@ -6106,6 +6136,7 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_MSG_ERROR(no)
     fi
 fi
+AC_SUBST(CXXFLAGS_CXX11)
 
 dnl Test for temporarily incompatible libstdc++ 4.7.{0,1}, where
 dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=179528> introduced
@@ -6166,51 +6197,6 @@ return !(i != 0 && j != 0);
     [ AC_MSG_ERROR(no)])
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
-
-dnl Clang 3.9 supports __float128 since
-dnl <http://llvm.org/viewvc/llvm-project?view=revision&revision=268898> "Enable support for
-dnl __float128 in Clang and enable it on pertinent platforms":
-AC_MSG_CHECKING([whether $CXX supports C++11 without __float128 compile error])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <vector>
-    // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
-    // (__float128)
-]])
-    ],[ AC_MSG_RESULT(yes) ],
-    [
-        AC_MSG_RESULT(no)
-        # The only reason why libstdc++ headers fail with Clang in C++11 mode is because
-        # they use the __float128 type that Clang doesn't know (libstdc++ checks whether
-        # __float128 is available during its build, but it's usually built using GCC,
-        # and so c++config.h hardcodes __float128 being supported). As the only place
-        # where __float128 is actually used is in a template specialization,
-        # -D__float128=void will avoid the problem there while still causing a problem
-        # if somebody actually uses the type.
-        AC_MSG_CHECKING([whether -D__float128=void workaround helps])
-        CXXFLAGS="$CXXFLAGS -D__float128=void"
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <vector>
-    // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
-    // (__float128)
-]])
-    ],
-    [
-     AC_MSG_RESULT(yes)
-     CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -D__float128=void"
-    ],
-    [
-     AC_MSG_ERROR(no)
-    ])
-])
-
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-
-AC_SUBST(CXXFLAGS_CXX11)
 
 AC_MSG_CHECKING([whether $CXX supports C++14 constexpr])
 save_CXXFLAGS=$CXXFLAGS
