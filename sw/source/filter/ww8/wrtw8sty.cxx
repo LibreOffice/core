@@ -974,7 +974,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     const SwNode* pNd = rExport.m_pCurPam->GetContentNode();
     const SfxItemSet* pSet = pNd ? &static_cast<const SwContentNode*>(pNd)->GetSwAttrSet() : nullptr;
 
-    sal_uLong nRstLnNum =  pSet ? static_cast<const SwFormatLineNumber&>(pSet->Get( RES_LINENUMBER )).GetStartValue() : 0;
+    sal_uLong nRstLnNum =  pSet ? pSet->Get( RES_LINENUMBER ).GetStartValue() : 0;
 
     const SwTableNode* pTableNd = rExport.m_pCurPam->GetNode().FindTableNode();
     const SwSectionNode* pSectNd;
@@ -1069,7 +1069,7 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
     if ( rInfo.pSectionFormat && reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)) != rInfo.pSectionFormat )
         aSet.Put( rInfo.pSectionFormat->GetFormatAttr( RES_COL ) );
 
-    const SwFormatCol& rCol = static_cast<const SwFormatCol&>(aSet.Get( RES_COL ));
+    const SwFormatCol& rCol = aSet.Get( RES_COL );
     const SwColumns& rColumns = rCol.GetColumns();
     return rColumns.size();
 }

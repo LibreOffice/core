@@ -357,7 +357,7 @@ void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if(nId == m_nColumnId)
     {
-        const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(GetInputSetImpl()->Get(RES_FRM_SIZE));
+        const SwFormatFrameSize& rSize = GetInputSetImpl()->Get(RES_FRM_SIZE);
 
         static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
     }

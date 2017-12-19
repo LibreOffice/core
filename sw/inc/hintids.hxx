@@ -177,54 +177,51 @@
 #define     RES_PARATR_LIST_ISCOUNTED              TypedWhichId<SfxBoolItem>(86)
 #define RES_PARATR_LIST_END (87)
 
-enum RES_FRMATR
-{
-RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
-    RES_FILL_ORDER = RES_FRMATR_BEGIN,              // 87
-    RES_FRM_SIZE,                                   // 88
-    RES_PAPER_BIN,                                  // 89
-    RES_LR_SPACE,                                   // 90
-    RES_UL_SPACE,                                   // 91
-    RES_PAGEDESC,                                   // 92
-    RES_BREAK,                                      // 93
-    RES_CNTNT,                                      // 94
-    RES_HEADER,                                     // 95
-    RES_FOOTER,                                     // 96
-    RES_PRINT,                                      // 97
-    RES_OPAQUE,                                     // 98
-    RES_PROTECT,                                    // 99
-    RES_SURROUND,                                   // 100
-    RES_VERT_ORIENT,                                // 101
-    RES_HORI_ORIENT,                                // 102
-    RES_ANCHOR,                                     // 103
-    RES_BACKGROUND,                                 // 104
-    RES_BOX,                                        // 105
-    RES_SHADOW,                                     // 106
-    RES_FRMMACRO,                                   // 107
-    RES_COL,                                        // 108
-    RES_KEEP,                                       // 109
-    RES_URL,                                        // 110
-    RES_EDIT_IN_READONLY,                           // 111
-    RES_LAYOUT_SPLIT,                               // 112
-    RES_CHAIN,                                      // 113
-    RES_TEXTGRID,                                   // 114
-    RES_LINENUMBER  ,                               // 115
-    RES_FTN_AT_TXTEND,                              // 116
-    RES_END_AT_TXTEND,                              // 117
-    RES_COLUMNBALANCE,                              // 118
-    RES_FRAMEDIR,                                   // 119
-    RES_HEADER_FOOTER_EAT_SPACING,                  // 120
-    RES_ROW_SPLIT,                                  // 121
-    RES_FOLLOW_TEXT_FLOW,                           // 122
-    RES_COLLAPSING_BORDERS,                         // 123
-    RES_WRAP_INFLUENCE_ON_OBJPOS,                   // 124
-    RES_AUTO_STYLE,                                 // 125
-    RES_FRMATR_STYLE_NAME,                          // 126
-    RES_FRMATR_CONDITIONAL_STYLE_NAME,              // 127
-    RES_FRMATR_GRABBAG,                             // 128
-    RES_TEXT_VERT_ADJUST,                           // 129
-RES_FRMATR_END
-};
+#define RES_FRMATR_BEGIN RES_PARATR_LIST_END
+#define     RES_FILL_ORDER                         TypedWhichId<SwFormatFillOrder>(RES_FRMATR_BEGIN)
+#define     RES_FRM_SIZE                           TypedWhichId<SwFormatFrameSize>(88)
+#define     RES_PAPER_BIN                          TypedWhichId<SvxPaperBinItem>(89)
+#define     RES_LR_SPACE                           TypedWhichId<SvxLRSpaceItem>(90)
+#define     RES_UL_SPACE                           TypedWhichId<SvxULSpaceItem>(91)
+#define     RES_PAGEDESC                           TypedWhichId<SwFormatPageDesc>(92)
+#define     RES_BREAK                              TypedWhichId<SvxFormatBreakItem>(93)
+#define     RES_CNTNT                              TypedWhichId<SwFormatContent>(94)
+#define     RES_HEADER                             TypedWhichId<SwFormatHeader>(95)
+#define     RES_FOOTER                             TypedWhichId<SwFormatFooter>(96)
+#define     RES_PRINT                              TypedWhichId<SvxPrintItem>(97)
+#define     RES_OPAQUE                             TypedWhichId<SvxOpaqueItem>(98)
+#define     RES_PROTECT                            TypedWhichId<SvxProtectItem>(99)
+#define     RES_SURROUND                           TypedWhichId<SwFormatSurround>(100)
+#define     RES_VERT_ORIENT                        TypedWhichId<SwFormatVertOrient>(101)
+#define     RES_HORI_ORIENT                        TypedWhichId<SwFormatHoriOrient>(102)
+#define     RES_ANCHOR                             TypedWhichId<SwFormatAnchor>(103)
+#define     RES_BACKGROUND                         TypedWhichId<SvxBrushItem>(104)
+#define     RES_BOX                                TypedWhichId<SvxBoxItem>(105)
+#define     RES_SHADOW                             TypedWhichId<SvxShadowItem>(106)
+#define     RES_FRMMACRO                           TypedWhichId<SvxMacroItem>(107)
+#define     RES_COL                                TypedWhichId<SwFormatCol>(108)
+#define     RES_KEEP                               TypedWhichId<SvxFormatKeepItem>(109)
+#define     RES_URL                                TypedWhichId<SwFormatURL>(110)
+#define     RES_EDIT_IN_READONLY                   TypedWhichId<SwFormatEditInReadonly>(111)
+#define     RES_LAYOUT_SPLIT                       TypedWhichId<SwFormatLayoutSplit>(112)
+#define     RES_CHAIN                              TypedWhichId<SwFormatChain>(113)
+#define     RES_TEXTGRID                           TypedWhichId<SwTextGridItem>(114)
+#define     RES_LINENUMBER                         TypedWhichId<SwFormatLineNumber>(115)
+#define     RES_FTN_AT_TXTEND                      TypedWhichId<SwFormatFootnoteAtTextEnd>(116)
+#define     RES_END_AT_TXTEND                      TypedWhichId<SwFormatEndAtTextEnd>(117)
+#define     RES_COLUMNBALANCE                      TypedWhichId<SwFormatNoBalancedColumns>(118)
+#define     RES_FRAMEDIR                           TypedWhichId<SvxFrameDirectionItem>(119)
+#define     RES_HEADER_FOOTER_EAT_SPACING          TypedWhichId<SwHeaderAndFooterEatSpacingItem>(120)
+#define     RES_ROW_SPLIT                          TypedWhichId<SwFormatRowSplit>(121)
+#define     RES_FOLLOW_TEXT_FLOW                   TypedWhichId<SwFormatFollowTextFlow>(122)
+#define     RES_COLLAPSING_BORDERS                 TypedWhichId<SfxBoolItem>(123)
+#define     RES_WRAP_INFLUENCE_ON_OBJPOS           TypedWhichId<SwFormatWrapInfluenceOnObjPos>(124)
+#define     RES_AUTO_STYLE                         TypedWhichId<SwFormatAutoFormat>(125)
+#define     RES_FRMATR_STYLE_NAME                  TypedWhichId<SfxStringItem>(126)
+#define     RES_FRMATR_CONDITIONAL_STYLE_NAME      TypedWhichId<SfxStringItem>(127)
+#define     RES_FRMATR_GRABBAG                     TypedWhichId<SfxGrabBagItem>(128)
+#define     RES_TEXT_VERT_ADJUST                   TypedWhichId<SdrTextVertAdjustItem>(129)
+#define RES_FRMATR_END 130
 
 #define RES_GRFATR_BEGIN RES_FRMATR_END
 #define     RES_GRFATR_MIRRORGRF    TypedWhichId<SwMirrorGrf>(RES_GRFATR_BEGIN) // 130

@@ -3093,7 +3093,7 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_URL );
     for (sal_uInt32 n = 0; n < nMaxItems; ++n)
     {
-        const SwFormatURL *pURL = static_cast<const SwFormatURL*>(rDoc.GetAttrPool().GetItem2(RES_URL, n));
+        const SwFormatURL *pURL = rDoc.GetAttrPool().GetItem2(RES_URL, n);
         if (!pURL)
             continue;
 

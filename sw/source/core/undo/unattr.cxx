@@ -372,7 +372,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( bool bSvDrwPt )
     }
 
     const SwFormatAnchor& rAnchor =
-        static_cast<const SwFormatAnchor&>( m_pOldSet->Get( RES_ANCHOR, false ) );
+        m_pOldSet->Get( RES_ANCHOR, false );
     if( !rAnchor.GetContentAnchor() )
         return;
 
@@ -403,7 +403,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
     SwFrameFormat* pFrameFormat = static_cast<SwFrameFormat*>(m_pFormat);
     const SwFormatAnchor& rAnchor =
-        static_cast<const SwFormatAnchor&>( m_pOldSet->Get( RES_ANCHOR, false ) );
+        m_pOldSet->Get( RES_ANCHOR, false );
 
     SwFormatAnchor aNewAnchor( rAnchor.GetAnchorId() );
     if (RndStdIds::FLY_AT_PAGE != rAnchor.GetAnchorId()) {
@@ -436,8 +436,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) {
         if( RES_DRAWFRMFMT == pFrameFormat->Which() ) {
             // get the old cached value
-            const SwFormatFrameSize& rOldSize = static_cast<const SwFormatFrameSize&>(
-                                               m_pOldSet->Get( RES_FRM_SIZE ) );
+            const SwFormatFrameSize& rOldSize = m_pOldSet->Get( RES_FRM_SIZE );
             aDrawSavePt.X() = rOldSize.GetWidth();
             aDrawSavePt.Y() = rOldSize.GetHeight();
             m_pOldSet->ClearItem( RES_FRM_SIZE );
