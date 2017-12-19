@@ -281,7 +281,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_KIND_ERROR:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
 
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetErrorBar( GetPropertySet(), bYError ));
@@ -336,7 +336,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         {
             OSL_FAIL( "Deprecated item" );
             bool bYError =
-                static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
 
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetErrorBar( GetPropertySet(), bYError));
@@ -362,7 +362,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_CONSTPLUS:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
 
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetErrorBar( GetPropertySet(),bYError));
@@ -386,7 +386,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_CONSTMINUS:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetErrorBar( GetPropertySet(),bYError));
             bool bOldHasErrorBar = xErrorBarProp.is();
@@ -525,7 +525,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_INDICATE:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetErrorBar( GetPropertySet(),bYError));
             bool bOldHasErrorBar = xErrorBarProp.is();
@@ -555,7 +555,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_RANGE_NEG:
         {
             const bool bYError =
-                static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< chart2::data::XDataSource > xErrorBarSource( lcl_GetErrorBar( GetPropertySet(), bYError),
                                                                          uno::UNO_QUERY );
             uno::Reference< chart2::XChartDocument > xChartDoc( m_xModel, uno::UNO_QUERY );
@@ -626,7 +626,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_KIND_ERROR:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             SvxChartKindError eErrorKind = SvxChartKindError::NONE;
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetErrorBar( GetPropertySet(), bYError));
@@ -663,7 +663,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_PERCENT:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
@@ -677,7 +677,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_BIGERROR:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
@@ -691,7 +691,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_CONSTPLUS:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
@@ -705,7 +705,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_CONSTMINUS:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
@@ -807,7 +807,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_INDICATE:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             SvxChartIndicate eIndicate = SvxChartIndicate::Both;
             if( xErrorBarProp.is())
@@ -838,7 +838,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_RANGE_NEG:
         {
             bool bYError =
-                static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
+                rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< chart2::data::XDataSource > xErrorBarSource( lcl_GetErrorBar( GetPropertySet(),bYError),
                                                                          uno::UNO_QUERY );
             if( xErrorBarSource.is())

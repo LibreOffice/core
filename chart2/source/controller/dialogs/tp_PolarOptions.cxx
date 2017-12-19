@@ -21,9 +21,11 @@
 #include <ResId.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 
+#include <editeng/sizeitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/controldims.hxx>
+#include <svx/chrtitem.hxx>
 
 namespace chart
 {
