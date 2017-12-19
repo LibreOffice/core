@@ -164,7 +164,7 @@ private:
     Bitmap                      maDimmedDialogBitmap;
     Size                        maParentDialogSize;
 
-    // VirtualDevice for buffered interation paints
+    // VirtualDevice for buffered interaction paints
     VclPtr<VirtualDevice>       mpVirtualBufferDevice;
 
     // all detected children

@@ -134,10 +134,10 @@ protected:
     void    revokeProperty( sal_Int32 _nHandle );
 
 
-    /// checkes whether a property with the given handle has been registered
+    /// checks whether a property with the given handle has been registered
     bool    isRegisteredProperty( sal_Int32 _nHandle ) const;
 
-    /// checkes whether a property with the given name has been registered
+    /// checks whether a property with the given name has been registered
     bool    isRegisteredProperty( const OUString& _rName ) const;
 
 

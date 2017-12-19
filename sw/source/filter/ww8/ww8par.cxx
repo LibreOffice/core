@@ -5106,7 +5106,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     {
         // inserting into an existing document:
         // As only complete paragraphs are inserted, the current one
-        // needs to be splitted - once or even twice.
+        // needs to be split - once or even twice.
         const SwPosition* pPos = m_pPaM->GetPoint();
 
         // split current paragraph to get new paragraph for the insertion

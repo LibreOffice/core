@@ -6060,7 +6060,7 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             dnl The only reason why libstdc++ headers fail with Clang in C++11 mode is because they
             dnl use the __float128 type that Clang doesn't know (libstdc++ checks whether __float128
             dnl is available during its build, but it's usually built using GCC, and so c++config.h
-            dnl hardcodes __float128 being supported). At least for some older libstc++, the only
+            dnl hardcodes __float128 being supported). At least for some older libstdc++, the only
             dnl place where __float128 is used is in a template specialization, -D__float128=void
             dnl will avoid the problem there while still causing a problem if somebody actually uses
             dnl the type. (But some later libstdc++ are known to use __float128 also in algorithm ->
