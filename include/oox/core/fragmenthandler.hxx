@@ -117,7 +117,7 @@ public:
     // XML stream handling ----------------------------------------------------
 
     /** Opens the fragment stream referred by the own fragment path. Derived
-        classes may provide specilized stream implementations. */
+        classes may provide specialized stream implementations. */
     virtual css::uno::Reference< css::io::XInputStream >
                         openFragmentStream() const;
 

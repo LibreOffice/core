@@ -512,7 +512,7 @@ yyparse(YYPARSE_PARAM_ARG)
 
 /* Push a new state, which is found in  yystate  .  */
 /* In all cases, when you get here, the value and location stacks
-   have just been pushed. so pushing a state here evens the stacks.  */
+   have just been pushed. So pushing a state here events the stacks.  */
 yynewstate:
 
   *++yyssp = sal::static_int_cast<short>(yystate);
