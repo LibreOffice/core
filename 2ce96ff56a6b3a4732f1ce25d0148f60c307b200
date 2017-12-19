@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_abcd9386",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-12-19T23:34:49Z",
+      "side": 1,
+      "message": "Don\u0027t use hard coded english strings.",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_5cc96058",
         "filename": "offapi/com/sun/star/sheet/XSpreadsheetDocument.idl",
         "patchSetId": 3
