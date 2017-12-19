@@ -84,19 +84,6 @@ namespace svxform
     class DataNavigatorWindow;
     class AddInstanceDialog;
 
-    typedef css::uno::Reference< css::xforms::XFormsUIHelper1 >         XFormsUIHelper1_ref;
-    typedef css::uno::Reference< css::xml::dom::XNode >                 XNode_ref;
-    typedef css::uno::Reference< css::beans::XPropertySet >             XPropertySet_ref;
-    typedef css::uno::Reference< css::xforms::XModel >                  XModel_ref;
-    typedef css::uno::Reference< css::container::XContainer >           XContainer_ref;
-    typedef css::uno::Reference< css::container::XNameContainer >       XNameContainer_ref;
-    typedef css::uno::Reference< css::frame::XFrame >                   XFrame_ref;
-    typedef css::uno::Reference< css::frame::XModel >                   XFrameModel_ref;
-    typedef css::uno::Reference< css::xml::dom::events::XEventTarget >  XEventTarget_ref;
-    typedef css::uno::Reference< css::xforms::XSubmission >             XSubmission_ref;
-    typedef css::uno::Sequence< css::beans::PropertyValue >             PropertyValue_seq;
-    typedef std::vector< XContainer_ref >                               ContainerList;
-
 
     class DataTreeListBox : public SvTreeListBox
     {
@@ -245,7 +232,8 @@ namespace svxform
         sal_uInt16                  m_nEditId;
         sal_uInt16                  m_nRemoveId;
 
-        XFormsUIHelper1_ref         m_xUIHelper;
+        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+                                    m_xUIHelper;
 
         VclPtr<DataNavigatorWindow> m_pNaviWin;
         bool                        m_bHasModel;
@@ -262,11 +250,11 @@ namespace svxform
         DECL_LINK(ItemSelectHdl, SvTreeListBox*, void);
 
         void                        AddChildren(SvTreeListEntry* _pParent,
-                                                const XNode_ref& _xNode);
+                                                const css::uno::Reference< css::xml::dom::XNode >& _xNode);
         bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
         SvTreeListEntry*            AddEntry( ItemNode* _pNewNode, bool _bIsElement );
-        SvTreeListEntry*            AddEntry( const XPropertySet_ref& _rPropSet );
-        void                        EditEntry( const XPropertySet_ref& _rPropSet );
+        SvTreeListEntry*            AddEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
+        void                        EditEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
         bool                        RemoveEntry();
 
     protected:
@@ -280,9 +268,9 @@ namespace svxform
         virtual void                Resize() override;
 
         bool                 HasModel() const { return m_bHasModel; }
-        OUString                    SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
+        OUString                    SetModel( const css::uno::Reference< css::xforms::XModel > & _xModel, sal_uInt16 _nPagePos );
         void                        ClearModel();
-        OUString                    LoadInstance(const PropertyValue_seq& _xPropSeq);
+        OUString                    LoadInstance(const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
 
         bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
@@ -295,13 +283,11 @@ namespace svxform
         void                 SetLinkOnce( bool bLinkOnce ) { m_bLinkOnce=bLinkOnce; }
 
         css::uno::Reference<css::beans::XPropertySet>
-                                    GetBindingForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
+                             GetBindingForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
         OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
-        const XFormsUIHelper1_ref&  GetXFormsHelper() const { return m_xUIHelper; }
+        const css::uno::Reference< css::xforms::XFormsUIHelper1 >&
+                             GetXFormsHelper() const { return m_xUIHelper; }
     };
-
-    typedef std::vector< VclPtr<XFormsPage> >   PageList;
-    typedef ::rtl::Reference < DataListener >   DataListener_ref;
 
     class DataNavigatorWindow : public vcl::Window, public VclBuilderContainer
     {
@@ -318,16 +304,22 @@ namespace svxform
         sal_Int32                   m_nLastSelectedPos;
         bool                        m_bShowDetails;
         bool                        m_bIsNotifyDisabled;
-        PageList                    m_aPageList;
-        ContainerList               m_aContainerList;
-        std::vector< XEventTarget_ref >
+        std::vector< VclPtr<XFormsPage> >
+                                    m_aPageList;
+        std::vector< css::uno::Reference< css::container::XContainer >  >
+                                    m_aContainerList;
+        std::vector< css::uno::Reference< css::xml::dom::events::XEventTarget > >
                                     m_aEventTargetList;
         Timer                       m_aUpdateTimer;
 
-        DataListener_ref            m_xDataListener;
-        XNameContainer_ref          m_xDataContainer;
-        XFrame_ref                  m_xFrame;
-        XFrameModel_ref             m_xFrameModel;
+        ::rtl::Reference < DataListener >
+                                    m_xDataListener;
+        css::uno::Reference< css::container::XNameContainer >
+                                    m_xDataContainer;
+        css::uno::Reference< css::frame::XFrame >
+                                    m_xFrame;
+        css::uno::Reference< css::frame::XModel >
+                                    m_xFrameModel;
 
         DECL_LINK(            ModelSelectListBoxHdl, ListBox&, void );
         DECL_LINK(            MenuSelectHdl, MenuButton *, void );
@@ -340,7 +332,7 @@ namespace svxform
         void                        SetPageModel();
         void                        ClearAllPageModels( bool bClearPages );
         void                        InitPages();
-        void                        CreateInstancePage( const PropertyValue_seq& _xPropSeq );
+        void                        CreateInstancePage( const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq );
         bool                        HasFirstInstancePage() const;
         sal_uInt16                  GetNewPageId() const;
 
@@ -357,8 +349,8 @@ namespace svxform
 
         static void                 SetDocModified();
         void                        NotifyChanges( bool _bLoadAll = false );
-        void                        AddContainerBroadcaster( const XContainer_ref& xContainer );
-        void                        AddEventBroadcaster( const XEventTarget_ref& xTarget );
+        void                        AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer > & xContainer );
+        void                        AddEventBroadcaster( const css::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget );
         void                        RemoveBroadcaster();
 
         bool                        IsShowDetails() const { return m_bShowDetails; }
@@ -426,9 +418,12 @@ namespace svxform
 
         VclPtr<OKButton>    m_pOKBtn;
 
-        XFormsUIHelper1_ref m_xUIHelper;
-        XPropertySet_ref    m_xBinding;
-        XPropertySet_ref    m_xTempBinding;
+        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+                            m_xUIHelper;
+        css::uno::Reference< css::beans::XPropertySet >
+                            m_xBinding;
+        css::uno::Reference< css::beans::XPropertySet >
+                            m_xTempBinding;
 
         ItemNode*           m_pItemNode;
         DataItemType        m_eItemType;
@@ -447,7 +442,8 @@ namespace svxform
 
     public:
         AddDataItemDialog(
-            vcl::Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
+            vcl::Window* pParent, ItemNode* _pNode,
+            const css::uno::Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper );
         virtual ~AddDataItemDialog() override;
         virtual void dispose() override;
 
@@ -463,11 +459,13 @@ namespace svxform
         VclPtr<PushButton>             m_pEditNamespacesBtn;
         VclPtr<OKButton>               m_pOKBtn;
 
-        Idle                    m_aResultIdle;
-        OUString                m_sPropertyName;
+        Idle                           m_aResultIdle;
+        OUString                       m_sPropertyName;
 
-        XFormsUIHelper1_ref     m_xUIHelper;
-        XPropertySet_ref        m_xBinding;
+        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+                                       m_xUIHelper;
+        css::uno::Reference< css::beans::XPropertySet >
+                                       m_xBinding;
 
         DECL_LINK(ModifyHdl, Edit&, void);
         DECL_LINK(ResultHdl, Timer *, void);
@@ -476,11 +474,11 @@ namespace svxform
 
     public:
         AddConditionDialog(vcl::Window* pParent,
-            const OUString& _rPropertyName, const XPropertySet_ref& _rBinding);
+            const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertySet >& _rBinding);
         virtual ~AddConditionDialog() override;
         virtual void dispose() override;
 
-        const XFormsUIHelper1_ref& GetUIHelper() const { return m_xUIHelper; }
+        const css::uno::Reference< css::xforms::XFormsUIHelper1 >& GetUIHelper() const { return m_xUIHelper; }
         OUString GetCondition() const { return m_pConditionED->GetText(); }
         void SetCondition(const OUString& _rCondition)
         {
@@ -502,7 +500,8 @@ namespace svxform
         VclPtr<AddConditionDialog> m_pConditionDlg;
         std::vector< OUString >    m_aRemovedList;
 
-        XNameContainer_ref& m_rNamespaces;
+        css::uno::Reference< css::container::XNameContainer >&
+                                   m_rNamespaces;
 
         DECL_LINK(    SelectHdl, SvTreeListBox*, void );
         DECL_LINK(    ClickHdl, Button*, void );
@@ -511,7 +510,7 @@ namespace svxform
         void                LoadNamespaces();
 
     public:
-        NamespaceItemDialog( AddConditionDialog* pParent, XNameContainer_ref& _rContainer );
+        NamespaceItemDialog( AddConditionDialog* pParent, css::uno::Reference< css::container::XNameContainer >& _rContainer );
         virtual ~NamespaceItemDialog() override;
         virtual void dispose() override;
     };
@@ -561,11 +560,16 @@ namespace svxform
 
         ItemNode*           m_pItemNode;
 
-        XFormsUIHelper1_ref m_xUIHelper;
-        XSubmission_ref     m_xNewSubmission;
-        XPropertySet_ref    m_xSubmission;
-        XPropertySet_ref    m_xTempBinding;
-        XPropertySet_ref    m_xCreatedBinding;
+        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+                            m_xUIHelper;
+        css::uno::Reference< css::xforms::XSubmission >
+                            m_xNewSubmission;
+        css::uno::Reference< css::beans::XPropertySet >
+                            m_xSubmission;
+        css::uno::Reference< css::beans::XPropertySet >
+                            m_xTempBinding;
+        css::uno::Reference< css::beans::XPropertySet >
+                            m_xCreatedBinding;
 
         DECL_LINK(RefHdl, Button*, void);
         DECL_LINK(OKHdl, Button*, void);
@@ -574,11 +578,11 @@ namespace svxform
 
     public:
         AddSubmissionDialog( vcl::Window* pParent, ItemNode* _pNode,
-            const XFormsUIHelper1_ref& _rUIHelper );
+            const css::uno::Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper );
         virtual ~AddSubmissionDialog() override;
         virtual void dispose() override;
 
-        const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
+        const css::uno::Reference< css::xforms::XSubmission >& GetNewSubmission() const { return m_xNewSubmission; }
     };
 
 
