@@ -3562,8 +3562,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( nSpace )
                         aFrameSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );
 
-                    RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aFrameSet.
-                                                Get( RES_ANCHOR )).
+                    RndStdIds eAnchorId = aFrameSet.
+                                                Get( RES_ANCHOR ).
                                                 GetAnchorId();
                     SwFrameFormat *pFrameFormat =  m_xDoc->MakeFlySection(
                                 eAnchorId, m_pPam->GetPoint(), &aFrameSet );

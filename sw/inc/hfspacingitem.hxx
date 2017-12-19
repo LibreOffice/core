@@ -41,7 +41,7 @@ public:
 };
 
 inline const SwHeaderAndFooterEatSpacingItem &SwAttrSet::GetHeaderAndFooterEatSpacing(bool bInP) const
-    { return static_cast<const SwHeaderAndFooterEatSpacingItem&>(Get( RES_HEADER_FOOTER_EAT_SPACING,bInP)); }
+    { return Get( RES_HEADER_FOOTER_EAT_SPACING,bInP); }
 
 inline const SwHeaderAndFooterEatSpacingItem &SwFormat::GetHeaderAndFooterEatSpacing(bool bInP) const
     { return m_aSet.GetHeaderAndFooterEatSpacing(bInP); }

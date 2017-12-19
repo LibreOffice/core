@@ -40,33 +40,33 @@
 
 // Implementation of FrameAttribute methods of SwAttrSet.
 inline const SvxPaperBinItem &SwAttrSet::GetPaperBin(bool bInP) const
-    { return static_cast<const SvxPaperBinItem&>(Get( RES_PAPER_BIN,bInP)); }
+    { return Get( RES_PAPER_BIN,bInP); }
 inline const SvxLRSpaceItem &SwAttrSet::GetLRSpace(bool bInP) const
-    { return static_cast<const SvxLRSpaceItem&>(Get( RES_LR_SPACE,bInP)); }
+    { return Get( RES_LR_SPACE,bInP); }
 inline const SvxULSpaceItem &SwAttrSet::GetULSpace(bool bInP) const
-    { return static_cast<const SvxULSpaceItem&>(Get( RES_UL_SPACE,bInP)); }
+    { return Get( RES_UL_SPACE,bInP); }
 inline const SvxPrintItem &SwAttrSet::GetPrint(bool bInP) const
-    { return static_cast<const SvxPrintItem&>(Get( RES_PRINT,bInP)); }
+    { return Get( RES_PRINT,bInP); }
 inline const SvxOpaqueItem &SwAttrSet::GetOpaque(bool bInP) const
-    { return static_cast<const SvxOpaqueItem&>(Get( RES_OPAQUE,bInP)); }
+    { return Get( RES_OPAQUE,bInP); }
 inline const SvxProtectItem &SwAttrSet::GetProtect(bool bInP) const
-    { return static_cast<const SvxProtectItem&>(Get( RES_PROTECT,bInP)); }
+    { return Get( RES_PROTECT,bInP); }
 inline const SvxBoxItem &SwAttrSet::GetBox(bool bInP) const
-    { return static_cast<const SvxBoxItem&>(Get( RES_BOX,bInP)); }
+    { return Get( RES_BOX,bInP); }
 inline const SvxFormatKeepItem &SwAttrSet::GetKeep(bool bInP) const
-    { return static_cast<const SvxFormatKeepItem&>(Get( RES_KEEP,bInP)); }
+    { return Get( RES_KEEP,bInP); }
 inline const SvxBrushItem &SwAttrSet::GetBackground(bool bInP) const
-    { return static_cast<const SvxBrushItem&>(Get( RES_BACKGROUND,bInP)); }
+    { return Get( RES_BACKGROUND,bInP); }
 inline const SvxShadowItem &SwAttrSet::GetShadow(bool bInP) const
-    { return static_cast<const SvxShadowItem&>(Get( RES_SHADOW,bInP)); }
+    { return Get( RES_SHADOW,bInP); }
 inline const SvxFormatBreakItem &SwAttrSet::GetBreak(bool bInP) const
-    { return static_cast<const SvxFormatBreakItem&>(Get( RES_BREAK,bInP)); }
+    { return Get( RES_BREAK,bInP); }
 inline const SvxMacroItem &SwAttrSet::GetMacro(bool bInP) const
-    { return static_cast<const SvxMacroItem&>(Get( RES_FRMMACRO,bInP)); }
+    { return Get( RES_FRMMACRO,bInP); }
 inline const SvxFrameDirectionItem &SwAttrSet::GetFrameDir(bool bInP) const
-    { return static_cast<const SvxFrameDirectionItem&>(Get( RES_FRAMEDIR,bInP)); }
+    { return Get( RES_FRAMEDIR,bInP); }
 inline const SdrTextVertAdjustItem &SwAttrSet::GetTextVertAdjust(bool bInP) const
-    { return static_cast<const SdrTextVertAdjustItem&>(Get( RES_TEXT_VERT_ADJUST,bInP)); }
+    { return Get( RES_TEXT_VERT_ADJUST,bInP); }
 
 // Implementation of FrameAttribute methods of SwFormat.
 inline const SvxPaperBinItem &SwFormat::GetPaperBin(bool bInP) const

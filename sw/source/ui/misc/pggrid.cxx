@@ -209,7 +209,7 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
 {
     if(SfxItemState::DEFAULT <= rSet->GetItemState(RES_TEXTGRID))
     {
-        const SwTextGridItem& rGridItem = static_cast<const SwTextGridItem&>(rSet->Get(RES_TEXTGRID));
+        const SwTextGridItem& rGridItem = rSet->Get(RES_TEXTGRID);
         RadioButton* pButton = nullptr;
         switch(rGridItem.GetGridType())
         {
@@ -299,7 +299,7 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
     if( SfxItemState::UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR ))
     {
         const SvxFrameDirectionItem& rDirItem =
-                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
+                    rSet.Get(RES_FRAMEDIR);
         m_bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
                     rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
     }
@@ -308,11 +308,9 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
         return;
 
     const SvxSizeItem& rSize = rSet.Get(SID_ATTR_PAGE_SIZE);
-    const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
-                                                        RES_LR_SPACE ));
-    const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get(
-                                                        RES_UL_SPACE ));
-    const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+    const SvxLRSpaceItem& rLRSpace = rSet.Get( RES_LR_SPACE );
+    const SvxULSpaceItem& rULSpace = rSet.Get( RES_UL_SPACE );
+    const SvxBoxItem& rBox = rSet.Get(RES_BOX);
     sal_Int32 nDistanceLR = rLRSpace.GetLeft() + rLRSpace.GetRight();
     sal_Int32 nDistanceUL = rULSpace.GetUpper() + rULSpace.GetLower();
 

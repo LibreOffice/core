@@ -158,8 +158,8 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
         if( GetAttrSet().GetParent() )
         {
             const SfxItemSet* pParent = GetAttrSet().GetParent();
-            pNewLRSpace = static_cast<const SvxLRSpaceItem*>(&pParent->Get( RES_LR_SPACE ));
-            pNewULSpace = static_cast<const SvxULSpaceItem*>(&pParent->Get( RES_UL_SPACE ));
+            pNewLRSpace = &pParent->Get( RES_LR_SPACE );
+            pNewULSpace = &pParent->Get( RES_UL_SPACE );
             aFontSizeArr[0] = &pParent->Get( RES_CHRATR_FONTSIZE );
             aFontSizeArr[1] = &pParent->Get( RES_CHRATR_CJK_FONTSIZE );
             aFontSizeArr[2] = &pParent->Get( RES_CHRATR_CTL_FONTSIZE );

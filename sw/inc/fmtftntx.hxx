@@ -102,9 +102,9 @@ public:
 };
 
 inline const SwFormatFootnoteAtTextEnd &SwAttrSet::GetFootnoteAtTextEnd(bool bInP) const
-    { return static_cast<const SwFormatFootnoteAtTextEnd&>(Get( RES_FTN_AT_TXTEND, bInP)); }
+    { return Get( RES_FTN_AT_TXTEND, bInP); }
 inline const SwFormatEndAtTextEnd &SwAttrSet::GetEndAtTextEnd(bool bInP) const
-    { return static_cast<const SwFormatEndAtTextEnd&>(Get( RES_END_AT_TXTEND, bInP)); }
+    { return Get( RES_END_AT_TXTEND, bInP); }
 
 inline const SwFormatFootnoteAtTextEnd &SwFormat::GetFootnoteAtTextEnd(bool bInP) const
     { return m_aSet.GetFootnoteAtTextEnd(bInP); }

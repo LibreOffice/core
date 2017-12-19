@@ -50,7 +50,7 @@ public:
 };
 
 inline const SwFormatContent &SwAttrSet::GetContent(bool bInP) const
-    { return static_cast<const SwFormatContent&>(Get( RES_CNTNT,bInP)); }
+    { return Get( RES_CNTNT,bInP); }
 
 inline const SwFormatContent &SwFormat::GetContent(bool bInP) const
     { return m_aSet.GetContent(bInP); }

@@ -173,7 +173,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 
     SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
     rSh.GetFlyFrameAttr( aSet );
-    const SwFormatURL &rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
+    const SwFormatURL &rURL = aSet.Get( RES_URL );
     SvxIMapDlgChildWindow::UpdateIMapDlg(
             aGrf, rURL.GetMap(), pList.get(), pEditObj );
 }
@@ -996,7 +996,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                     SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
                     rSh.GetFlyFrameAttr( aSet );
-                    SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
+                    SwFormatURL aURL( aSet.Get( RES_URL ) );
                     aURL.SetMap( &pDlg->GetImageMap() );
                     aSet.Put( aURL );
                     rSh.SetFlyFrameAttr( aSet );
@@ -1031,7 +1031,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.StartAction();
                     SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_SURROUND, RES_SURROUND>{});
                     rSh.GetFlyFrameAttr( aSet );
-                    SwFormatSurround aSur( static_cast<const SwFormatSurround&>(aSet.Get( RES_SURROUND )) );
+                    SwFormatSurround aSur( aSet.Get( RES_SURROUND ) );
                     if ( !aSur.IsContour() )
                     {
                         aSur.SetContour( true );
@@ -1094,9 +1094,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SfxItemSet aSet(GetPool(), svl::Items<RES_SURROUND, RES_HORI_ORIENT>{});
                 rSh.GetFlyFrameAttr(aSet);
 
-                const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
-                const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT));
-                const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT));
+                const SwFormatSurround& rSurround = aSet.Get(RES_SURROUND);
+                const SwFormatVertOrient& rVert = aSet.Get(RES_VERT_ORIENT);
+                const SwFormatHoriOrient& rHori = aSet.Get(RES_HORI_ORIENT);
                 sal_Int16 eVOrient = rVert.GetVertOrient();
                 sal_Int16 eHOrient = rHori.GetHoriOrient();
                 css::text::WrapTextMode eSurround = rSurround.GetSurround();
@@ -1340,7 +1340,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
                 {
                     SfxItemSet aSet(GetPool(), svl::Items<RES_SURROUND, RES_SURROUND>{});
                     rSh.GetFlyFrameAttr(aSet);
-                    const SwFormatSurround& rWrap = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
+                    const SwFormatSurround& rWrap = aSet.Get(RES_SURROUND);
                     bSetState = true;
                     bState = rWrap.IsContour();
                 }
@@ -1634,7 +1634,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         rSh.GetObjAttr(aSet);
                     else
                         rSh.GetFlyFrameAttr(aSet);
-                    RndStdIds eSet = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
+                    RndStdIds eSet = aSet.Get(RES_ANCHOR).GetAnchorId();
                     const bool bSet =
                            ((nWhich == FN_TOOL_ANCHOR_PAGE) &&
                             (eSet == RndStdIds::FLY_AT_PAGE))
@@ -1682,11 +1682,11 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else
                     {
                         rSh.GetFlyFrameAttr(aSet);
-                        nAnchorType = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
+                        nAnchorType = aSet.Get(RES_ANCHOR).GetAnchorId();
                     }
-                    const SwFormatSurround& rWrap = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
+                    const SwFormatSurround& rWrap = aSet.Get(RES_SURROUND);
 
-                    const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE));
+                    const SvxOpaqueItem& rOpaque = aSet.Get(RES_OPAQUE);
                     bool bOpaque = rOpaque.GetValue();
                     css::text::WrapTextMode nSurround = rWrap.GetSurround();
                     bool bSet = false;
@@ -1853,7 +1853,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
         rSh.GetObjAttr(aSet);
     else
         rSh.GetFlyFrameAttr(aSet);
-    SwFormatSurround aWrap( static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND)) );
+    SwFormatSurround aWrap( aSet.Get(RES_SURROUND) );
     css::text::WrapTextMode nOldSurround(aWrap.GetSurround());
     css::text::WrapTextMode nSurround = css::text::WrapTextMode_PARALLEL;
 
@@ -1922,7 +1922,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             bOpaque = !rSh.GetLayerId();
         else
         {
-            const SvxOpaqueItem aOpaque( static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE)) );
+            const SvxOpaqueItem aOpaque( aSet.Get(RES_OPAQUE) );
             bOpaque = !aOpaque.GetValue();
         }
     }
@@ -2541,8 +2541,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 if ( pDlg->Execute() == RET_OK )
                 {
 
-                    rSh.SetBoxBackground( static_cast<const SvxBrushItem&>(
-                        pDlg->GetOutputItemSet()->Get( RES_BACKGROUND )));
+                    rSh.SetBoxBackground( pDlg->GetOutputItemSet()->Get( RES_BACKGROUND ) );
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }

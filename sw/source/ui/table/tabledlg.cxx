@@ -1426,8 +1426,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             m_pPgBrkBeforeRB->IsValueChangedFromSaved()    ||
             m_pPgBrkRB->IsValueChangedFromSaved() ))
     {
-        SvxFormatBreakItem aBreak(
-            static_cast<const SvxFormatBreakItem&>(GetItemSet().Get( RES_BREAK )) );
+        SvxFormatBreakItem aBreak( GetItemSet().Get( RES_BREAK ) );
 
         if(bIsChecked)
         {

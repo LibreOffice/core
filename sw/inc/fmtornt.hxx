@@ -118,9 +118,9 @@ inline SwFormatHoriOrient &SwFormatHoriOrient::operator=( const SwFormatHoriOrie
 }
 
 inline const SwFormatVertOrient &SwAttrSet::GetVertOrient(bool bInP) const
-    { return static_cast<const SwFormatVertOrient&>(Get( RES_VERT_ORIENT,bInP)); }
+    { return Get( RES_VERT_ORIENT,bInP); }
 inline const SwFormatHoriOrient &SwAttrSet::GetHoriOrient(bool bInP) const
-    { return static_cast<const SwFormatHoriOrient&>(Get( RES_HORI_ORIENT,bInP)); }
+    { return Get( RES_HORI_ORIENT,bInP); }
 
 inline const SwFormatVertOrient &SwFormat::GetVertOrient(bool bInP) const
     { return m_aSet.GetVertOrient(bInP); }

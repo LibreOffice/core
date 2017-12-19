@@ -187,10 +187,10 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     SetMetric(*m_pTopMarginED, aMetric);
     SetMetric(*m_pBottomMarginED, aMetric);
 
-    const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet->Get(RES_SURROUND));
+    const SwFormatSurround& rSurround = rSet->Get(RES_SURROUND);
 
     css::text::WrapTextMode nSur = rSurround.GetSurround();
-    const SwFormatAnchor &rAnch = static_cast<const SwFormatAnchor&>(rSet->Get(RES_ANCHOR));
+    const SwFormatAnchor &rAnch = rSet->Get(RES_ANCHOR);
     m_nAnchorId = rAnch.GetAnchorId();
 
     if (((m_nAnchorId == RndStdIds::FLY_AT_PARA) || (m_nAnchorId == RndStdIds::FLY_AT_CHAR))
@@ -226,7 +226,7 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
 
             if (!m_bDrawMode)
             {
-                const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(rSet->Get(RES_OPAQUE));
+                const SvxOpaqueItem& rOpaque = rSet->Get(RES_OPAQUE);
                 m_pWrapTransparentCB->Check(!rOpaque.GetValue());
             }
             break;
@@ -264,8 +264,8 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     }
     m_pWrapTransparentCB->Enable( pBtn == m_pWrapThroughRB && !m_bHtmlMode );
 
-    const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rSet->Get(RES_UL_SPACE));
-    const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rSet->Get(RES_LR_SPACE));
+    const SvxULSpaceItem& rUL = rSet->Get(RES_UL_SPACE);
+    const SvxLRSpaceItem& rLR = rSet->Get(RES_LR_SPACE);
 
     // gap to text
     m_pLeftMarginED->SetValue(m_pLeftMarginED->Normalize(rLR.GetLeft()), FUNIT_TWIP);
@@ -282,14 +282,14 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bModified = false;
     const SfxPoolItem* pOldItem;
-    const SwFormatSurround& rOldSur = static_cast<const SwFormatSurround&>(GetItemSet().Get(RES_SURROUND));
+    const SwFormatSurround& rOldSur = GetItemSet().Get(RES_SURROUND);
     SwFormatSurround aSur( rOldSur );
 
     SvxOpaqueItem aOp( RES_OPAQUE);
 
     if (!m_bDrawMode)
     {
-        const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(GetItemSet().Get(RES_OPAQUE));
+        const SvxOpaqueItem& rOpaque = GetItemSet().Get(RES_OPAQUE);
         aOp = rOpaque;
         aOp.SetValue(true);
     }
@@ -383,7 +383,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     // anchor
-    const SwFormatAnchor &rAnch = static_cast<const SwFormatAnchor&>(rSet.Get(RES_ANCHOR));
+    const SwFormatAnchor &rAnch = rSet.Get(RES_ANCHOR);
     m_nAnchorId = rAnch.GetAnchorId();
     bool bEnable = (m_nAnchorId != RndStdIds::FLY_AS_CHAR);
 
@@ -394,19 +394,18 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         SvxSwFrameValidation aVal;
 
         // size
-        const SwFormatFrameSize& rFrameSize = static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE));
+        const SwFormatFrameSize& rFrameSize = rSet.Get(RES_FRM_SIZE);
         Size aSize = rFrameSize.GetSize();
 
         // position
-        const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));
-        const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT));
+        const SwFormatHoriOrient& rHori = rSet.Get(RES_HORI_ORIENT);
+        const SwFormatVertOrient& rVert = rSet.Get(RES_VERT_ORIENT);
 
         aVal.nAnchorType = m_nAnchorId;
         aVal.bAutoHeight = rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
         // #i18732#
-        aVal.bFollowTextFlow =
-            static_cast<const SwFormatFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+        aVal.bFollowTextFlow = rSet.Get(RES_FOLLOW_TEXT_FLOW).GetValue();
 
         aVal.nHoriOrient = (short)rHori.GetHoriOrient();
         aVal.nVertOrient = (short)rVert.GetVertOrient();
@@ -473,13 +472,13 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         RangeModifyHdl(*m_pTopMarginED);
     }
 
-    const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
+    const SwFormatSurround& rSurround = rSet.Get(RES_SURROUND);
     css::text::WrapTextMode nSur = rSurround.GetSurround();
 
     m_pWrapTransparentCB->Enable( bEnable && !m_bHtmlMode && nSur == css::text::WrapTextMode_THROUGH );
     if(m_bHtmlMode)
     {
-        const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));
+        const SwFormatHoriOrient& rHori = rSet.Get(RES_HORI_ORIENT);
         sal_Int16 eHOrient = rHori.GetHoriOrient();
         sal_Int16 eHRelOrient = rHori.GetRelationOrient();
         m_pWrapOutlineCB->Hide();
