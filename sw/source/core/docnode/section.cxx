@@ -62,6 +62,7 @@
 #include <swerror.h>
 #include <unosection.hxx>
 #include <calbck.hxx>
+#include <fmtclds.hxx>
 #include <algorithm>
 #include "ndsect.hxx"
 

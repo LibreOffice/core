@@ -150,7 +150,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView const *pVw)
     if(xStyleSheet.is())
     {
         SfxItemSet& rSet = xStyleSheet->GetItemSet();
-        const SwFormatLineNumber &aFormat = static_cast<const SwFormatLineNumber&>(rSet.Get(RES_LINENUMBER));
+        const SwFormatLineNumber &aFormat = rSet.Get(RES_LINENUMBER);
         if(aFormat.IsCount())
             m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
         else

@@ -241,7 +241,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( nLeftSpace )
         {
             const SwFormatHoriOrient& rHoriOri =
-                static_cast<const SwFormatHoriOrient&>(rFlyItemSet.Get( RES_HORI_ORIENT ));
+                rFlyItemSet.Get( RES_HORI_ORIENT );
             if( text::HoriOrientation::NONE == rHoriOri.GetHoriOrient() )
             {
                 SwFormatHoriOrient aHoriOri( rHoriOri );
@@ -277,7 +277,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( nUpperSpace )
         {
             const SwFormatVertOrient& rVertOri =
-                static_cast<const SwFormatVertOrient&>(rFlyItemSet.Get( RES_VERT_ORIENT ));
+                rFlyItemSet.Get( RES_VERT_ORIENT );
             if( text::VertOrientation::NONE == rVertOri.GetVertOrient() )
             {
                 SwFormatVertOrient aVertOri( rVertOri );

@@ -164,8 +164,7 @@ void SwFrameDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SwColumnPage&>(rPage).SetFrameMode(true);
         static_cast<SwColumnPage&>(rPage).SetFormatUsed(m_bFormat);
 
-        const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(
-                                            m_rSet.Get( RES_FRM_SIZE ));
+        const SwFormatFrameSize& rSize = m_rSet.Get( RES_FRM_SIZE );
         static_cast<SwColumnPage&>(rPage).SetPageWidth( rSize.GetWidth() );
     }
     else if (nId == m_nMacroId)

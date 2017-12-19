@@ -254,7 +254,7 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = rVal.nAnchorType;
-    const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(m_aSet.Get(RES_FRM_SIZE));
+    const SwFormatFrameSize& rSize = m_aSet.Get(RES_FRM_SIZE);
     m_pOwnSh->CalcBoundRect( aBoundRect, eAnchorType,
                            rVal.nHRelOrient,
                            rVal.nVRelOrient,
@@ -518,7 +518,7 @@ void SwFlyFrameAttrMgr::SetLRSpace( long nLeft, long nRight )
 {
     OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Which border to set?" );
 
-    SvxLRSpaceItem aTmp( static_cast<const SvxLRSpaceItem&>(m_aSet.Get( RES_LR_SPACE )) );
+    SvxLRSpaceItem aTmp( m_aSet.Get( RES_LR_SPACE ) );
     if( LONG_MAX != nLeft )
         aTmp.SetLeft( sal_uInt16(nLeft) );
     if( LONG_MAX != nRight )
@@ -530,7 +530,7 @@ void SwFlyFrameAttrMgr::SetULSpace( long nTop, long nBottom )
 {
     OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Which border to set?" );
 
-    SvxULSpaceItem aTmp( static_cast<const SvxULSpaceItem&>(m_aSet.Get( RES_UL_SPACE )) );
+    SvxULSpaceItem aTmp( m_aSet.Get( RES_UL_SPACE ) );
     if( LONG_MAX != nTop )
         aTmp.SetUpper( sal_uInt16(nTop) );
     if( LONG_MAX != nBottom )
