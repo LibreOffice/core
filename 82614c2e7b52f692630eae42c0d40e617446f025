@@ -16,6 +16,24 @@
       "revId": "82614c2e7b52f692630eae42c0d40e617446f025",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_40c88ea8",
+        "filename": "sal/qa/rtl/alloc/rtl_alloc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2017-12-19T10:39:41Z",
+      "side": 1,
+      "message": "Makes sense of course - thanks!",
+      "parentUuid": "1a430d35_e046da4d",
+      "revId": "82614c2e7b52f692630eae42c0d40e617446f025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
