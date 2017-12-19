@@ -306,7 +306,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg,
-            static_cast<sal_uInt16>(bTextAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL ));
+            bTextAttr ? sal_uInt16(RES_CONDTXTFMTCOLL) : sal_uInt16(RES_TXTFMTCOLL) );
         if( !rAttrs.empty() )
         {
             pUndo->SetAttrs( rAttrs );
