@@ -24,7 +24,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <sal/rtl/strimp.hxx>
+#include "../../../rtl/strimp.hxx"
 
 #include <memory.h>
 
