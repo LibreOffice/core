@@ -1916,6 +1916,7 @@ rtl::Reference<LwpVirtualLayout> LwpLayout::GetContainerLayout()
 LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
     : LwpLayout(objHdr, pStrm)
     , m_bGettingWrapType(false)
+    , m_bGettingLayoutRelativity(false)
     , m_nWrapType(0)
     , m_nBuoyancy(0)
     , m_nBaseLineOffset(0)
@@ -1995,11 +1996,15 @@ sal_uInt8 LwpPlacableLayout::GetWrapType()
 */
 LwpLayoutRelativity* LwpPlacableLayout::GetRelativityPiece()
 {
-    if(!m_LayRelativity.IsNull())
+    if (m_bGettingLayoutRelativity)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingLayoutRelativity = true;
+    LwpLayoutRelativity* pRet = nullptr;
+    if (!m_LayRelativity.IsNull())
     {
-        if(m_nOverrideFlag & OVER_PLACEMENT)
+        if (m_nOverrideFlag & OVER_PLACEMENT)
         {
-            return dynamic_cast<LwpLayoutRelativity*>(m_LayRelativity.obj().get());
+            pRet = dynamic_cast<LwpLayoutRelativity*>(m_LayRelativity.obj().get());
         }
     }
     else
@@ -2007,10 +2012,11 @@ LwpLayoutRelativity* LwpPlacableLayout::GetRelativityPiece()
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*>(xBase.get()))
         {
-            return pLay->GetRelativityPiece();
+            pRet = pLay->GetRelativityPiece();
         }
     }
-    return nullptr;
+    m_bGettingLayoutRelativity = false;
+    return pRet;
 }
 /**
 * @descr:   Get relative type
