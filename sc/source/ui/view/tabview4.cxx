@@ -388,7 +388,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
     bool        bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     SCCOL       nUsedX;
     SCROW       nUsedY;
-    pDoc->GetTableArea( nTab, nUsedX, nUsedY );     //! cachen !!!!!!!!!!!!!!!
+    pDoc->GetTableArea( nTab, nUsedX, nUsedY );     //! cached !!!!!!!!!!!!!!!
 
     SCCOL nVisXL = 0;
     SCCOL nVisXR = 0;

@@ -495,7 +495,7 @@ namespace svgio
                     // in a defs node (which gets not decomposed by itself), but you never
                     // know
 
-                    // also not directly used are Markers and Patterns, only indirecty used
+                    // also not directly used are Markers and Patterns, only indirectly used
                     // by reference
 
                     // #i121656# also do not decompose nodes which have display="none" set

@@ -321,7 +321,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  Our owner frame should handle this URL. But we can't do it for all of them.
     //  So we ask the internal set controller first. If he disagree we try to find a registered
     //  protocol handler. If this failed too - we check for a loadable content and in case of true
-    //  we load it into the frame by returning specilized dispatch object.
+    //  we load it into the frame by returning specialized dispatch object.
 
     else if (
              (sTargetFrameName==SPECIALTARGET_SELF)  ||
