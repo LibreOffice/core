@@ -2212,57 +2212,55 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
 
 void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
 {
-    {
 #ifndef NDEBUG
-        SwNode *const pFirst((*this)[nDelPos]);
+    SwNode *const pFirst((*this)[nDelPos]);
 #endif
-        for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
-        {
-            SwNode* pNode = ((*this)[ nDelPos + nCnt ]);
-            SwTextNode * pTextNd = pNode->GetTextNode();
+    for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
+    {
+        SwNode* pNode = ((*this)[ nDelPos + nCnt ]);
+        SwTextNode * pTextNd = pNode->GetTextNode();
 
-            if (pTextNd)
+        if (pTextNd)
+        {
+            pTextNd->RemoveFromList();
+            // remove RndStdIds::FLY_AS_CHAR *before* adjusting SwNodeIndex
+            // so their anchor still points to correct node when deleted!
+            // NOTE: this will call RemoveNode() recursively!
+            // so adjust our indexes to account for removed nodes
+            sal_uLong const nPos = pTextNd->GetIndex();
+            SwpHints *const pHints(pTextNd->GetpSwpHints());
+            if (pHints)
             {
-                pTextNd->RemoveFromList();
-                // remove RndStdIds::FLY_AS_CHAR *before* adjusting SwNodeIndex
-                // so their anchor still points to correct node when deleted!
-                // NOTE: this will call RemoveNode() recursively!
-                // so adjust our indexes to account for removed nodes
-                sal_uLong const nPos = pTextNd->GetIndex();
-                SwpHints *const pHints(pTextNd->GetpSwpHints());
-                if (pHints)
+                std::vector<SwTextAttr*> flys;
+                for (size_t i = 0; i < pHints->Count(); ++i)
                 {
-                    std::vector<SwTextAttr*> flys;
-                    for (size_t i = 0; i < pHints->Count(); ++i)
+                    SwTextAttr *const pHint(pHints->Get(i));
+                    if (RES_TXTATR_FLYCNT == pHint->Which())
                     {
-                        SwTextAttr *const pHint(pHints->Get(i));
-                        if (RES_TXTATR_FLYCNT == pHint->Which())
-                        {
-                            flys.push_back(pHint);
-                        }
+                        flys.push_back(pHint);
                     }
-                    for (SwTextAttr * pHint : flys)
-                    {
-                        pTextNd->DeleteAttribute(pHint);
-                    }   // pHints may be dead now
-                    sal_uLong const nDiff = nPos - pTextNd->GetIndex();
-                    if (nDiff)
-                    {
-                        nDelPos -= nDiff;
-                    }
-                    assert(pTextNd == (*this)[nDelPos + nCnt]);
-                    assert(pFirst == (*this)[nDelPos]);
                 }
+                for (SwTextAttr * pHint : flys)
+                {
+                    pTextNd->DeleteAttribute(pHint);
+                }   // pHints may be dead now
+                sal_uLong const nDiff = nPos - pTextNd->GetIndex();
+                if (nDiff)
+                {
+                    nDelPos -= nDiff;
+                }
+                assert(pTextNd == (*this)[nDelPos + nCnt]);
+                assert(pFirst == (*this)[nDelPos]);
             }
-            SwTableNode* pTableNode = pNode->GetTableNode();
-            if (pTableNode)
-            {
-                // The node that is deleted is a table node.
-                // Need to make sure that all the redlines that are
-                // related to this table are removed from the
-                // 'Extra Redlines' array
-                pTableNode->RemoveRedlines();
-            }
+        }
+        SwTableNode* pTableNode = pNode->GetTableNode();
+        if (pTableNode)
+        {
+            // The node that is deleted is a table node.
+            // Need to make sure that all the redlines that are
+            // related to this table are removed from the
+            // 'Extra Redlines' array
+            pTableNode->RemoveRedlines();
         }
     }
 
