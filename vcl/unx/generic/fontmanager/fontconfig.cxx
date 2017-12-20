@@ -866,11 +866,13 @@ namespace
 #if ENABLE_GIO
     guint get_xid_for_dbus()
     {
-        // FIXME: Application::GetActiveTopWindow only returns something sensible if LO currently has the focus
-        // (which is not the case when you are trying to debug this...). It should instead return the last active window.
-        const vcl::Window *pTopWindow = Application::IsHeadlessModeEnabled() ? nullptr : Application::GetActiveTopWindow();
+        if (Application::IsHeadlessModeEnabled())
+            return 0;
+        const vcl::Window *pTopWindow = Application::GetActiveTopWindow();
+        if (!pTopWindow)
+            pTopWindow = Application::GetFirstTopLevelWindow();
         const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
-        return pEnvData ? pEnvData->aWindow : 0;
+        return pEnvData ? GetDbusId(*pEnvData) : 0;
     }
 #endif
 }
