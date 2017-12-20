@@ -829,8 +829,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             {
                 OSL_ENSURE(aColItem.Count(), "ColDesc is empty!!");
 
-                const bool bSingleLine = static_cast<const SfxBoolItem&>(rReq.
-                                GetArgs()->Get(SID_RULER_ACT_LINE_ONLY)).GetValue();
+                const bool bSingleLine = rReq.
+                                GetArgs()->Get(SID_RULER_ACT_LINE_ONLY).GetValue();
 
                 SwTabCols aTabCols;
                 if ( m_bSetTabColFromDoc )
