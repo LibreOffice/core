@@ -1122,7 +1122,7 @@ namespace
     LanguageTag GetInstalledLocaleForSystemUILanguage()
     {
         css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
-        return LanguageTag(getInstalledLocaleForSystemUILanguage(inst)).makeFallback();
+        return LanguageTag(getInstalledLocaleForSystemUILanguage(inst, false)).makeFallback();
     }
 }
 
