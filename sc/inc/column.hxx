@@ -29,6 +29,7 @@
 #include "mtvelements.hxx"
 #include <formula/types.hxx>
 #include <svl/zforlist.hxx>
+#include <svx/svdobj.hxx>
 
 #include <set>
 #include <vector>
@@ -608,6 +609,7 @@ public:
                             sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption = true, SCROW nRowOffsetDest=0 ) const;
 
     void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 );
+    void UpdateDrawObjects( std::vector<std::vector<SdrObject*>> pObjects, SCROW nRowStart, SCROW nRowEnd );
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 
