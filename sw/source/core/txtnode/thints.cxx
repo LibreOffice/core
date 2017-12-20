@@ -296,7 +296,7 @@ into a hyperlink.
 
 Unfortunately the UNO API for Hyperlink and Ruby consists of the properties
 Hyperlink* and Ruby* of the css.text.CharacterProperties service.  In other
-words, they are treated as formatting attributes, not as content entites.
+words, they are treated as formatting attributes, not as content entities.
 Furthermore, for API users it is not possible to easily test whether a certain
 range would be overlapping with other nested attributes, and most importantly,
 <em>which ones</em>, so we can hardly refuse to insert these in cases of
