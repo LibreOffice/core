@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_660cc23b",
+        "filename": "sw/source/core/unocore/unomap1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-12-20T09:36:15Z",
+      "side": 1,
+      "message": "You can add new IDs for the new properties here: https://opengrok.libreoffice.org/xref/core/sw/inc/cmdid.h#785",
+      "revId": "28ec9cc6bc1f97e349f47ac352b1bffbbc2b26c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_86152e41",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-12-20T09:36:15Z",
+      "side": 1,
+      "message": "You need to use the loext namespace here.",
+      "revId": "28ec9cc6bc1f97e349f47ac352b1bffbbc2b26c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a6122a55",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-12-20T09:36:15Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "28ec9cc6bc1f97e349f47ac352b1bffbbc2b26c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
