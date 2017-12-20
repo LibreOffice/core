@@ -144,8 +144,8 @@ SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
     if ( pLst && pLst->GetMarkCount() == 1 )
     {
         SdrObject *pO = pLst->GetMark( 0 )->GetMarkedSdrObj();
-        if ( pO && dynamic_cast<const SwVirtFlyDrawObj*>( pO) !=  nullptr )
-            return static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrame();
+        if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pO))
+            return pVirtO->GetFlyFrame();
     }
     return nullptr;
 }
@@ -346,9 +346,9 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
     SwFrame* pOld;
     SwFlyFrame* pFly = nullptr;
     SdrObject *pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
-    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+    if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
     {
-        pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+        pFly = pVirtO->GetFlyFrame();
         pOld = pFly->AnchorFrame();
     }
     else
@@ -825,9 +825,9 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         sal_Int16 aHori = text::HoriOrientation::NONE;
         SwRect aRect;
         SdrObject *pO = pLst->GetMark( j )->GetMarkedSdrObj();
-        if ( dynamic_cast<const SwVirtFlyDrawObj*>( pO) !=  nullptr )
+        if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pO))
         {
-            SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrame();
+            SwFlyFrame *pFly = pVirtO->GetFlyFrame();
 
             const SwFormatHoriOrient &rHori = pFly->GetFormat()->GetHoriOrient();
             aHori = rHori.GetHoriOrient();
@@ -1115,9 +1115,9 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
             {
                 pObj->SetLayer( nLayerId );
                 InvalidateWindows( SwRect( pObj->GetCurrentBoundRect() ) );
-                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+                if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
                 {
-                    SwFormat *pFormat = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->GetFormat();
+                    SwFormat *pFormat = pVirtO->GetFlyFrame()->GetFormat();
                     SvxOpaqueItem aOpa( pFormat->GetOpaque() );
                     aOpa.SetValue(  nLayerId == rIDDMA.GetHellId() );
                     pFormat->SetFormatAttr( aOpa );
@@ -1527,7 +1527,8 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
         while ( aObjIter.IsMore() )
         {
             SdrObject* pObj = aObjIter.Next();
-            bool bFlyFrame = dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr;
+            SwVirtFlyDrawObj *pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+            bool bFlyFrame = pVirtO !=  nullptr;
             if( ( bNoFly && bFlyFrame ) ||
                 ( bNoDraw && !bFlyFrame ) ||
                 // Ignore TextBoxes of draw shapes here, so that
@@ -1540,8 +1541,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 continue;
             if( bFlyFrame )
             {
-                SwVirtFlyDrawObj *pO = static_cast<SwVirtFlyDrawObj*>(pObj);
-                SwFlyFrame *pFly = pO->GetFlyFrame();
+                SwFlyFrame *pFly = pVirtO->GetFlyFrame();
                 if( GotoObjFlags::FlyAny != ( GotoObjFlags::FlyAny & eType ) )
                 {
                     switch ( eType )
@@ -1581,13 +1581,13 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 while ( aTmpIter.IsMore() )
                 {
                     SdrObject* pTmpObj = aTmpIter.Next();
-                    bFlyFrame = dynamic_cast<const SwVirtFlyDrawObj*>( pTmpObj) !=  nullptr;
+                    pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pTmpObj);
+                    bFlyFrame = pVirtO !=  nullptr;
                     if( ( bNoFly && bFlyFrame ) || ( bNoDraw && !bFlyFrame ) )
                         continue;
                     if( bFlyFrame )
                     {
-                        SwVirtFlyDrawObj *pO = static_cast<SwVirtFlyDrawObj*>(pTmpObj);
-                        aCurPos = pO->GetFlyFrame()->getFrameArea().Pos();
+                        aCurPos = pVirtO->GetFlyFrame()->getFrameArea().Pos();
                     }
                     else
                         aCurPos = pTmpObj->GetCurrentBoundRect().TopLeft();
@@ -1645,11 +1645,11 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
     if ( !pBest )
         return false;
 
-    bool bFlyFrame = dynamic_cast<const SwVirtFlyDrawObj*>( pBest) !=  nullptr;
+    const SwVirtFlyDrawObj *pVirtO = dynamic_cast<const SwVirtFlyDrawObj*>(pBest);
+    bool bFlyFrame = pVirtO != nullptr;
     if( bFlyFrame )
     {
-        const SwVirtFlyDrawObj *pO = static_cast<const SwVirtFlyDrawObj*>(pBest);
-        const SwRect& rFrame = pO->GetFlyFrame()->getFrameArea();
+        const SwRect& rFrame = pVirtO->GetFlyFrame()->getFrameArea();
         SelectObj( rFrame.Pos(), 0, const_cast<SdrObject*>(pBest) );
         if( !ActionPend() )
             MakeVisible( rFrame );
@@ -2567,9 +2567,9 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
                 nChk |= ( pObj->IsMoveProtect() ? FlyProtectFlags::Pos : FlyProtectFlags::NONE ) |
                         ( pObj->IsResizeProtect()? FlyProtectFlags::Size : FlyProtectFlags::NONE );
 
-                if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+                if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
                 {
-                    SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+                    SwFlyFrame *pFly = pVirtO->GetFlyFrame();
                     if ( (FlyProtectFlags::Content & eType) && pFly->GetFormat()->GetProtect().IsContentProtected() )
                         nChk |= FlyProtectFlags::Content;
 
@@ -2601,8 +2601,8 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
                     return eType;
             }
             const SwFrame* pAnch;
-            if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
-                pAnch = static_cast<SwVirtFlyDrawObj*>( pObj )->GetFlyFrame()->GetAnchorFrame();
+            if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
+                pAnch = pVirtO->GetFlyFrame()->GetAnchorFrame();
             else
             {
                 SwDrawContact* pTmp = static_cast<SwDrawContact*>(GetUserCall(pObj));
