@@ -33,7 +33,6 @@ enum OpCode : sal_uInt16
         ocStop              = SC_OPCODE_STOP,
         ocExternal          = SC_OPCODE_EXTERNAL,
         ocName              = SC_OPCODE_NAME,
-        ocExternalRef       = SC_OPCODE_EXTERNAL_REF,
     // Jump commands
         ocIf                = SC_OPCODE_IF,
         ocIfError           = SC_OPCODE_IF_ERROR,
@@ -527,7 +526,6 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocStop: return "Stop";
     case ocExternal: return "External";
     case ocName: return "Name";
-    case ocExternalRef: return "ExternalRef";
     case ocIf: return "If";
     case ocIfError: return "IfError";
     case ocIfNA: return "IfNA";
