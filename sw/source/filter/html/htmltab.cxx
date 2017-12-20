@@ -3606,10 +3606,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 SwTextNode *const pOldTextNd = (!bAppended && !bForceFrame) ?
                     pSavePos->nNode.GetNode().GetTextNode() : nullptr;
 
-                if (pOldTextNd)
+                SwFrameFormat *pFrameFormat = (pOldTextNd && pSwTable) ? pSwTable->GetFrameFormat() : nullptr;
+                if (pFrameFormat)
                 {
-                    SwFrameFormat *pFrameFormat = pSwTable->GetFrameFormat();
-
                     const SfxPoolItem* pItem2;
                     if( SfxItemState::SET == pOldTextNd->GetSwAttrSet()
                             .GetItemState( RES_PAGEDESC, false, &pItem2 ) &&
