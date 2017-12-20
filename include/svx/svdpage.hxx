@@ -27,6 +27,7 @@
 #include <tools/weakbase.hxx>
 #include <tools/contnr.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <svl/lstner.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -34,7 +35,6 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <svx/svdobj.hxx>
 #include <memory>
 #include <vector>
 
@@ -45,6 +45,8 @@ namespace sdr { namespace contact { class ViewContact; }}
 class SdrPage;
 class SdrModel;
 class SfxItemPool;
+class SfxPoolItem;
+class SdrObject;
 class SdrPageView;
 class SdrLayerAdmin;
 class SetOfByte;
@@ -153,8 +155,21 @@ public:
     /// convert attributes of the style to hard formatting
     void BurnInStyleSheetAttributes();
 
-    size_t GetObjCount() const;
-    SdrObject* GetObj(size_t nNum) const;
+    size_t GetObjCount() const
+    {
+        return maList.size();
+    }
+
+    SdrObject* GetObj(size_t nNum) const
+    {
+        if (nNum >= maList.size())
+        {
+            OSL_ASSERT(nNum<maList.size());
+            return nullptr;
+        }
+        else
+            return maList[nNum];
+    }
 
     /// linked page or linked group object
     virtual bool IsReadOnly() const;

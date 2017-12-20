@@ -36,6 +36,7 @@
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unotext.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>

@@ -80,6 +80,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/awt/CharSet.hpp>

@@ -776,22 +776,6 @@ OUString SdrObject::GetDescription() const
     return OUString();
 }
 
-sal_uInt32 SdrObject::GetOrdNum() const
-{
-    if (pObjList!=nullptr) {
-        if (pObjList->IsObjOrdNumsDirty()) {
-            pObjList->RecalcObjOrdNums();
-        }
-    } else const_cast<SdrObject*>(this)->nOrdNum=0;
-    return nOrdNum;
-}
-
-
-void SdrObject::SetOrdNum(sal_uInt32 nNum)
-{
-    nOrdNum = nNum;
-}
-
 void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
 {
     if (pGrabBagItem != nullptr)

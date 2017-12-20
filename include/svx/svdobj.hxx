@@ -27,6 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
@@ -470,13 +471,24 @@ public:
     /// SdrObjList is changed, the bObjOrdNumsDirty flag is set on the SdrPage
     /// and the next GetOrdNum() call recalculates the order number of all
     /// SdrObjects in the SdrObjList.
-    sal_uInt32 GetOrdNum() const;
+    sal_uInt32 GetOrdNum() const
+    {
+        if (pObjList != nullptr)
+        {
+            if (pObjList->IsObjOrdNumsDirty())
+                pObjList->RecalcObjOrdNums();
+        }
+        else
+            const_cast<SdrObject*>(this)->nOrdNum = 0;
+
+        return nOrdNum;
+    }
 
     // Warning: this method should only be used if you really know what you're doing
     sal_uInt32 GetOrdNumDirect() const { return nOrdNum;}
 
     // setting the order number should only happen from the model or from the page
-    void SetOrdNum(sal_uInt32 nNum);
+    void SetOrdNum(sal_uInt32 nNum) { nOrdNum = nNum; }
 
     // GrabBagItem for interim interop purposes
     void GetGrabBagItem(css::uno::Any& rVal) const;

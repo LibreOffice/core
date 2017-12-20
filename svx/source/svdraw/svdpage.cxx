@@ -672,23 +672,6 @@ void SdrObjList::BurnInStyleSheetAttributes()
     }
 }
 
-size_t SdrObjList::GetObjCount() const
-{
-    return maList.size();
-}
-
-
-SdrObject* SdrObjList::GetObj(size_t nNum) const
-{
-    if (nNum >= maList.size())
-    {
-        OSL_ASSERT(nNum<maList.size());
-        return nullptr;
-    }
-    else
-        return maList[nNum];
-}
-
 
 bool SdrObjList::IsReadOnly() const
 {
