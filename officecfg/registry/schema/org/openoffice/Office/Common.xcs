@@ -6382,6 +6382,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="EnableLangpackInstallation" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if missing langpack installation should be triggered.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Classification">
       <info>

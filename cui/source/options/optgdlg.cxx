@@ -21,6 +21,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 #include <svtools/grfmgr.hxx>
+#include <svtools/langhelp.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
@@ -1122,7 +1123,7 @@ namespace
     LanguageTag GetInstalledLocaleForSystemUILanguage()
     {
         css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
-        return LanguageTag(getInstalledLocaleForSystemUILanguage(inst)).makeFallback();
+        return LanguageTag(getInstalledLocaleForSystemUILanguage(inst, false)).makeFallback();
     }
 }
 

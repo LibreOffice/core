@@ -131,9 +131,6 @@ public:
     bool            isCJKKeyboardLayoutInstalled() const;
 };
 
-OUString SVL_DLLPUBLIC getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale);
-OUString SVL_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed);
-
 #endif // INCLUDED_SVL_LANGUAGEOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
