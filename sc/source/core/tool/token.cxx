@@ -1674,6 +1674,19 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 // Named expression would need "recursive" handling of its
                 // token array for vector state in
                 // ScFormulaCell::InterpretFormulaGroup() and below.
+
+            case ocTableRef:
+                // May result in a single cell or range reference, depending on
+                // context.
+
+            case ocColRowName:
+                // The associated reference is the name cell with which to
+                // create the implicit intersection.
+
+            case ocColRowNameAuto:
+                // Auto column/row names lead to references computed in
+                // interpreter.
+
                 SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
                 meVectorState = FormulaVectorDisabledByOpCode;
                 mbOpenCLEnabled = false;
