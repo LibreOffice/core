@@ -143,6 +143,7 @@ void ScColumn::Delete( SCROW nRow )
     DeleteContent(nRow, false);
     maCellTextAttrs.set_empty(nRow, nRow);
     maCellNotes.set_empty(nRow, nRow);
+    maCellDrawObjects.set_empty(nRow, nRow);
 
     Broadcast(nRow);
     CellStorageModified();
@@ -157,6 +158,8 @@ void ScColumn::FreeAll()
     maCellTextAttrs.resize(MAXROWCOUNT);
     maCellNotes.clear();
     maCellNotes.resize(MAXROWCOUNT);
+    maCellDrawObjects.clear();
+    maCellDrawObjects.resize(MAXROWCOUNT);
     CellStorageModified();
 }
 
@@ -192,6 +195,9 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
     CellNotesDeleting(nStartRow, nEndRow, false);
     maCellNotes.erase(nStartRow, nEndRow);
     maCellNotes.resize(MAXROWCOUNT);
+
+    maCellDrawObjects.erase(nStartRow, nEndRow);
+    maCellDrawObjects.resize(MAXROWCOUNT);
 
     // See if we have any cells that would get deleted or shifted by deletion.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
@@ -785,6 +791,7 @@ bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
 {
     rBlockPos.miBroadcasterPos = maBroadcasters.begin();
     rBlockPos.miCellNotePos = maCellNotes.begin();
+    rBlockPos.miCellDrawObjPos = maCellDrawObjects.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();
     return true;
@@ -794,6 +801,7 @@ void ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) cons
 {
     rBlockPos.miBroadcasterPos = maBroadcasters.begin();
     rBlockPos.miCellNotePos = maCellNotes.begin();
+    rBlockPos.miCellDrawObjPos = maCellDrawObjects.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();
 }

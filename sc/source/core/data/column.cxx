@@ -84,6 +84,7 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 ScColumn::ScColumn() :
     maCellTextAttrs(MAXROWCOUNT),
     maCellNotes(MAXROWCOUNT),
+    maCellDrawObjects(MAXROWCOUNT),
     maBroadcasters(MAXROWCOUNT),
     maCellsEvent(this),
     maCells(maCellsEvent),
@@ -851,6 +852,9 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     maCellNotes.insert_empty(nStartRow, nSize);
     maCellNotes.resize(MAXROWCOUNT);
 
+    maCellDrawObjects.insert_empty(nStartRow, nSize);
+    maCellDrawObjects.resize(MAXROWCOUNT);
+
     maBroadcasters.insert_empty(nStartRow, nSize);
     maBroadcasters.resize(MAXROWCOUNT);
 
@@ -1205,6 +1209,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
 
     if (bSet)
     {
+        // TODO: Do we need to copy images as well here?
         rDestCol.maCellTextAttrs.set(nDestRow, maCellTextAttrs.get<sc::CellTextAttr>(nSrcRow));
         ScPostIt* pNote = maCellNotes.get<ScPostIt*>(nSrcRow);
         if (pNote)
@@ -1894,6 +1899,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCells.swap(rCol.maCells);
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
     maCellNotes.swap(rCol.maCellNotes);
+    maCellDrawObjects.swap(rCol.maCellDrawObjects);
 
     // Swap all CellStoreEvent mdds event_func related.
     std::swap( mnBlkCountFormula, rCol.mnBlkCountFormula);
@@ -1954,6 +1960,10 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // move the notes to the destination column
     maCellNotes.transfer(nStartRow, nEndRow, rCol.maCellNotes, nStartRow);
     UpdateNoteCaptions(0, MAXROW);
+
+    // move the draw objects to the destination column
+    maCellDrawObjects.transfer(nStartRow, nEndRow, rCol.maCellDrawObjects, nStartRow);
+    // TODO: Update graphics
 
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);

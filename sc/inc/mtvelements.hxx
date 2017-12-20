@@ -14,6 +14,7 @@
 #include "formulacell.hxx"
 #include <svl/broadcast.hxx>
 #include <svl/sharedstring.hxx>
+#include <svx/svdobj.hxx>
 #include <editeng/editobj.hxx>
 #include "calcmacros.hxx"
 #include "postit.hxx"
@@ -51,6 +52,7 @@ const mdds::mtv::element_t element_type_edittext = mdds::mtv::element_type_user_
 const mdds::mtv::element_t element_type_formula = mdds::mtv::element_type_user_start + 4;
 
 const mdds::mtv::element_t element_type_cellnote = mdds::mtv::element_type_user_start + 5;
+const mdds::mtv::element_t element_type_celldrawobj = mdds::mtv::element_type_user_start + 6;
 
 /// Mapped standard element types (for convenience).
 const mdds::mtv::element_t element_type_numeric = mdds::mtv::element_type_numeric;
@@ -60,6 +62,7 @@ const mdds::mtv::element_t element_type_uint16 = mdds::mtv::element_type_ushort;
 /// Custom element blocks.
 
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_cellnote, ScPostIt> cellnote_block;
+typedef mdds::mtv::noncopyable_managed_element_block<element_type_celldrawobj, SdrObject> celldrawobj_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> broadcaster_block;
 typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> celltextattr_block;
 typedef mdds::mtv::default_element_block<element_type_string, svl::SharedString> string_block;
@@ -76,6 +79,7 @@ MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellT
 
 /// These need to be in global namespace just like their respective types are.
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScPostIt, sc::element_type_cellnote, nullptr, sc::cellnote_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SdrObject, sc::element_type_celldrawobj, nullptr, sc::celldrawobj_block)
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SvtBroadcaster, sc::element_type_broadcaster, nullptr, sc::broadcaster_block)
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScFormulaCell, sc::element_type_formula, nullptr, sc::formula_block)
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(EditTextObject, sc::element_type_edittext, nullptr, sc::edittext_block)
@@ -103,6 +107,10 @@ public:
 typedef mdds::mtv::custom_block_func1<sc::cellnote_block> CNoteFunc;
 typedef mdds::multi_type_vector<CNoteFunc> CellNoteStoreType;
 
+/// Draw object container
+typedef mdds::mtv::custom_block_func1<sc::celldrawobj_block> CDrawObjFunc;
+typedef mdds::multi_type_vector<CDrawObjFunc> CellDrawObjStoreType;
+
 /// Broadcaster storage container
 typedef mdds::mtv::custom_block_func1<sc::broadcaster_block> BCBlkFunc;
 typedef mdds::multi_type_vector<BCBlkFunc> BroadcasterStoreType;
@@ -121,6 +129,7 @@ typedef mdds::multi_type_vector<CellFunc, CellStoreEvent> CellStoreType;
 struct ColumnBlockPosition
 {
     CellNoteStoreType::iterator miCellNotePos;
+    CellDrawObjStoreType::iterator miCellDrawObjPos;
     BroadcasterStoreType::iterator miBroadcasterPos;
     CellTextAttrStoreType::iterator miCellTextAttrPos;
     CellStoreType::iterator miCellPos;
@@ -131,6 +140,7 @@ struct ColumnBlockPosition
 struct ColumnBlockConstPosition
 {
     CellNoteStoreType::const_iterator miCellNotePos;
+    CellDrawObjStoreType::const_iterator miCellDrawObjPos;
     BroadcasterStoreType::const_iterator miBroadcasterPos;
     CellTextAttrStoreType::const_iterator miCellTextAttrPos;
     CellStoreType::const_iterator miCellPos;
