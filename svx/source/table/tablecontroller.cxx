@@ -2423,11 +2423,11 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
 
             const SvxColorItem* pLineColorItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SID_FRAME_LINECOLOR, false) )
-                pLineColorItem = dynamic_cast< const SvxColorItem* >( &rAttr.Get( SID_FRAME_LINECOLOR ) );
+                pLineColorItem = &rAttr.Get( SID_FRAME_LINECOLOR );
 
             const SvxBorderLine* pBorderLineItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SID_FRAME_LINESTYLE, false) )
-                pBorderLineItem = static_cast<const SvxLineItem&>(rAttr.Get( SID_FRAME_LINESTYLE )).GetLine();
+                pBorderLineItem = rAttr.Get( SID_FRAME_LINESTYLE ).GetLine();
 
             if( pBoxInfoItem && !pBoxItem )
             {

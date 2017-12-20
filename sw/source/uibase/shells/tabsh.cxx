@@ -1421,15 +1421,13 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
             case SID_FRAME_LINECOLOR:
                 if ( rReq.GetSlot() == SID_FRAME_LINESTYLE )
                 {
-                    const SvxLineItem &rLineItem = static_cast<const SvxLineItem&>(pArgs->
-                                                            Get( SID_FRAME_LINESTYLE ));
+                    const SvxLineItem &rLineItem = pArgs->Get( SID_FRAME_LINESTYLE );
                     const SvxBorderLine* pBorderLine = rLineItem.GetLine();
                     rSh.SetTabLineStyle( nullptr, true, pBorderLine);
                 }
                 else
                 {
-                    const SvxColorItem &rNewColorItem = static_cast<const SvxColorItem&>(pArgs->
-                                                            Get( SID_FRAME_LINECOLOR ));
+                    const SvxColorItem &rNewColorItem = pArgs->Get( SID_FRAME_LINECOLOR );
                     rSh.SetTabLineStyle( &rNewColorItem.GetValue() );
                 }
 

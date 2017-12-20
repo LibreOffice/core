@@ -704,10 +704,8 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             const SfxItemSet *pArgs = rReq.GetArgs();
             if( pArgs && pArgs->Count() >= 2 )
             {
-                sal_uInt8 nCols = (sal_uInt8)static_cast<const SfxUInt16Item &>(pArgs->Get(
-                                        SID_ATTR_TABLE_COLUMN)).GetValue();
-                sal_uInt8 nRows = (sal_uInt8)static_cast<const SfxUInt16Item &>(pArgs->Get(
-                                        SID_ATTR_TABLE_ROW)).GetValue();
+                sal_uInt8 nCols = (sal_uInt8)pArgs->Get(SID_ATTR_TABLE_COLUMN).GetValue();
+                sal_uInt8 nRows = (sal_uInt8)pArgs->Get(SID_ATTR_TABLE_ROW).GetValue();
                 m_pViewWin->CalcWish( nRows, nCols );
 
             }

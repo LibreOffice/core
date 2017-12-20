@@ -308,7 +308,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             short nSlotId = rReq.GetSlot();
 
-            if( nSlotId == SID_OBJECT_ROTATE )
+            if( nSlotId == sal_uInt16(SID_OBJECT_ROTATE) )
             {
                 // toggle rotation
                 if( nOldSId == nSlotId )
