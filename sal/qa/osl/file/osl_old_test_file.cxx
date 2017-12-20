@@ -32,6 +32,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <unotools/tempfile.hxx>
+
+
 namespace osl_test_file
 {
 
@@ -137,8 +140,30 @@ void oldtestfile::test_file_004()
 #endif
 }
 
+class TempFileTest : public CppUnit::TestFixture
+{
+
+public:
+    TempFileTest() {}
+
+    void SetTempNameBaseDirectory()
+    {   // only testing: of not found the directory
+        OUString path = utl::TempFile::SetTempNameBaseDirectory("file:///not/found/dir");
+
+        CPPUNIT_ASSERT_MESSAGE("SetTempNameBaseDirectory must give a empty string back",
+            path.isEmpty());
+    }
+
+
+    CPPUNIT_TEST_SUITE(TempFileTest);
+    CPPUNIT_TEST(SetTempNameBaseDirectory);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+
 } // namespace osl_test_file
 
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_test_file::oldtestfile);
+CPPUNIT_TEST_SUITE_REGISTRATION( osl_test_file::TempFileTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,13 +57,18 @@ namespace utl
 OUString getParentName( const OUString& aFileName )
 {
     sal_Int32 lastIndex = aFileName.lastIndexOf( '/' );
-    OUString aParent = aFileName.copy( 0, lastIndex );
+    OUString aParent;
 
-    if( aParent.endsWith(":") && aParent.getLength() == 6 )
-        aParent += "/";
+    if (lastIndex > -1)
+    {
+        aParent = aFileName.copy(0, lastIndex);
 
-    if( aParent.equalsIgnoreAsciiCase( "file://" ) )
-        aParent = "file:///";
+        if (aParent.endsWith(":") && aParent.getLength() == 6)
+            aParent += "/";
+
+        if (aParent.equalsIgnoreAsciiCase("file://"))
+            aParent = "file:///";
+    }
 
     return aParent;
 }
