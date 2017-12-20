@@ -1220,13 +1220,6 @@ public:
     /// Dialog / window tunneling related methods.
     Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
 
-    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
-    void LogicMouseMove(const MouseEvent& rMouseEvent);
-
-    void LOKKeyInput(const KeyEvent& rKeyEvent);
-    void LOKKeyUp(const KeyEvent& rKeyEvent);
-
     /** @name Accessibility
      */
     ///@{
