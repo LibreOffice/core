@@ -303,8 +303,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
             false, &pItem ) )
     {
         const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-        const SfxBoolItem& rFooterOn =
-            static_cast<const SfxBoolItem&>(rFooterSet.Get( SID_ATTR_PAGE_ON ));
+        const SfxBoolItem& rFooterOn = rFooterSet.Get( SID_ATTR_PAGE_ON );
 
         if ( rFooterOn.GetValue() )
         {

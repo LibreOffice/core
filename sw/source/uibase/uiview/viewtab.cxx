@@ -402,7 +402,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     case SID_ATTR_PAGE_LRSPACE:
         if ( pReqArgs )
         {
-            const SvxLongLRSpaceItem aLongLR( static_cast<const SvxLongLRSpaceItem&>(pReqArgs->Get( SID_ATTR_PAGE_LRSPACE )) );
+            const SvxLongLRSpaceItem aLongLR( pReqArgs->Get( SID_ATTR_PAGE_LRSPACE ) );
 
             SwPageDesc aDesc( rDesc );
             {
@@ -543,8 +543,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     case SID_ATTR_PAGE_ULSPACE:
         if ( pReqArgs )
         {
-            SvxLongULSpaceItem aLongULSpace(
-                static_cast<const SvxLongULSpaceItem&>(pReqArgs->Get( SID_ATTR_PAGE_ULSPACE ) ) );
+            SvxLongULSpaceItem aLongULSpace( pReqArgs->Get( SID_ATTR_PAGE_ULSPACE ) );
 
             SwPageDesc aDesc( rDesc );
             {

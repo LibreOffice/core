@@ -2821,8 +2821,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                     SwDoc::GetTabBorders(rCursor, aSet);
-                    const SvxBoxInfoItem& rBoxInfoItem =
-                        static_cast<const SvxBoxInfoItem&>(aSet.Get(SID_ATTR_BORDER_INNER));
+                    const SvxBoxInfoItem& rBoxInfoItem = aSet.Get(SID_ATTR_BORDER_INNER);
                     const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
 
                     if (FN_UNO_TABLE_BORDER == pEntry->nWID)
