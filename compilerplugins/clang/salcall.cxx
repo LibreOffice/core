@@ -498,6 +498,9 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             }
         }
 
+#if defined _WIN32
+        auto const macroExpansion = SM.getExpansionLoc(endLoc);
+#endif
         endLoc = SM.getSpellingLoc(endLoc);
 
         // Ctors/dtors/conversion functions don't have a return type, start searching for "SAL_CALL"
@@ -515,7 +518,17 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
 #endif
         startLoc = SM.getSpellingLoc(startLoc);
 
-#if !defined _WIN32
+#if defined _WIN32
+        if (macroRange.isValid()
+            && !compat::isPointWithin(SM, startLoc, macroRange.getBegin(), macroRange.getEnd()))
+        {
+            // endLoc is within a macro body but startLoc is not; two source ranges, first is from
+            // startLoc to the macro invocation, second is the leading part of the corresponding
+            // macro definition's replacement text:
+            ranges.emplace_back(startLoc, macroExpansion);
+            startLoc = macroRange.getBegin();
+        }
+#else
         // When the SAL_CALL macro expands to nothing, it may even precede the function
         // declaration's source range, so go back one token (unless the declaration is known to
         // start with a token that must precede a possible "SAL_CALL", like "virtual" or
