@@ -22,7 +22,6 @@
 
 #include <svx/svdpage.hxx>
 
-// HACK
 #include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
 #include <svx/svdview.hxx>
