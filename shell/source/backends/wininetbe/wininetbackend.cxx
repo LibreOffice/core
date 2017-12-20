@@ -341,7 +341,7 @@ css::uno::Any WinInetBackend::getPropertyValue(
     }
 }
 
-OUString SAL_CALL WinInetBackend::getBackendName() {
+OUString WinInetBackend::getBackendName() {
     return OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
 }
 
@@ -350,7 +350,7 @@ OUString SAL_CALL WinInetBackend::getImplementationName()
     return getBackendName() ;
 }
 
-uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames()
+uno::Sequence<OUString> WinInetBackend::getBackendServiceNames()
 {
     uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.WinInetBackend" };
 
