@@ -16,6 +16,24 @@
       "revId": "4e124b17a71d24079f43da68fb239b2e2a29dc4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_26547afd",
+        "filename": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-20T09:47:50Z",
+      "side": 1,
+      "message": "Well, it was something I deemed more readable - yes, to myself; so point taken.",
+      "parentUuid": "1a430d35_e62fd285",
+      "revId": "4e124b17a71d24079f43da68fb239b2e2a29dc4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
