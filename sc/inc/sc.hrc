@@ -118,9 +118,6 @@
 #define SID_SCPRINTOPTIONS      (SC_VIEW_START + 68)
 #define SID_WINDOW_SPLIT        (SC_VIEW_START + 69)
 #define SID_WINDOW_FIX          (SC_VIEW_START + 70)
-#ifdef SID_DRAW_CHART
-#undef SID_DRAW_CHART
-#endif
 #define SID_DRAW_CHART          (SC_VIEW_START + 71)
 #define SID_UPDATETABLINKS      (SC_VIEW_START + 72)
 
