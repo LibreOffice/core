@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_eb44fbb7",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-20T04:17:35Z",
+      "side": 1,
+      "message": "I believe that this include is a leftover from an earlier patchset. Please remove.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 42
+      },
+      "revId": "a3dd6b62aadcd992a6ed312242b4705869fc4fc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_2271dca8",
         "filename": "sfx2/source/appl/sfxhelp.cxx",
         "patchSetId": 4
@@ -30,6 +53,24 @@
       "writtenOn": "2017-12-07T06:48:04Z",
       "side": 1,
       "message": "I would like to get a language name for the current interface. utl::ConfigManager::getLocale() returns only two-letter language name. So, I need to convert from ‘rtl::OUString’ to non-scalar type ‘LanguageTag’ and I do not how it can be done. If there is easy way to get a language name for the current interface without \u0027take LanguageTag\u0027 -\u003e \u0027convert it to LanguageType\u0027 -\u003e \u0027convert it to language name\u0027, it is better, of course.",
+      "parentUuid": "1a430d35_2271dca8",
+      "revId": "a3dd6b62aadcd992a6ed312242b4705869fc4fc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0b14e79d",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-20T04:17:35Z",
+      "side": 1,
+      "message": "The algorithm was suggested by Eike IIRC.",
       "parentUuid": "1a430d35_2271dca8",
       "revId": "a3dd6b62aadcd992a6ed312242b4705869fc4fc7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
