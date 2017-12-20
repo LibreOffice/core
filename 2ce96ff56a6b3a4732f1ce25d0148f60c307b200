@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_460a667a",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-20T17:10:45Z",
+      "side": 1,
+      "message": "I\u0027d enter this block only iff we are in spreadsheet document (see my suggestion elsewhere) and there is an internal data table. We really don\u0027t want to reset the range of pivot tables",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_abcd9386",
         "filename": "chart2/source/controller/main/ChartController.cxx",
         "patchSetId": 3
@@ -13,6 +30,74 @@
       "writtenOn": "2017-12-19T23:34:49Z",
       "side": 1,
       "message": "Don\u0027t use hard coded english strings.",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a625ca09",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-20T17:10:45Z",
+      "side": 1,
+      "message": "This try-catch block can be avoided if we check whether rModel.getParent() is a spreadsheet document (i.e. whether it supports com.sun.star.sheet.SpreadsheetDocument) beforehand",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2619dad7",
+        "filename": "chart2/source/controller/main/ControllerCommandDispatch.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-20T17:10:45Z",
+      "side": 1,
+      "message": "The way it is implemented now, the command is available also in Impress and Writer, which is no good as there are no cell ranges to replace internal data table with.\n\nSo I\u0027d suggest to implement a function of ChartModel that would query its parent model and find out if it is a spreadsheet document. Use XServiceInfo and supportsService(com.sun.star.*.SpreadsheetDocument) or sth along that line\n\nThen, given the first two conditions are fulfilled, I\u0027d enable the command if we are in spreadsheet doc and this is not a pivot table (it was the requirement of pivot table tender that their data ranges are not editable)",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_067bfef5",
+        "filename": "chart2/source/model/main/ChartModel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-20T17:10:45Z",
+      "side": 1,
+      "message": "As moggi suggested, please move this functionality into ChartModelHelper",
+      "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2680fabf",
+        "filename": "offapi/com/sun/star/chart2/XChartDocument.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-12-20T17:10:45Z",
+      "side": 1,
+      "message": "and then we won\u0027t need this one",
       "revId": "2ce96ff56a6b3a4732f1ce25d0148f60c307b200",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
