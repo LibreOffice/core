@@ -1936,7 +1936,6 @@ void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAn
         rAnchor.maEndOffset.X() = aObjRect.Right()-aCellRect.Left();
     else
         rAnchor.maEndOffset.X() = aCellRect.Right()-aObjRect.Left();
-
 }
 
 void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect )
@@ -1975,6 +1974,29 @@ ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
     //If this object has a cell anchor associated with it
     //then its cell-anchored, otherwise its page-anchored
     return ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj)) ? SCA_CELL : SCA_PAGE;
+}
+
+std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCell(const ScAddress& rCell)
+{
+    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(rCell.Tab()));
+    if (!pPage || pPage->GetObjCount() < 1)
+        return std::vector<SdrObject*>();
+
+    std::vector<SdrObject*> pObjects;
+    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObject* pObject = aIter.Next();
+    ScDrawObjData* pObjData;
+    while (pObject)
+    {
+        if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
+        {
+            pObjData = GetObjData(pObject);
+            if (pObjData && pObjData->maStart == rCell) // Object is anchored to this cell
+                pObjects.push_back(pObject);
+        }
+        pObject = aIter.Next();
+    }
+    return pObjects;
 }
 
 ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate )
