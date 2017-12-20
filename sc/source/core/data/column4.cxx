@@ -29,6 +29,7 @@
 #include <scitems.hxx>
 #include <cellform.hxx>
 #include <sharedformula.hxx>
+#include <drwlayer.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
@@ -1096,6 +1097,21 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
             {
                 SetPattern(nRow, *pPat2);
                 rOther.SetPattern(nRow, *pPat1);
+            }
+
+            // Update draw object anchors
+            ScDrawLayer* pDrawLayer = GetDoc()->GetDrawLayer();
+            if (pDrawLayer)
+            {
+                ScAddress aThisCellPos(GetCol(), nRow, GetTab());
+                ScAddress aOtherCellPos(rOther.GetCol(), nRow, GetTab());
+                std::vector<SdrObject*> pThisColObjects = pDrawLayer->GetObjectsAnchoredToCell(aThisCellPos);
+                std::vector<SdrObject*> pOtherColObjects = pDrawLayer->GetObjectsAnchoredToCell(aOtherCellPos);
+                if (!pThisColObjects.empty())
+                    UpdateDrawObjectsForRow(pThisColObjects, rOther.GetCol(), nRow);
+                if (!pOtherColObjects.empty())
+                    rOther.UpdateDrawObjectsForRow(pOtherColObjects, GetCol(), nRow);
+
             }
         }
     }

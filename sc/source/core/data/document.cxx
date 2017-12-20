@@ -1104,7 +1104,8 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
 
 bool ScDocument::ShrinkToUsedDataArea( bool& o_bShrunk, SCTAB nTab, SCCOL& rStartCol,
         SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
-        bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes ) const
+        bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes,
+        bool bConsiderCellDrawObjects ) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB> (maTabs.size()) || !maTabs[nTab])
     {
@@ -1112,7 +1113,7 @@ bool ScDocument::ShrinkToUsedDataArea( bool& o_bShrunk, SCTAB nTab, SCCOL& rStar
         return false;
     }
     return maTabs[nTab]->ShrinkToUsedDataArea( o_bShrunk, rStartCol, rStartRow, rEndCol, rEndRow,
-            bColumnsOnly, bStickyTopRow, bStickyLeftCol, bConsiderCellNotes );
+            bColumnsOnly, bStickyTopRow, bStickyLeftCol, bConsiderCellNotes, bConsiderCellDrawObjects );
 }
 
 SCROW ScDocument::GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const

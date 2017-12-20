@@ -1303,9 +1303,17 @@ SCROW ScColumn::GetLastDataPos() const
     return MAXROW - static_cast<SCROW>(it->size);
 }
 
-SCROW ScColumn::GetLastDataPos( SCROW nLastRow ) const
+SCROW ScColumn::GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes,
+                                bool bConsiderCellDrawObjects ) const
 {
     sc::CellStoreType::const_position_type aPos = maCells.position(nLastRow);
+
+    if (bConsiderCellNotes && !IsNotesEmptyBlock(nLastRow, nLastRow))
+        return nLastRow;
+
+    if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nLastRow, nLastRow))
+        return nLastRow;
+
     if (aPos.first->type != sc::element_type_empty)
         return nLastRow;
 
@@ -3015,8 +3023,14 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
     rRow = nLastRow;
 }
 
-bool ScColumn::HasDataAt(SCROW nRow) const
+bool ScColumn::HasDataAt(SCROW nRow, bool bConsiderCellNotes, bool bConsiderCellDrawObjects) const
 {
+    if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
     return maCells.get_type(nRow) != sc::element_type_empty;
 }
 

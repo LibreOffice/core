@@ -1994,6 +1994,29 @@ ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
     return ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj)) ? SCA_CELL : SCA_PAGE;
 }
 
+std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCell(const ScAddress& rCell)
+{
+    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(rCell.Tab()));
+    if (!pPage || pPage->GetObjCount() < 1)
+        return std::vector<SdrObject*>();
+
+    std::vector<SdrObject*> pObjects;
+    SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+    SdrObject* pObject = aIter.Next();
+    ScDrawObjData* pObjData;
+    while (pObject)
+    {
+        if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
+        {
+            pObjData = GetObjData(pObject);
+            if (pObjData && pObjData->maStart == rCell) // Object is anchored to this cell
+                pObjects.push_back(pObject);
+        }
+        pObject = aIter.Next();
+    }
+    return pObjects;
+}
+
 ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate )
 {
     sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
