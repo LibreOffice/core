@@ -2414,7 +2414,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
     }
 
     bool bOverridingCharHeight = false;
-    sal_Int32 nCharHeight;
+    sal_Int32 nCharHeight = -1;
 
     while( enumeration->hasMoreElements() )
     {
