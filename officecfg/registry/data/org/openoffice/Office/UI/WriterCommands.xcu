@@ -1114,7 +1114,7 @@
       </node>
       <node oor:name=".uno:PageColumnType" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Page Column Type</value>
+          <value xml:lang="en-US">Page Columns</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3245,7 +3245,7 @@
       </node>
       <node oor:name=".uno:PageMargin" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Page Margin</value>
+          <value xml:lang="en-US">Page Margins</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
