@@ -16,6 +16,7 @@ import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
 import static org.libreoffice.SearchController.addProperty;
 import static org.libreoffice.UnitConverter.pixelToTwip;
+import static org.libreoffice.UnitConverter.twipsToHMM;
 
 public class AdjustLengthLine extends CommonCanvasElement {
 
@@ -82,11 +83,11 @@ public class AdjustLengthLine extends CommonCanvasElement {
             JSONObject rootJson = new JSONObject();
             if (mIsRow) {
                 addProperty(rootJson, "Row", "long", String.valueOf(mIndex));
-                addProperty(rootJson, "Height", "unsigned short", String.valueOf(documentDistance.y > 0 ? documentDistance.y : 0));
+                addProperty(rootJson, "RowHeight", "unsigned short", String.valueOf(Math.round(documentDistance.y > 0 ? twipsToHMM(documentDistance.y) : 0)));
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:RowHeight", rootJson.toString()));
             } else {
                 addProperty(rootJson, "Column", "long", String.valueOf(mIndex));
-                addProperty(rootJson, "Width", "unsigned short", String.valueOf(documentDistance.x > 0 ? documentDistance.x : 0));
+                addProperty(rootJson, "ColumnWidth", "unsigned short", String.valueOf(documentDistance.x > 0 ? twipsToHMM(documentDistance.x) : 0));
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:ColumnWidth", rootJson.toString()));
             }
         } catch (JSONException e) {
