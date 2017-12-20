@@ -302,7 +302,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
 
         // Force the current deck to update its panel list.
         if ( ! mbIsDocumentReadOnly)
-            msCurrentDeckId = gsDefaultDeckId;
+            SwitchToDefaultDeck();
 
         mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
         maAsynchronousDeckSwitch.CancelRequest();
