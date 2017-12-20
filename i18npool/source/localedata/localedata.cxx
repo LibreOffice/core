@@ -352,12 +352,10 @@ namespace i18npool {
 // static
 Sequence< CalendarItem > LocaleDataImpl::downcastCalendarItems( const Sequence< CalendarItem2 > & rCi )
 {
-    sal_Int32 nSize = rCi.getLength();
-    Sequence< CalendarItem > aCi( nSize);
+    Sequence< CalendarItem > aCi(rCi.getLength());
     CalendarItem* p1 = aCi.getArray();
-    const CalendarItem2* p2 = rCi.getConstArray();
-    for (sal_Int32 i=0; i < nSize; ++i, ++p1, ++p2)
-        *p1 = *p2;
+    for (const CalendarItem2& r2 : rCi)
+        *p1++ = r2;
     return aCi;
 }
 
@@ -712,30 +710,29 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
     }
     else
     {
-        sal_Int32 nSize = allCalendars[nWhichItem][nCalendar];
+        const sal_Int32 nSize = allCalendars[nWhichItem][nCalendar];
         aItems.realloc( nSize);
-        CalendarItem2* pItem = aItems.getArray();
         switch (nWhichItem)
         {
             case REF_DAYS:
             case REF_MONTHS:
             case REF_GMONTHS:
             case REF_PMONTHS:
-                for (sal_Int32 j = 0; j < nSize; ++j, ++pItem)
+                for (CalendarItem2& rItem : aItems)
                 {
                     CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
                             allCalendars[rnOffset+2], allCalendars[rnOffset+3]);
-                    *pItem = item;
+                    rItem = item;
                     rnOffset += 4;
                 }
                 break;
             case REF_ERAS:
                 // Absent narrow name.
-                for (sal_Int32 j = 0; j < nSize; ++j, ++pItem)
+                for (CalendarItem2& rItem : aItems)
                 {
                     CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
                             allCalendars[rnOffset+2], OUString());
-                    *pItem = item;
+                    rItem = item;
                     rnOffset += 3;
                 }
                 break;
@@ -796,13 +793,11 @@ Sequence< Calendar > SAL_CALL
 LocaleDataImpl::getAllCalendars( const Locale& rLocale )
 {
     const Sequence< Calendar2 > aCal2( getAllCalendars2( rLocale));
-    sal_Int32 nLen = aCal2.getLength();
-    Sequence< Calendar > aCal1( nLen);
-    const Calendar2* p2 = aCal2.getConstArray();
+    Sequence< Calendar > aCal1( aCal2.getLength());
     Calendar* p1 = aCal1.getArray();
-    for (sal_Int32 i=0; i < nLen; ++i, ++p1, ++p2)
+    for (const Calendar2& r2 : aCal2)
     {
-        *p1 = downcastCalendar( *p2);
+        *p1++ = downcastCalendar( r2);
     }
     return aCal1;
 }
@@ -844,13 +839,11 @@ Sequence< Currency > SAL_CALL
 LocaleDataImpl::getAllCurrencies( const Locale& rLocale )
 {
     Sequence< Currency2 > aCur2( getAllCurrencies2( rLocale));
-    sal_Int32 nLen = aCur2.getLength();
-    Sequence< Currency > aCur1( nLen);
-    const Currency2* p2 = aCur2.getArray();
+    Sequence< Currency > aCur1( aCur2.getLength());
     Currency* p1 = aCur1.getArray();
-    for (sal_Int32 i=0; i < nLen; ++i, ++p1, ++p2)
+    for (const Currency2& r2 : aCur2)
     {
-        *p1 = *p2;
+        *p1 = r2;
     }
     return aCur1;
 }

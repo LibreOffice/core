@@ -73,11 +73,12 @@ ignoreDiacritics_CTL::folding(const OUString& rInStr, sal_Int32 nStartPos,
 
             if (nOffset + aUStr.length() > rOffset.getLength())
                 rOffset.realloc(rOffset.getLength() + aUStr.length());
+            sal_Int32* pOffset = rOffset.getArray();
 
             aOutBuf.append(reinterpret_cast<const sal_Unicode*>(aUStr.getBuffer()), aUStr.length());
 
-            for (int32_t i = 0; i < aUStr.length(); i++)
-                rOffset[nOffset++] = nPosition;
+            for (const sal_Int32 nOffsetEnd = nOffset+aUStr.length(); nOffset < nOffsetEnd; nOffset++)
+                pOffset[nOffset] = nPosition;
 
             nPosition = nIndex;
         }
