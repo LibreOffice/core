@@ -216,12 +216,14 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     }
 
     // create and insert body area if it is not a blank page
-    SwDoc *pDoc = pFormat->GetDoc();
-    m_bEmptyPage = pFormat == pDoc->GetEmptyPageFormat();
-    if ( m_bEmptyPage )
-        return;
+    SwDoc* pDoc(pFormat->GetDoc());
+    m_bEmptyPage = (pFormat == pDoc->GetEmptyPageFormat());
 
-    m_bEmptyPage = false;
+    if(m_bEmptyPage)
+    {
+        return;
+    }
+
     Calc(pRenderContext); // so that the PrtArea is correct
     SwBodyFrame *pBodyFrame = new SwBodyFrame( pDoc->GetDfltFrameFormat(), this );
     pBodyFrame->ChgSize( getFramePrintArea().SSize() );
@@ -571,6 +573,28 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     {
         case RES_FMT_CHG:
         {
+            // state of m_bEmptyPage needs to be determined newly
+            const bool bNewState(GetFormat() == GetFormat()->GetDoc()->GetEmptyPageFormat());
+
+            if(m_bEmptyPage != bNewState)
+            {
+                // copy new state
+                m_bEmptyPage = bNewState;
+
+                if(nullptr == GetLower())
+                {
+                    // if we were an empty page before there is not yet a BodyArea in the
+                    // form of a SwBodyFrame, see constructor
+                    SwViewShell* pSh(getRootFrame()->GetCurrShell());
+                    vcl::RenderContext* pRenderContext(pSh ? pSh->GetOut() : nullptr);
+                    Calc(pRenderContext); // so that the PrtArea is correct
+                    SwBodyFrame* pBodyFrame = new SwBodyFrame(GetFormat(), this);
+                    pBodyFrame->ChgSize(getFramePrintArea().SSize());
+                    pBodyFrame->Paste(this);
+                    pBodyFrame->InvalidatePos();
+                }
+            }
+
             // If the frame format is changed, several things might also change:
             // 1. columns:
             assert(pOld && pNew); //FMT_CHG Missing Format
@@ -1486,19 +1510,81 @@ void SwRootFrame::AssertFlyPages()
     const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
 
     // what page targets the "last" Fly?
-    sal_uInt16 nMaxPg = 0;
+    // note the needed pages in a set
+    sal_uInt16 nMaxPg(0);
+    std::set< sal_uInt16 > neededPages;
 
     for ( size_t i = 0; i < pTable->size(); ++i )
     {
         const SwFormatAnchor &rAnch = (*pTable)[i]->GetAnchor();
-        if ( !rAnch.GetContentAnchor() && nMaxPg < rAnch.GetPageNum() )
-            nMaxPg = rAnch.GetPageNum();
+        if(!rAnch.GetContentAnchor())
+        {
+            const sal_uInt16 nPageNum(rAnch.GetPageNum());
+
+            // calc MaxPage (as before)
+            nMaxPg = std::max(nMaxPg, nPageNum);
+
+            // note as needed page
+            neededPages.insert(nPageNum);
+        }
     }
+
     // How many pages exist at the moment?
-    SwPageFrame *pPage = static_cast<SwPageFrame*>(Lower());
-    while ( pPage && pPage->GetNext() &&
-            !static_cast<SwPageFrame*>(pPage->GetNext())->IsFootnotePage() )
+    // And are there EmptyPages that are needed?
+    SwPageFrame* pPage(static_cast<SwPageFrame*>(Lower()));
+    SwPageFrame* pPrevPage(nullptr);
+    SwPageFrame* pFirstRevivedEmptyPage(nullptr);
+
+    while(pPage) // moved two while-conditions to break-statements (see below)
     {
+        const sal_uInt16 nPageNum(pPage->GetPhyPageNum());
+
+        if(pPage->IsEmptyPage() &&
+            nullptr != pPrevPage &&
+            neededPages.find(nPageNum) != neededPages.end())
+        {
+            // This is an empty page, but it *is* needed since a SwFrame
+            // is anchored at it directly. Initially these SwFrames are
+            // not fully initialized. Need to change the format of this SwFrame
+            // and let the ::Notify mechanism newly evaluate
+            // m_bEmptyPage (see SwPageFrame::UpdateAttr_). Code is taken and
+            // adapted from ::InsertPage (used below), this needs previous page
+            bool bWishedOdd(!pPrevPage->OnRightPage());
+            SwPageDesc* pDesc(pPrevPage->GetPageDesc()->GetFollow());
+            assert(pDesc && "Missing PageDesc");
+
+            if(!(bWishedOdd ? pDesc->GetRightFormat() : pDesc->GetLeftFormat()))
+            {
+                bWishedOdd = !bWishedOdd;
+            }
+
+            bool const bWishedFirst(pDesc != pPrevPage->GetPageDesc());
+            SwFrameFormat* pFormat(bWishedOdd ? pDesc->GetRightFormat(bWishedFirst) : pDesc->GetLeftFormat(bWishedFirst));
+
+            // set SwFrameFormat, this will trigger SwPageFrame::UpdateAttr_ and re-evaluate
+            // m_bEmptyPage, too
+            pPage->SetFrameFormat(pFormat);
+
+            if(nullptr == pFirstRevivedEmptyPage)
+            {
+                // remember first (lowest) SwPageFrame which needed correction
+                pFirstRevivedEmptyPage = pPage;
+            }
+        }
+
+        // original while-condition II
+        if(nullptr == pPage->GetNext())
+        {
+            break;
+        }
+
+        // original while-condition III
+        if(static_cast< SwPageFrame* >(pPage->GetNext())->IsFootnotePage())
+        {
+            break;
+        }
+
+        pPrevPage = pPage;
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
     }
 
@@ -1523,6 +1609,16 @@ void SwRootFrame::AssertFlyPages()
                     RemoveFootnotes( pPage, false, true );
             }
         }
+    }
+
+    // if we corrected SwFrameFormat and changed one (or more) m_bEmptyPage
+    // flags, we need to correct evtl. currently wrong positioned SwFrame(s)
+    // which did think until now that these Page(s) are empty.
+    // After trying to correct myself I found SwRootFrame::AssertPageFlys
+    // directly below that already does that, so use it.
+    if(nullptr != pFirstRevivedEmptyPage)
+    {
+        AssertPageFlys(pFirstRevivedEmptyPage);
     }
 
 #if OSL_DEBUG_LEVEL > 0
