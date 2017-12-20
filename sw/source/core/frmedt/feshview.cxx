@@ -1528,9 +1528,8 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
         {
             SdrObject* pObj = aObjIter.Next();
             SwVirtFlyDrawObj *pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
-            bool bFlyFrame = pVirtO !=  nullptr;
-            if( ( bNoFly && bFlyFrame ) ||
-                ( bNoDraw && !bFlyFrame ) ||
+            if( ( bNoFly && pVirtO ) ||
+                ( bNoDraw && !pVirtO ) ||
                 // Ignore TextBoxes of draw shapes here, so that
                 // SwFEShell::SelectObj() won't jump back on this list, meaning
                 // we never jump to the next draw shape.
@@ -1539,7 +1538,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 ( eType == GotoObjFlags::DrawControl && !lcl_IsControlGroup( pObj ) ) ||
                 ( pFilter && !pFilter->includeObject( *pObj ) ) )
                 continue;
-            if( bFlyFrame )
+            if (pVirtO)
             {
                 SwFlyFrame *pFly = pVirtO->GetFlyFrame();
                 if( GotoObjFlags::FlyAny != ( GotoObjFlags::FlyAny & eType ) )
@@ -1582,10 +1581,9 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 {
                     SdrObject* pTmpObj = aTmpIter.Next();
                     pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pTmpObj);
-                    bFlyFrame = pVirtO !=  nullptr;
-                    if( ( bNoFly && bFlyFrame ) || ( bNoDraw && !bFlyFrame ) )
+                    if( ( bNoFly && pVirtO ) || ( bNoDraw && !pVirtO ) )
                         continue;
-                    if( bFlyFrame )
+                    if (pVirtO)
                     {
                         aCurPos = pVirtO->GetFlyFrame()->getFrameArea().Pos();
                     }
@@ -1646,8 +1644,7 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
         return false;
 
     const SwVirtFlyDrawObj *pVirtO = dynamic_cast<const SwVirtFlyDrawObj*>(pBest);
-    bool bFlyFrame = pVirtO != nullptr;
-    if( bFlyFrame )
+    if (pVirtO)
     {
         const SwRect& rFrame = pVirtO->GetFlyFrame()->getFrameArea();
         SelectObj( rFrame.Pos(), 0, const_cast<SdrObject*>(pBest) );
