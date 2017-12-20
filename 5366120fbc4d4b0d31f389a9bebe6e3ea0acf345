@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_26063a1d",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-20T09:16:09Z",
+      "side": 1,
+      "message": "also note that pResetT is protected, so could be changed by a derived class; probably best to leave this poorly designed OSL mutex stuff alone as a curiosity, and gradually make LO-internal code use standard C++ mutex instead",
+      "revId": "5366120fbc4d4b0d31f389a9bebe6e3ea0acf345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
