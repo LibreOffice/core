@@ -768,17 +768,20 @@ void ScCondFormatDlg::OnSelectionChange(size_t nIndex, size_t nSize, bool bSelec
 IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
 {
     OUString aRangeStr = rEdit.GetText();
+    rEdit.SetForceControlBackground(true);
     ScRangeList aRange;
     ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
         mpViewData->GetDocument()->GetAddressConvention());
     if(nFlags & ScRefFlags::VALID)
     {
-        rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+        rEdit.SetControlBackground();
+        rEdit.SetControlForeground();
         mpBtnOk->Enable(true);
     }
     else
     {
-        rEdit.SetControlBackground(COL_LIGHTRED);
+        rEdit.SetControlBackground( 0xff6563 );
+        rEdit.SetControlForeground( COL_WHITE );
         mpBtnOk->Enable(false);
     }
 
