@@ -22,6 +22,7 @@
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svx/svdobj.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <stdlib.h>
@@ -63,6 +64,7 @@
 #include <listenerquery.hxx>
 #include <bcaslot.hxx>
 #include <reordermap.hxx>
+#include <drwlayer.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -226,9 +228,10 @@ public:
         ScRefCellValue maCell;
         const sc::CellTextAttr* mpAttr;
         const ScPostIt* mpNote;
+        std::vector<SdrObject*> maDrawObjects;
         const ScPatternAttr* mpPattern;
 
-        Cell() : mpAttr(nullptr), mpNote(nullptr), mpPattern(nullptr) {}
+        Cell() : mpAttr(nullptr), mpNote(nullptr), maDrawObjects(), mpPattern(nullptr) {}
     };
 
     struct Row
@@ -414,7 +417,7 @@ public:
 namespace {
 
 void initDataRows(
-    ScSortInfoArray& rArray, const ScTable& rTab, ScColContainer& rCols,
+    ScSortInfoArray& rArray, ScTable& rTab, ScColContainer& rCols,
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     bool bPattern, bool bHiddenFiltered )
 {
@@ -437,6 +440,17 @@ void initDataRows(
             rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
             rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
             rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
+            ScDrawLayer* pDrawLayer = rTab.GetDoc().GetDrawLayer();
+            if (pDrawLayer)
+            {
+                ScAddress aCellPos(nCol, nRow, rTab.GetTab());
+                std::vector<SdrObject*> pObjects = pDrawLayer->GetObjectsAnchoredToCell(aCellPos);
+                rCell.maDrawObjects = pObjects;
+            }
+            else
+            {
+                SAL_WARN("sc", "Could not retrieve anchored images, no DrawLayer available");
+            }
 
             if (!bUniformPattern && bPattern)
                 rCell.mpPattern = rCol.GetPattern(nRow);
@@ -547,6 +561,7 @@ struct SortedColumn
     sc::CellTextAttrStoreType maCellTextAttrs;
     sc::BroadcasterStoreType maBroadcasters;
     sc::CellNoteStoreType maCellNotes;
+    std::vector<std::vector<SdrObject*>> maCellDrawObjects;
 
     PatRangeType maPatterns;
     PatRangeType::const_iterator miPatternPos;
@@ -559,6 +574,7 @@ struct SortedColumn
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
         maCellNotes(nTopEmptyRows),
+        maCellDrawObjects(),
         maPatterns(0, MAXROWCOUNT, nullptr),
         miPatternPos(maPatterns.begin()) {}
 
@@ -789,6 +805,9 @@ void fillSortedColumnArray(
                 rNoteStore.push_back(const_cast<ScPostIt*>(rCell.mpNote));
             else
                 rNoteStore.push_back_empty();
+
+            // Add cell anchored images
+            aSortedCols.at(j).get()->maCellDrawObjects.push_back(rCell.maDrawObjects);
 
             if (rCell.mpPattern)
                 aSortedCols.at(j).get()->setPattern(aCellPos.Row(), rCell.mpPattern);
@@ -1102,6 +1121,9 @@ void ScTable::SortReorderByRow(
             aCol[nThisCol].UpdateNoteCaptions(nRow1, nRow2);
         }
 
+        // Update draw object positions
+        aCol[nThisCol].UpdateDrawObjects(aSortedCols[i].get()->maCellDrawObjects, nRow1, nRow2);
+
         {
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
@@ -1300,6 +1322,9 @@ void ScTable::SortReorderByRowRefUpdate(
             rSrc.transfer(nRow1, nRow2, rDest, nRow1);
             aCol[nThisCol].UpdateNoteCaptions(nRow1, nRow2);
         }
+
+        // Update draw object positions
+        aCol[nThisCol].UpdateDrawObjects(aSortedCols[i].get()->maCellDrawObjects, nRow1, nRow2);
 
         {
             // Get all row spans where the pattern is not NULL.
