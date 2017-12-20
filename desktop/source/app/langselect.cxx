@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <svl/languageoptions.hxx>
+#include <svtools/langhelp.hxx>
 
 #include <app.hxx>
 
@@ -103,7 +104,7 @@ bool prepareLocale() {
         }
     }
     if (locale.isEmpty()) {
-        locale = getInstalledLocaleForSystemUILanguage(inst);
+        locale = getInstalledLocaleForSystemUILanguage(inst, true);
     }
     if (locale.isEmpty()) {
         return false;
