@@ -1533,7 +1533,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 // Ignore TextBoxes of draw shapes here, so that
                 // SwFEShell::SelectObj() won't jump back on this list, meaning
                 // we never jump to the next draw shape.
-                (pObj && pObj->IsTextBox()) ||
+                (pVirtO && pVirtO->IsTextBox()) ||
                 ( eType == GotoObjFlags::DrawSimple && lcl_IsControlGroup( pObj ) ) ||
                 ( eType == GotoObjFlags::DrawControl && !lcl_IsControlGroup( pObj ) ) ||
                 ( pFilter && !pFilter->includeObject( *pObj ) ) )
