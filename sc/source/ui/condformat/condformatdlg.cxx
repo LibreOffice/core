@@ -552,6 +552,9 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     get(mpCondFormList, "list");
     mpCondFormList->init(mpViewData->GetDocument(), this, pFormat, aRange, maPos, mpDlgItem->GetDialogType());
 
+    // #i75179# enable setting the background to a different color
+    mpEdRange->SetForceControlBackground(true);
+
     mpBtnOk->SetClickHdl(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpBtnAdd->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, AddBtnHdl ) );
     mpBtnRemove->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, RemoveBtnHdl ) );
