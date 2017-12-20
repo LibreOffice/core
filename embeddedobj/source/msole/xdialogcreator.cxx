@@ -105,7 +105,7 @@ uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_In
 }
 
 
-uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.MSOLEObjectSystemCreator";
@@ -114,13 +114,13 @@ uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSuppo
 }
 
 
-OUString SAL_CALL MSOLEDialogObjectCreator::impl_staticGetImplementationName()
+OUString MSOLEDialogObjectCreator::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL MSOLEDialogObjectCreator::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > MSOLEDialogObjectCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new MSOLEDialogObjectCreator( xServiceManager ) );
