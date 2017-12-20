@@ -817,18 +817,16 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
                         FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED)));
     SvtSysLocale aSysLocale;
     const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
-    FormulaOpCodeMapEntry const * pArr2 = rMapping.getConstArray();
-    FormulaOpCodeMapEntry const * const pStop = pArr2 + rMapping.getLength();
-    for ( ; pArr2 < pStop; ++pArr2)
+    for (auto const& rMapEntry : rMapping)
     {
-        OpCode eOp = OpCode(pArr2->Token.OpCode);
+        OpCode eOp = OpCode(rMapEntry.Token.OpCode);
         if (eOp != ocExternal)
-            xMap->putOpCode( pArr2->Name, eOp, pCharClass);
+            xMap->putOpCode( rMapEntry.Name, eOp, pCharClass);
         else
         {
             OUString aExternalName;
-            if (pArr2->Token.Data >>= aExternalName)
-                xMap->putExternal( pArr2->Name, aExternalName);
+            if (rMapEntry.Token.Data >>= aExternalName)
+                xMap->putExternal( rMapEntry.Name, aExternalName);
             else
             {
                 SAL_WARN( "formula.core", "FormulaCompiler::CreateOpCodeMap: no Token.Data external name");
