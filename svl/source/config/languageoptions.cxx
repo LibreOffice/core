@@ -27,7 +27,6 @@
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/syslocale.hxx>
-#include <officecfg/System.hxx>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
@@ -256,41 +255,9 @@ bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptTyp
     return isInstalled;
 }
 
-
 bool SvtSystemLanguageOptions::isCJKKeyboardLayoutInstalled() const
 {
     return isKeyboardLayoutTypeInstalled(css::i18n::ScriptType::ASIAN);
-}
-
-OUString getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale)
-{
-    if (locale.isEmpty())
-        return OUString();  // do not attempt to resolve anything
-
-    for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
-        if (installed[i] == locale) {
-            return installed[i];
-        }
-    }
-    std::vector<OUString> fallbacks(LanguageTag(locale).getFallbackStrings(false));
-    for (OUString & rf : fallbacks) {
-        for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
-            if (installed[i] == rf) {
-                return installed[i];
-            }
-        }
-    }
-    return OUString();
-}
-
-OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString>& rLocaleElementNames)
-{
-    OUString locale = getInstalledLocaleForLanguage(rLocaleElementNames, officecfg::System::L10N::UILocale::get());
-    if (locale.isEmpty())
-        locale = getInstalledLocaleForLanguage(rLocaleElementNames, "en-US");
-    if (locale.isEmpty() && rLocaleElementNames.hasElements())
-        locale = rLocaleElementNames[0];
-    return locale;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
