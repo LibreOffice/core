@@ -99,7 +99,7 @@ bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int3
     if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
         if (number->multiplierExponent[number->exponentCount-1] > 1) {
             bool bNotZero = false;
-            for (sal_Int32 i = 0; i < len; i++, begin++) {
+            for (const sal_Int32 end = begin+len; begin < end; begin++) {
                 if (bNotZero || str[begin] != NUMBER_ZERO) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                     if (useOffset)
@@ -278,7 +278,7 @@ static void NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_U
             }
             if (shift) {
                 count -= max;
-                for (sal_Int16 j = 0; j < shift; j++, count++) {
+                for (const sal_Int32 countEnd = count+shift; count < countEnd; count++) {
                     dst[count] = dst[count + curr];
                     if (useOffset)
                         offset[count] = offset[count + curr];
