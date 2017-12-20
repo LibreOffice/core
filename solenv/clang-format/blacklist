@@ -1840,12 +1840,10 @@ compilerplugins/clang/test/casttovoid.cxx
 compilerplugins/clang/test/commaoperator.cxx
 compilerplugins/clang/test/constmethod.cxx
 compilerplugins/clang/test/constparams.cxx
-compilerplugins/clang/test/convertuintptr.cxx
 compilerplugins/clang/test/cppunitassertequals.cxx
 compilerplugins/clang/test/cppunitassertequals.hxx
 compilerplugins/clang/test/datamembershadow.cxx
 compilerplugins/clang/test/dodgyswitch.cxx
-compilerplugins/clang/test/droplong.cxx
 compilerplugins/clang/test/expressionalwayszero.cxx
 compilerplugins/clang/test/externvar.cxx
 compilerplugins/clang/test/externvar.hxx

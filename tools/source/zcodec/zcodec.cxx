@@ -400,7 +400,7 @@ void ZCodec::UpdateCRC ( sal_uInt8 const * pSource, long nDatSize)
 bool ZCodec::AttemptDecompression(SvStream& rIStm, SvStream& rOStm)
 {
     assert(meState == STATE_INIT);
-    sal_uLong nStreamPos = rIStm.Tell();
+    sal_uInt64 nStreamPos = rIStm.Tell();
     BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false/*updateCrc*/, true/*gzLib*/);
     InitDecompress(rIStm);
     EndCompression();
