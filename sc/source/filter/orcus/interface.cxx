@@ -177,24 +177,44 @@ void ScOrcusNamedExpression::define_name(const char* p_name, size_t n_name, cons
     pNames->insert(pRange, false);
 }
 
-ScOrcusFactory::CellStoreToken::CellStoreToken( const ScAddress& rPos, Type eType ) :
-    maPos(rPos), meType(eType)
+ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, Type eType)
+    : maPos(rPos)
+    , meType(eType)
+    , mnIndex1(0)
+    , mnIndex2(0)
+    , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
 {
     rtl::math::setNan(&mfValue);
 }
 
-ScOrcusFactory::CellStoreToken::CellStoreToken( const ScAddress& rPos, double fValue ) :
-    maPos(rPos), meType(Type::Numeric), mfValue(fValue) {}
+ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, double fValue)
+    : maPos(rPos)
+    , meType(Type::Numeric)
+    , mfValue(fValue)
+    , mnIndex1(0)
+    , mnIndex2(0)
+    , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
+{
+}
 
-ScOrcusFactory::CellStoreToken::CellStoreToken( const ScAddress& rPos, uint32_t nIndex ) :
-    maPos(rPos), meType(Type::String), mnIndex1(nIndex)
+ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, uint32_t nIndex)
+    : maPos(rPos)
+    , meType(Type::String)
+    , mnIndex1(nIndex)
+    , mnIndex2(0)
+    , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
 {
     rtl::math::setNan(&mfValue);
 }
 
-ScOrcusFactory::CellStoreToken::CellStoreToken(
-    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar ) :
-    maPos(rPos), meType(Type::Formula), maStr1(rFormula), meGrammar(eGrammar)
+ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, const OUString& rFormula,
+        formula::FormulaGrammar::Grammar eGrammar)
+    : maPos(rPos)
+    , meType(Type::Formula)
+    , maStr1(rFormula)
+    , mnIndex1(0)
+    , mnIndex2(0)
+    , meGrammar(eGrammar)
 {
     rtl::math::setNan(&mfValue);
 }
