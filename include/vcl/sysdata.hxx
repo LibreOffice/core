@@ -98,6 +98,19 @@ struct SystemEnvData
     }
 };
 
+inline sal_uInt32 GetDbusId(const SystemEnvData& rData)
+{
+#if defined(_WIN32) || defined( MACOSX ) || defined( ANDROID ) || defined( IOS )
+    (void)rData;
+    return 0;
+#elif defined( UNX )
+    return rData.aWindow;
+#else
+    (void)rData;
+    return 0;
+#endif
+}
+
 struct SystemParentData
 {
     sal_uInt32      nSize;            // size in bytes of this structure
