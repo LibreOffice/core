@@ -1670,10 +1670,17 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         // All the rest, special commands, separators, error codes, ...
         switch (eOp)
         {
+            default:
+                // Default is off, no vectorization.
+                // Mentioning some specific values below to indicate why.
+
             case ocName:
                 // Named expression would need "recursive" handling of its
                 // token array for vector state in
                 // ScFormulaCell::InterpretFormulaGroup() and below.
+
+            case ocDBArea:
+                // Certainly not a vectorization of the entire area..
 
             case ocTableRef:
                 // May result in a single cell or range reference, depending on
@@ -1692,8 +1699,30 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 mbOpenCLEnabled = false;
                 CheckForThreading(eOp);
             break;
-            default:
-                ;   // nothing
+
+            // Known good, don't change state.
+            case ocStop:
+            case ocExternal:
+            case ocOpen:
+            case ocClose:
+            case ocSep:
+            case ocArrayOpen:
+            case ocArrayRowSep:
+            case ocArrayColSep:
+            case ocArrayClose:
+            case ocMissing:
+            case ocBad:
+            case ocSpaces:
+            case ocSkip:
+            case ocPercentSign:
+            case ocErrNull:
+            case ocErrDivZero:
+            case ocErrValue:
+            case ocErrRef:
+            case ocErrName:
+            case ocErrNum:
+            case ocErrNA:
+            break;
         }
     }
 }
