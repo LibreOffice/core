@@ -11711,6 +11711,7 @@ if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     ALL_LANGS=`echo $ALL_LANGS qtz`
 fi
 AC_SUBST(ALL_LANGS)
+AC_DEFINE_UNQUOTED(WITH_LANG,"$WITH_LANG")
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
 AC_SUBST(GIT_NEEDED_SUBMODULES)
@@ -12475,6 +12476,7 @@ AC_CONFIG_HEADERS([config_host/config_java.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_libcxx.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
+AC_CONFIG_HEADERS([config_host/config_langs.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
