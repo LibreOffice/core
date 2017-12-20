@@ -1843,6 +1843,23 @@ void ScColumn::PrepareBroadcastersForDestruction()
     }
 }
 
+const SdrObject* ScColumn::GetCellDrawObject( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    sc::CellDrawObjStoreType::const_position_type aPos = maCellDrawObjects.position(rBlockPos.miCellDrawObjPos, nRow);
+    rBlockPos.miCellDrawObjPos = aPos.first;
+
+    if (aPos.first->type != sc::element_type_celldrawobj)
+        return nullptr;
+
+    return sc::celldrawobj_block::at(*aPos.first->data, aPos.second);
+}
+
+void ScColumn::SetCellDrawObject(SCROW nRow, SdrObject* pDrawObject)
+{
+    SAL_DEBUG("ScColumn::SetCellDrawObject nRow: " << nRow << " pDrawObject: " << pDrawObject);
+    maCellDrawObjects.set(nRow, pDrawObject);
+}
+
 ScPostIt* ScColumn::GetCellNote(SCROW nRow)
 {
     return maCellNotes.get<ScPostIt*>(nRow);

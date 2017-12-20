@@ -295,6 +295,9 @@ public:
     sal_uLong       GetWeightedCount() const;
     sal_uLong       GetCodeCount() const;       // RPN code in formula
 
+    ScColumn* FetchColumn( SCCOL nCol );
+    const ScColumn* FetchColumn( SCCOL nCol ) const;
+
     sal_uInt16 GetTextWidth(SCCOL nCol, SCROW nRow) const;
 
     bool        SetOutlineTable( const ScOutlineTable* pNewOutline );
@@ -1208,9 +1211,6 @@ private:
 
     // Clipboard transpose for notes
     void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2);
-
-    ScColumn* FetchColumn( SCCOL nCol );
-    const ScColumn* FetchColumn( SCCOL nCol ) const;
 
     void EndListeningIntersectedGroup(
         sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, std::vector<ScAddress>* pGroupPos );

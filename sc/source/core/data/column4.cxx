@@ -1081,6 +1081,7 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
     maCells.swap(nRow1, nRow2, rOther.maCells, nRow1);
     maCellTextAttrs.swap(nRow1, nRow2, rOther.maCellTextAttrs, nRow1);
     maCellNotes.swap(nRow1, nRow2, rOther.maCellNotes, nRow1);
+    maCellDrawObjects.swap(nRow1, nRow2, rOther.maCellDrawObjects, nRow1);
     maBroadcasters.swap(nRow1, nRow2, rOther.maBroadcasters, nRow1);
 
     if (bPattern)

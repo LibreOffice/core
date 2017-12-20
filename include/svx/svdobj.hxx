@@ -277,6 +277,7 @@ class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrOb
 
 public:
     SdrObject();
+    virtual ~SdrObject() override;
 
     void AddObjectUser(sdr::ObjectUser& rNewUser);
     void RemoveObjectUser(sdr::ObjectUser& rOldUser);
@@ -871,8 +872,6 @@ protected:
     bool                        mbLineIsOutsideGeometry : 1;
     // #i25616#
     bool                        mbSupportTextIndentingOnLineWidthChange : 1;
-
-    virtual ~SdrObject() override;
 
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
