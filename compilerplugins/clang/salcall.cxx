@@ -516,7 +516,6 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         startLoc = SM.getSpellingLoc(startLoc);
 
 #if !defined _WIN32
-        startLoc = SM.getSpellingLoc(startLoc);
         // When the SAL_CALL macro expands to nothing, it may even precede the function
         // declaration's source range, so go back one token (unless the declaration is known to
         // start with a token that must precede a possible "SAL_CALL", like "virtual" or
