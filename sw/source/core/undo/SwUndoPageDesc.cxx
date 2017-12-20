@@ -28,73 +28,6 @@
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <ndindex.hxx>
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
-// Pure debug help function to have a quick look at the header/footer attributes.
-void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
-{
-    sal_uLong nHeaderMaster = ULONG_MAX;
-    sal_uLong nHeaderLeft = ULONG_MAX;
-    sal_uLong nFooterMaster = ULONG_MAX;
-    sal_uLong nFooterLeft = ULONG_MAX;
-
-    SwFormatHeader& rHead = (SwFormatHeader&)rPageDesc.GetMaster().GetHeader();
-    SwFormatFooter& rFoot = (SwFormatFooter&)rPageDesc.GetMaster().GetFooter();
-    SwFormatHeader& rLeftHead = (SwFormatHeader&)rPageDesc.GetLeft().GetHeader();
-    SwFormatFooter& rLeftFoot = (SwFormatFooter&)rPageDesc.GetLeft().GetFooter();
-    if( rHead.IsActive() )
-    {
-        SwFrameFormat* pHeaderFormat = rHead.GetHeaderFormat();
-        if( pHeaderFormat )
-        {
-            const SwFormatContent* pContent = &pHeaderFormat->GetContent();
-            if( pContent->GetContentIdx() )
-                nHeaderMaster = pContent->GetContentIdx()->GetIndex();
-            else
-                nHeaderMaster = 0;
-        }
-        SwFrameFormat* pLeftHeaderFormat = rLeftHead.GetHeaderFormat();
-        if( pLeftHeaderFormat )
-        {
-            const SwFormatContent* pLeftContent = &pLeftHeaderFormat->GetContent();
-            if( pLeftContent->GetContentIdx() )
-                nHeaderLeft = pLeftContent->GetContentIdx()->GetIndex();
-            else
-                nHeaderLeft = 0;
-        }
-    }
-    if( rFoot.IsActive() )
-    {
-        SwFrameFormat* pFooterFormat = rFoot.GetFooterFormat();
-        if( pFooterFormat )
-        {
-            const SwFormatContent* pContent = &pFooterFormat->GetContent();
-            if( pContent->GetContentIdx() )
-                nFooterMaster = pContent->GetContentIdx()->GetIndex();
-            else
-                nFooterMaster = 0;
-        }
-        SwFrameFormat* pLeftFooterFormat = rLeftFoot.GetFooterFormat();
-        if( pLeftFooterFormat )
-        {
-            const SwFormatContent* pLeftContent = &pLeftFooterFormat->GetContent();
-            if( pLeftContent->GetContentIdx() )
-                nFooterLeft = pLeftContent->GetContentIdx()->GetIndex();
-            else
-                nFooterLeft = 0;
-        }
-    }
-
-    (void)nHeaderMaster;
-    (void)nHeaderLeft;
-    (void)nFooterMaster;
-    (void)nFooterLeft;
-}
-#endif
-
 SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                                const SwPageDesc & _aNew,
                                SwDoc * _pDoc)
@@ -105,11 +38,6 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
       aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc), bExchange( false )
 {
     OSL_ENSURE(nullptr != pDoc, "no document?");
-
-#if OSL_DEBUG_LEVEL > 1
-    DebugHeaderFooterContent( aOld.m_PageDesc );
-    DebugHeaderFooterContent( aNew.m_PageDesc );
-#endif
 
     /*
     The page description changes.
@@ -189,10 +117,6 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         // After this exchange method the old page description will point to zero,
         // the new one will point to the node position of the original content nodes.
         ExchangeContentNodes( aOld.m_PageDesc, aNew.m_PageDesc );
-#if OSL_DEBUG_LEVEL > 1
-        DebugHeaderFooterContent( aOld.m_PageDesc );
-        DebugHeaderFooterContent( aNew.m_PageDesc );
-#endif
     }
 }
 
@@ -213,12 +137,6 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrameFormat* pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
-#if OSL_DEBUG_LEVEL > 1
-        const SwFormatContent& rSourceContent = rSourceHead.GetHeaderFormat()->GetContent();
-        (void)rSourceContent;
-        const SwFormatContent& rDestContent = rDestHead.GetHeaderFormat()->GetContent();
-        (void)rDestContent;
-#endif
         pNewFormat->SetFormatAttr( rSourceHead.GetHeaderFormat()->GetContent() );
         delete pNewItem;
 
@@ -237,12 +155,6 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
-#if OSL_DEBUG_LEVEL > 1
-            const SwFormatContent& rSourceContent1 = rSourceLeftHead.GetHeaderFormat()->GetContent();
-            (void)rSourceContent1;
-            const SwFormatContent& rDestContent1 = rDest.GetLeft().GetHeader().GetHeaderFormat()->GetContent();
-            (void)rDestContent1;
-#endif
             pNewFormat->SetFormatAttr( rSourceLeftHead.GetHeaderFormat()->GetContent() );
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
@@ -258,12 +170,6 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
-#if OSL_DEBUG_LEVEL > 1
-            const SwFormatContent& rSourceContent1 = rSourceFirstMasterHead.GetHeaderFormat()->GetContent();
-            (void)rSourceContent1;
-            const SwFormatContent& rDestContent1 = rDest.GetFirstMaster().GetHeader().GetHeaderFormat()->GetContent();
-            (void)rDestContent1;
-#endif
             pNewFormat->SetFormatAttr( rSourceFirstMasterHead.GetHeaderFormat()->GetContent() );
             delete pNewItem;
             rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
@@ -286,12 +192,6 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     pNewFormat->SetFormatAttr( rSourceFoot.GetFooterFormat()->GetContent() );
     delete pNewItem;
 
-#if OSL_DEBUG_LEVEL > 1
-    const SwFormatContent& rFooterSourceContent = rSourceFoot.GetFooterFormat()->GetContent();
-    (void)rFooterSourceContent;
-    const SwFormatContent& rFooterDestContent = rDestFoot.GetFooterFormat()->GetContent();
-    (void)rFooterDestContent;
-#endif
     rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
     pNewItem = pItem->Clone();
     pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
@@ -301,13 +201,6 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     if( !rDest.IsFooterShared() )
     {
         const SwFormatFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
-#if OSL_DEBUG_LEVEL > 1
-        const SwFormatContent& rFooterSourceContent2 = rSourceLeftFoot.GetFooterFormat()->GetContent();
-        const SwFormatContent& rFooterDestContent2 =
-            rDest.GetLeft().GetFooter().GetFooterFormat()->GetContent();
-        (void)rFooterSourceContent2;
-        (void)rFooterDestContent2;
-#endif
         rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
         pNewItem = pItem->Clone();
         pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
@@ -323,13 +216,6 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         return;
 
     const SwFormatFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
-#if OSL_DEBUG_LEVEL > 1
-    const SwFormatContent& rFooterSourceContent2 = rSourceFirstMasterFoot.GetFooterFormat()->GetContent();
-    const SwFormatContent& rFooterDestContent2 =
-        rDest.GetFirstMaster().GetFooter().GetFooterFormat()->GetContent();
-    (void)rFooterSourceContent2;
-    (void)rFooterDestContent2;
-#endif
     rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
     pNewItem = pItem->Clone();
     pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
