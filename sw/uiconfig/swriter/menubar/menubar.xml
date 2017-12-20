@@ -231,7 +231,14 @@
   <menu:menu menu:id=".uno:InsertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertPagebreak"/>
-      <menu:menuitem menu:id=".uno:InsertBreak"/>
+      <menu:menu menu:id=".uno:BreaksMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:InsertLinebreak"/>
+          <menu:menuitem menu:id=".uno:InsertColumnBreak"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:InsertBreak"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertGraphic"/>
       <menu:menu menu:id=".uno:GraphicMenu">

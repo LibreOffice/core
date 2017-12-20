@@ -6492,6 +6492,11 @@
           <value xml:lang="en-US">Navigate</value>
         </prop>
       </node>
+      <node oor:name=".uno:BreaksMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">More Breaks</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
