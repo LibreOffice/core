@@ -1513,7 +1513,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         bChgHgt=true;
     }
     if (bChgSiz) {
-        eSizePoint=(RectPoint)static_cast<const SfxAllEnumItem&>(rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
+        eSizePoint=(RectPoint)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT).GetValue();
     }
 
     // rotation
@@ -1524,11 +1524,11 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // position rotation point x
     if(bRotate || SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, true ,&pPoolItem))
-        nRotateX = static_cast<const SfxInt32Item&>(rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue();
+        nRotateX = rAttr.Get(SID_ATTR_TRANSFORM_ROT_X).GetValue();
 
     // position rotation point y
     if(bRotate || SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, true ,&pPoolItem))
-        nRotateY = static_cast<const SfxInt32Item&>(rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue();
+        nRotateY = rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y).GetValue();
 
     // shearing
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem)) {

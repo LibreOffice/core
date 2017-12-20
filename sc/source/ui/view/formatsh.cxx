@@ -1832,8 +1832,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     // Update default line
                     const ::editeng::SvxBorderLine* pLine =
-                            static_cast<const SvxLineItem&>(
-                                pNewAttrs->Get( SID_FRAME_LINESTYLE )).
+                                pNewAttrs->Get( SID_FRAME_LINESTYLE ).
                                 GetLine();
 
                     if ( pLine )
@@ -1868,9 +1867,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_FRAME_LINECOLOR:
                 {
                     ::editeng::SvxBorderLine*  pDefLine = pTabViewShell->GetDefaultFrameLine();
-                    const Color&    rColor = static_cast<const SvxColorItem&>(
-                                        pNewAttrs->Get( SID_FRAME_LINECOLOR )).
-                                            GetValue();
+                    const Color&    rColor = pNewAttrs->Get( SID_FRAME_LINECOLOR ).GetValue();
 
                     // Update default line
                     if ( pDefLine )
@@ -1993,8 +1990,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             // ATTR_BACKGROUND (=SID_ATTR_BRUSH) has to be set to two IDs:
             case SID_BACKGROUND_COLOR:
                 {
-                    const SvxColorItem  rNewColorItem = static_cast<const SvxColorItem&>(
-                                            pNewAttrs->Get( SID_BACKGROUND_COLOR ) );
+                    const SvxColorItem  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
 
                     SvxBrushItem        aBrushItem(
                                             pTabViewShell->GetSelectionPattern()->

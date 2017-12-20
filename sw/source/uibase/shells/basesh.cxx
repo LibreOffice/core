@@ -801,7 +801,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if(SfxItemState::SET == pArgs->GetItemState(nSlot))
                     nCount = static_cast<const SfxUInt16Item &>(pArgs->Get(nSlot)).GetValue();
                 else
-                    nCount = static_cast<const SfxUInt16Item &>(pArgs->Get(SID_ATTR_COLUMNS)).GetValue();
+                    nCount = pArgs->Get(SID_ATTR_COLUMNS).GetValue();
                 sal_uInt16 nGutterWidth = DEF_GUTTER_WIDTH;
 
                 aFormatCol.Init(nCount ? nCount : 1, nGutterWidth, USHRT_MAX);
@@ -2298,7 +2298,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
             if(pArgs)
             {
-                const SvxColorItem& rNewColorItem = static_cast<const SvxColorItem&>(pArgs->Get(SID_BACKGROUND_COLOR));
+                const SvxColorItem& rNewColorItem = pArgs->Get(SID_BACKGROUND_COLOR);
                 const Color& rNewColor = rNewColorItem.GetValue();
                 aBrushItem.SetColor(rNewColor);
                 GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);

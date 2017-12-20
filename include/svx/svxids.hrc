@@ -26,6 +26,12 @@
 #include <svx/unomid.hxx>
 #include <svl/typedwhich.hxx>
 
+class SfxInt32Item;
+class SfxAllEnumItem;
+class SfxPointItem;
+class SfxBoolItem;
+class SfxUInt32Item;
+class SfxRectangleItem;
 class SvxPageItem;
 class SvxSizeItem;
 class SvxLongULSpaceItem;
@@ -34,6 +40,17 @@ class SvxPostItAuthorItem;
 class SvxPostItDateItem;
 class SvxPostItTextItem;
 class SvxPostItIdItem;
+class SvxColorListItem;
+class SvxColorItem;
+class SvxGradientListItem;
+class SvxRulerItem;
+class SvxNumberInfoItem;
+class SvxHatchListItem;
+class SvxBitmapListItem;
+class SvxPatternListItem;
+class SvxDashListItem;
+class SvxLineEndListItem;
+class SvxLineItem;
 
 // member IDs
 
@@ -245,23 +262,23 @@ class SvxPostItIdItem;
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 
 #define SID_RULER_CHANGE_STATE                          ( SID_SVX_START + 78 )
-#define SID_RULER_NULL_OFFSET                           ( SID_SVX_START + 79 )
-#define SID_RULER_BORDERS                               ( SID_SVX_START + 80 )
-#define SID_RULER_OBJECT                                ( SID_SVX_START + 81 )
-#define SID_RULER_PAGE_POS                              ( SID_SVX_START + 82 )
-#define SID_RULER_ACT_LINE_ONLY                         ( SID_SVX_START + 83 )
-#define SID_RULER_LR_MIN_MAX                            ( SID_SVX_START + 84 )
-#define SID_ATTR_NUMBERFORMAT_VALUE                     ( SID_SVX_START + 85 )
-#define SID_ATTR_NUMBERFORMAT_INFO                      ( SID_SVX_START + 86 )
-#define SID_ATTR_TRANSFORM                              ( SID_SVX_START + 87 )
-#define SID_ATTR_TRANSFORM_POS_X                        ( SID_SVX_START + 88 )
-#define SID_ATTR_TRANSFORM_POS_Y                        ( SID_SVX_START + 89 )
-#define SID_ATTR_TRANSFORM_WIDTH                        ( SID_SVX_START + 90 )
-#define SID_ATTR_TRANSFORM_HEIGHT                       ( SID_SVX_START + 91 )
-#define SID_ATTR_TRANSFORM_SIZE_POINT                   ( SID_SVX_START + 92 )
-#define SID_ATTR_TRANSFORM_ROT_X                        ( SID_SVX_START + 93 )
-#define SID_ATTR_TRANSFORM_ROT_Y                        ( SID_SVX_START + 94 )
-#define SID_ATTR_TRANSFORM_ANGLE                        ( SID_SVX_START + 95 )
+#define SID_RULER_NULL_OFFSET                           TypedWhichId<SfxPointItem>( SID_SVX_START + 79 )
+#define SID_RULER_BORDERS                               TypedWhichId<SvxRulerItem>( SID_SVX_START + 80 )
+#define SID_RULER_OBJECT                                TypedWhichId<SvxRulerItem>( SID_SVX_START + 81 )
+#define SID_RULER_PAGE_POS                              TypedWhichId<SvxRulerItem>( SID_SVX_START + 82 )
+#define SID_RULER_ACT_LINE_ONLY                         TypedWhichId<SfxBoolItem>( SID_SVX_START + 83 )
+#define SID_RULER_LR_MIN_MAX                            TypedWhichId<SfxUInt32Item>( SID_SVX_START + 84 )
+#define SID_ATTR_NUMBERFORMAT_VALUE                     TypedWhichId<SfxUInt32Item>( SID_SVX_START + 85 )
+#define SID_ATTR_NUMBERFORMAT_INFO                      TypedWhichId<SvxNumberInfoItem>( SID_SVX_START + 86 )
+#define SID_ATTR_TRANSFORM                              TypedWhichId<SfxInt32Item>( SID_SVX_START + 87 )
+#define SID_ATTR_TRANSFORM_POS_X                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 88 )
+#define SID_ATTR_TRANSFORM_POS_Y                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 89 )
+#define SID_ATTR_TRANSFORM_WIDTH                        TypedWhichId<SfxUInt32Item>( SID_SVX_START + 90 )
+#define SID_ATTR_TRANSFORM_HEIGHT                       TypedWhichId<SfxUInt32Item>( SID_SVX_START + 91 )
+#define SID_ATTR_TRANSFORM_SIZE_POINT                   TypedWhichId<SfxAllEnumItem>( SID_SVX_START + 92 )
+#define SID_ATTR_TRANSFORM_ROT_X                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 93 )
+#define SID_ATTR_TRANSFORM_ROT_Y                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 94 )
+#define SID_ATTR_TRANSFORM_ANGLE                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 95 )
 #define SID_SIZE_ALL                                    ( SID_SVX_START + 101 )
 #define SID_DRAW_LINE                                   ( SID_SVX_START + 102 )
 #define SID_DRAW_XLINE                                  ( SID_SVX_START + 103 )
@@ -276,12 +293,12 @@ class SvxPostItIdItem;
 #define SID_BEZIER_INSERT                               ( SID_SVX_START + 119 )
 #define SID_BEZIER_DELETE                               ( SID_SVX_START + 120 )
 #define SID_BEZIER_MOVE                                 ( SID_SVX_START + 121 )
-#define SID_BEZIER_CLOSE                                ( SID_SVX_START + 122 )
-#define SID_BEZIER_SMOOTH                               ( SID_SVX_START + 123 )
+#define SID_BEZIER_CLOSE                                TypedWhichId<SfxBoolItem>( SID_SVX_START + 122 )
+#define SID_BEZIER_SMOOTH                               TypedWhichId<SfxBoolItem>( SID_SVX_START + 123 )
 #define SID_BEZIER_EDIT                                 ( SID_SVX_START + 126 )
 #define SID_BEZIER_CUTLINE                              ( SID_SVX_START + 127 )
 #define SID_OBJECT_SELECT                               ( SID_SVX_START + 128 )
-#define SID_OBJECT_ROTATE                               ( SID_SVX_START + 129 )
+#define SID_OBJECT_ROTATE                               TypedWhichId<SfxBoolItem>( SID_SVX_START + 129 )
 #define SID_OBJECT_ALIGN                                ( SID_SVX_START + 130 )
 #define SID_OBJECT_ALIGN_LEFT                           ( SID_SVX_START + 131 )
 #define SID_OBJECT_ALIGN_CENTER                         ( SID_SVX_START + 132 )
@@ -324,14 +341,14 @@ class SvxPostItIdItem;
 #define SID_ATTR_LINE_ENDWIDTH                          ( SID_SVX_START + 176 )
 #define SID_ATTR_LINE_STARTCENTER                       ( SID_SVX_START + 177 )
 #define SID_ATTR_LINE_ENDCENTER                         ( SID_SVX_START + 178 )
-#define SID_COLOR_TABLE                                 ( SID_SVX_START + 179 )
-#define SID_GRADIENT_LIST                               ( SID_SVX_START + 180 )
-#define SID_HATCH_LIST                                  ( SID_SVX_START + 181 )
-#define SID_BITMAP_LIST                                 ( SID_SVX_START + 182 )
-#define SID_PATTERN_LIST                                ( SID_SVX_START + 183 )
-#define SID_DASH_LIST                                   ( SID_SVX_START + 184 )
-#define SID_LINEEND_LIST                                ( SID_SVX_START + 185 )
-#define SID_BACKGROUND_COLOR                            ( SID_SVX_START + 186 )
+#define SID_COLOR_TABLE                                 TypedWhichId<SvxColorListItem>( SID_SVX_START + 179 )
+#define SID_GRADIENT_LIST                               TypedWhichId<SvxGradientListItem>( SID_SVX_START + 180 )
+#define SID_HATCH_LIST                                  TypedWhichId<SvxHatchListItem>( SID_SVX_START + 181 )
+#define SID_BITMAP_LIST                                 TypedWhichId<SvxBitmapListItem>( SID_SVX_START + 182 )
+#define SID_PATTERN_LIST                                TypedWhichId<SvxPatternListItem>( SID_SVX_START + 183 )
+#define SID_DASH_LIST                                   TypedWhichId<SvxDashListItem>( SID_SVX_START + 184 )
+#define SID_LINEEND_LIST                                TypedWhichId<SvxLineEndListItem>( SID_SVX_START + 185 )
+#define SID_BACKGROUND_COLOR                            TypedWhichId<SvxColorItem>( SID_SVX_START + 186 )
 #define SID_BACKGROUND_PATTERN                          ( SID_SVX_START + 187 )
 #define SID_ATTR_BORDER                                 ( SID_SVX_START + 188 )
 #define SID_INSERT_FIXEDTEXT                            ( SID_SVX_START + 189 )
@@ -344,18 +361,18 @@ class SvxPostItIdItem;
 #define SID_INSERT_VSCROLLBAR                           ( SID_SVX_START + 196 )
 #define SID_INSERT_SELECT                               ( SID_SVX_START + 199 )
 #define SID_DIALOG_TESTMODE                             ( SID_SVX_START + 200 )
-#define SID_FRAME_LINESTYLE                             ( SID_SVX_START + 201 )
-#define SID_FRAME_LINECOLOR                             ( SID_SVX_START + 202 )
+#define SID_FRAME_LINESTYLE                             TypedWhichId<SvxLineItem>( SID_SVX_START + 201 )
+#define SID_FRAME_LINECOLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 202 )
 #define SID_SEARCHDLG_SEARCHSTRINGS                     ( SID_SVX_START + 215 )
 #define SID_SEARCHDLG_REPLACESTRINGS                    ( SID_SVX_START + 216 )
 #define SID_ATTR_TABLE                                  ( SID_SVX_START + 217 )
-#define SID_ATTR_TABLE_COLUMN                           ( SID_SVX_START + 218 )
-#define SID_ATTR_TABLE_ROW                              ( SID_SVX_START + 219 )
-#define SID_ATTR_COLUMNS                                ( SID_SVX_START + 220 )
-#define SID_ATTR_INSERT                                 ( SID_SVX_START + 221 )
-#define SID_ATTR_ZOOM_USER                              ( SID_SVX_START + 222 )
-#define SID_ATTR_POSITION                               ( SID_SVX_START + 223 )
-#define SID_ATTR_SIZE                                   ( SID_SVX_START + 224 )
+#define SID_ATTR_TABLE_COLUMN                           TypedWhichId<SfxUInt16Item>( SID_SVX_START + 218 )
+#define SID_ATTR_TABLE_ROW                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 219 )
+#define SID_ATTR_COLUMNS                                TypedWhichId<SfxUInt16Item>( SID_SVX_START + 220 )
+#define SID_ATTR_INSERT                                 TypedWhichId<SfxBoolItem>( SID_SVX_START + 221 )
+#define SID_ATTR_ZOOM_USER                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 222 )
+#define SID_ATTR_POSITION                               TypedWhichId<SfxPointItem>( SID_SVX_START + 223 )
+#define SID_ATTR_SIZE                                   TypedWhichId<SvxSizeItem>( SID_SVX_START + 224 )
 #define SID_TABLE_CELL                                  ( SID_SVX_START + 225 )
 #define SID_ATTR_ALIGN_MARGIN                           ( SID_SVX_START + 228 )
 #define SID_ATTR_ALIGN_STACKED                          ( SID_SVX_START + 229 )
@@ -364,13 +381,13 @@ class SvxPostItIdItem;
 #define SID_OUTLINE_EXPAND_ALL                          ( SID_SVX_START + 232 )
 #define SID_OUTLINE_EXPAND                              ( SID_SVX_START + 233 )
 #define SID_OUTLINE_DELETEALL                           ( SID_SVX_START + 234 )
-#define SID_ATTR_TRANSFORM_PROTECT_POS                  ( SID_SVX_START + 236 )
-#define SID_ATTR_TRANSFORM_PROTECT_SIZE                 ( SID_SVX_START + 237 )
+#define SID_ATTR_TRANSFORM_PROTECT_POS                  TypedWhichId<SfxBoolItem>( SID_SVX_START + 236 )
+#define SID_ATTR_TRANSFORM_PROTECT_SIZE                 TypedWhichId<SfxBoolItem>( SID_SVX_START + 237 )
 #define SID_ATTR_TRANSFORM_AUTOSIZE                     ( SID_SVX_START + 238 ) // !!!
-#define SID_ATTR_TRANSFORM_INTERN                       ( SID_SVX_START + 239 )
+#define SID_ATTR_TRANSFORM_INTERN                       TypedWhichId<SfxRectangleItem>( SID_SVX_START + 239 )
 #define SID_INSERT_FRAME                                ( SID_SVX_START + 240 )
-#define SID_INSERT_GRAPHIC                              ( SID_SVX_START + 241 )
-#define SID_AUTOFORMAT                                  ( SID_SVX_START + 242 )
+#define SID_INSERT_GRAPHIC                              TypedWhichId<SfxStringItem>( SID_SVX_START + 241 )
+#define SID_AUTOFORMAT                                  TypedWhichId<SfxStringItem>( SID_SVX_START + 242 )
 #define SID_SPELL_DIALOG                                ( SID_SVX_START + 243 )
 #define SID_INSERT_DRAW                                 ( SID_SVX_START + 244 )
 #define SID_THESAURUS                                   ( SID_SVX_START + 245 )

@@ -926,8 +926,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( aState == SfxItemState::SET )
                     {
                         sal_Int32 nFormatKey = static_cast< sal_Int32 >(
-                        static_cast< const SfxUInt32Item & >(
-                            rItemSet.Get( SID_ATTR_NUMBERFORMAT_VALUE )).GetValue());
+                            rItemSet.Get( SID_ATTR_NUMBERFORMAT_VALUE ).GetValue());
                         aValue <<= nFormatKey;
                     }
                     else

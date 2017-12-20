@@ -844,7 +844,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     if ( pReqArgs )
                     {
-                        const SfxStringItem& rNameItem = static_cast<const SfxStringItem&>(pReqArgs->Get( SID_AUTOFORMAT ));
+                        const SfxStringItem& rNameItem = pReqArgs->Get( SID_AUTOFORMAT );
                         ScAutoFormat* pFormat = ScGlobal::GetOrCreateAutoFormat();
                         ScAutoFormat::const_iterator it = pFormat->find(rNameItem.GetValue());
                         ScAutoFormat::const_iterator itBeg = pFormat->begin();
