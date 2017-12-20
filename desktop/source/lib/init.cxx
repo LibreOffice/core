@@ -74,6 +74,7 @@
 #include <svx/ruler.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
@@ -2291,10 +2292,10 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
     switch (nType)
     {
         case LOK_KEYEVENT_KEYINPUT:
-            pWindow->LOKKeyInput(aEvent);
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pWindow, &aEvent);
             break;
         case LOK_KEYEVENT_KEYUP:
-            pWindow->LOKKeyUp(aEvent);
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pWindow, &aEvent);
             break;
         default:
             assert(false);
@@ -2476,13 +2477,13 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
     switch (nType)
     {
         case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-            pWindow->LogicMouseButtonDown(aEvent);
+            Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pWindow, &aEvent);
             break;
         case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-            pWindow->LogicMouseButtonUp(aEvent);
+            Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONUP, pWindow, &aEvent);
             break;
         case LOK_MOUSEEVENT_MOUSEMOVE:
-            pWindow->LogicMouseMove(aEvent);
+            Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEMOVE, pWindow, &aEvent);
             break;
         default:
             assert(false);
