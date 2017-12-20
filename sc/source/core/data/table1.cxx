@@ -925,7 +925,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
         SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol,
-        bool bConsiderCellNotes ) const
+        bool bConsiderCellNotes, bool bConsiderCellDrawObjects ) const
 {
     rStartCol = std::min<SCCOL>( rStartCol, aCol.size()-1 );
     // check for rEndCol is done below.
@@ -961,6 +961,10 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
         {
             if (bConsiderCellNotes && !aCol[rEndCol].IsNotesEmptyBlock( rStartRow, rEndRow ))
                 break;
+
+            if (bConsiderCellDrawObjects && !aCol[rEndCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
+                break;
+
             --rEndCol;
             o_bShrunk = true;
         }
@@ -975,6 +979,9 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
             if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
             {
                 if (bConsiderCellNotes && !aCol[rStartCol].IsNotesEmptyBlock( rStartRow, rEndRow ))
+                    break;
+
+                if (bConsiderCellDrawObjects && !aCol[rStartCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
                     break;
 
                 ++rStartCol;

@@ -516,7 +516,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     bool bShrunk = false;
     rDoc.ShrinkToUsedDataArea( bShrunk, nTab, aLocalParam.nCol1, aLocalParam.nRow1,
             aLocalParam.nCol2, aLocalParam.nRow2, false, aLocalParam.bByRow, !aLocalParam.bByRow,
-            aLocalParam.bIncludeComments );
+            aLocalParam.bIncludeComments, true );
 
     SCROW nStartRow = aLocalParam.nRow1;
     if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)
