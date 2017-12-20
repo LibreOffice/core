@@ -52,6 +52,24 @@
       "revId": "45907df9b31a0c3b83e861e9d1d795a80a38c8a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_06069e85",
+        "filename": "unotools/source/ucbhelper/tempfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2017-12-20T15:59:59Z",
+      "side": 1,
+      "message": "it give always the parent path back e.g.\nfile:///var/temp\nfile:///var\n.\n.\nfile:\n\nthe next function \"ensuredir\" (here line 75) testing of empty-string.\n\nUnder Windows in debug mode when you say ignore the assertion it gives L\"!!br0ken!!\" back.\nUnder Release, Linux i have not testing",
+      "parentUuid": "1a430d35_66b762f5",
+      "revId": "45907df9b31a0c3b83e861e9d1d795a80a38c8a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
