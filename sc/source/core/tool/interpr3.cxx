@@ -154,7 +154,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
         {
             fAx = fRx; fAy = fRy;
         }
-        // if last interation brought to small advance, then do bisection next
+        // if last iteration brought to small advance, then do bisection next
         // time, for safety
         bHasToInterpolate = bHasToInterpolate && (fabs(fRy) * 2.0 <= fabs(fQy));
         ++nCount;
