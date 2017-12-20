@@ -31,7 +31,6 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
-#include <helpids.h>
 #include <globals.hrc>
 #include <drawbase.hxx>
 #include <beziersh.hxx>

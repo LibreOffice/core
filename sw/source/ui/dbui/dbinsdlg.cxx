@@ -80,7 +80,6 @@
 #include <dbui.hrc>
 
 #include <cmdid.h>
-#include <helpids.h>
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/uno3.hxx>
 #include <tabsh.hxx>

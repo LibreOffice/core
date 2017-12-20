@@ -65,7 +65,6 @@
 #include <modcfg.hxx>
 
 #include <cmdid.h>
-#include <helpids.h>
 #include <globals.hrc>
 #include <cnttab.hrc>
 #include <SwStyleNameMapper.hxx>

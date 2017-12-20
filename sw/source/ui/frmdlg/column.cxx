@@ -43,7 +43,6 @@
 #include <swmodule.hxx>
 #include <sal/macros.h>
 
-#include <helpids.h>
 #include <globals.hrc>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>

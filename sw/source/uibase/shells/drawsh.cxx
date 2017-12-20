@@ -54,7 +54,6 @@
 #include <wrtsh.hxx>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <helpids.h>
 #include <strings.hrc>
 #include <drwbassh.hxx>
 #include <drawsh.hxx>

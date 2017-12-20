@@ -62,7 +62,6 @@
 #include <shellio.hxx>
 
 #include <cmdid.h>
-#include <helpids.h>
 #include <swerror.h>
 #include <globals.hrc>
 #include <swmodule.hxx>

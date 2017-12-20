@@ -22,7 +22,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <globals.hrc>
-#include <helpids.h>
 
 #include <sfx2/styfitem.hxx>
 

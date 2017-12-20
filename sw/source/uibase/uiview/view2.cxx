@@ -111,7 +111,6 @@
 #include <globals.hrc>
 #include <app.hrc>
 #include <fmtclds.hxx>
-#include <helpids.h>
 #include <sfx2/templatedlg.hxx>
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>

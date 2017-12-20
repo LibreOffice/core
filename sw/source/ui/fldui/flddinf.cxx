@@ -24,7 +24,6 @@
 #include <svl/zformat.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <helpids.h>
 #include <swtypes.hxx>
 #include <globals.hrc>
 #include <strings.hrc>

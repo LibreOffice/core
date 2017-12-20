@@ -52,7 +52,6 @@
 #include <fmtfsize.hxx>
 #include <shellio.hxx>
 
-#include <helpids.h>
 #include <cmdid.h>
 #include <strings.hrc>
 #include <globals.hrc>

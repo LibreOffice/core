@@ -32,7 +32,6 @@
 #include <uitool.hxx>
 #include <poolfmt.hxx>
 #include <swstyle.h>
-#include <helpids.h>
 #include <SwStyleNameMapper.hxx>
 #include <memory>
 
