@@ -43,7 +43,6 @@
 #include <docstyle.hxx>
 #include <viewopt.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <paratr.hxx>

@@ -20,7 +20,6 @@
 #include <officecfg/Office/Writer.hxx>
 #include <comphelper/string.hxx>
 #include <swtypes.hxx>
-#include <helpids.h>
 #include <uiitems.hxx>
 #include <modcfg.hxx>
 #include <swmodule.hxx>

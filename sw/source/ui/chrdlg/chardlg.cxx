@@ -29,7 +29,6 @@
 #include <svl/cjkoptions.hxx>
 
 #include <cmdid.h>
-#include <helpids.h>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

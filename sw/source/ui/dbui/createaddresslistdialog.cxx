@@ -43,7 +43,6 @@
 #include <tools/urlobj.hxx>
 #include <dbui.hrc>
 #include <strings.hrc>
-#include <helpids.h>
 #include <unomid.h>
 
 using namespace ::com::sun::star;

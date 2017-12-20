@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <helpids.h>
 #include <swmodule.hxx>
 #include <view.hxx>
 

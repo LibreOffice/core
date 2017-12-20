@@ -69,7 +69,6 @@
 #include <docstat.hxx>
 #include <IDocumentStatistics.hxx>
 
-#include <helpids.h>
 #include <cmdid.h>
 #include <cfgitems.hxx>
 #include <globals.hrc>

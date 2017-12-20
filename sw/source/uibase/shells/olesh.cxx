@@ -24,7 +24,6 @@
 #include <vcl/EnumContext.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <helpids.h>
 #include <globals.hrc>
 #include <frmsh.hxx>
 #include <olesh.hxx>

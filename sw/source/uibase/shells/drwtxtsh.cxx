@@ -55,7 +55,6 @@
 #include <breakit.hxx>
 
 #include <cmdid.h>
-#include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
 

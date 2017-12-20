@@ -19,7 +19,6 @@
 
 #include "FldRefTreeListBox.hxx"
 
-#include <helpids.h>
 #include <vcl/builderfactory.hxx>
 #include <vcl/help.hxx>
 

@@ -46,7 +46,6 @@
 
 #include <cmdid.h>
 #include <strings.hrc>
-#include <helpids.h>
 #include <globals.hrc>
 
 #include <IDocumentSettingAccess.hxx>

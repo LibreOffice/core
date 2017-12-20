@@ -32,7 +32,6 @@
 #include <swwait.hxx>
 #include <uitool.hxx>
 
-#include <helpids.h>
 #include <cmdid.h>
 #include <strings.hrc>
 

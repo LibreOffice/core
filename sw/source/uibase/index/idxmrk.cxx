@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <helpids.h>
 #include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>

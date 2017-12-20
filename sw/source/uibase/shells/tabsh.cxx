@@ -75,7 +75,6 @@
 #include <strings.hrc>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <helpids.h>
 #include <unobaseclass.hxx>
 
 #define SwTableShell

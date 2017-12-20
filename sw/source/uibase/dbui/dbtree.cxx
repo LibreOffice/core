@@ -40,7 +40,6 @@
 #include <vcl/svapp.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <helpids.h>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 

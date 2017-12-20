@@ -58,7 +58,6 @@
 #include <dbui.hrc>
 #include <view.hxx>
 
-#include <helpids.h>
 #include <unomid.h>
 
 using namespace ::com::sun::star;

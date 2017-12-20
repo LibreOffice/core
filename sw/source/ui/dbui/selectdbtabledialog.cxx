@@ -33,7 +33,6 @@
 
 #include <dbui.hrc>
 #include <strings.hrc>
-#include <helpids.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbcx;

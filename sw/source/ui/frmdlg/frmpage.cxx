@@ -21,7 +21,6 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include <cmdid.h>
-#include <helpids.h>
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>

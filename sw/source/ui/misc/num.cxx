@@ -42,7 +42,6 @@
 #include <frmmgr.hxx>
 
 #include <globals.hrc>
-#include <helpids.h>
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

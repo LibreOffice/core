@@ -19,7 +19,6 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
-#include <helpids.h>
 #include <globals.hrc>
 #include <navsh.hxx>
 #include <strings.hrc>

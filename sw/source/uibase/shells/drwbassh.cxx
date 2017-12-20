@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <helpids.h>
 #include <swtypes.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>

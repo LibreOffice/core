@@ -71,7 +71,6 @@
 #include <shellio.hxx>
 
 #include <cmdid.h>
-#include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>

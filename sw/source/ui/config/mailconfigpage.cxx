@@ -35,7 +35,6 @@
 #include <globals.hrc>
 #include <dbui.hrc>
 #include <bitmaps.hlst>
-#include <helpids.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
