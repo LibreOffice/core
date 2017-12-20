@@ -351,7 +351,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
     case MeasureUnit::MM_10TH:
     case MeasureUnit::MM_100TH:
         {
-            long nFac2 = (MeasureUnit::MM_100TH == nSourceUnit) ? 100 : 10;
+            int nFac2 = (MeasureUnit::MM_100TH == nSourceUnit) ? 100 : 10;
             switch( nTargetUnit )
             {
             case MeasureUnit::MM_100TH:

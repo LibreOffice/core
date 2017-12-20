@@ -56,7 +56,7 @@ static OUString toUNOname( char const * p )
     while (*p != 'E')
     {
         // read chars count
-        long n = (*p++ - '0');
+        int n = (*p++ - '0');
         while ('0' <= *p && '9' >= *p)
         {
             n *= 10;

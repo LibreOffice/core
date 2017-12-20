@@ -177,9 +177,9 @@ void SotStorageStream::SetSize(sal_uInt64 const nNewSize)
 
 sal_uInt32 SotStorageStream::GetSize() const
 {
-    sal_uLong nPos = Tell();
+    sal_uInt64 nPos = Tell();
     const_cast<SotStorageStream *>(this)->Seek( STREAM_SEEK_TO_END );
-    sal_uLong nSize = Tell();
+    sal_uInt64 nSize = Tell();
     const_cast<SotStorageStream *>(this)->Seek( nPos );
     return nSize;
 }
@@ -199,7 +199,7 @@ void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
     if( !pOwnStm || !pDestStm->pOwnStm )
     {
         // If Ole2 or not only own StorageStreams
-        sal_uLong nPos = Tell();    // save position
+        sal_uInt64 nPos = Tell();    // save position
         Seek( 0 );
         pDestStm->SetSize( 0 ); // empty target stream
 
@@ -497,7 +497,7 @@ bool SotStorage::IsStorageFile( SvStream* pStream )
     /** code for new storages must come first! **/
     if ( pStream )
     {
-        long nPos = pStream->Tell();
+        sal_uInt64 nPos = pStream->Tell();
         bool bRet = UCBStorage::IsStorageFile( pStream );
         if ( !bRet )
             bRet = Storage::IsStorageFile( pStream );

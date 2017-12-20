@@ -1041,7 +1041,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
         {
             tools::Polygon aNewPoly;
             const Point& rFirst = mpImplPolygon->mxPointAry[ 0 ];
-            const long nReduce = ( nOptimizeFlags & PolyOptimizeFlags::REDUCE ) ? 4 : 0;
+            const int nReduce = ( nOptimizeFlags & PolyOptimizeFlags::REDUCE ) ? 4 : 0;
 
             while( nSize && ( mpImplPolygon->mxPointAry[ nSize - 1 ] == rFirst ) )
                 nSize--;

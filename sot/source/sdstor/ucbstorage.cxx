@@ -825,7 +825,7 @@ void UCBStorageStream_Impl::CopySourceToTemporary()
     // current position of the temporary stream is not changed
     if( m_bSourceRead )
     {
-        sal_uLong aPos = m_pStream->Tell();
+        sal_uInt64 aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
         ReadSourceWriteTemporary();
         m_pStream->Seek( aPos );
@@ -1010,10 +1010,10 @@ sal_uLong UCBStorageStream_Impl::GetSize()
     if( !Init() )
         return 0;
 
-    sal_uLong nPos = m_pStream->Tell();
+    sal_uInt64 nPos = m_pStream->Tell();
     m_pStream->Seek( STREAM_SEEK_TO_END );
     ReadSourceWriteTemporary();
-    sal_uLong nRet = m_pStream->Tell();
+    sal_uInt64 nRet = m_pStream->Tell();
     m_pStream->Seek( nPos );
 
     return nRet;
@@ -2884,7 +2884,7 @@ bool UCBStorage::IsStorageFile( SvStream* pFile )
     if ( !pFile )
         return false;
 
-    sal_uLong nPos = pFile->Tell();
+    sal_uInt64 nPos = pFile->Tell();
     pFile->Seek( STREAM_SEEK_TO_END );
     if ( pFile->Tell() < 4 )
         return false;
@@ -2914,7 +2914,7 @@ bool UCBStorage::IsStorageFile( SvStream* pFile )
 OUString UCBStorage::GetLinkedFile( SvStream &rStream )
 {
     OUString aString;
-    sal_uLong nPos = rStream.Tell();
+    sal_uInt64 nPos = rStream.Tell();
     rStream.Seek( STREAM_SEEK_TO_END );
     if ( !rStream.Tell() )
         return aString;
