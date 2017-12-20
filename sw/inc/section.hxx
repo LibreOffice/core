@@ -166,7 +166,7 @@ public:
 
     void SetSectionData(SwSectionData const& rData);
 
-    OUString GetSectionName() const         { return m_Data.GetSectionName(); }
+    const OUString& GetSectionName() const         { return m_Data.GetSectionName(); }
     void SetSectionName(OUString const& rName){ m_Data.SetSectionName(rName); }
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
