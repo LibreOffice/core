@@ -627,7 +627,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
 
             if ( CharClass::isAsciiNumeric( sString ) )
             {
-                long nIndex = sString.toInt32();
+                sal_Int32 nIndex = sString.toInt32();
                 if (nIndex > 0 && nIndex <= 64)
                 {
                     pResult = pFormatter->GetUserDefColor((sal_uInt16)nIndex-1);
