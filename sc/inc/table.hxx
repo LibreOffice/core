@@ -577,7 +577,8 @@ public:
 
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
                                       SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
-                                      bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes ) const;
+                                      bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes,
+                                      bool bConsiderCellDrawObjects ) const;
 
     SCROW GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 

@@ -1311,6 +1311,8 @@ public:
                                 If TRUE, do not adjust the left column.
                         @param  bConsiderCellNotes
                                 If TRUE, consider the presence of cell notes besides data.
+                        @param  bConsiderCellDrawObjects
+                                If TRUE, consider the presence of draw objects anchored to the cell.
 
                         @returns true if there is any data, false if not.
                      */
@@ -1318,7 +1320,8 @@ public:
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                           SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
                                           bool bStickyTopRow = false, bool bStickyLeftCol = false,
-                                          bool bConsiderCellNotes = false ) const;
+                                          bool bConsiderCellNotes = false,
+                                          bool bConsiderCellDrawObjects = false ) const;
 
     /**
      * Return the last non-empty row position in given columns that's no
