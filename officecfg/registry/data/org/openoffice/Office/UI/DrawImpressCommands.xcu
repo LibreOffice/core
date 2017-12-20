@@ -24,6 +24,16 @@
           <value xml:lang="en-US">S~lide</value>
         </prop>
       </node>
+      <node oor:name=".uno:PageMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Page</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ShapeMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Shape</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SlideMoveMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Move</value>
@@ -633,7 +643,7 @@
           <value xml:lang="en-US">Format Page</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Page Properties...</value>
+          <value xml:lang="en-US">Properties...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -728,7 +738,7 @@
       </node>
       <node oor:name=".uno:ImportFromFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~File...</value>
+          <value xml:lang="en-US">Insert Page from File...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -944,6 +954,17 @@
       <node oor:name=".uno:PresentationLayout" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Master Slide...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DrawingLayout" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Master Page...</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:PresentationLayout</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
