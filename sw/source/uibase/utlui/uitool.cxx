@@ -220,8 +220,8 @@ void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
     SwAttrSet aSet(pFormat->GetAttrSet());
     aSet.Put(rSet);
 
-    const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(SID_ATTR_PAGE_SIZE));
-    const SfxBoolItem& rDynamic = static_cast<const SfxBoolItem&>(rSet.Get(SID_ATTR_PAGE_DYNAMIC));
+    const SvxSizeItem& rSize = rSet.Get(SID_ATTR_PAGE_SIZE);
+    const SfxBoolItem& rDynamic = rSet.Get(SID_ATTR_PAGE_DYNAMIC);
 
     // Convert size
     SwFormatFrameSize aFrameSize(rDynamic.GetValue() ? ATT_MIN_SIZE : ATT_FIX_SIZE,
@@ -274,7 +274,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     // PageData
     if(rSet.GetItemState(SID_ATTR_PAGE) == SfxItemState::SET)
     {
-        const SvxPageItem& rPageItem = static_cast<const SvxPageItem&>(rSet.Get(SID_ATTR_PAGE));
+        const SvxPageItem& rPageItem = rSet.Get(SID_ATTR_PAGE);
 
         const SvxPageUsage nUse = rPageItem.GetPageUsage();
         if(nUse != SvxPageUsage::NONE)
@@ -287,7 +287,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     // Size
     if(rSet.GetItemState(SID_ATTR_PAGE_SIZE) == SfxItemState::SET)
     {
-        const SvxSizeItem& rSizeItem = static_cast<const SvxSizeItem&>(rSet.Get(SID_ATTR_PAGE_SIZE));
+        const SvxSizeItem& rSizeItem = rSet.Get(SID_ATTR_PAGE_SIZE);
         SwFormatFrameSize aSize(ATT_FIX_SIZE);
         aSize.SetSize(rSizeItem.GetSize());
         rMaster.SetFormatAttr(aSize);
@@ -298,7 +298,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             false, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-        const SfxBoolItem& rHeaderOn = static_cast<const SfxBoolItem&>(rHeaderSet.Get(SID_ATTR_PAGE_ON));
+        const SfxBoolItem& rHeaderOn = rHeaderSet.Get(SID_ATTR_PAGE_ON);
 
         if(rHeaderOn.GetValue())
         {
@@ -313,8 +313,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             ::FillHdFt(pHeaderFormat, rHeaderSet);
 
-            rPageDesc.ChgHeaderShare(static_cast<const SfxBoolItem&>(
-                        rHeaderSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
+            rPageDesc.ChgHeaderShare(rHeaderSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
             if (nFirstShare < 0)
             {
                 rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
@@ -338,7 +337,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             false, &pItem ) )
     {
         const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-        const SfxBoolItem& rFooterOn = static_cast<const SfxBoolItem&>(rFooterSet.Get(SID_ATTR_PAGE_ON));
+        const SfxBoolItem& rFooterOn = rFooterSet.Get(SID_ATTR_PAGE_ON);
 
         if(rFooterOn.GetValue())
         {
@@ -353,8 +352,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             ::FillHdFt(pFooterFormat, rFooterSet);
 
-            rPageDesc.ChgFooterShare(static_cast<const SfxBoolItem&>(
-                        rFooterSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
+            rPageDesc.ChgFooterShare(rFooterSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
             if (nFirstShare < 0)
             {
                 rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(

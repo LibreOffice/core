@@ -307,8 +307,7 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
     if( SfxItemState::SET != rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
         return;
 
-    const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(
-                                        SID_ATTR_PAGE_SIZE));
+    const SvxSizeItem& rSize = rSet.Get(SID_ATTR_PAGE_SIZE);
     const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
                                                         RES_LR_SPACE ));
     const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get(

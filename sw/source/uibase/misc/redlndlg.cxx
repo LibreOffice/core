@@ -1119,7 +1119,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                OUString sMsg(static_cast<const SvxPostItTextItem&>(pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
+                OUString sMsg(pOutSet->Get(SID_ATTR_POSTIT_TEXT).GetValue());
 
                 // insert / change comment
                 pSh->SetRedlineComment(sMsg);

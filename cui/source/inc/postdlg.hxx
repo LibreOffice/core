@@ -34,9 +34,9 @@
     over this list with links.
 
     [Items]
-    <SvxPostitAuthorItem><SID_ATTR_POSTIT_AUTHOR>
-    <SvxPostitDateItem><SID_ATTR_POSTIT_DATE>
-    <SvxPostitTextItem><SID_ATTR_POSTIT_TEXT>
+    <SvxPostItAuthorItem><SID_ATTR_POSTIT_AUTHOR>
+    <SvxPostItDateItem><SID_ATTR_POSTIT_DATE>
+    <SvxPostItTextItem><SID_ATTR_POSTIT_TEXT>
 */
 
 class SvxPostItDialog : public SfxModalDialog

@@ -24,6 +24,16 @@
 #include <sfx2/sfxsids.hrc>
 #include <editeng/editids.hrc>
 #include <svx/unomid.hxx>
+#include <svl/typedwhich.hxx>
+
+class SvxPageItem;
+class SvxSizeItem;
+class SvxLongULSpaceItem;
+class SvxLongLRSpaceItem;
+class SvxPostItAuthorItem;
+class SvxPostItDateItem;
+class SvxPostItTextItem;
+class SvxPostItIdItem;
 
 // member IDs
 
@@ -205,32 +215,32 @@
 
 // CAUTION! Range <1 .. 22> used by EditEngine (!)
 
-#define SID_ATTR_BORDER_INNER                           ( SID_SVX_START + 23 )
+#define SID_ATTR_BORDER_INNER                           TypedWhichId<SvxBoxInfoItem>( SID_SVX_START + 23 )
 
 // CAUTION! Range <24 .. 43> used by EditEngine (!)
 
-#define SID_ATTR_POSTIT_AUTHOR                          ( SID_SVX_START + 44 )
-#define SID_ATTR_POSTIT_DATE                            ( SID_SVX_START + 45 )
-#define SID_ATTR_POSTIT_TEXT                            ( SID_SVX_START + 46 )
-#define SID_ATTR_POSTIT_ID                              ( SID_SVX_START + 47 )
+#define SID_ATTR_POSTIT_AUTHOR                          TypedWhichId<SvxPostItAuthorItem>( SID_SVX_START + 44 )
+#define SID_ATTR_POSTIT_DATE                            TypedWhichId<SvxPostItDateItem>( SID_SVX_START + 45 )
+#define SID_ATTR_POSTIT_TEXT                            TypedWhichId<SvxPostItTextItem>( SID_SVX_START + 46 )
+#define SID_ATTR_POSTIT_ID                              TypedWhichId<SvxPostItIdItem>( SID_SVX_START + 47 )
 // free
 
 // CAUTION! Range <48 .. 49> used by EditEngine (!)
 
-#define SID_ATTR_PAGE                                   ( SID_SVX_START + 50 )
-#define SID_ATTR_PAGE_SIZE                              ( SID_SVX_START + 51 )
-#define SID_ATTR_PAGE_MAXSIZE                           ( SID_SVX_START + 52 )
-#define SID_ATTR_PAGE_ORIENTATION                       ( SID_SVX_START + 53 )
-#define SID_ATTR_PAGE_PAPERBIN                          ( SID_SVX_START + 54 )
-#define SID_ATTR_PAGE_EXT1                              ( SID_SVX_START + 55 )
-#define SID_ATTR_PAGE_EXT2                              ( SID_SVX_START + 56 )
-#define SID_ATTR_PAGE_HEADERSET                         ( SID_SVX_START + 57 )
-#define SID_ATTR_PAGE_FOOTERSET                         ( SID_SVX_START + 58 )
-#define SID_ATTR_PAGE_ON                                ( SID_SVX_START + 59 )
-#define SID_ATTR_PAGE_DYNAMIC                           ( SID_SVX_START + 60 )
-#define SID_ATTR_PAGE_SHARED                            ( SID_SVX_START + 61 )
-#define SID_ATTR_PAGE_LRSPACE                           ( SID_SVX_START + 62 )
-#define SID_ATTR_PAGE_ULSPACE                           ( SID_SVX_START + 63 )
+#define SID_ATTR_PAGE                                   TypedWhichId<SvxPageItem>( SID_SVX_START + 50 )
+#define SID_ATTR_PAGE_SIZE                              TypedWhichId<SvxSizeItem>( SID_SVX_START + 51 )
+#define SID_ATTR_PAGE_MAXSIZE                           TypedWhichId<SvxSizeItem>( SID_SVX_START + 52 )
+#define SID_ATTR_PAGE_ORIENTATION                       TypedWhichId<SvxPageItem>( SID_SVX_START + 53 )
+#define SID_ATTR_PAGE_PAPERBIN                          TypedWhichId<SvxPaperBinItem>( SID_SVX_START + 54 )
+#define SID_ATTR_PAGE_EXT1                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 55 )
+#define SID_ATTR_PAGE_EXT2                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 56 )
+#define SID_ATTR_PAGE_HEADERSET                         TypedWhichId<SvxSetItem>( SID_SVX_START + 57 )
+#define SID_ATTR_PAGE_FOOTERSET                         TypedWhichId<SvxSetItem>( SID_SVX_START + 58 )
+#define SID_ATTR_PAGE_ON                                TypedWhichId<SfxBoolItem>( SID_SVX_START + 59 )
+#define SID_ATTR_PAGE_DYNAMIC                           TypedWhichId<SfxBoolItem>( SID_SVX_START + 60 )
+#define SID_ATTR_PAGE_SHARED                            TypedWhichId<SfxBoolItem>( SID_SVX_START + 61 )
+#define SID_ATTR_PAGE_LRSPACE                           TypedWhichId<SvxLongLRSpaceItem>( SID_SVX_START + 62 )
+#define SID_ATTR_PAGE_ULSPACE                           TypedWhichId<SvxLongULSpaceItem>( SID_SVX_START + 63 )
 
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 

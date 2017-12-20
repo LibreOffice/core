@@ -2234,8 +2234,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         aCellId = static_cast<const SvxPostItIdItem*>(pCellId)->GetValue();
 
                     const SvxPostItTextItem*    pTextItem   = static_cast<const SvxPostItTextItem*>( pText );
-                    const SvxPostItAuthorItem*  pAuthorItem = static_cast<const SvxPostItAuthorItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_AUTHOR ) );
-                    const SvxPostItDateItem*    pDateItem   = static_cast<const SvxPostItDateItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_DATE ) );
+                    const SvxPostItAuthorItem*  pAuthorItem = pReqArgs->GetItem( SID_ATTR_POSTIT_AUTHOR );
+                    const SvxPostItDateItem*    pDateItem   = pReqArgs->GetItem( SID_ATTR_POSTIT_DATE );
 
                     if (!aCellId.isEmpty())
                     {

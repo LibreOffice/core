@@ -1218,8 +1218,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
     {
         if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
         {
-            const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(
-                                                SID_ATTR_PAGE_SIZE));
+            const SvxSizeItem& rSize = rSet.Get(SID_ATTR_PAGE_SIZE);
 
             sal_uInt16 nActWidth;
 

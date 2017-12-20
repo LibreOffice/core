@@ -923,7 +923,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
     if( !aUnions.empty() )
     {
         SvxBoxItem     aSetBox    (static_cast<const SvxBoxItem    &>( rSet.Get(RES_BOX    )));
-        SvxBoxInfoItem aSetBoxInfo(static_cast<const SvxBoxInfoItem&>( rSet.Get(SID_ATTR_BORDER_INNER)));
+        SvxBoxInfoItem aSetBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
 
         bool bTopSet      = false,
              bBottomSet   = false,
@@ -1112,7 +1112,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
         if ( bRTLTab )
         {
             SvxBoxItem     aTempBox    (static_cast<const SvxBoxItem    &>( rSet.Get(RES_BOX    )));
-            SvxBoxInfoItem aTempBoxInfo(static_cast<const SvxBoxInfoItem&>( rSet.Get(SID_ATTR_BORDER_INNER)));
+            SvxBoxInfoItem aTempBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
 
             aTempBox.SetLine( aSetBox.GetRight(), SvxBoxItemLine::RIGHT);
             aSetBox.SetLine( aSetBox.GetLeft(), SvxBoxItemLine::RIGHT);
