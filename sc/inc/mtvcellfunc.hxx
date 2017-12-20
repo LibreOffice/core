@@ -169,6 +169,34 @@ ProcessNote(
         CellNoteStoreType, cellnote_block, FuncElem, FuncElseNoOp<size_t> >(it, rStore, nRow1, nRow2, rFuncElem, aElse);
 }
 
+template<typename Func>
+void ProcessDrawObject(CellDrawObjStoreType& rStore, Func& rFunc)
+{
+    FuncElseNoOp<size_t> aElse;
+    ProcessElements1<CellDrawObjStoreType, celldrawobj_block, Func, FuncElseNoOp<size_t> >(rStore, rFunc, aElse);
+}
+
+template<typename Func>
+typename CellDrawObjStoreType::const_iterator
+ProcessDrawObject(
+    const CellDrawObjStoreType::const_iterator& itPos, const CellDrawObjStoreType& rStore,
+    SCROW nStart, SCROW nEnd, Func& rFunc)
+{
+    FuncElseNoOp<size_t> aElse;
+    return ParseElements1<CellDrawObjStoreType, celldrawobj_block, Func, FuncElseNoOp<size_t> >(
+        itPos, rStore, nStart, nEnd, rFunc, aElse);
+}
+
+template<typename FuncElem>
+typename CellDrawObjStoreType::iterator
+ProcessDrawObject(
+    const CellDrawObjStoreType::iterator& it, CellDrawObjStoreType& rStore, SCROW nRow1, SCROW nRow2, FuncElem& rFuncElem)
+{
+    FuncElseNoOp<size_t> aElse;
+    return ProcessElements1<
+        CellDrawObjStoreType, celldrawobj_block, FuncElem, FuncElseNoOp<size_t> >(it, rStore, nRow1, nRow2, rFuncElem, aElse);
+}
+
 template<typename FuncElem>
 typename BroadcasterStoreType::iterator
 ProcessBroadcaster(

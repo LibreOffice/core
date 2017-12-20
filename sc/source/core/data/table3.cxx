@@ -226,9 +226,10 @@ public:
         ScRefCellValue maCell;
         const sc::CellTextAttr* mpAttr;
         const ScPostIt* mpNote;
+        const SdrObject* mpDrawObject;
         const ScPatternAttr* mpPattern;
 
-        Cell() : mpAttr(nullptr), mpNote(nullptr), mpPattern(nullptr) {}
+        Cell() : mpAttr(nullptr), mpNote(nullptr), mpDrawObject(nullptr), mpPattern(nullptr) {}
     };
 
     struct Row
@@ -437,6 +438,7 @@ void initDataRows(
             rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
             rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
             rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
+            rCell.mpDrawObject = rCol.GetCellDrawObject(aBlockPos, nRow);
 
             if (!bUniformPattern && bPattern)
                 rCell.mpPattern = rCol.GetPattern(nRow);
@@ -547,6 +549,7 @@ struct SortedColumn
     sc::CellTextAttrStoreType maCellTextAttrs;
     sc::BroadcasterStoreType maBroadcasters;
     sc::CellNoteStoreType maCellNotes;
+    sc::CellDrawObjStoreType maCellDrawObjects;
 
     PatRangeType maPatterns;
     PatRangeType::const_iterator miPatternPos;
@@ -559,6 +562,7 @@ struct SortedColumn
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
         maCellNotes(nTopEmptyRows),
+        maCellDrawObjects(nTopEmptyRows),
         maPatterns(0, MAXROWCOUNT, nullptr),
         miPatternPos(maPatterns.begin()) {}
 
@@ -789,6 +793,12 @@ void fillSortedColumnArray(
                 rNoteStore.push_back(const_cast<ScPostIt*>(rCell.mpNote));
             else
                 rNoteStore.push_back_empty();
+
+            sc::CellDrawObjStoreType& rDrawObjStore = aSortedCols.at(j).get()->maCellDrawObjects;
+            if (rCell.mpDrawObject)
+                rDrawObjStore.push_back(const_cast<SdrObject*>(rCell.mpDrawObject));
+            else
+                rDrawObjStore.push_back_empty();
 
             if (rCell.mpPattern)
                 aSortedCols.at(j).get()->setPattern(aCellPos.Row(), rCell.mpPattern);
@@ -1103,6 +1113,14 @@ void ScTable::SortReorderByRow(
         }
 
         {
+            sc::CellDrawObjStoreType& rSrc = aSortedCols[i].get()->maCellDrawObjects;
+            sc::CellDrawObjStoreType& rDest = aCol[nThisCol].maCellDrawObjects;
+            rDest.release_range(nRow1, nRow2);
+            rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+            aCol[nThisCol].UpdateDrawObjects(nRow1, nRow2);
+        }
+
+        {
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
                 sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
@@ -1299,6 +1317,14 @@ void ScTable::SortReorderByRowRefUpdate(
             rDest.release_range(nRow1, nRow2);
             rSrc.transfer(nRow1, nRow2, rDest, nRow1);
             aCol[nThisCol].UpdateNoteCaptions(nRow1, nRow2);
+        }
+
+        {
+            sc::CellDrawObjStoreType& rSrc = aSortedCols[i].get()->maCellDrawObjects;
+            sc::CellDrawObjStoreType& rDest = aCol[nThisCol].maCellDrawObjects;
+            rDest.release_range(nRow1, nRow2);
+            rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+            aCol[nThisCol].UpdateDrawObjects(nRow1, nRow2);
         }
 
         {

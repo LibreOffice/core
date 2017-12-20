@@ -46,6 +46,8 @@
 #include <refhint.hxx>
 #include <stlalgorithm.hxx>
 #include <formulagroup.hxx>
+#include <userdat.hxx>
+#include <drwlayer.hxx>
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -84,6 +86,7 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 ScColumn::ScColumn() :
     maCellTextAttrs(MAXROWCOUNT),
     maCellNotes(MAXROWCOUNT),
+    maCellDrawObjects(MAXROWCOUNT),
     maBroadcasters(MAXROWCOUNT),
     maCellsEvent(this),
     maCells(maCellsEvent),
@@ -851,6 +854,9 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     maCellNotes.insert_empty(nStartRow, nSize);
     maCellNotes.resize(MAXROWCOUNT);
 
+    maCellDrawObjects.insert_empty(nStartRow, nSize);
+    maCellDrawObjects.resize(MAXROWCOUNT);
+
     maBroadcasters.insert_empty(nStartRow, nSize);
     maBroadcasters.resize(MAXROWCOUNT);
 
@@ -1205,6 +1211,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
 
     if (bSet)
     {
+        // TODO: Do we need to copy images as well here?
         rDestCol.maCellTextAttrs.set(nDestRow, maCellTextAttrs.get<sc::CellTextAttr>(nSrcRow));
         ScPostIt* pNote = maCellNotes.get<ScPostIt*>(nSrcRow);
         if (pNote)
@@ -1880,12 +1887,55 @@ public:
     }
 };
 
+class DrawObjectsUpdater
+{
+    ScDocument& mrDoc;
+    SCCOL mnCol;
+    SCTAB mnTab;
+
+public:
+    DrawObjectsUpdater(ScDocument& rDoc, SCCOL nCol, SCTAB nTab)
+        : mrDoc(rDoc)
+        , mnCol(nCol)
+        , mnTab(nTab)
+    {
+    }
+
+    void operator()(size_t nRow, SdrObject* pSdrObj)
+    {
+        // Get anchor data
+        ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pSdrObj, false);
+        const ScAddress aOldStart = pObjData->maStart;
+        const ScAddress aOldEnd = pObjData->maEnd;
+
+        // Set start address
+        ScAddress aNewStart = ScAddress(mnCol, nRow, mnTab);
+        pObjData->maStart = aNewStart;
+
+        // Set end address
+        const SCCOL nObjectColSpan = aOldEnd.Col() - aOldStart.Col();
+        const SCROW nObjectRowSpan = aOldEnd.Row() - aOldStart.Row();
+        ScAddress aNewEnd = aNewStart;
+        aNewEnd.IncRow(nObjectRowSpan);
+        aNewEnd.IncCol(nObjectColSpan);
+        pObjData->maEnd = aNewEnd;
+
+        // Update draw object according to new anchor
+        ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
+        pDrawLayer->RecalcPos(pSdrObj, *pObjData, false, false);
+    }
+};
 }
 
 void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 )
 {
     NoteCaptionUpdater aFunc(nCol, nTab);
     sc::ProcessNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
+}
+void ScColumn::UpdateDrawObjects(SCROW nRow1, SCROW nRow2)
+{
+    DrawObjectsUpdater aFunc(GetDoc(), nCol, nTab);
+    sc::ProcessDrawObject(maCellDrawObjects.begin(), maCellDrawObjects, nRow1, nRow2, aFunc);
 }
 
 void ScColumn::SwapCol(ScColumn& rCol)
@@ -1894,6 +1944,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCells.swap(rCol.maCells);
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
     maCellNotes.swap(rCol.maCellNotes);
+    maCellDrawObjects.swap(rCol.maCellDrawObjects);
 
     // Swap all CellStoreEvent mdds event_func related.
     std::swap( mnBlkCountFormula, rCol.mnBlkCountFormula);
@@ -1901,6 +1952,10 @@ void ScColumn::SwapCol(ScColumn& rCol)
     // notes update caption
     UpdateNoteCaptions(0, MAXROW);
     rCol.UpdateNoteCaptions(0, MAXROW);
+
+    // Swap images
+    UpdateDrawObjects(0, MAXROW);
+    rCol.UpdateDrawObjects(0, MAXROW);
 
     ScAttrArray* pTempAttr = rCol.pAttrArray;
     rCol.pAttrArray = pAttrArray;
@@ -1954,6 +2009,10 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // move the notes to the destination column
     maCellNotes.transfer(nStartRow, nEndRow, rCol.maCellNotes, nStartRow);
     UpdateNoteCaptions(0, MAXROW);
+
+    // move the draw objects to the destination column
+    maCellDrawObjects.transfer(nStartRow, nEndRow, rCol.maCellDrawObjects, nStartRow);
+    UpdateDrawObjects(0, MAXROW);
 
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);

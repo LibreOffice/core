@@ -565,6 +565,9 @@ public:
         return maInterpreterContext;
     }
 
+    ScTable* FetchTable( SCTAB nTab );
+    const ScTable* FetchTable( SCTAB nTab ) const;
+
     SC_DLLPUBLIC sfx2::LinkManager*       GetLinkManager();
     SC_DLLPUBLIC const sfx2::LinkManager* GetLinkManager() const;
 
@@ -2407,9 +2410,6 @@ private:
     private:
         ScDocument* mpDoc;
     };
-
-    ScTable* FetchTable( SCTAB nTab );
-    const ScTable* FetchTable( SCTAB nTab ) const;
 
     void    MergeNumberFormatter(const ScDocument* pSrcDoc);
 

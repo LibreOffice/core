@@ -131,6 +131,9 @@ class ScColumn
     // Cell notes
     sc::CellNoteStoreType maCellNotes;
 
+    // Images anchored to cell
+    sc::CellDrawObjStoreType maCellDrawObjects;
+
     // Broadcasters for formula cells.
     sc::BroadcasterStoreType maBroadcasters;
 
@@ -200,6 +203,8 @@ public:
     const sc::CellTextAttrStoreType& GetCellAttrStore() const { return maCellTextAttrs; }
     sc::CellNoteStoreType& GetCellNoteStore() { return maCellNotes; }
     const sc::CellNoteStoreType& GetCellNoteStore() const { return maCellNotes; }
+    sc::CellDrawObjStoreType& GetCellDrawObjStore() { return maCellDrawObjects; }
+    const sc::CellDrawObjStoreType& GetCellDrawObjStore() const { return maCellDrawObjects; }
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
     ScRefCellValue GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
@@ -598,6 +603,10 @@ public:
     void BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint );
     void BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint );
 
+    // cell anchored draw objects
+    const SdrObject* GetCellDrawObject(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow) const;
+    void SetCellDrawObject(SCROW nRow, SdrObject* pDrawObj);
+
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
     const ScPostIt* GetCellNote( SCROW nRow ) const;
@@ -626,6 +635,7 @@ public:
                             sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption, SCROW nRowOffsetDest=0 ) const;
 
     void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 );
+    void UpdateDrawObjects( SCROW nRow1, SCROW nRow2 );
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 

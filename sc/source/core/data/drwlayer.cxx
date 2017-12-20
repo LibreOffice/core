@@ -1907,6 +1907,7 @@ void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor
     pAnchor->maEnd = rAnchor.maEnd;
     pAnchor->maStartOffset = rAnchor.maStartOffset;
     pAnchor->maEndOffset = rAnchor.maEndOffset;
+
 }
 
 void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab )
@@ -1927,6 +1928,9 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     {
         pAnchor->maLastRect = rObj.GetSnapRect();
     }
+    const ScTable* pTab = rDoc.FetchTable(aAnchor.maStart.Tab());
+    ScColumn* pCol = const_cast<ScColumn*>(pTab->FetchColumn(aAnchor.maStart.Col()));
+    pCol->SetCellDrawObject(aAnchor.maStart.Row(), &rObj);
 }
 
 void ScDrawLayer::GetCellAnchorFromPosition( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect, bool bHiddenAsZero )
