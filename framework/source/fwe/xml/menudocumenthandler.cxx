@@ -865,15 +865,14 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
     if ( nStyle > 0 )
     {
         OUString aValue;
-        const MenuStyleItem* pStyle = MenuItemStyles;
 
-        for ( sal_Int32 nIndex = 0; nIndex < nMenuStyleItemEntries; ++nIndex, ++pStyle )
+        for ( sal_Int32 nIndex = 0; nIndex < nMenuStyleItemEntries; ++nIndex )
         {
-            if ( nStyle & pStyle->nBit )
+            if ( nStyle & MenuItemStyles[nIndex].nBit )
             {
                 if ( !aValue.isEmpty() )
                     aValue += "+";
-                aValue += OUString::createFromAscii( pStyle->attrName );
+                aValue += OUString::createFromAscii( MenuItemStyles[nIndex].attrName );
             }
         }
         pList->AddAttribute( ATTRIBUTE_NS_STYLE,

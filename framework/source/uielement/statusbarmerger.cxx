@@ -137,14 +137,11 @@ bool lcl_RemoveItems( StatusBar* pStatusbar,
                              sal_uInt16 nPos,
                              const ::rtl::OUString& rMergeCommandParameter )
 {
-    sal_Int32 nCount = rMergeCommandParameter.toInt32();
-    if ( nCount > 0 )
+    const sal_Int32 nCount = rMergeCommandParameter.toInt32();
+    for ( sal_Int32 i = 0; i < nCount; i++ )
     {
-        for ( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            if ( nPos < pStatusbar->GetItemCount() )
-                pStatusbar->RemoveItem( nPos );
-        }
+        if ( nPos < pStatusbar->GetItemCount() )
+            pStatusbar->RemoveItem( nPos );
     }
     return true;
 }

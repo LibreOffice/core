@@ -712,15 +712,14 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     if ( nStyle > 0 )
     {
         OUString aValue;
-        const ToolboxStyleItem* pStyle = Styles;
 
-        for ( sal_Int32 nIndex = 0; nIndex < nStyleItemEntries; ++nIndex, ++pStyle )
+        for ( sal_Int32 nIndex = 0; nIndex < nStyleItemEntries; ++nIndex )
         {
-            if ( nStyle & pStyle->nBit )
+            if ( nStyle & Styles[nIndex].nBit )
             {
                 if ( !aValue.isEmpty() )
                     aValue += " ";
-                aValue += OUString::createFromAscii( pStyle->attrName );
+                aValue += OUString::createFromAscii( Styles[nIndex].attrName );
             }
         }
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_ITEMSTYLE,

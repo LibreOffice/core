@@ -564,14 +564,11 @@ bool ToolBarMerger::RemoveItems(
     ToolBox::ImplToolItems::size_type nPos,
     const OUString&    rMergeCommandParameter )
 {
-    sal_Int32 nCount = rMergeCommandParameter.toInt32();
-    if ( nCount > 0 )
+    const sal_Int32 nCount = rMergeCommandParameter.toInt32();
+    for ( sal_Int32 i = 0; i < nCount; i++ )
     {
-        for ( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            if ( nPos < pToolbar->GetItemCount() )
-                pToolbar->RemoveItem( nPos );
-        }
+        if ( nPos < pToolbar->GetItemCount() )
+            pToolbar->RemoveItem( nPos );
     }
     return true;
 }
