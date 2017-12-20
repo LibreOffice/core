@@ -313,7 +313,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
                     sal_uInt16 nId = pMenu->GetItemId(i);
 
                     MenuItemData* pParentItemData = pMenu->GetItemList()->GetData(nId);
-
+                    assert(pParentItemData);
                     mpParentPopup->InsertItem(nId, pParentItemData->aText, pParentItemData->nBits, pParentItemData->sIdent);
                     mpParentPopup->SetHelpId(nId, pParentItemData->aHelpId);
                     mpParentPopup->SetHelpText(nId, pParentItemData->aHelpText);
@@ -370,6 +370,7 @@ void MenuBarWindow::KillActivePopup()
                 {
                     sal_uInt16 nId = mpParentPopup->GetItemId(i);
                     MenuItemData* pParentItemData = mpParentPopup->GetItemList()->GetData(nId);
+                    assert(pParentItemData);
                     pParentItemData->pSubMenu = nullptr;
                 }
             }
