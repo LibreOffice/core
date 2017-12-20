@@ -1371,7 +1371,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
         const SwSectionNode *const pSectNd = pFormat->GetSectionNode();
         if( pSectNd != nullptr )
         {
-            const OUString rNm = pSectNd->GetSection().GetSectionName();
+            const OUString& rNm = pSectNd->GetSection().GetSectionName();
             if (rNm.startsWith( aName ))
             {
                 // Calculate the Number and reset the Flag
