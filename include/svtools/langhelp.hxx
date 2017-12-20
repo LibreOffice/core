@@ -22,6 +22,9 @@
  */
 SVT_DLLPUBLIC void localizeWebserviceURI( OUString& io_rURI );
 
+OUString SVT_DLLPUBLIC getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale);
+OUString SVT_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed, bool bRequestInstallIfMissing);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

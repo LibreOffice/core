@@ -1,0 +1,10 @@
+/* Configuration of restriction on supported ui languages, by the
+ * --with-lang option.
+ */
+
+#ifndef CONFIG_VENDOR_H
+#define CONFIG_VENDOR_H
+
+#define OOO_VENDOR ""
+
+#endif

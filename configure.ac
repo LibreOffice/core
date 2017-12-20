@@ -11711,6 +11711,7 @@ if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     ALL_LANGS=`echo $ALL_LANGS qtz`
 fi
 AC_SUBST(ALL_LANGS)
+AC_DEFINE_UNQUOTED(WITH_LANG,"$WITH_LANG")
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
 AC_SUBST(GIT_NEEDED_SUBMODULES)
@@ -11859,6 +11860,7 @@ else
     OOO_VENDOR="$with_vendor"
     AC_MSG_RESULT([$OOO_VENDOR])
 fi
+AC_DEFINE_UNQUOTED(OOO_VENDOR,"$OOO_VENDOR")
 AC_SUBST(OOO_VENDOR)
 
 if test "$_os" = "Android" ; then
@@ -12472,6 +12474,7 @@ AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_gpgme.h])
 AC_CONFIG_HEADERS([config_host/config_java.h])
+AC_CONFIG_HEADERS([config_host/config_langs.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_libcxx.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
@@ -12484,6 +12487,7 @@ AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
 AC_CONFIG_HEADERS([config_host/config_test.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
+AC_CONFIG_HEADERS([config_host/config_vendor.h])
 AC_CONFIG_HEADERS([config_host/config_vcl.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
