@@ -34,6 +34,24 @@
       "revId": "45907df9b31a0c3b83e861e9d1d795a80a38c8a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_66b762f5",
+        "filename": "unotools/source/ucbhelper/tempfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-12-20T13:38:45Z",
+      "side": 1,
+      "message": "sure - but for the function \u0027getParentName()\u0027, perhaps return \u0027/\u0027 in case of invalid aFileName, instead of \u0027\u0027 (as the current patch would do)?",
+      "parentUuid": "1a430d35_66e042fb",
+      "revId": "45907df9b31a0c3b83e861e9d1d795a80a38c8a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
