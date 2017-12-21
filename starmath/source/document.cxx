@@ -915,14 +915,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
         }
         break;
 
-        case SID_LOADSYMBOLS:
-            LoadSymbols();
-        break;
-
-        case SID_SAVESYMBOLS:
-            SaveSymbols();
-        break;
-
         case SID_FONT:
         {
             // get device used to retrieve the FontList

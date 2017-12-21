@@ -55,18 +55,6 @@ interface FormulaDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp no menu entry, so no texts
-    SID_LOADSYMBOLS //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    //idlpp no menu entry, so no texts
-    SID_SAVESYMBOLS //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
     SID_FONT //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -252,12 +240,6 @@ interface FormulaView
     ]
     //idlpp no menu entry, so no texts
     SID_TEXTSTATUS //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    //idlpp no menu entry, so no texts
-    SID_GETEDITTEXT //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
