@@ -18,21 +18,12 @@
 
 interface ViewShellBaseView
 {
-    SID_SWITCH_SHELL
-    [
-        ExecMethod = Execute;
-    ]
     SID_LEFT_PANE_IMPRESS
     [
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
     SID_LEFT_PANE_DRAW
-    [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-    ]
-    SID_NOTES_WINDOW
     [
         ExecMethod = Execute;
         StateMethod = GetState;

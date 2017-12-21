@@ -422,11 +422,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_PAGESIZE // ole : no, status : rec play
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_PAGEMARGIN // ole : no, status : rec play
     [
         ExecMethod = FuTemporary ;
@@ -1127,16 +1122,6 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    SID_MOVETO // ole : no, status : play rec
-    [
-        ExecMethod = FuPermanent ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_LINETO // ole : no, status : play rec
-    [
-        ExecMethod = FuPermanent ;
-        StateMethod = GetMenuState ;
-    ]
     SID_BEZIERTO // ole : no, status : play rec
     [
         ExecMethod = FuPermanent ;
@@ -1814,115 +1799,7 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-     // problem with SID_ATTR_FILL_STYLE:
-     // former XFillStyle, now property FillStyle (Get/Set)
-     // therefore Export = FALSE !
-    SID_SETFILLSTYLE // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-        Export = FALSE ;
-    ]
-    SID_GETFILLSTYLE // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_SETLINESTYLE // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_GETLINESTYLE // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-     // problem with SID_ATTR_LINE_WIDTH:
-     // former XLineWidth, now property LineWidth (Get/Set)
-     // therefore Export = FALSE !
-    SID_SETLINEWIDTH // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-        Export = FALSE ;
-    ]
-    SID_GETLINEWIDTH // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-     //DB: FillColor -> SetFillColor
-     // problem with SID_ATTR_FILL_COLOR:
-     // former XFillColor, now property FillColor (Get/Set)
-     // therefore Export = FALSE !
-    SID_SETFILLCOLOR // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-        Export = FALSE ;
-    ]
-    SID_SETLINECOLOR // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_SETHATCHCOLOR // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_SETGRADSTARTCOLOR // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_SETGRADENDCOLOR // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_GETRED // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_GETBLUE // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_GETGREEN // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
     SID_DASH // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_HATCH // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_GRADIENT // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_SELECTGRADIENT // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_SELECTHATCH // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
-    SID_UNSELECT // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;

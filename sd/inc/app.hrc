@@ -166,7 +166,7 @@
 // In svxids.hrc:  SID_ATTR_SYMBOLTYPE          (SID_SD_START+115)
 // In svxids.hrc:  SID_ATTR_SYMBOLSIZE          (SID_SD_START+116)
 #define SID_REVERSE_ORDER                   (SID_SD_START+117)
-#define SID_CLEAR_UNDO_STACK                (SID_SD_START+118)
+    // FREE
 #define SID_CONNECTOR_ARROW_START           (SID_SD_START+119)
 #define SID_CONNECTOR_ARROW_END             (SID_SD_START+120)
 #define SID_CONNECTOR_ARROWS                (SID_SD_START+121)
@@ -269,36 +269,17 @@
 #define ID_VAL_WIDTH                        (SID_SD_START+247)
 #define SID_GRID_FRONT                      (SID_SD_START+248)
 #define ID_VAL_ISVISIBLE                    (SID_SD_START+249)
-#define SID_MOVETO                          (SID_SD_START+250)
-#define SID_LINETO                          (SID_SD_START+251)
+    // FREE
 // In svxids.hrc: SID_BEZIERTO                  (SID_SD_START+252)
-#define SID_PAGESIZE                        (SID_SD_START+253)
+    // FREE
 #define SID_PAGEMARGIN                      (SID_SD_START+254)
     // FREE
 #define SID_COLORVIEW                       (SID_SD_START+257)
     // FREE
-#define SID_GETRED                          (SID_SD_START+259)
-#define SID_GETBLUE                         (SID_SD_START+260)
-#define SID_GETGREEN                        (SID_SD_START+261)
-#define SID_SETFILLSTYLE                    (SID_SD_START+262)
-#define SID_SETFILLCOLOR                    (SID_SD_START+263)
-#define SID_GRADIENT                        (SID_SD_START+264)
-#define SID_SETLINESTYLE                    (SID_SD_START+265)
-#define SID_SETLINEWIDTH                    (SID_SD_START+266)
 // In svxids.hrc: SID_DASH                      (SID_SD_START+267)
 #define SID_RENAMEPAGE                      (SID_SD_START+268)
 #define SID_RENAMELAYER                     (SID_SD_START+269)
-#define SID_HATCH                           (SID_SD_START+270)
-#define SID_GETFILLSTYLE                    (SID_SD_START+271)
-#define SID_GETLINESTYLE                    (SID_SD_START+272)
-#define SID_GETLINEWIDTH                    (SID_SD_START+273)
-#define SID_SETLINECOLOR                    (SID_SD_START+274)
-#define SID_SETHATCHCOLOR                   (SID_SD_START+275)
-#define SID_SETGRADSTARTCOLOR               (SID_SD_START+276)
-#define SID_SETGRADENDCOLOR                 (SID_SD_START+277)
-#define SID_SELECTGRADIENT                  (SID_SD_START+278)
-#define SID_SELECTHATCH                     (SID_SD_START+279)
-#define SID_UNSELECT                        (SID_SD_START+280)
+    // FREE
 #define SID_TEXTATTR_DLG                    (SID_SD_START+281)
 #define SID_ORIGINAL_SIZE                   (SID_SD_START+282)
 #define SID_PAGES_PER_ROW                   (SID_SD_START+284)
@@ -310,7 +291,7 @@
     // FREE
 #define SID_NAVIGATOR_PAGE                  (SID_SD_START+292)
 #define SID_NAVIGATOR_OBJECT                (SID_SD_START+293)
-#define SID_ANIMATOR_INIT                   (SID_SD_START+294)
+    // FREE
 #define SID_DRAWTBX_3D_OBJECTS              (SID_SD_START+295)
 #define SID_3D_CUBE                         (SID_SD_START+296)
 #define SID_3D_SPHERE                       (SID_SD_START+297)
@@ -401,7 +382,7 @@
 #define SID_PREVIEW_QUALITY_CONTRAST        (SID_SD_START+401)
     // FREE
 #define SID_RENAMEPAGE_QUICK                (SID_SD_START+405)
-#define SID_SWITCH_SHELL                    (SID_SD_START+406)
+    // FREE
 #define SID_HEADER_AND_FOOTER               (SID_SD_START+407)
 #define SID_MASTER_LAYOUTS                  (SID_SD_START+408)
     // FREE
@@ -415,20 +396,11 @@
 #define SID_LEFT_PANE_IMPRESS               (SID_SD_START+414)
 #define SID_LEFT_PANE_DRAW                  (SID_SD_START+415)
         // FREE
-#define SID_NOTES_WINDOW                    (SID_SD_START+417)
-        // FREE
 #define SID_NORMAL_MULTI_PANE_GUI           (SID_SD_START+420)
 #define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+421)
 
 #define SID_SELECT_BACKGROUND               (SID_SD_START+422)
 #define SID_SAVE_BACKGROUND                 (SID_SD_START+423)
-        // FREE
-// Slots for the tool pane popup
-#define SID_TP_APPLY_TO_ALL_SLIDES          (SID_SD_START+425)
-#define SID_TP_APPLY_TO_SELECTED_SLIDES     (SID_SD_START+426)
-#define SID_TP_USE_FOR_NEW_PRESENTATIONS    (SID_SD_START+427)
-#define SID_TP_SHOW_LARGE_PREVIEW           (SID_SD_START+428)
-#define SID_TP_SHOW_SMALL_PREVIEW           (SID_SD_START+429)
         // FREE
 #define SID_INSERT_MASTER_PAGE              (SID_SD_START+431)
 #define SID_DELETE_MASTER_PAGE              (SID_SD_START+432)
@@ -438,7 +410,7 @@
 #define SID_DISPLAY_MASTER_BACKGROUND       (SID_SD_START+436)
 #define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
 #define SID_INSERTPAGE_LAYOUT_MENU          (SID_SD_START+438)
-#define SID_TP_EDIT_MASTER                  (SID_SD_START+439)
+    // FREE
 #define SID_OUTLINE_TEXT_AUTOFIT            (SID_SD_START+440)
 
 // Add companion for the SID_HIDE_SLIDE (that is defined in svx)
