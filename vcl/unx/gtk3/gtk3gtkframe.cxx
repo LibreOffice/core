@@ -1075,6 +1075,7 @@ void GtkSalFrame::InitCommon()
     m_pDragSource       = nullptr;
     m_bInDrag           = false;
     m_pFormatConversionRequest = nullptr;
+    m_bGeometryIsProvisional = false;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
     m_pSalMenu          = nullptr;
     m_nWatcherId        = 0;
@@ -1616,6 +1617,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 
         maGeometry.nX = nX;
         maGeometry.nY = nY;
+        m_bGeometryIsProvisional = true;
 
         m_bDefaultPos = false;
 
@@ -2595,8 +2597,9 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     {
         int frame_x = (int)(pEvent->x_root - pEvent->x);
         int frame_y = (int)(pEvent->y_root - pEvent->y);
-        if (frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
+        if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
         {
+            pThis->m_bGeometryIsProvisional = false;
             pThis->maGeometry.nX = frame_x;
             pThis->maGeometry.nY = frame_y;
             ImplSVData* pSVData = ImplGetSVData();
@@ -2816,8 +2819,9 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     int frame_x = (int)(pEvent->x_root - pEvent->x);
     int frame_y = (int)(pEvent->y_root - pEvent->y);
-    if (frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
+    if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
     {
+        pThis->m_bGeometryIsProvisional = false;
         pThis->maGeometry.nX = frame_x;
         pThis->maGeometry.nY = frame_y;
         ImplSVData* pSVData = ImplGetSVData();
@@ -2940,9 +2944,10 @@ gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpo
      * yet the gdkdisplay-x11.c code handling configure_events has
      * done this XTranslateCoordinates work since the day ~zero.
      */
-    if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
+    if (pThis->m_bGeometryIsProvisional || x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
     {
         bMoved = true;
+        pThis->m_bGeometryIsProvisional = false;
         pThis->maGeometry.nX = x;
         pThis->maGeometry.nY = y;
     }
