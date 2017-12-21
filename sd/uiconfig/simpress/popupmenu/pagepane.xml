@@ -44,7 +44,7 @@
   <menu:menuitem menu:id=".uno:ShowSlide"/>
   <menu:menuitem menu:id=".uno:RenameSlide"/>
   <menu:menuseparator/>
-  <menu:menu menu:id=".uno:SlideNavigateMenu">
+  <menu:menu menu:id=".uno:NavigateMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:FirstSlide"/>
       <menu:menuitem menu:id=".uno:PreviousSlide"/>
