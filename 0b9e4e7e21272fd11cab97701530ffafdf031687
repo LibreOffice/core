@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bd04f417",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-21T22:16:20Z",
+      "side": 1,
+      "message": "These ternary expressions repeated three times over the functions are a bit odd, I\u0027ll change that in a follow-up commit.",
+      "revId": "0b9e4e7e21272fd11cab97701530ffafdf031687",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9d0bb829",
+        "filename": "sc/uiconfig/scalc/ui/textimportcsv.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-12-21T22:16:20Z",
+      "side": 1,
+      "message": "I wonder if \"Skip empty cells\" isn\u0027t a bit ambiguous, as it doesn\u0027t indicate whether source or target cells are meant. Specifically, the source doesn\u0027t have \"cells\" yet.. concluding empty target cells then is really confusing and not what was meant.\n\nMaybe there\u0027d be some better wording like \"Empty field content overwrites target cell\" (though that\u0027s quite long) or whatever, maybe UX has some opinion on that for a follow-up commit, if you would like to ask them in the bug?",
+      "revId": "0b9e4e7e21272fd11cab97701530ffafdf031687",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
