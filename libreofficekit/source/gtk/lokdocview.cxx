@@ -3247,12 +3247,52 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_STRING);
 
     /**
-     * LOKDocView::window
-     * @pDocView: the #LOKDocView on which the signal is emitted
-     * @pPayload: JSON containing the information, including id, about the window
+     * Window related callbacks are emitted under this category. It includes
+     * external windows like dialogs, autopopups for now.
+     *
+     * The payload format is:
+     *
+     * {
+     *    "id": "unique integer id of the dialog",
+     *    "action": "<see below>",
+     *    "type": "<see below>"
+     *    "rectangle": "x, y, width, height"
+     * }
+     *
+     * "type" tells the type of the window the action is associated with
+     *  - "dialog" - window is a dialog
+     *  - "child" - window is a floating window (combo boxes, etc.)
+     *
+     * "action" can take following values:
+     * - "created" - window is created in the backend, client can render it now
+     * - "title_changed" - window's title is changed
+     * - "size_changed" - window's size is changed
+     * - "invalidate" - the area as described by "rectangle" is invalidated
+     *    Clients must request the new area
+     * - "cursor_invalidate" - cursor is invalidated. New position is in "rectangle"
+     * - "cursor_visible" - cursor visible status is changed. Status is availabe
+     *    in "visible" field
+     * - "close" - window is closed
      */
     doc_view_signals[WINDOW] =
         g_signal_new("window",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
+    /**
+     * The column/row header is no more valid because of a column/row insertion
+     * or a similar event. Clients must query a new column/row header set.
+     *
+     * The payload says if we are invalidating a row or column header. So,
+     * payload values can be: "row", "column", "all".
+     */
+    doc_view_signals[INVALIDATE_HEADER] =
+        g_signal_new("invalidate-header",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,

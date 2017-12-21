@@ -540,7 +540,32 @@ typedef enum
      */
     LOK_CALLBACK_RULER_UPDATE = 35,
     /**
-     * Dialog invalidation
+     * Window related callbacks are emitted under this category. It includes
+     * external windows like dialogs, autopopups for now.
+     *
+     * The payload format is:
+     *
+     * {
+     *    "id": "unique integer id of the dialog",
+     *    "action": "<see below>",
+     *    "type": "<see below>"
+     *    "rectangle": "x, y, width, height"
+     * }
+     *
+     * "type" tells the type of the window the action is associated with
+     *  - "dialog" - window is a dialog
+     *  - "child" - window is a floating window (combo boxes, etc.)
+     *
+     * "action" can take following values:
+     * - "created" - window is created in the backend, client can render it now
+     * - "title_changed" - window's title is changed
+     * - "size_changed" - window's size is changed
+     * - "invalidate" - the area as described by "rectangle" is invalidated
+     *    Clients must request the new area
+     * - "cursor_invalidate" - cursor is invalidated. New position is in "rectangle"
+     * - "cursor_visible" - cursor visible status is changed. Status is availabe
+     *    in "visible" field
+     * - "close" - window is closed
      */
     LOK_CALLBACK_WINDOW = 36,
 }
