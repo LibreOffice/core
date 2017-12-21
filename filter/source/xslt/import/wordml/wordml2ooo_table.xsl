@@ -176,7 +176,7 @@
                 <!-- initial values for tables-->
             </xsl:element>
         </xsl:element>
-        <!-- the following style is for conveting Word table text wrapping to SO Writer. Since SO Writer has no table text wrapping feature, so we use the draw:text-box as a container and put the table in draw:text-box -->
+        <!-- the following style is for converting Word table text wrapping to SO Writer. Since SO Writer has no table text wrapping feature, so we use the draw:text-box as a container and put the table in draw:text-box -->
         <xsl:if test="w:tblpPr">
             <xsl:element name="style:style">
                 <xsl:attribute name="style:name">TableFrame<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/>

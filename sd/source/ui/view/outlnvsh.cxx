@@ -1497,7 +1497,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                 if (aESel.nStartPara != aESel.nEndPara ||
                     aESel.nStartPos  != aESel.nEndPos)
                     // spanned selection, i.e. StyleSheet and/or
-                    // attribution not necessarily unqiue
+                    // attribution not necessarily unique
                     rSet.DisableItem(nWhich);
             }
             break;

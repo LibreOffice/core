@@ -91,7 +91,7 @@ public:
         class Deleter;
         friend class Deleter;
     };
-    // The member is not a unqiue_ptr because it takes over its own life time
+    // The member is not a unique_ptr because it takes over its own life time
     // control.
     std::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 

@@ -3254,7 +3254,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * - "invalidate" - the area as described by "rectangle" is invalidated
      *    Clients must request the new area
      * - "cursor_invalidate" - cursor is invalidated. New position is in "rectangle"
-     * - "cursor_visible" - cursor visible status is changed. Status is availabe
+     * - "cursor_visible" - cursor visible status is changed. Status is available
      *    in "visible" field
      * - "close" - window is closed
      */

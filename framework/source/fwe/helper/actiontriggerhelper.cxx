@@ -134,7 +134,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< X
                             if ( nIndex >= 0 )
                             {
                                 // Special code for our menu implementation: some menu items don't have a
-                                // command url but uses the item id as a unqiue identifier. These entries
+                                // command url but uses the item id as a unique identifier. These entries
                                 // got a special url during conversion from menu=>actiontriggercontainer.
                                 // Now we have to extract this special url and set the correct item id!!!
                                 nNewItemId = (sal_uInt16)aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32();
