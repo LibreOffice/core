@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1aa8ae8c",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-21T07:10:48Z",
+      "side": 1,
+      "message": "This should go to constructor",
+      "range": {
+        "startLine": 771,
+        "startChar": 4,
+        "endLine": 771,
+        "endChar": 42
+      },
+      "revId": "1ae43109bfa770d518a3ff87e95a10be85b4a452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5aaeb698",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-21T07:10:48Z",
+      "side": 1,
+      "message": "Please don\u0027t change the color in this patch. If you want to change colors, (e.g. to be consistent with some other module, like charts), then please do it in a different patch, as part of a dedicated issue.",
+      "range": {
+        "startLine": 783,
+        "startChar": 36,
+        "endLine": 783,
+        "endChar": 44
+      },
+      "revId": "1ae43109bfa770d518a3ff87e95a10be85b4a452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

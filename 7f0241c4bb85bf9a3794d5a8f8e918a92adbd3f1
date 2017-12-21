@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3aa9ea90",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-21T07:10:48Z",
+      "side": 0,
+      "message": "Please use this (not the parameterless method), and also GetSettings().GetStyleSettings().GetWindowTextColor() for rEdit.SetControlForeground()",
+      "range": {
+        "startLine": 776,
+        "startChar": 35,
+        "endLine": 776,
+        "endChar": 84
+      },
+      "revId": "7f0241c4bb85bf9a3794d5a8f8e918a92adbd3f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
