@@ -144,52 +144,6 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyDialog(const OUString& rDialogID,
-                                const OUString& rAction,
-                                const std::vector<vcl::LOKPayloadItem>& rPayload)
-{
-    if (SfxLokHelper::getViewsCount() <= 0 || rDialogID.isEmpty())
-        return;
-
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    OString aPayload = OString("{ \"dialogId\": \"") + OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
-    aPayload += OString(", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
-
-    for (const auto& rItem: rPayload)
-    {
-        if (!rItem.first.isEmpty() && !rItem.second.isEmpty())
-        {
-            aPayload += OString(", \"") + rItem.first + OString("\": \"") +
-                rItem.second + OString("\"");
-        }
-    }
-    aPayload += "}";
-
-    while (pViewShell)
-    {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG, aPayload.getStr());
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
-}
-
-void SfxLokHelper::notifyDialogChild(const OUString& rDialogID, const OUString& rAction, const Point& rPos)
-{
-    if (SfxLokHelper::getViewsCount() <= 0 || rDialogID.isEmpty())
-        return;
-
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    const OString aPayload = OString("{ \"dialogId\": \"") + OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr() +
-        OString("\", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() +
-        OString("\", \"position\": \"") + OString::number(rPos.getX()) + OString(", ") + OString::number(rPos.getY()) +
-        + "\" }";
-
-    while (pViewShell)
-    {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG_CHILD, aPayload.getStr());
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
-}
-
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)
 {
     OStringBuffer aBuf;
