@@ -807,13 +807,13 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         // whatever happens to be the current page
         // (but only if the printer config has changed, otherwise
         // don't override printer page auto-detection - tdf#91362)
-        if (getPrinterModified())
+        if (getPrinterModified() || getPapersizeFromSetup())
         {
             resetPaperToLastConfigured();
         }
 
         // call driver setup
-        bRet = xPrinter->Setup( i_pParent );
+        bRet = xPrinter->Setup( i_pParent, PrinterSetupMode::SingleJob );
         SAL_WARN_IF(xPrinter != mpImplData->mxPrinter, "vcl.gdi",
                     "Printer changed underneath us during setup");
         xPrinter = mpImplData->mxPrinter;

@@ -60,6 +60,7 @@ ImplJobSetup::ImplJobSetup()
     mnDriverDataLen     = 0;
     mpDriverData        = nullptr;
     mbPapersizeFromSetup = false;
+    meSetupMode         = PrinterSetupMode::DocumentGlobal;
 }
 
 ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
@@ -148,6 +149,11 @@ void ImplJobSetup::SetDriverData(sal_uInt8* pDriverData)
 void ImplJobSetup::SetPapersizeFromSetup(bool bPapersizeFromSetup)
 {
     mbPapersizeFromSetup = bPapersizeFromSetup;
+}
+
+void ImplJobSetup::SetPrinterSetupMode(PrinterSetupMode eMode)
+{
+    meSetupMode = eMode;
 }
 
 void ImplJobSetup::SetValueMap( const OUString& rKey, const OUString& rValue )

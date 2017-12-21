@@ -83,6 +83,12 @@ enum class PrinterCapType
     UsePullModel       = 12,
 };
 
+enum class PrinterSetupMode
+{
+    SingleJob = 0,
+    DocumentGlobal = 1
+};
+
 #endif // INCLUDED_VCL_PRNTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

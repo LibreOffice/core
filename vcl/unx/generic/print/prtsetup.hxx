@@ -83,6 +83,7 @@ class RTSPaperPage : public TabPage
     VclPtr<FixedText>          m_pPaperText;
     VclPtr<ListBox>            m_pPaperBox;
 
+    VclPtr<FixedText>          m_pOrientText;
     VclPtr<ListBox>            m_pOrientBox;
 
     VclPtr<FixedText>          m_pDuplexText;
