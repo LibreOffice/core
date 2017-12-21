@@ -3043,7 +3043,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Ignore ();
             break;
 
-        case SID_FONTWORK_SHAPE:
         case SID_FONTWORK_SHAPE_TYPE:
         case SID_FONTWORK_ALIGNMENT:
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:

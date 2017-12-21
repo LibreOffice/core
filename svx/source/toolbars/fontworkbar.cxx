@@ -171,7 +171,6 @@ void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSet )
             }
         }
     }
-    rSet.Put( SfxStringItem( SID_FONTWORK_SHAPE_TYPE, aFontWorkShapeType ) );
 }
 
 // Declare the default interface. (The slotmap must not be empty, so
@@ -501,7 +500,6 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindin
         }
         break;
 
-        case SID_FONTWORK_SHAPE:
         case SID_FONTWORK_ALIGNMENT:
         {
             if ( !pStrResId )

@@ -272,7 +272,6 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             ChooseMacro( nullptr );
         }
         break;
-        case SID_BASICIDE_CREATEMACRO:
         case SID_BASICIDE_EDITMACRO:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
@@ -300,26 +299,6 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
             SetCurLib( aDocument, aLibName );
 
-            if ( pBasic && rReq.GetSlot() == SID_BASICIDE_CREATEMACRO )
-            {
-                SbModule* pModule = pBasic->FindModule( rInfo.GetModule() );
-                if ( !pModule )
-                {
-                    if ( !rInfo.GetModule().isEmpty() || pBasic->GetModules().empty() )
-                    {
-                        const OUString& aModName = rInfo.GetModule();
-
-                        OUString sModuleCode;
-                        if ( aDocument.createModule( aLibName, aModName, false, sModuleCode ) )
-                            pModule = pBasic->FindModule( aModName );
-                    }
-                    else
-                        pModule = pBasic->GetModules().front().get();
-                }
-                DBG_ASSERT( pModule, "No Module!" );
-                if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxClassType::Method ) )
-                    CreateMacro( pModule, rInfo.GetMethod() );
-            }
             SfxViewFrame* pViewFrame = GetViewFrame();
             if ( pViewFrame )
                 pViewFrame->ToTop();
@@ -391,7 +370,6 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             }
         }
         break;
-        case SID_BASICIDE_STOREMODULESOURCE:
         case SID_BASICIDE_UPDATEMODULESOURCE:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
@@ -402,10 +380,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             VclPtr<ModulWindow> pWin = FindBasWin( aDocument, rInfo.GetLib(), rInfo.GetModule(), false, true );
             if ( pWin )
             {
-                if ( rReq.GetSlot() == SID_BASICIDE_STOREMODULESOURCE )
-                    pWin->StoreData();
-                else
-                    pWin->UpdateData();
+                pWin->UpdateData();
             }
         }
         break;
@@ -427,7 +402,6 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_LIBSELECTED:
         case SID_BASICIDE_LIBREMOVED:
-        case SID_BASICIDE_LIBLOADED:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SfxUsrAnyItem& rShellItem = static_cast<const SfxUsrAnyItem&>(rReq.GetArgs()->Get( SID_BASICIDE_ARG_DOCUMENT_MODEL ));
@@ -756,7 +730,6 @@ void Shell::GetState(SfxItemSet &rSet)
                     rSet.Put(SfxVisibilityItem(nWh, false));
                 break;
             case SID_BASICIDE_SHOWSBX:
-            case SID_BASICIDE_CREATEMACRO:
             case SID_BASICIDE_EDITMACRO:
             case SID_BASICIDE_NAMECHANGEDONTAB:
             {
@@ -869,12 +842,6 @@ void Shell::GetState(SfxItemSet &rSet)
                 SvxSearchItem& rItem = GetExtraData()->GetSearchItem();
                 rItem.SetSearchString( aSelected );
                 rSet.Put( rItem );
-            }
-            break;
-            case SID_BASICIDE_STAT_DATE:
-            {
-                SfxStringItem aItem( SID_BASICIDE_STAT_DATE, "Datum?!" );
-                rSet.Put( aItem );
             }
             break;
             case SID_DOC_MODIFIED:

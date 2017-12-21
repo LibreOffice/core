@@ -302,11 +302,8 @@ void ScTabViewShell::DeactivateOle()
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
-    if (nSlot != SID_OBJECTRESIZE )
-    {
-        SC_MOD()->InputEnterHandler();
-        UpdateInputHandler();
-    }
+    SC_MOD()->InputEnterHandler();
+    UpdateInputHandler();
 
     // insertion of border for Chart is cancelled:
     FuPoor* pPoor = GetDrawFuncPtr();
@@ -361,42 +358,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             catch (const uno::Exception& e)
             {
                 SAL_WARN( "sc", "Cannot Insert Chart: " << e);
-            }
-            break;
-
-        case SID_OBJECTRESIZE:
-            {
-                //         the server would like to change the client size
-
-                SfxInPlaceClient* pClient = GetIPClient();
-
-                if ( pClient && pClient->IsObjectInPlaceActive() )
-                {
-                    const SfxRectangleItem& rRect =
-                        static_cast<const SfxRectangleItem&>(rReq.GetArgs()->Get(SID_OBJECTRESIZE));
-                    tools::Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
-
-                    if ( pView->AreObjectsMarked() )
-                    {
-                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-
-                        if (rMarkList.GetMarkCount() == 1)
-                        {
-                            SdrMark* pMark = rMarkList.GetMark(0);
-                            SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-
-                            if (nSdrObjKind == OBJ_OLE2)
-                            {
-                                if ( static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
-                                {
-                                    pObj->SetLogicRect(aRect);
-                                }
-                            }
-                        }
-                    }
-                }
             }
             break;
 

@@ -33,10 +33,6 @@ StarMath
     include "smath.sdi"
     interface StarMath
     {
-    SID_CONFIGEVENT //idlpp ole : no , status : no
-    [
-        StateMethod = GetState ;
-    ]
 }
 
 shell SmModule

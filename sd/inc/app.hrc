@@ -140,7 +140,7 @@
 #define SID_STATUS_PAGE                     (SID_SD_START+86)
 #define SID_STATUS_LAYOUT                   (SID_SD_START+87)
 #define SID_STATUS_SELMODE                  (SID_SD_START+88)
-#define SID_MODIFIED                        (SID_SD_START+89)
+    // FREE
 #define SID_OBJECT_CROOK_ROTATE             (SID_SD_START+90)
 #define SID_OBJECT_CROOK_SLANT              (SID_SD_START+91)
 #define SID_OBJECT_CROOK_STRETCH            (SID_SD_START+92)
@@ -270,13 +270,10 @@
 #define SID_GRID_FRONT                      (SID_SD_START+248)
 #define ID_VAL_ISVISIBLE                    (SID_SD_START+249)
     // FREE
-// In svxids.hrc: SID_BEZIERTO                  (SID_SD_START+252)
-    // FREE
 #define SID_PAGEMARGIN                      (SID_SD_START+254)
     // FREE
 #define SID_COLORVIEW                       (SID_SD_START+257)
     // FREE
-// In svxids.hrc: SID_DASH                      (SID_SD_START+267)
 #define SID_RENAMEPAGE                      (SID_SD_START+268)
 #define SID_RENAMELAYER                     (SID_SD_START+269)
     // FREE

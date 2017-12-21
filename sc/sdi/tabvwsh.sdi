@@ -68,7 +68,6 @@ interface BaseSelection
     SID_GALLERY             [ ExecMethod = ExecChildWin; ]
     SID_AVMEDIA_PLAYER      [ ExecMethod = ExecChildWin; ]
     SID_DRAW_NOTEEDIT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
-    SID_OBJECTRESIZE        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
     SID_OBJECT_SELECT               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_DRAW_LINE                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]

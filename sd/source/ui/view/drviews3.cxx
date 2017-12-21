@@ -322,42 +322,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             rReq.Done ();
             break;
         }
-        case SID_OBJECTRESIZE:
-        {
-            // The server likes to change the client size
-            OSL_ASSERT (GetViewShell()!=nullptr);
-            SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
-
-            if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
-            {
-                const SfxRectangleItem& rRect =
-                    static_cast<const SfxRectangleItem&>(rReq.GetArgs()->Get(SID_OBJECTRESIZE));
-                ::tools::Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
-
-                if ( mpDrawView->AreObjectsMarked() )
-                {
-                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-
-                    if (rMarkList.GetMarkCount() == 1)
-                    {
-                        SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                        SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( pObj );
-                        if(pOle2Obj)
-                        {
-                            if( pOle2Obj->GetObjRef().is() )
-                            {
-                                pOle2Obj->SetLogicRect(aRect);
-                            }
-                        }
-                    }
-                }
-            }
-            rReq.Ignore ();
-            break;
-        }
-
         case SID_RELOAD:
         {
             sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();

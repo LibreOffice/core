@@ -75,7 +75,6 @@
 #define SID_BASICIDE_ADDWATCH               ( SID_BASICIDE_START +  1 )
 #define SID_BASICIDE_CHOOSEMACRO            ( SID_BASICIDE_START +  2 )
 #define SID_BASICIDE_EDITMACRO              ( SID_BASICIDE_START +  3 )
-#define SID_BASICIDE_CREATEMACRO            ( SID_BASICIDE_START +  4 )
 #define SID_BASICIDE_MODULEDLG              ( SID_BASICIDE_START +  5 )
 #define SID_BASICIDE_OBJCAT                 ( SID_BASICIDE_START +  6 )
 #define SID_BASICIDE_REMOVEWATCH            ( SID_BASICIDE_START +  7 )
@@ -83,7 +82,6 @@
 #define SID_BASICIDE_HIDECURPAGE            ( SID_BASICIDE_START + 10 )
 #define SID_BASICIDE_NAMECHANGEDONTAB       ( SID_BASICIDE_START + 11 )
 #define SID_BASICIDE_UPDATEMODULESOURCE     ( SID_BASICIDE_START + 12 )
-#define SID_BASICIDE_STOREMODULESOURCE      ( SID_BASICIDE_START + 13 )
 #define SID_BASICIDE_MATCHGROUP             ( SID_BASICIDE_START + 14 )
 #define SID_BASICIDE_APPEAR                 ( SID_BASICIDE_START + 15 )
 #define SID_BASICIDE_STOREALLMODULESOURCES  ( SID_BASICIDE_START + 16 )
@@ -97,7 +95,6 @@
 #define SID_BASICIDE_SBXDELETED             ( SID_BASICIDE_START + 24 )
 #define SID_BASICIDE_SBXINSERTED            ( SID_BASICIDE_START + 25 )
 #define SID_BASICIDE_SBXRENAMED             ( SID_BASICIDE_START + 26 )
-#define SID_BASICIDE_LIBLOADED              ( SID_BASICIDE_START + 27 )
 #define SID_BASICIDE_LIBREMOVED             ( SID_BASICIDE_START + 28 )
 #define SID_BASICIDE_ARG_TABID              ( SID_BASICIDE_START + 30 )
 #define SID_BASICIDE_ARG_SBX                ( SID_BASICIDE_START + 31 )
@@ -106,7 +103,6 @@
 #define SID_BASICIDE_ARG_MODULENAME         ( SID_BASICIDE_START + 35 )
 #define SID_BASICIDE_BRKPNTSCHANGED         ( SID_BASICIDE_START + 36 )
 #define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
-#define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
 #define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 
@@ -152,8 +148,7 @@
 #define ID_VAL_DASHLEN                      (SID_SD_START+244)
 #define ID_VAL_DISTANCE                     (SID_SD_START+245)
 #define ID_VAL_INDEX                        (SID_SD_START+246)
-#define SID_BEZIERTO                        (SID_SD_START+252)
-#define SID_DASH                            (SID_SD_START+267)
+    // FREE
 #define SID_TEXT_FITTOSIZE_VERTICAL         (SID_SD_START+286)
 #define SID_GRID_VISIBLE                    (SID_SD_START+322)
 #define ID_VAL_USEFIRSTROWSTYLE             (SID_SD_START+323)
@@ -234,7 +229,6 @@
 
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 
-#define SID_RULER_CHANGE_STATE                          ( SID_SVX_START + 78 )
 #define SID_RULER_NULL_OFFSET                           ( SID_SVX_START + 79 )
 #define SID_RULER_BORDERS                               ( SID_SVX_START + 80 )
 #define SID_RULER_OBJECT                                ( SID_SVX_START + 81 )
@@ -369,7 +363,7 @@
 
 #define SID_DRAW_TEXT                                   ( SID_SVX_START + 253 )
 #define SID_DRAW_CAPTION                                ( SID_SVX_START + 254 )
-#define SID_DRAW_SELECT                                 ( SID_SVX_START + 255 )
+    // FREE
 #define SID_FONTWORK                                    ( SID_SVX_START + 256 )
 #define SID_FORMTEXT_STYLE                              ( SID_SVX_START + 257 )
 #define SID_FORMTEXT_ADJUST                             ( SID_SVX_START + 258 )
@@ -774,7 +768,7 @@
 #define SID_FONTWORK_SAME_LETTER_HEIGHTS                ( SID_SVX_START + 980 )
 #define SID_FONTWORK_ALIGNMENT_FLOATER                  ( SID_SVX_START + 981 )
 #define SID_FONTWORK_CHARACTER_SPACING_FLOATER          ( SID_SVX_START + 982 )
-#define SID_FONTWORK_SHAPE                              ( SID_SVX_START + 983 )
+// free
 #define SID_FONTWORK_ALIGNMENT                          ( SID_SVX_START + 984 )
 #define SID_FONTWORK_CHARACTER_SPACING                  ( SID_SVX_START + 985 )
 #define SID_FONTWORK_KERN_CHARACTER_PAIRS               ( SID_SVX_START + 986 )

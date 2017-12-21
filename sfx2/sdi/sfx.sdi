@@ -693,25 +693,6 @@ SfxVoidItem Copy SID_COPY
 ]
 
 
-SfxVoidItem CreateMacro SID_BASICIDE_CREATEMACRO
-(SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Macro;
-]
-
-
 SfxStringItem CurrentURL SID_CURRENT_URL
 
 [
@@ -731,41 +712,6 @@ SfxStringItem CurrentURL SID_CURRENT_URL
     GroupId = ;
 ]
 
-
-SfxVoidItem CursorEndOfScreen SID_CURSORENDOFSCREEN
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Intern;
-]
-
-
-SfxVoidItem CursorTopOfScreen SID_CURSORTOPOFSCREEN
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Intern;
-]
 
 SfxVoidItem Cut SID_CUT
 ()
@@ -1893,25 +1839,6 @@ SfxVoidItem JumpToMark SID_JUMPTOMARK
     GroupId = SfxGroupId::Navigator;
 ]
 
-
-SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
-(SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Macro;
-]
-
-
 SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
@@ -1983,25 +1910,6 @@ SfxVoidItem LoadBasic SID_BASICLOAD
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Insert;
-]
-
-
-SfxVoidItem LoadEvents SID_CONFIGEVENT
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
 ]
 
 
@@ -2164,25 +2072,6 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
     ToolBoxConfig = FALSE,
     GroupId = ;
 ]
-
-SfxBoolItem Modified SID_MODIFIED
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
 
 SfxBoolItem ModifiedStatus SID_DOC_MODIFIED
 
@@ -3712,25 +3601,6 @@ SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
 ]
 
 
-SfxStringItem StatusGetDate SID_BASICIDE_STAT_DATE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-
 SfxStringItem StatusGetPosition SID_BASICIDE_STAT_POS
 
 [
@@ -3786,23 +3656,6 @@ SfxVoidItem StoreAllModuleSources SID_BASICIDE_STOREALLMODULESOURCES
     GroupId = SfxGroupId::Macro;
 ]
 
-
-SfxVoidItem StoreModuleSource SID_BASICIDE_STOREMODULESOURCE
-(SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Macro;
-]
 
 SfxVoidItem StyleEndPreview SID_STYLE_END_PREVIEW
 [

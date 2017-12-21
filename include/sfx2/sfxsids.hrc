@@ -374,8 +374,7 @@
 #define SID_CURSORPAGEUP                    (SID_SFX_START + 736)
 #define SID_CURSORENDOFFILE                 (SID_SFX_START + 741)
 #define SID_CURSORTOPOFFILE                 (SID_SFX_START + 742)
-#define SID_CURSORENDOFSCREEN               (SID_SFX_START + 743)
-#define SID_CURSORTOPOFSCREEN               (SID_SFX_START + 744)
+    // FREE
 #define SID_CURSORHOME                      (SID_SFX_START + 745)
 #define SID_CURSOREND                       (SID_SFX_START + 746)
 #define SID_UNICODE_NOTATION_TOGGLE         (SID_SFX_START + 792)
@@ -396,7 +395,7 @@
 #define SID_TOGGLEFUNCTIONBAR               (SID_SFX_START + 910)
 #define SID_MACROINFO                       (SID_SFX_START + 919)
 #define SID_TOGGLESTATUSBAR                 (SID_SFX_START + 920)
-#define SID_CONFIGEVENT                     (SID_SFX_START + 926)
+    // FREE
 #define SID_CFGFILE                         (SID_SFX_START + 927)
 
 // Item-Id for the assigned event Tabpage
@@ -420,8 +419,6 @@
 #define SID_IMPORT_DIALOG                   (SID_SFX_START + 966)
 
 #define SID_BASICBREAK                      (SID_SFX_START +1521)
-
-#define SID_OBJECTRESIZE                    (SID_SFX_START + 1000)
 
 #define SID_EVENTCONFIG                     (SID_SFX_START + 1101)
 #define SID_VERB_START                      (SID_SFX_START + 1100)
@@ -532,11 +529,9 @@
 #define SID_BASICIDE_APPEAR                 ( SID_BASICIDE_START + 15 )
 #define SID_BASICIDE_BRKPNTSCHANGED         ( SID_BASICIDE_START + 36 )
 #define SID_BASICIDE_CHOOSEMACRO            ( SID_BASICIDE_START +  2 )
-#define SID_BASICIDE_CREATEMACRO            ( SID_BASICIDE_START +  4 )
 #define SID_BASICIDE_DELETECURRENT          ( SID_BASICIDE_START + 22 )
 #define SID_BASICIDE_EDITMACRO              ( SID_BASICIDE_START +  3 )
 #define SID_BASICIDE_HIDECURPAGE            ( SID_BASICIDE_START + 10 )
-#define SID_BASICIDE_LIBLOADED              ( SID_BASICIDE_START + 27 )
 #define SID_BASICIDE_LIBSELECTOR            ( SID_BASICIDE_START + 19 )
 #define SID_BASICIDE_LIBSELECTED            ( SID_BASICIDE_START + 18 )
 #define SID_BASICIDE_LIBREMOVED             ( SID_BASICIDE_START + 28 )
@@ -558,9 +553,7 @@
 #define SID_BASICIDE_SBXRENAMED             ( SID_BASICIDE_START + 26 )
 #define SID_BASICIDE_SHOWSBX                ( SID_BASICIDE_START +  9 )
 #define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
-#define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
 #define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )
-#define SID_BASICIDE_STOREMODULESOURCE      ( SID_BASICIDE_START + 13 )
 #define SID_BASICIDE_STOREALLMODULESOURCES  ( SID_BASICIDE_START + 16 )
 #define SID_BASICIDE_UPDATEALLMODULESOURCES ( SID_BASICIDE_START + 17 )
 #define SID_BASICIDE_UPDATEMODULESOURCE     ( SID_BASICIDE_START + 12 )
@@ -602,7 +595,6 @@
 #define SID_CURSOREND_SEL                   (SID_KEYFUNC_START + 13)
 #define SID_REPAINT                         (SID_SC_START + 12)
 
-#define SID_MODIFIED                        (SID_SD_START+89)
 #define ID_VAL_DUMMY0                       (SID_SD_START+230)
 #define ID_VAL_ZOOM                         (SID_SD_START+234)
 #define SID_SIZE_OPTIMAL                    (SID_SD_START+99)
