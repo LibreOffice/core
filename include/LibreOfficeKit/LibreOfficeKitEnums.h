@@ -498,14 +498,14 @@ typedef enum
      * The column/row header is no more valid because of a column/row insertion
      * or a similar event. Clients must query a new column/row header set.
      *
-     * The payload says if we are invalidating a row or column header.
+     * The payload says if we are invalidating a row or column header. So,
+     * payload values can be: "row", "column", "all".
      */
     LOK_CALLBACK_INVALIDATE_HEADER = 33,
     /**
-     * The text content of the address field in Calc.
+     * The text content of the address field in Calc. Eg: "A7"
      */
     LOK_CALLBACK_CELL_ADDRESS = 34
-
 }
 LibreOfficeKitCallbackType;
 
