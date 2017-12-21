@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_9a949e43",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-21T07:11:38Z",
+      "side": 1,
+      "message": "Also a comment here is welcome, why is it required.",
+      "parentUuid": "1a430d35_1aa8ae8c",
+      "range": {
+        "startLine": 771,
+        "startChar": 4,
+        "endLine": 771,
+        "endChar": 42
+      },
+      "revId": "1ae43109bfa770d518a3ff87e95a10be85b4a452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_5aaeb698",
         "filename": "sc/source/ui/condformat/condformatdlg.cxx",
         "patchSetId": 1
