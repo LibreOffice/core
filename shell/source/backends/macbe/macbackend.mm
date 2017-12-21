@@ -373,7 +373,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
     }
 }
 
-rtl::OUString SAL_CALL MacOSXBackend::getBackendName(void)
+rtl::OUString MacOSXBackend::getBackendName(void)
 {
     return rtl::OUString("com.sun.star.comp.configuration.backend.MacOSXBackend");
 }
@@ -383,7 +383,7 @@ rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
     return getBackendName();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void)
+uno::Sequence<rtl::OUString> MacOSXBackend::getBackendServiceNames(void)
 {
     uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.MacOSXBackend" };
 
