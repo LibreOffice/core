@@ -397,9 +397,15 @@ css::uno::Reference<css::chart2::XChartType> getChartType(const css::uno::Refere
 
     css::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem>> xCooSysSequence(xCooSysContainer->getCoordinateSystems());
 
+    if (xCooSysSequence.getLength() == 0)
+        return css::uno::Reference<css::chart2::XChartType>();
+
     css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeContainer(xCooSysSequence[0], css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence<css::uno::Reference<css::chart2::XChartType>> xChartTypeSequence(xChartTypeContainer->getChartTypes());
+
+    if (xChartTypeSequence.getLength() == 0)
+        return css::uno::Reference<css::chart2::XChartType>();
 
     return xChartTypeSequence[0];
 }
