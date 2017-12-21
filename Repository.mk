@@ -956,19 +956,23 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		postprocess_fontconfig) \
 	$(call gb_Helper_optional,MORE_FONTS,\
 		fonts_alef \
+		fonts_amiri \
 		fonts_caladea \
 		fonts_carlito \
 		fonts_culmus \
 		fonts_dejavu \
 		fonts_emojione_color \
 		fonts_gentium \
+		fonts_kacst \
 		fonts_liberation \
 		fonts_liberation_narrow \
 		fonts_libertineg \
 		fonts_libre_hebrew \
 		fonts_noto \
+		fonts_reem \
 		fonts_sourcecode \
 		fonts_sourcesans \
+		fonts_scheherazade \
 	) \
 ))
 
