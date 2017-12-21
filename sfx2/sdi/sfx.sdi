@@ -77,46 +77,6 @@ SfxBoolItem _SwitchViewShell2 SID_VIEWSHELL2
 ]
 
 
-SfxBoolItem _SwitchViewShell3 SID_VIEWSHELL3
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-
-SfxBoolItem _SwitchViewShell4 SID_VIEWSHELL4
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-
 SfxVoidItem About SID_ABOUT
 ()
 [
@@ -132,24 +92,6 @@ SfxVoidItem About SID_ABOUT
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
-]
-
-
-SfxVoidItem Activate SID_ACTIVATE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = TRUE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
 ]
 
 
@@ -208,25 +150,6 @@ SfxStringItem NewDoc SID_NEWDOC
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
-
-
-SfxVoidItem AddBookmark SID_CREATELINK
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Explorer;
-]
-
 
 SfxStringItem AddDirect SID_NEWDOCDIRECT
 ()
@@ -620,25 +543,6 @@ SfxVoidItem ClearHistory SID_CLEARHISTORY
     GroupId = SfxGroupId::Options;
 ]
 
-SfxVoidItem CloseDocs SID_CLOSEDOCS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Application;
-]
-
-
 SfxStringItem CloseDoc SID_CLOSEDOC
 (SfxBoolItem saveChanges SID_CLOSEDOC_SAVE,SfxStringItem fileName SID_CLOSEDOC_FILENAME)
 [
@@ -674,25 +578,6 @@ SfxVoidItem CloseWin SID_CLOSEWIN
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
-]
-
-
-SfxBoolItem Closing SID_CLOSING
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Intern;
 ]
 
 
@@ -1991,43 +1876,6 @@ SfxBoolItem IsLoading SID_DOC_LOADING
 ]
 
 
-SfxBoolItem IsLoadingImages SID_IMG_LOADING
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-
-SfxBoolItem PrintOut SID_PRINTOUT
-(SfxInt16Item copies SID_PRINT_COPIES,SfxBoolItem silent SID_SILENT)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Document;
-]
-
-
 SfxVoidItem JumpToMark SID_JUMPTOMARK
 (SfxStringItem Bookmark SID_JUMPTOMARK)
 [
@@ -2043,25 +1891,6 @@ SfxVoidItem JumpToMark SID_JUMPTOMARK
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Navigator;
-]
-
-
-SfxStringItem Keywords SID_DOCINFO_KEYWORDS
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
 ]
 
 
@@ -2138,25 +1967,6 @@ SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
 ]
 
 
-SfxVoidItem LoadAccel SID_CONFIGACCEL
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
 SfxVoidItem LoadBasic SID_BASICLOAD
 ()
 [
@@ -2192,82 +2002,6 @@ SfxVoidItem LoadEvents SID_CONFIGEVENT
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem LoadMenu SID_CONFIGMENU
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem LoadStatusBar SID_CONFIGSTATUSBAR
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem LoadToolBox SID_TOOLBOXOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxStringItem Logout SID_LOGOUT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Application;
 ]
 
 
@@ -3109,25 +2843,6 @@ SfxVoidItem PasteOnlyValue SID_PASTE_ONLY_VALUE
 ]
 
 
-SfxStringItem DocPath SID_DOCPATH
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxVoidItem Print SID_PRINTDOC
 (SfxStringItem PrinterName SID_PRINTER_NAME,SfxStringItem FileName SID_FILE_NAME,SfxInt16Item Copies SID_PRINT_COPIES,SfxStringItem RangeText SID_PRINT_PAGES,SfxBoolItem Selection SID_SELECTION,SfxBoolItem Asynchron SID_ASYNCHRON,SfxBoolItem Collate SID_PRINT_COLLATE,SfxBoolItem Silent SID_SILENT)
 [
@@ -3684,25 +3399,6 @@ SfxVoidItem ImportDialog SID_IMPORT_DIALOG
 ]
 
 
-SfxBoolItem Saved SID_DOC_SAVED
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxVoidItem SbxDeleted SID_BASICIDE_SBXDELETED
 (SbxItem Sbx SID_BASICIDE_ARG_SBX)
 [
@@ -3922,24 +3618,6 @@ SfxStringItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
 ]
 
 
-SfxStringItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
-(SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY,SfxStringItem TypeName SID_TYPE_NAME)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-        AccelConfig = FALSE,
-        MenuConfig = FALSE,
-        ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Document;
-]
-
 SfxStringItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY)
 [
@@ -3974,44 +3652,6 @@ SfxStringItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Document;
-]
-
-
-SfxVoidItem SetOptions SID_SETOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
-SfxBoolItem ShowPopups SID_SHOWPOPUPS
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
 ]
 
 
@@ -4946,24 +4586,6 @@ SfxVoidItem InternetDialog SID_INET_DLG
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem CheckPLZ SID_OFFICE_CHECK_PLZ
-(SfxStringItem PLZ SID_OFFICE_CHECK_PLZ)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Special;
 ]
 
 

@@ -324,44 +324,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
     bool bDone = false;
     switch ( rReq.GetSlot() )
     {
-        case SID_SETOPTIONS:
-        {
-            if( rReq.GetArgs() )
-                SetOptions_Impl( *rReq.GetArgs() );
-            break;
-        }
-
         case SID_QUITAPP:
-        case SID_LOGOUT:
         {
             // protect against reentrant calls
             if ( pImpl->bInQuit )
                 return;
-
-            if ( rReq.GetSlot() == SID_LOGOUT )
-            {
-                for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
-                    pObjSh; pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
-                {
-                    if ( !pObjSh->IsModified() )
-                        continue;
-
-                    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjSh );
-                    if ( !pFrame || !pFrame->GetWindow().IsReallyVisible() )
-                        continue;
-
-                    if (pObjSh->PrepareClose())
-                        pObjSh->SetModified( false );
-                    else
-                        return;
-                }
-
-                SfxStringItem aNameItem( SID_FILE_NAME, OUString("vnd.sun.star.cmd:logout") );
-                SfxStringItem aReferer( SID_REFERER, "private/user" );
-                pImpl->pAppDispat->ExecuteList(SID_OPENDOC,
-                        SfxCallMode::SLOT, { &aNameItem, &aReferer });
-                return;
-            }
 
             // try from nested requests again after 100ms
             if( Application::GetDispatchLevel() > 1 )
@@ -394,10 +361,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         case SID_CONFIG:
-        case SID_TOOLBOXOPTIONS:
-        case SID_CONFIGSTATUSBAR:
-        case SID_CONFIGMENU:
-        case SID_CONFIGACCEL:
         case SID_CONFIGEVENT:
         {
             SfxAbstractDialogFactory* pFact =
@@ -433,40 +396,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         bDone = true;
                 }
             }
-            break;
-        }
-
-        case SID_CLOSEDOCS:
-        {
-
-            Reference < XDesktop2 > xDesktop  = Desktop::create( ::comphelper::getProcessComponentContext() );
-            Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
-            if ( !xTasks.is() )
-                break;
-
-            sal_Int32 n=0;
-            do
-            {
-                if ( xTasks->getCount() <= n )
-                    break;
-
-                Any aAny = xTasks->getByIndex(n);
-                Reference < XCloseable > xTask;
-                aAny >>= xTask;
-                try
-                {
-                    xTask->close(true);
-                    n++;
-                }
-                catch( CloseVetoException& )
-                {
-                }
-            }
-            while( true );
-
-            bool bOk = ( n == 0);
-            rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
-            bDone = true;
             break;
         }
 
@@ -1029,10 +958,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 }
 
                 case SID_CONFIG:
-                case SID_TOOLBOXOPTIONS:
-                case SID_CONFIGSTATUSBAR:
-                case SID_CONFIGMENU:
-                case SID_CONFIGACCEL:
                 case SID_CONFIGEVENT:
                 {
                     if( SvtMiscOptions().DisableUICustomization() )
@@ -1062,15 +987,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 {
                 }
                 break;
-
-                case SID_CLOSEDOCS:
-                {
-                    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-                    Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
-                    if ( !xTasks.is() || !xTasks->getCount() )
-                        rSet.DisableItem(nWhich);
-                    break;
-                }
 
                 case SID_SAVEDOCS:
                 {
@@ -1568,23 +1484,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         }
         break;
 #endif // HAVE_FEATURE_SCRIPTING
-
-        case SID_OFFICE_CHECK_PLZ:
-        {
-            bool bRet = false;
-            const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(rReq.GetSlot());
-
-            if ( pStringItem )
-            {
-                bRet = true /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
-            }
-#if HAVE_FEATURE_SCRIPTING
-            else
-                SbxBase::SetError( ERRCODE_BASIC_WRONG_ARGS );
-#endif
-            rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bRet ) );
-        }
-        break;
 
         case SID_AUTO_CORRECT_DLG:
         {

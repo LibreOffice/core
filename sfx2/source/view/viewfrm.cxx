@@ -2038,8 +2038,6 @@ void SfxViewFrame::ExecView_Impl
         case SID_VIEWSHELL0:
         case SID_VIEWSHELL1:
         case SID_VIEWSHELL2:
-        case SID_VIEWSHELL3:
-        case SID_VIEWSHELL4:
         {
             const sal_uInt16 nViewNo = rReq.GetSlot() - SID_VIEWSHELL0;
             bool bSuccess = SwitchToViewShell_Impl( nViewNo, true );
@@ -2186,8 +2184,6 @@ void SfxViewFrame::StateView_Impl
                 case SID_VIEWSHELL0:
                 case SID_VIEWSHELL1:
                 case SID_VIEWSHELL2:
-                case SID_VIEWSHELL3:
-                case SID_VIEWSHELL4:
                 {
                     sal_uInt16 nViewNo = nWhich - SID_VIEWSHELL0;
                     if ( GetObjectShell()->GetFactory().GetViewFactoryCount() >

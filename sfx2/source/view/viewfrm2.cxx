@@ -155,39 +155,6 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
     switch ( rReq.GetSlot() )
     {
-        case SID_SHOWPOPUPS :
-        {
-            const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(SID_SHOWPOPUPS);
-            bool bShow = pShowItem == nullptr || pShowItem->GetValue();
-
-            SfxWorkWindow *pWorkWin = GetFrame().GetWorkWindow_Impl();
-            if ( bShow )
-            {
-                // First, make the floats viewable
-                pWorkWin->MakeChildrenVisible_Impl( bShow );
-                GetDispatcher()->Update_Impl( true );
-
-                // Then view it
-                GetBindings().HidePopups( !bShow );
-            }
-            else
-            {
-                pWorkWin->HidePopups_Impl( !bShow, true );
-                pWorkWin->MakeChildrenVisible_Impl( bShow );
-            }
-
-            Invalidate( rReq.GetSlot() );
-            rReq.Done();
-            break;
-        }
-
-        case SID_ACTIVATE:
-        {
-            MakeActive_Impl( true );
-            rReq.SetReturnValue( SfxObjectItem( 0, this ) );
-            break;
-        }
-
         case SID_NEWDOCDIRECT :
         {
             const SfxStringItem* pFactoryItem = rReq.GetArg<SfxStringItem>(SID_NEWDOCDIRECT);
@@ -299,9 +266,6 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
             }
 
-            case SID_SHOWPOPUPS :
-                break;
-
             case SID_OBJECT:
                 if ( GetViewShell() && GetViewShell()->GetVerbs().getLength() && !GetObjectShell()->IsInPlaceActive() )
                 {
@@ -329,12 +293,6 @@ void SfxViewFrame::INetExecute_Impl( SfxRequest &rRequest )
         case SID_BROWSE_BACKWARD:
             OSL_FAIL( "SfxViewFrame::INetExecute_Impl: SID_BROWSE_FORWARD/BACKWARD are dead!" );
             break;
-        case SID_CREATELINK:
-        {
-/*! (pb) we need new implementation to create a link
-*/
-            break;
-        }
         case SID_FOCUSURLBOX:
         {
             SfxStateCache *pCache = GetBindings().GetAnyStateCache_Impl( SID_OPENURL );
@@ -358,12 +316,6 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
 {
     rItemSet.DisableItem( SID_BROWSE_FORWARD );
     rItemSet.DisableItem( SID_BROWSE_BACKWARD );
-
-    // Add/SaveToBookmark at BASIC-IDE, QUERY-EDITOR etc. disable
-    SfxObjectShell *pDocSh = GetObjectShell();
-    bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
-    if ( !pDocSh || bEmbedded || !pDocSh->HasName() )
-        rItemSet.DisableItem( SID_CREATELINK );
 }
 
 void SfxViewFrame::Activate( bool /*bMDI*/ )

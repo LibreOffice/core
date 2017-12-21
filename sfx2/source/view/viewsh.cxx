@@ -444,7 +444,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         case SID_MAIL_SENDDOCASOOO:
         case SID_MAIL_SENDDOCASPDF:
         case SID_MAIL_SENDDOC:
-        case SID_MAIL_SENDDOCASFORMAT:
         {
             SfxObjectShell* pDoc = GetObjectShell();
             if ( pDoc && pDoc->QueryHiddenInformation(
@@ -657,7 +656,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 #if HAVE_FEATURE_MACOSX_SANDBOX
             case SID_BLUETOOTH_SENDDOC:
             case SID_MAIL_SENDDOC:
-            case SID_MAIL_SENDDOCASFORMAT:
             case SID_MAIL_SENDDOCASMS:
             case SID_MAIL_SENDDOCASOOO:
             case SID_MAIL_SENDDOCASPDF:

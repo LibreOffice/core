@@ -46,11 +46,6 @@ interface Documents
     [
         ExecMethod = OpenDocExec_Impl ;
     ]
-    SID_CLOSEDOCS // ole(req) api(final/play/rec)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
     SID_SAVEDOCS // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
@@ -66,11 +61,6 @@ interface Document
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-    SID_DOCPATH // ole(req) api(final/play/norec)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
     SID_DOCFULLNAME // ole(req) api(final/play/norec)
     [
         ExecMethod = ExecProps_Impl ;
@@ -80,15 +70,6 @@ interface Document
     [
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
-    ]
-    SID_CLOSING // ole(no) api(final/play/norec)
-    [
-        StateMethod = StateProps_Impl ;
-    ]
-    SID_ACTIVATE // ole(no) api(final/play/norec)
-    [
-        ExecMethod = ExecView_Impl ;
-        StateMethod = StateView_Impl ;
     ]
 }
 
@@ -104,17 +85,7 @@ interface OfficeDocument : Document
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-    SID_DOCINFO_KEYWORDS // ole(opt) api(todo)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
     SID_DOC_READONLY // ole(opt) api(final/play/norec)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-    SID_DOC_SAVED // ole(req) api(final/play/norec)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
@@ -159,16 +130,7 @@ interface OfficeDocument : Document
         ExecMethod = PrintExec_Impl ;
         StateMethod = NoState ;
     ]
-    SID_PRINTOUT // ole(opt) api(final/play/norec)
-    [
-        ExecMethod = PrintExec_Impl ;
-        StateMethod = PrintState_Impl ;
-    ]
     SID_DOC_LOADING // ole(no) api(final/play/norec)
-    [
-        StateMethod = StateProps_Impl ;
-    ]
-    SID_IMG_LOADING // ole(no) api(final/play/norec)
     [
         StateMethod = StateProps_Impl ;
     ]
