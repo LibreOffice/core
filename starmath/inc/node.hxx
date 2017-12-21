@@ -122,9 +122,9 @@ public:
      */
     virtual bool        IsVisible() const = 0;
 
-    virtual sal_uInt16      GetNumSubNodes() const = 0;
-    virtual SmNode *    GetSubNode(sal_uInt16 nIndex) = 0;
-            const SmNode * GetSubNode(sal_uInt16 nIndex) const
+    virtual size_t      GetNumSubNodes() const = 0;
+    virtual SmNode *    GetSubNode(size_t nIndex) = 0;
+            const SmNode * GetSubNode(size_t nIndex) const
             {
                 return const_cast<SmNode *>(this)->GetSubNode(nIndex);
             }
@@ -231,10 +231,10 @@ public:
 
     virtual bool        IsVisible() const override;
 
-    virtual sal_uInt16      GetNumSubNodes() const override;
+    virtual size_t      GetNumSubNodes() const override;
 
     using   SmNode::GetSubNode;
-    virtual SmNode *    GetSubNode(sal_uInt16 nIndex) override;
+    virtual SmNode *    GetSubNode(size_t nIndex) override;
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = nullptr);
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
@@ -251,9 +251,9 @@ public:
      */
     int IndexOfSubNode(SmNode const * pSubNode)
     {
-        sal_uInt16 nSize = GetNumSubNodes();
-        for(sal_uInt16 i = 0; i < nSize; i++)
-            if(pSubNode == GetSubNode(i))
+        size_t nSize = GetNumSubNodes();
+        for (size_t i = 0; i < nSize; i++)
+            if (pSubNode == GetSubNode(i))
                 return i;
         return -1;
     }
@@ -294,9 +294,9 @@ protected:
 public:
 
     virtual bool        IsVisible() const override;
-    virtual sal_uInt16      GetNumSubNodes() const override;
+    virtual size_t      GetNumSubNodes() const override;
     using   SmNode::GetSubNode;
-    virtual SmNode *    GetSubNode(sal_uInt16 nIndex) override;
+    virtual SmNode *    GetSubNode(size_t nIndex) override;
 };
 
 
@@ -859,7 +859,7 @@ public:
     /** Get super- or subscript
      * @remarks this method may return NULL.
      */
-    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< sal_uInt16 >(1 + eSubSup) ); };
+    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode(1 + eSubSup); };
     const SmNode * GetSubSup(SmSubSup eSubSup) const { return const_cast< SmSubSupNode* >( this )->GetSubSup( eSubSup ); }
 
     /** Set the body */

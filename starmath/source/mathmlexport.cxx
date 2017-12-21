@@ -629,16 +629,18 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
                                    bool bNoMrowContainer /*=false*/)
 {
     SvXMLElementExport *pRow=nullptr;
-    auto nSize = pNode->GetNumSubNodes();
+    size_t nSize = pNode->GetNumSubNodes();
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
     if (!bNoMrowContainer &&
         (nSize > 1 || pNode->GetType() == SmNodeType::Expression))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, true, true);
 
-    for (sal_uInt16 i = 0; i < nSize; i++)
+    for (size_t i = 0; i < nSize; ++i)
+    {
         if (const SmNode *pTemp = pNode->GetSubNode(i))
             ExportNodes(pTemp, nLevel+1);
+    }
 
     delete pRow;
 }
@@ -705,7 +707,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport *pTable=nullptr;
 
-    sal_uInt16 nSize = pNode->GetNumSubNodes();
+    size_t nSize = pNode->GetNumSubNodes();
 
     //If the list ends in newline then the last entry has
     //no subnodes, the newline is superfluous so we just drop
@@ -725,7 +727,8 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     if (nLevel || (nSize >1))
         pTable = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTABLE, true, true);
 
-    for (sal_uInt16 i = 0; i < nSize; i++)
+    for (size_t i = 0; i < nSize; ++i)
+    {
         if (const SmNode *pTemp = pNode->GetSubNode(i))
         {
             SvXMLElementExport *pRow=nullptr;
@@ -765,6 +768,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
             delete pCell;
             delete pRow;
         }
+    }
 
     delete pTable;
 }
@@ -1409,11 +1413,12 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport aTable(*this, XML_NAMESPACE_MATH, XML_MTABLE, true, true);
     const SmMatrixNode *pMatrix = static_cast<const SmMatrixNode *>(pNode);
-    sal_uInt16 i=0;
+    size_t i = 0;
     for (sal_uInt16 y = 0; y < pMatrix->GetNumRows(); y++)
     {
         SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
         for (sal_uInt16 x = 0; x < pMatrix->GetNumCols(); x++)
+        {
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
                 if (pTemp->GetType() == SmNodeType::Align &&
@@ -1428,6 +1433,7 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
                 SvXMLElementExport aCell(*this, XML_NAMESPACE_MATH, XML_MTD, true, true);
                 ExportNodes(pTemp, nLevel+1);
             }
+        }
     }
 }
 

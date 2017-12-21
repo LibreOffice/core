@@ -2000,13 +2000,15 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
             HandleSubSupScript(pNode,nLevel);
             break;
         case SmNodeType::Expression:
+        {
+            size_t nSize = pNode->GetNumSubNodes();
+            for (size_t i = 0; i < nSize; ++i)
             {
-            sal_uInt16  nSize = pNode->GetNumSubNodes();
-            for (sal_uInt16 i = 0; i < nSize; i++)
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     HandleNodes(pTemp,nLevel+1);
             }
             break;
+        }
         case SmNodeType::Table:
             //Root Node, PILE equivalent, i.e. vertical stack
             HandleTable(pNode,nLevel);
@@ -2015,16 +2017,18 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
             HandleSmMatrix(static_cast<SmMatrixNode *>(pNode),nLevel);
             break;
         case SmNodeType::Line:
-            {
+        {
             pS->WriteUChar( 0x0a );
             pS->WriteUChar( LINE );
-            sal_uInt16  nSize = pNode->GetNumSubNodes();
-            for (sal_uInt16 i = 0; i < nSize; i++)
+            size_t nSize = pNode->GetNumSubNodes();
+            for (size_t i = 0; i < nSize; ++i)
+            {
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END );
             }
+            pS->WriteUChar( END );
             break;
+        }
         case SmNodeType::Align:
             HandleMAlign(pNode,nLevel);
             break;
@@ -2037,13 +2041,15 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
                 pS->WriteUInt16( 0xEB05 );
             break;
         default:
+        {
+            size_t nSize = pNode->GetNumSubNodes();
+            for (size_t i = 0; i < nSize; ++i)
             {
-            sal_uInt16  nSize = pNode->GetNumSubNodes();
-            for (sal_uInt16 i = 0; i < nSize; i++)
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     HandleNodes(pTemp,nLevel+1);
             }
             break;
+        }
     }
 }
 
@@ -2091,14 +2097,16 @@ void MathType::HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel)
         nBytes++;
     for (int k = 0; k < nBytes; k++)
         pS->WriteUChar( 0x00 ); //col_parts
-    sal_uInt16  nSize = pMatrix->GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
+    size_t nSize = pMatrix->GetNumSubNodes();
+    for (size_t i = 0; i < nSize; ++i)
+    {
         if (SmNode *pTemp = pMatrix->GetSubNode(i))
         {
             pS->WriteUChar( LINE ); //line
             HandleNodes(pTemp,nLevel+1);
             pS->WriteUChar( END ); //end line
         }
+    }
     pS->WriteUChar( END );
 }
 
@@ -2106,7 +2114,7 @@ void MathType::HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel)
 //Root Node, PILE equivalent, i.e. vertical stack
 void MathType::HandleTable(SmNode *pNode,int nLevel)
 {
-    sal_uInt16  nSize = pNode->GetNumSubNodes();
+    size_t nSize = pNode->GetNumSubNodes();
     //The root of the starmath is a table, if
     //we convert this them each iteration of
     //conversion from starmath to mathtype will
@@ -2124,13 +2132,15 @@ void MathType::HandleTable(SmNode *pNode,int nLevel)
         pS->WriteUChar( 0x01 ); //hAlign
     }
 
-    for (sal_uInt16 i = 0; i < nSize; i++)
+    for (size_t i = 0; i < nSize; ++i)
+    {
         if (SmNode *pTemp = pNode->GetSubNode(i))
         {
             pS->WriteUChar( LINE );
             HandleNodes(pTemp,nLevel+1);
             pS->WriteUChar( END );
         }
+    }
     if (nLevel || (nSize>1))
         pS->WriteUChar( END );
 }
@@ -3049,10 +3059,12 @@ void MathType::HandleMAlign(SmNode *pNode,int nLevel)
             nHAlign=1;
             break;
     }
-    sal_uInt16  nSize = pNode->GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
+    size_t nSize = pNode->GetNumSubNodes();
+    for (size_t i = 0; i < nSize; ++i)
+    {
         if (SmNode *pTemp = pNode->GetSubNode(i))
             HandleNodes(pTemp,nLevel+1);
+    }
     nHAlign=nPushedHAlign;
 }
 

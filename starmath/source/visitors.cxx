@@ -1613,11 +1613,12 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
     SmNode* pCurrResult = mpResult;
 
     //Create array for holding clones
-    sal_uInt16 nSize = pSource->GetNumSubNodes( );
+    size_t nSize = pSource->GetNumSubNodes( );
     SmNodeArray aNodes( nSize );
 
     //Clone children
-    for( sal_uInt16 i = 0; i < nSize; i++ ){
+    for (size_t i = 0; i < nSize; ++i)
+    {
         SmNode* pKid;
         if( nullptr != ( pKid = pSource->GetSubNode( i ) ) )
             pKid->Accept( this );
