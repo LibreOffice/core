@@ -3643,14 +3643,29 @@ Range ImpEditEngine::GetInvalidYOffsets( ParaPortion* pPortion )
                 aRange.Max() += rL.GetHeight();
             }
 
-            if( ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop ) && rLSItem.GetPropLineSpace() &&
-                ( rLSItem.GetPropLineSpace() < 100 ) )
+            sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
+            if( ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
+                && nPropLineSpace && ( nPropLineSpace < 100 ) )
             {
                 const EditLine& rL = pPortion->GetLines()[nFirstInvalid];
-                long n = rL.GetTxtHeight() * ( 100L - rLSItem.GetPropLineSpace() );
+                long n = rL.GetTxtHeight() * ( 100L - nPropLineSpace );
                 n /= 100;
                 aRange.Min() -= n;
                 aRange.Max() += n;
+
+                // Adapted code from sw/source/core/text/itrform2.cxx
+                if ( pPortion->GetLines().Count() )
+                {
+                    EditLine& rLine = pPortion->aLineList[0];
+                    sal_uInt16 nAscent = rLine.GetMaxAscent();
+                    sal_uInt16 nNewAscent = rL.GetTxtHeight() * nPropLineSpace / 100 * 4 / 5; // 80%
+                    if (!nAscent || nAscent > nNewAscent)
+                    {
+                        sal_uInt16 nHeight = rLine.GetHeight() * nPropLineSpace / 100;
+                        rLine.SetHeight(nHeight, rLine.GetTxtHeight());
+                        rLine.SetMaxAscent(nNewAscent);
+                    }
+                }
             }
 
             if ( ( nLastInvalid == pPortion->GetLines().Count()-1 ) && ( !aStatus.IsOutliner() ) )
