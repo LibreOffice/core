@@ -2225,7 +2225,6 @@ openDocumentInThread (gpointer data)
 
     priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
     priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath.c_str() );
-    priv->m_eDocumentType = static_cast<LibreOfficeKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
     if ( !priv->m_pDocument )
     {
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
@@ -2233,6 +2232,7 @@ openDocumentInThread (gpointer data)
     }
     else
     {
+        priv->m_eDocumentType = static_cast<LibreOfficeKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
         gdk_threads_add_idle(postDocumentLoad, pDocView);
         g_task_return_boolean (task, true);
     }
