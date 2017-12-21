@@ -3643,11 +3643,12 @@ Range ImpEditEngine::GetInvalidYOffsets( ParaPortion* pPortion )
                 aRange.Max() += rL.GetHeight();
             }
 
-            if( ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop ) && rLSItem.GetPropLineSpace() &&
-                ( rLSItem.GetPropLineSpace() < 100 ) )
+            sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
+            if ( ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
+                && nPropLineSpace && ( nPropLineSpace < 100 ) )
             {
                 const EditLine& rL = pPortion->GetLines()[nFirstInvalid];
-                long n = rL.GetTxtHeight() * ( 100L - rLSItem.GetPropLineSpace() );
+                long n = rL.GetTxtHeight() * ( 100L - nPropLineSpace );
                 n /= 100;
                 aRange.Min() -= n;
                 aRange.Max() += n;

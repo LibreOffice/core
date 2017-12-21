@@ -1442,23 +1442,33 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else if ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
-                if ( nPara || pLine->GetStartPortion() ) // Not the very first line
+                // There are documents with PropLineSpace 0, why?
+                // (cmc: re above question :-) such documents can be seen by importing a .ppt
+                if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() < 100 ) )
                 {
-                    // There are documents with PropLineSpace 0, why?
-                    // (cmc: re above question :-) such documents can be seen by importing a .ppt
-                    if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
+                    // Adapted code from sw/source/core/text/itrform2.cxx
+                    sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
+                    sal_uInt16 nAscent = pLine->GetMaxAscent();
+                    sal_uInt16 nNewAscent = pLine->GetTxtHeight() * nPropLineSpace / 100 * 4 / 5; // 80%
+                    if ( !nAscent || nAscent > nNewAscent )
                     {
-                        sal_uInt16 nTxtHeight = pLine->GetHeight();
-                        sal_Int32 nH = nTxtHeight;
-                        nH *= rLSItem.GetPropLineSpace();
-                        nH /= 100;
-                        // The Ascent has to be adjusted for the difference:
-                        long nDiff = pLine->GetHeight() - nH;
-                        if ( nDiff > pLine->GetMaxAscent() )
-                            nDiff = pLine->GetMaxAscent();
-                        pLine->SetMaxAscent( (sal_uInt16)(pLine->GetMaxAscent() - nDiff) );
-                        pLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
+                        sal_uInt16 nHeight = pLine->GetHeight() * nPropLineSpace / 100;
+                        pLine->SetHeight( nHeight, pLine->GetTxtHeight() );
+                        pLine->SetMaxAscent( nNewAscent );
                     }
+                }
+                else if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
+                {
+                    sal_uInt16 nTxtHeight = pLine->GetHeight();
+                    sal_Int32 nH = nTxtHeight;
+                    nH *= rLSItem.GetPropLineSpace();
+                    nH /= 100;
+                    // The Ascent has to be adjusted for the difference:
+                    long nDiff = pLine->GetHeight() - nH;
+                    if ( nDiff > pLine->GetMaxAscent() )
+                        nDiff = pLine->GetMaxAscent();
+                    pLine->SetMaxAscent( (sal_uInt16)( pLine->GetMaxAscent() - nDiff ) * 4 / 5 ); // 80%
+                    pLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
                 }
             }
         }
