@@ -2006,11 +2006,15 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         const SwLayoutFrame* pUpperFrame = m_rThis.GetUpper();
         while ( pUpperFrame )
         {
-            if ( pUpperFrame->IsTabFrame() )
+            if ( pUpperFrame->IsTabFrame() || pUpperFrame->IsRowFrame() )
             {
                 return false;
             }
-            if ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() )
+
+            // If the text frame is a follow-in-table, that can move
+            // backward as well.
+            bool bIsFollow = const_cast<SwLayoutFrame*>(pUpperFrame)->GetPrevCellLeaf();
+            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() ) || bIsFollow )
             {
                 break;
             }
