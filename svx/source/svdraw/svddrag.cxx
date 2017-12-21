@@ -58,30 +58,30 @@ void SdrDragStat::Reset()
 void SdrDragStat::Reset(const Point& rPnt)
 {
     Reset();
-    SetStart(rPnt);
+    mvPnts[0]=rPnt;
     aPos0=rPnt;
-    SetRealNow(rPnt);
+    aRealNow=rPnt;
 }
 
 void SdrDragStat::NextMove(const Point& rPnt)
 {
-    aPos0=GetNow();
-    SetRealNow(rPnt);
-    SetNow(GetRealNow());
+    aPos0=mvPnts.back();
+    aRealNow=rPnt;
+    mvPnts.back()=rPnt;
 }
 
 void SdrDragStat::NextPoint()
 {
-    Point aPnt(GetNow());
-    mvPnts.emplace_back(GetRealNow());
-    SetPrev(aPnt);
+    Point aPnt(mvPnts.back());
+    mvPnts.emplace_back(aRealNow);
+    mvPnts[GetPrevPos()] = aPnt;
 }
 
 void SdrDragStat::PrevPoint()
 {
-    if (mvPnts.size()>=2) { // one has to remain at all times
+    if (mvPnts.size()>1) { // one has to remain at all times
         mvPnts.erase(mvPnts.begin()+mvPnts.size()-2);
-        SetNow( GetRealNow() );
+        mvPnts.back() = aRealNow;
     }
 }
 
@@ -98,7 +98,7 @@ bool SdrDragStat::CheckMinMoved(const Point& rPnt)
 
 Fraction SdrDragStat::GetXFact() const
 {
-    long nMul=GetNow().X()-aRef1.X();
+    long nMul=mvPnts.back().X()-aRef1.X();
     long nDiv=GetPrev().X()-aRef1.X();
     if (nDiv==0) nDiv=1;
     if (bHorFixed) { nMul=1; nDiv=1; }
@@ -107,7 +107,7 @@ Fraction SdrDragStat::GetXFact() const
 
 Fraction SdrDragStat::GetYFact() const
 {
-    long nMul=GetNow().Y()-aRef1.Y();
+    long nMul=mvPnts.back().Y()-aRef1.Y();
     long nDiv=GetPrev().Y()-aRef1.Y();
     if (nDiv==0) nDiv=1;
     if (bVerFixed) { nMul=1; nDiv=1; }
@@ -116,9 +116,9 @@ Fraction SdrDragStat::GetYFact() const
 
 void SdrDragStat::TakeCreateRect(tools::Rectangle& rRect) const
 {
-    rRect=tools::Rectangle(GetStart(),GetNow());
-    if (GetPointCount()>=2) {
-        Point aBtmRgt(GetPoint(1));
+    rRect=tools::Rectangle(mvPnts[0], mvPnts.back());
+    if (mvPnts.size()>1) {
+        Point aBtmRgt(mvPnts[1]);
         rRect.Right()=aBtmRgt.X();
         rRect.Bottom()=aBtmRgt.Y();
     }

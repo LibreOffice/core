@@ -77,6 +77,8 @@ class SVX_DLLPUBLIC SdrDragStat final
 
     void Clear();
 
+    sal_Int32 GetPrevPos() const { return mvPnts.size()-(mvPnts.size()>1 ? 2 : 1); }
+
 public:
     SdrDragStat()                                    { Reset(); }
     ~SdrDragStat();
@@ -88,14 +90,10 @@ public:
     const Point& GetPoint(sal_Int32 nNum) const      { return mvPnts[nNum]; }
     sal_Int32    GetPointCount() const               { return mvPnts.size(); }
     const Point& GetStart() const                    { return mvPnts[0]; }
-    void         SetStart(const Point &pt)           { mvPnts[0] = pt; }
-    const Point& GetPrev() const                     { return mvPnts[GetPointCount()-(GetPointCount()>=2 ? 2:1)]; }
-    void         SetPrev(const Point &pt)            { mvPnts[GetPointCount()-(GetPointCount()>=2 ? 2:1)] = pt; }
+    const Point& GetPrev() const                     { return mvPnts[GetPrevPos()]; }
     const Point& GetPos0() const                     { return aPos0;  }
     const Point& GetNow() const                      { return mvPnts.back(); }
     void         SetNow(Point const &pt)             { mvPnts.back() = pt; }
-    const Point& GetRealNow() const                  { return aRealNow; }
-    void         SetRealNow(Point const &pt)         { aRealNow = pt; }
     const Point& GetRef1() const                     { return aRef1;  }
     void         SetRef1(const Point &pt)            { aRef1 = pt;  }
     const Point& GetRef2() const                     { return aRef2;  }
