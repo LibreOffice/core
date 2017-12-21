@@ -277,8 +277,6 @@ enum
     PASSWORD_REQUIRED,
     COMMENT,
     RULER,
-    DIALOG,
-    DIALOG_CHILD,
 
     LAST_SIGNAL
 };
@@ -436,10 +434,6 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_COMMENT";
     case LOK_CALLBACK_RULER_UPDATE:
         return "LOK_CALLBACK_RULER_UPDATE";
-    case LOK_CALLBACK_DIALOG:
-        return "LOK_CALLBACK_DIALOG";
-    case LOK_CALLBACK_DIALOG_CHILD:
-        return "LOK_CALLBACK_DIALOG_CHILD";
     }
     g_assert(false);
     return nullptr;
@@ -816,19 +810,38 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         }
     }
 
-    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-    LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
-    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? LOK_KEYEVENT_KEYUP : LOK_KEYEVENT_KEYINPUT;
-    pLOEvent->m_nCharCode = nCharCode;
-    pLOEvent->m_nKeyCode  = nKeyCode;
-    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != nullptr)
+    if (pEvent->type == GDK_KEY_RELEASE)
     {
-        g_warning("Unable to call LOK_POST_KEY: %s", error->message);
-        g_clear_error(&error);
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
+        pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYUP;
+        pLOEvent->m_nCharCode = nCharCode;
+        pLOEvent->m_nKeyCode  = nKeyCode;
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+        if (error != nullptr)
+        {
+            g_warning("Unable to call LOK_POST_KEY: %s", error->message);
+            g_clear_error(&error);
+        }
+        g_object_unref(task);
     }
-    g_object_unref(task);
+    else
+    {
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
+        pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYINPUT;
+        pLOEvent->m_nCharCode = nCharCode;
+        pLOEvent->m_nKeyCode  = nKeyCode;
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+        if (error != nullptr)
+        {
+            g_warning("Unable to call LOK_POST_KEY: %s", error->message);
+            g_clear_error(&error);
+        }
+        g_object_unref(task);
+    }
 
     return FALSE;
 }
@@ -1412,12 +1425,6 @@ callback (gpointer pData)
         break;
     case LOK_CALLBACK_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
-        break;
-    case LOK_CALLBACK_DIALOG:
-        g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG], 0, pCallback->m_aPayload.c_str());
-        break;
-    case LOK_CALLBACK_DIALOG_CHILD:
-        g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG_CHILD], 0, pCallback->m_aPayload.c_str());
         break;
     default:
         g_assert(false);
@@ -3208,52 +3215,6 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
 
     doc_view_signals[RULER] =
         g_signal_new("ruler",
-                     G_TYPE_FROM_CLASS(pGObjectClass),
-                     G_SIGNAL_RUN_FIRST,
-                     0,
-                     nullptr, nullptr,
-                     g_cclosure_marshal_generic,
-                     G_TYPE_NONE, 1,
-                     G_TYPE_STRING);
-
-    /**
-     * LOKDocView::dialog-invalidate:
-     * @pDocView: the #LOKDocView on which the signal is emitted
-     * @pDialogId: The uno command for the dialog (dialog ID)
-     */
-    doc_view_signals[DIALOG] =
-        g_signal_new("dialog",
-                     G_TYPE_FROM_CLASS(pGObjectClass),
-                     G_SIGNAL_RUN_FIRST,
-                     0,
-                     nullptr, nullptr,
-                     g_cclosure_marshal_generic,
-                     G_TYPE_NONE, 1,
-                     G_TYPE_STRING);
-
-    /**
-     * LOKDocView::dialog-child:
-     * @pDocView: the #LOKDocView on which the signal is emitted
-     * @pPayload: JSON described below:
-     *
-     * Invalidation corresponding to dialog's children.
-     * Eg: Floating window etc.
-     *
-     * Payload example:
-     * {
-     *   "dialogID": "SpellDialog",
-     *   "action": "close"
-     * }
-     *
-     * - dialogID is the UNO command of the dialog
-     * - action can be
-     *   - close, means dialog child window is closed now
-     *   - invalidate, means dialog child window is invalidated
-     *     It also means that dialog child window is created if it's the first
-     *     invalidate
-     */
-    doc_view_signals[DIALOG_CHILD] =
-        g_signal_new("dialog-child",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,

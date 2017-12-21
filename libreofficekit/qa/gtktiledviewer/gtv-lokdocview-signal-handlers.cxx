@@ -15,12 +15,9 @@
 #include "gtv-calc-header-bar.hxx"
 #include "gtv-comments-sidebar.hxx"
 #include "gtv-lokdocview-signal-handlers.hxx"
-#include "gtv-lok-dialog.hxx"
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
-
-#include <iostream>
 
 void LOKDocViewSigHandlers::editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
 {
@@ -280,90 +277,6 @@ void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpoin
         // already existing one now
         if (pSelf)
             gtk_widget_destroy(pSelf);
-    }
-}
-
-void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpointer)
-{
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-
-    std::stringstream aStream(pPayload);
-    boost::property_tree::ptree aRoot;
-    boost::property_tree::read_json(aStream, aRoot);
-    const std::string aDialogId = aRoot.get<std::string>("dialogId");
-    const std::string aAction = aRoot.get<std::string>("action");
-
-    // we only understand 'invalidate' and 'close' as of now
-    if (aAction != "invalidate" && aAction != "close")
-        return;
-
-    GList* pChildWins = gtv_application_window_get_all_child_windows(window);
-    GList* pIt = nullptr;
-    for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
-    {
-        gchar* pChildDialogId = nullptr;
-        g_object_get(pIt->data, "dialogid", &pChildDialogId, nullptr);
-        if (g_strcmp0(pChildDialogId, aDialogId.c_str()) == 0)
-        {
-            if (aAction == "close")
-                gtk_widget_destroy(GTK_WIDGET(pIt->data));
-            else if (aAction == "invalidate")
-            {
-                GdkRectangle aGdkRectangle = {0, 0, 0, 0};
-                try
-                {
-                    const std::string aRectangle = aRoot.get<std::string>("rectangle");
-                    std::vector<int> aRectPoints = GtvHelpers::splitIntoIntegers(aRectangle, ", ", 4);
-                    if (aRectPoints.size() == 4)
-                        aGdkRectangle = {aRectPoints[0], aRectPoints[1], aRectPoints[2], aRectPoints[3]};
-                }
-                catch(const std::exception& e)
-                {}
-
-                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data), aGdkRectangle);
-            }
-        }
-        g_free(pChildDialogId);
-    }
-}
-
-void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, gpointer)
-{
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-
-    std::stringstream aStream(pPayload);
-    boost::property_tree::ptree aRoot;
-    boost::property_tree::read_json(aStream, aRoot);
-    std::string aDialogId = aRoot.get<std::string>("dialogId");
-    std::string aAction = aRoot.get<std::string>("action");
-    std::string aPos = aRoot.get<std::string>("position");
-    gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
-    gchar** ppCoordinate = ppCoordinates;
-    int nX = 0;
-    int nY = 0;
-
-    if (*ppCoordinate)
-        nX = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (*ppCoordinate)
-        nY = atoi(*ppCoordinate);
-
-    g_strfreev(ppCoordinates);
-
-    GList* pChildWins = gtv_application_window_get_all_child_windows(window);
-    GList* pIt = nullptr;
-    for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
-    {
-        gchar* pChildDialogId = nullptr;
-        g_object_get(pIt->data, "dialogid", &pChildDialogId, nullptr);
-        if (g_strcmp0(pChildDialogId, aDialogId.c_str()) == 0)
-        {
-            if (aAction == "invalidate")
-                gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
-            else if (aAction == "close")
-                gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
-        }
-        g_free(pChildDialogId);
     }
 }
 
