@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9acd7e87",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-12-21T08:00:02Z",
+      "side": 1,
+      "message": "This condition is always false as we just did: m_aProcessingThread \u003d aCurId some lines above. I guess you wanted to place this condition before that assignment, or something else?",
+      "range": {
+        "startLine": 94,
+        "startChar": 51,
+        "endLine": 94,
+        "endChar": 85
+      },
+      "revId": "9f75724fdbe0b6b39656615400079dcf25c302c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
