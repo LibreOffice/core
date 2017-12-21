@@ -1142,8 +1142,7 @@ libo_FUZZ_ARG_ENABLE(gtk,
 
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
-        [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.
-         This is experimental and may not work.]),
+        [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
 ,test "${enable_gtk3+set}" = set || enable_gtk3=yes)
 
 libo_FUZZ_ARG_ENABLE(systray,
