@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_dd4460b8",
+        "filename": "offapi/com/sun/star/sheet/XDataProviderCreator.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-12-21T17:45:58Z",
+      "side": 1,
+      "message": "This is exactly what I did not want. This should not be a sheet interface as we might want to use the same interface for example in the writer data provider.",
+      "revId": "6967aa383a61e5b58a95ca9aec7c1a344678ab33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fd13dcb5",
+        "filename": "offapi/com/sun/star/sheet/XDataProviderCreator.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-12-21T17:45:58Z",
+      "side": 1,
+      "message": "Not limited to spreadsheets.",
+      "revId": "6967aa383a61e5b58a95ca9aec7c1a344678ab33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_3dae4481",
         "filename": "offapi/com/sun/star/sheet/XDataProviderCreator.idl",
         "patchSetId": 4
@@ -30,6 +64,23 @@
       "writtenOn": "2017-12-21T16:51:00Z",
       "side": 1,
       "message": "better leave this unpublished for now",
+      "revId": "6967aa383a61e5b58a95ca9aec7c1a344678ab33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1d1988d7",
+        "filename": "offapi/com/sun/star/sheet/XDataProviderCreator.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-12-21T17:45:58Z",
+      "side": 1,
+      "message": "We already know that it should return a css::chart2::XDataProvider. Please don\u0027t return an XInterface here.",
       "revId": "6967aa383a61e5b58a95ca9aec7c1a344678ab33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
