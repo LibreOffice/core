@@ -867,6 +867,8 @@ private:
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,
                              bool bSurroundOnly = false ) const;
 
+    bool CurrentTableInPaM(SwPaM& rPam) const;
+
 public:         // used in tables
 
     // Create brush item (with new) or 0
