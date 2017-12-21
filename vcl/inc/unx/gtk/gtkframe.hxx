@@ -217,6 +217,7 @@ class GtkSalFrame : public SalFrame
     GtkDragSource*                  m_pDragSource;
     bool                            m_bInDrag;
     GtkDnDTransferable*             m_pFormatConversionRequest;
+    bool                            m_bGeometryIsProvisional;
 #else
     GdkRegion*                      m_pRegion;
     bool                            m_bSetFocusOnMap;
