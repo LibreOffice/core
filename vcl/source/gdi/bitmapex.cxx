@@ -1165,7 +1165,7 @@ BitmapEx createBlendFrame(
     return BitmapEx();
 }
 
-BitmapEx createBlendFrame(
+BitmapEx const & createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,

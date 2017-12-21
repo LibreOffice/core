@@ -2740,7 +2740,7 @@ static void LoadThemedImageList(const StyleSettings &rStyleSettings,
     }
 }
 
-Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags )
+Image const & RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags )
 {
     ImplSVData*             pSVData = ImplGetSVData();
     const StyleSettings&    rStyleSettings = rSettings.GetStyleSettings();
@@ -3564,7 +3564,7 @@ Size CheckBox::ImplGetCheckImageSize() const
     return aSize;
 }
 
-Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags )
+Image const & CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags )
 {
     ImplSVData*             pSVData = ImplGetSVData();
     const StyleSettings&    rStyleSettings = rSettings.GetStyleSettings();

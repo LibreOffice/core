@@ -77,7 +77,7 @@ public:
 
     /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
     void                SetCommandHandler(const OUString& aCommand);
-    const OUString      GetCommand() const { return maCommand; }
+    OUString const &    GetCommand() const { return maCommand; }
 
     static OUString     GetStandardText( StandardButtonType eButton );
 
@@ -351,7 +351,7 @@ public:
     bool            GetSavedValue() const { return mbSaveValue; }
     bool            IsValueChangedFromSaved() const { return mbSaveValue != IsChecked(); }
 
-    static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
+    static Image const & GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
     Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const override;
@@ -458,7 +458,7 @@ public:
     TriState        GetSavedValue() const { return meSaveValue; }
     bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
-    static Image    GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
+    static Image const & GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const override;

@@ -427,8 +427,8 @@ public:
                             const Size &rSize );
 public:
 
-    SAL_DLLPRIVATE  std::shared_ptr<ImpBitmap>  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
-    SAL_DLLPRIVATE  std::shared_ptr<ImpBitmap>  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
 
 
 private:
@@ -478,7 +478,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     @param rSize
     The size of the frame in pixels
     */
-BitmapEx VCL_DLLPUBLIC createBlendFrame(
+BitmapEx const & VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,

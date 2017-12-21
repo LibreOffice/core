@@ -2968,7 +2968,7 @@ StyleSettings::GetOptions() const
     return mxData->mnOptions;
 }
 
-std::vector<vcl::IconThemeInfo>
+std::vector<vcl::IconThemeInfo> const &
 StyleSettings::GetInstalledIconThemes() const
 {
     if (!mxData->mIconThemeScanner) {

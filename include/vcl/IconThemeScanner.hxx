@@ -43,7 +43,7 @@ public:
 
     /** This method will return the standard path where icon themes are located.
      */
-    static OUString
+    static OUString const &
     GetStandardIconThemePath();
 
     const std::vector<IconThemeInfo>&

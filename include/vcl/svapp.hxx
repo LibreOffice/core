@@ -188,7 +188,7 @@ public:
 
      @returns The event's data string.
     */
-    OUString GetStringData() const
+    OUString const & GetStringData() const
     {
         assert(
             aEvent == Type::Accept || aEvent == Type::Help

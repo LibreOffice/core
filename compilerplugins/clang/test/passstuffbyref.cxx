@@ -8,6 +8,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <sys/time.h>
 
 struct S1 {
     OUString mv1;
@@ -42,6 +43,13 @@ struct S2 {
 
 
 // no warning expected
+
+timeval &operator -= ( timeval &t1, const timeval &t2 );
+timeval operator-( const timeval &t1, const timeval &t2 )
+{
+    timeval t0 = t1;
+    return t0 -= t2;
+}
 
 void f()
 {

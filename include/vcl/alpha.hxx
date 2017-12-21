@@ -55,7 +55,7 @@ public:
 
     BitmapChecksum   GetChecksum() const { return Bitmap::GetChecksum(); }
 
-    Bitmap      GetBitmap() const;
+    Bitmap const & GetBitmap() const;
 
     bool        Erase( sal_uInt8 cTransparency );
     bool        Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );

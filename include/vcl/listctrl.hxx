@@ -44,7 +44,7 @@ public:
     virtual void dispose() override;
 
     void addEntry(VclPtr<vcl::Window> xEntry, sal_uInt32 nPos = std::numeric_limits<sal_uInt16>::max());
-    std::vector<VclPtr<vcl::Window>> getEntries() const;
+    std::vector<VclPtr<vcl::Window>> const & getEntries() const;
     void deleteEntry(sal_uInt32 nPos);
 
     virtual Size GetOptimalSize() const override;

@@ -177,7 +177,7 @@ IconThemeScanner::Create(const OUString &path)
     return retval;
 }
 
-/*static*/ OUString
+/*static*/ OUString const &
 IconThemeScanner::GetStandardIconThemePath()
 {
     SvtPathOptions aPathOptions;

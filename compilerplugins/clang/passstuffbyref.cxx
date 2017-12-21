@@ -350,6 +350,19 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
         return isReturnExprDisqualified(condOper->getTrueExpr())
             || isReturnExprDisqualified(condOper->getFalseExpr());
     }
+    if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(expr)) {
+        // TODO could improve this, but sometimes it means we're returning a copy of a temporary.
+        // Same logic as CXXOperatorCallExpr::isAssignmentOp(), which our supported clang
+        // doesn't have yet.
+        auto Opc = operatorCallExpr->getOperator();
+        if (Opc == OO_Equal || Opc == OO_StarEqual ||
+            Opc == OO_SlashEqual || Opc == OO_PercentEqual ||
+            Opc == OO_PlusEqual || Opc == OO_MinusEqual ||
+            Opc == OO_LessLessEqual || Opc == OO_GreaterGreaterEqual ||
+            Opc == OO_AmpEqual || Opc == OO_CaretEqual ||
+            Opc == OO_PipeEqual)
+            return true;
+    }
     if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(expr)) {
         auto declRefExpr = dyn_cast<DeclRefExpr>(memberCallExpr->getImplicitObjectArgument());
         if (declRefExpr)

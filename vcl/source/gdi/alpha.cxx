@@ -75,7 +75,7 @@ void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )
     *static_cast<Bitmap*>(this) = rBitmap;
 }
 
-Bitmap AlphaMask::GetBitmap() const
+Bitmap const & AlphaMask::GetBitmap() const
 {
     return ImplGetBitmap();
 }
