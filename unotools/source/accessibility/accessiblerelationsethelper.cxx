@@ -39,7 +39,7 @@ public:
     sal_Int32 getRelationCount() const;
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
-    AccessibleRelation getRelation( sal_Int32 nIndex ) const;
+    AccessibleRelation const & getRelation( sal_Int32 nIndex ) const;
     /// @throws uno::RuntimeException
     bool containsRelation( sal_Int16 aRelationType ) const;
     /// @throws uno::RuntimeException
@@ -65,7 +65,7 @@ sal_Int32 AccessibleRelationSetHelperImpl::getRelationCount() const
     return maRelations.size();
 }
 
-AccessibleRelation AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nIndex ) const
+AccessibleRelation const & AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nIndex ) const
 {
     if ((nIndex < 0) || (static_cast<sal_uInt32>(nIndex) >= maRelations.size()))
         throw lang::IndexOutOfBoundsException();

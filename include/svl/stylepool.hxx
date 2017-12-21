@@ -42,7 +42,7 @@ public:
 
         @return a shared pointer to the SfxItemSet
     */
-    std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
+    std::shared_ptr<SfxItemSet> const & insertItemSet( const SfxItemSet& rSet );
 
     /** Create an iterator
 

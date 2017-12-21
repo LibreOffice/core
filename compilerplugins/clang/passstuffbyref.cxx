@@ -9,6 +9,7 @@
 
 #include <string>
 #include <set>
+#include <iostream>
 
 #include "check.hxx"
 #include "plugin.hxx"
@@ -211,7 +212,6 @@ static bool startswith(const std::string& rStr, const char* pSubStr) {
 }
 
 void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl) {
-
     if (methodDecl && (methodDecl->isVirtual() || methodDecl->hasAttr<OverrideAttr>())) {
         return;
     }
@@ -233,6 +233,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (isInUnoIncludeFile(functionDecl)) {
         return;
     }
+
     loplugin::DeclCheck dc(functionDecl);
     // function is passed as parameter to another function
     if (dc.Function("ImplColMonoFnc").Class("GDIMetaFile").GlobalNamespace()
@@ -274,21 +275,22 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (mbFoundReturnValueDisqualifier)
         return;
 
-    report(
-            DiagnosticsEngine::Warning,
-            "rather return %0 from function %1 by const& than by value, to avoid unnecessary copying",
+    report( DiagnosticsEngine::Warning,
+            "rather return %0 by const& than by value, to avoid unnecessary copying",
             functionDecl->getSourceRange().getBegin())
-        << type.getAsString() << functionDecl->getQualifiedNameAsString() << functionDecl->getSourceRange();
+        << type.getAsString() << functionDecl->getSourceRange();
 
     // display the location of the class member declaration so I don't have to search for it by hand
-    if (functionDecl->getSourceRange().getBegin() != functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
+    auto canonicalDecl = functionDecl->getCanonicalDecl();
+    if (functionDecl != canonicalDecl)
     {
-        report(
-                DiagnosticsEngine::Note,
+        report( DiagnosticsEngine::Note,
                 "decl here",
-                functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
-            << functionDecl->getCanonicalDecl()->getSourceRange();
+                canonicalDecl->getSourceRange().getBegin())
+            << canonicalDecl->getSourceRange();
     }
+
+    //functionDecl->dump();
 }
 
 bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
@@ -297,36 +299,44 @@ bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
         return true;
     const Expr* expr = dyn_cast<Expr>(*returnStmt->child_begin())->IgnoreParenCasts();
 
-    if (isReturnExprDisqualified(expr)) {
+    if (isReturnExprDisqualified(expr))
         mbFoundReturnValueDisqualifier = true;
-        return true;
-    }
+
     return true;
 }
 
+/**
+ * Does a return expression disqualify this method from doing return by const & ?
+ */
 bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
 {
-    if (isa<ExprWithCleanups>(expr)) {
-        return true;
+    if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(expr)) {
+        expr = exprWithCleanups->getSubExpr();
     }
-    if (const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(expr))
+    if (auto constructExpr = dyn_cast<CXXConstructExpr>(expr))
     {
         if (constructExpr->getNumArgs()==1
             && constructExpr->getConstructor()->isCopyOrMoveConstructor())
         {
-            expr = constructExpr->getArg(0)->IgnoreParenCasts();
+            expr = constructExpr->getArg(0);
         }
+        else
+            return true;
     }
-    if (isa<CXXConstructExpr>(expr)) {
+    if (isa<MaterializeTemporaryExpr>(expr)) {
         return true;
     }
-    if (const ArraySubscriptExpr* childExpr = dyn_cast<ArraySubscriptExpr>(expr)) {
+    if (isa<CXXBindTemporaryExpr>(expr)) {
+        return true;
+    }
+    expr = expr->IgnoreParenCasts();
+    if (auto childExpr = dyn_cast<ArraySubscriptExpr>(expr)) {
         expr = childExpr->getLHS();
     }
-    if (const MemberExpr* memberExpr = dyn_cast<MemberExpr>(expr)) {
+    if (auto memberExpr = dyn_cast<MemberExpr>(expr)) {
         expr = memberExpr->getBase();
     }
-    if (const DeclRefExpr* declRef = dyn_cast<DeclRefExpr>(expr)) {
+    if (auto declRef = dyn_cast<DeclRefExpr>(expr)) {
         const VarDecl* varDecl = dyn_cast<VarDecl>(declRef->getDecl());
         if (varDecl) {
             if (varDecl->getStorageDuration() == SD_Automatic
@@ -336,14 +346,30 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
             return false;
         }
     }
-    if (const ConditionalOperator* condOper = dyn_cast<ConditionalOperator>(expr)) {
+    if (auto condOper = dyn_cast<ConditionalOperator>(expr)) {
         return isReturnExprDisqualified(condOper->getTrueExpr())
             || isReturnExprDisqualified(condOper->getFalseExpr());
     }
-    if (const CallExpr* callExpr = dyn_cast<CallExpr>(expr)) {
-        return !loplugin::TypeCheck(callExpr->getType()).Const().LvalueReference();
+    if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(expr)) {
+        auto declRefExpr = dyn_cast<DeclRefExpr>(memberCallExpr->getImplicitObjectArgument());
+        if (declRefExpr)
+        {
+            const VarDecl* varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
+            if (varDecl) {
+                if (varDecl->getStorageDuration() == SD_Automatic
+                    || varDecl->getStorageDuration() == SD_FullExpression ) {
+                    return true;
+                }
+            }
+        }
     }
-    return true;
+    if (auto callExpr = dyn_cast<CallExpr>(expr)) {
+        FunctionDecl const * calleeFunctionDecl = callExpr->getDirectCallee();
+        if (!calleeFunctionDecl)
+            return true;
+        return !loplugin::TypeCheck(calleeFunctionDecl->getReturnType()).LvalueReference();
+    }
+    return false;
 }
 
 bool PassStuffByRef::VisitVarDecl(const VarDecl * varDecl)
@@ -388,7 +414,7 @@ bool PassStuffByRef::isPrimitiveConstRef(QualType type) {
 }
 
 
-loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref");
+loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref", false);
 
 }
 

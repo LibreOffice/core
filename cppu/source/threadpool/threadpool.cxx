@@ -53,7 +53,7 @@ namespace cppu_threadpool
         }
     };
 
-    DisposedCallerAdminHolder DisposedCallerAdmin::getInstance()
+    DisposedCallerAdminHolder const & DisposedCallerAdmin::getInstance()
     {
         return theDisposedCallerAdmin::get();
     }

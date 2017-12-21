@@ -38,7 +38,7 @@ namespace OFOPXMLHelper {
     // the first tag of each element sequence must be "Id"
     /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
+    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > const &
     ReadRelationsInfoSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         const OUString & aStreamName,
@@ -51,7 +51,7 @@ namespace OFOPXMLHelper {
     // by StringPair object ( First - PartName, Second - ContentType )
     /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
+    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > const &
     ReadContentTypeSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         const css::uno::Reference< css::uno::XComponentContext >& rContext );

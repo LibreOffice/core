@@ -88,7 +88,7 @@ namespace basegfx
 
             void transform(const B2DHomMatrix& );
 
-            B2DPolyPolygon getClipPoly() const;
+            B2DPolyPolygon const & getClipPoly() const;
         };
     }
 }
