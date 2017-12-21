@@ -94,9 +94,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         return;
     }
 
-    if ( nNewId == SID_DRAW_SELECT )
-        nNewId = SID_OBJECT_SELECT;
-
     sal_uInt16 nNewFormId = 0;
     if ( nNewId == SID_FM_CREATE_CONTROL && pArgs )
     {

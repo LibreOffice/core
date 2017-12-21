@@ -345,11 +345,6 @@ interface TextDraw : TextDrawBase
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    SID_FONTWORK_SHAPE
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
     SID_FONTWORK_SHAPE_TYPE
     [
         ExecMethod = Execute ;

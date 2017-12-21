@@ -94,11 +94,6 @@ interface OfficeDocument : Document
     [
         StateMethod = GetState_Impl ;
     ]
-    SID_MODIFIED // ole(no) api(final/noplay/norec)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
     SID_SAVESIMPLE []
     SID_SAVEDOC // ole(req) api(final/play/rec)
     [

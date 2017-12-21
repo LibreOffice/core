@@ -203,90 +203,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
     CheckLineTo (rReq);
 
-    SfxBindings&    rBindings = GetViewFrame()->GetBindings();
     std::unique_ptr<SfxItemSet> pAttr(new SfxItemSet ( GetDoc()->GetPool() ));
 
     GetView()->GetAttributes( *pAttr );
-    const SfxItemSet* pArgs = rReq.GetArgs();
-
-    switch (rReq.GetSlot ())
-    {
-        // configuration for line-dash
-        case SID_DASH :
-            if (pArgs)
-                if (pArgs->Count () == 7)
-                {
-                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
-                    const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
-                    const SfxUInt32Item* pDots = rReq.GetArg<SfxUInt32Item>(ID_VAL_DOTS);
-                    const SfxUInt32Item* pDotLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DOTLEN);
-                    const SfxUInt32Item* pDashes = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHES);
-                    const SfxUInt32Item* pDashLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHLEN);
-                    const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
-
-                    if (CHECK_RANGE ((sal_Int32)css::drawing::DashStyle_RECT, (sal_Int32)pStyle->GetValue(), (sal_Int32)css::drawing::DashStyle_ROUNDRELATIVE))
-                    {
-                        XDash aNewDash ((css::drawing::DashStyle) pStyle->GetValue (), (short) pDots->GetValue (), pDotLen->GetValue (),
-                                        (short) pDashes->GetValue (), pDashLen->GetValue (), pDistance->GetValue ());
-
-                        pAttr->ClearItem (XATTR_LINEDASH);
-                        pAttr->ClearItem (XATTR_LINESTYLE);
-
-                        XDashListRef pDashList = GetDoc()->GetDashList();
-                        long       nCounts    = pDashList->Count ();
-                        std::unique_ptr<XDashEntry> pEntry = o3tl::make_unique<XDashEntry>(aNewDash, pName->GetValue());
-                        long i;
-
-                        for ( i = 0; i < nCounts; i++ )
-                            if (pDashList->GetDash (i)->GetName () == pName->GetValue ())
-                                break;
-
-                        if (i < nCounts)
-                            pDashList->Replace(std::move(pEntry), i);
-                        else
-                            pDashList->Insert(std::move(pEntry));
-
-                        XLineDashItem aDashItem(pName->GetValue(), aNewDash);
-                        aDashItem.SetWhich(XATTR_LINEDASH);
-                        pAttr->Put(aDashItem);
-                        XLineStyleItem aStyleItem(drawing::LineStyle_DASH);
-                        aStyleItem.SetWhich(XATTR_LINESTYLE);
-                        pAttr->Put(aStyleItem);
-                        rBindings.Invalidate (SID_ATTR_LINE_DASH);
-                        rBindings.Invalidate (SID_ATTR_FILL_STYLE);
-                    }
-#if HAVE_FEATURE_SCRIPTING
-                    else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
-#endif
-                    break;
-                }
-#if HAVE_FEATURE_SCRIPTING
-            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
-#endif
-            break;
-
-/*        case SID_SETFONTFAMILYNAME :
-        case SID_SETFONTSTYLENAME :
-        case SID_SETFONTFAMILY :
-        case SID_SETFONTPITCH :
-        case SID_SETFONTCHARSET :
-        case SID_SETFONTPOSTURE :
-        case SID_SETFONTWEIGHT :
-        case SID_SETFONTUNDERLINE :
-        case SID_SETFONTCROSSEDOUT :
-        case SID_SETFONTSHADOWED :
-        case SID_SETFONTCONTOUR :
-        case SID_SETFONTCOLOR :
-        case SID_SETFONTLANGUAGE :
-        case SID_SETFONTWORDLINE :
-        case SID_SETFONTCASEMAP :
-        case SID_SETFONTESCAPE :
-        case SID_SETFONTKERNING :
-            break;*/
-
-        default :
-            ;
-    }
 
     mpDrawView->SetAttributes (*const_cast<const SfxItemSet *>(pAttr.get()));
     rReq.Ignore ();

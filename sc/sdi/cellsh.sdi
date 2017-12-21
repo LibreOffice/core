@@ -375,8 +375,6 @@ interface CellMovement
         ExecMethod = ExecutePage ;
         StateMethod = GetStateCursor ;
     ]
-    SID_CURSORTOPOFSCREEN   [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
-    SID_CURSORENDOFSCREEN   [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
 
     SfxVoidItem GoToStartOfRow SID_CURSORHOME
     (

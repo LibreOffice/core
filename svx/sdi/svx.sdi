@@ -690,23 +690,6 @@ SfxBoolItem BezierSymmetric SID_BEZIER_SYMMTR
 ]
 
 
-SfxVoidItem BezierTo SID_BEZIERTO
-(SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
 
 SfxBoolItem BmpMask SID_BMPMASK
 
@@ -2148,24 +2131,6 @@ SfxBoolItem CurrencyField SID_FM_CURRENCYFIELD
 ]
 
 
-SfxVoidItem Dash SID_DASH
-(SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Style ID_VAL_STYLE,SfxUInt32Item Dots ID_VAL_DOTS,SfxUInt32Item DotLen ID_VAL_DOTLEN,SfxUInt32Item Dashes ID_VAL_DASHES,SfxUInt32Item DashLen ID_VAL_DASHLEN,SfxUInt32Item Distance ID_VAL_DISTANCE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Document;
-]
-
-
 SfxBoolItem AddDateField SID_INSERT_DATEFIELD
 
 [
@@ -2276,25 +2241,6 @@ SfxVoidItem DistributeSelection SID_DISTRIBUTE_DLG
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Modify;
-]
-
-
-SfxBoolItem DrawSelect SID_DRAW_SELECT
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
 ]
 
 
@@ -4443,25 +4389,6 @@ SfxBoolItem Init3D SID_3D_INIT
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Options;
 ]
-
-
-SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Document;
-]
-
 
 SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
 (SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
@@ -7153,25 +7080,6 @@ SvxProtectItem RulerProtect SID_RULER_PROTECT
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem RulerChangeState SID_RULER_CHANGE_STATE
-(SfxStringItem Margin1 SID_RULER_MARGIN1, SfxStringItem Margin2 SID_RULER_MARGIN2)
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
 ()
 [
@@ -9859,21 +9767,6 @@ SfxBoolItem FontworkCharacterSpacingFloater SID_FONTWORK_CHARACTER_SPACING_FLOAT
     GroupId = SfxGroupId::Drawing;
 ]
 
-
-SfxInt32Item FontworkShape SID_FONTWORK_SHAPE
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
 
 
 SfxInt32Item FontworkAlignment SID_FONTWORK_ALIGNMENT

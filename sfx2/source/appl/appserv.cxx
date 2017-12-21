@@ -356,7 +356,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         case SID_CONFIG:
-        case SID_CONFIGEVENT:
         {
             SfxAbstractDialogFactory* pFact =
                 SfxAbstractDialogFactory::Create();
@@ -953,7 +952,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 }
 
                 case SID_CONFIG:
-                case SID_CONFIGEVENT:
                 {
                     if( SvtMiscOptions().DisableUICustomization() )
                         rSet.DisableItem(nWhich);

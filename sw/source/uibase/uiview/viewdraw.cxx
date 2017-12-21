@@ -239,7 +239,6 @@ void SwView::ExecDraw(SfxRequest& rReq)
     switch (nSlotId)
     {
         case SID_OBJECT_SELECT:
-        case SID_DRAW_SELECT:
             pFuncPtr = new DrawSelection(m_pWrtShell, m_pEditWin, this);
             m_nDrawSfxId = m_nFormSfxId = SID_OBJECT_SELECT;
             m_sDrawCustom.clear();

@@ -977,12 +977,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
             }
 
-            case SID_MODIFIED:
-            {
-                rSet.Put( SfxBoolItem( SID_MODIFIED, IsModified() ) );
-                break;
-            }
-
             case SID_DOCINFO_TITLE:
             {
                 rSet.Put( SfxStringItem(
@@ -1084,13 +1078,6 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
 {
     switch ( rReq.GetSlot() )
     {
-        case SID_MODIFIED:
-        {
-            SetModified( static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(SID_MODIFIED)).GetValue() );
-            rReq.Done();
-            break;
-        }
-
         case SID_DOCTITLE:
             SetTitle( static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_DOCTITLE)).GetValue() );
             rReq.Done();

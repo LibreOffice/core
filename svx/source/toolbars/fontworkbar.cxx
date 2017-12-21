@@ -139,7 +139,7 @@ void SetKernCharacterPairsState( SdrView const * pSdrView, SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_FONTWORK_KERN_CHARACTER_PAIRS, bChecked ) );
 }
 
-void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSet )
+void SetFontWorkShapeTypeState( SdrView const * pSdrView )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -171,7 +171,6 @@ void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSet )
             }
         }
     }
-    rSet.Put( SfxStringItem( SID_FONTWORK_SHAPE_TYPE, aFontWorkShapeType ) );
 }
 
 // Declare the default interface. (The slotmap must not be empty, so
@@ -501,7 +500,6 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindin
         }
         break;
 
-        case SID_FONTWORK_SHAPE:
         case SID_FONTWORK_ALIGNMENT:
         {
             if ( !pStrResId )
@@ -597,7 +595,7 @@ void FontworkBar::getState( SdrView const * pSdrView, SfxItemSet& rSet )
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus  ) )
             rSet.DisableItem( SID_FONTWORK_SHAPE_TYPE );
         else
-            SetFontWorkShapeTypeState( pSdrView, rSet );
+            SetFontWorkShapeTypeState( pSdrView );
     }
 }
 

@@ -328,8 +328,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
     sal_uInt16 nSlotId  = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-    if(nSlotId != SID_CURSORTOPOFSCREEN && nSlotId != SID_CURSORENDOFSCREEN)
-        pTabViewShell->ExecuteInputDirect();
+    pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )
     {
         case SID_NEXT_TABLE:
@@ -431,14 +430,6 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
                         pWin->SwitchToTextWin();
                 }
             }
-            break;
-
-        case SID_CURSORTOPOFSCREEN:
-            pTabViewShell->MoveCursorScreen( 0, -1, SC_FOLLOW_LINE, false );
-            break;
-
-        case SID_CURSORENDOFSCREEN:
-            pTabViewShell->MoveCursorScreen( 0, 1, SC_FOLLOW_LINE, false );
             break;
 
         default:

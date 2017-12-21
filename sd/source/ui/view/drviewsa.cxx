@@ -395,16 +395,6 @@ bool DrawViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 
 void DrawViewShell::CheckLineTo(SfxRequest& rReq)
 {
-#ifdef DBG_UTIL
-    if(rReq.IsAPI())
-    {
-        if(SID_BEZIERTO == rReq.GetSlot() )
-        {
-            OSL_FAIL("DrawViewShell::CheckLineTo: slots SID_BEZIERTO no longer supported.");
-        }
-    }
-#endif
-
     rReq.Ignore ();
 }
 

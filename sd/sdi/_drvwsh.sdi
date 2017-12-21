@@ -51,11 +51,6 @@ interface DrawView
         ExecMethod = ExecCtrl ;
         StateMethod = GetMenuState ;
     ]
-    SID_OBJECTRESIZE // ole : no, status : ?
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetMenuState ;
-    ]
     SID_ORIGINAL_SIZE // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -1122,11 +1117,6 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    SID_BEZIERTO // ole : no, status : play rec
-    [
-        ExecMethod = FuPermanent ;
-        StateMethod = GetMenuState ;
-    ]
     SID_DRAW_XPOLYGON // ole : no, status : no
     [
         ExecMethod = FuPermanent ;
@@ -1799,11 +1789,6 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-    SID_DASH // ole : no, status : play rec
-    [
-        ExecMethod = AttrExec ;
-        StateMethod = AttrState ;
-    ]
     SID_TEXTATTR_DLG // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;
@@ -2330,11 +2315,6 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
     SID_EXTRUSION_SURFACE
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_FONTWORK_SHAPE
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;

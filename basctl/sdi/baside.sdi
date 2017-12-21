@@ -143,12 +143,6 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
-    SID_BASICIDE_LIBLOADED
-    [
-        ExecMethod  = ExecuteGlobal;
-        StateMethod = GetState;
-    ]
-
     SID_BASICIDE_LIBREMOVED
     [
         ExecMethod  = ExecuteGlobal;
@@ -228,12 +222,6 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
-    SID_BASICIDE_CREATEMACRO
-    [
-        ExecMethod  = ExecuteGlobal;
-        StateMethod = GetState;
-    ]
-
     SID_BASICIDE_EDITMACRO
     [
         ExecMethod  = ExecuteGlobal;
@@ -241,12 +229,6 @@ shell basctl_Shell
     ]
 
     SID_BASICIDE_NAMECHANGEDONTAB
-    [
-        ExecMethod  = ExecuteGlobal;
-        StateMethod = GetState;
-    ]
-
-    SID_BASICIDE_STOREMODULESOURCE
     [
         ExecMethod  = ExecuteGlobal;
         StateMethod = GetState;
@@ -545,11 +527,6 @@ shell basctl_Shell
     ]
 
     SID_BASICIDE_STAT_POS
-    [
-        StateMethod = GetState;
-    ]
-
-    SID_BASICIDE_STAT_DATE
     [
         StateMethod = GetState;
     ]

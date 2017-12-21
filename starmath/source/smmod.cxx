@@ -196,17 +196,8 @@ VirtualDevice &SmModule::GetDefaultVirtualDev()
     return *mpVirtualDev;
 }
 
-void SmModule::GetState(SfxItemSet &rSet)
+void SmModule::GetState(SfxItemSet &/*rSet*/)
 {
-    SfxWhichIter aIter(rSet);
-
-    for (sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich())
-        switch (nWh)
-        {
-            case SID_CONFIGEVENT :
-                rSet.DisableItem(SID_CONFIGEVENT);
-                break;
-        }
 }
 
 std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
