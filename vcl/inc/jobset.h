@@ -48,6 +48,9 @@ struct ImplJobSetup
     sal_uInt32      mnDriverDataLen;    //< length of system specific data
     sal_uInt8*      mpDriverData;       //< system specific data (will be streamed a byte block)
     bool            mbPapersizeFromSetup;
+    // setup mode
+    PrinterSetupMode meSetupMode;
+    // TODO: orig paper size
     std::unordered_map< OUString, OUString, OUStringHash > maValueMap;
 };
 

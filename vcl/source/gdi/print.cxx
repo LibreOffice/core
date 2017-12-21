@@ -1075,7 +1075,7 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
     return false;
 }
 
-bool Printer::Setup( vcl::Window* pWindow )
+bool Printer::Setup( vcl::Window* pWindow, PrinterSetupMode eMode )
 {
     if ( IsDisplayPrinter() )
         return false;
@@ -1085,6 +1085,9 @@ bool Printer::Setup( vcl::Window* pWindow )
 
     JobSetup aJobSetup = maJobSetup;
     ImplJobSetup* pData = aJobSetup.ImplGetData();
+    pData->meSetupMode = eMode;
+    // TODO: orig page size
+
     SalFrame* pFrame;
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();

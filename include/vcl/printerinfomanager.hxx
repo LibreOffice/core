@@ -26,6 +26,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/helper.hxx>
 #include <vcl/jobdata.hxx>
+#include <vcl/prntypes.hxx>
 #include <osl/file.hxx>
 
 #include <cstdio>
@@ -50,11 +51,10 @@ struct PrinterInfo : JobData
     // a list of special features separated by ',' not used by psprint
     // but assigned from the outside (currently for "fax","pdf=","autoqueue","external_dialog")
     OUString             m_aFeatures;
-    bool                 m_bPapersizeFromSetup;
+    PrinterSetupMode     meSetupMode;
 
     PrinterInfo()
         : JobData()
-        , m_bPapersizeFromSetup(false)
     {}
 };
 

@@ -811,13 +811,13 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         // whatever happens to be the current page
         // (but only if the printer config has changed, otherwise
         // don't override printer page auto-detection - tdf#91362)
-        if (getPrinterModified())
+        if (getPrinterModified() || getPapersizeFromSetup())
         {
             resetPaperToLastConfigured();
         }
 
         // call driver setup
-        bRet = mpImplData->mxPrinter->Setup( i_pParent );
+        bRet = mpImplData->mxPrinter->Setup( i_pParent, PrinterSetupMode::SingleJob );
         Size aNewPaperSize(mpImplData->mxPrinter->GetPaperSize());
         if (bRet)
         {

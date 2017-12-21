@@ -293,7 +293,8 @@ public:
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
 
-    bool                        Setup( vcl::Window* pWindow = nullptr );
+    bool                        Setup( vcl::Window* pWindow = nullptr,
+                                       PrinterSetupMode eMode = PrinterSetupMode::DocumentGlobal );
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     /** SetPrinterOptions is used internally only now

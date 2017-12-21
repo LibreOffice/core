@@ -62,6 +62,7 @@ ImplJobSetup::ImplJobSetup()
     mnDriverDataLen     = 0;
     mpDriverData        = nullptr;
     mbPapersizeFromSetup = false;
+    meSetupMode         = PrinterSetupMode::DocumentGlobal;
 }
 
 ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
