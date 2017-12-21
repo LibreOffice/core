@@ -276,6 +276,7 @@ enum
     TEXT_SELECTION,
     PASSWORD_REQUIRED,
     COMMENT,
+    INVALIDATE_HEADER,
 
     LAST_SIGNAL
 };
@@ -429,6 +430,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED";
     case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
         return "LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
+    case LOK_CALLBACK_INVALIDATE_HEADER:
+        return "LOK_CALLBACK_INVALIDATE_HEADER";
     case LOK_CALLBACK_COMMENT:
         return "LOK_CALLBACK_COMMENT";
     }
@@ -1419,6 +1422,9 @@ callback (gpointer pData)
     }
     case LOK_CALLBACK_COMMENT:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[COMMENT], 0, pCallback->m_aPayload.c_str());
+        break;
+    case LOK_CALLBACK_INVALIDATE_HEADER:
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[INVALIDATE_HEADER], 0, pCallback->m_aPayload.c_str());
         break;
     default:
         g_assert(false);
@@ -3199,6 +3205,23 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      */
     doc_view_signals[COMMENT] =
         g_signal_new("comment",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
+    /**
+     * The column/row header is no more valid because of a column/row insertion
+     * or a similar event. Clients must query a new column/row header set.
+     *
+     * The payload says if we are invalidating a row or column header. So,
+     * payload values can be: "row", "column", "all".
+     */
+    doc_view_signals[INVALIDATE_HEADER] =
+        g_signal_new("invalidate-header",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
