@@ -57,7 +57,7 @@ else
 		)) \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) \
 			$(gb_PythonTest_COMMAND) \
-			$(MODULES) \
+			$(if $(PYTHON_TEST_NAME),$(PYTHON_TEST_NAME),$(MODULES)) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
 			|| ($(if $(value gb_CppunitTest_postprocess), \

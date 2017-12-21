@@ -29,9 +29,22 @@ make $1Test_$2 DEBUGCPPUNIT=TRUE
 
 You can limit the execution to just one particular test by:
 
+EOF
+
+case $1 in
+    Python)
+    cat << EOF
+make PYTHON_TEST_NAME="testXYZ" ...above mentioned params...
+
+EOF
+    ;;
+    *)
+    cat << EOF
 make CPPUNIT_TEST_NAME="testXYZ" ...above mentioned params...
 
 EOF
+    ;;
+esac
 
 exit 1
 
