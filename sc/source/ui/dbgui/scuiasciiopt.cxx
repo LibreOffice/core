@@ -84,6 +84,13 @@ const OUString aSep_Path =           "Office.Calc/Dialogs/CSVImport";
 const OUString aSep_Path_Clpbrd =    "Office.Calc/Dialogs/ClipboardTextImport";
 const OUString aSep_Path_Text2Col =  "Office.Calc/Dialogs/TextToColumnsImport";
 
+namespace {
+CSVImportOptionsIndex getSkipEmptyCellsIndex( ScImportAsciiCall eCall )
+{
+    return eCall == SC_TEXTTOCOLUMNS ? CSVIO_Text2ColSkipEmptyCells : CSVIO_PasteSkipEmptyCells;
+}
+}
+
 static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {
     sal_Int32 i;
@@ -165,9 +172,9 @@ void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& rNames,
     }
     if (eCall != SC_IMPORTFILE)
     {
-        pNames[ eCall == SC_TEXTTOCOLUMNS ?
-                CSVIO_Text2ColSkipEmptyCells :
-                CSVIO_PasteSkipEmptyCells ] = CSVImportOptionNames[ CSVIO_PasteSkipEmptyCells ];
+        const sal_Int32 nSkipEmptyCells = getSkipEmptyCellsIndex(eCall);
+        assert( nSkipEmptyCells < rNames.getLength());
+        pNames[ nSkipEmptyCells ] = CSVImportOptionNames[ CSVIO_PasteSkipEmptyCells ];
     }
 }
 
@@ -216,10 +223,9 @@ static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSepar
     }
     if (eCall != SC_IMPORTFILE)
     {
-        sal_Int32 nSkipEmptyCells = eCall == SC_TEXTTOCOLUMNS ?
-                                    CSVIO_Text2ColSkipEmptyCells :
-                                    CSVIO_PasteSkipEmptyCells;
-        if( pProperties[nSkipEmptyCells].hasValue() )
+        const sal_Int32 nSkipEmptyCells = getSkipEmptyCellsIndex(eCall);
+        assert( nSkipEmptyCells < aValues.getLength());
+        if ( pProperties[nSkipEmptyCells].hasValue() )
             rSkipEmptyCells = ScUnoHelpFunctions::GetBoolFromAny( pProperties[nSkipEmptyCells] );
     }
 }
@@ -254,9 +260,9 @@ static void lcl_SaveSeparators(
     }
     if (eCall != SC_IMPORTFILE)
     {
-        pProperties[ eCall == SC_TEXTTOCOLUMNS ?
-                                CSVIO_Text2ColSkipEmptyCells :
-                                CSVIO_PasteSkipEmptyCells ] <<= bSkipEmptyCells;
+        const sal_Int32 nSkipEmptyCells = getSkipEmptyCellsIndex(eCall);
+        assert( nSkipEmptyCells < aValues.getLength());
+        pProperties[ nSkipEmptyCells ] <<= bSkipEmptyCells;
     }
 
     aItem.PutProperties(aNames, aValues);
