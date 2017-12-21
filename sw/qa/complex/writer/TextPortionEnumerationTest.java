@@ -1841,8 +1841,9 @@ public class TextPortionEnumerationTest
         String name5 = mkName("frame");
         TreeNode root = new TreeNode();
         root.appendChild( new TextNode("abc") );
-        root.appendChild( new BookmarkNode(name1) );
+        root.appendChild( new BookmarkStartNode(name1) );
         root.appendChild( new FrameNode(name2, AT_CHARACTER) );
+        root.appendChild( new BookmarkEndNode(name1) );
         root.appendChild( new ReferenceMarkNode(name3) );
         root.appendChild( new FrameNode(name4, AT_CHARACTER) );
         root.appendChild( new FrameNode(name5, AT_CHARACTER) );
@@ -1899,12 +1900,14 @@ public class TextPortionEnumerationTest
         TreeNode root = new TreeNode();
         root.appendChild( new ReferenceMarkNode(name1) );
         root.appendChild( new DocumentIndexMarkNode(name2) );
-        root.appendChild( new BookmarkNode(name3) );
+        root.appendChild( new BookmarkStartNode(name3) );
         root.appendChild( new FrameNode(name4, AT_CHARACTER) );
+        root.appendChild( new BookmarkEndNode(name3) );
         root.appendChild( new ReferenceMarkNode(name7) );
         root.appendChild( new DocumentIndexMarkNode(name8) );
-        root.appendChild( new BookmarkNode(name9) );
+        root.appendChild( new BookmarkStartNode(name9) );
         root.appendChild( new FrameNode(nameA, AT_CHARACTER) );
+        root.appendChild( new BookmarkEndNode(name9) );
         doTest(root);
     }
 
@@ -1915,10 +1918,12 @@ public class TextPortionEnumerationTest
         String name9 = mkName("bookmark");
         String nameA = mkName("frame");
         TreeNode root = new TreeNode();
-        root.appendChild( new BookmarkNode(name3) );
+        root.appendChild( new BookmarkStartNode(name3) );
         root.appendChild( new FrameNode(name4, AT_CHARACTER) );
-        root.appendChild( new BookmarkNode(name9) );
+        root.appendChild( new BookmarkEndNode(name3) );
+        root.appendChild( new BookmarkStartNode(name9) );
         root.appendChild( new FrameNode(nameA, AT_CHARACTER) );
+        root.appendChild( new BookmarkEndNode(name9) );
         doTest(root);
     }
 
@@ -1937,8 +1942,9 @@ public class TextPortionEnumerationTest
         TreeNode root = new TreeNode();
         root.appendChild( new ReferenceMarkNode(name1) );
         root.appendChild( new DocumentIndexMarkNode(name2) );
-        root.appendChild( new BookmarkNode(name3) );
+        root.appendChild( new BookmarkStartNode(name3) );
         root.appendChild( new FrameNode(name4, AT_CHARACTER) );
+        root.appendChild( new BookmarkEndNode(name3) );
         /* currently empty hyperlinks may get eaten...
         TreeNode href = new HyperlinkNode(name5);
         href.appendChild( new TextNode("") );
@@ -1948,8 +1954,9 @@ public class TextPortionEnumerationTest
         root.appendChild(ruby);
         root.appendChild( new ReferenceMarkNode(name7) );
         root.appendChild( new DocumentIndexMarkNode(name8) );
-        root.appendChild( new BookmarkNode(name9) );
+        root.appendChild( new BookmarkStartNode(name9) );
         root.appendChild( new FrameNode(nameA, AT_CHARACTER) );
+        root.appendChild( new BookmarkEndNode(name9) );
         doTest(root);
     }
 
