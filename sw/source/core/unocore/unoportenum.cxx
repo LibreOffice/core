@@ -592,43 +592,77 @@ lcl_CreateMetaPortion(
     return pPortion;
 }
 
+/**
+ * Exports all bookmarks from rBkmArr into rPortions that have the same start
+ * or end position as nIndex.
+ *
+ * @param rBkmArr the array of bookmarks. If bOnlyFrameStarts is true, then
+ * this is only read, otherwise consumed entries are removed.
+ *
+ * @param rFramePositions the list of positions where there is an at-char /
+ * anchored frame.
+ *
+ * @param bOnlyFrameStarts If true: export only the start of the bookmarks
+ * which cover an at-char anchored frame. If false: export the end of the same
+ * bookmarks and everything else.
+ */
 static void lcl_ExportBookmark(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     SwXBookmarkPortion_ImplList& rBkmArr,
-    const sal_Int32 nIndex)
+    const sal_Int32 nIndex,
+    const std::set<sal_Int32>& rFramePositions,
+    bool bOnlyFrameStarts)
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end(); aIter != aEnd; )
     {
         SwXBookmarkPortion_ImplSharedPtr pPtr = (*aIter);
         if ( nIndex > pPtr->getIndex() )
         {
-            aIter = rBkmArr.erase(aIter);
+            if (bOnlyFrameStarts)
+                ++aIter;
+            else
+                aIter = rBkmArr.erase(aIter);
             continue;
         }
         if ( nIndex < pPtr->getIndex() )
             break;
 
         SwXTextPortion* pPortion = nullptr;
-        if ((BkmType::Start     == pPtr->nBkmType) ||
+        if ((BkmType::Start == pPtr->nBkmType && !bOnlyFrameStarts) ||
             (BkmType::StartEnd == pPtr->nBkmType))
         {
-            pPortion =
-                new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_START);
-            rPortions.emplace_back(pPortion);
-            pPortion->SetBookmark(pPtr->xBookmark);
-            pPortion->SetCollapsed( BkmType::StartEnd == pPtr->nBkmType );
+            bool bFrameStart = rFramePositions.find(nIndex) != rFramePositions.end();
+            bool bEnd = pPtr->nBkmType == BkmType::StartEnd && bFrameStart && !bOnlyFrameStarts;
+            if (pPtr->nBkmType == BkmType::Start || bFrameStart || !bOnlyFrameStarts)
+            {
+                // At this we create a text portion, due to one of these
+                // reasons:
+                // - this is the real start of a non-collapsed bookmark
+                // - this is the real position of a collapsed bookmark
+                // - this is the start or end (depending on bOnlyFrameStarts)
+                //   of a collapsed bookmark at the same position as an at-char
+                //   anchored frame
+                pPortion =
+                    new SwXTextPortion(pUnoCursor, xParent, bEnd ? PORTION_BOOKMARK_END : PORTION_BOOKMARK_START);
+                rPortions.emplace_back(pPortion);
+                pPortion->SetBookmark(pPtr->xBookmark);
+                pPortion->SetCollapsed( BkmType::StartEnd == pPtr->nBkmType && !bFrameStart );
+            }
 
         }
-        if (BkmType::End == pPtr->nBkmType)
+        if (BkmType::End == pPtr->nBkmType && !bOnlyFrameStarts)
         {
             pPortion =
                 new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_END);
             rPortions.emplace_back(pPortion);
             pPortion->SetBookmark(pPtr->xBookmark);
         }
-        aIter = rBkmArr.erase(aIter);
+        if (bOnlyFrameStarts)
+            ++aIter;
+        else
+            aIter = rBkmArr.erase(aIter);
     }
 }
 
@@ -1117,10 +1151,18 @@ static void lcl_ExportBkmAndRedline(
     SwXBookmarkPortion_ImplList& rBkmArr,
     SwXRedlinePortion_ImplList& rRedlineArr,
     SwSoftPageBreakList& rBreakArr,
-    const sal_Int32 nIndex)
+    const sal_Int32 nIndex,
+    const std::set<sal_Int32>& rFramePositions,
+    bool bOnlyFrameBookmarkStarts)
 {
     if (!rBkmArr.empty())
-        lcl_ExportBookmark(rPortions, xParent, pUnoCursor, rBkmArr, nIndex);
+        lcl_ExportBookmark(rPortions, xParent, pUnoCursor, rBkmArr, nIndex, rFramePositions,
+                           bOnlyFrameBookmarkStarts);
+
+    if (bOnlyFrameBookmarkStarts)
+        // Only exporting the start of some collapsed bookmarks: no export of
+        // other arrays.
+        return;
 
     if (!rRedlineArr.empty())
         lcl_ExportRedline(rPortions, xParent, pUnoCursor, rRedlineArr, nIndex);
@@ -1162,6 +1204,38 @@ static void lcl_ExportAnnotationStarts(
     }
 }
 
+/// Fills character positions from rFrames into rFramePositions.
+static void lcl_ExtractFramePositions(FrameClientSortList_t& rFrames, sal_Int32 nCurrentIndex,
+                                      std::set<sal_Int32>& rFramePositions)
+{
+    for (const auto& rFrame : rFrames)
+    {
+        if (rFrame.nIndex < nCurrentIndex)
+            continue;
+
+        if (rFrame.nIndex > nCurrentIndex)
+            break;
+
+        const SwModify* pFrame = rFrame.pFrameClient->GetRegisteredIn();
+        if (!pFrame)
+            continue;
+
+        auto& rFormat = *static_cast<SwFrameFormat*>(const_cast<SwModify*>(pFrame));
+        const SwFormatAnchor& rAnchor = rFormat.GetAnchor();
+        const SwPosition* pPosition = rAnchor.GetContentAnchor();
+        if (!pPosition)
+            continue;
+
+        rFramePositions.insert(pPosition->nContent.GetIndex());
+    }
+}
+
+/**
+ * Exports at-char anchored frames.
+ *
+ * @param i_rFrames the frames for this paragraph, frames at <= i_nCurrentIndex
+ * are removed from the container.
+ */
 static sal_Int32 lcl_ExportFrames(
     TextRangeList_t & rPortions,
     Reference<XText> const & i_xParent,
@@ -1286,12 +1360,23 @@ static void lcl_CreatePortions(
 
         SwUnoCursorHelper::SelectPam(*pUnoCursor, true); // set mark
 
+        // First remember the frame positions.
+        std::set<sal_Int32> aFramePositions;
+        lcl_ExtractFramePositions(i_rFrames, nCurrentIndex, aFramePositions);
+
+        // Then export start of collapsed bookmarks which "cover" at-char
+        // anchored frames.
+        lcl_ExportBkmAndRedline( *PortionStack.top().first, i_xParentText,
+            pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex, aFramePositions, /*bOnlyFrameBookmarkStarts=*/true );
+
         const sal_Int32 nFirstFrameIndex =
             lcl_ExportFrames( *PortionStack.top().first,
                 i_xParentText, pUnoCursor, i_rFrames, nCurrentIndex);
 
+        // Export ends of the previously started collapsed bookmarks + all
+        // other bookmarks, redlines, etc.
         lcl_ExportBkmAndRedline( *PortionStack.top().first, i_xParentText,
-            pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex );
+            pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex, aFramePositions, /*bOnlyFrameBookmarkStarts=*/false );
 
         lcl_ExportAnnotationStarts(
             *PortionStack.top().first,
