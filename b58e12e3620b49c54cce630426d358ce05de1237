@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9a3e5e26",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-21T09:13:45Z",
+      "side": 1,
+      "message": "better something like \"tdf#114603: enable setting the background to a different color; relevant for GTK; see also #i75179#\"",
+      "range": {
+        "startLine": 555,
+        "startChar": 4,
+        "endLine": 555,
+        "endChar": 66
+      },
+      "revId": "b58e12e3620b49c54cce630426d358ce05de1237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
