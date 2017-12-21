@@ -9,8 +9,6 @@
 
 #include "SidebarScrollBar.hxx"
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <view.hxx>

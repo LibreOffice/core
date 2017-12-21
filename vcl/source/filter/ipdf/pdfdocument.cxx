@@ -15,22 +15,16 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
-#include <filter/msfilter/mscodec.hxx>
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <sax/tools/converter.hxx>
 #include <svl/cryptosign.hxx>
 #include <tools/zcodec.hxx>
-#include <unotools/calendarwrapper.hxx>
-#include <unotools/datetime.hxx>
 #include <vcl/pdfwriter.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;

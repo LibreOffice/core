@@ -18,6 +18,7 @@
 #endif
 
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/graph.hxx>
 
 using namespace com::sun::star;
 

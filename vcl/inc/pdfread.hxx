@@ -11,7 +11,10 @@
 #define INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+class Bitmap;
+class Graphic;
 
 namespace vcl
 {

@@ -10,7 +10,6 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LATENTSTYLEHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <memory>
 #include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

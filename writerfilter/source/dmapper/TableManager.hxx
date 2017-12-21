@@ -20,15 +20,9 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEMANAGER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEMANAGER_HXX
 
-#include <dmapper/resourcemodel.hxx>
-
-#include <ooxml/resourceids.hxx>
-
 #include <memory>
 #include <stack>
-#include "TagLogger.hxx"
 
-#include <rtl/strbuf.hxx>
 #include "PropertyMap.hxx"
 #include "TableData.hxx"
 

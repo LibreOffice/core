@@ -8,6 +8,7 @@
  */
 
 #include "LockedCanvasContext.hxx"
+#include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/token/namespaces.hxx>
