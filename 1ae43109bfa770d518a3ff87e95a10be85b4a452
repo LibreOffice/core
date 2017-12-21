@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_da71c645",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-21T07:28:41Z",
+      "side": 1,
+      "message": "Please mention that it relates to GTK (and maybe mention i75179)",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "1ae43109bfa770d518a3ff87e95a10be85b4a452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_1aa8ae8c",
         "filename": "sc/source/ui/condformat/condformatdlg.cxx",
         "patchSetId": 1
