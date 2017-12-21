@@ -149,6 +149,8 @@ private:
     void exportPieChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportRadarChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportScatterChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    void exportScatterChartSeries( const css::uno::Reference< css::chart2::XChartType >& xChartType,
+            css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>* pSeries);
     void exportStockChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportSurfaceChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportHiLowLines();
