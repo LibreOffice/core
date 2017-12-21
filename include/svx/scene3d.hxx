@@ -164,8 +164,10 @@ public:
     virtual bool BckCreate(SdrDragStat& rStat) override;
     virtual void BrkCreate(SdrDragStat& rStat) override;
 
-    void EnterObjectSetupMode();
-    void ExitObjectSetupMode();
+    void SuspendReportingDirtyRects();
+    void ResumeReportingDirtyRects();
+    void SetAllSceneRectsDirty();
+
 };
 
 #endif // INCLUDED_SVX_SCENE3D_HXX

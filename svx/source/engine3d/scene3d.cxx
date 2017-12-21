@@ -416,14 +416,19 @@ E3dScene* E3dScene::Clone() const
     return CloneHelper< E3dScene >();
 }
 
-void E3dScene::EnterObjectSetupMode()
+void E3dScene::SuspendReportingDirtyRects()
 {
     GetScene()->mbSkipSettingDirty = true;
 }
 
-void E3dScene::ExitObjectSetupMode()
+void E3dScene::ResumeReportingDirtyRects()
 {
     GetScene()->mbSkipSettingDirty = false;
+}
+
+void E3dScene::SetAllSceneRectsDirty()
+{
+    GetScene()->SetRectsDirty();
 }
 
 E3dScene& E3dScene::operator=(const E3dScene& rObj)
