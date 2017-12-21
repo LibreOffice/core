@@ -72,9 +72,7 @@ void SdrDragStat::NextMove(const Point& rPnt)
 
 void SdrDragStat::NextPoint()
 {
-    Point aPnt(mvPnts.back());
     mvPnts.emplace_back(aRealNow);
-    mvPnts[GetPrevPos()] = aPnt;
 }
 
 void SdrDragStat::PrevPoint()
