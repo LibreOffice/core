@@ -401,6 +401,12 @@ bool ImpTwain::ImplHandleMsg( void* pMsg )
                     if( mrMgr.GetData() )
                         nEvent = TWAIN_EVENT_XFER;
                 }
+                else if( 7 == nCurState && mrMgr.GetData() )
+                {
+                    // Already sent TWAIN_EVENT_XFER; not processed yet;
+                    // duplicate event - avoid deleting mpImpTwain
+                    nEvent = TWAIN_EVENT_NONE;
+                }
 
                 ImplFallback( nEvent );
             }
@@ -425,7 +431,7 @@ void ImpTwain::ImplXfer()
     if( nCurState == 6 )
     {
         TW_IMAGEINFO    aInfo;
-        TW_UINT32       hDIB = 0;
+        HANDLE          hDIB = 0;
         long            nWidth, nHeight, nXRes, nYRes;
 
         if( PFUNC( &aAppIdent, &aSrcIdent, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo ) == TWRC_SUCCESS )
@@ -451,7 +457,7 @@ void ImpTwain::ImplXfer()
                     if( ( nXRes != -1 ) && ( nYRes != - 1 ) && ( nWidth != - 1 ) && ( nHeight != - 1 ) )
                     {
                         // set resolution of bitmap
-                        BITMAPINFOHEADER*   pBIH = static_cast<BITMAPINFOHEADER*>(GlobalLock( reinterpret_cast<HGLOBAL>((sal_IntPtr) hDIB) ));
+                        BITMAPINFOHEADER*   pBIH = static_cast<BITMAPINFOHEADER*>(GlobalLock( static_cast<HGLOBAL>(hDIB) ));
                         static const double fFactor = 100.0 / 2.54;
 
                         pBIH->biXPelsPerMeter = FRound( fFactor * nXRes );
