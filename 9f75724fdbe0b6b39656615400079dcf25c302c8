@@ -22,6 +22,30 @@
       "revId": "9f75724fdbe0b6b39656615400079dcf25c302c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_bac23a32",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-12-21T08:13:04Z",
+      "side": 1,
+      "message": "No - you have to think multi-threaded here. m_aProcessingThread is a member, thus shared by all callers / threads.\n\nThis is about event process stealing. So the 2nd thread steals the processing, which changes m_aProcessingThread, so the first thread won\u0027t continue processing events, after it has finished processing its current event.",
+      "parentUuid": "1a430d35_9acd7e87",
+      "range": {
+        "startLine": 94,
+        "startChar": 51,
+        "endLine": 94,
+        "endChar": 85
+      },
+      "revId": "9f75724fdbe0b6b39656615400079dcf25c302c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
