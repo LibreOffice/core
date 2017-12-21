@@ -136,7 +136,6 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 
     switch( nSId )
     {
-        case SID_ANIMATOR_INIT:
         case SID_ANIMATOR_ADD:
         case SID_ANIMATOR_CREATE:
         {
@@ -151,7 +150,7 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
             {
                 if( nSId == SID_ANIMATOR_ADD )
                     pAnimWin->AddObj( *mpDrawView );
-                else if( nSId == SID_ANIMATOR_CREATE )
+                else // SID_ANIMATOR_CREATE
                     pAnimWin->CreateAnimObj( *mpDrawView );
             }
         }

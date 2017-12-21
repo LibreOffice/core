@@ -710,13 +710,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
     switch ( nSId )
     {
-        case SID_CLEAR_UNDO_STACK:
-        {
-            GetDocSh()->ClearUndoBuffer();
-            rReq.Ignore ();
-        }
-        break;
-
         case SID_PRESENTATION:
         case SID_PRESENTATION_CURRENT_SLIDE:
         case SID_REHEARSE_TIMINGS:

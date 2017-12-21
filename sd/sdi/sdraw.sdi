@@ -105,24 +105,6 @@ SfxBoolItem AnimatorCreateObject SID_ANIMATOR_CREATE
     GroupId = SfxGroupId::Options;
 ]
 
-SfxBoolItem AnimatorInit SID_ANIMATOR_INIT
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
 SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
 
 [
@@ -1198,23 +1180,6 @@ SfxStringItem DeleteSnapItem SID_DELETE_SNAPITEM
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem DeSelect SID_UNSELECT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Edit;
-]
-
 SfxBoolItem DiaMode SID_SLIDE_SORTER_MODE
 [
     AutoUpdate = FALSE,
@@ -1389,23 +1354,6 @@ SfxVoidItem ExpandPage SID_EXPAND_PAGE
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem SetFillColor SID_SETFILLCOLOR
-(SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
-]
-
 SfxVoidItem Forward SID_MOREFRONT
 ()
 [
@@ -1421,111 +1369,6 @@ SfxVoidItem Forward SID_MOREFRONT
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Modify;
-]
-
-SfxVoidItem GetBlue SID_GETBLUE
-(SfxUInt32Item WhatKind ID_VAL_WHATKIND)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxUInt32Item GetFillStyle SID_GETFILLSTYLE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxVoidItem GetGreen SID_GETGREEN
-(SfxUInt32Item WhatKind ID_VAL_WHATKIND)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxUInt32Item GetLineStyle SID_GETLINESTYLE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxUInt32Item GetLineWidth SID_GETLINEWIDTH
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxVoidItem GetRed SID_GETRED
-(SfxUInt32Item WhatKind ID_VAL_WHATKIND)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
 ]
 
 SfxBoolItem GlueEditMode SID_GLUE_EDITMODE
@@ -1780,57 +1623,6 @@ SfxBoolItem GlueVertAlignTop SID_GLUE_VERTALIGN_TOP
     GroupId = SfxGroupId::Drawing;
 ]
 
-SfxVoidItem Gradient SID_GRADIENT
-(SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Style ID_VAL_STYLE,SfxUInt32Item Angle ID_VAL_ANGLE,SfxUInt32Item Border ID_VAL_BORDER,SfxUInt32Item XOffset ID_VAL_CENTER_X,SfxUInt32Item YOffset ID_VAL_CENTER_Y,SfxUInt32Item StartIntens ID_VAL_STARTINTENS,SfxUInt32Item EndIntens ID_VAL_ENDINTENS)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxVoidItem GradientEndColor SID_SETGRADENDCOLOR
-(SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
-]
-
-SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
-(SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
-]
-
 SfxBoolItem GridFront SID_GRID_FRONT
 
 [
@@ -1882,40 +1674,6 @@ SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Document;
-]
-
-SfxVoidItem Hatch SID_HATCH
-(SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Style ID_VAL_STYLE,SfxUInt32Item Distance ID_VAL_DISTANCE,SfxUInt32Item Angle ID_VAL_ANGLE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxVoidItem HatchColor SID_SETHATCHCOLOR
-(SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
 ]
 
 SfxBoolItem HelplinesFront SID_HELPLINES_FRONT
@@ -2350,42 +2108,8 @@ SfxBoolItem LeaveAllGroups SID_LEAVE_ALL_GROUPS
     GroupId = SfxGroupId::Modify;
 ]
 
-SfxVoidItem LineColor SID_SETLINECOLOR
-(SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
-]
-
 SfxVoidItem LineEndPolygon SID_LINEEND_POLYGON
 ()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
-]
-
-SfxVoidItem LineTo SID_LINETO
-(SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -2622,23 +2346,6 @@ SfxVoidItem Morphing SID_POLYGON_MORPHING
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Modify;
-]
-
-SfxVoidItem MoveTo SID_MOVETO
-(SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Drawing;
 ]
 
 SfxVoidItem NameGroup SID_NAME_GROUP
@@ -3017,23 +2724,6 @@ SfxVoidItem PageSetup SID_PAGESETUP
     GroupId = SfxGroupId::Options;
 ]
 
-SfxVoidItem PageSize SID_PAGESIZE
-(SfxUInt32Item PageWidth ID_VAL_PAGEWIDTH,SfxUInt32Item PageHeight ID_VAL_PAGEHEIGHT,SfxBoolItem ScaleObjects ID_VAL_SCALEOBJECTS)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Application;
-]
-
 SfxUInt16Item PagesPerRow SID_PAGES_PER_ROW
 
 [
@@ -3165,23 +2855,6 @@ SfxVoidItem PresentationEnd SID_PRESENTATION_END
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-SfxVoidItem ClearUndoStack SID_CLEAR_UNDO_STACK
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3365,91 +3038,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = ;
-]
-
-SfxVoidItem SelectGradient SID_SELECTGRADIENT
-(SfxStringItem Name ID_VAL_INDEX)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Edit;
-]
-
-SfxVoidItem SelectHatch SID_SELECTHATCH
-(SfxStringItem Name ID_VAL_INDEX)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Edit;
-]
-
-SfxVoidItem SetFillStyle SID_SETFILLSTYLE
-(SfxUInt32Item Style ID_VAL_STYLE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
-]
-
-SfxVoidItem SetLineStyle SID_SETLINESTYLE
-(SfxUInt32Item Style ID_VAL_STYLE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
-]
-
-SfxVoidItem SetLineWidth SID_SETLINEWIDTH
-(SfxUInt32Item Width ID_VAL_WIDTH)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Format;
 ]
 
 SfxStringItem SetSnapItem SID_SET_SNAPITEM
@@ -4124,108 +3712,6 @@ SfxVoidItem DistributeRows SID_TABLE_DISTRIBUTE_ROWS
     GroupId = SfxGroupId::Table;
 ]
 
-SfxVoidItem TaskPaneApplyToAllSlides SID_TP_APPLY_TO_ALL_SLIDES
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-SfxVoidItem TaskPaneApplyToSelectedSlides SID_TP_APPLY_TO_SELECTED_SLIDES
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-SfxVoidItem TaskPaneUseForNewPresentations SID_TP_USE_FOR_NEW_PRESENTATIONS
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-SfxVoidItem TaskPaneShowSmallPreview SID_TP_SHOW_SMALL_PREVIEW
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-SfxVoidItem TaskPaneEditMaster SID_TP_EDIT_MASTER
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
 SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
 [
     AutoUpdate = FALSE,
@@ -4241,27 +3727,6 @@ SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Insert;
-]
-
-/** This item holds the requested type of view shell when calling the
-    SID_SWITCH_SHELL slot.
-*/
-SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
 ]
 
 SfxBoolItem LeftPaneImpress SID_LEFT_PANE_IMPRESS
@@ -4300,25 +3765,6 @@ SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Modify;
-]
-
-SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
 ]
 
 SfxBoolItem NormalMultiPaneGUI SID_NORMAL_MULTI_PANE_GUI

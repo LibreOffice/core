@@ -398,9 +398,9 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
 #ifdef DBG_UTIL
     if(rReq.IsAPI())
     {
-        if(SID_LINETO == rReq.GetSlot() || SID_BEZIERTO == rReq.GetSlot() || SID_MOVETO == rReq.GetSlot() )
+        if(SID_BEZIERTO == rReq.GetSlot() )
         {
-            OSL_FAIL("DrawViewShell::CheckLineTo: slots SID_LINETO, SID_BEZIERTO, SID_MOVETO no longer supported.");
+            OSL_FAIL("DrawViewShell::CheckLineTo: slots SID_BEZIERTO no longer supported.");
         }
     }
 #endif
@@ -409,7 +409,7 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
 }
 
 /**
- * Change page parameter if SID_PAGESIZE or SID_PAGEMARGIN
+ * Change page parameter if SID_PAGEMARGIN
  */
 void DrawViewShell::SetupPage (Size const &rSize,
                                  long nLeft,

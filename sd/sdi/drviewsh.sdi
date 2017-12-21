@@ -72,21 +72,11 @@ interface ImpressEditView : DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-    SID_CLEAR_UNDO_STACK // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
     SID_STYLE_FAMILY5 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         Export = FALSE ;
-    ]
-    SID_ANIMATOR_INIT // ole : no, status : ?
-    [
-        ExecMethod = ExecAnimationWin ;
-        StateMethod = GetAnimationWinState ;
     ]
     SID_ANIMATOR_ADD // ole : no, status : ?
     [
