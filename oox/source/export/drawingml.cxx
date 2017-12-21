@@ -1978,15 +1978,42 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
 
     if( !aGraphicURL.isEmpty() )
     {
-        OUString sRelId = WriteImage( aGraphicURL );
-
         long nFirstCharHeightMm = TransformMetric(fFirstCharHeight * 100.f, FUNIT_POINT, FUNIT_MM);
         float fBulletSizeRel = aGraphicSize.Height / static_cast<float>(nFirstCharHeightMm) / OOX_BULLET_LIST_SCALE_FACTOR;
 
+        OUString sRelationId;
+
+        if(fBulletSizeRel < 1.f)
+        {
+            // Add padding to get the bullet point centered in PPT
+            Graphic aGraphic;
+            if (lcl_URLToGraphic(aGraphicURL, aGraphic))
+            {
+                Size aDestSize(64, 64);
+                float fBulletSizeRelX = fBulletSizeRel / aGraphicSize.Height * aGraphicSize.Width;
+                long nPaddingX = std::max(static_cast<long>(0), std::lround((aDestSize.Width() - fBulletSizeRelX * aDestSize.Width()) / 2.f));
+                long nPaddingY = std::lround((aDestSize.Height() - fBulletSizeRel * aDestSize.Height()) / 2.f);
+                tools::Rectangle aDestRect(nPaddingX, nPaddingY, aDestSize.Width() - nPaddingX, aDestSize.Height() - nPaddingY);
+
+                AlphaMask aMask(aDestSize);
+                aMask.Erase(255);
+                BitmapEx aSourceBitmap(aGraphic.GetBitmapEx());
+                aSourceBitmap.Scale(aDestRect.GetSize());
+                tools::Rectangle aSourceRect(Point(0, 0), aDestRect.GetSize());
+                BitmapEx aDestBitmap(Bitmap(aDestSize, 24), aMask);
+                aDestBitmap.CopyPixel(aDestRect, aSourceRect, &aSourceBitmap);
+                Graphic aDestGraphic(aDestBitmap);
+                sRelationId = WriteImage(aDestGraphic);
+                fBulletSizeRel = 1.f;
+            }
+        }
+        else
+            sRelationId = WriteImage(aGraphicURL);
+
         mpFS->singleElementNS( XML_a, XML_buSzPct,
-                               XML_val, IS( std::max( static_cast<sal_Int32>(25000), std::min( static_cast<sal_Int32>(400000), static_cast<sal_Int32>( std::lround( 100000.f * fBulletSizeRel ) ) ) ) ), FSEND );
+                               XML_val, IS( std::min(static_cast<sal_Int32>(std::lround(100000.f * fBulletSizeRel)), static_cast<sal_Int32>(400000))), FSEND);
         mpFS->startElementNS( XML_a, XML_buBlip, FSEND );
-        mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelId ), FSEND );
+        mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelationId ), FSEND );
         mpFS->endElementNS( XML_a, XML_buBlip );
     }
     else
