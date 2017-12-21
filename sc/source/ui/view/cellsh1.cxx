@@ -107,6 +107,31 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
+namespace{
+InsertDeleteFlags FlagsFromString(const OUString& rFlagsStr,
+    InsertDeleteFlags nFlagsMask = InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ATTRIB)
+{
+    OUString aFlagsStr = rFlagsStr.toAsciiUpperCase();
+    InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
+
+    for (sal_Int32 i=0 ; i < aFlagsStr.getLength(); ++i)
+    {
+        switch (aFlagsStr[i])
+        {
+            case 'A': return    InsertDeleteFlags::ALL;
+            case 'S': nFlags |= InsertDeleteFlags::STRING   & nFlagsMask; break;
+            case 'V': nFlags |= InsertDeleteFlags::VALUE    & nFlagsMask; break;
+            case 'D': nFlags |= InsertDeleteFlags::DATETIME & nFlagsMask; break;
+            case 'F': nFlags |= InsertDeleteFlags::FORMULA  & nFlagsMask; break;
+            case 'N': nFlags |= InsertDeleteFlags::NOTE     & nFlagsMask; break;
+            case 'T': nFlags |= InsertDeleteFlags::ATTRIB   & nFlagsMask; break;
+            case 'O': nFlags |= InsertDeleteFlags::OBJECTS  & nFlagsMask; break;
+        }
+    }
+    return nFlags;
+}
+}
+
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 {
     ScModule*           pScMod      = SC_MOD();
@@ -348,26 +373,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
                         aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                    aFlags = aFlags.toAsciiUpperCase();
-                    bool    bCont = true;
-
-                    for (sal_Int32 i=0 ; bCont && i<aFlags.getLength(); ++i)
-                    {
-                        switch (aFlags[i])
-                        {
-                            case 'A': // all
-                            nFlags |= InsertDeleteFlags::ALL;
-                            bCont = false; // don't continue!
-                            break;
-                            case 'S': nFlags |= InsertDeleteFlags::STRING; break;
-                            case 'V': nFlags |= InsertDeleteFlags::VALUE; break;
-                            case 'D': nFlags |= InsertDeleteFlags::DATETIME; break;
-                            case 'F': nFlags |= InsertDeleteFlags::FORMULA; break;
-                            case 'N': nFlags |= InsertDeleteFlags::NOTE; break;
-                            case 'T': nFlags |= InsertDeleteFlags::ATTRIB; break;
-                            case 'O': nFlags |= InsertDeleteFlags::OBJECTS; break;
-                        }
-                    }
+                    nFlags |= FlagsFromString(aFlags, InsertDeleteFlags::ALL);
                 }
                 else
                 {
@@ -459,25 +465,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pReqArgs->HasItem( FID_FILL_TAB, &pItem ) )
                         aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                    aFlags = aFlags.toAsciiUpperCase();
-                    bool    bCont = true;
-
-                    for (sal_Int32 i=0; bCont && i < aFlags.getLength(); ++i)
-                    {
-                        switch (aFlags[i])
-                        {
-                            case 'A': // all
-                            nFlags |= InsertDeleteFlags::ALL;
-                            bCont = false; // don't continue!
-                            break;
-                            case 'S': nFlags |= InsertDeleteFlags::STRING; break;
-                            case 'V': nFlags |= InsertDeleteFlags::VALUE; break;
-                            case 'D': nFlags |= InsertDeleteFlags::DATETIME; break;
-                            case 'F': nFlags |= InsertDeleteFlags::FORMULA; break;
-                            case 'N': nFlags |= InsertDeleteFlags::NOTE; break;
-                            case 'T': nFlags |= InsertDeleteFlags::ATTRIB; break;
-                        }
-                    }
+                    nFlags |= FlagsFromString(aFlags);
                 }
                 else
                 {
@@ -1354,25 +1342,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, &pItem ) )
                             aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                        aFlags = aFlags.toAsciiUpperCase();
-                        bool    bCont = true;
-
-                        for (sal_Int32 i=0 ; bCont && i<aFlags.getLength(); ++i)
-                        {
-                            switch (aFlags[i])
-                            {
-                                case 'A': // all
-                                nFlags |= InsertDeleteFlags::ALL;
-                                bCont = false; // don't continue!
-                                break;
-                                case 'S': nFlags |= InsertDeleteFlags::STRING; break;
-                                case 'V': nFlags |= InsertDeleteFlags::VALUE; break;
-                                case 'D': nFlags |= InsertDeleteFlags::DATETIME; break;
-                                case 'F': nFlags |= InsertDeleteFlags::FORMULA; break;
-                                case 'N': nFlags |= InsertDeleteFlags::NOTE; break;
-                                case 'T': nFlags |= InsertDeleteFlags::ATTRIB; break;
-                            }
-                        }
+                        nFlags |= FlagsFromString(aFlags);
 
                         const SfxUInt16Item* pFuncItem = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
                         const SfxBoolItem* pSkipItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
