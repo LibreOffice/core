@@ -87,12 +87,12 @@ public:
 namespace OFOPXMLHelper {
 
 /// @throws css::uno::Exception
-static uno::Sequence<uno::Sequence< beans::StringPair>> ReadSequence_Impl(
+static uno::Sequence<uno::Sequence< beans::StringPair>> const & ReadSequence_Impl(
     const uno::Reference<io::XInputStream>& xInStream,
     const OUString& aStringID, sal_uInt16 nFormat,
     const uno::Reference<uno::XComponentContext>& xContext);
 
-uno::Sequence< uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
+uno::Sequence< uno::Sequence< beans::StringPair > > const & ReadRelationsInfoSequence(
         const uno::Reference< io::XInputStream >& xInStream,
         const OUString & aStreamName,
         const uno::Reference< uno::XComponentContext >& rContext )
@@ -102,7 +102,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
 }
 
 
-uno::Sequence< uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
+uno::Sequence< uno::Sequence< beans::StringPair > > const & ReadContentTypeSequence(
         const uno::Reference< io::XInputStream >& xInStream,
         const uno::Reference< uno::XComponentContext >& rContext )
 {
@@ -228,7 +228,7 @@ void WriteContentSequence(
 
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
+uno::Sequence< uno::Sequence< beans::StringPair > > const & ReadSequence_Impl(
         const uno::Reference< io::XInputStream >& xInStream,
         const OUString& aStringID, sal_uInt16 nFormat,
         const uno::Reference< uno::XComponentContext >& rContext )

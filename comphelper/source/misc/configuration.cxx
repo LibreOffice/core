@@ -44,7 +44,7 @@ struct TheConfigurationWrapper:
         TheConfigurationWrapper >
 {};
 
-OUString getDefaultLocale(
+OUString const & getDefaultLocale(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     return LanguageTag(

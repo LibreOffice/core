@@ -101,7 +101,7 @@ struct Derived: public Base2, public Base3 {
 };
 
 // The special case using the conversion operator instead:
-css::uno::Reference< css::uno::XInterface > testUpcast1(
+css::uno::Reference< css::uno::XInterface > const & testUpcast1(
     css::uno::Reference< Derived > const & ref)
 {
     Base1::static_type(); // prevent loplugin:unreffun firing

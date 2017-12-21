@@ -2782,7 +2782,7 @@ LanguageType LanguageTag::convertToLanguageTypeWithFallback( const OUString& rBc
 
 
 // static
-css::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUString& rBcp47 )
+css::lang::Locale const & LanguageTag::convertToLocaleWithFallback( const OUString& rBcp47 )
 {
     return LanguageTag( rBcp47).makeFallback().getLocale();
 }

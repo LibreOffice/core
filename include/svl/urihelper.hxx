@@ -61,7 +61,7 @@ SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
 
 SVL_DLLPUBLIC void SetMaybeFileHdl(Link<OUString *, bool> const & rTheMaybeFileHdl);
 
-SVL_DLLPUBLIC Link<OUString *, bool> GetMaybeFileHdl();
+SVL_DLLPUBLIC Link<OUString *, bool> const & GetMaybeFileHdl();
 
 /**
    Converts a URI reference to a relative one, ignoring certain differences (for

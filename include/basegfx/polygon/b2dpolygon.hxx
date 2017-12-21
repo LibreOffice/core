@@ -75,7 +75,7 @@ namespace basegfx
         sal_uInt32 count() const;
 
         /// Coordinate interface
-        basegfx::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
+        basegfx::B2DPoint const & getB2DPoint(sal_uInt32 nIndex) const;
         void setB2DPoint(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue);
 
         /// Coordinate insert/append
@@ -149,7 +149,7 @@ namespace basegfx
             be this polygon itself when it has no bezier segments. It is guaranteed
             to have no more bezier segments
         */
-        B2DPolygon getDefaultAdaptiveSubdivision() const;
+        B2DPolygon const & getDefaultAdaptiveSubdivision() const;
 
         /** Get the B2DRange (Rectangle dimensions) of this B2DPolygon
 
@@ -178,7 +178,7 @@ namespace basegfx
             @return
             The outer range of the bezier curve/polygon
         */
-        B2DRange getB2DRange() const;
+        B2DRange const & getB2DRange() const;
 
         /** append other 2D polygons
 

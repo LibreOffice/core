@@ -9,30 +9,52 @@
 
 #include <rtl/ustring.hxx>
 
-struct S {
+struct S1 {
+    OUString mv1;
+    OUString const & get() { return mv1; }
+};
+struct S2 {
     OUString mv1;
     OUString mv2;
+    OUString mv3[2];
+    S1 child;
+    static OUString gs1;
 
     // make sure we ignore cases where the passed in parameter is std::move'd
-    S(OUString v1, OUString v2)
+    S2(OUString v1, OUString v2)
       : mv1(std::move(v1)), mv2((std::move(v2))) {}
+
+    OUString get1() { return mv1; } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    OUString get2(bool b) { return b ? mv1 : mv2; } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    OUString get3() { return child.mv1; } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    OUString get4() { return mv3[0]; } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    OUString get5() { return gs1; } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    OUString const & get6() { return gs1; }
+    OUString get7() { return get6(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    OUString & get8() { return gs1; }
+    OUString get9() { return get8(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+
+    // no warning expected
+    OUString set1() { return OUString("xxx"); }
+    OUString set2() { OUString v1("xxx"); return v1; }
+    OUString set3() { S1 v1; return v1.get(); }
 };
 
 
+// no warning expected
+
 void f()
 {
-    S* s;
+    S2* s;
     OUString v1, v2;
-    s = new S(v1, v2);
+    s = new S2(v1, v2);
 }
 
-struct S2 { S2(int); };
+struct S3 { S3(int); };
 
-S2 f2() {
+S3 f2() {
     static int n;
     return n;
 }
-
-// expected-no-diagnostics
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

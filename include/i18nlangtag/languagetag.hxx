@@ -499,7 +499,7 @@ public:
 
         Always resolves an empty tag to the system locale.
      */
-    static css::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
+    static css::lang::Locale const & convertToLocaleWithFallback( const OUString& rBcp47 );
 
     /** If rString represents a valid BCP 47 language tag.
 

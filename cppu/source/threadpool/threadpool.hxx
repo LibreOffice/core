@@ -82,7 +82,7 @@ namespace cppu_threadpool {
     public:
         ~DisposedCallerAdmin();
 
-        static DisposedCallerAdminHolder getInstance();
+        static DisposedCallerAdminHolder const & getInstance();
 
         void dispose( sal_Int64 nDisposeId );
         void destroy( sal_Int64 nDisposeId );

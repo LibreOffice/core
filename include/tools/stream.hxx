@@ -203,7 +203,7 @@ public:
     SvLockBytes*    GetLockBytes() const { return m_xLockBytes.get(); }
 
     ErrCode         GetError() const { return m_nError.IgnoreWarning(); }
-    ErrCode         GetErrorCode() const { return m_nError; }
+    ErrCode const & GetErrorCode() const { return m_nError; }
     void            SetError( ErrCode nErrorCode );
     virtual void    ResetError();
 

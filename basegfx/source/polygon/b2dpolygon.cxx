@@ -1175,7 +1175,7 @@ namespace basegfx
         return mpPolygon->count();
     }
 
-    B2DPoint B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
+    B2DPoint const & B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
@@ -1399,12 +1399,12 @@ namespace basegfx
         }
     }
 
-    B2DPolygon B2DPolygon::getDefaultAdaptiveSubdivision() const
+    B2DPolygon const & B2DPolygon::getDefaultAdaptiveSubdivision() const
     {
         return mpPolygon->getDefaultAdaptiveSubdivision(*this);
     }
 
-    B2DRange B2DPolygon::getB2DRange() const
+    B2DRange const & B2DPolygon::getB2DRange() const
     {
         return mpPolygon->getB2DRange(*this);
     }

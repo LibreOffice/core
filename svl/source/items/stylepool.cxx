@@ -61,11 +61,11 @@ namespace {
         // #i86923#
         bool hasItemSet( const bool bCheckUsage ) const;
         // #i87808#
-        const std::shared_ptr<SfxItemSet> getItemSet() const
+        std::shared_ptr<SfxItemSet> const & getItemSet() const
         {
             return maItemSet.back();
         }
-        const std::shared_ptr<SfxItemSet> getUsedOrLastAddedItemSet() const;
+        std::shared_ptr<SfxItemSet> const & getUsedOrLastAddedItemSet() const;
         void setItemSet( const SfxItemSet& rSet ){ maItemSet.push_back( std::shared_ptr<SfxItemSet>( rSet.Clone() ) ); }
         // #i86923#
         Node* findChildNode( const SfxPoolItem& rItem,
@@ -80,7 +80,7 @@ namespace {
     };
 
     // #i87808#
-    const std::shared_ptr<SfxItemSet> Node::getUsedOrLastAddedItemSet() const
+    std::shared_ptr<SfxItemSet> const & Node::getUsedOrLastAddedItemSet() const
     {
         std::vector< std::shared_ptr<SfxItemSet> >::const_reverse_iterator aIter;
 
@@ -362,14 +362,14 @@ public:
                     "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( sal_False )> does not work as excepted - <mpIgnorableItems> is not empty." );
     }
 
-    std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
+    std::shared_ptr<SfxItemSet> const & insertItemSet( const SfxItemSet& rSet );
 
     // #i86923#
     IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets,
                                               bool bSkipIgnorableItems );
 };
 
-std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
+std::shared_ptr<SfxItemSet> const & StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
 {
     bool bNonPoolable = false;
     Node* pCurNode = &maRoot[ rSet.GetParent() ];
@@ -448,7 +448,7 @@ StylePool::StylePool( SfxItemSet const * pIgnorableItems )
     : pImpl( new StylePoolImpl( pIgnorableItems ) )
 {}
 
-std::shared_ptr<SfxItemSet> StylePool::insertItemSet( const SfxItemSet& rSet )
+std::shared_ptr<SfxItemSet> const & StylePool::insertItemSet( const SfxItemSet& rSet )
 { return pImpl->insertItemSet( rSet ); }
 
 // #i86923#
