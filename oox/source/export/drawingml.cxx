@@ -1978,10 +1978,37 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
 
     if( !aGraphicURL.isEmpty() )
     {
-        OUString sRelId = WriteImage( aGraphicURL );
-
         long nFirstCharHeightMm = TransformMetric(fFirstCharHeight * 100.f, FUNIT_POINT, FUNIT_MM);
         float fBulletSizeRel = aGraphicSize.Height / static_cast<float>(nFirstCharHeightMm) / OOX_BULLET_LIST_SCALE_FACTOR;
+
+        OUString sRelId;
+
+        if(fBulletSizeRel < 1.f)
+        {
+            // Add padding to get the bullet point centered in PPT
+            Graphic aGraphic;
+            if (lcl_URLToGraphic(aGraphicURL, aGraphic))
+            {
+                Size aDstSize(64, 64);
+                float fBulletSizeRelX = fBulletSizeRel / aGraphicSize.Height * aGraphicSize.Width;
+                long nPaddingX = std::max(static_cast<long>(0), std::lround((aDstSize.Width() - fBulletSizeRelX * aDstSize.Width()) / 2.f));
+                long nPaddingY = std::lround((aDstSize.Height() - fBulletSizeRel * aDstSize.Height()) / 2.f);
+                tools::Rectangle aDstRect(nPaddingX, nPaddingY, aDstSize.Width() - nPaddingX, aDstSize.Height() - nPaddingY);
+
+                AlphaMask aMask(aDstSize);
+                aMask.Erase(255);
+                BitmapEx aSrcBitmap(aGraphic.GetBitmapEx());
+                aSrcBitmap.Scale(aDstRect.GetSize());
+                tools::Rectangle aSrcRect(Point(0, 0), aDstRect.GetSize());
+                BitmapEx aDstBitmap(Bitmap(aDstSize, 24), aMask);
+                aDstBitmap.CopyPixel(aDstRect, aSrcRect, &aSrcBitmap);
+                Graphic aDstGraphic(aDstBitmap);
+                sRelId = WriteImage(aDstGraphic);
+                fBulletSizeRel = 1.f;
+            }
+        }
+        else
+            sRelId = WriteImage(aGraphicURL);
 
         mpFS->singleElementNS( XML_a, XML_buSzPct,
                                XML_val, IS( std::max( static_cast<sal_Int32>(25000), std::min( static_cast<sal_Int32>(400000), static_cast<sal_Int32>( std::lround( 100000.f * fBulletSizeRel ) ) ) ) ), FSEND );
