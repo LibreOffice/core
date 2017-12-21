@@ -68,6 +68,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <oox/mathml/import.hxx>
 #include <rtl/uri.hxx>

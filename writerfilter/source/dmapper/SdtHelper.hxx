@@ -12,12 +12,9 @@
 
 #include <vector>
 
-#include <boost/optional.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
-
-#include "DomainMapper_Impl.hxx"
 
 namespace com
 {
@@ -38,6 +35,7 @@ namespace writerfilter
 {
 namespace dmapper
 {
+class DomainMapper_Impl;
 
 /**
  * Helper to create form controls from w:sdt tokens.

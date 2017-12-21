@@ -63,6 +63,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>

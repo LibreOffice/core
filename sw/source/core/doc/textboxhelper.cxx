@@ -23,10 +23,7 @@
 #include <unotextrange.hxx>
 #include <cmdid.h>
 #include <unoprnms.hxx>
-#include <dflyobj.hxx>
 #include <mvsave.hxx>
-#include <sortedobjs.hxx>
-#include <cntfrm.hxx>
 #include <fmtsrnd.hxx>
 #include <frmfmt.hxx>
 
@@ -39,6 +36,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>

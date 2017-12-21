@@ -10,7 +10,16 @@
 #ifndef INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
 #define INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
 
-#include <node.hxx>
+class SmAttributNode;
+class SmBinHorNode;
+class SmBraceNode;
+class SmMatrixNode;
+class SmNode;
+class SmOperNode;
+class SmRootNode;
+class SmSubSupNode;
+class SmUnHorNode;
+class SmVerticalBraceNode;
 
 /**
  Base class implementing writing of formulas to Word.

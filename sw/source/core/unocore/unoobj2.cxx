@@ -94,6 +94,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unoframe.hxx>
 #include <fmthdft.hxx>
 #include <vcl/svapp.hxx>

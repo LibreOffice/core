@@ -8,10 +8,10 @@
  */
 
 #include "docxsdrexport.hxx"
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <svx/svdogrp.hxx>
@@ -32,6 +32,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 

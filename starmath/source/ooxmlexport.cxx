@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #include "ooxmlexport.hxx"
+#include <node.hxx>
 
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>

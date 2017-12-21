@@ -17,7 +17,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Type.h>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include "swdllapi.h"
 

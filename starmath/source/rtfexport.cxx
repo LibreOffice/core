@@ -8,6 +8,7 @@
  */
 
 #include "rtfexport.hxx"
+#include <node.hxx>
 
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>

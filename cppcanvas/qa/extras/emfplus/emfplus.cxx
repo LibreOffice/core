@@ -7,17 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <test/unoapi_test.hxx>
-#include <unotest/macros_test.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/pngwrite.hxx>
 

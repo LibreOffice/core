@@ -67,6 +67,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <calbck.hxx>
 
 using namespace ::com::sun::star;

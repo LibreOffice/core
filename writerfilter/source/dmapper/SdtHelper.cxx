@@ -8,6 +8,7 @@
  */
 
 #include "SdtHelper.hxx"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -16,6 +17,9 @@
 #include <vcl/svapp.hxx>
 #include <unotools/datetime.hxx>
 #include <comphelper/sequence.hxx>
+
+#include "DomainMapper_Impl.hxx"
+#include "StyleSheetTable.hxx"
 
 namespace writerfilter
 {

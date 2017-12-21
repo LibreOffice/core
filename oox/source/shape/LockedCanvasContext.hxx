@@ -11,7 +11,7 @@
 #define INCLUDED_OOX_SOURCE_SHAPE_LOCKEDCANVASCONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
-#include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 namespace oox
 {
