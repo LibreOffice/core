@@ -18,27 +18,51 @@
  */
 
 #include "BarChart.hxx"
+#include "BarPositionHelper.hxx"
+
 #include <ShapeFactory.hxx>
 #include <CommonConverters.hxx>
 #include <ObjectIdentifier.hxx>
 #include <LabelPositionHelper.hxx>
-#include "BarPositionHelper.hxx"
 #include <AxisIndexDefines.hxx>
 #include <Clipping.hxx>
 #include <DateHelper.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/unoshape.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <rtl/math.hxx>
+#include <unordered_set>
 
 namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
+
+namespace
+{
+
+struct XShapeCompare
+{
+    bool operator() (uno::Reference<drawing::XShape> const & lhs, uno::Reference<drawing::XShape> const & rhs) const
+    {
+        return lhs.get() < rhs.get();
+    }
+};
+
+struct XShapeHash
+{
+    bool operator()(uno::Reference<drawing::XShape> const & rXShape) const
+    {
+        return rXShape->getShapeType().hashCode();
+    }
+};
+
+} // end anonymous namespace
 
 BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
                     , sal_Int32 nDimensionCount )
@@ -406,11 +430,11 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
     }
 }
 
-E3dScene* lcl_getE3dScene(uno::Reference<drawing::XShapes> const & xShapes)
+E3dScene* lcl_getE3dScene(uno::Reference<uno::XInterface> const & xInterface)
 {
     E3dScene* pScene = nullptr;
 
-    SvxShape* pSvxShape = SvxShape::getImplementation(xShapes);
+    SvxShape* pSvxShape = SvxShape::getImplementation(xInterface);
     if (pSvxShape)
     {
         SdrObject* pObject = pSvxShape->GetSdrObject();
@@ -452,6 +476,25 @@ void BarChart::createShapes()
     bool bDrawConnectionLines = false;
     bool bDrawConnectionLinesInited = false;
     bool bOnlyConnectionLinesForThisPoint = false;
+
+    std::unordered_set<uno::Reference<drawing::XShape>, XShapeHash, XShapeCompare> aShapeSet;
+
+    const comphelper::ScopeGuard aGuard([aShapeSet]() {
+
+        std::unordered_set<E3dScene*> aSceneSet;
+
+        for (uno::Reference<drawing::XShape> const & rShape : aShapeSet)
+        {
+            E3dScene* pScene = lcl_getE3dScene(rShape);
+            if (pScene)
+                aSceneSet.insert(pScene->GetScene());
+        }
+        for (E3dScene* pScene : aSceneSet)
+        {
+            pScene->ResumeReportingDirtyRects();
+            pScene->SetAllSceneRectsDirty();
+        }
+    });
 
     adaptOverlapAndGapwidthForGroupBarsPerAxis();
 
@@ -585,8 +628,13 @@ void BarChart::createShapes()
                         bDrawConnectionLinesInited = true;
                     }
 
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
-                        getSeriesGroupShape(pSeries, xSeriesTarget) );
+                    uno::Reference<drawing::XShapes> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries, xSeriesTarget));
+                    uno::Reference<drawing::XShape>  xSeriesGroupShape(xSeriesGroupShape_Shapes, uno::UNO_QUERY);
+                    // Suspend setting rects dirty for the duration of this call
+                    aShapeSet.insert(xSeriesGroupShape);
+                    E3dScene* pScene = lcl_getE3dScene(xSeriesGroupShape);
+                    if (pScene)
+                        pScene->SuspendReportingDirtyRects();
 
                     //collect data point information (logic coordinates, style ):
                     double fUnscaledLogicX = pSeries->getXValue( nPointIndex );
@@ -777,12 +825,9 @@ void BarChart::createShapes()
                                 if( fTopHeight < 0 )
                                     fTopHeight *= -1.0;
 
-                                E3dScene* pScene = lcl_getE3dScene(xSeriesGroupShape_Shapes);
-                                pScene->EnterObjectSetupMode();
                                 xShape = createDataPoint3D_Bar(
                                     xSeriesGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
                                     , xDataPointProperties, nGeometry3D );
-                                pScene->ExitObjectSetupMode();
                             }
                             else //m_nDimension!=3
                             {
