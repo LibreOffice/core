@@ -1047,7 +1047,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 bool (::svl::IUndoManager:: *fnDo)();
 
-                std::size_t nCount;
+                size_t nCount;
                 if( SID_UNDO == rReq.GetSlot() )
                 {
                     nCount = pTmpUndoMgr->GetUndoActionCount();
@@ -1154,7 +1154,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 {
                     OUString(::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
 
-                    sal_uInt16 nCount;
+                    size_t nCount;
                     if( SID_GETUNDOSTRINGS == nWh )
                     {
                         nCount = pTmpUndoMgr->GetUndoActionCount();
@@ -1165,10 +1165,10 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                         nCount = pTmpUndoMgr->GetRedoActionCount();
                         fnGetComment = &::svl::IUndoManager::GetRedoActionComment;
                     }
-                    if( nCount )
+                    if (nCount)
                     {
                         OUStringBuffer aBuf;
-                        for( sal_uInt16 n = 0; n < nCount; ++n )
+                        for (size_t n = 0; n < nCount; ++n)
                         {
                             aBuf.append((pTmpUndoMgr->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ));
                             aBuf.append('\n');

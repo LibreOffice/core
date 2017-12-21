@@ -2682,7 +2682,7 @@ void SmXMLTableContext_Impl::EndElement()
     {
         std::unique_ptr<SmStructureNode> xArray(static_cast<SmStructureNode*>(aReverseStack.front().release()));
         aReverseStack.pop_front();
-        for (sal_uInt16 i = 0; i < xArray->GetNumSubNodes(); ++i)
+        for (size_t i = 0; i < xArray->GetNumSubNodes(); ++i)
             aExpressionArray[j++] = xArray->GetSubNode(i);
         xArray->SetSubNodes(SmNodeArray());
     }

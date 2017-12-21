@@ -89,11 +89,11 @@ void NodeTest::testTdf52225()
 #define CHECK_GREEK_SYMBOL(text, code, bItalic) do {                    \
         mxDocShell->SetText(text);                                      \
         const SmTableNode *pTree= mxDocShell->GetFormulaTree();         \
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pTree->GetNumSubNodes());   \
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pTree->GetNumSubNodes());       \
         const SmNode *pLine = pTree->GetSubNode(0);                     \
         CPPUNIT_ASSERT(pLine);                                          \
         CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pLine->GetType());       \
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pLine->GetNumSubNodes());   \
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pLine->GetNumSubNodes());       \
         const SmNode *pNode = pLine->GetSubNode(0);                     \
         CPPUNIT_ASSERT(pNode);                                          \
         CPPUNIT_ASSERT_EQUAL(SmNodeType::Special, pNode->GetType());    \

@@ -470,7 +470,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
     {
         const SmBracebodyNode* body = static_cast< const SmBracebodyNode* >( pNode->Body());
         bool separatorWritten = false; // assume all separators are the same
-        for( int i = 0; i < body->GetNumSubNodes(); ++i )
+        for (size_t i = 0; i < body->GetNumSubNodes(); ++i)
         {
             const SmNode* subnode = body->GetSubNode( i );
             if (subnode->GetType() == SmNodeType::Math || subnode->GetType() == SmNodeType::MathIdent)

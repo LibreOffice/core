@@ -181,11 +181,13 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
 
     SmNode* pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
     SmStructureNode* pLineParent = pLine->GetParent();
-    int nLineOffset = pLineParent->IndexOfSubNode(pLine);
-    assert(nLineOffset >= 0);
+    int nLineOffsetIdx = pLineParent->IndexOfSubNode(pLine);
+    assert(nLineOffsetIdx >= 0);
 
     //If we're in front of a node who's parent is a TABLE
-    if(pLineParent->GetType() == SmNodeType::Table && mpPosition->CaretPos.nIndex == 0 && nLineOffset > 0){
+    if (pLineParent->GetType() == SmNodeType::Table && mpPosition->CaretPos.nIndex == 0 && nLineOffsetIdx > 0)
+    {
+        size_t nLineOffset = nLineOffsetIdx;
         //Now we can merge with nLineOffset - 1
         BeginEdit();
         //Line to merge things into, so we can delete pLine
@@ -210,7 +212,8 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         pLineParent->SetSubNode(nLineOffset-1, pLine);
         //Delete the removed line slot
         SmNodeArray lines(pLineParent->GetNumSubNodes()-1);
-        for(int i = 0; i < pLineParent->GetNumSubNodes(); i++){
+        for (size_t i = 0; i < pLineParent->GetNumSubNodes(); ++i)
+        {
             if(i < nLineOffset)
                 lines[i] = pLineParent->GetSubNode(i);
             else if(i > nLineOffset)
@@ -1353,7 +1356,7 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
 
         int index = pParentNode->IndexOfSubNode(pNode);
         assert(index >= 0);
-        if (index + 1 != pParentNode->GetNumSubNodes()) {
+        if (static_cast<size_t>(index + 1) != pParentNode->GetNumSubNodes()) {
             // The cursor is not at the tail at one of ancestor nodes.
             return false;
         }

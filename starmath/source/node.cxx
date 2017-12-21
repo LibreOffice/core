@@ -44,8 +44,9 @@ namespace {
 template<typename F>
 void ForEachNonNull(SmNode *pNode, F && f)
 {
-    sal_uInt16 nSize = pNode->GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++) {
+    size_t nSize = pNode->GetNumSubNodes();
+    for (size_t i = 0; i < nSize; ++i)
+    {
         SmNode *pSubNode = pNode->GetSubNode(i);
         if (pSubNode != nullptr)
             f(pSubNode);
@@ -68,11 +69,9 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
 {
 }
 
-
 SmNode::~SmNode()
 {
 }
-
 
 const SmNode * SmNode::GetLeftMost() const
     //  returns leftmost node of current subtree.
@@ -249,10 +248,9 @@ void SmNode::Move(const Point& rPosition)
     ForEachNonNull(this, [&rPosition](SmNode *pNode){pNode->Move(rPosition);});
 }
 
-
 void SmNode::CreateTextFromNode(OUString &rText)
 {
-    sal_uInt16  nSize = GetNumSubNodes();
+    auto nSize = GetNumSubNodes();
     if (nSize > 1)
         rText += "{";
     ForEachNonNull(this, [&rText](SmNode *pNode){pNode->CreateTextFromNode(rText);});
@@ -262,7 +260,6 @@ void SmNode::CreateTextFromNode(OUString &rText)
         rText += "} ";
     }
 }
-
 
 void SmNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong /*nWidth*/)
 {
@@ -285,9 +282,10 @@ const SmNode * SmNode::FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const
         return this;
     else
     {
-        sal_uInt16  nNumSubNodes = GetNumSubNodes();
-        for (sal_uInt16  i = 0;  i < nNumSubNodes;  i++)
-        {   const SmNode *pNode = GetSubNode(i);
+        size_t nNumSubNodes = GetNumSubNodes();
+        for (size_t i = 0;  i < nNumSubNodes; ++i)
+        {
+            const SmNode *pNode = GetSubNode(i);
 
             if (!pNode)
                 continue;
@@ -311,9 +309,10 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
         pResult = this;
     else
     {
-        sal_uInt16  nNumSubNodes = GetNumSubNodes();
-        for (sal_uInt16  i = 0;  i < nNumSubNodes;  i++)
-        {   const SmNode *pNode = GetSubNode(i);
+        size_t nNumSubNodes = GetNumSubNodes();
+        for (size_t i = 0;  i < nNumSubNodes; ++i)
+        {
+            const SmNode *pNode = GetSubNode(i);
 
             if (!pNode)
                 continue;
@@ -353,8 +352,8 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
         pResult = this;
     else
     {
-        sal_uInt16  nNumSubNodes = GetNumSubNodes();
-        for (sal_uInt16  i = 0;  i < nNumSubNodes;  i++)
+        size_t nNumSubNodes = GetNumSubNodes();
+        for (size_t i = 0; i < nNumSubNodes; ++i)
         {
             const SmNode *pNode = GetSubNode(i);
             if (!pNode)
@@ -390,31 +389,26 @@ void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThir
     ClaimPaternity();
 }
 
-
 void SmStructureNode::SetSubNodes(const SmNodeArray &rNodeArray)
 {
     maSubNodes = rNodeArray;
     ClaimPaternity();
 }
 
-
 bool SmStructureNode::IsVisible() const
 {
     return false;
 }
 
-
-sal_uInt16 SmStructureNode::GetNumSubNodes() const
+size_t SmStructureNode::GetNumSubNodes() const
 {
-    return sal::static_int_cast<sal_uInt16>(maSubNodes.size());
+    return maSubNodes.size();
 }
 
-
-SmNode * SmStructureNode::GetSubNode(sal_uInt16 nIndex)
+SmNode* SmStructureNode::GetSubNode(size_t nIndex)
 {
     return maSubNodes[nIndex];
 }
-
 
 void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
@@ -427,26 +421,22 @@ void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
         });
 }
 
-
 void SmStructureNode::ClaimPaternity()
 {
     ForEachNonNull(this, [this](SmNode *pNode){pNode->SetParent(this);});
 }
-
 
 bool SmVisibleNode::IsVisible() const
 {
     return true;
 }
 
-
-sal_uInt16 SmVisibleNode::GetNumSubNodes() const
+size_t SmVisibleNode::GetNumSubNodes() const
 {
     return 0;
 }
 
-
-SmNode * SmVisibleNode::GetSubNode(sal_uInt16 /*nIndex*/)
+SmNode * SmVisibleNode::GetSubNode(size_t /*nIndex*/)
 {
     return nullptr;
 }
@@ -458,10 +448,10 @@ void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
 
 void SmExpressionNode::CreateTextFromNode(OUString &rText)
 {
-    sal_uInt16  nSize = GetNumSubNodes();
+    size_t nSize = GetNumSubNodes();
     if (nSize > 1)
         rText += "{";
-    for (sal_uInt16 i = 0;  i < nSize;  i++)
+    for (size_t i = 0; i < nSize; ++i)
     {
         SmNode *pNode = GetSubNode(i);
         if (pNode)
@@ -486,7 +476,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one column
 {
     SmNode *pNode;
-    sal_uInt16  nSize   = GetNumSubNodes();
+    size_t nSize = GetNumSubNodes();
 
     // make distance depend on font size
     long  nDist = +(rFormat.GetDistance(DIS_VERTICAL)
@@ -498,18 +488,20 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // arrange subnodes and get maximum width of them
     long  nMaxWidth = 0,
           nTmp;
-    sal_uInt16 i;
-    for (i = 0; i < nSize;  i++)
+    for (size_t i = 0; i < nSize; ++i)
+    {
         if (nullptr != (pNode = GetSubNode(i)))
         {   pNode->Arrange(rDev, rFormat);
             if ((nTmp = pNode->GetItalicWidth()) > nMaxWidth)
                 nMaxWidth = nTmp;
         }
+    }
 
     Point  aPos;
     SmRect::operator = (SmRect(nMaxWidth, 1));
-    for (i = 0;  i < nSize;  i++)
-    {   if (nullptr != (pNode = GetSubNode(i)))
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        if (nullptr != (pNode = GetSubNode(i)))
         {   const SmRect &rNodeRect = pNode->GetRect();
             const SmNode *pCoNode   = pNode->GetLeftMost();
             RectHorAlign  eHorAlign = pCoNode->GetRectHorAlign();
@@ -571,11 +563,12 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one row with some extra space between
 {
     SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    sal_uInt16 i;
-    for (i = 0; i < nSize;  i++)
+    size_t nSize = GetNumSubNodes();
+    for (size_t i = 0; i < nSize; ++i)
+    {
         if (nullptr != (pNode = GetSubNode(i)))
             pNode->Arrange(rDev, rFormat);
+    }
 
     SmTmpDevice aTmpDev (rDev, true);
     aTmpDev.SetFont(GetFont());
@@ -606,7 +599,8 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     if (nullptr != (pNode = GetSubNode(0)))
         SmRect::operator = (pNode->GetRect());
 
-    for (i = 1;  i < nSize;  i++)
+    for (size_t i = 1;  i < nSize; ++i)
+    {
         if (nullptr != (pNode = GetSubNode(i)))
         {
             aPos = pNode->AlignTo(*this, RectPos::Right, RectHorAlign::Center, RectVerAlign::Baseline);
@@ -617,6 +611,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             pNode->MoveTo(aPos);
             ExtendBy( *pNode, RectCopyMBL::Xor );
         }
+    }
 }
 
 
@@ -1435,18 +1430,17 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
-    sal_uInt16  nNumSubNodes = GetNumSubNodes();
+    size_t nNumSubNodes = GetNumSubNodes();
     if (nNumSubNodes == 0)
         return;
 
     // arrange arguments
-    sal_uInt16 i;
-    for (i = 0;  i < nNumSubNodes;  i += 2)
+    for (size_t i = 0;  i < nNumSubNodes; i += 2)
         GetSubNode(i)->Arrange(rDev, rFormat);
 
     // build reference rectangle with necessary info for vertical alignment
     SmRect  aRefRect (*GetSubNode(0));
-    for (i = 0;  i < nNumSubNodes;  i += 2)
+    for (size_t i = 0;  i < nNumSubNodes; i += 2)
     {
         SmRect aTmpRect (*GetSubNode(i));
         Point  aPos = aTmpRect.AlignTo(aRefRect, RectPos::Right, RectHorAlign::Center, RectVerAlign::Baseline);
@@ -1464,7 +1458,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     sal_uInt16 nPerc   = rFormat.GetDistance(nIndex);
     if (bScale)
         nHeight += 2 * (nHeight * nPerc / 100L);
-    for (i = 1;  i < nNumSubNodes;  i += 2)
+    for (size_t i = 1; i < nNumSubNodes; i += 2)
     {
         SmNode *pNode = GetSubNode(i);
         pNode->AdaptToY(rDev, nHeight);
@@ -1477,7 +1471,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     SmNode *pLeft = GetSubNode(0);
     SmRect::operator = (*pLeft);
-    for (i = 1;  i < nNumSubNodes;  i++)
+    for (size_t i = 1; i < nNumSubNodes; ++i)
     {
         bool          bIsSeparator = i % 2 != 0;
         RectVerAlign  eVerAlign    = bIsSeparator ? RectVerAlign::CenterY : RectVerAlign::Baseline;
@@ -2231,17 +2225,16 @@ void SmMatrixNode::CreateTextFromNode(OUString &rText)
 void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode;
-    sal_uInt16  i, j;
 
     // initialize array that is to hold the maximum widths of all
     // elements (subnodes) in that column.
     std::vector<long> aColWidth(mnNumCols);
 
     // arrange subnodes and calculate the above arrays contents
-    sal_uInt16 nNodes = GetNumSubNodes();
-    for (i = 0;  i < nNodes;  i++)
+    size_t nNodes = GetNumSubNodes();
+    for (size_t i = 0; i < nNodes; ++i)
     {
-        sal_uInt16 nIdx = nNodes - 1 - i;
+        size_t nIdx = nNodes - 1 - i;
         if (nullptr != (pNode = GetSubNode(nIdx)))
         {
             pNode->Arrange(rDev, rFormat);
@@ -2261,18 +2254,18 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // build array that holds the leftmost position for each column
     std::vector<long> aColLeft(mnNumCols);
     long  nX = 0;
-    for (j = 0;  j < mnNumCols;  j++)
+    for (size_t j = 0; j < mnNumCols; ++j)
     {
         aColLeft[j] = nX;
         nX += aColWidth[j] + nHorDist;
     }
 
     SmRect::operator = (SmRect());
-    for (i = 0;  i < mnNumRows;  i++)
+    for (size_t i = 0;  i < mnNumRows; ++i)
     {
         Point aPos;
         SmRect aLineRect;
-        for (j = 0;  j < mnNumCols;  j++)
+        for (size_t j = 0;  j < mnNumCols; ++j)
         {
             SmNode *pTmpNode = GetSubNode(i * mnNumCols + j);
             assert(pTmpNode);
@@ -2317,9 +2310,11 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         Point aDelta(0, // since horizontal alignment is already done
                      aPos.Y() - aLineRect.GetTop());
         aLineRect.Move(aDelta);
-        for (j = 0;  j < mnNumCols;  j++)
+        for (size_t j = 0;  j < mnNumCols; ++j)
+        {
             if (nullptr != (pNode = GetSubNode(i * mnNumCols + j)))
                 pNode->Move(aDelta);
+        }
 
         ExtendBy(aLineRect, RectCopyMBL::None);
     }
