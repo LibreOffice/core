@@ -76,9 +76,9 @@ struct ViewRectangles
 /// Private struct used by this GObject type
 struct LOKDocViewPrivateImpl
 {
-    const gchar* m_aLOPath;
-    const gchar* m_pUserProfileURL;
-    const gchar* m_aDocPath;
+    std::string m_aLOPath;
+    std::string m_aUserProfileURL;
+    std::string m_aDocPath;
     std::string m_aRenderingArguments;
     gdouble m_nLoadProgress;
     gboolean m_bIsLoading;
@@ -192,10 +192,7 @@ struct LOKDocViewPrivateImpl
     std::map<int, ViewRectangle> m_aViewLockRectangles;
 
     LOKDocViewPrivateImpl()
-        : m_aLOPath(nullptr),
-        m_pUserProfileURL(nullptr),
-        m_aDocPath(nullptr),
-        m_nLoadProgress(0),
+        : m_nLoadProgress(0),
         m_bIsLoading(false),
         m_bCanZoomIn(true),
         m_bCanZoomOut(true),
@@ -1750,7 +1747,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     if (priv->m_bEdit && priv->m_bCursorVisible && !isEmptyRectangle(priv->m_aVisibleCursor) && priv->m_aTextSelectionRectangles.empty())
     {
         // Have a cursor, but no selection: we need the middle handle.
-        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_image_middle.png", nullptr);
+        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath.c_str(), CURSOR_HANDLE_DIR, "handle_image_middle.png", nullptr);
         if (!priv->m_pHandleMiddle)
         {
             priv->m_pHandleMiddle = cairo_image_surface_create_from_png(handleMiddlePath);
@@ -1778,7 +1775,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionStart))
         {
             // Have a start position: we need a start handle.
-            gchar* handleStartPath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_image_start.png", nullptr);
+            gchar* handleStartPath = g_strconcat (priv->m_aLOPath.c_str(), CURSOR_HANDLE_DIR, "handle_image_start.png", nullptr);
             if (!priv->m_pHandleStart)
             {
                 priv->m_pHandleStart = cairo_image_surface_create_from_png(handleStartPath);
@@ -1790,7 +1787,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
-            gchar* handleEndPath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_image_end.png", nullptr);
+            gchar* handleEndPath = g_strconcat (priv->m_aLOPath.c_str(), CURSOR_HANDLE_DIR, "handle_image_end.png", nullptr);
             if (!priv->m_pHandleEnd)
             {
                 priv->m_pHandleEnd = cairo_image_surface_create_from_png(handleEndPath);
@@ -2221,7 +2218,7 @@ openDocumentInThread (gpointer data)
     }
 
     priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
-    priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath );
+    priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath.c_str() );
     priv->m_eDocumentType = static_cast<LibreOfficeKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
     if ( !priv->m_pDocument )
     {
@@ -2484,16 +2481,17 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
     switch (propId)
     {
     case PROP_LO_PATH:
-        priv->m_aLOPath = g_value_dup_string (value);
+        priv->m_aLOPath = g_value_get_string (value);
         break;
     case PROP_LO_POINTER:
         priv->m_pOffice = static_cast<LibreOfficeKit*>(g_value_get_pointer(value));
         break;
     case PROP_USER_PROFILE_URL:
-        priv->m_pUserProfileURL = g_value_dup_string(value);
+        if (const gchar* pUserProfile = g_value_get_string(value))
+            priv->m_aUserProfileURL = pUserProfile;
         break;
     case PROP_DOC_PATH:
-        priv->m_aDocPath = g_value_dup_string (value);
+        priv->m_aDocPath = g_value_get_string (value);
         break;
     case PROP_DOC_POINTER:
         priv->m_pDocument = static_cast<LibreOfficeKitDocument*>(g_value_get_pointer(value));
@@ -2545,16 +2543,16 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
     switch (propId)
     {
     case PROP_LO_PATH:
-        g_value_set_string (value, priv->m_aLOPath);
+        g_value_set_string (value, priv->m_aLOPath.c_str());
         break;
     case PROP_LO_POINTER:
         g_value_set_pointer(value, priv->m_pOffice);
         break;
     case PROP_USER_PROFILE_URL:
-        g_value_set_string(value, priv->m_pUserProfileURL);
+        g_value_set_string(value, priv->m_aUserProfileURL.c_str());
         break;
     case PROP_DOC_PATH:
-        g_value_set_string (value, priv->m_aDocPath);
+        g_value_set_string (value, priv->m_aDocPath.c_str());
         break;
     case PROP_DOC_POINTER:
         g_value_set_pointer(value, priv->m_pDocument);
@@ -2677,14 +2675,14 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     if (priv->m_pOffice != nullptr)
         return TRUE;
 
-    priv->m_pOffice = lok_init_2(priv->m_aLOPath, priv->m_pUserProfileURL);
+    priv->m_pOffice = lok_init_2(priv->m_aLOPath.c_str(), priv->m_aUserProfileURL.empty() ? nullptr : priv->m_aUserProfileURL.c_str());
 
     if (priv->m_pOffice == nullptr)
     {
         g_set_error (error,
                      g_quark_from_static_string ("LOK initialization error"), 0,
                      "Failed to get LibreOfficeKit context. Make sure path (%s) is correct",
-                     priv->m_aLOPath);
+                     priv->m_aLOPath.c_str());
         return FALSE;
     }
     priv->m_nLOKFeatures |= LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK;
@@ -3252,8 +3250,8 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
 {
     LOKDocViewPrivate& pOldPriv = getPrivate(pOldLOKDocView);
     GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/nullptr, /*error=*/nullptr,
-                                                       "lopath", pOldPriv->m_aLOPath,
-                                                       "userprofileurl", pOldPriv->m_pUserProfileURL,
+                                                       "lopath", pOldPriv->m_aLOPath.c_str(),
+                                                       "userprofileurl", pOldPriv->m_aUserProfileURL.c_str(),
                                                        "lopointer", pOldPriv->m_pOffice,
                                                        "docpointer", pOldPriv->m_pDocument,
                                                        "halign", GTK_ALIGN_CENTER,
@@ -3298,7 +3296,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
 
     LOEvent* pLOEvent = new LOEvent(LOK_LOAD_DOC);
 
-    priv->m_aDocPath = pPath;
+    g_object_set(G_OBJECT(pDocView), "docpath", pPath, nullptr);
     if (pRenderingArguments)
         priv->m_aRenderingArguments = pRenderingArguments;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
