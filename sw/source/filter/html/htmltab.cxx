@@ -5246,4 +5246,18 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     return xRetTable;
 }
 
+bool SwHTMLParser::CurrentTableInPaM(SwPaM& rPam) const
+{
+    if (!m_xTable)
+        return false;
+    const SwTable *pTable = m_xTable->GetSwTable();
+    if (!pTable)
+        return false;
+    const SwTableNode* pTableNode = pTable->GetTableNode();
+    if (!pTableNode)
+        return false;
+    SwNodeIndex aTableNodeIndex(*pTableNode);
+    return (aTableNodeIndex >= rPam.Start()->nNode && aTableNodeIndex <= rPam.End()->nNode);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
