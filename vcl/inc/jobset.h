@@ -44,6 +44,9 @@ private:
     sal_uInt32      mnDriverDataLen;    //< length of system specific data
     sal_uInt8*      mpDriverData;       //< system specific data (will be streamed a byte block)
     bool            mbPapersizeFromSetup;
+    // setup mode
+    PrinterSetupMode meSetupMode;
+    // TODO: orig paper size
     std::unordered_map< OUString, OUString > maValueMap;
 
 public:
@@ -88,6 +91,9 @@ public:
 
     bool             GetPapersizeFromSetup() const { return mbPapersizeFromSetup; }
     void             SetPapersizeFromSetup(bool bPapersizeFromSetup);
+
+    PrinterSetupMode GetPrinterSetupMode() const { return meSetupMode; }
+    void             SetPrinterSetupMode(PrinterSetupMode eMode);
 
     const std::unordered_map< OUString, OUString >& GetValueMap() const
                     { return maValueMap; }

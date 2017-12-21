@@ -554,6 +554,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
         JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aInfo );
     }
     aInfo.m_bPapersizeFromSetup = pJobSetup->GetPapersizeFromSetup();
+    aInfo.meSetupMode = pJobSetup->GetPrinterSetupMode();
 
     if (SetupPrinterDriver(aInfo))
     {

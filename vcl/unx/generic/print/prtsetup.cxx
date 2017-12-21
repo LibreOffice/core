@@ -130,6 +130,10 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton, void )
             // orientation
             m_aJobData.m_eOrientation = m_pPaperPage->getOrientation() == 0 ?
                 orientation::Portrait : orientation::Landscape;
+            // assume use of paper size from printer setup if the user
+            // got here via File > Printer Settings ...
+            m_aJobData.m_bPapersizeFromSetup =
+                ( m_aJobData.meSetupMode == PrinterSetupMode::DocumentGlobal );
         }
         if( m_pDevicePage )
         {
@@ -155,6 +159,7 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     get(m_pCbFromSetup, "papersizefromsetup");
     get(m_pPaperText, "paperft");
     get(m_pPaperBox, "paperlb");
+    get(m_pOrientText, "orientft");
     get(m_pOrientBox, "orientlb");
     get(m_pDuplexText, "duplexft");
     get(m_pDuplexBox, "duplexlb");
@@ -191,9 +196,10 @@ RTSPaperPage::~RTSPaperPage()
 void RTSPaperPage::dispose()
 {
     m_pParent.clear();
-    m_pPaperText.clear();
     m_pCbFromSetup.clear();
+    m_pPaperText.clear();
     m_pPaperBox.clear();
+    m_pOrientText.clear();
     m_pOrientBox.clear();
     m_pDuplexText.clear();
     m_pDuplexBox.clear();
@@ -246,14 +252,21 @@ void RTSPaperPage::update()
         m_pSlotBox->Enable( false );
     }
 
-    if ( m_pParent->m_aJobData.m_bPapersizeFromSetup )
-        m_pCbFromSetup->Check( m_pParent->m_aJobData.m_bPapersizeFromSetup );
-    // disable those, unless user wants to use papersize from printer prefs
-    // as they have no influence on what's going to be printed anyway
-    else
+    if ( m_pParent->m_aJobData.meSetupMode == PrinterSetupMode::SingleJob )
     {
-        m_pPaperBox->Enable( false );
-        m_pOrientBox->Enable( false );
+        m_pCbFromSetup->Show();
+
+        if ( m_pParent->m_aJobData.m_bPapersizeFromSetup )
+            m_pCbFromSetup->Check( m_pParent->m_aJobData.m_bPapersizeFromSetup );
+        // disable those, unless user wants to use papersize from printer prefs
+        // as they have no influence on what's going to be printed anyway
+        else
+        {
+            m_pPaperText->Enable( false );
+            m_pPaperBox->Enable( false );
+            m_pOrientText->Enable( false );
+            m_pOrientBox->Enable( false );
+        }
     }
 }
 
