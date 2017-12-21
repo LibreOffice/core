@@ -21,6 +21,8 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
@@ -125,6 +127,19 @@ bool PowerPointImport::importDocument()
         file:///<path-to-oox-module>/source/dump/pptxdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
+    uno::Reference< document::XUndoManagerSupplier > xUndoManagerSupplier (getModel(), UNO_QUERY );
+    uno::Reference< util::XLockable > xUndoManager;
+    bool bWasUnLocked = true;
+    if(xUndoManagerSupplier.is())
+    {
+        xUndoManager = xUndoManagerSupplier->getUndoManager();
+        if(xUndoManager.is())
+        {
+            bWasUnLocked = !xUndoManager->isLocked();
+            xUndoManager->lock();
+        }
+    }
+
     importDocumentProperties();
 
     OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
@@ -157,6 +172,9 @@ bool PowerPointImport::importDocument()
         ScopedVclPtrInstance<WarningBox> pBox(nullptr, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, aWarning);
         pBox->Execute();
     }
+
+    if(xUndoManager.is() && bWasUnLocked)
+        xUndoManager->unlock();
 
     return bRet;
 
