@@ -1628,43 +1628,55 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
     pFS->endElement( FSNS( XML_c, XML_radarChart ) );
 }
 
+void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType >& xChartType,
+        css::uno::Sequence<css::uno::Reference<chart2::XDataSeries>>* pSeries)
+{
+    FSHelperPtr pFS = GetFS();
+    pFS->startElement( FSNS( XML_c, XML_scatterChart ),
+            FSEND );
+    // TODO:scatterStyle
+
+    sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
+    Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
+    if( GetProperty( xPropSet, "SymbolType" ) )
+        mAny >>= nSymbolType;
+
+    const char* scatterStyle = "lineMarker";
+    if (nSymbolType == css::chart::ChartSymbolType::NONE)
+    {
+        scatterStyle = "line";
+    }
+
+    pFS->singleElement( FSNS( XML_c, XML_scatterStyle ),
+            XML_val, scatterStyle,
+            FSEND );
+
+    exportVaryColors(xChartType);
+    // FIXME: should export xVal and yVal
+    bool bPrimaryAxes = true;
+    if (pSeries)
+        exportSeries(xChartType, *pSeries, bPrimaryAxes);
+    exportAxesId(bPrimaryAxes);
+
+    pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
+}
+
 void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
     std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    bool bExported = false;
     for (auto itr = aSplitDataSeries.begin(), itrEnd = aSplitDataSeries.end();
             itr != itrEnd; ++itr)
     {
         if (itr->getLength() == 0)
             continue;
 
-        pFS->startElement( FSNS( XML_c, XML_scatterChart ),
-                FSEND );
-        // TODO:scatterStyle
-
-        sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
-        Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-        if( GetProperty( xPropSet, "SymbolType" ) )
-            mAny >>= nSymbolType;
-
-        const char* scatterStyle = "lineMarker";
-        if (nSymbolType == css::chart::ChartSymbolType::NONE)
-        {
-            scatterStyle = "line";
-        }
-
-        pFS->singleElement( FSNS( XML_c, XML_scatterStyle ),
-                XML_val, scatterStyle,
-                FSEND );
-
-        exportVaryColors(xChartType);
-        // FIXME: should export xVal and yVal
-        bool bPrimaryAxes = true;
-        exportSeries(xChartType, *itr, bPrimaryAxes);
-        exportAxesId(bPrimaryAxes);
-
-        pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
+        bExported = true;
+        exportScatterChartSeries(xChartType, &(*itr));
     }
+    if (!bExported)
+        exportScatterChartSeries(xChartType, nullptr);
 }
 
 void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChartType )
