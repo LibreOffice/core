@@ -32,7 +32,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight"/>
- <toolbar:toolbarbreak/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignUp"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignMiddle"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignDown"/>
