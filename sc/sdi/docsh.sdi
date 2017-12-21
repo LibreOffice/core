@@ -40,8 +40,6 @@ interface TableSelection
     FID_TAB_RTL         [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_SET_TAB_BG_COLOR    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_TOGGLE_GRID [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-
-    SID_TABLE_ACTIVATE  [ ExecMethod = Execute; ]
 }
 
 
@@ -50,7 +48,6 @@ interface TableDocument
 {
     SID_OPEN_CALC   [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_SBA_IMPORT  [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_SC_SETTEXT  [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_TABLES_COUNT    [ StateMethod = GetState; ]
     SID_ATTR_YEAR2000   [ StateMethod = GetState; ExecMethod = Execute; ]
     SID_CHART_SOURCE    [ ExecMethod = Execute; ]
@@ -60,7 +57,6 @@ interface TableDocument
     FID_HARD_RECALC [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_UPDATETABLINKS      [ ExecMethod = Execute; ]
     SID_REIMPORT_AFTER_LOAD [ ExecMethod = Execute; ]
-    SID_AUTO_STYLE          [ ExecMethod = Execute; ]
 
     SID_GET_COLORLIST       [ ExecMethod = Execute; ]
 

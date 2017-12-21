@@ -676,64 +676,12 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
 
-            case SID_RANGE_ADDRESS:
-                {
-                    ScRange aRange;
-                    if ( pData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
-                    {
-                        OUString aStr(aRange.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D,pDoc));
-                        rSet.Put( SfxStringItem( nWhich, aStr ) );
-                    }
-                }
-                break;
-
-            case SID_RANGE_NOTETEXT:
-                {
-                    //  always take cursor position, do not use top-left cell of selection
-                    OUString aNoteText;
-                    if ( const ScPostIt* pNote = pDoc->GetNote(nPosX, nPosY, nTab) )
-                        aNoteText = pNote->GetText();
-                    rSet.Put( SfxStringItem( nWhich, aNoteText ) );
-                }
-                break;
-
             case SID_RANGE_ROW:
                 rSet.Put( SfxInt32Item( nWhich, nPosY+1 ) );
                 break;
 
             case SID_RANGE_COL:
                 rSet.Put( SfxInt16Item( nWhich, nPosX+1 ) );
-                break;
-
-            case SID_RANGE_TABLE:
-                rSet.Put( SfxInt16Item( nWhich, nTab+1 ) );
-                break;
-
-            case SID_RANGE_VALUE:
-                {
-                    double nValue;
-                    pDoc->GetValue( nPosX, nPosY, nTab, nValue );
-                    rSet.Put( ScDoubleItem( nWhich, nValue ) );
-                }
-                break;
-
-            case SID_RANGE_FORMULA:
-                {
-                    OUString aString;
-                    pDoc->GetFormula( nPosX, nPosY, nTab, aString );
-                    if( aString.isEmpty() )
-                    {
-                        pDoc->GetInputString( nPosX, nPosY, nTab, aString );
-                    }
-                    rSet.Put( SfxStringItem( nWhich, aString ) );
-                }
-                break;
-
-            case SID_RANGE_TEXTVALUE:
-                {
-                    OUString aString = pDoc->GetString(nPosX, nPosY, nTab);
-                    rSet.Put( SfxStringItem( nWhich, aString ) );
-                }
                 break;
 
             case SID_STATUS_SELMODE:

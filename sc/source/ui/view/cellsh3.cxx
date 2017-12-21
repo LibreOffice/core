@@ -210,19 +210,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        case SID_INSERT_MATRIX:
-            {
-                if ( pReqArgs )
-                {
-                    OUString aStr = static_cast<const SfxStringItem&>(pReqArgs->
-                                    Get( SID_INSERT_MATRIX )).GetValue();
-                    ScDocument* pDoc = GetViewData()->GetDocument();
-                    pTabViewShell->EnterMatrix( aStr, pDoc->GetGrammar() );
-                    rReq.Done();
-                }
-            }
-            break;
-
         case FID_INPUTLINE_ENTER:
         case FID_INPUTLINE_BLOCK:
         case FID_INPUTLINE_MATRIX:
@@ -926,11 +913,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             // Launch navigator.
             GetViewData()->GetDispatcher().Execute(
                 SID_NAVIGATOR, SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
-            break;
-
-        case SID_MARKAREA:
-            // called from Basic at the hidden view to select a range in the visible view
-            OSL_FAIL("old slot SID_MARKAREA");
             break;
 
         default:
