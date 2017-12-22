@@ -224,7 +224,7 @@ namespace basegfx
 
         /** Create the unit polygon
          */
-        BASEGFX_DLLPUBLIC B2DPolygon createUnitPolygon();
+        BASEGFX_DLLPUBLIC B2DPolygon const & createUnitPolygon();
 
         /** Create a circle polygon with given radius.
 
@@ -241,7 +241,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius );
 
         /// create half circle centered on (0,0) from [0 .. F_PI]
-        B2DPolygon createHalfUnitCircle();
+        B2DPolygon const & createHalfUnitCircle();
 
         /** create a polygon which describes the unit circle and close it
 
@@ -253,7 +253,7 @@ namespace basegfx
             this is the lowest one). This is needed since when lines are dashed, toe old
             geometry started at bottom point, else it would look different.
          */
-        BASEGFX_DLLPUBLIC B2DPolygon createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant = 0);
+        BASEGFX_DLLPUBLIC B2DPolygon const & createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant = 0);
 
         /** Create an ellipse polygon with given radii.
 

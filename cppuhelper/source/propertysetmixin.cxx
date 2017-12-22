@@ -363,7 +363,7 @@ public:
         css::uno::Sequence< rtl::OUString > const & absentOptional,
         css::uno::Type const & type);
 
-    rtl::OUString translateHandle(
+    rtl::OUString const & translateHandle(
         css::uno::Reference< css::uno::XInterface > const & object,
         sal_Int32 handle) const;
 
@@ -448,7 +448,7 @@ PropertySetMixinImpl::Impl::Impl(
     std::copy(handleNames.begin(), handleNames.end(), handleMap.getArray());
 }
 
-rtl::OUString PropertySetMixinImpl::Impl::translateHandle(
+rtl::OUString const & PropertySetMixinImpl::Impl::translateHandle(
     css::uno::Reference< css::uno::XInterface > const & object,
     sal_Int32 handle) const
 {

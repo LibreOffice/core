@@ -37,7 +37,7 @@ void XMLElement::addSubElement( Reference< xml::sax::XAttributeList > const & xE
     _subElems.push_back( xElem );
 }
 
-Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nIndex )
+Reference< xml::sax::XAttributeList > const & XMLElement::getSubElement( sal_Int32 nIndex )
 {
     return _subElems[ (size_t)nIndex ];
 }

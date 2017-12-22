@@ -57,7 +57,7 @@ public:
 
         @param nIndex index of sub element
     */
-    css::uno::Reference< css::xml::sax::XAttributeList > getSubElement( sal_Int32 nIndex );
+    css::uno::Reference< css::xml::sax::XAttributeList > const & getSubElement( sal_Int32 nIndex );
 
     /** Adds an attribute to elements.
 
