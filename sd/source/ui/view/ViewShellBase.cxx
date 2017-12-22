@@ -614,6 +614,19 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
     switch (nSlotId)
     {
+        case SID_SWITCH_SHELL:
+        {
+            Reference<XControllerManager> xControllerManager (GetController(), UNO_QUERY);
+            if (xControllerManager.is())
+            {
+                Reference<XConfigurationController> xConfigurationController (
+                    xControllerManager->getConfigurationController());
+                if (xConfigurationController.is())
+                    xConfigurationController->update();
+            }
+        }
+        break;
+
         case SID_LEFT_PANE_DRAW:
             mpImpl->SetPaneVisibility(
                 rRequest,
