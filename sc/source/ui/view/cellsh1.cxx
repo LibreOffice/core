@@ -130,6 +130,30 @@ InsertDeleteFlags FlagsFromString(const OUString& rFlagsStr,
     }
     return nFlags;
 }
+
+OUString FlagsToString( InsertDeleteFlags nFlags,
+    InsertDeleteFlags nFlagsMask = InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ATTRIB )
+{
+    OUString  aFlagsStr;
+
+    if( nFlags == InsertDeleteFlags::ALL )
+    {
+        aFlagsStr = "A";
+    }
+    else
+    {
+        nFlags &= nFlagsMask;
+
+        if( nFlags & InsertDeleteFlags::STRING )    aFlagsStr += "S";
+        if( nFlags & InsertDeleteFlags::VALUE )     aFlagsStr += "V";
+        if( nFlags & InsertDeleteFlags::DATETIME )  aFlagsStr += "D";
+        if( nFlags & InsertDeleteFlags::FORMULA )   aFlagsStr += "F";
+        if( nFlags & InsertDeleteFlags::NOTE )      aFlagsStr += "N";
+        if( nFlags & InsertDeleteFlags::ATTRIB )    aFlagsStr += "T";
+        if( nFlags & InsertDeleteFlags::OBJECTS )   aFlagsStr += "O";
+    }
+    return aFlagsStr;
+}
 }
 
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -404,22 +428,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        OUString  aFlags;
-
-                        if( nFlags == InsertDeleteFlags::ALL )
-                        {
-                            aFlags += "A";
-                        }
-                        else
-                        {
-                            if( nFlags & InsertDeleteFlags::STRING ) aFlags += "S";
-                            if( nFlags & InsertDeleteFlags::VALUE ) aFlags += "V";
-                            if( nFlags & InsertDeleteFlags::DATETIME ) aFlags += "D";
-                            if( nFlags & InsertDeleteFlags::FORMULA ) aFlags += "F";
-                            if( nFlags & InsertDeleteFlags::NOTE ) aFlags += "N";
-                            if( nFlags & InsertDeleteFlags::ATTRIB ) aFlags += "T";
-                            if( nFlags & InsertDeleteFlags::OBJECTS ) aFlags += "O";
-                        }
+                        OUString aFlags = FlagsToString( nFlags, InsertDeleteFlags::ALL );
 
                         rReq.AppendItem( SfxStringItem( SID_DELETE, aFlags ) );
                         rReq.Done();
@@ -493,21 +502,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        OUString  aFlags;
-
-                        if( nFlags == InsertDeleteFlags::ALL )
-                        {
-                            aFlags += "A";
-                        }
-                        else
-                        {
-                            if( nFlags & InsertDeleteFlags::STRING ) aFlags += "S";
-                            if( nFlags & InsertDeleteFlags::VALUE ) aFlags += "V";
-                            if( nFlags & InsertDeleteFlags::DATETIME ) aFlags += "D";
-                            if( nFlags & InsertDeleteFlags::FORMULA ) aFlags += "F";
-                            if( nFlags & InsertDeleteFlags::NOTE ) aFlags += "N";
-                            if( nFlags & InsertDeleteFlags::ATTRIB ) aFlags += "T";
-                        }
+                        OUString aFlags = FlagsToString( nFlags );
 
                         rReq.AppendItem( SfxStringItem( FID_FILL_TAB, aFlags ) );
                         rReq.Done();
@@ -1463,21 +1458,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                         if( !pReqArgs )
                         {
-                            OUString  aFlags;
-
-                            if( nFlags == InsertDeleteFlags::ALL )
-                            {
-                                aFlags += "A";
-                            }
-                            else
-                            {
-                                if( nFlags & InsertDeleteFlags::STRING ) aFlags += "S";
-                                if( nFlags & InsertDeleteFlags::VALUE ) aFlags += "V";
-                                if( nFlags & InsertDeleteFlags::DATETIME ) aFlags += "D";
-                                if( nFlags & InsertDeleteFlags::FORMULA ) aFlags += "F";
-                                if( nFlags & InsertDeleteFlags::NOTE ) aFlags += "N";
-                                if( nFlags & InsertDeleteFlags::ATTRIB ) aFlags += "T";
-                            }
+                            OUString  aFlags = FlagsToString( nFlags );
 
                             rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bSkipEmpty ) );
