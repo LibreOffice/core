@@ -2260,7 +2260,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot(rReq.GetSlot());
 
-    if(!pArgs  && nSlot != SID_BACKGROUND_COLOR)
+    if (!pArgs && nSlot != SID_BACKGROUND_COLOR)
     {
         return;
     }
@@ -2314,6 +2314,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case SID_ATTR_BRUSH:
         case RES_BACKGROUND:
         {
+            assert(pArgs && "only SID_BACKGROUND_COLOR can have !pArgs, checked at entry");
             const SvxBrushItem& rNewBrushItem = static_cast<const SvxBrushItem&>(pArgs->Get(GetPool().GetWhich(nSlot)));
             aBrushItem = rNewBrushItem;
             break;
