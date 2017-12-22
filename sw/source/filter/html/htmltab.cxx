@@ -3585,6 +3585,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 const SwTable* pSwTable = m_xDoc->InsertTable(
                         SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
                         *m_pPam->GetPoint(), 1, 1, text::HoriOrientation::LEFT );
+                SwFrameFormat *pFrameFormat = pSwTable ? pSwTable->GetFrameFormat() : nullptr;
 
                 if( bForceFrame )
                 {
@@ -3594,10 +3595,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 }
                 else
                 {
-                    if( bStyleParsed )
+                    if (bStyleParsed && pFrameFormat)
                     {
                         m_pCSS1Parser->SetFormatBreak( aItemSet, aPropInfo );
-                        pSwTable->GetFrameFormat()->SetFormatAttr( aItemSet );
+                        pFrameFormat->SetFormatAttr( aItemSet );
                     }
                     m_pPam->Move( fnMoveBackward );
                 }
@@ -3606,8 +3607,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 SwTextNode *const pOldTextNd = (!bAppended && !bForceFrame) ?
                     pSavePos->nNode.GetNode().GetTextNode() : nullptr;
 
-                SwFrameFormat *pFrameFormat = (pOldTextNd && pSwTable) ? pSwTable->GetFrameFormat() : nullptr;
-                if (pFrameFormat)
+                if (pFrameFormat && pOldTextNd)
                 {
                     const SfxPoolItem* pItem2;
                     if( SfxItemState::SET == pOldTextNd->GetSwAttrSet()
