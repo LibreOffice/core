@@ -778,7 +778,7 @@ inline HTMLTableCell *HTMLTableRow::GetCell( sal_uInt16 nCell ) const
 {
     OSL_ENSURE( nCell < m_xCells->size(),
         "invalid cell index in HTML table row" );
-    return (*m_xCells)[nCell].get();
+    return m_xCells->at(nCell).get();
 }
 
 void HTMLTableRow::Expand( sal_uInt16 nCells, bool bOneCell )
