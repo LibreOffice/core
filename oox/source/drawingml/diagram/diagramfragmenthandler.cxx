@@ -34,7 +34,6 @@ namespace oox { namespace drawingml {
 DiagramDataFragmentHandler::DiagramDataFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         const DiagramDataPtr& rDataPtr )
-    throw( )
     : FragmentHandler2( rFilter, rFragmentPath )
     , mpDataPtr( rDataPtr )
 {
@@ -68,7 +67,6 @@ DiagramDataFragmentHandler::onCreateContext( ::sal_Int32 aElement,
 DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         const DiagramLayoutPtr& rDataPtr )
-    throw( )
     : FragmentHandler2( rFilter, rFragmentPath )
     , mpDataPtr( rDataPtr )
 {

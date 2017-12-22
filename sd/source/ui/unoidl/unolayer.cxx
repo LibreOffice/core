@@ -131,7 +131,7 @@ OUString SdLayer::convertToExternalName( const OUString& rName )
     }
 }
 
-SdLayer::SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw()
+SdLayer::SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_)
 : mxLayerManager(pLayerManager_)
 , pLayer(pSdrLayer_)
 , pPropSet(ImplGetSdLayerPropertySet())

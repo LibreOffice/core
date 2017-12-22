@@ -339,7 +339,7 @@ sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sa
         }
 }
 
-SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet ) throw()
+SdGenericDrawPage::SdGenericDrawPage(SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet)
 :       SvxFmDrawPage( static_cast<SdrPage*>(pInPage) ),
         SdUnoSearchReplaceShape(this),
         mpModel     ( _pModel ),
@@ -2038,8 +2038,8 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
 }
 
 // SdDrawPage
-SdDrawPage::SdDrawPage(  SdXImpressDocument* pModel, SdPage* pPage ) throw()
-: SdGenericDrawPage( pModel, pPage, ImplGetDrawPagePropertySet( pModel->IsImpressDocument(), pPage->GetPageKind() ) )
+SdDrawPage::SdDrawPage(SdXImpressDocument* pModel, SdPage* pPage)
+    : SdGenericDrawPage( pModel, pPage, ImplGetDrawPagePropertySet( pModel->IsImpressDocument(), pPage->GetPageKind() ) )
 {
 }
 
@@ -2552,7 +2552,7 @@ Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotation
     return ::sd::createAnnotationEnumeration( GetPage()->getAnnotations() );
 }
 
-void SdDrawPage::getBackground( Any& rValue ) throw()
+void SdDrawPage::getBackground(Any& rValue)
 {
     const SfxItemSet& rFillAttributes = GetPage()->getSdrPageProperties().GetItemSet();
 
@@ -2663,7 +2663,7 @@ Any SdGenericDrawPage::getNavigationOrder()
 }
 
 // class SdMasterPage
-SdMasterPage::SdMasterPage( SdXImpressDocument* pModel, SdPage* pPage ) throw()
+SdMasterPage::SdMasterPage(SdXImpressDocument* pModel, SdPage* pPage)
     : SdGenericDrawPage(pModel, pPage, ImplGetMasterPagePropertySet(pPage->GetPageKind()))
 {
 }

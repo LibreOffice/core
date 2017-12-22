@@ -49,7 +49,7 @@ class SdLayer : public ::cppu::WeakImplHelper< css::drawing::XLayer,
                                                 css::lang::XComponent >
 {
 public:
-    SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw();
+    SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_);
     virtual ~SdLayer() throw() override;
 
     // intern

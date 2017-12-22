@@ -98,7 +98,7 @@ protected:
     void throwIfDisposed() const;
 
 public:
-    SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SvxItemPropertySet* pSet ) throw();
+    SdGenericDrawPage(SdXImpressDocument* pModel, SdPage* pInPage, const SvxItemPropertySet* pSet);
     virtual ~SdGenericDrawPage() throw() override;
 
     // intern
@@ -172,9 +172,9 @@ private:
 
 protected:
     virtual void setBackground( const css::uno::Any& rValue ) override;
-    virtual void getBackground( css::uno::Any& rValue ) throw() override;
+    virtual void getBackground( css::uno::Any& rValue ) override;
 public:
-    SdDrawPage( SdXImpressDocument* pModel, SdPage* pInPage ) throw();
+    SdDrawPage(SdXImpressDocument* pModel, SdPage* pInPage);
     virtual ~SdDrawPage() throw() override;
 
     UNO3_GETIMPLEMENTATION_DECL( SdDrawPage )
@@ -235,7 +235,7 @@ protected:
     virtual void getBackground( css::uno::Any& rValue ) override;
 
 public:
-    SdMasterPage( SdXImpressDocument* pModel, SdPage* pInPage ) throw();
+    SdMasterPage(SdXImpressDocument* pModel, SdPage* pInPage);
     virtual ~SdMasterPage() throw() override;
 
     UNO3_GETIMPLEMENTATION_DECL(SdMasterPage)

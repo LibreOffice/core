@@ -67,7 +67,7 @@ private:
     OUString GetPlaceholderText() const;
 
 public:
-    SdXShape(SvxShape* pShape, SdXImpressDocument* pModel) throw();
+    SdXShape(SvxShape* pShape, SdXImpressDocument* pModel);
     virtual ~SdXShape() throw();
 
     virtual bool queryAggregation( const css::uno::Type & rType, css::uno::Any& aAny ) override;

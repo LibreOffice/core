@@ -42,14 +42,12 @@ namespace oox { namespace ppt {
 
 // CT_SlideLayout
 
-LayoutFragmentHandler::LayoutFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pMasterPersistPtr )
-    throw()
+LayoutFragmentHandler::LayoutFragmentHandler(XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pMasterPersistPtr)
 : SlideFragmentHandler( rFilter, rFragmentPath, std::move(pMasterPersistPtr), Layout )
 {
 }
 
 LayoutFragmentHandler::~LayoutFragmentHandler()
-    throw()
 {
 
 }

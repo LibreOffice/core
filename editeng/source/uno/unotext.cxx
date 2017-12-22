@@ -207,12 +207,12 @@ void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) throw()
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
 
-SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxItemPropertySet* _pSet ) throw()
-: mpEditSource(nullptr) , mpPropSet(_pSet)
+SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet)
+    : mpEditSource(nullptr) , mpPropSet(_pSet)
 {
 }
 
-SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw()
+SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet)
 : mpPropSet(_pSet)
 {
     SolarMutexGuard aGuard;
@@ -230,7 +230,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const Sv
     }
 }
 
-SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw()
+SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange)
 :   text::XTextRange()
 ,   beans::XPropertySet()
 ,   beans::XMultiPropertySet()
@@ -1510,7 +1510,7 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference<
     }
 }
 
-SvxUnoTextRange::SvxUnoTextRange( const SvxUnoTextBase& rParent, bool bPortion /* = false */ ) throw()
+SvxUnoTextRange::SvxUnoTextRange(const SvxUnoTextBase& rParent, bool bPortion /* = false */)
 :SvxUnoTextRangeBase( rParent.GetEditSource(), bPortion ? ImplGetSvxTextPortionSvxPropertySet() : rParent.getPropertySet() ),
  mbPortion( bPortion )
 {
@@ -1611,13 +1611,13 @@ OUString SAL_CALL SvxUnoTextRange::getImplementationName()
 // class SvxUnoText
 
 
-SvxUnoTextBase::SvxUnoTextBase( const SvxItemPropertySet* _pSet  ) throw()
-: SvxUnoTextRangeBase( _pSet )
+SvxUnoTextBase::SvxUnoTextBase(const SvxItemPropertySet* _pSet)
+    : SvxUnoTextRangeBase(_pSet)
 {
 }
 
-SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > const & xParent ) throw()
-: SvxUnoTextRangeBase( pSource, _pSet )
+SvxUnoTextBase::SvxUnoTextBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > const & xParent)
+    : SvxUnoTextRangeBase(pSource, _pSet)
 {
     xParentText = xParent;
     ESelection aSelection;
@@ -1625,7 +1625,7 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPrope
     SetSelection( aSelection );
 }
 
-SvxUnoTextBase::SvxUnoTextBase( const SvxUnoTextBase& rText ) throw()
+SvxUnoTextBase::SvxUnoTextBase(const SvxUnoTextBase& rText)
 :   SvxUnoTextRangeBase( rText )
 , text::XTextAppend()
 ,   text::XTextCopy()

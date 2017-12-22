@@ -687,7 +687,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
     return aSeq;
 }
 
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
+css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(SdrModel* pModel)
 {
     const SvxNumRule* pDefaultRule = nullptr;
     if( pModel )

@@ -129,8 +129,8 @@ private:
     sd::DrawViewShell* GetViewShell();
 
 public:
-    SdXImpressDocument( ::sd::DrawDocShell* pShell, bool bClipBoard ) throw();
-    SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) throw();
+    SdXImpressDocument(::sd::DrawDocShell* pShell, bool bClipBoard);
+    SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard);
     virtual ~SdXImpressDocument() throw() override;
 
     static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument const * pDoc );

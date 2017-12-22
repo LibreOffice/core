@@ -220,7 +220,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 }
 
 // this ctor is used from the DocShell
-SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBoard ) throw()
+SdXImpressDocument::SdXImpressDocument(::sd::DrawDocShell* pShell, bool bClipBoard)
 :   SfxBaseModel( pShell ),
     mpDocShell( pShell ),
     mpDoc( pShell ? pShell->GetDoc() : nullptr ),
@@ -239,7 +239,7 @@ SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBo
     }
 }
 
-SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) throw()
+SdXImpressDocument::SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard)
 :   SfxBaseModel( nullptr ),
     mpDocShell( nullptr ),
     mpDoc( pDoc ),

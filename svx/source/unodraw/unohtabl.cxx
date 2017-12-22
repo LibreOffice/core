@@ -37,7 +37,7 @@ class SvxUnoHatchTable : public SvxUnoNameItemTable
 public:
     explicit SvxUnoHatchTable( SdrModel* pModel ) throw();
 
-    virtual NameOrIndex* createItem() const throw() override;
+    virtual NameOrIndex* createItem() const override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -63,7 +63,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  
     return aSNS;
 }
 
-NameOrIndex* SvxUnoHatchTable::createItem() const throw()
+NameOrIndex* SvxUnoHatchTable::createItem() const
 {
     return new XFillHatchItem();
 }

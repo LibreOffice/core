@@ -363,8 +363,8 @@ protected:
     virtual bool setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty ) override;
 
 public:
-    SvxShapeText( SdrObject* pObj ) throw ();
-    SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
+    SvxShapeText(SdrObject* pObj);
+    SvxShapeText(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet);
     virtual ~SvxShapeText() throw () override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
@@ -397,7 +397,7 @@ public:
 class SvxShapeRect : public SvxShapeText
 {
 public:
-    SvxShapeRect( SdrObject* pObj ) throw ();
+    SvxShapeRect(SdrObject* pObj);
     virtual ~SvxShapeRect() throw () override;
 
     // XInterface
@@ -424,7 +424,7 @@ private:
     void addUnoShape( const css::uno::Reference< css::drawing::XShape >& xShape, size_t nPos );
 
 public:
-    SvxShapeGroup( SdrObject* pObj,SvxDrawPage* pDrawPage ) throw ();
+    SvxShapeGroup(SdrObject* pObj,SvxDrawPage* pDrawPage);
     virtual ~SvxShapeGroup() throw () override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
@@ -475,7 +475,7 @@ class SvxShapeConnector : public css::drawing::XConnectorShape,
                           public SvxShapeText
 {
 public:
-    SvxShapeConnector( SdrObject* pObj ) throw();
+    SvxShapeConnector(SdrObject* pObj);
     virtual ~SvxShapeConnector() throw() override;
 
     // XInterface
@@ -514,7 +514,7 @@ protected:
     using SvxUnoTextRangeBase::getPropertyValue;
 
 public:
-    SvxShapeControl( SdrObject* pObj ) throw();
+    SvxShapeControl(SdrObject* pObj);
     virtual ~SvxShapeControl() throw() override;
 
     // XInterface
@@ -556,7 +556,7 @@ public:
 class SvxShapeDimensioning : public SvxShapeText
 {
 public:
-    SvxShapeDimensioning( SdrObject* pObj ) throw();
+    SvxShapeDimensioning(SdrObject* pObj);
     virtual ~SvxShapeDimensioning() throw() override;
 };
 
@@ -566,7 +566,7 @@ public:
 class SvxShapeCircle : public SvxShapeText
 {
 public:
-    SvxShapeCircle( SdrObject* pObj ) throw ();
+    SvxShapeCircle(SdrObject* pObj);
     virtual ~SvxShapeCircle() throw () override;
 };
 
@@ -586,8 +586,8 @@ protected:
 
     const SvGlobalName GetClassName_Impl(OUString& rHexCLSID);
 public:
-    SvxOle2Shape( SdrObject* pObj ) throw();
-    SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
+    SvxOle2Shape(SdrObject* pObj);
+    SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet);
     virtual ~SvxOle2Shape() throw() override;
 
     bool createObject( const SvGlobalName &aClassName );
@@ -642,7 +642,7 @@ public:
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
-    SvxShapePolyPolygonBezier( SdrObject* pObj, css::drawing::PolygonKind eNew ) throw();
+    SvxShapePolyPolygonBezier(SdrObject* pObj, css::drawing::PolygonKind eNew);
     virtual ~SvxShapePolyPolygonBezier() throw() override;
 
     // Local support functions
@@ -665,7 +665,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    SvxGraphicObject( SdrObject* pObj, OUString const & referer ) throw();
+    SvxGraphicObject(SdrObject* pObj, OUString const & referer);
     virtual ~SvxGraphicObject() throw() override;
 
 private:
@@ -685,7 +685,7 @@ protected:
     using SvxShape::getPropertyValue;
 
 public:
-    Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw();
+    Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage);
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl(const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
@@ -731,7 +731,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    Svx3DCubeObject( SdrObject* pObj ) throw();
+    Svx3DCubeObject(SdrObject* pObj);
     virtual ~Svx3DCubeObject() throw() override;
 
     // XServiceInfo
@@ -744,7 +744,7 @@ public:
 class Svx3DSphereObject : public SvxShape
 {
 public:
-    Svx3DSphereObject( SdrObject* pObj ) throw();
+    Svx3DSphereObject(SdrObject* pObj);
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
@@ -767,7 +767,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    Svx3DLatheObject( SdrObject* pObj ) throw();
+    Svx3DLatheObject(SdrObject* pObj);
     virtual ~Svx3DLatheObject() throw() override;
 
     // XServiceInfo
@@ -780,7 +780,7 @@ public:
 class Svx3DExtrudeObject : public SvxShape
 {
 public:
-    Svx3DExtrudeObject( SdrObject* pObj ) throw();
+    Svx3DExtrudeObject(SdrObject* pObj);
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
@@ -803,7 +803,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    Svx3DPolygonObject( SdrObject* pObj ) throw();
+    Svx3DPolygonObject(SdrObject* pObj);
     virtual ~Svx3DPolygonObject() throw() override;
 
     // XServiceInfo
@@ -824,7 +824,7 @@ protected:
     using SvxUnoTextRangeBase::getPropertyValue;
 
 public:
-    SvxCustomShape( SdrObject* pObj ) throw ();
+    SvxCustomShape(SdrObject* pObj);
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
@@ -858,7 +858,7 @@ public:
 class SvxMediaShape : public SvxShape
 {
 public:
-    SvxMediaShape( SdrObject* pObj, OUString const & referer ) throw();
+    SvxMediaShape(SdrObject* pObj, OUString const & referer);
     virtual     ~SvxMediaShape() throw() override;
 
 protected:
