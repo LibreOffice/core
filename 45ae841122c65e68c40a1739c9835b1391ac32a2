@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_93dc8974",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-22T16:57:49Z",
+      "side": 1,
+      "message": "Я посоветовал сделать просто передачей по значению, но боюсь, заругается плагин, так что давай сделаем\n\nconst OUString\u0026 rFlagsStr,",
+      "range": {
+        "startLine": 111,
+        "startChar": 34,
+        "endLine": 111,
+        "endChar": 53
+      },
+      "revId": "45ae841122c65e68c40a1739c9835b1391ac32a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b3e50539",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-22T16:57:49Z",
+      "side": 1,
+      "message": "а здесь - \n\nOUString aFlagsStr \u003d rFlagsStr.toAsciiUpperCase();",
+      "range": {
+        "startLine": 114,
+        "startChar": 4,
+        "endLine": 114,
+        "endChar": 45
+      },
+      "revId": "45ae841122c65e68c40a1739c9835b1391ac32a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_73df1d69",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-22T16:57:49Z",
+      "side": 1,
+      "message": "return InsertDeleteFlags::ALL;",
+      "range": {
+        "startLine": 122,
+        "startChar": 16,
+        "endLine": 123,
+        "endChar": 30
+      },
+      "revId": "45ae841122c65e68c40a1739c9835b1391ac32a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
