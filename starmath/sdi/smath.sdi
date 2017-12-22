@@ -289,6 +289,25 @@ SfxVoidItem ImportMathMLClipboard SID_IMPORT_MATHML_CLIPBOARD
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem LoadSymbols SID_LOADSYMBOLS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Options;
+]
+
+
 SfxStringItem ModifyStatus SID_MODIFYSTATUS
 
 [
@@ -415,6 +434,43 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
+
+
+SfxVoidItem SaveSymbols SID_SAVESYMBOLS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Options;
+]
+
+
+SfxVoidItem SetPaperSize SID_GETEDITTEXT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Math;
+]
+
 
 SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
 ()

@@ -49,6 +49,8 @@
 /** Command for inserting a math construction */
 #define SID_INSERTCOMMANDTEXT       (SID_SMA_START + 106)
 
+#define SID_LOADSYMBOLS             (SID_SMA_START + 107)
+#define SID_SAVESYMBOLS             (SID_SMA_START + 108)
 #define SID_MODIFYSTATUS            (SID_SMA_START + 110)
 #define SID_TEXTSTATUS              (SID_SMA_START + 111)
 
@@ -62,6 +64,7 @@
 #define SID_PASTEOBJECT             (SID_SMA_START + 118)
 #define SID_AUTOREDRAW              (SID_SMA_START + 119)
 
+#define SID_GETEDITTEXT             (SID_SMA_START + 121)
 #define SID_CMDBOXWINDOW            (SID_SMA_START + 122)
 #define SID_NO_RIGHT_SPACES         (SID_SMA_START + 124)
 #define SID_SAVE_ONLY_USED_SYMBOLS  (SID_SMA_START + 125)
