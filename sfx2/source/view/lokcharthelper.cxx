@@ -236,42 +236,32 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
                                           int nTilePosX, int nTilePosY,
                                           long nTileWidth, long nTileHeight)
 {
-    // TODO: Hack to make Android Viewer render at least *something* again, but of
-    // course it's just a crude hack to just disable this instead of debugging further
-    // and fixing it for Android case
-#if !defined(ANDROID)
-    // Resizes the virtual device so to contain the entries context
-    rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
-
-    rDevice.Push(PushFlags::MAPMODE);
-    MapMode aMapMode(rDevice.GetMapMode());
-
-    // Scaling. Must convert from pixels to twips. We know
-    // that VirtualDevices use a DPI of 96.
-    Fraction scaleX = Fraction(nOutputWidth, 96) * Fraction(1440) / Fraction(nTileWidth);
-    Fraction scaleY = Fraction(nOutputHeight, 96) * Fraction(1440) / Fraction(nTileHeight);
-    aMapMode.SetScaleX(scaleX);
-    aMapMode.SetScaleY(scaleY);
-    rDevice.SetMapMode(aMapMode);
-
-    tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
+    if (!comphelper::LibreOfficeKit::isTiledAnnotations())
     {
-        LokChartHelper aChartHelper(pViewShell);
-        aChartHelper.PaintTile(rDevice, aTileRect);
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
+        // Resizes the virtual device so to contain the entries context
+        rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
+
+        rDevice.Push(PushFlags::MAPMODE);
+        MapMode aMapMode(rDevice.GetMapMode());
+
+        // Scaling. Must convert from pixels to twips. We know
+        // that VirtualDevices use a DPI of 96.
+        Fraction scaleX = Fraction(nOutputWidth, 96) * Fraction(1440) / Fraction(nTileWidth);
+        Fraction scaleY = Fraction(nOutputHeight, 96) * Fraction(1440) / Fraction(nTileHeight);
+        aMapMode.SetScaleX(scaleX);
+        aMapMode.SetScaleY(scaleY);
+        rDevice.SetMapMode(aMapMode);
+
+        tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            LokChartHelper aChartHelper(pViewShell);
+            aChartHelper.PaintTile(rDevice, aTileRect);
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+        rDevice.Pop();
     }
-    rDevice.Pop();
-#else
-    (void)rDevice;
-    (void)nOutputWidth;
-    (void)nOutputHeight;
-    (void)nTilePosX;
-    (void)nTilePosY;
-    (void)nTileWidth;
-    (void)nTileHeight;
-#endif
 }
 
 bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
