@@ -305,8 +305,8 @@ SetupProgress	DlgDesc2	Text	21	23	249	25	65538		OOO_CONTROL_235
 SetupProgress	DlgLine	Line	0	234	376	0	1				
 SetupProgress	DlgText	Text	59	51	275	30	65538		OOO_CONTROL_236		
 SetupProgress	DlgText2	Text	59	51	275	30	65538		OOO_CONTROL_237		
-SetupProgress	DlgTitle	Text	13	6	257	25	65538		OOO_CONTROL_238		
-SetupProgress	DlgTitle2	Text	13	6	257	25	65538		OOO_CONTROL_239		
+SetupProgress	DlgTitle	Text	13	6	257	25	327682		OOO_CONTROL_238		
+SetupProgress	DlgTitle2	Text	13	6	257	25	327682		OOO_CONTROL_239		
 SetupProgress	LbSec	Text	172	139	32	12	2		OOO_CONTROL_240		
 SetupProgress	LbStatus	Text	59	85	70	12	3		OOO_CONTROL_241		
 SetupProgress	Next	PushButton	230	243	66	17	1		OOO_CONTROL_242	Cancel	
