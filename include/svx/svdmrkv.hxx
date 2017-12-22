@@ -162,6 +162,7 @@ protected:
     bool MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark);
 
     void SetMoveOutside(bool bOn);
+    bool MarkableObjectsExceed( int n ) const;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -200,7 +201,7 @@ public:
     bool IsFrameHandles() const { return mbForceFrameHandles; }
 
     // returns true if number of markable objects is greater than 1
-    bool HasMultipleMarkableObjects() const;
+    bool HasMultipleMarkableObjects() const { return MarkableObjectsExceed(1); };
 
     void SetEditMode(SdrViewEditMode eMode);
     SdrViewEditMode GetEditMode() const { return meEditMode; }
@@ -218,7 +219,7 @@ public:
     void SetFrameDragSingles(bool bOn=true) { SetFrameHandles(bOn); }
     bool IsFrameDragSingles() const { return IsFrameHandles(); }
 
-    bool HasMarkableObj() const;
+    bool HasMarkableObj() const { return MarkableObjectsExceed(0); };
 
 
 // migrate selections
