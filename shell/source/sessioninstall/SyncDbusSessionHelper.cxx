@@ -18,7 +18,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    struct GVariantDeleter { void operator()(GVariant* pV) { g_variant_unref(pV); } };
+    struct GVariantDeleter { void operator()(GVariant* pV) { if (pV) g_variant_unref(pV); } };
     struct GVariantBuilderDeleter { void operator()(GVariantBuilder* pVB) { g_variant_builder_unref(pVB); } };
     template <typename T> struct GObjectDeleter { void operator()(T* pO) { g_object_unref(pO); } };
     class GErrorWrapper
@@ -72,12 +72,12 @@ void request(
     std::shared_ptr<GDBusProxy> proxy(
         lcl_GetPackageKitProxy("Modify"), GObjectDeleter<GDBusProxy>());
     GErrorWrapper error;
-    g_dbus_proxy_call_sync(
+    std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync(
         proxy.get(), method,
         g_variant_new(
             "(uass)", static_cast<guint32>(xid), builder.get(),
             iactUtf8.getStr()),
-        G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error.getRef());
+        G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error.getRef()), GVariantDeleter());
 }
 
 }
