@@ -20,6 +20,14 @@
 
 interface TableOLEObject
 {
+    SID_ACTIVE_OBJ_NAME [ StateMethod = GetObjectState; ]
+    SID_OLE_ACTIVATE    [ ExecMethod = ExecuteObject; ]
+    SID_OLE_DEACTIVATE  [ ExecMethod = ExecuteObject; ]
+    SID_OLE_SELECT      [ ExecMethod = ExecuteObject; ] // api:
+    SID_OBJECT_LEFT     [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_TOP      [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_WIDTH    [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_HEIGHT   [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
 }
 
 
