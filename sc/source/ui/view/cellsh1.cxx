@@ -2179,6 +2179,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_RANGE_NOTETEXT:
+            if (pReqArgs)
+            {
+                const SfxStringItem& rTextItem = static_cast<const SfxStringItem&>(pReqArgs->Get( SID_RANGE_NOTETEXT ));
+
+                //  always cursor position
+                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                pTabViewShell->SetNoteText( aPos, rTextItem.GetValue() );
+                rReq.Done();
+            }
+            break;
+
         case SID_INSERT_POSTIT:
         case SID_EDIT_POSTIT:
             {

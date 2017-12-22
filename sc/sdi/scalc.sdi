@@ -34,6 +34,42 @@ SfxVoidItem AcceptChanges FID_CHG_ACCEPT
 ]
 
 
+SfxVoidItem ActivateOLE SID_OLE_ACTIVATE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Special;
+]
+
+
+SfxVoidItem ActivateTable SID_TABLE_ACTIVATE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View;
+]
+
+
 SfxVoidItem Add FID_TAB_APPEND
 (SfxStringItem Name FID_TAB_APPEND)
 [
@@ -83,6 +119,22 @@ SfxVoidItem AddPrintArea SID_ADD_PRINTAREA
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Format;
+]
+
+
+SfxStringItem Address SID_RANGE_ADDRESS
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
 ]
 
 
@@ -356,6 +408,24 @@ SfxBoolItem AutoRefreshArrows SID_DETECTIVE_AUTO
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Options;
+]
+
+
+SfxVoidItem AutoStyle SID_AUTO_STYLE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
 ]
 
 
@@ -1039,6 +1109,24 @@ SfxVoidItem DataSubTotals SID_SUBTOTALS
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Data;
+]
+
+
+SfxVoidItem Deactivate SID_OLE_DEACTIVATE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Special;
 ]
 
 
@@ -1731,6 +1819,25 @@ SfxVoidItem FormatCellDialog FID_CELL_FORMAT
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Format;
+]
+
+
+SfxStringItem Formula SID_RANGE_FORMULA
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
 ]
 
 
@@ -2854,6 +2961,24 @@ SfxVoidItem InsertFunction SID_INS_FUNCTION
 ]
 
 
+SfxVoidItem InsertMatrix SID_INSERT_MATRIX
+(SfxStringItem Formula SID_INSERT_MATRIX)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
+
 SfxVoidItem AddName FID_ADD_NAME
 ()
 [
@@ -3270,6 +3395,25 @@ SfxVoidItem NextPage SID_PREVIEW_NEXT
 ]
 
 
+SfxStringItem NoteText SID_RANGE_NOTETEXT
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
+
 SfxBoolItem NoteVisible FID_NOTE_VISIBLE
 
 [
@@ -3597,6 +3741,44 @@ SfxVoidItem NumberFormatThousands SID_NUMBER_THOUSANDS
 ]
 
 
+SfxInt32Item ObjectHeight SID_OBJECT_HEIGHT
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
+
+SfxInt32Item ObjectLeft SID_OBJECT_LEFT
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
+
 SfxVoidItem ObjectMirrorHorizontal SID_MIRROR_HORIZONTAL
 ()
 [
@@ -3630,6 +3812,44 @@ SfxVoidItem ObjectMirrorVertical SID_MIRROR_VERTICAL
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Format;
+]
+
+
+SfxInt32Item ObjectTop SID_OBJECT_TOP
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
+
+SfxInt32Item ObjectWidth SID_OBJECT_WIDTH
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
 ]
 
 
@@ -3758,6 +3978,24 @@ SfxVoidItem ProtectTraceChangeMode SID_CHG_PROTECT
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Edit;
+]
+
+
+SfxVoidItem PutCell SID_SC_SETTEXT
+(SfxInt16Item Column FN_PARAM_1,SfxInt32Item Row FN_PARAM_2,SfxInt16Item Table FN_PARAM_3,SfxStringItem Text SID_SC_SETTEXT)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
 ]
 
 
@@ -4093,6 +4331,23 @@ SfxVoidItem SearchAll FID_SEARCH_ALL
 ]
 
 
+SfxVoidItem SelectArea SID_MARKAREA
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
 SfxVoidItem SelectUnprotectedCells SID_SELECT_UNPROTECTED_CELLS
 ()
 [
@@ -4109,6 +4364,24 @@ SfxVoidItem SelectUnprotectedCells SID_SELECT_UNPROTECTED_CELLS
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Edit;
 ]
+
+SfxVoidItem SelectOLE SID_OLE_SELECT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Special;
+]
+
 
 SfxVoidItem SelectColumn SID_SELECT_COL
 (SfxInt32Item Col FN_PARAM_1,SfxInt16Item Modifier FN_PARAM_2)
@@ -4262,6 +4535,25 @@ SfxVoidItem ManageXMLSource SID_MANAGE_XML_SOURCE
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Data;
 ]
+
+SfxStringItem SelectedObjectName SID_ACTIVE_OBJ_NAME
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
 
 SfxVoidItem SelectRow SID_SELECT_ROW
 (SfxInt32Item Row FN_PARAM_1,SfxInt16Item Modifier FN_PARAM_2)
@@ -4903,6 +5195,25 @@ SfxUInt16Item StatusSelectionModeNorm SID_STATUS_SELMODE_NORM
 ]
 
 
+SfxInt16Item Table SID_RANGE_TABLE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
+
 SfxInt16Item TableCount SID_TABLES_COUNT
 
 [
@@ -5082,6 +5393,25 @@ SfxVoidItem TextToColumns SID_TEXT_TO_COLUMNS
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Data;
+]
+
+
+SfxStringItem TextValue SID_RANGE_TEXTVALUE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
 ]
 
 
@@ -5285,6 +5615,25 @@ SfxVoidItem Validation FID_VALIDATION
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Data;
+]
+
+
+ScDoubleItem Value SID_RANGE_VALUE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
 ]
 
 
