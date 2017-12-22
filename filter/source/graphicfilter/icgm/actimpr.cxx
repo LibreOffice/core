@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/bitmapex.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -719,14 +720,14 @@ void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size const & 
         {
             case TAV_HALF :
             {
-                aTextPos.Y -= static_cast<sal_Int32>( ( mpCGM->pElement->nCharacterHeight * 1.5 ) / 2 );
+                aTextPos.Y = o3tl::saturating_add(aTextPos.X, static_cast<sal_Int32>((mpCGM->pElement->nCharacterHeight * -1.5) / 2));
             }
             break;
 
             case TAV_BASE :
             case TAV_BOTTOM :
             case TAV_NORMAL :
-                aTextPos.Y -= static_cast<sal_Int32>( mpCGM->pElement->nCharacterHeight * 1.5 );
+                aTextPos.Y = o3tl::saturating_add(aTextPos.Y, static_cast<sal_Int32>(mpCGM->pElement->nCharacterHeight * -1.5));
                 break;
             case TAV_TOP :
                 break;
