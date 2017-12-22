@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b07fbba9",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-22T14:26:04Z",
+      "side": 1,
+      "message": "Any reason you work with raw SwNode pointers here, rather than with SwNodeIndex?",
+      "revId": "89a4dda0778c8d87c99cf3787ad4ac269a177931",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d07c47b7",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-12-22T14:26:04Z",
+      "side": 1,
+      "message": "That would also mean that you can call SwNodeIndex::operator ++() and no need to increment the index and fetch the new pointer manually.",
+      "revId": "89a4dda0778c8d87c99cf3787ad4ac269a177931",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
