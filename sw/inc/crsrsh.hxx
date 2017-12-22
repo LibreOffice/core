@@ -549,6 +549,11 @@ public:
         const OUString& rName,
         const OUString& rShortName,
         IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::MarkType::BOOKMARK);
+    ::sw::mark::IMark* SetBookmark(
+        const vcl::KeyCode&,
+        const OUString& rName,
+        bool rHide,
+        const OUString& rCondition);
     bool GotoMark( const ::sw::mark::IMark* const pMark );    // sets CurrentCursor.SPoint
     bool GotoMark( const ::sw::mark::IMark* const pMark, bool bAtStart );
     bool GoNextBookmark(); // true, if there was one
