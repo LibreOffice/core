@@ -115,9 +115,15 @@ ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
 define gb_LinkTarget__use_sane_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/external/$(if $(filter WNT,$(OS)),twain,sane)/inc \
-	$$(INCLUDE) \
+    $(if $(filter WNT,$(OS)), \
+        -I$(call gb_UnpackedTarball_get_dir,twain_dsm/pub/include), \
+        -I$(SRCDIR)/external/sane/inc) \
+    $$(INCLUDE) \
 )
+
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_use_unpacked,$(1),twain_dsm)
+endif
 
 endef
 
