@@ -240,7 +240,13 @@ void SlideBackground::HandleContextChange(
     if ( IsImpress() )
     {
         mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_LABEL));
+
+        // margin selector is only for Draw
         mpMarginSelectBox->Hide();
+        VclPtr<FixedText> pMarginLabel;
+        get(pMarginLabel, "labelmargin");
+        if ( pMarginLabel )
+            pMarginLabel->Hide();
 
         if ( maContext == maImpressMasterContext )
         {
