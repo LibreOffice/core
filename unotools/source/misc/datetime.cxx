@@ -27,15 +27,8 @@
 
 namespace
 {
-    /** convert string to number with optional min and max values */
-    template <typename T>
-    bool convertNumber( T& rValue,
-                        const OUString& rString,
-                        T /*nMin*/ = -1, T /*nMax*/ = -1)
+    bool checkAllNumber(const OUString& rString)
     {
-        bool bNeg = false;
-        rValue = 0;
-
         sal_Int32 nPos = 0;
         sal_Int32 nLen = rString.getLength();
 
@@ -44,26 +37,46 @@ namespace
             nPos++;
 
         if( nPos < nLen && '-' == rString[nPos] )
-        {
-            bNeg = true;
             nPos++;
-        }
 
         // get number
         while( nPos < nLen &&
                '0' <= rString[nPos] &&
                '9' >= rString[nPos] )
         {
-            // TODO: check overflow!
-            rValue *= 10;
-            rValue += (rString[nPos] - u'0');
             nPos++;
         }
 
-        if( bNeg )
-            rValue *= -1;
-
         return nPos == nLen;
+    }
+
+    /** convert string to number with optional min and max values */
+    bool convertNumber32(sal_Int32& rValue,
+                         const OUString& rString,
+                         sal_Int32 /*nMin*/ = -1, sal_Int32 /*nMax*/ = -1)
+    {
+        if (!checkAllNumber(rString))
+        {
+            rValue = 0;
+            return false;
+        }
+
+        rValue = rString.toInt32();
+        return true;
+    }
+
+    bool convertNumber64(sal_Int64& rValue,
+                         const OUString& rString,
+                         sal_Int64 /*nMin*/ = -1, sal_Int64 /*nMax*/ = -1)
+    {
+        if (!checkAllNumber(rString))
+        {
+            rValue = 0;
+            return false;
+        }
+
+        rValue = rString.toInt64();
+        return true;
     }
 
     // although the standard calls for fixed-length (zero-padded) tokens
@@ -319,13 +332,13 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
     else
     {
         sal_Int32 n = 0;
-        if ( !convertNumber<sal_Int32>( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
+        if ( !convertNumber32( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
             bSuccess = false;
         if ( nDateTokens >= 2 )
-            if ( !convertNumber<sal_Int32>( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
+            if ( !convertNumber32( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
                 bSuccess = false;
         if ( nDateTokens >= 3 )
-            if ( !convertNumber<sal_Int32>( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
+            if ( !convertNumber32( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
                 bSuccess = false;
     }
 
@@ -359,12 +372,12 @@ bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
         if ( bFrac && n < aTimeStr.getLength())
             // is it junk or the timezone?
             bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
-        if (bSuccess && (bSuccess = convertNumber<sal_Int32>( nHour, tokInt, 0, 23 )) )
+        if (bSuccess && (bSuccess = convertNumber32( nHour, tokInt, 0, 23 )) )
         {
             if (bFrac)
             {
                 sal_Int64 fracNumerator;
-                if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
+                if ( (bSuccess = convertNumber64(fracNumerator, tokFrac)) )
                 {
                     double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
                     // minutes
@@ -395,12 +408,12 @@ bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
         if ( bFrac && n < aTimeStr.getLength())
             // is it junk or the timezone?
             bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
-        if (bSuccess && (bSuccess = convertNumber<sal_Int32>( nMin, tokInt, 0, 59 )) )
+        if (bSuccess && (bSuccess = convertNumber32( nMin, tokInt, 0, 59 )) )
         {
             if (bFrac)
             {
                 sal_Int64 fracNumerator;
-                if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
+                if ( (bSuccess = convertNumber64(fracNumerator, tokFrac)) )
                 {
                     double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
                     // seconds
@@ -426,12 +439,12 @@ bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
             // is it junk or the timezone?
             bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
         // max 60 for leap seconds
-        if (bSuccess && (bSuccess = convertNumber<sal_Int32>( nSec, tokInt, 0, 60 )) )
+        if (bSuccess && (bSuccess = convertNumber32( nSec, tokInt, 0, 60 )) )
         {
             if (bFrac)
             {
                 sal_Int64 fracNumerator;
-                if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
+                if ( (bSuccess = convertNumber64(fracNumerator, tokFrac)) )
                 {
                     double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
                     // nanoseconds
