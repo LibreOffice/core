@@ -208,7 +208,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, RenameHdl, Button*, void)
 IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, InsertHdl, Button*, void)
 {
     OUString sBookmark = m_pEditBox->GetText();
-    rSh.SetBookmark(vcl::KeyCode(), sBookmark, OUString());
+    rSh.SetBookmark(vcl::KeyCode(), sBookmark, m_pHideCB->IsChecked(), m_pConditionED->GetText());
     rReq.AppendItem(SfxStringItem(FN_INSERT_BOOKMARK, sBookmark));
     rReq.Done();
     if (!rReq.IsDone())
