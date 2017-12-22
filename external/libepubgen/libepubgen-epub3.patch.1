@@ -1,0 +1,109 @@
+From 006848cb62225647c418d5143d4e88a9d73829da Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 22 Dec 2017 16:33:52 +0100
+Subject: [PATCH] EPUBHTMLGenerator: avoid <div> inside <p> and/or <span>
+
+This is not allowed in XHTML, but we wrote that markup when a text frame
+was inside a span or a paragraph. The closest allowed markup in XHTML
+seems to be closing the span/paragraph before opening the text box and
+doing the opposite after the text box is closed.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 33 +++++++++++++++++++++++++++++++++
+ src/test/EPUBTextGeneratorTest.cpp |  4 +++-
+ 2 files changed, 36 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 342213e..bc9c1b7 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -395,6 +395,8 @@ struct EPUBHTMLGeneratorImpl
+     , m_frameAnchorTypes()
+     , m_framePropertiesStack()
+     , m_linkPropertiesStack()
++    , m_paragraphAttributesStack()
++    , m_spanAttributesStack()
+     , m_stylesMethod(stylesMethod)
+     , m_layoutMethod(layoutMethod)
+     , m_actualSink()
+@@ -495,6 +497,8 @@ struct EPUBHTMLGeneratorImpl
+   std::stack<RVNGPropertyList> m_framePropertiesStack;
+   /// This is used for links which don't have a href.
+   std::stack<RVNGPropertyList> m_linkPropertiesStack;
++  std::stack<RVNGPropertyList> m_paragraphAttributesStack;
++  std::stack<RVNGPropertyList> m_spanAttributesStack;
+ 
+   EPUBStylesMethod m_stylesMethod;
+   EPUBLayoutMethod m_layoutMethod;
+@@ -683,6 +687,12 @@ void EPUBHTMLGenerator::openParagraph(const RVNGPropertyList &propList)
+   }
+   m_impl->output(false).openElement("p", attrs);
+   m_impl->m_hasText = false;
++
++  librevenge::RVNGPropertyList::Iter i(attrs);
++  RVNGPropertyList paragraphAttributes;
++  for (i.rewind(); i.next();)
++    paragraphAttributes.insert(i.key(), i()->clone());
++  m_impl->m_paragraphAttributesStack.push(paragraphAttributes);
+ }
+ 
+ void EPUBHTMLGenerator::closeParagraph()
+@@ -690,6 +700,9 @@ void EPUBHTMLGenerator::closeParagraph()
+   if (m_impl->m_ignore)
+     return;
+ 
++  if (!m_impl->m_paragraphAttributesStack.empty())
++    m_impl->m_paragraphAttributesStack.pop();
++
+   if (!m_impl->m_hasText)
+     insertSpace();
+ 
+@@ -717,12 +730,22 @@ void EPUBHTMLGenerator::openSpan(const RVNGPropertyList &propList)
+     break;
+   }
+   m_impl->output(false).openElement("span", attrs);
++
++  librevenge::RVNGPropertyList::Iter i(attrs);
++  RVNGPropertyList spanAttributes;
++  for (i.rewind(); i.next();)
++    spanAttributes.insert(i.key(), i()->clone());
++  m_impl->m_spanAttributesStack.push(spanAttributes);
+ }
+ 
+ void EPUBHTMLGenerator::closeSpan()
+ {
+   if (m_impl->m_ignore)
+     return;
++
++  if (!m_impl->m_spanAttributesStack.empty())
++    m_impl->m_spanAttributesStack.pop();
++
+   m_impl->output().closeElement("span");
+ }
+ 
+@@ -931,6 +954,11 @@ void EPUBHTMLGenerator::openTextBox(const RVNGPropertyList & /*propList*/)
+   if (m_impl->m_ignore)
+     return;
+ 
++  if (!m_impl->m_spanAttributesStack.empty())
++    m_impl->output().closeElement("span");
++  if (!m_impl->m_paragraphAttributesStack.empty())
++    m_impl->output().closeElement("p");
++
+   RVNGPropertyList attrs;
+ 
+   if (!m_impl->m_framePropertiesStack.empty())
+@@ -968,6 +996,11 @@ void EPUBHTMLGenerator::closeTextBox()
+       m_impl->output().insertEmptyElement("br", attrs);
+     }
+   }
++
++  if (!m_impl->m_paragraphAttributesStack.empty())
++    m_impl->output(false).openElement("p", m_impl->m_paragraphAttributesStack.top());
++  if (!m_impl->m_spanAttributesStack.empty())
++    m_impl->output(false).openElement("span", m_impl->m_spanAttributesStack.top());
+ }
+ 
+ void EPUBHTMLGenerator::openTable(const RVNGPropertyList &propList)
+-- 
+2.13.6
+
