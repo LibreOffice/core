@@ -25,14 +25,10 @@
 #include "tenchelp.hxx"
 #include "unichars.hxx"
 
-/* ======================================================================= */
-
 /* DBCS to Unicode conversion routine use a lead table for the first byte, */
 /* where we determine the trail table or for single byte chars the unicode */
 /* value. We have for all lead byte a separate table, because we can */
 /* then share many tables for different charset encodings. */
-
-/* ======================================================================= */
 
 sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
                             const char* pSrcBuf, sal_Size nSrcBytes,
@@ -82,7 +78,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
         }
         else
         {
-            /* Source buffer to small */
+            /* Source buffer too small */
             if ( pSrcBuf +1 == pEndSrcBuf )
             {
                 if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0 )
@@ -206,8 +202,6 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
     *pSrcCvtBytes = nSrcBytes - (pEndSrcBuf-pSrcBuf);
     return (nDestChars - (pEndDestBuf-pDestBuf));
 }
-
-/* ----------------------------------------------------------------------- */
 
 sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
@@ -361,12 +355,8 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
     return (nDestBytes - (pEndDestBuf-pDestBuf));
 }
 
-/* ======================================================================= */
-
 #define JIS_EUC_LEAD_OFF                                        0x80
 #define JIS_EUC_TRAIL_OFF                                       0x80
-
-/* ----------------------------------------------------------------------- */
 
 sal_Size ImplEUCJPToUnicode( const void* pData,
                              SAL_UNUSED_PARAMETER void*,
@@ -524,8 +514,6 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
     *pSrcCvtBytes = nSrcBytes - (pEndSrcBuf-pSrcBuf);
     return (nDestChars - (pEndDestBuf-pDestBuf));
 }
-
-/* ----------------------------------------------------------------------- */
 
 sal_Size ImplUnicodeToEUCJP( const void* pData,
                              SAL_UNUSED_PARAMETER void*,
