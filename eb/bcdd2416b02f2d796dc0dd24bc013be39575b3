@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Gabor Kelemen <kelemeng@ubuntu.com>
+Verified+1: Gabor Kelemen <kelemeng@ubuntu.com>
+Code-Review+2: Laurent BP <laurent.balland-poirier@laposte.net>
+Submitted-by: Laurent BP <laurent.balland-poirier@laposte.net>
+Submitted-at: Sat, 23 Dec 2017 00:04:08 +0100
+Reviewed-on: https://gerrit.libreoffice.org/45623
+Project: core
+Branch: refs/heads/master
