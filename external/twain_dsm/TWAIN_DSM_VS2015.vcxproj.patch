@@ -1,0 +1,263 @@
+diff --git a/visual_studio/TWAIN_DSM_VS2015.vcxproj b/visual_studio/TWAIN_DSM_VS2015.vcxproj
+new file mode 100755
+index 000000000000..425c39966171
+--- /dev/null
++++ b/visual_studio/TWAIN_DSM_VS2015.vcxproj
+@@ -0,0 +1,256 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <ProjectGuid>{5F73EBC7-6A0E-4CBF-A37C-CB167E4CC379}</ProjectGuid>
++    <RootNamespace>TWAINDSM</RootNamespace>
++    <Keyword>Win32Proj</Keyword>
++    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup>
++    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)15_32\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)15_32\</IntDir>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)15_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)15_64\</IntDir>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)15_32\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)15_32\</IntDir>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)15_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)15_64\</IntDir>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
++    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
++    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
++    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
++    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
++    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
++    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
++    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
++    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <TargetName>TWAINDSM</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <TargetName>TWAINDSM</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <TargetName>TWAINDSM</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <TargetName>TWAINDSM</TargetName>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <PreBuildEvent>
++      <Message>create pub folders if do not exist</Message>
++      <Command>
++      </Command>
++    </PreBuildEvent>
++    <ClCompile>
++      <Optimization>Disabled</Optimization>
++      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;TWAIN_DSM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MinimalRebuild>true</MinimalRebuild>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level4</WarningLevel>
++      <TreatWarningAsError>true</TreatWarningAsError>
++      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)TWAINDSM.dll</OutputFile>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <AdditionalLibraryDirectories>..\..\pub\external\lib;..\..\pub\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <ModuleDefinitionFile>..\src\dsm.def</ModuleDefinitionFile>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <ProgramDatabaseFile>$(OutDir)TWAINDSM.pdb</ProgramDatabaseFile>
++      <SubSystem>Windows</SubSystem>
++      <RandomizedBaseAddress>true</RandomizedBaseAddress>
++      <DataExecutionPrevention>true</DataExecutionPrevention>
++      <ImportLibrary>$(OutDir)TWAINDSM.lib</ImportLibrary>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <PreBuildEvent>
++      <Message>create pub folders if do not exist</Message>
++      <Command>
++      </Command>
++    </PreBuildEvent>
++    <Midl>
++      <TargetEnvironment>X64</TargetEnvironment>
++    </Midl>
++    <ClCompile>
++      <Optimization>Disabled</Optimization>
++      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;TWAIN_DSM_EXPORTS;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MinimalRebuild>true</MinimalRebuild>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level4</WarningLevel>
++      <TreatWarningAsError>true</TreatWarningAsError>
++      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
++    </ClCompile>
++    <ResourceCompile>
++      <PreprocessorDefinitions>_VC80_UPGRADE=0x0710;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Link>
++      <OutputFile>$(ProjectDir)\$(OutDir)TWAINDSM.dll</OutputFile>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <AdditionalLibraryDirectories>..\..\pub\external\lib;..\..\pub\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <ModuleDefinitionFile>..\src\dsm.def</ModuleDefinitionFile>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <ProgramDatabaseFile>$(OutDir)TWAINDSM.pdb</ProgramDatabaseFile>
++      <SubSystem>Windows</SubSystem>
++      <RandomizedBaseAddress>true</RandomizedBaseAddress>
++      <DataExecutionPrevention>true</DataExecutionPrevention>
++      <ImportLibrary>$(OutDir)TWAINDSM.lib</ImportLibrary>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <PreBuildEvent>
++      <Message>create pub folders if do not exist</Message>
++      <Command>
++      </Command>
++    </PreBuildEvent>
++    <ClCompile>
++      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;TWAIN_DSM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level3</WarningLevel>
++      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)TWAINDSM.dll</OutputFile>
++      <AdditionalLibraryDirectories>..\..\pub\external\lib;..\..\pub\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <ModuleDefinitionFile>..\src\dsm.def</ModuleDefinitionFile>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Windows</SubSystem>
++      <OptimizeReferences>true</OptimizeReferences>
++      <EnableCOMDATFolding>true</EnableCOMDATFolding>
++      <RandomizedBaseAddress>true</RandomizedBaseAddress>
++      <DataExecutionPrevention>true</DataExecutionPrevention>
++      <ImportLibrary>$(OutDir)TWAINDSM.lib</ImportLibrary>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <PreBuildEvent>
++      <Message>create pub folders if do not exist</Message>
++      <Command>
++      </Command>
++    </PreBuildEvent>
++    <Midl>
++      <TargetEnvironment>X64</TargetEnvironment>
++    </Midl>
++    <ClCompile>
++      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;TWAIN_DSM_EXPORTS;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level3</WarningLevel>
++      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
++    </ClCompile>
++    <ResourceCompile>
++      <PreprocessorDefinitions>_VC80_UPGRADE=0x0710;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Link>
++      <OutputFile>$(ProjectDir)\$(OutDir)TWAINDSM.dll</OutputFile>
++      <AdditionalLibraryDirectories>..\..\pub\external\lib;..\..\pub\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <ModuleDefinitionFile>..\src\dsm.def</ModuleDefinitionFile>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Windows</SubSystem>
++      <OptimizeReferences>true</OptimizeReferences>
++      <EnableCOMDATFolding>true</EnableCOMDATFolding>
++      <RandomizedBaseAddress>true</RandomizedBaseAddress>
++      <DataExecutionPrevention>true</DataExecutionPrevention>
++      <ImportLibrary>$(OutDir)TWAINDSM.lib</ImportLibrary>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <ClCompile Include="..\src\apps.cpp" />
++    <ClCompile Include="..\src\dsm.cpp" />
++    <ClCompile Include="..\src\hook.cpp" />
++    <ClCompile Include="..\src\log.cpp" />
++  </ItemGroup>
++  <ItemGroup>
++    <ClInclude Include="..\src\dsm.h" />
++    <ClInclude Include="..\src\resource.h" />
++    <ClInclude Include="..\src\twain.h" />
++  </ItemGroup>
++  <ItemGroup>
++    <ResourceCompile Include="..\src\dsm.rc" />
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+\ No newline at end of file
