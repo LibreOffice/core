@@ -1645,7 +1645,7 @@ namespace basegfx
             };
         }
 
-        B2DPolygon createUnitPolygon()
+        B2DPolygon const & createUnitPolygon()
         {
             return theUnitPolygon::get();
         }
@@ -1719,7 +1719,7 @@ namespace basegfx
             };
         }
 
-        B2DPolygon createHalfUnitCircle()
+        B2DPolygon const & createHalfUnitCircle()
         {
             return theUnitHalfCircle::get();
         }
@@ -1751,7 +1751,7 @@ namespace basegfx
             };
         }
 
-        B2DPolygon createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant)
+        B2DPolygon const & createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant)
         {
             switch(nStartQuadrant % 4)
             {

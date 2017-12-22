@@ -212,7 +212,7 @@ public:
 
     FastSerializerHelper* writeId(sal_Int32 tokenId);
 
-    css::uno::Reference< css::io::XOutputStream > getOutputStream() const;
+    css::uno::Reference< css::io::XOutputStream > const & getOutputStream() const;
 
     static FastAttributeList *createAttrList();
 

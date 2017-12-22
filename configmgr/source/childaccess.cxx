@@ -65,7 +65,7 @@ namespace
     class theChildAccessUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theChildAccessUnoTunnelId > {};
 }
 
-css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId()
+css::uno::Sequence< sal_Int8 > const & ChildAccess::getTunnelId()
 {
     return theChildAccessUnoTunnelId::get().getSeq();
 }

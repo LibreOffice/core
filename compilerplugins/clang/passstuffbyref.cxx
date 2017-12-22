@@ -9,6 +9,7 @@
 
 #include <string>
 #include <set>
+#include <iostream>
 
 #include "check.hxx"
 #include "plugin.hxx"
@@ -211,7 +212,6 @@ static bool startswith(const std::string& rStr, const char* pSubStr) {
 }
 
 void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl) {
-
     if (methodDecl && (methodDecl->isVirtual() || methodDecl->hasAttr<OverrideAttr>())) {
         return;
     }
@@ -233,6 +233,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (isInUnoIncludeFile(functionDecl)) {
         return;
     }
+
     loplugin::DeclCheck dc(functionDecl);
     // function is passed as parameter to another function
     if (dc.Function("ImplColMonoFnc").Class("GDIMetaFile").GlobalNamespace()
@@ -274,21 +275,22 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (mbFoundReturnValueDisqualifier)
         return;
 
-    report(
-            DiagnosticsEngine::Warning,
-            "rather return %0 from function %1 by const& than by value, to avoid unnecessary copying",
+    report( DiagnosticsEngine::Warning,
+            "rather return %0 by const& than by value, to avoid unnecessary copying",
             functionDecl->getSourceRange().getBegin())
-        << type.getAsString() << functionDecl->getQualifiedNameAsString() << functionDecl->getSourceRange();
+        << type.getAsString() << functionDecl->getSourceRange();
 
     // display the location of the class member declaration so I don't have to search for it by hand
-    if (functionDecl->getSourceRange().getBegin() != functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
+    auto canonicalDecl = functionDecl->getCanonicalDecl();
+    if (functionDecl != canonicalDecl)
     {
-        report(
-                DiagnosticsEngine::Note,
+        report( DiagnosticsEngine::Note,
                 "decl here",
-                functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
-            << functionDecl->getCanonicalDecl()->getSourceRange();
+                canonicalDecl->getSourceRange().getBegin())
+            << canonicalDecl->getSourceRange();
     }
+
+    //functionDecl->dump();
 }
 
 bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
@@ -297,53 +299,103 @@ bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
         return true;
     const Expr* expr = dyn_cast<Expr>(*returnStmt->child_begin())->IgnoreParenCasts();
 
-    if (isReturnExprDisqualified(expr)) {
+    if (isReturnExprDisqualified(expr))
         mbFoundReturnValueDisqualifier = true;
-        return true;
-    }
+
     return true;
 }
 
+/**
+ * Does a return expression disqualify this method from doing return by const & ?
+ */
 bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
 {
-    if (isa<ExprWithCleanups>(expr)) {
-        return true;
-    }
-    if (const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(expr))
+    while (true)
     {
-        if (constructExpr->getNumArgs()==1
-            && constructExpr->getConstructor()->isCopyOrMoveConstructor())
-        {
-            expr = constructExpr->getArg(0)->IgnoreParenCasts();
+        expr = expr->IgnoreParens();
+        if (auto implicitCast = dyn_cast<ImplicitCastExpr>(expr)) {
+            expr = implicitCast->getSubExpr();
+            continue;
         }
-    }
-    if (isa<CXXConstructExpr>(expr)) {
-        return true;
-    }
-    if (const ArraySubscriptExpr* childExpr = dyn_cast<ArraySubscriptExpr>(expr)) {
-        expr = childExpr->getLHS();
-    }
-    if (const MemberExpr* memberExpr = dyn_cast<MemberExpr>(expr)) {
-        expr = memberExpr->getBase();
-    }
-    if (const DeclRefExpr* declRef = dyn_cast<DeclRefExpr>(expr)) {
-        const VarDecl* varDecl = dyn_cast<VarDecl>(declRef->getDecl());
-        if (varDecl) {
-            if (varDecl->getStorageDuration() == SD_Automatic
-                || varDecl->getStorageDuration() == SD_FullExpression ) {
+        if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(expr)) {
+            expr = exprWithCleanups->getSubExpr();
+            continue;
+        }
+        if (auto constructExpr = dyn_cast<CXXConstructExpr>(expr))
+        {
+            if (constructExpr->getNumArgs()==1
+                && constructExpr->getConstructor()->isCopyOrMoveConstructor())
+            {
+                expr = constructExpr->getArg(0);
+                continue;
+            }
+            else
+                return true;
+        }
+        if (isa<MaterializeTemporaryExpr>(expr)) {
+            return true;
+        }
+        if (isa<CXXBindTemporaryExpr>(expr)) {
+            return true;
+        }
+        expr = expr->IgnoreParenCasts();
+        if (auto childExpr = dyn_cast<ArraySubscriptExpr>(expr)) {
+            expr = childExpr->getLHS();
+            continue;
+        }
+        if (auto memberExpr = dyn_cast<MemberExpr>(expr)) {
+            expr = memberExpr->getBase();
+            continue;
+        }
+        if (auto declRef = dyn_cast<DeclRefExpr>(expr)) {
+            // a param might be a temporary
+            if (isa<ParmVarDecl>(declRef->getDecl()))
+                return true;
+            const VarDecl* varDecl = dyn_cast<VarDecl>(declRef->getDecl());
+            if (varDecl) {
+                if (varDecl->getStorageDuration() == SD_Thread
+                    || varDecl->getStorageDuration() == SD_Static ) {
+                    return false;
+                }
                 return true;
             }
-            return false;
         }
+        if (auto condOper = dyn_cast<ConditionalOperator>(expr)) {
+            return isReturnExprDisqualified(condOper->getTrueExpr())
+                || isReturnExprDisqualified(condOper->getFalseExpr());
+        }
+        if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(expr)) {
+            // TODO could improve this, but sometimes it means we're returning a copy of a temporary.
+            // Same logic as CXXOperatorCallExpr::isAssignmentOp(), which our supported clang
+            // doesn't have yet.
+            auto Opc = operatorCallExpr->getOperator();
+            if (Opc == OO_Equal || Opc == OO_StarEqual ||
+                Opc == OO_SlashEqual || Opc == OO_PercentEqual ||
+                Opc == OO_PlusEqual || Opc == OO_MinusEqual ||
+                Opc == OO_LessLessEqual || Opc == OO_GreaterGreaterEqual ||
+                Opc == OO_AmpEqual || Opc == OO_CaretEqual ||
+                Opc == OO_PipeEqual)
+                return true;
+            if (Opc == OO_Subscript)
+            {
+                if (isReturnExprDisqualified(operatorCallExpr->getArg(0)))
+                    return true;
+                // otherwise fall through to the checking below
+            }
+        }
+        if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(expr)) {
+            if (isReturnExprDisqualified(memberCallExpr->getImplicitObjectArgument()))
+                return true;
+            // otherwise fall through to the checking in CallExpr
+        }
+        if (auto callExpr = dyn_cast<CallExpr>(expr)) {
+            FunctionDecl const * calleeFunctionDecl = callExpr->getDirectCallee();
+            if (!calleeFunctionDecl)
+                return true;
+            return !loplugin::TypeCheck(calleeFunctionDecl->getReturnType()).LvalueReference();
+        }
+        return false;
     }
-    if (const ConditionalOperator* condOper = dyn_cast<ConditionalOperator>(expr)) {
-        return isReturnExprDisqualified(condOper->getTrueExpr())
-            || isReturnExprDisqualified(condOper->getFalseExpr());
-    }
-    if (const CallExpr* callExpr = dyn_cast<CallExpr>(expr)) {
-        return !loplugin::TypeCheck(callExpr->getType()).Const().LvalueReference();
-    }
-    return true;
 }
 
 bool PassStuffByRef::VisitVarDecl(const VarDecl * varDecl)
@@ -388,7 +440,7 @@ bool PassStuffByRef::isPrimitiveConstRef(QualType type) {
 }
 
 
-loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref");
+loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref", false);
 
 }
 

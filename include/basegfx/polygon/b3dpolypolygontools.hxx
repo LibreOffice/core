@@ -44,11 +44,11 @@ namespace basegfx
 
         /** Create a unit 3D line polyPolygon which defines a cube.
          */
-        BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitCubePolyPolygon();
+        BASEGFX_DLLPUBLIC B3DPolyPolygon const & createUnitCubePolyPolygon();
 
         /** Create a unit 3D fill polyPolygon which defines a cube.
          */
-        BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitCubeFillPolyPolygon();
+        BASEGFX_DLLPUBLIC B3DPolyPolygon const & createUnitCubeFillPolyPolygon();
 
         /** Create a 3D line polyPolygon from a B3DRange which defines a cube.
          */
