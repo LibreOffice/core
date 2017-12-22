@@ -59,6 +59,8 @@ public class LocalFile implements IFile {
     @Override
     public List<IFile> listFiles() {
         List<IFile> children = new ArrayList<IFile>();
+        File[] files = file.listFiles();
+        if (files == null) return children;
         for (File child : file.listFiles()) {
             children.add(new LocalFile(child));
         }
@@ -68,6 +70,8 @@ public class LocalFile implements IFile {
     @Override
     public List<IFile> listFiles(FileFilter filter) {
         List<IFile> children = new ArrayList<IFile>();
+        File[] files = file.listFiles(filter);
+        if (files == null) return children;
         for (File child : file.listFiles(filter)) {
             children.add(new LocalFile(child));
         }

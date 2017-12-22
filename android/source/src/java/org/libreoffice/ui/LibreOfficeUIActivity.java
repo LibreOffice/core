@@ -9,6 +9,7 @@
 
 package org.libreoffice.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -18,6 +19,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
@@ -30,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -115,6 +118,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public static final String NEW_CALC_STRING_KEY = "private:factory/scalc";
     public static final String NEW_DRAW_STRING_KEY = "private:factory/sdraw";
 
+    private static final int LO_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+
     public static final int GRID_VIEW = 0;
     public static final int LIST_VIEW = 1;
 
@@ -139,11 +144,14 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private LinearLayout writerLayout;
     private LinearLayout impressLayout;
     private LinearLayout calcLayout;
+    private boolean isPermissionDenied = true;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestPermissions();
 
         // initialize document provider factory
         DocumentProviderFactory.initialize(this);
@@ -161,6 +169,42 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
         createUI();
         getAnimations();
+    }
+
+    private void requestPermissions() {
+        // Request permission to read/write from/to external storage
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            isPermissionDenied = true;
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    LO_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            isPermissionDenied = false;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LO_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    isPermissionDenied = false;
+                    Toast.makeText(this, R.string.permission_external_storage_successful, Toast.LENGTH_SHORT).show();
+                } else {
+                    isPermissionDenied = true;
+                    setContentView(R.layout.permission_denied);
+                    findViewById(R.id.button_grant_permission).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            requestPermissions();
+                        }
+                    });
+                }
+            }
+        }
     }
 
     public void createUI() {
@@ -337,7 +381,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        drawerToggle.syncState();
+        if (!isPermissionDenied) drawerToggle.syncState();
     }
 
     private void refreshView() {
@@ -449,7 +493,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
             @Override
             protected void onPostExecute(Void result) {
-                refreshView();
+                if (!isPermissionDenied) refreshView();
             }
         }.execute(provider);
     }
@@ -499,7 +543,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
             @Override
             protected void onPostExecute(Void result) {
-                refreshView();
+                if (!isPermissionDenied) refreshView();
             }
         }.execute(dir);
     }
@@ -836,7 +880,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     @Override
     public void settingsPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         readPreferences();
-        refreshView();
+        if (!isPermissionDenied) refreshView();
     }
 
     @Override
@@ -901,7 +945,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         super.onResume();
         Log.d(LOGTAG, "onResume");
         Log.d(LOGTAG, "sortMode="+ sortMode + " filterMode=" + filterMode);
-        createUI();
+        if (!isPermissionDenied) createUI();
     }
 
     @Override

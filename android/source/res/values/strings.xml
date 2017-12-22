@@ -168,4 +168,9 @@
     <string name="compress_photo_no_compress">Don\'t Compress</string>
     <string name="compress_photo_title">Do you want to compress the photo?</string>
 
+    <!-- Device Permission Strings -->
+    <string name="permission_external_storage_successful">Permission granted!</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="grant_permission_description">LibreOffice Android Viewer needs permission to external storage to access device files. Click on the button below to grant permission.</string>
+
 </resources>
