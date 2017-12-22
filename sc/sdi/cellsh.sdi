@@ -65,14 +65,23 @@ interface CellSelection
     // } database operations
 
 
+    SID_RANGE_ADDRESS   [ StateMethod = GetState; ]
+
     SID_HYPERLINK_SETLINK   [ ExecMethod = ExecuteEdit; ]
     SID_HYPERLINK_GETLINK   [ StateMethod = GetHLinkState; ]
     SID_UPDATECHART         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
     SID_RANGE_ROW           [ StateMethod = GetState; ]
     SID_RANGE_COL           [ StateMethod = GetState; ]
+    SID_RANGE_TABLE         [ StateMethod = GetState; ]
+    SID_RANGE_VALUE         [ StateMethod = GetState; ]
+    SID_RANGE_FORMULA       [ StateMethod = GetState; ]
+    SID_RANGE_TEXTVALUE     [ StateMethod = GetState; ]
+    SID_RANGE_NOTETEXT      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
     SID_ENTER_STRING        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_INSERT_MATRIX       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_MARKAREA            [ ExecMethod = Execute; ]
     SID_SELECT_SCENARIO     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_CELL_FORMAT         [ ExecMethod = Execute; StateMethod = GetBlockState; ]
     SID_ENABLE_HYPHENATION  [ ExecMethod = Execute; StateMethod = GetBlockState; ]

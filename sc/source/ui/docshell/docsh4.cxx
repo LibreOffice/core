@@ -121,6 +121,51 @@ void ScDocShell::Execute( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
+        case SID_SC_SETTEXT:
+        {
+            const SfxPoolItem* pColItem;
+            const SfxPoolItem* pRowItem;
+            const SfxPoolItem* pTabItem;
+            const SfxPoolItem* pTextItem;
+            if( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, &pColItem ) &&
+                            pReqArgs->HasItem( FN_PARAM_2, &pRowItem ) &&
+                            pReqArgs->HasItem( FN_PARAM_3, &pTabItem ) &&
+                            pReqArgs->HasItem( SID_SC_SETTEXT, &pTextItem ) )
+            {
+                //  parameters are  1-based !!!
+                SCCOL nCol = static_cast<const SfxInt16Item*>(pColItem)->GetValue() - 1;
+                SCROW nRow = static_cast<const SfxInt32Item*>(pRowItem)->GetValue() - 1;
+                SCTAB nTab = static_cast<const SfxInt16Item*>(pTabItem)->GetValue() - 1;
+
+                SCTAB nTabCount = aDocument.GetTableCount();
+                if ( ValidCol(nCol) && ValidRow(nRow) && ValidTab(nTab,nTabCount) )
+                {
+                    if ( aDocument.IsBlockEditable( nTab, nCol,nRow, nCol, nRow ) )
+                    {
+                        OUString aVal = static_cast<const SfxStringItem*>(pTextItem)->GetValue();
+                        aDocument.SetString( nCol, nRow, nTab, aVal );
+
+                        PostPaintCell( nCol, nRow, nTab );
+                        SetDocumentModified();
+
+                        rReq.Done();
+                        break;
+                    }
+                    else                // protected cell
+                    {
+#if HAVE_FEATURE_SCRIPTING
+                        SbxBase::SetError( ERRCODE_BASIC_BAD_PARAMETER );      //! which error ?
+#endif
+                        break;
+                    }
+                }
+            }
+#if HAVE_FEATURE_SCRIPTING
+            SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
+#endif
+        }
+        break;
+
         case SID_SBA_IMPORT:
         {
             if (pReqArgs)
@@ -509,6 +554,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 else
                     rReq.Ignore();
             }
+            break;
+
+        case SID_AUTO_STYLE:
+            OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
             break;
 
         case SID_GET_COLORLIST:

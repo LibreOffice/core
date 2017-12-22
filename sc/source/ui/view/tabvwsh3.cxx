@@ -567,6 +567,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
+        // SID_TABLE_ACTIVATE and SID_MARKAREA are called by basic for the
+        // hidden View, to mark/switch on the visible View:
+
+        case SID_TABLE_ACTIVATE:
+            OSL_FAIL("old slot SID_TABLE_ACTIVATE");
+            break;
+
         case SID_REPAINT:
             PaintGrid();
             PaintTop();
