@@ -96,8 +96,6 @@ public:
         ScDocShell* pNewDocShell, const ScAddress& rPos,
         ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj );
 
-    virtual ~ScUndoEnterData() override;
-
     virtual void    Undo() override;
     virtual void    Redo() override;
     virtual void    Repeat(SfxRepeatTarget& rTarget) override;

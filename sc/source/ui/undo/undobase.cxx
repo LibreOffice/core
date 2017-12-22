@@ -49,10 +49,6 @@ ViewShellId ScSimpleUndo::GetViewShellId() const
     return mnViewShellId;
 }
 
-ScSimpleUndo::~ScSimpleUndo()
-{
-}
-
 bool ScSimpleUndo::SetViewMarkData( const ScMarkData& rMarkData )
 {
     if ( IsPaintLocked() )
