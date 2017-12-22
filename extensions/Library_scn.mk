@@ -11,6 +11,8 @@
 
 $(eval $(call gb_Library_Library,scn))
 
+$(eval $(call gb_Library_use_external_project,scn,twain_dsm))
+
 $(eval $(call gb_Library_use_externals,scn,\
 	boost_headers \
     sane_headers \
@@ -18,6 +20,7 @@ $(eval $(call gb_Library_use_externals,scn,\
 
 $(eval $(call gb_Library_set_include,scn,\
     -I$(SRCDIR)/extensions/inc \
+    $(if $(filter WNT,$(OS)),-I$(call gb_UnpackedTarball_get_dir,twain_dsm/pub/include)) \
     $$(INCLUDE) \
 ))
 

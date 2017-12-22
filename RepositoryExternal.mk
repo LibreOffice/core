@@ -115,7 +115,7 @@ ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
 define gb_LinkTarget__use_sane_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/external/$(if $(filter WNT,$(OS)),twain,sane)/inc \
+	$(if $(filter WNT,$(OS)),,-I$(SRCDIR)/external/sane/inc) \
 	$$(INCLUDE) \
 )
 
