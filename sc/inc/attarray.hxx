@@ -87,7 +87,7 @@ class ScAttrArray
 private:
     SCCOL           nCol;
     SCTAB           nTab;
-    ScDocument*     pDocument;
+    ScDocument* const     pDocument;
 
     std::vector<ScAttrEntry> mvData;
 
@@ -112,6 +112,7 @@ public:
             ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pNextColAttrArray );
             ~ScAttrArray();
 
+    ScDocument* GetDoc() { return pDocument; }
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
 #if DEBUG_SC_TESTATTRARRAY

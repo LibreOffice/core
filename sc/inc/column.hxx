@@ -29,6 +29,7 @@
 #include "mtvelements.hxx"
 #include <formula/types.hxx>
 #include <svl/zforlist.hxx>
+#include "attarray.hxx"
 
 #include <set>
 #include <vector>
@@ -139,13 +140,12 @@ class ScColumn
     // Cell values.
     sc::CellStoreType maCells;
 
-    SCCOL           nCol;
-    SCTAB           nTab;
-
-    ScAttrArray*          pAttrArray;
-    ScDocument*           pDocument;
+    ScAttrArray* pAttrArray;
 
     size_t mnBlkCountFormula;
+
+    SCCOL           nCol;
+    SCTAB           nTab;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScTable;
@@ -190,8 +190,7 @@ public:
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray);
 
-    ScDocument& GetDoc() { return *pDocument;}
-    const ScDocument& GetDoc() const { return *pDocument;}
+    ScDocument* GetDoc() const { return pAttrArray->GetDoc(); }
     SCTAB GetTab() const { return nTab; }
     SCCOL GetCol() const { return nCol; }
     sc::CellStoreType& GetCellStore() { return maCells; }
