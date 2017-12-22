@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_33c835a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-22T18:36:08Z",
+      "side": 1,
+      "message": "Second line of a commit message should always be empty, so please move this to the third line. Something odd must be with your enviorment because this kind of issues used to be catched by git commit.",
+      "range": {
+        "startLine": 8,
+        "startChar": 7,
+        "endLine": 8,
+        "endChar": 15
+      },
+      "revId": "d7d12ce8c5a69d00e00c22657fd28264eca01a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f3d14d58",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3196,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-22T18:36:08Z",
+      "side": 1,
+      "message": "You should move \"{\" to a new line in every case.\nWe are using Allman style for braces: https://en.wikipedia.org/wiki/Indentation_style#Allman_style",
+      "range": {
+        "startLine": 3196,
+        "startChar": 52,
+        "endLine": 3196,
+        "endChar": 54
+      },
+      "revId": "d7d12ce8c5a69d00e00c22657fd28264eca01a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_13d7b94b",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3274,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-22T18:36:08Z",
+      "side": 1,
+      "message": "Here too.",
+      "range": {
+        "startLine": 3274,
+        "startChar": 48,
+        "endLine": 3274,
+        "endChar": 50
+      },
+      "revId": "d7d12ce8c5a69d00e00c22657fd28264eca01a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
