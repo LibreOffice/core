@@ -154,24 +154,25 @@ void SyncDbusSessionHelper::InstallPrinterDrivers(
     request("InstallPrinteDrivers", xid, files, interaction);
 }
 
-    void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled )
-    {
-        const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
-        const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);
-        std::shared_ptr<GDBusProxy> proxy(lcl_GetPackageKitProxy("Query"), GObjectDeleter<GDBusProxy>());
-        GErrorWrapper error;
-        std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync (proxy.get(),
-                         "IsInstalled",
-                         g_variant_new ("(ss)",
-                                sPackagenameAscii.getStr(),
-                                sInteractionAscii.getStr()),
-                         G_DBUS_CALL_FLAGS_NONE,
-                         -1, /* timeout */
-                         nullptr, /* cancellable */
-                         &error.getRef()),GVariantDeleter());
-        if(result.get())
-            o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
-    }
+void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled )
+{
+    const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
+    const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);
+    std::shared_ptr<GDBusProxy> proxy(lcl_GetPackageKitProxy("Query"), GObjectDeleter<GDBusProxy>());
+    GErrorWrapper error;
+    std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync (proxy.get(),
+                     "IsInstalled",
+                     g_variant_new ("(ss)",
+                            sPackagenameAscii.getStr(),
+                            sInteractionAscii.getStr()),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1, /* timeout */
+                     nullptr, /* cancellable */
+                     &error.getRef()),GVariantDeleter());
+    if(result.get())
+        o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
