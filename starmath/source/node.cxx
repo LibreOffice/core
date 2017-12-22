@@ -2204,17 +2204,17 @@ sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
 void SmMatrixNode::CreateTextFromNode(OUString &rText)
 {
     rText += "matrix {";
-    for (sal_uInt16 i = 0;  i < mnNumRows; i++)
+    for (size_t i = 0;  i < mnNumRows; ++i)
     {
-        for (sal_uInt16 j = 0;  j < mnNumCols; j++)
+        for (size_t j = 0;  j < mnNumCols; ++j)
         {
             SmNode *pNode = GetSubNode(i * mnNumCols + j);
             if (pNode)
                 pNode->CreateTextFromNode(rText);
-            if (j != mnNumCols-1)
+            if (j != mnNumCols - 1U)
                 rText += "# ";
         }
-        if (i != mnNumRows-1)
+        if (i != mnNumRows - 1U)
             rText += "## ";
     }
     rText = comphelper::string::stripEnd(rText, ' ');
