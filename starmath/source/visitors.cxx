@@ -1063,13 +1063,15 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
     SmCaretPosGraphEntry *left  = mpRightMost,
                          *right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    for ( sal_uInt16 i = 0;  i < pNode->GetNumRows( ); i++ ) {
+    for (size_t i = 0;  i < pNode->GetNumRows(); ++i)
+    {
         SmCaretPosGraphEntry* r = left;
-        for ( sal_uInt16 j = 0;  j < pNode->GetNumCols( ); j++ ){
+        for (size_t j = 0;  j < pNode->GetNumCols(); ++j)
+        {
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
 
             mpRightMost = mpGraph->Add( SmCaretPos( pSubNode, 0 ), r );
-            if( j != 0 || ( pNode->GetNumRows( ) - 1 ) / 2 == i )
+            if( j != 0 || ( pNode->GetNumRows() - 1U ) / 2 == i )
                 r->SetRight( mpRightMost );
 
             pSubNode->Accept( this );
@@ -1077,7 +1079,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
             r = mpRightMost;
         }
         mpRightMost->SetRight( right );
-        if( ( pNode->GetNumRows( ) - 1 ) / 2 == i )
+        if( ( pNode->GetNumRows() - 1U ) / 2 == i )
             right->SetLeft( mpRightMost );
     }
 
@@ -2281,17 +2283,19 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
 void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
 {
     Append( "matrix{" );
-    for ( sal_uInt16 i = 0; i < pNode->GetNumRows( ); i++ ) {
-        for ( sal_uInt16 j = 0; j < pNode->GetNumCols( ); j++ ) {
+    for (size_t i = 0; i < pNode->GetNumRows(); ++i)
+    {
+        for (size_t j = 0; j < pNode->GetNumCols( ); ++j)
+        {
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
             Separate( );
             pSubNode->Accept( this );
             Separate( );
-            if( j != pNode->GetNumCols( ) - 1 )
+            if (j != pNode->GetNumCols() - 1U)
                 Append( "#" );
         }
         Separate( );
-        if( i != pNode->GetNumRows( ) - 1 )
+        if (i != pNode->GetNumRows() - 1U)
             Append( "##" );
     }
     Append( "} " );

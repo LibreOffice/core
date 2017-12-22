@@ -386,10 +386,10 @@ void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLev
 void SmRtfExport::HandleMatrix(const SmMatrixNode* pNode, int nLevel)
 {
     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MM " ");
-    for (int row = 0; row < pNode->GetNumRows(); ++row)
+    for (size_t row = 0; row < pNode->GetNumRows(); ++row)
     {
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MMR " ");
-        for (int col = 0; col < pNode->GetNumCols(); ++col)
+        for (size_t col = 0; col < pNode->GetNumCols(); ++col)
         {
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             if (const SmNode* node = pNode->GetSubNode(row * pNode->GetNumCols() + col))
