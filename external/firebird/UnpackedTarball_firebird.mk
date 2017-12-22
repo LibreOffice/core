@@ -46,4 +46,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 ))
 endif
 
+ifeq ($(COM_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,firebird, \
+    external/firebird/sanitizer.patch \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
