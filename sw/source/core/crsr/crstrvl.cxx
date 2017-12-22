@@ -70,6 +70,9 @@
 #include <unotools/intlwrapper.hxx>
 #include <vcl/window.hxx>
 #include <docufld.hxx>
+#include <officecfg/Office/Writer.hxx>
+//#include <officecfg/Office/OptionsDialog.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -1116,7 +1119,11 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
     SET_CURR_SHELL( this );
     bool bRet = false;
 
-    if( !IsTableMode() )
+    const bool bShowTrackChanges = IDocumentRedlineAccess::IsShowChanges(GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags());
+    const bool bShowInlineTips = officecfg::Office::Writer::Layout::Window::ShowChangesTooltip::get();
+    //crash here since the key does not exists yet
+
+    if( !IsTableMode() && bShowTrackChanges && bShowInlineTips )
     {
         Point aPt( rPt );
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
