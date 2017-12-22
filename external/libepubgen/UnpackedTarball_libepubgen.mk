@@ -8,6 +8,8 @@
 #
 
 epubgen_patches :=
+# Backport of <https://sourceforge.net/p/libepubgen/code/ci/006848cb62225647c418d5143d4e88a9d73829da/>.
+epubgen_patches += libepubgen-epub3.patch.1
 
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
