@@ -439,6 +439,48 @@
           <value>preview</value>
         </prop>
       </node>
+      <node oor:name="c36" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ArrowsToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowsbar</value>
+        </prop>
+      </node>
+      <node oor:name="c37" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>linesbar</value>
+        </prop>
+      </node>
+      <node oor:name="c38" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConnectorToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>connectorsbar</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="lo.writer.ScrollToPrevious" oor:op="replace">
