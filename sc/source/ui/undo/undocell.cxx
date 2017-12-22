@@ -177,8 +177,6 @@ ScUndoEnterData::ScUndoEnterData(
     SetChangeTrack();
 }
 
-ScUndoEnterData::~ScUndoEnterData() {}
-
 OUString ScUndoEnterData::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"

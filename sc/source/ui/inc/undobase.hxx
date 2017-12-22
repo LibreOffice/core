@@ -43,7 +43,6 @@ public:
     typedef std::map<SCTAB, std::unique_ptr<sc::ColumnSpanSet>> DataSpansType;
 
                     ScSimpleUndo( ScDocShell* pDocSh );
-    virtual         ~ScSimpleUndo() override;
 
     virtual bool    Merge( SfxUndoAction *pNextAction ) override;
     /// See SfxUndoAction::GetViewShellId().
