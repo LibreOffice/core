@@ -178,6 +178,8 @@ public class DirectoryBrowserFragment extends Fragment {
         }
 
         public void populateFileList(File directory) {
+            File[] files = directory.listFiles();
+            if (files == null) return;
             for(File f : directory.listFiles()){
                 if(f.isDirectory()){
                     directoryAdapter.add(f);
