@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d346114e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-22T16:15:05Z",
+      "side": 1,
+      "message": "This line seems to be too long to me. I wonder why you don\u0027t get an error message about this when you created the commit. Anyway first line should contain less then 80 characters.",
+      "range": {
+        "startLine": 7,
+        "startChar": 32,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "f4826e148ea00cdd6c04fbaabe9ed5a9ca322804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f34ead6d",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-22T16:15:05Z",
+      "side": 1,
+      "message": "Better to make these functions local functions. Declare / define them inside drawingml.cxx as simple functions. It\u0027s not needed to make them member of this class. An example for local functions is lcl_URLToGraphic() in drawingml.cxx. You can use the same lcl_ prefix.\nIn general, it\u0027s always a good idea to make functions\u0027 / variables\u0027 scope minimal. These methods are used only in the drawingml.cxx file and they don\u0027t use members of the DrawingML class.",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 225,
+        "endChar": 13
+      },
+      "revId": "f4826e148ea00cdd6c04fbaabe9ed5a9ca322804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_135419fd",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3183,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-22T16:15:05Z",
+      "side": 1,
+      "message": "Please remove this extra spaces from the end of the line.",
+      "range": {
+        "startLine": 3183,
+        "startChar": 43,
+        "endLine": 3183,
+        "endChar": 51
+      },
+      "revId": "f4826e148ea00cdd6c04fbaabe9ed5a9ca322804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_335595f9",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3264,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-12-22T16:15:05Z",
+      "side": 1,
+      "message": "I missed this in the mail, but this also a problem here. You should not use aOuterShdwProps for all items of the aEffects, but only in that case when aEffects[i].Name \u003d\u003d \"outerShdw\".",
+      "range": {
+        "startLine": 3264,
+        "startChar": 48,
+        "endLine": 3264,
+        "endChar": 63
+      },
+      "revId": "f4826e148ea00cdd6c04fbaabe9ed5a9ca322804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
