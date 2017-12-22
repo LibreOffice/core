@@ -41,7 +41,7 @@ namespace oox { namespace ppt {
 class PresentationFragmentHandler final : public ::oox::core::FragmentHandler2
 {
 public:
-    PresentationFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw();
+    PresentationFragmentHandler(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath);
     virtual ~PresentationFragmentHandler() throw() override;
     virtual void finalizeImport() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;

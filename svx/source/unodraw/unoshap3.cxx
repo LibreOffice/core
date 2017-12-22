@@ -57,7 +57,7 @@ using namespace ::com::sun::star::container;
     if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
-Svx3DSceneObject::Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw()
+Svx3DSceneObject::Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DSCENEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DSCENEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 ,   mxPage( pDrawPage )
 {
@@ -446,7 +446,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
     return aSeq;
 }
 
-Svx3DCubeObject::Svx3DCubeObject( SdrObject* pObj ) throw()
+Svx3DCubeObject::Svx3DCubeObject(SdrObject* pObj)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DCUBEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DCUBEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
@@ -567,8 +567,8 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
     return aSeq;
 }
 
-Svx3DSphereObject::Svx3DSphereObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DSPHEREOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DSPHEREOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+Svx3DSphereObject::Svx3DSphereObject(SdrObject* pObj)
+    : SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DSPHEREOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DSPHEREOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -671,11 +671,11 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
                             "com.sun.star.drawing.Shape3DSphere"});
     return aSeq;
 }
-Svx3DLatheObject::Svx3DLatheObject( SdrObject* pObj ) throw()
+
+Svx3DLatheObject::Svx3DLatheObject(SdrObject* pObj)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DLATHEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DLATHEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
-
 
 Svx3DLatheObject::~Svx3DLatheObject() throw()
 {
@@ -870,7 +870,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
     return aSeq;
 }
 
-Svx3DExtrudeObject::Svx3DExtrudeObject( SdrObject* pObj ) throw()
+Svx3DExtrudeObject::Svx3DExtrudeObject(SdrObject* pObj)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DEXTRUDEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DEXTRUDEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
@@ -971,7 +971,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
     return aSeq;
 }
 
-Svx3DPolygonObject::Svx3DPolygonObject( SdrObject* pObj ) throw()
+Svx3DPolygonObject::Svx3DPolygonObject(SdrObject* pObj)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DPOLYGONOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DPOLYGONOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }

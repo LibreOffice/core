@@ -45,7 +45,7 @@ class SdUnoSearchReplaceShape : public css::util::XReplaceable
 protected:
     css::drawing::XDrawPage* mpPage;
 
-    css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw();
+    css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr );
     bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw();
     static ESelection GetSelection( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) throw();
     static css::uno::Reference< css::drawing::XShape >  GetShape( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) throw();

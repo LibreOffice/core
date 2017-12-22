@@ -37,7 +37,7 @@ class SvxUnoTransGradientTable : public SvxUnoNameItemTable
 public:
     explicit SvxUnoTransGradientTable( SdrModel* pModel ) throw();
 
-    virtual NameOrIndex* createItem() const throw() override;
+    virtual NameOrIndex* createItem() const override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -63,7 +63,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedService
     return aSNS;
 }
 
-NameOrIndex* SvxUnoTransGradientTable::createItem() const throw()
+NameOrIndex* SvxUnoTransGradientTable::createItem() const
 {
     XFillFloatTransparenceItem* pNewItem = new XFillFloatTransparenceItem();
     pNewItem->SetEnabled( true );

@@ -28,7 +28,7 @@ namespace oox { namespace drawingml {
 class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    DiagramDataFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramDataPtr& rDataPtr ) throw();
+    DiagramDataFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramDataPtr& rDataPtr);
     virtual ~DiagramDataFragmentHandler() throw() override;
 
     virtual void SAL_CALL endDocument() override;
@@ -42,7 +42,7 @@ private:
 class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    DiagramLayoutFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramLayoutPtr& rDataPtr ) throw();
+    DiagramLayoutFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramLayoutPtr& rDataPtr);
     virtual ~DiagramLayoutFragmentHandler() throw() override;
 
     virtual void SAL_CALL endDocument() override;

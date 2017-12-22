@@ -38,7 +38,7 @@ class SvxUnoDashTable : public SvxUnoNameItemTable
 public:
     explicit SvxUnoDashTable( SdrModel* pModel ) throw();
 
-    virtual NameOrIndex* createItem() const throw() override;
+    virtual NameOrIndex* createItem() const override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -64,7 +64,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )
     return aSNS;
 }
 
-NameOrIndex* SvxUnoDashTable::createItem() const throw()
+NameOrIndex* SvxUnoDashTable::createItem() const
 {
     XLineDashItem* pNewItem = new XLineDashItem();
     pNewItem->SetWhich( XATTR_LINEDASH ); // set which id for pooling

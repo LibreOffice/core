@@ -85,7 +85,7 @@ unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoNumberingRules );
 
-SvxUnoNumberingRules::SvxUnoNumberingRules( const SvxNumRule& rRule ) throw()
+SvxUnoNumberingRules::SvxUnoNumberingRules(const SvxNumRule& rRule)
 : maRule( rRule )
 {
 }
@@ -473,7 +473,7 @@ const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule )
     return pRule->getNumRule();
 }
 
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
+css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule* pRule)
 {
     DBG_ASSERT( pRule, "No default SvxNumRule!" );
     if( pRule )
@@ -539,7 +539,7 @@ Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
     return new SvxUnoNumberingRulesCompare;
 }
 
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule() throw()
+css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule()
 {
     SvxNumRule aTempRule( SvxNumRuleFlags::NONE, 10, false );
     return SvxCreateNumRule( &aTempRule );

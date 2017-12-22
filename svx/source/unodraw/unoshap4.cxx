@@ -63,13 +63,13 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 
-SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
+SvxOle2Shape::SvxOle2Shape(SdrObject* pObject)
 : SvxShapeText( pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2),
                 getSvxMapProvider().GetPropertySet(SVXMAP_OLE2,SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
-SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
+SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet)
 : SvxShapeText( pObject, pPropertyMap, pPropertySet  )
 {
 }
@@ -557,9 +557,8 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
     return aClassName;
 }
 
-
-SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
+SvxAppletShape::SvxAppletShape(SdrObject* pObject)
+    : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( "com.sun.star.drawing.AppletShape" );
 }
@@ -629,9 +628,8 @@ bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-
-SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxPluginShape::SvxPluginShape(SdrObject* pObject)
+    : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( "com.sun.star.drawing.PluginShape" );
 }
@@ -702,7 +700,7 @@ bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 }
 
 
-SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
+SvxFrameShape::SvxFrameShape(SdrObject* pObject)
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( "com.sun.star.drawing.FrameShape" );
@@ -773,7 +771,7 @@ bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPro
         return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
-SvxMediaShape::SvxMediaShape( SdrObject* pObj, OUString const & referer ) throw()
+SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString const & referer)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
     referer_(referer)
 {

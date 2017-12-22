@@ -302,9 +302,9 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet );
 
-    SvxUnoTextRangeBase( const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoTextRangeBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw();
+    SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet);
+    SvxUnoTextRangeBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet);
+    SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange);
     virtual ~SvxUnoTextRangeBase() throw();
 
 public:
@@ -388,7 +388,7 @@ private:
     bool mbPortion;
 
 public:
-    SvxUnoTextRange( const SvxUnoTextBase& rParent, bool bPortion = false ) throw();
+    SvxUnoTextRange(const SvxUnoTextBase& rParent, bool bPortion = false);
     virtual ~SvxUnoTextRange() throw() override;
 
     // css::uno::XInterface
@@ -418,9 +418,9 @@ class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
 protected:
     css::uno::Reference< css::text::XText >   xParentText;
 
-    SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent ) throw();
-    SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();
+    SvxUnoTextBase(const SvxItemPropertySet* _pSet);
+    SvxUnoTextBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent);
+    SvxUnoTextBase(const SvxUnoTextBase& rText);
     virtual ~SvxUnoTextBase() throw() override;
 
 public:
@@ -613,7 +613,7 @@ private:
     const ESelection         mnSel;
 
 public:
-    SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection& rSel ) throw();
+    SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection& rSel);
     virtual ~SvxUnoTextRangeEnumeration() throw() override;
 
     // css::container::XEnumeration

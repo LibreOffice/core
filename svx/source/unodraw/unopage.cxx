@@ -61,7 +61,7 @@ using namespace ::com::sun::star::drawing;
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 
-SvxDrawPage::SvxDrawPage(SdrPage* pInPage) throw()
+SvxDrawPage::SvxDrawPage(SdrPage* pInPage)
     : mrBHelper(getMutex())
     , mpPage(pInPage)
     , mpModel(mpPage->GetModel())  // register at broadcaster

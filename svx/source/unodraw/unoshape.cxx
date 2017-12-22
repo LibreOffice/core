@@ -3835,7 +3835,7 @@ void SvxShape::updateShapeKind()
     }
 }
 
-SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
+SvxShapeText::SvxShapeText(SdrObject* pObject)
 : SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
@@ -3843,7 +3843,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 }
 
 
-SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
+SvxShapeText::SvxShapeText(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet)
 : SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
@@ -4041,7 +4041,7 @@ bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* p
     return SvxShape::setPropertyToDefaultImpl( pProperty );
 }
 
-SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
+SvxShapeRect::SvxShapeRect(SdrObject* pObj)
 : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_SHAPE), getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 {
 }

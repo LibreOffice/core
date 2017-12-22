@@ -80,10 +80,10 @@ static std::map<PredefinedClrSchemeId, sal_Int32> PredefinedClrTokens =
     { folHlink, XML_folHlink }
 };
 
-PresentationFragmentHandler::PresentationFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw()
-: FragmentHandler2( rFilter, rFragmentPath )
-, mpTextListStyle( new TextListStyle )
-, mbCommentAuthorsRead(false)
+PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter, const OUString& rFragmentPath)
+    : FragmentHandler2( rFilter, rFragmentPath )
+    , mpTextListStyle( new TextListStyle )
+    , mbCommentAuthorsRead(false)
 {
     TextParagraphPropertiesVector& rParagraphDefaulsVector( mpTextListStyle->getListStyle() );
     TextParagraphPropertiesVector::iterator aParagraphDefaultIter( rParagraphDefaulsVector.begin() );

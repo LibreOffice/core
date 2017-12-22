@@ -31,8 +31,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw();
-EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule() throw();
+EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule* pRule);
+EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();
 /// @throws css::lang::IllegalArgumentException
 const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule );
 EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
@@ -43,7 +43,7 @@ class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< css::container::
 private:
     SvxNumRule maRule;
 public:
-    SvxUnoNumberingRules( const SvxNumRule& rRule ) throw();
+    SvxUnoNumberingRules(const SvxNumRule& rRule);
     virtual ~SvxUnoNumberingRules() throw() override;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )

@@ -39,7 +39,7 @@ public:
     // XMLMetaImportComponent() throw();
     explicit XMLMetaImportComponent(
         const css::uno::Reference< css::uno::XComponentContext >& xContext
-        ) throw();
+        );
 
 protected:
 
@@ -63,7 +63,7 @@ XMLMetaImportComponent_get_implementation(
 }
 
 XMLMetaImportComponent::XMLMetaImportComponent(
-    const uno::Reference< uno::XComponentContext >& xContext) throw()
+    const uno::Reference< uno::XComponentContext >& xContext)
     :   SvXMLImport(xContext, ""), mxDocProps()
 {
 }

@@ -23,9 +23,9 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-SwSvxUnoDrawPool::SwSvxUnoDrawPool( SwDoc* pDoc ) throw() :
-    SvxUnoDrawPool(pDoc->getIDocumentDrawModelAccess().GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER),
-    m_pDoc(pDoc)
+SwSvxUnoDrawPool::SwSvxUnoDrawPool(SwDoc* pDoc)
+    : SvxUnoDrawPool(pDoc->getIDocumentDrawModelAccess().GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER)
+    , m_pDoc(pDoc)
 {
 }
 

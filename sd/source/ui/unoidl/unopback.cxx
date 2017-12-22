@@ -52,7 +52,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdUnoPageBackground );
 
 SdUnoPageBackground::SdUnoPageBackground(
     SdDrawDocument* pDoc /* = NULL */,
-    const SfxItemSet* pSet /* = NULL */) throw()
+    const SfxItemSet* pSet /* = NULL */)
 :   mpPropSet(ImplGetPageBackgroundPropertySet()),
     mpDoc(pDoc)
 {

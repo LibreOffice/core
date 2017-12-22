@@ -23,7 +23,7 @@
 class SvxShapeCaption : public SvxShapeText
 {
 public:
-    explicit SvxShapeCaption( SdrObject* pObj ) throw();
+    explicit SvxShapeCaption(SdrObject* pObj);
     virtual ~SvxShapeCaption() throw() override;
 };
 class SvxPluginShape : public SvxOle2Shape
@@ -34,7 +34,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    explicit SvxPluginShape( SdrObject* pObj ) throw();
+    explicit SvxPluginShape(SdrObject* pObj);
     virtual ~SvxPluginShape() throw() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
@@ -52,7 +52,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    explicit SvxAppletShape( SdrObject* pObj ) throw();
+    explicit SvxAppletShape(SdrObject* pObj);
     virtual ~SvxAppletShape() throw() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
@@ -71,7 +71,7 @@ protected:
         css::uno::Any& rValue) override;
 
 public:
-    explicit SvxFrameShape( SdrObject* pObj ) throw();
+    explicit SvxFrameShape(SdrObject* pObj);
     virtual ~SvxFrameShape() throw() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
@@ -95,7 +95,7 @@ protected:
 
 public:
 
-    explicit SvxTableShape( SdrObject* pObj ) throw();
+    explicit SvxTableShape(SdrObject* pObj);
     virtual ~SvxTableShape() throw() override;
 };
 

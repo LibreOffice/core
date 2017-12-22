@@ -441,7 +441,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( const 
     return xFound;
 }
 
-uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::Reference< text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw()
+uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::Reference< text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr )
 {
     if(!xText.is())
         return uno::Reference< text::XTextRange > ();

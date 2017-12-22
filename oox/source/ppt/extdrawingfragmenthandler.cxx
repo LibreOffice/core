@@ -25,7 +25,6 @@ ExtDrawingFragmentHandler::ExtDrawingFragmentHandler( XmlFilterBase& rFilter,
         const oox::ppt::ShapeLocation   eShapeLocation,
         oox::drawingml::ShapePtr const & pGroupShapePtr,
         oox::drawingml::ShapePtr const & pShapePtr)
-    throw( )
     : FragmentHandler2( rFilter, rFragmentPath ),
      mpSlidePersistPtr (rSlidePersistPtr ),
      meShapeLocation( eShapeLocation ),

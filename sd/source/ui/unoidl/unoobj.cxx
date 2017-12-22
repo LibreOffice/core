@@ -262,7 +262,7 @@ const SvEventDescription* ImplGetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 
-SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
+SdXShape::SdXShape(SvxShape* pShape, SdXImpressDocument* pModel)
 :   mpShape( pShape ),
     mpPropSet( pModel?
                     lcl_ImplGetShapePropertySet(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )

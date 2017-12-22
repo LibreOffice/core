@@ -81,17 +81,15 @@ using namespace ::com::sun::star::container;
     if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
-SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw() :
-    SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()) ),
-    mxPage( pDrawPage )
+SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SvxDrawPage* pDrawPage)
+    : SvxShape(pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()))
+    , mxPage(pDrawPage)
 {
 }
-
 
 SvxShapeGroup::~SvxShapeGroup() throw()
 {
 }
-
 
 void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
@@ -351,8 +349,8 @@ sal_Bool SAL_CALL SvxShapeGroup::hasElements()
     return mpObj.is() && mpObj->GetSubList() && (mpObj->GetSubList()->GetObjCount() > 0);
 }
 
-SvxShapeConnector::SvxShapeConnector( SdrObject* pObj )  throw() :
-    SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONNECTOR), getSvxMapProvider().GetPropertySet(SVXMAP_CONNECTOR, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxShapeConnector::SvxShapeConnector(SdrObject* pObj)
+    : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONNECTOR), getSvxMapProvider().GetPropertySet(SVXMAP_CONNECTOR, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -486,8 +484,8 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
         mpModel->SetChanged();
 }
 
-SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
-    SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONTROL), getSvxMapProvider().GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxShapeControl::SvxShapeControl(SdrObject* pObj)
+    : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONTROL), getSvxMapProvider().GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     setShapeKind( OBJ_UNO );
 }
@@ -906,21 +904,19 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aProperty
     }
 }
 
-SvxShapeDimensioning::SvxShapeDimensioning( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_DIMENSIONING), getSvxMapProvider().GetPropertySet(SVXMAP_DIMENSIONING, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxShapeDimensioning::SvxShapeDimensioning(SdrObject* pObj)
+    : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_DIMENSIONING), getSvxMapProvider().GetPropertySet(SVXMAP_DIMENSIONING, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
-
 
 SvxShapeDimensioning::~SvxShapeDimensioning() throw()
 {
 }
 
-SvxShapeCircle::SvxShapeCircle( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CIRCLE), getSvxMapProvider().GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxShapeCircle::SvxShapeCircle(SdrObject* pObj)
+    : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CIRCLE), getSvxMapProvider().GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
-
 
 SvxShapeCircle::~SvxShapeCircle() throw()
 {
@@ -1171,17 +1167,15 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
     }
 }
 
-SvxShapePolyPolygonBezier::SvxShapePolyPolygonBezier( SdrObject* pObj , drawing::PolygonKind eNew ) throw()
-:   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_POLYPOLYGONBEZIER), getSvxMapProvider().GetPropertySet(SVXMAP_POLYPOLYGONBEZIER, SdrObject::GetGlobalDrawObjectItemPool()) )
-,   mePolygonKind( eNew )
+SvxShapePolyPolygonBezier::SvxShapePolyPolygonBezier(SdrObject* pObj , drawing::PolygonKind eNew)
+    : SvxShapeText(pObj, getSvxMapProvider().GetMap(SVXMAP_POLYPOLYGONBEZIER), getSvxMapProvider().GetPropertySet(SVXMAP_POLYPOLYGONBEZIER, SdrObject::GetGlobalDrawObjectItemPool()))
+    , mePolygonKind(eNew)
 {
 }
-
 
 SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 {
 }
-
 
 bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {
@@ -1285,8 +1279,8 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
     }
 }
 
-SvxGraphicObject::SvxGraphicObject( SdrObject* pObj, OUString const & referer ) throw()
-:   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_GRAPHICOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) ), referer_(referer)
+SvxGraphicObject::SvxGraphicObject(SdrObject* pObj, OUString const & referer)
+    : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_GRAPHICOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) ), referer_(referer)
 {
 }
 
@@ -1684,7 +1678,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 }
 
 
-SvxShapeCaption::SvxShapeCaption( SdrObject* pObj ) throw()
+SvxShapeCaption::SvxShapeCaption(SdrObject* pObj)
 : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CAPTION), getSvxMapProvider().GetPropertySet(SVXMAP_CAPTION, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
@@ -1693,16 +1687,14 @@ SvxShapeCaption::~SvxShapeCaption() throw()
 {
 }
 
-SvxCustomShape::SvxCustomShape( SdrObject* pObj )  throw() :
-    SvxShapeText( pObj, getSvxMapProvider().GetMap( SVXMAP_CUSTOMSHAPE ), getSvxMapProvider().GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxCustomShape::SvxCustomShape(SdrObject* pObj)
+    : SvxShapeText( pObj, getSvxMapProvider().GetMap( SVXMAP_CUSTOMSHAPE ), getSvxMapProvider().GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
-
 
 SvxCustomShape::~SvxCustomShape() throw()
 {
 }
-
 
 uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
 {

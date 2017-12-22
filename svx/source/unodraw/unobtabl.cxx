@@ -40,7 +40,7 @@ class SvxUnoBitmapTable : public SvxUnoNameItemTable
 public:
     explicit SvxUnoBitmapTable( SdrModel* pModel ) throw();
 
-    virtual NameOrIndex* createItem() const throw() override;
+    virtual NameOrIndex* createItem() const override;
     virtual bool isValid( const NameOrIndex* pItem ) const override;
 
     // XServiceInfo
@@ -83,7 +83,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames( 
     return aSNS;
 }
 
-NameOrIndex* SvxUnoBitmapTable::createItem() const throw()
+NameOrIndex* SvxUnoBitmapTable::createItem() const
 {
     return new XFillBitmapItem();
 }

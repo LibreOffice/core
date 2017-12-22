@@ -28,7 +28,7 @@
 class SdrHint;
 class SdrModel;
 
-SVX_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw();
+SVX_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(SdrModel* pModel);
 
 class SVX_DLLPUBLIC SvxUnoDrawMSFactory : public css::lang::XMultiServiceFactory
 {

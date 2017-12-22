@@ -37,7 +37,7 @@ class SvxUnoGradientTable : public SvxUnoNameItemTable
 public:
     explicit SvxUnoGradientTable( SdrModel* pModel ) throw();
 
-    virtual NameOrIndex* createItem() const throw() override;
+    virtual NameOrIndex* createItem() const override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -65,7 +65,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getSupportedServiceNames
 
 
 // XNameContainer
-NameOrIndex* SvxUnoGradientTable::createItem() const throw()
+NameOrIndex* SvxUnoGradientTable::createItem() const
 {
     return new XFillGradientItem();
 }
