@@ -3205,7 +3205,9 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_STRING);
 
     /**
-     * The key ruler related properties on change are reported by this.
+     * LOKDocView::ruler:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @pPayload: the JSON string contaning the information about ruler properties
      *
      * The payload format is:
      *
@@ -3217,8 +3219,6 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      *      "pageWidth": "...",
      *      "unit": "..."
      *  }
-     *
-     * Here all aproperties are same as described in svxruler.
      */
     doc_view_signals[RULER] =
         g_signal_new("ruler",
@@ -3231,10 +3231,13 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_STRING);
 
     /**
-     * Window related callbacks are emitted under this category. It includes
-     * external windows like dialogs, autopopups for now.
+     * LOKDocView::window::
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @pPayload: the JSON string containing the information about the window
      *
-     * The payload format is:
+     * This signal emits information about external windows like dialogs, autopopups for now.
+     *
+     * The payload format of pPayload is:
      *
      * {
      *    "id": "unique integer id of the dialog",
@@ -3269,11 +3272,14 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_STRING);
 
     /**
+     * LOKDocView::invalidate-header::
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @pPayload: can be either "row", "column", or "all".
+     *
      * The column/row header is no more valid because of a column/row insertion
      * or a similar event. Clients must query a new column/row header set.
      *
-     * The payload says if we are invalidating a row or column header. So,
-     * payload values can be: "row", "column", "all".
+     * The payload says if we are invalidating a row or column header
      */
     doc_view_signals[INVALIDATE_HEADER] =
         g_signal_new("invalidate-header",

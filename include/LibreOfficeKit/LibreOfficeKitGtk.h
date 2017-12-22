@@ -90,8 +90,6 @@ GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* 
  * @cancellable:
  * @callback:
  * @userdata:
- *
- * Returns: %TRUE if the document is loaded successfully, %FALSE otherwise
  */
 void                           lok_doc_view_open_document          (LOKDocView* pDocView,
                                                                     const gchar* pPath,
@@ -136,7 +134,7 @@ void                           lok_doc_view_set_zoom               (LOKDocView* 
 /**
  * lok_doc_view_set_visible_area:
  * @pDocView: The #LOKDocView instance
- * @fZoom: The new visible area of pDocView in twips.
+ * @pVisibleArea: The new visible area of pDocView in twips.
  *
  * Sets the new visible area of the widget. This helps e.g. the page down key
  * to jump the correct length, which depends on the amount of visible height of
@@ -308,7 +306,7 @@ gboolean                        lok_doc_view_paste                 (LOKDocView* 
 /**
  * lok_doc_view_set_document_password:
  * @pDocView: The #LOKDocView instance
- * @pUrl: the URL of the document to set password for, as sent with signal `password-required`
+ * @pURL: the URL of the document to set password for, as sent with signal `password-required`
  * @pPassword: (nullable) (allow-none): the password, NULL for no password
  *
  * Set the password for password protected documents
