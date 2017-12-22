@@ -67,6 +67,8 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnGradientListState ( ChangeType::NONE ),
     mnHatchingListState ( ChangeType::NONE )
 {
+
+    DBG_ASSERT(mpDrawModel, "no valid view (!)");
     m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr );
 
     if(bShadow)
@@ -80,7 +82,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
 
     m_nTransparenceTabPage = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  nullptr);
 
-    SetCurPageId( "RID_SVXPAGE_AREA" );
+    //SetCurPageId( "RID_SVXPAGE_AREA" );
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
