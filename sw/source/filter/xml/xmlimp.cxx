@@ -826,6 +826,91 @@ void SwXMLImport::endDocument()
                     pPaM->Move( fnMoveBackward );
                 }
             }
+
+            // tdf#113877
+            // when we insert one document with list inside into another one with list at the insert position,
+            // the resulting numbering in these lists are not consequent.
+            //
+            // Main document:
+            //  1. One
+            //  2. Two
+            //  3. Three
+            //  4.                      <-- insert position
+            //
+            // Inserted document:
+            //  1. One
+            //  2. Two
+            //  3. Three
+            //  4.
+            //
+            // Expected result
+            //  1. One
+            //  2. Two
+            //  3. Three
+            //  4. One
+            //  5. Two
+            //  6. Three
+            //  7.
+            //
+            if (IsInsertMode() && m_pSttNdIdx->GetIndex())
+            {
+                sal_uLong index = 1;
+
+                // the last node of the main document where we have inserted a document
+                SwNode * p1 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + 0];
+
+                // the first node of the inserted document
+                SwNode * p2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
+
+                // the first node of the inserted document,
+                // which will be used to detect if inside inserted document a new list was started
+                const SfxPoolItem* listId2Initial = nullptr;
+
+                while (
+                    p1 && p2
+                    && (p1->GetNodeType() == p2->GetNodeType())
+                    && (p1->IsTextNode() == p2->IsTextNode())
+                    )
+                {
+                    SwContentNode * c1 = static_cast<SwContentNode *>(p1);
+                    SwContentNode * c2 = static_cast<SwContentNode *>(p2);
+
+                    const SfxPoolItem* listId1 = c1->GetNoCondAttr(RES_PARATR_LIST_ID, false);
+                    const SfxPoolItem* listId2 = c2->GetNoCondAttr(RES_PARATR_LIST_ID, false);
+
+                    if (!listId2Initial)
+                    {
+                        listId2Initial = listId2;
+                    }
+
+                    if (! (listId2Initial && listId2 && (*listId2Initial == *listId2)) )
+                    {
+                        // no more list items of the first list inside inserted document
+                        break;
+                    }
+
+                    if (listId1 && listId2)
+                    {
+                        c2->SetAttr(*listId1);
+                    }
+                    else
+                    {
+                        // no more appropriate list items
+                        break;
+                    }
+
+                    // get next item
+                    index++;
+                    if (index >= pDoc->GetNodes().Count())
+                    {
+                        // no more items
+                        break;
+                    }
+
+                    p2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
+                }
+            }
+
         }
     }
 
