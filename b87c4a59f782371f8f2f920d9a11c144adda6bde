@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_90af1f29",
+        "filename": "offapi/com/sun/star/chart2/XDataProviderCreator.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-12-22T13:26:25Z",
+      "side": 1,
+      "message": "For new files you can use the MPL-only-Header, see https://opengrok.libreoffice.org/xref/core/TEMPLATE.SOURCECODE.HEADER",
+      "revId": "b87c4a59f782371f8f2f920d9a11c144adda6bde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
