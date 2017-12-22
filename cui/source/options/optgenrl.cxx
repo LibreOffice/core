@@ -308,15 +308,18 @@ void SvxGeneralTabPage::InitCryptography()
     {
         xSEInitializer = xml::crypto::GPGSEInitializer::create( comphelper::getProcessComponentContext() );
         uno::Reference<xml::crypto::XXMLSecurityContext> xSC = xSEInitializer->createSecurityContext( OUString() );
-        uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSC->getSecurityEnvironment();
-        uno::Sequence<uno::Reference<security::XCertificate>> xCertificates = xSE->getPersonalCertificates();
-
-        if (xCertificates.hasElements())
+        if (xSC.is())
         {
-            for (auto& xCert : xCertificates)
+            uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSC->getSecurityEnvironment();
+            uno::Sequence<uno::Reference<security::XCertificate>> xCertificates = xSE->getPersonalCertificates();
+
+            if (xCertificates.hasElements())
             {
-                m_pSigningKeyLB->InsertEntry( xCert->getIssuerName());
-                m_pEncryptionKeyLB->InsertEntry( xCert->getIssuerName());
+                for (auto& xCert : xCertificates)
+                {
+                    m_pSigningKeyLB->InsertEntry( xCert->getIssuerName());
+                    m_pEncryptionKeyLB->InsertEntry( xCert->getIssuerName());
+                }
             }
         }
     }
