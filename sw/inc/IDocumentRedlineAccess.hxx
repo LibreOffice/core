@@ -239,6 +239,9 @@ public:
     virtual void SetRedlinePassword(
         /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) = 0;
 
+    virtual bool IsHideInlineTooltips() = 0;
+    virtual void SetHideInlineTooltips(bool bSet) = 0;
+
 protected:
      virtual ~IDocumentRedlineAccess() {};
 };

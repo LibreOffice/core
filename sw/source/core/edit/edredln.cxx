@@ -25,6 +25,7 @@
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <frmtool.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 RedlineFlags SwEditShell::GetRedlineFlags() const
 {
@@ -130,7 +131,15 @@ void SwEditShell::UpdateRedlineAttr()
         SET_CURR_SHELL( this );
         StartAllAction();
 
-        GetDoc()->getIDocumentRedlineAccess().UpdateRedlineAttr();
+        // issue when the changes the inline option when IsShow is off
+        SwDoc& rDoc = *GetDoc();
+        bool bShowInlineTooltip = officecfg::Office::Writer::Revision::ShowInlineTooltip::get();
+        if (bShowInlineTooltip != rDoc.getIDocumentRedlineAccess().IsHideInlineTooltips() )
+        {
+           rDoc.getIDocumentRedlineAccess().SetHideInlineTooltips( bShowInlineTooltip );
+        }
+
+        rDoc.getIDocumentRedlineAccess().UpdateRedlineAttr();
 
         EndAllAction();
     }
