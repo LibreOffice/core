@@ -129,6 +129,7 @@ long ScColumn::GetNeededSize(
     }
 
     //      conditional formatting
+    ScDocument* pDocument = GetDoc();
     const SfxItemSet* pCondSet = pDocument->GetCondResult( nCol, nRow, nTab );
 
     //The pPattern may change in GetCondResult
@@ -647,6 +648,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
     sal_uInt16 nWidth = static_cast<sal_uInt16>(nOldWidth*nPPTX);
     bool bFound = false;
+    ScDocument* pDocument = GetDoc();
 
     if ( pParam && pParam->mbSimpleText )
     {   // all the same except for number format
@@ -782,6 +784,7 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
 void ScColumn::GetOptimalHeight(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16 nMinHeight, SCROW nMinStart )
 {
+    ScDocument* pDocument = GetDoc();
     ScFlatUInt16RowSegments& rHeights = rCxt.getHeightArray();
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow, pDocument->GetDefPattern() );
 
@@ -971,6 +974,7 @@ void ScColumn::GetOptimalHeight(
 
 bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const
 {
+    ScDocument* pDocument = GetDoc();
     bool bStop = false;
     sc::CellStoreType::const_iterator it = maCells.position(nRow).first;
     mdds::mtv::element_t eType = it->type;
@@ -1135,7 +1139,7 @@ public:
 
 void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 {
-    RemoveEditAttribsHandler aFunc(maCells, pDocument);
+    RemoveEditAttribsHandler aFunc(maCells, GetDoc());
     sc::ProcessEditText(maCells.begin(), maCells, nStartRow, nEndRow, aFunc);
     aFunc.commitStrings();
 }
@@ -1411,7 +1415,7 @@ SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
     {
         nRow++;
         SCROW nEndRow = 0;
-        bool bHidden = pDocument->RowHidden(nRow, nTab, nullptr, &nEndRow);
+        bool bHidden = GetDoc()->RowHidden(nRow, nTab, nullptr, &nEndRow);
         if(bHidden)
             return std::min<SCROW>(MAXROW, nEndRow + 1);
         else
@@ -1421,7 +1425,7 @@ SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
     {
         nRow--;
         SCROW nStartRow = MAXROW;
-        bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow);
+        bool bHidden = GetDoc()->RowHidden(nRow, nTab, &nStartRow);
         if(bHidden)
             return std::max<SCROW>(0, nStartRow - 1);
         else
@@ -1432,6 +1436,7 @@ SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
 SCROW ScColumn::FindNextVisibleRowWithContent(
     sc::CellStoreType::const_iterator& itPos, SCROW nRow, bool bForward) const
 {
+    ScDocument* pDocument = GetDoc();
     if (bForward)
     {
         do
@@ -1676,7 +1681,7 @@ struct ColumnStorageDumper
 void ScColumn::DumpColumnStorage() const
 {
     cout << "-- table: " << nTab << "; column: " << nCol << endl;
-    std::for_each(maCells.begin(), maCells.end(), ColumnStorageDumper(pDocument));
+    std::for_each(maCells.begin(), maCells.end(), ColumnStorageDumper(GetDoc()));
     cout << "--" << endl;
 }
 #endif
@@ -1775,9 +1780,9 @@ public:
         SCROW nDestRow = nRow + mnDestOffset;
         ScAddress aSrcPos(mnSrcCol, nRow, mnSrcTab);
         ScAddress aDestPos(mnDestCol, nDestRow, mnDestTab);
-        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption));
+        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, *mrDestCol.GetDoc(), aDestPos, mbCloneCaption));
         // Notify our LOK clients also
-        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &mrDestCol.GetDoc(), aDestPos, p);
+        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, mrDestCol.GetDoc(), aDestPos, p);
     }
 };
 
@@ -1790,7 +1795,7 @@ void ScColumn::CopyCellNotesToDocument(
         // The column has no cell notes to copy between specified rows.
         return;
 
-    ScDrawLayer *pDrawLayer = rDestCol.GetDoc().GetDrawLayer();
+    ScDrawLayer *pDrawLayer = rDestCol.GetDoc()->GetDrawLayer();
     bool bWasLocked = bool();
     if (pDrawLayer)
     {
@@ -1900,7 +1905,7 @@ namespace {
 void ScColumn::CellNotesDeleting(SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership)
 {
     ScAddress aAddr(nCol, 0, nTab);
-    CellNoteHandler aFunc(pDocument, aAddr, bForgetCaptionOwnership);
+    CellNoteHandler aFunc(GetDoc(), aAddr, bForgetCaptionOwnership);
     sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 
@@ -2104,8 +2109,8 @@ formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
         case sc::element_type_edittext:
         {
             const EditTextObject* pText = sc::edittext_block::at(*it->data, aPos.second);
-            OUString aStr = ScEditUtil::GetString(*pText, pDocument);
-            svl::SharedString aSS( pDocument->GetSharedStringPool().intern(aStr));
+            OUString aStr = ScEditUtil::GetString(*pText, GetDoc());
+            svl::SharedString aSS( GetDoc()->GetSharedStringPool().intern(aStr));
             return formula::FormulaTokenRef(new formula::FormulaStringToken(aSS));
         }
         case sc::element_type_empty:
@@ -2162,7 +2167,7 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
     if (nRow1 > nRow2)
         return false;
 
-    ToMatrixHandler aFunc(rMat, nMatCol, nRow1, pDocument);
+    ToMatrixHandler aFunc(rMat, nMatCol, nRow1, GetDoc());
     sc::ParseAllNonEmpty(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     return true;
 }
@@ -2360,7 +2365,7 @@ public:
 
 void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
-    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, pDocument, pPool);
+    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, GetDoc(), pPool);
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
 
@@ -2630,6 +2635,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
         return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
     // See if the requested range is already cached.
+    ScDocument* pDocument = GetDoc();
     sc::FormulaGroupContext& rCxt = *(pDocument->GetFormulaGroupContext());
     sc::FormulaGroupContext::ColArray* pColArray = rCxt.getCachedColArray(nTab, nCol, nRow2+1);
     if (pColArray)
@@ -2872,7 +2878,7 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRe
 
 void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
-    assert(pDocument->mbThreadedGroupCalcInProgress);
+    assert(GetDoc()->mbThreadedGroupCalcInProgress);
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
