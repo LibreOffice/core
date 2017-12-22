@@ -149,12 +149,25 @@ void  SwFormatTablePage::Init()
     m_pRightBtn->SetClickHdl( aLk2 );
     m_pCenterBtn->SetClickHdl( aLk2 );
 
-    Link<Edit&, void> aLk = LINK(this, SwFormatTablePage, UpDownHdl);
-    m_pTopMF->SetModifyHdl(aLk);
-    m_pBottomMF->SetModifyHdl(aLk);
-    m_aRightMF.SetModifyHdl(aLk);
-    m_aLeftMF.SetModifyHdl(aLk);
-    m_aWidthMF.SetModifyHdl(aLk);
+    Link<SpinField&,void> aLk = LINK( this, SwFormatTablePage, UpDownHdl );
+    m_pTopMF->SetUpHdl( aLk );
+    m_pBottomMF->SetUpHdl( aLk );
+    m_aRightMF.SetUpHdl( aLk );
+    m_aLeftMF.SetUpHdl( aLk );
+    m_aWidthMF.SetUpHdl( aLk );
+
+    m_pTopMF->SetDownHdl( aLk );
+    m_pBottomMF->SetDownHdl( aLk );
+    m_aRightMF.SetDownHdl( aLk );
+    m_aLeftMF.SetDownHdl( aLk );
+    m_aWidthMF.SetDownHdl( aLk );
+
+    Link<Control&,void> aLk3 = LINK( this, SwFormatTablePage, LoseFocusHdl );
+    m_pTopMF->SetLoseFocusHdl( aLk3 );
+    m_pBottomMF->SetLoseFocusHdl( aLk3 );
+    m_aRightMF.SetLoseFocusHdl( aLk3 );
+    m_aLeftMF.SetLoseFocusHdl( aLk3 );
+    m_aWidthMF.SetLoseFocusHdl( aLk3 );
 
     m_pRelWidthCB->SetClickHdl(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
 }
@@ -275,7 +288,11 @@ void SwFormatTablePage::RightModify()
     }
 }
 
-IMPL_LINK( SwFormatTablePage, UpDownHdl, Edit&, rEdit, void )
+IMPL_LINK( SwFormatTablePage, LoseFocusHdl, Control&, rControl, void )
+{
+    UpDownHdl(static_cast<SpinField&>(rControl));
+}
+IMPL_LINK( SwFormatTablePage, UpDownHdl, SpinField&, rEdit, void )
 {
     if( m_aRightMF.get() == &rEdit)
         RightModify();
@@ -578,6 +595,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     m_aRightMF.SetMax( m_aRightMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
     m_aLeftMF.SetMax( m_aLeftMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
     m_aWidthMF.SetMin( m_aWidthMF.NormalizePercent( nMinTableWidth ), FUNIT_TWIP );
+
 }
 
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
@@ -832,12 +850,16 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
 void  SwTableColumnPage::Init(bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
-    Link<Edit&,void> aLkModify = LINK(this, SwTableColumnPage, ModifyHdl);
+    Link<SpinField&,void> aLkUp = LINK( this, SwTableColumnPage, UpHdl );
+    Link<SpinField&,void> aLkDown = LINK( this, SwTableColumnPage, DownHdl );
+    Link<Control&,void> aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
         aValueTable[i] = i;
         m_aFieldArr[i].SetMetric(aMetric);
-        m_aFieldArr[i].SetModifyHdl(aLkModify);
+        m_aFieldArr[i].SetUpHdl( aLkUp );
+        m_aFieldArr[i].SetDownHdl( aLkDown );
+        m_aFieldArr[i].SetLoseFocusHdl( aLkLF );
     }
     SetMetric(*m_pSpaceED, aMetric);
 
@@ -882,10 +904,26 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
     UpdateCols(0);
 }
 
-IMPL_LINK(SwTableColumnPage, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( SwTableColumnPage, UpHdl, SpinField&, rEdit, void )
 {
     bModified = true;
-    ModifyHdl(static_cast<MetricField*>(&rEdit));
+    ModifyHdl( static_cast<MetricField*>(&rEdit) );
+}
+
+IMPL_LINK( SwTableColumnPage, DownHdl, SpinField&, rEdit, void )
+{
+    bModified = true;
+    ModifyHdl( static_cast<MetricField*>(&rEdit) );
+}
+
+IMPL_LINK( SwTableColumnPage, LoseFocusHdl, Control&, rControl, void )
+{
+    MetricField* pEdit = static_cast<MetricField*>(&rControl);
+    if (pEdit->IsModified())
+    {
+        bModified = true;
+        ModifyHdl( pEdit );
+    }
 }
 
 IMPL_LINK( SwTableColumnPage, ModeHdl, Button*, pBox, void )
@@ -901,7 +939,16 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, Button*, pBox, void )
 
 bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
 {
-    if (bModified)
+    for(PercentField & i : m_aFieldArr)
+    {
+        if (i.HasFocus())
+        {
+            LoseFocusHdl(*i.get());
+            break;
+        }
+    }
+
+    if(bModified)
     {
         pTableData->SetColsChanged();
     }
