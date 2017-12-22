@@ -87,8 +87,12 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
 
 }
 
-ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocumentImport& rDoc) :
-    mrDoc(rDoc), meOrcusGrammar(os::formula_grammar_t::unknown) {}
+ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocumentImport& rDoc)
+    : mrDoc(rDoc)
+    , meCalcGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
+    , meOrcusGrammar(os::formula_grammar_t::unknown)
+{
+}
 
 void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
 {
