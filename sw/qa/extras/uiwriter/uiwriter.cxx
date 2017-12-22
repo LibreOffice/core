@@ -262,6 +262,7 @@ public:
     void testTdf106736();
     void testTdf58604();
     void testTdf112025();
+    void testTdf113877();
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
     void testTdf107976();
@@ -432,6 +433,7 @@ public:
     CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testTdf58604);
     CPPUNIT_TEST(testTdf112025);
+    CPPUNIT_TEST(testTdf113877);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
@@ -5256,6 +5258,32 @@ void SwUiWriterTest::testTdf114306()
     // page 1 and 1 paragraph on page 2.
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt", 2);
     assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt", 1);
+}
+
+void SwUiWriterTest::testTdf113877()
+{
+    load(DATA_DIRECTORY, "tdf113877_insert_numbered_list.odt");
+
+    // set a page cursor into the end of the document
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    // insert the same document at current cursor position
+    {
+        const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list.odt";
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    }
+
+    // the initial list with 4 list items
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(1), "ListId"), getProperty<OUString>(getParagraph(4), "ListId"));
+
+    // the last of the first list, and the first of the inserted list
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(4), "ListId"), getProperty<OUString>(getParagraph(5), "ListId"));
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(5), "ListId"), getProperty<OUString>(getParagraph(6), "ListId"));
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(6), "ListId"), getProperty<OUString>(getParagraph(7), "ListId"));
 }
 
 void SwUiWriterTest::testTdf108524()
