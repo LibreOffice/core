@@ -437,10 +437,10 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
 void SmOoxmlExport::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
 {
     m_pSerializer->startElementNS( XML_m, XML_m, FSEND );
-    for( int row = 0; row < pNode->GetNumRows(); ++row )
+    for (size_t row = 0; row < pNode->GetNumRows(); ++row)
     {
         m_pSerializer->startElementNS( XML_m, XML_mr, FSEND );
-        for( int col = 0; col < pNode->GetNumCols(); ++col )
+        for (size_t col = 0; col < pNode->GetNumCols(); ++col)
         {
             m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
             if( const SmNode* node = pNode->GetSubNode( row * pNode->GetNumCols() + col ))
