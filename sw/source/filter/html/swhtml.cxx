@@ -5552,6 +5552,9 @@ bool TestImportHTML(SvStream &rStream)
     catch (const std::runtime_error&)
     {
     }
+    catch (const std::out_of_range&)
+    {
+    }
     pD->SetInReading(false);
 
     return bRet;
