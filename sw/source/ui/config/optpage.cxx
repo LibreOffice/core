@@ -74,6 +74,7 @@
 #include <vcl/svapp.hxx>
 
 #include <optload.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1753,6 +1754,8 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
     get(m_pMarkColorLB,"markcolor");
     get(m_pMarkPreviewWN,"markpreview");
 
+    get(m_pChangesTooltip,"changestooltip");
+
     m_pInsertedPreviewWN->set_height_request(aPreviewSize.Height());
     m_pDeletedPreviewWN->set_height_request(aPreviewSize.Height());
     m_pChangedPreviewWN->set_height_request(aPreviewSize.Height());
@@ -1810,6 +1813,7 @@ void SwRedlineOptionsTabPage::dispose()
     m_pMarkPosLB.clear();
     m_pMarkColorLB.clear();
     m_pMarkPreviewWN.clear();
+    m_pChangesTooltip.clear();
     SfxTabPage::dispose();
 }
 
@@ -1893,6 +1897,12 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         }
     }
 
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Writer::Layout::Window::ShowChangesTooltip::set(
+                m_pChangesTooltip->IsChecked(), batch );
+    batch->commit();
+
     return false;
 }
 
@@ -1923,6 +1933,9 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     m_pInsertLB->SelectEntryPos(0);
     m_pDeletedLB->SelectEntryPos(0);
     m_pChangedLB->SelectEntryPos(0);
+
+    const bool bSet = officecfg::Office::Writer::Layout::Window::ShowChangesTooltip::get();
+    m_pChangesTooltip->Check( bSet );
 
     lcl_FillRedlineAttrListBox(*m_pInsertLB, rInsertAttr, aInsertAttrMap, SAL_N_ELEMENTS(aInsertAttrMap));
     lcl_FillRedlineAttrListBox(*m_pDeletedLB, rDeletedAttr, aDeletedAttrMap, SAL_N_ELEMENTS(aDeletedAttrMap));

@@ -1289,6 +1289,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ShowChangesTooltip" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Text document - Changes - [Section] Show tooltip -->
+          <info>
+            <desc>Specifies whether inline tooltip for tracked changes are displayed.</desc>
+            <label>Show changes tooltip</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->

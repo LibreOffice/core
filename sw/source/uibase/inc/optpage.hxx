@@ -328,6 +328,8 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     VclPtr<SvxColorListBox>     m_pMarkColorLB;
     VclPtr<SwMarkPreview>       m_pMarkPreviewWN;
 
+    VclPtr<CheckBox>            m_pChangesTooltip;
+
     DECL_LINK(AttribHdl, ListBox&, void);
     void ChangedMaskPrev();
     DECL_LINK(ChangedMaskPrevHdl, ListBox&, void);
@@ -345,6 +347,7 @@ public:
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
+
 };
 
 // TabPage test settings for SW
