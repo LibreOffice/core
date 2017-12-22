@@ -11,8 +11,12 @@
 
 $(eval $(call gb_Library_Library,scn))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_unpacked,scn,twain_dsm))
+endif
+
 $(eval $(call gb_Library_use_externals,scn,\
-	boost_headers \
+    boost_headers \
     sane_headers \
 ))
 
@@ -47,7 +51,6 @@ $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/scanwin \
 ))
 else
-ifneq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/grid \
@@ -59,7 +62,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,scn,\
 	-ldl \
 ))
-endif
 endif
 endif
 

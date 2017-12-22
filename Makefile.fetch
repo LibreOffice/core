@@ -224,6 +224,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 		$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
 	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
+	$(foreach item, \
+		$(call fetch_Optional,TWAINDSM,TWAIN_DSM_TARBALL) \
+	,$(call fetch_Download_item,https://github.com/twain/twain-dsm/raw/master/Releases/dsm_020401/tarball,$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

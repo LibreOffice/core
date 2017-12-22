@@ -948,6 +948,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	)) \
 	sfx2_classification \
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
+    $(if $(TWAINDSM_BUILD),twain_dsm) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\

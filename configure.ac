@@ -6550,6 +6550,15 @@ AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)
 
 dnl ===================================================================
+dnl --with-twain-dsm
+dnl ===================================================================
+
+AC_ARG_WITH(twain-dsm,
+    AS_HELP_STRING([--with-twain-dsm],
+        [Build and bundle TWAINDSM.dll. Only applicable for Windows 64-bit builds.]),
+,)
+
+dnl ===================================================================
 dnl Checks for Java
 dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
@@ -11344,6 +11353,20 @@ if test "$ENABLE_JAVA" != ""; then
         AC_MSG_RESULT([no])
     fi
 fi
+
+dnl ===================================================================
+dnl Checking if to download and build TWAINDSM
+dnl ===================================================================
+TWAINDSM_BUILD=
+if test "$_os" = "WINNT"; then
+    # Fetch and unpack the tarball for all Windows builds (Library_scn needs its headers)
+    BUILD_TYPE="$BUILD_TYPE TWAINDSM"
+    # We only need to build TWAINDSM.dll for Windows 64-bit builds
+    if test "$BITNESS_OVERRIDE" = 64 -a "$with_twain_dsm" = "yes"; then
+        TWAINDSM_BUILD=TRUE
+    fi
+fi
+AC_SUBST(TWAINDSM_BUILD)
 
 dnl ===================================================================
 dnl Test for the presence of Ant and that it works
