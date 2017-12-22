@@ -1,0 +1,52 @@
+--- builds/posix/fbintl.vers
++++ builds/posix/fbintl.vers
+@@ -29,3 +29,4 @@
+ LD_lookup_texttype
+ LD_setup_attributes
+ LD_version
++_ZTI*
+--- builds/posix/fbplugin.vers
++++ builds/posix/fbplugin.vers
+@@ -26,3 +26,4 @@
+ #
+ 
+ firebird_plugin
++_ZTI*
+--- builds/posix/firebird.vers
++++ builds/posix/firebird.vers
+@@ -367,3 +367,4 @@
+ 
+ KEYWORD_stringIsAToken
+ KEYWORD_getTokens
++_ZTI*
+--- builds/posix/make.defaults
++++ builds/posix/make.defaults
+@@ -252,7 +252,7 @@
+ # LINKER OPTIONS
+ #
+ 
+-UNDEF_PLATFORM = -Wl,--no-undefined
++UNDEF_PLATFORM =
+ ifeq ($(TARGET),Debug)
+   UNDEF_FLAGS = $(UNDEF_PLATFORM)
+ endif
+@@ -291,7 +291,7 @@
+ LIB_LINK_MAPFILE= -Wl,--version-script,$(1)
+ FIREBIRD_LIBRARY_LINK= -L$(LIB) -lfbclient $(MATHLIB)
+ 
+-EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS) $(LINK_EMPTY_SYMBOLS)
++EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS)
+ LIB_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) -shared
+ 
+ FB_DAEMON = $(BIN)/firebird$(EXEC_EXT)
+--- src/common/os/posix/mod_loader.cpp
++++ src/common/os/posix/mod_loader.cpp
+@@ -88,7 +88,7 @@
+ 
+ ModuleLoader::Module* ModuleLoader::loadModule(const Firebird::PathName& modPath)
+ {
+-	void* module = dlopen(modPath.nullStr(), FB_RTLD_MODE);
++	void* module = dlopen(modPath.nullStr(), FB_RTLD_MODE | RTLD_GLOBAL);
+ 	if (module == NULL)
+ 	{
+ #ifdef DEV_BUILD
