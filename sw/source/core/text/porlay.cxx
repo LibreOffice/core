@@ -52,6 +52,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IMark.hxx>
 
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
@@ -2140,6 +2141,19 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelect
             }
         }
     }
+
+    const SwIndex* next;
+    for (const SwIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = next)
+    {
+        next = pIndex->GetNext();
+        const sw::mark::IMark* pMark = pIndex->GetMark();
+        const sw::mark::IBookmark* pBookmark = dynamic_cast<const sw::mark::IBookmark*>(pMark);
+        if (pBookmark && pBookmark->IsHidden())
+        {
+            // intersect bookmark range with textnode range and add the intersection to rHiddenMulti?
+        }
+    }
+
 }
 
 void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect)

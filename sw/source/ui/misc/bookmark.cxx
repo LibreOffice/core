@@ -69,11 +69,13 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
     sal_Int32 nSelectedEntries = 0;
     sal_Int32 nEntries = 0;
     sal_Int32 nTokenIndex = 0;
+    bool bIsExpanded = false;
     while (!sTmp.isEmpty() && nTokenIndex >= 0)
     {
         OUString aToken = sTmp.getToken(0, BookmarkTable::cSeparator, nTokenIndex);
         if (m_pBookmarksBox->GetBookmarkByName(aToken))
         {
+            bIsExpanded = m_pBookmarksBox->GetBookmarkByName(aToken)->IsExpanded();
             m_pBookmarksBox->SelectByName(aToken);
             nSelectedEntries++;
         }
@@ -82,6 +84,9 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
 
     // allow to add new bookmark only if one name provided and it's not taken
     m_pInsertBtn->Enable(nEntries == 1 && nSelectedEntries == 0);
+    // allow hidden/condition only for expanded  bookmark
+    m_pConditionED->Enable(nEntries == 1 && nSelectedEntries == 0 && bIsExpanded);
+    m_pHideCB->Enable(nEntries == 1 && nSelectedEntries == 0 && bIsExpanded);
 
     // allow to delete only if all bookmarks are recognized
     m_pDeleteBtn->Enable(nEntries > 0 && nSelectedEntries == nEntries);
@@ -208,7 +213,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, Button*, void)
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, Button*, void)
 {
     OUString sBookmark = m_pEditBox->GetText();
-    rSh.SetBookmark(vcl::KeyCode(), sBookmark);
+    rSh.SetBookmark(vcl::KeyCode(), sBookmark, m_pHideCB->IsChecked(), m_pConditionED->GetText());
     rReq.AppendItem(SfxStringItem(FN_INSERT_BOOKMARK, sBookmark));
     rReq.Done();
     if (!rReq.IsDone())
