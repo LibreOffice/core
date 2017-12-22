@@ -42,12 +42,10 @@ for pair in commandSet:
         for line2 in txt2:
             foundLines = foundLines + line2
     if foundLines.find("ExecuteList") != -1: continue
-    if foundLines.find("Dispatcher()->Execute") != -1: continue
+    if foundLines.find("GetDispatcher()->Execute") != -1: continue
     if foundLines.find("ExecuteScenarioSlot") != -1: continue
     # TODO not sure about this, but let's tackle the easy ones first
     if foundLines.find("Invalidate(") != -1: continue
-    if foundLines.find("SFX_IMPL_DOCKINGWINDOW_WITHID") != -1: continue
-
 
     # dump any lines that contain the SID, so we can eyeball the results
     print("remove: " + commandName)
