@@ -20,6 +20,7 @@
 #include <memory>
 #include <unx/fontmanager.hxx>
 #include <impfont.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>
@@ -31,18 +32,14 @@
 #include <rtl/strbuf.hxx>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
-#include <config_gio.h>
 #include <officecfg/Office/Common.hxx>
+#include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 
 using namespace psp;
 
 #include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include <fontconfig/fcfreetype.h>
-
-#if ENABLE_GIO
-#include <gio/gio.h>
-#endif
 
 #include <cstdio>
 #include <cstdarg>
@@ -863,97 +860,36 @@ namespace
         return OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
     }
 
-#if ENABLE_GIO
-    guint get_xid_for_dbus()
+    sal_uInt32 get_xid_for_dbus()
     {
-        if (Application::IsHeadlessModeEnabled())
-            return 0;
         const vcl::Window *pTopWindow = Application::GetActiveTopWindow();
         if (!pTopWindow)
             pTopWindow = Application::GetFirstTopLevelWindow();
         const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
         return pEnvData ? GetDbusId(*pEnvData) : 0;
     }
-#endif
 }
 
-#if ENABLE_GIO
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
 {
-    if (!officecfg::Office::Common::PackageKit::EnableFontInstallation::get())
-        return;
-
-    guint xid = get_xid_for_dbus();
-
-    if (!xid)
+    try
     {
-        SAL_WARN("vcl", "Could not retrieve X Window ID for DBUS");
-        return;
+        using namespace org::freedesktop::PackageKit;
+        css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+        xSyncDbusSessionHelper->InstallFontconfigResources(get_xid_for_dbus(), comphelper::containerToSequence(m_aCurrentRequests), "hide-finished");
     }
-
-
-    GError *error = nullptr;
-    /* get the DBUS session connection */
-    GDBusConnection *session_connection = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, &error);
-    if (error != nullptr)
+    catch (const css::uno::Exception& e)
     {
-        g_debug ("DBUS cannot connect : %s", error->message);
-        g_error_free (error);
-        return;
-    }
-
-    /* get the proxy with gnome-session-manager */
-    GDBusProxy *proxy = g_dbus_proxy_new_sync(session_connection,
-                                              G_DBUS_PROXY_FLAGS_NONE,
-                                              nullptr, // GDBusInterfaceInfo
-                                              "org.freedesktop.PackageKit",
-                                              "/org/freedesktop/PackageKit",
-                                              "org.freedesktop.PackageKit.Modify",
-                                              nullptr, // GCancellable
-                                              &error);
-    if (proxy == nullptr && error != nullptr)
-    {
-        g_debug("Could not get DBUS proxy: org.freedesktop.PackageKit: %s", error->message);
-        g_error_free(error);
-        return;
-    }
-
-    GVariantBuilder *builder = g_variant_builder_new (G_VARIANT_TYPE("as")); // 'as'=array of strings
-    for (std::vector<OString>::const_iterator aI = m_aCurrentRequests.begin(); aI != m_aCurrentRequests.end(); ++aI)
-        g_variant_builder_add (builder, "s", aI->getStr());
-
-    GVariant *res = g_dbus_proxy_call_sync(proxy,
-                                     "InstallFontconfigResources",
-                                     // Create a new variant with the following types:
-                                     //   'u'=guint32 (xid); 'as'=array of strings (builder); 's'=string ("hide-finished")
-                                     // See also https://people.gnome.org/~ryanl/glib-docs/gvariant-format-strings.html
-                                     g_variant_new("(uass)", xid, builder, "hide-finished"),
-                                     G_DBUS_CALL_FLAGS_NONE,
-                                     -1, // Timeout
-                                     nullptr, // GCancellable
-                                     &error);
-
-    if (res == nullptr && error != nullptr)
-    {
+        SAL_INFO("vcl", "InstallFontconfigResources problem, caught " << e);
         // Disable this method from now on. It's simply not available on some systems
         // and leads to an error dialog being shown each time this is called tdf#104883
         std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::Common::PackageKit::EnableFontInstallation::set(false, batch);
         batch->commit();
-        g_debug("InstallFontconfigResources problem : %s", error->message);
-        g_error_free(error);
     }
-    else
-    {
-        g_variant_unref(res);
-    }
-
-    g_variant_builder_unref(builder);
-    g_object_unref(G_OBJECT (proxy));
 
     m_aCurrentRequests.clear();
 }
-#endif
 
 void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes )
 {
@@ -1109,8 +1045,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                     }
                 }
                 OUString sStillMissing(pRemainingCodes.get(), nRemainingLen);
-#if ENABLE_GIO
-                if (get_xid_for_dbus())
+                if (!Application::IsHeadlessModeEnabled() && officecfg::Office::Common::PackageKit::EnableFontInstallation::get())
                 {
                     if (sStillMissing == rMissingCodes) //replaced nothing
                     {
@@ -1129,7 +1064,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                             if (!sTag.isEmpty() && m_aPreviousLangSupportRequests.find(sTag) == m_aPreviousLangSupportRequests.end())
                             {
                                 OString sReq = OString(":lang=") + sTag;
-                                m_aCurrentRequests.push_back(sReq);
+                                m_aCurrentRequests.push_back(OUString::fromUtf8(sReq));
                                 m_aPreviousLangSupportRequests.insert(sTag);
                             }
                         }
@@ -1140,7 +1075,6 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                         m_aFontInstallerTimer.Start();
                     }
                 }
-#endif
                 rMissingCodes = sStillMissing;
             }
         }
