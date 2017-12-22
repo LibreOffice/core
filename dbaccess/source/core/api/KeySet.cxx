@@ -125,12 +125,9 @@ OKeySet::~OKeySet()
 {
     tryDispose(m_xSet);
     // m_xStatement is necessarily one of those
-    const vStatements_t::const_iterator end(m_vStatements.end());
-    for(vStatements_t::iterator i(m_vStatements.begin());
-        i != end;
-        ++i)
+    for (auto & statement : m_vStatements)
     {
-        tryDispose(i->second);
+        tryDispose(statement.second);
     }
 
     m_xComposer = nullptr;
@@ -343,10 +340,8 @@ void OKeySet::ensureStatement( )
     // of key & foreign columns?
     FilterColumnsNULL_t FilterColumnsNULL;
     FilterColumnsNULL.reserve(m_aKeyIter->second.first->get().size());
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
-    const connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aEnd  = m_aKeyIter->second.first->get().end();
-    for( ; aIter != aEnd; ++aIter )
-        FilterColumnsNULL.push_back(aIter->isNull());
+    for (auto const& elem : m_aKeyIter->second.first->get())
+        FilterColumnsNULL.push_back(elem.isNull());
     vStatements_t::const_iterator pNewStatement(m_vStatements.find(FilterColumnsNULL));
     if(pNewStatement == m_vStatements.end())
     {
@@ -480,14 +475,12 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
     const sal_Int32 nOldLength = aSql.getLength();
     sal_Int32 i = 1;
     // here we build the condition part for the update statement
-    SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
-    SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
-    for(;aIter != aEnd;++aIter,++i)
+    for (auto const& columnName : *m_pColumnNames)
     {
-        if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
+        if ( m_pKeyColumnNames->find(columnName.first) != m_pKeyColumnNames->end() )
         {
-            sKeyCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
-            if((_rOriginalRow->get())[aIter->second.nPosition].isNull())
+            sKeyCondition.append(::dbtools::quoteName( aQuote,columnName.second.sRealName));
+            if((_rOriginalRow->get())[columnName.second.nPosition].isNull())
                 sKeyCondition.append(sIsNull);
             else
                 sKeyCondition.append(sParam);
@@ -495,29 +488,28 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         }
         else
         {
-            std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
-            for( std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
-                aIndexIter != aIndexEnd;++aIndexIter)
+            for (auto const& indexColumn : aAllIndexColumns)
             {
-                if((*aIndexIter)->hasByName(aIter->first))
+                if(indexColumn->hasByName(columnName.first))
                 {
-                    sIndexCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
-                    if((_rOriginalRow->get())[aIter->second.nPosition].isNull())
+                    sIndexCondition.append(::dbtools::quoteName( aQuote,columnName.second.sRealName));
+                    if((_rOriginalRow->get())[columnName.second.nPosition].isNull())
                         sIndexCondition.append(sIsNull);
                     else
                     {
                         sIndexCondition.append(sParam);
-                        aIndexColumnPositions.push_back(aIter->second.nPosition);
+                        aIndexColumnPositions.push_back(columnName.second.nPosition);
                     }
                     sIndexCondition.append(aAnd);
                     break;
                 }
             }
         }
-        if((_rInsertRow->get())[aIter->second.nPosition].isModified())
+        if((_rInsertRow->get())[columnName.second.nPosition].isModified())
         {
-            aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aPara);
+            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + aPara);
         }
+        ++i;
     }
 
     if( aSql.getLength() != nOldLength )
@@ -561,51 +553,43 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     Reference<XRow> xRow;
     sal_Int32 i = 1;
     // first the set values
-    SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
-    SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
-    sal_uInt16 j = 0;
-    for(;aIter != aEnd;++aIter,++j)
+    for (auto const& columnName : *m_pColumnNames)
     {
-        if ( i_sTableName.isEmpty() || aIter->second.sTableName == i_sTableName )
+        if ( i_sTableName.isEmpty() || columnName.second.sTableName == i_sTableName )
         {
-            sal_Int32 nPos = aIter->second.nPosition;
+            sal_Int32 nPos = columnName.second.nPosition;
             if((_rInsertRow->get())[nPos].isModified())
             {
                 if ( bRefetch )
                 {
-                    bRefetch = std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),aIter->second.sRealName) == m_aFilterColumns.end();
+                    bRefetch = std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),columnName.second.sRealName) == m_aFilterColumns.end();
                 }
-                impl_convertValue_throw(_rInsertRow,aIter->second);
+                impl_convertValue_throw(_rInsertRow,columnName.second);
                 (_rInsertRow->get())[nPos].setSigned((_rOriginalRow->get())[nPos].isSigned());
-                setParameter(i++,xParameter,(_rInsertRow->get())[nPos],aIter->second.nType,aIter->second.nScale);
+                setParameter(i++,xParameter,(_rInsertRow->get())[nPos],columnName.second.nType,columnName.second.nScale);
             }
         }
     }
     // and then the values of the where condition
-    aIter = m_pKeyColumnNames->begin();
-    aEnd = m_pKeyColumnNames->end();
-    j = 0;
-    for(;aIter != aEnd;++aIter,++j)
+    for (auto const& keyColumnName : *m_pKeyColumnNames)
     {
-        if ( i_sTableName.isEmpty() || aIter->second.sTableName == i_sTableName )
+        if ( i_sTableName.isEmpty() || keyColumnName.second.sTableName == i_sTableName )
         {
-            setParameter(i++,xParameter,(_rOriginalRow->get())[aIter->second.nPosition],aIter->second.nType,aIter->second.nScale);
+            setParameter(i++,xParameter,(_rOriginalRow->get())[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
         }
     }
     if ( !_aIndexColumnPositions.empty() )
     {
         // now we have to set the index values
-        std::vector<sal_Int32>::const_iterator aIdxColIter = _aIndexColumnPositions.begin();
-        std::vector<sal_Int32>::const_iterator aIdxColEnd = _aIndexColumnPositions.end();
-        j = 0;
-        aIter = m_pColumnNames->begin();
-        for(;aIdxColIter != aIdxColEnd;++aIdxColIter,++i,++j,++aIter)
+        auto aIter = m_pColumnNames->begin();
+        for (auto const& indexColumnPosition : _aIndexColumnPositions)
         {
-            setParameter(i,xParameter,(_rOriginalRow->get())[*aIdxColIter],(_rOriginalRow->get())[*aIdxColIter].getTypeKind(),aIter->second.nScale);
+            setParameter(i++,xParameter,(_rOriginalRow->get())[indexColumnPosition],(_rOriginalRow->get())[indexColumnPosition].getTypeKind(),aIter->second.nScale);
+            ++aIter;
         }
     }
     const sal_Int32 nRowsUpdated = xPrep->executeUpdate();
-     m_bUpdated =  nRowsUpdated > 0;
+    m_bUpdated = nRowsUpdated > 0;
     if(m_bUpdated)
     {
         const sal_Int32 nBookmark = ::comphelper::getINT32((_rInsertRow->get())[0].getAny());
@@ -745,12 +729,10 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         const OUString sQuote = getIdentifierQuoteString();
         OUString sMaxStmt;
         aEnd = m_pKeyColumnNames->end();
-        std::vector< OUString >::const_iterator aAutoIter = m_aAutoColumns.begin();
-        std::vector< OUString >::const_iterator aAutoEnd = m_aAutoColumns.end();
-        for (;aAutoIter !=  aAutoEnd; ++aAutoIter)
+        for (auto const& autoColumn : m_aAutoColumns)
         {
             // we will only fetch values which are keycolumns
-            SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+            SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(autoColumn);
             if ( aFind != aEnd )
             {
                 sMaxStmt += sMax + ::dbtools::quoteName( sQuote,aFind->second.sRealName) + sMaxEnd;
@@ -772,13 +754,13 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                 Reference<XRow> xRow(xRes,UNO_QUERY);
                 if(xRow.is() && xRes->next())
                 {
-                    aAutoIter = m_aAutoColumns.begin();
-                    for (sal_Int32 i=1;aAutoIter != aAutoEnd; ++aAutoIter,++i)
+                    sal_Int32 i=1;
+                    for (auto const& autoColumn : m_aAutoColumns)
                     {
                         // we will only fetch values which are keycolumns
-                        SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+                        SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(autoColumn);
                         if ( aFind != aEnd )
-                            (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
+                            (_rInsertRow->get())[aFind->second.nPosition].fill(i++, aFind->second.nType, xRow);
                     }
                 }
                 ::comphelper::disposeComponent(xStatement);
