@@ -194,6 +194,10 @@ interface Window
 
 interface BrowseWindow : Window
 {
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        // Implementations in Subclasses
+    ]
     SID_NEWWINDOW // ole(no) api(play/rec)
     [
         ExecMethod = ExecView_Impl ;
@@ -234,6 +238,16 @@ interface BrowseWindow : Window
         ExecMethod = ExecView_Impl ;
         StateMethod = StateView_Impl ;
     ]
+    SID_VIEWSHELL3 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+    SID_VIEWSHELL4 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
 }
 
 interface TopWindow : BrowseWindow
@@ -263,6 +277,11 @@ interface TopWindow : BrowseWindow
         ExecMethod = INetExecute_Impl ;
         StateMethod = INetState_Impl ;
     ]
+    SID_CREATELINK // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
     SID_FOCUSURLBOX // ole(no) api(final/play/rec)
     [
         ExecMethod = INetExecute_Impl ;
@@ -275,5 +294,17 @@ interface TopWindow : BrowseWindow
 shell SfxViewFrame
 {
     import TopWindow;
+
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    SID_SHOWPOPUPS
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
 }
 

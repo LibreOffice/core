@@ -244,8 +244,16 @@ void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
 }
 
 
-void SfxObjectShell::PrintState_Impl(SfxItemSet &/*rSet*/)
+void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 {
+    bool bPrinting = false;
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
+    if ( pFrame )
+    {
+        SfxPrinter *pPrinter = pFrame->GetViewShell()->GetPrinter();
+        bPrinting = pPrinter && pPrinter->IsPrinting();
+    }
+    rSet.Put( SfxBoolItem( SID_PRINTOUT, bPrinting ) );
 }
 
 bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet)
@@ -1103,6 +1111,14 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
         case SID_DOCINFO_COMMENTS :
             getDocProperties()->setDescription( static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue() );
             break;
+
+        case SID_DOCINFO_KEYWORDS :
+        {
+            const OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            getDocProperties()->setKeywords(
+                ::comphelper::string::convertCommaSeparated(aStr) );
+            break;
+        }
     }
 }
 
@@ -1128,6 +1144,19 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
                 break;
             }
 
+            case SID_DOCINFO_KEYWORDS :
+            {
+                rSet.Put( SfxStringItem( nSID, ::comphelper::string::
+                    convertCommaSeparated(getDocProperties()->getKeywords())) );
+                break;
+            }
+
+            case SID_DOCPATH:
+            {
+                OSL_FAIL( "Not supported anymore!" );
+                break;
+            }
+
             case SID_DOCFULLNAME:
             {
                 rSet.Put( SfxStringItem( SID_DOCFULLNAME, GetTitle(SFX_TITLE_FULLNAME) ) );
@@ -1146,16 +1175,44 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
                 break;
             }
 
+            case SID_DOC_SAVED:
+            {
+                rSet.Put( SfxBoolItem( SID_DOC_SAVED, !IsModified() ) );
+                break;
+            }
+
+            case SID_CLOSING:
+            {
+                rSet.Put( SfxBoolItem( SID_CLOSING, false ) );
+                break;
+            }
+
             case SID_DOC_LOADING:
                 rSet.Put( SfxBoolItem( nSID, ! ( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) ) );
+                break;
+
+            case SID_IMG_LOADING:
+                rSet.Put( SfxBoolItem( nSID, ! ( pImpl->nLoadedFlags & SfxLoadedFlags::IMAGES ) ) );
                 break;
         }
     }
 }
 
 
-void SfxObjectShell::ExecView_Impl(SfxRequest & /*rReq*/)
+void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
 {
+    switch ( rReq.GetSlot() )
+    {
+        case SID_ACTIVATE:
+        {
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
+            if ( pFrame )
+                pFrame->GetFrame().Appear();
+            rReq.SetReturnValue( SfxObjectItem( 0, pFrame ) );
+            rReq.Done();
+            break;
+        }
+    }
 }
 
 
