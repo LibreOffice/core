@@ -1252,6 +1252,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sTextFieldEnd( "TextFieldEnd"  ),
     sTextFieldStartEnd( "TextFieldStartEnd"  ),
     sFrameStyleName("FrameStyleName"),
+    sBookmarkHidden("BookmarkHidden"),
+    sBookmarkCondition("BookmarkCondition"),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
     rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TextPropMap::PARA, true ));
@@ -2498,6 +2500,28 @@ void XMLTextParagraphExport::exportTextMark(
             const uno::Reference<text::XTextContent> xTextContent(
                     xName, uno::UNO_QUERY_THROW);
             GetExport().AddAttributesRDFa(xTextContent);
+        }
+
+        // bookmark-start: add attributes hidden and condition
+        if (nElement == 1)
+        {
+            Reference<XPropertySet> bkmkProps(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
+            Reference<XPropertySetInfo> bkmkPropInfo(bkmkProps->getPropertySetInfo(), UNO_QUERY);
+            if (bkmkPropInfo->hasPropertyByName(sBookmarkHidden))
+            {
+                bool bHidden = false;
+                bkmkProps->getPropertyValue(sBookmarkHidden) >>= bHidden;
+                if (bHidden)
+                {
+                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "hidden", "true");
+                    if (bkmkPropInfo->hasPropertyByName(sBookmarkCondition))
+                    {
+                        OUString sCondition;
+                        bkmkProps->getPropertyValue(sBookmarkCondition) >>= sCondition;
+                        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", sCondition);
+                    }
+                }
+            }
         }
 
         // export element
