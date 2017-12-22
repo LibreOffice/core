@@ -25,6 +25,7 @@ public:
     void testFdo69893();
     void testFdo75110();
     void testFdo75898();
+    void testTdf113877();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -32,6 +33,7 @@ public:
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
+    CPPUNIT_TEST(testTdf113877);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -143,6 +145,32 @@ void SwUiWriterTest::testFdo69893()
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
     // Selection did not include the para after table, this was "B1".
     CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetTxt());
+}
+
+void SwUiWriterTest::testTdf113877()
+{
+    load(DATA_DIRECTORY, "tdf113877_insert_numbered_list.odt");
+
+    // set a page cursor into the end of the document
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    // insert the same document at current cursor position
+    {
+        const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list.odt";
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    }
+
+    // the initial list with 4 list items
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(1), "ListId"), getProperty<OUString>(getParagraph(4), "ListId"));
+
+    // the last of the first list, and the first of the inserted list
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(4), "ListId"), getProperty<OUString>(getParagraph(5), "ListId"));
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(5), "ListId"), getProperty<OUString>(getParagraph(6), "ListId"));
+    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(6), "ListId"), getProperty<OUString>(getParagraph(7), "ListId"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
