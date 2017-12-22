@@ -210,6 +210,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,RHINO,SWING_TARBALL) \
 		$(call fetch_Optional,SERF,SERF_TARBALL) \
 		$(call fetch_Optional,STAROFFICE,STAROFFICE_TARBALL) \
+		$(if $(filter WNT,$(OS)),TWAIN_DSM_TARBALL) \
 		$(call fetch_Optional,UCPP,UCPP_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 		$(call fetch_Optional,WPD,WPD_TARBALL) \
