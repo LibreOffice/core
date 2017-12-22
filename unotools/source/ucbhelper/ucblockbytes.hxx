@@ -111,7 +111,7 @@ public:
     void                    SetError( ErrCode nError )
                             { m_nError = nError; }
 
-    ErrCode                 GetError() const
+    ErrCode const &         GetError() const
                             { return m_nError; }
 
     // calling this method delegates the responsibility to call closeinput to the caller!

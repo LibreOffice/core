@@ -100,7 +100,7 @@ namespace basegfx
             };
         }
 
-        B3DPolyPolygon createUnitCubePolyPolygon()
+        B3DPolyPolygon const & createUnitCubePolyPolygon()
         {
             return theUnitCubePolyPolygon::get();
         }
@@ -182,7 +182,7 @@ namespace basegfx
             };
         }
 
-        B3DPolyPolygon createUnitCubeFillPolyPolygon()
+        B3DPolyPolygon const & createUnitCubeFillPolyPolygon()
         {
             return theUnitCubeFillPolyPolygon::get();
         }

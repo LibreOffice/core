@@ -256,10 +256,10 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 
         bool            IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
         css::uno::Sequence < OUString > GetAllServiceNames();
-        OUString        GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
-        OUString        GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString const & GetFactoryName           (       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString const & GetFactoryStandardTemplate(      SvtModuleOptions::EFactory    eFactory   ) const;
         static OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   );
-        OUString        GetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString const & GetFactoryDefaultFilter  (       SvtModuleOptions::EFactory    eFactory   ) const;
         bool            IsDefaultFilterReadonly(          SvtModuleOptions::EFactory eFactory      ) const;
         sal_Int32       GetFactoryIcon            (       SvtModuleOptions::EFactory    eFactory   ) const;
         static bool     ClassifyFactoryByName     ( const OUString&              sName      ,
@@ -439,7 +439,7 @@ css::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
     return comphelper::containerToSequence(aVec);
 }
 
-OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
+OUString const & SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
 {
     return m_lFactories[eFactory].getFactory();
 }
@@ -482,7 +482,7 @@ OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFacto
     return sShortName;
 }
 
-OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
+OUString const & SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
 {
     return m_lFactories[eFactory].getTemplateFile();
 }
@@ -524,7 +524,7 @@ OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EF
     return sURL;
 }
 
-OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
+OUString const & SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
 {
     return m_lFactories[eFactory].getDefaultFilter();
 }

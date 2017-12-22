@@ -39,7 +39,7 @@ bool isListType(Type type);
 
 Type elementType(Type type);
 
-css::uno::Type mapType(Type type);
+css::uno::Type const & mapType(Type type);
 
 Type getDynamicType(css::uno::Any const & value);
 

@@ -377,7 +377,7 @@ namespace sax_fastparser {
         writeBytes(sSlashAndClosingBracket, N_CHARS(sSlashAndClosingBracket));
     }
 
-    css::uno::Reference< css::io::XOutputStream > FastSaxSerializer::getOutputStream() const
+    css::uno::Reference< css::io::XOutputStream > const & FastSaxSerializer::getOutputStream() const
     {
         return maCachedOutputStream.getOutputStream();
     }
