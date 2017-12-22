@@ -70,6 +70,7 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
     switch (nSlotId)
     {
+        case SID_NOTES_WINDOW:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_SLIDE_SORTER_MODE:
         case SID_SLIDE_MASTER_MODE:
@@ -81,6 +82,7 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
             rRequest.Cancel();
             break;
 
+        case SID_SWITCH_SHELL:
         case SID_LEFT_PANE_DRAW:
         case SID_LEFT_PANE_IMPRESS:
         default:
