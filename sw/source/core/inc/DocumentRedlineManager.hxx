@@ -30,6 +30,8 @@ namespace sw
 
 class DocumentRedlineManager : public IDocumentRedlineAccess
 {
+    bool bHideInlineTooltips : 1;
+
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );
 
@@ -111,6 +113,8 @@ public:
     virtual void SetRedlinePassword(
         /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) override;
 
+    virtual bool IsHideInlineTooltips() override;
+    virtual void SetHideInlineTooltips(bool bSet) override;
 
     //Non Interface methods;
 

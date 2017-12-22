@@ -32,6 +32,8 @@
 #include <docsh.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
+
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
@@ -1752,6 +1754,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
     get(m_pMarkPosLB,"markpos");
     get(m_pMarkColorLB,"markcolor");
     get(m_pMarkPreviewWN,"markpreview");
+    get(m_pShowChangesTooltip,"changestooltip");
 
     m_pInsertedPreviewWN->set_height_request(aPreviewSize.Height());
     m_pDeletedPreviewWN->set_height_request(aPreviewSize.Height());
@@ -1810,6 +1813,7 @@ void SwRedlineOptionsTabPage::dispose()
     m_pMarkPosLB.clear();
     m_pMarkColorLB.clear();
     m_pMarkPreviewWN.clear();
+    m_pShowChangesTooltip.clear();
     SfxTabPage::dispose();
 }
 
@@ -1830,6 +1834,8 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     AuthorCharAttr aOldInsertAttr(pOpt->GetInsertAuthorAttr());
     AuthorCharAttr aOldDeletedAttr(pOpt->GetDeletedAuthorAttr());
     AuthorCharAttr aOldChangedAttr(pOpt->GetFormatAuthorAttr());
+
+    const bool bOldShowInlineTooltips = pOpt->IsShowInlineTooltip();
 
     ColorData nOldMarkColor = pOpt->GetMarkAlignColor().GetColor();
     sal_uInt16 nOldMarkMode = pOpt->GetMarkAlignMode();
@@ -1874,14 +1880,15 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         case 4: nPos = text::HoriOrientation::INSIDE;     break;
     }
     pOpt->SetMarkAlignMode(nPos);
-
     pOpt->SetMarkAlignColor(m_pMarkColorLB->GetSelectEntryColor());
+    pOpt->SetShowInlineTooltip( m_pShowChangesTooltip->IsChecked() );
 
     if (!(aInsertedAttr == aOldInsertAttr) ||
         !(aDeletedAttr == aOldDeletedAttr) ||
         !(aChangedAttr == aOldChangedAttr) ||
        nOldMarkColor != pOpt->GetMarkAlignColor().GetColor() ||
-       nOldMarkMode != pOpt->GetMarkAlignMode())
+       nOldMarkMode != pOpt->GetMarkAlignMode() ||
+       bOldShowInlineTooltips != pOpt->IsShowInlineTooltip() )
     {
         // update all documents
         SwDocShell* pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<SwDocShell>));
@@ -1919,6 +1926,8 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     m_pChangedColorLB->SelectEntry(Color(nColor));
 
     m_pMarkColorLB->SelectEntry(pOpt->GetMarkAlignColor());
+
+    m_pShowChangesTooltip->Check( pOpt->IsShowInlineTooltip() );
 
     m_pInsertLB->SelectEntryPos(0);
     m_pDeletedLB->SelectEntryPos(0);
