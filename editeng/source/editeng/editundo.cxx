@@ -254,11 +254,13 @@ void EditUndoConnectParas::Undo()
 
     EditPaM aPaM = GetEditEngine()->SplitContent(nNode, nSepPos);
     GetEditEngine()->SetParaAttribs( nNode, aLeftParaAttribs );
-    GetEditEngine()->SetParaAttribs( nNode+1, aRightParaAttribs );
 
     GetEditEngine()->SetCallParaInsertedOrDeleted( bCall );
     if (GetEditEngine()->IsCallParaInsertedOrDeleted())
+    {
         GetEditEngine()->ParagraphInserted( nNode+1 );
+        GetEditEngine()->SetParaAttribs( nNode+1, aRightParaAttribs );
+    }
 
     if (GetEditEngine()->GetStyleSheetPool())
     {
