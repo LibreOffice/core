@@ -129,7 +129,7 @@ public:
 
     void    SetAutoPopup(bool bAuto) { mbAutoPopup = bAuto; }
     void    LayoutChanged();
-    Size            MinCloseButtonSize();
+    Size const & MinCloseButtonSize();
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
     sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString&);

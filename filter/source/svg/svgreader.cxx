@@ -136,7 +136,7 @@ bool PolyPolygonIsMixedOpenAndClosed( const basegfx::B2DPolyPolygon& rPoly )
     // polygon and there are both closed and open polygons.
     for( sal_uInt32 a(0); !bRetval && a < rPoly.count(); a++ )
     {
-        if ( (rPoly.getB2DPolygon(a)).isClosed() )
+        if ( rPoly.getB2DPolygon(a).isClosed() )
         {
             bClosed = true;
         }

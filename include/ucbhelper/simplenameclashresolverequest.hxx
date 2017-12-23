@@ -61,7 +61,7 @@ public:
       *
       * @return the new name, if supplied.
       */
-    const OUString getNewName() const;
+    OUString const & getNewName() const;
 };
 
 } // namespace ucbhelper

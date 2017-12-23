@@ -221,7 +221,7 @@ public:
     void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    OUString getNamespaceURL( const OUString& rPrefix );
+    OUString const & getNamespaceURL( const OUString& rPrefix );
     /// @throws css::uno::RuntimeException
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
@@ -254,7 +254,7 @@ private:
     /// @throws css::xml::sax::SAXException
     sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen );
     /// @throws css::xml::sax::SAXException
-    OUString GetNamespaceURL( const OString& rPrefix );
+    OUString const & GetNamespaceURL( const OString& rPrefix );
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
@@ -703,7 +703,7 @@ sal_Int32 FastSaxParserImpl::GetNamespaceToken( const OUString& rNamespaceURL )
         return FastToken::DONTKNOW;
 }
 
-OUString FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix )
+OUString const & FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix )
 {
     Entity& rEntity = getEntity();
     if( !rEntity.maNamespaceCount.empty() )
@@ -877,7 +877,7 @@ void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int
     throw IllegalArgumentException();
 }
 
-OUString FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix )
+OUString const & FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix )
 {
     try
     {

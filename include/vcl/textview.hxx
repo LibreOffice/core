@@ -96,7 +96,7 @@ class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
     void                ShowSelection( const TextSelection& rSel );
     void                ImpShowHideSelection( const TextSelection* pRange = nullptr );
 
-    TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
+    TextSelection const & ImpMoveCursor( const KeyEvent& rKeyEvent );
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
     bool                IsInSelection( const TextPaM& rPaM );
 

@@ -46,7 +46,7 @@ public:
     SAL_DLLPRIVATE ImplJobSetup&        ImplGetData();
     SAL_DLLPRIVATE const ImplJobSetup&  ImplGetConstData() const;
 
-    OUString              GetPrinterName() const;
+    OUString const &      GetPrinterName() const;
     bool                  IsDefault() const;
 
     friend VCL_DLLPUBLIC SvStream&  ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup );

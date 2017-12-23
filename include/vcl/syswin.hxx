@@ -238,7 +238,7 @@ public:
 
     void            SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
     void            CloseNotebookBar();
-    VclPtr<NotebookBar> GetNotebookBar() const;
+    VclPtr<NotebookBar> const & GetNotebookBar() const;
 
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;
