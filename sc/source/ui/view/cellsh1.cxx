@@ -154,6 +154,26 @@ OUString FlagsToString( InsertDeleteFlags nFlags,
     }
     return aFlagsStr;
 }
+
+void SetTabNoAndCursor( const ScViewData* rViewData, const OUString& rCellId )
+{
+    ScTabViewShell* pTabViewShell = rViewData->GetViewShell();
+    assert(pTabViewShell);
+    const ScDocument& rDoc = rViewData->GetDocShell()->GetDocument();
+    std::vector<sc::NoteEntry> aNotes;
+    rDoc.GetAllNoteEntries(aNotes);
+
+    sal_uInt32 nId = rCellId.toUInt32();
+    auto lComp = [nId](const sc::NoteEntry& rNote) { return rNote.mpNote->GetId() == nId; };
+
+    const auto& aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);
+    if (aFoundNoteIt != aNotes.end())
+    {
+        ScAddress aFoundPos = aFoundNoteIt->maPos;
+        pTabViewShell->SetTabNo(aFoundPos.Tab());
+        pTabViewShell->SetCursor(aFoundPos.Col(), aFoundPos.Row());
+    }
+}
 }
 
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -2190,21 +2210,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if (!aCellId.isEmpty())
                     {
-
-                        ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
-                        std::vector<sc::NoteEntry> aNotes;
-                        rDoc.GetAllNoteEntries(aNotes);
-
-                        sal_uInt32 nId = aCellId.toUInt32();
-                        auto lComp = [nId](const sc::NoteEntry& rNote) { return rNote.mpNote->GetId() == nId; };
-
-                        const auto& aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);
-                        if (aFoundNoteIt != aNotes.end())
-                        {
-                            ScAddress aFoundPos = aFoundNoteIt->maPos;
-                            pTabViewShell->SetTabNo(aFoundPos.Tab());
-                            pTabViewShell->SetCursor(aFoundPos.Col(), aFoundPos.Row());
-                        }
+                        SetTabNoAndCursor( GetViewData(), aCellId );
                     }
 
                     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
@@ -2385,20 +2391,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 OUString aCellId = pIdItem->GetValue();
                 if (!aCellId.isEmpty())
                 {
-                    ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
-                    std::vector<sc::NoteEntry> aNotes;
-                    rDoc.GetAllNoteEntries(aNotes);
-
-                    sal_uInt32 nId = aCellId.toUInt32();
-                    auto lComp = [nId](const sc::NoteEntry& rNote) { return rNote.mpNote->GetId() == nId; };
-
-                    const auto& aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);
-                    if (aFoundNoteIt != aNotes.end())
-                    {
-                        ScAddress aFoundPos = aFoundNoteIt->maPos;
-                        pTabViewShell->SetTabNo(aFoundPos.Tab());
-                        pTabViewShell->SetCursor(aFoundPos.Col(), aFoundPos.Row());
-                    }
+                    SetTabNoAndCursor( GetViewData(), aCellId );
                 }
             }
 
