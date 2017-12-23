@@ -229,6 +229,10 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         return;
     }
 
+    // not sure if it's possible to modify these
+    if (isa<CXXConversionDecl>(functionDecl))
+        return;
+
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(functionDecl)) {
         return;
@@ -267,6 +271,9 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (startswith(type.getAsString(), "struct o3tl::strong_int")) {
         return;
     }
+
+    //functionDecl->dump();
+
     mbInsideFunctionDecl = true;
     mbFoundReturnValueDisqualifier = false;
     TraverseStmt(functionDecl->getBody());
@@ -395,7 +402,9 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
             FunctionDecl const * calleeFunctionDecl = callExpr->getDirectCallee();
             if (!calleeFunctionDecl)
                 return true;
-            return !loplugin::TypeCheck(calleeFunctionDecl->getReturnType()).LvalueReference();
+            auto tc = loplugin::TypeCheck(calleeFunctionDecl->getReturnType());
+            if (!tc.LvalueReference() && !tc.Pointer())
+                return true;
         }
         return false;
     }

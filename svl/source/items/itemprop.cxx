@@ -79,7 +79,7 @@ const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( const OUString 
     return &aIter->second;
 }
 
-uno::Sequence<beans::Property> SfxItemPropertyMap::getProperties() const
+uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
 {
     if( !m_pImpl->m_aPropSeq.getLength() )
     {

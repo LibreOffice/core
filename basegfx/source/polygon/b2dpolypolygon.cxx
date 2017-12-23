@@ -230,7 +230,7 @@ namespace basegfx
         return mpPolyPolygon->count();
     }
 
-    B2DPolygon B2DPolyPolygon::getB2DPolygon(sal_uInt32 nIndex) const
+    B2DPolygon const & B2DPolyPolygon::getB2DPolygon(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
 

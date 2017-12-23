@@ -543,7 +543,7 @@ public:
     /** Obtain the list of icon themes which were found in the config folder
      * @see vcl::IconThemeScanner for more details.
      */
-    std::vector<vcl::IconThemeInfo> GetInstalledIconThemes() const;
+    std::vector<vcl::IconThemeInfo> const & GetInstalledIconThemes() const;
 
     /** Obtain the name of the icon theme which will be chosen automatically for the desktop environment.
      * This method will only return icon themes which were actually found on the system.
@@ -561,9 +561,9 @@ public:
     const FrameStyle&               GetFrameStyle() const;
     void                            SetFrameStyle( const FrameStyle& rStyle );
 
-    const BitmapEx                  GetPersonaHeader() const;
+    BitmapEx const &                GetPersonaHeader() const;
 
-    const BitmapEx                  GetPersonaFooter() const;
+    BitmapEx const &                GetPersonaFooter() const;
 
     const boost::optional<Color>&   GetPersonaMenuBarTextColor() const;
 

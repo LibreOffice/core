@@ -82,7 +82,7 @@ public:
     static OUString     GetStandardText( StandardButtonType eButton );
 
     bool                SetModeImage( const Image& rImage );
-    const Image         GetModeImage( ) const;
+    Image const &       GetModeImage( ) const;
     bool                HasImage() const;
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;

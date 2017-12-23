@@ -482,7 +482,7 @@ namespace utils
         mpImpl->xorPolyPolygon(rPolyPoly);
     }
 
-    B2DPolyPolygon B2DClipState::getClipPoly() const
+    B2DPolyPolygon const & B2DClipState::getClipPoly() const
     {
         return mpImpl->getClipPoly();
     }

@@ -721,7 +721,7 @@ The following structure describes the permissions used in PDF security
      * this should enable the producer to give feedback about
      * any anomalies that might have occurred
      */
-    std::set< ErrorCode > GetErrors();
+    std::set< ErrorCode > const & GetErrors();
 
     static css::uno::Reference< css::beans::XMaterialHolder >
            InitEncryption( const OUString& i_rOwnerPassword,

@@ -223,7 +223,7 @@ ImplJobSetup& JobSetup::ImplGetData()
     return *mpData;
 }
 
-OUString JobSetup::GetPrinterName() const
+OUString const & JobSetup::GetPrinterName() const
 {
     return mpData->GetPrinterName();
 }

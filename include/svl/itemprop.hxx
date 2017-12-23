@@ -95,7 +95,7 @@ public:
     ~SfxItemPropertyMap();
 
     const SfxItemPropertySimpleEntry*  getByName( const OUString &rName ) const;
-    css::uno::Sequence< css::beans::Property > getProperties() const;
+    css::uno::Sequence< css::beans::Property > const & getProperties() const;
     /// @throws css::beans::UnknownPropertyException
     css::beans::Property getPropertyByName( const OUString & rName ) const;
     bool hasPropertyByName( const OUString& rName ) const;

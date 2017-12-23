@@ -152,7 +152,7 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
     setContinuations( aContinuations );
 }
 
-const OUString SimpleNameClashResolveRequest::getNewName() const
+OUString const & SimpleNameClashResolveRequest::getNewName() const
 {
     return m_xNameSupplier->getName();
 }
