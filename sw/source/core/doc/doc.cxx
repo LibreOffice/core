@@ -658,25 +658,37 @@ void SwDoc::CalculatePagesForPrinting(
     bool bPrintEmptyPages   = !bPrintSelection && rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
-    std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
-    rValidPages.clear();
+    // tdf#114663: rData.GetValidPagesSet() will recieve the physical page numbers, but here we
+    // must deal with two cases of numbering from user PoV: one is taking into account autoinserted
+    // blank pages (= physical numbering), and one when blanks are not printed (then only non-blank
+    // pages are counted: tdf#89708). So the numbering that is used in UI for the chosen mode will
+    // be stored to aValidUIPages, and its mapping to physical numbers in aUIPages2PhyPagesMap, to
+    // produce sequence of those numbers later in aPagesToPrint, and ultimately be mapped back to
+    // physical numbers before being put to rData.GetPagesToPrint().
+    std::set< sal_Int32 > aValidUIPages;
+    std::map< sal_Int32, sal_Int32 > aUIPages2PhyPagesMap;
 
-    sal_Int32 nPageNum = 1;
+    sal_Int32 nPhyPageNum = 1, nUIPageNum = 1;
     const SwPageFrame *pStPage = dynamic_cast<const SwPageFrame*>( rLayout.Lower() );
-    while (pStPage && nPageNum <= nDocPageCount)
+    while (pStPage && nPhyPageNum <= nDocPageCount)
     {
+        const bool bNonEmptyPage = pStPage->getFrameArea().Height() != 0;
         const bool bPrintThisPage =
             ( (bPrintRightPages && pStPage->OnRightPage()) ||
               (bPrintLeftPages && !pStPage->OnRightPage()) ) &&
-            ( bPrintEmptyPages || pStPage->getFrameArea().Height() );
+            ( bPrintEmptyPages || bNonEmptyPage );
 
         if (bPrintThisPage)
         {
-            rValidPages.insert( nPageNum );
-            rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
+            aUIPages2PhyPagesMap[ nUIPageNum ] = nPhyPageNum;
+            rData.GetValidPagesSet().insert( nPhyPageNum );
+            aValidUIPages.insert( nUIPageNum );
+            rPrinterPaperTrays[ nPhyPageNum ] = lcl_GetPaperBin( pStPage );
         }
 
-        ++nPageNum;
+        ++nPhyPageNum;
+        if (bPrintEmptyPages || bNonEmptyPage)
+            ++nUIPageNum;
         pStPage = static_cast<const SwPageFrame*>(pStPage->GetNext());
     }
 
@@ -716,54 +728,14 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get vector of pages to print according to PageRange and valid pages set from above
     // (result may be an empty vector, for example if the range string is not correct)
-    // If excluding empty pages, allow range to specify range of printable pages
-    if (bPrintEmptyPages || nContent == 0)
-    {
-        // Use range enumerator directly
-        StringRangeEnumerator::getRangesFromString(
-            aPageRange, rData.GetPagesToPrint(),
-            1, nDocPageCount, 0, &rData.GetValidPagesSet() );
-    }
-    else // not printing blanks and not printing all
-    {
-        // Use range enumerator to adjust for empty pages - numbers in range are
-        // essentially indexes into the valid page number set
-        StringRangeEnumerator aEnum( aPageRange, 1, nDocPageCount, 0);
-        rData.GetPagesToPrint().clear();
-        rData.GetPagesToPrint().reserve(static_cast<size_t>(aEnum.size()));
-
-        std::set<sal_Int32>::iterator valIt = rData.GetValidPagesSet().begin();
-        sal_Int32 lastRangeValue = 1;
-        for (StringRangeEnumerator::Iterator it = aEnum.begin(); it != aEnum.end(); ++it)
-        {
-            // Move valid page set iterator forward/back by diff between current
-            // and previous numbers expressed in range
-            if ((*it) - lastRangeValue > 0)
-            {
-                // Fast-forward
-                for (sal_Int32 i = 0;
-                     i < (*it) - lastRangeValue && valIt != rData.GetValidPagesSet().end();
-                     ++i, ++valIt)
-                    ;
-            }
-            else if (lastRangeValue - (*it) > 0)
-            {
-                // Rewind
-                for (sal_Int32 i = 0;
-                     i < lastRangeValue - (*it) && valIt != rData.GetValidPagesSet().begin();
-                     ++i, --valIt)
-                    ;
-            }
-
-            // Range encompasses more values than are listed as valid
-            if (valIt == rData.GetValidPagesSet().end())
-                break;
-
-            rData.GetPagesToPrint().push_back(*valIt);
-
-            lastRangeValue = *it;
-        }
-    }
+    // If excluding empty pages, allow range to specify range of non-empty pages
+    std::vector< sal_Int32 > aPagesToPrint;
+    StringRangeEnumerator::getRangesFromString( aPageRange, aPagesToPrint,
+                                                1, nDocPageCount, 0, &aValidUIPages );
+    // Now map the UI page numbers used above to physical page numbers
+    for (sal_Int32& rPage : aPagesToPrint)
+        rPage = aUIPages2PhyPagesMap[rPage];
+    rData.GetPagesToPrint().swap(aPagesToPrint);
 }
 
 void SwDoc::UpdatePagesForPrintingWithPostItData(
