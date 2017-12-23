@@ -208,8 +208,9 @@ public:
 class SwRenderData
 {
     /** pages valid for printing (according to the current settings)
+     Maps UI page number (possibly ignoring automatically added blank pages) to document page number
      This set of pages does NOT depend on the 'PageRange' that is used as a printing option! */
-    std::set< sal_Int32 >                       m_aValidPages;          ///< the set of possible pages (see StringRangeEnumerator::getRangesFromString )
+    std::map< sal_Int32, sal_Int32 >            m_aValidPages;          ///< the set of possible pages (see StringRangeEnumerator::getRangesFromString )
 
     /// printer paper tray to use for each of the m_aValidPages above
     std::map< sal_Int32, sal_Int32 >            m_aPrinterPaperTrays;
@@ -267,8 +268,8 @@ public:
 
     typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
 
-    std::set< sal_Int32 > &             GetValidPagesSet()          { return m_aValidPages; }
-    const std::set< sal_Int32 > &       GetValidPagesSet() const    { return m_aValidPages; }
+    std::map< sal_Int32, sal_Int32 > &       GetValidPagesSet()          { return m_aValidPages; }
+    const std::map< sal_Int32, sal_Int32 > & GetValidPagesSet() const    { return m_aValidPages; }
 
     /** a map for printer paper tray numbers to use for each document page
        a value of -1 for the tray means that there is no specific tray defined */

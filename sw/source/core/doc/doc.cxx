@@ -498,7 +498,7 @@ struct PostItField_ : public SetGetExpField
         : SetGetExpField( rNdIdx, pField, nullptr ) {}
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
-            const std::set< sal_Int32 > &rPossiblePages,
+            const std::map< sal_Int32, sal_Int32 > &rPossiblePages,
             sal_uInt16& rVirtPgNo, sal_uInt16& rLineNo );
 
     const SwPostItField* GetPostIt() const
@@ -509,7 +509,7 @@ struct PostItField_ : public SetGetExpField
 
 sal_uInt16 PostItField_::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,
-    const std::set< sal_Int32 > &rPossiblePages,
+    const std::map< sal_Int32, sal_Int32 > &rPossiblePages,
     /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_uInt16& rLineNo )
 {
     //Problem: If a PostItField is contained in a Node that is represented
@@ -526,7 +526,12 @@ sal_uInt16 PostItField_::GetPageNo(
             (pFrame->HasFollow() && pFrame->GetFollow()->GetOfst() <= nPos) )
             continue;
         sal_uInt16 nPgNo = pFrame->GetPhyPageNum();
-        if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))
+        auto const aIt = std::find_if(rPossiblePages.begin(), rPossiblePages.end(),
+            [nPgNo](const std::pair<const sal_Int32, sal_Int32>& i) -> bool { return i.second == nPgNo; });
+        if (aIt == rPossiblePages.end())
+            return 0;
+        sal_Int32 nPgNoUI = aIt->first;
+        if( rRangeEnum.hasValue( nPgNoUI, &rPossiblePages ))
         {
             rLineNo = (sal_uInt16)(pFrame->GetLineCount( nPos ) +
                       pFrame->GetAllLines() - pFrame->GetThisLines());
@@ -658,26 +663,29 @@ void SwDoc::CalculatePagesForPrinting(
     bool bPrintEmptyPages   = !bPrintSelection && rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
-    std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
+    std::map< sal_Int32, sal_Int32 > &rValidPages = rData.GetValidPagesSet();
     rValidPages.clear();
 
-    sal_Int32 nPageNum = 1;
+    sal_Int32 nPhyPageNum = 1, nPageNumUI = 1;
     const SwPageFrame *pStPage = dynamic_cast<const SwPageFrame*>( rLayout.Lower() );
-    while (pStPage && nPageNum <= nDocPageCount)
+    while (pStPage && nPhyPageNum <= nDocPageCount)
     {
+        const bool bNonEmptyPage = pStPage->getFrameArea().Height();
         const bool bPrintThisPage =
             ( (bPrintRightPages && pStPage->OnRightPage()) ||
               (bPrintLeftPages && !pStPage->OnRightPage()) ) &&
-            ( bPrintEmptyPages || pStPage->getFrameArea().Height() );
+            ( bPrintEmptyPages || bNonEmptyPage );
 
         if (bPrintThisPage)
         {
-            rValidPages.insert( nPageNum );
-            rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
+            rValidPages[ nPageNumUI ] = nPhyPageNum;
+            rPrinterPaperTrays[ nPhyPageNum ] = lcl_GetPaperBin( pStPage );
         }
 
-        ++nPageNum;
+        ++nPhyPageNum;
         pStPage = static_cast<const SwPageFrame*>(pStPage->GetNext());
+        if (bPrintEmptyPages || bNonEmptyPage)
+            ++nPageNumUI;
     }
 
     // now that we have identified the valid pages for printing according
@@ -717,53 +725,9 @@ void SwDoc::CalculatePagesForPrinting(
     // get vector of pages to print according to PageRange and valid pages set from above
     // (result may be an empty vector, for example if the range string is not correct)
     // If excluding empty pages, allow range to specify range of printable pages
-    if (bPrintEmptyPages || nContent == 0)
-    {
-        // Use range enumerator directly
-        StringRangeEnumerator::getRangesFromString(
+    StringRangeEnumerator::getRangesFromString(
             aPageRange, rData.GetPagesToPrint(),
             1, nDocPageCount, 0, &rData.GetValidPagesSet() );
-    }
-    else // not printing blanks and not printing all
-    {
-        // Use range enumerator to adjust for empty pages - numbers in range are
-        // essentially indexes into the valid page number set
-        StringRangeEnumerator aEnum( aPageRange, 1, nDocPageCount, 0);
-        rData.GetPagesToPrint().clear();
-        rData.GetPagesToPrint().reserve(static_cast<size_t>(aEnum.size()));
-
-        std::set<sal_Int32>::iterator valIt = rData.GetValidPagesSet().begin();
-        sal_Int32 lastRangeValue = 1;
-        for (StringRangeEnumerator::Iterator it = aEnum.begin(); it != aEnum.end(); ++it)
-        {
-            // Move valid page set iterator forward/back by diff between current
-            // and previous numbers expressed in range
-            if ((*it) - lastRangeValue > 0)
-            {
-                // Fast-forward
-                for (sal_Int32 i = 0;
-                     i < (*it) - lastRangeValue && valIt != rData.GetValidPagesSet().end();
-                     ++i, ++valIt)
-                    ;
-            }
-            else if (lastRangeValue - (*it) > 0)
-            {
-                // Rewind
-                for (sal_Int32 i = 0;
-                     i < lastRangeValue - (*it) && valIt != rData.GetValidPagesSet().begin();
-                     ++i, --valIt)
-                    ;
-            }
-
-            // Range encompasses more values than are listed as valid
-            if (valIt == rData.GetValidPagesSet().end())
-                break;
-
-            rData.GetPagesToPrint().push_back(*valIt);
-
-            lastRangeValue = *it;
-        }
-    }
 }
 
 void SwDoc::UpdatePagesForPrintingWithPostItData(
@@ -912,7 +876,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     sal_Int32 nDocPageCount )
 {
     std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
-    std::set< sal_Int32 > &rValidPagesSet = rData.GetValidPagesSet();
+    std::map< sal_Int32, sal_Int32 > &rValidPagesSet = rData.GetValidPagesSet();
     std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rData.GetPagePairsForProspectPrinting();
     std::map< sal_Int32, const SwPageFrame * > validStartFrames;
 
@@ -950,7 +914,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     while( pPageFrame && nPageNum < nDocPageCount )
     {
         ++nPageNum;
-        rValidPagesSet.insert( nPageNum );
+        rValidPagesSet[ nPageNum ] = nPageNum;
         validStartFrames[ nPageNum ] = pPageFrame;
         pPageFrame = static_cast<const SwPageFrame*>(pPageFrame->GetNext());
 

@@ -539,7 +539,7 @@ StringRangeEnumerator::StringRangeEnumerator( const OUString& i_rInput,
         mbValidInput = setRange( i_rInput );
 }
 
-bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
+bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues ) const
 {
     if( i_nValue < 0 || i_nValue < mnMin || i_nValue > mnMax )
         return false;
@@ -665,7 +665,7 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
     return true;
 }
 
-bool StringRangeEnumerator::hasValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
+bool StringRangeEnumerator::hasValue( sal_Int32 i_nValue, const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues ) const
 {
     if( i_pPossibleValues && i_pPossibleValues->find( i_nValue ) == i_pPossibleValues->end() )
         return false;
@@ -685,6 +685,17 @@ bool StringRangeEnumerator::hasValue( sal_Int32 i_nValue, const std::set< sal_In
         }
     }
     return false;
+}
+
+StringRangeEnumerator::Iterator::Iterator(const StringRangeEnumerator* i_pEnum,
+    const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues,
+    sal_Int32 i_nRange,
+    sal_Int32 i_nCurrent)
+    : pEnumerator(i_pEnum), pPossibleValues(i_pPossibleValues)
+    , nRangeIndex(i_nRange), nCurrent(i_nCurrent)
+{
+    if (!pEnumerator->checkValue(nCurrent, pPossibleValues))
+        ++(*this);
 }
 
 StringRangeEnumerator::Iterator& StringRangeEnumerator::Iterator::operator++()
@@ -729,24 +740,32 @@ StringRangeEnumerator::Iterator& StringRangeEnumerator::Iterator::operator++()
     return *this;
 }
 
+sal_Int32 StringRangeEnumerator::Iterator::operator*() const
+{
+    if (pPossibleValues)
+    {
+        auto aIt = pPossibleValues->find(nCurrent);
+        if (aIt != pPossibleValues->end())
+            return aIt->second;
+    }
+    return nCurrent;
+}
 
 bool StringRangeEnumerator::Iterator::operator==( const Iterator& i_rCompare ) const
 {
     return i_rCompare.pEnumerator == pEnumerator && i_rCompare.nRangeIndex == nRangeIndex && i_rCompare.nCurrent == nCurrent;
 }
 
-StringRangeEnumerator::Iterator StringRangeEnumerator::begin( const std::set< sal_Int32 >* i_pPossibleValues ) const
+StringRangeEnumerator::Iterator StringRangeEnumerator::begin( const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues ) const
 {
     StringRangeEnumerator::Iterator it( this,
                                         i_pPossibleValues,
                                         maSequence.empty() ? -1 : 0,
                                         maSequence.empty() ? -1 : maSequence[0].nFirst );
-    if( ! checkValue(*it, i_pPossibleValues ) )
-        ++it;
     return it;
 }
 
-StringRangeEnumerator::Iterator StringRangeEnumerator::end( const std::set< sal_Int32 >* i_pPossibleValues ) const
+StringRangeEnumerator::Iterator StringRangeEnumerator::end( const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues ) const
 {
     return StringRangeEnumerator::Iterator( this, i_pPossibleValues, -1, -1 );
 }
@@ -756,7 +775,7 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
                                                  sal_Int32 i_nMinNumber,
                                                  sal_Int32 i_nMaxNumber,
                                                  sal_Int32 i_nLogicalOffset,
-                                                 std::set< sal_Int32 > const * i_pPossibleValues
+                                                 std::map< sal_Int32, sal_Int32 > const * i_pPossibleValues
                                                )
 {
     o_rPageVector.clear();

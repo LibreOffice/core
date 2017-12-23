@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vector>
-#include <set>
+#include <map>
 
 typedef ::std::vector< Range* > ImpSelList;
 
@@ -95,26 +95,24 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringRangeEnumerator
     bool setRange( const OUString& i_rNewRange );
     bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence );
     bool insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers );
-    bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    bool checkValue( sal_Int32, const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues = nullptr ) const;
 public:
     class TOOLS_DLLPUBLIC Iterator
     {
         const StringRangeEnumerator*      pEnumerator;
-        const std::set< sal_Int32 >*      pPossibleValues;
+        const std::map< sal_Int32, sal_Int32 >* pPossibleValues;
         sal_Int32                         nRangeIndex;
         sal_Int32                         nCurrent;
 
         friend class StringRangeEnumerator;
         Iterator( const StringRangeEnumerator* i_pEnum,
-                  const std::set< sal_Int32 >* i_pPossibleValues,
+                  const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues,
                   sal_Int32 i_nRange,
-                  sal_Int32 i_nCurrent )
-        : pEnumerator( i_pEnum ), pPossibleValues( i_pPossibleValues )
-        , nRangeIndex( i_nRange ), nCurrent( i_nCurrent ) {}
+                  sal_Int32 i_nCurrent );
 
     public:
         Iterator& operator++();
-        sal_Int32 operator*() const { return nCurrent;}
+        sal_Int32 operator*() const;
         bool operator==(const Iterator&) const;
         bool operator!=(const Iterator& i_rComp) const
         { return ! (*this == i_rComp); }
@@ -129,10 +127,10 @@ public:
                            );
 
     sal_Int32 size() const { return mnCount; }
-    Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
-    Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    Iterator begin( const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    Iterator end( const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
-    bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    bool hasValue( sal_Int32 nValue, const std::map< sal_Int32, sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
     /**
     i_rPageRange:     the string to be changed into a sequence of numbers
@@ -163,7 +161,7 @@ public:
                                      sal_Int32 i_nMinNumber,
                                      sal_Int32 i_nMaxNumber,
                                      sal_Int32 i_nLogicalOffset = -1,
-                                     std::set< sal_Int32 > const * i_pPossibleValues = nullptr
+                                     std::map< sal_Int32, sal_Int32 > const * i_pPossibleValues = nullptr
                                     );
 };
 
