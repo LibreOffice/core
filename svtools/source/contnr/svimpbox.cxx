@@ -53,7 +53,6 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     , aFctSet(this, pLBView)
     , bAreChildrenTransient(true)
     , mbForceMakeVisible (false)
-    , m_pStringSorter(nullptr)
     , aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
     , aOutputSize(0, 0)
     , mbNoAutoCurEntry(false)
@@ -119,7 +118,6 @@ SvImpLBox::~SvImpLBox()
     aEditIdle.Stop();
     StopUserEvent();
 
-    delete m_pStringSorter;
     if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
@@ -141,17 +139,14 @@ void SvImpLBox::UpdateStringSorter()
         if( aLocale.Language != rNewLocale.Language ||
             aLocale.Country != rNewLocale.Country ||
             aLocale.Variant != rNewLocale.Variant )
-        {
-            delete m_pStringSorter;
-            m_pStringSorter = nullptr;
-        }
+            m_pStringSorter.reset();
     }
 
     if( !m_pStringSorter )
     {
-        m_pStringSorter = new comphelper::string::NaturalStringSorter(
+        m_pStringSorter.reset(new comphelper::string::NaturalStringSorter(
                               ::comphelper::getProcessComponentContext(),
-                              rNewLocale);
+                              rNewLocale));
     }
 }
 
