@@ -817,7 +817,7 @@ $(eval $(call gb_Helper_register_packages_for_install,calc,\
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,libreofficekit,\
-	$(if $(filter LINUX %BSD SOLARIS, $(OS)),$(if $(ENABLE_GTK3),libreofficekit_selectionhandles)) \
+	$(if $(filter LINUX %BSD SOLARIS, $(OS)),libreofficekit_selectionhandles) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
