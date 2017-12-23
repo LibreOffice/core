@@ -783,7 +783,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
                 sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
 
-                if (sTemp == pFolder->getName())
+                if (pFolder && sTemp == pFolder->getName())
                     return makeAny(uno::Reference<XUnoTunnel>(pFolder));
             }
             else
@@ -791,7 +791,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 // Determine the file name.
                 sTemp = aName.copy ( nStreamIndex + 1 );
 
-                if (pFolder->hasByName(sTemp))
+                if (pFolder && pFolder->hasByName(sTemp))
                     return pFolder->getByName(sTemp);
             }
 
