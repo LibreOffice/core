@@ -332,6 +332,9 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
             else
                 return true;
         }
+        if (isa<CXXFunctionalCastExpr>(expr)) {
+            return true;
+        }
         if (isa<MaterializeTemporaryExpr>(expr)) {
             return true;
         }
