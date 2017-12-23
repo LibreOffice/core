@@ -29,8 +29,6 @@ class SwView;
 // double entry! hrc and hxx
 // these Ids say what the buttons below the scrollbar are doing
 #define NID_START   20000
-#define NID_NEXT    20000
-#define NID_PREV    20001
 #define NID_TBL     20002
 #define NID_FRM     20003
 #define NID_PGE     20004
@@ -49,7 +47,7 @@ class SwView;
 #define NID_INDEX_ENTRY  20017
 #define NID_TABLE_FORMULA   20018
 #define NID_TABLE_FORMULA_ERROR     20019
-#define NID_COUNT  20
+#define NID_COUNT  18
 
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {
@@ -65,47 +63,6 @@ public:
                                               const SfxPoolItem* pState ) override;
 
     DECL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, bool);
-};
-
-class SwScrollNaviPopup;
-
-class SwScrollNaviToolBox : public ToolBox
-{
-    VclPtr<SwScrollNaviPopup> m_pNaviPopup;
-
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-
-public:
-    SwScrollNaviToolBox(vcl::Window* pParent, SwScrollNaviPopup* pNaviPopup, WinBits nWinStyle)
-        : ToolBox(pParent, nWinStyle)
-        , m_pNaviPopup(pNaviPopup)
-    {
-    }
-    virtual ~SwScrollNaviToolBox() override;
-    virtual void dispose() override;
-};
-
-class SwScrollNaviPopup : public SfxPopupWindow
-{
-    VclPtr<SwScrollNaviToolBox> m_pToolBox;
-    VclPtr<FixedText>           m_pInfoField;
-
-    OUString        sQuickHelp[2 * NID_COUNT];
-
-protected:
-    DECL_LINK(SelectHdl, ToolBox*, void);
-
-public:
-    SwScrollNaviPopup( sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window *pParent );
-    virtual ~SwScrollNaviPopup() override;
-    virtual void dispose() override;
-
-    static OUString     GetToolTip(bool bNext);
-
-    void                GrabFocus() { m_pToolBox->GrabFocus(); }
-
-    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
 class SwPreviewZoomControl : public SfxToolBoxControl
@@ -133,6 +90,9 @@ public:
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
+
+OUString GetScrollToToolTip(bool bNext);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

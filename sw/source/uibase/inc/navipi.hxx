@@ -21,7 +21,6 @@
 
 #include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
 #include <sfx2/childwin.hxx>
@@ -31,33 +30,17 @@
 #include "conttree.hxx"
 #include <ndarr.hxx>
 #include <memory>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 
 class SwWrtShell;
 class SwNavigationPI;
 class SwNavigationChild;
 class SfxBindings;
-class NumEditAction;
 class SwView;
 class SwNavigationConfig;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
 enum class RegionMode;
-class SpinField;
-
-class SwNavHelpToolBox : public ToolBox
-{
-    VclPtr<SwNavigationPI> m_xDialog;
-    virtual void    MouseButtonDown(const MouseEvent &rEvt) override;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void    dispose() override;
-public:
-    SwNavHelpToolBox(Window* pParent);
-    void SetDialog(SwNavigationPI* pDialog)
-    {
-        m_xDialog = pDialog;
-    }
-    ~SwNavHelpToolBox() override;
-};
 
 class SwNavigationPI : public PanelLayout,
                        public SfxControllerItem, public SfxListener
@@ -66,15 +49,13 @@ class SwNavigationPI : public PanelLayout,
     friend class SwContentTree;
     friend class SwGlobalTree;
 
-    VclPtr<SwNavHelpToolBox>    m_aContentToolBox;
+    VclPtr<sfx2::sidebar::SidebarToolBox>    m_aContentToolBox;
     VclPtr<ToolBox>             m_aGlobalToolBox;
-    VclPtr<NumEditAction>       m_xEdit;
     VclPtr<VclContainer>        m_aContentBox;
     VclPtr<SwContentTree>       m_aContentTree;
     VclPtr<VclContainer>        m_aGlobalBox;
     VclPtr<SwGlobalTree>        m_aGlobalTree;
     VclPtr<ListBox>             m_aDocListBox;
-    Idle                m_aPageChgIdle;
     OUString            m_sContentFileName;
     OUString            m_aContextArr[3];
     OUString            m_aStatusArr[4];
@@ -108,15 +89,10 @@ class SwNavigationPI : public PanelLayout,
     DECL_LINK( ToolBoxSelectHdl, ToolBox *, void );
     DECL_LINK( ToolBoxClickHdl, ToolBox *, void );
     DECL_LINK( ToolBoxDropdownClickHdl, ToolBox*, void );
-    DECL_LINK( EditAction, NumEditAction&, void );
-    DECL_LINK( EditGetFocus, Control&, void );
     DECL_LINK( DoneLink, SfxPoolItem *, void );
     DECL_LINK( MenuSelectHdl, Menu *, bool );
-    DECL_LINK( ChangePageHdl, Timer*, void );
-    DECL_LINK( PageEditModifyHdl, SpinField&, void );
     DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
-    void UsePage();
 
     void SetPopupWindow( SfxPopupWindow* );
 
@@ -125,13 +101,22 @@ protected:
     // release ObjectShellLock early enough for app end
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    NumEditAction&  GetPageEdit();
     void            ToggleTree();
     void            SetGlobalMode(bool bSet) {m_bGlobalMode = bSet;}
 
 public:
 
-    SwNavigationPI(SfxBindings*, vcl::Window*);
+    static VclPtr<vcl::Window> Create(
+        vcl::Window* pParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* pBindings);
+
+    SwNavigationPI(
+        vcl::Window* pParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* _pBindings
+        );
+
     virtual ~SwNavigationPI() override;
     virtual void    dispose() override;
 
@@ -156,7 +141,6 @@ public:
     bool            IsGlobalMode() const {return    m_bGlobalMode;}
 
     SwView*         GetCreateView() const;
-    void            CreateNavigationTool(const tools::Rectangle& rRect, bool bSetFocus, vcl::Window *pParent);
 };
 
 class SwNavigationChild : public SfxChildWindowContext

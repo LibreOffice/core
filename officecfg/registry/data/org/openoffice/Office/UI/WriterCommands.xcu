@@ -2737,6 +2737,11 @@
           <value xml:lang="en-US">Continue previous numbering</value>
         </prop>
       </node>
+      <node oor:name=".uno:Go2Page" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Go To Page</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NavElement" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Navigate By</value>

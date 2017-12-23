@@ -190,23 +190,6 @@ void SwNavigationPI::FillBox()
     }
 }
 
-void SwNavigationPI::UsePage()
-{
-    SwView *pView = GetCreateView();
-    SwWrtShell *pSh = pView ? &pView->GetWrtShell() : nullptr;
-    GetPageEdit().SetValue(1);
-    if (pSh)
-    {
-        const sal_uInt16 nPageCnt = pSh->GetPageCnt();
-        sal_uInt16 nPhyPage, nVirPage;
-        pSh->GetPageNum(nPhyPage, nVirPage);
-
-        GetPageEdit().SetMax(nPageCnt);
-        GetPageEdit().SetLast(nPageCnt);
-        GetPageEdit().SetValue(nPhyPage);
-    }
-}
-
 // Select handler of the toolboxes
 
 IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
@@ -224,19 +207,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
     bool bOutlineWithChildren  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
     bool bFocusToDoc = false;
-    if (sCommand == "back")
-    {
-        // #i75416# move the execution of the search to an asynchronously called static link
-        bool* pbNext = new bool(false);
-        Application::PostUserEvent(LINK(pView, SwView, MoveNavigationHdl), pbNext);
-    }
-    else if (sCommand == "forward")
-    {
-        // #i75416# move the execution of the search to an asynchronously called static link
-        bool* pbNext = new bool(true);
-        Application::PostUserEvent(LINK(pView, SwView, MoveNavigationHdl), pbNext);
-    }
-    else if (sCommand == "root")
+    if (sCommand == "root")
     {
         m_aContentTree->ToggleToRoot();
     }
@@ -353,9 +324,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     const OUString sCommand = pBox->GetItemCommand(nCurrItemId);
-    if (sCommand == "navigation")
-       CreateNavigationTool(pBox->GetItemRect(nCurrItemId), true, this);
-    else if (sCommand == "dragmode")
+    if (sCommand == "dragmode")
     {
         static const char* aHIDs[] =
         {
@@ -395,95 +364,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
         pBox->EndSelection();
         pBox->Invalidate();
     }
-}
-
-SwNavHelpToolBox::SwNavHelpToolBox(Window* pParent)
-    : ToolBox(pParent)
-{
-}
-
-VCL_BUILDER_FACTORY(SwNavHelpToolBox)
-
-void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
-{
-    sal_uInt16 nItemId = GetItemId(rEvt.GetPosPixel());
-    if (rEvt.GetButtons() == MOUSE_LEFT && GetItemCommand(nItemId) == "navigation")
-    {
-        m_xDialog->CreateNavigationTool(GetItemRect(nItemId), false, this);
-        return;
-    }
-    ToolBox::MouseButtonDown(rEvt);
-}
-
-void SwNavigationPI::CreateNavigationTool(const tools::Rectangle& rRect, bool bSetFocus, vcl::Window *pParent)
-{
-    Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
-    VclPtrInstance<SwScrollNaviPopup> pPopup(FN_SCROLL_NAVIGATION, xFrame, pParent);
-
-    tools::Rectangle aRect(rRect);
-    Point aT1 = aRect.TopLeft();
-    aT1 = pPopup->GetParent()->OutputToScreenPixel(pPopup->GetParent()->AbsoluteScreenToOutputPixel(m_aContentToolBox->OutputToAbsoluteScreenPixel(aT1)));
-    aRect.SetPos(aT1);
-    pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Right|FloatWinPopupFlags::AllowTearOff);
-    SetPopupWindow( pPopup );
-    if(bSetFocus)
-    {
-        pPopup->EndPopupMode(FloatWinPopupEndFlags::TearOff);
-        pPopup->GrabFocus();
-    }
-}
-
-void SwNavHelpToolBox::RequestHelp(const HelpEvent& rHEvt)
-{
-    const sal_uInt16 nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-    const OUString sCommand(GetItemCommand(nItemId));
-    if (sCommand == "back")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(false));
-    else if (sCommand == "forward")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(true));
-    ToolBox::RequestHelp(rHEvt);
-}
-
-void SwNavHelpToolBox::dispose()
-{
-    m_xDialog.clear();
-    ToolBox::dispose();
-}
-
-SwNavHelpToolBox::~SwNavHelpToolBox()
-{
-    disposeOnce();
-}
-
-// Action-Handler Edit:
-// Switches to the page if the structure view is not turned on.
-
-IMPL_LINK( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
-{
-    SwView *pView = GetCreateView();
-    if (pView)
-    {
-        if(m_aPageChgIdle.IsActive())
-            m_aPageChgIdle.Stop();
-        m_pCreateView->GetWrtShell().GotoPage((sal_uInt16)rEdit.GetValue(), true);
-        m_pCreateView->GetEditWin().GrabFocus();
-        m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
-    }
-}
-
-// If the page can be set here, the maximum is set.
-
-IMPL_LINK( SwNavigationPI, EditGetFocus, Control&, rControl, void )
-{
-    NumEditAction* pEdit = static_cast<NumEditAction*>(&rControl);
-    SwView *pView = GetCreateView();
-    if (!pView)
-        return;
-    SwWrtShell &rSh = pView->GetWrtShell();
-
-    const sal_uInt16 nPageCnt = rSh.GetPageCnt();
-    pEdit->SetMax(nPageCnt);
-    pEdit->SetLast(nPageCnt);
 }
 
 // Setting of an automatic mark
@@ -587,9 +467,26 @@ enum StatusIndex
     IDX_STR_INACTIVE = 2
 };
 
-SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
-                               vcl::Window* pParent)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", nullptr)
+VclPtr<vcl::Window> SwNavigationPI::Create(
+    vcl::Window* pParent,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    SfxBindings* pBindings)
+{
+    if( pParent == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to SwNavigationPI::Create", nullptr, 0);
+    if( !rxFrame.is() )
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to SwNavigationPI::Create", nullptr, 0);
+    if( pBindings == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to SwNavigationPI::Create", nullptr, 0);
+
+    return VclPtr<SwNavigationPI>::Create(pParent, rxFrame, pBindings);
+}
+
+SwNavigationPI::SwNavigationPI(
+    vcl::Window* pParent,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    SfxBindings* _pBindings)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", rxFrame)
     , SfxControllerItem(SID_DOCFULLNAME, *_pBindings)
     , m_pxObjectShell(nullptr)
     , m_pContentView(nullptr)
@@ -607,12 +504,14 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 {
     get(m_aContentToolBox, "content");
     m_aContentToolBox->SetLineCount(2);
-    m_aContentToolBox->InsertBreak(8);
-    m_aContentToolBox->SetDialog(this);
+    m_aContentToolBox->InsertBreak(6);
+    m_aContentToolBox->SetQuickHelpText(m_aContentToolBox->GetItemId(".uno:ScrollToPrevious"), GetScrollToToolTip(false));
+    m_aContentToolBox->SetQuickHelpText(m_aContentToolBox->GetItemId(".uno:ScrollToNext"), GetScrollToToolTip(true));
+
     get(m_aGlobalToolBox, "global");
     get(m_aDocListBox, "documents");
-
     get(m_aContentBox, "contentbox");
+
     m_aContentTree = VclPtr<SwContentTree>::Create(m_aContentBox, this);
     m_aContentTree->set_expand(true);
     get(m_aGlobalBox, "globalbox");
@@ -626,31 +525,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aDocListBox->SetHelpId(HID_NAVIGATOR_LISTBOX);
     m_aDocListBox->SetDropDownLineCount(9);
 
-    // Insert the numeric field in the toolbox.
-    m_xEdit = VclPtr<NumEditAction>::Create(
-                    m_aContentToolBox.get(), WB_BORDER|WB_TABSTOP|WB_LEFT|WB_REPEAT|WB_SPIN);
-    m_xEdit->SetMin(1);
-    m_xEdit->SetFirst(1);
-    m_xEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
-    m_xEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
-    m_xEdit->SetAccessibleName(m_xEdit->GetQuickHelpText());
-    m_xEdit->SetUpHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
-    m_xEdit->SetDownHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
-
-    // Double separators are not allowed, so you have to
-    // determine the suitable size differently.
-    tools::Rectangle aFirstRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("anchor"));
-    tools::Rectangle aSecondRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("header"));
-    Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
-                       aFirstRect.Bottom() - aFirstRect.Top() );
-    Size aOptimalSize(m_xEdit->get_preferred_size());
-    aItemWinSize.Width() = std::max(aItemWinSize.Width(), aOptimalSize.Width());
-    m_xEdit->SetSizePixel(aItemWinSize);
-    m_aContentToolBox->InsertSeparator(4);
-    m_aContentToolBox->InsertWindow( FN_PAGENUMBER, m_xEdit, ToolBoxItemBits::NONE, 4);
-    m_aContentToolBox->InsertSeparator(4);
-    m_aContentToolBox->SetHelpId(FN_PAGENUMBER, "modules/swriter/ui/navigatorpanel/numericfield");
-    m_aContentToolBox->ShowItem(FN_PAGENUMBER);
     if (!IsGlobalDoc())
     {
         m_aContentToolBox->HideItem(m_aContentToolBox->GetItemId("toggle"));
@@ -702,9 +576,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     Link<ToolBox *, void> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
     m_aContentToolBox->SetSelectHdl( aLk );
     m_aGlobalToolBox->SetSelectHdl( aLk );
-    m_aDocListBox->SetSelectHdl(LINK(this, SwNavigationPI,
-                                                    DocListBoxSelectHdl));
-    m_aContentToolBox->SetClickHdl( LINK(this, SwNavigationPI, ToolBoxClickHdl) );
+    m_aDocListBox->SetSelectHdl(LINK(this, SwNavigationPI, DocListBoxSelectHdl));
     m_aContentToolBox->SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
     m_aGlobalToolBox->SetClickHdl( LINK(this, SwNavigationPI, ToolBoxClickHdl) );
     m_aGlobalToolBox->SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
@@ -712,7 +584,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 
     vcl::Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
-    GetPageEdit().SetFont(aFont);
     aFont = m_aContentTree->GetFont();
     aFont.SetWeight(WEIGHT_NORMAL);
     m_aContentTree->SetFont(aFont);
@@ -720,8 +591,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 
     StartListening(*SfxGetpApp());
 
-    sal_uInt16 nNavId = m_aContentToolBox->GetItemId("navigation");
-    m_aContentToolBox->SetItemBits(nNavId, m_aContentToolBox->GetItemBits(nNavId) | ToolBoxItemBits::DROPDOWNONLY );
     sal_uInt16 nDropId = m_aContentToolBox->GetItemId("dragmode");
     m_aContentToolBox->SetItemBits(nDropId, m_aContentToolBox->GetItemBits(nDropId) | ToolBoxItemBits::DROPDOWNONLY );
     sal_uInt16 nOutlineId = m_aContentToolBox->GetItemId("headings");
@@ -738,9 +607,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     }
     else
         m_aContentTree->GrabFocus();
-    UsePage();
-    m_aPageChgIdle.SetInvokeHandler(LINK(this, SwNavigationPI, ChangePageHdl));
-    m_aPageChgIdle.SetPriority(TaskPriority::LOWEST);
 
     m_aContentTree->SetAccessibleName(SwResId(STR_ACCESS_TL_CONTENT));
     m_aGlobalTree->SetAccessibleName(SwResId(STR_ACCESS_TL_GLOBAL));
@@ -766,7 +632,6 @@ void SwNavigationPI::dispose()
 
     EndListening(*SfxGetpApp());
 
-    m_aContentToolBox->GetItemWindow(FN_PAGENUMBER)->disposeOnce();
     m_aContentToolBox->Clear();
     if (m_pxObjectShell)
     {
@@ -786,10 +651,7 @@ void SwNavigationPI::dispose()
     m_aContentTree.disposeAndClear();
     m_aContentBox.clear();
     m_aGlobalToolBox.disposeAndClear();
-    m_xEdit.disposeAndClear();
     m_aContentToolBox.clear();
-
-    m_aPageChgIdle.Stop();
 
     ::SfxControllerItem::dispose();
 
@@ -877,13 +739,6 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
             UpdateListBox();
         }
     }
-}
-
-// Get the numeric field from the toolbox.
-
-NumEditAction& SwNavigationPI::GetPageEdit()
-{
-    return *static_cast<NumEditAction*>(m_aContentToolBox->GetItemWindow(FN_PAGENUMBER));
 }
 
 // Notification on modified DocInfo
@@ -1182,22 +1037,6 @@ bool SwNavigationPI::IsGlobalDoc() const
     return bRet;
 }
 
-IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
-{
-    if (!IsDisposed())
-    {
-        EditAction(GetPageEdit());
-        GetPageEdit().GrabFocus();
-    }
-}
-
-IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, SpinField&, void)
-{
-    if (m_aPageChgIdle.IsActive())
-        m_aPageChgIdle.Stop();
-    m_aPageChgIdle.Start();
-}
-
 SwView*  SwNavigationPI::GetCreateView() const
 {
     if (!m_pCreateView)
@@ -1222,7 +1061,9 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
                         SfxBindings* _pBindings )
     : SfxChildWindowContext( nId )
 {
-    VclPtr<SwNavigationPI> pNavi = VclPtr<SwNavigationPI>::Create(_pBindings, pParent);
+    Reference< XFrame > xFrame = _pBindings->GetActiveFrame();
+    VclPtr< SwNavigationPI > pNavi = VclPtr< SwNavigationPI >::Create( pParent, xFrame, _pBindings );
+
     _pBindings->Invalidate(SID_NAVIGATOR);
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();

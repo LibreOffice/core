@@ -7616,6 +7616,23 @@ SfxInt16Item SwPageFooterLayout SID_ATTR_PAGE_FOOTER_LAYOUT
     GroupId = SfxGroupId::Format;
 ]
 
+SfxUInt16Item Go2Page FN_GO2PAGE
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
 SfxVoidItem AddTextBox FN_ADD_TEXT_BOX
 ()
 [
