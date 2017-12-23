@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4e5b58f6",
+        "filename": "svtools/source/contnr/svimpbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-23T11:42:26Z",
+      "side": 1,
+      "message": "I\u0027m not sure for this too but shouldn\u0027t it be if(m_pStringSorter.get()) ?",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 25
+      },
+      "revId": "d25772990dc3108a9cd2b06fdfae64a0195acc63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6e749467",
+        "filename": "svtools/source/contnr/svimpbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-23T11:42:26Z",
+      "side": 1,
+      "message": "idem, (if !m_pStringSorter.get())",
+      "range": {
+        "startLine": 145,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 26
+      },
+      "revId": "d25772990dc3108a9cd2b06fdfae64a0195acc63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
