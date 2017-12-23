@@ -5280,7 +5280,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
-                        VclPtr<Menu> pMenu;
+                        ScopedVclPtr<Menu> pMenu;
                         OUString sMenuName("private:resource/ReadonlyContextMenu");
                         if (GetView().TryContextMenuInterception(aROPopup.GetMenu(), sMenuName, pMenu, aEvent))
                         {
