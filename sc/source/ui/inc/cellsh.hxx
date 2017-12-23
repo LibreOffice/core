@@ -32,6 +32,7 @@
 #include <vcl/window.hxx>
 #include <rtl/ref.hxx>
 #include <sot/formats.hxx>
+#include <tabvwsh.hxx>
 
 class SvxClipboardFormatItem;
 class TransferableDataHelper;
@@ -64,7 +65,7 @@ private:
     void ExecuteDataPilotDialog();
     void ExecuteXMLSourceDialog();
     void ExecuteSubtotals(SfxRequest& rReq);
-
+    void SetTabNoAndCursor(ScTabViewShell* rTabViewShell, OUString& aCellId);
     void ExecuteFillSingleEdit();
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );
