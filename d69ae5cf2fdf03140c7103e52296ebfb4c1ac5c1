@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ee06c4cc",
+        "filename": "sc/source/ui/inc/cellsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-23T12:04:13Z",
+      "side": 1,
+      "message": "*Если бы* нужно было добавить этот новый метод в класс, то нам не нужно было бы включать новый заголовок сюда. Если тебе нужно передвавть в функцию указатель или ссылку на класс, достаточно добавить объявление класса прямо сюда без полного определения:\n\n  class ScTabViewShell;\n\nЭто позволяет использовать это имя, а размер объекта для указателя не важен. И не нужно увеличивать вермя компиляции файла за счёт парсинга дополнительного заголовка....",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "d69ae5cf2fdf03140c7103e52296ebfb4c1ac5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2e0d2ce8",
+        "filename": "sc/source/ui/inc/cellsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-23T12:04:13Z",
+      "side": 1,
+      "message": "... но на самом деле нам не нужно добавлять этот метод в класс. См. примечания во втором файле.",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 77
+      },
+      "revId": "d69ae5cf2fdf03140c7103e52296ebfb4c1ac5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6efbb4c1",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-23T12:04:13Z",
+      "side": 1,
+      "message": "Ты здесь используешь единственный метод класса: GetViewData(), для того чтобы потом получить DocShell, и из него ScDocument. Без этого ты бы мог сделать эту функцию статической, внутренней для файла.\n\nНо посмотри, ты передаёшь в неё ScTabViewShell. Обрати внимание, откуда она вообще появляется. На самом деле ты можешь в эту функцию передать единый параметр - DocShell, из которого уже получать и документ, и ScTabViewShell.",
+      "range": {
+        "startLine": 137,
+        "startChar": 23,
+        "endLine": 137,
+        "endChar": 36
+      },
+      "revId": "d69ae5cf2fdf03140c7103e52296ebfb4c1ac5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8ef8e0c4",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-23T12:04:13Z",
+      "side": 1,
+      "message": "SetTabNoAndCursor( GetViewData()-\u003eGetDocShell(), aCellId );",
+      "range": {
+        "startLine": 2218,
+        "startChar": 24,
+        "endLine": 2218,
+        "endChar": 68
+      },
+      "revId": "d69ae5cf2fdf03140c7103e52296ebfb4c1ac5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
