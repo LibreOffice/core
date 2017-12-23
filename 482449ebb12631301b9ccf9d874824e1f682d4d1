@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_aeb75c38",
+        "filename": "svtools/source/contnr/svimpbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-23T09:03:01Z",
+      "side": 1,
+      "message": "I\u0027m not sure, is it really necessary to explicitly call reset in a destructor?",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 121,
+        "endChar": 28
+      },
+      "revId": "482449ebb12631301b9ccf9d874824e1f682d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
