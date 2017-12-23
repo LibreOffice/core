@@ -148,7 +148,7 @@ void ListControl::deleteEntry(sal_uInt32 nPos)
     RecalcAll();
 }
 
-std::vector<VclPtr<vcl::Window>> ListControl::getEntries() const
+std::vector<VclPtr<vcl::Window>> const & ListControl::getEntries() const
 {
     return maEntries;
 }

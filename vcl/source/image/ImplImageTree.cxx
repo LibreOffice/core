@@ -557,7 +557,7 @@ bool ImplImageTree::checkPathAccess()
     return rNameAccess.is();
 }
 
-css::uno::Reference<css::container::XNameAccess> ImplImageTree::getNameAccess()
+css::uno::Reference<css::container::XNameAccess> const & ImplImageTree::getNameAccess()
 {
     checkPathAccess();
     return getCurrentIconSet().maNameAccess;

@@ -77,7 +77,7 @@ public:
 
     /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
     void                SetCommandHandler(const OUString& aCommand);
-    const OUString      GetCommand() const { return maCommand; }
+    OUString const &    GetCommand() const { return maCommand; }
 
     static OUString     GetStandardText( StandardButtonType eButton );
 

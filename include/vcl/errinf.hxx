@@ -145,7 +145,7 @@ public:
                                 nUserId(nArgUserId) {}
     virtual                 ~ErrorInfo();
 
-    ErrCode                 GetErrorCode() const { return nUserId; }
+    ErrCode const &         GetErrorCode() const { return nUserId; }
 
     static ErrorInfo*       GetErrorInfo(ErrCode);
 

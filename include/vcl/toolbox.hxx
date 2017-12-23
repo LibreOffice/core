@@ -355,7 +355,7 @@ public:
     sal_uInt16          GetItemId( const OUString& rCommand ) const;
     tools::Rectangle           GetItemRect( sal_uInt16 nItemId );
     tools::Rectangle           GetItemPosRect( ImplToolItems::size_type nPos );
-    tools::Rectangle           GetOverflowRect() const;
+    tools::Rectangle const &   GetOverflowRect() const;
 
     /// Returns size of the bitmap / text that is inside this toolbox item.
     Size                GetItemContentSize( sal_uInt16 nItemId );

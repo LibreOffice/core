@@ -68,7 +68,7 @@ public:
 
     size_t          size() const { return aCommandList.size(); }
 
-    SvCommand       operator[]( size_t i) {
+    SvCommand const & operator[]( size_t i) {
                         return aCommandList[ i ];
                     }
 

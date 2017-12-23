@@ -77,7 +77,7 @@ public:
      *  be too late for the destructors of the bitmaps in maIconCache)*/
     void shutdown();
 
-    css::uno::Reference< css::container::XNameAccess > getNameAccess();
+    css::uno::Reference< css::container::XNameAccess > const & getNameAccess();
 
 private:
     ImplImageTree(const ImplImageTree&) = delete;
