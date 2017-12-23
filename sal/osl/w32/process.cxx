@@ -440,6 +440,11 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     osl_releaseMutex (*osl_getGlobalMutex());
 }
 
+/* TODO because of an issue with GetEnvironmentVariableW we have to
+   allocate a buffer large enough to hold the requested environment
+   variable instead of testing for the required size. This wastes
+   some stack space, maybe we should revoke this work around if
+   this is no longer a problem */
 #define ENV_BUFFER_SIZE (32*1024-1)
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
