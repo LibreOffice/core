@@ -863,7 +863,7 @@ tools::Rectangle ToolBox::GetItemPosRect( ImplToolItems::size_type nPos )
         return tools::Rectangle();
 }
 
-tools::Rectangle ToolBox::GetOverflowRect() const
+tools::Rectangle const & ToolBox::GetOverflowRect() const
 {
     return mpData->maMenubuttonItem.maRect;
 }

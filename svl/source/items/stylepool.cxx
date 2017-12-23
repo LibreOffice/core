@@ -61,11 +61,11 @@ namespace {
         // #i86923#
         bool hasItemSet( const bool bCheckUsage ) const;
         // #i87808#
-        const std::shared_ptr<SfxItemSet> getItemSet() const
+        std::shared_ptr<SfxItemSet> const & getItemSet() const
         {
             return maItemSet.back();
         }
-        const std::shared_ptr<SfxItemSet> getUsedOrLastAddedItemSet() const;
+        std::shared_ptr<SfxItemSet> const & getUsedOrLastAddedItemSet() const;
         void setItemSet( const SfxItemSet& rSet ){ maItemSet.push_back( std::shared_ptr<SfxItemSet>( rSet.Clone() ) ); }
         // #i86923#
         Node* findChildNode( const SfxPoolItem& rItem,
@@ -80,7 +80,7 @@ namespace {
     };
 
     // #i87808#
-    const std::shared_ptr<SfxItemSet> Node::getUsedOrLastAddedItemSet() const
+    std::shared_ptr<SfxItemSet> const & Node::getUsedOrLastAddedItemSet() const
     {
         std::vector< std::shared_ptr<SfxItemSet> >::const_reverse_iterator aIter;
 

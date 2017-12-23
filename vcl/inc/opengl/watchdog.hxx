@@ -43,7 +43,7 @@ public:
         mbRelaxed = bRelaxed;
     }
 
-    WatchdogTimingsValues getWatchdogTimingsValues(WatchdogTimingMode eMode)
+    WatchdogTimingsValues const & getWatchdogTimingsValues(WatchdogTimingMode eMode)
     {
         size_t index = 0;
         index = (eMode == WatchdogTimingMode::SHADER_COMPILE) ? 1 : 0;

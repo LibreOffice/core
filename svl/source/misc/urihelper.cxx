@@ -112,7 +112,7 @@ void URIHelper::SetMaybeFileHdl(Link<OUString *, bool> const & rTheMaybeFileHdl)
     MaybeFileHdl::get() = rTheMaybeFileHdl;
 }
 
-Link<OUString *, bool> URIHelper::GetMaybeFileHdl()
+Link<OUString *, bool> const & URIHelper::GetMaybeFileHdl()
 {
     return MaybeFileHdl::get();
 }
