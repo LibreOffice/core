@@ -7672,7 +7672,7 @@ SfxVoidItem NavElement FN_NAV_ELEMENT
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
