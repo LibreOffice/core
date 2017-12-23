@@ -95,7 +95,7 @@ public:
                         InfoBox( vcl::Window* pParent, MessBoxStyle nStyle,
                                 const OUString& rMessage );
 
-    static Image        GetStandardImage();
+    static Image const & GetStandardImage();
     static OUString     GetStandardText();
 };
 
@@ -109,7 +109,7 @@ public:
 
     void                SetDefaultCheckBoxText();
 
-    static Image        GetStandardImage();
+    static Image const & GetStandardImage();
     static OUString     GetStandardText();
 };
 
@@ -136,7 +136,7 @@ public:
 
     void                SetDefaultCheckBoxText();
 
-    static Image        GetStandardImage();
+    static Image const & GetStandardImage();
     static OUString     GetStandardText();
 };
 

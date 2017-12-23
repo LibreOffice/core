@@ -67,7 +67,7 @@ namespace basegfx
         // polygon interface
         sal_uInt32 count() const;
 
-        B2DPolygon getB2DPolygon(sal_uInt32 nIndex) const;
+        B2DPolygon const & getB2DPolygon(sal_uInt32 nIndex) const;
         void setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
 
         // test for curve

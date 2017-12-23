@@ -181,10 +181,10 @@ public:
     const std::shared_ptr< css::i18n::Calendar2 >& getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
-    const css::uno::Sequence< css::i18n::CalendarItem2 > getDefaultCalendarDays() const;
+    css::uno::Sequence< css::i18n::CalendarItem2 > const & getDefaultCalendarDays() const;
 
     /// Convenience method to obtain the month names of the default calendar.
-    const css::uno::Sequence< css::i18n::CalendarItem2 > getDefaultCalendarMonths() const;
+    css::uno::Sequence< css::i18n::CalendarItem2 > const & getDefaultCalendarMonths() const;
 
     /** If the secondary calendar, if any, is of the name passed AND number
         formats using it usually use the E or EE keyword (EC|EEC). */

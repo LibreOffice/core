@@ -162,7 +162,7 @@ bool Button::SetModeImage( const Image& rImage )
     return true;
 }
 
-const Image Button::GetModeImage( ) const
+Image const & Button::GetModeImage( ) const
 {
     return mpButtonData->maImage;
 }
