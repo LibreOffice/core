@@ -25,6 +25,7 @@
 #include <vcl/vclevent.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <o3tl/enumarray.hxx>
+#include <memory>
 #include <vector>
 #include "svtaccessiblefactory.hxx"
 
@@ -142,7 +143,7 @@ private:
     Point               aEditClickPos;
     Idle                aEditIdle;
 
-    comphelper::string::NaturalStringSorter *m_pStringSorter;
+    std::unique_ptr<comphelper::string::NaturalStringSorter> m_pStringSorter;
 
     std::vector< short > aContextBmpWidthVector;
 
