@@ -101,7 +101,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optcompatpage|label11">Compatibility options for '%DOCNAME'</property>
+            <property name="label" translatable="yes" context="optcompatpage|label11">Compatibility options for “%DOCNAME”</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
