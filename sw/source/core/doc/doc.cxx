@@ -659,22 +659,29 @@ void SwDoc::CalculatePagesForPrinting(
 
     std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
     std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
+    // If excluding automatically inserted empty pages, then page numbers entered into Pages field
+    // are ordinal numbers of real pages in document. This map references those pages.
+    std::map< sal_Int32, bool > aNonEmptyPages;
     rValidPages.clear();
 
     sal_Int32 nPageNum = 1;
     const SwPageFrame *pStPage = dynamic_cast<const SwPageFrame*>( rLayout.Lower() );
     while (pStPage && nPageNum <= nDocPageCount)
     {
+        const bool bNonEmptyPage = pStPage->getFrameArea().Height();
         const bool bPrintThisPage =
             ( (bPrintRightPages && pStPage->OnRightPage()) ||
               (bPrintLeftPages && !pStPage->OnRightPage()) ) &&
-            ( bPrintEmptyPages || pStPage->getFrameArea().Height() );
+            ( bPrintEmptyPages || bNonEmptyPage );
 
         if (bPrintThisPage)
         {
             rValidPages.insert( nPageNum );
             rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
         }
+
+        if (bNonEmptyPage && !bPrintEmptyPages)
+            aNonEmptyPages[nPageNum] = bPrintThisPage;
 
         ++nPageNum;
         pStPage = static_cast<const SwPageFrame*>(pStPage->GetNext());
@@ -727,12 +734,12 @@ void SwDoc::CalculatePagesForPrinting(
     else // not printing blanks and not printing all
     {
         // Use range enumerator to adjust for empty pages - numbers in range are
-        // essentially indexes into the valid page number set
+        // essentially indexes into the non-empty page number set
         StringRangeEnumerator aEnum( aPageRange, 1, nDocPageCount, 0);
         rData.GetPagesToPrint().clear();
         rData.GetPagesToPrint().reserve(static_cast<size_t>(aEnum.size()));
 
-        std::set<sal_Int32>::iterator valIt = rData.GetValidPagesSet().begin();
+        auto valIt = aNonEmptyPages.begin();
         sal_Int32 lastRangeValue = 1;
         for (StringRangeEnumerator::Iterator it = aEnum.begin(); it != aEnum.end(); ++it)
         {
@@ -742,7 +749,7 @@ void SwDoc::CalculatePagesForPrinting(
             {
                 // Fast-forward
                 for (sal_Int32 i = 0;
-                     i < (*it) - lastRangeValue && valIt != rData.GetValidPagesSet().end();
+                     i < (*it) - lastRangeValue && valIt != aNonEmptyPages.end();
                      ++i, ++valIt)
                     ;
             }
@@ -750,16 +757,17 @@ void SwDoc::CalculatePagesForPrinting(
             {
                 // Rewind
                 for (sal_Int32 i = 0;
-                     i < lastRangeValue - (*it) && valIt != rData.GetValidPagesSet().begin();
+                     i < lastRangeValue - (*it) && valIt != aNonEmptyPages.begin();
                      ++i, --valIt)
                     ;
             }
 
             // Range encompasses more values than are listed as valid
-            if (valIt == rData.GetValidPagesSet().end())
+            if (valIt == aNonEmptyPages.end())
                 break;
 
-            rData.GetPagesToPrint().push_back(*valIt);
+            if (valIt->second)
+            rData.GetPagesToPrint().push_back(valIt->first);
 
             lastRangeValue = *it;
         }
