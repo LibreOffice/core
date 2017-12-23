@@ -49,6 +49,7 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/layout.hxx>
@@ -559,6 +560,50 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     catch (const Exception&)
     {
     }
+    return false;
+}
+
+
+#define SHTML1 "<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">"
+#define SHTML2 "<meta http-equiv=\"refresh\" content=\"1\" url=\""
+#define SHTML3 "\"><script type=\"text/javascript\"> window.location.href = \""
+#define SHTML4 "\";</script><title>Help Page Redirection</title></head><body></body></html>"
+
+static bool impl_showOfflineHelp( const OUString& rURL )
+{
+    OUString aBaseInstallPath;
+    utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
+    OUString aInternal( "vnd.sun.star.help://"  );
+
+    OUString aHelpLink( aBaseInstallPath + "/help/help.html?"  );
+    aHelpLink += rURL.copy( aInternal.getLength() );
+    aHelpLink = aHelpLink.replaceAll("%2F","/");
+
+    // get a html tempfile
+    OUString const aExtension(".html");
+    ::utl::TempFile aTempFile("NewHelp", true, &aExtension, nullptr, false );
+
+    SvStream* pStream = aTempFile.GetStream(StreamMode::WRITE);
+    pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+
+    OUString aTempStr(SHTML1 SHTML2);
+    aTempStr += aHelpLink + SHTML3;
+    aTempStr += aHelpLink + SHTML4;
+
+    pStream->WriteUnicodeOrByteText(aTempStr);
+
+    aTempFile.CloseStream();
+
+    try
+    {
+        sfx2::openUriExternally(aTempFile.GetURL(), false);
+        //         aTempFile.EnableKillingFile();
+        return true;
+    }
+    catch (const Exception&)
+    {
+    }
+    //     aTempFile.EnableKillingFile();
     return false;
 }
 
