@@ -60,7 +60,7 @@ public:
         BitmapEx & bitmap, bool localized,
         const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
-    VCL_DLLPUBLIC css::uno::Reference<css::container::XNameAccess> getNameAccess();
+    VCL_DLLPUBLIC css::uno::Reference<css::container::XNameAccess> const & getNameAccess();
 
 
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,

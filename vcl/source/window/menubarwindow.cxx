@@ -211,7 +211,7 @@ void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
     Resize();
 }
 
-Size MenuBarWindow::MinCloseButtonSize()
+Size const & MenuBarWindow::MinCloseButtonSize()
 {
     return aCloseBtn->getMinSize();
 }

@@ -9,6 +9,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sys/time.h>
+#include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
 struct S1 {
@@ -21,6 +22,7 @@ struct S2 {
     OUString mv3[2];
     S1 child;
     static OUString gs1;
+    o3tl::cow_wrapper<S1> mxCow;
 
     // make sure we ignore cases where the passed in parameter is std::move'd
     S2(OUString v1, OUString v2)
@@ -35,6 +37,9 @@ struct S2 {
     OUString get7() { return get6(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
     OUString & get8() { return gs1; }
     OUString get9() { return get8(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    // TODO
+    OUString get10() { return OUString(*&get6()); } // todoexpected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    OUString get11() const { return mxCow->get(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
 
     // no warning expected
     OUString set1() { return OUString("xxx"); }

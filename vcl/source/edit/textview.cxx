@@ -1127,7 +1127,7 @@ void TextView::SetReadOnly( bool bReadOnly )
     }
 }
 
-TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
+TextSelection const & TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
 {
     // normally only needed for Up/Down; but who cares
     mpImpl->mpTextEngine->CheckIdleFormatter();

@@ -563,12 +563,12 @@ const std::shared_ptr< css::i18n::Calendar2 >& LocaleDataWrapper::getDefaultCale
     return xDefaultCalendar;
 }
 
-const css::uno::Sequence< css::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarDays() const
+css::uno::Sequence< css::i18n::CalendarItem2 > const & LocaleDataWrapper::getDefaultCalendarDays() const
 {
     return getDefaultCalendar()->Days;
 }
 
-const css::uno::Sequence< css::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarMonths() const
+css::uno::Sequence< css::i18n::CalendarItem2 > const & LocaleDataWrapper::getDefaultCalendarMonths() const
 {
     return getDefaultCalendar()->Months;
 }

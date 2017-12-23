@@ -386,7 +386,7 @@ InfoBox::InfoBox( vcl::Window* pParent, MessBoxStyle nStyle, const OUString& rMe
     SetImage( InfoBox::GetStandardImage() );
 }
 
-Image InfoBox::GetStandardImage()
+Image const & InfoBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[3];
@@ -419,7 +419,7 @@ void WarningBox::SetDefaultCheckBoxText()
     maCheckBoxText = VclResId(SV_STDTEXT_DONTWARNAGAIN);
 }
 
-Image WarningBox::GetStandardImage()
+Image const & WarningBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[2];
@@ -497,7 +497,7 @@ void QueryBox::SetDefaultCheckBoxText()
     maCheckBoxText = VclResId(SV_STDTEXT_DONTASKAGAIN);
 }
 
-Image QueryBox::GetStandardImage()
+Image const & QueryBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[1];

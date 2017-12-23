@@ -2209,13 +2209,13 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     }
 }
 
-const BitmapEx StyleSettings::GetPersonaHeader() const
+BitmapEx const & StyleSettings::GetPersonaHeader() const
 {
     setupPersonaHeaderFooter( PERSONA_HEADER, mxData->maPersonaHeaderFooter, mxData->maPersonaHeaderBitmap, mxData->maPersonaMenuBarTextColor );
     return mxData->maPersonaHeaderBitmap;
 }
 
-const BitmapEx StyleSettings::GetPersonaFooter() const
+BitmapEx const & StyleSettings::GetPersonaFooter() const
 {
     setupPersonaHeaderFooter( PERSONA_FOOTER, mxData->maPersonaHeaderFooter, mxData->maPersonaFooterBitmap, mxData->maPersonaMenuBarTextColor );
     return mxData->maPersonaFooterBitmap;
@@ -2974,7 +2974,7 @@ StyleSettings::GetOptions() const
     return mxData->mnOptions;
 }
 
-std::vector<vcl::IconThemeInfo>
+std::vector<vcl::IconThemeInfo> const &
 StyleSettings::GetInstalledIconThemes() const
 {
     if (!mxData->mIconThemeScanner) {
