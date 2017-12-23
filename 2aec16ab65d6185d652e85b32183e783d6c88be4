@@ -22,6 +22,29 @@
       "revId": "2aec16ab65d6185d652e85b32183e783d6c88be4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2e07ec18",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-23T03:21:05Z",
+      "side": 1,
+      "message": "Если придираться, это можно было бы проделать в начале этого блока (типа nFlags \u0026\u003d nFlagsMask сразу после else), и дальше уже использовать только\n\n  if( nFlags \u0026 InsertDeleteFlags::STRING )\n\nчтобы сэкономить несколько лишних тактов процессора... кстати, здесь бы сыграла роль неконстантность аргумента :)",
+      "range": {
+        "startLine": 145,
+        "startChar": 12,
+        "endLine": 145,
+        "endChar": 31
+      },
+      "revId": "2aec16ab65d6185d652e85b32183e783d6c88be4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
