@@ -52,6 +52,9 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public cppu::WeakImplHelper< css::xm
     SAL_DLLPRIVATE std::unique_ptr<SvXMLNamespaceMap> TakeRewindMap() { return std::move(m_pRewindMap); }
     SAL_DLLPRIVATE void PutRewindMap(std::unique_ptr<SvXMLNamespaceMap> p) { m_pRewindMap = std::move(p); }
 
+    static const OUString aDefaultNamespace;
+    static const OUString aNamespaceSeparator;
+
 protected:
 
     SvXMLImport& GetImport() { return mrImport; }
