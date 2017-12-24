@@ -1016,11 +1016,11 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     pColumn->SetMax( pColumn->GetMin() );
             }
             // and divide by the quotient
-            OSL_ENSURE( nQuotMax!=ULONG_MAX, "Where did the relative columns go?" );
-            for( i=0; i<m_nCols; i++ )
+            SAL_WARN_IF(nQuotMax != ULONG_MAX && !nQuotMax, "sw.core", "Where did the relative columns go?");
+            for (i = 0; i < m_nCols; ++i)
             {
                 SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
-                if( pColumn->IsRelWidthOption() && pColumn->GetWidthOption() )
+                if (pColumn->IsRelWidthOption() && pColumn->GetWidthOption() && nQuotMax)
                 {
                     if( pColumn->GetWidthOption() )
                     {
