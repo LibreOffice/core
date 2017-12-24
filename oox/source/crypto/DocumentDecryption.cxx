@@ -81,11 +81,13 @@ public:
 
     void SAL_CALL startUnknownElement( const OUString& /*aNamespace*/, const OUString& rName, const Reference< XFastAttributeList >& aAttributeList ) override
     {
-        if (rName == "keyData")
+        const auto& localname = [](const OUString &a) { return a.copy(a.indexOf(":") + 1); };
+        const OUString& rLocalName = localname(rName);
+        if (rLocalName == "keyData")
         {
             for (const Attribute& rAttribute : aAttributeList->getUnknownAttributes())
             {
-                if (rAttribute.Name == "saltValue")
+                if (localname(rAttribute.Name) == "saltValue")
                 {
                     Sequence<sal_Int8> keyDataSalt;
                     ::sax::Converter::decodeBase64(keyDataSalt, rAttribute.Value);
@@ -93,61 +95,62 @@ public:
                 }
             }
         }
-        else if (rName == "encryptedKey")
+        else if (rLocalName == "encryptedKey")
         {
             for (const Attribute& rAttribute : aAttributeList->getUnknownAttributes())
             {
-                if (rAttribute.Name == "spinCount")
+                const OUString& rAttrLocalName = localname(rAttribute.Name);
+                if (rAttrLocalName == "spinCount")
                 {
                     ::sax::Converter::convertNumber(mInfo.spinCount, rAttribute.Value);
                 }
-                else if (rAttribute.Name == "saltSize")
+                else if (rAttrLocalName == "saltSize")
                 {
                     ::sax::Converter::convertNumber(mInfo.saltSize, rAttribute.Value);
                 }
-                else if (rAttribute.Name == "blockSize")
+                else if (rAttrLocalName == "blockSize")
                 {
                     ::sax::Converter::convertNumber(mInfo.blockSize, rAttribute.Value);
                 }
-                else if (rAttribute.Name == "keyBits")
+                else if (rAttrLocalName == "keyBits")
                 {
                     ::sax::Converter::convertNumber(mInfo.keyBits, rAttribute.Value);
                 }
-                else if (rAttribute.Name == "hashSize")
+                else if (rAttrLocalName == "hashSize")
                 {
                     ::sax::Converter::convertNumber(mInfo.hashSize, rAttribute.Value);
                 }
-                else if (rAttribute.Name == "cipherAlgorithm")
+                else if (rAttrLocalName == "cipherAlgorithm")
                 {
                     mInfo.cipherAlgorithm = rAttribute.Value;
                 }
-                else if (rAttribute.Name == "cipherChaining")
+                else if (rAttrLocalName == "cipherChaining")
                 {
                     mInfo.cipherChaining = rAttribute.Value;
                 }
-                else if (rAttribute.Name == "hashAlgorithm")
+                else if (rAttrLocalName == "hashAlgorithm")
                 {
                     mInfo.hashAlgorithm = rAttribute.Value;
                 }
-                else if (rAttribute.Name == "saltValue")
+                else if (rAttrLocalName == "saltValue")
                 {
                     Sequence<sal_Int8> saltValue;
                     ::sax::Converter::decodeBase64(saltValue, rAttribute.Value);
                     mInfo.saltValue = convertToVector(saltValue);
                 }
-                else if (rAttribute.Name == "encryptedVerifierHashInput")
+                else if (rAttrLocalName == "encryptedVerifierHashInput")
                 {
                     Sequence<sal_Int8> encryptedVerifierHashInput;
                     ::sax::Converter::decodeBase64(encryptedVerifierHashInput, rAttribute.Value);
                     mInfo.encryptedVerifierHashInput = convertToVector(encryptedVerifierHashInput);
                 }
-                else if (rAttribute.Name == "encryptedVerifierHashValue")
+                else if (rAttrLocalName == "encryptedVerifierHashValue")
                 {
                     Sequence<sal_Int8> encryptedVerifierHashValue;
                     ::sax::Converter::decodeBase64(encryptedVerifierHashValue, rAttribute.Value);
                     mInfo.encryptedVerifierHashValue = convertToVector(encryptedVerifierHashValue);
                 }
-                else if (rAttribute.Name == "encryptedKeyValue")
+                else if (rAttrLocalName == "encryptedKeyValue")
                 {
                     Sequence<sal_Int8> encryptedKeyValue;
                     ::sax::Converter::decodeBase64(encryptedKeyValue, rAttribute.Value);

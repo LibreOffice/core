@@ -134,6 +134,9 @@ private:
     const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
     const OUString getNameFromToken( sal_Int32 nToken );
 
+    static const OUString aDefaultNamespace;
+    static const OUString aNamespaceSeparator;
+
 public:
     CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler,
                              rtl::Reference< NamespaceHandler > const & rNamespaceHandler,
@@ -155,6 +158,9 @@ public:
     virtual void SAL_CALL characters( const OUString& aChars ) override;
 
 };
+
+const OUString CallbackDocumentHandler::aDefaultNamespace = OUString("");
+const OUString CallbackDocumentHandler::aNamespaceSeparator = OUString(":");
 
 const OUString CallbackDocumentHandler::getNamespacePrefixFromToken( sal_Int32 nToken )
 {
@@ -210,32 +216,28 @@ void SAL_CALL CallbackDocumentHandler::setDocumentLocator( const Reference< XLoc
 
 void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& Attribs  )
 {
-    startUnknownElement( CallbackDocumentHandler::getNamespacePrefixFromToken( nElement ),
-                         CallbackDocumentHandler::getNameFromToken( nElement ), Attribs );
+    const OUString& rPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
+    const OUString& rLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
+    startUnknownElement( aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + aNamespaceSeparator + rLocalName, Attribs );
 }
 
-void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
+void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Namespace*/, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
 {
     if ( m_xDocumentHandler.is() )
     {
-        OUString elementName;
         rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
         m_aNamespaceHandler->addNSDeclAttributes( rAttrList );
-        if ( !Namespace.isEmpty() )
-            elementName =  Namespace + ":" + Name;
-        else
-            elementName = Name;
 
         Sequence< xml::FastAttribute > fastAttribs = Attribs->getFastAttributes();
         sal_uInt16 len = fastAttribs.getLength();
         for (sal_uInt16 i = 0; i < len; i++)
         {
-            OUString& rAttrValue = fastAttribs[i].Value;
+            const OUString& rAttrValue = fastAttribs[i].Value;
             sal_Int32 nToken = fastAttribs[i].Token;
             const OUString& rAttrNamespacePrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nToken );
             OUString sAttrName = CallbackDocumentHandler::getNameFromToken( nToken );
             if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
+                sAttrName = rAttrNamespacePrefix + aNamespaceSeparator + sAttrName;
 
             rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
         }
@@ -244,35 +246,28 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Name
         len = unknownAttribs.getLength();
         for (sal_uInt16 i = 0; i < len; i++)
         {
-            OUString& rAttrValue = unknownAttribs[i].Value;
-            OUString sAttrName = unknownAttribs[i].Name;
-            OUString& rAttrNamespacePrefix = unknownAttribs[i].NamespaceURL;
-            if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
+            const OUString& rAttrValue = unknownAttribs[i].Value;
+            const OUString& rAttrName = unknownAttribs[i].Name;
 
-            rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+            rAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
         }
-        m_xDocumentHandler->startElement( elementName, rAttrList.get() );
+        m_xDocumentHandler->startElement( Name, rAttrList.get() );
     }
 }
 
 void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
 {
-    endUnknownElement( CallbackDocumentHandler::getNamespacePrefixFromToken( nElement ),
-                       CallbackDocumentHandler::getNameFromToken( nElement ) );
+    const OUString& rPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
+    const OUString& rLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
+    endUnknownElement( aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + aNamespaceSeparator + rLocalName );
 }
 
 
-void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& Namespace, const OUString& Name )
+void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& /*Namespace*/, const OUString& Name )
 {
     if ( m_xDocumentHandler.is() )
     {
-        OUString elementName;
-        if ( !Namespace.isEmpty() )
-            elementName = Namespace + ":" + Name;
-        else
-            elementName = Name;
-        m_xDocumentHandler->endElement( elementName );
+        m_xDocumentHandler->endElement( Name );
     }
 }
 

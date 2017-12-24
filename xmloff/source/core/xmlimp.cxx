@@ -76,6 +76,8 @@ using namespace ::xmloff::token;
 
 css::uno::Reference< css::xml::sax::XFastTokenHandler > SvXMLImport::xTokenHandler( new FastTokenHandler() );
 std::unordered_map< sal_Int32, std::pair< OUString, OUString > > SvXMLImport::aNamespaceMap;
+const OUString SvXMLImport::aDefaultNamespace = OUString("");
+const OUString SvXMLImport::aNamespaceSeparator = OUString(":");
 bool SvXMLImport::bIsNSMapsInitialized = false;
 
 class SvXMLImportEventListener : public cppu::WeakImplHelper< css::lang::XEventListener >

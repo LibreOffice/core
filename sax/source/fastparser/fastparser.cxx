@@ -249,6 +249,7 @@ private:
     bool consume(EventList&);
     void deleteUsedEvents();
     void sendPendingCharacters();
+    void addUnknownElementWithPrefix(const xmlChar **attributes, int i, rtl::Reference< FastAttributeList >& xAttributes);
 
     sal_Int32 GetToken( const xmlChar* pName, sal_Int32 nameLen );
     /// @throws css::xml::sax::SAXException
@@ -1148,8 +1149,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                     if( nAttributeToken != FastToken::DONTKNOW )
                         rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
                     else
-                        rEvent.mxAttributes->addUnknown( OUString( XML_CAST( attributes[ i + 1 ] ), strlen( XML_CAST( attributes[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ),
-                                OString( XML_CAST( attributes[ i ] )), OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
+                        addUnknownElementWithPrefix(attributes, i, rEvent.mxAttributes);
                 }
                 else
                 {
@@ -1174,8 +1174,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             for (int i = 0; i < numAttributes * 5; i += 5)
             {
                 if( attributes[ i + 1 ] != nullptr )
-                    rEvent.mxAttributes->addUnknown( OUString( XML_CAST( attributes[ i + 1 ] ), strlen( XML_CAST( attributes[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ),
-                            OString( XML_CAST( attributes[ i ] )), OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
+                    addUnknownElementWithPrefix(attributes, i, rEvent.mxAttributes);
                 else
                     rEvent.mxAttributes->addUnknown( XML_CAST( attributes[ i ] ),
                             OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
@@ -1186,16 +1185,19 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
         if( rEvent.mnElementToken == FastToken::DONTKNOW )
         {
+            OUString aElementPrefix;
             if( prefix != nullptr )
             {
                 if ( !m_bIgnoreMissingNSDecl || URI != nullptr )
                     sNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
+                else
+                    sNamespace.clear();
                 nNamespaceToken = GetNamespaceToken( sNamespace );
-                rEvent.msNamespace = OUString( XML_CAST( prefix ), strlen( XML_CAST( prefix )), RTL_TEXTENCODING_UTF8 );
+                aElementPrefix = OUString( XML_CAST( prefix ), strlen( XML_CAST( prefix )), RTL_TEXTENCODING_UTF8 );
             }
-            else
-                rEvent.msNamespace.clear();
-            rEvent.msElementName = OUString( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
+            const OUString& rElementLocalName = OUString( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
+            rEvent.msNamespace = sNamespace;
+            rEvent.msElementName = (aElementPrefix.isEmpty())? rElementLocalName : aElementPrefix + ":" + rElementLocalName;
         }
         else // token is always preferred.
             rEvent.msElementName.clear();
@@ -1213,6 +1215,18 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     {
         rEntity.saveException( ::cppu::getCaughtException() );
     }
+}
+
+void FastSaxParserImpl::addUnknownElementWithPrefix(const xmlChar **attributes, int i, rtl::Reference< FastAttributeList >& xAttributes)
+{
+    OUString aNamespaceURI;
+    if ( !m_bIgnoreMissingNSDecl || attributes[i + 2] != nullptr )
+        aNamespaceURI = OUString( XML_CAST( attributes[ i + 2 ] ), strlen( XML_CAST( attributes[ i + 2 ] )), RTL_TEXTENCODING_UTF8 );
+    const OString& rPrefix = OString( XML_CAST( attributes[ i + 1 ] ));
+    const OString& rLocalName = OString( XML_CAST( attributes[ i ] ));
+    OString aQualifiedName = (rPrefix.isEmpty())? rLocalName : rPrefix + ":" + rLocalName;
+    xAttributes->addUnknown( aNamespaceURI, aQualifiedName,
+        OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
 }
 
 void FastSaxParserImpl::callbackEndElement()

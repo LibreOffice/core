@@ -70,26 +70,20 @@ void SvXMLImportContext::Characters( const OUString& )
 void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     mrImport.isFastContext = false;
-    startUnknownElement( SvXMLImport::getNamespacePrefixFromToken( nElement ),
-                         SvXMLImport::getNameFromToken( nElement ), Attribs );
+    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken( nElement );
+    const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
+    startUnknownElement( SvXMLImport::aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName, Attribs );
 }
 
-void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, const OUString & rLocalName,
+void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamespace*/, const OUString & rElementName,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    OUString elementName;
-
     if ( mrImport.maAttrList.is() )
         mrImport.maAttrList->Clear();
     else
         mrImport.maAttrList = new comphelper::AttributeList;
 
     mrImport.maNamespaceHandler->addNSDeclAttributes( mrImport.maAttrList );
-
-    if ( !rPrefix.isEmpty() )
-        elementName =  rPrefix + ":" + rLocalName;
-    else
-        elementName = rLocalName;
 
     if ( Attribs.is() )
     {
@@ -102,7 +96,7 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
             const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken( nToken );
             OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
             if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
+                sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
 
             mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
         }
@@ -112,33 +106,24 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
         for ( sal_Int32 i = 0; i < len; i++ )
         {
             const OUString& rAttrValue = unknownAttribs[i].Value;
-            OUString sAttrName = unknownAttribs[i].Name;
-            const OUString& rAttrNamespacePrefix = unknownAttribs[i].NamespaceURL;
-            if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
-
-            mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+            const OUString& rAttrName = unknownAttribs[i].Name;
+            mrImport.maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
         }
     }
-
-    mrImport.startElement( elementName, mrImport.maAttrList.get() );
+    mrImport.startElement( rElementName, mrImport.maAttrList.get() );
 }
 
 void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32 nElement)
 {
     mrImport.isFastContext = false;
-    endUnknownElement( SvXMLImport::getNamespacePrefixFromToken( nElement ),
-                       SvXMLImport::getNameFromToken( nElement ) );
+    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken( nElement );
+    const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
+    endUnknownElement( SvXMLImport::aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName );
 }
 
-void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
+void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & /*rNamespace*/, const OUString & rElementName)
 {
-    OUString elementName;
-    if ( !rPrefix.isEmpty() )
-        elementName = rPrefix + ":" + rLocalName;
-    else
-        elementName = rLocalName;
-    mrImport.endElement( elementName );
+    mrImport.endElement( rElementName );
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createFastChildContext
