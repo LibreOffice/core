@@ -3688,7 +3688,8 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
 
         // In headings the current heading sets the font height
         // and not BASEFONT.
-        sal_uInt16 nPoolId = GetCurrFormatColl()->GetPoolFormatId();
+        const SwFormatColl *pColl = GetCurrFormatColl();
+        sal_uInt16 nPoolId = pColl ? pColl->GetPoolFormatId() : 0;
         if( nPoolId>=RES_POOLCOLL_HEADLINE1 &&
             nPoolId<=RES_POOLCOLL_HEADLINE6 )
         {
@@ -4505,7 +4506,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
 const SwFormatColl *SwHTMLParser::GetCurrFormatColl() const
 {
     const SwContentNode* pCNd = m_pPam->GetContentNode();
-    return &pCNd->GetAnyFormatColl();
+    return pCNd ? &pCNd->GetAnyFormatColl() : nullptr;
 }
 
 void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
@@ -5286,9 +5287,9 @@ void SwHTMLParser::InsertHorzRule()
             if( nWidth < MINLAY )
                 nWidth = MINLAY;
 
-            if( (long)nWidth < nBrowseWidth )
+            const SwFormatColl *pColl = ((long)nWidth < nBrowseWidth) ? GetCurrFormatColl() : nullptr;
+            if (pColl)
             {
-                const SwFormatColl *pColl = GetCurrFormatColl();
                 SvxLRSpaceItem aLRItem( pColl->GetLRSpace() );
                 long nDist = nBrowseWidth - nWidth;
 
