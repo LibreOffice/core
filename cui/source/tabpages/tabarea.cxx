@@ -80,8 +80,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
 
     m_nTransparenceTabPage = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  nullptr);
 
-    SetCurPageId( "RID_SVXPAGE_AREA" );
-
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
 }

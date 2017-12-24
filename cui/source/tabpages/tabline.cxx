@@ -93,8 +93,6 @@ SvxLineTabDialog::SvxLineTabDialog
     m_nStyleTabPage = AddTabPage( "RID_SVXPAGE_LINE_DEF", SvxLineDefTabPage::Create, nullptr);
     m_nEndTabPage = AddTabPage( "RID_SVXPAGE_LINEEND_DEF", SvxLineEndDefTabPage::Create, nullptr);
 
-    SetCurPageId( "RID_SVXPAGE_LINE" );
-
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
 }
