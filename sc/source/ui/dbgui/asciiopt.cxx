@@ -31,6 +31,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bMergeFieldSeps ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
+    bSkipEmptyCells(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( osl_getThreadTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
