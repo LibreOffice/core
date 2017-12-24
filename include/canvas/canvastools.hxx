@@ -329,7 +329,7 @@ namespace canvas
             Use this method for dead-simple bitmap implementations,
             that map all their formats to 8888 RGBA color.
          */
-        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XIntegerBitmapColorSpace> getStdColorSpace();
+        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XIntegerBitmapColorSpace> const & getStdColorSpace();
 
         /** Return a color space for a default RGB integer format
 
@@ -337,7 +337,7 @@ namespace canvas
             that map all their formats to 8888 RGB color (the last byte
             is unused).
          */
-        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XIntegerBitmapColorSpace> getStdColorSpaceWithoutAlpha();
+        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XIntegerBitmapColorSpace> const & getStdColorSpaceWithoutAlpha();
 
         /** Return a memory layout for a default RGBA integer format
 

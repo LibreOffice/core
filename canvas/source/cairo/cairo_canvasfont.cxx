@@ -146,7 +146,7 @@ namespace cairocanvas
         return { "com.sun.star.rendering.CanvasFont" };
     }
 
-    vcl::Font CanvasFont::getVCLFont() const
+    vcl::Font const & CanvasFont::getVCLFont() const
     {
         return *maFont;
     }

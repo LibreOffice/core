@@ -54,7 +54,7 @@ namespace svt
         implInit();
     }
 
-    Size HyperLabel::CalcMinimumSize( long nMaxWidth ) const
+    Size const & HyperLabel::CalcMinimumSize( long nMaxWidth ) const
     {
         m_pImpl->m_aMinSize = FixedText::CalcMinimumSize( nMaxWidth );
         // the MinimumSize is used to size the FocusRectangle

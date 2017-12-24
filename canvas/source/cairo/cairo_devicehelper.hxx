@@ -83,7 +83,7 @@ namespace cairocanvas
         css::uno::Any getDeviceHandle() const;
         css::uno::Any getSurfaceHandle() const;
         css::uno::Reference<
-            css::rendering::XColorSpace > getColorSpace() const;
+            css::rendering::XColorSpace > const & getColorSpace() const;
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.

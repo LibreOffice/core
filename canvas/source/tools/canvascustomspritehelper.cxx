@@ -425,7 +425,7 @@ namespace canvas
         }
     }
 
-    ::basegfx::B2DRange CanvasCustomSpriteHelper::getUpdateArea( const ::basegfx::B2DRange& rBounds ) const
+    ::basegfx::B2DRange const & CanvasCustomSpriteHelper::getUpdateArea( const ::basegfx::B2DRange& rBounds ) const
     {
         // Internal! Only call with locked object mutex!
         ::basegfx::B2DHomMatrix aTransform( maTransform );

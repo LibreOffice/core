@@ -391,7 +391,7 @@ void SvtIconChoiceCtrl::SetSelectionMode( SelectionMode eMode )
     _pImpl->SetSelectionMode( eMode );
 }
 
-tools::Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
+tools::Rectangle const & SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     return _pImpl->GetEntryBoundRect( pEntry );
 }

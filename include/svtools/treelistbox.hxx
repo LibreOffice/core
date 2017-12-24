@@ -697,7 +697,7 @@ public:
 
     void            SetCollapsedNodeBmp( const Image& );
     void            SetExpandedNodeBmp( const Image& );
-    Image           GetExpandedNodeBmp( ) const;
+    Image const &   GetExpandedNodeBmp( ) const;
 
     void            SetFont( const vcl::Font& rFont );
 
@@ -796,7 +796,7 @@ public:
     void        LoseFocus();
     bool        EditingCanceled() const { return bCanceled; }
     OUString    GetText() const;
-    OUString    GetSavedValue() const;
+    OUString const & GetSavedValue() const;
     void        StopEditing( bool bCancel );
     void        Hide();
 };

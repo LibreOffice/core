@@ -277,7 +277,7 @@ public:
     Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );
 
-    tools::Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
+    tools::Rectangle const &   GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
     tools::Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;
 
     void                SetNoSelection();

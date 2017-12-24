@@ -279,7 +279,7 @@ bool SvtHelpOptions::IsHelpTips() const
     return pImpl->IsHelpTips();
 }
 
-OUString SvtHelpOptions::GetSystem() const
+OUString const & SvtHelpOptions::GetSystem() const
 {
     return pImpl->GetSystem();
 }

@@ -44,7 +44,7 @@ public:
     const OUString& GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const OUString& rStyleSheet);
 
-    OUString        GetSystem() const;
+    OUString const & GetSystem() const;
 };
 
 #endif

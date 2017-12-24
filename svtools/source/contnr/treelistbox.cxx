@@ -140,7 +140,7 @@ SvInplaceEdit2::~SvInplaceEdit2()
     pEdit.disposeAndClear();
 }
 
-OUString SvInplaceEdit2::GetSavedValue() const
+OUString const & SvInplaceEdit2::GetSavedValue() const
 {
     return pEdit->GetSavedValue();
 }
@@ -2420,7 +2420,7 @@ void SvTreeListBox::SetCurEntry( SvTreeListEntry* pEntry )
     pImpl->SetCurEntry( pEntry );
 }
 
-Image SvTreeListBox::GetExpandedNodeBmp( ) const
+Image const & SvTreeListBox::GetExpandedNodeBmp( ) const
 {
     return pImpl->GetExpandedNodeBmp( );
 }

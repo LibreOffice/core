@@ -72,7 +72,7 @@ public:
     bool            SelectRoadmapItemByID( ItemId _nItemID );
 
     void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
-    Link<LinkParamNone*,void> GetItemSelectHdl( ) const;
+    Link<LinkParamNone*,void> const & GetItemSelectHdl( ) const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    GetFocus() override;
     virtual void    ApplySettings( vcl::RenderContext& rRenderContext ) override;
