@@ -7328,11 +7328,15 @@ void CreateTableRows( const Reference< XTableRows >& xTableRows, const std::set<
         sal_Int32 nHeight;
         if ( ++aIter != rRows.end() )
         {
-            nHeight = *aIter - nLastPosition;
+            if (o3tl::checked_sub<sal_Int32>(*aIter, nLastPosition, nHeight))
+                throw lang::IllegalArgumentException();
             nLastPosition = *aIter;
         }
         else
-            nHeight = nTableBottom - nLastPosition;
+        {
+            if (o3tl::checked_sub<sal_Int32>(nTableBottom, nLastPosition, nHeight))
+                throw lang::IllegalArgumentException();
+        }
 
         Reference< XPropertySet > xPropSet( xTableRows->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( "Height", Any( nHeight ) );
@@ -7351,11 +7355,15 @@ void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const 
         sal_Int32 nWidth;
         if ( ++aIter != rColumns.end() )
         {
-            nWidth = *aIter - nLastPosition;
+            if (o3tl::checked_sub<sal_Int32>(*aIter, nLastPosition, nWidth))
+                throw lang::IllegalArgumentException();
             nLastPosition = *aIter;
         }
         else
-            nWidth = nTableRight - nLastPosition;
+        {
+            if (o3tl::checked_sub<sal_Int32>(nTableRight, nLastPosition, nWidth))
+                throw lang::IllegalArgumentException();
+        }
 
         Reference< XPropertySet > xPropSet( xTableColumns->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( "Width", Any( nWidth ) );
