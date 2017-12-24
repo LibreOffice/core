@@ -158,44 +158,58 @@
     </Expand>
   </Type>
   <Type Name="SwNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{Node}}</DisplayString>
+    <DisplayString IncludeView="No">[{m_pBlock->nStart + m_nOffset,d}]</DisplayString>
+    <DisplayString IncludeView="Name">Node</DisplayString>
+    <DisplayString>{*this,view(No)nd} {{{*this,view(Name)}}}</DisplayString>
     <Expand>
+      <Item Name="No">m_pBlock->nStart + m_nOffset,d</Item>
       <Item Name="Nodes">static_cast &lt; SwNodes* &gt;(m_pBlock->pBigArr)</Item>
     </Expand>
   </Type>
   <Type Name="SwEndNode">
-    <DisplayString Condition="m_pStartOfSection != nullptr">[{m_pBlock->nStart + m_nOffset,d}] {{EndNode}} - for {*m_pStartOfSection}</DisplayString>
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{EndNode}}</DisplayString>
+    <DisplayString IncludeView="For" Condition="m_pStartOfSection != nullptr">- for {*(SwNode*)m_pStartOfSection,view(No)nd}</DisplayString>
+    <DisplayString IncludeView="For"/>
+    <DisplayString IncludeView="Name">EndNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd} {*this,view(For)nd}</DisplayString>
   </Type>
   <Type Name="SwStartNode">
-    <DisplayString Condition="m_eStartNodeType == 0">[{m_pBlock->nStart + m_nOffset,d}] {{NormalStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 1">[{m_pBlock->nStart + m_nOffset,d}] {{TableBoxStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 2">[{m_pBlock->nStart + m_nOffset,d}] {{FlyStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 3">[{m_pBlock->nStart + m_nOffset,d}] {{FootnoteStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 4">[{m_pBlock->nStart + m_nOffset,d}] {{HeaderStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 5">[{m_pBlock->nStart + m_nOffset,d}] {{FooterStartNode}}</DisplayString>
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{StartNode}}</DisplayString>
+    <DisplayString IncludeView="Till">- till {*(SwNode*)m_pEndOfSection,view(No)nd}</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 0">NormalStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 1">TableBoxStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 2">FlyStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 3">FootnoteStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 4">HeaderStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 5">FooterStartNode</DisplayString>
+    <DisplayString IncludeView="Name">StartNode {m_nNodeType,en}</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd} {*this,view(Till)nd}</DisplayString>
   </Type>
   <Type Name="SwContentNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{ContentNode}}</DisplayString>
+    <DisplayString IncludeView="Name">ContentNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
   </Type>
   <Type Name="SwOLENode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{OLENode}}</DisplayString>
+    <DisplayString IncludeView="Name">OLENode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
   </Type>
   <Type Name="SwGrfNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{GrfNode}}</DisplayString>
+    <DisplayString IncludeView="Name">GrfNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
   </Type>
   <Type Name="SwSectionNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{SectionNode}}</DisplayString>
+    <DisplayString IncludeView="Name">SectionNode</DisplayString>
+    <DisplayString>{*(SwStartNode*)this,nd}</DisplayString>
   </Type>
   <Type Name="SwTableNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{TableNode}}</DisplayString>
+    <DisplayString IncludeView="Name">TableNode</DisplayString>
+    <DisplayString>{*(SwStartNode*)this,nd}</DisplayString>
   </Type>
   <Type Name="SwDummySectionNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{DummySectionNode}}</DisplayString>
+    <DisplayString IncludeView="Name">DummySectionNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
   </Type>
   <Type Name="SwTextNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{TextNode: {m_Text}}}</DisplayString>
+    <DisplayString IncludeView="Name">TextNode: {m_Text}</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
   </Type>
   <Type Name="SwNodeIndex">
     <DisplayString>{{{*m_pNode}}}</DisplayString>
