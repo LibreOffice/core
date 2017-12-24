@@ -60,6 +60,11 @@ public interface TileProvider {
     int getCurrentPartNumber();
 
     /**
+     * Updates the page count to render
+     */
+    void updatePageCount();
+
+    /**
      * Get the total number of parts.
      */
     int getPartsCount();
