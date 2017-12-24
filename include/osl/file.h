@@ -128,9 +128,9 @@ typedef enum {
     osl_File_E_USERS,           /*!< file quote system is confused as there are too many users   */
     osl_File_E_OVERFLOW,        /*!< value too large for defined data type                       */
     osl_File_E_NOTREADY,        /*!< device not ready                                            */
-    osl_File_E_invalidError,    /*!< unmapped error: always last entry in enum!                  */
     osl_File_E_TIMEDOUT,        /*!< socket operation timed out                                  */
     osl_File_E_NETWORK,
+    osl_File_E_invalidError,    /*!< unmapped error: always last entry in enum!                  */
     osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslFileError;
 
