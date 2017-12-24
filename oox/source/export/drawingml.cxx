@@ -659,6 +659,13 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
             }
             break;
     }
+    if ( GETA( LineTransparence) )
+    {
+        sal_uInt32 nTransparency;
+        mAny>>=nTransparency;
+        sal_uInt32 nAlpha = MAX_PERCENT - (nTransparency*PER_PERCENT);
+        WriteSolidFill(nColor, nAlpha);
+    }
 
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
