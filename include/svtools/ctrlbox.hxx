@@ -31,12 +31,12 @@
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class FontList;
 class ImpLineListData;
 enum class SvxBorderLineStyle : sal_Int16;
 
-typedef ::std::vector< ImpLineListData*      > ImpLineList;
 typedef ::std::vector< FontMetric         > ImplFontList;
 
 /*************************************************************************
@@ -232,7 +232,6 @@ private:
                                     Color nColor1, Color nColor2, Color nColorDist,
                                     SvxBorderLineStyle nStyle, Bitmap& rBmp );
     using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit();
     void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
@@ -247,7 +246,7 @@ private:
                     LineListBox( const LineListBox& ) = delete;
     LineListBox&    operator =( const LineListBox& ) = delete;
 
-    ImpLineList*    pLineList;
+    std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
     long            m_nWidth;
     OUString        m_sNone;
     ScopedVclPtr<VirtualDevice>   aVirDev;
