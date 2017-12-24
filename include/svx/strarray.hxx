@@ -21,7 +21,6 @@
 
 #include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
-#include <vector>
 
 class SVX_DLLPUBLIC SvxFieldUnitTable
 {
