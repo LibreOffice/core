@@ -75,6 +75,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     mnPaperHeight( rJobSetup.GetPaperHeight() ),
     mnDriverDataLen( rJobSetup.GetDriverDataLen() ),
     mbPapersizeFromSetup( rJobSetup.GetPapersizeFromSetup() ),
+    meSetupMode( rJobSetup.GetPrinterSetupMode() ),
     maValueMap( rJobSetup.GetValueMap() )
  {
     if ( rJobSetup.GetDriverData() )
