@@ -826,7 +826,8 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         if( SfxItemState::SET == pFrameFormat->GetAttrSet().
                 GetItemState( RES_PAGEDESC, false, &pItem ) )
         {
-            pDestContentNd->SetAttr( *pItem );
+            if (pDestContentNd)
+                pDestContentNd->SetAttr(*pItem);
             pFrameFormat->ResetFormatAttr( RES_PAGEDESC );
         }
     }
