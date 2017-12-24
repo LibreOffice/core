@@ -470,19 +470,6 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     rBmp = aVirDev->GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
 }
 
-void LineListBox::ImplInit()
-{
-    aTxtSize.Width()  = GetTextWidth( " " );
-    aTxtSize.Height() = GetTextHeight();
-    pLineList   = new ImpLineList;
-    eSourceUnit = FUNIT_POINT;
-
-    aVirDev->SetLineColor();
-    aVirDev->SetMapMode( MapMode( MapUnit::MapTwip ) );
-
-    UpdatePaintLineColor();
-}
-
 LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
     m_nWidth( 5 ),
@@ -491,7 +478,14 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     aColor( COL_BLACK ),
     maPaintCol( COL_BLACK )
 {
-    ImplInit();
+    aTxtSize.Width()  = GetTextWidth( " " );
+    aTxtSize.Height() = GetTextHeight();
+    eSourceUnit = FUNIT_POINT;
+
+    aVirDev->SetLineColor();
+    aVirDev->SetMapMode( MapMode( MapUnit::MapTwip ) );
+
+    UpdatePaintLineColor();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeLineListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
@@ -513,10 +507,7 @@ LineListBox::~LineListBox()
 
 void LineListBox::dispose()
 {
-    for (ImpLineListData* p : *pLineList)
-        delete p;
-    pLineList->clear();
-    delete pLineList;
+    m_vLineList.clear();
     ListBox::dispose();
 }
 
@@ -528,10 +519,10 @@ sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, long nWidth )
 
     sal_Int32 n = 0;
     size_t i = 0;
-    size_t nCount = pLineList->size();
+    size_t nCount = m_vLineList.size();
     while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
     {
-        ImpLineListData* pData = (*pLineList)[ i ];
+        auto& pData = m_vLineList[ i ];
         if ( pData && pData->GetMinWidth() <= nWidth )
         {
             if ( nListPos == n )
@@ -555,17 +546,16 @@ void LineListBox::InsertEntry(
     const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, long nMinWidth,
     ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
 {
-    ImpLineListData* pData = new ImpLineListData(
-        rWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn);
-    pLineList->push_back( pData );
+    m_vLineList.emplace_back(new ImpLineListData(
+        rWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn));
 }
 
 sal_Int32 LineListBox::GetEntryPos( SvxBorderLineStyle nStyle ) const
 {
     if(nStyle == SvxBorderLineStyle::NONE && !m_sNone.isEmpty())
         return 0;
-    for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
-        ImpLineListData* pData = (*pLineList)[ i ];
+    for ( size_t i = 0, n = m_vLineList.size(); i < n; ++i ) {
+        auto& pData = m_vLineList[ i ];
         if ( pData )
         {
             if ( GetEntryStyle( i ) == nStyle )
@@ -582,7 +572,7 @@ sal_Int32 LineListBox::GetEntryPos( SvxBorderLineStyle nStyle ) const
 
 SvxBorderLineStyle LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
-    ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < pLineList->size()) ? (*pLineList)[ nPos ] : nullptr;
+    ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < m_vLineList.size()) ? m_vLineList[ nPos ].get() : nullptr;
     return pData ? pData->GetStyle() : SvxBorderLineStyle::NONE;
 }
 
@@ -615,10 +605,10 @@ void LineListBox::UpdateEntries( long nOldWidth )
         ListBox::InsertEntry( m_sNone );
 
     sal_uInt16 n = 0;
-    sal_uInt16 nCount = pLineList->size( );
+    sal_uInt16 nCount = m_vLineList.size( );
     while ( n < nCount )
     {
-        ImpLineListData* pData = (*pLineList)[ n ];
+        auto& pData = m_vLineList[ n ];
         if ( pData && pData->GetMinWidth() <= m_nWidth )
         {
             Bitmap      aBmp;
@@ -647,7 +637,7 @@ Color LineListBox::GetColorLine1( sal_Int32 nPos )
     Color rResult = GetPaintColor( );
 
     sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineListData* pData = (*pLineList)[ nStyle ];
+    auto& pData = m_vLineList[ nStyle ];
     if ( pData )
         rResult = pData->GetColorLine1( GetColor( ) );
 
@@ -659,7 +649,7 @@ Color LineListBox::GetColorLine2( sal_Int32 nPos )
     Color rResult = GetPaintColor( );
 
     sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineListData* pData = (*pLineList)[ nStyle ];
+    auto& pData = m_vLineList[ nStyle ];
     if ( pData )
         rResult = pData->GetColorLine2( GetColor( ) );
 
@@ -671,7 +661,7 @@ Color LineListBox::GetColorDist( sal_Int32 nPos )
     Color rResult = GetSettings().GetStyleSettings().GetFieldColor();
 
     sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineListData* pData = (*pLineList)[ nStyle ];
+    auto& pData = m_vLineList[ nStyle ];
     if ( pData )
         rResult = pData->GetColorDist( GetColor( ), rResult );
 
