@@ -19,9 +19,7 @@
 #ifndef INCLUDED_SVX_STRARRAY_HXX
 #define INCLUDED_SVX_STRARRAY_HXX
 
-#include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
-#include <vector>
 
 class SVX_DLLPUBLIC SvxFieldUnitTable
 {
