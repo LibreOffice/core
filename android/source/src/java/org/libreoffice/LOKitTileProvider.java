@@ -316,6 +316,11 @@ class LOKitTileProvider implements TileProvider {
         return ret;
     }
 
+    @Override
+    public void updatePageCount(){
+        resetDocumentSize();
+    }
+
     private boolean resetDocumentSize() {
         mWidthTwip = mDocument.getDocumentWidth();
         mHeightTwip = mDocument.getDocumentHeight();
