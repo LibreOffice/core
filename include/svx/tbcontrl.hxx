@@ -139,7 +139,6 @@
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svx/colorwindow.hxx>
-#include <svx/PaletteManager.hxx>
 #include <memory>
 
 // important in the tbxctrls.hxx created with HeDaBu !!!
@@ -150,6 +149,7 @@ class SfxStyleControllerItem_Impl;
 class SfxStyleSheetBasePool;
 class SfxTemplateItem;
 class SvxStyleBox_Impl;
+class PaletteManager;
 
 namespace svx
 {

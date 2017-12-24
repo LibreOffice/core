@@ -90,6 +90,7 @@
 #include <svx/tbcontrl.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/PaletteManager.hxx>
 #include <memory>
 
 #include <svx/framelink.hxx>
