@@ -45,7 +45,7 @@ public:
 private:
     sal_uInt16 nCtxId;
     const ErrMsgCode* pIds;
-    const std::locale& rResLocale;
+    std::locale aResLocale;
     OUString aArg1;
 };
 
@@ -63,7 +63,7 @@ private:
     ErrCodeArea          lStart;
     ErrCodeArea          lEnd;
     const ErrMsgCode*    pIds;
-    const std::locale&   rResLocale;
+    std::locale aResLocale;
 
     SVT_DLLPRIVATE static void GetClassString(ErrCodeClass lErrId, OUString &);
     virtual bool          CreateString(const ErrorInfo *, OUString &) const override;
