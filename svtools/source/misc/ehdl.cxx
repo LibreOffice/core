@@ -140,7 +140,7 @@ static DialogMask aWndFunc(
 }
 
 SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, ErrCodeArea lStartP, ErrCodeArea lEndP, const std::locale& rLocale)
-    : lStart(lStartP), lEnd(lEndP), pIds(pIdPs), rResLocale(rLocale)
+    : lStart(lStartP), lEnd(lEndP), pIds(pIdPs), aResLocale(rLocale)
 {
     ErrorRegistry::RegisterDisplay(&aWndFunc);
 }
@@ -219,7 +219,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
     {
         if (pItem->second.GetRest() == lErrId.GetRest())
         {
-            rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, rResLocale));
+            rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, aResLocale));
             bRet = true;
             break;
         }
@@ -239,7 +239,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, vcl::Window *pWindow, const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), rResLocale(rResLocaleP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP)
 {
     if (!pIds)
         pIds = getRID_ERRCTX();
@@ -249,7 +249,7 @@ SfxErrorContext::SfxErrorContext(
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, const OUString &aArg1P, vcl::Window *pWindow,
     const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), rResLocale(rResLocaleP),
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP),
     aArg1(aArg1P)
 {
     if (!pIds)
@@ -269,7 +269,7 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
     {
         if (sal_uInt32(pItem->second) == nCtxId)
         {
-            rStr = Translate::get(pItem->first, rResLocale);
+            rStr = Translate::get(pItem->first, aResLocale);
             rStr = rStr.replaceAll("$(ARG1)", aArg1);
             bRet = true;
             break;
@@ -285,7 +285,7 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
         {
             if (sal_uInt32(pItem->second) == nId)
             {
-                rStr = rStr.replaceAll("$(ERR)", Translate::get(pItem->first, rResLocale));
+                rStr = rStr.replaceAll("$(ERR)", Translate::get(pItem->first, aResLocale));
                 break;
             }
         }
