@@ -440,6 +440,24 @@ published constants NumberingType
      */
     const short NUMBER_HEBREW = 56;
 
+    /** Numbering in Arabic-Indic numerals
+
+        @since LibreOffice 5.4
+     */
+    const short NUMBER_ARABIC_INDIC = 57;
+
+    /** Numbering in Arabic-Indic numerals
+
+        @since LibreOffice 5.4
+     */
+    const short NUMBER_EAST_ARABIC_INDIC = 58;
+
+    /** Numbering in Arabic-Indic numerals
+
+        @since LibreOffice 5.4
+     */
+    const short NUMBER_INDIC_DEVANAGARI = 59;
+
 };
 
 
