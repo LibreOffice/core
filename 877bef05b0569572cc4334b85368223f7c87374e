@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_6a00b7ab",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-25T15:02:03Z",
+      "side": 1,
+      "message": "I don\u0027t see how this vector could ever contain null entries, so perhaps we could clean up these null checks?",
+      "revId": "877bef05b0569572cc4334b85368223f7c87374e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_aa30ef9f",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-25T15:02:03Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "877bef05b0569572cc4334b85368223f7c87374e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ca25235d",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-25T15:02:03Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "877bef05b0569572cc4334b85368223f7c87374e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ea2ae72b",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-25T15:02:03Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "877bef05b0569572cc4334b85368223f7c87374e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0a201b49",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-25T15:02:03Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "877bef05b0569572cc4334b85368223f7c87374e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
