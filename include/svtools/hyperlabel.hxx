@@ -69,7 +69,7 @@ namespace svt
 
         void                SetClickHdl( const Link<HyperLabel*,void>& rLink ) { maClickHdl = rLink; }
 
-        Size                CalcMinimumSize( long nMaxWidth ) const;
+        Size const &        CalcMinimumSize( long nMaxWidth ) const;
     };
 }
 
