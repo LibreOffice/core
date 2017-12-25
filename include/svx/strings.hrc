@@ -1339,7 +1339,7 @@
 #define STR_COLORTABLE                                      NC_("STR_COLORTABLE", "Color Palette")
 
 // String for saving modified image (instead of original)
-#define RID_SVXSTR_SAVE_MODIFIED_IMAGE                      NC_("RID_SVXSTR_SAVE_MODIFIED_IMAGE", "The image has been modified. By default the original image will be saved.\nDo you want to save the modified version instead ?")
+#define RID_SVXSTR_SAVE_MODIFIED_IMAGE                      NC_("RID_SVXSTR_SAVE_MODIFIED_IMAGE", "The image has been modified. By default the original image will be saved.\nDo you want to save the modified version instead?")
 
 #define RID_ADD_TO_FAVORITES                                NC_("RID_SUBSETMAP", "Add to favorites")
 #define RID_REMOVE_FAVORITES                                NC_("RID_SUBSETMAP", "Remove from favorites")
