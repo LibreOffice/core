@@ -288,6 +288,17 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 
 #ifdef LIBO_INTERNAL_ONLY
 
+typedef enum
+{
+    // Start phase I of pre-init.
+    BeginPhaseI,
+    // Finish phase I of pre-init.
+    EndPhaseI,
+    // Post pre-init and before forking.
+    BeginPhaseII
+
+} rtl_alloc_preInit_phase_t;
+
 /** @cond INTERNAL */
 /** rtl_alloc_preInit
  *
@@ -295,8 +306,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
  * at the end of LibreOfficeKit pre-initialization to enable
  * various optimizations.
  *
- * Its function is to annotate a section @start = true to
- * end (@start = false) via. two calls. Inside this section
+ * Its function is to annotate a section @phase = BeginPhaseI to
+ * end (@phase = EndPhaseI) via. two calls. Inside this section
  * string allocators are replaced with ones which cause the
  * strings to be staticized at the end of the section.
  *
@@ -317,7 +328,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
  * @since LibreOffice 6.1
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
-    sal_Bool start
+    rtl_alloc_preInit_phase_t phase
 ) SAL_THROW_EXTERN_C();
 /** @endcond */
 

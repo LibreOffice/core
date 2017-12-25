@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.h>
+#include <rtllifecycle.h>
 
 #include "strimp.hxx"
 #include "alloc_impl.hxx"
@@ -93,25 +94,42 @@ static void mark_static(void *addr, sal_Size /* size */, void *)
     str->refCount |= SAL_STRING_STATIC_FLAG;
 }
 
-void SAL_CALL rtl_alloc_preInit (sal_Bool start) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_alloc_preInit (rtl_alloc_preInit_phase_t phase) SAL_THROW_EXTERN_C()
 {
-    if (start)
+    switch (phase)
     {
-        rtl_allocateString = pre_allocateStringFn;
-        rtl_freeString = pre_freeStringFn;
-        pre_arena = rtl_arena_create("pre-init strings", 4, 0,
-                                     nullptr, rtl_arena_alloc,
-                                     rtl_arena_free, 0);
-    }
-    else // back to normal
-    {
-        rtl_arena_foreach(pre_arena, mark_static, nullptr);
-        rtl_allocateString = rtl_allocateMemory;
-        rtl_freeString = rtl_freeMemory;
+        case BeginPhaseI:
+        {
+            rtl_allocateString = pre_allocateStringFn;
+            rtl_freeString = pre_freeStringFn;
+            pre_arena = rtl_arena_create("pre-init strings", 4, 0,
+                                         nullptr, rtl_arena_alloc,
+                                         rtl_arena_free, 0);
+        }
+        break;
 
-        // TODO: also re-initialize main allocator as well.
+        case EndPhaseI:
+        // back to normal
+        {
+            rtl_arena_foreach(pre_arena, mark_static, nullptr);
+            rtl_allocateString = rtl_allocateMemory;
+            rtl_freeString = rtl_freeMemory;
+
+            // Stop the rtl cache thread to have no extra threads while forking.
+            rtl_cache_stop_threads();
+
+            // TODO: also re-initialize main allocator as well.
+        }
+        break;
+
+        case BeginPhaseII:
+        {
+            // We have forked and need to restart threads and anything
+            // that must start after forking.
+            rtl_cache_start_threads();
+        }
+        break;
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
