@@ -304,7 +304,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes" context="picturepage">0,00</property>
+                        <property name="text" translatable="no" context="picturepage">0,00</property>
                         <property name="adjustment">adjustmentANGLE</property>
                         <property name="digits">2</property>
                         <property name="wrap">True</property>
