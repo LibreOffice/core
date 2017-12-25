@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa31d9ce_8a2b2b33",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T15:03:11Z",
+      "side": 1,
+      "message": "The first line of commit message should look like this:\n\n  tdf#114622 Add Numbering in Arabic-Indic numerals\n\nThe \"tdf#114622\" syntax allows proper attribution of the change to relevant bug in bug tracker, with proper commit notifications etc. Also, there must be indication what was done specifically.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_4a1a1319",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T15:03:11Z",
+      "side": 1,
+      "message": "This and following comments are the same: don\u0027t they need some indication what\u0027s different among them?",
+      "range": {
+        "startLine": 443,
+        "startChar": 8,
+        "endLine": 443,
+        "endChar": 42
+      },
+      "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_ea13c70b",
         "filename": "offapi/com/sun/star/style/NumberingType.idl",
         "patchSetId": 1
@@ -25,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_6a17d7ed",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T15:03:11Z",
+      "side": 1,
+      "message": "See line#443 above",
+      "range": {
+        "startLine": 449,
+        "startChar": 8,
+        "endLine": 449,
+        "endChar": 42
+      },
+      "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_0af9fbc8",
         "filename": "offapi/com/sun/star/style/NumberingType.idl",
         "patchSetId": 1
@@ -41,6 +110,29 @@
         "startChar": 8,
         "endLine": 451,
         "endChar": 30
+      },
+      "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8ad24b33",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T15:03:11Z",
+      "side": 1,
+      "message": "See line#443 above",
+      "range": {
+        "startLine": 455,
+        "startChar": 8,
+        "endLine": 455,
+        "endChar": 42
       },
       "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
