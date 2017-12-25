@@ -553,6 +553,10 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
     bool bSuccess = true;
     if( bSequence )
     {
+        // Check if the range is completely outside of possible pages range
+        if ((i_nFirst < mnMin && i_nLast < mnMin) ||
+            (i_nFirst > mnMax && i_nLast > mnMax))
+            return false;
         if( i_nFirst < mnMin )
             i_nFirst = mnMin;
         if( i_nFirst > mnMax )
@@ -640,12 +644,18 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
         {
             bSequence = true;
             if( aNumbers.empty() )
-                aNumbers.push_back( mnMin );
+            {
+                // push out-of-range small value, to exclude ranges totally outside of possible range
+                aNumbers.push_back( mnMin-1 );
+            }
         }
         else if( *pInput == ',' || *pInput == ';' )
         {
             if( bSequence && !aNumbers.empty() )
-                aNumbers.push_back( mnMax );
+            {
+                // push out-of-range large value, to exclude ranges totally outside of possible range
+                aNumbers.push_back( mnMax+1 );
+            }
             insertJoinedRanges( aNumbers );
 
             aNumbers.clear();
@@ -659,7 +669,10 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
     }
     // insert last entries
     if( bSequence && !aNumbers.empty() )
-        aNumbers.push_back( mnMax );
+    {
+        // push out-of-range large value, to exclude ranges totally outside of possible range
+        aNumbers.push_back( mnMax+1 );
+    }
     insertJoinedRanges( aNumbers );
 
     return true;
