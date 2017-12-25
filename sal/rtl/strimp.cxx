@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.h>
+#include <rtllifecycle.h>
 
 #include "strimp.hxx"
 #include "alloc_impl.hxx"
@@ -109,9 +110,18 @@ void SAL_CALL rtl_alloc_preInit (sal_Bool start) SAL_THROW_EXTERN_C()
         rtl_allocateString = rtl_allocateMemory;
         rtl_freeString = rtl_freeMemory;
 
+        // Stop the rtl cache thread to have no extra threads while forking.
+        rtl_cache_stop_threads();
+
         // TODO: also re-initialize main allocator as well.
     }
 }
 
+void SAL_CALL rtl_alloc_preInit_phaseII(void) SAL_THROW_EXTERN_C()
+{
+    // We have forked and need to restart threads and anything
+    // that must start after forking.
+    rtl_cache_start_threads();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

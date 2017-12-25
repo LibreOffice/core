@@ -321,6 +321,25 @@ SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
 ) SAL_THROW_EXTERN_C();
 /** @endcond */
 
+/** @cond INTERNAL */
+/** rtl_alloc_preInit
+ *
+ * This function is called during the second phase of
+ * the LibreOfficeKit pre-initialization to re-enable
+ * various threads that are stopped at the end of the
+ * first phase (to have no extra threads while forking).
+ *
+ * It is almost certainly not the method that you want,
+ * use with extraordinary care referring to the
+ * implementation.
+ *
+ * @since LibreOffice 6.1
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit_phaseII (
+    void
+) SAL_THROW_EXTERN_C();
+/** @endcond */
+
 #endif
 
 #ifdef __cplusplus

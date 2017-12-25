@@ -743,6 +743,7 @@ PRIVATE_1.4 { # LibreOffice 6.0
 PRIVATE_1.5 { # LibreOffice 6.1
     global:
         rtl_alloc_preInit;
+        rtl_alloc_preInit_phaseII;
 } PRIVATE_1.4;
 
 PRIVATE_textenc.1 { # LibreOffice 3.6

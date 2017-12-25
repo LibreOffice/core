@@ -3553,6 +3553,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (eStage == PRE_INIT)
         rtl_alloc_preInit(true);
+    else if (eStage == SECOND_INIT)
+        rtl_alloc_preInit_phaseII();
 
     if (eStage != SECOND_INIT)
         comphelper::LibreOfficeKit::setActive();
