@@ -24,6 +24,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svxids.hrc>
 #if OSL_DEBUG_LEVEL > 0
@@ -3639,7 +3640,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
                 sal_Int32 nSSize;
                 if( '+' == rOption.GetString()[0] ||
                     '-' == rOption.GetString()[0] )
-                    nSSize = nBaseSize + rOption.GetSNumber();
+                    nSSize = o3tl::saturating_add<sal_Int32>(nBaseSize, rOption.GetSNumber());
                 else
                     nSSize = (sal_Int32)rOption.GetNumber();
 
