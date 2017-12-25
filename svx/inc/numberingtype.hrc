@@ -53,7 +53,10 @@ const std::pair<const char*, int> RID_SVXSTRARY_NUMBERINGTYPE[] =
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "Α, Β, Γ, ... (Greek Upper Letter)"),    52 /* CHARS_GREEK_UPPER_LETTER         */ },
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "α, β, γ, ... (Greek Lower Letter)"),    53 /* CHARS_GREEK_LOWER_LETTER         */ },
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "א...י, יא...כ, ...") ,                  56 /* NUMBER_HEBREW                    */ },
-    { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "א...ת, אא...תת, ...") ,                 33 /* CHARS_HEBREW                     */ }
+    { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "א...ת, אא...תת, ...") ,                 33 /* CHARS_HEBREW                     */ },
+    { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "١, ٢, ٣, ٤, ... (Arabic)"),             57 /* NUMBER_ARABIC_INDIC              */ },
+    { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "۱, ۲, ۳, ۴, ... (Farsi)"),              58 /* NUMBER_EAST_ARABIC_INDIC         */ },
+    { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "१, २, ३, ..."),                         59 /* NUMBER_INDIC_DEVANAGARI          */ },
 };
 
 #endif
