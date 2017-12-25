@@ -602,7 +602,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                 // create new field
                 SwFieldType* pFieldType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenText);
-                SwHiddenTextField *const pHTField = new SwHiddenTextField(
+                SwHiddenTextField aHTField(
                     static_cast<SwHiddenTextFieldType*>(pFieldType),
                     paramCondition,
                     paramTrue,
@@ -610,7 +610,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     static_cast<sal_uInt16>(TYP_CONDTXTFLD));
 
                 // insert new field into document
-                m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(*pHTField));
+                m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aHTField));
                 break;
             }
             default:
