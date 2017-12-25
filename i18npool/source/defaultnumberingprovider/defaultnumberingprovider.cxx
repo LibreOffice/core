@@ -51,6 +51,21 @@
 #define S_HE_YOD "\xD7\x99"
 #define S_HE_QOF "\xD7\xA7"
 
+//Arabic-Indic
+#define S_AR_ONE "\xd9\xa1"
+#define S_AR_TWO "\xd9\xa2"
+#define S_AR_THREE "\xd9\xa3"
+
+// East Arabic-Indic
+#define S_FA_ONE "\xDB\xB1"
+#define S_FA_TWO "\xDB\xB2"
+#define S_FA_THREE "\xDB\xB3"
+
+// Indic Devanagari
+#define S_HI_ONE "\xDB\xB1"
+#define S_HI_TWO "\xDB\xB2"
+#define S_HI_THREE "\xDB\xB3"
+
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
@@ -751,6 +766,18 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case CHARS_ARABIC_ABJAD:
               lcl_formatChars(table_Alphabet_ar_abjad, SAL_N_ELEMENTS(table_Alphabet_ar_abjad), number - 1, result);
               break;
+          case NUMBER_ARABIC_INDIC:
+              natNum = NativeNumberMode::NATNUM1;
+              locale.Language = "ar";
+              break;
+          case NUMBER_EAST_ARABIC_INDIC:
+              natNum = NativeNumberMode::NATNUM1;
+              locale.Language = "fa";
+              break;
+          case NUMBER_INDIC_DEVANAGARI:
+              natNum = NativeNumberMode::NATNUM1;
+              locale.Language = "hi";
+              break;
           case CHARS_THAI:
               lcl_formatChars(table_Alphabet_th, SAL_N_ELEMENTS(table_Alphabet_th), number - 1, result);
               break;
@@ -924,6 +951,9 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,      nullptr, LANG_CJK},
         {style::NumberingType::CHARS_ARABIC,    nullptr, LANG_CTL},
         {style::NumberingType::CHARS_ARABIC_ABJAD,   nullptr, LANG_CTL},
+        {style::NumberingType::NUMBER_ARABIC_INDIC,    S_AR_ONE ", " S_AR_TWO ", " S_AR_THREE ", ...", LANG_CTL},
+        {style::NumberingType::NUMBER_EAST_ARABIC_INDIC,    S_FA_ONE ", " S_FA_TWO ", " S_FA_THREE ", ...", LANG_CTL},
+        {style::NumberingType::NUMBER_INDIC_DEVANAGARI,    S_HI_ONE ", " S_HI_TWO ", " S_HI_THREE ", ...", LANG_CTL},
         {style::NumberingType::CHARS_THAI,      nullptr, LANG_CTL},
         {style::NumberingType::CHARS_HEBREW,    nullptr, LANG_CTL},
         {style::NumberingType::NUMBER_HEBREW,    S_HE_ALEPH ", " S_HE_YOD ", " S_HE_QOF ", ...", LANG_CTL},
