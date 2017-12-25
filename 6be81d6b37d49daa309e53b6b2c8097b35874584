@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ea13c70b",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T14:57:11Z",
+      "side": 1,
+      "message": "This can\u0027t get into 5.4: this is a new feature; even 6.0 is feature freeze already (you need a very good reasons to include it there as a late feature - ask Eike if that\u0027s realistic and advisable).\n\nSo - it should be 6.1, or 6.0 (*if* would get into 6.0)",
+      "range": {
+        "startLine": 445,
+        "startChar": 8,
+        "endLine": 445,
+        "endChar": 30
+      },
+      "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0af9fbc8",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T14:57:11Z",
+      "side": 1,
+      "message": "The same",
+      "range": {
+        "startLine": 451,
+        "startChar": 8,
+        "endLine": 451,
+        "endChar": 30
+      },
+      "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2af6bfd7",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T14:57:11Z",
+      "side": 1,
+      "message": "The same",
+      "range": {
+        "startLine": 457,
+        "startChar": 8,
+        "endLine": 457,
+        "endChar": 30
+      },
+      "revId": "6be81d6b37d49daa309e53b6b2c8097b35874584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
