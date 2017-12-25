@@ -507,7 +507,7 @@ void ORoadmap::SetItemSelectHdl(const Link<LinkParamNone*,void>& _rHdl)
     m_pImpl->setSelectHdl(_rHdl);
 }
 
-Link<LinkParamNone*,void> ORoadmap::GetItemSelectHdl() const
+Link<LinkParamNone*,void> const & ORoadmap::GetItemSelectHdl() const
 {
     return m_pImpl->getSelectHdl();
 }

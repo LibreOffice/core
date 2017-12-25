@@ -15,6 +15,7 @@
 struct S1 {
     OUString mv1;
     OUString const & get() const { return mv1; }
+    OUString const & get2(bool) const { return mv1; }
 };
 struct S2 {
     OUString mv1;
@@ -40,6 +41,8 @@ struct S2 {
     // TODO
     OUString get10() { return OUString(*&get6()); } // todoexpected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
     OUString get11() const { return mxCow->get(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+    // TODO anything takes a param is suspect because it might return the param by ref
+    OUString get12() { return child.get2(false); } // todoexpected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
 
     // no warning expected
     OUString set1() { return OUString("xxx"); }

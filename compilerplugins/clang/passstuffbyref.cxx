@@ -402,6 +402,12 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
             FunctionDecl const * calleeFunctionDecl = callExpr->getDirectCallee();
             if (!calleeFunctionDecl)
                 return true;
+            // TODO anything takes a param is suspect because it might return the param by ref.
+            // we could tighten this to only reject functions that have a param of the same type
+            // as the return type. Or we could check for such functions and disallow them.
+            // Or we could force such functions to be annotated somehow.
+            if (calleeFunctionDecl->getNumParams() > 0)
+                return true;
             auto tc = loplugin::TypeCheck(calleeFunctionDecl->getReturnType());
             if (!tc.LvalueReference() && !tc.Pointer())
                 return true;

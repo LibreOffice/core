@@ -75,7 +75,7 @@ namespace vclcanvas
         css::uno::Any getDeviceHandle() const;
         css::uno::Any getSurfaceHandle() const;
         css::uno::Reference<
-            css::rendering::XColorSpace > getColorSpace() const;
+            css::rendering::XColorSpace > const & getColorSpace() const;
 
         const OutDevProviderSharedPtr& getOutDev() const { return mpOutDev; }
 

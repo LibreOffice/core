@@ -173,12 +173,12 @@ namespace cairocanvas
         return maDeviceHelper.getOutputDevice();
     }
 
-    SurfaceSharedPtr SpriteCanvas::getBufferSurface()
+    SurfaceSharedPtr const & SpriteCanvas::getBufferSurface()
     {
         return maDeviceHelper.getBufferSurface();
     }
 
-    SurfaceSharedPtr SpriteCanvas::getWindowSurface()
+    SurfaceSharedPtr const & SpriteCanvas::getWindowSurface()
     {
         return maDeviceHelper.getWindowSurface();
     }
