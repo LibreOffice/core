@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_6a69978b",
+        "filename": "i18nutil/source/utility/unicode_data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T14:40:13Z",
+      "side": 1,
+      "message": "This relates to range U+2C00..U+2C5F - you could indicate this in line 631, to avoid ambiguity, like\n\n  // Range U+2C00..U+2C5F: Glagolitic",
+      "range": {
+        "startLine": 631,
+        "startChar": 84,
+        "endLine": 631,
+        "endChar": 97
+      },
+      "revId": "1c6a1a662e654c2415113d764d2fc90ef46d0eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4a6cd39c",
+        "filename": "i18nutil/source/utility/unicode_data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-25T14:40:13Z",
+      "side": 0,
+      "message": "Please don\u0027t remove the comment completely; move it to proper range (U+2C80..U+2CFF) below, i.e., to line 639",
+      "range": {
+        "startLine": 632,
+        "startChar": 72,
+        "endLine": 632,
+        "endChar": 89
+      },
+      "revId": "de7392c4967f76d958dd7f2be8ef9e5af90624e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
