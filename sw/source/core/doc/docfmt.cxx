@@ -1027,10 +1027,9 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
         {
             // Check, if the list style of the paragraph will change.
             bool bChangeOfListStyleAtParagraph( true );
-            SwTextNode* pTNd( dynamic_cast<SwTextNode*>(pCNd) );
-            OSL_ENSURE( pTNd, "<lcl_SetTextFormatColl(..)> - text node expected -> crash" );
+            SwTextNode& rTNd(dynamic_cast<SwTextNode&>(*pCNd));
             {
-                SwNumRule* pNumRuleAtParagraph( pTNd->GetNumRule() );
+                SwNumRule* pNumRuleAtParagraph(rTNd.GetNumRule());
                 if ( pNumRuleAtParagraph )
                 {
                     const SwNumRuleItem& rNumRuleItemAtParagraphStyle =
@@ -1048,7 +1047,7 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
                 std::unique_ptr< SwRegHistory > pRegH;
                 if ( pPara->pHistory )
                 {
-                    pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );
+                    pRegH.reset(new SwRegHistory(&rTNd, rTNd, pPara->pHistory));
                 }
 
                 pCNd->ResetAttr( RES_PARATR_NUMRULE );
