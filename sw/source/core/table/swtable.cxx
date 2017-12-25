@@ -2232,8 +2232,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                     else
                     {
                         // fetch the current Item
-                        GetItemState( RES_BOXATR_FORMAT, false,
-                                            reinterpret_cast<const SfxPoolItem**>(&pNewFormat) );
+                        (void)GetItemState(RES_BOXATR_FORMAT, false, reinterpret_cast<const SfxPoolItem**>(&pNewFormat));
                         nOldFormat = GetTableBoxNumFormat().GetValue();
                         nNewFormat = pNewFormat ? pNewFormat->GetValue() : nOldFormat;
                     }
