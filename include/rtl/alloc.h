@@ -289,15 +289,49 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 #ifdef LIBO_INTERNAL_ONLY
 
 /** @cond INTERNAL */
+/** rtl_alloc_preInit_phase_t
+ *
+ * This is used to control the pre-init logic
+ * in rtl_alloc_preInit. The reason for this is
+ * to first initialize all caching and other memory
+ * logic from WSD (the Online demaon) at startup.
+ * All these pages will then be forked over when
+ * spawning per-document instances. This is done
+ * by calling rtl_alloc_preInit with rtlAllocPreInitStart.
+ *
+ * However before forking we need to wind down
+ * all threads, which is required by design.
+ * This is done by calling rtl_alloc_preInit
+ * with rtlAllocPreInitEnd.
+ *
+ * And of course the stopped threads need restarting
+ * after forking to ensure correct cleanup of the
+ * caches and other memory allocations. This is done
+ * by calling rtl_alloc_preInit with rtlAllocPostInit.
+ *
+ * @since LibreOffice 6.1
+ */
+typedef enum
+{
+    // Start phase I of pre-init.
+    rtlAllocPreInitStart,
+    // Finish phase I of pre-init (before forking).
+    rtlAllocPreInitEnd,
+    // Post pre-init and after forking.
+    rtlAllocPostInit
+
+} rtl_alloc_preInit_phase_t;
+
+/** @cond INTERNAL */
 /** rtl_alloc_preInit
  *
  * This function, is called at the beginning and again
  * at the end of LibreOfficeKit pre-initialization to enable
  * various optimizations.
  *
- * Its function is to annotate a section @start = true to
- * end (@start = false) via. two calls. Inside this section
- * string allocators are replaced with ones which cause the
+ * Its function is to annotate a section @phase = rtlAllocPreInitStart
+ * to end (@phase = rtlAllocPreInitEnd) via. two calls. Inside this
+ * section string allocators are replaced with ones which cause the
  * strings to be staticized at the end of the section.
  *
  * This brings a number of constraints - in particular no
@@ -317,7 +351,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
  * @since LibreOffice 6.1
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
-    sal_Bool start
+    rtl_alloc_preInit_phase_t phase
 ) SAL_THROW_EXTERN_C();
 /** @endcond */
 

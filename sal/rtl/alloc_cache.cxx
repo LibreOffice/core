@@ -1353,6 +1353,16 @@ rtl_cache_wsupdate_all(void * arg)
 #endif
 }
 
+void rtl_cache_stop_threads(void)
+{
+    rtl_cache_wsupdate_fini();
+}
+
+void rtl_cache_start_threads(void)
+{
+    rtl_cache_wsupdate_init();
+}
+
 void rtl_cache_init()
 {
     {
