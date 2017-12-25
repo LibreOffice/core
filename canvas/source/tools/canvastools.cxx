@@ -863,12 +863,12 @@ namespace canvas
             };
         }
 
-        uno::Reference<rendering::XIntegerBitmapColorSpace> getStdColorSpace()
+        uno::Reference<rendering::XIntegerBitmapColorSpace> const & getStdColorSpace()
         {
             return StandardColorSpaceHolder::get();
         }
 
-        uno::Reference<rendering::XIntegerBitmapColorSpace> getStdColorSpaceWithoutAlpha()
+        uno::Reference<rendering::XIntegerBitmapColorSpace> const & getStdColorSpaceWithoutAlpha()
         {
             return StandardNoAlphaColorSpaceHolder::get();
         }

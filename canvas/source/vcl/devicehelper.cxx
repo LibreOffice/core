@@ -189,7 +189,7 @@ namespace vclcanvas
         };
     }
 
-    uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
+    uno::Reference<rendering::XColorSpace> const & DeviceHelper::getColorSpace() const
     {
         // always the same
         return DeviceColorSpace::get();

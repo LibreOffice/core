@@ -1,0 +1,583 @@
+From 7893187afae766a15ea6a5c178e97e15ebd33e14 Mon Sep 17 00:00:00 2001
+From: Noel Grandin <noel@peralex.com>
+Date: Tue, 1 Mar 2016 08:52:45 +0200
+Subject: [PATCH] add rvalue reference support to
+ comphelper::containerToSequence
+
+so that we trigger the nice move optimisations we added to Sequence
+
+Also tighten up the template parameters, so we need to explicitly
+specify them less often. The downside is that the order is now swapped
+compared to the other variants in this file.
+
+Change-Id: I1904b322c9383a02a966d48f453982aa52fa850e
+---
+ chart2/source/tools/ConfigColorScheme.cxx           |  2 +-
+ .../source/eventattachermgr/eventattachermgr.cxx    |  2 +-
+ cui/source/dialogs/hlmarkwn.cxx                     |  2 +-
+ cui/source/options/tsaurls.cxx                      |  2 +-
+ dbaccess/source/core/dataaccess/connection.cxx      |  2 +-
+ .../deployment/manager/dp_extensionmanager.cxx      | 15 +++------------
+ desktop/source/migration/migration.cxx              |  3 +--
+ extensions/source/bibliography/framectr.cxx         |  2 +-
+ filter/source/pdf/pdfexport.cxx                     |  2 +-
+ forms/source/component/FormattedField.cxx           |  2 +-
+ forms/source/component/ListBox.cxx                  |  2 +-
+ forms/source/component/refvaluecomponent.cxx        |  2 +-
+ forms/source/misc/componenttools.cxx                |  2 +-
+ include/comphelper/sequence.hxx                     | 21 ++++++++++-----------
+ pyuno/source/module/pyuno_runtime.cxx               |  2 +-
+ sc/source/ui/unoobj/chart2uno.cxx                   |  2 +-
+ scripting/source/vbaevents/eventhelper.cxx          |  2 +-
+ sd/source/core/CustomAnimationEffect.cxx            |  2 +-
+ sfx2/source/appl/appdispatchprovider.cxx            |  6 ++----
+ sfx2/source/dialog/filtergrouping.cxx               |  2 +-
+ sfx2/source/view/sfxbasecontroller.cxx              |  6 ++----
+ stoc/source/implementationregistration/implreg.cxx  |  2 +-
+ stoc/source/servicemanager/servicemanager.cxx       |  2 +-
+ svl/source/passwordcontainer/syscreds.cxx           |  2 +-
+ svtools/source/misc/transfer.cxx                    |  2 +-
+ svx/source/form/fmPropBrw.cxx                       |  2 +-
+ svx/source/unodraw/UnoNameItemTable.cxx             |  2 +-
+ svx/source/unodraw/UnoNamespaceMap.cxx              |  2 +-
+ svx/source/unodraw/unomtabl.cxx                     |  2 +-
+ sw/source/core/unocore/unotbl.cxx                   |  2 +-
+ vcl/unx/kde/UnxCommandThread.cxx                    |  2 +-
+ xmloff/source/chart/SchXMLExport.cxx                |  2 +-
+ xmloff/source/style/prstylei.cxx                    |  2 +-
+ 33 files changed, 46 insertions(+), 61 deletions(-)
+
+diff --git a/chart2/source/tools/ConfigColorScheme.cxx b/chart2/source/tools/ConfigColorScheme.cxx
+index 69ddf39..eb3715e 100644
+--- a/chart2/source/tools/ConfigColorScheme.cxx
++++ b/chart2/source/tools/ConfigColorScheme.cxx
+@@ -89,7 +89,7 @@ void ChartConfigItem::ImplCommit()
+ void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )
+ {
+     m_aPropertiesToNotify.insert( rPropertyName );
+-    EnableNotification( comphelper::containerToSequence<OUString>( m_aPropertiesToNotify ));
++    EnableNotification( comphelper::containerToSequence( m_aPropertiesToNotify ));
+ }
+ 
+ uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
+diff --git a/comphelper/source/eventattachermgr/eventattachermgr.cxx b/comphelper/source/eventattachermgr/eventattachermgr.cxx
+index e4ff4a9..1562b46 100644
+--- a/comphelper/source/eventattachermgr/eventattachermgr.cxx
++++ b/comphelper/source/eventattachermgr/eventattachermgr.cxx
+@@ -562,7 +562,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
+ {
+     Guard< Mutex > aGuard( aLock );
+     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
+-    return comphelper::containerToSequence<ScriptEventDescriptor>(aIt->aEventList);
++    return comphelper::containerToSequence(aIt->aEventList);
+ }
+ 
+ 
+diff --git a/cui/source/dialogs/hlmarkwn.cxx b/cui/source/dialogs/hlmarkwn.cxx
+index a822f07..28b43a9 100644
+--- a/cui/source/dialogs/hlmarkwn.cxx
++++ b/cui/source/dialogs/hlmarkwn.cxx
+@@ -613,7 +613,7 @@ IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
+         uno::Sequence< beans::NamedValue > aSettings
+         {
+             { TG_SETTING_LASTMARK, css::uno::makeAny(sLastSelectedMark) },
+-            { TG_SETTING_LASTPATH, css::uno::makeAny(comphelper::containerToSequence<OUString>(aLastSelectedPath)) }
++            { TG_SETTING_LASTPATH, css::uno::makeAny(comphelper::containerToSequence(aLastSelectedPath)) }
+         };
+ 
+         // write
+diff --git a/cui/source/options/tsaurls.cxx b/cui/source/options/tsaurls.cxx
+index d812f37..a55cf1b8 100644
+--- a/cui/source/options/tsaurls.cxx
++++ b/cui/source/options/tsaurls.cxx
+@@ -53,7 +53,7 @@ IMPL_LINK_NOARG_TYPED(TSAURLsDialog, OKHdl_Impl, Button*, void)
+ {
+     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+ 
+-    officecfg::Office::Common::Security::Scripting::TSAURLs::set(comphelper::containerToSequence<OUString>(m_aURLs), batch);
++    officecfg::Office::Common::Security::Scripting::TSAURLs::set(comphelper::containerToSequence(m_aURLs), batch);
+     batch->commit();
+ 
+     EndDialog(RET_OK);
+diff --git a/dbaccess/source/core/dataaccess/connection.cxx b/dbaccess/source/core/dataaccess/connection.cxx
+index 0ff6362..fd1739b 100644
+--- a/dbaccess/source/core/dataaccess/connection.cxx
++++ b/dbaccess/source/core/dataaccess/connection.cxx
+@@ -412,7 +412,7 @@ Sequence< Type > OConnection::getTypes() throw (RuntimeException, std::exception
+     if ( !m_bSupportsGroups )
+         aNormalizedTypes.erase( cppu::UnoType<XGroupsSupplier>::get() );
+ 
+-    return comphelper::containerToSequence<Type>(aNormalizedTypes);
++    return comphelper::containerToSequence(aNormalizedTypes);
+ }
+ 
+ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException, std::exception)
+diff --git a/desktop/source/deployment/manager/dp_extensionmanager.cxx b/desktop/source/deployment/manager/dp_extensionmanager.cxx
+index 9e9d95e..b8c640a 100644
+--- a/desktop/source/deployment/manager/dp_extensionmanager.cxx
++++ b/desktop/source/deployment/manager/dp_extensionmanager.cxx
+@@ -334,10 +334,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
+                 "Could not find extension: " + identifier + ", " + fileName,
+                 static_cast<cppu::OWeakObject*>(this), -1);
+ 
+-        return comphelper::containerToSequence<
+-            Reference<css::deployment::XPackage>,
+-            ::std::list<Reference<css::deployment::XPackage> >
+-            > (listExtensions);
++        return comphelper::containerToSequence(listExtensions);
+     }
+     catch ( const css::deployment::DeploymentException & )
+     {
+@@ -371,10 +368,7 @@ bool ExtensionManager::isUserDisabled(
+     }
+     OSL_ASSERT(listExtensions.size() == 3);
+ 
+-    return isUserDisabled( ::comphelper::containerToSequence<
+-                           Reference<css::deployment::XPackage>,
+-                           ::std::list<Reference<css::deployment::XPackage> >
+-                           > (listExtensions));
++    return isUserDisabled( ::comphelper::containerToSequence(listExtensions));
+ }
+ 
+ bool ExtensionManager::isUserDisabled(
+@@ -427,10 +421,7 @@ void ExtensionManager::activateExtension(
+     OSL_ASSERT(listExtensions.size() == 3);
+ 
+     activateExtension(
+-        ::comphelper::containerToSequence<
+-        Reference<css::deployment::XPackage>,
+-        ::std::list<Reference<css::deployment::XPackage> >
+-        > (listExtensions),
++        ::comphelper::containerToSequence(listExtensions),
+         bUserDisabled, bStartup, xAbortChannel, xCmdEnv);
+ 
+     fireModified();
+diff --git a/desktop/source/migration/migration.cxx b/desktop/source/migration/migration.cxx
+index 5e7f6e1..8871033 100644
+--- a/desktop/source/migration/migration.cxx
++++ b/desktop/source/migration/migration.cxx
+@@ -902,8 +902,7 @@ void MigrationImpl::runServices()
+                 uno::Sequence< OUString > seqExtBlackList;
+                 sal_uInt32 nSize = i_mig->excludeExtensions.size();
+                 if ( nSize > 0 )
+-                    seqExtBlackList = comphelper::arrayToSequence< OUString >(
+-                                          &i_mig->excludeExtensions[0], nSize );
++                    seqExtBlackList = comphelper::containerToSequence( i_mig->excludeExtensions );
+                 seqArguments[2] = uno::makeAny(NamedValue("ExtensionBlackList",
+                                                uno::makeAny( seqExtBlackList )));
+ 
+diff --git a/extensions/source/bibliography/framectr.cxx b/extensions/source/bibliography/framectr.cxx
+index d89df18..7da5489 100644
+--- a/extensions/source/bibliography/framectr.cxx
++++ b/extensions/source/bibliography/framectr.cxx
+@@ -340,7 +340,7 @@ throw (css::uno::RuntimeException, std::exception)
+     }
+ 
+     css::uno::Sequence< css::frame::DispatchInformation > aSeq =
+-        comphelper::containerToSequence< css::frame::DispatchInformation, std::list< css::frame::DispatchInformation > >( aDispatchInfoList );
++        comphelper::containerToSequence( aDispatchInfoList );
+ 
+     return aSeq;
+ }
+diff --git a/filter/source/pdf/pdfexport.cxx b/filter/source/pdf/pdfexport.cxx
+index 000bcb3..6268259 100644
+--- a/filter/source/pdf/pdfexport.cxx
++++ b/filter/source/pdf/pdfexport.cxx
+@@ -1004,7 +1004,7 @@ void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors
+     if( ! rErrors.empty() && mxIH.is() )
+     {
+         task::PDFExportException aExc;
+-        aExc.ErrorCodes = comphelper::containerToSequence<sal_Int32>( rErrors );
++        aExc.ErrorCodes = comphelper::containerToSequence<decltype(rErrors), sal_Int32>( rErrors );
+         Reference< task::XInteractionRequest > xReq( new PDFErrorRequest( aExc ) );
+         mxIH->handle( xReq );
+     }
+diff --git a/forms/source/component/FormattedField.cxx b/forms/source/component/FormattedField.cxx
+index b00f7ce..ca059c1 100644
+--- a/forms/source/component/FormattedField.cxx
++++ b/forms/source/component/FormattedField.cxx
+@@ -1019,7 +1019,7 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
+         aTypes.push_front(cppu::UnoType< sal_Bool >::get() );
+         break;
+     }
+-    return comphelper::containerToSequence<Type>(aTypes);
++    return comphelper::containerToSequence(aTypes);
+ }
+ 
+ Any OFormattedModel::getDefaultForReset() const
+diff --git a/forms/source/component/ListBox.cxx b/forms/source/component/ListBox.cxx
+index 2abf7a8..c0f6729 100644
+--- a/forms/source/component/ListBox.cxx
++++ b/forms/source/component/ListBox.cxx
+@@ -1403,7 +1403,7 @@ namespace frm
+             }
+ 
+             // copy the indexes to the sequence
+-            aSelectIndexes = comphelper::containerToSequence<sal_Int16>( aSelectionSet );
++            aSelectIndexes = comphelper::containerToSequence( aSelectionSet );
+         }
+         break;
+ 
+diff --git a/forms/source/component/refvaluecomponent.cxx b/forms/source/component/refvaluecomponent.cxx
+index c1d6ae8..c5987e4 100644
+--- a/forms/source/component/refvaluecomponent.cxx
++++ b/forms/source/component/refvaluecomponent.cxx
+@@ -177,7 +177,7 @@ namespace frm
+             aTypes.push_front( cppu::UnoType<OUString>::get() );
+             // push_front, because this is the preferred type
+ 
+-        return comphelper::containerToSequence<Type>(aTypes);
++        return comphelper::containerToSequence(aTypes);
+     }
+ 
+ 
+diff --git a/forms/source/misc/componenttools.cxx b/forms/source/misc/componenttools.cxx
+index 13a1ed7..ad92957 100644
+--- a/forms/source/misc/componenttools.cxx
++++ b/forms/source/misc/componenttools.cxx
+@@ -81,7 +81,7 @@ namespace frm
+ 
+     TypeBag::TypeSequence TypeBag::getTypes() const
+     {
+-        return comphelper::containerToSequence<css::uno::Type>(m_aTypes);
++        return comphelper::containerToSequence(m_aTypes);
+     }
+ 
+ 
+diff --git a/include/comphelper/sequence.hxx b/include/comphelper/sequence.hxx
+index 46f8153..fcab7b9 100644
+--- a/include/comphelper/sequence.hxx
++++ b/include/comphelper/sequence.hxx
+@@ -20,11 +20,12 @@
+ #ifndef INCLUDED_COMPHELPER_SEQUENCE_HXX
+ #define INCLUDED_COMPHELPER_SEQUENCE_HXX
+ 
+-#include <algorithm>
+ #include <com/sun/star/uno/Sequence.hxx>
+ #include <osl/diagnose.h>
+ #include <comphelper/comphelperdllapi.h>
+ 
++#include <algorithm>
++#include <type_traits>
+ #include <vector>
+ 
+ namespace comphelper
+@@ -223,14 +224,13 @@ namespace comphelper
+         prevent or detect precision loss, overflow or truncation.
+      */
+     template < typename DstType, typename SrcType >
+-    inline css::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
++    inline css::uno::Sequence< DstType > arrayToSequence( const SrcType& i_pArray, sal_Int32 nNum )
+     {
+         css::uno::Sequence< DstType > result( nNum );
+         ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
+         return result;
+     }
+ 
+-
+     /** Copy from a Sequence into a plain C/C++ array
+ 
+         @tpl SrcType
+@@ -283,23 +283,22 @@ namespace comphelper
+         truncated. There's currently no measure to prevent or detect
+         precision loss, overflow or truncation.
+      */
+-    template < typename DstType, typename SrcType >
+-    inline css::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
++    template< typename SrcType, typename DstType = typename SrcType::value_type >
++    inline css::uno::Sequence< DstType > containerToSequence( const SrcType & i_Container )
+     {
+         css::uno::Sequence< DstType > result( i_Container.size() );
+         ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
+         return result;
+     }
+ 
+-    template <typename T>
+-    inline css::uno::Sequence<T> containerToSequence(
+-        ::std::vector<T> const& v )
++    template< typename SrcType, typename DstType = typename SrcType::value_type >
++    inline css::uno::Sequence< DstType > containerToSequence( SrcType && i_Container )
+     {
+-        return css::uno::Sequence<T>(
+-            v.data(), static_cast<sal_Int32>(v.size()) );
++        css::uno::Sequence< DstType > result( i_Container.size() );
++        ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
++        return result;
+     }
+ 
+-
+     /** Copy from a Sequence into a container
+ 
+         @tpl SrcType
+diff --git a/pyuno/source/module/pyuno_runtime.cxx b/pyuno/source/module/pyuno_runtime.cxx
+index 8eb64c7..491eb57 100644
+--- a/pyuno/source/module/pyuno_runtime.cxx
++++ b/pyuno/source/module/pyuno_runtime.cxx
+@@ -637,7 +637,7 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
+         items.push_back( pyObject2Any( rItem.get() ) );
+     }
+     while( (pItem = PyIter_Next( pObj )) );
+-    a <<= comphelper::containerToSequence<Any>(items);
++    a <<= comphelper::containerToSequence(items);
+     return true;
+ }
+ 
+diff --git a/sc/source/ui/unoobj/chart2uno.cxx b/sc/source/ui/unoobj/chart2uno.cxx
+index fe84cf0..d87dac7 100644
+--- a/sc/source/ui/unoobj/chart2uno.cxx
++++ b/sc/source/ui/unoobj/chart2uno.cxx
+@@ -2407,7 +2407,7 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
+ ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException, std::exception)
+ {
+     SolarMutexGuard aGuard;
+-    return comphelper::containerToSequence< uno::Reference< chart2::data::XLabeledDataSequence> >(m_aLabeledSequences);
++    return comphelper::containerToSequence(m_aLabeledSequences);
+ }
+ 
+ void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data::XLabeledDataSequence >& xNew)
+diff --git a/scripting/source/vbaevents/eventhelper.cxx b/scripting/source/vbaevents/eventhelper.cxx
+index fdc80e3..800b747 100644
+--- a/scripting/source/vbaevents/eventhelper.cxx
++++ b/scripting/source/vbaevents/eventhelper.cxx
+@@ -416,7 +416,7 @@ ScriptEventHelper::getEventListeners()
+         }
+     }
+ 
+-    return comphelper::containerToSequence<OUString>(eventMethods);
++    return comphelper::containerToSequence(eventMethods);
+ }
+ 
+ Sequence< ScriptEventDescriptor >
+diff --git a/sd/source/core/CustomAnimationEffect.cxx b/sd/source/core/CustomAnimationEffect.cxx
+index a3efd9f..51560a4 100644
+--- a/sd/source/core/CustomAnimationEffect.cxx
++++ b/sd/source/core/CustomAnimationEffect.cxx
+@@ -1732,7 +1732,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
+ 
+             if( bFilter )
+             {
+-                aUserData = ::comphelper::containerToSequence< NamedValue, std::vector< NamedValue > >( aNewUserData );
++                aUserData = ::comphelper::containerToSequence( aNewUserData );
+                 xNode->setUserData( aUserData );
+             }
+ 
+diff --git a/sfx2/source/appl/appdispatchprovider.cxx b/sfx2/source/appl/appdispatchprovider.cxx
+index 11cc76d..67a5a3b 100644
+--- a/sfx2/source/appl/appdispatchprovider.cxx
++++ b/sfx2/source/appl/appdispatchprovider.cxx
+@@ -203,8 +203,7 @@ throw (uno::RuntimeException, std::exception)
+         }
+     }
+ 
+-    uno::Sequence< sal_Int16 > aSeq =
+-        comphelper::containerToSequence< sal_Int16, std::list< sal_Int16 > >( aGroupList );
++    uno::Sequence< sal_Int16 > aSeq = comphelper::containerToSequence( aGroupList );
+ 
+     return aSeq;
+ }
+@@ -250,8 +249,7 @@ throw (uno::RuntimeException, std::exception)
+         }
+     }
+ 
+-    uno::Sequence< frame::DispatchInformation > aSeq =
+-        comphelper::containerToSequence< frame::DispatchInformation, std::list< frame::DispatchInformation > >( aCmdList );
++    uno::Sequence< frame::DispatchInformation > aSeq = comphelper::containerToSequence( aCmdList );
+ 
+     return aSeq;
+ }
+diff --git a/sfx2/source/dialog/filtergrouping.cxx b/sfx2/source/dialog/filtergrouping.cxx
+index f14c57f..e94d128 100644
+--- a/sfx2/source/dialog/filtergrouping.cxx
++++ b/sfx2/source/dialog/filtergrouping.cxx
+@@ -817,7 +817,7 @@ namespace sfx2
+                     // create a representation of the group which is understandable by the XFilterGroupManager
+                     if ( _rGroup.size() )
+                     {
+-                        Sequence< StringPair > aFilters( comphelper::containerToSequence<StringPair>(_rGroup) );
++                        Sequence< StringPair > aFilters( comphelper::containerToSequence(_rGroup) );
+                         if ( _bAddExtension )
+                         {
+                             StringPair* pFilters = aFilters.getArray();
+diff --git a/sfx2/source/view/sfxbasecontroller.cxx b/sfx2/source/view/sfxbasecontroller.cxx
+index 6683640..bfbc998 100644
+--- a/sfx2/source/view/sfxbasecontroller.cxx
++++ b/sfx2/source/view/sfxbasecontroller.cxx
+@@ -1170,8 +1170,7 @@ throw (RuntimeException, std::exception)
+         }
+     }
+ 
+-    uno::Sequence< sal_Int16 > aSeq =
+-        comphelper::containerToSequence< sal_Int16 >( aGroupList );
++    uno::Sequence< sal_Int16 > aSeq = comphelper::containerToSequence( aGroupList );
+     return aSeq;
+ }
+ 
+@@ -1217,8 +1216,7 @@ throw (RuntimeException, std::exception)
+         }
+     }
+ 
+-    uno::Sequence< frame::DispatchInformation > aSeq =
+-        comphelper::containerToSequence< frame::DispatchInformation, std::list< frame::DispatchInformation > >( aCmdList );
++    uno::Sequence< frame::DispatchInformation > aSeq = comphelper::containerToSequence( aCmdList );
+ 
+     return aSeq;
+ }
+diff --git a/stoc/source/implementationregistration/implreg.cxx b/stoc/source/implementationregistration/implreg.cxx
+index c95159b..38fae1a 100644
+--- a/stoc/source/implementationregistration/implreg.cxx
++++ b/stoc/source/implementationregistration/implreg.cxx
+@@ -1628,7 +1628,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
+ 
+                         if (!implNames.empty())
+                         {
+-                            Sequence<OUString> seqImpl(comphelper::containerToSequence<OUString>(implNames));
++                            Sequence<OUString> seqImpl(comphelper::containerToSequence(implNames));
+                             xImpl->closeKey();
+                             return seqImpl;
+                         }
+diff --git a/stoc/source/servicemanager/servicemanager.cxx b/stoc/source/servicemanager/servicemanager.cxx
+index 7553398..50fe0ea 100644
+--- a/stoc/source/servicemanager/servicemanager.cxx
++++ b/stoc/source/servicemanager/servicemanager.cxx
+@@ -853,7 +853,7 @@ Sequence< OUString > OServiceManager::getUniqueAvailableServiceNames(
+         aNameSet.insert( (*aIt++).first );
+     */
+ 
+-    return comphelper::containerToSequence<OUString>(aNameSet);
++    return comphelper::containerToSequence(aNameSet);
+ }
+ 
+ // XMultiComponentFactory
+diff --git a/svl/source/passwordcontainer/syscreds.cxx b/svl/source/passwordcontainer/syscreds.cxx
+index ca54b51..69df68a 100644
+--- a/svl/source/passwordcontainer/syscreds.cxx
++++ b/svl/source/passwordcontainer/syscreds.cxx
+@@ -186,7 +186,7 @@ void SysCredentialsConfig::writeCfg()
+ 
+     OSL_ENSURE( m_bCfgInited, "SysCredentialsConfig::writeCfg : not initialized!" );
+ 
+-    m_aConfigItem.setSystemCredentialsURLs( comphelper::containerToSequence<OUString>(m_aCfgContainer) );
++    m_aConfigItem.setSystemCredentialsURLs( comphelper::containerToSequence(m_aCfgContainer) );
+ }
+ 
+ OUString SysCredentialsConfig::find( OUString const & aURL )
+diff --git a/svtools/source/misc/transfer.cxx b/svtools/source/misc/transfer.cxx
+index 81dd5dc..9a82de2 100644
+--- a/svtools/source/misc/transfer.cxx
++++ b/svtools/source/misc/transfer.cxx
+@@ -405,7 +405,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
+     {
+     }
+ 
+-    return comphelper::containerToSequence<DataFlavor>(*mpFormats);
++    return comphelper::containerToSequence<DataFlavorExVector, DataFlavor>(*mpFormats);
+ }
+ 
+ 
+diff --git a/svx/source/form/fmPropBrw.cxx b/svx/source/form/fmPropBrw.cxx
+index aff1df1..89d6622 100644
+--- a/svx/source/form/fmPropBrw.cxx
++++ b/svx/source/form/fmPropBrw.cxx
+@@ -397,7 +397,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
+             Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
+ 
+             // tell it the objects to inspect
+-            xInspector->inspect( comphelper::containerToSequence< Reference< XInterface > >(_rSelection) );
++            xInspector->inspect( comphelper::containerToSequence(_rSelection) );
+         }
+         catch( const VetoException& )
+         {
+diff --git a/svx/source/unodraw/UnoNameItemTable.cxx b/svx/source/unodraw/UnoNameItemTable.cxx
+index d69f682..e0e5907 100644
+--- a/svx/source/unodraw/UnoNameItemTable.cxx
++++ b/svx/source/unodraw/UnoNameItemTable.cxx
+@@ -247,7 +247,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
+         aNameSet.insert(aApiName);
+     }
+ 
+-    return comphelper::containerToSequence<OUString>(aNameSet);
++    return comphelper::containerToSequence(aNameSet);
+ }
+ 
+ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
+diff --git a/svx/source/unodraw/UnoNamespaceMap.cxx b/svx/source/unodraw/UnoNamespaceMap.cxx
+index 32dca96..6340c2a 100644
+--- a/svx/source/unodraw/UnoNamespaceMap.cxx
++++ b/svx/source/unodraw/UnoNamespaceMap.cxx
+@@ -224,7 +224,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
+     while( aIter.next( aPrefix, aURL ) )
+         aPrefixSet.insert( aPrefix );
+ 
+-    return comphelper::containerToSequence<OUString>(aPrefixSet);
++    return comphelper::containerToSequence(aPrefixSet);
+ }
+ 
+ sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
+diff --git a/svx/source/unodraw/unomtabl.cxx b/svx/source/unodraw/unomtabl.cxx
+index aea0bd6..b303c15 100644
+--- a/svx/source/unodraw/unomtabl.cxx
++++ b/svx/source/unodraw/unomtabl.cxx
+@@ -357,7 +357,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
+     // search model pool for line ends
+     createNamesForPool( mpModelPool, XATTR_LINEEND, aNameSet );
+ 
+-    return comphelper::containerToSequence<OUString>(aNameSet);
++    return comphelper::containerToSequence(aNameSet);
+ }
+ 
+ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
+diff --git a/sw/source/core/unocore/unotbl.cxx b/sw/source/core/unocore/unotbl.cxx
+index 6f88f48..735ab4b 100644
+--- a/sw/source/core/unocore/unotbl.cxx
++++ b/sw/source/core/unocore/unotbl.cxx
+@@ -2130,7 +2130,7 @@ uno::Sequence<OUString> SwXTextTable::getCellNames() throw( uno::RuntimeExceptio
+     SwTableLines& rTableLines = pTable->GetTabLines();
+     std::vector<OUString> aAllNames;
+     lcl_InspectLines(rTableLines, aAllNames);
+-    return comphelper::containerToSequence<OUString>(aAllNames);
++    return comphelper::containerToSequence(aAllNames);
+ }
+ 
+ uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(const OUString& sCellName)
+diff --git a/vcl/unx/kde/UnxCommandThread.cxx b/vcl/unx/kde/UnxCommandThread.cxx
+index c5d313c..e2ca566 100644
+--- a/vcl/unx/kde/UnxCommandThread.cxx
++++ b/vcl/unx/kde/UnxCommandThread.cxx
+@@ -269,7 +269,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
+         }
+         else if ( aType == "stringList" )
+         {
+-            m_aGetValue <<= comphelper::containerToSequence<OUString>(aList);
++            m_aGetValue <<= comphelper::containerToSequence(aList);
+             m_aGetValueCondition.set();
+         }
+         else
+diff --git a/xmloff/source/chart/SchXMLExport.cxx b/xmloff/source/chart/SchXMLExport.cxx
+index 694dd6f..b253627 100644
+--- a/xmloff/source/chart/SchXMLExport.cxx
++++ b/xmloff/source/chart/SchXMLExport.cxx
+@@ -384,7 +384,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
+         }
+     }
+ 
+-    return comphelper::containerToSequence< Reference< chart2::data::XLabeledDataSequence > >( aContainer );
++    return comphelper::containerToSequence( aContainer );
+ }
+ 
+ Reference< chart2::data::XLabeledDataSequence >
+diff --git a/xmloff/source/style/prstylei.cxx b/xmloff/source/style/prstylei.cxx
+index f80f4e0..d1ee6d5 100644
+--- a/xmloff/source/style/prstylei.cxx
++++ b/xmloff/source/style/prstylei.cxx
+@@ -402,7 +402,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
+                     }
+ 
+                     nCount = aNameSet.size();
+-                    Sequence<OUString> aNames( comphelper::containerToSequence<OUString>(aNameSet) );
++                    Sequence<OUString> aNames( comphelper::containerToSequence(aNameSet) );
+                     Sequence < PropertyState > aStates( xPropState->getPropertyStates(aNames) );
+                     const PropertyState *pStates = aStates.getConstArray();
+                     OUString* pNames = aNames.getArray();
+-- 
+2.5.0
+

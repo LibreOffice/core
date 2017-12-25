@@ -143,9 +143,9 @@ namespace vclcanvas
                               const GraphicAttr&                              rAttr ) const override;
 
         /// Get backbuffer for this canvas
-        OutDevProviderSharedPtr getFrontBuffer() const { return maDeviceHelper.getOutDev(); }
+        OutDevProviderSharedPtr const & getFrontBuffer() const { return maDeviceHelper.getOutDev(); }
         /// Get window for this canvas
-        BackBufferSharedPtr getBackBuffer() const { return maDeviceHelper.getBackBuffer(); }
+        BackBufferSharedPtr const & getBackBuffer() const { return maDeviceHelper.getBackBuffer(); }
 
     private:
         css::uno::Sequence< css::uno::Any >                maArguments;
