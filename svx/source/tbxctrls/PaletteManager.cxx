@@ -37,6 +37,8 @@
 
 #include <palettes.hxx>
 
+std::vector<std::unique_ptr<Palette>> PaletteManager::m_Palettes;
+
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
     mnNumOfPalettes(2),
@@ -67,58 +69,61 @@ PaletteManager::~PaletteManager()
 
 void PaletteManager::LoadPalettes()
 {
-    m_Palettes.clear();
-    OUString aPalPaths = SvtPathOptions().GetPalettePath();
-
-    std::stack<OUString> aDirs;
-    sal_Int32 nIndex = 0;
-    do
+    static std::once_flag aLoadedPalettes;
+    std::call_once(aLoadedPalettes, []
     {
-        aDirs.push(aPalPaths.getToken(0, ';', nIndex));
-    }
-    while (nIndex >= 0);
+        OUString aPalPaths = SvtPathOptions().GetPalettePath();
 
-    std::set<OUString> aNames;
-    //try all entries palette path list user first, then
-    //system, ignoring duplicate file names
-    while (!aDirs.empty())
-    {
-        OUString aPalPath = aDirs.top();
-        aDirs.pop();
-
-        osl::Directory aDir(aPalPath);
-        osl::DirectoryItem aDirItem;
-        osl::FileStatus aFileStat( osl_FileStatus_Mask_FileName |
-                                   osl_FileStatus_Mask_FileURL  |
-                                   osl_FileStatus_Mask_Type     );
-        if( aDir.open() == osl::FileBase::E_None )
+        std::stack<OUString> aDirs;
+        sal_Int32 nIndex = 0;
+        do
         {
-            while( aDir.getNextItem(aDirItem) == osl::FileBase::E_None )
-            {
-                aDirItem.getFileStatus(aFileStat);
-                if(aFileStat.isRegular() || aFileStat.isLink())
-                {
-                    OUString aFName = aFileStat.getFileName();
-                    INetURLObject aURLObj( aFileStat.getFileURL() );
-                    OUString aFNameWithoutExt = aURLObj.GetBase();
-                    if (aNames.find(aFName) == aNames.end())
-                    {
-                        std::unique_ptr<Palette> pPalette;
-                        if( aFName.endsWithIgnoreAsciiCase(".gpl") )
-                            pPalette.reset(new PaletteGPL(aFileStat.getFileURL(), aFNameWithoutExt));
-                        else if( aFName.endsWithIgnoreAsciiCase(".soc") )
-                            pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFNameWithoutExt));
-                        else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
-                            pPalette.reset(new PaletteASE(aFileStat.getFileURL(), aFNameWithoutExt));
+            aDirs.push(aPalPaths.getToken(0, ';', nIndex));
+        }
+        while (nIndex >= 0);
 
-                        if( pPalette && pPalette->IsValid() )
-                            m_Palettes.push_back( std::move(pPalette) );
-                        aNames.insert(aFNameWithoutExt);
+        std::set<OUString> aNames;
+        //try all entries palette path list user first, then
+        //system, ignoring duplicate file names
+        while (!aDirs.empty())
+        {
+            OUString aPalPath = aDirs.top();
+            aDirs.pop();
+
+            osl::Directory aDir(aPalPath);
+            osl::DirectoryItem aDirItem;
+            osl::FileStatus aFileStat( osl_FileStatus_Mask_FileName |
+                                       osl_FileStatus_Mask_FileURL  |
+                                       osl_FileStatus_Mask_Type     );
+            if( aDir.open() == osl::FileBase::E_None )
+            {
+                while( aDir.getNextItem(aDirItem) == osl::FileBase::E_None )
+                {
+                    aDirItem.getFileStatus(aFileStat);
+                    if(aFileStat.isRegular() || aFileStat.isLink())
+                    {
+                        OUString aFName = aFileStat.getFileName();
+                        INetURLObject aURLObj( aFileStat.getFileURL() );
+                        OUString aFNameWithoutExt = aURLObj.GetBase();
+                        if (aNames.find(aFName) == aNames.end())
+                        {
+                            std::unique_ptr<Palette> pPalette;
+                            if( aFName.endsWithIgnoreAsciiCase(".gpl") )
+                                pPalette.reset(new PaletteGPL(aFileStat.getFileURL(), aFNameWithoutExt));
+                            else if( aFName.endsWithIgnoreAsciiCase(".soc") )
+                                pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFNameWithoutExt));
+                            else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
+                                pPalette.reset(new PaletteASE(aFileStat.getFileURL(), aFNameWithoutExt));
+
+                            if( pPalette && pPalette->IsValid() )
+                                m_Palettes.push_back( std::move(pPalette) );
+                            aNames.insert(aFNameWithoutExt);
+                        }
                     }
                 }
             }
         }
-    }
+    } );
 }
 
 void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)

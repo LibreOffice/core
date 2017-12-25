@@ -35,6 +35,8 @@
 
 class SVX_DLLPUBLIC PaletteManager
 {
+    static std::vector<std::unique_ptr<Palette>> m_Palettes;
+
     const sal_uInt16        mnMaxRecentColors;
 
     sal_uInt16              mnNumOfPalettes;
@@ -46,16 +48,16 @@ class SVX_DLLPUBLIC PaletteManager
     XColorListRef           pColorList;
     Color                   mLastColor;
     std::deque<NamedColor>  maRecentColors;
-    std::vector<std::unique_ptr<Palette>> m_Palettes;
 
     std::function<void(const OUString&, const NamedColor&)> maColorSelectFunction;
     css::uno::Reference < css::uno::XComponentContext > m_context;
 public:
+    static void LoadPalettes();
+
     PaletteManager();
     ~PaletteManager();
     PaletteManager(const PaletteManager&) = delete;
     PaletteManager& operator=(const PaletteManager&) = delete;
-    void        LoadPalettes();
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
     void        ReloadRecentColorSet(SvxColorValueSet& rColorSet);
     std::vector<OUString> GetPaletteList();

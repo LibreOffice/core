@@ -175,7 +175,6 @@ void PaletteASE::LoadPalette()
 static OString lcl_getToken(const OString& rStr, sal_Int32& index);
 
 PaletteGPL::PaletteGPL( const OUString &rFPath, const OUString &rFName ) :
-    mbLoadedPalette( false ),
     mbValidPalette( false ),
     maFName( rFName ),
     maFPath( rFPath )
@@ -245,44 +244,44 @@ void PaletteGPL::LoadPaletteHeader()
 
 void PaletteGPL::LoadPalette()
 {
-    if( mbLoadedPalette ) return;
-    mbLoadedPalette = true;
+    std::call_once(maLoadedPalette, [this]
+    {
+        // TODO add error handling!!!
+        SvFileStream aFile(maFPath, StreamMode::READ);
+        mbValidPalette = ReadPaletteHeader( aFile );
 
-    // TODO add error handling!!!
-    SvFileStream aFile(maFPath, StreamMode::READ);
-    mbValidPalette = ReadPaletteHeader( aFile );
+        if( !mbValidPalette ) return;
 
-    if( !mbValidPalette ) return;
+        OString aLine;
+        do {
+            if (aLine[0] != '#' && aLine[0] != '\n')
+            {
+                // TODO check if r,g,b are 0<= x <=255, or just clamp?
+                sal_Int32 nIndex = 0;
+                OString token;
 
-    OString aLine;
-    do {
-        if (aLine[0] != '#' && aLine[0] != '\n')
-        {
-            // TODO check if r,g,b are 0<= x <=255, or just clamp?
-            sal_Int32 nIndex = 0;
-            OString token;
+                token = lcl_getToken(aLine, nIndex);
+                if(token.isEmpty() || nIndex == -1) continue;
+                sal_Int32 r = token.toInt32();
 
-            token = lcl_getToken(aLine, nIndex);
-            if(token.isEmpty() || nIndex == -1) continue;
-            sal_Int32 r = token.toInt32();
+                token = lcl_getToken(aLine, nIndex);
+                if(token.isEmpty() || nIndex == -1) continue;
+                sal_Int32 g = token.toInt32();
 
-            token = lcl_getToken(aLine, nIndex);
-            if(token.isEmpty() || nIndex == -1) continue;
-            sal_Int32 g = token.toInt32();
+                token = lcl_getToken(aLine, nIndex);
+                if(token.isEmpty()) continue;
+                sal_Int32 b = token.toInt32();
 
-            token = lcl_getToken(aLine, nIndex);
-            if(token.isEmpty()) continue;
-            sal_Int32 b = token.toInt32();
+                OString name;
+                if(nIndex != -1)
+                    name = aLine.copy(nIndex);
 
-            OString name;
-            if(nIndex != -1)
-                name = aLine.copy(nIndex);
-
-            maColors.emplace_back(
-                Color(r, g, b),
-                OStringToOUString(name, RTL_TEXTENCODING_ASCII_US));
-        }
-    } while (aFile.ReadLine(aLine));
+                maColors.emplace_back(
+                    Color(r, g, b),
+                    OStringToOUString(name, RTL_TEXTENCODING_ASCII_US));
+            }
+        } while (aFile.ReadLine(aLine));
+    } );
 }
 
 // finds first token in rStr from index, separated by whitespace
@@ -323,7 +322,6 @@ static OString lcl_getToken(const OString& rStr, sal_Int32& index)
 // PaletteSOC ------------------------------------------------------------------
 
 PaletteSOC::PaletteSOC( const OUString &rFPath, const OUString &rFName ) :
-    mbLoadedPalette( false ),
     maFPath( rFPath ),
     maSOCPaletteName( rFName )
 {
@@ -345,12 +343,11 @@ const OUString& PaletteSOC::GetPath()
 
 void PaletteSOC::LoadColorSet( SvxColorValueSet& rColorSet )
 {
-    if( !mbLoadedPalette )
+    std::call_once(maLoadedPalette, [this]
     {
-        mbLoadedPalette = true;
         mpColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(XPropertyListType::Color, maFPath));
         (void)mpColorList->Load();
-    }
+    } );
     rColorSet.Clear();
     if( mpColorList.is() )
         rColorSet.addEntriesForXColorList( *mpColorList );

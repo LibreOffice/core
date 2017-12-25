@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_INC_PALETTE_HXX
 
 #include <svx/Palette.hxx>
+#include <mutex>
 
 class SvFileStream;
 
@@ -50,12 +51,12 @@ public:
 
 class SVX_DLLPUBLIC PaletteGPL : public Palette
 {
-    bool        mbLoadedPalette;
-    bool        mbValidPalette;
-    OUString    maFName;
-    OUString    maFPath;
-    OUString    maGPLPaletteName;
-    ColorList   maColors;
+    std::once_flag  maLoadedPalette;
+    bool            mbValidPalette;
+    OUString        maFName;
+    OUString        maFPath;
+    OUString        maGPLPaletteName;
+    ColorList       maColors;
 
     bool        ReadPaletteHeader(SvFileStream& rFileStream);
     void        LoadPaletteHeader();
@@ -75,7 +76,7 @@ public:
 
 class SVX_DLLPUBLIC PaletteSOC : public Palette
 {
-    bool            mbLoadedPalette;
+    std::once_flag  maLoadedPalette;
     OUString        maFPath;
     OUString        maSOCPaletteName;
     XColorListRef   mpColorList;
