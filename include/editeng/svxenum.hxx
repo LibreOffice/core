@@ -198,7 +198,10 @@ enum SvxNumType : sal_Int16
     SVX_NUM_CHARS_GREEK_LOWER_LETTER = css::style::NumberingType::CHARS_GREEK_LOWER_LETTER,
     SVX_NUM_CHARS_ARABIC_ABJAD    = css::style::NumberingType::CHARS_ARABIC_ABJAD,
     SVX_NUM_CHARS_PERSIAN_WORD    = css::style::NumberingType::CHARS_PERSIAN_WORD,
-    SVX_NUM_NUMBER_HEBREW         = css::style::NumberingType::NUMBER_HEBREW
+    SVX_NUM_NUMBER_HEBREW         = css::style::NumberingType::NUMBER_HEBREW,
+    SVX_NUM_NUMBER_ARABIC_INDIC   = css::style::NumberingType::NUMBER_ARABIC_INDIC,
+    SVX_NUM_NUMBER_EAST_ARABIC_INDIC  = css::style::NumberingType::NUMBER_EAST_ARABIC_INDIC,
+    SVX_NUM_NUMBER_INDIC_DEVANAGARI  = css::style::NumberingType::NUMBER_INDIC_DEVANAGARI
 };
 
 #endif
