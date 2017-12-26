@@ -20,6 +20,7 @@
 #include <svdata.hxx>
 
 #include <fontinstance.hxx>
+#include <impfontcache.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
 #include <PhysicalFontFamily.hxx>

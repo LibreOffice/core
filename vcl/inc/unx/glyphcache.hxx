@@ -118,7 +118,7 @@ class VCL_DLLPUBLIC FreetypeFont final
 {
 public:
                             FreetypeFont( const FontSelectPattern&, FreetypeFontInfo* );
-                           ~FreetypeFont();
+    virtual                ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
     int                     GetFontFaceIndex() const;
@@ -130,8 +130,6 @@ public:
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
-    const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
-
     void                    GetFontMetric(ImplFontMetricDataRef const &) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength ) const;
     const FontCharMapRef    GetFontCharMap() const;
@@ -140,8 +138,8 @@ public:
     const tools::Rectangle&        GetGlyphBoundRect(const GlyphItem& rGlyph);
     bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
     bool                    GetAntialiasAdvice() const;
-    hb_font_t*              GetHbFont() { return mpHbFont; }
-    void                    SetHbFont( hb_font_t* pHbFont ) { mpHbFont = pHbFont; }
+
+    LogicalFontInstance* GetFontInstance() const { return mpFontInstance; }
 
 private:
     friend class GlyphCache;
@@ -163,7 +161,7 @@ private:
     typedef std::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList       maGlyphList;
 
-    const FontSelectPattern maFontSelData;
+    LogicalFontInstance* const mpFontInstance;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnRefCount;
@@ -190,8 +188,6 @@ private:
     bool                    mbFaceOk;
     bool                    mbArtItalic;
     bool                    mbArtBold;
-
-    hb_font_t*              mpHbFont;
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX

@@ -1756,7 +1756,7 @@ void Window::ImplNewInputContext()
         pFontInstance = pFocusWin->mpFontCache->GetFontInstance( pFocusWin->mpFontCollection,
                          rFont, aSize, static_cast<float>(aSize.Height()) );
         if ( pFontInstance )
-            aNewContext.mpFont = &pFontInstance->GetFontSelectPattern();
+            aNewContext.mpFont = pFontInstance;
     }
     aNewContext.meLanguage  = rFont.GetLanguage();
     aNewContext.mnOptions   = rInputContext.GetOptions();
