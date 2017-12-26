@@ -22,25 +22,23 @@
 #include <vcl/dllapi.h>
 #include <QtGui/QFont>
 
-#include <fontselect.hxx>
+#include <fontinstance.hxx>
 #include <hb-ot.h>
 
-class VCL_DLLPUBLIC Qt5Font : public QFont
+class VCL_DLLPUBLIC Qt5Font : public QFont, public LogicalFontInstance
 {
-    const FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
 
 public:
-    Qt5Font(const FontSelectPattern& rFSP)
-        : m_aFontSelData(rFSP)
+    Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+        : LogicalFontInstance(rPFF, rFSP)
         , m_pHbFont(nullptr)
     {
     }
-    virtual ~Qt5Font();
+    virtual ~Qt5Font() override;
 
     hb_font_t* GetHbFont() const { return m_pHbFont; }
     void SetHbFont(hb_font_t* pHbFont) { m_pHbFont = pHbFont; }
-    const FontSelectPattern& GetFontSelData() const { return m_aFontSelData; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

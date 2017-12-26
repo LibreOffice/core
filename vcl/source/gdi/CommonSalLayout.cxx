@@ -311,7 +311,7 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
 }
 
 CommonSalLayout::CommonSalLayout(Qt5Font& rQFont)
-    : CommonSalLayout(rQFont.GetFontSelData(),
+    : CommonSalLayout(rQFont.GetFontSelectPattern(),
                       nullptr, &rQFont, true)
 {
 }

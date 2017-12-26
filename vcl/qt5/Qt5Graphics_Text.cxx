@@ -48,8 +48,10 @@ void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
         m_pFontData[nFallbackLevel] = nullptr;
     else
     {
-        m_pFontData[nFallbackLevel] = static_cast<const Qt5FontFace*>(pReqFont->mpFontData);
-        m_pTextStyle[nFallbackLevel] = new Qt5Font(*pReqFont);
+        const Qt5FontFace* pQFF
+            = static_cast<const Qt5FontFace*>(pReqFont->mpFontInstance->GetFontFace());
+        m_pFontData[nFallbackLevel] = pQFF;
+        m_pTextStyle[nFallbackLevel] = new Qt5Font(*pQFF, *pReqFont);
     }
 }
 

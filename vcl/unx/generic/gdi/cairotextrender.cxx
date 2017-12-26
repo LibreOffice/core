@@ -100,10 +100,6 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
     if( !pEntry )
         return false;
 
-    // return early if this is not a valid font for this graphics
-    if( !pEntry->mpFontData )
-        return false;
-
     // handle the request for a non-native X11-font => use the GlyphCache
     FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont( *pEntry );
     if( pFreetypeFont != nullptr )

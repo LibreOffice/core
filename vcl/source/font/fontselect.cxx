@@ -29,7 +29,6 @@ const char FontSelectPatternAttributes::FEAT_SEPARATOR = '&';
 FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight)
     : FontSelectPatternAttributes(rFont, rSearchName, rSize, fExactHeight)
-    , mpFontData( nullptr )
     , mpFontInstance( nullptr )
 {
 }

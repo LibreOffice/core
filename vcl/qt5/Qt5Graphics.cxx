@@ -22,8 +22,6 @@
 #include "Qt5Frame.hxx"
 #include "Qt5Painter.hxx"
 
-#include <qt5/Qt5Font.hxx>
-
 #include <QtWidgets/QWidget>
 
 #include <QtGui/QPainter>
