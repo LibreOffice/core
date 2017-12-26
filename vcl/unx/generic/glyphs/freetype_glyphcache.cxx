@@ -63,6 +63,7 @@
 #include <sys/mman.h>
 #include <unx/fontmanager.hxx>
 #include <impfontcharmap.hxx>
+#include <impfontcache.hxx>
 
 static FT_Library aLibFT = nullptr;
 
@@ -335,8 +336,11 @@ FreetypeFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     FreetypeFontInfo* pFontInfo = nullptr;
 
     // find a FontInfo matching to the font id
-    sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFSD.mpFontData );
-    FontList::iterator it = maFontList.find( nFontId );
+    sal_IntPtr nFontId = 0;
+    if (rFSD.mpFontInstance && rFSD.mpFontInstance->GetFontFace())
+        nFontId = rFSD.mpFontInstance->GetFontFace()->GetFontId();
+
+    FontList::iterator it = maFontList.find(nFontId);
     if( it != maFontList.end() )
         pFontInfo = it->second;
 
@@ -356,7 +360,7 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 
 LogicalFontInstance* FreetypeFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
-    return new FreetypeFontInstance(rFSD);
+    return new FreetypeFontInstance(*this, rFSD);
 }
 
 // FreetypeFont
@@ -384,6 +388,7 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     // TODO: move update of mpFontInstance into FontEntry class when
     // it becomes responsible for the FreetypeFont instantiation
     static_cast<FreetypeFontInstance*>(rFSD.mpFontInstance)->SetFreetypeFont( this );
+    maFontSelData.mpFontInstance->Acquire();
 
     maFaceFT = pFI->GetFaceFT();
 
@@ -485,15 +490,16 @@ FreetypeFont::~FreetypeFont()
     if( mpHbFont )
         hb_font_destroy( mpHbFont );
 
+    maFontSelData.mpFontInstance->Release();
+
     ReleaseFromGarbageCollect();
 }
-
 
 void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 {
     rxTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
 
-    rxTo->SetOrientation( GetFontSelData().mnOrientation );
+    rxTo->SetOrientation( maFontSelData.mnOrientation );
 
     //Always consider [star]symbol as symbol fonts
     if ( IsStarSymbol( rxTo->GetFamilyName() ) )
@@ -563,7 +569,7 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 {
     // shortcut most common case
-    if (!GetFontSelData().mnOrientation && !bVertical)
+    if (!maFontSelData.mnOrientation && !bVertical)
         return;
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
@@ -644,7 +650,7 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 bool FreetypeFont::GetAntialiasAdvice() const
 {
     // TODO: also use GASP info
-    return !GetFontSelData().mbNonAntialiased && (mnPrioAntiAlias > 0);
+    return !maFontSelData.mbNonAntialiased && (mnPrioAntiAlias > 0);
 }
 
 // determine unicode ranges in font

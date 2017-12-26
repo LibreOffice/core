@@ -610,7 +610,7 @@ void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLeve
     if( !pEntry )
         return;
 
-    sal_IntPtr nID = pEntry->mpFontData ? pEntry->mpFontData->GetFontId() : 0;
+    sal_IntPtr nID = pEntry->mpFontInstance ? pEntry->mpFontInstance->GetFontFace()->GetFontId() : 0;
 
     // determine which font attributes need to be emulated
     bool bArtItalic = false;
@@ -629,7 +629,7 @@ void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLeve
     }
 
     // also set the serverside font for layouting
-    if( pEntry->mpFontData )
+    if( pEntry->mpFontInstance )
     {
         // requesting a font provided by builtin rasterizer
         FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont( *pEntry );

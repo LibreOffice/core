@@ -217,9 +217,10 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     if( !pVDev->SetOutputSizePixel( aBoundRect.GetSize() ) )
         return false;
 
+    const FontSelectPattern& rPattern = mpFontInstance->GetFontSelectPattern();
     vcl::Font aFont( GetFont() );
     aFont.SetOrientation( 0 );
-    aFont.SetFontSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
+    aFont.SetFontSize( Size( rPattern.mnWidth, rPattern.mnHeight ) );
     pVDev->SetFont( aFont );
     pVDev->SetTextColor( COL_BLACK );
     pVDev->SetTextFillColor();
@@ -1358,7 +1359,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
-    if (aLayoutArgs.NeedFallback() && mpFontInstance->maFontSelData.mnHeight >= 3)
+    if (aLayoutArgs.NeedFallback() && mpFontInstance->GetFontSelectPattern().mnHeight >= 3)
         pSalLayout = ImplGlyphFallbackLayout(std::move(pSalLayout), aLayoutArgs);
 
     // position, justify, etc. the layout

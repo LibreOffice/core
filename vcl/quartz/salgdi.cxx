@@ -67,8 +67,8 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
     OUString& rMissingChars) const
 {
     bool bFound = false;
-    CoreTextStyle rStyle(rPattern);
-    CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
+    CoreTextStyle* pStyle = static_cast<CoreTextStyle*>(rPattern.mpFontInstance);
+    CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(pStyle->GetStyleDict(), kCTFontAttributeName));
     CFStringRef pStr = CreateCFString(rMissingChars);
     if (pStr)
     {
@@ -89,7 +89,11 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
 
             SalData* pSalData = GetSalData();
             if (pSalData->mpFontList)
-                rPattern.mpFontData = pSalData->mpFontList->GetFontDataFromId(reinterpret_cast<sal_IntPtr>(pDesc));
+            {
+                const CoreTextFontFace *pFontFace = pSalData->mpFontList->GetFontDataFromId(reinterpret_cast<sal_IntPtr>(pDesc));
+                if (pFontFace)
+                    rPattern.mpFontInstance = pFontFace->CreateFontInstance(rPattern);
+            }
 
             CFRelease(pFallback);
             CFRelease(pDesc);
@@ -223,10 +227,7 @@ AquaSalGraphics::AquaSalGraphics()
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
 
     for (int i = 0; i < MAX_FALLBACK; ++i)
-    {
         mpTextStyle[i] = nullptr;
-        mpFontData[i] = nullptr;
-    }
 }
 
 AquaSalGraphics::~AquaSalGraphics()
@@ -240,7 +241,11 @@ AquaSalGraphics::~AquaSalGraphics()
     }
 
     for (int i = 0; i < MAX_FALLBACK; ++i)
-        delete mpTextStyle[i];
+    {
+        if (!mpTextStyle[i])
+            break;
+        mpTextStyle[i]->Release();
+    }
 
     if( mpXorEmulation )
         delete mpXorEmulation;
@@ -405,7 +410,7 @@ bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangl
 void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 {
     const CoreTextStyle& rStyle = rLayout.getFontData();
-    const FontSelectPattern& rFontSelect = rStyle.maFontSelData;
+    const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
     if (rFontSelect.mnHeight == 0)
         return;
 
@@ -482,26 +487,27 @@ void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLe
     // release the text style
     for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)
     {
-        delete mpTextStyle[i];
+        if (!mpTextStyle[i])
+            break;
+        mpTextStyle[i]->Release();
         mpTextStyle[i] = nullptr;
     }
 
-    // handle NULL request meaning: release-font-resources request
-    if( !pReqFont )
-    {
-        mpFontData[nFallbackLevel] = nullptr;
+    if (!pReqFont)
         return;
-    }
+    assert(pReqFont->mpFontInstance);
+    if (!pReqFont->mpFontInstance)
+        return;
 
     // update the text style
-    mpFontData[nFallbackLevel] = static_cast<const CoreTextFontFace*>(pReqFont->mpFontData);
-    mpTextStyle[nFallbackLevel] = new CoreTextStyle(*pReqFont);
+    mpTextStyle[nFallbackLevel] = static_cast<CoreTextStyle*>(pReqFont->mpFontInstance);
+    mpTextStyle[nFallbackLevel]->Acquire();
 
     SAL_INFO("vcl.ct",
             "SetFont"
-               " to "     << mpFontData[nFallbackLevel]->GetFamilyName()
-            << ", "       << mpFontData[nFallbackLevel]->GetStyleName()
-            << " fontid=" << mpFontData[nFallbackLevel]->GetFontId()
+               " to "     << mpTextStyle[nFallbackLevel]->GetFontFace()->GetFamilyName()
+            << ", "       << mpTextStyle[nFallbackLevel]->GetFontFace()->GetStyleName()
+            << " fontid=" << mpTextStyle[nFallbackLevel]->GetFontFace()->GetFontId()
             << " for "    << pReqFont->GetFamilyName()
             << ", "       << pReqFont->GetStyleName()
             << " weight=" << pReqFont->GetWeight()
@@ -522,21 +528,21 @@ std::unique_ptr<SalLayout> AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArg
 
 const FontCharMapRef AquaSalGraphics::GetFontCharMap() const
 {
-    if (!mpFontData[0])
+    if (!mpTextStyle[0])
     {
         FontCharMapRef xFontCharMap( new FontCharMap() );
         return xFontCharMap;
     }
 
-    return mpFontData[0]->GetFontCharMap();
+    return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCharMap();
 }
 
 bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if (!mpFontData[0])
+    if (!mpTextStyle[0])
         return false;
 
-    return mpFontData[0]->GetFontCapabilities(rFontCapabilities);
+    return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCapabilities(rFontCapabilities);
 }
 
 // fake a SFNT font directory entry for a font table
