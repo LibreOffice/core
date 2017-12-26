@@ -540,10 +540,9 @@ void ORowSet::freeResources( bool _bComplete )
     MutexGuard aGuard(m_aMutex);
 
     // free all clones
-    connectivity::OWeakRefArray::const_iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::const_iterator i = m_aClones.begin(); aEnd != i; ++i)
+    for (auto const& clone : m_aClones)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(clone.get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }
@@ -1239,16 +1238,16 @@ void SAL_CALL ORowSet::moveToInsertRow(  )
 void ORowSet::impl_setDataColumnsWriteable_throw()
 {
     impl_restoreDataColumnsWriteable_throw();
-    TDataColumns::const_iterator aIter = m_aDataColumns.begin();
     m_aReadOnlyDataColumns.resize(m_aDataColumns.size(),false);
     std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
-    for(;aIter != m_aDataColumns.end();++aIter,++aReadIter)
+    for (auto const& dataColumn : m_aDataColumns)
     {
         bool bReadOnly = false;
-        (*aIter)->getPropertyValue(PROPERTY_ISREADONLY) >>= bReadOnly;
+        dataColumn->getPropertyValue(PROPERTY_ISREADONLY) >>= bReadOnly;
         *aReadIter = bReadOnly;
 
-        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY,makeAny(false));
+        dataColumn->setPropertyValue(PROPERTY_ISREADONLY,makeAny(false));
+        ++aReadIter;
     }
 }
 
@@ -1256,10 +1255,10 @@ void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
     assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.size() == 0 );
     TDataColumns::const_iterator aIter = m_aDataColumns.begin();
-    std::vector<bool, std::allocator<bool> >::const_iterator aReadIter = m_aReadOnlyDataColumns.begin();
-    for(;aReadIter != m_aReadOnlyDataColumns.end();++aIter,++aReadIter)
+    for (auto const& readOnlyDataColumn : m_aReadOnlyDataColumns)
     {
-        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny( (bool)*aReadIter ) );
+        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny( (bool) readOnlyDataColumn) );
+        ++aIter;
     }
     m_aReadOnlyDataColumns.clear();
 }
@@ -2166,10 +2165,9 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify ourself
     onDeleteRow( _rBookmark );
     // notify the clones
-    connectivity::OWeakRefArray::const_iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::const_iterator i = m_aClones.begin(); aEnd != i; ++i)
+    for (auto const& elem : m_aClones)
     {
-        Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
+        Reference< XUnoTunnel > xTunnel(elem.get(),UNO_QUERY);
         if(xTunnel.is())
         {
             ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
