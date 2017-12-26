@@ -3926,13 +3926,18 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         {
             const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
             SwContentNode *pCNd = m_xDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
-            //Added defaults to CJK and CTL
-            SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
-            pCNd->SetAttr( aFontHeight );
-            SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
-            pCNd->SetAttr( aFontHeightCJK );
-            SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
-            pCNd->SetAttr( aFontHeightCTL );
+            if (!pCNd)
+                eState = SvParserState::Error;
+            else
+            {
+                //Added defaults to CJK and CTL
+                SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
+                pCNd->SetAttr( aFontHeight );
+                SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
+                pCNd->SetAttr( aFontHeightCJK );
+                SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
+                pCNd->SetAttr( aFontHeightCTL );
+            }
         }
 
         xSaveStruct->AddContents( new HTMLTableCnts(pStNd) );
