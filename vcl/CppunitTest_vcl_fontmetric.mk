@@ -46,4 +46,8 @@ $(eval $(call gb_CppunitTest_use_components,vcl_fontmetric,\
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_fontmetric))
 
+$(eval $(call gb_CppunitTest_use_externals,vcl_fontmetric,\
+    harfbuzz \
+))
+
 # vim: set noet sw=4 ts=4:

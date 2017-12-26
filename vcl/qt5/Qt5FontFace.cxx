@@ -18,7 +18,7 @@
  */
 
 #include "Qt5FontFace.hxx"
-#include <qt5/Qt5Font.hxx>
+#include "Qt5Font.hxx"
 #include "Qt5Tools.hxx"
 
 #include <sft.hxx>

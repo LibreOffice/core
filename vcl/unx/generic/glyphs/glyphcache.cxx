@@ -259,7 +259,7 @@ void GlyphCache::GarbageCollect()
         pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
         if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
-        const FontSelectPattern& rIFSD = pFreetypeFont->GetFontSelData();
+        const FontSelectPattern& rIFSD = pFreetypeFont->GetFontInstance()->GetFontSelectPattern();
         maFontList.erase( rIFSD );
         mnBytesUsed -= pFreetypeFont->GetByteCount();
 
@@ -370,4 +370,28 @@ FreetypeFontInstance::~FreetypeFontInstance()
     if (mpFreetypeFont)
         mpFreetypeFont->Release();
 }
+
+static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+{
+    char pTagName[5];
+    LogicalFontInstance::DecodeHbTag( nTableTag, pTagName );
+
+    sal_uLong nLength = 0;
+    FreetypeFontInstance* pFontInstance = static_cast<FreetypeFontInstance*>( pUserData );
+    FreetypeFont* pFont = pFontInstance->GetFreetypeFont();
+    const char* pBuffer = reinterpret_cast<const char*>(
+        pFont->GetTable(pTagName, &nLength) );
+
+    hb_blob_t* pBlob = nullptr;
+    if (pBuffer != nullptr)
+        pBlob = hb_blob_create(pBuffer, nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+
+    return pBlob;
+}
+
+hb_font_t* FreetypeFontInstance::ImplInitHbFont()
+{
+    return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

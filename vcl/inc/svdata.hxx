@@ -31,7 +31,6 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 #include "vcleventlisteners.hxx"
-#include "impfontcache.hxx"
 #include "salwtype.hxx"
 #include "displayconnectiondispatch.hxx"
 
