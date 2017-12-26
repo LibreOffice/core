@@ -82,7 +82,7 @@ class VCL_DLLPUBLIC CommonSalLayout : public GenericSalLayout
 
 public:
 #if defined(_WIN32)
-    explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
+    explicit                CommonSalLayout(HDC, WinFontInstance&);
     const FontSelectPattern& getFontSelData() const { return mrFontSelData; }
     HFONT                   getHFONT() const { return mhFont; }
     WinFontInstance&        getWinFontInstance() const { return mrWinFontInstance; }

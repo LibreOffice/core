@@ -21,6 +21,8 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/metric.hxx>
 
+#include <fontinstance.hxx>
+#include <fontselect.hxx>
 #include <impfontmetric.hxx>
 #include <impfontmetricdata.hxx>
 #include <PhysicalFontFace.hxx>
@@ -224,10 +226,10 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     , mnDStrikeoutOffset2( 0 )
 {
     // initialize the used font name
-    if( rFontSelData.mpFontData )
+    if (rFontSelData.mpFontInstance)
     {
-        SetFamilyName( rFontSelData.mpFontData->GetFamilyName() );
-        SetStyleName( rFontSelData.mpFontData->GetStyleName() );
+        SetFamilyName(rFontSelData.mpFontInstance->GetFontFace()->GetFamilyName());
+        SetStyleName(rFontSelData.mpFontInstance->GetFontFace()->GetStyleName());
     }
     else
     {

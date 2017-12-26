@@ -35,9 +35,10 @@ class ImplFontCache
 {
     // For access to Acquire and Release
     friend class LogicalFontInstance;
+
 private:
-    LogicalFontInstance* mpFirstEntry;
-    int                  mnRef0Count;    // number of unreferenced LogicalFontInstances
+    LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
+    int mnRef0Count; ///< number of unreferenced LogicalFontInstances
 
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
@@ -53,13 +54,14 @@ private:
     /// Decrease the refcount and potentially cleanup the entries with zero refcount from the cache.
     void                Release(LogicalFontInstance*);
 
+    LogicalFontInstance* GetFontInstance(PhysicalFontCollection const*, FontSelectPattern&);
+
 public:
                         ImplFontCache();
                         ~ImplFontCache();
 
     LogicalFontInstance* GetFontInstance( PhysicalFontCollection const *,
                              const vcl::Font&, const Size& rPixelSize, float fExactHeight);
-    LogicalFontInstance* GetFontInstance( PhysicalFontCollection const *, FontSelectPattern& );
     LogicalFontInstance* GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
 

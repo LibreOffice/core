@@ -239,7 +239,7 @@ struct SalFrameState
 
 struct SalInputContext
 {
-    FontSelectPattern*     mpFont;
+    const FontSelectPattern* mpFont;
     LanguageType           meLanguage;
     InputContextFlags      mnOptions;
 };

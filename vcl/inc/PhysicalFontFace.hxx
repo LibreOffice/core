@@ -22,9 +22,7 @@
 
 #include <vcl/dllapi.h>
 
-#include "fontinstance.hxx"
 #include "fontattributes.hxx"
-#include "fontselect.hxx"
 
 class LogicalFontInstance;
 struct FontMatchStatus;
