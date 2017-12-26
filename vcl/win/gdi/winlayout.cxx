@@ -305,9 +305,9 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
     if (!mpWinFontEntry[nFallbackLevel])
         return nullptr;
 
-    assert(mpWinFontData[nFallbackLevel]);
+    assert(mpWinFontEntry[nFallbackLevel]->GetFontFace());
 
-    return std::unique_ptr<SalLayout>(new CommonSalLayout(getHDC(), *mpWinFontEntry[nFallbackLevel], *mpWinFontData[nFallbackLevel]));
+    return std::unique_ptr<SalLayout>(new CommonSalLayout(getHDC(), *mpWinFontEntry[nFallbackLevel]));
 }
 
 LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
@@ -315,8 +315,8 @@ LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
     return mpWinFontEntry[nFallbackLevel];
 }
 
-WinFontInstance::WinFontInstance( FontSelectPattern const & rFSD )
-:   LogicalFontInstance( rFSD )
+WinFontInstance::WinFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+    : LogicalFontInstance(rPFF, rFSP)
 {
 }
 
@@ -335,7 +335,7 @@ PhysicalFontFace* WinFontFace::Clone() const
 
 LogicalFontInstance* WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
-    return new WinFontInstance(rFSD);
+    return new WinFontInstance(*this, rFSD);
 }
 
 bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)

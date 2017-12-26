@@ -155,7 +155,7 @@ public:
     GlyphCache& GetGlyphCache() { return maGlyphCache; }
 
 private:
-    explicit WinFontInstance(const FontSelectPattern&);
+    explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
     GlyphCache maGlyphCache;

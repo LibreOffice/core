@@ -71,6 +71,8 @@ public:
     bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
+    LogicalFontInstance*            CreateFontInstance(const FontSelectPattern&) const override;
+
 protected:
                                     CoreTextFontFace( const CoreTextFontFace& );
 
@@ -81,11 +83,12 @@ private:
     mutable bool                    mbFontCapabilitiesRead;
 };
 
-class CoreTextStyle
+class CoreTextStyle : public LogicalFontInstance
 {
+    friend LogicalFontInstance* CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
+
 public:
-    CoreTextStyle( const FontSelectPattern& );
-    ~CoreTextStyle( void );
+    ~CoreTextStyle();
 
     void       GetFontMetric( ImplFontMetricDataRef const & ) const;
     bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) const;
@@ -95,14 +98,14 @@ public:
 
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 
-    const CoreTextFontFace*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float               mfFontStretch;
     /// text rotation in radian
     float               mfFontRotation;
-    FontSelectPattern   maFontSelData;
 
 private:
+    explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);
+
     /// CoreText text style object
     CFMutableDictionaryRef  mpStyleDict;
     mutable hb_font_t*      mpHbFont;
@@ -158,7 +161,6 @@ class AquaSalGraphics : public SalGraphics
     RGBAColor                               maFillColor;
 
     // Device Font settings
-    const CoreTextFontFace*                 mpFontData[MAX_FALLBACK];
     CoreTextStyle*                          mpTextStyle[MAX_FALLBACK];
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing

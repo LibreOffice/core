@@ -37,9 +37,8 @@ namespace std
 }
 
 
-LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData )
-    : maFontSelData( rFontSelData )
-    , mxFontMetric( new ImplFontMetricData( rFontSelData ))
+LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, const FontSelectPattern& rFontSelData )
+    : mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
     , mnLineHeight( 0 )
     , mnOwnOrientation( 0 )
@@ -48,8 +47,10 @@ LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData 
     , mpUnicodeFallbackList( nullptr )
     , mpFontCache( nullptr )
     , mnRefCount( 1 )
+    , m_aFontSelData(rFontSelData)
+    , m_pFontFace(&rFontFace)
 {
-    maFontSelData.mpFontInstance = this;
+    const_cast<FontSelectPattern*>(&m_aFontSelData)->mpFontInstance = this;
 }
 
 LogicalFontInstance::~LogicalFontInstance()

@@ -51,6 +51,7 @@
 #include <sft.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
+#include <win/winlayout.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
 
@@ -175,7 +176,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OU
         const FontSelectPattern aFSD( *pFace, aSize, (float)aSize.Height(), 0, false );
         // construct log font
         LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, &aFSD, aLogFont, true );
+        ImplGetLogFontFromFontSelect( mhDC, &aFSD, pFace, aLogFont );
 
         // create HFONT from log font
         HFONT hNewFont = ::CreateFontIndirectW( &aLogFont );
@@ -752,12 +753,15 @@ int CALLBACK SalEnumQueryFontProcExW( const LOGFONTW*,
 
 void ImplGetLogFontFromFontSelect( HDC hDC,
                                    const FontSelectPattern* pFont,
-                                   LOGFONTW& rLogFont,
-                                   bool /*bTestVerticalAvail*/ )
+                                   const PhysicalFontFace* pFontFace,
+                                   LOGFONTW& rLogFont )
 {
-    OUString   aName;
-    if ( pFont->mpFontData )
-        aName = pFont->mpFontData->GetFamilyName();
+    OUString aName;
+    if (!pFontFace && pFont->mpFontInstance)
+        pFontFace = pFont->mpFontInstance->GetFontFace();
+
+    if (pFontFace)
+        aName = pFontFace->GetFamilyName();
     else
         aName = pFont->GetFamilyName().getToken( 0, ';' );
 
@@ -767,17 +771,17 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     memcpy( rLogFont.lfFaceName, aName.getStr(), nNameLen*sizeof( wchar_t ) );
     rLogFont.lfFaceName[nNameLen] = 0;
 
-    if( !pFont->mpFontData )
+    if  (pFontFace)
+    {
+        const WinFontFace* pWinFontData = static_cast<const WinFontFace*>(pFontFace);
+        rLogFont.lfCharSet = pWinFontData->GetCharSet();
+        rLogFont.lfPitchAndFamily = pWinFontData->GetPitchAndFamily();
+    }
+    else
     {
         rLogFont.lfCharSet = pFont->IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
         rLogFont.lfPitchAndFamily = ImplPitchToWin( pFont->GetPitch() )
                                   | ImplFamilyToWin( pFont->GetFamilyType() );
-    }
-    else
-    {
-        const WinFontFace* pWinFontData = static_cast<const WinFontFace*>( pFont->mpFontData );
-        rLogFont.lfCharSet        = pWinFontData->GetCharSet();
-        rLogFont.lfPitchAndFamily = pWinFontData->GetPitchAndFamily();
     }
 
     static BYTE nDefaultQuality = NONANTIALIASED_QUALITY;
@@ -833,7 +837,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 }
 
-HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_rOldFont)
+HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont,
+                                    const PhysicalFontFace * i_pFontFace,
+                                    HFONT& o_rOldFont)
 {
     HFONT hNewFont = nullptr;
 
@@ -843,7 +849,7 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_
         hdcScreen = GetDC(nullptr);
 
     LOGFONTW aLogFont;
-    ImplGetLogFontFromFontSelect( getHDC(), i_pFont, aLogFont, true );
+    ImplGetLogFontFromFontSelect( getHDC(), i_pFont, i_pFontFace, aLogFont );
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );
     if( hdcScreen )
@@ -889,17 +895,13 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
                 ::DeleteFont( mhFonts[i] );
             mhFonts[ i ] = nullptr;
             if (mpWinFontEntry[i])
-            {
                 GetWinFontEntry(i)->Release();
-            }
             mpWinFontEntry[i] = nullptr;
-            mpWinFontData[i] = nullptr;
         }
         mhDefFont = nullptr;
         return;
     }
 
-    assert(pFont->mpFontData);
     if (mpWinFontEntry[nFallbackLevel])
     {
         GetWinFontEntry(nFallbackLevel)->Release();
@@ -911,10 +913,9 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
         pFont->mpFontInstance->Acquire();
     }
     mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>( pFont->mpFontInstance );
-    mpWinFontData[ nFallbackLevel ] = static_cast<const WinFontFace*>( pFont->mpFontData );
 
     HFONT hOldFont = nullptr;
-    HFONT hNewFont = ImplDoSetFont(pFont, hOldFont);
+    HFONT hNewFont = ImplDoSetFont(pFont, nullptr, hOldFont);
 
     if( !mhDefFont )
     {
@@ -937,9 +938,13 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
 
     // store new font in correct layer
     mhFonts[ nFallbackLevel ] = hNewFont;
+
     // now the font is live => update font face
-    if( mpWinFontData[ nFallbackLevel ] )
-        mpWinFontData[ nFallbackLevel ]->UpdateFromHDC( getHDC() );
+    if (mpWinFontEntry[nFallbackLevel])
+    {
+        const WinFontFace* pFontFace = static_cast<const WinFontFace*>(mpWinFontEntry[nFallbackLevel]->GetFontFace());
+        pFontFace->UpdateFromHDC(getHDC());
+    }
 }
 
 void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
@@ -994,19 +999,19 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
 const FontCharMapRef WinSalGraphics::GetFontCharMap() const
 {
-    if( !mpWinFontData[0] )
+    if (!mpWinFontEntry[0])
     {
         FontCharMapRef xDefFontCharMap( new FontCharMap() );
         return xDefFontCharMap;
     }
-    return mpWinFontData[0]->GetFontCharMap();
+    return static_cast<const WinFontFace*>(mpWinFontEntry[0]->GetFontFace())->GetFontCharMap();
 }
 
 bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if( !mpWinFontData[0] )
+    if (!mpWinFontEntry[0])
         return false;
-    return mpWinFontData[0]->GetFontCapabilities(rFontCapabilities);
+    return static_cast<const WinFontFace*>(mpWinFontEntry[0]->GetFontFace())->GetFontCapabilities(rFontCapabilities);
 }
 
 int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
@@ -1602,9 +1607,9 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(&aIFSD, hOldFont);
+    ImplDoSetFont(&aIFSD, pFont, hOldFont);
 
-    WinFontFace const * pWinFontData = static_cast<WinFontFace const *>(aIFSD.mpFontData);
+    WinFontFace const * pWinFontData = static_cast<WinFontFace const *>(pFont);
 
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
@@ -1750,7 +1755,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     ScopedFont aOldFont(*this);
 
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(&aIFSD, hOldFont);
+    ImplDoSetFont(&aIFSD, pFont, hOldFont);
 
     // get raw font file data
     const RawFontData xRawFontData( getHDC() );
