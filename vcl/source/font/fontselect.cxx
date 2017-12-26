@@ -20,6 +20,8 @@
 #include <sal/config.h>
 #include <o3tl/safeint.hxx>
 
+#include <fontselect.hxx>
+
 #include <PhysicalFontFace.hxx>
 #include <svdata.hxx>
 
