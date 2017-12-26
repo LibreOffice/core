@@ -38,11 +38,6 @@
 # [ language=all && ENABLE_XXX ]
 #    file://XXX.oxt
 
-# Danish dictionary and synonyms
-[ language=da ]
-    b38cba04b6513dd42b031199d617cce6 https://sourceforge.net/projects/aoo-extensions/files/1388/12/DanskeSynonymer.oxt/download "danske-synonymer.oxt"
-    6ee1e24fb17e44577d8e3200f3e44adc https://sourceforge.net/projects/aoo-extensions/files/1429/6/dict-da-current.oxt/download "dict-da.oxt"
-
 # Asturian dictionary
 [ language=ast ]
     931373dea3bed9621dd55713b53b38ae https://sourceforge.net/projects/aoo-extensions/files/3932/2/ort_ast_20150417_2259.oxt/download "dict-ast.oxt"
@@ -58,6 +53,11 @@
 # Valencian RACV dictionary (this is incompatible with Catalan)
 [ language=ca_XR ]
     6112a73444a1ad3cf70736649e228f0f https://sourceforge.net/projects/aoo-extensions/files/1395/0/dict_valencian_llit.oxt/download "dict-ca_xr.oxt"
+
+# Danish dictionary and synonyms
+[ language=da ]
+    6ee1e24fb17e44577d8e3200f3e44adc https://sourceforge.net/projects/aoo-extensions/files/1429/6/dict-da-current.oxt/download "dict-da.oxt"
+    b38cba04b6513dd42b031199d617cce6 https://sourceforge.net/projects/aoo-extensions/files/1388/12/DanskeSynonymer.oxt/download "danske-synonymer.oxt"
 
 # German dictionary
 [ language=de || language=de_DE || language=nl || language=ru ]
@@ -97,8 +97,8 @@
 
 # Hungarian dictionary and grammar checker
 [ language=hu ]
-    76345f925e34fef2d29bade4f29108e9 https://sourceforge.net/projects/aoo-extensions/files/3423/4/lightproof-hu_HU-1.3.oxt/download "lightproof-hu_hu.oxt"
     d320e43e815c2dfd599dbfb7cd0e41fb https://sourceforge.net/projects/aoo-extensions/files/1283/9/dict-hu.oxt/download "dict-hu.oxt"
+    76345f925e34fef2d29bade4f29108e9 https://sourceforge.net/projects/aoo-extensions/files/3423/4/lightproof-hu_HU-1.3.oxt/download "lightproof-hu_hu.oxt"
 
 # Italian dictionary
 [ language=it || language=de || language=de_DE ]
