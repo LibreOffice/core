@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_8a308b09",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-12-26T21:11:57Z",
+      "side": 1,
+      "message": "I love the way it has \"Fast\" in its name for that extra injection of speed :-)",
+      "revId": "33761c69e9d3fa16e7a5b176200d183dc3236627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
