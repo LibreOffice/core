@@ -4772,8 +4772,11 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
     // If there's an adjustment for the cell, we need to close it
     std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
-    EndContext(xCntxt.get());
-    xCntxt.reset();
+    if (xCntxt)
+    {
+        EndContext(xCntxt.get());
+        xCntxt.reset();
+    }
 
     SetAttr( false );
 
