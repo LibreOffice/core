@@ -49,27 +49,27 @@
 
 # Catalan dictionary
 [ language=ca ]
-    4cf4e4a9d85f14761d38943b7e1fd76d https://sourceforge.net/projects/aoo-extensions/files/1205/5/ca.3.0.0.oxt/download "ca.3.0.0.oxt"
+    4cf4e4a9d85f14761d38943b7e1fd76d https://sourceforge.net/projects/aoo-extensions/files/1205/5/ca.3.0.0.oxt/download "dict-ca.oxt"
 
 # Valencian AVL dictionary (this is incompatible with Catalan)
 [ language=ca_XV ]
-    d425579a9a2e26663abaecdd661be419 https://sourceforge.net/projects/aoo-extensions/files/1475/1/ca-valencia.3.0.0.oxt/download "ca-valencia.3.0.0.oxt"
+    d425579a9a2e26663abaecdd661be419 https://sourceforge.net/projects/aoo-extensions/files/1475/1/ca-valencia.3.0.0.oxt/download "dict-ca_xv.oxt"
 
 # Valencian RACV dictionary (this is incompatible with Catalan)
 [ language=ca_XR ]
-    6112a73444a1ad3cf70736649e228f0f https://sourceforge.net/projects/aoo-extensions/files/1395/0/dict_valencian_llit.oxt/download "dict_valencian_llit.oxt"
+    6112a73444a1ad3cf70736649e228f0f https://sourceforge.net/projects/aoo-extensions/files/1395/0/dict_valencian_llit.oxt/download "dict-ca_xr.oxt"
 
 # German dictionary
 [ language=de || language=de_DE || language=nl || language=ru ]
-    ea35a6a6761655107da3e99ee56c171f https://sourceforge.net/projects/aoo-extensions/files/1075/15/dict-de_de-frami_2017-01-12.oxt/download "dict-de_de-frami_2017-01-12.oxt"
+    ea35a6a6761655107da3e99ee56c171f https://sourceforge.net/projects/aoo-extensions/files/1075/15/dict-de_de-frami_2017-01-12.oxt/download "dict-de_de.oxt"
 
 # German (Austria) dictionary
 [ language=de || language=de_AT || language=de_DE ]
-    0cf6783cb0f1355ef3869aa9699700b3 https://sourceforge.net/projects/aoo-extensions/files/1697/12/dict-de_at-frami_2017-01-12.oxt/download "dict-de_at-frami_2017-01-12.oxt"
+    0cf6783cb0f1355ef3869aa9699700b3 https://sourceforge.net/projects/aoo-extensions/files/1697/12/dict-de_at-frami_2017-01-12.oxt/download "dict-de_at.oxt"
 
 # German (Switzerland) dictionary
 [ language=de || language=de_CH || language=de_DE ]
-    48f7f27f22bf1006a6d9f91d55a7cffc https://sourceforge.net/projects/aoo-extensions/files/1699/12/dict-de_ch-frami_2017-01-12.oxt/download "dict-de_ch-frami_2017-01-12.oxt"
+    48f7f27f22bf1006a6d9f91d55a7cffc https://sourceforge.net/projects/aoo-extensions/files/1699/12/dict-de_ch-frami_2017-01-12.oxt/download "dict-de_ch.oxt"
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
@@ -77,11 +77,11 @@
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
-    e2eab80772ab1aa09716954219351a80 https://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "en_US.oxt"
+    e2eab80772ab1aa09716954219351a80 https://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "dict-en_us.oxt"
 
 # Spanish dictionary
 [ language=es || language=ca || language=ca_XV ]
-    1b999fcef948148e269161a08e7acf20 https://sourceforge.net/projects/aoo-extensions/files/1657/4/es_es.oxt/download "es_es.oxt"
+    1b999fcef948148e269161a08e7acf20 https://sourceforge.net/projects/aoo-extensions/files/1657/4/es_es.oxt/download "dict-es_es.oxt"
 
 # Basque dictionary
 [ language=eu ]
@@ -126,7 +126,7 @@
 
 # Portuguese (European) dictionary
 [ language=pt || language=pt_PT ]
-    a1414b7be0cacb7a810166833a02fa66 https://sourceforge.net/projects/aoo-extensions/files/1196/41/oo3x-pt-pt-17.5.29.1.oxt/download "oo3x-pt-pt-17.5.29.1.oxt"
+    a1414b7be0cacb7a810166833a02fa66 https://sourceforge.net/projects/aoo-extensions/files/1196/41/oo3x-pt-pt-17.5.29.1.oxt/download "dict-pt_pt.oxt"
 
 # Romanian dictionary
 [ language=ro ]
@@ -146,7 +146,7 @@
 
 # Norwegian dictionary
 [ language=nb ]
-    c06841f7f193e4f083482440999d801b https://sourceforge.net/projects/aoo-extensions/files/1216/2/dictionary-no-no-2.2.oxt/download "dictionary-no-no-2.2.oxt"
+    c06841f7f193e4f083482440999d801b https://sourceforge.net/projects/aoo-extensions/files/1216/2/dictionary-no-no-2.2.oxt/download "dict-no_no.oxt"
 
 # Swedish dictionary
 [ language=sv ]
