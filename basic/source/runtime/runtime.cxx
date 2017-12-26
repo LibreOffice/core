@@ -357,7 +357,7 @@ SbiDllMgr* SbiInstance::GetDllMgr()
 }
 
 // #39629 create NumberFormatter with the help of a static method now
-std::shared_ptr<SvNumberFormatter> SbiInstance::GetNumberFormatter()
+std::shared_ptr<SvNumberFormatter> const & SbiInstance::GetNumberFormatter()
 {
     LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
     SvtSysLocale aSysLocale;

@@ -130,12 +130,12 @@ public:
     // Specific to error handler
     static void     MakeErrorText( ErrCode, const OUString& aMsg );
     static const    OUString& GetErrorText();
-    static ErrCode  GetErrorCode();
+    static ErrCode const & GetErrorCode();
     static sal_uInt16 GetVBErrorCode( ErrCode nError );
     static ErrCode  GetSfxFromVBError( sal_uInt16 nError );
     bool            IsBreak() const             { return bBreak; }
 
-    static Link<StarBASIC*,bool> GetGlobalErrorHdl();
+    static Link<StarBASIC*,bool> const & GetGlobalErrorHdl();
     static void     SetGlobalErrorHdl( const Link<StarBASIC*,bool>& rNewHdl );
 
     static void     SetGlobalBreakHdl( const Link<StarBASIC*,BasicDebugFlags>& rNewHdl );

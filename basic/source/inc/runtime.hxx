@@ -167,7 +167,7 @@ public:
     void Abort();                               // with current error code
 
     void    Stop();
-    ErrCode GetErr()                { return nErr; }
+    ErrCode const & GetErr()                { return nErr; }
     const OUString& GetErrorMsg()           { return aErrorMsg; }
     sal_Int32 GetErl()             { return nErl; }
     void    EnableReschedule( bool bEnable ) { bReschedule = bEnable; }
@@ -186,7 +186,7 @@ public:
     SbiDllMgr* GetDllMgr();
     SbiRTLData* GetRTLData() const { return const_cast<SbiRTLData*>(&aRTLData); }
 
-    std::shared_ptr<SvNumberFormatter> GetNumberFormatter();
+    std::shared_ptr<SvNumberFormatter> const & GetNumberFormatter();
     sal_uInt32 GetStdDateIdx() const { return nStdDateIdx; }
     sal_uInt32 GetStdTimeIdx() const { return nStdTimeIdx; }
     sal_uInt32 GetStdDateTimeIdx() const { return nStdDateTimeIdx; }

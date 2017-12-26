@@ -81,7 +81,7 @@ public:
     bool            Store( SvStream& );
     virtual bool    LoadCompleted();
 
-    static ErrCode GetError();
+    static ErrCode const & GetError();
     static void SetError( ErrCode );
     static bool IsError();
     static void ResetError();

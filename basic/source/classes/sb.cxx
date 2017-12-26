@@ -1448,7 +1448,7 @@ sal_uInt16 StarBASIC::GetCol1()     { return GetSbData()->nCol1; }
 sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 
 // Specific to error handler
-ErrCode StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
+ErrCode const & StarBASIC::GetErrorCode() { return GetSbData()->nCode; }
 const OUString& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 
 // From 1996-03-29:
@@ -1763,7 +1763,7 @@ bool StarBASIC::ErrorHdl()
     return aErrorHdl.Call( this );
 }
 
-Link<StarBASIC*,bool> StarBASIC::GetGlobalErrorHdl()
+Link<StarBASIC*,bool> const & StarBASIC::GetGlobalErrorHdl()
 {
     return GetSbData()->aErrHdl;
 }

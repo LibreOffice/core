@@ -55,7 +55,7 @@ public:
             BasicError( const BasicError& rErr );
             BasicError( ErrCode nId, BasicErrorReason nR );
 
-    ErrCode GetErrorId() const                  { return nErrorId; }
+    ErrCode const & GetErrorId() const                  { return nErrorId; }
 };
 
 class ErrorManager;
