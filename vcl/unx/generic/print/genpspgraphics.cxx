@@ -547,7 +547,7 @@ private:
 };
 
 PspCommonSalLayout::PspCommonSalLayout(::psp::PrinterGfx& rGfx, FreetypeFont& rFont)
-:   CommonSalLayout(rFont)
+:   CommonSalLayout(*rFont.GetFontInstance())
 ,   mrPrinterGfx(rGfx)
 {
     mnFontID     = mrPrinterGfx.GetFontID();

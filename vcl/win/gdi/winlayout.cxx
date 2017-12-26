@@ -251,7 +251,7 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     HFONT hAltFont = nullptr;
     bool bUseAltFont = false;
     bool bShift = false;
-    if (rLayout.getFontSelData().mbVertical)
+    if (rLayout.getFont().GetFontSelectPattern().mbVertical)
     {
         LOGFONTW aLogFont;
         GetObjectW(hFont, sizeof(aLogFont), &aLogFont);
@@ -307,7 +307,9 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
 
     assert(mpWinFontEntry[nFallbackLevel]->GetFontFace());
 
-    return std::unique_ptr<SalLayout>(new CommonSalLayout(getHDC(), *mpWinFontEntry[nFallbackLevel]));
+    mpWinFontEntry[nFallbackLevel]->SetHDC(getHDC());
+    CommonSalLayout *aLayout = new CommonSalLayout(*mpWinFontEntry[nFallbackLevel]);
+    return std::unique_ptr<SalLayout>(aLayout);
 }
 
 LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
@@ -324,18 +326,79 @@ WinFontInstance::~WinFontInstance()
 {
 }
 
-PhysicalFontFace* WinFontFace::Clone() const
+bool WinFontInstance::hasHScale() const
 {
-    if( mpHbFont )
-        hb_font_reference( mpHbFont );
-
-    PhysicalFontFace* pClone = new WinFontFace( *this );
-    return pClone;
+    const FontSelectPattern &rPattern = GetFontSelectPattern();
+    int nHeight(rPattern.mnHeight);
+    int nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetWidthFactor() : nHeight);
+    return nWidth != nHeight;
 }
 
-LogicalFontInstance* WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
-    return new WinFontInstance(*this, rFSD);
+    char pTagName[5];
+    LogicalFontInstance::DecodeHbTag(nTableTag, pTagName);
+
+    sal_uLong nLength = 0;
+    unsigned char* pBuffer = nullptr;
+    HFONT hFont = static_cast<HFONT>(pUserData);
+    HDC hDC = GetDC(nullptr);
+    HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
+    nLength = ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, nullptr, 0);
+    if (nLength > 0 && nLength != GDI_ERROR)
+    {
+        pBuffer = new unsigned char[nLength];
+        ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, pBuffer, nLength);
+    }
+    SelectObject(hDC, hOrigFont);
+    ReleaseDC(nullptr, hDC);
+
+    hb_blob_t* pBlob = nullptr;
+    if (pBuffer != nullptr)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
+                               pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
+    return pBlob;
+}
+
+hb_font_t* WinFontInstance::ImplInitHbFont()
+{
+    assert(m_hDC);
+    m_hFont = static_cast<HFONT>(GetCurrentObject(m_hDC, OBJ_FONT));
+    hb_font_t* pHbFont = InitHbFont(hb_face_create_for_tables(getFontTable, m_hFont, nullptr));
+
+    // Calculate the mnAveWidthFactor, see the comment where it is used.
+    if (GetFontSelectPattern().mnWidth)
+    {
+        double nUPEM = hb_face_get_upem(hb_font_get_face(pHbFont));
+
+        LOGFONTW aLogFont;
+        GetObjectW(m_hFont, sizeof(LOGFONTW), &aLogFont);
+
+        // Set the height (font size) to EM to minimize rounding errors.
+        aLogFont.lfHeight = -nUPEM;
+        // Set width to the default to get the original value in the metrics.
+        aLogFont.lfWidth = 0;
+
+        // Get the font metrics.
+        HFONT hNewFont = CreateFontIndirectW(&aLogFont);
+        HFONT hOldFont = static_cast<HFONT>(SelectObject(m_hDC, hNewFont));
+        TEXTMETRICW aFontMetric;
+        GetTextMetricsW(m_hDC, &aFontMetric);
+        SelectObject(m_hDC, hOldFont);
+        DeleteObject(hNewFont);
+
+        SetWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);
+    }
+
+    return pHbFont;
+}
+
+void WinFontInstance::SetHDC(const HDC hDC)
+{
+    if (m_hDC == hDC)
+        return;
+    ReleaseHbFont();
+    m_hDC = hDC;
 }
 
 bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
@@ -345,8 +408,8 @@ bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
         return false;
 
     HDC hDC = getHDC();
-    HFONT hFONT = rLayout.getHFONT();
-    WinFontInstance& rFont = rLayout.getWinFontInstance();
+    WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.getFont());
+    HFONT hFONT = rFont.GetHFONT();
 
     int nStart = 0;
     Point aPos(0, 0);
@@ -377,7 +440,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
     if (!pImpl)
         return false;
 
-    WinFontInstance& rFont = rLayout.getWinFontInstance();
+    WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.getFont());
 
     int nStart = 0;
     Point aPos(0, 0);
@@ -414,7 +477,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 
     // Our DirectWrite renderer is incomplete, skip it for non-horizontal or
     // stretched text.
-    bool bForceGDI = rLayout.GetOrientation() || rLayout.hasHScale();
+    bool bForceGDI = rLayout.GetOrientation() || static_cast<const WinFontInstance*>(&rLayout.getFont())->hasHScale();
 
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
     if (!bUseOpenGL)

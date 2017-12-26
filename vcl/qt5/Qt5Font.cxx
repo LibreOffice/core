@@ -17,8 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <qt5/Qt5Font.hxx>
+#include "Qt5Font.hxx"
+
+#include <QtGui/QFont>
+#include <QtGui/QRawFont>
+
+Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+    : LogicalFontInstance(rPFF, rFSP)
+{
+}
 
 Qt5Font::~Qt5Font() {}
+
+static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
+{
+    char pTagName[5];
+    LogicalFontInstance::DecodeHbTag(nTableTag, pTagName);
+
+    Qt5Font* pFont = static_cast<Qt5Font*>(pUserData);
+    QRawFont aRawFont(QRawFont::fromFont(*pFont));
+    QByteArray aTable = aRawFont.fontTable(pTagName);
+    const sal_uInt32 nLength = aTable.size();
+
+    hb_blob_t* pBlob = nullptr;
+    if (nLength > 0)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(aTable.data()), nLength,
+                               HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+    return pBlob;
+}
+
+hb_font_t* Qt5Font::ImplInitHbFont()
+{
+    return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,85 +20,32 @@
 #ifndef INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 #define INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 
-#include <config_qt5.h>
-
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
-#ifdef _WIN32
-#include "win/winlayout.hxx"
-
-#elif defined(MACOSX) || defined(IOS)
-#include "quartz/ctfonts.hxx"
-#include <hb-coretext.h>
-
-#else
-#include "unx/freetype_glyphcache.hxx"
-#endif
-
 #include "sallayout.hxx"
-#include <hb-icu.h>
-#include <hb-ot.h>
+#include "fontinstance.hxx"
 
-#if ENABLE_QT5
-class Qt5Font;
-#endif
+#include <hb-icu.h>
 
 class VCL_DLLPUBLIC CommonSalLayout : public GenericSalLayout
 {
-    hb_font_t*              mpHbFont;
-    const FontSelectPattern& mrFontSelData;
+    LogicalFontInstance* const mpFont;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
-#ifdef _WIN32
-    HDC                     mhDC;
-    HFONT                   mhFont;
-    WinFontInstance&        mrWinFontInstance;
-    double                  mnAveWidthFactor;
-#elif defined(MACOSX) || defined(IOS)
-    const CoreTextStyle&    mrCoreTextStyle;
-#else
-    FreetypeFont*           mpFreetypeFont;
-#if ENABLE_QT5
-    const bool              mbUseQt5;
-    Qt5Font*                mpQFont;
-
-    explicit                CommonSalLayout(const FontSelectPattern &rFSP,
-                                            FreetypeFont *pFreetypeFont,
-                                            Qt5Font *pFont, bool bUseQt5);
-#endif
-    void                    InitFromFreetypeFont();
-#endif
 
     void                    ParseFeatures(const OUString& name);
     OString                 msLanguage;
     std::vector<hb_feature_t> maFeatures;
 
-    void                    getScale(double* nXScale, double* nYScale);
-
     hb_set_t*               mpVertGlyphs;
-    bool                    mbFuzzing;
+    const bool              mbFuzzing;
     bool                    HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
 
     void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
 
 public:
-#if defined(_WIN32)
-    explicit                CommonSalLayout(HDC, WinFontInstance&);
-    const FontSelectPattern& getFontSelData() const { return mrFontSelData; }
-    HFONT                   getHFONT() const { return mhFont; }
-    WinFontInstance&        getWinFontInstance() const { return mrWinFontInstance; }
-    bool                    hasHScale() const;
-#elif defined(MACOSX) || defined(IOS)
-    explicit                CommonSalLayout(const CoreTextStyle&);
-    const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; }
-#else
-    explicit                CommonSalLayout(FreetypeFont&);
-    const FreetypeFont*     getFreetypeFont() const { return mpFreetypeFont; }
-#if ENABLE_QT5
-    explicit                CommonSalLayout(Qt5Font&);
-    const Qt5Font*          getQt5Font() const { return mpQFont; }
-    bool                    useQt5() const { return mbUseQt5; }
-#endif
-#endif
+                            CommonSalLayout(LogicalFontInstance&);
+                            ~CommonSalLayout() override;
+    LogicalFontInstance&    getFont() const { return *mpFont; }
 
     virtual void            InitFont() const override;
     void                    AdjustLayout(ImplLayoutArgs&) final override;
@@ -113,4 +60,5 @@ public:
 };
 
 #endif // INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
