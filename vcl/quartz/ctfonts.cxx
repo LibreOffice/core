@@ -37,35 +37,32 @@
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
 #include <sallayout.hxx>
-
+#include <hb-coretext.h>
 
 inline double toRadian(int nDegree)
 {
     return nDegree * (M_PI / 1800.0);
 }
 
-CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
-    : mpFontData( static_cast<CoreTextFontFace const *>(rFSD.mpFontData) )
+CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+    : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
-    , maFontSelData( rFSD )
     , mpStyleDict( nullptr )
     , mpHbFont( nullptr )
 {
-    const FontSelectPattern* const pReqFont = &rFSD;
-
-    double fScaledFontHeight = pReqFont->mfExactHeight;
+    double fScaledFontHeight = rFSP.mfExactHeight;
 
     // convert font rotation to radian
-    mfFontRotation = toRadian(pReqFont->mnOrientation);
+    mfFontRotation = toRadian(rFSP.mnOrientation);
 
     // dummy matrix so we can use CGAffineTransformConcat() below
     CGAffineTransform aMatrix = CGAffineTransformMakeTranslation(0, 0);
 
     // handle font stretching if any
-    if( (pReqFont->mnWidth != 0) && (pReqFont->mnWidth != pReqFont->mnHeight) )
+    if( (rFSP.mnWidth != 0) && (rFSP.mnWidth != rFSP.mnHeight) )
     {
-        mfFontStretch = static_cast<float>(pReqFont->mnWidth) / pReqFont->mnHeight;
+        mfFontStretch = (float)rFSP.mnWidth / rFSP.mnHeight;
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMakeScale(mfFontStretch, 1.0F));
     }
 
@@ -75,28 +72,28 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
                                              &kCFTypeDictionaryKeyCallBacks,
                                              &kCFTypeDictionaryValueCallBacks );
 
-    CFBooleanRef pCFVertBool = pReqFont->mbVertical ? kCFBooleanTrue : kCFBooleanFalse;
+    CFBooleanRef pCFVertBool = rFSP.mbVertical ? kCFBooleanTrue : kCFBooleanFalse;
     CFDictionarySetValue( mpStyleDict, kCTVerticalFormsAttributeName, pCFVertBool );
 
     // fake bold
-    if ( (pReqFont->GetWeight() >= WEIGHT_BOLD) &&
-         ((mpFontData->GetWeight() < WEIGHT_SEMIBOLD) &&
-          (mpFontData->GetWeight() != WEIGHT_DONTKNOW)) )
+    if ( (rFSP.GetWeight() >= WEIGHT_BOLD) &&
+         ((rPFF.GetWeight() < WEIGHT_SEMIBOLD) &&
+          (rPFF.GetWeight() != WEIGHT_DONTKNOW)) )
     {
-        int nStroke = -lrint((3.5F * pReqFont->GetWeight()) / mpFontData->GetWeight());
+        int nStroke = -lrint((3.5F * rFSP.GetWeight()) / rPFF.GetWeight());
         CFNumberRef rStroke = CFNumberCreate(nullptr, kCFNumberSInt32Type, &nStroke);
         CFDictionarySetValue(mpStyleDict, kCTStrokeWidthAttributeName, rStroke);
     }
 
     // fake italic
-    if (((pReqFont->GetItalic() == ITALIC_NORMAL) ||
-         (pReqFont->GetItalic() == ITALIC_OBLIQUE)) &&
-        (mpFontData->GetItalic() == ITALIC_NONE))
+    if (((rFSP.GetItalic() == ITALIC_NORMAL) ||
+         (rFSP.GetItalic() == ITALIC_OBLIQUE)) &&
+        (rPFF.GetItalic() == ITALIC_NONE))
     {
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
     }
 
-    CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>(mpFontData->GetFontId());
+    CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>(rPFF.GetFontId());
     CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
@@ -115,6 +112,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric ) 
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
+    const CoreTextFontFace* mpFontData = static_cast<const CoreTextFontFace*>(GetFontFace());
 
     int nBufSize = 0;
 
@@ -266,6 +264,11 @@ bool CoreTextStyle::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPol
 PhysicalFontFace* CoreTextFontFace::Clone() const
 {
     return new CoreTextFontFace( *this);
+}
+
+LogicalFontInstance* CoreTextFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+{
+    return new CoreTextStyle(*this, rFSD);
 }
 
 int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const

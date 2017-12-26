@@ -19,16 +19,13 @@
 
 #include "Qt5Graphics.hxx"
 
+#include <qt5/Qt5Font.hxx>
 #include "Qt5Frame.hxx"
 #include "Qt5Painter.hxx"
 
-#include <qt5/Qt5Font.hxx>
-
-#include <QtWidgets/QWidget>
-
-#include <QtGui/QPainter>
-
 #include <QtGui/QImage>
+#include <QtGui/QPainter>
+#include <QtWidgets/QWidget>
 
 Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     : m_pFrame( pFrame )
@@ -44,7 +41,16 @@ Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     ResetClipRegion();
 }
 
-Qt5Graphics::~Qt5Graphics() {}
+Qt5Graphics::~Qt5Graphics()
+{
+    // release the text styles
+    for (int i = 0; i < MAX_FALLBACK; ++i)
+    {
+        if (!m_pTextStyle[i])
+            break;
+        m_pTextStyle[i]->Release();
+    }
+}
 
 void Qt5Graphics::ChangeQImage(QImage* pQImage)
 {

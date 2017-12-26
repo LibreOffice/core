@@ -18,6 +18,7 @@
  */
 
 #include "Qt5FontFace.hxx"
+#include <qt5/Qt5Font.hxx>
 #include "Qt5Tools.hxx"
 
 #include <sft.hxx>
@@ -59,6 +60,11 @@ Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID)
 Qt5FontFace::~Qt5FontFace() {}
 
 sal_IntPtr Qt5FontFace::GetFontId() const { return reinterpret_cast<sal_IntPtr>(&m_aFontId); }
+
+LogicalFontInstance* Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+{
+    return new Qt5Font(*this, rFSD);
+}
 
 const FontCharMapRef Qt5FontFace::GetFontCharMap() const
 {

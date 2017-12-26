@@ -39,17 +39,18 @@ void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
     {
         if (!m_pTextStyle[i])
             break;
-        m_pTextStyle[i].reset();
+        m_pTextStyle[i]->Release();
+        m_pTextStyle[i] = nullptr;
     }
 
     if (!pReqFont)
-        // handle release-font-resources request
-        m_pFontData[nFallbackLevel] = nullptr;
-    else
-    {
-        m_pFontData[nFallbackLevel] = static_cast<const Qt5FontFace*>(pReqFont->mpFontData);
-        m_pTextStyle[nFallbackLevel].reset(new Qt5Font(*pReqFont));
-    }
+        return;
+    assert(pReqFont->mpFontInstance);
+    if (!pReqFont->mpFontInstance)
+        return;
+
+    m_pTextStyle[nFallbackLevel] = static_cast<Qt5Font*>(pReqFont->mpFontInstance);
+    m_pTextStyle[nFallbackLevel]->Acquire();
 }
 
 void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)

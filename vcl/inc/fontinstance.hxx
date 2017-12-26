@@ -22,13 +22,13 @@
 
 #include "fontselect.hxx"
 #include "impfontmetricdata.hxx"
-#include "PhysicalFontFace.hxx"
 
 #include <unordered_map>
 #include <memory>
 
 class ConvertChar;
 class ImplFontCache;
+class PhysicalFontFace;
 
 // TODO: allow sharing of metrics for related fonts
 
@@ -42,7 +42,6 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance
 public: // TODO: make data members private
     virtual ~LogicalFontInstance();
 
-    FontSelectPattern  maFontSelData;       // FontSelectionData
     ImplFontMetricDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
@@ -58,8 +57,12 @@ public: // TODO: make data members private
     void            Acquire();
     void            Release();
 
+    const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
+    const PhysicalFontFace* GetFontFace() const { return m_pFontFace; }
+    const ImplFontCache* GetFontCache() const { return mpFontCache; }
+
 protected:
-    explicit LogicalFontInstance(const FontSelectPattern&);
+    explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
 private:
     // cache of Unicode characters and replacement font names
@@ -69,6 +72,8 @@ private:
     std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
     ImplFontCache * mpFontCache;
     sal_uInt32      mnRefCount;
+    const FontSelectPattern m_aFontSelData;
+    const PhysicalFontFace* m_pFontFace;
 };
 
 #endif // INCLUDED_VCL_INC_FONTINSTANCE_HXX

@@ -28,8 +28,8 @@
 
 namespace vcl { class Font; }
 
-class PhysicalFontFace;
 class LogicalFontInstance;
+class PhysicalFontFace;
 class Size;
 
 class FontSelectPatternAttributes : public FontAttributes
@@ -80,7 +80,6 @@ public:
 #endif
 
 public: // TODO: change to private
-    const PhysicalFontFace* mpFontData;         // a matching PhysicalFontFace object
     LogicalFontInstance*  mpFontInstance;                // pointer to the resulting FontCache entry
 
     void            copyAttributes(const FontSelectPatternAttributes &rAttributes);

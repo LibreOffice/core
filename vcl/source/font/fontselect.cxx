@@ -30,7 +30,6 @@ const char FontSelectPatternAttributes::FEAT_SEPARATOR = '&';
 FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight)
     : FontSelectPatternAttributes(rFont, rSearchName, rSize, fExactHeight)
-    , mpFontData( nullptr )
     , mpFontInstance( nullptr )
 {
 }
@@ -90,7 +89,6 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace
 FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
     : FontSelectPatternAttributes(rFontData, rSize, fExactHeight, nOrientation, bVertical)
-    , mpFontData( &rFontData )
     , mpFontInstance( nullptr )
 {
 }

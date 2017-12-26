@@ -77,7 +77,7 @@ public:
 
 private:
     FT_FaceRec_*    maFaceFT;
-    FreetypeFontFile*     mpFontFile;
+    FreetypeFontFile* const mpFontFile;
     const int       mnFaceNum;
     int             mnRefCount;
     sal_IntPtr      mnFontId;
@@ -127,12 +127,13 @@ class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
     FreetypeFont* mpFreetypeFont;
 
 protected:
-    explicit FreetypeFontInstance(const FontSelectPattern&);
+    explicit FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP);
 
 public:
     virtual ~FreetypeFontInstance() override;
 
     void SetFreetypeFont(FreetypeFont* p);
+    FreetypeFont* GetFreetypeFont() const { return mpFreetypeFont; }
 };
 
 #endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX

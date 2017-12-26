@@ -624,7 +624,6 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     for( int i = 0; i < MAX_FALLBACK; ++i )
     {
         mhFonts[ i ] = nullptr;
-        mpWinFontData[ i ]  = nullptr;
         mpWinFontEntry[ i ] = nullptr;
         mfFontScale[ i ] = 1.0;
     }

@@ -39,7 +39,7 @@ PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
 
 LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
-    return new LogicalFontInstance(rFSD);
+    return new LogicalFontInstance(*this, rFSD);
 }
 
 sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const

@@ -187,8 +187,8 @@ void CommonSalLayout::ParseFeatures(const OUString& aName)
 }
 
 #if defined(_WIN32)
-CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, const WinFontFace& rWinFontFace)
-:   mrFontSelData(rWinFontInstance.maFontSelData)
+CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance)
+:   mrFontSelData(rWinFontInstance.GetFontSelectPattern())
 ,   mhDC(hDC)
 ,   mhFont(static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT)))
 ,   mrWinFontInstance(rWinFontInstance)
@@ -196,6 +196,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 ,   mpVertGlyphs(nullptr)
 ,   mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
+    const WinFontFace& rWinFontFace = *static_cast<const WinFontFace*>(rWinFontInstance.GetFontFace());
     mpHbFont = rWinFontFace.GetHbFont();
     if (!mpHbFont)
     {
@@ -239,7 +240,7 @@ bool CommonSalLayout::hasHScale() const
 
 #elif defined(MACOSX) || defined(IOS)
 CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
-:   mrFontSelData(rCoreTextStyle.maFontSelData)
+:   mrFontSelData(rCoreTextStyle.GetFontSelectPattern())
 ,   mrCoreTextStyle(rCoreTextStyle)
 ,   mpVertGlyphs(nullptr)
 ,   mbFuzzing(utl::ConfigManager::IsFuzzing())
@@ -256,7 +257,7 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
         if (pCGFont)
             pHbFace = hb_coretext_face_create(pCGFont);
         else
-            pHbFace = hb_face_create_for_tables(getFontTable, const_cast<CoreTextFontFace*>(rCoreTextStyle.mpFontData), nullptr);
+            pHbFace = hb_face_create_for_tables(getFontTable, const_cast<PhysicalFontFace*>(rCoreTextStyle.GetFontFace()), nullptr);
         CGFontRelease(pCGFont);
 
         mpHbFont = createHbFont(pHbFace);
@@ -314,7 +315,7 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
 }
 
 CommonSalLayout::CommonSalLayout(Qt5Font& rQFont)
-    : CommonSalLayout(rQFont.GetFontSelData(),
+    : CommonSalLayout(rQFont.GetFontSelectPattern(),
                       nullptr, &rQFont, true)
 {
 }

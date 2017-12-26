@@ -6219,7 +6219,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
     getReferenceDevice()->SetFont( i_rFont );
     getReferenceDevice()->ImplNewFont();
 
-    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData;
+    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->GetFontFace();
     sal_Int32 nFontID = 0;
     FontEmbedData::iterator it = m_aSystemFonts.find( pDevFont );
     if( it != m_aSystemFonts.end() )
@@ -6553,7 +6553,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     int nIndex = 0;
     double fXScale = 1.0;
     double fSkew = 0.0;
-    sal_Int32 nPixelFontHeight = m_pReferenceDevice->mpFontInstance->maFontSelData.mnHeight;
+    sal_Int32 nPixelFontHeight = m_pReferenceDevice->mpFontInstance->GetFontSelectPattern().mnHeight;
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
 
     // transform font height back to current units
@@ -6577,8 +6577,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // perform artificial italics if necessary
     if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
           m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
-        !( m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData->GetItalic() == ITALIC_NORMAL ||
-           m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData->GetItalic() == ITALIC_OBLIQUE )
+        !( m_pReferenceDevice->mpFontInstance->GetFontFace()->GetItalic() == ITALIC_NORMAL ||
+           m_pReferenceDevice->mpFontInstance->GetFontFace()->GetItalic() == ITALIC_OBLIQUE )
         )
     {
         fSkew = M_PI/12.0;
@@ -6605,8 +6605,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     bool bPop = false;
     bool bABold = false;
     // artificial bold necessary ?
-    if( m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData->GetWeight() <= WEIGHT_MEDIUM &&
-        m_pReferenceDevice->mpFontInstance->maFontSelData.GetWeight() > WEIGHT_MEDIUM )
+    if( m_pReferenceDevice->mpFontInstance->GetFontFace()->GetWeight() <= WEIGHT_MEDIUM &&
+        m_pReferenceDevice->mpFontInstance->GetFontSelectPattern().GetWeight() > WEIGHT_MEDIUM )
     {
         if( ! bPop )
             aLine.append( "q " );
@@ -6667,7 +6667,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
-    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData;
+    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->GetFontFace();
 
     // collect the glyphs into a single array
     std::vector< PDFGlyph > aGlyphs;
