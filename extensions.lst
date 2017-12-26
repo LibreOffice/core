@@ -28,7 +28,8 @@
 # https:// URLs can be prefixed by an MD5 checksum.  If that is present then it is an error if
 # the file pointed to by the URL has a different MD5 checksum.
 # When the downloaded file name is not the last part of the URL (everything after the final /) then
-# the name has to be specified after the URL enclosed in double quotes.
+# the name has to be specified after the URL enclosed in double quotes. In this case, use a
+# conventional filename like "dict-en.oxt" or "dict-en_us.oxt" for dictionaries when possible.
 
 
 # Some extensions that are installed independently of the language.
