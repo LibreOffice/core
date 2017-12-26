@@ -161,7 +161,6 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
     if( mpAlphaVDev )
         mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
 
-    OutputDevice::ImplRefreshAllFontData(true);
     return true;
 }
 
