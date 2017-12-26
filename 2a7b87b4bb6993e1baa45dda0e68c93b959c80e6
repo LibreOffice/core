@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2aff9f35",
+        "filename": "sax/source/fastparser/legacyfastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-12-26T12:48:32Z",
+      "side": 1,
+      "message": "I hope this very seldom happens - it should be really slow allocating and building those strings \u003d)",
+      "revId": "2a7b87b4bb6993e1baa45dda0e68c93b959c80e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0a02db3e",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-12-26T12:48:32Z",
+      "side": 1,
+      "message": "don\u0027t believe we need \"\" here - the strings should be default initialized to empty strings \u003d)",
+      "revId": "2a7b87b4bb6993e1baa45dda0e68c93b959c80e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
