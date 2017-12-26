@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_aa2f0ff5",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2017-12-26T01:41:44Z",
+      "side": 1,
+      "message": "Thank you for pointing it out. Preparing an updated patch.",
+      "parentUuid": "fa31d9ce_6a00b7ab",
+      "revId": "877bef05b0569572cc4334b85368223f7c87374e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_aa30ef9f",
         "filename": "svtools/source/control/ctrlbox.cxx",
         "patchSetId": 1
