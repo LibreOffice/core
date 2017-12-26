@@ -445,7 +445,7 @@ void    UCBStream::SetSize( sal_uInt64 )
 }
 
 
-ErrCode SbiStream::Open
+ErrCode const & SbiStream::Open
 ( const OString& rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
 {
     nMode   = nFlags;
@@ -511,7 +511,7 @@ ErrCode SbiStream::Open
     return nError;
 }
 
-ErrCode SbiStream::Close()
+ErrCode const & SbiStream::Close()
 {
     if( pStrm )
     {
@@ -553,7 +553,7 @@ ErrCode SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
     return nError;
 }
 
-ErrCode SbiStream::Read( char& ch )
+ErrCode const & SbiStream::Read( char& ch )
 {
     nExpandOnWriteTo = 0;
     if (aLine.isEmpty())

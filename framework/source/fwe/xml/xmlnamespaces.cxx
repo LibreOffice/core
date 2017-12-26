@@ -143,7 +143,7 @@ OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const
     return aElementName;
 }
 
-OUString XMLNamespaces::getNamespaceValue( const OUString& aNamespace ) const
+OUString const & XMLNamespaces::getNamespaceValue( const OUString& aNamespace ) const
 {
     if ( aNamespace.isEmpty() )
         return m_aDefaultNamespace;

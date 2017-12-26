@@ -94,7 +94,7 @@ void SbxBase::SetModified( bool b )
         ResetFlag( SbxFlagBits::Modified );
 }
 
-ErrCode SbxBase::GetError()
+ErrCode const & SbxBase::GetError()
 {
     return GetSbxData_Impl().eErrCode;
 }
