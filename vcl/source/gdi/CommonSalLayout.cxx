@@ -29,119 +29,8 @@
 #include <unicode/uchar.h>
 #include <android/compatibility.hxx>
 
-#if ENABLE_QT5
-#include <qt5/Qt5Font.hxx>
-#include <QtGui/QRawFont>
-#endif
-
-static inline void decode_hb_tag( const hb_tag_t nTableTag, char *pTagName )
-{
-    pTagName[0] = (char)(nTableTag >> 24);
-    pTagName[1] = (char)(nTableTag >> 16);
-    pTagName[2] = (char)(nTableTag >>  8);
-    pTagName[3] = (char)nTableTag;
-    pTagName[4] = 0;
-}
-
-static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
-{
-    char pTagName[5];
-    decode_hb_tag( nTableTag, pTagName );
-
-    sal_uLong nLength = 0;
-#if defined(_WIN32)
-    unsigned char* pBuffer = nullptr;
-    HFONT hFont = static_cast<HFONT>(pUserData);
-    HDC hDC = GetDC(nullptr);
-    HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
-    nLength = ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, nullptr, 0);
-    if (nLength > 0 && nLength != GDI_ERROR)
-    {
-        pBuffer = new unsigned char[nLength];
-        ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, pBuffer, nLength);
-    }
-    SelectObject(hDC, hOrigFont);
-    ReleaseDC(nullptr, hDC);
-#elif defined(MACOSX) || defined(IOS)
-    unsigned char* pBuffer = nullptr;
-    CoreTextFontFace* pFont = static_cast<CoreTextFontFace*>(pUserData);
-    nLength = pFont->GetFontTable(pTagName, nullptr);
-    if (nLength > 0)
-    {
-        pBuffer = new unsigned char[nLength];
-        pFont->GetFontTable(pTagName, pBuffer);
-    }
-#else
-    FreetypeFont* pFont = static_cast<FreetypeFont*>( pUserData );
-    const char* pBuffer = reinterpret_cast<const char*>(
-        pFont->GetTable(pTagName, &nLength) );
-#endif
-
-    hb_blob_t* pBlob = nullptr;
-    if (pBuffer != nullptr)
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
-                               pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
-#else
-        pBlob = hb_blob_create(pBuffer, nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
-#endif
-
-    return pBlob;
-}
-
-#if ENABLE_QT5
-static hb_blob_t* getFontTable_Qt5Font(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
-{
-    char pTagName[5];
-    decode_hb_tag( nTableTag, pTagName );
-
-    Qt5Font *pFont = static_cast<Qt5Font*>( pUserData );
-    QRawFont aRawFont( QRawFont::fromFont( *pFont ) );
-    QByteArray aTable = aRawFont.fontTable( pTagName );
-    const sal_uLong nLength = aTable.size();
-
-    hb_blob_t* pBlob = nullptr;
-    if (nLength > 0)
-        pBlob = hb_blob_create(reinterpret_cast<const char*>( aTable.data() ),
-                               nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
-    return pBlob;
-}
-#endif
-
-static hb_font_t* createHbFont(hb_face_t* pHbFace)
-{
-    hb_font_t* pHbFont = hb_font_create(pHbFace);
-    unsigned int nUPEM = hb_face_get_upem(pHbFace);
-    hb_font_set_scale(pHbFont, nUPEM, nUPEM);
-    hb_ot_font_set_funcs(pHbFont);
-
-    hb_face_destroy(pHbFace);
-
-    return pHbFont;
-}
-
-void CommonSalLayout::getScale(double* nXScale, double* nYScale)
-{
-    hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
-    unsigned int nUPEM = hb_face_get_upem(pHbFace);
-
-    double nHeight(mrFontSelData.mnHeight);
-#if defined(_WIN32)
-    // On Windows, mnWidth is relative to average char width not font height,
-    // and we need to keep it that way for GDI to correctly scale the glyphs.
-    // Here we compensate for this so that HarfBuzz gives us the correct glyph
-    // positions.
-    double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth * mnAveWidthFactor : nHeight);
-#else
-    double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth : nHeight);
-#endif
-
-    if (nYScale)
-        *nYScale = nHeight / nUPEM;
-
-    if (nXScale)
-        *nXScale = nWidth / nUPEM;
-}
+#include <fontselect.hxx>
+#include <impfontcache.hxx>
 
 #if !HB_VERSION_ATLEAST(1, 1, 0)
 // Disabled Unicode compatibility decomposition, see fdo#66715
@@ -160,6 +49,18 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
     return ufuncs;
 }
 #endif
+
+CommonSalLayout::CommonSalLayout(LogicalFontInstance &rFont)
+    : mpFont(&rFont)
+    , mpVertGlyphs(nullptr)
+{
+    mpFont->Acquire();
+}
+
+CommonSalLayout::~CommonSalLayout()
+{
+    mpFont->Release();
+}
 
 void CommonSalLayout::ParseFeatures(const OUString& aName)
 {
@@ -186,155 +87,8 @@ void CommonSalLayout::ParseFeatures(const OUString& aName)
     while (nIndex >= 0);
 }
 
-#if defined(_WIN32)
-CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance)
-:   mrFontSelData(rWinFontInstance.GetFontSelectPattern())
-,   mhDC(hDC)
-,   mhFont(static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT)))
-,   mrWinFontInstance(rWinFontInstance)
-,   mnAveWidthFactor(1.0f)
-,   mpVertGlyphs(nullptr)
-{
-    const WinFontFace& rWinFontFace = *static_cast<const WinFontFace*>(rWinFontInstance.GetFontFace());
-    mpHbFont = rWinFontFace.GetHbFont();
-    if (!mpHbFont)
-    {
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, mhFont, nullptr);
-
-        mpHbFont = createHbFont(pHbFace);
-        rWinFontFace.SetHbFont(mpHbFont);
-    }
-
-    // Calculate the mnAveWidthFactor, see the comment where it is used.
-    if (mrFontSelData.mnWidth)
-    {
-        double nUPEM = hb_face_get_upem(hb_font_get_face(mpHbFont));
-
-        LOGFONTW aLogFont;
-        GetObjectW(mhFont, sizeof(LOGFONTW), &aLogFont);
-
-        // Set the height (font size) to EM to minimize rounding errors.
-        aLogFont.lfHeight = -nUPEM;
-        // Set width to the default to get the original value in the metrics.
-        aLogFont.lfWidth = 0;
-
-        // Get the font metrics.
-        HFONT hNewFont = CreateFontIndirectW(&aLogFont);
-        HFONT hOldFont = static_cast<HFONT>(SelectObject(hDC, hNewFont));
-        TEXTMETRICW aFontMetric;
-        GetTextMetricsW(hDC, &aFontMetric);
-        SelectObject(hDC, hOldFont);
-        DeleteObject(hNewFont);
-
-        mnAveWidthFactor = nUPEM / aFontMetric.tmAveCharWidth;
-    }
-}
-
-bool CommonSalLayout::hasHScale() const
-{
-    int nHeight(mrFontSelData.mnHeight);
-    int nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth * mnAveWidthFactor : nHeight);
-    return nWidth != nHeight;
-}
-
-#elif defined(MACOSX) || defined(IOS)
-CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
-:   mrFontSelData(rCoreTextStyle.GetFontSelectPattern())
-,   mrCoreTextStyle(rCoreTextStyle)
-,   mpVertGlyphs(nullptr)
-{
-    mpHbFont = rCoreTextStyle.GetHbFont();
-    if (!mpHbFont)
-    {
-        // On macOS we use HarfBuzz for AAT shaping, but HarfBuzz will then
-        // need a CGFont (as it offloads the actual AAT shaping to Core Text),
-        // if we have one we use it to create the hb_face_t.
-        hb_face_t* pHbFace;
-        CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(rCoreTextStyle.GetStyleDict(), kCTFontAttributeName));
-        CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, nullptr);
-        if (pCGFont)
-            pHbFace = hb_coretext_face_create(pCGFont);
-        else
-            pHbFace = hb_face_create_for_tables(getFontTable, const_cast<PhysicalFontFace*>(rCoreTextStyle.GetFontFace()), nullptr);
-        CGFontRelease(pCGFont);
-
-        mpHbFont = createHbFont(pHbFace);
-        rCoreTextStyle.SetHbFont(mpHbFont);
-    }
-}
-
-#else
-
-void CommonSalLayout::InitFromFreetypeFont()
-{
-    mpHbFont = mpFreetypeFont->GetHbFont();
-    if (!mpHbFont)
-    {
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, mpFreetypeFont, nullptr);
-        mpHbFont = createHbFont(pHbFace);
-        mpFreetypeFont->SetHbFont(mpHbFont);
-    }
-}
-
-#if ENABLE_QT5
-CommonSalLayout::CommonSalLayout(const FontSelectPattern &rFSP,
-                                 FreetypeFont *pFreetypeFont,
-                                 Qt5Font *pQt5Font, bool bUseQt5)
-    : mrFontSelData(rFSP)
-    , mpFreetypeFont(pFreetypeFont)
-    , mbUseQt5(bUseQt5)
-    , mpQFont(pQt5Font)
-    , mpVertGlyphs(nullptr)
-{
-    if (mbUseQt5)
-    {
-        assert( pQt5Font && !pFreetypeFont );
-        mpHbFont = mpQFont->GetHbFont();
-        if (!mpHbFont)
-        {
-            hb_face_t* pHbFace = hb_face_create_for_tables(
-                getFontTable_Qt5Font, pQt5Font, nullptr);
-            mpHbFont = createHbFont(pHbFace);
-            mpQFont->SetHbFont(mpHbFont);
-        }
-    }
-    else
-    {
-        assert( !pQt5Font && pFreetypeFont );
-        InitFromFreetypeFont();
-    }
-}
-
-CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
-    : CommonSalLayout(rFreetypeFont.GetFontSelData(),
-                      &rFreetypeFont, nullptr, false)
-{
-}
-
-CommonSalLayout::CommonSalLayout(Qt5Font& rQFont)
-    : CommonSalLayout(rQFont.GetFontSelectPattern(),
-                      nullptr, &rQFont, true)
-{
-}
-
-#else // ! ENABLE_QT5
-
-CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
-    : mrFontSelData(rFreetypeFont.GetFontSelData())
-    , mpFreetypeFont(&rFreetypeFont)
-    , mpVertGlyphs(nullptr)
-{
-    InitFromFreetypeFont();
-}
-
-#endif
-#endif
-
 void CommonSalLayout::InitFont() const
 {
-#if defined(_WIN32)
-    SelectObject(mhDC, mhFont);
-#endif
 }
 
 struct SubRun
@@ -480,12 +234,13 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
 bool CommonSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSelector)
 {
     hb_codepoint_t nGlyphIndex = 0;
-    if (!hb_font_get_glyph(mpHbFont, aChar, aVariationSelector, &nGlyphIndex))
+    hb_font_t *pHbFont = mpFont->GetHbFont();
+    if (!hb_font_get_glyph(pHbFont, aChar, aVariationSelector, &nGlyphIndex))
         return false;
 
     if (!mpVertGlyphs)
     {
-        hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
+        hb_face_t* pHbFace = hb_font_get_face(pHbFont);
         mpVertGlyphs = hb_set_create();
 
         // Find all GSUB lookups for “vert” feature.
@@ -515,7 +270,7 @@ bool CommonSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSe
 
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
-    hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
+    hb_face_t* pHbFace = hb_font_get_face(mpFont->GetHbFont());
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
     Reserve(nGlyphCapacity);
@@ -542,17 +297,18 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
 
+    const FontSelectPattern& rFontSelData = mpFont->GetFontSelectPattern();
     if (rArgs.mnFlags & SalLayoutFlags::DisableKerning)
     {
-        SAL_INFO("vcl.harfbuzz", "Disabling kerning for font: " << mrFontSelData.maTargetName);
+        SAL_INFO("vcl.harfbuzz", "Disabling kerning for font: " << rFontSelData.maTargetName);
         maFeatures.push_back({ HB_TAG('k','e','r','n'), 0, 0, static_cast<unsigned int>(-1) });
     }
 
-    ParseFeatures(mrFontSelData.maTargetName);
+    ParseFeatures(rFontSelData.maTargetName);
 
     double nXScale = 0;
     double nYScale = 0;
-    getScale(&nXScale, &nYScale);
+    mpFont->GetScale(&nXScale, &nYScale);
 
     Point aCurrPos(0, 0);
     while (true)
@@ -643,6 +399,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
         if (bRightToLeft)
             std::reverse(aSubRuns.begin(), aSubRuns.end());
 
+        hb_font_t *pHbFont = mpFont->GetHbFont();
         for (const auto& aSubRun : aSubRuns)
         {
             hb_buffer_clear_contents(pHbBuffer);
@@ -678,7 +435,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             hb_segment_properties_t aHbProps;
             hb_buffer_get_segment_properties(pHbBuffer, &aHbProps);
             hb_shape_plan_t* pHbPlan = hb_shape_plan_create_cached(pHbFace, &aHbProps, maFeatures.data(), maFeatures.size(), pHbShapers);
-            bool ok = hb_shape_plan_execute(pHbPlan, mpHbFont, pHbBuffer, maFeatures.data(), maFeatures.size());
+            bool ok = hb_shape_plan_execute(pHbPlan, pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size());
             assert(ok);
             (void) ok;
             hb_buffer_set_content_type(pHbBuffer, HB_BUFFER_CONTENT_TYPE_GLYPHS);
@@ -736,7 +493,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
                     // We have glyph offsets that is relative to h origin now,
                     // add the origin back so it is relative to v origin.
-                    hb_font_add_glyph_origin_for_direction( mpHbFont,
+                    hb_font_add_glyph_origin_for_direction(pHbFont,
                             nGlyphIndex,
                             HB_DIRECTION_TTB,
                             &pHbPositions[i].x_offset ,
@@ -828,12 +585,13 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
     hb_codepoint_t nKashidaIndex = 0;
     if (rArgs.mnFlags & SalLayoutFlags::KashidaJustification)
     {
+        hb_font_t *pHbFont = mpFont->GetHbFont();
         // Find Kashida glyph width and index.
-        if (hb_font_get_glyph(mpHbFont, 0x0640, 0, &nKashidaIndex))
+        if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nKashidaIndex))
         {
             double nXScale = 0;
-            getScale(&nXScale, nullptr);
-            nKashidaWidth = hb_font_get_glyph_h_advance(mpHbFont, nKashidaIndex) * nXScale;
+            mpFont->GetScale(&nXScale, nullptr);
+            nKashidaWidth = hb_font_get_glyph_h_advance(pHbFont, nKashidaIndex) * nXScale;
         }
         bKashidaJustify = nKashidaWidth != 0;
     }

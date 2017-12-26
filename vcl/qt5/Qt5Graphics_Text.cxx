@@ -19,7 +19,7 @@
 
 #include "Qt5Graphics.hxx"
 #include "Qt5FontFace.hxx"
-#include <qt5/Qt5Font.hxx>
+#include "Qt5Font.hxx"
 
 #include <vcl/fontcharmap.hxx>
 
@@ -78,16 +78,17 @@ void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
 
 const FontCharMapRef Qt5Graphics::GetFontCharMap() const
 {
-    if (!m_pFontData[0])
+    if (!m_pTextStyle[0])
         return FontCharMapRef(new FontCharMap());
-    return m_pFontData[0]->GetFontCharMap();
+    return static_cast<const Qt5FontFace*>(m_pTextStyle[0]->GetFontFace())->GetFontCharMap();
 }
 
 bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
 {
-    if (!m_pFontData[0])
+    if (!m_pTextStyle[0])
         return false;
-    return m_pFontData[0]->GetFontCapabilities(rFontCapabilities);
+    return static_cast<const Qt5FontFace*>(m_pTextStyle[0]->GetFontFace())
+        ->GetFontCapabilities(rFontCapabilities);
 }
 
 void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)

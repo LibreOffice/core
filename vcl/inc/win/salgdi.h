@@ -90,14 +90,9 @@ private:
     BYTE                    mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
-private:
+
     void                    ReadCmapTable( HDC ) const;
     void                    GetFontCapabilities( HDC hDC ) const;
-
-    mutable hb_font_t*      mpHbFont;
-public:
-    hb_font_t*              GetHbFont() const { return mpHbFont; }
-    void                    SetHbFont( hb_font_t* pHbFont ) const { mpHbFont = pHbFont; }
 };
 
 /** Class that creates (and destroys) a compatible Device Context.

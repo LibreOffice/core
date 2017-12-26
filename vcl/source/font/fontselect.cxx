@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <fontselect.hxx>
+
 #include <PhysicalFontFace.hxx>
 #include <svdata.hxx>
 

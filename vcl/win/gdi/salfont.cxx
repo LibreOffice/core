@@ -617,8 +617,7 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsHigh( false ),
-    mbAliasSymbolsLow( false ),
-    mpHbFont( nullptr )
+    mbAliasSymbolsLow( false )
 {
     SetBitmapSize( 0, nHeight );
 
@@ -647,14 +646,21 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
 WinFontFace::~WinFontFace()
 {
     mxUnicodeMap.clear();
-
-    if( mpHbFont )
-        hb_font_destroy( mpHbFont );
 }
 
 sal_IntPtr WinFontFace::GetFontId() const
 {
     return mnId;
+}
+
+PhysicalFontFace* WinFontFace::Clone() const
+{
+    return new WinFontFace(*this);
+}
+
+LogicalFontInstance* WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+{
+    return new WinFontInstance(*this, rFSD);
 }
 
 static inline DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }

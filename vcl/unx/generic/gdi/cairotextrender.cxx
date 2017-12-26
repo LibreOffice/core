@@ -32,6 +32,7 @@
 #include <unx/geninst.h>
 #include <unx/glyphcache.hxx>
 #include <unx/fc_fontoptions.hxx>
+#include <unx/freetype_glyphcache.hxx>
 #include <PhysicalFontFace.hxx>
 #include <impfont.hxx>
 #include <impfontmetricdata.hxx>
@@ -154,7 +155,8 @@ namespace
 
 void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
 {
-    const FreetypeFont& rFont = *rLayout.getFreetypeFont();
+    const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.getFont());
+    const FreetypeFont& rFont = *rInstance.GetFreetypeFont();
 
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
@@ -180,7 +182,7 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
     if (cairo_glyphs.empty())
         return;
 
-    const FontSelectPattern& rFSD = rFont.GetFontSelData();
+    const FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
@@ -446,7 +448,7 @@ bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
     if( nLevel >= MAX_FALLBACK )
         return false;
 
-    FreetypeFont* pSF = mpFreetypeFont[ nLevel ];
+    const FreetypeFont* pSF = mpFreetypeFont[ nLevel ];
     if( !pSF )
         return false;
 
@@ -456,7 +458,7 @@ bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
 std::unique_ptr<SalLayout> CairoTextRender::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (mpFreetypeFont[nFallbackLevel])
-        return std::unique_ptr<SalLayout>(new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]));
+        return std::unique_ptr<SalLayout>(new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]->GetFontInstance()));
 
     return nullptr;
 }
@@ -471,13 +473,13 @@ SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 
     if (mpFreetypeFont[nFallbackLevel] != nullptr)
     {
-        FreetypeFont* rFont = mpFreetypeFont[nFallbackLevel];
+        const FreetypeFont* rFont = mpFreetypeFont[nFallbackLevel];
         aSysFontData.nFontId = rFont->GetFtFace();
         aSysFontData.nFontFlags = rFont->GetLoadFlags();
         aSysFontData.bFakeBold = rFont->NeedsArtificialBold();
         aSysFontData.bFakeItalic = rFont->NeedsArtificialItalic();
         aSysFontData.bAntialias = rFont->GetAntialiasAdvice();
-        aSysFontData.bVerticalCharacterType = rFont->GetFontSelData().mbVertical;
+        aSysFontData.bVerticalCharacterType = rFont->GetFontInstance()->GetFontSelectPattern().mbVertical;
     }
 
     return aSysFontData;
@@ -541,4 +543,5 @@ void CairoTextRender::GetGlyphWidths( const PhysicalFontFace* pFont,
     psp::fontID aFont = pFont->GetFontId();
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

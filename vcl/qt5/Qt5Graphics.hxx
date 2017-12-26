@@ -48,7 +48,6 @@ class Qt5Graphics : public SalGraphics
     QPainter::CompositionMode m_eCompositionMode;
 
     PhysicalFontCollection* m_pFontCollection;
-    const Qt5FontFace* m_pFontData[MAX_FALLBACK];
     Qt5Font* m_pTextStyle[MAX_FALLBACK];
     SalColor m_aTextColor;
 

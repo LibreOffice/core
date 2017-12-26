@@ -126,6 +126,8 @@ class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
 
     FreetypeFont* mpFreetypeFont;
 
+    virtual hb_font_t* ImplInitHbFont() override;
+
 protected:
     explicit FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP);
 

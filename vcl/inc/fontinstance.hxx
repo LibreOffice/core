@@ -25,6 +25,8 @@
 
 #include <unordered_map>
 
+#include <hb-ot.h>
+
 class ConvertChar;
 class ImplFontCache;
 class PhysicalFontFace;
@@ -56,12 +58,24 @@ public: // TODO: make data members private
     void            Acquire();
     void            Release();
 
+    inline hb_font_t* GetHbFont();
+    void SetWidthFactor(double nFactor) { m_nAveWidthFactor = nFactor; }
+    double GetWidthFactor() const { return m_nAveWidthFactor; }
     const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
+
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace; }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
+    void GetScale(double* nXScale, double* nYScale);
+    static inline void DecodeHbTag(const hb_tag_t nTableTag, char* pTagName);
+
 protected:
     explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+
+    // Takes ownership of pHbFace and destroys it!
+    hb_font_t* InitHbFont(hb_face_t* pHbFace) const;
+    virtual hb_font_t* ImplInitHbFont();
+    inline void ReleaseHbFont();
 
 private:
     // cache of Unicode characters and replacement font names
@@ -72,8 +86,34 @@ private:
     ImplFontCache * mpFontCache;
     sal_uInt32      mnRefCount;
     const FontSelectPattern m_aFontSelData;
+    hb_font_t* m_pHbFont;
+    double m_nAveWidthFactor;
     const PhysicalFontFace* m_pFontFace;
 };
+
+inline hb_font_t* LogicalFontInstance::GetHbFont()
+{
+    if (!m_pHbFont)
+        m_pHbFont = ImplInitHbFont();
+    return m_pHbFont;
+}
+
+inline void LogicalFontInstance::ReleaseHbFont()
+{
+    if (!m_pHbFont)
+        return;
+    hb_font_destroy(m_pHbFont);
+    m_pHbFont = nullptr;
+}
+
+inline void LogicalFontInstance::DecodeHbTag(const hb_tag_t nTableTag, char* pTagName)
+{
+    pTagName[0] = (char)(nTableTag >> 24);
+    pTagName[1] = (char)(nTableTag >> 16);
+    pTagName[2] = (char)(nTableTag >> 8);
+    pTagName[3] = (char)nTableTag;
+    pTagName[4] = 0;
+}
 
 #endif // INCLUDED_VCL_INC_FONTINSTANCE_HXX
 

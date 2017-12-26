@@ -367,7 +367,7 @@ LogicalFontInstance* FreetypeFontFace::CreateFontInstance(const FontSelectPatter
 
 FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
 :   maGlyphList( 0),
-    maFontSelData(rFSD),
+    mpFontInstance(rFSD.mpFontInstance),
     mnRefCount(1),
     mnBytesUsed( sizeof(FreetypeFont) ),
     mpPrevGCFont( nullptr ),
@@ -382,13 +382,12 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     maSizeFT( nullptr ),
     mbFaceOk( false ),
     mbArtItalic( false ),
-    mbArtBold( false ),
-    mpHbFont( nullptr )
+    mbArtBold(false)
 {
     // TODO: move update of mpFontInstance into FontEntry class when
     // it becomes responsible for the FreetypeFont instantiation
-    static_cast<FreetypeFontInstance*>(rFSD.mpFontInstance)->SetFreetypeFont( this );
-    maFontSelData.mpFontInstance->Acquire();
+    static_cast<FreetypeFontInstance*>(mpFontInstance)->SetFreetypeFont( this );
+    mpFontInstance->Acquire();
 
     maFaceFT = pFI->GetFaceFT();
 
@@ -459,7 +458,7 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
 {
     if (!mxFontOptions)
     {
-        mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), maFontSelData.mnHeight));
+        mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), mpFontInstance->GetFontSelectPattern().mnHeight));
         mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     }
     return mxFontOptions.get();
@@ -487,10 +486,7 @@ FreetypeFont::~FreetypeFont()
 
     mpFontInfo->ReleaseFaceFT();
 
-    if( mpHbFont )
-        hb_font_destroy( mpHbFont );
-
-    maFontSelData.mpFontInstance->Release();
+    mpFontInstance->Release();
 
     ReleaseFromGarbageCollect();
 }
@@ -499,7 +495,7 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 {
     rxTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
 
-    rxTo->SetOrientation( maFontSelData.mnOrientation );
+    rxTo->SetOrientation( mpFontInstance->GetFontSelectPattern().mnOrientation );
 
     //Always consider [star]symbol as symbol fonts
     if ( IsStarSymbol( rxTo->GetFamilyName() ) )
@@ -569,7 +565,7 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 {
     // shortcut most common case
-    if (!maFontSelData.mnOrientation && !bVertical)
+    if (!mpFontInstance->GetFontSelectPattern().mnOrientation && !bVertical)
         return;
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
@@ -650,7 +646,7 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 bool FreetypeFont::GetAntialiasAdvice() const
 {
     // TODO: also use GASP info
-    return !maFontSelData.mbNonAntialiased && (mnPrioAntiAlias > 0);
+    return !mpFontInstance->GetFontSelectPattern().mbNonAntialiased && (mnPrioAntiAlias > 0);
 }
 
 // determine unicode ranges in font

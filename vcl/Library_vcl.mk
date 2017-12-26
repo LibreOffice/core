@@ -718,22 +718,4 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_package,vcl,postprocess_images))
 endif
 
-ifeq ($(ENABLE_QT5),TRUE)
-$(eval $(call gb_Library_use_externals,vcl,\
-	qt5 \
-))
-$(eval $(call gb_Library_add_defs,vcl,\
-    $(QT5_CFLAGS) \
-))
-$(eval $(call gb_Library_add_libs,vcl,\
-    $(QT5_LIBS) \
-))
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(QT5_CFLAGS) \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/qt5/Qt5Font \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
