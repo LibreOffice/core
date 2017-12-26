@@ -46,7 +46,7 @@ ImageWrapper::~ImageWrapper()
 {
 }
 
-Sequence< sal_Int8 > ImageWrapper::GetUnoTunnelId()
+Sequence< sal_Int8 > const & ImageWrapper::GetUnoTunnelId()
 {
     return impl_getStaticIdentifier();
 }

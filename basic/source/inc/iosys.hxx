@@ -60,10 +60,10 @@ class SbiStream
 public:
     SbiStream();
    ~SbiStream();
-    ErrCode Open( const OString&, StreamMode, SbiStreamFlags, short );
-    ErrCode Close();
+    ErrCode const & Open( const OString&, StreamMode, SbiStreamFlags, short );
+    ErrCode const & Close();
     ErrCode Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
-    ErrCode Read( char& );
+    ErrCode const & Read( char& );
     ErrCode Write( const OString& );
 
     bool IsText() const     { return !bool(nMode & SbiStreamFlags::Binary); }
