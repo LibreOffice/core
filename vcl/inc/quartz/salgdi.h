@@ -47,6 +47,8 @@
 #include <unordered_map>
 #include <hb-ot.h>
 
+#include "fontinstance.hxx"
+
 class AquaSalFrame;
 class FontAttributes;
 class CoreTextStyle;
@@ -63,6 +65,7 @@ public:
     PhysicalFontFace*               Clone() const override;
     sal_IntPtr                      GetFontId() const override;
 
+    int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
     const FontCharMapRef            GetFontCharMap() const;
@@ -91,8 +94,6 @@ public:
     void       GetFontMetric( ImplFontMetricDataRef const & ) const;
     bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) const;
     bool       GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) const;
-    hb_font_t* GetHbFont() const { return mpHbFont; }
-    void       SetHbFont(hb_font_t* pHbFont) const { mpHbFont = pHbFont; }
 
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 
@@ -104,9 +105,10 @@ public:
 private:
     explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);
 
+    virtual hb_font_t* ImplInitHbFont() override;
+
     /// CoreText text style object
     CFMutableDictionaryRef  mpStyleDict;
-    mutable hb_font_t*      mpHbFont;
 };
 
 // TODO: move into cross-platform headers

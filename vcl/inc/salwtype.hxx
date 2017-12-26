@@ -24,11 +24,11 @@
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 
+class LogicalFontInstance;
 class SalGraphics;
 class SalFrame;
 class SalObject;
 namespace vcl { class Window; }
-class FontSelectPattern;
 enum class InputContextFlags;
 enum class WindowStateMask;
 enum class WindowStateState;
@@ -239,7 +239,7 @@ struct SalFrameState
 
 struct SalInputContext
 {
-    const FontSelectPattern* mpFont;
+    LogicalFontInstance* mpFont;
     LanguageType           meLanguage;
     InputContextFlags      mnOptions;
 };

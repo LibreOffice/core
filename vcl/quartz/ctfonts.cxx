@@ -49,7 +49,6 @@ CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPatte
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
     , mpStyleDict( nullptr )
-    , mpHbFont( nullptr )
 {
     double fScaledFontHeight = rFSP.mfExactHeight;
 
@@ -103,8 +102,6 @@ CoreTextStyle::~CoreTextStyle()
 {
     if( mpStyleDict )
         CFRelease( mpStyleDict );
-    if( mpHbFont )
-        hb_font_destroy( mpHbFont );
 }
 
 void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric ) const
@@ -261,6 +258,42 @@ bool CoreTextStyle::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPol
     return true;
 }
 
+static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+{
+    sal_uLong nLength = 0;
+    unsigned char* pBuffer = nullptr;
+    CoreTextFontFace* pFont = static_cast<CoreTextFontFace*>(pUserData);
+    nLength = pFont->GetFontTable(nTableTag, nullptr);
+    if (nLength > 0)
+    {
+        pBuffer = new unsigned char[nLength];
+        pFont->GetFontTable(nTableTag, pBuffer);
+    }
+
+    hb_blob_t* pBlob = nullptr;
+    if (pBuffer != nullptr)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
+                               pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
+    return pBlob;
+}
+
+hb_font_t* CoreTextStyle::ImplInitHbFont()
+{
+    // On macOS we use HarfBuzz for AAT shaping, but HarfBuzz will then
+    // need a CGFont (as it offloads the actual AAT shaping to Core Text),
+    // if we have one we use it to create the hb_face_t.
+    hb_face_t* pHbFace;
+    CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(GetStyleDict(), kCTFontAttributeName));
+    CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, nullptr);
+    if (pCGFont)
+        pHbFace = hb_coretext_face_create(pCGFont);
+    else
+        pHbFace = hb_face_create_for_tables(getFontTable, const_cast<PhysicalFontFace*>(GetFontFace()), nullptr);
+    CGFontRelease(pCGFont);
+
+    return InitHbFont(pHbFace);
+}
+
 PhysicalFontFace* CoreTextFontFace::Clone() const
 {
     return new CoreTextFontFace( *this);
@@ -277,6 +310,11 @@ int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResu
 
     const CTFontTableTag nTagCode = (pTagName[0]<<24) + (pTagName[1]<<16) + (pTagName[2]<<8) + (pTagName[3]<<0);
 
+    return GetFontTable(nTagCode, pResultBuf);
+}
+
+int CoreTextFontFace::GetFontTable(uint32_t nTagCode, unsigned char* pResultBuf ) const
+{
     // get the raw table length
     CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>( GetFontId());
     CTFontRef rCTFont = CTFontCreateWithFontDescriptor( pFontDesc, 0.0, nullptr);
