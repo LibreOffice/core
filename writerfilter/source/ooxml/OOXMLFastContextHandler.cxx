@@ -1662,12 +1662,12 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
         awt::Point aPosition = mpStream->getPositionOffset();
         mrShapeContext->setPosition(aPosition);
         uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
+        m_bShapeSent = true;
         if (xShape.is())
         {
             OOXMLValue::Pointer_t
                 pValue(new OOXMLShapeValue(xShape));
             newProperty(NS_ooxml::LN_shape, pValue);
-            m_bShapeSent = true;
 
             bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
 
