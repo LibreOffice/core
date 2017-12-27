@@ -1524,7 +1524,7 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
     // - anchored between start and end of the selection
     // - anchored in start of the selection with "CheckNoContent"
     // - anchored in start of sel. and the selection start at pos 0
-    return  (rAnchorPos.nNode < rEnd.nNode)
+    return  (rAnchorPos.nNode <= rEnd.nNode)
          && (   (DelContentType::CheckNoCntnt & nDelContentType)
             ||  (rStart.nNode < rAnchorPos.nNode)
             ||  !rStart.nContent.GetIndex()
