@@ -573,10 +573,6 @@ void DeInitVCL()
     }
 
     ImplDeletePrnQueueList();
-    delete pSVData->maGDIData.mpScreenFontList;
-    pSVData->maGDIData.mpScreenFontList = nullptr;
-    delete pSVData->maGDIData.mpScreenFontCache;
-    pSVData->maGDIData.mpScreenFontCache = nullptr;
 
     // destroy all Sal interfaces before destroying the instance
     // and thereby unloading the plugin
@@ -611,6 +607,14 @@ void DeInitVCL()
     pSVData->maWinData.mpTrackWin = nullptr;
     pSVData->maWinData.mpAutoScrollWin = nullptr;
     pSVData->maWinData.mpLastWheelWindow = nullptr;
+
+    // Delete mpScreenFontList and mpScreenFontCache after all output devices,
+    // to avoid deleting them twice (when destructors find that objects' caches
+    // aren't equal to global SVData's caches which are nullptr already)
+    delete pSVData->maGDIData.mpScreenFontList;
+    pSVData->maGDIData.mpScreenFontList = nullptr;
+    delete pSVData->maGDIData.mpScreenFontCache;
+    pSVData->maGDIData.mpScreenFontCache = nullptr;
 
     // Deinit Sal
     if (pSVData->mpDefInst)
