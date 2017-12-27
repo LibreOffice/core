@@ -90,7 +90,6 @@ class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
     SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
-    SvxChartColorTableItem( const SvxChartColorTableItem& );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

@@ -473,9 +473,6 @@ class SvxLinguData_Impl
 
 public:
     SvxLinguData_Impl();
-    SvxLinguData_Impl( const SvxLinguData_Impl &rData );
-
-    SvxLinguData_Impl & operator = (const SvxLinguData_Impl &rData);
 
     uno::Reference<XLinguServiceManager2> &   GetManager() { return xLinguSrvcMgr; }
 
@@ -804,31 +801,6 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         if (aCfgSvcs.getLength())
             aCfgThesTable[ nLang ] = aCfgSvcs;
     }
-}
-
-SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
-    aDisplayServiceArr  (rData.aDisplayServiceArr),
-    nDisplayServices    (rData.nDisplayServices),
-    aAllServiceLocales  (rData.aAllServiceLocales),
-    aCfgSpellTable      (rData.aCfgSpellTable),
-    aCfgHyphTable       (rData.aCfgHyphTable),
-    aCfgThesTable       (rData.aCfgThesTable),
-    aCfgGrammarTable    (rData.aCfgGrammarTable),
-    xLinguSrvcMgr       (rData.xLinguSrvcMgr)
-{
-}
-
-SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rData)
-{
-    xLinguSrvcMgr       = rData.xLinguSrvcMgr;
-    aAllServiceLocales  = rData.aAllServiceLocales;
-    aCfgSpellTable      = rData.aCfgSpellTable;
-    aCfgHyphTable       = rData.aCfgHyphTable;
-    aCfgThesTable       = rData.aCfgThesTable;
-    aCfgGrammarTable    = rData.aCfgGrammarTable;
-    aDisplayServiceArr  = rData.aDisplayServiceArr;
-    nDisplayServices    = rData.nDisplayServices;
-    return *this;
 }
 
 void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices)
