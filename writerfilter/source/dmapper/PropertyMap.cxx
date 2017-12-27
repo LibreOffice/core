@@ -1591,32 +1591,6 @@ ParagraphProperties::ParagraphProperties()
 {
 }
 
-ParagraphProperties::ParagraphProperties( const ParagraphProperties& rCopy )
-    : m_bFrameMode( rCopy.m_bFrameMode )
-    , m_nDropCap( rCopy.m_nDropCap )
-    , m_nLines( rCopy.m_nLines )
-    , m_w( rCopy.m_w )
-    , m_h( rCopy.m_h )
-    , m_nWrap( rCopy.m_nWrap )
-    , m_hAnchor( rCopy.m_hAnchor )
-    , m_vAnchor( rCopy.m_vAnchor )
-    , m_x( rCopy.m_x )
-    , m_bxValid( rCopy.m_bxValid )
-    , m_y( rCopy.m_y )
-    , m_byValid( rCopy.m_byValid )
-    , m_hSpace( rCopy.m_hSpace )
-    , m_vSpace( rCopy.m_vSpace )
-    , m_hRule( rCopy.m_hRule )
-    , m_xAlign( rCopy.m_xAlign )
-    , m_yAlign( rCopy.m_yAlign )
-    , m_bAnchorLock( rCopy.m_bAnchorLock )
-    , m_nDropCapLength( rCopy.m_nDropCapLength )
-    , m_sParaStyleName( rCopy.m_sParaStyleName )
-    , m_xStartingRange( rCopy.m_xStartingRange )
-    , m_xEndingRange( rCopy.m_xEndingRange )
-{
-}
-
 bool ParagraphProperties::operator==( const ParagraphProperties& rCompare )
 {
     return ( m_bFrameMode  == rCompare.m_bFrameMode &&

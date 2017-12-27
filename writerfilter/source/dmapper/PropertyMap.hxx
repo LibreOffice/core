@@ -391,7 +391,6 @@ private:
 
 public:
     ParagraphProperties();
-    ParagraphProperties( const ParagraphProperties& );
     virtual ~ParagraphProperties() {}
 
     // Does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
