@@ -150,9 +150,6 @@ public:
     }
 };
 
-typedef std::unordered_map< OUString, Reference< browse::XBrowseNode > >  BrowseNodeAggregatorHash;
-typedef std::vector< OUString > vString;
-
 struct alphaSort
 {
     bool operator()( const OUString& a, const OUString& b )
@@ -164,8 +161,8 @@ class LocationBrowseNode :
     public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
 private:
-    std::unique_ptr<BrowseNodeAggregatorHash> m_hBNA;
-    vString m_vStr;
+    std::unique_ptr<std::unordered_map< OUString, Reference< browse::XBrowseNode > >> m_hBNA;
+    std::vector< OUString > m_vStr;
     OUString m_sNodeName;
     Reference< browse::XBrowseNode > m_origNode;
 
@@ -197,7 +194,7 @@ public:
         Sequence<  Reference< browse::XBrowseNode > > children( m_hBNA->size() );
         sal_Int32 index = 0;
 
-        vString::const_iterator it = m_vStr.begin();
+        auto it = m_vStr.begin();
 
         for ( ; it != m_vStr.end(); ++it, index++ )
         {
@@ -221,7 +218,7 @@ private:
 
     void loadChildNodes()
     {
-        m_hBNA.reset( new BrowseNodeAggregatorHash );
+        m_hBNA.reset( new std::unordered_map< OUString, Reference< browse::XBrowseNode > > );
 
         Sequence< Reference< browse::XBrowseNode > > langNodes =
             m_origNode->getChildNodes();
@@ -245,7 +242,7 @@ private:
             {
                 Reference< browse::XBrowseNode > grandchild(grandchildren[j]);
 
-                BrowseNodeAggregatorHash::iterator h_it =
+                auto h_it =
                     m_hBNA->find( grandchild->getName() );
 
                 if ( h_it != m_hBNA->end() )

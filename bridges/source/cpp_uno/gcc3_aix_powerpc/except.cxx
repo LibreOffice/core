@@ -88,11 +88,9 @@ static OUString toUNOname( char const * p )
 
 class RTTI
 {
-    typedef std::unordered_map< OUString, type_info * > t_rtti_map;
-
     Mutex m_mutex;
-        t_rtti_map m_rttis;
-    t_rtti_map m_generatedRttis;
+        std::unordered_map< OUString, type_info * > m_rttis;
+    std::unordered_map< OUString, type_info * > m_generatedRttis;
 
     void * m_hApp;
 
@@ -121,7 +119,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
     MutexGuard guard( m_mutex );
-    t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
+    auto iFind( m_rttis.find( unoName ) );
     if (iFind == m_rttis.end())
     {
         // RTTI symbol
@@ -143,14 +141,14 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 
         if (rtti)
         {
-            pair< t_rtti_map::iterator, bool > insertion(
-                m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
+            pair< auto, bool > insertion(
+                m_rttis.insert( std::unordered_map< OUString, type_info * >::value_type( unoName, rtti ) ) );
             assert(insertion.second);
         }
         else
         {
             // try to lookup the symbol in the generated rtti map
-            t_rtti_map::const_iterator iiFind( m_generatedRttis.find( unoName ) );
+            auto iiFind( m_generatedRttis.find( unoName ) );
             if (iiFind == m_generatedRttis.end())
             {
                 // we must generate it !
@@ -174,8 +172,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                     rtti = new __class_type_info( strdup( rttiName ) );
                 }
 
-                pair< t_rtti_map::iterator, bool > insertion(
-                    m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
+                pair< auto, bool > insertion(
+                    m_generatedRttis.insert( std::unordered_map< OUString, type_info * >::value_type( unoName, rtti ) ) );
                 assert(insertion.second);
             }
             else // taking already generated rtti
