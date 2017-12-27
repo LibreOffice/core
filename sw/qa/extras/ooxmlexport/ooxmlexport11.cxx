@@ -181,6 +181,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-635), aProps["FirstLineIndent"].get<sal_Int32>());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf113399, "tdf113399.doc")
+{
+    // 0 padding was not preserved
+    // In LO 0 is the defualt, but in OOXML format the default is 254 / 127
+    uno::Reference<beans::XPropertySet> xPropSet(getShape(1), uno::UNO_QUERY);
+    sal_Int32 nPaddingValue;
+    xPropSet->getPropertyValue("TextLeftDistance") >>= nPaddingValue;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
+    xPropSet->getPropertyValue("TextRightDistance") >>= nPaddingValue;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
+    xPropSet->getPropertyValue("TextUpperDistance") >>= nPaddingValue;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
+    xPropSet->getPropertyValue("TextLowerDistance") >>= nPaddingValue;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1602,6 +1602,19 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         pFS->endElementNS(XML_w, XML_txbxContent);
         pFS->endElementNS(XML_wps, XML_txbx);
     }
+
+    // We need to init padding to 0, if it's not set.
+    // In LO the default is 0 and so ins attributes are not set when padding is 0
+    // but in MSO the default is 254 / 127, so we need to set 0 padding explicitely
+    if(!m_pImpl->m_pBodyPrAttrList->hasAttribute(XML_lIns))
+        m_pImpl->m_pBodyPrAttrList->add(XML_lIns, OString::number(0));
+    if(!m_pImpl->m_pBodyPrAttrList->hasAttribute(XML_tIns))
+        m_pImpl->m_pBodyPrAttrList->add(XML_tIns, OString::number(0));
+    if(!m_pImpl->m_pBodyPrAttrList->hasAttribute(XML_rIns))
+        m_pImpl->m_pBodyPrAttrList->add(XML_rIns, OString::number(0));
+    if(!m_pImpl->m_pBodyPrAttrList->hasAttribute(XML_bIns))
+        m_pImpl->m_pBodyPrAttrList->add(XML_bIns, OString::number(0));
+
     sax_fastparser::XFastAttributeListRef xBodyPrAttrList(m_pImpl->m_pBodyPrAttrList);
     m_pImpl->m_pBodyPrAttrList = nullptr;
     if (!bTextBoxOnly)
