@@ -198,8 +198,6 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxLineTabPage&>(rPage).SetObjSelected( bObjSelected );
         static_cast<SvxLineTabPage&>(rPage).Construct();
         static_cast<SvxLineTabPage&>(rPage).SetColorChgd( &mnColorListState );
-        // ActivatePage() is not called the first time
-        static_cast<SvxLineTabPage&>(rPage).ActivatePage( rOutAttrs );
     }
     else if(nId == m_nStyleTabPage)
     {
