@@ -1246,8 +1246,7 @@ bool EscherPropertyContainer::CreateOLEGraphicProperties(const uno::Reference<dr
     if ( rXShape.is() )
     {
         SdrObject* pObject = GetSdrObjectFromXShape(rXShape); // SJ: leaving unoapi, because currently there is
-        const SdrOle2Obj* pOle2Obj = pObject == nullptr ? nullptr : dynamic_cast<const SdrOle2Obj*>(pObject);
-        if (pOle2Obj != nullptr) // no access to the native graphic object
+        if (auto pOle2Obj = dynamic_cast<const SdrOle2Obj*>(pObject)) // no access to the native graphic object
         {
             const Graphic* pGraphic = pOle2Obj->GetGraphic();
             if (pGraphic)
@@ -1297,8 +1296,7 @@ bool EscherPropertyContainer::CreateMediaGraphicProperties(const uno::Reference<
     if ( rXShape.is() )
     {
         SdrObject* pSdrObject(GetSdrObjectFromXShape(rXShape));  // SJ: leaving unoapi, because currently there is
-        auto* pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(pSdrObject);
-        if (pSdrMediaObj != nullptr)               // no access to the native graphic object
+        if (auto pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(pSdrObject)) // no access to the native graphic object
         {
             std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(pSdrMediaObj->getSnapshot()));
             bRetValue = CreateGraphicProperties(rXShape, *xGraphicObject);
@@ -4610,8 +4608,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                 else if ( nGluePointType == drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
                     SdrObject* pObject = pCustoShape->DoConvertToPolyObj(true, true);
-                    const SdrPathObj* pSdrPathObj = dynamic_cast<const SdrPathObj*>(pObject);
-                    if (pSdrPathObj != nullptr)
+                    if (auto pSdrPathObj = dynamic_cast<const SdrPathObj*>(pObject))
                     {
                         sal_Int16 a, b, nIndex = 0;
                         sal_uInt32 nDistance = 0xffffffff;
