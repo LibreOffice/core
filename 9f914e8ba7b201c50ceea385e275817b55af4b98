@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2d6fb993",
+        "filename": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2017-12-27T10:38:25Z",
+      "side": 1,
+      "message": "Don\u0027t get the point of showing the special character dialog and hide the floating widget in the toolbar. -1",
+      "range": {
+        "startLine": 63,
+        "startChar": 39,
+        "endLine": 63,
+        "endChar": 51
+      },
+      "revId": "9f914e8ba7b201c50ceea385e275817b55af4b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ad09e9df",
+        "filename": "sw/uiconfig/swriter/toolbar/textstylebar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2017-12-27T10:38:25Z",
+      "side": 1,
+      "message": "Too many options for my taste, at least the lower cases could be removed or hidden. Toolbars are not meant to make property dialogs obsolete, and the required width here is quite large with 1300px. But it\u0027s not a showstopper.",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 59
+      },
+      "revId": "9f914e8ba7b201c50ceea385e275817b55af4b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
