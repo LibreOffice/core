@@ -10,6 +10,7 @@
 #include "Table.hxx"
 #include "Tables.hxx"
 #include "Catalog.hxx"
+#include "Util.hxx"
 
 #include <TConnection.hxx>
 
@@ -112,6 +113,12 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
             // Subtype number 1 always refers to CLOB
             aSql.append(" ");
             aSql.append("SUB_TYPE 1");
+        }
+        else if(aType == DataType::LONGVARBINARY)
+        {
+            aSql.append(" ");
+            aSql.append("SUB_TYPE ");
+            aSql.append(OUString::number(static_cast<short>(BlobSubtype::Image)));
         }
     }
 
