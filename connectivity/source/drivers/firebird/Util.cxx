@@ -151,6 +151,8 @@ sal_Int32 firebird::ColumnTypeInfo::getSdbcType() const
                 return DataType::BLOB;
             case BlobSubtype::Clob:
                 return DataType::CLOB;
+            case BlobSubtype::Image:
+                return DataType::LONGVARBINARY;
             default:
                 SAL_WARN("connectivity.firebird", "Unknown subtype for Blob type: " << aSubType);
                 assert(!"Unknown subtype for Blob type"); // Should never happen
