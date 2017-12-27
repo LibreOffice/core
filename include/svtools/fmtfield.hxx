@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <vcl/spinfld.hxx>
 #include <svl/zforlist.hxx>
+#include <memory>
 
 namespace validation { class NumberValidator; }
 
@@ -255,15 +256,9 @@ protected:
 class SVT_DLLPUBLIC DoubleNumericField final : public FormattedField
 {
 public:
-    DoubleNumericField(vcl::Window* pParent, WinBits nStyle)
-        :FormattedField(pParent, nStyle)
-        ,m_pNumberValidator( nullptr )
-    {
-        ResetConformanceTester();
-    }
+    DoubleNumericField(vcl::Window* pParent, WinBits nStyle);
 
     virtual ~DoubleNumericField() override;
-    virtual void dispose() override;
 
 private:
     virtual bool CheckText(const OUString& sText) const override;
@@ -271,7 +266,7 @@ private:
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
     void ResetConformanceTester();
 
-    validation::NumberValidator*    m_pNumberValidator;
+    std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
 };
 
 
