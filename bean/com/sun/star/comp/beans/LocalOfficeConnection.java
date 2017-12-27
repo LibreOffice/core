@@ -69,7 +69,7 @@ public class LocalOfficeConnection
 
     static
     {
-        // preload shared libraries whichs import lips are linked to officebean
+        // preload shared libraries which import lips are linked to officebean
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
         {
             try
