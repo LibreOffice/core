@@ -125,7 +125,9 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
             OUString install = getInstalledLocaleForLanguage(comphelper::containerToSequence(aAvailable), wantedLocale);
             if (!install.isEmpty() && install != "en-US")
             {
-                OUString sVendor(OOO_VENDOR);
+#define CONCAT_UNICODE_IDENTIFIER(x, y) x ## y
+#define MAKE_UNICODE_LITERAL(x) CONCAT_UNICODE_IDENTIFIER(u, x)
+                OUString sVendor(MAKE_UNICODE_LITERAL(OOO_VENDOR));
                 if (sVendor == "Red Hat, Inc." || sVendor == "The Fedora Project")
                 {
                     // langpack is the typical Fedora/RHEL naming convention
