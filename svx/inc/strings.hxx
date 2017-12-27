@@ -149,6 +149,7 @@
 #define RID_SVXSTR_GRDT67_DEF                       "Purple Pipe"
 #define RID_SVXSTR_GRDT68_DEF                       "Night"
 #define RID_SVXSTR_GRDT69_DEF                       "Green Gradient"
+// pre 6.0 gradients
 #define RID_SVXSTR_GRDT70_DEF                       "Tango Green"
 #define RID_SVXSTR_GRDT71_DEF                       "Subtle Tango Green"
 #define RID_SVXSTR_GRDT72_DEF                       "Tango Purple"
@@ -167,6 +168,22 @@
 #define RID_SVXSTR_GRDT85_DEF                       "Deep Orange"
 #define RID_SVXSTR_GRDT86_DEF                       "Deep Blue"
 #define RID_SVXSTR_GRDT87_DEF                       "Purple Haze"
+// post 6.0 gradients
+#define RID_SVXSTR_GRDT88_DEF                       "Pastel Dream"
+#define RID_SVXSTR_GRDT89_DEF                       "Pastel Bouqet"
+#define RID_SVXSTR_GRDT90_DEF                       "Sun Rise"
+#define RID_SVXSTR_GRDT91_DEF                       "Early Morning"
+#define RID_SVXSTR_GRDT92_DEF                       "Hign Noon"
+#define RID_SVXSTR_GRDT93_DEF                       "Sun Down"
+#define RID_SVXSTR_GRDT94_DEF                       "Midnight"
+#define RID_SVXSTR_GRDT95_DEF                       "Mahagoni"
+#define RID_SVXSTR_GRDT96_DEF                       "Blue Hole"
+#define RID_SVXSTR_GRDT97_DEF                       "Stairways"
+#define RID_SVXSTR_GRDT98_DEF                       "Radioactive Worm"
+#define RID_SVXSTR_GRDT99_DEF                       "Neon Light"
+#define RID_SVXSTR_GRDT100_DEF                      "Submarine"
+#define RID_SVXSTR_GRDT101_DEF                      "London Mist"
+// #define RID_SVXSTR_GRDT102_DEF                        "Purple Haze" //same as RID_SVXSTR_GRDT87_DEF
 // Reference-strings for standard-hatch-table
 #define RID_SVXSTR_HATCH0_DEF                       "Black 45 Degrees Wide"
 #define RID_SVXSTR_HATCH1_DEF                       "Black 45 Degrees"
