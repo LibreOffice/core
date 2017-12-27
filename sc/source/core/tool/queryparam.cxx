@@ -87,6 +87,25 @@ ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
     }
 }
 
+ScQueryParamBase& ScQueryParamBase::operator=(const ScQueryParamBase& r)
+{
+    eSearchType = r.eSearchType;
+    bHasHeader  = r.bHasHeader;
+    bByRow = r.bByRow;
+    bInplace = r.bInplace;
+    bCaseSens = r.bCaseSens;
+    bDuplicate = r.bDuplicate;
+    mbRangeLookup = r.mbRangeLookup;
+
+    m_Entries.clear();
+    for (auto const& it : r.m_Entries)
+    {
+        m_Entries.push_back(o3tl::make_unique<ScQueryEntry>(*it));
+    }
+
+    return *this;
+}
+
 ScQueryParamBase::~ScQueryParamBase()
 {
 }
@@ -283,11 +302,6 @@ ScQueryParamTable::ScQueryParamTable() :
 {
 }
 
-ScQueryParamTable::ScQueryParamTable(const ScQueryParamTable& r) :
-    nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nTab(r.nTab)
-{
-}
-
 ScQueryParamTable::~ScQueryParamTable()
 {
 }
@@ -303,12 +317,7 @@ ScQueryParam::ScQueryParam() :
     Clear();
 }
 
-ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
-    ScQueryParamBase(r),
-    ScQueryParamTable(r),
-    bDestPers(r.bDestPers), nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow)
-{
-}
+ScQueryParam::ScQueryParam( const ScQueryParam& ) = default;
 
 ScQueryParam::ScQueryParam( const ScDBQueryParamInternal& r ) :
     ScQueryParamBase(r),
@@ -349,32 +358,7 @@ void ScQueryParam::ClearDestParams()
     nDestRow = 0;
 }
 
-ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
-{
-    nCol1       = r.nCol1;
-    nRow1       = r.nRow1;
-    nCol2       = r.nCol2;
-    nRow2       = r.nRow2;
-    nTab        = r.nTab;
-    nDestTab    = r.nDestTab;
-    nDestCol    = r.nDestCol;
-    nDestRow    = r.nDestRow;
-    bHasHeader  = r.bHasHeader;
-    bInplace    = r.bInplace;
-    bCaseSens   = r.bCaseSens;
-    eSearchType = r.eSearchType;
-    bDuplicate  = r.bDuplicate;
-    bByRow      = r.bByRow;
-    bDestPers   = r.bDestPers;
-
-    m_Entries.clear();
-    for (auto const& it : r.m_Entries)
-    {
-        m_Entries.push_back(o3tl::make_unique<ScQueryEntry>(*it));
-    }
-
-    return *this;
-}
+ScQueryParam& ScQueryParam::operator=( const ScQueryParam& ) = default;
 
 bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {

@@ -77,6 +77,7 @@ public:
 protected:
     ScQueryParamBase();
     ScQueryParamBase(const ScQueryParamBase& r);
+    ScQueryParamBase& operator=(const ScQueryParamBase& r);
 
     EntriesType m_Entries;
 };
@@ -107,7 +108,6 @@ struct ScQueryParamTable
     SCTAB           nTab;
 
     ScQueryParamTable();
-    ScQueryParamTable(const ScQueryParamTable& r);
     virtual ~ScQueryParamTable();
 };
 
@@ -134,11 +134,11 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     SCROW           nDestRow;
 
     ScQueryParam();
-    ScQueryParam( const ScQueryParam& r );
+    ScQueryParam( const ScQueryParam& );
     ScQueryParam( const ScDBQueryParamInternal& r );
     virtual ~ScQueryParam() override;
 
-    ScQueryParam&   operator=  ( const ScQueryParam& r );
+    ScQueryParam&   operator=  ( const ScQueryParam& );
     bool            operator== ( const ScQueryParam& rOther ) const;
     void            Clear();
     void            ClearDestParams();
