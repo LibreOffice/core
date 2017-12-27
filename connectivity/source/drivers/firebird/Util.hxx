@@ -28,9 +28,13 @@ namespace connectivity
         // Type Blob has 2 subtypes values
         // 0 for BLOB, 1 for CLOB
         // see http://www.firebirdfaq.org/faq48/
+        // user-defined subtypes are negative.
+        // Use a number for imahe which is very unlikely to be defined by a user
+        // in a database.
         enum class BlobSubtype {
             Blob = 0,
-            Clob = 1
+            Clob = 1,
+            Image = -9546
         };
 
         // Numeric and decimal types can be identified by their subtype
