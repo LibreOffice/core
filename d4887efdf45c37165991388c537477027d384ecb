@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cd9e1d07",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2017-12-27T19:47:58Z",
+      "side": 1,
+      "message": "Here you should add the new string IDs without the _DEF ending as well.\nIt\u0027s rather overcomplicated, but the logic is like this:\n- in the strings.hxx there are the original strings that LO is supposed to find in the gradients file, these have Ids ending with_DEF \n- in the strings.hrc ther are the same strings but marked for localization, their IDs are the same minus the _DEF\n- Here the two IDs are matched by their index in these two arrays (also see the comment at SvxUnoColorNameDefResId a little below in this file). If the string to be localized matches one in the _DEF array, then the localized string with the same index is returned from the other array.\n\nI\u0027d love to get rid of this madness, and the gettext migration should make this easy... in the 6.1 timeframe.",
+      "range": {
+        "startLine": 1383,
+        "startChar": 18,
+        "endLine": 1383,
+        "endChar": 34
+      },
+      "revId": "d4887efdf45c37165991388c537477027d384ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
