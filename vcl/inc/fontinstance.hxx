@@ -36,17 +36,16 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance
     // just declaring the factory function doesn't work AKA
     // friend LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern&) const;
     friend class PhysicalFontFace;
+    friend class ImplFontCache;
 
 public: // TODO: make data members private
     virtual ~LogicalFontInstance();
 
-    ImplFontCache * mpFontCache;
     FontSelectPattern  maFontSelData;       // FontSelectionData
     ImplFontMetricDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     long            mnLineHeight;
-    sal_uInt32      mnRefCount;
     short           mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
     short           mnOrientation;          // text angle in 3600 system
     bool            mbInit;                 // true if maFontMetric member is valid
@@ -54,6 +53,9 @@ public: // TODO: make data members private
     void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
     bool            GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
     void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
+
+    void            Acquire();
+    void            Release();
 
 protected:
     explicit LogicalFontInstance(const FontSelectPattern&);
@@ -64,6 +66,8 @@ private:
     // TODO: at least the ones which just differ in orientation, stretching or height
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
+    ImplFontCache * mpFontCache;
+    sal_uInt32      mnRefCount;
 };
 
 #endif // INCLUDED_VCL_INC_FONTINSTANCE_HXX

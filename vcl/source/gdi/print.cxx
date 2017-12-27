@@ -593,7 +593,7 @@ void Printer::ImplReleaseFonts()
 
     if ( mpFontInstance )
     {
-        mpFontCache->Release( mpFontInstance );
+        mpFontInstance->Release();
         mpFontInstance = nullptr;
     }
 
@@ -970,7 +970,7 @@ void Printer::dispose()
         // TODO: consolidate duplicate cleanup by Printer and OutputDevice
         if ( mpFontInstance )
         {
-            mpFontCache->Release( mpFontInstance );
+            mpFontInstance->Release();
             mpFontInstance = nullptr;
         }
         if ( mpDeviceFontList )
@@ -1118,7 +1118,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
             if ( mpFontInstance )
             {
-                mpFontCache->Release( mpFontInstance );
+                mpFontInstance->Release();
                 mpFontInstance = nullptr;
             }
             if ( mpDeviceFontList )
@@ -1161,7 +1161,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
 
             if ( mpFontInstance )
             {
-                mpFontCache->Release( mpFontInstance );
+                mpFontInstance->Release();
                 mpFontInstance = nullptr;
             }
             if ( mpDeviceFontList )

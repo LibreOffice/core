@@ -890,7 +890,7 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
             mhFonts[ i ] = nullptr;
             if (mpWinFontEntry[i])
             {
-                GetWinFontEntry(i)->mpFontCache->Release(GetWinFontEntry(i));
+                GetWinFontEntry(i)->Release();
             }
             mpWinFontEntry[i] = nullptr;
             mpWinFontData[i] = nullptr;
@@ -902,13 +902,13 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
     assert(pFont->mpFontData);
     if (mpWinFontEntry[nFallbackLevel])
     {
-        GetWinFontEntry(nFallbackLevel)->mpFontCache->Release(GetWinFontEntry(nFallbackLevel));
+        GetWinFontEntry(nFallbackLevel)->Release();
     }
     // WinSalGraphics::GetEmbedFontData does not set mpFontInstance
     // since it is interested in font file data only.
     if (pFont->mpFontInstance)
     {
-        pFont->mpFontInstance->mpFontCache->Acquire(pFont->mpFontInstance);
+        pFont->mpFontInstance->Acquire();
     }
     mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>( pFont->mpFontInstance );
     mpWinFontData[ nFallbackLevel ] = static_cast<const WinFontFace*>( pFont->mpFontData );
