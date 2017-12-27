@@ -52,12 +52,12 @@ bool OutputDevice::ImplIsUnderlineAbove( const vcl::Font& rFont )
 
 void OutputDevice::ImplInitTextLineSize()
 {
-    mpFontInstance->mxFontMetric->ImplInitTextLineSize( this );
+    GetRefreshedFontInstance()->mxFontMetric->ImplInitTextLineSize( this );
 }
 
 void OutputDevice::ImplInitAboveTextLineSize()
 {
-    mpFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
+    GetRefreshedFontInstance()->mxFontMetric->ImplInitAboveTextLineSize();
 }
 
 void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
@@ -211,7 +211,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
                                          Color aColor,
                                          bool bIsAbove )
 {
-    LogicalFontInstance* pFontInstance = mpFontInstance;
+    LogicalFontInstance* pFontInstance = GetRefreshedFontInstance();
     long            nLineHeight;
     long            nLinePos;
 
@@ -260,16 +260,16 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
 
         nLinePos -= nLineWidthHeight-nLineDY2;
         ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
-                          nLineWidth, mpFontInstance->mnOrientation, aColor );
+                          nLineWidth, pFontInstance->mnOrientation, aColor );
         nLinePos += nLineWidthHeight+nLineDY;
         ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
-                          nLineWidth, mpFontInstance->mnOrientation, aColor );
+                          nLineWidth, pFontInstance->mnOrientation, aColor );
     }
     else
     {
         nLinePos -= nLineWidthHeight/2;
         ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
-                          nLineWidth, mpFontInstance->mnOrientation, aColor );
+                          nLineWidth, pFontInstance->mnOrientation, aColor );
     }
 }
 
@@ -279,7 +279,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                                              Color aColor,
                                              bool bIsAbove )
 {
-    LogicalFontInstance*  pFontInstance = mpFontInstance;
+    LogicalFontInstance* pFontInstance = GetRefreshedFontInstance();
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -521,7 +521,7 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
-    LogicalFontInstance*  pFontInstance = mpFontInstance;
+    LogicalFontInstance* pFontInstance = GetRefreshedFontInstance();
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -619,10 +619,11 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     const OUString aStrikeoutText(aChars, nStrikeStrLen);
 
-    if( mpFontInstance->mnOrientation )
+    LogicalFontInstance* pFontInstance = GetRefreshedFontInstance();
+    if( pFontInstance->mnOrientation )
     {
         Point aOriginPt(0, 0);
-        aOriginPt.RotateAround( nDistX, nDistY, mpFontInstance->mnOrientation );
+        aOriginPt.RotateAround( nDistX, nDistY, pFontInstance->mnOrientation );
     }
 
     nBaseX += nDistX;
@@ -647,13 +648,13 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     tools::Rectangle aPixelRect;
     aPixelRect.Left() = nBaseX+mnTextOffX;
     aPixelRect.Right() = aPixelRect.Left()+nWidth;
-    aPixelRect.Bottom() = nBaseY+mpFontInstance->mxFontMetric->GetDescent();
-    aPixelRect.Top() = nBaseY-mpFontInstance->mxFontMetric->GetAscent();
+    aPixelRect.Bottom() = nBaseY+pFontInstance->mxFontMetric->GetDescent();
+    aPixelRect.Top() = nBaseY-pFontInstance->mxFontMetric->GetAscent();
 
-    if (mpFontInstance->mnOrientation)
+    if (pFontInstance->mnOrientation)
     {
         tools::Polygon aPoly( aPixelRect );
-        aPoly.Rotate( Point(nBaseX+mnTextOffX, nBaseY+mnTextOffY), mpFontInstance->mnOrientation);
+        aPoly.Rotate( Point(nBaseX+mnTextOffX, nBaseY+mnTextOffY), pFontInstance->mnOrientation);
         aPixelRect = aPoly.GetBoundRect();
     }
 
@@ -690,8 +691,9 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     if ( IsRTLEnabled() )
     {
         long nXAdd = nWidth - nDistX;
-        if( mpFontInstance->mnOrientation )
-            nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation * F_PI1800 ) );
+        LogicalFontInstance* pFontInstance = GetRefreshedFontInstance();
+        if( pFontInstance->mnOrientation )
+            nXAdd = FRound( nXAdd * cos( pFontInstance->mnOrientation * F_PI1800 ) );
 
         nX += nXAdd - 1;
     }
@@ -760,10 +762,11 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                 {
                     // get the distance to the base point (as projected to baseline)
                     nDist = aPos.X() - aStartPt.X();
-                    if( mpFontInstance->mnOrientation )
+                    LogicalFontInstance* pFontInstance = GetRefreshedFontInstance();
+                    if( pFontInstance->mnOrientation )
                     {
                         const long nDY = aPos.Y() - aStartPt.Y();
-                        const double fRad = mpFontInstance->mnOrientation * F_PI1800;
+                        const double fRad = pFontInstance->mnOrientation * F_PI1800;
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
                 }
@@ -1030,7 +1033,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     }
 
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
-    LogicalFontInstance* pFontInstance = mpFontInstance;
+    LogicalFontInstance* pFontInstance = GetRefreshedFontInstance();
     if( nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize() )
     {
         nWaveHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();

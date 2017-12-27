@@ -1260,15 +1260,15 @@ public:
                                                 GetDefaultFontFlags nFlags,
                                                 const OutputDevice* pOutDev = nullptr );
 
-    SAL_DLLPRIVATE void         ImplInitFontList() const;
+    SAL_DLLPRIVATE void         ImplInitFontList( bool bRefreshIfRequired ) const;
     SAL_DLLPRIVATE void         ImplUpdateFontData();
 
     //drop font data for all outputdevices.
     //If bNewFontLists is true then empty lists of system fonts
     SAL_DLLPRIVATE static void  ImplClearAllFontData( bool bNewFontLists );
-    //fetch font data for all outputdevices
+    //mark that fetch font data for all outputdevices is required on next access
     //If bNewFontLists is true then fetch lists of system fonts
-    SAL_DLLPRIVATE static void  ImplRefreshAllFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE static void  ImplMarkRefreshAllFontDataRequired( bool bNewFontLists );
     //drop and fetch font data for all outputdevices
     //If bNewFontLists is true then drop and refetch lists of system fonts
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
@@ -1289,6 +1289,14 @@ private:
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
     SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
+
+    // Check if a refresh of font data is required
+    SAL_DLLPRIVATE static bool RefreshAllFontDataIfRequired();
+    SAL_DLLPRIVATE LogicalFontInstance*    GetRefreshedFontInstance()       const { RefreshAllFontDataIfRequired(); assert(mpFontInstance);       return mpFontInstance; }
+    SAL_DLLPRIVATE ImplDeviceFontList*     GetRefreshedDeviceFontList()     const { RefreshAllFontDataIfRequired(); assert(mpDeviceFontList);     return mpDeviceFontList; }
+    SAL_DLLPRIVATE ImplDeviceFontSizeList* GetRefreshedDeviceFontSizeList() const { RefreshAllFontDataIfRequired(); assert(mpDeviceFontSizeList); return mpDeviceFontSizeList; }
+    SAL_DLLPRIVATE ImplFontCache*          GetRefreshedFontCache()          const { RefreshAllFontDataIfRequired(); assert(mpFontCache);          return mpFontCache; }
+    SAL_DLLPRIVATE PhysicalFontCollection* GetRefreshedFontCollection()     const { RefreshAllFontDataIfRequired(); assert(mpFontCollection);     return mpFontCollection; }
 
     static
     SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
