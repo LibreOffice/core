@@ -993,6 +993,7 @@ res/lx03165.svg cmd/lc_save.svg
 res/lx03189.svg cmd/lc_open.svg
 res/sc05501.svg cmd/sc_open.svg
 res/lx03256.svg cmd/lc_insertplugin.svg
+res/sc0554.svg cmd/sc_formatpaintbrush.svg
 
 res/mainapp_16.svg cmd/sc_showsinglepage.svg
 res/mainapp_16.svg cmd/sc_showsinglepage.svg
@@ -1007,12 +1008,13 @@ res/reload.svg cmd/sc_reload.svg
 res/library_16.svg cmd/lc_viewdatasourcebrowser.svg
 
 res/sc05508.svg cmd/sc_reload.svg
+res/sc05555.svg cmd/sc_editstyle.svg
 res/sc05556.svg cmd/sc_reload.svg
 res/sc05502.svg cmd/sc_saveas.svg
 res/sc05504.svg cmd/sc_print.svg
 res/sc05509.svg cmd/sc_print.svg
 
-res/sc05554.svg cmd/sc_formatarea.svg
+res/sc05554.svg cmd/sc_formatpaintbrush.svg
 res/sc05711.svg cmd/sc_copy.svg
 res/sc05961.svg cmd/sc_recsearch.svg
 res/sc06300.svg cmd/sc_nextrecord.svg
