@@ -44,8 +44,7 @@ namespace connectivity
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
                                                    css::util::XCancellable,
-                                                   css::sdbc::XCloseable,
-                                                   css::sdbc::XMultipleResults> OStatementCommonBase_Base;
+                                                   css::sdbc::XCloseable> OStatementCommonBase_Base;
 
         class OStatementCommonBase  :   public  OStatementCommonBase_Base,
                                         public  ::cppu::OPropertySetHelper,
