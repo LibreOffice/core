@@ -1455,12 +1455,12 @@ void SvXMLExport::ResetNamespaceMap()
     delete mpNamespaceMap;    mpNamespaceMap = new SvXMLNamespaceMap;
 }
 
-OUString SvXMLExport::GetSourceShellID() const
+OUString const & SvXMLExport::GetSourceShellID() const
 {
     return mpImpl->maSrcShellID;
 }
 
-OUString SvXMLExport::GetDestinationShellID() const
+OUString const & SvXMLExport::GetDestinationShellID() const
 {
     return mpImpl->maDestShellID;
 }
@@ -2337,7 +2337,7 @@ bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
     return mpImpl->mbOutlineStyleAsNormalListStyle;
 }
 
-uno::Reference< embed::XStorage > SvXMLExport::GetTargetStorage()
+uno::Reference< embed::XStorage > const & SvXMLExport::GetTargetStorage()
 {
     return mpImpl->mxTargetStorage;
 }
@@ -2466,7 +2466,7 @@ bool SvXMLExport::SetNullDateOnUnitConverter()
     return mpImpl->mbNullDateInitialized;
 }
 
-OUString SvXMLExport::GetImageFilterName() const
+OUString const & SvXMLExport::GetImageFilterName() const
 {
     return msImgFilterName;
 }

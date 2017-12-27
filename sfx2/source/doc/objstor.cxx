@@ -289,7 +289,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
 }
 
 
-SvGlobalName SfxObjectShell::GetClassName() const
+SvGlobalName const & SfxObjectShell::GetClassName() const
 {
     return GetFactory().GetClassId();
 }
@@ -3009,7 +3009,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
     else return false;
 }
 
-uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
+uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
 {
     if ( !pImpl->m_xDocStorage.is() )
     {

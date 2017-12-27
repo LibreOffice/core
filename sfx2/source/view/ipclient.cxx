@@ -125,7 +125,7 @@ public:
 
     void SizeHasChanged();
     DECL_LINK(TimerHdl, Timer *, void);
-    uno::Reference < frame::XFrame > GetFrame() const;
+    uno::Reference < frame::XFrame > const & GetFrame() const;
 
     // XEmbeddedClient
     virtual void SAL_CALL saveObject() override;
@@ -201,7 +201,7 @@ void SAL_CALL SfxInPlaceClient_Impl::disposing( const css::lang::EventObject& /*
 
 // XEmbeddedClient
 
-uno::Reference < frame::XFrame > SfxInPlaceClient_Impl::GetFrame() const
+uno::Reference < frame::XFrame > const & SfxInPlaceClient_Impl::GetFrame() const
 {
     if ( !m_pClient )
         throw uno::RuntimeException();

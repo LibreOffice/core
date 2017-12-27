@@ -2130,7 +2130,7 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
     EnableItem(nId, bEnable);
 }
 
-VclPtr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
+VclPtr<PopupMenu> const & SfxCommonTemplateDialog_Impl::CreateContextMenu()
 {
     if ( bBindingUpdate )
     {

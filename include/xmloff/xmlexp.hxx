@@ -215,8 +215,8 @@ protected:
     /// Override this method to export the content of <office:body>.
     virtual void ExportContent_() = 0;
 
-    OUString GetSourceShellID() const;
-    OUString GetDestinationShellID() const;
+    OUString const & GetSourceShellID() const;
+    OUString const & GetDestinationShellID() const;
 
     // save linked sections? (may be false in global documents)
     bool mbSaveLinkedSections;
@@ -533,7 +533,7 @@ public:
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     bool writeOutlineStyleAsNormalListStyle() const;
 
-    css::uno::Reference< css::embed::XStorage > GetTargetStorage();
+    css::uno::Reference< css::embed::XStorage > const & GetTargetStorage();
 
     /// returns the currently configured default version for odf export
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
@@ -559,7 +559,7 @@ public:
     bool SetNullDateOnUnitConverter();
 
     /// Get clamped mimetype for image export (empty if none)
-    OUString GetImageFilterName() const;
+    OUString const & GetImageFilterName() const;
 };
 
 inline rtl::Reference< XMLTextParagraphExport > const & SvXMLExport::GetTextParagraphExport()

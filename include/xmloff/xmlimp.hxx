@@ -416,7 +416,7 @@ public:
     OUString ResolveEmbeddedObjectURLFromBase64();
 
     // get source storage we're importing from (if available)
-    css::uno::Reference< css::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage > const &
           GetSourceStorage();
 
     void AddStyleDisplayName( sal_uInt16 nFamily,
@@ -450,7 +450,7 @@ public:
 
     bool IsTableShapeSupported() const { return mbIsTableShapeSupported; }
 
-    OUString GetODFVersion() const;
+    OUString const & GetODFVersion() const;
     bool IsOOoXML() const; // legacy non-ODF format?
 
     /**
@@ -481,7 +481,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext > const &
     GetComponentContext() const;
 
     // Convert drawing object positions from OOo file format to OASIS file format and vice versa (#i28749#)

@@ -2864,7 +2864,7 @@ void XMLTextImportHelper::SetChangesProtectionKey(const Sequence<sal_Int8> &)
 }
 
 
-OUString XMLTextImportHelper::GetOpenRedlineId()
+OUString const & XMLTextImportHelper::GetOpenRedlineId()
 {
     return m_xImpl->m_sOpenRedlineIdentifier;
 }

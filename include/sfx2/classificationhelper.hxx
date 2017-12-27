@@ -89,9 +89,9 @@ public:
     bool HasDocumentFooter();
     void UpdateInfobar(SfxViewFrame& rViewFrame);
 
-    const std::vector<OUString> GetMarkings();
-    const std::vector<OUString> GetIntellectualPropertyParts();
-    const std::vector<OUString> GetIntellectualPropertyPartNumbers();
+    std::vector<OUString> const & GetMarkings();
+    std::vector<OUString> const & GetIntellectualPropertyParts();
+    std::vector<OUString> const & GetIntellectualPropertyPartNumbers();
 
     /// Does a best-effort conversion of rType to SfxClassificationPolicyType.
     static SfxClassificationPolicyType stringToPolicyType(const OUString& rType);
@@ -130,7 +130,7 @@ private:
     sal_Int32 m_nIPPartNumber;
     sal_Int32 m_nMarkingNumber;
 
-    OUString getPolicyKey() const
+    OUString const & getPolicyKey() const
     {
         return m_sPolicy;
     }

@@ -54,7 +54,7 @@ public:
         SvXMLExportFlags nExportFlags );
     virtual ~SchXMLExport() override;
 
-    rtl::Reference< XMLPropertySetMapper > GetPropertySetMapper() const;
+    rtl::Reference< XMLPropertySetMapper > const & GetPropertySetMapper() const;
 };
 
 #endif // INCLUDED_XMLOFF_INC_SCHXMLEXPORT_HXX

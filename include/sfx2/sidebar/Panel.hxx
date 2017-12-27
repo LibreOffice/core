@@ -47,7 +47,7 @@ public:
     virtual ~Panel() override;
     virtual void dispose() override;
 
-    VclPtr<PanelTitleBar> GetTitleBar() const;
+    VclPtr<PanelTitleBar> const & GetTitleBar() const;
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional;}
     void SetUIElement (const css::uno::Reference<css::ui::XUIElement>& rxElement);
     const css::uno::Reference<css::ui::XSidebarPanel>& GetPanelComponent() const { return mxPanelComponent;}

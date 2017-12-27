@@ -1421,7 +1421,7 @@ OUString SvXMLImport::ResolveEmbeddedObjectURL(
     return sRet;
 }
 
-Reference< embed::XStorage > SvXMLImport::GetSourceStorage()
+Reference< embed::XStorage > const & SvXMLImport::GetSourceStorage()
 {
     return mpImpl->mxSourceStorage;
 }
@@ -1895,7 +1895,7 @@ void SvXMLImport::DisposingModel()
     return mpImpl->maInterfaceToIdentifierMapper;
 }
 
-uno::Reference< uno::XComponentContext >
+uno::Reference< uno::XComponentContext > const &
 SvXMLImport::GetComponentContext() const
 {
     return mpImpl->mxComponentContext;
@@ -1966,7 +1966,7 @@ bool SvXMLImport::isGeneratorVersionOlderThan(
 }
 
 
-OUString SvXMLImport::GetODFVersion() const
+OUString const & SvXMLImport::GetODFVersion() const
 {
     return mpImpl->aODFVersion;
 }

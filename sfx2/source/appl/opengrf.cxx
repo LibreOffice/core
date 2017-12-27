@@ -254,7 +254,7 @@ OUString SvxOpenGraphicDialog::GetCurrentFilter() const
     return mpImpl->aFileDlg.GetCurrentFilter();
 }
 
-OUString SvxOpenGraphicDialog::GetDetectedFilter() const
+OUString const & SvxOpenGraphicDialog::GetDetectedFilter() const
 {
     return mpImpl->sDetectedFilter;
 }

@@ -132,7 +132,7 @@ public:
 
     void                CheckFileDate( const css::util::DateTime& aInitDate );
     SAL_WARN_UNUSED_RESULT bool  DocNeedsFileDateCheck() const;
-    css::util::DateTime GetInitFileDate( bool bIgnoreOldValue );
+    css::util::DateTime const & GetInitFileDate( bool bIgnoreOldValue );
 
     css::uno::Reference< css::ucb::XContent > GetContent() const;
     const OUString& GetPhysicalName() const;
@@ -144,7 +144,7 @@ public:
     ErrCode             GetErrorCode() const;
     ErrCode             GetError() const
                         { return GetErrorCode().IgnoreWarning(); }
-    ErrCode             GetLastStorageCreationState();
+    ErrCode const &     GetLastStorageCreationState();
 
     void                SetError(ErrCode nError);
 
@@ -191,7 +191,7 @@ public:
     // independent of later changes via SetOpenMode; used for SID_RELOAD:
     SAL_WARN_UNUSED_RESULT bool IsOriginallyLoadedReadOnly() const;
 
-    css::uno::Reference< css::io::XInputStream >  GetInputStream();
+    css::uno::Reference< css::io::XInputStream > const &  GetInputStream();
 
     void                CreateTempFile( bool bReplace = true );
     void                CreateTempFileNoCopy();
@@ -207,9 +207,9 @@ public:
     SAL_DLLPRIVATE bool HasStorage_Impl() const;
 
     SAL_DLLPRIVATE void StorageBackup_Impl();
-    SAL_DLLPRIVATE OUString GetBackup_Impl();
+    SAL_DLLPRIVATE OUString const & GetBackup_Impl();
 
-    SAL_DLLPRIVATE css::uno::Reference< css::embed::XStorage > GetZipStorageToSign_Impl( bool bReadOnly = true );
+    SAL_DLLPRIVATE css::uno::Reference< css::embed::XStorage > const & GetZipStorageToSign_Impl( bool bReadOnly = true );
     SAL_DLLPRIVATE void CloseZipStorage_Impl();
 
     // the storage that will be returned by the medium on GetStorage request
