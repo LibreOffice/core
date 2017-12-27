@@ -1896,26 +1896,26 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
                         if ( rExtensionId.isEmpty() || sId == rExtensionId )
                         {
-                            OptionsLeaf* pLeaf = new OptionsLeaf(
-                                sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx );
+                            std::unique_ptr<OptionsLeaf> pLeaf(new OptionsLeaf(
+                                sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx ));
 
                             if ( !sLeafGrpId.isEmpty() )
                             {
                                 bool bAlreadyOpened = false;
                                 if ( pNode->m_aGroupedLeaves.size() > 0 )
                                 {
-                                    for (std::vector<OptionsLeaf*> & rGroup : pNode->m_aGroupedLeaves)
+                                    for (auto & rGroup : pNode->m_aGroupedLeaves)
                                     {
                                         if ( rGroup.size() > 0 &&
                                              rGroup[0]->m_sGroupId == sLeafGrpId )
                                         {
-                                            std::vector<OptionsLeaf *>::size_type l = 0;
+                                            std::vector<std::unique_ptr<OptionsLeaf>>::size_type l = 0;
                                             for ( ; l < rGroup.size(); ++l )
                                             {
                                                 if ( rGroup[l]->m_nGroupIndex >= nLeafGrpIdx )
                                                     break;
                                             }
-                                            rGroup.insert( rGroup.begin() + l, pLeaf );
+                                            rGroup.insert( rGroup.begin() + l, std::move(pLeaf) );
                                             bAlreadyOpened = true;
                                             break;
                                         }
@@ -1923,13 +1923,13 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                                 }
                                 if ( !bAlreadyOpened )
                                 {
-                                    VectorOfLeaves aGroupedLeaves;
-                                    aGroupedLeaves.push_back( pLeaf );
-                                    pNode->m_aGroupedLeaves.push_back( aGroupedLeaves );
+                                    std::vector< std::unique_ptr<OptionsLeaf> > aGroupedLeaves;
+                                    aGroupedLeaves.push_back( std::move(pLeaf) );
+                                    pNode->m_aGroupedLeaves.push_back( std::move(aGroupedLeaves) );
                                 }
                             }
                             else
-                                pNode->m_aLeaves.push_back( pLeaf );
+                                pNode->m_aLeaves.push_back( std::move(pLeaf) );
                         }
                     }
                 }
@@ -2022,15 +2022,13 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
             {
                 for ( size_t k = 0; k < j.size(); ++k )
                 {
-                    OptionsLeaf* pLeaf = j[k];
-                    lcl_insertLeaf( this, pNode, pLeaf, *pTreeLB );
+                    lcl_insertLeaf( this, pNode, j[k].get(), *pTreeLB );
                 }
             }
 
             for ( auto const & j: pNode->m_aLeaves )
             {
-                OptionsLeaf* pLeaf = j;
-                lcl_insertLeaf( this, pNode, pLeaf, *pTreeLB );
+                lcl_insertLeaf( this, pNode, j.get(), *pTreeLB );
             }
         }
     }

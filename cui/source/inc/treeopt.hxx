@@ -73,8 +73,6 @@ struct OptionsLeaf
         m_nGroupIndex( nGroupIndex ) {}
 };
 
-typedef std::vector< OptionsLeaf* > VectorOfLeaves;
-
 // struct OptionsNode ----------------------------------------------------
 
 struct OptionsNode
@@ -83,8 +81,8 @@ struct OptionsNode
     OUString                m_sLabel;
     OUString                m_sPageURL;
     bool                    m_bAllModules;
-    VectorOfLeaves          m_aLeaves;
-    std::vector< VectorOfLeaves >
+    std::vector< std::unique_ptr<OptionsLeaf> > m_aLeaves;
+    std::vector< std::vector< std::unique_ptr<OptionsLeaf> > >
                             m_aGroupedLeaves;
 
     OptionsNode(    const OUString& rId,
@@ -95,14 +93,6 @@ struct OptionsNode
         m_sLabel( rLabel ),
         m_sPageURL( rPageURL ),
         m_bAllModules( bAllModules ) {}
-
-    ~OptionsNode()
-    {
-        for ( size_t i = 0; i < m_aLeaves.size(); ++i )
-            delete m_aLeaves[i];
-        m_aLeaves.clear();
-        m_aGroupedLeaves.clear();
-    }
 };
 
 typedef std::vector< OptionsNode* > VectorOfNodes;
