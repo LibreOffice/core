@@ -3613,7 +3613,7 @@ void SchXMLExport::ExportContent_()
     }
 }
 
-rtl::Reference< XMLPropertySetMapper > SchXMLExport::GetPropertySetMapper() const
+rtl::Reference< XMLPropertySetMapper > const & SchXMLExport::GetPropertySetMapper() const
 {
     return maExportHelper->m_pImpl->GetPropertySetMapper();
 }

@@ -249,7 +249,8 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
             .GlobalNamespace())
         || (dc.MemberFunction().Class("Submission").Namespace("xforms")
             .GlobalNamespace())
-        || (dc.Function("TopLeft").Class("SwRect").GlobalNamespace()))
+        || (dc.Function("TopLeft").Class("SwRect").GlobalNamespace())
+        || (dc.Function("ConvDicList_CreateInstance").GlobalNamespace()))
     {
         return;
     }

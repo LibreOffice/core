@@ -302,7 +302,7 @@ void SfxMedium::ResetError()
         pImpl->m_pOutStream->ResetError();
 }
 
-ErrCode SfxMedium::GetLastStorageCreationState()
+ErrCode const & SfxMedium::GetLastStorageCreationState()
 {
     return pImpl->nLastStorageError;
 }
@@ -365,7 +365,7 @@ bool SfxMedium::DocNeedsFileDateCheck() const
                                 GetURLObject().isAnyKnownWebDAVScheme() ) );
 }
 
-util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
+util::DateTime const & SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
 {
     if ( ( bIgnoreOldValue || !pImpl->m_bGotDateTime ) && !pImpl->m_aLogicName.isEmpty() )
     {
@@ -749,7 +749,7 @@ void SfxMedium::StorageBackup_Impl()
 }
 
 
-OUString SfxMedium::GetBackup_Impl()
+OUString const & SfxMedium::GetBackup_Impl()
 {
     if ( pImpl->m_aBackupURL.isEmpty() )
         StorageBackup_Impl();
@@ -1484,7 +1484,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 }
 
 
-uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( bool bReadOnly )
+uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( bool bReadOnly )
 {
     if ( !GetError() && !pImpl->m_xZipStorage.is() )
     {
@@ -3191,7 +3191,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
     return pImpl->xAttributes.get();
 }
 
-css::uno::Reference< css::io::XInputStream >  SfxMedium::GetInputStream()
+css::uno::Reference< css::io::XInputStream > const &  SfxMedium::GetInputStream()
 {
     if ( !pImpl->xInputStream.is() )
         GetMedium_Impl();

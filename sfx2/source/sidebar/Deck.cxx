@@ -92,7 +92,7 @@ void Deck::dispose()
     vcl::Window::dispose();
 }
 
-VclPtr<DeckTitleBar> Deck::GetTitleBar() const
+VclPtr<DeckTitleBar> const & Deck::GetTitleBar() const
 {
     return mpTitleBar;
 }

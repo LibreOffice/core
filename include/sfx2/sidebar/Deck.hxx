@@ -46,7 +46,7 @@ public:
 
     const OUString& GetId() const { return msId; }
 
-    VclPtr<DeckTitleBar> GetTitleBar() const;
+    VclPtr<DeckTitleBar> const & GetTitleBar() const;
     tools::Rectangle GetContentArea() const;
     void ResetPanels (const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels() const  { return maPanels; }

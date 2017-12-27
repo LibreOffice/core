@@ -337,7 +337,7 @@ public:
     void                SetDoubleClickHdl( const Link<Control*,bool>& rLink );
     void         SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const OUString& rFactory, bool bActive );
-    OUString     GetFactory() const { return pIPage->GetFactory(); }
+    OUString const &    GetFactory() const { return pIPage->GetFactory(); }
     OUString            GetSelectedEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     bool                IsValidFactory( const OUString& _rFactory );
@@ -538,7 +538,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
     void                setContainerWindow( const css::uno::Reference < css::awt::XWindow >& xWin );
-    css::uno::Reference < css::frame::XFrame2 >
+    css::uno::Reference < css::frame::XFrame2 > const &
                         getTextFrame() const { return pTextWin->getFrame(); }
 
     void                SetFactory( const OUString& rFactory );

@@ -230,7 +230,7 @@ public:
     }
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    css::uno::Reference < css::drawing::XShape > GetShape() const
+    css::uno::Reference < css::drawing::XShape > const & GetShape() const
     {
         return static_cast<SvXMLShapeContext*>(xContext.get())->getShape();
     }

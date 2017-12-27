@@ -170,12 +170,12 @@ public:
     virtual             ~SfxOleObjectBase();
 
     /** Returns the current error code. */
-    ErrCode      GetError() const { return mnErrCode; }
+    ErrCode const &     GetError() const { return mnErrCode; }
 
     /** Loads this object from the passed stream. Calls virtual ImplLoad(). */
-    ErrCode             Load( SvStream& rStrm );
+    ErrCode const &     Load( SvStream& rStrm );
     /** Saves this object to the passed stream. Calls virtual ImplSave(). */
-    ErrCode             Save( SvStream& rStrm );
+    ErrCode const &     Save( SvStream& rStrm );
 
 protected:
     /** Sets the passed error code. Will be returned by Load() and Save() functions.
@@ -359,9 +359,9 @@ public:
     explicit     SfxOlePropertySet() {}
 
     /** Loads this object from the passed storage. */
-    ErrCode             LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName );
+    ErrCode const &     LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName );
     /** Saves this object to the passed storage. */
-    ErrCode             SavePropertySet( SotStorage* pStrg, const OUString& rStrmName );
+    ErrCode const &     SavePropertySet( SotStorage* pStrg, const OUString& rStrmName );
 
     /** Returns the specified section, or an empty reference, if nothing found. */
     SfxOleSectionRef    GetSection( SfxOleSectionType eSection ) const;

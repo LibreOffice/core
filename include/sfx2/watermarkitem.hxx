@@ -22,9 +22,9 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const OUString          GetText() const { return m_aText; }
+    OUString const &        GetText() const { return m_aText; }
     void                    SetText(const OUString& aText) { m_aText = aText; }
-    const OUString          GetFont() const { return m_aFont; }
+    OUString const &        GetFont() const { return m_aFont; }
     void                    SetFont(const OUString& aFont) { m_aFont = aFont; }
     sal_Int16               GetAngle() const { return m_nAngle; }
     void                    SetAngle(const sal_Int16 nAngle) { m_nAngle = nAngle; }

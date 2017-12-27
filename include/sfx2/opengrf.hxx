@@ -47,7 +47,7 @@ public:
     void                    SetCurrentFilter(const OUString&);
 
     //what was subsequently found to be the format
-    OUString                GetDetectedFilter() const;
+    OUString const &        GetDetectedFilter() const;
     void                    SetDetectedFilter(const OUString&);
 
 private:

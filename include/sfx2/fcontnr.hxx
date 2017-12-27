@@ -51,7 +51,7 @@ public:
                         ~SfxFilterContainer();
 
 
-    const OUString      GetName() const;
+    OUString const &      GetName() const;
 
     std::shared_ptr<const SfxFilter>    GetAnyFilter( SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     std::shared_ptr<const SfxFilter>    GetFilter4EA( const OUString& rEA, SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;

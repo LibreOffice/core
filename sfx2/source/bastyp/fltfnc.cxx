@@ -172,7 +172,7 @@ SfxFilterContainer::~SfxFilterContainer()
 }
 
 
-const OUString SfxFilterContainer::GetName() const
+OUString const & SfxFilterContainer::GetName() const
 {
     return pImpl->aName;
 }

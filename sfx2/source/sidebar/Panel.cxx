@@ -100,7 +100,7 @@ void Panel::dispose()
     vcl::Window::dispose();
 }
 
-VclPtr<PanelTitleBar> Panel::GetTitleBar() const
+VclPtr<PanelTitleBar> const & Panel::GetTitleBar() const
 {
     return mpTitleBar;
 }

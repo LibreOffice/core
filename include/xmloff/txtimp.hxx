@@ -683,7 +683,7 @@ public:
         const css::uno::Sequence<sal_Int8> & rProtectionKey );
 
     /// get the last open redline ID
-    OUString GetOpenRedlineId();
+    OUString const & GetOpenRedlineId();
     /// modify the last open redline ID
     void SetOpenRedlineId( OUString const & rId);
     /// reset the last open redline ID

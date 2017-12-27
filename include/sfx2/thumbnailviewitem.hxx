@@ -104,7 +104,7 @@ public:
     void setHelpText (const OUString &sText) { maHelpText = sText; }
 
     virtual OUString getHelpText() const { return maHelpText; };
-    OUString getTitle() const { return maTitle; };
+    OUString const & getTitle() const { return maTitle; };
 
     void setTitle (const OUString& rTitle);
 

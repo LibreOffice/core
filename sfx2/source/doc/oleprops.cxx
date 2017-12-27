@@ -334,7 +334,7 @@ SfxOleObjectBase::~SfxOleObjectBase()
 {
 }
 
-ErrCode SfxOleObjectBase::Load( SvStream& rStrm )
+ErrCode const & SfxOleObjectBase::Load( SvStream& rStrm )
 {
     mnErrCode = ERRCODE_NONE;
     ImplLoad( rStrm );
@@ -342,7 +342,7 @@ ErrCode SfxOleObjectBase::Load( SvStream& rStrm )
     return GetError();
 }
 
-ErrCode SfxOleObjectBase::Save( SvStream& rStrm )
+ErrCode const & SfxOleObjectBase::Save( SvStream& rStrm )
 {
     mnErrCode = ERRCODE_NONE;
     ImplSave( rStrm );
@@ -1090,7 +1090,7 @@ void SfxOleSection::SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, sa
 }
 
 
-ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName )
+ErrCode const & SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName )
 {
     if( pStrg )
     {
@@ -1108,7 +1108,7 @@ ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& r
     return GetError();
 }
 
-ErrCode SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUString& rStrmName )
+ErrCode const & SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUString& rStrmName )
 {
     if( pStrg )
     {

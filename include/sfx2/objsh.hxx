@@ -592,9 +592,9 @@ public:
                         const css::uno::Reference< css::embed::XStorage >& xStorage,
                         sal_Int32 nVersion, bool bTemplate, bool bChart = false ) const;
 
-    css::uno::Reference< css::embed::XStorage > GetStorage();
+    css::uno::Reference< css::embed::XStorage > const & GetStorage();
 
-    SvGlobalName    GetClassName() const;
+    SvGlobalName const & GetClassName() const;
 
     // comphelper::IEmbeddedHelper
     virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() const override;

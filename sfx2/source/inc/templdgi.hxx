@@ -327,7 +327,7 @@ public:
     }
 
     // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
-    VclPtr<PopupMenu> CreateContextMenu();
+    VclPtr<PopupMenu> const & CreateContextMenu();
 };
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper
