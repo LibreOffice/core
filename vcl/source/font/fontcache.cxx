@@ -91,10 +91,9 @@ ImplFontCache::ImplFontCache()
 
 ImplFontCache::~ImplFontCache()
 {
-    FontInstanceList::iterator it = maFontInstanceList.begin();
-    for(; it != maFontInstanceList.end(); ++it )
+    for( const auto& el : maFontInstanceList )
     {
-        LogicalFontInstance* pFontInstance = (*it).second;
+        LogicalFontInstance* pFontInstance = el.second;
         delete pFontInstance;
     }
 }
