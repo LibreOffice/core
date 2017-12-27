@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cd561d06",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-27T06:54:57Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 158,
+        "startChar": 47,
+        "endLine": 158,
+        "endChar": 55
+      },
+      "revId": "ac64a4d945302cc41a7588492c8efcb793a5d687",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0d41153a",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-27T06:54:57Z",
+      "side": 1,
+      "message": "Вставь здесь между строками ещё\n\n  assert(pTabViewShell);",
+      "revId": "ac64a4d945302cc41a7588492c8efcb793a5d687",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ed5be12c",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-12-27T06:54:57Z",
+      "side": 1,
+      "message": "const (да, я знаю, что это так было в исходном коде, но ты используешь здесь единственный константный метод)",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 161,
+        "endChar": 14
+      },
+      "revId": "ac64a4d945302cc41a7588492c8efcb793a5d687",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
