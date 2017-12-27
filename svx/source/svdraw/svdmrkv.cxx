@@ -1909,8 +1909,8 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
 bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const
 {
     SortMarkedObjects();
-    bool bBoundCheckOn2ndPass(nOptions & SdrSearchOptions::PASS2BOUND);
-    bool bCheckNearestOn3rdPass(nOptions & SdrSearchOptions::PASS3NEAREST);
+    const bool bBoundCheckOn2ndPass(nOptions & SdrSearchOptions::PASS2BOUND);
+    const bool bCheckNearestOn3rdPass(nOptions & SdrSearchOptions::PASS3NEAREST);
     rpObj=nullptr;
     rpPV=nullptr;
     const size_t nMarkCount=GetMarkedObjectCount();
