@@ -16,6 +16,24 @@
       "revId": "e1a954a93fd621ad409ba2f41540086a26b3b9c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ed3f61d4",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-12-27T21:11:23Z",
+      "side": 1,
+      "message": "Thanks, these are good points. I tried avoiding a plain int since passing arbitrary numbers would not be self-documenting while being error prone. I gave the enum entries more sensible names and added proper comment (didn\u0027t know @cond INTERNAL could go over enums as well). Let me know if it can be improved further, would be happy to polish it as necessary.",
+      "parentUuid": "fa31d9ce_0dd115fc",
+      "revId": "e1a954a93fd621ad409ba2f41540086a26b3b9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
