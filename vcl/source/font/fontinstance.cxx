@@ -59,6 +59,27 @@ LogicalFontInstance::~LogicalFontInstance()
     mxFontMetric = nullptr;
 }
 
+void LogicalFontInstance::Acquire()
+{
+    assert(mnRefCount < std::numeric_limits<decltype(mnRefCount)>::max()
+        && "LogicalFontInstance::Release() - refcount overflow");
+    if (mpFontCache)
+        mpFontCache->Acquire(this);
+    else
+        ++mnRefCount;
+}
+
+void LogicalFontInstance::Release()
+{
+    assert(mnRefCount > 0 && "LogicalFontInstance::Release() - refcount underflow");
+
+    if (mpFontCache)
+        mpFontCache->Release(this);
+    else
+        if (--mnRefCount == 0)
+            delete this;
+}
+
 void LogicalFontInstance::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
 {
     if( !mpUnicodeFallbackList )

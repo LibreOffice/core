@@ -168,7 +168,7 @@ LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection cons
     if( pFontInstance ) // cache hit => use existing font instance
     {
         // increase the font instance's reference count
-        Acquire(pFontInstance);
+        pFontInstance->Acquire();
     }
 
     if (!pFontInstance && pFontData)// still no cache hit => create a new font instance
@@ -243,6 +243,7 @@ LogicalFontInstance* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection
 void ImplFontCache::Acquire(LogicalFontInstance* pFontInstance)
 {
     assert(pFontInstance->mpFontCache == this);
+    assert(IsFontInList(pFontInstance) && "ImplFontCache::Acquire() - font absent in the cache");
 
     if (0 == pFontInstance->mnRefCount++)
         --mnRef0Count;
@@ -252,6 +253,8 @@ void ImplFontCache::Release(LogicalFontInstance* pFontInstance)
 {
     static const int FONTCACHE_MAX = getenv("LO_TESTNAME") ? 1 : 50;
 
+    assert(pFontInstance->mpFontCache == this);
+    assert(IsFontInList(pFontInstance) && "ImplFontCache::Release() - font absent in the cache");
     assert(pFontInstance->mnRefCount > 0 && "ImplFontCache::Release() - font refcount underflow");
     if( --pFontInstance->mnRefCount > 0 )
         return;
@@ -282,6 +285,12 @@ void ImplFontCache::Release(LogicalFontInstance* pFontInstance)
     assert(mnRef0Count==0 && "ImplFontCache::Release() - refcount0 mismatch");
 }
 
+bool ImplFontCache::IsFontInList(const LogicalFontInstance* pFont) const
+{
+    auto Pred = [pFont](const FontInstanceList::value_type& el) -> bool { return el.second == pFont; };
+    return std::find_if(maFontInstanceList.begin(), maFontInstanceList.end(), Pred) != maFontInstanceList.end();
+}
+
 int ImplFontCache::CountUnreferencedEntries() const
 {
     size_t nCount = 0;
@@ -307,7 +316,12 @@ void ImplFontCache::Invalidate()
     {
         LogicalFontInstance* pFontEntry = (*it).second;
         if( pFontEntry->mnRefCount > 0 )
+        {
+            // These fonts will become orphans after clearing the list below;
+            // allow them to control their life from now on and wish good luck :)
+            pFontEntry->mpFontCache = nullptr;
             continue;
+        }
 
         delete pFontEntry;
         --mnRef0Count;

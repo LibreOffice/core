@@ -495,7 +495,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     // => clean up the original font lists before getting new ones
     if ( mpFontInstance )
     {
-        mpFontCache->Release( mpFontInstance );
+        mpFontInstance->Release();
         mpFontInstance = nullptr;
     }
     if ( mpDeviceFontList )
