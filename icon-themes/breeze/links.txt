@@ -1016,12 +1016,13 @@ res/reload.png cmd/sc_reload.png
 res/library_16.png cmd/lc_viewdatasourcebrowser.png
 
 res/sc05508.png cmd/sc_reload.png
+res/sc05555.png cmd/sc_editstyle.png
 res/sc05556.png cmd/sc_reload.png
 res/sc05502.png cmd/sc_saveas.png
 res/sc05504.png cmd/sc_print.png
 res/sc05509.png cmd/sc_print.png
 
-res/sc05554.png cmd/sc_formatarea.png
+res/sc05554.png cmd/sc_formatpaintbrush.png
 res/sc05711.png cmd/sc_copy.png
 res/sc05961.png cmd/sc_recsearch.png
 res/sc06300.png cmd/sc_nextrecord.png
