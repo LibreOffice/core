@@ -9,6 +9,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/System.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
@@ -125,7 +126,7 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
             OUString install = getInstalledLocaleForLanguage(comphelper::containerToSequence(aAvailable), wantedLocale);
             if (!install.isEmpty() && install != "en-US")
             {
-                OUString sVendor(OOO_VENDOR);
+                o3tl::string_view sVendor(OOO_VENDOR);
                 if (sVendor == "Red Hat, Inc." || sVendor == "The Fedora Project")
                 {
                     // langpack is the typical Fedora/RHEL naming convention
