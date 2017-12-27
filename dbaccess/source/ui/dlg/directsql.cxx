@@ -191,9 +191,11 @@ namespace dbaui
         {
             // create a statement
             Reference< XStatement > xStatement = m_xConnection->createStatement();
+
+            Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
             css::uno::Reference< css::sdbc::XMultipleResults > xMR ( xStatement, UNO_QUERY );
 
-            if (xMR.is())
+            if (xMeta.is() && xMeta->supportsMultipleResultSets() && xMR.is())
             {
                 bool hasRS = xStatement->execute(_rStatement);
                 if(hasRS)
