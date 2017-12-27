@@ -1245,13 +1245,15 @@ bool EscherPropertyContainer::CreateOLEGraphicProperties(const uno::Reference<dr
 
     if ( rXShape.is() )
     {
-        SdrObject* pSdrOLE2( GetSdrObjectFromXShape( rXShape ) );   // SJ: leaving unoapi, because currently there is
-        if ( pSdrOLE2 && nullptr != dynamic_cast<const SdrOle2Obj* > (pSdrOLE2) )              // no access to the native graphic object
+        SdrObject* pObject = GetSdrObjectFromXShape(rXShape); // SJ: leaving unoapi, because currently there is
+        const SdrOle2Obj* pOle2Obj = pObject == nullptr ? nullptr : dynamic_cast<const SdrOle2Obj*>(pObject);
+        if (pOle2Obj != nullptr) // no access to the native graphic object
         {
-            const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
-            if ( pGraphic )
+            const Graphic* pGraphic = pOle2Obj->GetGraphic();
+            if (pGraphic)
             {
-                std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(*pGraphic));
+                Graphic aGraphic(*pGraphic);
+                std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(aGraphic));
                 bRetValue = CreateGraphicProperties(rXShape, *xGraphicObject);
             }
         }
@@ -1294,10 +1296,11 @@ bool EscherPropertyContainer::CreateMediaGraphicProperties(const uno::Reference<
     bool    bRetValue = false;
     if ( rXShape.is() )
     {
-        SdrObject* pSdrMedia( GetSdrObjectFromXShape( rXShape ) );  // SJ: leaving unoapi, because currently there is
-        if ( dynamic_cast<const SdrMediaObj* >(pSdrMedia) !=  nullptr )               // no access to the native graphic object
+        SdrObject* pSdrObject(GetSdrObjectFromXShape(rXShape));  // SJ: leaving unoapi, because currently there is
+        auto* pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(pSdrObject);
+        if (pSdrMediaObj != nullptr)               // no access to the native graphic object
         {
-            std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(static_cast<SdrMediaObj*>(pSdrMedia)->getSnapshot()));
+            std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(pSdrMediaObj->getSnapshot()));
             bRetValue = CreateGraphicProperties(rXShape, *xGraphicObject);
         }
     }
@@ -4561,8 +4564,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
         if (aType == "drawing.Custom")
         {
-            SdrObject* pCustoShape( GetSdrObjectFromXShape( aXShape ) );
-            if ( dynamic_cast<const SdrObjCustomShape* >(pCustoShape) !=  nullptr )
+            SdrObject* pCustoShape(GetSdrObjectFromXShape(aXShape));
+            if (dynamic_cast<const SdrObjCustomShape*>(pCustoShape) !=  nullptr)
             {
                 const SdrCustomShapeGeometryItem& rGeometryItem =
                     pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
@@ -4606,15 +4609,16 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                 }
                 else if ( nGluePointType == drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
-                    SdrObject* pPoly = pCustoShape->DoConvertToPolyObj( true, true );
-                    if ( dynamic_cast<const SdrPathObj* >( pPoly ) !=  nullptr )
+                    SdrObject* pObject = pCustoShape->DoConvertToPolyObj(true, true);
+                    const SdrPathObj* pSdrPathObj = dynamic_cast<const SdrPathObj*>(pObject);
+                    if (pSdrPathObj != nullptr)
                     {
                         sal_Int16 a, b, nIndex = 0;
                         sal_uInt32 nDistance = 0xffffffff;
 
                         // #i74631# use explicit constructor here. Also XPolyPolygon is not necessary,
                         // reducing to PolyPolygon
-                        const tools::PolyPolygon aPolyPoly(static_cast<SdrPathObj*>(pPoly)->GetPathPoly());
+                        const tools::PolyPolygon aPolyPoly(pSdrPathObj->GetPathPoly());
 
                         for ( a = 0; a < aPolyPoly.Count(); a++ )
                         {
