@@ -56,8 +56,8 @@ namespace o3tl
     template<> struct typed_flags<ToolBoxMenuType> : is_typed_flags<ToolBoxMenuType, 0x0003> {};
 }
 
-// small, large, size32 force an exact toolbox size for proper alignemnt
-// dontcare will let the toolbox decide about its size
+// small, large, size32 force an exact toolbox size for proper alignment
+// DontCare will let the toolbox decide about its size
 enum class ToolBoxButtonSize
 {
     DontCare,

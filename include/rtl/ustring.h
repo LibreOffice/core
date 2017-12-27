@@ -161,7 +161,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_reverseCompare_WithLength(
 /** Compare two strings from back to front for equality.
 
     The comparison is based on the numeric value of each character in the
-    strings and returns 'true' if, ans only if, both strings are equal.
+    strings and returns 'true' if, and only if, both strings are equal.
     This function cannot be used for language-specific sorting.
 
     @param first
