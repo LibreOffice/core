@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cd59bd90",
+        "filename": "cui/source/inc/treeopt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-27T19:09:41Z",
+      "side": 1,
+      "message": "these 2 lines are unnecessary",
+      "revId": "44ce264e7ae7a911775eebd4d14a7fef3b1bc74f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
