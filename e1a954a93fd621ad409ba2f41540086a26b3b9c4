@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_0dd115fc",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-27T15:31:52Z",
+      "side": 1,
+      "message": "at least cover this also in @cond INTERNAL and add a @since tag (or just get rid of it in favor of using a plain int; \"phaseI\" and \"phaseII\" are not that meaningful anyway; and why use roman numerals? and don\u0027t pollute the global namespace with enumerators named without any prefix)",
+      "revId": "e1a954a93fd621ad409ba2f41540086a26b3b9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
