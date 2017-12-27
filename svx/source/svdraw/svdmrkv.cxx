@@ -1913,7 +1913,6 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
     bool bCheckNearestOn3rdPass(nOptions & SdrSearchOptions::PASS3NEAREST);
     rpObj=nullptr;
     rpPV=nullptr;
-    sal_uInt16 nTol=(sal_uInt16)mnHitTolLog;
     bool bFnd=false;
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nMarkNum=nMarkCount; nMarkNum>0 && !bFnd;) {
@@ -1921,7 +1920,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
         SdrPageView* pPV=pM->GetPageView();
         SdrObject* pObj=pM->GetMarkedSdrObj();
-        bFnd = nullptr != CheckSingleSdrObjectHit(rPnt,nTol,pObj,pPV,SdrSearchOptions::TESTMARKABLE,nullptr);
+        bFnd = nullptr != CheckSingleSdrObjectHit(rPnt,mnHitTolLog,pObj,pPV,SdrSearchOptions::TESTMARKABLE,nullptr);
         if (bFnd) {
             rpObj=pObj;
             rpPV=pPV;
@@ -1937,10 +1936,10 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
             SdrPageView* pPV=pM->GetPageView();
             SdrObject* pObj=pM->GetMarkedSdrObj();
             tools::Rectangle aRect(pObj->GetCurrentBoundRect());
-            aRect.Left  ()-=nTol;
-            aRect.Top   ()-=nTol;
-            aRect.Right ()+=nTol;
-            aRect.Bottom()+=nTol;
+            aRect.Left  ()-=mnHitTolLog;
+            aRect.Top   ()-=mnHitTolLog;
+            aRect.Right ()+=mnHitTolLog;
+            aRect.Bottom()+=mnHitTolLog;
             if (aRect.IsInside(rPnt)) {
                 bFnd=true;
                 rpObj=pObj;
