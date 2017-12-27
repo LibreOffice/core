@@ -188,8 +188,7 @@ void OutputDevice::dispose()
     // release ImplFontCache specific to this OutputDevice
     // TODO: refcount ImplFontCache
     if( mpFontCache
-    && (mpFontCache != ImplGetSVData()->maGDIData.mpScreenFontCache)
-    && (ImplGetSVData()->maGDIData.mpScreenFontCache != nullptr) )
+    && (mpFontCache != ImplGetSVData()->maGDIData.mpScreenFontCache) )
     {
         delete mpFontCache;
         mpFontCache = nullptr;
@@ -198,8 +197,7 @@ void OutputDevice::dispose()
     // release ImplFontList specific to this OutputDevice
     // TODO: refcount ImplFontList
     if( mpFontCollection
-    && (mpFontCollection != ImplGetSVData()->maGDIData.mpScreenFontList)
-    && (ImplGetSVData()->maGDIData.mpScreenFontList != nullptr) )
+    && (mpFontCollection != ImplGetSVData()->maGDIData.mpScreenFontList) )
     {
         mpFontCollection->Clear();
         delete mpFontCollection;

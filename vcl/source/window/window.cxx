@@ -1747,6 +1747,8 @@ void Window::ImplNewInputContext()
     aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
     {
+        RefreshAllFontDataIfRequired();
+        assert(pFocusWin->mpFontCache && pFocusWin->mpFontCollection);
         OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
         Size aSize = pFocusWinOutDev->ImplLogicToDevicePixel( rFont.GetFontSize() );
         if ( !aSize.Height() )
