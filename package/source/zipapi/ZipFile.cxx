@@ -539,6 +539,7 @@ public:
         const sal_Int32 nBufSize = 8192;
 
         sal_Int32 nRemaining = xSrcStream->available();
+        sal_Int32 nRead = 0;
         maBytes.reserve(nRemaining);
         uno::Sequence<sal_Int8> aBuf(nBufSize);
 
@@ -552,10 +553,17 @@ public:
         };
 
         while (nRemaining > nBufSize)
-            nRemaining -= readAndCopy(nBufSize);
+        {
+            const auto nBytes = readAndCopy(nBufSize);
+            if (!nBytes)
+                break;
+            nRead += nBytes;
+            nRemaining -= nBytes;
+        }
 
         if (nRemaining)
-            readAndCopy(nRemaining);
+            nRead += readAndCopy(nRemaining);
+        maBytes.resize(nRead);
     }
 
     virtual sal_Int32 SAL_CALL readBytes( uno::Sequence<sal_Int8>& rData, sal_Int32 nBytesToRead ) override
