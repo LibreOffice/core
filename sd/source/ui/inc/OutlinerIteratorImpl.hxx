@@ -206,7 +206,7 @@ private:
     SdrObjListIter* mpObjectIterator;
 
     // Don't use this operator.
-    ViewIteratorImpl& operator= (const ViewIteratorImpl&){return *this;};
+    ViewIteratorImpl& operator= (const ViewIteratorImpl&) = delete;
 };
 
 /** Iterator for iteration over all objects in all views.  It automatically
@@ -235,7 +235,7 @@ private:
     sal_Int32 mnPageCount;
 
     // Don't use this operator.
-    DocumentIteratorImpl& operator= (const DocumentIteratorImpl& ){return *this;};
+    DocumentIteratorImpl& operator= (const DocumentIteratorImpl& ) = delete;
 };
 
 } } // end of namespace ::sd::outliner
