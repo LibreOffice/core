@@ -2296,10 +2296,18 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
             break;
         case CSS1_PIXLENGTH:
             {
-                long nPWidth = 0;
-                nMargin =  (long)pExpr->GetNumber();
-                SvxCSS1Parser::PixelToTwip( nPWidth, nMargin );
-                bSetThis = true;
+                auto fMargin = pExpr->GetNumber();
+                if (fMargin < SAL_MAX_INT32/2 && fMargin > SAL_MIN_INT32/2)
+                {
+                    nMargin =  (long)fMargin;
+                    long nPWidth = 0;
+                    SvxCSS1Parser::PixelToTwip( nPWidth, nMargin );
+                    bSetThis = true;
+                }
+                else
+                {
+                    SAL_WARN("sw.html", "out-of-size pxlength: " << fMargin);
+                }
             }
             break;
         case CSS1_PERCENTAGE:
