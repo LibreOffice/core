@@ -38,16 +38,16 @@ namespace std
 
 
 LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData )
-    : mpFontCache(nullptr)
-    , maFontSelData( rFontSelData )
+    : maFontSelData( rFontSelData )
     , mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
     , mnLineHeight( 0 )
-    , mnRefCount( 1 )
     , mnOwnOrientation( 0 )
     , mnOrientation( 0 )
     , mbInit( false )
     , mpUnicodeFallbackList( nullptr )
+    , mpFontCache( nullptr )
+    , mnRefCount( 1 )
 {
     maFontSelData.mpFontInstance = this;
 }
@@ -57,6 +57,27 @@ LogicalFontInstance::~LogicalFontInstance()
     delete mpUnicodeFallbackList;
     mpFontCache = nullptr;
     mxFontMetric = nullptr;
+}
+
+void LogicalFontInstance::Acquire()
+{
+    assert(mnRefCount < std::numeric_limits<decltype(mnRefCount)>::max()
+        && "LogicalFontInstance::Release() - refcount overflow");
+    if (mpFontCache)
+        mpFontCache->Acquire(this);
+    else
+        ++mnRefCount;
+}
+
+void LogicalFontInstance::Release()
+{
+    assert(mnRefCount > 0 && "LogicalFontInstance::Release() - refcount underflow");
+
+    if (mpFontCache)
+        mpFontCache->Release(this);
+    else
+        if (--mnRefCount == 0)
+            delete this;
 }
 
 void LogicalFontInstance::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )

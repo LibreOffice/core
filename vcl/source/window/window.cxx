@@ -1768,7 +1768,7 @@ void Window::ImplNewInputContext()
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 
     if ( pFontInstance )
-        pFocusWin->mpFontCache->Release( pFontInstance );
+        pFontInstance->Release();
 }
 
 void Window::doLazyDelete()
