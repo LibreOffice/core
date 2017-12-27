@@ -1260,7 +1260,7 @@ public:
                                                 GetDefaultFontFlags nFlags,
                                                 const OutputDevice* pOutDev = nullptr );
 
-    SAL_DLLPRIVATE void         ImplInitFontList() const;
+    SAL_DLLPRIVATE void         ImplInitFontList( bool bRefreshIfRequired ) const;
     SAL_DLLPRIVATE void         ImplUpdateFontData();
 
     //drop font data for all outputdevices.
@@ -1272,6 +1272,9 @@ public:
     //drop and fetch font data for all outputdevices
     //If bNewFontLists is true then drop and refetch lists of system fonts
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
+
+    static void                 DontUpdateAllFontData();
+    static void                 ResumeUpdateAllFontData();
 
 protected:
 
@@ -1930,6 +1933,13 @@ private:
     SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
     ///@}
 
+    // Check if a refresh of font data is required
+    SAL_DLLPRIVATE static bool RefreshAllFontDataIfRequired();
+    SAL_DLLPRIVATE LogicalFontInstance*    GetRefreshedFontInstance()       const { RefreshAllFontDataIfRequired(); assert(mpFontInstance);       return mpFontInstance; }
+    SAL_DLLPRIVATE ImplDeviceFontList*     GetRefreshedDeviceFontList()     const { RefreshAllFontDataIfRequired(); assert(mpDeviceFontList);     return mpDeviceFontList; }
+    SAL_DLLPRIVATE ImplDeviceFontSizeList* GetRefreshedDeviceFontSizeList() const { RefreshAllFontDataIfRequired(); assert(mpDeviceFontSizeList); return mpDeviceFontSizeList; }
+    SAL_DLLPRIVATE ImplFontCache*          GetRefreshedFontCache()          const { RefreshAllFontDataIfRequired(); assert(mpFontCache);          return mpFontCache; }
+    SAL_DLLPRIVATE PhysicalFontCollection* GetRefreshedFontCollection()     const { RefreshAllFontDataIfRequired(); assert(mpFontCollection);     return mpFontCollection; }
 
     /** @name Native Widget Rendering functions
 
