@@ -432,16 +432,16 @@ cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 # Quit
 cmd/lc_closemasterview.png cmd/lc_quit.png
 cmd/lc_closewin.png cmd/lc_quit.png
-cmd/lc_closepreview.png cmd/lc_quit.png
 cmd/sc_closemasterview.png cmd/sc_quit.png
 cmd/sc_closewin.png cmd/sc_quit.png
-cmd/sc_closepreview.png cmd/sc_quit.png
 
 # Close
 cmd/lc_closedocs.png cmd/lc_closedoc.png
 cmd/lc_exitsearch.png cmd/lc_closedoc.png
+cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
+cmd/sc_closepreview.png cmd/sc_closedoc.png
 
 # arc
 cmd/lc_basicshapes.block-arc.png cmd/lc_arc.png
@@ -708,6 +708,8 @@ cmd/sc_presentation.png cmd/sc_dia.png
 # Style
 cmd/lc_editstyled.png cmd/lc_editstyle.png
 cmd/sc_editstyled.png cmd/sc_editstyle.png
+cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
+cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Outline
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
@@ -1014,12 +1016,13 @@ res/reload.png cmd/sc_reload.png
 res/library_16.png cmd/lc_viewdatasourcebrowser.png
 
 res/sc05508.png cmd/sc_reload.png
+res/sc05555.png cmd/sc_editstyle.png
 res/sc05556.png cmd/sc_reload.png
 res/sc05502.png cmd/sc_saveas.png
 res/sc05504.png cmd/sc_print.png
 res/sc05509.png cmd/sc_print.png
 
-res/sc05554.png cmd/sc_formatarea.png
+res/sc05554.png cmd/sc_formatpaintbrush.png
 res/sc05711.png cmd/sc_copy.png
 res/sc05961.png cmd/sc_recsearch.png
 res/sc06300.png cmd/sc_nextrecord.png
