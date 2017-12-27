@@ -23,14 +23,12 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-typedef std::vector< OUString > StringVector;
-
 class FileDialogItemEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
-    StringVector m_sItems;
-    StringVector::iterator mIt;
+    std::vector< OUString > m_sItems;
+    std::vector< OUString >::iterator mIt;
 public:
-    explicit FileDialogItemEnumeration( const StringVector& rVector ) : m_sItems( rVector ), mIt( m_sItems.begin() ) {}
+    explicit FileDialogItemEnumeration( const std::vector< OUString >& rVector ) : m_sItems( rVector ), mIt( m_sItems.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements() override
     {
         return ( mIt != m_sItems.end() );
@@ -47,7 +45,7 @@ public:
 ScVbaFileDialogSelectedItems::ScVbaFileDialogSelectedItems(
         const css::uno::Reference< ov::XHelperInterface >& xParent
        ,const css::uno::Reference< css::uno::XComponentContext >& xContext
-       ,const StringVector& rItems)
+       ,const std::vector< OUString >& rItems)
     : FileDialogSelectedItems_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() )
     , m_sItems(rItems) {}
 
