@@ -274,7 +274,7 @@ private:
 
     // Do not allow default constructor and copying of outliner containers.
     OutlinerContainer (const OutlinerContainer&) = delete;
-    OutlinerContainer& operator= (const OutlinerContainer&) {return *this;};
+    OutlinerContainer& operator= (const OutlinerContainer&) = delete;
 };
 
 /** Data collection specifying a <type>SdrObject</type> and its position in
