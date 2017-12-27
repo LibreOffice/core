@@ -479,7 +479,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     // the currently selected logical font is no longer needed
     if ( mpFontInstance )
     {
-        mpFontCache->Release( mpFontInstance );
+        mpFontInstance->Release();
         mpFontInstance = nullptr;
     }
 
@@ -900,7 +900,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                             aFont.SetFamilyName( pFontInstance->maFontSelData.mpFontData->GetFamilyName() );
                         else
                             aFont.SetFamilyName( pFontInstance->maFontSelData.maTargetName );
-                        pOutDev->mpFontCache->Release(pFontInstance);
+                        pFontInstance->Release();
                     }
                 }
             }
@@ -1047,7 +1047,7 @@ bool OutputDevice::ImplNewFont() const
     LogicalFontInstance* pOldFontInstance = mpFontInstance;
     mpFontInstance = mpFontCache->GetFontInstance( mpFontCollection, maFont, aSize, fExactHeight );
     if( pOldFontInstance )
-        mpFontCache->Release( pOldFontInstance );
+        pOldFontInstance->Release();
 
     LogicalFontInstance* pFontInstance = mpFontInstance;
 
@@ -1375,7 +1375,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
             if( mpFontInstance->maFontSelData.mpFontData == aFontSelData.mpFontData &&
                 aMissingCodes.indexOf(0x202F) == -1 )
             {
-                mpFontCache->Release( pFallbackFont );
+                pFallbackFont->Release();
                 continue;
             }
         }
@@ -1393,7 +1393,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
                 pMultiSalLayout->SetIncomplete(true);
         }
 
-        mpFontCache->Release( pFallbackFont );
+        pFallbackFont->Release();
 
         // break when this fallback was sufficient
         if( !rLayoutArgs.PrepareFallback() )

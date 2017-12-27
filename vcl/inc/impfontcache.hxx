@@ -33,6 +33,8 @@ class PhysicalFontCollection;
 
 class ImplFontCache
 {
+    // For access to Acquire and Release
+    friend class LogicalFontInstance;
 private:
     LogicalFontInstance* mpFirstEntry;
     int                  mnRef0Count;    // number of unreferenced LogicalFontInstances
@@ -44,6 +46,12 @@ private:
     FontInstanceList    maFontInstanceList;
 
     int                 CountUnreferencedEntries() const;
+    bool                IsFontInList(const LogicalFontInstance* pFont) const;
+
+    /// Increase the refcount of the given LogicalFontInstance.
+    void                Acquire(LogicalFontInstance*);
+    /// Decrease the refcount and potentially cleanup the entries with zero refcount from the cache.
+    void                Release(LogicalFontInstance*);
 
 public:
                         ImplFontCache();
@@ -54,11 +62,6 @@ public:
     LogicalFontInstance* GetFontInstance( PhysicalFontCollection const *, FontSelectPattern& );
     LogicalFontInstance* GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
-
-    /// Increase the refcount of the given LogicalFontInstance.
-    void                Acquire(LogicalFontInstance*);
-    /// Decrease the refcount and potentially cleanup the entries with zero refcount from the cache.
-    void                Release(LogicalFontInstance*);
 
     void                Invalidate();
 };

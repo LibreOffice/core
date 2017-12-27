@@ -175,7 +175,7 @@ void OutputDevice::dispose()
 
     // release the active font instance
     if( mpFontInstance )
-        mpFontCache->Release( mpFontInstance );
+        mpFontInstance->Release();
 
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them

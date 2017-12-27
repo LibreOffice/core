@@ -625,7 +625,7 @@ void OutputDevice::ImplReleaseFonts()
 
     if ( mpFontInstance )
     {
-        mpFontCache->Release( mpFontInstance );
+        mpFontInstance->Release();
         mpFontInstance = nullptr;
     }
 
