@@ -13,6 +13,7 @@
 #define STR_HTML_GENERATOR "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"
 
 // Do not translate STR_TEMPLATE_NAME*_DEF names!!
+// STR_TEMPLATE_NAME*_DEF strings must EXACTLY fit dc:title tag in meta.xml of each template file
 #define STR_TEMPLATE_NAME1_DEF  "Alizarin"
 #define STR_TEMPLATE_NAME2_DEF  "Beehive"
 #define STR_TEMPLATE_NAME3_DEF  "Blue Curve"
