@@ -58,7 +58,7 @@ class SwHTMLTableLayoutCnts
 
 public:
 
-    SwHTMLTableLayoutCnts(const SwStartNode* pSttNd, SwHTMLTableLayout* pTab,
+    SwHTMLTableLayoutCnts(const SwStartNode* pSttNd, std::shared_ptr<SwHTMLTableLayout> const& rTab,
                           bool bNoBreakTag, std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt);
 
     void SetTableBox( SwTableBox *pBx ) { pBox = pBx; }

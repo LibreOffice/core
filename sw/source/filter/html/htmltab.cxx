@@ -432,7 +432,7 @@ class HTMLTable
 
     HTMLTableContext *m_pContext;    // the context of the table
 
-    SwHTMLTableLayout *m_pLayoutInfo;
+    std::shared_ptr<SwHTMLTableLayout> m_xLayoutInfo;
 
     // the following parameters are from the <TABLE>-Tag
     sal_uInt16 m_nWidth;                  // width of the table
@@ -590,7 +590,7 @@ public:
 
     HTMLTableContext *GetContext() const { return m_pContext; }
 
-    SwHTMLTableLayout *CreateLayoutInfo();
+    const std::shared_ptr<SwHTMLTableLayout>& CreateLayoutInfo();
 
     bool HasColTags() const { return m_bColSpec; }
 
@@ -661,9 +661,10 @@ const std::shared_ptr<SwHTMLTableLayoutCnts>& HTMLTableCnts::CreateLayoutInfo()
         std::shared_ptr<SwHTMLTableLayoutCnts> xNextInfo;
         if (m_pNext)
             xNextInfo = m_pNext->CreateLayoutInfo();
-        SwHTMLTableLayout *pTableInfo = m_xTable ? m_xTable->CreateLayoutInfo() : nullptr;
-
-        m_xLayoutInfo.reset(new SwHTMLTableLayoutCnts(m_pStartNode, pTableInfo, m_bNoBreak, xNextInfo));
+        std::shared_ptr<SwHTMLTableLayout> xTableInfo;
+        if (m_xTable)
+            xTableInfo = m_xTable->CreateLayoutInfo();
+        m_xLayoutInfo.reset(new SwHTMLTableLayoutCnts(m_pStartNode, xTableInfo, m_bNoBreak, xNextInfo));
     }
 
     return m_xLayoutInfo;
@@ -1029,7 +1030,6 @@ HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
     m_bPrcWidth( pOptions->bPrcWidth ),
     m_pParser( pPars ),
     m_pTopTable( pTopTab ? pTopTab : this ),
-    m_pLayoutInfo( nullptr ),
     m_nWidth( pOptions->nWidth ),
     m_nHeight( pTopTab ? 0 : pOptions->nHeight ),
     m_eTableAdjust( pOptions->eAdjust ),
@@ -1058,7 +1058,7 @@ HTMLTable::~HTMLTable()
     // pLayoutInfo has either already been deleted or is now owned by SwTable
 }
 
-SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
+const std::shared_ptr<SwHTMLTableLayout>& HTMLTable::CreateLayoutInfo()
 {
     sal_uInt16 nW = m_bPrcWidth ? m_nWidth : SwHTMLParser::ToTwips( m_nWidth );
 
@@ -1068,13 +1068,13 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
     sal_uInt16 nRightBorderWidth =
         m_bRightBorder ? GetBorderWidth( m_aRightBorderLine, true ) : 0;
 
-    m_pLayoutInfo = new SwHTMLTableLayout(
+    m_xLayoutInfo.reset(new SwHTMLTableLayout(
                         m_pSwTable,
                         m_nRows, m_nCols, m_bFixedCols, m_bColSpec,
                         nW, m_bPrcWidth, m_nBorder, m_nCellPadding,
                         m_nCellSpacing, m_eTableAdjust,
                         m_nLeftMargin, m_nRightMargin,
-                        nBorderWidth, nLeftBorderWidth, nRightBorderWidth );
+                        nBorderWidth, nLeftBorderWidth, nRightBorderWidth));
 
     bool bExportable = true;
     sal_uInt16 i;
@@ -1083,8 +1083,8 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
         HTMLTableRow *const pRow = (*m_pRows)[i].get();
         for( sal_uInt16 j=0; j<m_nCols; j++ )
         {
-            m_pLayoutInfo->SetCell( pRow->GetCell(j)->CreateLayoutInfo(), i, j );
-            SwHTMLTableLayoutCell* pLayoutCell = m_pLayoutInfo->GetCell(i, j );
+            m_xLayoutInfo->SetCell(pRow->GetCell(j)->CreateLayoutInfo(), i, j);
+            SwHTMLTableLayoutCell* pLayoutCell = m_xLayoutInfo->GetCell(i, j );
 
             if( bExportable )
             {
@@ -1096,12 +1096,12 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
         }
     }
 
-    m_pLayoutInfo->SetExportable( bExportable );
+    m_xLayoutInfo->SetExportable( bExportable );
 
     for( i=0; i<m_nCols; i++ )
-        m_pLayoutInfo->SetColumn( (*m_pColumns)[i]->CreateLayoutInfo(), i );
+        m_xLayoutInfo->SetColumn( (*m_pColumns)[i]->CreateLayoutInfo(), i );
 
-    return m_pLayoutInfo;
+    return m_xLayoutInfo;
 }
 
 inline void HTMLTable::SetCaption( const SwStartNode *pStNd, bool bTop )
@@ -1118,8 +1118,8 @@ void HTMLTable::FixRowSpan( sal_uInt16 nRow, sal_uInt16 nCol,
     while (pCell=GetCell(nRow,nCol), pCell->GetContents().get() == pCnts)
     {
         pCell->SetRowSpan( nRowSpan );
-        if( m_pLayoutInfo )
-            m_pLayoutInfo->GetCell(nRow,nCol)->SetRowSpan( nRowSpan );
+        if (m_xLayoutInfo)
+            m_xLayoutInfo->GetCell(nRow,nCol)->SetRowSpan(nRowSpan);
 
         if( !nRow ) break;
         nRowSpan++; nRow--;
@@ -1131,8 +1131,8 @@ void HTMLTable::ProtectRowSpan( sal_uInt16 nRow, sal_uInt16 nCol, sal_uInt16 nRo
     for( sal_uInt16 i=0; i<nRowSpan; i++ )
     {
         GetCell(nRow+i,nCol)->SetProtected();
-        if( m_pLayoutInfo )
-            m_pLayoutInfo->GetCell(nRow+i,nCol)->SetProtected();
+        if (m_xLayoutInfo)
+            m_xLayoutInfo->GetCell(nRow+i,nCol)->SetProtected();
     }
 }
 
@@ -1310,10 +1310,10 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         pFrameFormat = pBox->ClaimFrameFormat();
 
         // calculate width of the box
-        SwTwips nFrameWidth = (SwTwips)m_pLayoutInfo->GetColumn(nCol)
+        SwTwips nFrameWidth = (SwTwips)m_xLayoutInfo->GetColumn(nCol)
                                                 ->GetRelColWidth();
         for( sal_uInt16 i=1; i<nColSpan; i++ )
-            nFrameWidth += (SwTwips)m_pLayoutInfo->GetColumn(nCol+i)
+            nFrameWidth += (SwTwips)m_xLayoutInfo->GetColumn(nCol+i)
                                              ->GetRelColWidth();
 
         // Only set the border on edit boxes.
@@ -1624,7 +1624,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                             xCnts->CreateLayoutInfo();
 
                         pCell2->SetContents(xCnts);
-                        SwHTMLTableLayoutCell *pCurrCell = m_pLayoutInfo->GetCell( nTopRow, nStartCol );
+                        SwHTMLTableLayoutCell *pCurrCell = m_xLayoutInfo->GetCell(nTopRow, nStartCol);
                         pCurrCell->SetContents(xCntsLayoutInfo);
                         if( nBoxRowSpan < 0 )
                             pCurrCell->SetRowSpan( 0 );
@@ -1633,7 +1633,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                         for( sal_uInt16 j=nStartCol+1; j<nSplitCol; j++ )
                         {
                             GetCell(nTopRow,j)->SetContents(xCnts);
-                            m_pLayoutInfo->GetCell( nTopRow, j )
+                            m_xLayoutInfo->GetCell(nTopRow, j)
                                        ->SetContents(xCntsLayoutInfo);
                         }
                     }
@@ -1687,10 +1687,10 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             // in the rows of the box
             pBox = new SwTableBox( m_pBoxFormat, 0, pUpper );
             sal_uInt16 nAbs, nRel;
-            m_pLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
-            sal_uInt16 nLSpace = m_pLayoutInfo->GetLeftCellSpace( nLeftCol, nColSpan );
-            sal_uInt16 nRSpace = m_pLayoutInfo->GetRightCellSpace( nLeftCol, nColSpan );
-            sal_uInt16 nInhSpace = m_pLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
+            m_xLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
+            sal_uInt16 nLSpace = m_xLayoutInfo->GetLeftCellSpace( nLeftCol, nColSpan );
+            sal_uInt16 nRSpace = m_xLayoutInfo->GetRightCellSpace( nLeftCol, nColSpan );
+            sal_uInt16 nInhSpace = m_xLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
             pCnts->GetTable()->MakeTable( pBox, nAbs, nRel, nLSpace, nRSpace,
                                           nInhSpace );
         }
@@ -1737,12 +1737,12 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                                                        nRightCol-nLeftCol );
                 // Tables are entered directly
                 sal_uInt16 nAbs, nRel;
-                m_pLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
-                sal_uInt16 nLSpace = m_pLayoutInfo->GetLeftCellSpace( nLeftCol,
+                m_xLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
+                sal_uInt16 nLSpace = m_xLayoutInfo->GetLeftCellSpace( nLeftCol,
                                                                 nColSpan );
-                sal_uInt16 nRSpace = m_pLayoutInfo->GetRightCellSpace( nLeftCol,
+                sal_uInt16 nRSpace = m_xLayoutInfo->GetRightCellSpace( nLeftCol,
                                                                  nColSpan );
-                sal_uInt16 nInhSpace = m_pLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
+                sal_uInt16 nInhSpace = m_xLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
                 pCnts->GetTable()->MakeTable( pBox, nAbs, nRel, nLSpace,
                                               nRSpace, nInhSpace );
             }
@@ -1834,7 +1834,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
         nInhLeftBorderWidth = 2 * MIN_BORDER_DIST;
     if( !m_bInheritedRightBorder && (m_bFillerTopBorder || m_bFillerBottomBorder) )
         nInhRightBorderWidth = 2 * MIN_BORDER_DIST;
-    m_pLayoutInfo->SetInhBorderWidths( nInhLeftBorderWidth,
+    m_xLayoutInfo->SetInhBorderWidths( nInhLeftBorderWidth,
                                      nInhRightBorderWidth );
 
     m_bRightAllowed = ( pParent->m_bRightAllowed &&
@@ -2293,7 +2293,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     OSL_ENSURE( m_nRows>0 && m_nCols>0 && m_nCurrentRow==m_nRows,
             "Was CloseTable not called?" );
 
-    OSL_ENSURE( (m_pLayoutInfo==nullptr) == (this==m_pTopTable),
+    OSL_ENSURE( (m_xLayoutInfo.get()==nullptr) == (this==m_pTopTable),
             "Top-Table has no layout info or vice versa" );
 
     if( this==m_pTopTable )
@@ -2307,19 +2307,19 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         // Step 2: the minimal and maximal column width is calculated
         // (including tables in tables). Since we don't have boxes yet,
         // we'll work on the start nodes
-        m_pLayoutInfo->AutoLayoutPass1();
+        m_xLayoutInfo->AutoLayoutPass1();
     }
 
     // Step 3: the actual column widths of this table are calculated (not tables in tables)
     // We need this now to decide if we need filler cells
     // (Pass1 was needed because of this as well)
-    m_pLayoutInfo->AutoLayoutPass2( nAbsAvail, nRelAvail, nAbsLeftSpace,
+    m_xLayoutInfo->AutoLayoutPass2( nAbsAvail, nRelAvail, nAbsLeftSpace,
                                   nAbsRightSpace, nInhAbsSpace );
 
     if( this!=m_pTopTable )
     {
         // the right and left border of this table can be finally defined
-        if( m_pLayoutInfo->GetRelRightFill() == 0 )
+        if (m_xLayoutInfo->GetRelRightFill() == 0)
         {
             if( !m_bRightBorder )
             {
@@ -2337,7 +2337,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             }
         }
 
-        if( m_pLayoutInfo->GetRelLeftFill() == 0 &&
+        if( m_xLayoutInfo->GetRelLeftFill() == 0 &&
             !((*m_pColumns)[0])->bLeftBorder &&
             m_bInheritedLeftBorder )
         {
@@ -2421,8 +2421,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
     // If applicable, add filler cells for tables in tables
     if( this != m_pTopTable &&
-        ( m_pLayoutInfo->GetRelLeftFill() > 0  ||
-          m_pLayoutInfo->GetRelRightFill() > 0 ) )
+        ( m_xLayoutInfo->GetRelLeftFill() > 0  ||
+          m_xLayoutInfo->GetRelRightFill() > 0 ) )
     {
         OSL_ENSURE( pBox, "No TableBox for table in table" );
 
@@ -2448,7 +2448,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         SwTableBox *pNewBox;
 
         // If applicable, add a cell to the left
-        if( m_pLayoutInfo->GetRelLeftFill() > 0 )
+        if (m_xLayoutInfo->GetRelLeftFill() > 0)
         {
             // pPrevStNd is the predecessor start node of the table
             // We'll add the filler node just behind
@@ -2457,7 +2457,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             pNewBox = NewTableBox( m_pPrevStartNode, pLine );
             rBoxes.push_back( pNewBox );
             FixFillerFrameFormat( pNewBox, false );
-            m_pLayoutInfo->SetLeftFillerBox( pNewBox );
+            m_xLayoutInfo->SetLeftFillerBox(pNewBox);
         }
 
         // modify the table now
@@ -2473,7 +2473,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         MakeTable_( pNewBox );
 
         // and add a cell to the right if applicable
-        if( m_pLayoutInfo->GetRelRightFill() > 0 )
+        if (m_xLayoutInfo->GetRelRightFill() > 0)
         {
             const SwStartNode *pStNd =
                 GetPrevBoxStartNode( USHRT_MAX, USHRT_MAX );
@@ -2483,7 +2483,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             rBoxes.push_back( pNewBox );
 
             FixFillerFrameFormat( pNewBox, true );
-            m_pLayoutInfo->SetRightFillerBox( pNewBox );
+            m_xLayoutInfo->SetRightFillerBox( pNewBox );
         }
     }
     else
@@ -2526,7 +2526,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             // we'll stack it with a border of 100% width, so its size will
             // be adapted. That text frame mustn't be modified
             OSL_ENSURE( HasToFly(), "Why is the table in a frame?" );
-            sal_uInt32 nMin = m_pLayoutInfo->GetMin();
+            sal_uInt32 nMin = m_xLayoutInfo->GetMin();
             if( nMin > USHRT_MAX )
                 nMin = USHRT_MAX;
             SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
@@ -2538,11 +2538,11 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         {
             // left or right adjusted table without width mustn't be adjusted in width
             // as they would only shrink but never grow
-            m_pLayoutInfo->SetMustNotRecalc( true );
+            m_xLayoutInfo->SetMustNotRecalc( true );
             if( m_pContext->GetFrameFormat()->GetAnchor().GetContentAnchor()
                 ->nNode.GetNode().FindTableNode() )
             {
-                sal_uInt32 nMax = m_pLayoutInfo->GetMax();
+                sal_uInt32 nMax = m_xLayoutInfo->GetMax();
                 if( nMax > USHRT_MAX )
                     nMax = USHRT_MAX;
                 SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
@@ -2551,18 +2551,18 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             }
             else
             {
-                m_pLayoutInfo->SetMustNotResize( true );
+                m_xLayoutInfo->SetMustNotResize( true );
             }
         }
     }
-    m_pLayoutInfo->SetMayBeInFlyFrame( bIsInFlyFrame );
+    m_xLayoutInfo->SetMayBeInFlyFrame( bIsInFlyFrame );
 
     // Only tables with relative width or without width should be modified
-    m_pLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
+    m_xLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
 
-    m_pLayoutInfo->SetWidths();
+    m_xLayoutInfo->SetWidths();
 
-    const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout( m_pLayoutInfo );
+    const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout(m_xLayoutInfo);
 
     if( m_pResizeDrawObjects )
     {
@@ -2575,11 +2575,11 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             sal_uInt8 nPrcWidth = (sal_uInt8)(*m_pDrawObjectPrcWidths)[3*i+2];
 
             SwHTMLTableLayoutCell *pLayoutCell =
-                m_pLayoutInfo->GetCell( nRow, nCol );
+                m_xLayoutInfo->GetCell( nRow, nCol );
             sal_uInt16 nColSpan = pLayoutCell->GetColSpan();
 
             sal_uInt16 nWidth2, nDummy;
-            m_pLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
+            m_xLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
             nWidth2 = static_cast< sal_uInt16 >(((long)m_nWidth * nPrcWidth) / 100);
 
             SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );

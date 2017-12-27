@@ -532,7 +532,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         return false;
 
     // Delete HTML layout
-    pTableNd->GetTable().SetHTMLTableLayout( nullptr );
+    pTableNd->GetTable().SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
 
     // #i37739# A simple 'MakeFrames' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.

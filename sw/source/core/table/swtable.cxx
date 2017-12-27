@@ -205,7 +205,6 @@ void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
 
 SwTable::SwTable()
     : SwClient( nullptr ),
-    m_pHTMLLayout( nullptr ),
     m_pTableNode( nullptr ),
     m_nGraphicsThatResize( 0 ),
     m_nRowsToRepeat( 1 ),
@@ -218,7 +217,6 @@ SwTable::SwTable()
 
 SwTable::SwTable( const SwTable& rTable )
     : SwClient( rTable.GetFrameFormat() ),
-    m_pHTMLLayout( nullptr ),
     m_pTableNode( nullptr ),
     m_eTableChgMode( rTable.m_eTableChgMode ),
     m_nGraphicsThatResize( 0 ),
@@ -261,7 +259,6 @@ SwTable::~SwTable()
     // section need deletion.
     DelBoxNode(m_TabSortContentBoxes);
     m_TabSortContentBoxes.clear();
-    delete m_pHTMLLayout;
 }
 
 namespace
@@ -839,7 +836,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
 {
     CHECK_TABLE( *this )
 
-    SetHTMLTableLayout( nullptr );    // delete HTML-Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // delete HTML-Layout
 
     // FME: Made rOld const. The caller is responsible for passing correct
     // values of rOld. Therefore we do not have to call GetTabCols anymore:
@@ -1941,10 +1938,9 @@ void SwTable::SetRefObject( SwServerObject* pObj )
     m_xRefObj = pObj;
 }
 
-void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
+void SwTable::SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout> const& r)
 {
-    delete m_pHTMLLayout;
-    m_pHTMLLayout = p;
+    m_xHTMLLayout = r;
 }
 
 void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,

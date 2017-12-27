@@ -119,7 +119,7 @@ protected:
     SwTableSortBoxes m_TabSortContentBoxes;
     tools::SvRef<SwServerObject> m_xRefObj;   // In case DataServer -> pointer is set.
 
-    SwHTMLTableLayout *m_pHTMLLayout;
+    std::shared_ptr<SwHTMLTableLayout> m_xHTMLLayout;
 
     // Usually, the table node of a SwTable can be accessed by getting a box
     // out of m_TabSortContentBoxes, which know their SwStartNode. But in some rare
@@ -175,9 +175,9 @@ private:
 
 public:
 
-    SwHTMLTableLayout *GetHTMLTableLayout() { return m_pHTMLLayout; }
-    const SwHTMLTableLayout *GetHTMLTableLayout() const { return m_pHTMLLayout; }
-    void SetHTMLTableLayout( SwHTMLTableLayout *p );    //Change of property!
+    SwHTMLTableLayout *GetHTMLTableLayout() { return m_xHTMLLayout.get(); }
+    const SwHTMLTableLayout *GetHTMLTableLayout() const { return m_xHTMLLayout.get(); }
+    void SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout> const& r);    //Change of property!
 
     sal_uInt16 IncGrfsThatResize() { return ++m_nGraphicsThatResize; }
     sal_uInt16 DecGrfsThatResize() { return m_nGraphicsThatResize ? --m_nGraphicsThatResize : 0; }
