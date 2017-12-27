@@ -883,6 +883,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
 
+        // Longvarbinary (SQL_BLOB)
+        // Distinguished from simple blob with a user-defined subtype.
+        aRow[2] = new ORowSetValueDecorator(DataType::LONGVARBINARY);
+        aResults.push_back(aRow);
+
         // Integer Types common
         {
             aRow[6] = new ORowSetValueDecorator(); // Create Params
