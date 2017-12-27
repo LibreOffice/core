@@ -192,6 +192,9 @@ struct ImplSVGDIData
     long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged = false;       // true: FontSubstitution was changed between Begin/End
+    bool                    mbDontUpdateFontData = false;   // Skip updating font data for all frames
+    bool                    mbUpdateFontDataPending = false; // At least one update of font data for all frames was skipped
+    bool                    mbUpdateNewFontLists = false;   // value to use when resuming updates of font data
 };
 
 struct ImplSVWinData
