@@ -280,12 +280,6 @@ SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, const SvxCha
 {
 }
 
-SvxChartColorTableItem::SvxChartColorTableItem( const SvxChartColorTableItem& rOther ) :
-    SfxPoolItem( rOther ),
-    m_aColorTable( rOther.m_aColorTable )
-{
-}
-
 SfxPoolItem* SvxChartColorTableItem::Clone( SfxItemPool * ) const
 {
     return new SvxChartColorTableItem( *this );
