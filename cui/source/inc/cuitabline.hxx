@@ -37,8 +37,6 @@ class SvxLineTabDialog final : public SfxTabDialog
     SdrModel*           pDrawModel;
     const SdrObject*    pObj;
 
-    const SfxItemSet&   rOutAttrs;
-
     XColorListRef         pColorList;
     XColorListRef         mpNewColorList;
     XDashListRef          pDashList;

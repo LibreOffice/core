@@ -59,7 +59,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mpNewBitmapList      ( pModel->GetBitmapList() ),
     mpPatternList        ( pModel->GetPatternList() ),
     mpNewPatternList     ( pModel->GetPatternList() ),
-    mrOutAttrs           ( *pAttr ),
 
     mnColorListState ( ChangeType::NONE ),
     mnBitmapListState ( ChangeType::NONE ),
@@ -248,8 +247,6 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             static_cast<SvxAreaTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
             static_cast<SvxAreaTabPage&>(rPage).SetPtrnChgd( &mnPatternListState );
             static_cast<SvxAreaTabPage&>(rPage).SetColorChgd( &mnColorListState );
-            // ActivatePge() is not called the first time
-            static_cast<SvxAreaTabPage&>(rPage).ActivatePage( mrOutAttrs );
     }
     else if (nId == m_nShadowTabPage)
     {
