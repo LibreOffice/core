@@ -1986,20 +1986,20 @@ void SdrMarkView::UnmarkAllObj(SdrPageView const * pPV)
     }
 }
 
-void SdrMarkView::MarkAllObj(SdrPageView* _pPV)
+void SdrMarkView::MarkAllObj(SdrPageView* pPV)
 {
     BrkAction();
 
-    if(!_pPV)
+    if(!pPV)
     {
-        _pPV = GetSdrPageView();
+        pPV = GetSdrPageView();
     }
 
-    // #i69171# _pPV may still be NULL if there is no SDrPageView (!), e.g. when inserting
+    // #i69171# pPV may still be NULL if there is no SDrPageView (!), e.g. when inserting
     // other files
-    if(_pPV)
+    if(pPV)
     {
-        const bool bMarkChg(GetMarkedObjectListWriteAccess().InsertPageView(*_pPV));
+        const bool bMarkChg(GetMarkedObjectListWriteAccess().InsertPageView(*pPV));
 
         if(bMarkChg)
         {
@@ -2154,14 +2154,14 @@ void SdrMarkView::SetMoveOutside(bool bOn)
     maHdlList.SetMoveOutside(bOn);
 }
 
-void SdrMarkView::SetDesignMode( bool _bOn )
+void SdrMarkView::SetDesignMode( bool bOn )
 {
-    if ( mbDesignMode != _bOn )
+    if ( mbDesignMode != bOn )
     {
-        mbDesignMode = _bOn;
+        mbDesignMode = bOn;
         SdrPageView* pPageView = GetSdrPageView();
         if ( pPageView )
-            pPageView->SetDesignMode( _bOn );
+            pPageView->SetDesignMode( bOn );
     }
 }
 
