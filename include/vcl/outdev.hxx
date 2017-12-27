@@ -1273,6 +1273,9 @@ public:
     //If bNewFontLists is true then drop and refetch lists of system fonts
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
+    static void                 DontUpdateAllFontData();
+    static void                 ResumeUpdateAllFontData();
+
 protected:
 
     virtual void                InitFont() const;

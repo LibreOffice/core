@@ -617,6 +617,15 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 
 void OutputDevice::ImplRefreshAllFontData(bool bNewFontLists)
 {
+    ImplSVData* const pSVData = ImplGetSVData();
+
+    if (pSVData->maGDIData.mbDontUpdateFontData)
+    {
+        pSVData->maGDIData.mbUpdateFontDataPending = true;
+        pSVData->maGDIData.mbUpdateNewFontLists |= bNewFontLists;
+        return;
+    }
+
     ImplUpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
 }
 
@@ -624,6 +633,31 @@ void OutputDevice::ImplUpdateAllFontData(bool bNewFontLists)
 {
     OutputDevice::ImplClearAllFontData(bNewFontLists);
     OutputDevice::ImplRefreshAllFontData(bNewFontLists);
+}
+
+// static
+void OutputDevice::DontUpdateAllFontData()
+{
+    ImplGetSVData()->maGDIData.mbDontUpdateFontData = true;
+}
+
+// static
+void OutputDevice::ResumeUpdateAllFontData()
+{
+    ImplSVData* const pSVData = ImplGetSVData();
+
+    if (pSVData->maGDIData.mbDontUpdateFontData)
+    {
+        pSVData->maGDIData.mbDontUpdateFontData = false;
+        bool bNewFontLists = pSVData->maGDIData.mbUpdateNewFontLists;
+        pSVData->maGDIData.mbUpdateNewFontLists = false;
+        if (pSVData->maGDIData.mbUpdateFontDataPending)
+        {
+            pSVData->maGDIData.mbUpdateFontDataPending = false;
+            OutputDevice::ImplRefreshAllFontData(bNewFontLists);
+        }
+        return;
+    }
 }
 
 void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHdl, const bool bNewFontLists )

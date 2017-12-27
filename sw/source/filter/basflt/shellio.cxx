@@ -62,8 +62,18 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+struct FontUpdateGuard
+{
+    FontUpdateGuard() { OutputDevice::DontUpdateAllFontData(); }
+    ~FontUpdateGuard() { OutputDevice::ResumeUpdateAllFontData(); }
+};
+}
+
 ErrCode SwReader::Read( const Reader& rOptions )
 {
+    FontUpdateGuard aFontUpdateGuard;
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
     po->pStrm = pStrm;
