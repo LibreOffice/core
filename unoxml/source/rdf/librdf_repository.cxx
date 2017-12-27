@@ -456,7 +456,7 @@ private:
     // needed for synchronizing access to librdf (it doesn't do win32 threading)
     ::osl::Mutex & m_rMutex;
     // the query (in case this is a result of a graph query)
-    // not that the redland documentation spells this out explicity, but
+    // not that the redland documentation spells this out explicitly, but
     // queries must be freed only after all the results are completely read
     std::shared_ptr<librdf_query>  const m_pQuery;
     std::shared_ptr<librdf_node>   const m_pContext;
@@ -566,7 +566,7 @@ private:
     ::rtl::Reference< librdf_Repository > m_xRep;
     // needed for synchronizing access to librdf (it doesn't do win32 threading)
     ::osl::Mutex & m_rMutex;
-    // not that the redland documentation spells this out explicity, but
+    // not that the redland documentation spells this out explicitly, but
     // queries must be freed only after all the results are completely read
     std::shared_ptr<librdf_query> const m_pQuery;
     std::shared_ptr<librdf_query_results> const m_pQueryResult;
