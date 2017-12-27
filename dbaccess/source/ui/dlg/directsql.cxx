@@ -204,7 +204,7 @@ namespace dbaui
                 }
                 else
                     addOutputText(OUString::number(xMR->getUpdateCount()) + " rows updated\n");
-                while ((hasRS=xMR->getMoreResults()) || (xMR->getUpdateCount() != -1))
+                while ((hasRS=xMR->getMoreResults()) || (xMR->getUpdateCount() != -1 && xMR->getUpdateCount() != 0))
                 {
                     if(hasRS)
                     {
