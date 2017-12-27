@@ -3101,7 +3101,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
         return false;
 
     SwTable& rTable = pTNd->GetTable();
-    rTable.SetHTMLTableLayout( nullptr ); // Delete HTML Layout
+    rTable.SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>()); // Delete HTML Layout
 
     SwTableFormulaUpdate aMsgHint( &rTable );
 
@@ -3470,8 +3470,8 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
         return false;
 
     // Delete HTML Layout
-    pTableNd->GetTable().SetHTMLTableLayout( nullptr );
-    pDelTableNd->GetTable().SetHTMLTableLayout( nullptr );
+    pTableNd->GetTable().SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
+    pDelTableNd->GetTable().SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
 
     // Both Tables are present; we can start
     SwUndoMergeTable* pUndo = nullptr;
@@ -3719,7 +3719,7 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
         return false;
 
     SwTable &table = pTableNd->GetTable();
-    table.SetHTMLTableLayout( nullptr );
+    table.SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
 
     FndBox_* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&

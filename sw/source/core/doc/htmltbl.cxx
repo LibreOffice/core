@@ -75,11 +75,11 @@ public:
     sal_uInt16 GetColumn() const { return nCol; }
 };
 
-SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
-                                          SwHTMLTableLayout* pTab,
-                                          bool bNoBrTag,
-                                          std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt ) :
-    xNext( rNxt ), pBox( nullptr ), xTable( pTab ), pStartNode( pSttNd ),
+SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts(const SwStartNode *pSttNd,
+                                             std::shared_ptr<SwHTMLTableLayout> const& rTab,
+                                             bool bNoBrTag,
+                                             std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt ) :
+    xNext( rNxt ), pBox( nullptr ), xTable( rTab ), pStartNode( pSttNd ),
     nPass1Done( 0 ), nWidthSet( 0 ), bNoBreakTag( bNoBrTag )
 {}
 
@@ -445,7 +445,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
     bool bFixRelWidths = false;
     sal_uInt16 i;
 
-    SwHTMLTableLayoutConstraints *pConstraints = nullptr;
+    std::unique_ptr<SwHTMLTableLayoutConstraints> xConstraints;
 
     for( i=0; i<m_nCols; i++ )
     {
@@ -672,10 +672,14 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     SwHTMLTableLayoutConstraints *pConstr =
                         new SwHTMLTableLayoutConstraints( nMinNoAlignCell,
                             nMaxNoAlignCell, j, i, nColSpan );
-                    if( pConstraints )
-                        pConstraints = pConstraints->InsertNext( pConstr );
+                    if (xConstraints)
+                    {
+                        SwHTMLTableLayoutConstraints* pConstraints = xConstraints->InsertNext(pConstr);
+                        xConstraints.release();
+                        xConstraints.reset(pConstraints);
+                    }
                     else
-                        pConstraints = pConstr;
+                        xConstraints.reset(pConstr);
                 }
             }
         }
@@ -755,7 +759,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
     }
 
     // Now process the constraints
-    SwHTMLTableLayoutConstraints *pConstr = pConstraints;
+    SwHTMLTableLayoutConstraints *pConstr = xConstraints.get();
     while( pConstr )
     {
         // At first we need to process the width in the same way
@@ -1035,8 +1039,6 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             }
         }
     }
-
-    delete pConstraints;
 }
 
 //TODO: provide documentation

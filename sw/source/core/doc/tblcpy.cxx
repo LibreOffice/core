@@ -720,7 +720,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
 bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
                         SwUndoTableCpyTable* pUndo )
 {
-    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
     SwDoc* pDoc = GetFrameFormat()->GetDoc();
 
@@ -801,7 +801,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 {
     OSL_ENSURE( !rSelBoxes.empty(), "Missing selection" );
 
-    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
     if( IsNewModel() || rCpyTable.IsNewModel() )
         return InsNewTable( rCpyTable, rSelBoxes, pUndo );

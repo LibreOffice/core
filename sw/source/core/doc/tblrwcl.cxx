@@ -500,7 +500,7 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         if( aFndBox.GetLines().empty() )
             return false;
 
-        SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+        SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
         // Find Lines for the layout update
         aFndBox.SetTableLines( *this );
@@ -555,7 +555,7 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     if( aFndBox.GetLines().empty() )
         return false;
 
-    SetHTMLTableLayout( nullptr );   // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());   // Delete HTML Layout
 
     FndBox_* pFndBox = &aFndBox;
     {
@@ -975,7 +975,7 @@ bool SwTable::DeleteSel(
             return false;
     }
 
-    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
     // Find Lines for the Layout update
     FndBox_ aFndBox( nullptr, nullptr );
@@ -1047,7 +1047,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
     // Thus we tell the charts to use their own data provider and forget about this table
     pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
-    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
     // If the rows should get the same (min) height, we first have
     // to store the old row heights before deleting the frames
@@ -1189,7 +1189,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
     // Thus we tell the charts to use their own data provider and forget about this table
     pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
-    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
     SwSelBoxes aSelBoxes(rBoxes);
     ExpandSelection( aSelBoxes );
 
@@ -1557,7 +1557,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     // Thus we tell the charts to use their own data provider and forget about this table
     pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
-    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
     if( pUndo )
         pUndo->SetSelBoxes( rBoxes );
@@ -3375,7 +3375,7 @@ static FndBox_* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
 bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo )
 {
-    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
+    SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
     const SwFormatFrameSize& rSz = GetFrameFormat()->GetFrameSize();
     const SvxLRSpaceItem& rLR = GetFrameFormat()->GetLRSpace();

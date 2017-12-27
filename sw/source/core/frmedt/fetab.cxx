@@ -2118,7 +2118,7 @@ void SwFEShell::SetTableAttr( const SfxItemSet &rNew )
         SET_CURR_SHELL( this );
         StartAllAction();
         SwTabFrame *pTab = pFrame->FindTabFrame();
-        pTab->GetTable()->SetHTMLTableLayout( nullptr );
+        pTab->GetTable()->SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
         GetDoc()->SetAttr( rNew, *pTab->GetFormat() );
         GetDoc()->getIDocumentState().SetModified();
         EndAllActionAndCall();
