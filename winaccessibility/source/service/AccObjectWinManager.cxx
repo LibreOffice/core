@@ -913,7 +913,7 @@ void  AccObjectWinManager::UpdateState( css::accessibility::XAccessible* pXAcc )
 }
 
 /**
-   * Set corresponding com object's accessible name via XAccessilbe interface and new
+   * Set corresponding com object's accessible name via XAccessible interface and new
    * name
    * @param pXAcc XAccessible interface.
    * @return
@@ -940,7 +940,7 @@ void AccObjectWinManager::UpdateDescription( XAccessible* pXAcc )
 }
 
 /**
-   * Set corresponding com object's accessible location via XAccessilbe interface and new
+   * Set corresponding com object's accessible location via XAccessible interface and new
    * location.
    * @param pXAcc XAccessible interface.
    * @return
@@ -955,7 +955,7 @@ void  AccObjectWinManager::SetLocation( XAccessible* pXAcc, long /*top*/, long /
 }
 
 /**
-   * Set corresponding com object's value  via XAccessilbe interface and new value.
+   * Set corresponding com object's value  via XAccessible interface and new value.
    * @param pXAcc XAccessible interface.
    * @param pAny new value.
    * @return
@@ -968,7 +968,7 @@ void  AccObjectWinManager::SetValue( XAccessible* pXAcc, Any pAny )
 }
 
 /**
-   * Set corresponding com object's value  via XAccessilbe interface.
+   * Set corresponding com object's value  via XAccessible interface.
    * @param pXAcc XAccessible interface.
    * @return
    */
@@ -980,7 +980,7 @@ void  AccObjectWinManager::UpdateValue( XAccessible* pXAcc )
 }
 
 /**
-   * Set corresponding com object's name via XAccessilbe interface and new name.
+   * Set corresponding com object's name via XAccessible interface and new name.
    * @param pXAcc XAccessible interface.
    * @param newName new name
    * @return
@@ -993,7 +993,7 @@ void  AccObjectWinManager::SetAccName( XAccessible* pXAcc, Any newName)
 }
 
 /**
-   * Set corresponding com object's description via XAccessilbe interface and new description.
+   * Set corresponding com object's description via XAccessible interface and new description.
    * @param pXAcc XAccessible interface.
    * @param newDesc new description
    * @return
@@ -1006,7 +1006,7 @@ void  AccObjectWinManager::SetDescription( XAccessible* pXAcc, Any newDesc )
 }
 
 /**
-   * Set corresponding com object's role via XAccessilbe interface and new role.
+   * Set corresponding com object's role via XAccessible interface and new role.
    * @param pXAcc XAccessible interface.
    * @param Role new role
    * @return
