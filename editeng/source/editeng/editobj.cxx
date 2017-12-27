@@ -878,15 +878,13 @@ public:
 
 void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs ) const
 {
-    typedef std::vector<size_t> SectionBordersType;
-    typedef std::vector<SectionBordersType> ParagraphsType;
-    ParagraphsType aParaBorders(aContents.size());
+    std::vector<std::vector<size_t>> aParaBorders(aContents.size());
 
     // First pass: determine section borders for each paragraph.
     for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
     {
         const ContentInfo& rC = *aContents[nPara].get();
-        SectionBordersType& rBorders = aParaBorders[nPara];
+        std::vector<size_t>& rBorders = aParaBorders[nPara];
         rBorders.push_back(0);
         rBorders.push_back(rC.GetText().getLength());
         for (const auto & aAttrib : rC.maCharAttribs)
@@ -902,12 +900,12 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
     }
 
     // Sort and remove duplicates for each paragraph.
-    ParagraphsType::iterator it = aParaBorders.begin(), itEnd = aParaBorders.end();
+    std::vector<std::vector<size_t>>::iterator it = aParaBorders.begin(), itEnd = aParaBorders.end();
     for (; it != itEnd; ++it)
     {
-        SectionBordersType& rBorders = *it;
+        std::vector<size_t>& rBorders = *it;
         std::sort(rBorders.begin(), rBorders.end());
-        SectionBordersType::iterator itUniqueEnd = std::unique(rBorders.begin(), rBorders.end());
+        auto itUniqueEnd = std::unique(rBorders.begin(), rBorders.end());
         rBorders.erase(itUniqueEnd, rBorders.end());
     }
 
@@ -920,7 +918,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
     for (; it != itEnd; ++it)
     {
         size_t nPara = distance(aParaBorders.begin(), it);
-        const SectionBordersType& rBorders = *it;
+        const std::vector<size_t>& rBorders = *it;
         if (rBorders.size() == 1 && rBorders[0] == 0)
         {
             // Empty paragraph. Push an empty section.
@@ -928,7 +926,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             continue;
         }
 
-        SectionBordersType::const_iterator itBorder = rBorders.begin(), itBorderEnd = rBorders.end();
+        auto itBorder = rBorders.begin(), itBorderEnd = rBorders.end();
         size_t nPrev = *itBorder;
         size_t nCur;
         for (++itBorder; itBorder != itBorderEnd; ++itBorder, nPrev = nCur)

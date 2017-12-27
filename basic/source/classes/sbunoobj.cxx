@@ -3200,8 +3200,6 @@ Reference< XTypeDescriptionEnumeration > getTypeDescriptorEnumeration( const OUS
     return xEnum;
 }
 
-typedef std::unordered_map< OUString, Any > VBAConstantsHash;
-
 VBAConstantHelper&
 VBAConstantHelper::instance()
 {
@@ -3278,7 +3276,7 @@ VBAConstantHelper::getVBAConstant( const OUString& rName )
     SbxVariable* pConst = nullptr;
     init();
 
-    VBAConstantsHash::const_iterator it = aConstHash.find( rName.toAsciiLowerCase() );
+    auto it = aConstHash.find( rName.toAsciiLowerCase() );
 
     if ( it != aConstHash.end() )
     {

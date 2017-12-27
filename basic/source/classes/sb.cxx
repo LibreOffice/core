@@ -173,14 +173,13 @@ void SAL_CALL DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ )
 namespace {
 
 typedef ::rtl::Reference< DocBasicItem > DocBasicItemRef;
-typedef std::unordered_map< const StarBASIC *, DocBasicItemRef > DocBasicItemMap;
 
-class GaDocBasicItems : public rtl::Static<DocBasicItemMap,GaDocBasicItems> {};
+class GaDocBasicItems : public rtl::Static<std::unordered_map< const StarBASIC *, DocBasicItemRef >,GaDocBasicItems> {};
 
 const DocBasicItem* lclFindDocBasicItem( const StarBASIC* pDocBasic )
 {
-    DocBasicItemMap::iterator it = GaDocBasicItems::get().find( pDocBasic );
-    DocBasicItemMap::iterator end = GaDocBasicItems::get().end();
+    auto it = GaDocBasicItems::get().find( pDocBasic );
+    auto end = GaDocBasicItems::get().end();
     return (it != end) ? it->second.get() : nullptr;
 }
 
@@ -193,13 +192,13 @@ void lclInsertDocBasicItem( StarBASIC& rDocBasic )
 
 void lclRemoveDocBasicItem( StarBASIC& rDocBasic )
 {
-    DocBasicItemMap::iterator it = GaDocBasicItems::get().find( &rDocBasic );
+    auto it = GaDocBasicItems::get().find( &rDocBasic );
     if( it != GaDocBasicItems::get().end() )
     {
         it->second->stopListening();
         GaDocBasicItems::get().erase( it );
     }
-    DocBasicItemMap::iterator it_end = GaDocBasicItems::get().end();
+    auto it_end = GaDocBasicItems::get().end();
     for( it = GaDocBasicItems::get().begin(); it != it_end; ++it )
     {
         it->second->clearDependingVarsOnDelete( rDocBasic );
@@ -1936,8 +1935,8 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
 
 void StarBASIC::DetachAllDocBasicItems()
 {
-    DocBasicItemMap& rItems = GaDocBasicItems::get();
-    DocBasicItemMap::iterator it = rItems.begin(), itEnd = rItems.end();
+    std::unordered_map< const StarBASIC *, DocBasicItemRef >& rItems = GaDocBasicItems::get();
+    auto it = rItems.begin(), itEnd = rItems.end();
     for (; it != itEnd; ++it)
     {
         DocBasicItemRef xItem = it->second;
