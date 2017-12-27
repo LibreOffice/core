@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2d3c192f",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-12-27T16:52:30Z",
+      "side": 1,
+      "message": "since e4c2f01ee9201167a08d12e0b875240f4f79c271 \"INTEGRATION: CWS valgrind02 (1.26.86); FILE MERGED\" the comment had been directly before the #define, without an empty line in between, which is IMO better as it makes it more clear that the comment pertains to the following #define (although it also pertains to the use of that define in the following function, osl_getEnvironment)\n\nthe original comment mentions the \"unicows library\", which is probably useful to put this into context (presumably this was an issue specifically with the implementation of GetEnvironmentVariableW in that unicows lib, and maybe is no longer an issue today, where unicows was only relevant for Windows 95/98/Me IIUC?)",
+      "revId": "9e6234679317ae55d9793a5dc1e3c304b6186ca3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
