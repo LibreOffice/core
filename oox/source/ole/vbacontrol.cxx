@@ -426,7 +426,6 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                 IdToPageMap idToPage;
                 VbaFormControlVector::iterator it = maControls.begin();
                 VbaFormControlVector::iterator it_end = maControls.end();
-                typedef std::vector< sal_uInt32 > UInt32Array;
                 AxArrayString sCaptions;
 
                 for ( ; it != it_end; ++it )
@@ -446,8 +445,8 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                     }
                 }
                 // apply caption/titles to pages
-                UInt32Array::iterator itCtrlId = pMultiPage->mnIDs.begin();
-                UInt32Array::iterator itCtrlId_end = pMultiPage->mnIDs.end();
+                auto itCtrlId = pMultiPage->mnIDs.begin();
+                auto itCtrlId_end = pMultiPage->mnIDs.end();
                 AxArrayString::iterator itCaption = sCaptions.begin();
 
                 maControls.clear();

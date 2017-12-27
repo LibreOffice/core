@@ -151,7 +151,6 @@ public:
 };
 
 typedef std::unordered_map< OUString, Reference< browse::XBrowseNode > >  BrowseNodeAggregatorHash;
-typedef std::vector< OUString > vString;
 
 struct alphaSort
 {
@@ -165,7 +164,7 @@ class LocationBrowseNode :
 {
 private:
     std::unique_ptr<BrowseNodeAggregatorHash> m_hBNA;
-    vString m_vStr;
+    std::vector< OUString > m_vStr;
     OUString m_sNodeName;
     Reference< browse::XBrowseNode > m_origNode;
 
@@ -197,7 +196,7 @@ public:
         Sequence<  Reference< browse::XBrowseNode > > children( m_hBNA->size() );
         sal_Int32 index = 0;
 
-        vString::const_iterator it = m_vStr.begin();
+        auto it = m_vStr.begin();
 
         for ( ; it != m_vStr.end(); ++it, index++ )
         {
