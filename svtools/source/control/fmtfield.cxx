@@ -1007,16 +1007,13 @@ void FormattedField::UseInputStringForFormatting()
 }
 
 
-DoubleNumericField::~DoubleNumericField()
+DoubleNumericField::DoubleNumericField(vcl::Window* pParent, WinBits nStyle)
+    : FormattedField(pParent, nStyle)
 {
-    disposeOnce();
+    ResetConformanceTester();
 }
 
-void DoubleNumericField::dispose()
-{
-    delete m_pNumberValidator;
-    FormattedField::dispose();
-}
+DoubleNumericField::~DoubleNumericField() = default;
 
 void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 {
@@ -1052,8 +1049,7 @@ void DoubleNumericField::ResetConformanceTester()
             cSeparatorDecimal = sSeparator[0];
     }
 
-    delete m_pNumberValidator;
-    m_pNumberValidator = new validation::NumberValidator( cSeparatorThousand, cSeparatorDecimal );
+    m_pNumberValidator.reset(new validation::NumberValidator( cSeparatorThousand, cSeparatorDecimal ));
 }
 
 DoubleCurrencyField::DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle)
