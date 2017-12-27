@@ -113,8 +113,6 @@ class SvxAreaTabDialog final : public SfxTabDialog
     XPatternListRef       mpPatternList;
     XPatternListRef       mpNewPatternList;
 
-    const SfxItemSet&   mrOutAttrs;
-
     ChangeType          mnColorListState;
     ChangeType          mnBitmapListState;
     ChangeType          mnPatternListState;
