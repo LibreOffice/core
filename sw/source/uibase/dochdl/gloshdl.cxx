@@ -258,13 +258,13 @@ sal_uInt16 SwGlossaryHdl::GetGlossaryCnt()
 
 OUString SwGlossaryHdl::GetGlossaryName( sal_uInt16 nId )
 {
-    OSL_ENSURE(nId < GetGlossaryCnt(), "Textbausteinarray ueberindiziert.");
+    OSL_ENSURE(nId < GetGlossaryCnt(), "Text building block array over-indexed.");
     return pCurGrp->GetLongName( nId );
 }
 
 OUString SwGlossaryHdl::GetGlossaryShortName(sal_uInt16 nId)
 {
-    OSL_ENSURE(nId < GetGlossaryCnt(), "Textbausteinarray ueberindiziert.");
+    OSL_ENSURE(nId < GetGlossaryCnt(), "Text building block array over-indexed.");
     return pCurGrp->GetShortName( nId );
 }
 
