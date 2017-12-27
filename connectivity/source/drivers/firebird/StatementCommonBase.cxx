@@ -220,29 +220,29 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 }
 
 // ---- XMultipleResults - UNSUPPORTED ----------------------------------------
-uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet()
-{
-    // TODO: verify we really can't support this
-//     return uno::Reference< XResultSet >();
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    return m_xResultSet;
-}
-
-sal_Bool SAL_CALL OStatementCommonBase::getMoreResults()
-{
-    // TODO: verify we really can't support this
-    return false;
-//     MutexGuard aGuard( m_aMutex );
+// uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet()
+// {
+//     // TODO: verify we really can't support this
+// //     return uno::Reference< XResultSet >();
+//     MutexGuard aGuard(m_aMutex);
 //     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-}
 
-sal_Int32 SAL_CALL OStatementCommonBase::getUpdateCount()
-{
-    // TODO: verify we really can't support this
-    return 0;
-}
+//     return m_xResultSet;
+// }
+
+// sal_Bool SAL_CALL OStatementCommonBase::getMoreResults()
+// {
+//     // TODO: verify we really can't support this
+//     return false;
+// //     MutexGuard aGuard( m_aMutex );
+// //     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+// }
+
+// sal_Int32 SAL_CALL OStatementCommonBase::getUpdateCount()
+// {
+//     // TODO: verify we really can't support this
+//     return -1;
+// }
 
 
 // ---- XWarningsSupplier - UNSUPPORTED ----------------------------------------

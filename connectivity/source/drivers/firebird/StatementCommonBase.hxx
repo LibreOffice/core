@@ -44,8 +44,7 @@ namespace connectivity
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
                                                    css::util::XCancellable,
-                                                   css::sdbc::XCloseable,
-                                                   css::sdbc::XMultipleResults> OStatementCommonBase_Base;
+                                                   css::sdbc::XCloseable> OStatementCommonBase_Base;
 
         class OStatementCommonBase  :   public  OStatementCommonBase_Base,
                                         public  ::cppu::OPropertySetHelper,
@@ -123,9 +122,9 @@ namespace connectivity
             virtual css::uno::Any SAL_CALL getWarnings(  ) override;
             virtual void SAL_CALL clearWarnings(  ) override;
             // XMultipleResults - UNSUPPORTED
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
-            virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
-            virtual sal_Bool SAL_CALL getMoreResults(  ) override;
+            // virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
+            // virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
+            // virtual sal_Bool SAL_CALL getMoreResults(  ) override;
 
             // XCancellable
             virtual void SAL_CALL cancel(  ) override;
