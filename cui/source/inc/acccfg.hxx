@@ -80,8 +80,8 @@ struct TAccInfo
                  const vcl::KeyCode& aKey )
             : m_nKeyPos        (nKeyPos  )
             , m_nListPos       (nListPos )
-            , m_bIsConfigurable(true ) /**< its important to set sal_True as default -
-                                                because only fix entries will be disabled later ... */
+            , m_bIsConfigurable(true ) /**< it's important to set true as default -
+                                                because only fix entries will be disabled later... */
             , m_sCommand       (         )
             , m_aKey           (aKey     )
         {}

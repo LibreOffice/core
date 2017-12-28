@@ -1314,7 +1314,7 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
         // the user is better of with interpreting arrays as strings !
 //         if( typeName.getLength() && '_' == typeName[0] )
 //         {
-//             its just a naming convention, but as long as we don't have anything better,
+//             it's just a naming convention, but as long as we don't have anything better,
 //             we take it as granted
 //             ret = css::sdbc::DataType::ARRAY;
 //         }

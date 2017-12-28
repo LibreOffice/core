@@ -398,7 +398,7 @@ ScVbaBorders::createEnumeration()
 uno::Any
 ScVbaBorders::createCollectionObject( const css::uno::Any& aSource )
 {
-    return aSource; // its already a Border object
+    return aSource; // it's already a Border object
 }
 
 uno::Type

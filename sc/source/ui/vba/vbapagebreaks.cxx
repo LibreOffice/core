@@ -232,7 +232,7 @@ ScVbaHPageBreaks::createEnumeration()
 uno::Any
 ScVbaHPageBreaks::createCollectionObject( const css::uno::Any& aSource )
 {
-    return aSource; // its already a pagebreak object
+    return aSource; // it's already a pagebreak object
 }
 
 uno::Type
@@ -291,7 +291,7 @@ ScVbaVPageBreaks::createEnumeration()
 uno::Any
 ScVbaVPageBreaks::createCollectionObject( const css::uno::Any& aSource )
 {
-    return aSource; // its already a pagebreak object
+    return aSource; // it's already a pagebreak object
 }
 
 uno::Type

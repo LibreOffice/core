@@ -6935,7 +6935,7 @@ WW8_STD* WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pString)
                     {
                         /*
                         #i8114#
-                        This is supposed to be impossible, its just supposed
+                        This is supposed to be impossible, it's just supposed
                         to be 16 bit count followed by the string and ending
                         in a 0 short. But "Lotus SmartSuite Product: Word Pro"
                         is creating invalid style names in ww7- format. So we

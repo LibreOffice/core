@@ -605,7 +605,7 @@ void SbiParser::Set()
         // It's a good idea to distinguish between
         // set something = another &
         // something = another
-        // ( its necessary for vba objects where set is object
+        // ( it's necessary for vba objects where set is object
         // specific and also doesn't involve processing default params )
         if( pDef->GetTypeId() )
         {
