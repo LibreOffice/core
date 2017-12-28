@@ -29,8 +29,6 @@ public:
     ScTypedStrData( const OUString& rStr, double nVal = 0.0,
                     StringType eType = Standard, bool bDate = false );
 
-    ScTypedStrData( const ScTypedStrData& rCpy );
-
     bool IsDate() const { return mbIsDate;}
     const OUString& GetString() const { return maStrValue;}
     StringType GetStringType() const { return meStrType;}

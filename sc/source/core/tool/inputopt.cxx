@@ -38,15 +38,6 @@ ScInputOptions::ScInputOptions()
     SetDefaults();
 }
 
-ScInputOptions::ScInputOptions( const ScInputOptions& rCpy )
-{
-    *this = rCpy;
-}
-
-ScInputOptions::~ScInputOptions()
-{
-}
-
 void ScInputOptions::SetDefaults()
 {
     nMoveDir        = DIR_BOTTOM;
@@ -61,24 +52,6 @@ void ScInputOptions::SetDefaults()
     bTextWysiwyg    = false;
     bReplCellsWarn  = true;
     bLegacyCellSelection = false;
-}
-
-ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
-{
-    nMoveDir        = rCpy.nMoveDir;
-    bMoveSelection  = rCpy.bMoveSelection;
-    bEnterEdit      = rCpy.bEnterEdit;
-    bExtendFormat   = rCpy.bExtendFormat;
-    bRangeFinder    = rCpy.bRangeFinder;
-    bExpandRefs     = rCpy.bExpandRefs;
-    mbSortRefUpdate = rCpy.mbSortRefUpdate;
-    bMarkHeader     = rCpy.bMarkHeader;
-    bUseTabCol      = rCpy.bUseTabCol;
-    bTextWysiwyg    = rCpy.bTextWysiwyg;
-    bReplCellsWarn  = rCpy.bReplCellsWarn;
-    bLegacyCellSelection = rCpy.bLegacyCellSelection;
-
-    return *this;
 }
 
 //  Config Item containing input options

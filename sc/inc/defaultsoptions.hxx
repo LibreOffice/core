@@ -24,8 +24,6 @@ private:
 
 public:
     ScDefaultsOptions();
-    ScDefaultsOptions( const ScDefaultsOptions& rCpy );
-    ~ScDefaultsOptions();
 
     void SetDefaults();
 
@@ -34,7 +32,6 @@ public:
     void   SetInitTabPrefix(const OUString& aPrefix) { aInitTabPrefix = aPrefix; }
     const OUString& GetInitTabPrefix() const { return aInitTabPrefix; }
 
-    ScDefaultsOptions&  operator=  ( const ScDefaultsOptions& rCpy );
     bool                operator== ( const ScDefaultsOptions& rOpt ) const;
 
 };
@@ -45,7 +42,6 @@ class SC_DLLPUBLIC ScTpDefaultsItem : public SfxPoolItem
 {
 public:
     ScTpDefaultsItem( const ScDefaultsOptions& rOpt );
-    ScTpDefaultsItem( const ScTpDefaultsItem& rItem );
     virtual ~ScTpDefaultsItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

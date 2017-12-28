@@ -53,32 +53,6 @@ ScDocOptions::ScDocOptions()
     ResetDocOptions();
 }
 
-ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
-        :   fIterEps( rCpy.fIterEps ),
-            nIterCount( rCpy.nIterCount ),
-            nPrecStandardFormat( rCpy.nPrecStandardFormat ),
-            nDay( rCpy.nDay ),
-            nMonth( rCpy.nMonth ),
-            nYear( rCpy.nYear ),
-            nYear2000( rCpy.nYear2000 ),
-            nTabDistance( rCpy.nTabDistance ),
-            eFormulaSearchType( rCpy.eFormulaSearchType ),
-            bIsIgnoreCase( rCpy.bIsIgnoreCase ),
-            bIsIter( rCpy.bIsIter ),
-            bCalcAsShown( rCpy.bCalcAsShown ),
-            bMatchWholeCell( rCpy.bMatchWholeCell ),
-            bDoAutoSpell( rCpy.bDoAutoSpell ),
-            bLookUpColRowNames( rCpy.bLookUpColRowNames ),
-            bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled ),
-            bFormulaWildcardsEnabled( rCpy.bFormulaWildcardsEnabled ),
-            bWriteCalcConfig( rCpy.bWriteCalcConfig )
-{
-}
-
-ScDocOptions::~ScDocOptions()
-{
-}
-
 void ScDocOptions::ResetDocOptions()
 {
     bIsIgnoreCase       = false;
@@ -140,12 +114,6 @@ void ScDocOptions::SetFormulaWildcardsEnabled( bool bVal )
 ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
         theOptions  ( rOpt )
-{
-}
-
-ScTpCalcItem::ScTpCalcItem( const ScTpCalcItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        theOptions  ( rItem.theOptions )
 {
 }
 

@@ -198,12 +198,6 @@ ScTpViewItem::ScTpViewItem( const ScViewOptions& rOpt )
 {
 }
 
-ScTpViewItem::ScTpViewItem( const ScTpViewItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        theOptions  ( rItem.theOptions )
-{
-}
-
 ScTpViewItem::~ScTpViewItem()
 {
 }

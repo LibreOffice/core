@@ -932,23 +932,6 @@ ScArea::ScArea( SCTAB tab,
 {
 }
 
-ScArea::ScArea( const ScArea& r ) :
-        nTab     ( r.nTab ),
-        nColStart( r.nColStart ),   nRowStart( r.nRowStart ),
-        nColEnd  ( r.nColEnd ),     nRowEnd  ( r.nRowEnd )
-{
-}
-
-ScArea& ScArea::operator=( const ScArea& r )
-{
-    nTab        = r.nTab;
-    nColStart   = r.nColStart;
-    nRowStart   = r.nRowStart;
-    nColEnd     = r.nColEnd;
-    nRowEnd     = r.nRowEnd;
-    return *this;
-}
-
 bool ScArea::operator==( const ScArea& r ) const
 {
     return (   (nTab        == r.nTab)

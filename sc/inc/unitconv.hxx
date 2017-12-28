@@ -26,13 +26,13 @@ class ScUnitConverterData
 {
     OUString maIndexString;
     double mfValue;
-    ScUnitConverterData& operator=( const ScUnitConverterData& ) = delete;
 
 public:
     ScUnitConverterData( const OUString& rFromUnit,
         const OUString& rToUnit, double fValue );
-    ScUnitConverterData( const ScUnitConverterData& );
-    ~ScUnitConverterData();
+    ScUnitConverterData( const ScUnitConverterData& ) = default;
+    ScUnitConverterData& operator=( const ScUnitConverterData& ) = delete;
+    ~ScUnitConverterData() = default;
 
     double GetValue() const { return mfValue;}
     const OUString& GetIndexString() const { return maIndexString;}
