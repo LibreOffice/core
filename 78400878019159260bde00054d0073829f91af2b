@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f039f842",
+        "filename": "connectivity/source/drivers/firebird/Util.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-28T11:34:10Z",
+      "side": 1,
+      "message": "imahe-\u003eimage",
+      "revId": "78400878019159260bde00054d0073829f91af2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
