@@ -72,7 +72,7 @@ namespace dbtools
             @throws css::sdbc::SQLException
                 if such an exception occurs while creating the composer
         */
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
+        css::uno::Reference< css::sdb::XSingleSelectQueryComposer > const &
                 getComposer();
 
         /** returns the composer statement

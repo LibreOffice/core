@@ -266,7 +266,7 @@ namespace dbtools
     }
 
 
-    Reference< XSingleSelectQueryComposer > StatementComposer::getComposer()
+    Reference< XSingleSelectQueryComposer > const & StatementComposer::getComposer()
     {
         lcl_ensureUpToDateComposer_nothrow( *m_pData );
         return m_pData->xComposer;

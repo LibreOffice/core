@@ -400,7 +400,7 @@ const ParserContextSharedPtr& getParserContext()
 
 }
 
-std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& _sFunction)
+std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( const OUString& _sFunction)
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space

@@ -197,7 +197,7 @@ public:
 
     const OUString & getHostName() const { return m_aHostName; }
 
-    const ::uno::Reference< ::uno::XComponentContext > getComponentContext()
+    ::uno::Reference< ::uno::XComponentContext > const & getComponentContext()
     { return m_xFactory->getComponentContext(); }
 
     const void * getRequestData() const { return m_pRequestData; }
