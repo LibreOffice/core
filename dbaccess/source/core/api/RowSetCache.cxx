@@ -1441,8 +1441,7 @@ void ORowSetCache::deleteIterator(const ORowSetBase* _pRowSet)
     {
         if ( aCacheIter->second.pRowSet == _pRowSet )
         {
-            m_aCacheIterators.erase(aCacheIter);
-            aCacheIter = m_aCacheIterators.begin();
+            aCacheIter = m_aCacheIterators.erase(aCacheIter);
         }
         else
             ++aCacheIter;
