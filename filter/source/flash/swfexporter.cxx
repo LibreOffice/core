@@ -180,7 +180,7 @@ bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< X
         if ( xStatusIndicator.is() )
             xStatusIndicator->setValue( nPage );
 
-        // #i56084# get current xDrawPage when not exporting selection; else alraedy set above
+        // #i56084# get current xDrawPage when not exporting selection; else already set above
         if(!mbExportSelection)
         {
             xDrawPages->getByIndex(nPage) >>= xDrawPage;

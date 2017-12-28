@@ -294,7 +294,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
  * This is used to control the pre-init logic
  * in rtl_alloc_preInit. The reason for this is
  * to first initialize all caching and other memory
- * logic from WSD (the Online demaon) at startup.
+ * logic from WSD (the Online daemon) at startup.
  * All these pages will then be forked over when
  * spawning per-document instances. This is done
  * by calling rtl_alloc_preInit with rtlAllocPreInitStart.

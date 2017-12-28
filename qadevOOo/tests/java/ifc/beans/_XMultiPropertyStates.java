@@ -188,7 +188,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
            log.println("Ignore Runtime Exception: " + e.getMessage());
        }
         log.println("Checking that all properties are now in DEFAULT state" +
-            " excepting may be those which 'cann't be default'");
+            " excepting may be those which 'can't be default'");
 
         try {
             states = oObj.getPropertyStates(names);
