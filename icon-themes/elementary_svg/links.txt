@@ -401,10 +401,6 @@ cmd/sc_recundo.svg cmd/sc_undo.svg
 cmd/lc_bezieredge.svg cmd/lc_bezierappend.svg
 cmd/sc_bezieredge.svg cmd/sc_bezierappend.svg
 
-# Frame
-cmd/lc_setborderstyle.svg cmd/lc_diagramarea.svg
-cmd/sc_setborderstyle.svg cmd/sc_diagramarea.svg
-
 # Label
 cmd/lc_definename.svg cmd/lc_label.svg
 cmd/sc_definename.svg cmd/sc_label.svg
