@@ -228,7 +228,7 @@ public:
 
     // access methods for master objects
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::beans::XPropertySetInfo > _getPropertySetInfo(  );
+    css::uno::Reference< css::beans::XPropertySetInfo > const & _getPropertySetInfo(  );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException

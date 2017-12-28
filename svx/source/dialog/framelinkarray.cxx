@@ -76,7 +76,7 @@ public:
 
     void                MirrorSelfX();
 
-    basegfx::B2DHomMatrix CreateCoordinateSystem(const Array& rArray) const;
+    basegfx::B2DHomMatrix const & CreateCoordinateSystem(const Array& rArray) const;
     size_t GetCellIndex(const Array& rArray) const;
 };
 
@@ -93,7 +93,7 @@ size_t Cell::GetCellIndex(const Array& rArray) const
     return maCellIndex;
 }
 
-basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray) const
+basegfx::B2DHomMatrix const & Cell::CreateCoordinateSystem(const Array& rArray) const
 {
     if(!maCoordinateSystem.isIdentity())
     {

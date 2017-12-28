@@ -59,7 +59,7 @@ public:
 
     virtual void SetObjectType(SvxPreviewObjectType nType);
     SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
-    SfxItemSet Get3DAttributes() const;
+    SfxItemSet const & Get3DAttributes() const;
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
 

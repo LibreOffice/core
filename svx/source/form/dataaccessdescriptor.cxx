@@ -353,7 +353,7 @@ namespace svx
         m_pImpl->buildFrom(_rValues);
     }
 
-    Sequence< PropertyValue > ODataAccessDescriptor::createPropertyValueSequence()
+    Sequence< PropertyValue > const & ODataAccessDescriptor::createPropertyValueSequence()
     {
         m_pImpl->updateSequence();
         return m_pImpl->m_aAsSequence;

@@ -79,7 +79,7 @@ namespace svx
             <p>If you call this method more than once, without writing any values between both calls, the same object
             is returned. If you wrote values, a new object is returned.</p>
         */
-        css::uno::Sequence< css::beans::PropertyValue >
+        css::uno::Sequence< css::beans::PropertyValue > const &
                     createPropertyValueSequence();
 
         /** initialized the descriptor from the property values given

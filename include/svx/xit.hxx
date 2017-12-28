@@ -51,7 +51,7 @@ public:
     virtual bool         operator==(const SfxPoolItem& rItem) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
-            OUString     GetName() const              { return GetValue();   }
+            OUString const & GetName() const              { return GetValue();   }
             void         SetName(const OUString& rName) { SetValue(rName);     }
             bool         IsIndex() const          { return (nPalIndex >= 0); }
 

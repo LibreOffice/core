@@ -230,7 +230,7 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
     }
 }
 
-SfxItemSet Svx3DPreviewControl::Get3DAttributes() const
+SfxItemSet const & Svx3DPreviewControl::Get3DAttributes() const
 {
     return mp3DObj->GetMergedItemSet();
 }

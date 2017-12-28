@@ -578,7 +578,7 @@ void SdrGrafObj::SetGrafStreamURL( const OUString& rGraphicStreamURL )
     }
 }
 
-OUString SdrGrafObj::GetGrafStreamURL() const
+OUString const & SdrGrafObj::GetGrafStreamURL() const
 {
     return pGraphic->GetUserData();
 }
