@@ -26,14 +26,10 @@
 #include <svtools/treelistbox.hxx>
 
 #include "hlmarkwn_def.hxx"
+
 class SvxHyperlinkTabPageBase;
 
-
-//#                                                                      #
 //# Tree-Window                                                          #
-//#                                                                      #
-
-
 class SvxHlinkDlgMarkWnd;
 
 class SvxHlmarkTreeLBox : public SvTreeListBox
@@ -53,12 +49,11 @@ public:
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
     virtual Size GetOptimalSize() const override;
+    virtual VclPtr<PopupMenu> CreateContextMenu() override;
+    virtual void ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 };
 
-
-//#                                                                      #
 //# Window-Class                                                         #
-//#                                                                      #
 class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 {
 private:
@@ -68,13 +63,13 @@ private:
     VclPtr<PushButton>       mpBtClose;
     VclPtr<SvxHlmarkTreeLBox>  mpLbTree;
 
-    bool            mbUserMoved;
+    bool        mbUserMoved;
 
     VclPtr<SvxHyperlinkTabPageBase> mpParent;
 
-    OUString        maStrLastURL;
-
-    sal_uInt16          mnError;
+    OUString    maStrLastURL;
+    sal_uInt16  mnError;
+    sal_uInt16  mnOutlineLevel;
 
 protected:
     bool RefreshFromDoc( const OUString& aURL );
@@ -82,7 +77,9 @@ protected:
 
     SvTreeListEntry* FindEntry(const OUString& aStrName);
     void ClearTree();
-    int FillTree( const css::uno::Reference< css::container::XNameAccess >& xLinks, SvTreeListEntry* pParentEntry =nullptr );
+    int FillTree( const css::uno::Reference< css::container::XNameAccess >& xLinks,
+            sal_uInt16 nCurrentLevel,
+            SvTreeListEntry* pParentEntry = nullptr );
 
     virtual void Move () override;
 
@@ -98,7 +95,7 @@ public:
     bool MoveTo ( Point aNewPos );
     void RefreshTree(const OUString& aStrURL);
     bool SelectEntry(const OUString& aStrMark);
-
+    void SetOutlineLevel(const sal_uInt16& nOutlineLevel);
     bool ConnectToDialog();
 
     sal_uInt16 SetError( sal_uInt16 nError);
