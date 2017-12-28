@@ -2646,10 +2646,10 @@ void SmXMLTableContext_Impl::EndElement()
     SmNodeStack aReverseStack;
     aExpressionArray.resize(rNodeStack.size()-nElementCount);
 
-    auto nRows = rNodeStack.size()-nElementCount;
-    sal_uInt16 nCols = 0;
+    size_t nRows = rNodeStack.size()-nElementCount;
+    size_t nCols = 0;
 
-    for (auto i=nRows;i > 0;i--)
+    for (size_t i = nRows; i > 0; --i)
     {
         SmNode* pArray = rNodeStack.front().release();
         rNodeStack.pop_front();
@@ -2672,8 +2672,7 @@ void SmXMLTableContext_Impl::EndElement()
             pArray = pExprNode;
         }
 
-        if (pArray->GetNumSubNodes() > nCols)
-            nCols = pArray->GetNumSubNodes();
+        nCols = std::max(nCols, pArray->GetNumSubNodes());
         aReverseStack.push_front(std::unique_ptr<SmNode>(pArray));
     }
     aExpressionArray.resize(nCols*nRows);
