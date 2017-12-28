@@ -1120,9 +1120,17 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
     return aNames;
 }
 
-SwTableConfig::SwTableConfig(bool bWeb) :
-    ConfigItem(bWeb ? OUString("Office.WriterWeb/Table") : OUString("Office.Writer/Table"),
+SwTableConfig::SwTableConfig(bool bWeb)
+    : ConfigItem(bWeb ? OUString("Office.WriterWeb/Table") : OUString("Office.Writer/Table"),
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
+    , nTableHMove(0)
+    , nTableVMove(0)
+    , nTableHInsert(0)
+    , nTableVInsert(0)
+    , eTableChgMode(TableChgMode::FixedWidthChangeAbs)
+    , bInsTableFormatNum(false)
+    , bInsTableChangeNumFormat(false)
+    , bInsTableAlignNum(false)
 {
     Load();
 }
