@@ -401,10 +401,6 @@ cmd/sc_recundo.png cmd/sc_undo.png
 cmd/lc_bezieredge.png cmd/lc_bezierappend.png
 cmd/sc_bezieredge.png cmd/sc_bezierappend.png
 
-# Frame
-cmd/lc_setborderstyle.png cmd/lc_diagramarea.png
-cmd/sc_setborderstyle.png cmd/sc_diagramarea.png
-
 # Label
 cmd/lc_definename.png cmd/lc_label.png
 cmd/sc_definename.png cmd/sc_label.png
