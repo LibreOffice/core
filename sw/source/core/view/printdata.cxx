@@ -159,7 +159,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     m_rDefaultPrintData( rDefaultPrintData )
 {
     // printing HTML sources does not have any valid UI options.
-    // Its just the source code that gets printed ...
+    // It's just the source code that gets printed...
     if (bSwSrcView)
     {
         m_aUIProperties.clear();
