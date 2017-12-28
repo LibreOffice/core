@@ -43,6 +43,10 @@ struct MathMLAttributeLengthValue
 {
     Fraction aNumber;
     MathMLLengthUnit eUnit;
+    MathMLAttributeLengthValue()
+        : eUnit(MathMLLengthUnit::None)
+    {
+    }
 };
 
 sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue& rV);
