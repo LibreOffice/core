@@ -370,7 +370,7 @@ void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, c
 {
 }
 
-//obviously doesn't actually do anything, its just a nonfunctional stub
+//obviously doesn't actually do anything, it's just a nonfunctional stub
 
 #ifdef LIBO_HEADLESS
 

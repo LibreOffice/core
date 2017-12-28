@@ -631,8 +631,8 @@ bool TypeDetection::impl_getPreselectionForType(
     const OUString& sPreSelType, const util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService)
 {
     // Can be used to suppress execution of some parts of this method
-    // if its already clear that detected type is valid or not.
-    // Its necessary to use shared code at the end, which update
+    // if it's already clear that detected type is valid or not.
+    // It's necessary to use shared code at the end, which update
     // all return parameters consistency!
     bool bBreakDetection = false;
 

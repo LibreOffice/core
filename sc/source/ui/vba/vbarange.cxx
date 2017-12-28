@@ -1987,7 +1987,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula)
         return xRange->setFormulaArray( rFormula );
     }
     // #TODO need to distinguish between getFormula and getFormulaArray e.g. (R1C1)
-    // but for the moment its just easier to treat them the same for setting
+    // but for the moment it's just easier to treat them the same for setting
     // seems
     uno::Reference< lang::XMultiServiceFactory > xModelFactory( getUnoModel(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XFormulaParser > xParser( xModelFactory->createInstance( "com.sun.star.sheet.FormulaParser" ), uno::UNO_QUERY_THROW );

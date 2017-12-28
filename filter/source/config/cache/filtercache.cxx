@@ -1579,10 +1579,10 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
                                          css::uno::Reference< css::uno::XInterface >());
     }
 
-    // set too. Of course its already used as key into the e.g. outside
-    // used hash map ... but some of our API methods provide
+    // set too. Of course it's already used as key into the e.g. outside
+    // used hash map... but some of our API methods provide
     // this property set as result only. But the user of this CacheItem
-    // should know, which value the key names has :-) ITS IMPORTANT!
+    // should know, which value the key names has :-) IT'S IMPORTANT!
     CacheItem aItem;
     aItem[PROPNAME_NAME] <<= sItem;
     switch(eType)
