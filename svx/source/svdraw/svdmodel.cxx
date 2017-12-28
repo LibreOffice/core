@@ -1296,27 +1296,26 @@ void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr)
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
-    bool bNeg(nMul < 0);
+    bool bNeg {false};
 
-    if(nDiv < 0)
+    if (nDiv < 0)
+    {
         bNeg = !bNeg;
-
-    if(nMul < 0)
-        nMul = -nMul;
-
-    if(nDiv < 0)
         nDiv = -nDiv;
+    }
 
-    nMul *= 100;
-    nMul += nDiv/2;
-    nMul /= nDiv;
+    if (nMul < 0)
+    {
+        bNeg = !bNeg;
+        nMul = -nMul;
+    }
 
-    rStr = OUString::number(nMul);
+    sal_Int32 nPct = ((nMul*100) + nDiv/2)/nDiv;
 
-    if(bNeg)
-        rStr = "-" + rStr;
+    if (bNeg)
+        nPct = -nPct;
 
-    rStr += "%";
+    rStr = OUString::number(nPct) + "%";
 }
 
 void SdrModel::SetChanged(bool bFlg)
