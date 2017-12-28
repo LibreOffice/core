@@ -57,6 +57,7 @@ struct PrinterInfo : JobData
 
     PrinterInfo()
         : JobData()
+        , meSetupMode(PrinterSetupMode::SingleJob)
     {}
 };
 
