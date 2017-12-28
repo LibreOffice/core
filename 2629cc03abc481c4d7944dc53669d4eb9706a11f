@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5362ced9",
+        "filename": "qadevOOo/tests/java/ifc/ui/dialogs/_XExecutableDialog.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-28T18:31:13Z",
+      "side": 0,
+      "message": "\"These\" ?",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 35,
+        "endChar": 7
+      },
+      "revId": "2629cc03abc481c4d7944dc53669d4eb9706a11f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

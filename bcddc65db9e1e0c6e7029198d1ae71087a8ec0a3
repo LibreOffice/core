@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_33655ae1",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-28T18:31:13Z",
+      "side": 1,
+      "message": "Both are ok. \"artefact\" is British spelling, \"artifact\" is American spelling (see http://grammarist.com/spelling/artefact-artifact/)",
+      "range": {
+        "startLine": 111,
+        "startChar": 58,
+        "endLine": 111,
+        "endChar": 67
+      },
+      "revId": "bcddc65db9e1e0c6e7029198d1ae71087a8ec0a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_735fd20e",
+        "filename": "svtools/source/control/asynclink.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-28T18:31:13Z",
+      "side": 1,
+      "message": "same comment. Perhaps we could let this as it is.",
+      "range": {
+        "startLine": 38,
+        "startChar": 141,
+        "endLine": 38,
+        "endChar": 149
+      },
+      "revId": "bcddc65db9e1e0c6e7029198d1ae71087a8ec0a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_939a86c4",
+        "filename": "sw/source/core/crsr/crsrsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1316,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-28T18:31:13Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1316,
+        "startChar": 97,
+        "endLine": 1316,
+        "endChar": 98
+      },
+      "revId": "bcddc65db9e1e0c6e7029198d1ae71087a8ec0a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
