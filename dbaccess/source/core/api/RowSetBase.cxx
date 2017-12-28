@@ -1427,10 +1427,9 @@ void ORowSetNotifier::firePropertyChange()
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
     if( m_pImpl.get() )
     {
-        std::vector<sal_Int32>::const_iterator aIter = m_pImpl->aChangedColumns.begin();
-        for(;aIter != m_pImpl->aChangedColumns.end();++aIter)
+        for (auto const& changedColumn : m_pImpl->aChangedColumns)
         {
-            m_pRowSet->firePropertyChange((*aIter)-1 ,m_pImpl->aRow[(*aIter)-1], ORowSetBase::GrantNotifierAccess());
+            m_pRowSet->firePropertyChange(changedColumn-1 ,m_pImpl->aRow[changedColumn-1], ORowSetBase::GrantNotifierAccess());
         }
         if ( !m_pImpl->aChangedColumns.empty() )
             m_pRowSet->fireProperty(PROPERTY_ID_ISMODIFIED,true,false, ORowSetBase::GrantNotifierAccess());
