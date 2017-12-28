@@ -16,6 +16,24 @@
       "revId": "29f7ec4d03d7d05f78b6cb60ed69b6e93583d4bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_7369928b",
+        "filename": "sc/inc/queryparam.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-12-28T21:23:54Z",
+      "side": 1,
+      "message": "I would need SC_DLLPUBLIC for ScQueryParamBase\u0027s copy-ctor, assignment and ScQueryParamTable.\nI\u0027ll avoid this by defining ScQueryParam copy implementation in the source.",
+      "parentUuid": "fa31d9ce_531d6e65",
+      "revId": "29f7ec4d03d7d05f78b6cb60ed69b6e93583d4bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
