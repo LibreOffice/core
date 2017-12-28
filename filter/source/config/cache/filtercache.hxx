@@ -561,14 +561,14 @@ class FilterCache : public BaseLock
 
             @param      aURL
                         URL of the content, which type should be detected.
-                        Its already parsed and splitted into its different parts,
+                        It's already parsed and split into its different parts,
                         like e.g.: main, jump marks etcpp.
 
             @param      rFlatTypes
                         used as [out] parameter to add all types, which match to the given
                         URL. Further an information is added for every type. It indicates, how
                         this type is related to the specified URL (means e.g. if it matches
-                        by extension or URLPattern ...).
+                        by extension or URLPattern...).
 
             @attention  Please note: because this cache can be used inside multithreaded
                         environments, such returned key names can point to some already removed
@@ -655,7 +655,7 @@ class FilterCache : public BaseLock
                         and return its value.
 
             @descr      The specified key must be an absolute configuration path,
-                        which can be splitted into its package and relative path tokens.
+                        which can be split into its package and relative path tokens.
 
             @attention  Because this function might opens a new configuration
                         read access for reading one key value only, it should

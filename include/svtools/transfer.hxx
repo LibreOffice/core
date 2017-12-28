@@ -318,7 +318,7 @@ public:
 
         @param nMaxAction Allows you to limit the amount of actions; defaults to 0 which means no limit.
 
-        Whet you eg. Ctrl+a in Excel, you can get the entire sheet as
+        When you eg. Ctrl+a in Excel, you can get the entire sheet as
         metafile, with over 3 million (!) actions; which is just too large for
         any reasonable handling - and you need to set a limit.
     */

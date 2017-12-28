@@ -722,14 +722,14 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         aAnchor.SetAnchor( pPam->GetPoint() );
 
         // #i32349# - adjustment of vertical positioning
-        // attributes no longer needed, because its already got a default.
+        // attributes no longer needed, because it's already got a default.
     }
     else
     {
         aAnchor.SetType(RndStdIds::FLY_AT_PAGE);
 
         // #i32349# - adjustment of vertical positioning
-        // attributes no longer needed, because its already got a default.
+        // attributes no longer needed, because it's already got a default.
     }
     aSet.Put(aAnchor);
     SwPaM* pTemp = pInternalPam;

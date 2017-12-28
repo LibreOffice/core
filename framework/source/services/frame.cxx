@@ -1255,7 +1255,7 @@ void SAL_CALL Frame::activate()
             // But we do nothing then! We are already activated.
             xParent->activate();
         }
-        // Its necessary to send event NOW - not before.
+        // It's necessary to send event NOW - not before.
         // Activation goes from bottom to top!
         // That's the reason to activate parent first and send event now.
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_ACTIVATED );
