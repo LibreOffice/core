@@ -3701,7 +3701,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
 
 void SdXMLCustomShapeContext::EndElement()
 {
-    // for backward compatibility, the above SetTransformation() may alraedy have
+    // for backward compatibility, the above SetTransformation() may already have
     // applied a call to SetMirroredX/SetMirroredY. This is not yet added to the
     // beans::PropertyValues in maCustomShapeGeometry. When applying these now, this
     // would be lost again.
