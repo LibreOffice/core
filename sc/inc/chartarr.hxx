@@ -66,8 +66,6 @@ private:
     ScMemChart* CreateMemChartMulti();
 public:
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList );
-    ScChartArray( const ScChartArray& rArr );
-    ~ScChartArray();
 
     const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
     const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }

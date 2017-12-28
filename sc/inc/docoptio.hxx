@@ -53,8 +53,6 @@ class SC_DLLPUBLIC ScDocOptions
 
 public:
                 ScDocOptions();
-                ScDocOptions( const ScDocOptions& rCpy );
-                ~ScDocOptions();
 
     bool   IsLookUpColRowNames() const       { return bLookUpColRowNames; }
     void   SetLookUpColRowNames( bool bVal ) { bLookUpColRowNames = bVal; }
@@ -145,7 +143,6 @@ class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 public:
                 ScTpCalcItem( sal_uInt16 nWhich,
                               const ScDocOptions& rOpt );
-                ScTpCalcItem( const ScTpCalcItem& rItem );
                 virtual ~ScTpCalcItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

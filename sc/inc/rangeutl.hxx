@@ -236,9 +236,6 @@ public:
                     SCCOL colEnd   = 0,
                     SCROW rowEnd   = 0 );
 
-            ScArea( const ScArea& r );
-
-    ScArea& operator=   ( const ScArea& r );
     bool    operator==  ( const ScArea& r ) const;
 
 public:

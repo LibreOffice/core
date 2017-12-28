@@ -36,8 +36,6 @@ private:
 
 public:
     ScFormulaOptions();
-    ScFormulaOptions( const ScFormulaOptions& rCpy );
-    ~ScFormulaOptions();
 
     void SetDefaults();
 
@@ -73,7 +71,6 @@ public:
 
     static void GetDefaultFormulaSeparators(OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow);
 
-    ScFormulaOptions&  operator=  ( const ScFormulaOptions& rCpy );
     bool               operator== ( const ScFormulaOptions& rOpt ) const;
     bool               operator!= ( const ScFormulaOptions& rOpt ) const;
 };
@@ -84,7 +81,6 @@ class SC_DLLPUBLIC ScTpFormulaItem : public SfxPoolItem
 {
 public:
     ScTpFormulaItem( const ScFormulaOptions& rOpt );
-    ScTpFormulaItem( const ScTpFormulaItem& rItem );
     virtual ~ScTpFormulaItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

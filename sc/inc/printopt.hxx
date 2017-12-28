@@ -33,7 +33,6 @@ private:
 
 public:
                 ScPrintOptions();
-                ScPrintOptions( const ScPrintOptions& rCpy );
                 ~ScPrintOptions();
 
     bool    GetSkipEmpty() const            { return bSkipEmpty; }
@@ -45,7 +44,6 @@ public:
 
     void    SetDefaults();
 
-    ScPrintOptions&         operator=  ( const ScPrintOptions& rCpy );
     bool                    operator== ( const ScPrintOptions& rOpt ) const;
 };
 
@@ -55,7 +53,6 @@ class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
                 ScTpPrintItem( const ScPrintOptions& rOpt );
-                ScTpPrintItem( const ScTpPrintItem& rItem );
                 virtual ~ScTpPrintItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

@@ -34,12 +34,6 @@ ScUnitConverterData::ScUnitConverterData(
     maIndexString(BuildIndexString(rFromUnit, rToUnit)),
     mfValue(fValue) {}
 
-ScUnitConverterData::ScUnitConverterData( const ScUnitConverterData& r ) :
-    maIndexString(r.maIndexString),
-    mfValue(r.mfValue) {}
-
-ScUnitConverterData::~ScUnitConverterData() {}
-
 OUString ScUnitConverterData::BuildIndexString(
     const OUString& rFromUnit, const OUString& rToUnit )
 {

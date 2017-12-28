@@ -59,7 +59,7 @@ public:
     ScTokenArray();
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
-    ScTokenArray( const ScTokenArray& );
+    ScTokenArray( const ScTokenArray& ) = default;
     virtual ~ScTokenArray() override;
 
     bool EqualTokens( const ScTokenArray* pArr2 ) const;
