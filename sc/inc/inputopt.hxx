@@ -41,8 +41,6 @@ private:
 
 public:
                 ScInputOptions();
-                ScInputOptions( const ScInputOptions& rCpy );
-                ~ScInputOptions();
 
     void        SetDefaults();
 
@@ -70,8 +68,6 @@ public:
     bool        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
     void        SetLegacyCellSelection(bool bSet)   { bLegacyCellSelection = bSet; }
     bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
-
-    ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
 };
 
 // CfgItem for input options

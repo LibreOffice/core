@@ -85,12 +85,6 @@ ScTypedStrData::ScTypedStrData(
     meStrType(nType),
     mbIsDate( bDate ) {}
 
-ScTypedStrData::ScTypedStrData( const ScTypedStrData& rCpy ) :
-    maStrValue(rCpy.maStrValue),
-    mfValue(rCpy.mfValue),
-    meStrType(rCpy.meStrType),
-    mbIsDate( rCpy.mbIsDate ) {}
-
 FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
     maVal(rVal), mbCaseSens(bCaseSens) {}
 

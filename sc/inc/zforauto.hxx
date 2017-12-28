@@ -33,7 +33,6 @@ class ScNumFormatAbbrev
     LanguageType eSysLanguage;
 public:
     ScNumFormatAbbrev();
-    ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
     ScNumFormatAbbrev(sal_uInt32 nFormat, const SvNumberFormatter& rFormatter);
     void Load( SvStream& rStream, rtl_TextEncoding eByteStrSet );            // loading of the numberformats
     void Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) const;   // saving of the numberformats
@@ -44,13 +43,6 @@ public:
         return ((sFormatstring == rNumFormat.sFormatstring)
             && (eLanguage == rNumFormat.eLanguage)
             && (eSysLanguage == rNumFormat.eSysLanguage));
-    }
-    ScNumFormatAbbrev& operator=(const ScNumFormatAbbrev& rNumFormat)
-    {
-        sFormatstring = rNumFormat.sFormatstring;
-        eLanguage = rNumFormat.eLanguage;
-        eSysLanguage = rNumFormat.eSysLanguage;
-        return *this;
     }
     LanguageType GetLanguage() const { return eLanguage; }
 };

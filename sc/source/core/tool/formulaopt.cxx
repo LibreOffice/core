@@ -27,23 +27,6 @@ ScFormulaOptions::ScFormulaOptions()
     SetDefaults();
 }
 
-ScFormulaOptions::ScFormulaOptions( const ScFormulaOptions& rCpy ) :
-    bUseEnglishFuncName ( rCpy.bUseEnglishFuncName ),
-    eFormulaGrammar     ( rCpy.eFormulaGrammar ),
-    aCalcConfig(rCpy.aCalcConfig),
-    mbWriteCalcConfig   (rCpy.mbWriteCalcConfig),
-    aFormulaSepArg      ( rCpy.aFormulaSepArg ),
-    aFormulaSepArrayRow ( rCpy.aFormulaSepArrayRow ),
-    aFormulaSepArrayCol ( rCpy.aFormulaSepArrayCol ),
-    meOOXMLRecalc       ( rCpy.meOOXMLRecalc ),
-    meODFRecalc         ( rCpy.meODFRecalc )
-{
-}
-
-ScFormulaOptions::~ScFormulaOptions()
-{
-}
-
 void ScFormulaOptions::SetDefaults()
 {
     bUseEnglishFuncName = false;
@@ -122,20 +105,6 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     rSepArrayRow = ";";
 }
 
-ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
-{
-    bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
-    eFormulaGrammar     = rCpy.eFormulaGrammar;
-    aCalcConfig = rCpy.aCalcConfig;
-    mbWriteCalcConfig = rCpy.mbWriteCalcConfig;
-    aFormulaSepArg      = rCpy.aFormulaSepArg;
-    aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
-    aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
-    meOOXMLRecalc       = rCpy.meOOXMLRecalc;
-    meODFRecalc         = rCpy.meODFRecalc;
-    return *this;
-}
-
 bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
 {
     return bUseEnglishFuncName == rOpt.bUseEnglishFuncName
@@ -157,12 +126,6 @@ bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
 ScTpFormulaItem::ScTpFormulaItem( const ScFormulaOptions& rOpt ) :
     SfxPoolItem ( SID_SCFORMULAOPTIONS ),
     theOptions  ( rOpt )
-{
-}
-
-ScTpFormulaItem::ScTpFormulaItem( const ScTpFormulaItem& rItem ) :
-    SfxPoolItem ( rItem ),
-    theOptions  ( rItem.theOptions )
 {
 }
 

@@ -1037,12 +1037,11 @@ bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL ) :
     FormulaToken(formula::svMatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
 
-ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
-    FormulaToken(r), xMatrix(r.xMatrix), xUpperLeft(r.xUpperLeft) {}
+ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) = default;
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
 
-ScMatrixCellResultToken::~ScMatrixCellResultToken() {}
+ScMatrixCellResultToken::~ScMatrixCellResultToken() = default;
 
 svl::SharedString ScMatrixCellResultToken::GetString() const
 {
