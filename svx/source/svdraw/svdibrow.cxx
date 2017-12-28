@@ -386,11 +386,11 @@ void SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
 void SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16 nKeyCode=rKEvt.GetKeyCode().GetCode()+rKEvt.GetKeyCode().GetModifier();
-    bool bAusgewertet = false;
+    bool bEvaluated = false;
     const std::size_t nPos=GetCurrentPos();
     if (nPos!=ITEM_NOT_FOUND) {
         if (nKeyCode==KEY_RETURN) {
-            if (BeginChangeEntry(nPos)) bAusgewertet = true;
+            if (BeginChangeEntry(nPos)) bEvaluated = true;
         } else if (nKeyCode==KEY_ESCAPE) {
 
         } else if (rKEvt.GetKeyCode().GetModifier()==KEY_SHIFT+KEY_MOD1+KEY_MOD2) { // Ctrl
@@ -408,7 +408,7 @@ void SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
             }
         }
     }
-    if (!bAusgewertet) BrowseBox::KeyInput(rKEvt);
+    if (!bEvaluated) BrowseBox::KeyInput(rKEvt);
 }
 
 void SdrItemBrowserControl::SetDirty()
