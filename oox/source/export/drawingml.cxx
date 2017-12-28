@@ -1185,11 +1185,16 @@ void DrawingML::WritePattFill( const Reference< XPropertySet >& rXPropSet )
     {
         drawing::Hatch aHatch;
         mAny >>= aHatch;
+        WritePattFill(rXPropSet, aHatch);
+    }
+}
 
-        mpFS->startElementNS( XML_a , XML_pattFill, XML_prst, GetHatchPattern(aHatch), FSEND );
+void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const css::drawing::Hatch& rHatch)
+{
+        mpFS->startElementNS( XML_a , XML_pattFill, XML_prst, GetHatchPattern(rHatch), FSEND );
 
         mpFS->startElementNS( XML_a , XML_fgClr, FSEND );
-        WriteColor(aHatch.Color);
+        WriteColor(rHatch.Color);
         mpFS->endElementNS( XML_a , XML_fgClr );
 
         sal_uInt32 nColor = COL_WHITE;
@@ -1215,7 +1220,6 @@ void DrawingML::WritePattFill( const Reference< XPropertySet >& rXPropSet )
         mpFS->endElementNS( XML_a , XML_bgClr );
 
         mpFS->endElementNS( XML_a , XML_pattFill );
-    }
 }
 
 void DrawingML::WriteSrcRect( const Reference< XPropertySet >& rXPropSet, const OUString& rURL )

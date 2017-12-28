@@ -1244,9 +1244,31 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
         case FillStyle_BITMAP :
             exportBitmapFill( xPropSet );
             break;
+        case FillStyle_HATCH:
+            exportHatch(xPropSet);
+        break;
         default:
             WriteFill( xPropSet );
     }
+}
+
+void ChartExport::exportHatch( const Reference< XPropertySet >& xPropSet )
+{
+    if (!xPropSet.is())
+        return;
+
+    if (GetProperty(xPropSet, "FillHatchName"))
+    {
+        OUString aHatchName;
+        mAny >>= aHatchName;
+        uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xHatchTable( xFact->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
+        uno::Any rValue = xHatchTable->getByName(aHatchName);
+        css::drawing::Hatch aHatch;
+        rValue >>= aHatch;
+        WritePattFill(xPropSet, aHatch);
+    }
+
 }
 
 void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
