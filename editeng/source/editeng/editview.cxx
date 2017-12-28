@@ -660,7 +660,7 @@ void EditView::SetBackgroundColor( const Color& rColor )
     pImpEditView->SetBackgroundColor( rColor );
 }
 
-Color EditView::GetBackgroundColor() const
+Color const & EditView::GetBackgroundColor() const
 {
     return pImpEditView->GetBackgroundColor();
 }

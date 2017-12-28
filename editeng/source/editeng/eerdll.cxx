@@ -216,7 +216,7 @@ editeng::SharedVclResources::SharedVclResources()
 editeng::SharedVclResources::~SharedVclResources()
     { m_pVirDev.disposeAndClear(); }
 
-VclPtr<VirtualDevice> editeng::SharedVclResources::GetVirtualDevice()
+VclPtr<VirtualDevice> const & editeng::SharedVclResources::GetVirtualDevice()
     { return m_pVirDev; }
 
 std::shared_ptr<editeng::SharedVclResources> EditDLL::GetSharedVclResources()

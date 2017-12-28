@@ -824,7 +824,7 @@ public:
     void            SetText( const EditTextObject& rTextObject );
     EditSelection   InsertText( const EditTextObject& rTextObject, EditSelection aSel );
 
-    EditSelection   MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView );
+    EditSelection const & MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView );
 
     EditSelection   MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos, EditView* pCurView );
 
@@ -1039,7 +1039,7 @@ public:
     void                SetAddExtLeading( bool b );
     bool                IsAddExtLeading() const { return bAddExtLeading; }
 
-    static std::shared_ptr<SvxForbiddenCharactersTable> GetForbiddenCharsTable();
+    static std::shared_ptr<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
     static void         SetForbiddenCharsTable( const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */

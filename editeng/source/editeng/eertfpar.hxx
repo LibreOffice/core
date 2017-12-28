@@ -61,7 +61,7 @@ public:
 
     virtual SvParserState   CallParser() override;
 
-    EditPaM         GetCurPaM() const                   { return aCurSel.Max(); }
+    EditPaM const &         GetCurPaM() const                   { return aCurSel.Max(); }
 };
 
 typedef tools::SvRef<EditRTFParser> EditRTFParserRef;

@@ -72,7 +72,7 @@ bool Outliner::IsUndoEnabled() const
     return pEditEngine->IsUndoEnabled();
 }
 
-MapMode Outliner::GetRefMapMode() const
+MapMode const & Outliner::GetRefMapMode() const
 {
     return pEditEngine->GetRefMapMode();
 }
@@ -87,7 +87,7 @@ void Outliner::SetBackgroundColor( const Color& rColor )
     pEditEngine->SetBackgroundColor( rColor );
 }
 
-Color Outliner::GetBackgroundColor() const
+Color const & Outliner::GetBackgroundColor() const
 {
     return pEditEngine->GetBackgroundColor();
 }
@@ -113,7 +113,7 @@ void Outliner::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
     pEditEngine->SetModifyHdl( rLink );
 }
 
-Link<LinkParamNone*,void> Outliner::GetModifyHdl() const
+Link<LinkParamNone*,void> const & Outliner::GetModifyHdl() const
 {
     return pEditEngine->GetModifyHdl();
 }
@@ -133,7 +133,7 @@ void Outliner::SetStatusEventHdl( const Link<EditStatus&, void>& rLink )
     pEditEngine->SetStatusEventHdl( rLink );
 }
 
-Link<EditStatus&, void> Outliner::GetStatusEventHdl() const
+Link<EditStatus&, void> const & Outliner::GetStatusEventHdl() const
 {
     return pEditEngine->GetStatusEventHdl();
 }
@@ -163,7 +163,7 @@ void Outliner::SetWordDelimiters( const OUString& rDelimiters )
     pEditEngine->SetWordDelimiters( rDelimiters );
 }
 
-OUString Outliner::GetWordDelimiters() const
+OUString const & Outliner::GetWordDelimiters() const
 {
     return pEditEngine->GetWordDelimiters();
 }
@@ -393,7 +393,8 @@ void Outliner::SetSpeller( Reference< XSpellChecker1 > const &xSpeller )
 {
     pEditEngine->SetSpeller( xSpeller );
 }
-Reference< XSpellChecker1 > Outliner::GetSpeller()
+
+Reference< XSpellChecker1 > const & Outliner::GetSpeller()
 {
     return pEditEngine->GetSpeller();
 }

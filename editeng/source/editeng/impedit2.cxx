@@ -755,7 +755,7 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode )
 //  Cursor movements
 
 
-EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView )
+EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView )
 {
     // Actually, only necessary for up/down, but whatever.
     CheckIdleFormatter();
@@ -4337,7 +4337,7 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, bool bRight )
     }
 }
 
-std::shared_ptr<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable()
+std::shared_ptr<SvxForbiddenCharactersTable> const & ImpEditEngine::GetForbiddenCharsTable()
 {
     return EditDLL::Get().GetGlobalData()->GetForbiddenCharsTable();
 }
