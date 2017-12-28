@@ -1,0 +1,255 @@
+--- configure
++++ configure
+@@ -21349,7 +21349,7 @@
+     char a;
+     long long b;
+   };
+-  exit((int)&((struct s*)0)->b);
++  exit((int)&((struct s*)1024)->b - 1024);
+ }
+ _ACEOF
+ if ac_fn_c_try_run "$LINENO"; then :
+@@ -21384,7 +21384,7 @@
+     char a;
+     double b;
+   };
+-  exit((int)&((struct s*)0)->b);
++  exit((int)&((struct s*)1024)->b - 1024);
+ }
+ _ACEOF
+ if ac_fn_c_try_run "$LINENO"; then :
+--- src/common/classes/array.h
++++ src/common/classes/array.h
+@@ -149,7 +149,7 @@
+ 	void copyFrom(const Array<T, Storage>& source)
+ 	{
+ 		ensureCapacity(source.count, false);
+-		memcpy(data, source.data, sizeof(T) * source.count);
++		if (source.count != 0) memcpy(data, source.data, sizeof(T) * source.count);
+ 		count = source.count;
+ 	}
+ 
+@@ -227,7 +227,7 @@
+ 		fb_assert(count <= FB_MAX_SIZEOF - itemsCount);
+ 		ensureCapacity(count + itemsCount);
+ 		memmove(data + index + itemsCount, data + index, sizeof(T) * (count - index));
+-		memcpy(data + index, items, sizeof(T) * itemsCount);
++		if (itemsCount != 0) memcpy(data + index, items, sizeof(T) * itemsCount);
+ 		count += itemsCount;
+ 	}
+ 
+@@ -242,7 +242,7 @@
+ 	{
+ 		fb_assert(count <= FB_MAX_SIZEOF - itemsCount);
+ 		ensureCapacity(count + itemsCount);
+-		memcpy(data + count, items, sizeof(T) * itemsCount);
++		if (itemsCount != 0) memcpy(data + count, items, sizeof(T) * itemsCount);
+ 		count += itemsCount;
+ 	}
+ 
+@@ -294,7 +294,7 @@
+ 	{
+ 		fb_assert(newCount >= count);
+ 		ensureCapacity(newCount);
+-		memset(data + count, 0, sizeof(T) * (newCount - count));
++		if (newCount != count) memset(data + count, 0, sizeof(T) * (newCount - count));
+ 		count = newCount;
+ 	}
+ 
+@@ -328,7 +328,7 @@
+ 	{
+ 		fb_assert(count <= FB_MAX_SIZEOF - L.count);
+ 		ensureCapacity(count + L.count);
+-		memcpy(data + count, L.data, sizeof(T) * L.count);
++		if (L.count != 0) memcpy(data + count, L.data, sizeof(T) * L.count);
+ 		count += L.count;
+ 	}
+ 
+@@ -462,7 +462,7 @@
+ 
+ 			T* newdata = static_cast<T*>
+ 				(this->getPool().allocate(sizeof(T) * newcapacity ALLOC_ARGS));
+-			if (preserve)
++			if (preserve && count != 0)
+ 				memcpy(newdata, data, sizeof(T) * count);
+ 			freeData();
+ 			data = newdata;
+--- src/dsql/StmtNodes.cpp
++++ src/dsql/StmtNodes.cpp
+@@ -6643,7 +6643,7 @@
+ 
+ void StoreNode::genBlr(DsqlCompilerScratch* dsqlScratch)
+ {
+-	const dsql_msg* message = dsqlGenDmlHeader(dsqlScratch, dsqlRse->as<RseNode>());
++	const dsql_msg* message = dsqlGenDmlHeader(dsqlScratch, dsqlRse == nullptr ? nullptr : dsqlRse->as<RseNode>());
+ 
+ 	dsqlScratch->appendUChar(statement2 ? blr_store2 : blr_store);
+ 	GEN_expr(dsqlScratch, dsqlRelation);
+--- src/gpre/hsh.cpp
++++ src/gpre/hsh.cpp
+@@ -232,7 +232,7 @@
+ {
+ 	SCHAR c;
+ 
+-	SLONG value = 0;
++	ULONG value = 0;
+ 
+ 	while (c = *string++)
+ 		value = (value << 1) + UPPER(c);
+--- src/jrd/GlobalRWLock.cpp
++++ src/jrd/GlobalRWLock.cpp
+@@ -78,7 +78,7 @@
+ 
+ 	cachedLock = FB_NEW_RPT(getPool(), lockLen)
+ 		Lock(tdbb, lockLen, lckType, this, lockCaching ? blocking_ast_cached_lock : NULL);
+-	memcpy(&cachedLock->lck_key, lockStr, lockLen);
++	if (lockLen != 0) memcpy(&cachedLock->lck_key, lockStr, lockLen);
+ }
+ 
+ GlobalRWLock::~GlobalRWLock()
+--- src/jrd/Optimizer.cpp
++++ src/jrd/Optimizer.cpp
+@@ -368,7 +368,7 @@
+ 
+ 	// Allocate needed indexScratches
+ 
+-	index_desc* idx = csb_tail->csb_idx->items;
++	index_desc* idx = csb_tail->csb_idx == nullptr ? nullptr : csb_tail->csb_idx->items;
+ 	for (int i = 0; i < csb_tail->csb_indices; ++i, ++idx)
+ 		indexScratches.add(IndexScratch(p, tdbb, idx, csb_tail));
+ }
+--- src/jrd/blb.cpp
++++ src/jrd/blb.cpp
+@@ -1786,7 +1786,7 @@
+ 	arg.slice_base = array->arr_data;
+ 
+ 	SLONG variables[64];
+-	memcpy(variables, param, MIN(sizeof(variables), param_length));
++	if (param_length != 0) memcpy(variables, param, MIN(sizeof(variables), param_length));
+ 
+ 	if (SDL_walk(tdbb->tdbb_status_vector, sdl, array->arr_data, &array_desc->arr_desc,
+ 				 variables, slice_callback, &arg))
+--- src/jrd/btn.cpp
++++ src/jrd/btn.cpp
+@@ -387,7 +387,7 @@
+ 
+ 	put_short(pagePointer, offset);
+ 	pagePointer += sizeof(USHORT);
+-	memmove(pagePointer, data, length);
++	if (length != 0) memmove(pagePointer, data, length);
+ 	pagePointer += length;
+ 	return pagePointer;
+ }
+@@ -622,7 +622,7 @@
+ 	}
+ 
+ 	// Store data
+-	if (withData) {
++	if (withData && length != 0) {
+ 		memcpy(pagePointer, data, length);
+ 	}
+ 	pagePointer += length;
+--- src/jrd/btr.cpp
++++ src/jrd/btr.cpp
+@@ -5206,7 +5206,7 @@
+ 			// Push node on end in list
+ 			jumpNodes->add(jumpNode);
+ 			// Store new data in jumpKey, so a new jump node can calculate prefix
+-			memcpy(jumpData + jumpNode.prefix, jumpNode.data, jumpNode.length);
++			if (jumpNode.length != 0) memcpy(jumpData + jumpNode.prefix, jumpNode.data, jumpNode.length);
+ 			jumpLength = jumpNode.length + jumpNode.prefix;
+ 
+ 			// Check if this could be our split point (if we need to split)
+@@ -5611,7 +5611,7 @@
+ 			for (size_t i = 0; i < jumpNodes->getCount(); i++, index++)
+ 			{
+ 				UCHAR* q = new_key->key_data + walkJumpNode[i].prefix;
+-				memcpy(q, walkJumpNode[i].data, walkJumpNode[i].length);
++				if (walkJumpNode[i].length != 0) memcpy(q, walkJumpNode[i].data, walkJumpNode[i].length);
+ 				if (index == splitJumpNodeIndex)
+ 				{
+ 					jn = &walkJumpNode[i];
+@@ -5636,7 +5636,7 @@
+ 					const USHORT length = walkJumpNode[i].prefix + walkJumpNode[i].length;
+ 					UCHAR* newData = FB_NEW_POOL(*tdbb->getDefaultPool()) UCHAR[length];
+ 					memcpy(newData, new_key->key_data, walkJumpNode[i].prefix);
+-					memcpy(newData + walkJumpNode[i].prefix, walkJumpNode[i].data,
++					if (walkJumpNode[i].length != 0) memcpy(newData + walkJumpNode[i].prefix, walkJumpNode[i].data,
+ 						walkJumpNode[i].length);
+ 					delete[] walkJumpNode[i].data;
+ 					walkJumpNode[i].prefix = 0;
+--- src/jrd/evl.cpp
++++ src/jrd/evl.cpp
+@@ -415,7 +415,7 @@
+ 	case dtype_real:
+ 	case dtype_sql_time:
+ 	case dtype_sql_date:
+-		value->vlu_misc.vlu_long = *((SLONG*) from.dsc_address);
++		memcpy(&value->vlu_misc.vlu_long, from.dsc_address, sizeof (SLONG));
+ 		return;
+ 
+ 	case dtype_int64:
+--- src/jrd/lck.cpp
++++ src/jrd/lck.cpp
+@@ -488,7 +488,7 @@
+ 		break;
+ 	}
+ 
+-	dbb->dbb_lock_mgr->shutdownOwner(tdbb, owner_handle_ptr);
++	LockManager::shutdownOwner(dbb->dbb_lock_mgr, tdbb, owner_handle_ptr);
+ }
+ 
+ 
+--- src/lock/lock.cpp
++++ src/lock/lock.cpp
+@@ -441,7 +441,7 @@
+ }
+ 
+ 
+-void LockManager::shutdownOwner(thread_db* tdbb, SRQ_PTR* owner_handle)
++void LockManager::shutdownOwner(LockManager* This, thread_db* tdbb, SRQ_PTR* owner_handle)
+ {
+ /**************************************
+  *
+@@ -460,8 +460,9 @@
+ 	if (!owner_offset)
+ 		return;
+ 
+-	LockTableGuard guard(this, FB_FUNCTION, owner_offset);
++	LockTableGuard guard(This, FB_FUNCTION, owner_offset);
+ 
++#define SRQ_BASE                    ((UCHAR*) This->m_sharedMemory->getHeader())
+ 	own* owner = (own*) SRQ_ABS_PTR(owner_offset);
+ 	if (!owner->own_count)
+ 		return;
+@@ -472,7 +473,7 @@
+ 	while (owner->own_ast_count)
+ 	{
+ 		{ // checkout scope
+-			LockTableCheckout checkout(this, FB_FUNCTION);
++			LockTableCheckout checkout(This, FB_FUNCTION);
+ 			EngineCheckout cout(tdbb, FB_FUNCTION, true);
+ 			Thread::sleep(10);
+ 		}
+@@ -484,8 +485,9 @@
+ 	// released before destroying the lock owner. This is not strictly required,
+ 	// but it enforces the proper object lifetime discipline through the codebase.
+ 	fb_assert(SRQ_EMPTY(owner->own_requests));
++#define SRQ_BASE                    ((UCHAR*) m_sharedMemory->getHeader())
+ 
+-	purge_owner(owner_offset, owner);
++	This->purge_owner(owner_offset, owner);
+ 
+ 	*owner_handle = 0;
+ }
+--- src/lock/lock_proto.h
++++ src/lock/lock_proto.h
+@@ -402,7 +402,7 @@
+ 	static void destroy(LockManager*);
+ 
+ 	bool initializeOwner(Firebird::CheckStatusWrapper*, LOCK_OWNER_T, UCHAR, SRQ_PTR*);
+-	void shutdownOwner(thread_db*, SRQ_PTR*);
++	static void shutdownOwner(LockManager* This, thread_db*, SRQ_PTR*);
+ 
+ 	SRQ_PTR enqueue(thread_db*, Firebird::CheckStatusWrapper*, SRQ_PTR, const USHORT,
+ 		const UCHAR*, const USHORT, UCHAR, lock_ast_t, void*, SINT64, SSHORT, SRQ_PTR);

@@ -266,7 +266,6 @@ namespace comphelper
     {
         // try to delete "this"
         m_xImpl->pKeepThisAlive.reset();
-        return osl::Thread::onTerminated();
     }
 
 } // namespace comphelper
