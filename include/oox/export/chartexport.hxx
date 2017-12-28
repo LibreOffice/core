@@ -176,7 +176,7 @@ private:
     void exportTextProps(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void exportDataPoints(
         const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties,
-        sal_Int32 nSeriesLength );
+        sal_Int32 nSeriesLength, sal_Int32 eChartType );
     void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType );
     void exportGrouping( bool isBar = false );
     void exportTrendlines( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );

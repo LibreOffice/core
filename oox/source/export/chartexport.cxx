@@ -1960,7 +1960,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                     }
 
                     // export data points
-                    exportDataPoints( uno::Reference< beans::XPropertySet >( rSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
+                    exportDataPoints( uno::Reference< beans::XPropertySet >( rSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength, eChartType );
 
                     // export data labels
                     exportDataLabels(rSeriesSeq[nSeriesIdx], nSeriesLength, eChartType);
@@ -2992,7 +2992,7 @@ void ChartExport::exportDataLabels(
 
 void ChartExport::exportDataPoints(
     const uno::Reference< beans::XPropertySet > & xSeriesProperties,
-    sal_Int32 nSeriesLength )
+    sal_Int32 nSeriesLength, sal_Int32 eChartType )
 {
     uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
     bool bVaryColorsByPoint = false;
@@ -3045,6 +3045,26 @@ void ChartExport::exportDataPoints(
                 pFS->singleElement( FSNS( XML_c, XML_idx ),
                     XML_val, I32S(nElement),
                     FSEND );
+
+                switch (eChartType)
+                {
+                    case chart::TYPEID_PIE:
+                    case chart::TYPEID_DOUGHNUT:
+                    {
+                        if( xPropSet.is() && GetProperty( xPropSet, "SegmentOffset") )
+                        {
+                            sal_Int32 nOffset = 0;
+                            mAny >>= nOffset;
+                            if (nOffset)
+                                pFS->singleElement( FSNS( XML_c, XML_explosion ),
+                                        XML_val, I32S( nOffset ),
+                                        FSEND );
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
                 exportShapeProps( xPropSet );
 
                 pFS->endElement( FSNS( XML_c, XML_dPt ) );
