@@ -101,6 +101,7 @@ public:
     void testMultipleAxisXLSX();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
+    void testPieChartDataPointExplosionXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -166,6 +167,7 @@ public:
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
+    CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1544,6 +1546,15 @@ void Chart2ExportTest::testAxisCrossBetweenXSLX()
     load("/chart2/qa/extras/data/odt/", "axis-position.odt");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     assertXPath(pXmlDoc, "(//c:crossBetween)[1]", "val", "midCat");
+}
+
+void Chart2ExportTest::testPieChartDataPointExplosionXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "pie_chart_datapoint_explosion.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dPt/c:explosion", "val", "28");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
