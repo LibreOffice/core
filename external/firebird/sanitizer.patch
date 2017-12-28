@@ -39,6 +39,17 @@
  LIB_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) -shared
  
  FB_DAEMON = $(BIN)/firebird$(EXEC_EXT)
+--- src/common/classes/alloc.cpp
++++ src/common/classes/alloc.cpp
+@@ -2535,7 +2535,7 @@
+ 	const char* myStack = &probeVar;
+ 	const char* thisLocation = (const char*) this;
+ 	ptrdiff_t distance = thisLocation - myStack;
+-	fb_assert(absVal(distance) < 128 * 1024);
++	//fb_assert(absVal(distance) < 128 * 1024);
+ }
+ #endif
+ 
 --- src/common/os/posix/mod_loader.cpp
 +++ src/common/os/posix/mod_loader.cpp
 @@ -88,7 +88,7 @@
@@ -50,3 +61,20 @@
  	if (module == NULL)
  	{
  #ifdef DEV_BUILD
+--- src/jrd/met.epp
++++ src/jrd/met.epp
+@@ -1486,10 +1486,11 @@
+ 			USHORT offset = p[0] | (p[1] << 8);
+ 			p += 2;
+ 
+-			const Ods::Descriptor* odsDflDesc = (Ods::Descriptor*) p;
+-			p = (UCHAR*) (odsDflDesc + 1);
++			Ods::Descriptor odsDflDesc;
++			memcpy(&odsDflDesc, p, sizeof (Ods::Descriptor));
++			p = (UCHAR*) (((Ods::Descriptor*) p) + 1);
+ 
+-			dsc desc = *odsDflDesc;
++			dsc desc = odsDflDesc;
+ 			desc.dsc_address = const_cast<UCHAR*>(p);
+ 			EVL_make_value(tdbb, &desc, &format->fmt_defaults[offset], relation->rel_pool);
+ 
