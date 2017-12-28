@@ -321,7 +321,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  )
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsMultipleResultSets())
+    if (!xMeta.is() || !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getResultSet();
@@ -334,7 +334,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsMultipleResultSets())
+    if (!xMeta.is() || !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getUpdateCount();
@@ -347,7 +347,7 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  )
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsMultipleResultSets())
+    if (!xMeta.is() || !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
     // free the previous results
@@ -364,7 +364,7 @@ void SAL_CALL OStatementBase::addBatch(  )
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+    if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch();
@@ -377,7 +377,7 @@ void SAL_CALL OStatementBase::clearBatch(  )
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+    if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
@@ -390,7 +390,7 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+    if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     // free the previous results
@@ -496,7 +496,7 @@ void OStatement::addBatch( const OUString& _rSQL )
 
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+    if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
@@ -509,7 +509,7 @@ void OStatement::clearBatch( )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+    if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
@@ -521,7 +521,7 @@ Sequence< sal_Int32 > OStatement::executeBatch( )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     // first check the meta data
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
-    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+    if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
     return Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch( );
 }
