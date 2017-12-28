@@ -205,7 +205,7 @@ public class ORowSet extends TestCase {
     * Creating a TestEnvironment for the interfaces to be tested.
     * The database (DBF) file is copied from test document directory
     * into SOffice temp dir with unique name for each environment
-    * creation. If the file cann't be copied (is not released)
+    * creation. If the file can't be copied (is not released)
     * then another unique name is used (file name suffix incremented
     * by 1).<p>
     *

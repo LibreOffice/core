@@ -103,7 +103,7 @@ namespace sfx2
 
         /** checks whether the document's storage contains sub storages with macros or scripts
 
-            A default implementation of this method will simply cann DocumentMacroMode::storageHasMacros
+            A default implementation of this method will simply call DocumentMacroMode::storageHasMacros
             with the document's root storage. However, there might be document types where this
             isn't sufficient (e.g. database documents which contain sub documents which can also
             contain macro/script storages).

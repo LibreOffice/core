@@ -3161,7 +3161,7 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
     // Otherwise something's wrong. Let's check that...
 
     // MIB 8.1.98: When attributes were opened outside of a cell,
-    // they're still in the attribut table and will only be deleted at the end
+    // they're still in the attribute table and will only be deleted at the end
     // through the CleanContext calls in BuildTable. We don't check that there
     // so that we get no assert [violations, by translator]
     // We can see this on nContextStAttrMin: the remembered value of nContextStAttrMinSave

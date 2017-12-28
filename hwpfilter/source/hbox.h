@@ -354,7 +354,7 @@ struct TxtBox: public FBox
  */
     short     nCell;                              //:=1    offset 80
 /**
- * If value of protect is 1, size of cell cann't change.
+ * If value of protect is 1, size of cell can't change.
  */
     short     protect;                            //1=size lock
 

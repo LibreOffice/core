@@ -197,7 +197,7 @@
     </anim:par>
   </xsl:template>
 
-  <!-- whipe -->
+  <!-- wipe -->
   <xsl:template match="anim:par[@pres:preset-id = 'ooo-entrance-wipe']">
     <anim:par pres:preset-property="Direction">
       <xsl:apply-templates select="*|@*|text()"/>

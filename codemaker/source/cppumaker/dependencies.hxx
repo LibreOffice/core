@@ -34,7 +34,7 @@ class TypeManager;
 namespace codemaker { namespace cppumaker {
 
 /**
-   A simple class to track which other entites a given entity depends on.
+   A simple class to track which other entities a given entity depends on.
 
    <p>This class is not multi-thread&ndash;safe.</p>
  */

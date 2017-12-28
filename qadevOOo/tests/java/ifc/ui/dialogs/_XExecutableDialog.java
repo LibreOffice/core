@@ -32,9 +32,9 @@ import com.sun.star.util.XCancellable;
  *  <li><code> execute()</code></li>
  * </ul> <p>
  *
- * This interface methods cann't be checked, thereby methods
+ * These interface methods can't be checked, thereby methods
  * are just called. <code>execute</code> method is not called
- * at all as the dialog shown cann't be disposed. <p>
+ * at all as the dialog shown can't be disposed. <p>
  *
  * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.ui.dialogs.XExecutableDialog

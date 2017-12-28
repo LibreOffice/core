@@ -376,7 +376,7 @@ public class _XDataPilotDescriptor {
         }
 
         if (fieldsNames[rem] == null) {
-            System.out.println("No fields were set to this orientation - cann't check result") ;
+            System.out.println("No fields were set to this orientation - can't check result") ;
             return true ;
         }
 

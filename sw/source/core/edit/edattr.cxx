@@ -351,11 +351,11 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                                 if( pItem->Which() == nWhich )
                                 {
                                     sal_Int32 nStart = 0, nStop = 0;
-                                    if( nAttrStart < nStt ) //Attribut starts before selection
+                                    if( nAttrStart < nStt ) // Attribute starts before selection
                                         nStart = nStt;
                                     else
                                         nStart = nAttrStart;
-                                    if( *pAttrEnd > nEnd ) //Attribut ends after selection
+                                    if( *pAttrEnd > nEnd ) // Attribute ends after selection
                                         nStop = nEnd;
                                     else
                                         nStop = *pAttrEnd;

@@ -30,7 +30,7 @@ namespace framework{
 /** @short  specify an exception, which can be used inside the
             load environment only.
 
-    @descr  Of course outside code must wrapp it, to transport
+    @descr  Of course outside code must wrap it, to transport
             the occurred information to its caller.
  */
 class LoadEnvException

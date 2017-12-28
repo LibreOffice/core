@@ -406,7 +406,7 @@ public class _XFrame extends MultiMethodTest {
         TestFrameActionListener listener = new TestFrameActionListener();
 
         if (tEnv.getTestCase().getObjectName().equals("Desktop")) {
-            log.println("Desktop cann't change context");
+            log.println("Desktop can't change context");
             tRes.tested("contextChanged()", true) ;
             return;
         }

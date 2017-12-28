@@ -1065,7 +1065,7 @@ struct SEPr
     // Fixed array - two entries for each SEP column to store width of column and spacing to next column.
     // At odd index values [1,3,5,...] the column widths are stored.
     // At even index values [2,4,6,...] the spacings to the next columns are stored.
-    // Value at index 0 is initialized with 0 and used for easier interation on the array
+    // Value at index 0 is initialized with 0 and used for easier iteration on the array
     sal_Int32 rgdxaColumnWidthSpacing[MAX_NO_OF_SEP_COLUMNS*2 + 1];
 
     sal_Int32 dxaColumnWidth;
