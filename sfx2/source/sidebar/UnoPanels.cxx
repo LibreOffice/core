@@ -108,6 +108,9 @@ sal_Bool SAL_CALL SfxUnoPanels::hasByName( const OUString& aName )
             iPanel(aPanels.begin()), iEnd(aPanels.end());
             iPanel!=iEnd; ++iPanel)
             {
+                // Determine if the panel can be displayed.
+                if(pSidebarController->IsDocumentReadOnly() && !iPanel->mbShowForReadOnlyDocuments)
+                    continue;
                 if (iPanel->msId == aName)
                     return true;
             }
