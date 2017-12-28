@@ -695,8 +695,7 @@ bool ScRefListToken::operator==( const FormulaToken& r ) const
 ScMatrixToken::ScMatrixToken( const ScMatrixRef& p ) :
     FormulaToken(formula::svMatrix), pMatrix(p) {}
 
-ScMatrixToken::ScMatrixToken( const ScMatrixToken& r ) :
-    FormulaToken(r), pMatrix(r.pMatrix) {}
+ScMatrixToken::ScMatrixToken( const ScMatrixToken& ) = default;
 
 const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix.get(); }
 ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix.get(); }
@@ -714,8 +713,7 @@ ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
     maRef.InitRange(rMat.mnCol1, rMat.mnRow1, rMat.mnTab1, rMat.mnCol2, rMat.mnRow2, rMat.mnTab2);
 }
 
-ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRangeToken& r ) :
-    FormulaToken(r), mpMatrix(r.mpMatrix), maRef(r.maRef) {}
+ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRangeToken& ) = default;
 
 sal_uInt8 ScMatrixRangeToken::GetByte() const
 {
@@ -757,14 +755,6 @@ ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const sv
     mnFileId(nFileId),
     maTabName(rTabName),
     maSingleRef(r)
-{
-}
-
-ScExternalSingleRefToken::ScExternalSingleRefToken( const ScExternalSingleRefToken& r ) :
-    FormulaToken(r),
-    mnFileId(r.mnFileId),
-    maTabName(r.maTabName),
-    maSingleRef(r.maSingleRef)
 {
 }
 
@@ -811,14 +801,6 @@ ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const sv
     mnFileId(nFileId),
     maTabName(rTabName),
     maDoubleRef(r)
-{
-}
-
-ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r ) :
-    FormulaToken(r),
-    mnFileId(r.mnFileId),
-    maTabName(r.maTabName),
-    maDoubleRef(r.maDoubleRef)
 {
 }
 
@@ -884,13 +866,6 @@ ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedS
     FormulaToken( svExternalName, ocPush),
     mnFileId(nFileId),
     maName(rName)
-{
-}
-
-ScExternalNameToken::ScExternalNameToken( const ScExternalNameToken& r ) :
-    FormulaToken(r),
-    mnFileId(r.mnFileId),
-    maName(r.maName)
 {
 }
 
@@ -1002,9 +977,7 @@ ScJumpMatrixToken::ScJumpMatrixToken( std::shared_ptr<ScJumpMatrix> p )
     : FormulaToken( formula::svJumpMatrix ), mpJumpMatrix( p )
 {}
 
-ScJumpMatrixToken::ScJumpMatrixToken( const ScJumpMatrixToken & p )
-    : FormulaToken( p ), mpJumpMatrix( p.mpJumpMatrix )
-{}
+ScJumpMatrixToken::ScJumpMatrixToken( const ScJumpMatrixToken & ) = default;
 
 ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const
 {
@@ -1036,9 +1009,6 @@ bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL ) :
     FormulaToken(formula::svMatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
-
-ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
-    FormulaToken(r), xMatrix(r.xMatrix), xUpperLeft(r.xUpperLeft) {}
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
 
@@ -1916,15 +1886,6 @@ ScTokenArray::ScTokenArray() :
     meVectorState(FormulaVectorEnabled),
     mbOpenCLEnabled(true),
     mbThreadingEnabled(!ScCalcConfig::isOpenCLEnabled() && ScCalcConfig::isThreadingEnabled())
-{
-}
-
-ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
-    FormulaTokenArray(rArr),
-    mnHashValue(rArr.mnHashValue),
-    meVectorState(rArr.meVectorState),
-    mbOpenCLEnabled(rArr.mbOpenCLEnabled),
-    mbThreadingEnabled(rArr.mbThreadingEnabled)
 {
 }
 

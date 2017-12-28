@@ -27,28 +27,10 @@ ScDefaultsOptions::ScDefaultsOptions()
     SetDefaults();
 }
 
-ScDefaultsOptions::ScDefaultsOptions( const ScDefaultsOptions& rCpy ) :
-    nInitTabCount( rCpy.nInitTabCount ),
-    aInitTabPrefix( rCpy.aInitTabPrefix )
-{
-}
-
-ScDefaultsOptions::~ScDefaultsOptions()
-{
-}
-
 void ScDefaultsOptions::SetDefaults()
 {
     nInitTabCount  = 1;
     aInitTabPrefix = ScGlobal::GetRscString(STR_TABLE_DEF); // Default Prefix "Sheet"
-}
-
-ScDefaultsOptions& ScDefaultsOptions::operator=( const ScDefaultsOptions& rCpy )
-{
-    nInitTabCount  = rCpy.nInitTabCount;
-    aInitTabPrefix = rCpy.aInitTabPrefix;
-
-    return *this;
 }
 
 bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
@@ -60,12 +42,6 @@ bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
 ScTpDefaultsItem::ScTpDefaultsItem( const ScDefaultsOptions& rOpt ) :
     SfxPoolItem ( SID_SCDEFAULTSOPTIONS ),
     theOptions  ( rOpt )
-{
-}
-
-ScTpDefaultsItem::ScTpDefaultsItem( const ScTpDefaultsItem& rItem ) :
-    SfxPoolItem ( rItem ),
-    theOptions  ( rItem.theOptions )
 {
 }
 

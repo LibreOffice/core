@@ -116,7 +116,6 @@ class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
                 ScTpViewItem( const ScViewOptions& rOpt );
-                ScTpViewItem( const ScTpViewItem&  rItem );
                 virtual ~ScTpViewItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

@@ -32,13 +32,6 @@ ScNumFormatAbbrev::ScNumFormatAbbrev() :
 {
 }
 
-ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
-    sFormatstring   (aFormat.sFormatstring),
-    eLanguage       (aFormat.eLanguage),
-    eSysLanguage    (aFormat.eSysLanguage)
-{
-}
-
 ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uInt32 nFormat,
                                      const SvNumberFormatter& rFormatter)
 {

@@ -34,13 +34,6 @@ ScPrintOptions::ScPrintOptions()
     SetDefaults();
 }
 
-ScPrintOptions::ScPrintOptions( const ScPrintOptions& rCpy ) :
-    bSkipEmpty( rCpy.bSkipEmpty ),
-    bAllSheets( rCpy.bAllSheets ),
-    bForceBreaks( rCpy.bForceBreaks )
-{
-}
-
 ScPrintOptions::~ScPrintOptions()
 {
 }
@@ -50,14 +43,6 @@ void ScPrintOptions::SetDefaults()
     bSkipEmpty = true;
     bAllSheets = false;
     bForceBreaks = false;
-}
-
-ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
-{
-    bSkipEmpty = rCpy.bSkipEmpty;
-    bAllSheets = rCpy.bAllSheets;
-    bForceBreaks = rCpy.bForceBreaks;
-    return *this;
 }
 
 bool ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
@@ -70,12 +55,6 @@ bool ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
 ScTpPrintItem::ScTpPrintItem( const ScPrintOptions& rOpt ) :
     SfxPoolItem ( SID_SCPRINTOPTIONS ),
     theOptions  ( rOpt )
-{
-}
-
-ScTpPrintItem::ScTpPrintItem( const ScTpPrintItem& rItem ) :
-    SfxPoolItem ( rItem ),
-    theOptions  ( rItem.theOptions )
 {
 }
 
