@@ -312,7 +312,7 @@ protected:
     formula::FormulaConstTokenRef     xUpperLeft;
 public:
     ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
-    ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
+    ScMatrixCellResultToken( const ScMatrixCellResultToken& );
     virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
     virtual svl::SharedString GetString() const override;

@@ -60,12 +60,6 @@ ScChartArray::ScChartArray(
     pDocument( pDoc ),
     aPositioner(pDoc, rRangeList) {}
 
-ScChartArray::ScChartArray( const ScChartArray& rArr ) :
-    pDocument(rArr.pDocument),
-    aPositioner(rArr.aPositioner) {}
-
-ScChartArray::~ScChartArray() {}
-
 ScMemChart* ScChartArray::CreateMemChart()
 {
     ScRangeListRef aRangeListRef(GetRangeList());
