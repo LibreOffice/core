@@ -136,7 +136,7 @@ namespace connectivity
             );
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
-        css::uno::Reference< css::sdbc::XConnection> getConnection() const;
+        css::uno::Reference< css::sdbc::XConnection> const & getConnection() const;
 
         // XRename
         virtual void SAL_CALL rename( const OUString& newName ) override;
@@ -152,10 +152,10 @@ namespace connectivity
 
         virtual OUString getTypeCreatePattern() const;
 
-        css::uno::Reference< css::sdb::tools::XTableRename>      getRenameService() const;
-        css::uno::Reference< css::sdb::tools::XTableAlteration>  getAlterService() const;
-        css::uno::Reference< css::sdb::tools::XKeyAlteration>    getKeyService() const;
-        css::uno::Reference< css::sdb::tools::XIndexAlteration>  getIndexService() const;
+        css::uno::Reference< css::sdb::tools::XTableRename> const &      getRenameService() const;
+        css::uno::Reference< css::sdb::tools::XTableAlteration> const &  getAlterService() const;
+        css::uno::Reference< css::sdb::tools::XKeyAlteration> const &    getKeyService() const;
+        css::uno::Reference< css::sdb::tools::XIndexAlteration> const &  getIndexService() const;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX

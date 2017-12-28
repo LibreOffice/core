@@ -46,10 +46,10 @@ public:
 
     const css::uno::Reference< css::ucb::XContentProvider >& getProvider() const
     { return m_xProvider; }
-    inline css::uno::Reference< css::ucb::XContentProvider > getResolvedProvider() const;
+    inline css::uno::Reference< css::ucb::XContentProvider > const & getResolvedProvider() const;
 };
 
-inline css::uno::Reference< css::ucb::XContentProvider >
+inline css::uno::Reference< css::ucb::XContentProvider > const &
 ProviderListEntry_Impl::getResolvedProvider() const
 {
     return m_xResolvedProvider.is() ? m_xResolvedProvider : resolveProvider();

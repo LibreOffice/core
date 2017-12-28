@@ -289,7 +289,7 @@ const Any& CachedContentResultSet::CCRS_Cache
     return (*rRow)[nColumnIndex-1];
 }
 
-OUString CachedContentResultSet::CCRS_Cache
+OUString const & CachedContentResultSet::CCRS_Cache
     ::getContentIdentifierString( sal_Int32 nRow )
 {
     try

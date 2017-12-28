@@ -594,27 +594,27 @@ OUString OTableHelper::getTypeCreatePattern() const
     return OUString();
 }
 
-Reference< XConnection> OTableHelper::getConnection() const
+Reference< XConnection> const & OTableHelper::getConnection() const
 {
     return m_pImpl->m_xConnection;
 }
 
-Reference< css::sdb::tools::XTableRename>      OTableHelper::getRenameService() const
+Reference< css::sdb::tools::XTableRename> const & OTableHelper::getRenameService() const
 {
     return m_pImpl->m_xRename;
 }
 
-Reference< css::sdb::tools::XTableAlteration>  OTableHelper::getAlterService() const
+Reference< css::sdb::tools::XTableAlteration> const & OTableHelper::getAlterService() const
 {
     return m_pImpl->m_xAlter;
 }
 
-Reference< css::sdb::tools::XKeyAlteration>  OTableHelper::getKeyService() const
+Reference< css::sdb::tools::XKeyAlteration> const & OTableHelper::getKeyService() const
 {
     return m_pImpl->m_xKeyAlter;
 }
 
-Reference< css::sdb::tools::XIndexAlteration>  OTableHelper::getIndexService() const
+Reference< css::sdb::tools::XIndexAlteration> const & OTableHelper::getIndexService() const
 {
     return m_pImpl->m_xIndexAlter;
 }

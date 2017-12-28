@@ -98,7 +98,7 @@ class CachedContentResultSet
         getAny( sal_Int32 nRow, sal_Int32 nColumnIndex );
 
         /// @throws css::uno::RuntimeException
-        OUString
+        OUString const &
         getContentIdentifierString( sal_Int32 nRow );
 
         /// @throws css::uno::RuntimeException
