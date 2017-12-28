@@ -86,6 +86,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     bool                        mbExportNDests; //i56629
     sal_Int32                   mnPage;
     sal_Int32                   mnCompressionQuality;
+    sal_Int32                   mnMaxImageResolution;
     css::lang::Locale           maDocLocale;
 
     std::unique_ptr<PageSyncData> mpPageSyncData;
@@ -139,6 +140,8 @@ public:
     bool        GetIsReduceImageResolution() const { return mbReduceImageResolution;}
     void        SetIsReduceImageResolution( const bool bReduceImageResolution );
 
+    void        SetMaxImageResolution( sal_Int32 nMaxImageResolution );
+
     const css::lang::Locale& GetDocumentLocale() const { return maDocLocale;}
     void        SetDocumentLocale( const css::lang::Locale& rLoc );
 
@@ -181,7 +184,7 @@ public:
                           const tools::Rectangle&  rVisibleOutputRect );
 
     /// Detect if stream is compressed enough to avoid de-compress / scale & re-compress
-    bool        HasAdequateCompression( const Graphic &rGraphic ) const;
+    bool        HasAdequateCompression( const Graphic &rGraphic, const tools::Rectangle &rOutputRect ) const;
 
 //--->i56629
     /** Create a new named destination to be used in a link to this document from another PDF document

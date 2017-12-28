@@ -404,13 +404,13 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                             GfxLinkType eType = rGraphic.GetLink().GetType();
                             if ( eType == GfxLinkType::NativeJpg )
                             {
-                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic);
+                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic, mParaRects.front());
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
                             else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
                             {
-                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic) )
+                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic, mParaRects.front()) )
                                     mCurrentGraphic = rGraphic;
                             }
                         }
@@ -546,6 +546,10 @@ void PDFExtOutDevData::SetCompressionQuality( const sal_Int32 nQuality )
 void PDFExtOutDevData::SetIsReduceImageResolution( const bool bReduceImageResolution )
 {
     mbReduceImageResolution = bReduceImageResolution;
+}
+void PDFExtOutDevData::SetMaxImageResolution( sal_Int32 nMaxImageResolution )
+{
+    mnMaxImageResolution = nMaxImageResolution;
 }
 void PDFExtOutDevData::SetIsExportNotes( const bool bExportNotes )
 {
@@ -796,7 +800,7 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 }
 
 // Avoids expensive de-compression and re-compression of large images.
-bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
+bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic, const tools::Rectangle &rOutputRect ) const
 {
     assert(rGraphic.IsLink() &&
            (rGraphic.GetLink().GetType() == GfxLinkType::NativeJpg ||
@@ -816,7 +820,22 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
     if (GetIsLosslessCompression())
         return !GetIsReduceImageResolution();
 
-    // FIXME: ideally we'd also pre-empt the DPI related scaling too.
+    if (GetIsReduceImageResolution())
+    {
+        if (rOutputRect.Right() - rOutputRect.Left() == 0 || rOutputRect.Bottom() - rOutputRect.Top() == 0)
+        {
+            assert(! "Degenerate rectangle");
+            return false;
+        }
+
+        // calculate DPI in both dimensions from size in twips and target rectangle in pixels
+        //  if either DPI is larger than target => resize
+        const sal_Int32 nActualDPI = std::max(aSize.Width() * 1440 / std::abs(rOutputRect.Right() - rOutputRect.Left()),
+                                         aSize.Height() * 1440 / std::abs(rOutputRect.Bottom() - rOutputRect.Top()));
+        if (mnMaxImageResolution < nActualDPI)
+            return false;
+    }
+
     sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
                                rGraphic.GetLink().GetDataSize();
 

@@ -809,6 +809,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetCompressionQuality( mnQuality );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
+                pPDFExtOutDevData->SetMaxImageResolution( mnMaxImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
                 Sequence< PropertyValue > aRenderOptions( 7 );
