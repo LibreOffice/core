@@ -913,28 +913,31 @@ void ORowSetCache::moveWindow()
                 }
 
                 std::rotate(m_pMatrix->begin(), aEnd, aNewEnd);
-                // now correct the iterator in our iterator vector
-                //  rotateCacheIterator(aEnd-m_pMatrix->begin()); //can't be used because they decrement and here we need to increment
-                ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
-                const ORowSetCacheMap::const_iterator aCacheEnd  = m_aCacheIterators.end();
-                for(;aCacheIter != aCacheEnd;++aCacheIter)
+                if (!m_bModified)
                 {
-                    if ( !aCacheIter->second.pRowSet->isInsertRow()
-                        && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
+                    // now correct the iterator in our iterator vector
+                    //  rotateCacheIterator(aEnd-m_pMatrix->begin()); //can't be used because they decrement and here we need to increment
+                    ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
+                    const ORowSetCacheMap::const_iterator aCacheEnd  = m_aCacheIterators.end();
+                    for(;aCacheIter != aCacheEnd;++aCacheIter)
                     {
-                        const ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
-                        if ( nDist >= nOverlapSize )
+                        if ( !aCacheIter->second.pRowSet->isInsertRow()
+                            && aCacheIter->second.aIterator != m_pMatrix->end() )
                         {
-                            // That's from outside the overlap area; invalidate iterator.
-                            aCacheIter->second.aIterator = m_pMatrix->end();
-                        }
-                        else
-                        {
-                            // Inside overlap area: move to correct position
-                            CHECK_MATRIX_POS( (nDist + nStartPosOffset) );
-                            aCacheIter->second.aIterator += nStartPosOffset;
-                            OSL_ENSURE(aCacheIter->second.aIterator >= m_pMatrix->begin()
+                            const ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                            if ( nDist >= nOverlapSize )
+                            {
+                                // That's from outside the overlap area; invalidate iterator.
+                                aCacheIter->second.aIterator = m_pMatrix->end();
+                            }
+                            else
+                            {
+                                // Inside overlap area: move to correct position
+                                CHECK_MATRIX_POS( (nDist + nStartPosOffset) );
+                                aCacheIter->second.aIterator += nStartPosOffset;
+                                OSL_ENSURE(aCacheIter->second.aIterator >= m_pMatrix->begin()
                                     && aCacheIter->second.aIterator < m_pMatrix->end(),"Iterator out of area!");
+                            }
                         }
                     }
                 }
@@ -1448,6 +1451,9 @@ void ORowSetCache::deleteIterator(const ORowSetBase* _pRowSet)
 
 void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
 {
+    if (m_bModified)
+        return;
+
     if(_nDist)
     {
         // now correct the iterator in our iterator vector
@@ -1456,7 +1462,7 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
         for(;aCacheIter != aCacheEnd;++aCacheIter)
         {
             if ( !aCacheIter->second.pRowSet->isInsertRow()
-                && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
+                && aCacheIter->second.aIterator != m_pMatrix->end())
             {
                 ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                 if(nDist < _nDist)
@@ -1477,11 +1483,14 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
 
 void ORowSetCache::rotateAllCacheIterators()
 {
+    if (m_bModified)
+        return;
+
     // now correct the iterator in our iterator vector
     auto aCacheEnd  = m_aCacheIterators.end();
     for (auto aCacheIter = m_aCacheIterators.begin(); aCacheIter != aCacheEnd; ++aCacheIter)
     {
-        if (!aCacheIter->second.pRowSet->isInsertRow() && !m_bModified)
+        if (!aCacheIter->second.pRowSet->isInsertRow())
         {
             aCacheIter->second.aIterator = m_pMatrix->end();
         }
