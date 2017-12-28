@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_531d6e65",
+        "filename": "sc/inc/queryparam.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-28T17:05:02Z",
+      "side": 1,
+      "message": "you probably need an SC_DLLPUBLIC here, since this class is not declared with that (unlike the place where you moved it from)",
+      "revId": "29f7ec4d03d7d05f78b6cb60ed69b6e93583d4bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
