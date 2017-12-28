@@ -591,7 +591,7 @@ bool ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
 {
     GetShell()->GetViewFrame()->ToTop();
 
-    // ReturnWert: BOOL
+    // Return value: BOOL
     //  FALSE:  cancel
     //  TRUE:   go on....
     sal_uInt16 nErrorLine = StarBASIC::GetLine() - 1;
