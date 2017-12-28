@@ -1118,7 +1118,7 @@ const ParserContextSharedPtr& getParserContext()
 namespace EnhancedCustomShape  {
 
 
-std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
+std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space

@@ -1367,7 +1367,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     }
 }
 
-Reference< beans::XPropertySetInfo >
+Reference< beans::XPropertySetInfo > const &
     SvxShape::_getPropertySetInfo()
 {
     return mpPropSet->getPropertySetInfo();

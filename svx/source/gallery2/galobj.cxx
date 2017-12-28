@@ -217,7 +217,7 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     aURL = INetURLObject(aTmpStr);
 }
 
-const OUString SgaObject::GetTitle() const
+OUString const & SgaObject::GetTitle() const
 {
     return aTitle;
 }

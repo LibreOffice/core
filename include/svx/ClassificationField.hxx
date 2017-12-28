@@ -44,7 +44,7 @@ public:
     }
 
     /// Returns the text to display, which is the Abbreviated Name, if provided, otherwise Name.
-    OUString getDisplayText() const
+    OUString const & getDisplayText() const
     {
         return !msAbbreviatedName.isEmpty() ? msAbbreviatedName : msName;
     }

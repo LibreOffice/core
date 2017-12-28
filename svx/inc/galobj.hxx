@@ -74,7 +74,7 @@ public:
     bool                IsValid() const { return bIsValid; }
     bool                IsThumbBitmap() const { return bIsThumbBmp; }
 
-    const OUString          GetTitle() const;
+    OUString const &        GetTitle() const;
     void                    SetTitle( const OUString& rTitle );
 
     friend SvStream&        WriteSgaObject( SvStream& rOut, const SgaObject& rObj );

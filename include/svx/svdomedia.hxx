@@ -63,7 +63,7 @@ public:
         void                        setMediaProperties( const ::avmedia::MediaItem& rState );
         const ::avmedia::MediaItem& getMediaProperties() const;
 
-        const css::uno::Reference< css::graphic::XGraphic >
+        css::uno::Reference< css::graphic::XGraphic > const &
                                     getSnapshot() const;
         css::uno::Reference< css::io::XInputStream>
                                     GetInputStream();

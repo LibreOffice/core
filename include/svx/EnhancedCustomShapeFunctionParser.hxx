@@ -233,7 +233,7 @@ public:
         @return the generated function object.
        */
 
-    SVX_DLLPUBLIC static std::shared_ptr<ExpressionNode> parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
+    SVX_DLLPUBLIC static std::shared_ptr<ExpressionNode> const & parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
 
     // this is a singleton
     FunctionParser() = delete;

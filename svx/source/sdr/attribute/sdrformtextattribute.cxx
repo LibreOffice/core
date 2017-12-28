@@ -347,7 +347,7 @@ namespace drawinglayer
             return mpSdrFormTextAttribute->getFormTextShadow();
         }
 
-        Color SdrFormTextAttribute::getFormTextShdwColor() const
+        Color const & SdrFormTextAttribute::getFormTextShdwColor() const
         {
             return mpSdrFormTextAttribute->getFormTextShdwColor();
         }

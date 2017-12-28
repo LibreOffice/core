@@ -157,7 +157,7 @@ public:
     const Size&             GetGrafPrefSize() const;
 
     void                    SetGrafStreamURL( const OUString& rGraphicStreamURL );
-    OUString                GetGrafStreamURL() const;
+    OUString const &        GetGrafStreamURL() const;
     Size                    getOriginalSize() const;
 
 private:
@@ -272,7 +272,7 @@ public:
         mbIsSignatureLineCanAddComment = bIsSignatureCanAddComment;
     };
     bool isSignatureLineCanAddComment() const { return mbIsSignatureLineCanAddComment; };
-    const css::uno::Reference<css::graphic::XGraphic> getSignatureLineUnsignedGraphic() const
+    css::uno::Reference<css::graphic::XGraphic> const & getSignatureLineUnsignedGraphic() const
     {
         return mpSignatureLineUnsignedGraphic;
     };

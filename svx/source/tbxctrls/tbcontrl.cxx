@@ -3423,7 +3423,7 @@ void SvxColorListBox::dispose()
     MenuButton::dispose();
 }
 
-VclPtr<SvxColorWindow> SvxColorListBox::getColorWindow() const
+VclPtr<SvxColorWindow> const & SvxColorListBox::getColorWindow() const
 {
     if (!m_xColorWindow || m_xColorWindow->isDisposed())
         const_cast<SvxColorListBox*>(this)->createColorWindow();

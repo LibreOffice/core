@@ -6362,7 +6362,7 @@ rtl::Reference<sdr::overlay::OverlayManager> ScGridWindow::getOverlayManager()
 
         if ( pPageWin )
         {
-            return (pPageWin->GetOverlayManager());
+            return pPageWin->GetOverlayManager();
         }
     }
 
