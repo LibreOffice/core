@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
@@ -187,6 +188,8 @@ public:
     void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                          const OUString& sURLPropName, sal_Int32 nXmlNamespace );
     void WritePattFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WritePattFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+            const css::drawing::Hatch& rHatch);
     void WriteSrcRect( const css::uno::Reference< css::beans::XPropertySet >&, const OUString& );
     void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteStretch( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
