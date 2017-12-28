@@ -73,6 +73,7 @@ cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
 cmd/lc_insertspreadsheet.png cmd/lc_togglesheetgrid.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
+cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
 
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_insert.png cmd/sc_togglesheetgrid.png
@@ -112,7 +113,7 @@ cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
 cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
-cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
+cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 
 # Zoom
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
@@ -276,6 +277,8 @@ cmd/sc_basicshapes.circle-pie.png cmd/sc_pie.png
 cmd/sc_flowchartshapes.flowchart-merge.png cmd/sc_fontworkshapetype.fontwork-triangle-down.png
 cmd/sc_fontworkshapetype.fontwork-fade-down.png cmd/sc_basicshapes.trapezoid.png
 cmd/sc_flowchartshapes.flowchart-magnetic-disk.png cmd/sc_basicshapes.can.png
+cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
+cmd/sc_shapeslinemenu.png cmd/sc_line.png
 
 # Open
 cmd/lc_openfromwriter.png cmd/lc_open.png
@@ -377,6 +380,13 @@ cmd/lc_romanliststyle.png cmd/lc_defaultnumbering.png
 cmd/sc_romanliststyle.png cmd/sc_defaultnumbering.png
 cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
+
+# Format
+cmd/sc_formattextmenu.png cmd/sc_bold.png
+cmd/sc_formatspacingmenu.png cmd/sc_paraspaceincrease.png
+cmd/sc_textalign.png cmd/sc_alignleft.png
+cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
+cmd/sc_formatframemenu.png cmd/sc_chainframes.png
 
 # Group
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
@@ -701,6 +711,8 @@ cmd/sc_presentation.png cmd/sc_dia.png
 # Style
 cmd/lc_editstyled.png cmd/lc_editstyle.png
 cmd/sc_editstyled.png cmd/sc_editstyle.png
+cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
+cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Outline
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png

@@ -73,6 +73,7 @@ cmd/lc_insertrowbreak.svg cmd/lc_insertpagebreak.svg
 cmd/lc_insertrowsbefore.svg cmd/lc_insertrows.svg
 cmd/lc_insertspreadsheet.svg cmd/lc_togglesheetgrid.svg
 cmd/lc_inserttimefield.svg cmd/lc_timefield.svg
+cmd/lc_tracechangemode.svg cmd/lc_trackchanges.svg
 
 cmd/sc_insobjctrl.svg cmd/sc_newdoc.svg
 cmd/sc_insert.svg cmd/sc_togglesheetgrid.svg
@@ -112,7 +113,7 @@ cmd/sc_inserttimefield.svg cmd/sc_timefield.svg
 cmd/sc_showtrackedchanges.svg cmd/sc_addwatch.svg
 cmd/lc_showtrackedchanges.svg cmd/lc_addwatch.svg
 cmd/sc_tracechangemode.svg cmd/sc_trackchanges.svg
-cmd/lc_tracechangemode.svg cmd/lc_trackchanges.svg
+cmd/sc_numberformatmenu.svg cmd/sc_numberformatstandard.svg
 
 # Zoom
 cmd/lc_previewzoom.svg cmd/lc_zoomprevious.svg
@@ -276,6 +277,8 @@ cmd/sc_basicshapes.circle-pie.svg cmd/sc_pie.svg
 cmd/sc_flowchartshapes.flowchart-merge.svg cmd/sc_fontworkshapetype.fontwork-triangle-down.svg
 cmd/sc_fontworkshapetype.fontwork-fade-down.svg cmd/sc_basicshapes.trapezoid.svg
 cmd/sc_flowchartshapes.flowchart-magnetic-disk.svg cmd/sc_basicshapes.can.svg
+cmd/sc_shapesmenu.svg cmd/sc_basicshapes.round-quadrat.svg
+cmd/sc_shapeslinemenu.svg cmd/sc_line.svg
 
 # Open
 cmd/lc_openfromwriter.svg cmd/lc_open.svg
@@ -377,6 +380,13 @@ cmd/lc_romanliststyle.svg cmd/lc_defaultnumbering.svg
 cmd/sc_romanliststyle.svg cmd/sc_defaultnumbering.svg
 cmd/lc_defaultparastyle.svg cmd/lc_controlcodes.svg
 cmd/sc_defaultparastyle.svg cmd/sc_controlcodes.svg
+
+# Format
+cmd/sc_formattextmenu.svg cmd/sc_bold.svg
+cmd/sc_formatspacingmenu.svg cmd/sc_paraspaceincrease.svg
+cmd/sc_textalign.svg cmd/sc_alignleft.svg
+cmd/sc_formatbulletsmenu.svg cmd/sc_defaultbullet.svg
+cmd/sc_formatframemenu.svg cmd/sc_chainframes.svg
 
 # Group
 cmd/lc_leaveallgroups.svg cmd/lc_leavegroup.svg
@@ -701,6 +711,8 @@ cmd/sc_presentation.svg cmd/sc_dia.svg
 # Style
 cmd/lc_editstyled.svg cmd/lc_editstyle.svg
 cmd/sc_editstyled.svg cmd/sc_editstyle.svg
+cmd/lc_viewsidebarstyles.svg cmd/lc_designerdialog.svg
+cmd/sc_viewsidebarstyles.svg cmd/sc_designerdialog.svg
 
 # Outline
 cmd/lc_outlineright.svg cmd/lc_decrementlevel.svg
