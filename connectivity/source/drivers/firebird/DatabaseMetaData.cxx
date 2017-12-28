@@ -874,7 +874,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         // Clob (SQL_BLOB)
         aRow[1] = new ORowSetValueDecorator(OUString("BLOB")); // BLOB, with subtype 1
         aRow[2] = new ORowSetValueDecorator(DataType::CLOB);
-        aRow[3] = new ORowSetValueDecorator(sal_Int16(2147483647)); // Precision = max length
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(2147483647)); // Precision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
