@@ -22,13 +22,15 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-static ResMgr* pResMgr=nullptr;
+static std::unique_ptr<ResMgr> pResMgr;
 
 ResMgr* DialogsResMgr::GetResMgr()
 {
-    if (!pResMgr)
-        pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
-    return pResMgr;
+    const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
+
+    if (!pResMgr || pResMgr->GetLocale() != rLocale)
+        pResMgr.reset(ResMgr::CreateResMgr("svx", rLocale));
+    return pResMgr.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
